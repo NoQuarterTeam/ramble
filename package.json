@@ -1,0 +1,28 @@
+{
+  "name": "@travel/root",
+  "private": true,
+  "dependencies": {
+    "turbo": "^1.9.1"
+  },
+  "packageManager": "pnpm@8.3.1",
+  "devDependencies": {
+    "prettier": "^2.8.4",
+    "prettier-plugin-tailwindcss": "^0.2.4",
+    "typescript": "5.0.4"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "ci": "turbo run typecheck lint prettier",
+    "lint": "turbo run lint",
+    "fix": "turbo run lint:fix prettier:fix",
+    "prettier": "turbo run prettier",
+    "prettier:fix": "turbo run prettier:fix",
+    "lint:fix": "turbo run lint:fix",
+    "typecheck": "turbo run typecheck",
+    "db:generate": "turbo run db:generate"
+  },
+  "prisma": {
+    "schema": "./packages/database/schema.prisma"
+  }
+}

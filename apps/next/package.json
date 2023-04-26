@@ -1,0 +1,57 @@
+{
+  "name": "@travel/next",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "lint:fix": "eslint --config .eslintrc.commit.js --fix --cache --ext .ts,.tsx src",
+    "prettier": "prettier --check src",
+    "prettier:fix": "prettier --write src",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@travel/api": "workspace:*",
+    "@travel/database": "workspace:*",
+    "@travel/shared": "workspace:*",
+    "@travel/ui": "workspace:*",
+    "dayjs": "1.11.7",
+    "isbot": "latest",
+    "lucide-react": "^0.180.0",
+    "next": "13.3.1",
+    "next-themes": "^0.2.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-dropzone": "14.2.3",
+    "resend": "^0.13.0",
+    "zod": "3.21.4",
+    "zustand": "4.3.7"
+  },
+  "devDependencies": {
+    "@travel/eslint-config": "workspace:*",
+    "@travel/tailwind-config": "workspace:*",
+    "@tailwindcss/forms": "^0.5.3",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/jsonwebtoken": "9.0.1",
+    "@types/node": "18.16.1",
+    "@types/nodemailer": "6.4.7",
+    "@types/nprogress": "^0.2.0",
+    "@types/react": "18.2.0",
+    "@types/react-dom": "18.2.1",
+    "@types/sharp": "^0.31.1",
+    "autoprefixer": "10.4.14",
+    "cssnano": "^6.0.0",
+    "dotenv-cli": "^7.1.0",
+    "eslint": "8.39.0",
+    "eslint-config-next": "13.3.1",
+    "postcss": "^8.4.21",
+    "prettier": "^2.8.4",
+    "tailwindcss": "^3.3.1",
+    "typescript": "5.0.4"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

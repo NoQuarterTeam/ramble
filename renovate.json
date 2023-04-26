@@ -1,0 +1,35 @@
+{
+  "extends": ["config:base"],
+  "baseBranches": ["main"],
+  "automerge": true,
+  "major": { "automerge": false },
+  "requiredStatusChecks": null,
+  "packageRules": [
+    {
+      "packagePatterns": ["eslint"],
+      "groupName": "eslint"
+    },
+    {
+      "packagePatterns": ["@types/"],
+      "groupName": "@types"
+    },
+    {
+      "packageNames": ["lucid-react"],
+      "extends": ["schedule:weekly"]
+    },
+    {
+      "packageNames": ["@aws-sdk/"],
+      "extends": ["schedule:weekly"]
+    }
+  ],
+  "ignoreDeps": [
+    "@react-native-async-storage/async-storage",
+    "react-native-progress",
+    "react-native-reanimated",
+    "react-native-safe-area-context",
+    "react-native-svg",
+    "react-native-web",
+    "react-native",
+    "uuid"
+  ]
+}

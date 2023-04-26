@@ -1,0 +1,30 @@
+{
+  "name": "@travel/database",
+  "version": "1.0.0",
+  "main": "./index.ts",
+  "files": [
+    "./index.ts",
+    "./types.ts"
+  ],
+  "sideEffects": false,
+  "dependencies": {
+    "@prisma/client": "4.13.0",
+    "prisma": "4.13.0"
+  },
+  "scripts": {
+    "dev": "pnpm with-env prisma studio",
+    "db:migrate": "pnpm with-env prisma migrate dev",
+    "db:push": "pnpm with-env prisma db push",
+    "db:generate": "pnpm with-env prisma generate",
+    "with-env": "dotenv -e ../../.env --",
+    "postinstall": "prisma generate"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.3",
+    "dotenv-cli": "^7.1.0",
+    "typescript": "5.0.4"
+  },
+  "prisma": {
+    "schema": "./schema.prisma"
+  }
+}

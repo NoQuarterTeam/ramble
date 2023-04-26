@@ -1,0 +1,27 @@
+{
+  "name": "@travel/shared",
+  "version": "1.0.0",
+  "main": "./src/index.ts",
+  "files": [
+    "./src/index.ts"
+  ],
+  "scripts": {
+    "lint:fix": "eslint --config .eslintrc.commit.js --fix --cache --ext .ts,.tsx src",
+    "lint": "eslint --config .eslintrc.js --ext .ts,.tsx src",
+    "prettier": "prettier --check src",
+    "prettier:fix": "prettier --write src",
+    "typecheck": "tsc --noEmit"
+  },
+  "sideEffects": false,
+  "dependencies": {
+    "@travel/database": "workspace:*",
+    "tailwind-merge": "^1.10.0"
+  },
+  "devDependencies": {
+    "@travel/eslint-config": "workspace:*",
+    "@types/node": "^18.15.3",
+    "eslint": "8.39.0",
+    "prettier": "^2.8.4",
+    "typescript": "5.0.4"
+  }
+}
