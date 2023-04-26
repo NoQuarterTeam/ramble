@@ -29,9 +29,6 @@
     "db:push": {
       "cache": false
     },
-    "db:migrate": {
-      "cache": false
-    },
     "typecheck": {
       "dependsOn": ["^build"],
       "outputs": []

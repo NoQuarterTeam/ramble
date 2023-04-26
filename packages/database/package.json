@@ -6,22 +6,24 @@
     "./index.ts",
     "./types.ts"
   ],
+  "scripts": {
+    "dev": "pnpm with-env prisma studio",
+    "db:push": "pnpm with-env prisma db push",
+    "db:seed": "pnpm with-env ts-node ./seed",
+    "db:generate": "pnpm with-env prisma generate",
+    "with-env": "dotenv -e ../../.env --",
+    "postinstall": "prisma generate"
+  },
   "sideEffects": false,
   "dependencies": {
     "@prisma/client": "4.13.0",
     "prisma": "4.13.0"
   },
-  "scripts": {
-    "dev": "pnpm with-env prisma studio",
-    "db:migrate": "pnpm with-env prisma migrate dev",
-    "db:push": "pnpm with-env prisma db push",
-    "db:generate": "pnpm with-env prisma generate",
-    "with-env": "dotenv -e ../../.env --",
-    "postinstall": "prisma generate"
-  },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@types/node": "^18.15.3",
     "dotenv-cli": "^7.1.0",
+    "ts-node": "^10.9.1",
     "typescript": "5.0.4"
   },
   "prisma": {

@@ -1,12 +1,12 @@
 generator client {
   provider        = "prisma-client-js"
-  relationMode    = "prisma"
   previewFeatures = ["jsonProtocol"]
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  relationMode = "prisma"
+  url          = env("DATABASE_URL")
 }
 
 enum Role {
@@ -15,14 +15,117 @@ enum Role {
 }
 
 model User {
-  id        String  @id @default(uuid())
-  email     String  @unique
-  password  String
-  firstName String
-  lastName  String
-  role      Role    @default(USER)
-  avatar    String?
+  id            String       @id @default(uuid())
+  email         String       @unique
+  password      String
+  firstName     String
+  lastName      String
+  role          Role         @default(USER)
+  avatar        String?
+  createdSpots  Spot[]
+  verifiedSpots Spot[]       @relation(name: "VerifiedSpot")
+  spotImages    SpotImage[]
+  lists         List[]
+  spotRatings   SpotRating[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum SpotType {
+  CAFE
+  CAMPING
+  RESTAURANT
+  PARKING
+  BAR
+  TIP
+  SHOP
+  CLIMBING
+  MOUNTAIN_BIKING
+  GAS_STATION
+  SUPPING
+  VIEW
+  OTHER
+}
+
+model Spot {
+  id               String       @id @default(uuid())
+  name             String
+  type             SpotType
+  description      String       @db.LongText
+  address          String
+  latitude         Float
+  longitude        Float
+  isAnimalFriendly Boolean      @default(true)
+  images           SpotImage[]
+  verifiedAt       DateTime?
+  verifierId       String?
+  verifier         User?        @relation(name: "VerifiedSpot", fields: [verifierId], references: [id])
+  creatorId        String
+  creator          User         @relation(fields: [creatorId], references: [id])
+  spotLists        ListSpot[]
+  ratings          SpotRating[]
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @default(now()) @updatedAt
+
+  @@index([verifierId])
+  @@index([creatorId])
+}
+
+model SpotImage {
+  id     String @id @default(uuid())
+  spotId String
+  spot   Spot   @relation(fields: [spotId], references: [id])
+  path   String
+
+  creatorId String
+  creator   User     @relation(fields: [creatorId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([spotId])
+  @@index([creatorId])
+}
+
+model List {
+  id        String     @id @default(uuid())
+  name      String
+  listSpots ListSpot[]
+  creatorId String
+  creator   User       @relation(fields: [creatorId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([creatorId])
+}
+
+model ListSpot {
+  id     String @id @default(uuid())
+  listId String
+  list   List   @relation(fields: [listId], references: [id])
+  spotId String
+  spot   Spot   @relation(fields: [spotId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([spotId])
+  @@index([listId])
+}
+
+model SpotRating {
+  id     String @id @default(uuid())
+  spotId String
+  spot   Spot   @relation(fields: [spotId], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  rating Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@unique([spotId, userId])
+  @@index([spotId])
+  @@index([userId])
 }

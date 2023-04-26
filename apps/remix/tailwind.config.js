@@ -5,6 +5,9 @@ module.exports = {
   content: ["./app/**/*.{js,ts,jsx,tsx}", "!./app/pages/emails+/**/*", "../../packages/ui/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      spacing: {
+        nav: "80px",
+      },
       fontSize: {
         xxxs: "0.4rem",
         xxs: "0.625rem",
