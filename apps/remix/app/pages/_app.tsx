@@ -2,7 +2,7 @@ import { Outlet, useFetcher, useLoaderData, useNavigate, useSearchParams } from 
 import { SpotType } from "@travel/database"
 import { ClientOnly } from "@travel/shared"
 import { Select } from "@travel/ui"
-import { json, LinksFunction, SerializeFrom, type LoaderArgs } from "@vercel/remix"
+import { HeadersFunction, json, LinksFunction, SerializeFrom, type LoaderArgs } from "@vercel/remix"
 import { cva } from "class-variance-authority"
 import mapStyles from "mapbox-gl/dist/mapbox-gl.css"
 import * as React from "react"
@@ -20,28 +20,22 @@ import { useTheme } from "~/lib/theme"
 
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
-import { useLoaderHeaders } from "~/lib/headers"
-import { getMapSpots } from "./api+/spots"
+import { getMapSpots, loader } from "./api+/spots"
 
-export const headers = useLoaderHeaders
+export const headers: HeadersFunction = () => {
+  return {
+    "Cache-Control": cacheHeader({
+      public: true,
+      maxAge: "1hour",
+      sMaxage: "1hour",
+      staleWhileRevalidate: "1day",
+      staleIfError: "1day",
+    }),
+  }
+}
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: mapStyles }]
-}
-
-export const loader = async ({ request }: LoaderArgs) => {
-  const spots = await getMapSpots(request)
-  return json(spots, {
-    headers: {
-      "Cache-Control": cacheHeader({
-        public: true,
-        maxAge: "1hour",
-        sMaxage: "1hour",
-        staleWhileRevalidate: "1day",
-        staleIfError: "1day",
-      }),
-    },
-  })
 }
 
 const SPOT_OPTIONS: { label: string; value: SpotType }[] = [
@@ -60,8 +54,6 @@ const SPOT_OPTIONS: { label: string; value: SpotType }[] = [
 ]
 
 export default function Home() {
-  const initialSpots = useLoaderData<typeof loader>()
-
   const [searchParams, setSearchParams] = useSearchParams()
   const type = searchParams.get("type")
 
@@ -69,7 +61,7 @@ export default function Home() {
     <div className="relative">
       <Nav />
       <ClientOnly>
-        <MapView initialPoints={initialSpots} />
+        <MapView />
       </ClientOnly>
       <div className="top-nav absolute right-6 mt-4 bg-white shadow-md dark:bg-gray-900">
         <Select defaultValue={type || ""} className="cursor-pointer" onChange={(e) => setSearchParams({ type: e.target.value })}>
@@ -106,16 +98,32 @@ const spotMarkerColors = cva("cursor-pointer hover:scale-110 border sq-5 shadow-
   },
 })
 
-type Points = SerializeFrom<typeof loader>[number]
+type Point = SerializeFrom<typeof loader>[number]
 
-const MapView = React.memo(function _MapView({ initialPoints }: { initialPoints: Points[] }) {
-  const [points, setPoints] = React.useState(initialPoints)
+const MapView = React.memo(function _MapView() {
+  const [points, setPoints] = React.useState<Point[]>([])
   const theme = useTheme()
   const mapRef = React.useRef<MapRef>(null)
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const type = searchParams.get("type")
   const spotFetcher = useFetcher<typeof loader>()
+
+  const handleLoadSpots = React.useCallback(() => {
+    console.log("what")
+    if (!mapRef.current) return
+    const bounds = mapRef.current.getBounds()
+    const zoom = mapRef.current.getZoom()
+    const params = queryString.stringify({
+      minLat: bounds.getSouth(),
+      maxLat: bounds.getNorth(),
+      minLng: bounds.getWest(),
+      maxLng: bounds.getEast(),
+      zoom,
+      type,
+    })
+    spotFetcher.load(`/api/spots?${params}`)
+  }, [type])
 
   React.useEffect(() => {
     if (!spotFetcher.data) return
@@ -133,10 +141,8 @@ const MapView = React.memo(function _MapView({ initialPoints }: { initialPoints:
               Number(point.geometry.coordinates[0].toFixed(4)),
               Number(point.geometry.coordinates[1].toFixed(4)),
             ] as LngLatLike
-
             const currentZoom = mapRef.current?.getZoom()
             const zoom = point.properties.cluster ? Math.min((currentZoom || 5) + 2, 14) : currentZoom
-
             mapRef.current?.flyTo({
               center,
               duration: 500,
@@ -144,10 +150,11 @@ const MapView = React.memo(function _MapView({ initialPoints }: { initialPoints:
               zoom,
               offset: point.properties.cluster ? [0, 0] : [100, 0],
             })
+            const params = queryString.stringify({ type })
             if (!point.properties.cluster && point.properties.id) {
-              navigate(point.properties.id)
+              navigate(point.properties.id + "?" + params)
             } else {
-              navigate("/")
+              navigate("/" + "?" + params)
             }
           }}
           anchor="bottom"
@@ -163,24 +170,13 @@ const MapView = React.memo(function _MapView({ initialPoints }: { initialPoints:
           )}
         </Marker>
       )),
-    [points],
+    [points, type],
   )
   return (
     <div className="relative h-screen w-screen overflow-hidden">
       <Map
-        onMoveEnd={(e) => {
-          const bounds = e?.target.getBounds()
-          const zoom = e?.target.getZoom()
-          const params = queryString.stringify({
-            minLat: bounds.getSouth(),
-            maxLat: bounds.getNorth(),
-            minLng: bounds.getWest(),
-            maxLng: bounds.getEast(),
-            zoom,
-            type,
-          })
-          spotFetcher.load(`/api/spots?${params}`)
-        }}
+        onLoad={handleLoadSpots}
+        onMoveEnd={handleLoadSpots}
         ref={mapRef}
         style={{ height: "100%", width: "100%" }}
         initialViewState={{ longitude: 4, latitude: 50, zoom: 5 }}

@@ -1,10 +1,22 @@
-import { json, LoaderArgs } from "@remix-run/node"
+import { json, LoaderArgs } from "@vercel/remix"
 import { SpotType } from "@travel/database"
 import { z } from "zod"
 import { db } from "~/lib/db.server"
 import SuperCluster from "supercluster"
+import { cacheHeader } from "pretty-cache-header"
+
 export const loader = async ({ request }: LoaderArgs) => {
-  return json(await getMapSpots(request))
+  return json(await getMapSpots(request), {
+    headers: {
+      "Cache-Control": cacheHeader({
+        public: true,
+        maxAge: "1hour",
+        sMaxage: "1hour",
+        staleWhileRevalidate: "1day",
+        staleIfError: "1day",
+      }),
+    },
+  })
 }
 
 export async function getMapSpots(request: Request) {
@@ -15,6 +27,7 @@ export async function getMapSpots(request: Request) {
   if (paramType) {
     type = await z.nativeEnum(SpotType).nullable().optional().parseAsync(url.searchParams.get("type"))
   }
+
   const zoom = (await z.coerce.number().parseAsync(zoomType)) || 5
 
   const coords = await z

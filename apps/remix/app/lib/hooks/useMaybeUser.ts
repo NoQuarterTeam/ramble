@@ -1,4 +1,4 @@
-import { SerializeFrom } from "@remix-run/node"
+import { SerializeFrom } from "@vercel/remix"
 import { useRouteLoaderData } from "@remix-run/react"
 import { loader } from "~/root"
 
