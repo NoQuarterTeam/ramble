@@ -3,7 +3,7 @@ import { getClientIPAddress } from "remix-utils"
 import { IPAPI_KEY } from "~/lib/config.server"
 
 export async function getIpInfo(request: Request) {
-  const ip = getClientIPAddress(request) || "2a09:bac2:41d4:1e1::30:51"
+  const ip = getClientIPAddress(request)
   if (!ip) return null
   const res = await fetch(`http://api.ipapi.com/api/${ip}?access_key=${IPAPI_KEY}`)
   const data = (await res.json()) as IPInfo
