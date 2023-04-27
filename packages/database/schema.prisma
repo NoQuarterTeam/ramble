@@ -75,11 +75,10 @@ model Spot {
 }
 
 model SpotImage {
-  id     String @id @default(uuid())
-  spotId String
-  spot   Spot   @relation(fields: [spotId], references: [id])
-  path   String
-
+  id        String   @id @default(uuid())
+  path      String
+  spotId    String
+  spot      Spot     @relation(fields: [spotId], references: [id])
   creatorId String
   creator   User     @relation(fields: [creatorId], references: [id])
   createdAt DateTime @default(now())

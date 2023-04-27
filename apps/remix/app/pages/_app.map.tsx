@@ -106,11 +106,11 @@ const MapView = React.memo(function _MapView() {
   const mapRef = React.useRef<MapRef>(null)
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const type = searchParams.get("type")
   const spotFetcher = useFetcher<typeof loader>()
 
+  const type = searchParams.get("type")
+
   const handleLoadSpots = React.useCallback(() => {
-    console.log("what")
     if (!mapRef.current) return
     const bounds = mapRef.current.getBounds()
     const zoom = mapRef.current.getZoom()
@@ -126,9 +126,13 @@ const MapView = React.memo(function _MapView() {
   }, [type])
 
   React.useEffect(() => {
-    if (!spotFetcher.data) return
+    handleLoadSpots()
+  }, [type])
+
+  React.useEffect(() => {
+    if (!spotFetcher.data || spotFetcher.state === "loading") return
     setPoints(spotFetcher.data)
-  }, [spotFetcher.data])
+  }, [spotFetcher.data, spotFetcher.state])
 
   const spotMarkers = React.useMemo(
     () =>
@@ -150,6 +154,7 @@ const MapView = React.memo(function _MapView() {
               zoom,
               offset: point.properties.cluster ? [0, 0] : [100, 0],
             })
+            const type = searchParams.get("type")
             const params = queryString.stringify({ type })
             if (!point.properties.cluster && point.properties.id) {
               navigate("/map/" + point.properties.id + "?" + params)
@@ -170,7 +175,7 @@ const MapView = React.memo(function _MapView() {
           )}
         </Marker>
       )),
-    [points, type],
+    [points],
   )
   return (
     <div className="relative h-screen w-screen overflow-hidden">

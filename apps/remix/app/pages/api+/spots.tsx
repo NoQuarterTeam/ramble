@@ -40,6 +40,7 @@ export async function getMapSpots(request: Request) {
     })
 
   const spots = await db.spot.findMany({
+    take: 20, // temp limit
     select: { id: true, latitude: true, longitude: true, type: true },
     where: {
       latitude: { gt: coords.minLat, lt: coords.maxLat },
