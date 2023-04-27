@@ -39,6 +39,7 @@ import { getThemeSession } from "./services/session/theme.server"
 
 import { LinkButton } from "./components/LinkButton"
 import { Frown } from "lucide-react"
+import { getMaybeUser } from "./services/auth/auth.server"
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "Travel" }, { name: "description", content: "Created by No Quarter" }]
@@ -61,8 +62,10 @@ export const links: LinksFunction = () => {
 export const loader = async ({ request }: LoaderArgs) => {
   const { flash, commit } = await getFlashSession(request)
   const { getTheme, commit: commitTheme } = await getThemeSession(request)
+  const user = await getMaybeUser(request)
   return json(
     {
+      user,
       flash,
       theme: getTheme(),
       config: { WEB_URL: FULL_WEB_URL },

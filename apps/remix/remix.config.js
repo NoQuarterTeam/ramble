@@ -18,6 +18,8 @@ module.exports = {
   serverDependenciesToBundle: [
     "@travel/api",
     "@travel/database",
+    "supercluster",
+    "kdbush",
     "@travel/database/types",
     "@travel/emails",
     "@travel/shared",

@@ -1,11 +1,12 @@
-import { Link, useFetcher, useSubmit } from "@remix-run/react"
+import { Link, useFetcher, useRouteLoaderData, useSubmit } from "@remix-run/react"
 import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, IconButton, Limiter } from "@travel/ui"
 import { Menu, Moon, Sun } from "lucide-react"
 import { LinkButton } from "~/components/LinkButton"
+import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { useTheme } from "~/lib/theme"
-import { type IndexUser } from "~/pages"
 
-export function Nav({ user }: { user: IndexUser }) {
+export function Nav() {
+  const user = useMaybeUser()
   const logoutSubmit = useSubmit()
   const themeFetcher = useFetcher()
 

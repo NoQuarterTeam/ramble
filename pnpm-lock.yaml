@@ -376,6 +376,9 @@ importers:
       nprogress:
         specifier: ^0.2.0
         version: 0.2.0
+      pretty-cache-header:
+        specifier: ^1.0.0
+        version: 1.0.0
       query-string:
         specifier: ^8.1.0
         version: 8.1.0
@@ -397,6 +400,9 @@ importers:
       sharp:
         specifier: ^0.32.0
         version: 0.32.0
+      supercluster:
+        specifier: ^8.0.0
+        version: 8.0.0
       zod:
         specifier: 3.21.4
         version: 3.21.4
@@ -437,6 +443,9 @@ importers:
       '@types/sharp':
         specifier: ^0.31.1
         version: 0.31.1
+      '@types/supercluster':
+        specifier: ^7.1.0
+        version: 7.1.0
       cssnano:
         specifier: ^6.0.0
         version: 6.0.0(postcss@8.4.21)
@@ -5883,7 +5892,6 @@ packages:
 
   /@types/geojson@7946.0.10:
     resolution: {integrity: sha512-Nmh0K3iWQJzniTuPRcJn5hxXkfB1T1pgB89SBig5PlJQU5yocazeu4jATJlaA0GYFKWMqDdvYemoSnF2pXgLVA==}
-    dev: false
 
   /@types/glob@7.2.0:
     resolution: {integrity: sha512-ZUxbzKl0IfJILTS6t7ip5fQQM/J3TJYubDm3nMbgubNNYS62eXeUpoLUC8/7fJNiFYHTrGPQn7hspDUzIHX3UA==}
@@ -6043,6 +6051,12 @@ packages:
   /@types/stack-utils@2.0.1:
     resolution: {integrity: sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==}
     dev: false
+
+  /@types/supercluster@7.1.0:
+    resolution: {integrity: sha512-6JapQ2GmEkH66r23BK49I+u6zczVDGTtiJEVvKDYZVSm/vepWaJuTq6BXzJ6I4agG5s8vA1KM7m/gXWDg03O4Q==}
+    dependencies:
+      '@types/geojson': 7946.0.10
+    dev: true
 
   /@types/unist@2.0.6:
     resolution: {integrity: sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==}
@@ -11221,6 +11235,10 @@ packages:
     resolution: {integrity: sha512-hRkd6/XW4HTsA9vjVpY9tuXJYLSlelnkTmVFu4M9/7MIYQtFcHpbugAU7UbOfjOiVSVYl2fqgBuJ32JUmRo5Ew==}
     dev: false
 
+  /kdbush@4.0.1:
+    resolution: {integrity: sha512-RlSWHFOf40nU5Be8dZIzdA8j6Jn9IYskSPSZwkDCooGb16uXeUx/6QZuW+krdEToViiK2OAwfW7QWDHY+kAz0A==}
+    dev: false
+
   /keyv@4.5.2:
     resolution: {integrity: sha512-5MHbFaKn8cNSmVW7BYnijeAVlE4cYA/SVkifVgrh7yotnfhKmjuXpDKjrABLnT0SfHWV21P8ow07OGfRrNDg8g==}
     dependencies:
@@ -14134,6 +14152,13 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
+  /pretty-cache-header@1.0.0:
+    resolution: {integrity: sha512-xtXazslu25CdnGnUkByU1RoOjK55TqwatJkjjJLg5ZAdz2Lngko/mmaUgeET36P2GMlNwh3fdM7FWBO717pNcw==}
+    engines: {node: '>=12.13'}
+    dependencies:
+      timestring: 6.0.0
+    dev: false
+
   /pretty-format@26.6.2:
     resolution: {integrity: sha512-7AeGuCYNGmycyQbCqd/3PWH4eOoX/OiCa0uphp57NVTeAGdJGaAliecxwBDHYQCIvrW7aDBZCYeNTP/WX69mkg==}
     engines: {node: '>= 10'}
@@ -15810,6 +15835,12 @@ packages:
       kdbush: 3.0.0
     dev: false
 
+  /supercluster@8.0.0:
+    resolution: {integrity: sha512-/cyICCWE1LjHwN5vKjBB1OHn7TwSyrnerRSMvcLkDgSIyPLN7KJEqx3upzB3BxK4Efs5JrF37bmqMuaxfH0EmA==}
+    dependencies:
+      kdbush: 4.0.1
+    dev: false
+
   /superjson@1.12.2:
     resolution: {integrity: sha512-ugvUo9/WmvWOjstornQhsN/sR9mnGtWGYeTxFuqLb4AiT4QdUavjGFRALCPKWWnAiUJ4HTpytj5e0t5HoMRkXg==}
     engines: {node: '>=10'}
@@ -16073,6 +16104,11 @@ packages:
 
   /through@2.3.8:
     resolution: {integrity: sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==}
+
+  /timestring@6.0.0:
+    resolution: {integrity: sha512-wMctrWD2HZZLuIlchlkE2dfXJh7J2KDI9Dwl+2abPYg0mswQHfOAyQW3jJg1pY5VfttSINZuKcXoB3FGypVklA==}
+    engines: {node: '>=8'}
+    dev: false
 
   /tiny-glob@0.2.9:
     resolution: {integrity: sha512-g/55ssRPUjShh+xkfx9UPDXqhckHEsHr4Vd9zX55oSdGZc/MD0m3sferOkwWtp98bv+kcVfEHtRJgBVJzelrzg==}

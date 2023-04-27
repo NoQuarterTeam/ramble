@@ -69,6 +69,8 @@ model Spot {
   updatedAt        DateTime     @default(now()) @updatedAt
 
   @@index([verifierId])
+  @@index([latitude])
+  @@index([longitude])
   @@index([creatorId])
 }
 
