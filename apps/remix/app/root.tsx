@@ -1,4 +1,3 @@
-import * as React from "react"
 import poppins300 from "@fontsource/poppins/300.css"
 import poppins400 from "@fontsource/poppins/400.css"
 import poppins500 from "@fontsource/poppins/500.css"
@@ -14,7 +13,6 @@ import {
   Meta,
   Outlet,
   Scripts,
-  useFetchers,
   useLoaderData,
   useMatches,
   useNavigation,
@@ -24,6 +22,7 @@ import type { LinksFunction, LoaderArgs, SerializeFrom, V2_MetaFunction } from "
 import { json } from "@vercel/remix"
 import { Frown } from "lucide-react"
 import NProgress from "nprogress"
+import * as React from "react"
 
 import { join } from "@travel/shared"
 import { Toaster } from "@travel/ui"
@@ -83,14 +82,7 @@ NProgress.configure({ showSpinner: false })
 export default function App() {
   const { flash, theme } = useLoaderData<typeof loader>()
 
-  const transition = useNavigation()
-  const fetchers = useFetchers()
-
-  const state = React.useMemo<"idle" | "loading">(() => {
-    const states = [transition.state, ...fetchers.map((fetcher) => fetcher.state)]
-    if (states.every((state) => state === "idle")) return "idle"
-    return "loading"
-  }, [transition.state, fetchers])
+  const { state } = useNavigation()
 
   React.useEffect(() => {
     if (state === "loading") NProgress.start()
