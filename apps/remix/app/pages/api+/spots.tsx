@@ -32,17 +32,19 @@ export async function getMapSpots(request: Request) {
 
   const zoom = (await z.coerce.number().parseAsync(zoomType)) || 5
 
-  const coords = await z
+  const result = await z
     .object({ minLat: z.coerce.number(), maxLat: z.coerce.number(), minLng: z.coerce.number(), maxLng: z.coerce.number() })
-    .parseAsync({
-      minLat: url.searchParams.get("minLat") || 45,
-      maxLat: url.searchParams.get("maxLat") || 55,
-      minLng: url.searchParams.get("minLng") || -4,
-      maxLng: url.searchParams.get("maxLng") || 4,
+    .safeParseAsync({
+      minLat: url.searchParams.get("minLat"),
+      maxLat: url.searchParams.get("maxLat"),
+      minLng: url.searchParams.get("minLng"),
+      maxLng: url.searchParams.get("maxLng"),
     })
+  if (!result.success) return []
+  const coords = result.data
 
   const spots = await db.spot.findMany({
-    take: 20, // temp limit
+    // take: 20, // temp limit
     select: { id: true, latitude: true, longitude: true, type: true },
     where: {
       latitude: { gt: coords.minLat, lt: coords.maxLat },
