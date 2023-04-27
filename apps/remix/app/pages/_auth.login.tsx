@@ -37,7 +37,7 @@ export const action = async ({ request }: ActionArgs) => {
 
   const { setUser } = await getUserSession(request)
   const headers = new Headers([["Set-Cookie", await setUser(user.id)]])
-  return redirect(redirectTo || "/", { headers })
+  return redirect(redirectTo || "/map", { headers })
 }
 
 export default function Login() {

@@ -60,7 +60,7 @@ export const action = async ({ request }: ActionArgs) => {
             ),
           ],
         ])
-        return redirect("/", { headers })
+        return redirect("/map", { headers })
       } catch (e) {
         return badRequest(e, {
           headers: { "Set-Cookie": await createFlash(FlashType.Error, "Register error") },

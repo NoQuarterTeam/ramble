@@ -152,9 +152,9 @@ const MapView = React.memo(function _MapView() {
             })
             const params = queryString.stringify({ type })
             if (!point.properties.cluster && point.properties.id) {
-              navigate(point.properties.id + "?" + params)
+              navigate("/map/" + point.properties.id + "?" + params)
             } else {
-              navigate("/" + "?" + params)
+              navigate("/map" + "?" + params)
             }
           }}
           anchor="bottom"
