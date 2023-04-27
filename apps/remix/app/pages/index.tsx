@@ -1,4 +1,5 @@
-import { json, LoaderArgs, redirect } from "@vercel/remix"
+import { json, type LoaderArgs, redirect } from "@vercel/remix"
+
 import { getMaybeUser } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderArgs) => {

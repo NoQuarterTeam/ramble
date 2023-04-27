@@ -1,5 +1,5 @@
-import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 import * as trpcFetch from "@trpc/server/adapters/fetch"
+import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 
 import { appRouter, createContext } from "@travel/api"
 

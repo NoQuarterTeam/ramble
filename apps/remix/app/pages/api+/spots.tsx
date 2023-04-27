@@ -1,9 +1,11 @@
-import { json, LoaderArgs } from "@vercel/remix"
-import { SpotType } from "@travel/database"
-import { z } from "zod"
-import { db } from "~/lib/db.server"
-import SuperCluster from "supercluster"
+import { json, type LoaderArgs } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
+import SuperCluster from "supercluster"
+import { z } from "zod"
+
+import { SpotType } from "@travel/database"
+
+import { db } from "~/lib/db.server"
 
 export const loader = async ({ request }: LoaderArgs) => {
   return json(await getMapSpots(request), {
@@ -51,6 +53,8 @@ export async function getMapSpots(request: Request) {
   })
 
   const superCluster = new SuperCluster()
+  if (spots.length === 0) return []
+
   const clusters = superCluster.load(
     spots.map((spot) => ({
       type: "Feature",
@@ -58,6 +62,5 @@ export async function getMapSpots(request: Request) {
       properties: { id: spot.id, type: spot.type },
     })),
   )
-
   return clusters.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], zoom)
 }

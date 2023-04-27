@@ -1,12 +1,11 @@
+import { Link, useSearchParams } from "@remix-run/react"
 import type { ActionArgs, V2_MetaFunction } from "@vercel/remix"
 import { redirect } from "@vercel/remix"
-import { Link, useSearchParams } from "@remix-run/react"
 import { z } from "zod"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
-
 import { comparePasswords } from "~/services/auth/password.server"
 import { getUserSession } from "~/services/session/session.server"
 

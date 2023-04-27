@@ -1,8 +1,10 @@
-import { json, LoaderArgs } from "@vercel/remix"
 import { useLoaderData, useNavigate, useSearchParams } from "@remix-run/react"
-import { CloseButton } from "@travel/ui"
+import { json, type LoaderArgs } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
+
+import { CloseButton } from "@travel/ui"
+
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers"
 
@@ -33,7 +35,7 @@ export default function SpotTile() {
     <div className="mt-nav absolute bottom-4 left-4 top-4 z-[1000] w-[400px] rounded-md bg-white p-4 shadow-md dark:bg-gray-900">
       <div className="flex justify-between">
         <p className="text-lg">{spot.name}</p>
-        <CloseButton onClick={() => navigate("../" + "?" + params)} />
+        <CloseButton onClick={() => navigate(`../?${params}`)} />
       </div>
       <p>{spot.address}</p>
     </div>

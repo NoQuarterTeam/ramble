@@ -1,11 +1,10 @@
 import * as React from "react"
-
 import { useSearchParams } from "@remix-run/react"
+import { SearchIcon, X } from "lucide-react"
 import queryString from "query-string"
 
 import { merge } from "@travel/shared"
 import { IconButton, Input, type InputProps } from "@travel/ui"
-import { SearchIcon, X } from "lucide-react"
 
 export function Search({ placeholder, name = "search", ...props }: InputProps) {
   const [params, setParams] = useSearchParams()

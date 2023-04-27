@@ -1,6 +1,6 @@
+import { Outlet } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { redirect } from "@vercel/remix"
-import { Outlet } from "@remix-run/react"
 
 import { db } from "~/lib/db.server"
 import { useTheme } from "~/lib/theme"

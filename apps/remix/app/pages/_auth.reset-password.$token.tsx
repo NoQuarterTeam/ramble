@@ -1,13 +1,12 @@
+import { Link, useParams } from "@remix-run/react"
 import type { ActionArgs } from "@vercel/remix"
 import { redirect } from "@vercel/remix"
-import { Link, useParams } from "@remix-run/react"
 import { z } from "zod"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { decryptToken } from "~/lib/jwt.server"
-
 import { hashPassword } from "~/services/auth/password.server"
 import { FlashType, getFlashSession } from "~/services/session/flash.server"
 
