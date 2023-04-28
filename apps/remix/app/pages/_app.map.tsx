@@ -1,7 +1,7 @@
 import { Outlet, useLoaderData, useNavigate, useRouteLoaderData, useSearchParams } from "@remix-run/react"
 import turfCenter from "@turf/center"
 import { points } from "@turf/helpers"
-import { json, type HeadersFunction, type LinksFunction, type LoaderArgs } from "@vercel/remix"
+import { json, type LinksFunction, type LoaderArgs } from "@vercel/remix"
 import { cva } from "class-variance-authority"
 import mapStyles from "mapbox-gl/dist/mapbox-gl.css"
 import { cacheHeader } from "pretty-cache-header"
@@ -16,21 +16,19 @@ import { useTheme } from "~/lib/theme"
 import { getMapSpots } from "~/services/spots.server"
 import type { IpInfo } from "./_app"
 
-export const headers: HeadersFunction = () => {
-  return {
-    "Cache-Control": cacheHeader({
-      public: true,
-      maxAge: "1hour",
-      sMaxage: "1hour",
-      staleWhileRevalidate: "1day",
-      staleIfError: "1day",
-    }),
-  }
-}
-
 export const loader = async ({ request }: LoaderArgs) => {
   const spots = await getMapSpots(request)
-  return json(spots)
+  return json(spots, {
+    headers: {
+      "Cache-Control": cacheHeader({
+        public: true,
+        maxAge: "1hour",
+        sMaxage: "1hour",
+        staleWhileRevalidate: "1day",
+        staleIfError: "1day",
+      }),
+    },
+  })
 }
 
 export const links: LinksFunction = () => {
