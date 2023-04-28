@@ -1,7 +1,9 @@
 import Supercluster from "supercluster"
-import type { SpotType } from "@travel/database"
 import { z } from "zod"
 import { NumAsString, parseQuerySafe } from "zodix"
+
+import type { SpotType } from "@travel/database"
+
 import { db } from "~/lib/db.server"
 
 export async function getMapSpots(request: Request) {

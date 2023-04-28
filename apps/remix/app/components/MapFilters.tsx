@@ -1,10 +1,10 @@
 import { useSearchParams } from "@remix-run/react"
-import type { SpotType } from "@travel/database"
-import { useDisclosure } from "@travel/shared"
-
-import { Button, Checkbox, Modal, ModalFooter, Select } from "@travel/ui"
 import { Settings2 } from "lucide-react"
 import queryString from "query-string"
+
+import type { SpotType } from "@travel/database"
+import { useDisclosure } from "@travel/shared"
+import { Button, Checkbox, Modal, ModalFooter, Select } from "@travel/ui"
 
 const SPOT_OPTIONS: { label: string; value: SpotType }[] = [
   { label: "Cafe", value: "CAFE" },

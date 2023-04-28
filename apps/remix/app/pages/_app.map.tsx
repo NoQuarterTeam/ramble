@@ -1,28 +1,19 @@
+import * as React from "react"
+import type { ViewStateChangeEvent } from "react-map-gl"
+import Map, { GeolocateControl, type LngLatLike, type MapRef, Marker, NavigationControl } from "react-map-gl"
 import { Outlet, useLoaderData, useNavigate, useSearchParams } from "@remix-run/react"
 import turfCenter from "@turf/center"
 import { points } from "@turf/helpers"
-import { json, type HeadersFunction, type LinksFunction, type LoaderArgs } from "@vercel/remix"
+import { type HeadersFunction, json, type LinksFunction, type LoaderArgs } from "@vercel/remix"
 import { cva } from "class-variance-authority"
 import mapStyles from "mapbox-gl/dist/mapbox-gl.css"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
-import * as React from "react"
-import type { ViewStateChangeEvent } from "react-map-gl"
-import Map, {
-  FullscreenControl,
-  GeolocateControl,
-  Marker,
-  NavigationControl,
-  ScaleControl,
-  type LngLatLike,
-  type MapRef,
-} from "react-map-gl"
 
 import { ClientOnly } from "@travel/shared"
 
 import { useTheme } from "~/lib/theme"
 import { getIpInfo } from "~/services/ip.server"
-
 import { getMapSpots } from "~/services/spots.server"
 
 export const headers: HeadersFunction = () => {
@@ -76,7 +67,7 @@ export default function MapView() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const handleMove = (e: mapboxgl.MapboxEvent<undefined> | ViewStateChangeEvent) => {
+  const onMove = (e: mapboxgl.MapboxEvent<undefined> | ViewStateChangeEvent) => {
     const bounds = e.target.getBounds()
     const zoom = Math.round(e.target.getZoom())
     const params = queryString.stringify({
@@ -107,7 +98,7 @@ export default function MapView() {
             const zoom = point.properties.cluster ? Math.min((currentZoom || 5) + 2, 14) : currentZoom
             mapRef.current?.flyTo({
               center,
-              duration: 500,
+              duration: 1000,
               padding: 50,
               zoom,
               offset: point.properties.cluster ? [0, 0] : [100, 0],
@@ -124,8 +115,8 @@ export default function MapView() {
         <div className="relative h-screen w-screen overflow-hidden">
           <Map
             mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
-            onLoad={handleMove}
-            onMoveEnd={handleMove}
+            onLoad={onMove}
+            onMoveEnd={onMove}
             ref={mapRef}
             style={{ height: "100%", width: "100%" }}
             initialViewState={initialViewState}
@@ -139,9 +130,7 @@ export default function MapView() {
             {spotMarkers}
 
             <GeolocateControl position="bottom-right" />
-            <FullscreenControl position="bottom-right" />
             <NavigationControl position="bottom-right" />
-            <ScaleControl />
           </Map>
           <Outlet />
         </div>

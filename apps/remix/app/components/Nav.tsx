@@ -1,11 +1,12 @@
 import { Link, useFetcher, useSubmit } from "@remix-run/react"
-import { Menu, Moon, Sun } from "lucide-react"
+import { LogOut, Menu, Moon, Sun, User } from "lucide-react"
 
-import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, IconButton } from "@travel/ui"
+import { Avatar, Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, IconButton } from "@travel/ui"
 
 import { LinkButton } from "~/components/LinkButton"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { useTheme } from "~/lib/theme"
+
 import { MapFilters } from "./MapFilters"
 
 export function Nav() {
@@ -23,22 +24,48 @@ export function Nav() {
             <p className="text-xl font-semibold">Travel</p>
           </div>
         </Link>
-        <MapFilters />
       </div>
-      <div className="hstack hidden md:flex">
-        <themeFetcher.Form action="/api/theme" method="post" replace>
-          <input type="hidden" name="theme" value={isDark ? "light" : "dark"} />
-          <IconButton
-            type="submit"
-            aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
-            variant="ghost"
-            icon={isDark ? <Sun className="sq-4" /> : <Moon className="sq-4" />}
-          />
-        </themeFetcher.Form>
+      <MapFilters />
+      <div className="hstack">
         {user ? (
-          <Button variant="outline" onClick={() => logoutSubmit(null, { method: "post", action: "/logout" })}>
-            Logout
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Avatar className="hover:opacity-70" src={user.avatar} name={user.firstName + " " + user.lastName} />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-[200px] space-y-2 p-1">
+              <LinkButton
+                to="/profile"
+                variant="ghost"
+                size="sm"
+                className="flex w-full items-center justify-start outline-none"
+                leftIcon={<User className="sq-4 mr-2" />}
+              >
+                Profile
+              </LinkButton>
+              <themeFetcher.Form action="/api/theme" method="post" replace className="w-full">
+                <input type="hidden" name="theme" value={isDark ? "light" : "dark"} />
+
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  type="submit"
+                  className="flex w-full items-center justify-start outline-none"
+                  leftIcon={isDark ? <Sun className="sq-4 mr-2" /> : <Moon className="sq-4 mr-2" />}
+                >
+                  <span>{isDark ? "Light" : "Dark"} mode</span>
+                </Button>
+              </themeFetcher.Form>
+              <Button
+                onClick={() => logoutSubmit(null, { method: "post", action: "/logout" })}
+                variant="ghost"
+                size="sm"
+                className="flex w-full items-center justify-start outline-none"
+                leftIcon={<LogOut className="sq-4 mr-2" />}
+              >
+                Logout
+              </Button>
+            </DropdownMenuContent>
+          </DropdownMenu>
         ) : (
           <div className="hstack">
             <LinkButton variant="ghost" to="/login">
