@@ -1,20 +1,20 @@
-import * as React from "react"
-import type { ViewStateChangeEvent } from "react-map-gl"
-import Map, { GeolocateControl, type LngLatLike, type MapRef, Marker, NavigationControl } from "react-map-gl"
-import { Outlet, useLoaderData, useNavigate, useSearchParams } from "@remix-run/react"
+import { Outlet, useLoaderData, useNavigate, useRouteLoaderData, useSearchParams } from "@remix-run/react"
 import turfCenter from "@turf/center"
 import { points } from "@turf/helpers"
-import { type HeadersFunction, json, type LinksFunction, type LoaderArgs } from "@vercel/remix"
+import { json, type HeadersFunction, type LinksFunction, type LoaderArgs } from "@vercel/remix"
 import { cva } from "class-variance-authority"
 import mapStyles from "mapbox-gl/dist/mapbox-gl.css"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
+import * as React from "react"
+import type { ViewStateChangeEvent } from "react-map-gl"
+import Map, { GeolocateControl, Marker, NavigationControl, type LngLatLike, type MapRef } from "react-map-gl"
 
 import { ClientOnly } from "@travel/shared"
 
 import { useTheme } from "~/lib/theme"
-import { getIpInfo } from "~/services/ip.server"
 import { getMapSpots } from "~/services/spots.server"
+import type { IpInfo } from "./_app"
 
 export const headers: HeadersFunction = () => {
   return {
@@ -29,9 +29,8 @@ export const headers: HeadersFunction = () => {
 }
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const ipInfo = await getIpInfo(request)
   const spots = await getMapSpots(request)
-  return json({ ipInfo, spots })
+  return json(spots)
 }
 
 export const links: LinksFunction = () => {
@@ -39,7 +38,10 @@ export const links: LinksFunction = () => {
 }
 
 export default function MapView() {
-  const { ipInfo, spots } = useLoaderData<typeof loader>()
+  const spots = useLoaderData<typeof loader>()
+  const ipInfo = useRouteLoaderData("pages/_app") as IpInfo
+  console.log({ ipInfo })
+
   const [searchParams, setSearchParams] = useSearchParams()
 
   const theme = useTheme()
