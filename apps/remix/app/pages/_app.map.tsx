@@ -72,9 +72,10 @@ export default function MapView() {
   const navigate = useNavigate()
 
   React.useEffect(() => {
+    if (!ipInfo) return
     const params = queryString.stringify({
       ...queryString.parse(searchParams.toString()),
-      c: ipInfo ? JSON.stringify([ipInfo?.longitude, ipInfo.latitude]) : undefined,
+      c: JSON.stringify([ipInfo?.longitude, ipInfo.latitude]),
     })
     const url = [window.location.pathname, params.toString()].join("?")
     window.history.replaceState(null, "", url)
@@ -157,8 +158,8 @@ export default function MapView() {
             mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
             onLoad={handleLoadSpots}
             onMoveEnd={(e) => {
-              const newCenter = [e.viewState.longitude, e.viewState.latitude]
               handleLoadSpots()
+              const newCenter = [e.viewState.longitude, e.viewState.latitude]
               const newParams = queryString.stringify({
                 ...queryString.parse(searchParams.toString()),
                 c: JSON.stringify(newCenter),
