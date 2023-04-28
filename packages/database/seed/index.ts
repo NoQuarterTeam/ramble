@@ -54,6 +54,10 @@ export async function main() {
     const randomUser = await prisma.user.findFirstOrThrow({
       skip: Math.floor(Math.random() * USER_COUNT),
     })
+    const tenRandomUsers = await prisma.user.findMany({
+      take: 10,
+      skip: Math.floor(Math.random() * 50),
+    })
     // date between 5 and 60 days ago
     const verifiedAt = new Date(Date.now() - Math.floor(Math.random() * 60 * 24 * 60 * 60 * 1000) + 5 * 24 * 60 * 60 * 1000)
     await prisma.spot.create({
@@ -63,6 +67,18 @@ export async function main() {
         description: faker.lorem.paragraph(),
         latitude: parseFloat(faker.address.latitude(52, 42)),
         longitude: parseFloat(faker.address.longitude(8, -3)),
+        images: {
+          create: Array.from({ length: 5 }).map((_) => ({
+            creator: { connect: { id: admin.id } },
+            path: "https://picsum.photos/400/300",
+          })),
+        },
+        ratings: {
+          create: tenRandomUsers.map((user) => ({
+            user: { connect: { id: user.id } },
+            rating: Math.floor(Math.random() * 5) + 1,
+          })),
+        },
         type: types[Math.floor(Math.random() * types.length)],
         address: faker.address.streetAddress(),
         creator: { connect: { id: randomUser.id } },
