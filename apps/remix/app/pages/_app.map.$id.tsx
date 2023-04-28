@@ -1,14 +1,15 @@
-import { isRouteErrorResponse, useLoaderData, useNavigate, useRouteError } from "@remix-run/react"
-import { json, type LoaderArgs } from "@vercel/remix"
+import * as React from "react"
+import { Await, isRouteErrorResponse, useLoaderData, useNavigate, useRouteError } from "@remix-run/react"
+import { defer, type LoaderArgs } from "@vercel/remix"
+import { Frown, Star } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 
 import { CloseButton } from "@travel/ui"
 
+import { LinkButton } from "~/components/LinkButton"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers"
-import { Frown, Star } from "lucide-react"
-import { LinkButton } from "~/components/LinkButton"
 import { notFound } from "~/lib/remix"
 
 export const headers = useLoaderHeaders
@@ -24,7 +25,7 @@ export const loader = async ({ params }: LoaderArgs) => {
     _avg: { rating: true },
   })
 
-  return json(
+  return defer(
     { ...spot, rating: averageRating._avg.rating?.toFixed(1) },
     {
       headers: {
@@ -41,24 +42,30 @@ export const loader = async ({ params }: LoaderArgs) => {
 }
 
 export default function SpotTile() {
-  const spot = useLoaderData<typeof loader>()
+  const spotPromise = useLoaderData<typeof loader>()
 
   return (
     <SpotContainer>
-      <div className="space-y-2">
-        <p className="text-lg">{spot.name}</p>
+      <React.Suspense>
+        <Await resolve={spotPromise}>
+          {(spot) => (
+            <div className="space-y-2">
+              <p className="text-lg">{spot.name}</p>
 
-        <div className="hstack">
-          <Star className="sq-5" />
-          <p>{spot.rating || "Not yet rated"}</p>
-        </div>
-        <p>{spot.address}</p>
-        <div className="relative h-[600px] space-y-2 overflow-scroll">
-          {spot.images.map((image, i) => (
-            <img alt="spot" className={" rounded-md  "} key={image.id} src={`${image.path}?${i}`} />
-          ))}
-        </div>
-      </div>
+              <div className="hstack">
+                <Star className="sq-5" />
+                <p>{spot.rating || "Not yet rated"}</p>
+              </div>
+              <p>{spot.address}</p>
+              <div className="relative h-[600px] space-y-2 overflow-scroll">
+                {spot.images?.map((image, i) => (
+                  <img alt="spot" className={" rounded-md  "} key={image.id} src={`${image.path}?${spot.id}${i}`} />
+                ))}
+              </div>
+            </div>
+          )}
+        </Await>
+      </React.Suspense>
     </SpotContainer>
   )
 }

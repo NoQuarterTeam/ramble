@@ -1,10 +1,10 @@
+import { Outlet } from "@remix-run/react"
 import type { LoaderArgs, SerializeFrom } from "@vercel/remix"
 import { json } from "@vercel/remix"
-import { Outlet } from "@remix-run/react"
+import { cacheHeader } from "pretty-cache-header"
 
 import { Nav } from "~/components/Nav"
 import { getIpInfo } from "~/services/ip.server"
-import { cacheHeader } from "pretty-cache-header"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const ipInfo = await getIpInfo(request)
