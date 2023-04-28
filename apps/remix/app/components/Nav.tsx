@@ -1,7 +1,16 @@
 import { Link, useFetcher, useSubmit } from "@remix-run/react"
-import { LogOut, Menu, Moon, Sun, User } from "lucide-react"
+import { LogOut, Menu, Moon, Plus, Sun, User } from "lucide-react"
 
-import { Avatar, Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, IconButton } from "@travel/ui"
+import {
+  Avatar,
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  IconButton,
+  Tooltip,
+} from "@travel/ui"
 
 import { LinkButton } from "~/components/LinkButton"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
@@ -19,51 +28,58 @@ export function Nav() {
   return (
     <div className="h-nav absolute left-0 top-0 z-50 flex w-full items-center justify-between border-b border-solid border-gray-50 bg-white px-6 align-middle dark:border-gray-700 dark:bg-gray-800">
       <div className="hstack h-12 space-x-6">
-        <Link to="/">
-          <div className="hstack">
-            <p className="text-xl font-semibold">Travel</p>
-          </div>
-        </Link>
+        <div className="hstack">
+          <p className="text-xl font-semibold">Travel</p>
+        </div>
       </div>
       <MapFilters />
-      <div className="hstack">
+      <div className="hstack space-x-3">
+        <Tooltip label="Add a spot">
+          <IconButton icon={<Plus className="sq-4" />} aria-label="add spot" variant="outline" />
+        </Tooltip>
         {user ? (
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar className="hover:opacity-70" src={user.avatar} name={user.firstName + " " + user.lastName} />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[200px] space-y-2 p-1">
-              <LinkButton
-                to="/profile"
-                variant="ghost"
-                size="sm"
-                className="flex w-full items-center justify-start outline-none"
-                leftIcon={<User className="sq-4 mr-2" />}
-              >
-                Profile
-              </LinkButton>
+              <DropdownMenuItem asChild>
+                <LinkButton
+                  to="/profile"
+                  variant="ghost"
+                  size="sm"
+                  className="flex w-full items-center justify-start outline-none"
+                  leftIcon={<User className="sq-4 mr-2" />}
+                >
+                  Profile
+                </LinkButton>
+              </DropdownMenuItem>
               <themeFetcher.Form action="/api/theme" method="post" replace className="w-full">
                 <input type="hidden" name="theme" value={isDark ? "light" : "dark"} />
 
+                <DropdownMenuItem asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    type="submit"
+                    className="flex w-full items-center justify-start outline-none"
+                    leftIcon={isDark ? <Sun className="sq-4 mr-2" /> : <Moon className="sq-4 mr-2" />}
+                  >
+                    <span>{isDark ? "Light" : "Dark"} mode</span>
+                  </Button>
+                </DropdownMenuItem>
+              </themeFetcher.Form>
+              <DropdownMenuItem asChild>
                 <Button
+                  onClick={() => logoutSubmit(null, { method: "post", action: "/logout" })}
                   variant="ghost"
                   size="sm"
-                  type="submit"
                   className="flex w-full items-center justify-start outline-none"
-                  leftIcon={isDark ? <Sun className="sq-4 mr-2" /> : <Moon className="sq-4 mr-2" />}
+                  leftIcon={<LogOut className="sq-4 mr-2" />}
                 >
-                  <span>{isDark ? "Light" : "Dark"} mode</span>
+                  Logout
                 </Button>
-              </themeFetcher.Form>
-              <Button
-                onClick={() => logoutSubmit(null, { method: "post", action: "/logout" })}
-                variant="ghost"
-                size="sm"
-                className="flex w-full items-center justify-start outline-none"
-                leftIcon={<LogOut className="sq-4 mr-2" />}
-              >
-                Logout
-              </Button>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (

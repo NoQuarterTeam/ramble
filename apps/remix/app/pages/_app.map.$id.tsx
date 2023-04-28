@@ -1,9 +1,9 @@
-import * as React from "react"
 import { Await, isRouteErrorResponse, useLoaderData, useNavigate, useRouteError } from "@remix-run/react"
 import { defer, type LoaderArgs } from "@vercel/remix"
 import { Frown, Star } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
+import * as React from "react"
 
 import { CloseButton } from "@travel/ui"
 
@@ -59,7 +59,7 @@ export default function SpotTile() {
               <p>{spot.address}</p>
               <div className="relative h-[600px] space-y-2 overflow-scroll">
                 {spot.images?.map((image, i) => (
-                  <img alt="spot" className={" rounded-md  "} key={image.id} src={`${image.path}?${spot.id}${i}`} />
+                  <img alt="spot" className="rounded-md" key={image.id} src={`${image.path}?${spot.id}${i}`} />
                 ))}
               </div>
             </div>
