@@ -67,45 +67,46 @@ export function Nav() {
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <div className="hstack">
-            <LinkButton variant="ghost" to="/login">
-              Login
-            </LinkButton>
-            <LinkButton colorScheme="primary" to="/register">
-              Register
-            </LinkButton>
-          </div>
+          <>
+            <div className="hstack hidden md:flex">
+              <LinkButton variant="ghost" to="/login">
+                Login
+              </LinkButton>
+              <LinkButton colorScheme="primary" to="/register">
+                Register
+              </LinkButton>
+            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <IconButton
+                  className="inline-block md:hidden"
+                  aria-label={`Toggle open menu`}
+                  icon={<Menu className="sq-5" />}
+                  variant="ghost"
+                />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent side="bottom" align="end" className="inline-block md:hidden">
+                {user ? (
+                  <DropdownMenuItem asChild>
+                    <Button variant="ghost" onClick={() => logoutSubmit(null, { method: "post", action: "/logout" })}>
+                      Log out
+                    </Button>
+                  </DropdownMenuItem>
+                ) : (
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link to="/register">Register</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/login">Login</Link>
+                    </DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </>
         )}
       </div>
-
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <IconButton
-            className="inline-block md:hidden"
-            aria-label={`Toggle open menu`}
-            icon={<Menu className="sq-5" />}
-            variant="ghost"
-          />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent side="bottom" align="end" className="inline-block md:hidden">
-          {user ? (
-            <DropdownMenuItem asChild>
-              <Button variant="ghost" onClick={() => logoutSubmit(null, { method: "post", action: "/logout" })}>
-                Log out
-              </Button>
-            </DropdownMenuItem>
-          ) : (
-            <>
-              <DropdownMenuItem asChild>
-                <Link to="/register">Register</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to="/login">Login</Link>
-              </DropdownMenuItem>
-            </>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
     </div>
   )
 }
