@@ -7,7 +7,7 @@ import { merge } from "@travel/shared"
 import { Spinner } from "./Spinner"
 import { Text } from "./Text"
 
-export const buttonStyles = cva("flex items-center justify-center rounded-sm border", {
+export const buttonStyles = cva("flex items-center justify-center rounded-md border", {
   variants: {
     size: {
       xs: "h-8",

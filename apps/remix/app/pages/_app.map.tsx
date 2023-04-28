@@ -1,28 +1,29 @@
-import * as React from "react"
-import Map, {
-  FullscreenControl,
-  GeolocateControl,
-  type LngLatLike,
-  type MapRef,
-  Marker,
-  NavigationControl,
-  ScaleControl,
-} from "react-map-gl"
-import { Outlet, useFetcher, useLoaderData, useNavigate, useSearchParams } from "@remix-run/react"
-import { type HeadersFunction, json, type LinksFunction, type LoaderArgs, type SerializeFrom } from "@vercel/remix"
+import { Outlet, useLoaderData, useNavigate, useSearchParams } from "@remix-run/react"
+import turfCenter from "@turf/center"
+import { points } from "@turf/helpers"
+import { json, type HeadersFunction, type LinksFunction, type LoaderArgs } from "@vercel/remix"
 import { cva } from "class-variance-authority"
 import mapStyles from "mapbox-gl/dist/mapbox-gl.css"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
+import * as React from "react"
+import type { ViewStateChangeEvent } from "react-map-gl"
+import Map, {
+  FullscreenControl,
+  GeolocateControl,
+  Marker,
+  NavigationControl,
+  ScaleControl,
+  type LngLatLike,
+  type MapRef,
+} from "react-map-gl"
 
-import { type SpotType } from "@travel/database"
 import { ClientOnly } from "@travel/shared"
-import { Select } from "@travel/ui"
 
 import { useTheme } from "~/lib/theme"
 import { getIpInfo } from "~/services/ip.server"
 
-import { type loader as spotLoader } from "./api+/spots"
+import { getMapSpots } from "~/services/spots.server"
 
 export const headers: HeadersFunction = () => {
   return {
@@ -38,85 +39,69 @@ export const headers: HeadersFunction = () => {
 
 export const loader = async ({ request }: LoaderArgs) => {
   const ipInfo = await getIpInfo(request)
-  return json(ipInfo, { headers: { "Cache-Control": cacheHeader({ private: true, maxAge: "1day" }) } })
+  const spots = await getMapSpots(request)
+  return json({ ipInfo, spots })
 }
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: mapStyles }]
 }
 
-const SPOT_OPTIONS: { label: string; value: SpotType }[] = [
-  { label: "Cafe", value: "CAFE" },
-  { label: "Restaurant", value: "RESTAURANT" },
-  { label: "Camping", value: "CAMPING" },
-  { label: "Parking", value: "PARKING" },
-  { label: "Bar", value: "BAR" },
-  { label: "Tip", value: "TIP" },
-  { label: "Shop", value: "SHOP" },
-  { label: "Climbing", value: "CLIMBING" },
-  { label: "Mountain Biking", value: "MOUNTAIN_BIKING" },
-  { label: "Gas Station", value: "GAS_STATION" },
-  { label: "SUPing", value: "SUPPING" },
-  { label: "Other", value: "OTHER" },
-]
-
-type Point = SerializeFrom<typeof spotLoader>[number]
-
 export default function MapView() {
-  const ipInfo = useLoaderData<typeof loader>()
+  const { ipInfo, spots } = useLoaderData<typeof loader>()
   const [searchParams, setSearchParams] = useSearchParams()
-  const type = searchParams.get("type")
-  const [points, setPoints] = React.useState<Point[]>([])
+
   const theme = useTheme()
   const mapRef = React.useRef<MapRef>(null)
-  const navigate = useNavigate()
 
-  React.useEffect(() => {
-    if (!ipInfo) return
-    const params = queryString.stringify({
-      ...queryString.parse(searchParams.toString()),
-      c: JSON.stringify([ipInfo?.longitude, ipInfo.latitude]),
-    })
-    const url = [window.location.pathname, params.toString()].join("?")
-    window.history.replaceState(null, "", url)
+  const initialViewState = React.useMemo(() => {
+    const minLat = searchParams.get("minLat")
+    const maxLat = searchParams.get("maxLat")
+    const minLng = searchParams.get("minLng")
+    const maxLng = searchParams.get("maxLng")
+    let centerFromParams
+    if (minLat && maxLat && minLng && maxLng) {
+      centerFromParams = turfCenter(
+        points([
+          [parseFloat(minLng), parseFloat(minLat)],
+          [parseFloat(maxLng), parseFloat(maxLat)],
+        ]),
+      )
+    }
+    return {
+      zoom: ipInfo ? 6 : 5,
+      longitude: centerFromParams?.geometry.coordinates[0] || ipInfo?.longitude || 4,
+      latitude: centerFromParams?.geometry.coordinates[1] || ipInfo?.latitude || 52,
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ipInfo])
+  }, [])
 
-  const spotFetcher = useFetcher<typeof spotLoader>()
-
-  const handleLoadSpots = React.useCallback(() => {
-    if (!mapRef.current) return
-    const bounds = mapRef.current.getBounds()
-    const zoom = mapRef.current.getZoom()
+  const handleMove = (e: mapboxgl.MapboxEvent<undefined> | ViewStateChangeEvent) => {
+    const bounds = e.target.getBounds()
+    const zoom = Math.round(e.target.getZoom())
     const params = queryString.stringify({
-      minLat: bounds.getSouth(),
-      maxLat: bounds.getNorth(),
-      minLng: bounds.getWest(),
-      maxLng: bounds.getEast(),
+      ...queryString.parse(window.location.search),
+      minLat: parseFloat(bounds.getSouth().toFixed(6)),
+      maxLat: parseFloat(bounds.getNorth().toFixed(6)),
+      minLng: parseFloat(bounds.getWest().toFixed(6)),
+      maxLng: parseFloat(bounds.getEast().toFixed(6)),
       zoom,
-      type,
     })
-    spotFetcher.load(`/api/spots?${params}`)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [type])
-
-  React.useEffect(() => {
-    handleLoadSpots()
-  }, [handleLoadSpots])
-
-  React.useEffect(() => {
-    if (!spotFetcher.data || spotFetcher.state === "loading") return
-    setPoints(spotFetcher.data)
-  }, [spotFetcher.data, spotFetcher.state])
-
+    setSearchParams(params)
+  }
+  const navigate = useNavigate()
   const spotMarkers = React.useMemo(
     () =>
-      points.map((point, i) => (
+      spots.map((point, i) => (
         <SpotMarker
           point={point}
           key={i}
           onClick={(e) => {
             e.originalEvent.stopPropagation()
+            if (!point.properties.cluster && point.properties.id) {
+              const newParams = queryString.stringify(queryString.parse(window.location.search))
+              navigate(`/map/${point.properties.id}?${newParams}`)
+            }
             const center = point.geometry.coordinates as LngLatLike
             const currentZoom = mapRef.current?.getZoom()
             const zoom = point.properties.cluster ? Math.min((currentZoom || 5) + 2, 14) : currentZoom
@@ -127,49 +112,23 @@ export default function MapView() {
               zoom,
               offset: point.properties.cluster ? [0, 0] : [100, 0],
             })
-
-            if (!point.properties.cluster && point.properties.id) {
-              navigate(`/map/${point.properties.id}?${searchParams.toString()}`)
-            } else {
-              navigate(`/map?${searchParams.toString()}`)
-            }
-            const newParams = queryString.stringify({
-              ...queryString.parse(searchParams.toString()),
-              c: JSON.stringify(center),
-            })
-            const url = [window.location.pathname, newParams.toString()].join("?")
-            window.history.replaceState(null, "", url)
           }}
         />
       )),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [points],
+    [spots],
   )
-
-  const center = queryString.parse(searchParams.toString()).c as string | undefined
-  const longitude = center ? JSON.parse(center)[0] : ipInfo?.longitude || 4
-  const latitude = center ? JSON.parse(center)[1] : ipInfo?.latitude || 50
-
   return (
     <div className="relative">
       <ClientOnly>
         <div className="relative h-screen w-screen overflow-hidden">
           <Map
             mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
-            onLoad={handleLoadSpots}
-            onMoveEnd={(e) => {
-              handleLoadSpots()
-              const newCenter = [e.viewState.longitude, e.viewState.latitude]
-              const newParams = queryString.stringify({
-                ...queryString.parse(searchParams.toString()),
-                c: JSON.stringify(newCenter),
-              })
-              const url = [window.location.pathname, newParams.toString()].join("?")
-              window.history.replaceState(null, "", url)
-            }}
+            onLoad={handleMove}
+            onMoveEnd={handleMove}
             ref={mapRef}
             style={{ height: "100%", width: "100%" }}
-            initialViewState={{ longitude, latitude, zoom: ipInfo ? 6 : 5 }}
+            initialViewState={initialViewState}
             attributionControl={false}
             mapStyle={
               theme === "dark"
@@ -178,28 +137,15 @@ export default function MapView() {
             }
           >
             {spotMarkers}
+
             <GeolocateControl position="bottom-right" />
             <FullscreenControl position="bottom-right" />
             <NavigationControl position="bottom-right" />
             <ScaleControl />
           </Map>
+          <Outlet />
         </div>
       </ClientOnly>
-      <div className="top-nav absolute right-6 mt-4 bg-white shadow-md dark:bg-gray-900">
-        <Select
-          defaultValue={type || ""}
-          className="cursor-pointer"
-          onChange={(e) => setSearchParams({ ...searchParams, type: e.target.value })}
-        >
-          <option value="">All</option>
-          {SPOT_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </Select>
-      </div>
-      <Outlet />
     </div>
   )
 }
@@ -223,6 +169,8 @@ const spotMarkerColors = cva("cursor-pointer hover:scale-110 border sq-5 shadow-
     },
   },
 })
+
+type Point = Awaited<ReturnType<typeof getMapSpots>>[number]
 
 interface MarkerProps {
   onClick: (e: mapboxgl.MapboxEvent<MouseEvent>) => void

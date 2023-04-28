@@ -15,14 +15,12 @@ import {
   Scripts,
   useLoaderData,
   useMatches,
-  useNavigation,
   useRouteError,
 } from "@remix-run/react"
 import type { LinksFunction, LoaderArgs, SerializeFrom, V2_MetaFunction } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { Frown } from "lucide-react"
 import NProgress from "nprogress"
-import * as React from "react"
 
 import { join } from "@travel/shared"
 import { Toaster } from "@travel/ui"
@@ -81,13 +79,6 @@ NProgress.configure({ showSpinner: false })
 
 export default function App() {
   const { flash, theme } = useLoaderData<typeof loader>()
-
-  const { state } = useNavigation()
-
-  React.useEffect(() => {
-    if (state === "loading") NProgress.start()
-    if (state === "idle") NProgress.done()
-  }, [state])
 
   return (
     <Document theme={theme}>

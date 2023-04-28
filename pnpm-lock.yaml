@@ -343,6 +343,12 @@ importers:
       '@turf/bbox':
         specifier: ^6.5.0
         version: 6.5.0
+      '@turf/center':
+        specifier: ^6.5.0
+        version: 6.5.0
+      '@turf/helpers':
+        specifier: ^6.5.0
+        version: 6.5.0
       '@vercel/remix':
         specifier: ^1.15.0
         version: 1.15.0(react-dom@18.2.0)(react@18.2.0)
@@ -409,6 +415,9 @@ importers:
       zod:
         specifier: 3.21.4
         version: 3.21.4
+      zodix:
+        specifier: ^0.4.0
+        version: 0.4.0(@remix-run/server-runtime@1.15.0)(zod@3.21.4)
       zustand:
         specifier: 4.3.7
         version: 4.3.7(react@18.2.0)
@@ -5851,6 +5860,13 @@ packages:
     dependencies:
       '@turf/helpers': 6.5.0
       '@turf/meta': 6.5.0
+    dev: false
+
+  /@turf/center@6.5.0:
+    resolution: {integrity: sha512-T8KtMTfSATWcAX088rEDKjyvQCBkUsLnK/Txb6/8WUXIeOZyHu42G7MkdkHRoHtwieLdduDdmPLFyTdG5/e7ZQ==}
+    dependencies:
+      '@turf/bbox': 6.5.0
+      '@turf/helpers': 6.5.0
     dev: false
 
   /@turf/helpers@6.5.0:
@@ -17015,6 +17031,16 @@ packages:
 
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
+    dev: false
+
+  /zodix@0.4.0(@remix-run/server-runtime@1.15.0)(zod@3.21.4):
+    resolution: {integrity: sha512-FfQSfQsGp/rmS9eYAuLoo8hYdd/DsvrBUy+Wm31g4sb0aOqC5aJKKrdzbCGmcoeG9Z8ANAIlknwcQo/Edf1lJg==}
+    peerDependencies:
+      '@remix-run/server-runtime': 1.x
+      zod: 3.x
+    dependencies:
+      '@remix-run/server-runtime': 1.15.0
+      zod: 3.21.4
     dev: false
 
   /zustand@4.3.7(react@18.2.0):

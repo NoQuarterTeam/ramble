@@ -9,7 +9,7 @@ export function ResetPasswordEmail(props: { link?: string }) {
       <div>
         <h1 className="text-2xl font-bold text-black">Reset Password</h1>
         <p className="mb-4 text-black">Click below to reset your password</p>
-        <Button href={link} className="bg-primary-500 rounded-xs mb-4 px-3 py-3 text-black">
+        <Button href={link} className="bg-primary-500 mb-4 rounded-md px-3 py-3 text-black">
           Reset password
         </Button>
         <a href={link} className="block underline">

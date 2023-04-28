@@ -1,27 +1,17 @@
-import { Link, useFetcher, useFetchers, useSubmit } from "@remix-run/react"
+import { Link, useFetcher, useSubmit } from "@remix-run/react"
 import { Menu, Moon, Sun } from "lucide-react"
 
-import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, IconButton, Spinner } from "@travel/ui"
+import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, IconButton } from "@travel/ui"
 
-import * as React from "react"
 import { LinkButton } from "~/components/LinkButton"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { useTheme } from "~/lib/theme"
+import { MapFilters } from "./MapFilters"
 
 export function Nav() {
   const user = useMaybeUser()
   const logoutSubmit = useSubmit()
   const themeFetcher = useFetcher()
-
-  const fetchers = useFetchers()
-
-  const state = React.useMemo<"idle" | "loading">(() => {
-    const states = fetchers.map((fetcher) => fetcher.state)
-    if (states.every((state) => state === "idle")) return "idle"
-    return "loading"
-  }, [fetchers])
-
-  const isLoading = state === "loading"
 
   const theme = useTheme()
   const isDark = theme === "dark"
@@ -31,9 +21,9 @@ export function Nav() {
         <Link to="/">
           <div className="hstack">
             <p className="text-xl font-semibold">Travel</p>
-            {isLoading && <Spinner />}
           </div>
         </Link>
+        <MapFilters />
       </div>
       <div className="hstack hidden md:flex">
         <themeFetcher.Form action="/api/theme" method="post" replace>
