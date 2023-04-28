@@ -38,7 +38,6 @@ export const links: LinksFunction = () => {
 export default function MapView() {
   const spots = useLoaderData<typeof loader>()
   const ipInfo = useRouteLoaderData("pages/_app") as IpInfo
-  console.log({ ipInfo })
 
   const [searchParams, setSearchParams] = useSearchParams()
 
