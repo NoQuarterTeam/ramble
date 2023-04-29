@@ -45,7 +45,7 @@
     "cssnano": "^6.0.0",
     "dotenv-cli": "^7.1.0",
     "eslint": "8.39.0",
-    "eslint-config-next": "13.3.1",
+    "eslint-config-next": "13.3.2",
     "postcss": "^8.4.21",
     "prettier": "^2.8.4",
     "tailwindcss": "^3.3.1",
