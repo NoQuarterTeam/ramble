@@ -5,7 +5,7 @@ import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 import * as React from "react"
 
-import { CloseButton } from "@travel/ui"
+import { Avatar, CloseButton } from "@travel/ui"
 
 import { LinkButton } from "~/components/LinkButton"
 import { db } from "~/lib/db.server"
@@ -17,10 +17,28 @@ export const headers = useLoaderHeaders
 export const loader = async ({ params }: LoaderArgs) => {
   const spot = await db.spot.findUnique({
     where: { id: params.id },
-    select: { id: true, name: true, address: true, images: { select: { id: true, path: true } } },
+    select: {
+      id: true,
+      name: true,
+      address: true,
+      images: { select: { id: true, path: true } },
+      reviews: {
+        take: 5,
+        orderBy: { createdAt: "desc" },
+        select: {
+          id: true,
+          createdAt: true,
+          rating: true,
+          description: true,
+          user: {
+            select: { id: true, firstName: true, lastName: true, avatar: true },
+          },
+        },
+      },
+    },
   })
   if (!spot) throw notFound("Spot not found")
-  const averageRating = await db.spotRating.aggregate({
+  const averageRating = await db.review.aggregate({
     where: { spotId: params.id },
     _avg: { rating: true },
   })
@@ -51,16 +69,44 @@ export default function SpotTile() {
           {(spot) => (
             <div className="space-y-2">
               <p className="text-lg">{spot.name}</p>
-
               <div className="hstack">
                 <Star className="sq-5" />
                 <p>{spot.rating || "Not yet rated"}</p>
               </div>
               <p>{spot.address}</p>
-              <div className="relative h-[600px] space-y-2 overflow-scroll">
+              <div className="relative flex space-x-2 overflow-scroll">
                 {spot.images?.map((image, i) => (
                   <img alt="spot" className="rounded-md" key={image.id} src={`${image.path}?${spot.id}${i}`} />
                 ))}
+              </div>
+              <div>
+                <h2 className="text-lg">Reviews</h2>
+                <div className="space-y-6">
+                  {spot.reviews?.map((review) => (
+                    <div key={review.id} className="stack space-y-2">
+                      <div className="flex justify-between">
+                        <div className="hstack">
+                          <Avatar
+                            className="sq-10 rounded-full"
+                            name={`${review.user.firstName} ${review.user.lastName}`}
+                            src={review.user.avatar}
+                          />
+                          <div>
+                            <p className="text-md">
+                              {review.user.firstName} {review.user.lastName}
+                            </p>
+                            <p className="text-sm opacity-70">{new Date(review.createdAt).toLocaleDateString()}</p>
+                          </div>
+                        </div>
+                        <div className="hstack">
+                          <Star className="sq-5" />
+                          <p>{review.rating}</p>
+                        </div>
+                      </div>
+                      <p className="text-sm">{review.description}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}
@@ -73,7 +119,7 @@ export default function SpotTile() {
 function SpotContainer(props: { children: React.ReactNode }) {
   const navigate = useNavigate()
   return (
-    <div className="mt-nav absolute bottom-4 left-4 top-4 z-10 w-[400px] rounded-md bg-white p-4 shadow-md dark:bg-gray-800">
+    <div className="mt-nav absolute bottom-4 left-4 top-4 z-10 w-[400px] overflow-scroll rounded-md bg-white p-4 shadow-md dark:bg-gray-800">
       <CloseButton
         className="absolute right-2 top-2"
         onClick={() => {

@@ -73,10 +73,11 @@ export async function main() {
             path: "https://picsum.photos/400/300",
           })),
         },
-        ratings: {
+        reviews: {
           create: tenRandomUsers.map((user) => ({
             user: { connect: { id: user.id } },
             rating: Math.floor(Math.random() * 5) + 1,
+            description: faker.lorem.paragraph(),
           })),
         },
         type: types[Math.floor(Math.random() * types.length)],
