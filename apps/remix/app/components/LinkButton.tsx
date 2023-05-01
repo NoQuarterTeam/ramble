@@ -10,7 +10,7 @@ interface LinkButtonProps extends ButtonStyleProps, LinkProps {
 
 export function LinkButton({ variant, size, isLoading, leftIcon, disabled, colorScheme, ...props }: LinkButtonProps) {
   return (
-    <div className={join("inline-block", disabled && "cursor-not-allowed")}>
+    <div className={join("inline-block w-full", disabled && "cursor-not-allowed")}>
       <Link
         style={{ pointerEvents: disabled ? "none" : undefined }}
         {...props}

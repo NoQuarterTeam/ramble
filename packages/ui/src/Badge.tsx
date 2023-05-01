@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { merge } from "@travel/shared"
 
-export const badgeProps = cva("rounded-xs font-medium uppercase", {
+export const badgeProps = cva("rounded-md font-medium uppercase", {
   variants: {
     colorScheme: {
       primary: "bg-primary-300/40 dark:bg-primary-300/20 text-primary-900 dark:text-primary-200 dark:color-primary-200",

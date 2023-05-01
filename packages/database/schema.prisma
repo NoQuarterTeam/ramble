@@ -15,18 +15,18 @@ enum Role {
 }
 
 model User {
-  id            String       @id @default(uuid())
-  email         String       @unique
+  id            String      @id @default(uuid())
+  email         String      @unique
   password      String
   firstName     String
   lastName      String
-  role          Role         @default(USER)
+  role          Role        @default(USER)
   avatar        String?
   createdSpots  Spot[]
-  verifiedSpots Spot[]       @relation(name: "VerifiedSpot")
+  verifiedSpots Spot[]      @relation(name: "VerifiedSpot")
   spotImages    SpotImage[]
   lists         List[]
-  spotRatings   SpotRating[]
+  reviews       Review[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -49,24 +49,24 @@ enum SpotType {
 }
 
 model Spot {
-  id               String       @id @default(uuid())
+  id               String      @id @default(uuid())
   name             String
   type             SpotType
-  description      String       @db.LongText
+  description      String      @db.LongText
   address          String
   latitude         Float
   longitude        Float
-  isAnimalFriendly Boolean      @default(true)
+  isAnimalFriendly Boolean     @default(true)
   images           SpotImage[]
   verifiedAt       DateTime?
   verifierId       String?
-  verifier         User?        @relation(name: "VerifiedSpot", fields: [verifierId], references: [id])
+  verifier         User?       @relation(name: "VerifiedSpot", fields: [verifierId], references: [id])
   creatorId        String
-  creator          User         @relation(fields: [creatorId], references: [id])
+  creator          User        @relation(fields: [creatorId], references: [id])
   spotLists        ListSpot[]
-  ratings          SpotRating[]
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @default(now()) @updatedAt
+  reviews          Review[]
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @default(now()) @updatedAt
 
   @@index([verifierId])
   @@index([latitude])
@@ -75,11 +75,10 @@ model Spot {
 }
 
 model SpotImage {
-  id     String @id @default(uuid())
-  spotId String
-  spot   Spot   @relation(fields: [spotId], references: [id])
-  path   String
-
+  id        String   @id @default(uuid())
+  path      String
+  spotId    String
+  spot      Spot     @relation(fields: [spotId], references: [id])
   creatorId String
   creator   User     @relation(fields: [creatorId], references: [id])
   createdAt DateTime @default(now())
@@ -116,13 +115,14 @@ model ListSpot {
   @@index([listId])
 }
 
-model SpotRating {
-  id     String @id @default(uuid())
-  spotId String
-  spot   Spot   @relation(fields: [spotId], references: [id])
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-  rating Int
+model Review {
+  id          String @id @default(uuid())
+  spotId      String
+  spot        Spot   @relation(fields: [spotId], references: [id])
+  userId      String
+  user        User   @relation(fields: [userId], references: [id])
+  rating      Int
+  description String @db.LongText
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt

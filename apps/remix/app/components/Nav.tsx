@@ -1,9 +1,22 @@
-import { Link, useFetcher, useRouteLoaderData, useSubmit } from "@remix-run/react"
-import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, IconButton, Limiter } from "@travel/ui"
-import { Menu, Moon, Sun } from "lucide-react"
+import { Link, useFetcher, useSubmit } from "@remix-run/react"
+import { LogOut, Menu, Moon, Plus, Sun, User } from "lucide-react"
+
+import {
+  Avatar,
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  IconButton,
+  Tooltip,
+} from "@travel/ui"
+
 import { LinkButton } from "~/components/LinkButton"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { useTheme } from "~/lib/theme"
+
+import { MapFilters } from "./MapFilters"
 
 export function Nav() {
   const user = useMaybeUser()
@@ -15,66 +28,101 @@ export function Nav() {
   return (
     <div className="h-nav absolute left-0 top-0 z-50 flex w-full items-center justify-between border-b border-solid border-gray-50 bg-white px-6 align-middle dark:border-gray-700 dark:bg-gray-800">
       <div className="hstack h-12 space-x-6">
-        <Link to="/">
-          <div className="hstack">
-            <p className="text-xl font-semibold">Travel</p>
-          </div>
-        </Link>
+        <div className="hstack">
+          <p className="text-xl font-semibold">Travel</p>
+        </div>
       </div>
-      <div className="hstack hidden md:flex">
-        <themeFetcher.Form action="/api/theme" method="post" replace>
-          <input type="hidden" name="theme" value={isDark ? "light" : "dark"} />
-          <IconButton
-            type="submit"
-            aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
-            variant="ghost"
-            icon={isDark ? <Sun className="sq-4" /> : <Moon className="sq-4" />}
-          />
-        </themeFetcher.Form>
+      <MapFilters />
+      <div className="hstack space-x-3">
+        <Tooltip label="Add a spot">
+          <IconButton icon={<Plus className="sq-4" />} aria-label="add spot" variant="outline" />
+        </Tooltip>
         {user ? (
-          <Button variant="outline" onClick={() => logoutSubmit(null, { method: "post", action: "/logout" })}>
-            Logout
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Avatar className="hover:opacity-70" src={user.avatar} name={user.firstName + " " + user.lastName} />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-[200px] space-y-2 p-1">
+              <DropdownMenuItem asChild>
+                <LinkButton
+                  to="/profile"
+                  variant="ghost"
+                  size="sm"
+                  className="flex w-full items-center justify-start outline-none"
+                  leftIcon={<User className="sq-4 mr-2" />}
+                >
+                  Profile
+                </LinkButton>
+              </DropdownMenuItem>
+              <themeFetcher.Form action="/api/theme" method="post" replace className="w-full">
+                <input type="hidden" name="theme" value={isDark ? "light" : "dark"} />
+
+                <DropdownMenuItem asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    type="submit"
+                    className="flex w-full items-center justify-start outline-none"
+                    leftIcon={isDark ? <Sun className="sq-4 mr-2" /> : <Moon className="sq-4 mr-2" />}
+                  >
+                    <span>{isDark ? "Light" : "Dark"} mode</span>
+                  </Button>
+                </DropdownMenuItem>
+              </themeFetcher.Form>
+              <DropdownMenuItem asChild>
+                <Button
+                  onClick={() => logoutSubmit(null, { method: "post", action: "/logout" })}
+                  variant="ghost"
+                  size="sm"
+                  className="flex w-full items-center justify-start outline-none"
+                  leftIcon={<LogOut className="sq-4 mr-2" />}
+                >
+                  Logout
+                </Button>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         ) : (
-          <div className="hstack">
-            <LinkButton variant="ghost" to="/login">
-              Login
-            </LinkButton>
-            <LinkButton colorScheme="primary" to="/register">
-              Register
-            </LinkButton>
-          </div>
+          <>
+            <div className="hstack hidden md:flex">
+              <LinkButton variant="ghost" to="/login">
+                Login
+              </LinkButton>
+              <LinkButton colorScheme="primary" to="/register">
+                Register
+              </LinkButton>
+            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <IconButton
+                  className="inline-block md:hidden"
+                  aria-label={`Toggle open menu`}
+                  icon={<Menu className="sq-5" />}
+                  variant="ghost"
+                />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent side="bottom" align="end" className="inline-block md:hidden">
+                {user ? (
+                  <DropdownMenuItem asChild>
+                    <Button variant="ghost" onClick={() => logoutSubmit(null, { method: "post", action: "/logout" })}>
+                      Log out
+                    </Button>
+                  </DropdownMenuItem>
+                ) : (
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link to="/register">Register</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/login">Login</Link>
+                    </DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </>
         )}
       </div>
-
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <IconButton
-            className="inline-block md:hidden"
-            aria-label={`Toggle open menu`}
-            icon={<Menu className="sq-5" />}
-            variant="ghost"
-          />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent side="bottom" align="end" className="inline-block md:hidden">
-          {user ? (
-            <DropdownMenuItem asChild>
-              <Button variant="ghost" onClick={() => logoutSubmit(null, { method: "post", action: "/logout" })}>
-                Log out
-              </Button>
-            </DropdownMenuItem>
-          ) : (
-            <>
-              <DropdownMenuItem asChild>
-                <Link to="/register">Register</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link to="/login">Login</Link>
-              </DropdownMenuItem>
-            </>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
     </div>
   )
 }

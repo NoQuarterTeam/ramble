@@ -6,6 +6,8 @@ const envSchema = z.object({
   VERCEL_ENV: z.enum(["development", "production", "preview"]).optional(),
   VERCEL_URL: z.string().optional(),
   APP_SECRET: z.string(),
+  DATABASE_URL: z.string(),
+  IPAPI_KEY: z.string(),
   SESSION_SECRET: z.string(),
   RESEND_API_KEY: z.string(),
   FLASH_SESSION_SECRET: z.string(),
@@ -18,6 +20,7 @@ export const {
   NODE_ENV,
   VERCEL_ENV,
   APP_SECRET,
+  IPAPI_KEY,
   SESSION_SECRET,
   RESEND_API_KEY,
   FLASH_SESSION_SECRET,
@@ -27,6 +30,6 @@ export const {
   AWS_SECRET_KEY_USER,
 } = envSchema.parse(process.env)
 
-export const IS_PRODUCTION = VERCEL_ENV === "production"
+export const IS_PRODUCTION = VERCEL_ENV === "production" || VERCEL_ENV === "preview"
 // WEB URL
 export const FULL_WEB_URL = !VERCEL_URL ? "http://localhost:3000" : `https://${VERCEL_URL}`

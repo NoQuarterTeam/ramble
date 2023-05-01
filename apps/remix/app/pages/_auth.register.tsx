@@ -1,6 +1,6 @@
+import { Link } from "@remix-run/react"
 import type { ActionArgs, V2_MetaFunction } from "@vercel/remix"
 import { redirect } from "@vercel/remix"
-import { Link } from "@remix-run/react"
 import { z } from "zod"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
@@ -60,7 +60,7 @@ export const action = async ({ request }: ActionArgs) => {
             ),
           ],
         ])
-        return redirect("/", { headers })
+        return redirect("/map", { headers })
       } catch (e) {
         return badRequest(e, {
           headers: { "Set-Cookie": await createFlash(FlashType.Error, "Register error") },

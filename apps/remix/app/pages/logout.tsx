@@ -11,7 +11,7 @@ export const action = async ({ request }: ActionArgs) => {
     ["Set-Cookie", await destroy()],
     ["Set-Cookie", await createFlash(FlashType.Info, "Logged out!", "See you soon!")],
   ])
-  return redirect("/login", { headers })
+  return redirect("/map", { headers })
 }
 
 export const loader = () => redirect("/login")

@@ -1,6 +1,8 @@
-import { join } from "@travel/shared"
-import { json, redirect, type LoaderArgs } from "@vercel/remix"
 import { NavLink, Outlet } from "@remix-run/react"
+import { json, type LoaderArgs, redirect } from "@vercel/remix"
+
+import { join } from "@travel/shared"
+
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderArgs) => {

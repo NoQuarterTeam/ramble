@@ -18,7 +18,7 @@ export function Input(props: TextInputProps) {
       {...props}
       className={merge(
         "border border-gray-100 dark:border-gray-600",
-        "font-body text-md focus:border-primary-500 block w-full rounded-sm px-3.5 py-2.5 text-black dark:text-white",
+        "font-body text-md focus:border-primary-500 block w-full rounded-md px-3.5 py-2.5 text-black dark:text-white",
         props.className,
       )}
     />

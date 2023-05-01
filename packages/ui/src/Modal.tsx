@@ -11,7 +11,7 @@ const ModalTrigger = ModalPrimitive.Trigger
 
 const ModalPortal = ({ className, children, ...props }: ModalPrimitive.DialogPortalProps) => (
   <ModalPrimitive.Portal className={merge(className)} {...props}>
-    <div className="fixed inset-0 z-50 flex items-start justify-center sm:items-center">{children}</div>
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-4 sm:items-center sm:pt-0">{children}</div>
   </ModalPrimitive.Portal>
 )
 ModalPortal.displayName = ModalPrimitive.Portal.displayName
@@ -40,14 +40,14 @@ const ModalContent = React.forwardRef<
     <ModalPrimitive.Content
       ref={ref}
       className={merge(
-        "animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 sm:zoom-in-90 data-[state=open]:sm:slide-in-from-bottom-0 fixed z-50 grid w-full gap-4 rounded-b-lg bg-white p-6 sm:rounded-lg",
+        "animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 sm:zoom-in-90 data-[state=open]:sm:slide-in-from-bottom-0 fixed z-50 grid w-full gap-4 rounded-lg bg-white p-6",
         "dark:bg-gray-900",
         className,
       )}
       {...props}
     >
       {children}
-      <ModalPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-gray-100 dark:focus:ring-gray-400 dark:focus:ring-offset-gray-900 dark:data-[state=open]:bg-gray-800">
+      <ModalPrimitive.Close className="absolute right-4 top-4 rounded-md opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-gray-100 dark:focus:ring-gray-400 dark:focus:ring-offset-gray-900 dark:data-[state=open]:bg-gray-800">
         <X className="sq-4" />
         <span className="sr-only">Close</span>
       </ModalPrimitive.Close>
