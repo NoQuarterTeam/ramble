@@ -20,9 +20,9 @@
     "@aws-sdk/lib-storage": "^3.310.0",
     "@aws-sdk/s3-request-presigner": "^3.310.0",
     "@fontsource/poppins": "^4.5.10",
-    "@remix-run/node": "1.15.0",
-    "@remix-run/react": "1.15.0",
-    "@remix-run/serve": "1.15.0",
+    "@remix-run/node": "1.16.0",
+    "@remix-run/react": "1.16.0",
+    "@remix-run/serve": "1.16.0",
     "@travel/api": "workspace:*",
     "@travel/database": "workspace:*",
     "@travel/emails": "workspace:*",
@@ -59,7 +59,7 @@
     "zustand": "4.3.7"
   },
   "devDependencies": {
-    "@remix-run/dev": "1.15.0",
+    "@remix-run/dev": "1.16.0",
     "@remix-run/eslint-config": "1.16.0",
     "@tailwindcss/forms": "^0.5.3",
     "@travel/eslint-config": "workspace:*",
