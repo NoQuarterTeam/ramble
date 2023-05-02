@@ -2,9 +2,10 @@ import "./globals.css"
 
 import { Poppins } from "next/font/google"
 
-import { Toaster } from "@travel/ui/src"
+import { Toaster } from "@travel/ui"
 
 import { ThemeProvider } from "~/components/ThemeProvider"
+import { TooltipProvider } from "~/components/TooltipProvider"
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -22,8 +23,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${poppins.variable}`} suppressHydrationWarning>
       <body className="bg-white dark:bg-gray-800">
-        <ThemeProvider attribute="class">{children}</ThemeProvider>
-        <Toaster />
+        <ThemeProvider attribute="class">
+          <TooltipProvider>
+            {children}
+            <Toaster />
+          </TooltipProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

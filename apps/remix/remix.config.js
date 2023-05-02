@@ -6,14 +6,15 @@ const { flatRoutes } = require("remix-flat-routes")
 module.exports = {
   cacheDirectory: "./node_modules/.cache/remix",
   ignoredRouteFiles: ["**/*"],
+  serverModuleFormat: "cjs",
   future: {
     unstable_postcss: true,
     v2_meta: true,
     v2_routeConvention: true,
     v2_errorBoundary: true,
-    unstable_cssSideEffectImports: true,
+    cssSideEffectImports: true,
     v2_normalizeFormMethod: true,
-    unstable_tailwind: true,
+    tailwind: true,
   },
   serverDependenciesToBundle: [
     "@travel/api",

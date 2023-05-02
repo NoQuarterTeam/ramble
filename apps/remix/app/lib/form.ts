@@ -1,6 +1,5 @@
-import { z } from "zod"
-
-import { badRequest } from "./remix"
+import type { z } from "zod"
+import { badRequest } from "./remix.server"
 
 export type FieldErrors<T> = {
   [Property in keyof T]: string[]
@@ -47,31 +46,4 @@ export const getFormDataArray = (formData: FormData, field: string) =>
 
 export function formError(args: { formError?: string; fieldErrors?: FieldErrors<unknown>; data?: Record<string, unknown> }) {
   return badRequest(args)
-}
-
-const boolean = z
-  .string()
-  .regex(/^(true|false)$/, 'Must be a boolean string ("true" or "false")')
-  .transform((value) => value === "true")
-
-const checkbox = z
-  .literal("on")
-  .optional()
-  .transform((value) => value === "on")
-
-const int = z
-  .string()
-  .regex(/^-?\d+$/, "Must be an integer string")
-  .transform((val) => parseInt(val, 10))
-
-const num = z
-  .string()
-  .regex(/^-?\d*\.?\d+$/, "Must be a number string")
-  .transform(Number)
-
-export const zform = {
-  boolean,
-  checkbox,
-  int,
-  num,
 }

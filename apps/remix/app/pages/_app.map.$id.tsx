@@ -9,8 +9,8 @@ import { Avatar, CloseButton } from "@travel/ui"
 
 import { LinkButton } from "~/components/LinkButton"
 import { db } from "~/lib/db.server"
-import { useLoaderHeaders } from "~/lib/headers"
-import { notFound } from "~/lib/remix"
+import { useLoaderHeaders } from "~/lib/headers.server"
+import { notFound } from "~/lib/remix.server"
 
 export const headers = useLoaderHeaders
 
@@ -66,7 +66,7 @@ export default function SpotTile() {
     <SpotContainer>
       <React.Suspense>
         <Await resolve={spotPromise}>
-          {(spot) => (
+          {({ data: spot }) => (
             <div className="space-y-2">
               <p className="text-lg">{spot.name}</p>
               <div className="hstack">

@@ -201,6 +201,15 @@ importers:
       '@travel/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@turf/bbox':
+        specifier: ^6.5.0
+        version: 6.5.0
+      '@turf/center':
+        specifier: ^6.5.0
+        version: 6.5.0
+      '@turf/helpers':
+        specifier: ^6.5.0
+        version: 6.5.0
       dayjs:
         specifier: 1.11.7
         version: 1.11.7
@@ -210,6 +219,9 @@ importers:
       lucide-react:
         specifier: ^0.192.0
         version: 0.192.0(react@18.2.0)
+      mapbox-gl:
+        specifier: ^2.14.1
+        version: 2.14.1
       next:
         specifier: 13.3.4
         version: 13.3.4(react-dom@18.2.0)(react@18.2.0)
@@ -225,9 +237,15 @@ importers:
       react-dropzone:
         specifier: 14.2.3
         version: 14.2.3(react@18.2.0)
+      react-map-gl:
+        specifier: ^7.0.23
+        version: 7.0.23(mapbox-gl@2.14.1)(react@18.2.0)
       resend:
         specifier: ^0.14.0
         version: 0.14.0
+      supercluster:
+        specifier: ^8.0.0
+        version: 8.0.0
       zod:
         specifier: 3.21.4
         version: 3.21.4
@@ -464,6 +482,9 @@ importers:
       '@typescript-eslint/parser':
         specifier: 5.59.2
         version: 5.59.2(eslint@8.39.0)(typescript@5.0.4)
+      autoprefixer:
+        specifier: 10.4.14
+        version: 10.4.14(postcss@8.4.21)
       cssnano:
         specifier: ^6.0.0
         version: 6.0.0(postcss@8.4.21)

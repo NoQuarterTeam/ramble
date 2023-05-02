@@ -5,6 +5,9 @@ module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx}", "../../packages/ui/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      spacing: {
+        nav: "80px",
+      },
       fontSize: {
         xxxs: "0.4rem",
         xxs: "0.625rem",
