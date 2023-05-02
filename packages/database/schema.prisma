@@ -11,25 +11,65 @@ datasource db {
 
 enum Role {
   ADMIN
+  AMBASSADOR
   USER
 }
 
 model User {
-  id            String      @id @default(uuid())
-  email         String      @unique
-  password      String
-  firstName     String
-  lastName      String
-  role          Role        @default(USER)
-  avatar        String?
+  id        String  @id @default(uuid())
+  email     String  @unique
+  password  String
+  firstName String
+  lastName  String
+  role      Role    @default(USER)
+  avatar    String?
+
+  // Profile
+  isPetOwner      Boolean @default(false)
+  isClimber       Boolean @default(false)
+  isMountainBiker Boolean @default(false)
+  isSUPer         Boolean @default(false)
+  bio             String? @db.LongText
+
+  // Relations
   createdSpots  Spot[]
   verifiedSpots Spot[]      @relation(name: "VerifiedSpot")
   spotImages    SpotImage[]
   lists         List[]
   reviews       Review[]
+  vans          Van[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Van {
+  id          String  @id @default(uuid())
+  name        String
+  model       String
+  year        Int
+  description String? @db.LongText
+  user        User    @relation(fields: [userId], references: [id])
+  userId      String  @unique
+
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @default(now()) @updatedAt
+  images    VanImage[]
+
+  @@index([userId])
+}
+
+model VanImage {
+  id   String @id @default(uuid())
+  path String
+
+  vanId String
+  van   Van    @relation(fields: [vanId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([vanId])
 }
 
 enum SpotType {
@@ -49,24 +89,24 @@ enum SpotType {
 }
 
 model Spot {
-  id               String      @id @default(uuid())
-  name             String
-  type             SpotType
-  description      String      @db.LongText
-  address          String
-  latitude         Float
-  longitude        Float
-  isAnimalFriendly Boolean     @default(true)
-  images           SpotImage[]
-  verifiedAt       DateTime?
-  verifierId       String?
-  verifier         User?       @relation(name: "VerifiedSpot", fields: [verifierId], references: [id])
-  creatorId        String
-  creator          User        @relation(fields: [creatorId], references: [id])
-  spotLists        ListSpot[]
-  reviews          Review[]
-  createdAt        DateTime    @default(now())
-  updatedAt        DateTime    @default(now()) @updatedAt
+  id            String      @id @default(uuid())
+  name          String
+  type          SpotType
+  description   String      @db.LongText
+  address       String
+  latitude      Float
+  longitude     Float
+  isPetFriendly Boolean     @default(true)
+  images        SpotImage[]
+  verifiedAt    DateTime?
+  verifierId    String?
+  verifier      User?       @relation(name: "VerifiedSpot", fields: [verifierId], references: [id])
+  creatorId     String
+  creator       User        @relation(fields: [creatorId], references: [id])
+  spotLists     ListSpot[]
+  reviews       Review[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now()) @updatedAt
 
   @@index([verifierId])
   @@index([latitude])

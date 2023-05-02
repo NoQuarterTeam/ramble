@@ -14,7 +14,7 @@ export async function getMapSpots(request: Request) {
     minLng: NumAsString,
     maxLng: NumAsString,
     type: z.string().optional().nullable(),
-    // isAnimalFriendly: zx.CheckboxAsString,
+    // isPetFriendly: zx.CheckboxAsString,
   })
   if (!result.success) return []
 

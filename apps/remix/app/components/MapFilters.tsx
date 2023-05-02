@@ -39,10 +39,10 @@ export function MapFilters() {
       </Button>
       <Modal {...modalProps} title="Filters">
         <form className="space-y-2" onSubmit={onSubmit}>
-          <label htmlFor="isDogFriendly" className="flex space-x-4">
-            <Checkbox name="isDogFriendly" id="isDogFriendly" className="mt-1" />
+          <label htmlFor="isPetFriendly" className="flex space-x-4">
+            <Checkbox name="isPetFriendly" id="isPetFriendly" className="mt-1" />
             <div>
-              <p>Dog friendly</p>
+              <p>Pet friendly</p>
               <p className="text-sm opacity-70">Furry friends allowed!</p>
             </div>
           </label>
