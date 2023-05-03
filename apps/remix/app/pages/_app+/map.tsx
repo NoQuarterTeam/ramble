@@ -16,7 +16,7 @@ import type { Point } from "~/services/points.server"
 
 import type { pointsLoader } from "../api+/points"
 import type { IpInfo } from "./_layout"
-import { MapFilters } from "~/components/MapFilters"
+import { MapFilters } from "~/pages/_app+/components/MapFilters"
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: mapStyles }]
