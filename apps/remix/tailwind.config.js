@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     extend: {
       spacing: {
-        nav: "80px",
+        nav: "70px",
       },
       fontSize: {
         xxxs: "0.4rem",

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Await, isRouteErrorResponse, useLoaderData, useNavigate, useRouteError } from "@remix-run/react"
+import { Await, isRouteErrorResponse, Link, useLoaderData, useNavigate, useRouteError } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { defer } from "@vercel/remix"
 import { Frown, Star } from "lucide-react"
@@ -19,6 +19,7 @@ export const loader = async ({ params }: LoaderArgs) => {
     id: true,
     name: true,
     address: true,
+    description: true,
     images: { select: { id: true, path: true } },
     reviews: {
       take: 5,
@@ -64,32 +65,40 @@ export default function SpotPreview() {
       <React.Suspense fallback={<SpotFallback />}>
         <Await resolve={promise.spot}>
           {(spot) => (
-            <div className="space-y-2">
-              <p className="text-lg">{spot.name}</p>
-              <div className="hstack">
-                <Star className="sq-5" />
-                <React.Suspense fallback={<Spinner size="sm" />}>
-                  <Await resolve={promise.rating}>{(rating) => <p>{rating._avg.rating?.toFixed(1) || "Not yet rated"}</p>}</Await>
-                </React.Suspense>
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <Link target="_blank" rel="noopener norefer" to={`/spots/${spot.id}`} className="text-lg hover:underline">
+                  {spot.name}
+                </Link>
+                <div className="hstack">
+                  <Star className="sq-5" />
+                  <React.Suspense fallback={<Spinner size="sm" />}>
+                    <Await resolve={promise.rating}>
+                      {(rating) => <p>{rating._avg.rating?.toFixed(1) || "Not yet rated"}</p>}
+                    </Await>
+                  </React.Suspense>
+                </div>
+                <p className="text-sm">{spot.address}</p>
+                <div className="relative flex h-[225px] space-x-2 overflow-scroll">
+                  {spot.images?.map((image, i) => (
+                    <img
+                      alt="spot"
+                      width={350}
+                      height={225}
+                      className="rounded-md"
+                      key={image.id}
+                      src={`${image.path}?${spot.id}${i}`}
+                    />
+                  ))}
+                </div>
+                <p className="text-sm">{spot.description}</p>
               </div>
-              <p>{spot.address}</p>
-              <div className="relative flex h-[225px] space-x-2 overflow-scroll">
-                {spot.images?.map((image, i) => (
-                  <img
-                    alt="spot"
-                    width={350}
-                    height={225}
-                    className="rounded-md"
-                    key={image.id}
-                    src={`${image.path}?${spot.id}${i}`}
-                  />
-                ))}
-              </div>
-              <div>
-                <h2 className="text-lg">Reviews</h2>
+              <hr />
+              <div className="space-y-4">
+                <h2 className="text-lg font-semibold">Reviews</h2>
                 <div className="space-y-6">
                   {spot.reviews?.map((review) => (
-                    <div key={review.id} className="stack space-y-2">
+                    <div key={review.id} className="stack space-y-2 rounded border border-gray-50 px-4 py-3 dark:border-gray-700">
                       <div className="flex justify-between">
                         <div className="hstack">
                           <Avatar
@@ -146,7 +155,7 @@ export function Skeleton(props: React.HTMLAttributes<HTMLDivElement>) {
 function SpotContainer(props: { children: React.ReactNode }) {
   const navigate = useNavigate()
   return (
-    <div className="mt-nav absolute bottom-4 left-4 top-4 z-10 w-[400px] overflow-scroll rounded-md bg-white p-4 shadow-md dark:bg-gray-800">
+    <div className="border-gray-75 absolute bottom-0 left-0 top-0 z-10 w-full max-w-[400px] overflow-scroll border-r bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
       <CloseButton
         className="absolute right-2 top-2 z-10"
         onClick={() => {

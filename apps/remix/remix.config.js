@@ -19,8 +19,6 @@ module.exports = {
   serverDependenciesToBundle: [
     "@travel/api",
     "@travel/database",
-    "supercluster",
-    "kdbush",
     "@travel/database/types",
     "@travel/emails",
     "@travel/shared",
@@ -29,10 +27,12 @@ module.exports = {
     "axios",
     "decode-uri-component",
     "filter-obj",
+    "kdbush",
     "query-string",
     "split-on-first",
+    "supercluster",
   ],
-  watchPaths: ["../../packages/**/*"],
+  watchPaths: ["../../packages/**/*", "./tailwind.config.js"],
   routes: (defineRoutes) => {
     return flatRoutes("pages", defineRoutes)
   },

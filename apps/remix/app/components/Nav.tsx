@@ -17,8 +17,6 @@ import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { createImageUrl } from "~/lib/s3"
 import { useTheme } from "~/lib/theme"
 
-import { MapFilters } from "./MapFilters"
-
 export function Nav() {
   const user = useMaybeUser()
   const logoutSubmit = useSubmit()
@@ -27,13 +25,12 @@ export function Nav() {
   const theme = useTheme()
   const isDark = theme === "dark"
   return (
-    <div className="h-nav absolute left-0 top-0 z-50 flex w-full items-center justify-between border-b border-solid border-gray-50 bg-white px-6 align-middle dark:border-gray-700 dark:bg-gray-800">
+    <div className="h-nav flex w-full items-center justify-between border-b border-solid border-gray-50 bg-white px-6 align-middle dark:border-gray-700 dark:bg-gray-800">
       <div className="hstack h-12 space-x-6">
         <div className="hstack">
           <p className="text-xl font-semibold">Travel</p>
         </div>
       </div>
-      <MapFilters />
       <div className="hstack space-x-3">
         <Tooltip label="Add a spot">
           <IconButton icon={<Plus className="sq-4" />} aria-label="add spot" variant="outline" />

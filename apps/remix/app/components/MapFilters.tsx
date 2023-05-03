@@ -34,7 +34,13 @@ export function MapFilters() {
   const modalProps = useDisclosure()
   return (
     <>
-      <Button onClick={modalProps.onOpen} variant="outline" leftIcon={<Settings2 className="sq-4" />} aria-label="filters">
+      <Button
+        onClick={modalProps.onOpen}
+        variant="outline"
+        className="hover:bg-gray-75 absolute left-1/2 top-4 -translate-x-1/2 bg-white active:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:active:bg-gray-600"
+        leftIcon={<Settings2 className="sq-4" />}
+        aria-label="filters"
+      >
         Filters
       </Button>
       <Modal {...modalProps} title="Filters">
