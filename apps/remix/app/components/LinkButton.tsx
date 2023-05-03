@@ -11,7 +11,7 @@ interface LinkButtonProps extends ButtonStyleProps, LinkProps {
 }
 
 export const LinkButton = React.forwardRef<HTMLAnchorElement, LinkButtonProps>(function _LinkButton(
-  { variant, size, isLoading, leftIcon, rightIcon, disabled, colorScheme, ...props }: LinkButtonProps,
+  { variant, size, isLoading, leftIcon, rightIcon, disabled, colorScheme, ...props },
   ref,
 ) {
   return (

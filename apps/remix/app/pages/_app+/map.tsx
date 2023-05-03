@@ -98,29 +98,32 @@ export default function MapView() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [points],
   )
+  const noMap = searchParams.get("noMap")
   return (
     <div className="relative">
       <ClientOnly>
         <div className="relative h-screen w-screen overflow-hidden">
-          <Map
-            mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
-            onLoad={onMove}
-            onMoveEnd={onMove}
-            ref={mapRef}
-            style={{ height: "100%", width: "100%" }}
-            initialViewState={initialViewState}
-            attributionControl={false}
-            mapStyle={
-              theme === "dark"
-                ? "mapbox://styles/jclackett/ck44lf1f60a7j1cowkgjr6f3j"
-                : "mapbox://styles/jclackett/ckcqlc8j6040i1ipeuh4s5fey"
-            }
-          >
-            {spotMarkers}
+          {!noMap && (
+            <Map
+              mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
+              onLoad={onMove}
+              onMoveEnd={onMove}
+              ref={mapRef}
+              style={{ height: "100%", width: "100%" }}
+              initialViewState={initialViewState}
+              attributionControl={false}
+              mapStyle={
+                theme === "dark"
+                  ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
+                  : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
+              }
+            >
+              {spotMarkers}
 
-            <GeolocateControl position="bottom-right" />
-            <NavigationControl position="bottom-right" />
-          </Map>
+              <GeolocateControl position="bottom-right" />
+              <NavigationControl position="bottom-right" />
+            </Map>
+          )}
           <Outlet />
         </div>
       </ClientOnly>
