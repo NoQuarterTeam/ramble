@@ -281,8 +281,8 @@ importers:
         specifier: 18.2.1
         version: 18.2.1
       '@types/react-dom':
-        specifier: 18.2.2
-        version: 18.2.2
+        specifier: 18.2.3
+        version: 18.2.3
       '@types/sharp':
         specifier: ^0.31.1
         version: 0.31.1
@@ -468,8 +468,8 @@ importers:
         specifier: 18.2.1
         version: 18.2.1
       '@types/react-dom':
-        specifier: 18.2.2
-        version: 18.2.2
+        specifier: 18.2.3
+        version: 18.2.3
       '@types/sharp':
         specifier: ^0.31.1
         version: 0.31.1
@@ -795,8 +795,8 @@ importers:
         specifier: 18.2.1
         version: 18.2.1
       '@types/react-dom':
-        specifier: 18.2.2
-        version: 18.2.2
+        specifier: 18.2.3
+        version: 18.2.3
       dotenv-cli:
         specifier: ^7.1.0
         version: 7.1.0
@@ -5850,8 +5850,8 @@ packages:
     resolution: {integrity: sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==}
     dev: false
 
-  /@types/react-dom@18.2.2:
-    resolution: {integrity: sha512-IGuuCsLmAH0f3KksOZp/vkpUtO2YrIwob4YxvoFQR2XvkLL7tf7mLYcXiyG47KgTKngI4+7lNm4dM4eBTbG1Bw==}
+  /@types/react-dom@18.2.3:
+    resolution: {integrity: sha512-hxXEXWxFJXbY0LMj/T69mznqOZJXNtQMqVxIiirVAZnnpeYiD4zt+lPsgcr/cfWg2VLsxZ1y26vigG03prYB+Q==}
     dependencies:
       '@types/react': 18.2.1
     dev: true
