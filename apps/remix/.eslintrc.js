@@ -18,6 +18,7 @@ module.exports = {
     "prettier",
   ],
   rules: {
+    "react/no-unescaped-entities": OFF,
     "@typescript-eslint/no-var-requires": OFF,
     "react/function-component-definition": ERROR,
     "@typescript-eslint/no-unused-vars": [ERROR, { args: "none", argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],

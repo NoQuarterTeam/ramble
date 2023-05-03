@@ -27,8 +27,9 @@ model User {
   // Profile
   isPetOwner      Boolean @default(false)
   isClimber       Boolean @default(false)
+  isHiker         Boolean @default(false)
   isMountainBiker Boolean @default(false)
-  isSUPer         Boolean @default(false)
+  isPaddleBoarder Boolean @default(false)
   bio             String? @db.LongText
 
   // Relations
@@ -37,7 +38,7 @@ model User {
   spotImages    SpotImage[]
   lists         List[]
   reviews       Review[]
-  vans          Van[]
+  van           Van?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt

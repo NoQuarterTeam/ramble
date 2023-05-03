@@ -17,12 +17,11 @@ export const headers = () => {
 }
 
 export const action = async ({ request }: ActionArgs) => {
-  const formData = await request.formData()
   const resetPasswordSchema = z.object({
     token: z.string(),
     password: z.string().min(8, "Must be at least 8 characters"),
   })
-  const result = await validateFormData(resetPasswordSchema, formData)
+  const result = await validateFormData(request, resetPasswordSchema)
   if (!result.success) return formError(result)
   const data = result.data
   const payload = decryptToken<{ id: string }>(data.token)

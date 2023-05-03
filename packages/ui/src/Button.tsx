@@ -118,10 +118,11 @@ export type ButtonProps = ButtonStyleProps &
   React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> & {
     isLoading?: boolean
     leftIcon?: React.ReactNode
+    rightIcon?: React.ReactNode
   }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function _Button(
-  { variant, leftIcon, rounded, disabled, isLoading, colorScheme, size, ...props },
+  { variant, leftIcon, rightIcon, rounded, disabled, isLoading, colorScheme, size, ...props },
   ref,
 ) {
   return (
@@ -146,10 +147,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
         <div className={join("center", isLoading && "opacity-0")} aria-hidden={isLoading}>
           {leftIcon && <span className="mr-0 md:mr-1">{leftIcon}</span>}
           {props.children}
+          {rightIcon && <span className="mr-0 md:ml-1">{rightIcon}</span>}
         </div>
         {isLoading && (
           <div className="center absolute inset-0">
-            <Spinner size={size} />
+            <Spinner size="sm" />
           </div>
         )}
       </button>

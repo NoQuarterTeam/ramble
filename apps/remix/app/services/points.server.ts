@@ -6,7 +6,7 @@ import type { SpotType } from "@travel/database"
 
 import { db } from "~/lib/db.server"
 
-export async function getMapSpots(request: Request) {
+export async function getMapPoints(request: Request) {
   const result = parseQuerySafe(request, {
     zoom: NumAsString,
     minLat: NumAsString,
@@ -42,3 +42,5 @@ export async function getMapSpots(request: Request) {
   )
   return clusters.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], zoom || 5)
 }
+
+export type Point = Awaited<ReturnType<typeof getMapPoints>>[number]

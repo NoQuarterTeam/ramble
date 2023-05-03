@@ -14,6 +14,7 @@ import {
 
 import { LinkButton } from "~/components/LinkButton"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
+import { createImageUrl } from "~/lib/s3"
 import { useTheme } from "~/lib/theme"
 
 import { MapFilters } from "./MapFilters"
@@ -40,7 +41,11 @@ export function Nav() {
         {user ? (
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <Avatar className="hover:opacity-70" src={user.avatar} name={user.firstName + " " + user.lastName} />
+              <Avatar
+                className="hover:opacity-70"
+                src={createImageUrl(user.avatar)}
+                name={user.firstName + " " + user.lastName}
+              />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[200px] space-y-2 p-1">
               <DropdownMenuItem asChild>

@@ -24,14 +24,14 @@ const userSelectFields = {
   createdAt: true,
 } satisfies Prisma.UserSelect
 
-export async function getCurrentUser(request: Request) {
+export async function getCurrentUser<T extends Prisma.UserSelect>(request: Request, select?: T) {
   const userId = await requireUser(request)
   const user = await db.user.findFirst({
     where: { id: userId },
-    select: userSelectFields,
+    select: select ?? userSelectFields,
   })
   if (!user) throw redirect(`/login`)
-  return user
+  return user as Prisma.UserGetPayload<{ select: T }>
 }
 export type CurrentUser = Await<typeof getCurrentUser>
 

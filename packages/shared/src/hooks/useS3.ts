@@ -23,7 +23,6 @@ export type UploadFile = {
   fileUrl: string
   fileKey: string
   fileName: string
-  fileType: string | null
 }
 export function useS3Upload(props?: Props): [(file: File, lazyProps?: Props) => Promise<UploadFile>, { isLoading: boolean }] {
   const [isLoading, setIsLoading] = React.useState(false)
@@ -31,33 +30,32 @@ export function useS3Upload(props?: Props): [(file: File, lazyProps?: Props) => 
   async function upload(file: File, lazyProps?: Props) {
     try {
       setIsLoading(true)
-      let parsedKey = props?.path || lazyProps?.path || "/unknown"
-      if (parsedKey[parsedKey.length - 1] === "/") {
-        parsedKey = parsedKey.slice(0, -1)
+      let formattedKey = props?.path || lazyProps?.path || "/"
+      if (formattedKey[formattedKey.length - 1] === "/") {
+        formattedKey = formattedKey.slice(0, -1)
       }
-      if (parsedKey[0] === "/") {
-        parsedKey = parsedKey.substring(1)
+      if (formattedKey[0] === "/") {
+        formattedKey = formattedKey.substring(1)
       }
       const formattedName = formatFileName(file.name)
-      const key = parsedKey + "/" + formattedName
+      const key = formattedKey + "/" + formattedName
 
       const formData = new FormData()
       formData.append("key", key)
-      formData.append("contentType", file.type)
       const res = await fetch("/api/s3/createSignedUrl", {
         method: "post",
         body: formData,
       })
-      const signedUrl = await res.json()
+      const signedUrl = (await res.json()) as string
       if (!signedUrl) throw new Error("Error fetching signed url")
-      await fetch(signedUrl.uploadUrl, {
+      await fetch(signedUrl, {
         method: "PUT",
         headers: { "Content-Type": file.type },
         body: file,
       })
       setIsLoading(false)
       return {
-        fileUrl: signedUrl.url,
+        fileUrl: signedUrl,
         fileKey: key,
         fileName: file.name,
         fileType: file.type || null,

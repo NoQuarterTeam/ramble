@@ -1,51 +1,38 @@
 import * as React from "react"
 import type { ViewStateChangeEvent } from "react-map-gl"
 import Map, { GeolocateControl, type LngLatLike, type MapRef, Marker, NavigationControl } from "react-map-gl"
-import { Outlet, useLoaderData, useNavigate, useRouteLoaderData, useSearchParams } from "@remix-run/react"
+import { Outlet, useFetcher, useNavigate, useRouteLoaderData, useSearchParams } from "@remix-run/react"
 import turfCenter from "@turf/center"
-import { points } from "@turf/helpers"
-import { json, type LinksFunction, type LoaderArgs } from "@vercel/remix"
+import * as turf from "@turf/helpers"
+import { type LinksFunction } from "@vercel/remix"
 import { cva } from "class-variance-authority"
 import mapStyles from "mapbox-gl/dist/mapbox-gl.css"
-import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 
 import { ClientOnly } from "@travel/shared"
 
 import { useTheme } from "~/lib/theme"
-import { getMapSpots } from "~/services/spots.server"
+import type { Point } from "~/services/points.server"
 
-import type { IpInfo } from "./_app"
-
-export const loader = async ({ request }: LoaderArgs) => {
-  const spots = await getMapSpots(request)
-  return json(spots, {
-    headers: {
-      "Cache-Control": cacheHeader({
-        public: true,
-        maxAge: "1hour",
-        sMaxage: "1hour",
-        staleWhileRevalidate: "1day",
-        staleIfError: "1day",
-      }),
-    },
-  })
-}
+import type { pointsLoader } from "../api+/points"
+import type { IpInfo } from "./_layout"
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: mapStyles }]
 }
 
 export default function MapView() {
-  const spots = useLoaderData<typeof loader>()
+  const pointsFetcher = useFetcher<typeof pointsLoader>()
   const ipInfo = useRouteLoaderData("pages/_app") as IpInfo
 
-  const [searchParams, setSearchParams] = useSearchParams()
+  const points = pointsFetcher.data
+  const [searchParams] = useSearchParams()
 
   const theme = useTheme()
   const mapRef = React.useRef<MapRef>(null)
 
   const initialViewState = React.useMemo(() => {
+    const zoom = searchParams.get("zoom")
     const minLat = searchParams.get("minLat")
     const maxLat = searchParams.get("maxLat")
     const minLng = searchParams.get("minLng")
@@ -53,14 +40,15 @@ export default function MapView() {
     let centerFromParams
     if (minLat && maxLat && minLng && maxLng) {
       centerFromParams = turfCenter(
-        points([
+        turf.points([
           [parseFloat(minLng), parseFloat(minLat)],
           [parseFloat(maxLng), parseFloat(maxLat)],
         ]),
       )
     }
+
     return {
-      zoom: ipInfo ? 6 : 5,
+      zoom: zoom ? parseInt(zoom) : ipInfo ? 6 : 5,
       longitude: centerFromParams?.geometry.coordinates[0] || ipInfo?.longitude || 4,
       latitude: centerFromParams?.geometry.coordinates[1] || ipInfo?.latitude || 52,
     }
@@ -78,19 +66,20 @@ export default function MapView() {
       maxLng: parseFloat(bounds.getEast().toFixed(6)),
       zoom,
     })
-    setSearchParams(params)
+    pointsFetcher.load(`/api/points/?${params}`)
+    window.history.pushState(null, "", `${window.location.pathname}?${params}`)
   }
   const navigate = useNavigate()
   const spotMarkers = React.useMemo(
     () =>
-      spots.map((point, i) => (
+      points?.map((point, i) => (
         <SpotMarker
           point={point}
           key={i}
           onClick={(e) => {
             e.originalEvent.stopPropagation()
             if (!point.properties.cluster && point.properties.id) {
-              const newParams = queryString.stringify(queryString.parse(window.location.search))
+              const newParams = queryString.stringify({ ...queryString.parse(window.location.search) })
               navigate(`/map/${point.properties.id}?${newParams}`)
             }
             const center = point.geometry.coordinates as LngLatLike
@@ -107,7 +96,7 @@ export default function MapView() {
         />
       )),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [spots],
+    [points],
   )
   return (
     <div className="relative">
@@ -158,8 +147,6 @@ const spotMarkerColors = cva("cursor-pointer hover:scale-110 border sq-5 shadow-
     },
   },
 })
-
-type Point = Awaited<ReturnType<typeof getMapSpots>>[number]
 
 interface MarkerProps {
   onClick: (e: mapboxgl.MapboxEvent<MouseEvent>) => void

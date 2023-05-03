@@ -6,11 +6,12 @@ import { buttonSizeStyles, type ButtonStyleProps, buttonStyles, Spinner } from "
 interface LinkButtonProps extends ButtonStyleProps, LinkProps {
   isLoading?: boolean
   leftIcon?: React.ReactNode
+  rightIcon?: React.ReactNode
 }
 
-export function LinkButton({ variant, size, isLoading, leftIcon, disabled, colorScheme, ...props }: LinkButtonProps) {
+export function LinkButton({ variant, size, isLoading, leftIcon, rightIcon, disabled, colorScheme, ...props }: LinkButtonProps) {
   return (
-    <div className={join("inline-block w-full", disabled && "cursor-not-allowed")}>
+    <div className={join("inline-block", disabled && "cursor-not-allowed")}>
       <Link
         style={{ pointerEvents: disabled ? "none" : undefined }}
         {...props}
@@ -19,6 +20,7 @@ export function LinkButton({ variant, size, isLoading, leftIcon, disabled, color
         <div className={join("center", isLoading && "opacity-0")} aria-hidden={isLoading}>
           {leftIcon && <span className="mr-2">{leftIcon}</span>}
           {props.children}
+          {rightIcon && <span className="ml-2">{rightIcon}</span>}
         </div>
         {isLoading && (
           <div className="center absolute inset-0">

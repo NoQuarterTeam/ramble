@@ -12,8 +12,8 @@ const envSchema = z.object({
   RESEND_API_KEY: z.string(),
   FLASH_SESSION_SECRET: z.string(),
   THEME_SESSION_SECRET: z.string(),
-  AWS_ACCESS_KEY_USER: z.string(),
-  AWS_SECRET_KEY_USER: z.string(),
+  AWS_ACCESS_KEY_ID: z.string(),
+  AWS_SECRET_ACCESS_KEY: z.string(),
 })
 
 export const {
@@ -26,8 +26,8 @@ export const {
   FLASH_SESSION_SECRET,
   THEME_SESSION_SECRET,
   VERCEL_URL,
-  AWS_ACCESS_KEY_USER,
-  AWS_SECRET_KEY_USER,
+  AWS_ACCESS_KEY_ID,
+  AWS_SECRET_ACCESS_KEY,
 } = envSchema.parse(process.env)
 
 export const IS_PRODUCTION = VERCEL_ENV === "production" || VERCEL_ENV === "preview"

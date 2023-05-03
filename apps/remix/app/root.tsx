@@ -6,6 +6,7 @@ import poppins700 from "@fontsource/poppins/700.css"
 import poppins800 from "@fontsource/poppins/800.css"
 import poppins900 from "@fontsource/poppins/900.css"
 import * as Tooltip from "@radix-ui/react-tooltip"
+import type { ShouldRevalidateFunction } from "@remix-run/react"
 import {
   isRouteErrorResponse,
   Links,
@@ -73,6 +74,11 @@ export const loader = async ({ request }: LoaderArgs) => {
     },
   )
 }
+
+export const shouldRevalidate: ShouldRevalidateFunction = ({ currentUrl }) => {
+  return currentUrl.pathname !== "/map"
+}
+
 export type RootLoader = SerializeFrom<typeof loader>
 
 NProgress.configure({ showSpinner: false })
@@ -97,7 +103,7 @@ export function ErrorBoundary() {
 
   return (
     <Document theme="dark">
-      <div className="flex h-screen items-center p-20">
+      <div className="flex items-center overflow-scroll p-20 pt-40">
         {isCatchError ? (
           <div className="stack space-y-6">
             <div className="stack">

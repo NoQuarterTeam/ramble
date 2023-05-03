@@ -1,50 +1,48 @@
+import * as React from "react"
 import { Await, isRouteErrorResponse, useLoaderData, useNavigate, useRouteError } from "@remix-run/react"
-import { defer, type LoaderArgs } from "@vercel/remix"
+import type { LoaderArgs } from "@vercel/remix"
+import { defer } from "@vercel/remix"
 import { Frown, Star } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
-import * as React from "react"
 
-import { Avatar, CloseButton } from "@travel/ui"
+import type { Prisma } from "@travel/database"
+import { merge } from "@travel/shared"
+import { Avatar, CloseButton, Spinner } from "@travel/ui"
 
 import { LinkButton } from "~/components/LinkButton"
 import { db } from "~/lib/db.server"
-import { useLoaderHeaders } from "~/lib/headers.server"
-import { notFound } from "~/lib/remix.server"
-
-export const headers = useLoaderHeaders
+import { createImageUrl } from "~/lib/s3"
 
 export const loader = async ({ params }: LoaderArgs) => {
-  const spot = await db.spot.findUnique({
-    where: { id: params.id },
-    select: {
-      id: true,
-      name: true,
-      address: true,
-      images: { select: { id: true, path: true } },
-      reviews: {
-        take: 5,
-        orderBy: { createdAt: "desc" },
-        select: {
-          id: true,
-          createdAt: true,
-          rating: true,
-          description: true,
-          user: {
-            select: { id: true, firstName: true, lastName: true, avatar: true },
-          },
-        },
+  const select = {
+    id: true,
+    name: true,
+    address: true,
+    images: { select: { id: true, path: true } },
+    reviews: {
+      take: 5,
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        createdAt: true,
+        rating: true,
+        description: true,
+        user: { select: { id: true, firstName: true, lastName: true, avatar: true } },
       },
     },
-  })
-  if (!spot) throw notFound("Spot not found")
-  const averageRating = await db.review.aggregate({
-    where: { spotId: params.id },
-    _avg: { rating: true },
-  })
+  } satisfies Prisma.SpotSelect
+
+  const spot = new Promise((res) => db.spot.findUniqueOrThrow({ where: { id: params.id }, select }).then(res)) as Promise<
+    Prisma.SpotGetPayload<{ select: typeof select }>
+  >
+
+  const rating = new Promise((res) =>
+    db.review.aggregate({ where: { spotId: params.id }, _avg: { rating: true } }).then(res),
+  ) as Promise<Prisma.GetReviewAggregateType<{ _avg: { rating: true } }>>
 
   return defer(
-    { ...spot, rating: averageRating._avg.rating?.toFixed(1) },
+    { spot, rating },
     {
       headers: {
         "Cache-Control": cacheHeader({
@@ -59,24 +57,32 @@ export const loader = async ({ params }: LoaderArgs) => {
   )
 }
 
-export default function SpotTile() {
-  const spotPromise = useLoaderData<typeof loader>()
-
+export default function SpotPreview() {
+  const promise = useLoaderData<typeof loader>()
   return (
     <SpotContainer>
-      <React.Suspense>
-        <Await resolve={spotPromise}>
-          {({ data: spot }) => (
+      <React.Suspense fallback={<SpotFallback />}>
+        <Await resolve={promise.spot}>
+          {(spot) => (
             <div className="space-y-2">
               <p className="text-lg">{spot.name}</p>
               <div className="hstack">
                 <Star className="sq-5" />
-                <p>{spot.rating || "Not yet rated"}</p>
+                <React.Suspense fallback={<Spinner size="sm" />}>
+                  <Await resolve={promise.rating}>{(rating) => <p>{rating._avg.rating?.toFixed(1) || "Not yet rated"}</p>}</Await>
+                </React.Suspense>
               </div>
               <p>{spot.address}</p>
-              <div className="relative flex space-x-2 overflow-scroll">
+              <div className="relative flex h-[225px] space-x-2 overflow-scroll">
                 {spot.images?.map((image, i) => (
-                  <img alt="spot" className="rounded-md" key={image.id} src={`${image.path}?${spot.id}${i}`} />
+                  <img
+                    alt="spot"
+                    width={350}
+                    height={225}
+                    className="rounded-md"
+                    key={image.id}
+                    src={`${image.path}?${spot.id}${i}`}
+                  />
                 ))}
               </div>
               <div>
@@ -89,7 +95,7 @@ export default function SpotTile() {
                           <Avatar
                             className="sq-10 rounded-full"
                             name={`${review.user.firstName} ${review.user.lastName}`}
-                            src={review.user.avatar}
+                            src={createImageUrl(review.user.avatar)}
                           />
                           <div>
                             <p className="text-md">
@@ -116,12 +122,33 @@ export default function SpotTile() {
   )
 }
 
+function SpotFallback() {
+  return (
+    <div className="space-y-2">
+      <Skeleton className="h-8 w-4/5" />
+      <Skeleton className="h-6 w-10" />
+      <Skeleton className="h-5 w-40" />
+      <div className="flex h-[225px] w-full space-x-2 overflow-hidden">
+        <Skeleton className="h-[225px] min-w-[350px] rounded" />
+        <Skeleton className="h-[225px] min-w-[350px] rounded" />
+      </div>
+      <Skeleton className="h-8 w-20" />
+      <Skeleton className="h-40 w-full" />
+      <Skeleton className="h-40 w-full" />
+      <Skeleton className="h-40 w-full" />
+    </div>
+  )
+}
+export function Skeleton(props: React.HTMLAttributes<HTMLDivElement>) {
+  return <div {...props} className={merge("animate-pulse rounded bg-gray-100 dark:bg-gray-700", props.className)} />
+}
+
 function SpotContainer(props: { children: React.ReactNode }) {
   const navigate = useNavigate()
   return (
     <div className="mt-nav absolute bottom-4 left-4 top-4 z-10 w-[400px] overflow-scroll rounded-md bg-white p-4 shadow-md dark:bg-gray-800">
       <CloseButton
-        className="absolute right-2 top-2"
+        className="absolute right-2 top-2 z-10"
         onClick={() => {
           const params = queryString.stringify(queryString.parse(window.location.search))
           navigate(`..?${params}`)
@@ -138,7 +165,7 @@ export function ErrorBoundary() {
 
   return (
     <SpotContainer>
-      <div className="flex  items-center p-2">
+      <div className="flex items-center p-2">
         {isCatchError ? (
           <div className="stack space-y-4">
             <div className="stack">

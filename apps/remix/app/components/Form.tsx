@@ -1,17 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react"
 import type { FormProps as RemixFormProps } from "@remix-run/react"
-import { Form as RemixForm, useActionData, useNavigation } from "@remix-run/react"
+import { Form as RemixForm, useNavigation } from "@remix-run/react"
 
 import { merge } from "@travel/shared"
 import { BrandButton, type ButtonProps, Input, type InputProps } from "@travel/ui"
 
-import type { ActionData } from "~/lib/form"
+import { useFormErrors } from "~/lib/form"
 import { createImageUrl } from "~/lib/s3"
 
 import { ImageUploader } from "./ImageUploader"
 
 export const Form = React.forwardRef(function _Form(props: RemixFormProps, ref: React.ForwardedRef<HTMLFormElement> | null) {
-  const form = useActionData<ActionData<unknown>>()
+  const form = useFormErrors()
   return (
     <RemixForm aria-describedby="form-error" aria-invalid={form?.formError ? true : undefined} ref={ref} {...props}>
       {props.children}
@@ -30,7 +31,7 @@ export function FormFieldLabel(
     <label
       htmlFor={props.name}
       {...props}
-      className={merge("flex text-sm font-medium text-gray-900 dark:text-gray-50", props.className)}
+      className={merge("flex text-sm font-normal text-gray-700 dark:text-gray-100", props.className)}
     >
       {props.children}
       {props.required && <span className="text-red-500">*</span>}
@@ -62,7 +63,7 @@ export const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(func
   { label, errors, input, ...props },
   ref,
 ) {
-  const form = useActionData<ActionData<{ [key: string]: unknown }>>()
+  const form = useFormErrors<any>()
   const fieldErrors = errors || form?.fieldErrors?.[props.name]
   const className = merge(props.className, fieldErrors && "border-red-500 focus:border-red-500")
   const sharedProps = {
@@ -103,7 +104,7 @@ export const InlineFormField = React.forwardRef<HTMLInputElement, FormFieldProps
   { label, errors, input, shouldPassProps = true, ...props },
   ref,
 ) {
-  const form = useActionData<ActionData<{ [key: string]: unknown }>>()
+  const form = useFormErrors<any>()
   const fieldErrors = errors || form?.fieldErrors?.[props.name]
   const className = merge(props.className, fieldErrors && "border-red-500 focus:border-red-500")
   const sharedProps = shouldPassProps
@@ -158,7 +159,7 @@ interface ImageFieldProps {
 }
 
 export function ImageField(props: ImageFieldProps) {
-  const form = useActionData<ActionData<{ [key: string]: string }>>()
+  const form = useFormErrors<any>()
   const [image, setImage] = React.useState(props.defaultValue)
   const fieldErrors = props.errors || form?.fieldErrors?.[props.name]
   return (
@@ -175,7 +176,7 @@ export function ImageField(props: ImageFieldProps) {
           className={merge("h-48 w-full cursor-pointer object-cover hover:opacity-80", props.className)}
         >
           {image ? (
-            <img src={createImageUrl(image)} className="h-full w-full object-contain" alt="preview" />
+            <img src={createImageUrl(image)} className="h-full w-full object-cover" alt="preview" />
           ) : (
             <div className="center h-full w-full">
               <p className="text-center text-gray-500">{props.placeholder || "Upload an image"}</p>
@@ -200,7 +201,7 @@ export function ImageField(props: ImageFieldProps) {
 }
 
 export function FormError({ error }: { error?: string }) {
-  const form = useActionData<ActionData<{ [key: string]: unknown }>>()
+  const form = useFormErrors<any>()
   if (!form?.formError && !error) return null
   return <FormFieldError id="form-error">{form?.formError || error}</FormFieldError>
 }

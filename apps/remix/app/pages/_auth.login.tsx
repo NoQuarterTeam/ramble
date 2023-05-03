@@ -19,13 +19,12 @@ export const headers = () => {
 }
 
 export const action = async ({ request }: ActionArgs) => {
-  const formData = await request.formData()
   const loginSchema = z.object({
     email: z.string().min(3).email("Invalid email"),
     password: z.string().min(8, "Must be at least 8 characters"),
     redirectTo: z.string().nullable().optional(),
   })
-  const result = await validateFormData(loginSchema, formData)
+  const result = await validateFormData(request, loginSchema)
   if (!result.success) return formError(result)
   const data = result.data
   const user = await db.user.findUnique({ where: { email: data.email } })

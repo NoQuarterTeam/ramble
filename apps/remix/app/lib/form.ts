@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useActionData } from "react-router"
 import type { z } from "zod"
+
 import { badRequest } from "./remix.server"
 
 export type FieldErrors<T> = {
@@ -9,41 +12,35 @@ type ValidForm<Schema extends z.ZodType<unknown>> = {
   success: true
   data: z.infer<Schema>
 }
-type InvalidForm<Schema extends z.ZodType<unknown>> = {
+export type InvalidForm<Schema extends z.ZodType<unknown>> = {
   success: false
-  fieldErrors: FieldErrors<Schema>
+  fieldErrors: FieldErrors<z.infer<Schema>>
 }
 
 export async function validateFormData<Schema extends z.ZodType<unknown>>(
+  init: FormData | Request,
   schema: Schema,
-  formData: FormData,
 ): Promise<ValidForm<Schema> | InvalidForm<Schema>> {
-  const data = Object.fromEntries(formData)
+  const maybeFormData = init instanceof FormData ? init : await init.formData()
+  const data = Object.fromEntries(maybeFormData)
   const validations = schema.safeParse(data)
   if (validations.success) return validations
   const fieldErrors = validations.error.flatten().fieldErrors as FieldErrors<Schema>
   return { fieldErrors, success: false }
 }
 
-export type ActionData<T> = {
-  formError?: string
-  fieldErrors?: FieldErrors<T>
-  data?: T
+export function formError<Schema extends z.ZodType<unknown>>(args: ActionData<Schema>) {
+  return badRequest(args)
 }
 
-export const getFormDataArray = (formData: FormData, field: string) =>
-  [...formData.entries()]
-    .filter(([key]) => key.startsWith(field))
-    .reduce((acc, [key, value]) => {
-      const [prefix, name] = key.split(".")
-      const id = Number(prefix.charAt(prefix.lastIndexOf("[") + 1))
-      acc[id] = {
-        ...acc[id],
-        [name]: value as string | undefined,
-      }
-      return acc
-    }, [] as Array<Record<string, string | undefined>>)
+export type FormError<T> = { formError?: string; fieldErrors?: FieldErrors<T>; data?: Record<string, unknown> }
 
-export function formError(args: { formError?: string; fieldErrors?: FieldErrors<unknown>; data?: Record<string, unknown> }) {
-  return badRequest(args)
+export type ActionData<Schema extends z.ZodType<unknown>> = {
+  formError?: string
+  fieldErrors?: FieldErrors<z.infer<Schema>>
+  data?: z.infer<Schema>
+}
+
+export function useFormErrors<Schema extends z.ZodType<unknown>>() {
+  return useActionData() as Partial<ActionData<Schema>> | null
 }

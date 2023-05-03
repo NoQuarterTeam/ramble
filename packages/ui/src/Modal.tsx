@@ -47,7 +47,7 @@ const ModalContent = React.forwardRef<
       {...props}
     >
       {children}
-      <ModalPrimitive.Close className="absolute right-4 top-4 rounded-md opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-gray-100 dark:focus:ring-gray-400 dark:focus:ring-offset-gray-900 dark:data-[state=open]:bg-gray-800">
+      <ModalPrimitive.Close className="absolute right-4 top-4 rounded-md opacity-70 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none">
         <X className="sq-4" />
         <span className="sr-only">Close</span>
       </ModalPrimitive.Close>
