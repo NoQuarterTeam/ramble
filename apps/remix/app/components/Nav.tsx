@@ -52,20 +52,19 @@ export function Nav() {
                 <LinkButton
                   to="/profile"
                   variant="ghost"
-                  size="sm"
                   className="flex w-full items-center justify-start outline-none"
                   leftIcon={<User className="sq-4 mr-2" />}
                 >
                   Profile
                 </LinkButton>
               </DropdownMenuItem>
+
               <themeFetcher.Form action="/api/theme" method="post" replace className="w-full">
                 <input type="hidden" name="theme" value={isDark ? "light" : "dark"} />
 
                 <DropdownMenuItem asChild>
                   <Button
                     variant="ghost"
-                    size="sm"
                     type="submit"
                     className="flex w-full items-center justify-start outline-none"
                     leftIcon={isDark ? <Sun className="sq-4 mr-2" /> : <Moon className="sq-4 mr-2" />}
@@ -78,7 +77,6 @@ export function Nav() {
                 <Button
                   onClick={() => logoutSubmit(null, { method: "post", action: "/logout" })}
                   variant="ghost"
-                  size="sm"
                   className="flex w-full items-center justify-start outline-none"
                   leftIcon={<LogOut className="sq-4 mr-2" />}
                 >

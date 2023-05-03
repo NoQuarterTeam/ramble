@@ -21,13 +21,11 @@ import {
 import type { LinksFunction, LoaderArgs, SerializeFrom, V2_MetaFunction } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { Frown } from "lucide-react"
-import NProgress from "nprogress"
 
 import { join } from "@travel/shared"
 import { Toaster } from "@travel/ui"
 
 import appStyles from "~/styles/app.css"
-import nProgressStyles from "~/styles/nprogress.css"
 
 import { FlashMessage } from "./components/FlashMessage"
 import { LinkButton } from "./components/LinkButton"
@@ -51,7 +49,6 @@ export const links: LinksFunction = () => {
     { rel: "stylesheet", href: poppins800 },
     { rel: "stylesheet", href: poppins900 },
     { rel: "stylesheet", href: appStyles },
-    { rel: "stylesheet", href: nProgressStyles, async: true },
   ]
 }
 
@@ -75,13 +72,13 @@ export const loader = async ({ request }: LoaderArgs) => {
   )
 }
 
-export const shouldRevalidate: ShouldRevalidateFunction = ({ currentUrl }) => {
+export const shouldRevalidate: ShouldRevalidateFunction = ({ currentUrl, formAction }) => {
+  const rootActions = ["/api/theme", "/logout"]
+  if (formAction && rootActions.includes(formAction)) return true
   return currentUrl.pathname !== "/map"
 }
 
 export type RootLoader = SerializeFrom<typeof loader>
-
-NProgress.configure({ showSpinner: false })
 
 export default function App() {
   const { flash, theme } = useLoaderData<typeof loader>()

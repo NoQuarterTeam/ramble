@@ -126,35 +126,34 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
   ref,
 ) {
   return (
-    <div className={isLoading || disabled ? "cursor-not-allowed" : undefined}>
-      <button
-        ref={ref}
-        type="button"
-        disabled={isLoading || !!disabled}
-        {...props}
-        className={merge(
-          buttonStyles({
-            size,
-            rounded,
-            colorScheme,
-            disabled: disabled || isLoading,
-            variant,
-          }),
-          buttonSizeStyles({ size }),
-          props.className,
-        )}
-      >
-        <div className={join("center", isLoading && "opacity-0")} aria-hidden={isLoading}>
-          {leftIcon && <span className="mr-0 md:mr-1">{leftIcon}</span>}
-          {props.children}
-          {rightIcon && <span className="mr-0 md:ml-1">{rightIcon}</span>}
+    <button
+      ref={ref}
+      type="button"
+      disabled={isLoading || !!disabled}
+      {...props}
+      className={merge(
+        (isLoading || disabled) && "cursor-not-allowed",
+        buttonStyles({
+          size,
+          rounded,
+          colorScheme,
+          disabled: disabled || isLoading,
+          variant,
+        }),
+        buttonSizeStyles({ size }),
+        props.className,
+      )}
+    >
+      <div className={join("center", isLoading && "opacity-0")} aria-hidden={isLoading}>
+        {leftIcon && <span className="mr-0 md:mr-1">{leftIcon}</span>}
+        {props.children}
+        {rightIcon && <span className="mr-0 md:ml-1">{rightIcon}</span>}
+      </div>
+      {isLoading && (
+        <div className="center absolute inset-0">
+          <Spinner size="sm" />
         </div>
-        {isLoading && (
-          <div className="center absolute inset-0">
-            <Spinner size="sm" />
-          </div>
-        )}
-      </button>
-    </div>
+      )}
+    </button>
   )
 })

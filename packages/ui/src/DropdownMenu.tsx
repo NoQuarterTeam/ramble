@@ -80,7 +80,8 @@ const DropdownMenuItem = React.forwardRef<
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={merge(
-      "hover:bg-gray-75 relative flex w-full cursor-pointer items-center rounded-md px-2 py-1.5 text-sm font-normal outline-none focus:bg-gray-100 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 dark:hover:bg-gray-700 dark:focus:bg-gray-700/70",
+      !props.asChild &&
+        "hover:bg-gray-75 relative flex w-full cursor-pointer items-center rounded-md px-2 py-1.5 text-sm font-normal outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 dark:hover:bg-gray-700",
       inset && "pl-8",
       className,
     )}
