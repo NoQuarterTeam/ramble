@@ -207,5 +207,5 @@ export function FormError({ error }: { error?: string }) {
 }
 export const FormButton = React.forwardRef<HTMLButtonElement, ButtonProps>(function _FormButton(props, ref) {
   const navigation = useNavigation()
-  return <BrandButton type="submit" isLoading={navigation.state !== "idle"} {...props} ref={ref} />
+  return <BrandButton type="submit" isLoading={navigation.state !== "idle" && !!navigation.formAction} {...props} ref={ref} />
 })

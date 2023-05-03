@@ -151,7 +151,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
       </div>
       {isLoading && (
         <div className="center absolute inset-0">
-          <Spinner size="sm" />
+          <Spinner size="sm" className={join(colorScheme === "primary" && "text-white")} />
         </div>
       )}
     </button>

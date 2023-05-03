@@ -47,7 +47,7 @@ export default function Onboarding2() {
     <Form method="post" replace className="space-y-10">
       <div>
         <h1 className="text-3xl">What sports are you into?</h1>
-        <p className="opacity-70">Are you fat basically?</p>
+        <p className="opacity-70">Are you fat, basically</p>
       </div>
       <input type="hidden" name="isClimber" value={String(isClimber)} />
       <input type="hidden" name="isMountainBiker" value={String(isMountainBiker)} />

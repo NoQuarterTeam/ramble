@@ -39,7 +39,7 @@ export const action = async ({ request }: ActionArgs) => {
           firstName: z.string().min(2, "Must be at least 2 characters"),
           lastName: z.string().min(2, "Must be at least 2 characters"),
         })
-        const result = await validateFormData(request, registerSchema)
+        const result = await validateFormData(formData, registerSchema)
         if (!result.success) return formError(result)
         const data = result.data
         const email = data.email.toLowerCase().trim()
@@ -51,17 +51,12 @@ export const action = async ({ request }: ActionArgs) => {
         const { createFlash } = await getFlashSession(request)
         const headers = new Headers([
           ["Set-Cookie", await setUser(user.id)],
-          [
-            "Set-Cookie",
-            await createFlash(
-              FlashType.Info,
-              `Welcome to the travel, ${data.firstName}!`,
-              "If you like it, give us a star on Github!",
-            ),
-          ],
+          ["Set-Cookie", await createFlash(FlashType.Info, `Welcome to Travel, ${data.firstName}!`, "Let's get you setup.")],
         ])
         return redirect("/onboarding", { headers })
       } catch (e) {
+        console.log(e)
+
         return badRequest(e, {
           headers: { "Set-Cookie": await createFlash(FlashType.Error, "Register error") },
         })
