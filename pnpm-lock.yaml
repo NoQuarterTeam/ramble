@@ -99,8 +99,8 @@ importers:
         specifier: ~0.16.4
         version: 0.16.4(expo@48.0.10)
       lucide-react-native:
-        specifier: ^0.192.0
-        version: 0.192.0(prop-types@15.8.1)(react-native-svg@13.4.0)(react-native@0.71.6)(react@18.2.0)
+        specifier: ^0.204.0
+        version: 0.204.0(prop-types@15.8.1)(react-native-svg@13.4.0)(react-native@0.71.6)(react@18.2.0)
       nativewind:
         specifier: ^2.0.11
         version: 2.0.11(react@18.2.0)(tailwindcss@3.3.1)
@@ -217,8 +217,8 @@ importers:
         specifier: latest
         version: 3.6.10
       lucide-react:
-        specifier: ^0.192.0
-        version: 0.192.0(react@18.2.0)
+        specifier: ^0.204.0
+        version: 0.204.0(react@18.2.0)
       mapbox-gl:
         specifier: ^2.14.1
         version: 2.14.1
@@ -389,8 +389,8 @@ importers:
         specifier: 9.0.0
         version: 9.0.0
       lucide-react:
-        specifier: ^0.192.0
-        version: 0.192.0(react@18.2.0)
+        specifier: ^0.204.0
+        version: 0.204.0(react@18.2.0)
       mapbox-gl:
         specifier: ^2.14.1
         version: 2.14.1
@@ -770,8 +770,8 @@ importers:
         specifier: ^0.6.0
         version: 0.6.0(typescript@5.0.4)
       lucide-react:
-        specifier: ^0.192.0
-        version: 0.192.0(react@18.2.0)
+        specifier: ^0.204.0
+        version: 0.204.0(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -11177,8 +11177,8 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
-  /lucide-react-native@0.192.0(prop-types@15.8.1)(react-native-svg@13.4.0)(react-native@0.71.6)(react@18.2.0):
-    resolution: {integrity: sha512-6XXgPgTza+lHGWj/ctFmtxOAu/hX6anBkVqypiYLlI9eHAkHs0SWh/5cGH5CO/Y2sExdBKzV2rW4Wb7QO7j5aA==}
+  /lucide-react-native@0.204.0(prop-types@15.8.1)(react-native-svg@13.4.0)(react-native@0.71.6)(react@18.2.0):
+    resolution: {integrity: sha512-kDp6GbmEAMKn8fCxuEGwgdX0my6gIlPJDv99sfOU4aPzgKaB4OTFhcD9XgNG8mMlwFBrUy7f99N/Y3Xu752XgA==}
     peerDependencies:
       prop-types: ^15.7.2
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
@@ -11191,8 +11191,8 @@ packages:
       react-native-svg: 13.4.0(react-native@0.71.6)(react@18.2.0)
     dev: false
 
-  /lucide-react@0.192.0(react@18.2.0):
-    resolution: {integrity: sha512-ThZ1jGJhUzDP8oQbHtvvG/xh0uodewEt0G6aM/pAtC9RRKPZWNHKmDfoc5sbBC5hU9CHAYknq4/R/JY/QzLOjg==}
+  /lucide-react@0.204.0(react@18.2.0):
+    resolution: {integrity: sha512-tIgHjOtimLOGetSOfdztb0YQpm7uEuFjerJuqF8dwW1txkxfqu3jt8yqEn2m/TgpeULDofQN074nuJIyYDaMIg==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
