@@ -1,4 +1,3 @@
-import { useSearchParams } from "@remix-run/react"
 import { Settings2 } from "lucide-react"
 import queryString from "query-string"
 
@@ -21,14 +20,17 @@ const SPOT_OPTIONS: { label: string; value: SpotType }[] = [
   { label: "Other", value: "OTHER" },
 ]
 
-export function MapFilters() {
-  const [searchParams, setSearchParams] = useSearchParams()
-  const type = searchParams.get("type")
+export function MapFilters({ onChange }: { onChange: (params: string) => void }) {
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault()
     const values = Object.fromEntries(new FormData(e.target as HTMLFormElement))
-    const existingParams = queryString.parse(searchParams.toString())
-    setSearchParams(queryString.stringify({ ...existingParams, ...values }))
+    const existingParams = queryString.parse(window.location.search)
+    const newParams = queryString.stringify({
+      ...existingParams,
+      type: values.type || undefined,
+      isPetFriendly: values.isPetFriendly || undefined,
+    })
+    onChange(newParams)
     modalProps.onClose()
   }
   const modalProps = useDisclosure()
@@ -46,14 +48,23 @@ export function MapFilters() {
       <Modal {...modalProps} title="Filters">
         <form className="space-y-2" onSubmit={onSubmit}>
           <label htmlFor="isPetFriendly" className="flex space-x-4">
-            <Checkbox name="isPetFriendly" id="isPetFriendly" className="mt-1" />
+            <Checkbox
+              name="isPetFriendly"
+              id="isPetFriendly"
+              defaultChecked={Boolean(queryString.parse(window.location.search).isPetFriendly)}
+              className="mt-1"
+            />
             <div>
               <p>Pet friendly</p>
               <p className="text-sm opacity-70">Furry friends allowed!</p>
             </div>
           </label>
 
-          <Select name="type" defaultValue={type || ""} className="cursor-pointer">
+          <Select
+            name="type"
+            defaultValue={(queryString.parse(window.location.search).type as string) || ""}
+            className="cursor-pointer"
+          >
             <option value="">All</option>
             {SPOT_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>

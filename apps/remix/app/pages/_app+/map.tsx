@@ -12,9 +12,8 @@ import queryString from "query-string"
 import { ClientOnly } from "@travel/shared"
 
 import { useTheme } from "~/lib/theme"
-import type { Point } from "~/services/points.server"
 
-import type { pointsLoader } from "../api+/points"
+import type { pointsLoader, Point } from "../api+/points"
 import type { IpInfo } from "./_layout"
 import { MapFilters } from "~/pages/_app+/components/MapFilters"
 
@@ -56,6 +55,10 @@ export default function MapView() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const onParamsChange = (params: string) => {
+    pointsFetcher.load(`/api/points/?${params}`)
+    window.history.pushState(null, "", `${window.location.pathname}?${params}`)
+  }
   const onMove = (e: mapboxgl.MapboxEvent<undefined> | ViewStateChangeEvent) => {
     const bounds = e.target.getBounds()
     const zoom = Math.round(e.target.getZoom())
@@ -67,8 +70,7 @@ export default function MapView() {
       maxLng: parseFloat(bounds.getEast().toFixed(6)),
       zoom,
     })
-    pointsFetcher.load(`/api/points/?${params}`)
-    window.history.pushState(null, "", `${window.location.pathname}?${params}`)
+    onParamsChange(params)
   }
   const navigate = useNavigate()
   const spotMarkers = React.useMemo(
@@ -126,7 +128,7 @@ export default function MapView() {
             </Map>
           )}
 
-          <MapFilters />
+          <MapFilters onChange={onParamsChange} />
 
           <Outlet />
         </div>
