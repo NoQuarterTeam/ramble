@@ -14,7 +14,11 @@
       "groupName": "@types"
     },
     {
-      "packageNames": ["lucid-react"],
+      "packageNames": ["lucide-react"],
+      "extends": ["schedule:weekly"]
+    },
+    {
+      "packageNames": ["lucide-react-native"],
       "extends": ["schedule:weekly"]
     },
     {
