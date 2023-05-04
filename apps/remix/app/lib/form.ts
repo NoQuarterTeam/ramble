@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useActionData } from "react-router"
-import type { z } from "zod"
+import { z } from "zod"
 
 import { badRequest } from "./remix.server"
 
@@ -44,3 +44,10 @@ export type ActionData<Schema extends z.ZodType<unknown>> = {
 export function useFormErrors<Schema extends z.ZodType<unknown>>() {
   return useActionData() as Partial<ActionData<Schema>> | null
 }
+
+export const NullableFormString = z.preprocess((v) => v || null, z.string().min(2).nullish())
+export const NullableFormNumber = z.preprocess(
+  (v) => v || null,
+  z.coerce.number({ invalid_type_error: "Not a number" }).nullish(),
+)
+export const FormNumber = z.coerce.number({ invalid_type_error: "Not a number" })

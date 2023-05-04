@@ -3,14 +3,13 @@ import { useLoaderData } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json, redirect } from "@vercel/remix"
 import { z } from "zod"
-import { zx } from "zodix"
 
 import { Textarea } from "@travel/ui"
 
-import { Form, FormButton, FormField, ImageField } from "~/components/Form"
+import { Form, FormButton, FormError, FormField, ImageField } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { db } from "~/lib/db.server"
-import { formError, validateFormData } from "~/lib/form"
+import { formError, FormNumber, NullableFormString, validateFormData } from "~/lib/form"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import Footer from "./components/Footer"
@@ -24,11 +23,11 @@ export const loader = async ({ request }: LoaderArgs) => {
 }
 
 const schema = z.object({
-  name: z.string(),
-  model: z.string(),
-  year: zx.NumAsString,
-  description: z.string().nullable().optional(),
-  image: z.string().nullable().optional(),
+  name: z.string().min(1),
+  model: z.string().min(1),
+  year: FormNumber.min(1950).max(new Date().getFullYear() + 2),
+  description: NullableFormString,
+  image: NullableFormString,
 })
 
 export const action = async ({ request }: ActionArgs) => {
@@ -58,15 +57,28 @@ export default function Onboarding3() {
       </div>
       <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
         <div className="space-y-2">
-          <FormField name="name" defaultValue={user.van?.name} label="What's it's name?" placeholder="Patrick" />
-          <FormField name="model" defaultValue={user.van?.model} label="What type of van is it?" placeholder="Citroën Jumper" />
-          <FormField name="year" defaultValue={String(user.van?.year || "")} label="What year was it born?" placeholder="2013" />
+          <FormField required name="name" defaultValue={user.van?.name} label="What's it's name?" placeholder="Patrick" />
+          <FormField
+            required
+            name="model"
+            defaultValue={user.van?.model}
+            label="What type of van is it?"
+            placeholder="Citroën Jumper"
+          />
+          <FormField
+            required
+            name="year"
+            defaultValue={String(user.van?.year || "")}
+            label="What year was it born?"
+            placeholder="2013"
+          />
           <FormField
             name="description"
             defaultValue={user.van?.description || ""}
             label="Anything else you wana mention?"
             input={<Textarea rows={4} />}
           />
+          <FormError />
         </div>
         <div>
           <ImageField
@@ -83,9 +95,14 @@ export default function Onboarding3() {
         <LinkButton size="lg" to="../3" variant="ghost">
           Back
         </LinkButton>
-        <FormButton size="lg" className="min-w-[100px]">
-          Next
-        </FormButton>
+        <div className="flex space-x-2">
+          <LinkButton size="lg" to="/map/welcome" variant="ghost">
+            Skip
+          </LinkButton>
+          <FormButton size="lg" className="min-w-[100px]">
+            Next
+          </FormButton>
+        </div>
       </Footer>
     </Form>
   )

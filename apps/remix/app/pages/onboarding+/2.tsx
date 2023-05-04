@@ -9,7 +9,7 @@ import { zx } from "zodix"
 
 import { join } from "@travel/shared"
 
-import { Form, FormButton } from "~/components/Form"
+import { Form, FormButton, FormError } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
@@ -103,6 +103,7 @@ export default function Onboarding2() {
           <span className="md:text-md text-sm">Hiking</span>
         </button>
       </div>
+      <FormError />
       <Footer>
         <LinkButton size="lg" to=".." variant="ghost">
           Back

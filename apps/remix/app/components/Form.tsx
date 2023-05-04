@@ -34,7 +34,7 @@ export function FormFieldLabel(
       className={merge("flex text-sm font-normal text-gray-700 dark:text-gray-100", props.className)}
     >
       {props.children}
-      {props.required && <span className="text-red-500">*</span>}
+      {props.required && <span className="pl-0.5 text-red-500">*</span>}
     </label>
   )
 }

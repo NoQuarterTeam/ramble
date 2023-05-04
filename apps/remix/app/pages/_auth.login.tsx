@@ -5,7 +5,7 @@ import { z } from "zod"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { db } from "~/lib/db.server"
-import { formError, validateFormData } from "~/lib/form"
+import { formError, NullableFormString, validateFormData } from "~/lib/form"
 import { comparePasswords } from "~/services/auth/password.server"
 import { getUserSession } from "~/services/session/session.server"
 
@@ -22,7 +22,7 @@ export const action = async ({ request }: ActionArgs) => {
   const loginSchema = z.object({
     email: z.string().min(3).email("Invalid email"),
     password: z.string().min(8, "Must be at least 8 characters"),
-    redirectTo: z.string().nullable().optional(),
+    redirectTo: NullableFormString,
   })
   const result = await validateFormData(request, loginSchema)
   if (!result.success) return formError(result)

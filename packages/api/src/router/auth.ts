@@ -11,7 +11,7 @@ export const userSchema = z.object({
   password: z.string().min(2),
   firstName: z.string().min(2),
   lastName: z.string().min(2),
-  avatar: z.string().optional(),
+  avatar: z.string().nullish(),
 })
 export const loginSchema = userSchema.pick({ email: true, password: true })
 export const registerSchema = userSchema.pick({ email: true, password: true, firstName: true, lastName: true })

@@ -6,10 +6,10 @@ import { z } from "zod"
 
 import { Textarea } from "@travel/ui"
 
-import { Form, FormButton, FormField, FormFieldLabel, ImageField } from "~/components/Form"
+import { Form, FormButton, FormError, FormField, FormFieldLabel, ImageField } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { db } from "~/lib/db.server"
-import { formError, validateFormData } from "~/lib/form"
+import { formError, NullableFormString, validateFormData } from "~/lib/form"
 import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
 
 import Footer from "./components/Footer"
@@ -20,8 +20,8 @@ export const loader = async ({ request }: LoaderArgs) => {
 }
 
 const schema = z.object({
-  bio: z.string().nullable().optional(),
-  avatar: z.string().nullable().optional(),
+  bio: NullableFormString,
+  avatar: NullableFormString,
 })
 
 export const action = async ({ request }: ActionArgs) => {
@@ -29,8 +29,6 @@ export const action = async ({ request }: ActionArgs) => {
   if (!result.success) return formError(result)
   const id = await requireUser(request)
   await db.user.update({ where: { id }, data: result.data })
-  console.log("woooo")
-
   return redirect("/onboarding/2")
 }
 
@@ -42,7 +40,7 @@ export default function Onboarding3() {
         <h1 className="text-3xl">Tell us a little bit youself</h1>
         <p className="opacity-70">Why do you travel?</p>
       </div>
-      {/* <div className="flex space-x-20"> */}
+
       <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
         <FormField
           name="bio"
@@ -56,6 +54,7 @@ export default function Onboarding3() {
           <ImageField name="avatar" className="sq-[200px]" defaultValue={user.avatar} placeholder="Click here" path={user.id} />
         </div>
       </div>
+      <FormError />
       <Footer>
         <div />
         <div className="flex space-x-2">

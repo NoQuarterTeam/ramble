@@ -9,7 +9,7 @@ import { zx } from "zodix"
 
 import { join } from "@travel/shared"
 
-import { Form, FormButton } from "~/components/Form"
+import { Form, FormButton, FormError } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { db } from "~/lib/db.server"
 import { formError, useFormErrors, validateFormData } from "~/lib/form"
@@ -73,6 +73,7 @@ export default function Onboarding() {
           </button>
         </div>
         {actionData?.fieldErrors?.isPetOwner && <p className="w-full text-center">Please choose an answer</p>}
+        <FormError />
       </div>
       <Footer>
         <LinkButton size="lg" to="../2" variant="ghost">
