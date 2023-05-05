@@ -23,7 +23,7 @@ export function Nav() {
   const user = null as User | null
 
   return (
-    <div className="h-nav absolute left-0 top-0 z-50 flex w-full items-center justify-between border-b border-solid border-gray-50 bg-white px-6 align-middle dark:border-gray-700 dark:bg-gray-800">
+    <div className="h-nav flex w-full items-center justify-between border-b border-solid border-gray-50 bg-white px-6 align-middle dark:border-gray-700 dark:bg-gray-800">
       <div className="hstack h-12 space-x-6">
         <div className="hstack">
           <p className="text-xl font-semibold">Travel</p>

@@ -1,13 +1,18 @@
 "use client"
 import * as React from "react"
 import type { ViewStateChangeEvent } from "react-map-gl"
-import Map, { GeolocateControl, type LngLatLike, type MapRef, Marker, NavigationControl } from "react-map-gl"
+import Map, {
+  GeolocateControl,
+  // type LngLatLike,
+  type MapRef,
+  Marker,
+  NavigationControl,
+} from "react-map-gl"
 
 import turfCenter from "@turf/center"
 import * as turf from "@turf/helpers"
 
 import { cva } from "class-variance-authority"
-import "mapbox-gl/dist/mapbox-gl.css"
 
 import queryString from "query-string"
 
@@ -81,18 +86,18 @@ export const MapView = React.memo(function _MapView(props: Props) {
             e.originalEvent.stopPropagation()
             if (!point.properties.cluster && point.properties.id) {
               const newParams = queryString.stringify(queryString.parse(window.location.search))
-              router.push(`/map/${point.properties.id}?${newParams}`)
+              router.push(`/spots/${point.properties.id}?${newParams}`)
             }
-            const center = point.geometry.coordinates as LngLatLike
-            const currentZoom = mapRef.current?.getZoom()
-            const zoom = point.properties.cluster ? Math.min((currentZoom || 5) + 2, 14) : currentZoom
-            mapRef.current?.flyTo({
-              center,
-              duration: 1000,
-              padding: 50,
-              zoom,
-              offset: point.properties.cluster ? [0, 0] : [100, 0],
-            })
+            // const center = point.geometry.coordinates as LngLatLike
+            // const currentZoom = mapRef.current?.getZoom()
+            // const zoom = point.properties.cluster ? Math.min((currentZoom || 5) + 2, 14) : currentZoom
+            // mapRef.current?.flyTo({
+            //   center,
+            //   duration: 1000,
+            //   padding: 50,
+            //   zoom,
+            //   offset: point.properties.cluster ? [0, 0] : [100, 0],
+            // })
           }}
         />
       )),
@@ -100,28 +105,26 @@ export const MapView = React.memo(function _MapView(props: Props) {
     [points],
   )
   return (
-    <div className="relative">
-      <div className="relative h-screen w-screen overflow-hidden">
-        <Map
-          mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
-          // onLoad={onMove}
-          onMoveEnd={onMove}
-          ref={mapRef}
-          style={{ height: "100%", width: "100%" }}
-          initialViewState={initialViewState}
-          attributionControl={false}
-          mapStyle={
-            theme === "dark"
-              ? "mapbox://styles/jclackett/ck44lf1f60a7j1cowkgjr6f3j"
-              : "mapbox://styles/jclackett/ckcqlc8j6040i1ipeuh4s5fey"
-          }
-        >
-          {spotMarkers}
+    <div className="relative h-[calc(100vh-70px)] w-screen overflow-hidden">
+      <Map
+        mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
+        // onLoad={onMove}
+        onMoveEnd={onMove}
+        ref={mapRef}
+        style={{ height: "100%", width: "100%" }}
+        initialViewState={initialViewState}
+        attributionControl={false}
+        mapStyle={
+          theme === "dark"
+            ? "mapbox://styles/jclackett/ck44lf1f60a7j1cowkgjr6f3j"
+            : "mapbox://styles/jclackett/ckcqlc8j6040i1ipeuh4s5fey"
+        }
+      >
+        {spotMarkers}
 
-          <GeolocateControl position="bottom-right" />
-          <NavigationControl position="bottom-right" />
-        </Map>
-      </div>
+        <GeolocateControl position="bottom-right" />
+        <NavigationControl position="bottom-right" />
+      </Map>
     </div>
   )
 })

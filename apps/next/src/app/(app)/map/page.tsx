@@ -2,15 +2,41 @@ import { cache } from "react"
 import Supercluster from "supercluster"
 import { db } from "~/lib/db"
 import { MapView } from "./MapView"
+import "mapbox-gl/dist/mapbox-gl.css"
+import { z } from "zod"
+import { type SpotType } from "@travel/database/types"
 
-const getSpots = cache(async () => {
+export const revalidate = 60 * 60 * 24 // 24 hours
+
+type MapSearchParams = {
+  type?: string
+  minLat?: string
+  maxLat?: string
+  minLng?: string
+  maxLng?: string
+}
+
+const NumAsString = z.coerce.number()
+
+const getSpots = cache(async (searchParams: MapSearchParams) => {
+  const schema = z.object({
+    zoom: NumAsString,
+    minLat: NumAsString,
+    maxLat: NumAsString,
+    minLng: NumAsString,
+    maxLng: NumAsString,
+    type: z.string().nullish(),
+  })
+  const result = await schema.safeParseAsync(searchParams)
+
+  if (!result.success) return []
+  const { type, zoom, ...coords } = result.data
   const spots = await db.spot.findMany({
-    // take: 20, // temp limit
     select: { id: true, latitude: true, longitude: true, type: true },
     where: {
-      // latitude: { gt: coords.minLat, lt: coords.maxLat },
-      // longitude: { gt: coords.minLng, lt: coords.maxLng },
-      // type: type ? { equals: type as SpotType } : undefined,
+      latitude: { gt: coords.minLat, lt: coords.maxLat },
+      longitude: { gt: coords.minLng, lt: coords.maxLng },
+      type: type ? { equals: type as SpotType } : undefined,
     },
     orderBy: { createdAt: "desc" },
   })
@@ -25,12 +51,12 @@ const getSpots = cache(async () => {
       properties: { id: spot.id, type: spot.type },
     })),
   )
-  return clusters.getClusters([-10, 40, 50, 10], 5)
+  return clusters.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], zoom || 5)
 })
 
 export type Point = Awaited<ReturnType<typeof getSpots>>[number]
 
-export default async function Map() {
-  const spots = await getSpots()
+export default async function Map({ searchParams }: { searchParams: MapSearchParams }) {
+  const spots = await getSpots(searchParams)
   return <MapView points={spots} />
 }

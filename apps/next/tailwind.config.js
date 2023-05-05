@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     extend: {
       spacing: {
-        nav: "80px",
+        nav: "70px",
       },
       fontSize: {
         xxxs: "0.4rem",
@@ -14,8 +14,8 @@ module.exports = {
       },
     },
     fontFamily: {
-      sans: ["var(--font-poppins)"],
-      serif: ["var(--font-poppins)"],
+      sans: ["var(--font-custom)"],
+      serif: ["var(--font-custom)"],
     },
   },
   plugins: [require("@tailwindcss/forms"), require("tailwindcss-radix")],
