@@ -1,10 +1,14 @@
+import "mapbox-gl/dist/mapbox-gl.css"
+
 import { cache } from "react"
 import Supercluster from "supercluster"
-import { db } from "~/lib/db"
-import { MapView } from "./MapView"
-import "mapbox-gl/dist/mapbox-gl.css"
 import { z } from "zod"
+
 import { type SpotType } from "@travel/database/types"
+
+import { db } from "~/lib/db"
+
+import { MapView } from "./MapView"
 
 export const revalidate = 60 * 60 * 24 // 24 hours
 

@@ -2,6 +2,7 @@ import { useLoaderData } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
+
 import { db } from "~/lib/db.server"
 
 export const loader = async ({ request, params }: LoaderArgs) => {

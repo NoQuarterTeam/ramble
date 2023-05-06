@@ -1,14 +1,13 @@
+import type * as React from "react"
+import { cache } from "react"
 import { Star, X } from "lucide-react"
-import * as React from "react"
+import Image from "next/image"
+import Link from "next/link"
 
-import { merge, createImageUrl } from "@travel/shared"
+import { createImageUrl,merge } from "@travel/shared"
 import { Avatar } from "@travel/ui"
 
-import { cache } from "react"
-
 import { db } from "~/lib/db"
-import Link from "next/link"
-import Image from "next/image"
 
 export const revalidate = 60 * 60 * 24 // 24 hours
 

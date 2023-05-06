@@ -1,7 +1,8 @@
 import * as React from "react"
-
 import { LogOut, Menu, Plus, User as UserIcon } from "lucide-react"
 import Link from "next/link"
+
+import { type User } from "@travel/database/types"
 import {
   Avatar,
   Button,
@@ -15,7 +16,6 @@ import {
 
 import { LinkButton } from "~/components/LinkButton"
 
-import { type User } from "@travel/database/types"
 import { MapFilters } from "./MapFilters"
 import { ThemeSwitcher } from "./ThemeSwitcher"
 

@@ -4,7 +4,7 @@ import type { FormProps as RemixFormProps } from "@remix-run/react"
 import { Form as RemixForm, useNavigation } from "@remix-run/react"
 
 import { merge } from "@travel/shared"
-import { type ButtonProps, Input, type InputProps, Button } from "@travel/ui"
+import { Button,type ButtonProps, Input, type InputProps } from "@travel/ui"
 
 import { useFormErrors } from "~/lib/form"
 import { createImageUrl } from "~/lib/s3"

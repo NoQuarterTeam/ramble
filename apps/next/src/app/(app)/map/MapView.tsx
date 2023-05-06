@@ -8,17 +8,14 @@ import Map, {
   Marker,
   NavigationControl,
 } from "react-map-gl"
-
 import turfCenter from "@turf/center"
 import * as turf from "@turf/helpers"
-
 import { cva } from "class-variance-authority"
-
-import queryString from "query-string"
-
 import { useRouter, useSearchParams } from "next/navigation"
 import { useTheme } from "next-themes"
-import { Point } from "./page"
+import queryString from "query-string"
+
+import { type Point } from "./page"
 
 // import type { IpInfo } from "./_app"
 

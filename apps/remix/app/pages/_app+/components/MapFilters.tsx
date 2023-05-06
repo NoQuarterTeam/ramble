@@ -1,3 +1,4 @@
+import * as React from "react"
 import type { LucideIcon } from "lucide-react"
 import {
   Beer,
@@ -17,7 +18,6 @@ import {
   Waves,
 } from "lucide-react"
 import queryString from "query-string"
-import * as React from "react"
 
 import type { SpotType } from "@travel/database"
 import { useDisclosure } from "@travel/shared"

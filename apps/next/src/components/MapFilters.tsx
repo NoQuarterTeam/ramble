@@ -1,6 +1,6 @@
 "use client"
-import { useSearchParams, useRouter } from "next/navigation"
 import { Settings2 } from "lucide-react"
+import { useRouter,useSearchParams } from "next/navigation"
 import queryString from "query-string"
 
 import type { SpotType } from "@travel/database/types"

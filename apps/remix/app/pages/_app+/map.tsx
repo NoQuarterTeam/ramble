@@ -12,10 +12,10 @@ import queryString from "query-string"
 import { ClientOnly } from "@travel/shared"
 
 import { useTheme } from "~/lib/theme"
-
-import type { pointsLoader, Point } from "../api+/points"
-import type { IpInfo } from "./_layout"
 import { MapFilters } from "~/pages/_app+/components/MapFilters"
+
+import type { Point,pointsLoader } from "../api+/points"
+import type { IpInfo } from "./_layout"
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: mapStyles }]
