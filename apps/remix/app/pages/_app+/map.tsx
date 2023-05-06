@@ -56,20 +56,23 @@ export default function MapView() {
   }, [])
 
   const onParamsChange = (params: string) => {
-    pointsFetcher.load(`/api/points/?${params}`)
+    pointsFetcher.load(`/api/points?${params}`)
     window.history.pushState(null, "", `${window.location.pathname}?${params}`)
   }
   const onMove = (e: mapboxgl.MapboxEvent<undefined> | ViewStateChangeEvent) => {
     const bounds = e.target.getBounds()
     const zoom = Math.round(e.target.getZoom())
-    const params = queryString.stringify({
-      ...queryString.parse(window.location.search),
-      minLat: parseFloat(bounds.getSouth().toFixed(6)),
-      maxLat: parseFloat(bounds.getNorth().toFixed(6)),
-      minLng: parseFloat(bounds.getWest().toFixed(6)),
-      maxLng: parseFloat(bounds.getEast().toFixed(6)),
-      zoom,
-    })
+    const params = queryString.stringify(
+      {
+        ...queryString.parse(window.location.search, { arrayFormat: "bracket" }),
+        minLat: parseFloat(bounds.getSouth().toFixed(6)),
+        maxLat: parseFloat(bounds.getNorth().toFixed(6)),
+        minLng: parseFloat(bounds.getWest().toFixed(6)),
+        maxLng: parseFloat(bounds.getEast().toFixed(6)),
+        zoom,
+      },
+      { arrayFormat: "bracket" },
+    )
     onParamsChange(params)
   }
   const navigate = useNavigate()
@@ -82,8 +85,7 @@ export default function MapView() {
           onClick={(e) => {
             e.originalEvent.stopPropagation()
             if (!point.properties.cluster && point.properties.id) {
-              const newParams = queryString.stringify({ ...queryString.parse(window.location.search) })
-              navigate(`/map/${point.properties.id}?${newParams}`)
+              navigate(`/map/${point.properties.id}${window.location.search}`)
             }
             const center = point.geometry.coordinates as LngLatLike
             const currentZoom = mapRef.current?.getZoom()

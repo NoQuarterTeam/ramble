@@ -1,7 +1,6 @@
 export * from "./AlertDialog"
 export * from "./Avatar"
 export * from "./Badge"
-export * from "./BrandButton"
 export * from "./Button"
 export * from "./ButtonGroup"
 export * from "./CloseButton"

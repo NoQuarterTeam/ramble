@@ -4,7 +4,7 @@ import type { FormProps as RemixFormProps } from "@remix-run/react"
 import { Form as RemixForm, useNavigation } from "@remix-run/react"
 
 import { merge } from "@travel/shared"
-import { BrandButton, type ButtonProps, Input, type InputProps } from "@travel/ui"
+import { type ButtonProps, Input, type InputProps, Button } from "@travel/ui"
 
 import { useFormErrors } from "~/lib/form"
 import { createImageUrl } from "~/lib/s3"
@@ -207,5 +207,5 @@ export function FormError({ error }: { error?: string }) {
 }
 export const FormButton = React.forwardRef<HTMLButtonElement, ButtonProps>(function _FormButton(props, ref) {
   const navigation = useNavigation()
-  return <BrandButton type="submit" isLoading={navigation.state !== "idle" && !!navigation.formAction} {...props} ref={ref} />
+  return <Button type="submit" isLoading={navigation.state !== "idle" && !!navigation.formAction} {...props} ref={ref} />
 })

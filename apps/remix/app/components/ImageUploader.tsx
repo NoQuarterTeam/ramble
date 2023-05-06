@@ -3,7 +3,7 @@ import type { DropzoneOptions, FileRejection } from "react-dropzone"
 import { useDropzone } from "react-dropzone"
 
 import { merge, useDisclosure, useS3Upload } from "@travel/shared"
-import { BrandButton, Button, ButtonGroup, inputStyles, Modal, useToast } from "@travel/ui"
+import { Button, ButtonGroup, inputStyles, Modal, useToast } from "@travel/ui"
 
 interface Props {
   path: string
@@ -86,9 +86,9 @@ export function ImageUploader({ children, path, onSubmit, dropzoneOptions, class
             <Button variant="ghost" disabled={isLoading} onClick={handleClose}>
               Cancel
             </Button>
-            <BrandButton isLoading={isLoading} onClick={handleSubmitImage}>
+            <Button isLoading={isLoading} onClick={handleSubmitImage}>
               Submit
-            </BrandButton>
+            </Button>
           </ButtonGroup>
         </div>
       </Modal>

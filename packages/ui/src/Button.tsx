@@ -8,7 +8,7 @@ import { join, merge } from "@travel/shared"
 import { Spinner } from "./Spinner"
 
 export const buttonStyles = cva(
-  "outline-none focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-gray-400 dark:focus:ring-offset-gray-900 flex center border border-transparent transition-colors duration-200",
+  "outline-none focus:outline-none font-normal rounded-md focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-gray-400 dark:focus:ring-offset-gray-900 flex center border border-transparent transition-colors duration-200",
   {
     variants: {
       size: {
@@ -18,82 +18,29 @@ export const buttonStyles = cva(
         lg: "text-md px-5",
       },
       variant: {
-        solid: "border-transparent font-medium",
-        outline: "bg-transparent font-normal",
-        ghost: "bg-transparent border-transparent font-normal",
-      },
-      colorScheme: {
-        gray: "text-black dark:text-white",
-        primary: "text-white",
-        red: "text-white",
+        primary:
+          "border-transparent text-white dark:text-black bg-gray-900 hover:bg-gray-600 active:bg-gray-500 dark:bg-white dark:hover:bg-white/90 dark:active:bg-white/80",
+        secondary:
+          "border-transparent text-black bg-black/10 hover:bg-black/20 active:bg-black/30 dark:bg-white/10 dark:hover:bg-white/20 dark:active:bg-white/30",
+        destructive: "border-transparent text-white bg-red-500 hover:bg-red-600 active:bg-red-700",
+        outline: "border-black/10 dark:border-white/10",
+        ghost: "",
+        link: "hover:underline",
       },
       disabled: {
         true: "relative opacity-70 pointer-events-none",
       },
-      rounded: {
-        xs: "rounded-xs",
-        sm: "rounded-sm",
-        md: "rounded-md",
-        lg: "rounded-lg",
-        full: "rounded-full",
-      },
     },
     compoundVariants: [
-      // GRAY
       {
-        colorScheme: "gray",
-        variant: ["solid"],
+        variant: ["ghost", "outline"],
         className:
-          "bg-black/10 hover:bg-black/20 active:bg-black/30 dark:bg-white/10 dark:hover:bg-white/20 dark:active:bg-white/30",
-      },
-      {
-        colorScheme: "gray",
-        variant: ["ghost", "outline"],
-        className: "hover:bg-black/10 active:bg-black/20 dark:hover:bg-white/10 dark:active:bg-white/20",
-      },
-      {
-        colorScheme: "gray",
-        variant: ["outline"],
-        className: "border-black/10 dark:border-white/10",
-      },
-      // PINK
-      {
-        colorScheme: ["primary"],
-        variant: ["solid"],
-        className: "bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white",
-      },
-      {
-        colorScheme: "primary",
-        variant: ["ghost", "outline"],
-        className: "hover:bg-primary-500/10 active:bg-primary-500/20 text-primary-500",
-      },
-      {
-        colorScheme: "primary",
-        variant: ["outline"],
-        className: "border-primary-500/40 text-primary-500",
-      },
-      // RED
-      {
-        colorScheme: ["red"],
-        variant: ["solid"],
-        className: "bg-red-500 hover:bg-red-600 active:bg-red-700 text-white",
-      },
-      {
-        colorScheme: "red",
-        variant: ["ghost", "outline"],
-        className: "hover:bg-red-500/10 active:bg-red-500/20 text-red-500",
-      },
-      {
-        colorScheme: "red",
-        variant: ["outline"],
-        className: "border-red-500/40 text-red-500",
+          "text-black dark:text-white bg-transparent hover:bg-black/10 active:bg-black/20 dark:hover:bg-white/10 dark:active:bg-white/20",
       },
     ],
     defaultVariants: {
-      variant: "solid",
-      rounded: "md",
+      variant: "primary",
       size: "md",
-      colorScheme: "gray",
     },
   },
 )
@@ -122,7 +69,7 @@ export type ButtonProps = ButtonStyleProps &
   }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function _Button(
-  { variant, leftIcon, rightIcon, rounded, disabled, isLoading, colorScheme, size, ...props },
+  { variant = "primary", leftIcon, rightIcon, disabled, isLoading, size, ...props },
   ref,
 ) {
   return (
@@ -135,8 +82,6 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
         (isLoading || disabled) && "cursor-not-allowed",
         buttonStyles({
           size,
-          rounded,
-          colorScheme,
           disabled: disabled || isLoading,
           variant,
         }),
@@ -145,13 +90,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
       )}
     >
       <div className={join("center", isLoading && "opacity-0")} aria-hidden={isLoading}>
-        {leftIcon && <span className="mr-0 md:mr-1">{leftIcon}</span>}
+        {leftIcon && <span className="mr-1.5">{leftIcon}</span>}
         {props.children}
-        {rightIcon && <span className="mr-0 md:ml-1">{rightIcon}</span>}
+        {rightIcon && <span className="ml-1.5">{rightIcon}</span>}
       </div>
       {isLoading && (
         <div className="center absolute inset-0">
-          <Spinner size="sm" className={join(colorScheme === "primary" && "text-white")} />
+          <Spinner size="sm" color={variant === "primary" || variant === "destructive" ? "white" : "black"} />
         </div>
       )}
     </button>

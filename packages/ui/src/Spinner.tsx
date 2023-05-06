@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { merge } from "@travel/shared"
 
-const spinnerStyles = cva("animate-spin text-black dark:text-white", {
+const spinnerStyles = cva("animate-spin", {
   variants: {
     size: {
       xs: "sq-3",
@@ -11,8 +11,13 @@ const spinnerStyles = cva("animate-spin text-black dark:text-white", {
       md: "sq-5",
       lg: "sq-7",
     },
+    color: {
+      white: "text-white dark:text-black",
+      black: "text-black dark:text-white",
+    },
   },
   defaultVariants: {
+    color: "black",
     size: "md",
   },
 })
@@ -20,11 +25,11 @@ const spinnerStyles = cva("animate-spin text-black dark:text-white", {
 export type SpinnerStyleProps = VariantProps<typeof spinnerStyles>
 export type SpinnerProps = React.SVGProps<SVGSVGElement> & SpinnerStyleProps
 
-export function Spinner({ size, ...props }: SpinnerProps) {
+export function Spinner({ size, color = "black", ...props }: SpinnerProps) {
   return (
     <svg
       {...props}
-      className={merge(spinnerStyles({ size }), props.className)}
+      className={merge(spinnerStyles({ size, color }), props.className)}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"

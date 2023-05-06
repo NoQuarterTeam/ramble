@@ -4,33 +4,43 @@ import { cacheHeader } from "pretty-cache-header"
 
 import Supercluster from "supercluster"
 import { z } from "zod"
-import { CheckboxAsString, NumAsString, parseQuerySafe } from "zodix"
+import { CheckboxAsString, NumAsString } from "zodix"
 
 import type { SpotType } from "@travel/database"
 
 import { db } from "~/lib/db.server"
+import queryString from "query-string"
 
 async function getMapPoints(request: Request) {
-  const result = parseQuerySafe(request, {
+  const schema = z.object({
     zoom: NumAsString,
     minLat: NumAsString,
     maxLat: NumAsString,
     minLng: NumAsString,
     maxLng: NumAsString,
-    type: z.string().optional().nullable(),
-    isPetFriendly: CheckboxAsString,
+    type: z.array(z.string()).or(z.string()).optional(),
+    isPetFriendly: CheckboxAsString.optional(),
+    isVerified: CheckboxAsString.optional(),
   })
+  const result = schema.safeParse(queryString.parse(new URL(request.url).search, { arrayFormat: "bracket" }))
   if (!result.success) return []
+  const { zoom, type, isVerified, isPetFriendly, ...coords } = result.data
 
-  const { type, zoom, isPetFriendly, ...coords } = result.data
   const spots = await db.spot.findMany({
     // take: 20, // temp limit
     select: { id: true, latitude: true, longitude: true, type: true },
     where: {
+      verifiedAt: isVerified ? { not: { equals: null } } : undefined,
       isPetFriendly: isPetFriendly ? { equals: true } : undefined,
       latitude: { gt: coords.minLat, lt: coords.maxLat },
       longitude: { gt: coords.minLng, lt: coords.maxLng },
-      type: type ? { equals: type as SpotType } : undefined,
+      type: type
+        ? typeof type === "string"
+          ? { equals: type as SpotType }
+          : type.length > 0
+          ? { in: type as SpotType[] }
+          : undefined
+        : undefined,
     },
     orderBy: { createdAt: "desc" },
   })

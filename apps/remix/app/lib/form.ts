@@ -45,7 +45,8 @@ export function useFormErrors<Schema extends z.ZodType<unknown>>() {
   return useActionData() as Partial<ActionData<Schema>> | null
 }
 
-export const NullableFormString = z.preprocess((v) => v || null, z.string().min(2).nullish())
+export const NullableFormString = z.preprocess((v) => (v === "" ? null : v), z.string().nullish())
+
 export const NullableFormNumber = z.preprocess(
   (v) => v || null,
   z.coerce.number({ invalid_type_error: "Not a number" }).nullish(),

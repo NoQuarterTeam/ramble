@@ -11,7 +11,7 @@ interface LinkButtonProps extends ButtonStyleProps, LinkProps {
 }
 
 export const LinkButton = React.forwardRef<HTMLAnchorElement, LinkButtonProps>(function _LinkButton(
-  { variant, size, isLoading, leftIcon, rightIcon, disabled, colorScheme, ...props },
+  { variant = "primary", size, isLoading, leftIcon, rightIcon, disabled, ...props },
   ref,
 ) {
   return (
@@ -20,7 +20,7 @@ export const LinkButton = React.forwardRef<HTMLAnchorElement, LinkButtonProps>(f
       style={{ pointerEvents: disabled ? "none" : undefined }}
       {...props}
       className={merge(
-        buttonStyles({ size, colorScheme, variant, disabled }),
+        buttonStyles({ size, variant, disabled }),
         buttonSizeStyles({ size }),
         props.className,
         disabled && "cursor-not-allowed",
@@ -33,7 +33,7 @@ export const LinkButton = React.forwardRef<HTMLAnchorElement, LinkButtonProps>(f
       </div>
       {isLoading && (
         <div className="center absolute inset-0">
-          <Spinner size={size} />
+          <Spinner size="sm" color={variant === "primary" || variant === "destructive" ? "white" : "black"} />
         </div>
       )}
     </Link>

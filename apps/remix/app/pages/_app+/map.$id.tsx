@@ -4,7 +4,6 @@ import type { LoaderArgs } from "@vercel/remix"
 import { defer } from "@vercel/remix"
 import { Frown, Star } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
-import queryString from "query-string"
 
 import type { Prisma } from "@travel/database"
 import { merge } from "@travel/shared"
@@ -92,6 +91,11 @@ export default function SpotPreview() {
                   ))}
                 </div>
                 <p className="text-sm">{spot.description}</p>
+                <div className="flex justify-end">
+                  <LinkButton variant="link" to={`/spots/${spot.id}`}>
+                    Read more
+                  </LinkButton>
+                </div>
               </div>
               <hr />
               <div className="space-y-4">
@@ -141,6 +145,14 @@ function SpotFallback() {
         <Skeleton className="h-[225px] min-w-[350px] rounded" />
         <Skeleton className="h-[225px] min-w-[350px] rounded" />
       </div>
+      <Skeleton className="h-28 w-full" />
+      <div className="flex justify-end">
+        <Skeleton className="h-8 w-20" />
+      </div>
+      <div className="py-4">
+        <hr />
+      </div>
+
       <Skeleton className="h-8 w-20" />
       <Skeleton className="h-40 w-full" />
       <Skeleton className="h-40 w-full" />
@@ -156,13 +168,7 @@ function SpotContainer(props: { children: React.ReactNode }) {
   const navigate = useNavigate()
   return (
     <div className="border-gray-75 absolute bottom-0 left-0 top-0 z-10 w-full max-w-[400px] overflow-scroll border-r bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
-      <CloseButton
-        className="absolute right-2 top-2 z-10"
-        onClick={() => {
-          const params = queryString.stringify(queryString.parse(window.location.search))
-          navigate(`..?${params}`)
-        }}
-      />
+      <CloseButton className="absolute right-2 top-2 z-10" onClick={() => navigate(`..${window.location.search}`)} />
       {props.children}
     </div>
   )

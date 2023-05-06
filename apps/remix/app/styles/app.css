@@ -19,8 +19,8 @@
   hr {
     @apply border-gray-100 dark:border-gray-600;
   }
-  * {
-    @apply dark:text-white;
+  body {
+    @apply text-black dark:text-white;
   }
 }
 

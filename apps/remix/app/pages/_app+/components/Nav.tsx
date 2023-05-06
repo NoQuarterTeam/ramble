@@ -88,9 +88,7 @@ export function Nav() {
               <LinkButton variant="ghost" to="/login">
                 Login
               </LinkButton>
-              <LinkButton colorScheme="primary" to="/register">
-                Register
-              </LinkButton>
+              <LinkButton to="/register">Register</LinkButton>
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

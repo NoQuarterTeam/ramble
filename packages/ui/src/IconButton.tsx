@@ -25,7 +25,7 @@ export type IconButtonStyleProps = VariantProps<typeof iconbuttonStyles>
 export type IconButtonProps = IconButtonStyleProps & ButtonProps & { icon: React.ReactNode; "aria-label": string }
 
 export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(function _IconButton(
-  { variant, size, rounded, colorScheme, isLoading, disabled, icon, ...props },
+  { variant, size, isLoading, disabled, icon, ...props },
   ref,
 ) {
   return (
@@ -34,7 +34,7 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(f
       type="button"
       disabled={disabled || isLoading}
       {...props}
-      className={merge(buttonStyles({ colorScheme, rounded, disabled, variant }), iconbuttonStyles({ size }), props.className)}
+      className={merge(buttonStyles({ disabled, variant }), iconbuttonStyles({ size }), props.className)}
     >
       <div className="center h-full w-full">{isLoading ? <Spinner size="xs" /> : icon}</div>
     </button>
