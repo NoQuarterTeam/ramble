@@ -35,7 +35,7 @@ const SPOT_OPTIONS: SpotOption[] = [
   { label: "Climbing", value: "CLIMBING", Icon: Mountain },
   { label: "Mountain Biking", value: "MOUNTAIN_BIKING", Icon: Bike },
   { label: "Gas Station", value: "GAS_STATION", Icon: Fuel },
-  { label: "SUPing", value: "SUPPING", Icon: Waves },
+  { label: "Paddle Boarding", value: "PADDLE_BOARDING", Icon: Waves },
   { label: "Other", value: "OTHER", Icon: HelpCircle },
 ]
 

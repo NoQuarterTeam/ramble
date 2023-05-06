@@ -152,7 +152,7 @@ const spotMarkerColors = cva("cursor-pointer hover:scale-110 border sq-5 shadow-
       CLIMBING: "bg-white dark:bg-gray-900",
       MOUNTAIN_BIKING: "bg-white dark:bg-gray-900",
       GAS_STATION: "bg-white dark:bg-gray-900",
-      SUPPING: "bg-white dark:bg-gray-900",
+      PADDLE_BOARDING: "bg-white dark:bg-gray-900",
       VIEW: "bg-white dark:bg-gray-900",
       OTHER: "bg-white dark:bg-gray-900",
     },
