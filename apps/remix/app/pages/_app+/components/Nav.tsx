@@ -25,10 +25,12 @@ export function Nav() {
   const theme = useTheme()
   const isDark = theme === "dark"
   return (
-    <div className="h-nav flex w-full items-center justify-between border-b border-solid border-gray-50 bg-white px-6 align-middle dark:border-gray-700 dark:bg-gray-800">
+    <div className="h-nav flex w-full items-center justify-between border-b border-solid border-gray-50 bg-white px-4 align-middle dark:border-gray-700 dark:bg-gray-800 md:px-20">
       <div className="hstack h-12 space-x-6">
         <div className="hstack">
-          <p className="text-xl font-semibold">Travel</p>
+          <Link to={`/map${typeof window !== "undefined" ? window.location.search : ""}`} className="text-xl font-semibold">
+            Travel
+          </Link>
         </div>
       </div>
       <div className="hstack space-x-3">

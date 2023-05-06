@@ -1,19 +1,33 @@
-import type { LoaderArgs, ActionArgs } from "@remix-run/node"
-import { json } from "@remix-run/node"
-import { useLoaderData } from "@remix-run/react"
-import { getCurrentUser } from "~/services/auth/auth.server"
+import { Outlet } from "@remix-run/react"
+import { buttonSizeStyles, buttonStyles } from "@travel/ui"
 
-export const loader = async ({ request }: LoaderArgs) => {
-  const user = await getCurrentUser(request)
-  return json(user)
-}
+import { NavLink } from "~/components/NavLink"
 
-export const action = async ({ request }: ActionArgs) => {
-  //
-}
-
-export default function Profile() {
-  const user = useLoaderData<typeof loader>()
-
-  return <div>{user.firstName}</div>
+export default function ProfileLayout() {
+  return (
+    <div className="max-w-screen-limiter mx-auto p-4 md:px-20">
+      <div className="flex space-x-2">
+        <NavLink
+          to="/profile"
+          end
+          className={({ isActive }) => buttonStyles({ className: buttonSizeStyles(), variant: isActive ? "primary" : "outline" })}
+        >
+          Profile
+        </NavLink>
+        <NavLink
+          to="/profile/van"
+          className={({ isActive }) => buttonStyles({ className: buttonSizeStyles(), variant: isActive ? "primary" : "outline" })}
+        >
+          My van
+        </NavLink>
+        <NavLink
+          to="/profile/settings"
+          className={({ isActive }) => buttonStyles({ className: buttonSizeStyles(), variant: isActive ? "primary" : "outline" })}
+        >
+          Settings
+        </NavLink>
+      </div>
+      <Outlet />
+    </div>
+  )
 }
