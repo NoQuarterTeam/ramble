@@ -5,7 +5,6 @@ import { defer } from "@vercel/remix"
 import { Frown, Star } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
-import type { Prisma } from "@travel/database"
 import { merge } from "@travel/shared"
 import { Avatar, CloseButton, Spinner } from "@travel/ui"
 
@@ -14,32 +13,31 @@ import { db } from "~/lib/db.server"
 import { createImageUrl } from "~/lib/s3"
 
 export const loader = async ({ params }: LoaderArgs) => {
-  const select = {
-    id: true,
-    name: true,
-    address: true,
-    description: true,
-    images: { select: { id: true, path: true } },
-    reviews: {
-      take: 5,
-      orderBy: { createdAt: "desc" },
+  const spot = db.spot
+    .findUniqueOrThrow({
+      where: { id: params.id },
       select: {
         id: true,
-        createdAt: true,
-        rating: true,
+        name: true,
+        address: true,
         description: true,
-        user: { select: { id: true, firstName: true, lastName: true, avatar: true } },
+        images: { select: { id: true, path: true } },
+        reviews: {
+          take: 5,
+          orderBy: { createdAt: "desc" },
+          select: {
+            id: true,
+            createdAt: true,
+            rating: true,
+            description: true,
+            user: { select: { id: true, firstName: true, lastName: true, avatar: true } },
+          },
+        },
       },
-    },
-  } satisfies Prisma.SpotSelect
+    })
+    .then((s) => s)
 
-  const spot = new Promise((res) => db.spot.findUniqueOrThrow({ where: { id: params.id }, select }).then(res)) as Promise<
-    Prisma.SpotGetPayload<{ select: typeof select }>
-  >
-
-  const rating = new Promise((res) =>
-    db.review.aggregate({ where: { spotId: params.id }, _avg: { rating: true } }).then(res),
-  ) as Promise<Prisma.GetReviewAggregateType<{ _avg: { rating: true } }>>
+  const rating = db.review.aggregate({ where: { spotId: params.id }, _avg: { rating: true } }).then((r) => r)
 
   return defer(
     { spot, rating },
