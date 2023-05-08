@@ -16,6 +16,7 @@ import { LinkButton } from "~/components/LinkButton"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { createImageUrl } from "~/lib/s3"
 import { useTheme } from "~/lib/theme"
+import { ClientOnly } from "@travel/shared"
 
 export function Nav() {
   const user = useMaybeUser()
@@ -28,9 +29,11 @@ export function Nav() {
     <div className="h-nav flex w-full items-center justify-between border-b border-solid border-gray-50 bg-white px-4 align-middle dark:border-gray-700 dark:bg-gray-800 md:px-20">
       <div className="hstack h-12 space-x-6">
         <div className="hstack">
-          <Link to={`/map${typeof window !== "undefined" ? window.location.search : ""}`} className="text-xl font-semibold">
-            Travel
-          </Link>
+          <ClientOnly>
+            <Link to={`/map${typeof window !== "undefined" ? window.location.search : ""}`} className="text-xl font-semibold">
+              Travel
+            </Link>
+          </ClientOnly>
         </div>
       </div>
       <div className="hstack space-x-3">

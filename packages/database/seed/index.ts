@@ -3,7 +3,6 @@ import { prisma, SpotType } from ".."
 import { faker } from "@faker-js/faker"
 
 export async function main() {
-  // Me
   const admin = await prisma.user.upsert({
     create: {
       email: "jack@noquarter.co",
@@ -43,7 +42,6 @@ export async function main() {
     "MOUNTAIN_BIKING",
     "GAS_STATION",
     "SUPPING",
-    "VIEW",
     "OTHER",
   ] as SpotType[]
 

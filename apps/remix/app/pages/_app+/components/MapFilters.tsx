@@ -1,43 +1,10 @@
-import * as React from "react"
-import type { LucideIcon } from "lucide-react"
-import {
-  Beer,
-  Bike,
-  Coffee,
-  Dog,
-  Fuel,
-  HelpCircle,
-  Info,
-  Mountain,
-  ParkingCircle,
-  Settings2,
-  ShoppingCart,
-  Tent,
-  Utensils,
-  Verified,
-  Waves,
-} from "lucide-react"
+import { Dog, Settings2, Verified } from "lucide-react"
 import queryString from "query-string"
+import * as React from "react"
 
-import type { SpotType } from "@travel/database"
 import { useDisclosure } from "@travel/shared"
 import { Button, Modal, ModalFooter, Switch } from "@travel/ui"
-
-type SpotOption = { label: string; value: SpotType; Icon: LucideIcon }
-const SPOT_OPTIONS: SpotOption[] = [
-  { label: "Cafe", value: "CAFE", Icon: Coffee },
-  { label: "Restaurant", value: "RESTAURANT", Icon: Utensils },
-  { label: "Camping", value: "CAMPING", Icon: Tent },
-  { label: "Parking", value: "PARKING", Icon: ParkingCircle },
-  { label: "Bar", value: "BAR", Icon: Beer },
-  { label: "Tip", value: "TIP", Icon: Info },
-  { label: "Shop", value: "SHOP", Icon: ShoppingCart },
-  { label: "Climbing", value: "CLIMBING", Icon: Mountain },
-  { label: "Mountain Biking", value: "MOUNTAIN_BIKING", Icon: Bike },
-  { label: "Gas Station", value: "GAS_STATION", Icon: Fuel },
-  { label: "Paddle Boarding", value: "PADDLE_BOARDING", Icon: Waves },
-  { label: "Other", value: "OTHER", Icon: HelpCircle },
-]
+import { SPOT_OPTIONS } from "~/lib/spots"
 
 export function MapFilters({ onChange }: { onChange: (params: string) => void }) {
   const onSubmit = (e: React.SyntheticEvent) => {
@@ -129,7 +96,7 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
   )
 }
 
-function SpotTypeSelector({ type, defaultValue }: { type: SpotOption; defaultValue: boolean }) {
+function SpotTypeSelector({ type, defaultValue }: { type: (typeof SPOT_OPTIONS)[number]; defaultValue: boolean }) {
   const [isSelected, setIsSelected] = React.useState(defaultValue)
   return (
     <>

@@ -1,20 +1,21 @@
-import * as React from "react"
-import type { ViewStateChangeEvent } from "react-map-gl"
-import Map, { GeolocateControl, type LngLatLike, type MapRef, Marker, NavigationControl } from "react-map-gl"
 import { Outlet, useFetcher, useNavigate, useRouteLoaderData, useSearchParams } from "@remix-run/react"
 import turfCenter from "@turf/center"
 import * as turf from "@turf/helpers"
 import { type LinksFunction } from "@vercel/remix"
-import { cva } from "class-variance-authority"
 import mapStyles from "mapbox-gl/dist/mapbox-gl.css"
 import queryString from "query-string"
+import * as React from "react"
+import type { ViewStateChangeEvent } from "react-map-gl"
+import Map, { GeolocateControl, Marker, NavigationControl, type LngLatLike, type MapRef } from "react-map-gl"
 
 import { ClientOnly } from "@travel/shared"
 
 import { useTheme } from "~/lib/theme"
 import { MapFilters } from "~/pages/_app+/components/MapFilters"
 
-import type { Point,pointsLoader } from "../api+/points"
+import type { SpotType } from "@travel/database"
+import { SPOTS } from "~/lib/spots"
+import type { Point, pointsLoader } from "../api+/points"
 import type { IpInfo } from "./_layout"
 
 export const links: LinksFunction = () => {
@@ -139,31 +140,32 @@ export default function MapView() {
   )
 }
 
-const spotMarkerColors = cva("cursor-pointer hover:scale-110 border sq-5 shadow-sm rounded-full", {
-  variants: {
-    type: {
-      CAFE: "bg-blue-500 dark:bg-blue-900 border-blue-800 dark:border-blue-400",
-      RESTAURANT: "bg-purple-500 dark:bg-purple-900 border-purple-900 dark:border-purple-400",
-      CAMPING: "bg-green-500 dark:bg-green-900 border-green-800 dark:border-green-600",
-      PARKING: "bg-gray-500 dark:bg-gray-900 border-gray-800 dark:border-gray-400",
-      BAR: "bg-red-500 dark:bg-red-900 border-red-800 dark:border-red-400",
-      TIP: "bg-white dark:bg-gray-900",
-      SHOP: "bg-white dark:bg-gray-900",
-      CLIMBING: "bg-white dark:bg-gray-900",
-      MOUNTAIN_BIKING: "bg-white dark:bg-gray-900",
-      GAS_STATION: "bg-white dark:bg-gray-900",
-      PADDLE_BOARDING: "bg-white dark:bg-gray-900",
-      VIEW: "bg-white dark:bg-gray-900",
-      OTHER: "bg-white dark:bg-gray-900",
-    },
-  },
-})
+// const spotMarkerColors = cva("relative cursor-pointer hover:scale-110 rounded-full sq-8", {
+//   variants: {
+//     type: {
+//       CAFE: "bg-blue-700 dark:bg-blue-900",
+//       RESTAURANT: "bg-purple-500 dark:bg-purple-900",
+//       CAMPING: "bg-green-500 dark:bg-green-900",
+//       PARKING: "bg-gray-500 dark:bg-gray-900",
+//       BAR: "bg-red-500 dark:bg-red-900",
+//       TIP: "bg-white dark:bg-gray-900",
+//       SHOP: "bg-white dark:bg-gray-900",
+//       CLIMBING: "bg-white dark:bg-gray-900",
+//       MOUNTAIN_BIKING: "bg-white dark:bg-gray-900",
+//       GAS_STATION: "bg-white dark:bg-gray-900",
+//       PADDLE_BOARDING: "bg-white dark:bg-gray-900",
+//       VIEW: "bg-white dark:bg-gray-900",
+//       OTHER: "bg-white dark:bg-gray-900",
+//     },
+//   },
+// })
 
 interface MarkerProps {
   onClick: (e: mapboxgl.MapboxEvent<MouseEvent>) => void
   point: Point
 }
 function SpotMarker(props: MarkerProps) {
+  const Icon = !props.point.properties.cluster && SPOTS[props.point.properties.type as SpotType].Icon
   return (
     <Marker
       onClick={props.onClick}
@@ -172,11 +174,16 @@ function SpotMarker(props: MarkerProps) {
       latitude={props.point.geometry.coordinates[1]}
     >
       {props.point.properties.cluster ? (
-        <div className="sq-8 flex cursor-pointer items-center justify-center rounded-full border border-green-600 bg-green-400 hover:scale-110 dark:border-green-300 dark:bg-green-700">
+        <div className="sq-10 border-primary-100 bg-primary-800 dark:border-primary-700 dark:bg-primary-900 flex cursor-pointer items-center justify-center rounded-full border text-white shadow transition-transform hover:scale-110">
           <p className="text-center text-sm">{props.point.properties.point_count_abbreviated}</p>
         </div>
       ) : (
-        <div className={spotMarkerColors({ type: props.point.properties.type })} />
+        <div className="relative">
+          <div className="sq-8 bg-primary-600 dark:bg-primary-700 border-primary-100 dark:border-primary-600 flex cursor-pointer items-center justify-center rounded-full border shadow-md transition-transform hover:scale-110">
+            {Icon && <Icon className="sq-4 text-white" />}
+          </div>
+          <div className="sq-3 bg-primary-600 dark:bg-primary-700 absolute -bottom-[3px] left-1/2 -z-[1] -translate-x-1/2 rotate-45 shadow" />
+        </div>
       )}
     </Marker>
   )
