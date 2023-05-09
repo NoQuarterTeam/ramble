@@ -1,6 +1,7 @@
-import { prisma, SpotType } from ".."
+import { SpotType } from "../types"
 
 import { faker } from "@faker-js/faker"
+import { prisma } from ".."
 
 export async function main() {
   const admin = await prisma.user.upsert({
