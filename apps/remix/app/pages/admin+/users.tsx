@@ -1,7 +1,7 @@
 import { useLoaderData } from "@remix-run/react"
 import { json, type LoaderArgs, type SerializeFrom } from "@vercel/remix"
 
-import { type Prisma } from "@travel/database"
+import { type Prisma } from "@travel/database/types"
 import { Tile } from "@travel/ui"
 
 import { Search } from "~/components/Search"

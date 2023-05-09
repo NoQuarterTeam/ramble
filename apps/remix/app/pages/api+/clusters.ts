@@ -1,3 +1,4 @@
+import type { SpotType } from "@travel/database/types"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
@@ -6,11 +7,9 @@ import Supercluster from "supercluster"
 import { z } from "zod"
 import { CheckboxAsString, NumAsString } from "zodix"
 
-import type { SpotType } from "@travel/database"
-
 import { db } from "~/lib/db.server"
 
-async function getMapPoints(request: Request) {
+async function getMapClusters(request: Request) {
   const schema = z.object({
     zoom: NumAsString,
     minLat: NumAsString,
@@ -57,10 +56,10 @@ async function getMapPoints(request: Request) {
   return clusters.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], zoom || 5)
 }
 
-export type Point = Awaited<ReturnType<typeof getMapPoints>>[number]
+export type Cluster = Awaited<ReturnType<typeof getMapClusters>>[number]
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const spots = await getMapPoints(request)
+  const spots = await getMapClusters(request)
   return json(spots, {
     headers: {
       "Cache-Control": cacheHeader({
@@ -74,4 +73,4 @@ export const loader = async ({ request }: LoaderArgs) => {
   })
 }
 
-export const pointsLoader = loader
+export const clustersLoader = loader

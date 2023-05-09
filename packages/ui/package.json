@@ -2,7 +2,7 @@
   "name": "@travel/ui",
   "version": "1.0.0",
   "private": true,
-  "main": "src",
+  "main": "index.ts",
   "types": "src",
   "scripts": {
     "lint:fix": "eslint --config .eslintrc.commit.js --fix --cache --ext .ts,.tsx src",

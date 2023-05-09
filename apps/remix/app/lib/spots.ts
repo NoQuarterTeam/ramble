@@ -1,5 +1,6 @@
 import { SpotType } from "@travel/database/types"
 
+import type { LucideIcon } from "lucide-react"
 import {
   Coffee,
   Utensils,
@@ -28,6 +29,10 @@ export const SPOTS = {
   [SpotType.GAS_STATION]: { label: "Gas Station", Icon: Fuel },
   [SpotType.PADDLE_BOARDING]: { label: "Paddle Boarding", Icon: Waves },
   [SpotType.OTHER]: { label: "Other", Icon: HelpCircle },
-}
+} as const
 
-export const SPOT_OPTIONS = Object.entries(SPOTS).map(([value, { label, Icon }]) => ({ label, value, Icon }))
+export const SPOT_OPTIONS = Object.entries(SPOTS).map(([value, { label, Icon }]) => ({ label, value, Icon })) as {
+  label: string
+  value: SpotType
+  Icon: LucideIcon
+}[]

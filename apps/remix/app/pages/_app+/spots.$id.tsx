@@ -1,11 +1,12 @@
 import { useLoaderData } from "@remix-run/react"
+import { createImageUrl } from "@travel/shared"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
 import { db } from "~/lib/db.server"
 
-export const loader = async ({ request, params }: LoaderArgs) => {
+export const loader = async ({ params }: LoaderArgs) => {
   const spot = await db.spot.findUniqueOrThrow({
     where: { id: params.id },
     select: {
@@ -49,8 +50,15 @@ export const loader = async ({ request, params }: LoaderArgs) => {
 export default function SpotDetail() {
   const spot = useLoaderData<typeof loader>()
   return (
-    <div className="p-10">
+    <div className="p-4 md:p-10 md:px-20">
       <h1 className="text-4xl">{spot.name}</h1>
+      <p className="text-2xl">{spot.address}</p>
+      <p className="text-xl">{spot.description}</p>
+      <div className="flex flex-wrap">
+        {spot.images.map((image) => (
+          <img alt="spot" key={image.id} src={createImageUrl(image.path)} className="w-1/2" />
+        ))}
+      </div>
     </div>
   )
 }

@@ -4,13 +4,16 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { merge } from "@travel/shared"
 
 export const inputStyles = cva(
-  "text-base block w-full border text-black dark:text-white placeholder-gray-500 transition-colors focus:border-primary-500 focus:bg-transparent focus:ring-transparent rounded-md focus:ring-primary-500 ring-0 focus:ring-2",
+  "text-base block w-full border text-black dark:text-white placeholder-gray-500 transition-colors focus:border-primary-500 focus:bg-transparent focus:ring-transparent rounded-md focus:ring-primary-500 ring-0 focus:ring-2 read-only:focus:ring-transparent",
   {
     variants: {
       variant: {
-        solid: "border-transparent bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10",
-        outline: "bg-transparent border-black/10 hover:border-black/40 dark:border-white/10 dark:hover:border-white/20",
-        ghost: "border-transparent bg-transparent hover:border-black/10 dark:hover:border-white/10",
+        solid:
+          "border-transparent bg-black/5 hover:bg-black/10 dark:bg-white/5 dark:hover:bg-white/10 read-only:hover:bg-black/10 read-only:dark:hover:bg-white/10",
+        outline:
+          "bg-transparent border-black/10 hover:border-black/40 dark:border-white/10 dark:hover:border-white/20 read-only:hover:border-black/10 read-only:dark:hover:border-white/10",
+        ghost:
+          "border-transparent bg-transparent hover:border-black/10 dark:hover:border-white/10 read-only:hover:border-black/10 read-only:dark:hover:border-white/10",
       },
       size: {
         xs: "text-xs px-2 py-1",

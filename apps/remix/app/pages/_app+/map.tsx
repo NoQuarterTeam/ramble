@@ -1,4 +1,5 @@
 import { Outlet, useFetcher, useNavigate, useRouteLoaderData, useSearchParams } from "@remix-run/react"
+
 import turfCenter from "@turf/center"
 import * as turf from "@turf/helpers"
 import { type LinksFunction } from "@vercel/remix"
@@ -8,14 +9,14 @@ import * as React from "react"
 import type { ViewStateChangeEvent } from "react-map-gl"
 import Map, { GeolocateControl, Marker, NavigationControl, type LngLatLike, type MapRef } from "react-map-gl"
 
-import { ClientOnly } from "@travel/shared"
+import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@travel/shared"
 
 import { useTheme } from "~/lib/theme"
 import { MapFilters } from "~/pages/_app+/components/MapFilters"
 
-import type { SpotType } from "@travel/database"
+import type { SpotType } from "@travel/database/types"
 import { SPOTS } from "~/lib/spots"
-import type { Point, pointsLoader } from "../api+/points"
+import type { Cluster, clustersLoader } from "../api+/clusters"
 import type { IpInfo } from "./_layout"
 
 export const links: LinksFunction = () => {
@@ -23,15 +24,15 @@ export const links: LinksFunction = () => {
 }
 
 export default function MapView() {
-  const pointsFetcher = useFetcher<typeof pointsLoader>()
+  const clustersFetcher = useFetcher<typeof clustersLoader>()
   const ipInfo = useRouteLoaderData("pages/_app") as IpInfo
 
-  const points = pointsFetcher.data
-  const [searchParams] = useSearchParams()
+  const clusters = clustersFetcher.data
 
   const theme = useTheme()
   const mapRef = React.useRef<MapRef>(null)
 
+  const [searchParams] = useSearchParams()
   const initialViewState = React.useMemo(() => {
     const zoom = searchParams.get("zoom")
     const minLat = searchParams.get("minLat")
@@ -50,14 +51,14 @@ export default function MapView() {
 
     return {
       zoom: zoom ? parseInt(zoom) : ipInfo ? 6 : 5,
-      longitude: centerFromParams?.geometry.coordinates[0] || ipInfo?.longitude || 4,
-      latitude: centerFromParams?.geometry.coordinates[1] || ipInfo?.latitude || 52,
+      longitude: centerFromParams?.geometry.coordinates[0] || ipInfo?.longitude || INITIAL_LONGITUDE,
+      latitude: centerFromParams?.geometry.coordinates[1] || ipInfo?.latitude || INITIAL_LATITUDE,
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const onParamsChange = (params: string) => {
-    pointsFetcher.load(`/api/points?${params}`)
+    clustersFetcher.load(`/api/clusters?${params}`)
     window.history.pushState(null, "", `${window.location.pathname}?${params}`)
   }
   const onMove = (e: mapboxgl.MapboxEvent<undefined> | ViewStateChangeEvent) => {
@@ -66,10 +67,10 @@ export default function MapView() {
     const params = queryString.stringify(
       {
         ...queryString.parse(window.location.search, { arrayFormat: "bracket" }),
-        minLat: parseFloat(bounds.getSouth().toFixed(6)),
-        maxLat: parseFloat(bounds.getNorth().toFixed(6)),
-        minLng: parseFloat(bounds.getWest().toFixed(6)),
-        maxLng: parseFloat(bounds.getEast().toFixed(6)),
+        minLat: bounds.getSouth(),
+        maxLat: bounds.getNorth(),
+        minLng: bounds.getWest(),
+        maxLng: bounds.getEast(),
         zoom,
       },
       { arrayFormat: "bracket" },
@@ -77,9 +78,10 @@ export default function MapView() {
     onParamsChange(params)
   }
   const navigate = useNavigate()
-  const spotMarkers = React.useMemo(
+
+  const markers = React.useMemo(
     () =>
-      points?.map((point, i) => (
+      clusters?.map((point, i) => (
         <SpotMarker
           point={point}
           key={i}
@@ -102,7 +104,7 @@ export default function MapView() {
         />
       )),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [points],
+    [clusters],
   )
   const noMap = searchParams.get("noMap")
   return (
@@ -124,7 +126,7 @@ export default function MapView() {
                   : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
               }
             >
-              {spotMarkers}
+              {markers}
 
               <GeolocateControl position="bottom-right" />
               <NavigationControl position="bottom-right" />
@@ -162,7 +164,7 @@ export default function MapView() {
 
 interface MarkerProps {
   onClick: (e: mapboxgl.MapboxEvent<MouseEvent>) => void
-  point: Point
+  point: Cluster
 }
 function SpotMarker(props: MarkerProps) {
   const Icon = !props.point.properties.cluster && SPOTS[props.point.properties.type as SpotType].Icon
