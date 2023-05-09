@@ -35,6 +35,10 @@ export function Nav() {
             </Link>
           </ClientOnly>
         </div>
+        <ClientOnly>
+          <Link to={`/map${typeof window !== "undefined" ? window.location.search : ""}`}>Map</Link>
+        </ClientOnly>
+        <Link to="/latest">Latest</Link>
       </div>
       <div className="hstack space-x-3">
         <Tooltip label="Add a spot">

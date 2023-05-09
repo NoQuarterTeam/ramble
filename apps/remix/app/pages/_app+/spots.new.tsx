@@ -45,6 +45,7 @@ export const action = async ({ request }: ActionArgs) => {
 
   const images = (formData.getAll("image") as string[]).filter(Boolean)
 
+  if (images.length === 0) return formError({ formError: "You must upload at least one image." })
   if (!result.success) return formError(result)
 
   const { customAddress, ...data } = result.data
@@ -168,7 +169,7 @@ export default function NewSpot() {
           <div className="space-y-0.5">
             <FormFieldLabel required>Images</FormFieldLabel>
             {Array.from({ length: imageCount }).map((_, i) => (
-              <ImageField key={i} path="spots/images" name="image" />
+              <ImageField errors={[]} key={i} path="spots/images" name="image" />
             ))}
             <IconButton
               variant="outline"
