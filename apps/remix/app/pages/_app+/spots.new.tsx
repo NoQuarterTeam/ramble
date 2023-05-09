@@ -120,8 +120,11 @@ export default function NewSpot() {
         replace
         className="relative h-[calc(100vh-70px)] space-y-4 overflow-scroll p-4 pb-40 pl-10 md:p-10 md:pb-40 md:pl-20"
       >
-        <CloseButton className="absolute right-4 top-4" onClick={() => navigate(`/map${window.location.search}`)} />
-        <h1 className="text-3xl">Add a new spot</h1>
+        <div className="flex justify-between">
+          <h1 className="text-3xl">Add a new spot</h1>
+
+          <CloseButton onClick={() => navigate(`/map${window.location.search}`)} />
+        </div>
         <input type="hidden" name="latitude" value={latitude || ""} />
         <input type="hidden" name="longitude" value={longitude || ""} />
         <div className="space-y-2">

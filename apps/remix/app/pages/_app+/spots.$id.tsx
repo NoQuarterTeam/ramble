@@ -2,6 +2,7 @@ import { useLoaderData } from "@remix-run/react"
 import { createImageUrl } from "@travel/shared"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
+import { Verified } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
 import { db } from "~/lib/db.server"
@@ -12,6 +13,7 @@ export const loader = async ({ params }: LoaderArgs) => {
     select: {
       id: true,
       name: true,
+      verifiedAt: true,
       address: true,
       description: true,
       images: { select: { id: true, path: true } },
@@ -51,7 +53,10 @@ export default function SpotDetail() {
   const spot = useLoaderData<typeof loader>()
   return (
     <div className="p-4 md:p-10 md:px-20">
-      <h1 className="text-4xl">{spot.name}</h1>
+      <h1 className="text-4xl">
+        <span>{spot.name}</span>
+        {spot.verifiedAt && <Verified className="sq-5 ml-1" />}
+      </h1>
       <p className="text-2xl">{spot.address}</p>
       <p className="text-xl">{spot.description}</p>
       <div className="flex flex-wrap">

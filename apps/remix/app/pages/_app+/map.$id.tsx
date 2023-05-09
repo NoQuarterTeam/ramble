@@ -2,7 +2,7 @@ import * as React from "react"
 import { Await, isRouteErrorResponse, Link, useLoaderData, useNavigate, useRouteError } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { defer } from "@vercel/remix"
-import { Frown, Star } from "lucide-react"
+import { Frown, Star, Verified } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
 import { merge } from "@travel/shared"
@@ -21,6 +21,7 @@ export const loader = async ({ params }: LoaderArgs) => {
         name: true,
         address: true,
         description: true,
+        verifiedAt: true,
         images: { select: { id: true, path: true } },
         reviews: {
           take: 5,
@@ -64,8 +65,14 @@ export default function SpotPreview() {
           {(spot) => (
             <div className="space-y-6">
               <div className="space-y-2">
-                <Link target="_blank" rel="noopener norefer" to={`/spots/${spot.id}`} className="text-lg hover:underline">
-                  {spot.name}
+                <Link
+                  target="_blank"
+                  rel="noopener norefer"
+                  to={`/spots/${spot.id}`}
+                  className="flex items-center text-lg hover:underline"
+                >
+                  <span>{spot.name}</span>
+                  {spot.verifiedAt && <Verified className="sq-4 ml-1" />}
                 </Link>
                 <div className="hstack">
                   <Star className="sq-5" />
