@@ -45,7 +45,7 @@ export const action = async ({ request }: ActionArgs) => {
 
   const images = (formData.getAll("image") as string[]).filter(Boolean)
 
-  if (images.length === 0) return formError({ formError: "You must upload at least one image." })
+  // if (images.length === 0) return formError({ formError: "You must upload at least one image." })
   if (!result.success) return formError(result)
 
   const { customAddress, ...data } = result.data
