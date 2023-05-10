@@ -50,7 +50,7 @@ model Van {
   model       String
   year        Int
   description String? @db.LongText
-  user        User    @relation(fields: [userId], references: [id])
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String  @unique
 
   createdAt DateTime   @default(now())
@@ -65,7 +65,7 @@ model VanImage {
   path String
 
   vanId String
-  van   Van    @relation(fields: [vanId], references: [id])
+  van   Van    @relation(fields: [vanId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -118,7 +118,7 @@ model SpotImage {
   id        String   @id @default(uuid())
   path      String
   spotId    String
-  spot      Spot     @relation(fields: [spotId], references: [id])
+  spot      Spot     @relation(fields: [spotId], references: [id], onDelete: Cascade)
   creatorId String
   creator   User     @relation(fields: [creatorId], references: [id])
   createdAt DateTime @default(now())
@@ -133,7 +133,7 @@ model List {
   name      String
   listSpots ListSpot[]
   creatorId String
-  creator   User       @relation(fields: [creatorId], references: [id])
+  creator   User       @relation(fields: [creatorId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -144,9 +144,9 @@ model List {
 model ListSpot {
   id     String @id @default(uuid())
   listId String
-  list   List   @relation(fields: [listId], references: [id])
+  list   List   @relation(fields: [listId], references: [id], onDelete: Cascade)
   spotId String
-  spot   Spot   @relation(fields: [spotId], references: [id])
+  spot   Spot   @relation(fields: [spotId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -158,7 +158,7 @@ model ListSpot {
 model Review {
   id          String @id @default(uuid())
   spotId      String
-  spot        Spot   @relation(fields: [spotId], references: [id])
+  spot        Spot   @relation(fields: [spotId], references: [id], onDelete: Cascade)
   userId      String
   user        User   @relation(fields: [userId], references: [id])
   rating      Int
