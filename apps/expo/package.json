@@ -66,7 +66,7 @@
     "@travel/tailwind-config": "workspace:*",
     "@expo/config-plugins": "^6.0.0",
     "@types/react": "^18.0.27",
-    "@types/react-native": "^0.71.3",
+    "@types/react-native": "^0.72.0",
     "eslint": "8.40.0",
     "metro": "~0.76.0",
     "postcss": "^8.4.21",
