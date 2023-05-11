@@ -4,7 +4,7 @@ import type { FormProps as RemixFormProps } from "@remix-run/react"
 import { Form as RemixForm, useNavigation } from "@remix-run/react"
 
 import { merge } from "@travel/shared"
-import { Button,type ButtonProps, Input, type InputProps } from "@travel/ui"
+import { Button, type ButtonProps, Input, type InputProps } from "@travel/ui"
 
 import { useFormErrors } from "~/lib/form"
 import { createImageUrl } from "~/lib/s3"
@@ -88,15 +88,13 @@ export const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(func
 
       {typeof fieldErrors === "string" ? (
         <FormFieldError>{fieldErrors}</FormFieldError>
-      ) : (
-        fieldErrors?.length && (
-          <ul id={props.name + "-error"}>
-            {fieldErrors?.map((error, i) => (
-              <FormFieldError key={i}>{error}</FormFieldError>
-            ))}
-          </ul>
-        )
-      )}
+      ) : fieldErrors?.length ? (
+        <ul id={props.name + "-error"}>
+          {fieldErrors?.map((error, i) => (
+            <FormFieldError key={i}>{error}</FormFieldError>
+          ))}
+        </ul>
+      ) : null}
     </div>
   )
 })
@@ -134,15 +132,13 @@ export const InlineFormField = React.forwardRef<HTMLInputElement, FormFieldProps
       </div>
       {typeof fieldErrors === "string" ? (
         <FormFieldError>{fieldErrors}</FormFieldError>
-      ) : (
-        fieldErrors?.length && (
-          <ul id={props.name + "-error"}>
-            {fieldErrors?.map((error, i) => (
-              <FormFieldError key={i}>{error}</FormFieldError>
-            ))}
-          </ul>
-        )
-      )}
+      ) : fieldErrors?.length ? (
+        <ul id={props.name + "-error"}>
+          {fieldErrors?.map((error, i) => (
+            <FormFieldError key={i}>{error}</FormFieldError>
+          ))}
+        </ul>
+      ) : null}
     </div>
   )
 })
@@ -187,15 +183,13 @@ export function ImageField(props: ImageFieldProps) {
       </div>
       {typeof fieldErrors === "string" ? (
         <FormFieldError>{fieldErrors}</FormFieldError>
-      ) : (
-        fieldErrors?.length && (
-          <ul id={props.name + "-error"}>
-            {fieldErrors?.map((error, i) => (
-              <FormFieldError key={i}>{error}</FormFieldError>
-            ))}
-          </ul>
-        )
-      )}
+      ) : fieldErrors?.length ? (
+        <ul id={props.name + "-error"}>
+          {fieldErrors?.map((error, i) => (
+            <FormFieldError key={i}>{error}</FormFieldError>
+          ))}
+        </ul>
+      ) : null}
     </div>
   )
 }

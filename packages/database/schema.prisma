@@ -12,6 +12,7 @@ datasource db {
 enum Role {
   ADMIN
   AMBASSADOR
+  OWNER
   USER
 }
 
@@ -33,8 +34,9 @@ model User {
   bio             String? @db.LongText
 
   // Relations
-  createdSpots  Spot[]
-  verifiedSpots Spot[]      @relation(name: "VerifiedSpot")
+  createdSpots  Spot[]      @relation(name: "Creator")
+  ownedSpots    Spot[]      @relation(name: "Owner")
+  verifiedSpots Spot[]      @relation(name: "Verifier")
   spotImages    SpotImage[]
   lists         List[]
   reviews       Review[]
@@ -100,17 +102,20 @@ model Spot {
   images        SpotImage[]
   verifiedAt    DateTime?
   verifierId    String?
-  verifier      User?       @relation(name: "VerifiedSpot", fields: [verifierId], references: [id])
+  verifier      User?       @relation(name: "Verifier", fields: [verifierId], references: [id])
   creatorId     String
-  creator       User        @relation(fields: [creatorId], references: [id])
+  creator       User        @relation(name: "Creator", fields: [creatorId], references: [id])
   spotLists     ListSpot[]
+  ownerId       String?
+  owner         User?       @relation(name: "Owner", fields: [ownerId], references: [id])
   reviews       Review[]
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @default(now()) @updatedAt
 
-  @@index([verifierId])
   @@index([latitude])
   @@index([longitude])
+  @@index([ownerId])
+  @@index([verifierId])
   @@index([creatorId])
 }
 
