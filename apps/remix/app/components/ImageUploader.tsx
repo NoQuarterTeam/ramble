@@ -2,8 +2,8 @@ import * as React from "react"
 import type { DropzoneOptions, FileRejection } from "react-dropzone"
 import { useDropzone } from "react-dropzone"
 
-import { merge, useDisclosure, useS3Upload } from "@travel/shared"
-import { Button, ButtonGroup, inputStyles, Modal, useToast } from "@travel/ui"
+import { useDisclosure, useS3Upload } from "@travel/shared"
+import { Button, ButtonGroup, Modal, useToast } from "@travel/ui"
 
 interface Props {
   path: string
@@ -74,7 +74,7 @@ export function ImageUploader({ children, path, onSubmit, dropzoneOptions, class
 
   return (
     <>
-      <div className={merge(inputStyles(), className)} {...getRootProps()}>
+      <div className={className} {...getRootProps()}>
         <input {...getInputProps()} />
         {children}
       </div>

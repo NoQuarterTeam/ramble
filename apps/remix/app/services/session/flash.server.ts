@@ -22,6 +22,7 @@ const flashStorage = createCookieSessionStorage({
 })
 
 export type FlashMessage = { title: string; description?: string }
+
 export async function getFlashSession(request: Request) {
   const session = await flashStorage.getSession(request.headers.get("Cookie"))
   const flashError = (session.get(FlashType.Error) as FlashMessage) || null

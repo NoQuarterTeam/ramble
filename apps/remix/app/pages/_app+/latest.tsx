@@ -1,5 +1,5 @@
 import { json } from "@remix-run/node"
-import { useLoaderData } from "@remix-run/react"
+import { Link, useLoaderData } from "@remix-run/react"
 import { createImageUrl } from "@travel/shared"
 import { db } from "~/lib/db.server"
 
@@ -34,7 +34,9 @@ export default function Latest() {
                   : undefined
               }
             />
-            <p>{spot.name}</p>
+            <Link to={`/spots/${spot.id}`}>
+              <p>{spot.name}</p>
+            </Link>
           </div>
         ))}
       </div>

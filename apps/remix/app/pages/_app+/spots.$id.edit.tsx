@@ -1,0 +1,58 @@
+import { useLoaderData } from "@remix-run/react"
+import type { ActionArgs, LinksFunction, LoaderArgs } from "@vercel/remix"
+import { json } from "@vercel/remix"
+import { redirect } from "@vercel/remix"
+import mapStyles from "mapbox-gl/dist/mapbox-gl.css"
+import { db } from "~/lib/db.server"
+import { formError, validateFormData } from "~/lib/form"
+import { canManageSpot } from "~/lib/spots"
+import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
+import { SpotForm, spotSchema } from "./components/SpotForm"
+
+export const links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: mapStyles }]
+}
+export const loader = async ({ request, params }: LoaderArgs) => {
+  const user = await getCurrentUser(request, { role: true, id: true })
+  const spot = await db.spot.findUniqueOrThrow({
+    where: { id: params.id },
+    include: { images: true },
+  })
+  if (!canManageSpot(spot, user)) throw redirect("/latest")
+  return json(spot)
+}
+
+export const action = async ({ request, params }: ActionArgs) => {
+  const userId = await requireUser(request)
+  const formData = await request.formData()
+
+  const result = await validateFormData(formData, spotSchema)
+
+  const images = (formData.getAll("image") as string[]).filter(Boolean)
+
+  if (!result.success) return formError(result)
+
+  const { customAddress, ...data } = result.data
+
+  const spot = await db.spot.update({
+    where: { id: params.id },
+    data: {
+      ...data,
+      images: {
+        deleteMany: { path: { notIn: images } },
+        connectOrCreate: images.map((image) => ({
+          where: { path: image },
+          create: { path: image, creator: { connect: { id: userId } } },
+        })),
+      },
+      address: customAddress ?? data.address,
+    },
+  })
+
+  return redirect(`/spots/${spot.id}`)
+}
+
+export default function EditSpot() {
+  const spot = useLoaderData<typeof loader>()
+  return <SpotForm spot={spot} />
+}

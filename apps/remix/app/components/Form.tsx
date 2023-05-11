@@ -4,12 +4,13 @@ import type { FormProps as RemixFormProps } from "@remix-run/react"
 import { Form as RemixForm, useNavigation } from "@remix-run/react"
 
 import { merge } from "@travel/shared"
-import { Button, type ButtonProps, Input, type InputProps } from "@travel/ui"
+import { Button, type ButtonProps, Input, type InputProps, inputStyles, IconButton } from "@travel/ui"
 
 import { useFormErrors } from "~/lib/form"
 import { createImageUrl } from "~/lib/s3"
 
 import { ImageUploader } from "./ImageUploader"
+import { Trash } from "lucide-react"
 
 export const Form = React.forwardRef(function _Form(props: RemixFormProps, ref: React.ForwardedRef<HTMLFormElement> | null) {
   const form = useFormErrors()
@@ -152,12 +153,16 @@ interface ImageFieldProps {
   defaultValue?: string | null | undefined
   required?: boolean
   placeholder?: string
+  children?: React.ReactNode
+  onRemove?: () => void
 }
 
 export function ImageField(props: ImageFieldProps) {
   const form = useFormErrors<any>()
   const [image, setImage] = React.useState(props.defaultValue)
   const fieldErrors = props.errors || form?.fieldErrors?.[props.name]
+  const hasChildren = React.Children.count(props.children) > 0
+
   return (
     <div>
       {props.label && (
@@ -165,20 +170,32 @@ export function ImageField(props: ImageFieldProps) {
           {props.label}
         </FormFieldLabel>
       )}
-      <div>
+      <div className="relative">
         <ImageUploader
           onSubmit={setImage}
           path={props.path}
-          className={merge("h-48 w-full cursor-pointer object-cover hover:opacity-80", props.className)}
+          className={
+            hasChildren ? "" : props.className || merge(inputStyles(), "h-48 w-full cursor-pointer object-cover hover:opacity-80")
+          }
         >
           {image ? (
             <img src={createImageUrl(image)} className="h-full w-full object-cover" alt="preview" />
+          ) : hasChildren ? (
+            props.children
           ) : (
             <div className="center h-full w-full">
               <p className="text-center text-gray-500">{props.placeholder || "Upload an image"}</p>
             </div>
           )}
         </ImageUploader>
+        {props.onRemove && image && (
+          <IconButton
+            className="absolute right-2 top-2"
+            aria-label="remove image"
+            icon={<Trash className="sq-3" />}
+            onClick={props.onRemove}
+          />
+        )}
         <input type="hidden" value={image || ""} name={props.name} />
       </div>
       {typeof fieldErrors === "string" ? (

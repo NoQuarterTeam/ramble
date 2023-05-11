@@ -59,7 +59,7 @@ export default function MapView() {
 
   const onParamsChange = (params: string) => {
     clustersFetcher.load(`/api/clusters?${params}`)
-    window.history.pushState(null, "", `${window.location.pathname}?${params}`)
+    window.history.replaceState(null, "", `${window.location.pathname}?${params}`)
   }
   const onMove = (e: mapboxgl.MapboxEvent<undefined> | ViewStateChangeEvent) => {
     const bounds = e.target.getBounds()

@@ -1,12 +1,13 @@
 import { Link } from "@remix-run/react"
-import { type ActionArgs, redirect } from "@vercel/remix"
+import { type ActionArgs } from "@vercel/remix"
 import { z } from "zod"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { createToken } from "~/lib/jwt.server"
-import { FlashType, getFlashSession } from "~/services/session/flash.server"
+import { redirect } from "~/lib/remix.server"
+import { FlashType } from "~/services/session/flash.server"
 import { sendResetPasswordEmail } from "~/services/user/user.mailer.server"
 
 export const headers = () => {
@@ -25,10 +26,8 @@ export const action = async ({ request }: ActionArgs) => {
     const token = createToken({ id: user.id })
     await sendResetPasswordEmail(user, token)
   }
-  const { createFlash } = await getFlashSession(request)
-  return redirect("/login", {
-    headers: { "Set-Cookie": await createFlash(FlashType.Info, "Reset link sent to your email") },
-  })
+
+  return redirect("/login", request, { flash: { type: FlashType.Info, title: "Reset link sent to your email" } })
 }
 
 export default function ForgotPassword() {
