@@ -27,18 +27,23 @@ export function Nav() {
   const isDark = theme === "dark"
   return (
     <div className="h-nav flex w-full items-center justify-between border-b border-solid border-gray-50 bg-white px-4 align-middle dark:border-gray-700 dark:bg-gray-800 md:px-20">
-      <div className="hstack h-12 space-x-6">
-        <div className="hstack">
-          <ClientOnly>
-            <Link to={`/map${typeof window !== "undefined" ? window.location.search : ""}`} className="text-xl font-semibold">
-              Travel
-            </Link>
-          </ClientOnly>
-        </div>
+      <div className="flex items-center space-x-4">
         <ClientOnly>
-          <Link to={`/map${typeof window !== "undefined" ? window.location.search : ""}`}>Map</Link>
+          <Link to={`/map${typeof window !== "undefined" ? window.location.search : ""}`} className="font-ribeye-marrow text-xl">
+            Ramble
+          </Link>
         </ClientOnly>
-        <Link to="/latest">Latest</Link>
+
+        <div className="flex items-center">
+          <ClientOnly>
+            <LinkButton variant="ghost" to={`/map${typeof window !== "undefined" ? window.location.search : ""}`}>
+              Map
+            </LinkButton>
+          </ClientOnly>
+          <LinkButton variant="ghost" to="/latest">
+            Latest
+          </LinkButton>
+        </div>
       </div>
       <div className="hstack space-x-3">
         <Tooltip label="Add a spot">
