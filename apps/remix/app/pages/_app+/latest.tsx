@@ -16,7 +16,7 @@ export default function Latest() {
   const spots = useLoaderData<typeof loader>()
 
   return (
-    <div className="space-y-4 px-20 pt-10">
+    <div className="space-y-4 p-4 md:p-8">
       <h1 className="text-3xl">Latest Spots</h1>
       <div className="space-y-2">
         {spots.map((spot, i) => (

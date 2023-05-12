@@ -98,7 +98,7 @@ export default function MapView() {
               duration: 1000,
               padding: 50,
               zoom,
-              offset: point.properties.cluster ? [0, 0] : [100, 0],
+              offset: point.properties.cluster ? [0, 0] : [250, 0],
             })
           }}
         />

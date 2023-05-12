@@ -6,7 +6,7 @@ import { NavLink } from "~/components/NavLink"
 
 export default function ProfileLayout() {
   return (
-    <div className="max-w-screen-limiter mx-auto p-4 md:px-20">
+    <div className="mx-auto p-4 md:p-8">
       <div className="flex space-x-2">
         <NavLink
           to="/profile"

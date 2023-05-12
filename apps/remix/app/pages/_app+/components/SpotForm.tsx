@@ -93,7 +93,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
       <Form
         method="post"
         replace
-        className="relative h-auto space-y-4 overflow-scroll p-4 pb-40 md:h-[calc(100vh-70px)] md:p-10 md:pb-40 md:pl-20"
+        className="relative h-auto space-y-4 overflow-scroll p-4 pb-40 md:h-[calc(100vh-70px)] md:p-8 md:pb-40"
       >
         <div>
           <div className="flex justify-between">

@@ -80,7 +80,7 @@ export default function SpotDetail() {
   const user = useMaybeUser()
 
   return (
-    <div className="p-4 md:p-10 md:px-20">
+    <div className="p-4 md:p-8">
       <div>
         <h1 className="text-4xl">
           <span>{spot.name}</span>

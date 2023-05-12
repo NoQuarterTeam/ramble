@@ -26,7 +26,7 @@ export function Nav() {
   const theme = useTheme()
   const isDark = theme === "dark"
   return (
-    <div className="h-nav flex w-full items-center justify-between border-b border-solid border-gray-50 bg-white px-4 align-middle dark:border-gray-700 dark:bg-gray-800 md:px-20">
+    <div className="h-nav flex w-full items-center justify-between border-b border-solid border-gray-50 bg-white px-4 align-middle dark:border-gray-700 dark:bg-gray-800 md:px-8">
       <div className="flex items-center space-x-4">
         <ClientOnly>
           <Link to={`/map${typeof window !== "undefined" ? window.location.search : ""}`} className="font-ribeye-marrow text-xl">
