@@ -119,8 +119,8 @@ model Spot {
   updatedAt  DateTime       @default(now()) @updatedAt
 
   // Campspace
-  campspaceId  Int? @unique
-  campspaceUrl Int?
+  campspaceId  Int?    @unique
+  campspaceUrl String? @db.VarChar(500)
 
   @@index([latitude])
   @@index([longitude])
