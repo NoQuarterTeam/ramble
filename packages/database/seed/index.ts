@@ -18,11 +18,11 @@ export async function main() {
   const USER_COUNT = 50
   // Users
   for (let index = 0; index < USER_COUNT; index++) {
-    const firstName = faker.name.firstName()
-    const lastName = faker.name.lastName()
+    const firstName = faker.person.firstName()
+    const lastName = faker.person.lastName()
     await prisma.user.create({
       data: {
-        email: faker.internet.email(firstName, lastName, "noquarter.co"),
+        email: faker.internet.email({ firstName, lastName, provider: "noquarter.co" }),
         password: faker.internet.password(),
         firstName,
         lastName,
@@ -64,8 +64,8 @@ export async function main() {
         verifiedAt,
         name: faker.company.name(),
         description: faker.lorem.paragraph(),
-        latitude: parseFloat(faker.address.latitude(52, 42)),
-        longitude: parseFloat(faker.address.longitude(8, -3)),
+        latitude: faker.location.latitude(52, 42),
+        longitude: faker.location.longitude(8, -3),
         images: {
           create: Array.from({ length: 5 }).map((_) => ({
             creator: { connect: { id: admin.id } },
@@ -80,7 +80,7 @@ export async function main() {
           })),
         },
         type: types[Math.floor(Math.random() * types.length)],
-        address: faker.address.streetAddress(),
+        address: faker.location.streetAddress(),
         creator: { connect: { id: randomUser.id } },
         verifier: { connect: { id: admin.id } },
       },
