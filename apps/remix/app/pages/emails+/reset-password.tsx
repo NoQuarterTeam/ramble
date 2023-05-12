@@ -1,3 +1,3 @@
-import { ResetPasswordEmail } from "@travel/emails"
+import { ResetPasswordEmail } from "@ramble/emails"
 
 export default ResetPasswordEmail

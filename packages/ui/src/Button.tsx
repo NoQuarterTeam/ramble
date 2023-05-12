@@ -3,7 +3,7 @@ import * as React from "react"
 import type { VariantProps } from "class-variance-authority"
 import { cva } from "class-variance-authority"
 
-import { join, merge } from "@travel/shared"
+import { join, merge } from "@ramble/shared"
 
 import { Spinner } from "./Spinner"
 

@@ -1,7 +1,7 @@
 import { Controller, useFormContext } from "react-hook-form"
 import { View } from "react-native"
 
-import { merge } from "@travel/shared"
+import { merge } from "@ramble/shared"
 
 import { Input, type InputProps } from "./Input"
 import { Text } from "./Text"

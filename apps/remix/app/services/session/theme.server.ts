@@ -3,7 +3,7 @@ import { createCookieSessionStorage } from "@vercel/remix"
 import { IS_PRODUCTION, THEME_SESSION_SECRET } from "~/lib/config.server"
 import { isTheme, type Theme } from "~/lib/theme"
 
-export const THEME_COOKIE_KEY = IS_PRODUCTION ? "travel_session_theme" : "travel_session_dev_theme"
+export const THEME_COOKIE_KEY = IS_PRODUCTION ? "ramble_session_theme" : "ramble_session_dev_theme"
 
 const themeStorage = createCookieSessionStorage({
   cookie: {

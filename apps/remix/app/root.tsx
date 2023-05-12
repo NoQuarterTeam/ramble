@@ -24,8 +24,8 @@ import type { LinksFunction, LoaderArgs, SerializeFrom, V2_MetaFunction } from "
 import { json } from "@vercel/remix"
 import { Frown } from "lucide-react"
 
-import { join } from "@travel/shared"
-import { Toaster } from "@travel/ui"
+import { join } from "@ramble/shared"
+import { Toaster } from "@ramble/ui"
 
 import appStyles from "~/styles/app.css"
 
@@ -38,7 +38,7 @@ import { getFlashSession } from "./services/session/flash.server"
 import { getThemeSession } from "./services/session/theme.server"
 
 export const meta: V2_MetaFunction = () => {
-  return [{ title: "Travel" }, { name: "description", content: "Created by No Quarter" }]
+  return [{ title: "Ramble" }, { name: "description", content: "Created by No Quarter" }]
 }
 
 export const links: LinksFunction = () => {

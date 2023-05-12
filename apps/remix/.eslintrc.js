@@ -6,7 +6,7 @@ const ERROR = "error"
 module.exports = {
   root: true,
   //  TODO: temp sharing configs not working right now
-  // extends: ["@travel/eslint-config", "@remix-run/eslint-config", "@remix-run/eslint-config/node"],
+  // extends: ["@ramble/eslint-config", "@remix-run/eslint-config", "@remix-run/eslint-config/node"],
   parser: "@typescript-eslint/parser",
   plugins: ["@typescript-eslint", "tailwindcss"],
   extends: [

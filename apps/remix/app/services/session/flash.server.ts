@@ -2,7 +2,7 @@ import { createCookieSessionStorage } from "@vercel/remix"
 
 import { FLASH_SESSION_SECRET, IS_PRODUCTION } from "~/lib/config.server"
 
-export const FLASH_COOKIE_KEY = IS_PRODUCTION ? "travel_session_flash" : "travel_session_dev_flash"
+export const FLASH_COOKIE_KEY = IS_PRODUCTION ? "ramble_session_flash" : "ramble_session_dev_flash"
 
 export enum FlashType {
   Error = "flashError",

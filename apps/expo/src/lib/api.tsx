@@ -7,7 +7,7 @@ import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server"
 import Constants from "expo-constants"
 import superjson from "superjson"
 
-import type { AppRouter } from "@travel/api"
+import type { AppRouter } from "@ramble/api"
 
 /**
  * A set of typesafe hooks for consuming your API.
@@ -36,7 +36,7 @@ const getBaseUrl = () => {
    * you'll have to manually set it. NOTE: Port 3000 should work for most but confirm
    * you don't have anything else running on it, or you'd have to change it.
    */
-  // return "https://travel.app"
+  // return "https://ramble.app"
   const localhost = Constants.manifest?.debuggerHost?.split(":")[0]
   if (!localhost) return "https://my-production-app.com"
   return `http://${localhost}:3000`

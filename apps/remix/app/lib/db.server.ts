@@ -1,2 +1,2 @@
-import { prisma } from "@travel/database"
+import { prisma } from "@ramble/database"
 export const db = prisma

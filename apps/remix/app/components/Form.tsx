@@ -3,11 +3,11 @@ import * as React from "react"
 import type { FormProps as RemixFormProps } from "@remix-run/react"
 import { Form as RemixForm, useNavigation } from "@remix-run/react"
 
-import { merge } from "@travel/shared"
-import { Button, type ButtonProps, Input, type InputProps, inputStyles, IconButton } from "@travel/ui"
+import { createImageUrl, merge } from "@ramble/shared"
+import type { InputStyleProps } from "@ramble/ui"
+import { Button, type ButtonProps, Input, type InputProps, inputStyles, IconButton } from "@ramble/ui"
 
 import { useFormErrors } from "~/lib/form"
-import { createImageUrl } from "~/lib/s3"
 
 import { ImageUploader } from "./ImageUploader"
 import { Trash } from "lucide-react"
@@ -145,7 +145,6 @@ export const InlineFormField = React.forwardRef<HTMLInputElement, FormFieldProps
 })
 
 interface ImageFieldProps {
-  path: string
   className?: string
   name: string
   label?: string
@@ -153,6 +152,7 @@ interface ImageFieldProps {
   defaultValue?: string | null | undefined
   required?: boolean
   placeholder?: string
+  variant?: InputStyleProps["variant"]
   children?: React.ReactNode
   onRemove?: () => void
 }
@@ -173,9 +173,14 @@ export function ImageField(props: ImageFieldProps) {
       <div className="relative">
         <ImageUploader
           onSubmit={setImage}
-          path={props.path}
           className={
-            hasChildren ? "" : props.className || merge(inputStyles(), "h-48 w-full cursor-pointer object-cover hover:opacity-80")
+            hasChildren
+              ? ""
+              : props.className ||
+                merge(
+                  inputStyles({ variant: props.variant || "outline" }),
+                  "h-48 w-full cursor-pointer object-cover hover:opacity-80",
+                )
           }
         >
           {image ? (

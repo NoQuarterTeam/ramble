@@ -10,13 +10,13 @@ import {
   DropdownMenuTrigger,
   IconButton,
   Tooltip,
-} from "@travel/ui"
+} from "@ramble/ui"
 
 import { LinkButton } from "~/components/LinkButton"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
-import { createImageUrl } from "~/lib/s3"
+
 import { useTheme } from "~/lib/theme"
-import { ClientOnly } from "@travel/shared"
+import { ClientOnly, createImageUrl } from "@ramble/shared"
 
 export function Nav() {
   const user = useMaybeUser()

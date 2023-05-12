@@ -2,7 +2,7 @@
 import * as React from "react"
 import * as Popover from "@radix-ui/react-popover"
 
-import { merge } from "@travel/shared"
+import { merge } from "@ramble/shared"
 
 export * from "@radix-ui/react-popover"
 

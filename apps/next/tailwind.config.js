@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: "class",
-  presets: [require("@travel/tailwind-config")],
+  presets: [require("@ramble/tailwind-config")],
   content: ["./src/**/*.{js,ts,jsx,tsx}", "../../packages/ui/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {

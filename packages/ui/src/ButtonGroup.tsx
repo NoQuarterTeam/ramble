@@ -1,4 +1,4 @@
-import { merge } from "@travel/shared"
+import { merge } from "@ramble/shared"
 
 export function ButtonGroup(props: React.HtmlHTMLAttributes<HTMLDivElement>) {
   return (

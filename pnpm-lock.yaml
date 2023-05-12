@@ -29,24 +29,24 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.1.0
         version: 3.1.0(react-hook-form@7.43.9)
+      '@ramble/api':
+        specifier: workspace:*
+        version: link:../../packages/api
+      '@ramble/database':
+        specifier: workspace:*
+        version: link:../../packages/database
+      '@ramble/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
+      '@ramble/tailwind-config':
+        specifier: workspace:*
+        version: link:../../packages/config/tailwind
       '@react-native-async-storage/async-storage':
         specifier: 1.17.11
         version: 1.17.11(react-native@0.71.6)
       '@tanstack/react-query':
         specifier: ^4.23.0
         version: 4.24.9(react-dom@18.2.0)(react-native@0.71.6)(react@18.2.0)
-      '@travel/api':
-        specifier: workspace:*
-        version: link:../../packages/api
-      '@travel/database':
-        specifier: workspace:*
-        version: link:../../packages/database
-      '@travel/shared':
-        specifier: workspace:*
-        version: link:../../packages/shared
-      '@travel/tailwind-config':
-        specifier: workspace:*
-        version: link:../../packages/config/tailwind
       '@trpc/client':
         specifier: ^10.9.0
         version: 10.16.0(@trpc/server@10.16.0)
@@ -162,7 +162,7 @@ importers:
       '@expo/config-plugins':
         specifier: ^6.0.0
         version: 6.0.1
-      '@travel/eslint-config':
+      '@ramble/eslint-config':
         specifier: workspace:*
         version: link:../../packages/config/eslint
       '@types/react':
@@ -189,16 +189,16 @@ importers:
 
   apps/next:
     dependencies:
-      '@travel/api':
+      '@ramble/api':
         specifier: workspace:*
         version: link:../../packages/api
-      '@travel/database':
+      '@ramble/database':
         specifier: workspace:*
         version: link:../../packages/database
-      '@travel/shared':
+      '@ramble/shared':
         specifier: workspace:*
         version: link:../../packages/shared
-      '@travel/ui':
+      '@ramble/ui':
         specifier: workspace:*
         version: link:../../packages/ui
       '@turf/bbox':
@@ -253,15 +253,15 @@ importers:
         specifier: 4.3.8
         version: 4.3.8(react@18.2.0)
     devDependencies:
+      '@ramble/eslint-config':
+        specifier: workspace:*
+        version: link:../../packages/config/eslint
+      '@ramble/tailwind-config':
+        specifier: workspace:*
+        version: link:../../packages/config/tailwind
       '@tailwindcss/forms':
         specifier: ^0.5.3
         version: 0.5.3(tailwindcss@3.3.1)
-      '@travel/eslint-config':
-        specifier: workspace:*
-        version: link:../../packages/config/eslint
-      '@travel/tailwind-config':
-        specifier: workspace:*
-        version: link:../../packages/config/tailwind
       '@types/bcryptjs':
         specifier: ^2.4.2
         version: 2.4.2
@@ -334,6 +334,24 @@ importers:
       '@fontsource/ribeye-marrow':
         specifier: ^4.5.8
         version: 4.5.8
+      '@ramble/api':
+        specifier: workspace:*
+        version: link:../../packages/api
+      '@ramble/database':
+        specifier: workspace:*
+        version: link:../../packages/database
+      '@ramble/emails':
+        specifier: workspace:*
+        version: link:../../packages/emails
+      '@ramble/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
+      '@ramble/tailwind-config':
+        specifier: workspace:*
+        version: link:../../packages/config/tailwind
+      '@ramble/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@remix-run/node':
         specifier: 1.16.0
         version: 1.16.0
@@ -343,24 +361,6 @@ importers:
       '@remix-run/serve':
         specifier: 1.16.0
         version: 1.16.0
-      '@travel/api':
-        specifier: workspace:*
-        version: link:../../packages/api
-      '@travel/database':
-        specifier: workspace:*
-        version: link:../../packages/database
-      '@travel/emails':
-        specifier: workspace:*
-        version: link:../../packages/emails
-      '@travel/shared':
-        specifier: workspace:*
-        version: link:../../packages/shared
-      '@travel/tailwind-config':
-        specifier: workspace:*
-        version: link:../../packages/config/tailwind
-      '@travel/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
       '@trpc/server':
         specifier: ^10.16.0
         version: 10.16.0
@@ -446,6 +446,9 @@ importers:
         specifier: 4.3.8
         version: 4.3.8(react@18.2.0)
     devDependencies:
+      '@ramble/eslint-config':
+        specifier: workspace:*
+        version: link:../../packages/config/eslint
       '@remix-run/dev':
         specifier: 1.16.0
         version: 1.16.0(@remix-run/serve@1.16.0)
@@ -455,9 +458,6 @@ importers:
       '@tailwindcss/forms':
         specifier: ^0.5.3
         version: 0.5.3(tailwindcss@3.3.1)
-      '@travel/eslint-config':
-        specifier: workspace:*
-        version: link:../../packages/config/eslint
       '@types/bcryptjs':
         specifier: ^2.4.2
         version: 2.4.2
@@ -530,7 +530,7 @@ importers:
 
   packages/api:
     dependencies:
-      '@travel/database':
+      '@ramble/database':
         specifier: workspace:*
         version: link:../database
       '@trpc/server':
@@ -552,7 +552,7 @@ importers:
         specifier: 3.21.4
         version: 3.21.4
     devDependencies:
-      '@travel/eslint-config':
+      '@ramble/eslint-config':
         specifier: workspace:*
         version: link:../config/eslint
       '@types/bcryptjs':
@@ -607,12 +607,12 @@ importers:
         specifier: ^1.0.5
         version: 1.0.5(tailwindcss@3.3.1)
     devDependencies:
+      '@ramble/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint
       '@tailwindcss/forms':
         specifier: ^0.5.3
         version: 0.5.3(tailwindcss@3.3.1)
-      '@travel/eslint-config':
-        specifier: workspace:*
-        version: link:../eslint
       eslint:
         specifier: 8.40.0
         version: 8.40.0
@@ -653,6 +653,9 @@ importers:
 
   packages/emails:
     dependencies:
+      '@ramble/tailwind-config':
+        specifier: workspace:*
+        version: link:../config/tailwind
       '@react-email/button':
         specifier: 0.0.8
         version: 0.0.8
@@ -692,11 +695,8 @@ importers:
       '@react-email/text':
         specifier: 0.0.5
         version: 0.0.5
-      '@travel/tailwind-config':
-        specifier: workspace:*
-        version: link:../config/tailwind
     devDependencies:
-      '@travel/eslint-config':
+      '@ramble/eslint-config':
         specifier: workspace:*
         version: link:../config/eslint
       eslint:
@@ -714,19 +714,25 @@ importers:
 
   packages/shared:
     dependencies:
-      '@travel/database':
+      '@ramble/database':
         specifier: workspace:*
         version: link:../database
       tailwind-merge:
         specifier: ^1.10.0
         version: 1.10.0
+      uuid:
+        specifier: ^3.4.0
+        version: 3.4.0
     devDependencies:
-      '@travel/eslint-config':
+      '@ramble/eslint-config':
         specifier: workspace:*
         version: link:../config/eslint
       '@types/node':
         specifier: ^18.15.3
         version: 18.15.3
+      '@types/uuid':
+        specifier: ^9.0.1
+        version: 9.0.1
       eslint:
         specifier: 8.40.0
         version: 8.40.0
@@ -766,10 +772,10 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.0.5
         version: 1.0.5(@types/react@18.2.6)(react-dom@18.2.0)(react@18.2.0)
-      '@travel/shared':
+      '@ramble/shared':
         specifier: workspace:*
         version: link:../shared
-      '@travel/tailwind-config':
+      '@ramble/tailwind-config':
         specifier: workspace:*
         version: link:../config/tailwind
       class-variance-authority:
@@ -791,12 +797,12 @@ importers:
         specifier: ^2.8.0
         version: 2.8.0
     devDependencies:
+      '@ramble/eslint-config':
+        specifier: workspace:*
+        version: link:../config/eslint
       '@tailwindcss/forms':
         specifier: ^0.5.3
         version: 0.5.3(tailwindcss@3.3.1)
-      '@travel/eslint-config':
-        specifier: workspace:*
-        version: link:../config/eslint
       '@types/react':
         specifier: 18.2.6
         version: 18.2.6
@@ -5908,6 +5914,10 @@ packages:
 
   /@types/unist@2.0.6:
     resolution: {integrity: sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==}
+    dev: true
+
+  /@types/uuid@9.0.1:
+    resolution: {integrity: sha512-rFT3ak0/2trgvp4yYZo5iKFEPsET7vKydKF+VRCxlQ9bpheehyAJH89dAkaLEq/j/RZXJIqcgsmPJKUP1Z28HA==}
     dev: true
 
   /@types/yargs-parser@21.0.0:

@@ -1,4 +1,4 @@
-import type { Prisma } from "@travel/database/types"
+import type { Prisma } from "@ramble/database/types"
 
 // Sometimes we have table thats using nested data, and so the sortKey needs to be nested
 // e.g { user: { createdAt: "desc" } }, instead of just { createdAt: "desc" }

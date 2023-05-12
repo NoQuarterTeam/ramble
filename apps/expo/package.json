@@ -1,5 +1,5 @@
 {
-  "name": "@travel/expo",
+  "name": "@ramble/expo",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -14,10 +14,10 @@
     "typecheck-todo": "tsc --noEmit"
   },
   "dependencies": {
-    "@travel/api": "workspace:*",
-    "@travel/database": "workspace:*",
-    "@travel/shared": "workspace:*",
-    "@travel/tailwind-config": "workspace:*",
+    "@ramble/api": "workspace:*",
+    "@ramble/database": "workspace:*",
+    "@ramble/shared": "workspace:*",
+    "@ramble/tailwind-config": "workspace:*",
     "@expo-google-fonts/poppins": "^0.2.3",
     "@expo/react-native-action-sheet": "^4.0.1",
     "@hookform/resolvers": "^3.1.0",
@@ -62,8 +62,8 @@
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
-    "@travel/eslint-config": "workspace:*",
-    "@travel/tailwind-config": "workspace:*",
+    "@ramble/eslint-config": "workspace:*",
+    "@ramble/tailwind-config": "workspace:*",
     "@expo/config-plugins": "^6.0.0",
     "@types/react": "^18.0.27",
     "@types/react-native": "^0.72.0",

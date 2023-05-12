@@ -5,7 +5,7 @@ import * as DrawerPrimitive from "@radix-ui/react-dialog"
 import { cva, type VariantProps } from "class-variance-authority"
 import { X } from "lucide-react"
 
-import { join, merge, type UseDisclosure } from "@travel/shared"
+import { join, merge, type UseDisclosure } from "@ramble/shared"
 
 const DrawerRoot = DrawerPrimitive.Root
 

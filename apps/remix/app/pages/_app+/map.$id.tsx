@@ -5,12 +5,11 @@ import { defer } from "@vercel/remix"
 import { Frown, Star, Verified } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
-import { merge } from "@travel/shared"
-import { Avatar, CloseButton, Spinner } from "@travel/ui"
+import { createImageUrl, merge } from "@ramble/shared"
+import { Avatar, CloseButton, Spinner } from "@ramble/ui"
 
 import { LinkButton } from "~/components/LinkButton"
 import { db } from "~/lib/db.server"
-import { createImageUrl } from "~/lib/s3"
 
 export const loader = async ({ params }: LoaderArgs) => {
   const spot = db.spot

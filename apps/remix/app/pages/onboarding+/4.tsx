@@ -4,7 +4,7 @@ import type { LoaderArgs } from "@vercel/remix"
 import { json, redirect } from "@vercel/remix"
 import { z } from "zod"
 
-import { Textarea } from "@travel/ui"
+import { Textarea } from "@ramble/ui"
 
 import { Form, FormButton, FormError, FormField, ImageField } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -83,11 +83,9 @@ export default function Onboarding3() {
         <div>
           <ImageField
             name="image"
-            className="h-[300px]"
             defaultValue={user.van?.images?.[0]?.path}
             label="Have an image you want to share?"
             placeholder="Click or drop an image here"
-            path={`${user.id}/van`}
           />
         </div>
       </div>

@@ -1,5 +1,5 @@
 {
-  "name": "@travel/next",
+  "name": "@ramble/next",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -13,10 +13,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@travel/api": "workspace:*",
-    "@travel/database": "workspace:*",
-    "@travel/shared": "workspace:*",
-    "@travel/ui": "workspace:*",
+    "@ramble/api": "workspace:*",
+    "@ramble/database": "workspace:*",
+    "@ramble/shared": "workspace:*",
+    "@ramble/ui": "workspace:*",
     "@turf/bbox": "^6.5.0",
     "@turf/center": "^6.5.0",
     "@turf/helpers": "^6.5.0",
@@ -36,8 +36,8 @@
     "zustand": "4.3.8"
   },
   "devDependencies": {
-    "@travel/eslint-config": "workspace:*",
-    "@travel/tailwind-config": "workspace:*",
+    "@ramble/eslint-config": "workspace:*",
+    "@ramble/tailwind-config": "workspace:*",
     "@tailwindcss/forms": "^0.5.3",
     "@types/bcryptjs": "^2.4.2",
     "@types/jsonwebtoken": "9.0.2",

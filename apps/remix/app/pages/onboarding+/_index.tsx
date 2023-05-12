@@ -4,7 +4,7 @@ import type { LoaderArgs } from "@vercel/remix"
 import { json, redirect } from "@vercel/remix"
 import { z } from "zod"
 
-import { Textarea } from "@travel/ui"
+import { Textarea } from "@ramble/ui"
 
 import { Form, FormButton, FormError, FormField, FormFieldLabel, ImageField } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -38,20 +38,25 @@ export default function Onboarding3() {
     <Form method="post" replace className="space-y-10">
       <div>
         <h1 className="text-3xl">Tell us a little bit youself</h1>
-        <p className="opacity-70">Why do you travel?</p>
+        <p className="opacity-70">Why do you ramble?</p>
       </div>
 
       <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
         <FormField
           name="bio"
           defaultValue={user.bio || ""}
-          placeholder="Sustainability, nature, and the outdoors are my passions. I love to travel and meet new people."
+          placeholder="Sustainability, nature, and the outdoors are my passions. I love to ramble and meet new people."
           label="A little bio, just a few words about yourself and your interests"
           input={<Textarea rows={10} />}
         />
         <div className="flex w-full flex-col items-center text-center">
           <FormFieldLabel>Let&apos;s put a picture to your name</FormFieldLabel>
-          <ImageField name="avatar" className="sq-[200px]" defaultValue={user.avatar} placeholder="Click here" path={user.id} />
+          <ImageField
+            name="avatar"
+            className="sq-[200px] border-gray-75 rounded border dark:border-gray-700"
+            defaultValue={user.avatar}
+            placeholder="Click here"
+          />
         </div>
       </div>
       <FormError />

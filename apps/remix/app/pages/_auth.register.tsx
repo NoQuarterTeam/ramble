@@ -12,7 +12,7 @@ import { FlashType, getFlashSession } from "~/services/session/flash.server"
 import { getUserSession } from "~/services/session/session.server"
 
 export const meta: V2_MetaFunction = () => {
-  return [{ title: "Register" }, { name: "description", content: "Sign up to the travel" }]
+  return [{ title: "Register" }, { name: "description", content: "Sign up to the ramble" }]
 }
 export const headers = () => {
   return {
@@ -51,7 +51,7 @@ export const action = async ({ request }: ActionArgs) => {
         const { createFlash } = await getFlashSession(request)
         const headers = new Headers([
           ["Set-Cookie", await setUser(user.id)],
-          ["Set-Cookie", await createFlash(FlashType.Info, `Welcome to Travel, ${data.firstName}!`, "Let's get you setup.")],
+          ["Set-Cookie", await createFlash(FlashType.Info, `Welcome to Ramble, ${data.firstName}!`, "Let's get you setup.")],
         ])
         return redirect("/onboarding", { headers })
       } catch (e) {

@@ -4,8 +4,8 @@ import type { DropzoneOptions, FileRejection } from "react-dropzone"
 import { useDropzone } from "react-dropzone"
 import Image from "next/image"
 
-import { merge, useDisclosure, useS3Upload } from "@travel/shared"
-import { BrandButton, Button, ButtonGroup, inputStyles, Modal, useToast } from "@travel/ui"
+import { merge, useDisclosure, useS3Upload } from "@ramble/shared"
+import { BrandButton, Button, ButtonGroup, inputStyles, Modal, useToast } from "@ramble/ui"
 
 interface Props {
   path: string

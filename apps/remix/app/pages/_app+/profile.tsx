@@ -1,6 +1,6 @@
 import { Outlet } from "@remix-run/react"
 
-import { buttonSizeStyles, buttonStyles } from "@travel/ui"
+import { buttonSizeStyles, buttonStyles } from "@ramble/ui"
 
 import { NavLink } from "~/components/NavLink"
 

@@ -1,11 +1,11 @@
 "use client"
 import { Settings2 } from "lucide-react"
-import { useRouter,useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import queryString from "query-string"
 
-import type { SpotType } from "@travel/database/types"
-import { useDisclosure } from "@travel/shared"
-import { Button, Checkbox, Modal, ModalFooter, Select } from "@travel/ui"
+import type { SpotType } from "@ramble/database/types"
+import { useDisclosure } from "@ramble/shared"
+import { Button, Checkbox, Modal, ModalFooter, Select } from "@ramble/ui"
 
 const SPOT_OPTIONS: { label: string; value: SpotType }[] = [
   { label: "Cafe", value: "CAFE" },

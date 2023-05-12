@@ -1,5 +1,5 @@
 {
-  "name": "@travel/eslint-config",
+  "name": "@ramble/eslint-config",
   "version": "1.0.0",
   "sideEffects": false,
   "main": "./index.js",

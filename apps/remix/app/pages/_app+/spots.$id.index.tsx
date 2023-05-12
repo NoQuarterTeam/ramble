@@ -1,5 +1,5 @@
 import { Form, useLoaderData } from "@remix-run/react"
-import { createImageUrl } from "@travel/shared"
+import { createImageUrl } from "@ramble/shared"
 import {
   AlertDialogCancel,
   AlertDialogContent,
@@ -9,7 +9,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
   Button,
-} from "@travel/ui"
+} from "@ramble/ui"
 import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { Edit2, Verified } from "lucide-react"

@@ -4,7 +4,7 @@ import { cache } from "react"
 import Supercluster from "supercluster"
 import { z } from "zod"
 
-import { type SpotType } from "@travel/database/types"
+import { type SpotType } from "@ramble/database/types"
 
 import { db } from "~/lib/db"
 

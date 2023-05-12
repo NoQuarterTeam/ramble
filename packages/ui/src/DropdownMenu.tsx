@@ -3,7 +3,7 @@ import * as React from "react"
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
 import { ChevronRight } from "lucide-react"
 
-import { merge } from "@travel/shared"
+import { merge } from "@ramble/shared"
 
 const DropdownMenu = DropdownMenuPrimitive.Root
 

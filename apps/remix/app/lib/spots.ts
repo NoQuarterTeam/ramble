@@ -1,5 +1,5 @@
-import type { Spot, User } from "@travel/database/types"
-import { SpotType } from "@travel/database/types"
+import type { Spot, User } from "@ramble/database/types"
+import { SpotType } from "@ramble/database/types"
 
 import type { LucideIcon } from "lucide-react"
 import {

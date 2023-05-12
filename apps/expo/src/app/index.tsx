@@ -20,7 +20,7 @@ export default function Home() {
   }
   return (
     <View className="space-y-4 px-4 pt-20">
-      <Heading className="text-4xl">Welcome to the travel</Heading>
+      <Heading className="text-4xl">Welcome to the ramble</Heading>
       {isLoading ? null : data ? (
         <View className="space-y-2">
           <Text className="text-2xl">Hey {data.firstName}</Text>

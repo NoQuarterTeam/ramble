@@ -2,7 +2,7 @@ import * as React from "react"
 import { LogOut, Menu, Plus, User as UserIcon } from "lucide-react"
 import Link from "next/link"
 
-import { type User } from "@travel/database/types"
+import { type User } from "@ramble/database/types"
 import {
   Avatar,
   Button,
@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
   IconButton,
   Tooltip,
-} from "@travel/ui"
+} from "@ramble/ui"
 
 import { LinkButton } from "~/components/LinkButton"
 
@@ -26,7 +26,7 @@ export function Nav() {
     <div className="h-nav flex w-full items-center justify-between border-b border-solid border-gray-50 bg-white px-6 align-middle dark:border-gray-700 dark:bg-gray-800">
       <div className="hstack h-12 space-x-6">
         <div className="hstack">
-          <p className="text-xl font-semibold">Travel</p>
+          <p className="text-xl font-semibold">Ramble</p>
         </div>
       </div>
       <React.Suspense>
@@ -73,9 +73,7 @@ export function Nav() {
               <LinkButton variant="ghost" href="/login">
                 Login
               </LinkButton>
-              <LinkButton colorScheme="primary" href="/register">
-                Register
-              </LinkButton>
+              <LinkButton href="/register">Register</LinkButton>
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

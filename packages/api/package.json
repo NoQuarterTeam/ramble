@@ -1,5 +1,5 @@
 {
-  "name": "@travel/api",
+  "name": "@ramble/api",
   "version": "1.0.0",
   "main": "./index.ts",
   "types": "./index.ts",
@@ -12,7 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@travel/database": "workspace:*",
+    "@ramble/database": "workspace:*",
     "@trpc/server": "^10.16.0",
     "bcryptjs": "^2.4.3",
     "dayjs": "1.11.7",
@@ -21,7 +21,7 @@
     "zod": "3.21.4"
   },
   "devDependencies": {
-    "@travel/eslint-config": "workspace:*",
+    "@ramble/eslint-config": "workspace:*",
     "@types/bcryptjs": "^2.4.2",
     "@types/jsonwebtoken": "9.0.2",
     "@types/node": "^18.15.3",

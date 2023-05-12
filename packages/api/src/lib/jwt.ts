@@ -7,8 +7,8 @@ export const createAuthToken = (payload: { id: string }) => {
   if (!SESSION_SECRET) throw new Error("SESSION_SECRET is not defined")
   try {
     const token = jwt.sign(payload, SESSION_SECRET, {
-      issuer: "@travel/api",
-      audience: ["@travel/app"],
+      issuer: "@ramble/api",
+      audience: ["@ramble/app"],
       expiresIn: "8 weeks",
     })
     return token

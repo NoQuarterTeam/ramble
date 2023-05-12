@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Link, useRouter } from "expo-router"
 import { type z } from "zod"
 
-import { registerSchema } from "@travel/api/src/router/auth"
+import { registerSchema } from "@ramble/api/src/router/auth"
 
 import { Button } from "../../components/Button"
 import { FormError } from "../../components/FormError"

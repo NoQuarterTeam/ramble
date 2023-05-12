@@ -1,6 +1,6 @@
 import { NavLink as RNavLink, type NavLinkProps } from "@remix-run/react"
 
-import { merge } from "@travel/shared"
+import { merge } from "@ramble/shared"
 
 export function TabLink(props: NavLinkProps) {
   return (

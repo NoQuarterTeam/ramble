@@ -7,7 +7,7 @@ type Payload = Record<string, unknown>
 export const createToken = (payload: Payload, options?: jwt.SignOptions): string => {
   try {
     const token = jwt.sign(payload, APP_SECRET, {
-      issuer: "@travel",
+      issuer: "@ramble",
       expiresIn: "4w",
       ...options,
     })

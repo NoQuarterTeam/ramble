@@ -7,7 +7,7 @@ import { Bike, Footprints, Mountain, Waves } from "lucide-react"
 import { z } from "zod"
 import { zx } from "zodix"
 
-import { join } from "@travel/shared"
+import { join } from "@ramble/shared"
 
 import { Form, FormButton, FormError } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"

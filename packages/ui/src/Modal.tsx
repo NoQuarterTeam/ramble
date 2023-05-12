@@ -3,7 +3,7 @@ import * as React from "react"
 import * as ModalPrimitive from "@radix-ui/react-dialog"
 import { X } from "lucide-react"
 
-import { join, merge, type UseDisclosure } from "@travel/shared"
+import { join, merge, type UseDisclosure } from "@ramble/shared"
 
 const ModalRoot = ModalPrimitive.Root
 

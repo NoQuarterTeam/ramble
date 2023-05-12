@@ -1,7 +1,7 @@
 import type * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
-import { merge } from "@travel/shared"
+import { merge } from "@ramble/shared"
 
 const spinnerStyles = cva("animate-spin", {
   variants: {

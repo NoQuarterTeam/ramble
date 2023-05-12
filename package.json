@@ -1,5 +1,5 @@
 {
-  "name": "@travel/root",
+  "name": "@ramble/root",
   "private": true,
   "dependencies": {
     "turbo": "^1.9.3"

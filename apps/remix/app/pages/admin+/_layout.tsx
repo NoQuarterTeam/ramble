@@ -1,7 +1,7 @@
 import { NavLink, Outlet } from "@remix-run/react"
 import { json, type LoaderArgs, redirect } from "@vercel/remix"
 
-import { join } from "@travel/shared"
+import { join } from "@ramble/shared"
 
 import { getCurrentUser } from "~/services/auth/auth.server"
 

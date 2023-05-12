@@ -9,12 +9,12 @@ import * as React from "react"
 import type { ViewStateChangeEvent } from "react-map-gl"
 import Map, { GeolocateControl, Marker, NavigationControl, type LngLatLike, type MapRef } from "react-map-gl"
 
-import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@travel/shared"
+import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
 
 import { useTheme } from "~/lib/theme"
 import { MapFilters } from "~/pages/_app+/components/MapFilters"
 
-import type { SpotType } from "@travel/database/types"
+import type { SpotType } from "@ramble/database/types"
 import { SPOTS } from "~/lib/spots"
 import type { Cluster, clustersLoader } from "../api+/clusters"
 import type { IpInfo } from "./_layout"

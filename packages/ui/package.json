@@ -1,5 +1,5 @@
 {
-  "name": "@travel/ui",
+  "name": "@ramble/ui",
   "version": "1.0.0",
   "private": true,
   "main": "index.ts",
@@ -12,8 +12,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@travel/shared": "workspace:*",
-    "@travel/tailwind-config": "workspace:*",
+    "@ramble/shared": "workspace:*",
+    "@ramble/tailwind-config": "workspace:*",
     "@radix-ui/react-alert-dialog": "^1.0.3",
     "@radix-ui/react-avatar": "^1.0.2",
     "@radix-ui/react-checkbox": "^1.0.3",
@@ -31,7 +31,7 @@
     "tailwindcss-radix": "^2.8.0"
   },
   "devDependencies": {
-    "@travel/eslint-config": "workspace:*",
+    "@ramble/eslint-config": "workspace:*",
     "@tailwindcss/forms": "^0.5.3",
     "@types/react": "18.2.6",
     "@types/react-dom": "18.2.4",

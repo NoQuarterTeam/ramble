@@ -4,7 +4,7 @@ import type * as trpcFetch from "@trpc/server/adapters/fetch"
 import superjson from "superjson"
 import { ZodError } from "zod"
 
-import { prisma, type User } from "@travel/database"
+import { prisma, type User } from "@ramble/database"
 
 import { decodeAuthToken } from "./lib/jwt"
 

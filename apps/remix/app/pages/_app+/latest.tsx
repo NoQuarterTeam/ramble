@@ -1,6 +1,6 @@
 import { json } from "@remix-run/node"
 import { Link, useLoaderData } from "@remix-run/react"
-import { createImageUrl } from "@travel/shared"
+import { createImageUrl } from "@ramble/shared"
 import { db } from "~/lib/db.server"
 
 export const loader = async () => {

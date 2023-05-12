@@ -2,7 +2,7 @@
 import * as RAvatar from "@radix-ui/react-avatar"
 import { cva, type VariantProps } from "class-variance-authority"
 
-import { merge } from "@travel/shared"
+import { merge } from "@ramble/shared"
 
 export const avatarStyles = cva("center rounded-full capitalize", {
   variants: {

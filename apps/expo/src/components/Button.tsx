@@ -2,7 +2,7 @@ import type * as React from "react"
 import { TouchableOpacity, type TouchableOpacityProps, useColorScheme } from "react-native"
 import { cva, type VariantProps } from "class-variance-authority"
 
-import { merge } from "@travel/shared"
+import { merge } from "@ramble/shared"
 
 import { Spinner } from "./Spinner"
 import { Text } from "./Text"

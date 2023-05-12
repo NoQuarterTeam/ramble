@@ -3,9 +3,9 @@ import { Link as RLink, useSearchParams } from "@remix-run/react"
 import { ArrowDown, ArrowUp } from "lucide-react"
 import queryString from "query-string"
 
-import { Prisma } from "@travel/database/types"
-import { join, merge } from "@travel/shared"
-import { Button, NoData } from "@travel/ui"
+import { Prisma } from "@ramble/database/types"
+import { join, merge } from "@ramble/shared"
+import { Button, NoData } from "@ramble/ui"
 
 import { DEFAULT_TAKE } from "~/lib/table"
 

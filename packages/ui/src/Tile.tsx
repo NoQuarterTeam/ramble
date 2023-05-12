@@ -1,4 +1,4 @@
-import { merge } from "@travel/shared"
+import { merge } from "@ramble/shared"
 
 type DivProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 

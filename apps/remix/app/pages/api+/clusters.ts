@@ -1,4 +1,4 @@
-import type { SpotType } from "@travel/database/types"
+import type { SpotType } from "@ramble/database/types"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"

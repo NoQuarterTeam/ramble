@@ -1,5 +1,5 @@
-import type { User } from "@travel/database/types"
-import { ResetPasswordEmail } from "@travel/emails"
+import type { User } from "@ramble/database/types"
+import { ResetPasswordEmail } from "@ramble/emails"
 
 import { FULL_WEB_URL } from "~/lib/config.server"
 import { mailer } from "~/lib/mailer.server"

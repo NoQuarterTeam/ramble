@@ -3,5 +3,5 @@
  */
 module.exports = {
   root: true,
-  extends: ["@travel/eslint-config", "next/core-web-vitals"],
+  extends: ["@ramble/eslint-config", "next/core-web-vitals"],
 }

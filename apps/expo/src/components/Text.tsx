@@ -1,6 +1,6 @@
 import { Text as RText, type TextProps } from "react-native"
 
-import { merge } from "@travel/shared"
+import { merge } from "@ramble/shared"
 
 export function Text(props: TextProps) {
   return (

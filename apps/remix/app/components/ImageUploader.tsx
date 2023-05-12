@@ -2,18 +2,17 @@ import * as React from "react"
 import type { DropzoneOptions, FileRejection } from "react-dropzone"
 import { useDropzone } from "react-dropzone"
 
-import { useDisclosure, useS3Upload } from "@travel/shared"
-import { Button, ButtonGroup, Modal, useToast } from "@travel/ui"
+import { useDisclosure, useS3Upload } from "@ramble/shared"
+import { Button, ButtonGroup, Modal, useToast } from "@ramble/ui"
 
 interface Props {
-  path: string
   onSubmit: (key: string) => Promise<unknown> | unknown
   children: React.ReactNode
   dropzoneOptions?: Omit<DropzoneOptions, "multiple" | "onDrop">
   className?: string
 }
 
-export function ImageUploader({ children, path, onSubmit, dropzoneOptions, className }: Props) {
+export function ImageUploader({ children, onSubmit, dropzoneOptions, className }: Props) {
   const modalProps = useDisclosure()
   const { toast } = useToast()
   const [image, setImage] = React.useState<{ file: File; preview: string } | null>(null)
@@ -46,7 +45,7 @@ export function ImageUploader({ children, path, onSubmit, dropzoneOptions, class
     onDrop,
     multiple: false,
   })
-  const [upload, { isLoading }] = useS3Upload({ path })
+  const [upload, { isLoading }] = useS3Upload()
 
   const handleSubmitImage = async () => {
     if (!image || !image.file) return
@@ -74,7 +73,7 @@ export function ImageUploader({ children, path, onSubmit, dropzoneOptions, class
 
   return (
     <>
-      <div className={className} {...getRootProps()}>
+      <div {...getRootProps({ className })}>
         <input {...getInputProps()} />
         {children}
       </div>

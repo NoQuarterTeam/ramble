@@ -13,7 +13,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export default function OnboardingLayout() {
   return (
-    <div className="mx-auto max-w-6xl px-4 pt-10 md:pt-20">
+    <div className="mx-auto min-h-screen max-w-6xl px-4 pb-32 pt-10 md:pt-20">
       <div className="flex items-center justify-between">
         <h2 className="font-normal">Account setup</h2>
         <LinkButton to="/map" variant="ghost" rightIcon={<ArrowRight className="sq-4" />}>

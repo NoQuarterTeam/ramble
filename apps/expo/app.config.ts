@@ -1,10 +1,10 @@
 import { ConfigContext, ExpoConfig } from "expo/config"
 
 const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
-  name: "Travel",
-  description: "no quarter travel",
-  slug: "travel",
-  scheme: "travel",
+  name: "Ramble",
+  description: "Ramble: ramble Guide",
+  slug: "ramble",
+  scheme: "ramble",
   owner: "noquarter",
   version: "1.0.0",
   jsEngine: "hermes",
@@ -24,14 +24,14 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     icon: "./assets/icon.png",
-    bundleIdentifier: "co.noquarter.travel",
+    bundleIdentifier: "co.noquarter.ramble",
   },
   android: {
     adaptiveIcon: {
       foregroundImage: "./assets/icon.png",
       backgroundColor: "#ffffff",
     },
-    package: "co.noquarter.travel",
+    package: "co.noquarter.ramble",
   },
   plugins: ["./expo-plugins/with-modify-gradle.js"],
 })

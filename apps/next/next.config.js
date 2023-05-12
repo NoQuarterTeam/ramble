@@ -1,6 +1,6 @@
 // /** @type {import('next').NextConfig} */
 module.exports = {
-  transpilePackages: ["@travel/shared", "@travel/ui", "@travel/api", "@travel/tailwind-config", "@travel/database"],
+  transpilePackages: ["@ramble/shared", "@ramble/ui", "@ramble/api", "@ramble/tailwind-config", "@ramble/database"],
   experimental: {
     appDir: true,
   },

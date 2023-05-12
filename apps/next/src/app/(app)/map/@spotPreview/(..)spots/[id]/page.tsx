@@ -4,8 +4,8 @@ import { Star, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
-import { createImageUrl,merge } from "@travel/shared"
-import { Avatar } from "@travel/ui"
+import { createImageUrl, merge } from "@ramble/shared"
+import { Avatar } from "@ramble/ui"
 
 import { db } from "~/lib/db"
 

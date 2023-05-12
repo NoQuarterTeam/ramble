@@ -2,7 +2,7 @@ import { createCookieSessionStorage } from "@vercel/remix"
 
 import { IS_PRODUCTION, SESSION_SECRET } from "~/lib/config.server"
 
-export const COOKIE_KEY = IS_PRODUCTION ? "travel" : "travel_session_dev"
+export const COOKIE_KEY = IS_PRODUCTION ? "ramble" : "ramble_session_dev"
 
 const userStorage = createCookieSessionStorage({
   cookie: {

@@ -2,7 +2,7 @@ import "./globals.css"
 
 import { Noto_Sans } from "next/font/google"
 
-import { Toaster } from "@travel/ui"
+import { Toaster } from "@ramble/ui"
 
 import { ThemeProvider } from "~/components/ThemeProvider"
 import { TooltipProvider } from "~/components/TooltipProvider"
@@ -15,7 +15,7 @@ const custom = Noto_Sans({
 })
 
 export const metadata = {
-  title: "Travel",
+  title: "Ramble",
   description: "Created by No Quarter",
 }
 

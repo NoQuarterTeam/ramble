@@ -3,7 +3,7 @@
  */
 module.exports = {
   root: true,
-  extends: ["@travel/eslint-config"],
+  extends: ["@ramble/eslint-config"],
   rules: {
     "react/function-component-definition": "off",
   },

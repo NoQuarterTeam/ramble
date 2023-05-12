@@ -1,8 +1,8 @@
 "use client"
 import Link, { type LinkProps } from "next/link"
 
-import { join, merge } from "@travel/shared"
-import { buttonSizeStyles, type ButtonStyleProps, buttonStyles, Spinner } from "@travel/ui"
+import { join, merge } from "@ramble/shared"
+import { buttonSizeStyles, type ButtonStyleProps, buttonStyles, Spinner } from "@ramble/ui"
 
 interface LinkButtonProps extends ButtonStyleProps, LinkProps {
   isLoading?: boolean

@@ -6,7 +6,7 @@ import { Html } from "@react-email/html"
 import { Tailwind } from "@react-email/tailwind"
 import { type Config } from "tailwindcss"
 
-import colors from "@travel/tailwind-config/src/colors"
+import colors from "@ramble/tailwind-config/src/colors"
 
 const theme = {
   extend: {

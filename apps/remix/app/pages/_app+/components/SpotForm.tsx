@@ -1,8 +1,8 @@
 import { useFetcher, useNavigate, useRouteLoaderData, useSearchParams } from "@remix-run/react"
-import type { Spot, SpotImage } from "@travel/database/types"
-import { SpotType } from "@travel/database/types"
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@travel/shared"
-import { Button, CloseButton, IconButton, Spinner, Textarea } from "@travel/ui"
+import type { Spot, SpotImage } from "@ramble/database/types"
+import { SpotType } from "@ramble/database/types"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
+import { Button, CloseButton, IconButton, Spinner, Textarea } from "@ramble/ui"
 
 import turfCenter from "@turf/center"
 import * as turf from "@turf/helpers"
@@ -158,12 +158,11 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
                 onRemove={() => setImages(images.filter((image) => image.path !== path))}
                 defaultValue={path}
                 key={i}
-                path="spots/images"
                 name="image"
               />
             ))}
 
-            <ImageUploader onSubmit={(path) => setImages((i) => [...i, { path }])} path="spots/images">
+            <ImageUploader onSubmit={(path) => setImages((i) => [...i, { path }])}>
               <IconButton variant="outline" icon={<Plus className="sq-4" />} aria-label="Add image" />
             </ImageUploader>
           </div>

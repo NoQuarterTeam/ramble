@@ -3,7 +3,7 @@
 import * as React from "react"
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
 
-import { merge } from "@travel/shared"
+import { merge } from "@ramble/shared"
 
 import { Button } from "./Button"
 
