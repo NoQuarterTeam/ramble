@@ -26,13 +26,7 @@ export default function Latest() {
               width={200}
               height={100}
               className="h-[100px] rounded object-cover"
-              src={
-                spot.images[0]?.path
-                  ? spot.images[0].path.startsWith("http")
-                    ? spot.images[0].path + "?" + i
-                    : createImageUrl(spot.images[0].path)
-                  : undefined
-              }
+              src={spot.images[0]?.path ? createImageUrl(spot.images[0].path) : undefined}
             />
             <Link to={`/spots/${spot.id}`}>
               <p>{spot.name}</p>

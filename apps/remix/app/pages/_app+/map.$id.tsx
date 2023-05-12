@@ -90,7 +90,7 @@ export default function SpotPreview() {
                       height={225}
                       className="rounded-md object-cover"
                       key={image.id}
-                      src={image.path.startsWith("http") ? image.path : createImageUrl(image.path)}
+                      src={createImageUrl(image.path)}
                     />
                   ))}
                 </div>
