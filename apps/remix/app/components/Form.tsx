@@ -184,7 +184,11 @@ export function ImageField(props: ImageFieldProps) {
           }
         >
           {image ? (
-            <img src={createImageUrl(image)} className="h-full w-full object-cover" alt="preview" />
+            <img
+              src={image.startsWith("http") ? image : createImageUrl(image)}
+              className="h-full w-full object-cover"
+              alt="preview"
+            />
           ) : hasChildren ? (
             props.children
           ) : (
