@@ -111,9 +111,9 @@ export default function SpotDetail() {
 
         <p className="text-2xl">{spot.address}</p>
         <p className="text-xl">{spot.description}</p>
-        <div className="flex flex-wrap">
+        <div className="flex flex-wrap gap-2">
           {spot.images.map((image) => (
-            <img alt="spot" key={image.id} src={createImageUrl(image.path)} className="w-1/2" />
+            <img alt="spot" key={image.id} src={createImageUrl(image.path)} width={300} height={200} />
           ))}
         </div>
       </div>
