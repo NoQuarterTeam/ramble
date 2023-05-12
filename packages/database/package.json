@@ -10,6 +10,7 @@
     "dev": "pnpm with-env prisma studio",
     "db:push": "pnpm with-env prisma db push",
     "db:seed": "pnpm with-env ts-node ./seed",
+    "load-campspace": "pnpm with-env ts-node ./load-campspace.ts",
     "db:generate": "pnpm with-env prisma generate",
     "with-env": "dotenv -e ../../.env --",
     "postinstall": "prisma generate"
@@ -22,7 +23,9 @@
   "devDependencies": {
     "@faker-js/faker": "^8.0.0",
     "@types/node": "^18.15.3",
+    "cheerio": "1.0.0-rc.12",
     "dotenv-cli": "^7.1.0",
+    "puppeteer": "^20.2.0",
     "ts-node": "^10.9.1",
     "typescript": "5.0.4"
   },

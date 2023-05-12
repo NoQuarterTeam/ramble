@@ -22,6 +22,7 @@ export function Nav() {
   const user = useMaybeUser()
   const logoutSubmit = useSubmit()
   const themeFetcher = useFetcher()
+
   const navigate = useNavigate()
   const theme = useTheme()
   const isDark = theme === "dark"
@@ -46,14 +47,16 @@ export function Nav() {
         </div>
       </div>
       <div className="hstack space-x-3">
-        <Tooltip label="Add a spot">
-          <IconButton
-            onClick={() => navigate(`/spots/new${window.location.search}`)}
-            icon={<Plus className="sq-4" />}
-            aria-label="add spot"
-            variant="outline"
-          />
-        </Tooltip>
+        {user && (
+          <Tooltip label="Add a spot">
+            <IconButton
+              onClick={() => navigate(`/spots/new${window.location.search}`)}
+              icon={<Plus className="sq-4" />}
+              aria-label="add spot"
+              variant="outline"
+            />
+          </Tooltip>
+        )}
         {user ? (
           <DropdownMenu>
             <DropdownMenuTrigger>

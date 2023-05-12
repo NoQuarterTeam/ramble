@@ -1,4 +1,4 @@
-import { Dog, Settings2, Verified } from "lucide-react"
+import { Dog, Settings2, Truck, Verified } from "lucide-react"
 import queryString from "query-string"
 import * as React from "react"
 
@@ -80,6 +80,21 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
                 name="isPetFriendly"
                 id="isPetFriendly"
                 defaultChecked={Boolean(queryString.parse(window.location.search).isPetFriendly)}
+                className="mt-1"
+              />
+            </label>
+            <label htmlFor="isVanFriendly" className="flex items-center justify-between space-x-4">
+              <div className="flex items-center space-x-4">
+                <Truck className="sq-6" />
+                <div>
+                  <p>Van allowed</p>
+                  <p className="text-sm opacity-70">Bring your van!</p>
+                </div>
+              </div>
+              <Switch
+                name="isVanFriendly"
+                id="isVanFriendly"
+                defaultChecked={Boolean(queryString.parse(window.location.search).isVanFriendly)}
                 className="mt-1"
               />
             </label>

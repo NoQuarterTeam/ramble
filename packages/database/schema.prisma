@@ -91,32 +91,64 @@ enum SpotType {
 }
 
 model Spot {
-  id            String      @id @default(uuid())
-  name          String
-  type          SpotType
-  description   String      @db.LongText
-  address       String
-  latitude      Float
-  longitude     Float
-  isPetFriendly Boolean     @default(true)
-  images        SpotImage[]
-  verifiedAt    DateTime?
-  verifierId    String?
-  verifier      User?       @relation(name: "Verifier", fields: [verifierId], references: [id])
-  creatorId     String
-  creator       User        @relation(name: "Creator", fields: [creatorId], references: [id])
-  spotLists     ListSpot[]
-  ownerId       String?
-  owner         User?       @relation(name: "Owner", fields: [ownerId], references: [id])
-  reviews       Review[]
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @default(now()) @updatedAt
+  id          String   @id @default(uuid())
+  name        String
+  type        SpotType
+  description String   @db.LongText
+  address     String
+  latitude    Float
+  longitude   Float
+
+  // Options
+  isVanFriendly Boolean @default(true)
+  isPetFriendly Boolean @default(true)
+
+  // Relations
+  amenities  SpotAmenities?
+  images     SpotImage[]
+  verifiedAt DateTime?
+  verifierId String?
+  verifier   User?          @relation(name: "Verifier", fields: [verifierId], references: [id])
+  creatorId  String
+  creator    User           @relation(name: "Creator", fields: [creatorId], references: [id])
+  spotLists  ListSpot[]
+  ownerId    String?
+  owner      User?          @relation(name: "Owner", fields: [ownerId], references: [id])
+  reviews    Review[]
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @default(now()) @updatedAt
+
+  // Campspace
+  campspaceId  Int? @unique
+  campspaceUrl Int?
 
   @@index([latitude])
   @@index([longitude])
   @@index([ownerId])
   @@index([verifierId])
   @@index([creatorId])
+  @@index([campspaceId])
+}
+
+model SpotAmenities {
+  id          String  @id @default(uuid())
+  hotWater    Boolean
+  wifi        Boolean
+  shower      Boolean
+  toilet      Boolean
+  kitchen     Boolean
+  electricity Boolean
+  water       Boolean
+  firePit     Boolean
+  sauna       Boolean
+  pool        Boolean
+  bbq         Boolean
+
+  spot   Spot   @relation(fields: [spotId], references: [id], onDelete: Cascade)
+  spotId String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model SpotImage {
