@@ -1,4 +1,5 @@
 import { json, redirect as remixRedirect } from "@vercel/remix"
+
 import type { FlashMessage, FlashType } from "~/services/session/flash.server"
 import { getFlashSession } from "~/services/session/flash.server"
 

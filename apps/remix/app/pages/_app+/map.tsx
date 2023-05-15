@@ -1,21 +1,20 @@
+import * as React from "react"
+import type { ViewStateChangeEvent } from "react-map-gl"
+import Map, { GeolocateControl, type LngLatLike, type MapRef, Marker, NavigationControl } from "react-map-gl"
 import { Outlet, useFetcher, useNavigate, useRouteLoaderData, useSearchParams } from "@remix-run/react"
-
 import turfCenter from "@turf/center"
 import * as turf from "@turf/helpers"
 import { type LinksFunction } from "@vercel/remix"
 import mapStyles from "mapbox-gl/dist/mapbox-gl.css"
 import queryString from "query-string"
-import * as React from "react"
-import type { ViewStateChangeEvent } from "react-map-gl"
-import Map, { GeolocateControl, Marker, NavigationControl, type LngLatLike, type MapRef } from "react-map-gl"
 
+import type { SpotType } from "@ramble/database/types"
 import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
 
+import { SPOTS } from "~/lib/spots"
 import { useTheme } from "~/lib/theme"
 import { MapFilters } from "~/pages/_app+/components/MapFilters"
 
-import type { SpotType } from "@ramble/database/types"
-import { SPOTS } from "~/lib/spots"
 import type { Cluster, clustersLoader } from "../api+/clusters"
 import type { IpInfo } from "./_layout"
 

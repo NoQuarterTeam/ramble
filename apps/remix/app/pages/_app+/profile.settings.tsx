@@ -1,4 +1,4 @@
-import type { ActionArgs,LoaderArgs } from "@remix-run/node"
+import type { ActionArgs, LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 
 import { getCurrentUser } from "~/services/auth/auth.server"

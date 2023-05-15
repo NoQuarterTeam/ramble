@@ -1,20 +1,20 @@
+import * as React from "react"
+import type { ViewStateChangeEvent } from "react-map-gl"
+import Map from "react-map-gl"
 import { useFetcher, useNavigate, useRouteLoaderData, useSearchParams } from "@remix-run/react"
-import type { Spot, SpotImage } from "@ramble/database/types"
-import { SpotType } from "@ramble/database/types"
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
-import { Button, CloseButton, IconButton, Spinner, Textarea } from "@ramble/ui"
-
 import turfCenter from "@turf/center"
 import * as turf from "@turf/helpers"
 import type { SerializeFrom } from "@vercel/remix"
 // import { redirect } from "@vercel/remix"
 import { CircleDot, Plus } from "lucide-react"
-
 import queryString from "query-string"
-import * as React from "react"
-import type { ViewStateChangeEvent } from "react-map-gl"
-import Map from "react-map-gl"
 import { z } from "zod"
+
+import type { Spot, SpotImage } from "@ramble/database/types"
+import { SpotType } from "@ramble/database/types"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
+import { Button, CloseButton, IconButton, Spinner, Textarea } from "@ramble/ui"
+
 import { Form, FormButton, FormError, FormField, FormFieldError, FormFieldLabel, ImageField } from "~/components/Form"
 import { ImageUploader } from "~/components/ImageUploader"
 import { FormNumber, NullableFormString, useFormErrors } from "~/lib/form"
@@ -22,6 +22,7 @@ import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { SPOT_OPTIONS } from "~/lib/spots"
 import { useTheme } from "~/lib/theme"
 import type { geocodeLoader } from "~/pages/api+/geocode"
+
 import type { IpInfo } from "../_layout"
 
 export const spotSchema = z.object({

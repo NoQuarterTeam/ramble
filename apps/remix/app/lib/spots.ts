@@ -1,21 +1,21 @@
-import type { Spot, User } from "@ramble/database/types"
-import { SpotType } from "@ramble/database/types"
-
 import type { LucideIcon } from "lucide-react"
 import {
-  Coffee,
-  Utensils,
-  Tent,
-  ParkingCircle,
   Beer,
-  Info,
-  ShoppingCart,
-  Mountain,
   Bike,
+  Coffee,
   Fuel,
-  Waves,
   HelpCircle,
+  Info,
+  Mountain,
+  ParkingCircle,
+  ShoppingCart,
+  Tent,
+  Utensils,
+  Waves,
 } from "lucide-react"
+
+import type { Spot, User } from "@ramble/database/types"
+import { SpotType } from "@ramble/database/types"
 
 export const SPOTS = {
   [SpotType.CAFE]: { label: "Cafe", Icon: Coffee },

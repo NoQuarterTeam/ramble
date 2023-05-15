@@ -1,7 +1,8 @@
-import { createImageUrl } from "@ramble/shared"
 import type { ActionArgs, LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
+
+import { createImageUrl } from "@ramble/shared"
 
 import { getCurrentUser } from "~/services/auth/auth.server"
 

@@ -1,6 +1,7 @@
 import { Link, useFetcher, useNavigate, useSubmit } from "@remix-run/react"
 import { LogOut, Menu, Moon, Plus, Sun, User } from "lucide-react"
 
+import { ClientOnly, createImageUrl } from "@ramble/shared"
 import {
   Avatar,
   Button,
@@ -14,9 +15,7 @@ import {
 
 import { LinkButton } from "~/components/LinkButton"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
-
 import { useTheme } from "~/lib/theme"
-import { ClientOnly, createImageUrl } from "@ramble/shared"
 
 export function Nav() {
   const user = useMaybeUser()

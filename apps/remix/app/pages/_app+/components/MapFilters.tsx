@@ -1,9 +1,10 @@
+import * as React from "react"
 import { Dog, Settings2, Truck, Verified } from "lucide-react"
 import queryString from "query-string"
-import * as React from "react"
 
 import { useDisclosure } from "@ramble/shared"
 import { Button, Modal, ModalFooter, Switch } from "@ramble/ui"
+
 import { SPOT_OPTIONS } from "~/lib/spots"
 
 export function MapFilters({ onChange }: { onChange: (params: string) => void }) {

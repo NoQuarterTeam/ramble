@@ -1,4 +1,3 @@
-import type { SpotType } from "@ramble/database/types"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
@@ -6,6 +5,8 @@ import queryString from "query-string"
 import Supercluster from "supercluster"
 import { z } from "zod"
 import { CheckboxAsString, NumAsString } from "zodix"
+
+import type { SpotType } from "@ramble/database/types"
 
 import { db } from "~/lib/db.server"
 

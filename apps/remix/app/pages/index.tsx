@@ -1,6 +1,6 @@
 import { json, type LoaderArgs, redirect } from "@vercel/remix"
-import { LinkButton } from "~/components/LinkButton"
 
+import { LinkButton } from "~/components/LinkButton"
 import { getMaybeUser } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderArgs) => {
