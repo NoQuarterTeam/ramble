@@ -10,7 +10,7 @@ export interface InputProps extends TextInputProps {
 
 const StyledInput = styled(TextInput)
 
-export function Input(props: TextInputProps) {
+export function Input(props: InputProps) {
   const colorScheme = useColorScheme()
   return (
     <StyledInput

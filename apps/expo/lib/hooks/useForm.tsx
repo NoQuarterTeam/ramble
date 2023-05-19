@@ -5,6 +5,6 @@ import { type z } from "zod"
 export function useForm<TFieldValues extends FieldValues = FieldValues, TContext = unknown>({
   schema,
   ...props
-}: UseFormProps<TFieldValues, TContext> & { schema: z.ZodSchema<unknown> }) {
+}: (UseFormProps<TFieldValues, TContext> & { schema?: z.ZodSchema<unknown> }) | undefined) {
   return useRForm({ resolver: zodResolver(schema), ...props })
 }

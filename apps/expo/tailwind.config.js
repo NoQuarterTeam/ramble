@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  presets: [require("@ramble/tailwind-config/dist")],
-  content: ["./src/**/*.{js,ts,jsx,tsx}"],
+  presets: [require("@ramble/tailwind-config")],
+  content: ["./**/*.tsx"],
   theme: {
     fontFamily: {
       body: ["Poppins_400Regular"],

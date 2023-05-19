@@ -2,12 +2,12 @@ import { ConfigContext, ExpoConfig } from "expo/config"
 
 const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   name: "Ramble",
-  description: "Ramble: ramble Guide",
+  description: "Ramble: Van Life Guide",
   slug: "ramble",
   scheme: "ramble",
   owner: "noquarter",
   version: "1.0.0",
-  jsEngine: "hermes",
+  jsEngine: "jsc",
   orientation: "portrait",
   icon: "./assets/icon.png",
   userInterfaceStyle: "automatic",
