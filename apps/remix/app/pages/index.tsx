@@ -1,7 +1,6 @@
 import { json, type LoaderArgs, redirect } from "@vercel/remix"
 
 import { LinkButton } from "~/components/LinkButton"
-import { OptimizedImage } from "~/components/OptimisedImage"
 import { getMaybeUser } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderArgs) => {
@@ -23,7 +22,13 @@ export default function Home() {
           </LinkButton>
         </div>
         <div>
-          <OptimizedImage src="/hero.jpg" width={400} height={400} alt="two vans in the forest" className="rounded" />
+          <img
+            src="/hero.jpg"
+            width={400}
+            height={400}
+            alt="two vans in the forest"
+            className="sq-[400px] rounded object-cover"
+          />
         </div>
       </div>
     </div>
