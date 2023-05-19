@@ -27,7 +27,7 @@ export default function AuthLayout() {
   return (
     <div className="center flex-col pt-10 md:pt-20">
       <div className="vstack w-full">
-        <div className="vstack w-full max-w-sm space-y-8 bg-white p-4 dark:bg-gray-800">
+        <div className="vstack w-full max-w-md space-y-8 bg-white p-4 dark:bg-gray-800">
           <div className="w-full">
             <Outlet />
           </div>

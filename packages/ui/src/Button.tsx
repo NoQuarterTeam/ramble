@@ -8,7 +8,7 @@ import { join, merge } from "@ramble/shared"
 import { Spinner } from "./Spinner"
 
 export const buttonStyles = cva(
-  "outline-none focus:outline-none font-normal rounded-md focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-gray-400 dark:focus:ring-offset-gray-900 flex center border border-transparent transition-colors duration-200",
+  "outline-none focus:outline-none whitespace-nowrap font-normal rounded-md focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-gray-400 dark:focus:ring-offset-gray-900 flex center border border-transparent transition-colors duration-200",
   {
     variants: {
       size: {

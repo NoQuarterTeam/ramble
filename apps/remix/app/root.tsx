@@ -36,6 +36,7 @@ import { type Theme } from "./lib/theme"
 import { getMaybeUser } from "./services/auth/auth.server"
 import { getFlashSession } from "./services/session/flash.server"
 import { getThemeSession } from "./services/session/theme.server"
+import { Nav } from "./pages/_app+/components/Nav"
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "Ramble" }, { name: "description", content: "Created by No Quarter" }]
@@ -91,6 +92,7 @@ export default function App() {
     <Document theme={theme}>
       <Tooltip.Provider>
         <FlashMessage flash={flash} />
+        <Nav />
         <Outlet />
       </Tooltip.Provider>
       <Toaster />

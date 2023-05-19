@@ -7,7 +7,7 @@ import fsp from "fs/promises"
 import path from "path"
 import sharp from "sharp"
 
-import { IS_PRODUCTION } from "~/lib/config.server"
+import { FULL_WEB_URL, IS_PRODUCTION } from "~/lib/config.server"
 
 const badImageBase64 = "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
 
@@ -71,7 +71,8 @@ export async function generateImage({ request }: LoaderArgs) {
     }
 
     // fetch from original source
-    const res = await axios.get(src, { responseType: "stream" })
+    const parsedSrc = src.startsWith("http") ? src : `${FULL_WEB_URL}${src}`
+    const res = await axios.get(parsedSrc, { responseType: "stream" })
     if (!res) return badImageResponse()
 
     // transform image
