@@ -122,6 +122,7 @@ model Spot {
   campspaceId  Int?    @unique
   campspaceUrl String? @db.VarChar(500)
 
+  @@index([createdAt])
   @@index([latitude])
   @@index([longitude])
   @@index([ownerId])
