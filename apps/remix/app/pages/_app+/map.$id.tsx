@@ -70,7 +70,7 @@ export default function SpotPreview() {
                   to={`/spots/${spot.id}`}
                   className="flex items-center text-lg hover:underline"
                 >
-                  <span>{spot.name}</span>
+                  <span className="line-clamp-1">{spot.name}</span>
                   {spot.verifiedAt && <Verified className="sq-4 ml-1" />}
                 </Link>
                 <div className="hstack">
@@ -81,20 +81,20 @@ export default function SpotPreview() {
                     </Await>
                   </React.Suspense>
                 </div>
-                <p className="text-sm">{spot.address}</p>
-                <div className="relative flex h-[225px] space-x-2 overflow-scroll">
-                  {spot.images?.map((image, i) => (
+                <p className="text-sm">{spot.address.split(",").join(", ")}</p>
+                <div className="relative flex h-[225px] space-x-2 overflow-scroll rounded-md">
+                  {spot.images?.map((image) => (
                     <img
                       alt="spot"
                       width={350}
                       height={225}
-                      className="rounded-md object-cover"
+                      className="min-h-[225px] rounded-md object-cover"
                       key={image.id}
                       src={createImageUrl(image.path)}
                     />
                   ))}
                 </div>
-                <p className="text-sm">{spot.description}</p>
+                <p className="line-clamp-6 text-sm">{spot.description}</p>
                 <div className="flex justify-end">
                   <LinkButton variant="link" to={`/spots/${spot.id}`}>
                     Read more
@@ -142,14 +142,14 @@ export default function SpotPreview() {
 function SpotFallback() {
   return (
     <div className="space-y-2">
-      <Skeleton className="h-8 w-4/5" />
+      <Skeleton className="h-7 w-11/12" />
       <Skeleton className="h-6 w-10" />
       <Skeleton className="h-5 w-40" />
-      <div className="flex h-[225px] w-full space-x-2 overflow-hidden">
-        <Skeleton className="h-[225px] min-w-[350px] rounded" />
-        <Skeleton className="h-[225px] min-w-[350px] rounded" />
+      <div className="flex h-[225px] w-full space-x-2 overflow-hidden rounded-md">
+        <Skeleton className="h-[225px] min-w-[350px] rounded-md" />
+        <Skeleton className="h-[225px] min-w-[75px] rounded-md" />
       </div>
-      <Skeleton className="h-28 w-full" />
+      <Skeleton className="h-32 w-full" />
       <div className="flex justify-end">
         <Skeleton className="h-8 w-20" />
       </div>
