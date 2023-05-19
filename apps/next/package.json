@@ -22,7 +22,7 @@
     "@turf/helpers": "^6.5.0",
     "dayjs": "1.11.7",
     "isbot": "latest",
-    "lucide-react": "^0.216.0",
+    "lucide-react": "^0.220.0",
     "mapbox-gl": "^2.14.1",
     "next-themes": "^0.2.1",
     "next": "13.4.3",
