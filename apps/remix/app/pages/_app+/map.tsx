@@ -109,7 +109,7 @@ export default function MapView() {
   return (
     <div className="relative">
       <ClientOnly>
-        <div className="relative h-[calc(100vh-70px)] w-screen overflow-hidden">
+        <div className="h-nav-screen relative w-screen overflow-hidden">
           {!noMap && (
             <Map
               mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"

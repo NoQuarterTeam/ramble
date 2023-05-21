@@ -91,11 +91,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
   const user = useMaybeUser()
   return (
     <div className="grid grid-cols-1 md:grid-cols-2">
-      <Form
-        method="post"
-        replace
-        className="relative h-auto space-y-4 overflow-scroll p-4 pb-40 md:h-[calc(100vh-70px)] md:p-8 md:pb-40"
-      >
+      <Form method="post" replace className="md:h-nav-screen relative h-auto space-y-4 overflow-scroll p-4 pb-40 md:p-8 md:pb-40">
         <div>
           <div className="flex justify-between">
             <h1 className="text-3xl">{spot ? "Edit spot" : "Add a new spot"}</h1>
@@ -175,7 +171,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
         </div>
       </Form>
 
-      <div className="relative h-[calc(100vh-70px)] w-full">
+      <div className="h-nav-screen relative w-full">
         <Map
           mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
           onLoad={onMove}

@@ -7,6 +7,7 @@ module.exports = {
     extend: {
       spacing: {
         nav: "70px",
+        "nav-screen": "calc(100vh - 70px)",
       },
       fontSize: {
         xxxs: "0.4rem",
