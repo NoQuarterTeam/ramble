@@ -20,7 +20,7 @@
     "@aws-sdk/lib-storage": "^3.310.0",
     "@aws-sdk/s3-request-presigner": "^3.310.0",
     "@fontsource/poppins": "^4.5.10",
-    "@fontsource/ribeye": "^4.5.10",
+    "@fontsource/ribeye": "^5.0.0",
     "@fontsource/ribeye-marrow": "^4.5.8",
     "@remix-run/node": "1.16.1",
     "@remix-run/react": "1.16.1",

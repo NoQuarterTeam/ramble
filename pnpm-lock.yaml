@@ -335,8 +335,8 @@ importers:
         specifier: ^4.5.10
         version: 4.5.10
       '@fontsource/ribeye':
-        specifier: ^4.5.10
-        version: 4.5.10
+        specifier: ^5.0.0
+        version: 5.0.0
       '@fontsource/ribeye-marrow':
         specifier: ^4.5.8
         version: 4.5.8
@@ -4835,8 +4835,8 @@ packages:
     resolution: {integrity: sha512-nOoHHiO62QybS6AC8sceTNXyxQ9A9HcDnmHGj2RXTzb5HH/JOKiaxa42ArzS59v61zFOwSUiOlCjosTUD3kFvw==}
     dev: false
 
-  /@fontsource/ribeye@4.5.10:
-    resolution: {integrity: sha512-RycF7ZkXQA/JGifIokfQ3rIW7iD2xYZgbSqgGVKY3rSJeb2uQqqJP8MlYg3Ota/nhHc6bhhj0vow8B4WnByN+Q==}
+  /@fontsource/ribeye@5.0.0:
+    resolution: {integrity: sha512-vbYm4gbvSlZr7cwie/y+KnPlPMTZ/qbaywSp4P30hi4tbqImLd2zqJ9JpwEml6q9iNr2NP9JfrLGH9gWBMukiw==}
     dev: false
 
   /@gar/promisify@1.1.3:
