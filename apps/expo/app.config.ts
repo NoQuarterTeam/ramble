@@ -33,7 +33,27 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     },
     package: "co.noquarter.ramble",
   },
-  plugins: ["./expo-plugins/with-modify-gradle.js"],
+  extra: {
+    eas: {
+      projectId: "b868666b-33e3-40d3-a88b-71c40a54e3dd",
+    },
+  },
+  plugins: [
+    "./expo-plugins/with-modify-gradle.js",
+    [
+      "expo-location",
+      {
+        locationWhenInUsePermission: "Show current location on map.",
+      },
+    ],
+    [
+      "@rnmapbox/maps",
+      {
+        RNMapboxMapsImpl: "mapbox",
+        RNMapboxMapsDownloadToken: "sk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNsaHVvaXZ4bDAxdjMzY2xiNnE3OHp0dnMifQ.nwE8EhfOoonpunlKdGikiA",
+      },
+    ],
+  ],
 })
 
 export default defineConfig
