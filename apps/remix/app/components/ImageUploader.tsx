@@ -2,8 +2,8 @@ import * as React from "react"
 import type { DropzoneOptions, FileRejection } from "react-dropzone"
 import { useDropzone } from "react-dropzone"
 
-import { useDisclosure, useS3Upload } from "@ramble/shared"
-import { Button, ButtonGroup, Modal, useToast } from "@ramble/ui"
+import { useS3Upload } from "@ramble/shared"
+import { Spinner, useToast } from "@ramble/ui"
 
 interface Props {
   onSubmit: (key: string) => Promise<unknown> | unknown
@@ -13,9 +13,20 @@ interface Props {
 }
 
 export function ImageUploader({ children, onSubmit, dropzoneOptions, className }: Props) {
-  const modalProps = useDisclosure()
   const { toast } = useToast()
-  const [image, setImage] = React.useState<{ file: File; preview: string } | null>(null)
+  const [upload, { isLoading }] = useS3Upload()
+
+  const handleSubmitImage = React.useCallback(
+    async (image: File) => {
+      try {
+        const uploadedFile = await upload(image)
+        await onSubmit(uploadedFile.fileKey)
+      } catch {
+        toast({ variant: "destructive", title: "Error uploading image", description: "Please try again!" })
+      }
+    },
+    [onSubmit, upload, toast],
+  )
 
   const onDrop = React.useCallback(
     (files: File[], rejectedFiles: FileRejection[]) => {
@@ -33,11 +44,11 @@ export function ImageUploader({ children, onSubmit, dropzoneOptions, className }
         }
         return
       }
-      if (files.length === 0) return
-      setImage({ file: files[0], preview: window.URL.createObjectURL(files[0]) })
-      modalProps.onOpen()
+      if (files.length === 0) return toast({ variant: "destructive", description: "No file, please add one" })
+      const image = files[0]
+      handleSubmitImage(image)
     },
-    [toast, dropzoneOptions, modalProps],
+    [toast, dropzoneOptions, handleSubmitImage],
   )
   const { getRootProps, getInputProps } = useDropzone({
     maxSize: 5000000, // 5MB
@@ -45,52 +56,19 @@ export function ImageUploader({ children, onSubmit, dropzoneOptions, className }
     onDrop,
     multiple: false,
   })
-  const [upload, { isLoading }] = useS3Upload()
-
-  const handleSubmitImage = async () => {
-    if (!image || !image.file) return
-    try {
-      const uploadedFile = await upload(image.file)
-      await onSubmit(uploadedFile.fileKey)
-      handleClose()
-    } catch (error) {
-      console.log(error)
-      toast({ variant: "destructive", title: "Error uploading image", description: "Please try again!" })
-    }
-  }
-
-  const handleClose = () => {
-    modalProps.onClose()
-    handleRemoveFile()
-  }
-
-  const handleRemoveFile = React.useCallback(() => {
-    window.URL = window.URL || window.webkitURL
-    if (image) window.URL.revokeObjectURL(image.preview)
-  }, [image])
-
-  React.useEffect(() => handleRemoveFile, [handleRemoveFile])
 
   return (
-    <>
-      <div {...getRootProps({ className })}>
-        <input {...getInputProps()} />
-        {children}
-      </div>
-
-      <Modal {...modalProps} onClose={handleClose} title="Confirm image">
-        <div className="p-4">
-          <img className="mb-4 max-h-[400px] w-full object-contain" alt="preview" src={image?.preview} />
-          <ButtonGroup>
-            <Button variant="ghost" disabled={isLoading} onClick={handleClose}>
-              Cancel
-            </Button>
-            <Button isLoading={isLoading} onClick={handleSubmitImage}>
-              Submit
-            </Button>
-          </ButtonGroup>
+    <div {...getRootProps({ className })}>
+      {isLoading ? (
+        <div className="flex h-full w-full items-center justify-center">
+          <Spinner />
         </div>
-      </Modal>
-    </>
+      ) : (
+        <>
+          <input {...getInputProps()} />
+          {children}
+        </>
+      )}
+    </div>
   )
 }

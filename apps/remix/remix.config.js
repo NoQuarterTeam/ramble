@@ -8,15 +8,14 @@ module.exports = {
   ignoredRouteFiles: ["**/*"],
   serverModuleFormat: "cjs",
   future: {
-    unstable_postcss: true,
     v2_meta: true,
-    unstable_dev: false,
     v2_routeConvention: true,
     v2_errorBoundary: true,
-    cssSideEffectImports: true,
     v2_normalizeFormMethod: true,
-    tailwind: true,
+    cssSideEffectImports: true,
   },
+  tailwind: true,
+  postcss: true,
   serverDependenciesToBundle: [
     "@ramble/api",
     "@ramble/database",

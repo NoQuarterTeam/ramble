@@ -51,7 +51,7 @@ export default function Onboarding() {
             type="button"
             onClick={() => setIsPetOwner(false)}
             className={join(
-              "sq-48 hover:bg-gray-75 flex flex-col items-center justify-center space-y-4 rounded border border-gray-100 dark:border-gray-700 dark:hover:bg-gray-700",
+              "sq-48 flex flex-col items-center justify-center space-y-4 rounded-md border border-gray-100 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-700",
               isPetOwner === false &&
                 "border-primary-400 dark:border-primary-700 bg-primary-500 dark:bg-primary-700 hover:bg-primary-600 dark:hover:bg-primary-800",
             )}
@@ -63,7 +63,7 @@ export default function Onboarding() {
             type="button"
             onClick={() => setIsPetOwner(true)}
             className={join(
-              "sq-48 hover:bg-gray-75 flex flex-col items-center justify-center space-y-4 rounded border border-gray-100 dark:border-gray-700 dark:hover:bg-gray-700",
+              "sq-48 flex flex-col items-center justify-center space-y-4 rounded-md border border-gray-100 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-700",
               isPetOwner === true &&
                 "border-primary-400 dark:border-primary-700 bg-primary-500 dark:bg-primary-700 hover:bg-primary-600 dark:hover:bg-primary-800",
             )}

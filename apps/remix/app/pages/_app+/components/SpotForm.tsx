@@ -97,7 +97,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
             <h1 className="text-3xl">{spot ? "Edit spot" : "Add a new spot"}</h1>
             <CloseButton onClick={() => navigate(-1)} />
           </div>
-          {user && user.role === "USER" && <p className="opacity-70">An Ambassador will shortly verify it</p>}
+          {user && user.role === "USER" && <p className="opacity-70">An Ambassador will verify it shortly</p>}
         </div>
         <input type="hidden" name="latitude" value={latitude || ""} />
         <input type="hidden" name="longitude" value={longitude || ""} />

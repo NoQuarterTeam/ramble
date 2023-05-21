@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { LoaderArgs } from "@remix-run/node"
 import { useActionData } from "react-router"
 import { z } from "zod"
 

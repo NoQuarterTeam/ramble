@@ -106,7 +106,10 @@ export default function SpotPreview() {
                 <h2 className="text-lg font-semibold">Reviews</h2>
                 <div className="space-y-6">
                   {spot.reviews?.map((review) => (
-                    <div key={review.id} className="stack space-y-2 rounded border border-gray-50 px-4 py-3 dark:border-gray-700">
+                    <div
+                      key={review.id}
+                      className="stack space-y-2 rounded-md border border-gray-50 px-4 py-3 dark:border-gray-700"
+                    >
                       <div className="flex justify-between">
                         <div className="hstack">
                           <Avatar
@@ -165,13 +168,13 @@ function SpotFallback() {
   )
 }
 export function Skeleton(props: React.HTMLAttributes<HTMLDivElement>) {
-  return <div {...props} className={merge("animate-pulse rounded bg-gray-100 dark:bg-gray-700", props.className)} />
+  return <div {...props} className={merge("animate-pulse rounded-md bg-gray-100 dark:bg-gray-700", props.className)} />
 }
 
 function SpotContainer(props: { children: React.ReactNode }) {
   const navigate = useNavigate()
   return (
-    <div className="border-gray-75 absolute bottom-0 left-0 top-0 z-10 w-full max-w-[500px] overflow-scroll border-r bg-white p-4 dark:border-gray-700 dark:bg-gray-800 md:px-8">
+    <div className="absolute bottom-0 left-0 top-0 z-10 w-full max-w-[500px] overflow-scroll border-r border-gray-100 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 md:px-8">
       <CloseButton className="absolute right-2 top-2 z-10" onClick={() => navigate(`..${window.location.search}`)} />
       {props.children}
     </div>

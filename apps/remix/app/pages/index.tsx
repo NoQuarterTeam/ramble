@@ -27,7 +27,7 @@ export default function Home() {
             width={400}
             height={400}
             alt="two vans in the forest"
-            className="sq-[400px] rounded object-cover"
+            className="sq-[400px] rounded-md object-cover"
           />
         </div>
       </div>

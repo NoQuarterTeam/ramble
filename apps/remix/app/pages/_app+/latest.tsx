@@ -49,11 +49,11 @@ export default function Latest() {
                 alt="spot"
                 width={200}
                 height={100}
-                className="h-[100px] min-w-[200px] rounded bg-gray-50 object-cover dark:bg-gray-700"
+                className="h-[100px] min-w-[200px] rounded-md bg-gray-50 object-cover dark:bg-gray-700"
                 src={spot.images[0].path ? createImageUrl(spot.images[0].path) : undefined}
               />
             ) : (
-              <div className="flex h-[100px] min-w-[200px] items-center justify-center rounded bg-gray-50 object-cover dark:bg-gray-700">
+              <div className="flex h-[100px] min-w-[200px] items-center justify-center rounded-md bg-gray-50 object-cover dark:bg-gray-700">
                 <Camera className="opacity-50" />
               </div>
             )}
