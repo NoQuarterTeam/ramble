@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { merge } from "@ramble/shared"
 
 export const inputStyles = cva(
-  "text-base block w-full border text-black dark:text-white placeholder-gray-500 transition-colors focus:border-primary-500 focus:bg-transparent focus:ring-transparent rounded-md focus:ring-primary-500 ring-0 focus:ring-2 read-only:focus:ring-transparent",
+  "text-base block w-full border text-black dark:text-white placeholder-gray-500 transition-colors focus:border-primary-500 focus:bg-transparent focus:ring-transparent placeholder:font-thin rounded-md focus:ring-primary-500 ring-0 focus:ring-2 read-only:focus:ring-transparent",
   {
     variants: {
       variant: {

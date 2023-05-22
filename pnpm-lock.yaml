@@ -442,6 +442,9 @@ importers:
       supercluster:
         specifier: ^8.0.0
         version: 8.0.0
+      use-onclickoutside:
+        specifier: ^0.4.1
+        version: 0.4.1(@types/react@18.2.6)(react@18.2.0)
       zod:
         specifier: 3.21.4
         version: 3.21.4
@@ -5609,7 +5612,7 @@ packages:
     peerDependencies:
       react: ^16.8 || ^17.0 || ^18.0
     dependencies:
-      '@babel/runtime': 7.20.0
+      '@babel/runtime': 7.21.5
       '@radix-ui/react-compose-refs': 1.0.0(react@18.2.0)
       react: 18.2.0
     dev: false
@@ -7281,6 +7284,10 @@ packages:
 
   /application-config-path@0.1.1:
     resolution: {integrity: sha512-zy9cHePtMP0YhwG+CfHm0bgwdnga2X3gZexpdCwEj//dpb+TKajtiC8REEUJUSq6Ab4f9cgNy2l8ObXzCXFkEw==}
+    dev: false
+
+  /are-passive-events-supported@1.1.1:
+    resolution: {integrity: sha512-5wnvlvB/dTbfrCvJ027Y4L4gW/6Mwoy1uFSavney0YO++GU+0e/flnjiBBwH+1kh7xNCgCOGvmJC3s32joYbww==}
     dev: false
 
   /arg@4.1.0:
@@ -17582,6 +17589,32 @@ packages:
       react: '>=16.8'
     dependencies:
       react: 18.2.0
+    dev: false
+
+  /use-latest@1.2.1(@types/react@18.2.6)(react@18.2.0):
+    resolution: {integrity: sha512-xA+AVm/Wlg3e2P/JiItTziwS7FK92LWrDB0p+hgXloIMuVCeJJ8v6f0eeHyPZaJrM+usM1FkFfbNCrJGs8A/zw==}
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+    dependencies:
+      '@types/react': 18.2.6
+      react: 18.2.0
+      use-isomorphic-layout-effect: 1.1.2(@types/react@18.2.6)(react@18.2.0)
+    dev: false
+
+  /use-onclickoutside@0.4.1(@types/react@18.2.6)(react@18.2.0):
+    resolution: {integrity: sha512-hAo1viJ9D2mPffUig4EWCwE4as7fq84HANk3MCkY3rhXk5oMl0mjLCLF/OhzWIhTaITcAcDDcnaxRdMHPq+sww==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      are-passive-events-supported: 1.1.1
+      react: 18.2.0
+      use-latest: 1.2.1(@types/react@18.2.6)(react@18.2.0)
+    transitivePeerDependencies:
+      - '@types/react'
     dev: false
 
   /use-sidecar@1.1.2(@types/react@18.2.6)(react@18.2.0):

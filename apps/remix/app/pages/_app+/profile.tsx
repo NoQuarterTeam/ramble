@@ -3,7 +3,7 @@ import { Outlet, useLoaderData } from "@remix-run/react"
 
 import { Avatar } from "@ramble/ui"
 
-import { join } from "@ramble/shared"
+import { createImageUrl, join } from "@ramble/shared"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import type { LucideIcon } from "lucide-react"
@@ -19,9 +19,9 @@ export const loader = async ({ request }: LoaderArgs) => {
 export default function ProfileLayout() {
   const user = useLoaderData<typeof loader>()
   return (
-    <div className="mx-auto max-w-7xl space-y-4 p-4">
+    <div className="mx-auto max-w-6xl space-y-4 p-4">
       <div className="flex items-center space-x-2 py-2">
-        <Avatar size="lg" name={`${user.firstName} ${user.lastName}`} src={user.avatar} />
+        <Avatar size="lg" name={`${user.firstName} ${user.lastName}`} src={createImageUrl(user.avatar)} />
         <p>
           {user.firstName} {user.lastName}
         </p>
