@@ -79,8 +79,8 @@ export function Nav() {
                 <hr />
               </div>
               <DropdownMenuItem asChild>
-                <LinkButton variant="ghost" to="/profile" leftIcon={<User className="sq-4 mr-2" />}>
-                  Profile
+                <LinkButton variant="ghost" to="/account" leftIcon={<User className="sq-4 mr-2" />}>
+                  Account
                 </LinkButton>
               </DropdownMenuItem>
 

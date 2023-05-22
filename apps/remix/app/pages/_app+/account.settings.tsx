@@ -13,10 +13,10 @@ export const loader = async ({ request }: LoaderArgs) => {
 }
 
 export const action = async ({ request }: ActionArgs) => {
-  return redirect("/profile", request, { flash: { type: FlashType.Info, title: "Not possible yet" } })
+  return redirect("/account", request, { flash: { type: FlashType.Info, title: "Not possible yet" } })
 }
 
-export default function ProfileSettings() {
+export default function AccountSettings() {
   return (
     <div className="space-y-2">
       <h1 className="text-3xl">Settings</h1>

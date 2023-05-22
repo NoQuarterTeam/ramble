@@ -41,10 +41,10 @@ export const action = async ({ request }: ActionArgs) => {
     await db.van.create({ data: { userId: user.id, ...data, images: image ? { create: { path: image } } : undefined } })
   }
 
-  return redirect("/profile/van", request, { flash: { type: FlashType.Info, title: user.van ? "Van updated" : "Van created" } })
+  return redirect("/account/van", request, { flash: { type: FlashType.Info, title: user.van ? "Van updated" : "Van created" } })
 }
 
-export default function VanProfile() {
+export default function VanAccount() {
   const user = useLoaderData<typeof loader>()
 
   return (

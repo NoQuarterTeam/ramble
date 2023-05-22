@@ -13,25 +13,27 @@ enum Role {
   ADMIN
   AMBASSADOR
   OWNER
-  USER
+  MEMBER
 }
 
 model User {
-  id        String  @id @default(uuid())
-  email     String  @unique
-  password  String
-  firstName String
-  lastName  String
-  role      Role    @default(USER)
-  avatar    String?
+  id              String  @id @default(uuid())
+  email           String  @unique
+  password        String
+  firstName       String
+  lastName        String
+  username        String  @unique
+  role            Role    @default(MEMBER)
+  avatar          String?
+  bio             String? @db.LongText
+  isProfilePublic Boolean @default(true)
 
-  // Profile
+  // Preferences
   isPetOwner      Boolean @default(false)
   isClimber       Boolean @default(false)
   isHiker         Boolean @default(false)
   isMountainBiker Boolean @default(false)
   isPaddleBoarder Boolean @default(false)
-  bio             String? @db.LongText
 
   // Relations
   createdSpots  Spot[]      @relation(name: "Creator")
@@ -41,9 +43,10 @@ model User {
   lists         List[]
   reviews       Review[]
   van           Van?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now()) @updatedAt
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  @@index([username])
 }
 
 model Van {

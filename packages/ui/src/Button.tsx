@@ -8,7 +8,7 @@ import { join, merge } from "@ramble/shared"
 import { Spinner } from "./Spinner"
 
 export const buttonStyles = cva(
-  "outline-none focus:outline-none whitespace-nowrap font-normal rounded-md focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-gray-400 dark:focus:ring-offset-gray-900 flex center border border-transparent transition-colors duration-200",
+  "outline-none focus:outline-none whitespace-nowrap font-normal rounded-md focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-gray-500 dark:focus:ring-offset-gray-900 flex center border border-transparent transition-colors duration-200",
   {
     variants: {
       size: {
@@ -21,7 +21,7 @@ export const buttonStyles = cva(
         primary:
           "border-transparent text-white dark:text-black bg-gray-900 hover:bg-gray-600 active:bg-gray-500 dark:bg-white dark:hover:bg-white/90 dark:active:bg-white/80",
         secondary:
-          "border-transparent text-black bg-black/10 hover:bg-black/20 active:bg-black/30 dark:bg-white/10 dark:hover:bg-white/20 dark:active:bg-white/30",
+          "border-transparent text-black dark:text-white bg-black/5 hover:bg-black/10 active:bg-black/20 dark:bg-white/10 dark:hover:bg-white/20 dark:active:bg-white/30",
         destructive: "border-transparent text-white bg-red-500 hover:bg-red-600 active:bg-red-700",
         outline: "border-black/10 dark:border-white/10",
         ghost: "",

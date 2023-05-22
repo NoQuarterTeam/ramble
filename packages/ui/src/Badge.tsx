@@ -6,7 +6,7 @@ import { merge } from "@ramble/shared"
 export const badgeProps = cva("rounded-md font-medium uppercase", {
   variants: {
     colorScheme: {
-      primary: "bg-primary-300/40 dark:bg-primary-300/20 text-primary-900 dark:text-primary-200 dark:color-primary-200",
+      orange: "bg-orange-300/40 dark:bg-orange-300/20 text-orange-900 dark:text-orange-200 dark:color-orange-200",
       gray: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-100",
       red: "bg-red-300/40 dark:bg-red-300/20 text-red-900 dark:text-red-200 dark:color-red-200",
       green: "bg-green-300/40 dark:bg-green-300/20 text-green-900 dark:text-green-200 dark:color-green-200",

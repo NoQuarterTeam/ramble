@@ -35,6 +35,7 @@ export const action = async ({ request }: ActionArgs) => {
         if (formData.get("passwordConfirmation")) return redirect("/")
         const registerSchema = z.object({
           email: z.string().min(3).email("Invalid email"),
+          username: z.string().min(2),
           password: z.string().min(8, "Must be at least 8 characters"),
           firstName: z.string().min(2, "Must be at least 2 characters"),
           lastName: z.string().min(2, "Must be at least 2 characters"),
@@ -43,8 +44,11 @@ export const action = async ({ request }: ActionArgs) => {
         if (!result.success) return formError(result)
         const data = result.data
         const email = data.email.toLowerCase().trim()
-        const existing = await db.user.findFirst({ where: { email } })
-        if (existing) return formError({ data, formError: "User with these details already exists" })
+        const existingEmail = await db.user.findFirst({ where: { email } })
+        if (existingEmail) return formError({ data, formError: "User with this email already exists" })
+        const username = data.username.toLowerCase().trim()
+        const existingUsername = await db.user.findFirst({ where: { username } })
+        if (existingUsername) return formError({ data, formError: "User with this username already exists" })
         const password = await hashPassword(data.password)
         const user = await db.user.create({ data: { ...data, email, password } })
         const { setUser } = await getUserSession(request)
@@ -73,9 +77,10 @@ export default function Register() {
       <Form method="post" replace>
         <div className="stack">
           <h1 className="text-4xl font-bold">Register</h1>
-          <FormField required label="Email address" name="email" placeholder="jim@gmail.com" />
+          <FormField autoCapitalize="none" required label="Email address" name="email" placeholder="jim@gmail.com" />
           <FormField required label="Password" name="password" type="password" placeholder="********" />
           <input name="passwordConfirmation" className="hidden" />
+          <FormField autoCapitalize="none" required label="Choose a username" name="username" placeholder="Jim93" />
           <FormField required label="First name" name="firstName" placeholder="Jim" />
           <FormField required label="Last name" name="lastName" placeholder="Bob" />
           <div>

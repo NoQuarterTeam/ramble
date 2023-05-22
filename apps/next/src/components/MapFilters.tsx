@@ -18,7 +18,7 @@ const SPOT_OPTIONS: { label: string; value: SpotType }[] = [
   { label: "Climbing", value: "CLIMBING" },
   { label: "Mountain Biking", value: "MOUNTAIN_BIKING" },
   { label: "Gas Station", value: "GAS_STATION" },
-  { label: "SUPing", value: "SUPPING" },
+  { label: "Padding Boarding", value: "PADDLE_BOARDING" },
   { label: "Other", value: "OTHER" },
 ]
 

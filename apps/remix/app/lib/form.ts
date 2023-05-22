@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { LoaderArgs } from "@remix-run/node"
 import { useActionData } from "react-router"
 import { z } from "zod"
 
@@ -53,3 +52,8 @@ export const NullableFormNumber = z.preprocess(
   z.coerce.number({ invalid_type_error: "Not a number" }).nullish(),
 )
 export const FormNumber = z.coerce.number({ invalid_type_error: "Not a number" })
+
+export const FormCheckbox = z
+  .literal("on")
+  .optional()
+  .transform((value) => value === "on")

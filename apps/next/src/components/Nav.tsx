@@ -44,13 +44,13 @@ export function Nav() {
             <DropdownMenuContent align="end" className="w-[200px] space-y-2 p-1">
               <DropdownMenuItem asChild>
                 <LinkButton
-                  href="/profile"
+                  href="/account"
                   variant="ghost"
                   size="sm"
                   className="flex w-full items-center justify-start outline-none"
                   leftIcon={<UserIcon className="sq-4 mr-2" />}
                 >
-                  Profile
+                  Account
                 </LinkButton>
               </DropdownMenuItem>
               <ThemeSwitcher />
