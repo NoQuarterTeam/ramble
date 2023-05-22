@@ -37,7 +37,7 @@ export function Nav() {
           </Link>
         </ClientOnly>
 
-        <div className="flex items-center">
+        <div className="hidden items-center md:flex">
           <ClientOnly>
             <LinkButton variant="ghost" to={`/map${typeof window !== "undefined" ? window.location.search : ""}`}>
               Map
@@ -68,14 +68,18 @@ export function Nav() {
                 name={user.firstName + " " + user.lastName}
               />
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-[200px] space-y-2 p-1">
+            <DropdownMenuContent align="end" className="w-[200px] p-1 py-1.5">
+              <div className="block md:hidden">
+                <DropdownMenuItem asChild>
+                  <Link to="/map">Map</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/latest">Latest</Link>
+                </DropdownMenuItem>
+                <hr />
+              </div>
               <DropdownMenuItem asChild>
-                <LinkButton
-                  to="/profile"
-                  variant="ghost"
-                  className="flex w-full items-center justify-start outline-none"
-                  leftIcon={<User className="sq-4 mr-2" />}
-                >
+                <LinkButton variant="ghost" to="/profile" leftIcon={<User className="sq-4 mr-2" />}>
                   Profile
                 </LinkButton>
               </DropdownMenuItem>
@@ -87,7 +91,6 @@ export function Nav() {
                   <Button
                     variant="ghost"
                     type="submit"
-                    className="flex w-full items-center justify-start outline-none"
                     leftIcon={isDark ? <Sun className="sq-4 mr-2" /> : <Moon className="sq-4 mr-2" />}
                   >
                     <span>{isDark ? "Light" : "Dark"} mode</span>
@@ -98,7 +101,6 @@ export function Nav() {
                 <Button
                   onClick={() => logoutSubmit(null, { method: "post", action: "/logout" })}
                   variant="ghost"
-                  className="flex w-full items-center justify-start outline-none"
                   leftIcon={<LogOut className="sq-4 mr-2" />}
                 >
                   Logout
@@ -123,7 +125,15 @@ export function Nav() {
                   variant="ghost"
                 />
               </DropdownMenuTrigger>
-              <DropdownMenuContent side="bottom" align="end" className="inline-block md:hidden">
+              <DropdownMenuContent side="bottom" align="end" className="inline-block w-[200px] p-1 md:hidden">
+                <DropdownMenuItem asChild>
+                  <Link to="/map">Map</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/latest">Latest</Link>
+                </DropdownMenuItem>
+                <hr />
+
                 {user ? (
                   <DropdownMenuItem asChild>
                     <Button variant="ghost" onClick={() => logoutSubmit(null, { method: "post", action: "/logout" })}>

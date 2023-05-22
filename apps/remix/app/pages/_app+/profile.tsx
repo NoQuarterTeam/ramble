@@ -26,8 +26,8 @@ export default function ProfileLayout() {
           {user.firstName} {user.lastName}
         </p>
       </div>
-      <div className="flex gap-10">
-        <div className="w-[350px]">
+      <div className="flex flex-col gap-4 md:flex-row md:gap-10">
+        <div className="flex w-auto flex-row space-x-2 overflow-scroll md:w-[350px] md:flex-col md:space-x-0">
           <ProfileLink to="/profile" Icon={User} end>
             Profile
           </ProfileLink>
@@ -53,12 +53,12 @@ function ProfileLink({ Icon, children, ...props }: NavLinkProps & { Icon: Lucide
       to={props.to}
       className={({ isActive }) =>
         join(
-          `flex items-center space-x-2 rounded-md p-2 hover:bg-gray-100 dark:hover:bg-gray-600`,
+          `md:text-md flex items-center space-x-1 rounded-md p-1 px-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 md:space-x-2 md:p-2`,
           isActive && "bg-gray-50 dark:bg-gray-700",
         )
       }
     >
-      {<Icon className="sq-4 opacity-60" />}
+      <Icon className="sq-4 opacity-60" />
       <span>{children}</span>
     </NavLink>
   )

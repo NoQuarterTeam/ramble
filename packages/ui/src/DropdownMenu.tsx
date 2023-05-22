@@ -4,6 +4,7 @@ import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
 import { ChevronRight } from "lucide-react"
 
 import { merge } from "@ramble/shared"
+import { buttonSizeStyles, buttonStyles } from "./Button"
 
 const DropdownMenu = DropdownMenuPrimitive.Root
 
@@ -73,17 +74,15 @@ DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName
 
 const DropdownMenuItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> & {
-    inset?: boolean
-  }
->(({ className, inset, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item>
+>(({ className, ...props }, ref) => (
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={merge(
-      !props.asChild &&
-        "relative flex w-full cursor-pointer items-center rounded-md px-2 py-1.5 text-sm font-normal outline-none hover:bg-gray-100 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 dark:hover:bg-gray-700",
-      inset && "pl-8",
+      buttonStyles({ variant: "ghost", size: "md" }),
+      buttonSizeStyles({ size: "md" }),
       className,
+      "flex w-full items-center justify-start",
     )}
     {...props}
   />
