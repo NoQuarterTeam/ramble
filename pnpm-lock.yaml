@@ -338,8 +338,8 @@ importers:
         specifier: ^4.5.10
         version: 4.5.10
       '@fontsource/ribeye-marrow':
-        specifier: ^4.5.8
-        version: 4.5.8
+        specifier: ^5.0.0
+        version: 5.0.0
       '@ramble/api':
         specifier: workspace:*
         version: link:../../packages/api
@@ -4834,8 +4834,8 @@ packages:
     resolution: {integrity: sha512-oYZVHsnlwV3VWM1SE/m6SUxVh0QLk5+2wB+lBiXcI7N/0KVQWmV9YykaPqfJHBLvmdya+MAOnv+BQHeLU1vOOw==}
     dev: false
 
-  /@fontsource/ribeye-marrow@4.5.8:
-    resolution: {integrity: sha512-nOoHHiO62QybS6AC8sceTNXyxQ9A9HcDnmHGj2RXTzb5HH/JOKiaxa42ArzS59v61zFOwSUiOlCjosTUD3kFvw==}
+  /@fontsource/ribeye-marrow@5.0.0:
+    resolution: {integrity: sha512-yuu0dHFrLcwjpT7LhQWPJp/sbp+RG/WKTrxBYceHTkGCabDI1ISIPcgCw7oZO3WMM8PlUm6aGqR1qmR6H0+VnA==}
     dev: false
 
   /@fontsource/ribeye@4.5.10:
