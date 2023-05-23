@@ -17,8 +17,7 @@ module.exports = {
     fontFamily: {
       serif: ["Poppins", "sans-serif"],
       sans: ["Poppins", "sans-serif"],
-      "ribeye-marrow": ["Ribeye Marrow", "serif"],
-      ribeye: ["Ribeye", "serif"],
+      ribeye: ["Ribeye Marrow", "serif"],
       mono: ["SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace"],
     },
   },

@@ -20,7 +20,6 @@
     "@aws-sdk/lib-storage": "^3.310.0",
     "@aws-sdk/s3-request-presigner": "^3.310.0",
     "@fontsource/poppins": "^4.5.10",
-    "@fontsource/ribeye": "^4.5.10",
     "@fontsource/ribeye-marrow": "^4.5.8",
     "@ramble/api": "workspace:*",
     "@ramble/database": "workspace:*",

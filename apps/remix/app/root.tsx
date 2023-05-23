@@ -5,7 +5,7 @@ import poppins600 from "@fontsource/poppins/600.css"
 import poppins700 from "@fontsource/poppins/700.css"
 import poppins800 from "@fontsource/poppins/800.css"
 import poppins900 from "@fontsource/poppins/900.css"
-import ribeye from "@fontsource/ribeye/400.css"
+
 import ribeyeMarrow from "@fontsource/ribeye-marrow/400.css"
 import * as Tooltip from "@radix-ui/react-tooltip"
 import type { ShouldRevalidateFunction } from "@remix-run/react"
@@ -51,7 +51,6 @@ export const links: LinksFunction = () => {
     { rel: "stylesheet", href: poppins700 },
     { rel: "stylesheet", href: poppins800 },
     { rel: "stylesheet", href: poppins900 },
-    { rel: "stylesheet", href: ribeye },
     { rel: "stylesheet", href: ribeyeMarrow },
     { rel: "stylesheet", href: appStyles },
   ]

@@ -31,7 +31,7 @@ export function Nav() {
         <ClientOnly fallback={<div className="w-[70px]" />}>
           <Link
             to={`/map${typeof window !== "undefined" ? window.location.search : ""}`}
-            className="font-ribeye-marrow w-[70px] text-xl"
+            className="font-ribeye w-[70px] text-xl"
           >
             Ramble
           </Link>
