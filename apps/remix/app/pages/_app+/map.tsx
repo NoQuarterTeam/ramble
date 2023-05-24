@@ -1,15 +1,15 @@
-import * as React from "react"
-import type { ViewStateChangeEvent } from "react-map-gl"
-import Map, { GeolocateControl, type LngLatLike, type MapRef, Marker, NavigationControl } from "react-map-gl"
 import { Outlet, useFetcher, useNavigate, useRouteLoaderData, useSearchParams } from "@remix-run/react"
 import turfCenter from "@turf/center"
 import * as turf from "@turf/helpers"
 import { type LinksFunction } from "@vercel/remix"
 import mapStyles from "mapbox-gl/dist/mapbox-gl.css"
 import queryString from "query-string"
+import * as React from "react"
+import type { ViewStateChangeEvent } from "react-map-gl"
+import Map, { GeolocateControl, Marker, NavigationControl, type LngLatLike, type MapRef } from "react-map-gl"
 
 import type { SpotType } from "@ramble/database/types"
-import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
 
 import { SPOTS } from "~/lib/spots"
 import { useTheme } from "~/lib/theme"
@@ -107,36 +107,32 @@ export default function MapView() {
   )
   const noMap = searchParams.get("noMap")
   return (
-    <div className="relative">
-      <ClientOnly>
-        <div className="h-nav-screen relative w-screen overflow-hidden">
-          {!noMap && (
-            <Map
-              mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
-              onLoad={onMove}
-              onMoveEnd={onMove}
-              ref={mapRef}
-              style={{ height: "100%", width: "100%" }}
-              initialViewState={initialViewState}
-              attributionControl={false}
-              mapStyle={
-                theme === "dark"
-                  ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
-                  : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
-              }
-            >
-              {markers}
+    <div className="h-nav-screen relative w-screen overflow-hidden">
+      {!noMap && (
+        <Map
+          mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
+          onLoad={onMove}
+          onMoveEnd={onMove}
+          ref={mapRef}
+          style={{ height: "100%", width: "100%" }}
+          initialViewState={initialViewState}
+          attributionControl={false}
+          mapStyle={
+            theme === "dark"
+              ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
+              : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
+          }
+        >
+          {markers}
 
-              <GeolocateControl position="bottom-right" />
-              <NavigationControl position="bottom-right" />
-            </Map>
-          )}
+          <GeolocateControl position="bottom-right" />
+          <NavigationControl position="bottom-right" />
+        </Map>
+      )}
 
-          <MapFilters onChange={onParamsChange} />
+      <MapFilters onChange={onParamsChange} />
 
-          <Outlet />
-        </div>
-      </ClientOnly>
+      <Outlet />
     </div>
   )
 }

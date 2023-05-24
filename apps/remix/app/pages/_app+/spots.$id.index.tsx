@@ -1,9 +1,10 @@
 import { Form, useLoaderData } from "@remix-run/react"
-import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import type { ActionArgs, LinksFunction, LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
-import { Edit2, Verified } from "lucide-react"
-
-import { createImageUrl } from "@ramble/shared"
+import { Edit2, Star, Verified } from "lucide-react"
+import Map, { Marker } from "react-map-gl"
+import mapStyles from "mapbox-gl/dist/mapbox-gl.css"
+import { ClientOnly, createImageUrl } from "@ramble/shared"
 import {
   AlertDialogCancel,
   AlertDialogContent,
@@ -20,10 +21,17 @@ import { LinkButton } from "~/components/LinkButton"
 import { db } from "~/lib/db.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { notFound, redirect } from "~/lib/remix.server"
-import { canManageSpot } from "~/lib/spots"
+import { SPOTS, canManageSpot } from "~/lib/spots"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
+import type { SpotType } from "@ramble/database/types"
+import { PageContainer } from "~/components/PageContainer"
+import { useTheme } from "~/lib/theme"
 import { ReviewItem } from "./components/ReviewItem"
+
+export const links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: mapStyles }]
+}
 
 export const loader = async ({ params }: LoaderArgs) => {
   const spot = await db.spot.findUnique({
@@ -31,11 +39,15 @@ export const loader = async ({ params }: LoaderArgs) => {
     select: {
       id: true,
       name: true,
+      type: true,
       verifiedAt: true,
       address: true,
       description: true,
+      latitude: true,
+      longitude: true,
       ownerId: true,
       images: { select: { id: true, path: true } },
+      _count: { select: { reviews: true } },
       reviews: {
         take: 5,
         orderBy: { createdAt: "desc" },
@@ -68,27 +80,13 @@ export const action = async ({ request, params }: ActionArgs) => {
 export default function SpotDetail() {
   const spot = useLoaderData<typeof loader>()
   const user = useMaybeUser()
+  const theme = useTheme()
 
+  const Icon = SPOTS[spot.type as SpotType].Icon
   return (
-    <div className="space-y-4 p-4 md:p-8">
-      <div className="flex gap-2 overflow-scroll">
-        {spot.images.map((image) => (
-          <img
-            alt="spot"
-            key={image.id}
-            src={createImageUrl(image.path)}
-            className="h-[200px] w-[300px] rounded-md object-cover"
-            width={300}
-            height={200}
-          />
-        ))}
-      </div>
-      <h1 className="text-4xl">
-        <span>{spot.name}</span>
-        {spot.verifiedAt && <Verified className="sq-5 ml-1" />}
-      </h1>
+    <div className="relative">
       {canManageSpot(spot, user) && (
-        <div className="flex space-x-2">
+        <div className="absolute left-10 top-10 flex space-x-2">
           <LinkButton to="edit" leftIcon={<Edit2 className="sq-4" />}>
             Edit
           </LinkButton>
@@ -109,25 +107,96 @@ export default function SpotDetail() {
           </AlertDialogRoot>
         </div>
       )}
-
-      <p className="text-xl">{spot.address}</p>
-      <p dangerouslySetInnerHTML={{ __html: spot.description }} />
-
-      <div className="space-y-2">
-        <div className="flex justify-between">
-          <p className="text-xl">Review</p>
-          {user && (
-            <LinkButton variant="secondary" to="reviews/new">
-              Add review
-            </LinkButton>
-          )}
-        </div>
-        <div className="md: grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {spot.reviews.map((review) => (
-            <ReviewItem key={review.id} review={review} />
-          ))}
-        </div>
+      <div className="flex gap-2 overflow-scroll">
+        {spot.images.map((image) => (
+          <img
+            alt="spot"
+            key={image.id}
+            src={createImageUrl(image.path)}
+            className="h-[300px] w-[400px] rounded-md object-cover"
+            height={300}
+            width={400}
+          />
+        ))}
       </div>
+      <PageContainer className="space-y-10">
+        <div>
+          <h1 className="text-4xl">
+            <span>{spot.name}</span>
+            {spot.verifiedAt && <Verified className="sq-5 ml-1" />}
+          </h1>
+          <div className="flex items-center space-x-1 text-sm">
+            <Star className="sq-3" />
+            <p>{spot.rating._avg.rating ? spot.rating._avg.rating?.toFixed(1) : "Not rated"}</p>
+            <p>·</p>
+            <p>
+              {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
+            </p>
+
+            <p>·</p>
+            <p>{spot.address}</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="space-y-2">
+            <h3 className="text-xl font-medium">Description</h3>
+            <ClientOnly>
+              <p dangerouslySetInnerHTML={{ __html: spot.description }} />
+            </ClientOnly>
+          </div>
+
+          <div className="z-10 h-full min-h-[400px] w-full overflow-hidden rounded-md">
+            <Map
+              mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
+              style={{ height: "100%", width: "100%" }}
+              initialViewState={{ latitude: spot.latitude, longitude: spot.longitude, zoom: 10 }}
+              attributionControl={false}
+              mapStyle={
+                theme === "dark"
+                  ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
+                  : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
+              }
+            >
+              <Marker anchor="bottom" longitude={spot.longitude} latitude={spot.latitude}>
+                <div className="relative">
+                  <div className="sq-8 bg-primary-600 dark:bg-primary-700 border-primary-100 dark:border-primary-600 flex items-center justify-center rounded-full border shadow-md">
+                    <Icon className="sq-4 text-white" />
+                  </div>
+                  <div className="sq-3 bg-primary-600 dark:bg-primary-700 absolute -bottom-[3px] left-1/2 -z-[1] -translate-x-1/2 rotate-45 shadow" />
+                </div>
+              </Marker>
+            </Map>
+          </div>
+        </div>
+
+        <hr />
+
+        <div className="space-y-2">
+          <div className="flex justify-between">
+            <div className="flex items-center space-x-2">
+              <p className="text-xl">
+                {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
+              </p>
+              <p>·</p>
+              <div className="flex items-center space-x-1">
+                <Star className="sq-5" />
+                <p className="pt-1">{spot.rating._avg.rating?.toFixed(1)}</p>
+              </div>
+            </div>
+            {user && (
+              <LinkButton variant="secondary" to="reviews/new">
+                Add review
+              </LinkButton>
+            )}
+          </div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {spot.reviews.map((review) => (
+              <ReviewItem key={review.id} review={review} />
+            ))}
+          </div>
+        </div>
+      </PageContainer>
     </div>
   )
 }
