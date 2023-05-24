@@ -5,7 +5,6 @@ import poppins600 from "@fontsource/poppins/600.css"
 import poppins700 from "@fontsource/poppins/700.css"
 import poppins800 from "@fontsource/poppins/800.css"
 import poppins900 from "@fontsource/poppins/900.css"
-
 import ribeyeMarrow from "@fontsource/ribeye-marrow/400.css"
 import * as Tooltip from "@radix-ui/react-tooltip"
 import type { ShouldRevalidateFunction } from "@remix-run/react"
@@ -33,10 +32,10 @@ import { FlashMessage } from "./components/FlashMessage"
 import { LinkButton } from "./components/LinkButton"
 import { FULL_WEB_URL } from "./lib/config.server"
 import { type Theme } from "./lib/theme"
+import { Nav } from "./pages/_app+/components/Nav"
 import { getMaybeUser } from "./services/auth/auth.server"
 import { getFlashSession } from "./services/session/flash.server"
 import { getThemeSession } from "./services/session/theme.server"
-import { Nav } from "./pages/_app+/components/Nav"
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "Ramble" }, { name: "description", content: "Created by No Quarter" }]

@@ -1,6 +1,7 @@
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
+
 import { requireUser } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderArgs) => {

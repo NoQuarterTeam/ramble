@@ -1,16 +1,17 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Outlet, useLoaderData } from "@remix-run/react"
-
-import { Avatar, Badge, buttonSizeStyles, buttonStyles } from "@ramble/ui"
-
-import { createImageUrl, merge } from "@ramble/shared"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import type { LucideIcon } from "lucide-react"
 import { Settings, Truck, User } from "lucide-react"
+
+import { createImageUrl, merge } from "@ramble/shared"
+import { Avatar, Badge, buttonSizeStyles, buttonStyles } from "@ramble/ui"
+
+import { LinkButton } from "~/components/LinkButton"
 import { NavLink } from "~/components/NavLink"
 import { getCurrentUser } from "~/services/auth/auth.server"
-import { LinkButton } from "~/components/LinkButton"
+
 import { PageContainer } from "../../components/PageContainer"
 
 export const loader = async ({ request }: LoaderArgs) => {

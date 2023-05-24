@@ -2,12 +2,13 @@ import * as React from "react"
 import type { LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { Link, useFetcher, useLoaderData } from "@remix-run/react"
+import { Camera } from "lucide-react"
 
 import { createImageUrl } from "@ramble/shared"
 import { Button } from "@ramble/ui"
 
 import { db } from "~/lib/db.server"
-import { Camera } from "lucide-react"
+
 import { PageContainer } from "../../components/PageContainer"
 
 export const loader = async ({ request }: LoaderArgs) => {

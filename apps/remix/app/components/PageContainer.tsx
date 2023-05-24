@@ -1,5 +1,6 @@
-import { merge } from "@ramble/shared"
 import type * as React from "react"
+
+import { merge } from "@ramble/shared"
 
 export function PageContainer(props: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>) {
   return (

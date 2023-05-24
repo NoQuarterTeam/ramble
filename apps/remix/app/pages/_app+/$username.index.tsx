@@ -1,12 +1,15 @@
-import { createImageUrl } from "@ramble/shared"
-import { Avatar } from "@ramble/ui"
 import type { LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 import { cacheHeader } from "pretty-cache-header"
+
+import { createImageUrl } from "@ramble/shared"
+import { Avatar } from "@ramble/ui"
+
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { notFound } from "~/lib/remix.server"
+
 import { PageContainer } from "../../components/PageContainer"
 
 export const headers = useLoaderHeaders

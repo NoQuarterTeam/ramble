@@ -7,7 +7,6 @@ import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { createToken } from "~/lib/jwt.server"
 import { redirect } from "~/lib/remix.server"
-
 import { sendResetPasswordEmail } from "~/services/user/user.mailer.server"
 
 export const headers = () => {

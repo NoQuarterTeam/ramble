@@ -1,15 +1,15 @@
-import { useDisclosure } from "@ramble/shared"
-import { Button, Input } from "@ramble/ui"
+import * as React from "react"
 import type { ActionArgs, LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
-
 import { useFetcher } from "@remix-run/react"
 import { CircleDot, MapPin } from "lucide-react"
-import * as React from "react"
 import useOnClickOutside from "use-onclickoutside"
 
-import type { locationSearchLoader } from "../api+/location-search"
+import { useDisclosure } from "@ramble/shared"
+import { Button, Input } from "@ramble/ui"
+
 import { PageContainer } from "../../components/PageContainer"
+import type { locationSearchLoader } from "../api+/location-search"
 // import { Autocomplete } from "./components/Autocomplete"
 
 export const loader = async ({ request }: LoaderArgs) => {
