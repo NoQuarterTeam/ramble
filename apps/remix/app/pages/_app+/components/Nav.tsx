@@ -46,6 +46,9 @@ export function Nav() {
           <LinkButton variant="ghost" to="/latest">
             Latest
           </LinkButton>
+          <LinkButton variant="ghost" to="/rated">
+            Top rated
+          </LinkButton>
         </div>
       </div>
       <div className="hstack space-x-3">
@@ -75,6 +78,9 @@ export function Nav() {
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/latest">Latest</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/rated">Top rated</Link>
                 </DropdownMenuItem>
                 <hr />
               </div>
@@ -131,6 +137,9 @@ export function Nav() {
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/latest">Latest</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/rated">Rated</Link>
                 </DropdownMenuItem>
                 <hr />
 

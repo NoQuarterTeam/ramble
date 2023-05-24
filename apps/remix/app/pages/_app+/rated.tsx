@@ -7,22 +7,24 @@ import { Button } from "@ramble/ui"
 
 import { db } from "~/lib/db.server"
 
+import type { Spot, SpotImage } from "@ramble/database/types"
 import { PageContainer } from "../../components/PageContainer"
 import { SpotItem } from "./components/SpotItem"
-import type { Spot, SpotImage } from "@ramble/database/types"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const searchParams = new URL(request.url).searchParams
   const skip = parseInt((searchParams.get("skip") as string) || "0")
 
   const spots: Array<Pick<Spot, "id" | "name" | "address"> & { rating: number; image: SpotImage["path"] }> = await db.$queryRaw`
-    SELECT Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating, (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image
-    FROM Spot
-    LEFT JOIN Review ON Spot.id = Review.spotId
-    GROUP BY Spot.id
-    ORDER BY Spot.createdAt DESC, Spot.id
-    LIMIT 10 OFFSET ${skip};
-  `
+      SELECT Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating,
+        (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id LIMIT 1) AS image
+      FROM Spot
+      LEFT JOIN Review ON Spot.id = Review.spotId
+      GROUP BY Spot.id
+      ORDER BY rating DESC, Spot.id
+      LIMIT 10 OFFSET ${skip};
+    `
+
   const count = await db.spot.count()
   return json({ spots, count })
 }
@@ -33,7 +35,7 @@ export default function Latest() {
   const spotFetcher = useFetcher<typeof loader>()
   const [spots, setSpots] = React.useState(initialSpots)
 
-  const onNext = () => spotFetcher.load(`/latest?skip=${spots.length}`)
+  const onNext = () => spotFetcher.load(`/rated?skip=${spots.length}`)
 
   React.useEffect(() => {
     if (spotFetcher.state === "loading") return
@@ -43,7 +45,7 @@ export default function Latest() {
 
   return (
     <PageContainer>
-      <h1 className="text-3xl">Latest Spots</h1>
+      <h1 className="text-3xl">Top rated</h1>
       <div className="space-y-2">
         {spots.map((spot) => (
           <SpotItem key={spot.id} spot={spot} />
