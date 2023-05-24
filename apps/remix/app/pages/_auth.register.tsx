@@ -49,7 +49,7 @@ export const action = async ({ request }: ActionArgs) => {
         const existingUsername = await db.user.findFirst({ where: { username } })
         if (existingUsername) return formError({ data, formError: "User with this username already exists" })
         const password = await hashPassword(data.password)
-        const user = await db.user.create({ data: { ...data, email, password } })
+        const user = await db.user.create({ data: { ...data, email, password, lists: { create: { name: "Favourites" } } } })
         const { setUser } = await getUserSession(request)
         const { createFlash } = await getFlashSession(request)
         const headers = new Headers([

@@ -1,7 +1,7 @@
 import { Form, useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LinksFunction, LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
-import { Edit2, Star, Verified } from "lucide-react"
+import { Edit2, Heart, Share, Star, Verified } from "lucide-react"
 import Map, { Marker } from "react-map-gl"
 import mapStyles from "mapbox-gl/dist/mapbox-gl.css"
 import { ClientOnly, createImageUrl } from "@ramble/shared"
@@ -14,6 +14,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
   Button,
+  Popover,
+  PopoverArrow,
+  PopoverContent,
+  PopoverTrigger,
 } from "@ramble/ui"
 
 import { FormButton } from "~/components/Form"
@@ -107,7 +111,7 @@ export default function SpotDetail() {
           </AlertDialogRoot>
         </div>
       )}
-      <div className="flex gap-2 overflow-scroll">
+      <div className="flex gap-2 overflow-scroll p-2">
         {spot.images.map((image) => (
           <img
             alt="spot"
@@ -119,22 +123,43 @@ export default function SpotDetail() {
           />
         ))}
       </div>
-      <PageContainer className="space-y-10">
-        <div>
-          <h1 className="text-4xl">
-            <span>{spot.name}</span>
-            {spot.verifiedAt && <Verified className="sq-5 ml-1" />}
-          </h1>
-          <div className="flex items-center space-x-1 text-sm">
-            <Star className="sq-3" />
-            <p>{spot.rating._avg.rating ? spot.rating._avg.rating?.toFixed(1) : "Not rated"}</p>
-            <p>·</p>
-            <p>
-              {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
-            </p>
+      <PageContainer className="space-y-10 pb-40">
+        <div className="flex justify-between">
+          <div>
+            <h1 className="text-4xl">
+              <span>{spot.name}</span>
+              {spot.verifiedAt && <Verified className="sq-5 ml-1" />}
+            </h1>
+            <div className="flex items-center space-x-1 text-sm">
+              <Star className="sq-3" />
+              <p>{spot.rating._avg.rating ? spot.rating._avg.rating?.toFixed(1) : "Not rated"}</p>
+              <p>·</p>
+              <p>
+                {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
+              </p>
 
-            <p>·</p>
-            <p>{spot.address}</p>
+              <p>·</p>
+              <p>{spot.address}</p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-1">
+            <Button variant="ghost" leftIcon={<Share className="sq-4" />} aria-label="share">
+              Share
+            </Button>
+
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="ghost" leftIcon={<Heart className="sq-4" />} aria-label="favourite">
+                  Save
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent side="bottom" align="end">
+                <PopoverArrow />
+                <div className="p-2">
+                  <p className="font-medium">Favourite</p>
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
 
@@ -146,7 +171,7 @@ export default function SpotDetail() {
             </ClientOnly>
           </div>
 
-          <div className="z-10 h-full min-h-[400px] w-full overflow-hidden rounded-md">
+          <div className="z-10 h-[400px] w-full overflow-hidden rounded-md">
             <Map
               mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
               style={{ height: "100%", width: "100%" }}

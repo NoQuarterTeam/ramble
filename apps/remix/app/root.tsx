@@ -8,6 +8,7 @@ import poppins900 from "@fontsource/poppins/900.css"
 import ribeyeMarrow from "@fontsource/ribeye-marrow/400.css"
 import * as Tooltip from "@radix-ui/react-tooltip"
 import type { ShouldRevalidateFunction } from "@remix-run/react"
+import { ScrollRestoration } from "@remix-run/react"
 import {
   isRouteErrorResponse,
   Links,
@@ -176,6 +177,7 @@ function Document({ theme, children }: DocumentProps) {
       </head>
       <body className="bg-white dark:bg-gray-800">
         {children}
+        <ScrollRestoration />
         {!shouldDisableScripts && <Scripts />}
         <LiveReload />
       </body>
