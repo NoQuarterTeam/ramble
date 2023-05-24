@@ -165,6 +165,7 @@ model SpotImage {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
+  @@unique([spotId, path])
   @@index([spotId])
   @@index([creatorId])
 }

@@ -56,8 +56,8 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
     }
     return {
       zoom: zoom ? parseInt(zoom) : ipInfo ? 6 : 5,
-      longitude: centerFromParams?.geometry.coordinates[0] || ipInfo?.longitude || INITIAL_LONGITUDE,
-      latitude: centerFromParams?.geometry.coordinates[1] || ipInfo?.latitude || INITIAL_LATITUDE,
+      longitude: spot?.longitude || centerFromParams?.geometry.coordinates[0] || ipInfo?.longitude || INITIAL_LONGITUDE,
+      latitude: spot?.latitude || centerFromParams?.geometry.coordinates[1] || ipInfo?.latitude || INITIAL_LATITUDE,
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -97,7 +97,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
             <h1 className="text-3xl">{spot ? "Edit spot" : "Add a new spot"}</h1>
             <CloseButton onClick={() => navigate(-1)} />
           </div>
-          {user && user.role === "USER" && <p className="opacity-70">An Ambassador will verify it shortly</p>}
+          {user?.role === "MEMBER" && <p className="opacity-70">An Ambassador will verify it shortly</p>}
         </div>
         <input type="hidden" name="latitude" value={latitude || ""} />
         <input type="hidden" name="longitude" value={longitude || ""} />
@@ -167,7 +167,9 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
           <FormError />
         </div>
         <div className="fixed bottom-0 left-0 flex w-full justify-end border-t border-gray-100 bg-white px-10 py-4 dark:border-gray-600 dark:bg-gray-800 md:w-1/2">
-          <FormButton size="lg">Save</FormButton>
+          <FormButton disabled={!address} size="lg">
+            Save
+          </FormButton>
         </div>
       </Form>
 

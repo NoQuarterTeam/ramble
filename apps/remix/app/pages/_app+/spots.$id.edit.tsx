@@ -6,6 +6,7 @@ import mapStyles from "mapbox-gl/dist/mapbox-gl.css"
 
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
+import { notFound } from "~/lib/remix.server"
 import { canManageSpot } from "~/lib/spots"
 import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
 
@@ -36,14 +37,17 @@ export const action = async ({ request, params }: ActionArgs) => {
 
   const { customAddress, ...data } = result.data
 
-  const spot = await db.spot.update({
-    where: { id: params.id },
+  const spot = await db.spot.findUnique({ where: { id: params.id } })
+  if (!spot) throw notFound(null)
+
+  await db.spot.update({
+    where: { id: spot.id },
     data: {
       ...data,
       images: {
         deleteMany: { path: { notIn: images } },
         connectOrCreate: images.map((image) => ({
-          where: { path: image },
+          where: { spotId_path: { path: image, spotId: spot.id } },
           create: { path: image, creator: { connect: { id: userId } } },
         })),
       },
