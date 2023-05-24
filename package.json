@@ -2,7 +2,7 @@
   "name": "@ramble/root",
   "private": true,
   "dependencies": {
-    "turbo": "^1.9.3"
+    "turbo": "^1.9.9"
   },
   "packageManager": "pnpm@8.5.1",
   "devDependencies": {
