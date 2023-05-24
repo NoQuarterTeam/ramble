@@ -42,8 +42,8 @@ importers:
         specifier: 1.17.11
         version: 1.17.11(react-native@0.71.6)
       '@rnmapbox/maps':
-        specifier: 10.0.7-rc.0
-        version: 10.0.7-rc.0(expo@48.0.10)(react-native@0.71.6)(react@18.2.0)
+        specifier: 10.0.7-rc.1
+        version: 10.0.7-rc.1(expo@48.0.10)(react-native@0.71.6)(react@18.2.0)
       '@tanstack/react-query':
         specifier: ^4.23.0
         version: 4.23.0(react-dom@18.2.0)(react-native@0.71.6)(react@18.2.0)
@@ -6148,8 +6148,8 @@ packages:
     dependencies:
       web-streams-polyfill: 3.2.1
 
-  /@rnmapbox/maps@10.0.7-rc.0(expo@48.0.10)(react-native@0.71.6)(react@18.2.0):
-    resolution: {integrity: sha512-4Iz6u0JcNdcsXKV2XlPyRcCnY3napvABlKrEWJX7y68UfalHHCljQur0aStvAGiFYSse2Jasim3QG9NA6B/UVw==}
+  /@rnmapbox/maps@10.0.7-rc.1(expo@48.0.10)(react-native@0.71.6)(react@18.2.0):
+    resolution: {integrity: sha512-bzQZT2u6a43ypE2sd8lNDg4VTkG7NMbDhHMA2GOjd5M3OlovtYAqRcjCAhqQpf+SMHACWhJ2PgVIU0naooeI1g==}
     peerDependencies:
       expo: '>=47.0.0'
       mapbox-gl: ^2.9.0
