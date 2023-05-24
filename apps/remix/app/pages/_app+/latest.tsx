@@ -8,6 +8,7 @@ import { Button } from "@ramble/ui"
 
 import { db } from "~/lib/db.server"
 import { Camera } from "lucide-react"
+import { PageContainer } from "../../components/PageContainer"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const searchParams = new URL(request.url).searchParams
@@ -39,7 +40,7 @@ export default function Latest() {
   }, [spotFetcher.data, spotFetcher.state])
 
   return (
-    <div className="space-y-4 p-4 md:p-8">
+    <PageContainer>
       <h1 className="text-3xl">Latest Spots</h1>
       <div className="space-y-2">
         {spots.map((spot) => (
@@ -72,6 +73,6 @@ export default function Latest() {
           </div>
         )}
       </div>
-    </div>
+    </PageContainer>
   )
 }

@@ -5,7 +5,6 @@ import { Form, FormButton, FormField } from "~/components/Form"
 import { redirect } from "~/lib/remix.server"
 
 import { getCurrentUser } from "~/services/auth/auth.server"
-import { FlashType } from "~/services/session/flash.server"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const user = await getCurrentUser(request)
@@ -13,7 +12,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 }
 
 export const action = async ({ request }: ActionArgs) => {
-  return redirect("/account", request, { flash: { type: FlashType.Info, title: "Not possible yet" } })
+  return redirect("/account", request, { flash: { title: "Not possible yet" } })
 }
 
 export default function AccountSettings() {

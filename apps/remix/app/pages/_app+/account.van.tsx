@@ -6,7 +6,7 @@ import { Textarea } from "@ramble/ui"
 import { Form, FormButton, FormError, FormField, ImageField } from "~/components/Form"
 import { getCurrentUser } from "~/services/auth/auth.server"
 import { redirect } from "~/lib/remix.server"
-import { FlashType } from "~/services/session/flash.server"
+
 import { db } from "~/lib/db.server"
 import { formError, FormNumber, NullableFormString, validateFormData } from "~/lib/form"
 import { z } from "zod"
@@ -41,7 +41,7 @@ export const action = async ({ request }: ActionArgs) => {
     await db.van.create({ data: { userId: user.id, ...data, images: image ? { create: { path: image } } : undefined } })
   }
 
-  return redirect("/account/van", request, { flash: { type: FlashType.Info, title: user.van ? "Van updated" : "Van created" } })
+  return redirect("/account/van", request, { flash: { title: user.van ? "Van updated" : "Van created" } })
 }
 
 export default function VanAccount() {

@@ -6,10 +6,12 @@ import { Frown, Star, Verified } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
 import { createImageUrl, merge } from "@ramble/shared"
-import { Avatar, CloseButton, Spinner } from "@ramble/ui"
+import { CloseButton, Spinner } from "@ramble/ui"
 
 import { LinkButton } from "~/components/LinkButton"
 import { db } from "~/lib/db.server"
+import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
+import { ReviewItem } from "./components/ReviewItem"
 
 export const loader = async ({ params }: LoaderArgs) => {
   const spot = db.spot
@@ -27,6 +29,7 @@ export const loader = async ({ params }: LoaderArgs) => {
           orderBy: { createdAt: "desc" },
           select: {
             id: true,
+            spotId: true,
             createdAt: true,
             rating: true,
             description: true,
@@ -56,6 +59,7 @@ export const loader = async ({ params }: LoaderArgs) => {
 }
 
 export default function SpotPreview() {
+  const user = useMaybeUser()
   const promise = useLoaderData<typeof loader>()
   return (
     <SpotContainer>
@@ -103,34 +107,17 @@ export default function SpotPreview() {
               </div>
               <hr />
               <div className="space-y-4">
-                <h2 className="text-lg font-semibold">Reviews</h2>
+                <div className="flex justify-between">
+                  <h2 className="text-lg font-semibold">Reviews</h2>
+                  {user && (
+                    <LinkButton variant="secondary" to={`/spots/${spot.id}/reviews/new`}>
+                      Add review
+                    </LinkButton>
+                  )}
+                </div>
                 <div className="space-y-6">
                   {spot.reviews?.map((review) => (
-                    <div
-                      key={review.id}
-                      className="stack space-y-2 rounded-md border border-gray-50 px-4 py-3 dark:border-gray-700"
-                    >
-                      <div className="flex justify-between">
-                        <div className="hstack">
-                          <Avatar
-                            className="sq-10 rounded-full"
-                            name={`${review.user.firstName} ${review.user.lastName}`}
-                            src={createImageUrl(review.user.avatar)}
-                          />
-                          <div>
-                            <p className="text-md">
-                              {review.user.firstName} {review.user.lastName}
-                            </p>
-                            <p className="text-sm opacity-70">{new Date(review.createdAt).toLocaleDateString()}</p>
-                          </div>
-                        </div>
-                        <div className="hstack">
-                          <Star className="sq-5" />
-                          <p>{review.rating}</p>
-                        </div>
-                      </div>
-                      <p className="text-sm">{review.description}</p>
-                    </div>
+                    <ReviewItem key={review.id} review={review} />
                   ))}
                 </div>
               </div>

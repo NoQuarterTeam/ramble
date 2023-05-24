@@ -10,7 +10,6 @@ import { NullableFormString, validateFormData, formError, FormCheckbox } from "~
 import { redirect } from "~/lib/remix.server"
 
 import { getCurrentUser } from "~/services/auth/auth.server"
-import { FlashType } from "~/services/session/flash.server"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const user = await getCurrentUser(request, {
@@ -42,7 +41,7 @@ export const action = async ({ request }: ActionArgs) => {
   const existingUsername = await db.user.findFirst({ where: { username, id: { not: { equals: user.id } } } })
   if (existingUsername) return formError({ formError: "User with this username already exists" })
   await db.user.update({ where: { id: user.id }, data: result.data })
-  return redirect("/account", request, { flash: { type: FlashType.Info, title: "Account updated" } })
+  return redirect("/account", request, { flash: { title: "Account updated" } })
 }
 
 export default function Account() {

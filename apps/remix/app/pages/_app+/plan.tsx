@@ -6,10 +6,10 @@ import { json } from "@remix-run/node"
 import { useFetcher } from "@remix-run/react"
 import { CircleDot, MapPin } from "lucide-react"
 import * as React from "react"
-import { ClientOnly } from "remix-utils"
 import useOnClickOutside from "use-onclickoutside"
 
 import type { locationSearchLoader } from "../api+/location-search"
+import { PageContainer } from "../../components/PageContainer"
 // import { Autocomplete } from "./components/Autocomplete"
 
 export const loader = async ({ request }: LoaderArgs) => {
@@ -48,7 +48,7 @@ export default function PlanTrip() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-2 p-4">
+    <PageContainer>
       <div>
         <h1 className="text-3xl">Plan a trip</h1>
         <p>We'll help you find spots and suggest things to do along the way!</p>
@@ -136,6 +136,6 @@ export default function PlanTrip() {
         </div>
         {startingPointQuery && destinationQuery && <Button>Go</Button>}
       </div>
-    </div>
+    </PageContainer>
   )
 }

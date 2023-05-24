@@ -57,3 +57,8 @@ export const FormCheckbox = z
   .literal("on")
   .optional()
   .transform((value) => value === "on")
+
+export const FORM_ACTION = "_action"
+export function FormAction({ value }: { value: string }) {
+  return <input type="hidden" name={FORM_ACTION} value={value} />
+}

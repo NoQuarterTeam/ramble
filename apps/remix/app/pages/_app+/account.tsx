@@ -11,6 +11,7 @@ import { Settings, Truck, User } from "lucide-react"
 import { NavLink } from "~/components/NavLink"
 import { getCurrentUser } from "~/services/auth/auth.server"
 import { LinkButton } from "~/components/LinkButton"
+import { PageContainer } from "../../components/PageContainer"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const user = await getCurrentUser(request, {
@@ -27,7 +28,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 export default function AccountLayout() {
   const user = useLoaderData<typeof loader>()
   return (
-    <div className="mx-auto max-w-6xl space-y-4 p-4">
+    <PageContainer>
       <div className="flex flex-wrap items-center justify-between">
         <div className="flex items-center space-x-2 py-2">
           <Avatar size="lg" name={`${user.firstName} ${user.lastName}`} src={createImageUrl(user.avatar)} />
@@ -65,7 +66,7 @@ export default function AccountLayout() {
           <Outlet />
         </div>
       </div>
-    </div>
+    </PageContainer>
   )
 }
 

@@ -7,7 +7,7 @@ import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { createToken } from "~/lib/jwt.server"
 import { redirect } from "~/lib/remix.server"
-import { FlashType } from "~/services/session/flash.server"
+
 import { sendResetPasswordEmail } from "~/services/user/user.mailer.server"
 
 export const headers = () => {
@@ -27,7 +27,7 @@ export const action = async ({ request }: ActionArgs) => {
     await sendResetPasswordEmail(user, token)
   }
 
-  return redirect("/login", request, { flash: { type: FlashType.Info, title: "Reset link sent to your email" } })
+  return redirect("/login", request, { flash: { title: "Reset link sent to your email" } })
 }
 
 export default function ForgotPassword() {

@@ -7,6 +7,7 @@ import { cacheHeader } from "pretty-cache-header"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { notFound } from "~/lib/remix.server"
+import { PageContainer } from "../../components/PageContainer"
 
 export const headers = useLoaderHeaders
 
@@ -33,7 +34,7 @@ export default function Profile() {
   const user = useLoaderData<typeof loader>()
 
   return (
-    <div className="mx-auto max-w-6xl p-4">
+    <PageContainer>
       <div className="flex flex-col items-center space-y-1">
         <Avatar className="sq-32" src={createImageUrl(user.avatar)} name={`${user.firstName} ${user.lastName}`} />
         <h1 className="text-3xl">{user.username}</h1>
@@ -41,6 +42,6 @@ export default function Profile() {
           {user.firstName} {user.lastName}
         </p>
       </div>
-    </div>
+    </PageContainer>
   )
 }
