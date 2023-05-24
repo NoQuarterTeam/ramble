@@ -4,10 +4,12 @@ import data from "../campspace.json"
 export async function main() {
   const admin = await prisma.user.findFirstOrThrow({ where: { email: "jack@noquarter.co" } })
 
+  const spots = await prisma.spot.findMany()
   await Promise.all(
-    data.map((spot) =>
-      prisma.spot
-        .upsert({
+    data
+      .filter((s) => s.images.length > 2 && s.description.length > 50 && !spots.find((spot) => spot.campspaceId === s.id))
+      .map((spot) =>
+        prisma.spot.upsert({
           where: { campspaceId: spot.id },
           create: {
             campspaceId: spot.id,
@@ -31,7 +33,7 @@ export async function main() {
                 firePit: spot.firePit,
                 sauna: spot.sauna,
                 pool: spot.pool,
-                bbq: spot.bbq || false,
+                bbq: spot.bbq,
               },
             },
             creator: { connect: { id: admin.id } },
@@ -52,7 +54,7 @@ export async function main() {
                 firePit: spot.firePit,
                 sauna: spot.sauna,
                 pool: spot.pool,
-                bbq: spot.bbq || false,
+                bbq: spot.bbq,
               },
             },
             name: spot.name,
@@ -62,17 +64,16 @@ export async function main() {
             type: "CAMPING",
             creator: { connect: { id: admin.id } },
           },
-        })
-        .catch((e) => {
-          console.log(spot.id)
-          console.log(e)
         }),
-    ),
+      ),
   )
 
+  await prisma.spotImage.deleteMany({})
+
   await Promise.all(
-    data.map(
-      async (spot) =>
+    data
+      .filter((s) => s.images.length > 2 && s.description.length > 50)
+      .map(async (spot) => {
         await prisma.spot.update({
           where: { campspaceId: spot.id },
           data: {
@@ -80,8 +81,8 @@ export async function main() {
               createMany: { skipDuplicates: true, data: spot.images.map((image) => ({ path: image, creatorId: admin.id })) },
             },
           },
-        }),
-    ),
+        })
+      }),
   )
 }
 

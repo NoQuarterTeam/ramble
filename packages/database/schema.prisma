@@ -157,7 +157,7 @@ model SpotAmenities {
 
 model SpotImage {
   id        String   @id @default(uuid())
-  path      String   @unique
+  path      String
   spotId    String
   spot      Spot     @relation(fields: [spotId], references: [id], onDelete: Cascade)
   creatorId String

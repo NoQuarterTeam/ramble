@@ -111,7 +111,7 @@ export default function SpotDetail() {
         )}
 
         <p className="text-2xl">{spot.address}</p>
-        <p>{spot.description}</p>
+        <p dangerouslySetInnerHTML={{ __html: spot.description }} />
         <div className="flex flex-wrap gap-2">
           {spot.images.map((image) => (
             <img

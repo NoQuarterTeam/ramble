@@ -3,8 +3,8 @@ import * as puppeteer from "puppeteer"
 import fs from "fs"
 
 // const url = "https://www.pureportugal.co.uk/properties/?cat=54+54+99+54+54+54-&landmin=0&landmax=0&order=ASC&v="
-const url = `https://campspace.com/en/campsites?numberOfAdults=1&numberOfChildren=0&filter%5Baccommodations%5D%5B%5D=bring_minivan&page=`
-const pageCount = 40
+const url = `https://campspace.com/en/campsites?location=&startDate=&endDate=&numberOfAdults=2&numberOfChildren=0&filter%5Baccommodations%5D%5B%5D=bring_motorhome&filter%5Baccommodations%5D%5B%5D=bring_minivan&filter%5Bsurfaces%5D%5B%5D=grass&filter%5BspaceSize%5D=no_maximum&filter%5Bamenities%5D%5B%5D=pets_allowed&filter%5Bactivities%5D%5B%5D=sightseeing&page=`
+const pageCount = 9
 
 import data from "./campspace.json"
 
@@ -73,23 +73,20 @@ async function getPageCards(page: puppeteer.Page, currentPage: number) {
       const $ = cheerio.load(html)
 
       let images: string[] = []
-      $("img.space-images--img").each((_, img) => {
+      $(".space-images .space-images--img").each((_, img) => {
         const src = $(img).attr("src")
-        if (src) images.push(src)
+        if (src) images.push(src.replace("teaser", "medium"))
       })
-      const description = $(".space-section-with-avatar .space-section--text")
-        .first()
-        .children()
-        .filter((_, t) => t.name === "p")
-        .first()
-        .text()
+      const description = $(".about-popup .popup-body").html()?.trim() || ""
 
       const address =
         $(".space-header--part-location")
           .text()
           .replace(/(\r\n|\n|\r)/gm, "")
           .replace(/ /g, "")
-          .trim() || ""
+          .trim()
+          .split(",")
+          .join(", ") || ""
 
       const isPetFriendly = $("p").filter((_, p) => $(p).text().includes("Pets allowed")).length > 0
 
@@ -107,8 +104,8 @@ async function getPageCards(page: puppeteer.Page, currentPage: number) {
 
       currentData.push({
         ...spot,
-        images,
         description,
+        images,
         bbq,
         shower,
         kitchen,

@@ -10,6 +10,7 @@ export async function main() {
       password: "$2a$10$oNNINu1SnaMxZMRfz0HDduKX3BedpcP3y00A0k7tKbDQ4M.hYdiLq",
       firstName: "Jack",
       lastName: "Clackett",
+      username: "jack",
     },
     update: {},
     where: { email: "jack@noquarter.co" },
@@ -22,6 +23,7 @@ export async function main() {
     const lastName = faker.person.lastName()
     await prisma.user.create({
       data: {
+        username: faker.internet.userName({ firstName, lastName }),
         email: faker.internet.email({ firstName, lastName, provider: "noquarter.co" }),
         password: faker.internet.password(),
         firstName,
