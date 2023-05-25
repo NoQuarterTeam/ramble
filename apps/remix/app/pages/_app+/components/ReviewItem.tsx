@@ -69,32 +69,32 @@ export function ReviewItem({ review }: Props) {
         </div>
       </div>
       <p className="text-sm">{review.description}</p>
-      <div className="flex space-x-2">
-        {user?.id === review.user.id && (
+      {user?.id === review.user.id && (
+        <div className="flex space-x-2">
           <LinkButton variant="outline" to={`reviews/${review.id}`}>
             Edit
           </LinkButton>
-        )}
-        <AlertDialogRoot>
-          <AlertDialogTrigger asChild>
-            <Button variant="destructive">Delete</Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
-            <AlertDialogFooter>
-              <AlertDialogCancel asChild>
-                <Button variant="ghost">Cancel</Button>
-              </AlertDialogCancel>
+          <AlertDialogRoot>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive">Delete</Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+              <AlertDialogFooter>
+                <AlertDialogCancel asChild>
+                  <Button variant="ghost">Cancel</Button>
+                </AlertDialogCancel>
 
-              <deleteFetcher.Form method="post" action={`/spots/${review.spotId}/reviews/${review.id}`} replace>
-                <FormAction value={Actions.Delete} />
-                <Button type="submit">Confirm</Button>
-              </deleteFetcher.Form>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogRoot>
-      </div>
+                <deleteFetcher.Form method="post" action={`/spots/${review.spotId}/reviews/${review.id}`} replace>
+                  <FormAction value={Actions.Delete} />
+                  <Button type="submit">Confirm</Button>
+                </deleteFetcher.Form>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialogRoot>
+        </div>
+      )}
     </div>
   )
 }
