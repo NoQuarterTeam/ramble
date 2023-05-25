@@ -89,11 +89,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
         props.className,
       )}
     >
-      <>
-        {leftIcon && <span className={join("mr-1.5", isLoading && "opacity-0")}>{leftIcon}</span>}
-        <span className={join(isLoading && "opacity-0")}>{props.children}</span>
-        {rightIcon && <span className={join("ml-1.5", isLoading && "opacity-0")}>{rightIcon}</span>}
-      </>
+      {leftIcon && <span className={join("mr-1.5", isLoading && "opacity-0")}>{leftIcon}</span>}
+      {isLoading ? <span className="opacity-0">{props.children}</span> : props.children}
+      {rightIcon && <span className={join("ml-1.5", isLoading && "opacity-0")}>{rightIcon}</span>}
 
       {isLoading && (
         <div className="absolute inset-0 flex w-full items-center justify-center">
