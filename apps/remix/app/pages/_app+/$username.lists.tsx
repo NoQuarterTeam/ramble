@@ -25,7 +25,7 @@ export default function ProfileLists() {
   const user = useLoaderData<typeof loader>()
   const currentUser = useMaybeUser()
   return (
-    <div>
+    <div className="space-y-2">
       {currentUser?.id === user.id && (
         <LinkButton to="new" variant="secondary">
           New list
@@ -33,7 +33,7 @@ export default function ProfileLists() {
       )}
       <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
         {user.lists.map((list) => (
-          <div key={list.id}>
+          <div key={list.id} className="rounded-md border border-gray-100 p-4 dark:border-gray-700">
             <p>{list.name}</p>
           </div>
         ))}
