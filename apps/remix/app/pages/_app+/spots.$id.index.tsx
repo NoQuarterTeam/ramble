@@ -32,7 +32,7 @@ import { canManageSpot, SPOTS } from "~/lib/spots"
 import { useTheme } from "~/lib/theme"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
-import { ReviewItem } from "./components/ReviewItem"
+import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: mapStyles }]
@@ -56,14 +56,7 @@ export const loader = async ({ params }: LoaderArgs) => {
       reviews: {
         take: 5,
         orderBy: { createdAt: "desc" },
-        select: {
-          id: true,
-          createdAt: true,
-          spotId: true,
-          rating: true,
-          description: true,
-          user: { select: { id: true, firstName: true, lastName: true, avatar: true } },
-        },
+        select: reviewItemSelectFields,
       },
     },
   })

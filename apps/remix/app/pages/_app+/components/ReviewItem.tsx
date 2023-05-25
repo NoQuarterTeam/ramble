@@ -1,8 +1,8 @@
-import { useFetcher } from "@remix-run/react"
+import { Link, useFetcher } from "@remix-run/react"
 import type { SerializeFrom } from "@vercel/remix"
 import { Star } from "lucide-react"
 
-import type { Review, User } from "@ramble/database/types"
+import type { Prisma } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 import { Avatar, Button } from "@ramble/ui"
 
@@ -12,12 +12,25 @@ import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 
 import { Actions } from "../spots.$id.reviews.$reviewId"
 
+export const reviewItemSelectFields = {
+  id: true,
+  spotId: true,
+  description: true,
+  rating: true,
+  createdAt: true,
+  user: {
+    select: {
+      id: true,
+      avatar: true,
+      firstName: true,
+      lastName: true,
+      username: true,
+    },
+  },
+} satisfies Prisma.ReviewSelect
+
 interface Props {
-  review: SerializeFrom<
-    Pick<Review, "id" | "spotId" | "description" | "createdAt" | "rating"> & {
-      user: Pick<User, "id" | "avatar" | "firstName" | "lastName">
-    }
-  >
+  review: SerializeFrom<Prisma.ReviewGetPayload<{ select: typeof reviewItemSelectFields }>>
 }
 
 export function ReviewItem({ review }: Props) {
@@ -33,10 +46,10 @@ export function ReviewItem({ review }: Props) {
             src={createImageUrl(review.user.avatar)}
           />
           <div>
-            <p className="text-md">
+            <Link to={`/${review.user.username}`} className="text-md hover:underline">
               {review.user.firstName} {review.user.lastName}
-            </p>
-            <p className="text-sm opacity-70">{new Date(review.createdAt).toLocaleDateString()}</p>
+            </Link>
+            <p className="text-sm leading-3 opacity-70">{new Date(review.createdAt).toLocaleDateString()}</p>
           </div>
         </div>
         <div className="hstack">

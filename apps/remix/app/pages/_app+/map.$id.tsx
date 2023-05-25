@@ -12,7 +12,7 @@ import { LinkButton } from "~/components/LinkButton"
 import { db } from "~/lib/db.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 
-import { ReviewItem } from "./components/ReviewItem"
+import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 
 export const loader = async ({ params }: LoaderArgs) => {
   const spot = db.spot
@@ -28,14 +28,7 @@ export const loader = async ({ params }: LoaderArgs) => {
         reviews: {
           take: 5,
           orderBy: { createdAt: "desc" },
-          select: {
-            id: true,
-            spotId: true,
-            createdAt: true,
-            rating: true,
-            description: true,
-            user: { select: { id: true, firstName: true, lastName: true, avatar: true } },
-          },
+          select: reviewItemSelectFields,
         },
       },
     })
