@@ -92,7 +92,7 @@ export function Nav() {
                 </DropdownMenuItem>
               )}
               <DropdownMenuItem asChild>
-                <LinkButton variant="ghost" to="/profile" leftIcon={<Heart className="sq-4" />}>
+                <LinkButton variant="ghost" to={`/${user.username}/lists`} leftIcon={<Heart className="sq-4" />}>
                   Lists
                 </LinkButton>
               </DropdownMenuItem>
@@ -150,23 +150,11 @@ export function Nav() {
                   <Link to="/rated">Rated</Link>
                 </DropdownMenuItem>
                 <hr />
-
-                {user ? (
-                  <DropdownMenuItem asChild>
-                    <Button variant="ghost" onClick={() => logoutSubmit(null, { method: "post", action: "/logout" })}>
-                      Log out
-                    </Button>
-                  </DropdownMenuItem>
-                ) : (
-                  <>
-                    <DropdownMenuItem asChild>
-                      <Link to="/register">Register</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/login">Login</Link>
-                    </DropdownMenuItem>
-                  </>
-                )}
+                <DropdownMenuItem asChild>
+                  <Button variant="ghost" onClick={() => logoutSubmit(null, { method: "post", action: "/logout" })}>
+                    Log out
+                  </Button>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </>

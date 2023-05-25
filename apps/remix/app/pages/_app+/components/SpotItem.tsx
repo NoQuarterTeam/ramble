@@ -27,7 +27,7 @@ export function SpotItem({ spot }: Props) {
       )}
 
       <div>
-        <p className="line-clamp-2 text-2xl">{spot.name}</p>
+        <p className="line-clamp-2 text-xl">{spot.name}</p>
         {spot.rating && (
           <div className="flex space-x-1">
             <Star className="sq-5" />

@@ -66,27 +66,37 @@ export default function ProfileLists() {
           <div className="flex space-x-2">
             {user.isPetOwner && (
               <Tooltip label="Pet owner">
-                <Dog className="sq-6" />
+                <div className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
+                  <Dog className="sq-6" />
+                </div>
               </Tooltip>
             )}
             {user.isClimber && (
               <Tooltip label="Climber">
-                <Mountain className="sq-6" />
+                <div className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
+                  <Mountain className="sq-6" />
+                </div>
               </Tooltip>
             )}
             {user.isHiker && (
               <Tooltip label="Hiker">
-                <Footprints className="sq-6" />
+                <div className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
+                  <Footprints className="sq-6" />
+                </div>
               </Tooltip>
             )}
             {user.isMountainBiker && (
               <Tooltip label="Mountain biker">
-                <Bike className="sq-6" />
+                <div className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
+                  <Bike className="sq-6" />
+                </div>
               </Tooltip>
             )}
             {user.isPaddleBoarder && (
               <Tooltip label="Paddle boarder">
-                <Waves className="sq-6" />
+                <div className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
+                  <Waves className="sq-6" />
+                </div>
               </Tooltip>
             )}
           </div>
