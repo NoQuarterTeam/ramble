@@ -102,7 +102,7 @@ export function Nav() {
                 </LinkButton>
               </DropdownMenuItem>
 
-              <themeFetcher.Form action="/api/theme" method="post" replace className="w-full">
+              <themeFetcher.Form action="/api/theme" className="w-full">
                 <input type="hidden" name="theme" value={isDark ? "light" : "dark"} />
 
                 <DropdownMenuItem onSelect={(event: Event) => event.preventDefault()} asChild>

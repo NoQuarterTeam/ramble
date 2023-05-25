@@ -98,7 +98,11 @@ export interface ModalProps extends Partial<UseDisclosure> {
 
 export function Modal({ size = "md", description, trigger, children, title, ...disclosureProps }: ModalProps) {
   return (
-    <ModalRoot open={disclosureProps.isOpen} onOpenChange={disclosureProps.onSetIsOpen}>
+    <ModalRoot
+      modal
+      open={disclosureProps.isOpen}
+      onOpenChange={(open) => (open ? disclosureProps.onClose?.() : disclosureProps.onClose?.())}
+    >
       {trigger && <ModalTrigger asChild>{trigger}</ModalTrigger>}
       <ModalContent
         className={join(

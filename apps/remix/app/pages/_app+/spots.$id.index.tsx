@@ -1,9 +1,9 @@
-import Map, { Marker } from "react-map-gl"
 import { Form, useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LinksFunction, LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
-import { Edit2, Heart, Share, Star, Verified } from "lucide-react"
+import { Edit2, Share, Star, Trash, Verified } from "lucide-react"
 import mapStyles from "mapbox-gl/dist/mapbox-gl.css"
+import Map, { Marker } from "react-map-gl"
 
 import type { SpotType } from "@ramble/database/types"
 import { ClientOnly, createImageUrl } from "@ramble/shared"
@@ -16,10 +16,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
   Button,
-  Popover,
-  PopoverArrow,
-  PopoverContent,
-  PopoverTrigger,
 } from "@ramble/ui"
 
 import { FormButton } from "~/components/Form"
@@ -28,10 +24,11 @@ import { PageContainer } from "~/components/PageContainer"
 import { db } from "~/lib/db.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { notFound, redirect } from "~/lib/remix.server"
-import { canManageSpot, SPOTS } from "~/lib/spots"
+import { SPOTS, canManageSpot } from "~/lib/spots"
 import { useTheme } from "~/lib/theme"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
+import { SaveToList } from "../api+/$spotId.save-to-list.$listId"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 
 export const links: LinksFunction = () => {
@@ -85,11 +82,15 @@ export default function SpotDetail() {
     <div className="relative">
       {canManageSpot(spot, user) && (
         <div className="absolute left-10 top-10 flex space-x-2">
-          <LinkButton to="edit" leftIcon={<Edit2 className="sq-4" />}>
+          <LinkButton to="edit" leftIcon={<Edit2 className="sq-3" />}>
             Edit
           </LinkButton>
           <AlertDialogRoot>
-            <AlertDialogTrigger asChild>{<Button variant="destructive">Delete</Button>}</AlertDialogTrigger>
+            <AlertDialogTrigger asChild>
+              <Button variant="destructive" leftIcon={<Trash className="sq-3" />}>
+                Delete
+              </Button>
+            </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
               <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
@@ -97,7 +98,7 @@ export default function SpotDetail() {
                 <AlertDialogCancel asChild>
                   <Button variant="ghost">Cancel</Button>
                 </AlertDialogCancel>
-                <Form method="post" replace>
+                <Form>
                   <FormButton>Confirm</FormButton>
                 </Form>
               </AlertDialogFooter>
@@ -141,19 +142,7 @@ export default function SpotDetail() {
               Share
             </Button>
 
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="ghost" leftIcon={<Heart className="sq-4" />} aria-label="favourite">
-                  Save
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent side="bottom" align="end">
-                <PopoverArrow />
-                <div className="p-2">
-                  <p className="font-medium">Favourite</p>
-                </div>
-              </PopoverContent>
-            </Popover>
+            {user && <SaveToList spotId={spot.id} />}
           </div>
         </div>
 

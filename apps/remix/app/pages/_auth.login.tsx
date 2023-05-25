@@ -41,25 +41,23 @@ export const action = async ({ request }: ActionArgs) => {
 export default function Login() {
   const [params] = useSearchParams()
   return (
-    <Form method="post" replace>
-      <div className="stack">
-        <h1 className="text-4xl">Login</h1>
-        <input type="hidden" name="redirectTo" value={params.get("redirectTo") || ""} />
-        <FormField required label="Email address" name="email" placeholder="jim@gmail.com" />
-        <FormField required label="Password" name="password" type="password" placeholder="********" />
-        <div>
-          <FormButton className="w-full">Login</FormButton>
-          <FormError />
-        </div>
+    <Form className="space-y-2">
+      <h1 className="text-4xl">Login</h1>
+      <input type="hidden" name="redirectTo" value={params.get("redirectTo") || ""} />
+      <FormField required label="Email address" name="email" placeholder="jim@gmail.com" />
+      <FormField required label="Password" name="password" type="password" placeholder="********" />
+      <div>
+        <FormButton className="w-full">Login</FormButton>
+        <FormError />
+      </div>
 
-        <div className="flex justify-between">
-          <Link to="/register" className="hover:opacity-70">
-            Register
-          </Link>
-          <Link to="/forgot-password" className="hover:opacity-70">
-            Forgot password?
-          </Link>
-        </div>
+      <div className="flex justify-between">
+        <Link to="/register" className="hover:opacity-70">
+          Register
+        </Link>
+        <Link to="/forgot-password" className="hover:opacity-70">
+          Forgot password?
+        </Link>
       </div>
     </Form>
   )

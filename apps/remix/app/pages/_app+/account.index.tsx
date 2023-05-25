@@ -49,7 +49,7 @@ export default function Account() {
   const user = useLoaderData<typeof loader>()
 
   return (
-    <Form method="post" replace className="space-y-4" action="/account?index">
+    <Form className="space-y-4" action="/account?index">
       <h1 className="text-3xl">Account</h1>
       <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
         <div className="space-y-2">

@@ -1,7 +1,8 @@
-import { Button } from "@ramble/ui"
+import { ClientOnly } from "@ramble/shared"
 import type { LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
-import { useLoaderData } from "@remix-run/react"
+import { Outlet, useLoaderData } from "@remix-run/react"
+import { LinkButton } from "~/components/LinkButton"
 
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
@@ -25,7 +26,11 @@ export default function ProfileLists() {
   const currentUser = useMaybeUser()
   return (
     <div>
-      {currentUser?.id === user.id && <Button variant="secondary">New list</Button>}
+      {currentUser?.id === user.id && (
+        <LinkButton to="new" variant="secondary">
+          New list
+        </LinkButton>
+      )}
       <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
         {user.lists.map((list) => (
           <div key={list.id}>
@@ -33,6 +38,10 @@ export default function ProfileLists() {
           </div>
         ))}
       </div>
+
+      <ClientOnly>
+        <Outlet />
+      </ClientOnly>
     </div>
   )
 }

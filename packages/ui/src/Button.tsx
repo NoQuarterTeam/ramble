@@ -1,14 +1,14 @@
 "use client"
-import * as React from "react"
 import type { VariantProps } from "class-variance-authority"
 import { cva } from "class-variance-authority"
+import * as React from "react"
 
-import { join, merge } from "@ramble/shared"
+import { merge } from "@ramble/shared"
 
 import { Spinner } from "./Spinner"
 
 export const buttonStyles = cva(
-  "outline-none focus:outline-none whitespace-nowrap font-normal rounded-md focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-gray-500 dark:focus:ring-offset-gray-900 flex center border border-transparent transition-colors duration-200",
+  "outline-none w-min focus:outline-none whitespace-nowrap font-normal rounded-md focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-gray-500 dark:focus:ring-offset-gray-900 flex center border border-transparent transition-colors duration-200",
   {
     variants: {
       size: {
@@ -89,15 +89,16 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
         props.className,
       )}
     >
-      <div className={join("center", isLoading && "opacity-0")} aria-hidden={isLoading}>
-        {leftIcon && <span className="mr-1.5">{leftIcon}</span>}
-        {props.children}
-        {rightIcon && <span className="ml-1.5">{rightIcon}</span>}
-      </div>
-      {isLoading && (
-        <div className="center absolute inset-0">
+      {isLoading ? (
+        <div className="absolute inset-0 flex w-full items-center justify-center">
           <Spinner size="sm" color={variant === "primary" || variant === "destructive" ? "white" : "black"} />
         </div>
+      ) : (
+        <>
+          {leftIcon && <span className="mr-1.5">{leftIcon}</span>}
+          {props.children}
+          {rightIcon && <span className="ml-1.5">{rightIcon}</span>}
+        </>
       )}
     </button>
   )

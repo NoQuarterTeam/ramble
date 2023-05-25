@@ -47,7 +47,7 @@ export default function Interests() {
   const user = useLoaderData<typeof loader>()
 
   return (
-    <Form method="post" replace className="space-y-4">
+    <Form className="space-y-4">
       <h1 className="text-3xl">Interests</h1>
 
       <div className="flex w-full flex-wrap gap-2 py-10 md:gap-4">

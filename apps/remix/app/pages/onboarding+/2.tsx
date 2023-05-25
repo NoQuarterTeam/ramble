@@ -44,7 +44,7 @@ export default function Onboarding2() {
   const [isPaddleBoarder, setIsPaddleBoarder] = React.useState(user.isPaddleBoarder)
   const [isHiker, setIsHiker] = React.useState(user.isHiker)
   return (
-    <Form method="post" replace className="space-y-10">
+    <Form className="space-y-10">
       <div>
         <h1 className="text-3xl">What sports are you into?</h1>
         <p className="opacity-70">Are you fat, basically</p>

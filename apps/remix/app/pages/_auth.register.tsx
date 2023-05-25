@@ -68,7 +68,7 @@ export const action = async ({ request }: ActionArgs) => {
 
 export default function Register() {
   return (
-    <Form method="post" replace className="space-y-2">
+    <Form className="space-y-2">
       <h1 className="text-4xl font-bold">Register</h1>
       <FormField autoCapitalize="none" required label="Email address" name="email" placeholder="jim@gmail.com" />
       <FormField required label="Password" name="password" type="password" placeholder="********" />

@@ -15,7 +15,14 @@ import { ImageUploader } from "./ImageUploader"
 export const Form = React.forwardRef(function _Form(props: RemixFormProps, ref: React.ForwardedRef<HTMLFormElement> | null) {
   const form = useFormErrors()
   return (
-    <RemixForm aria-describedby="form-error" aria-invalid={form?.formError ? true : undefined} ref={ref} {...props}>
+    <RemixForm
+      method="post"
+      replace
+      aria-describedby="form-error"
+      aria-invalid={form?.formError ? true : undefined}
+      ref={ref}
+      {...props}
+    >
       {props.children}
     </RemixForm>
   )

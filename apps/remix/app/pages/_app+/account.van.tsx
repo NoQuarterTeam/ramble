@@ -48,7 +48,7 @@ export default function VanAccount() {
   const user = useLoaderData<typeof loader>()
 
   return (
-    <Form method="post" replace className="space-y-4">
+    <Form className="space-y-4">
       <h1 className="text-3xl">My van</h1>
       <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
         <div className="space-y-2">

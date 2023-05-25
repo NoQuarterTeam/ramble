@@ -39,7 +39,7 @@ export default function Onboarding() {
   const [isPetOwner, setIsPetOwner] = React.useState<boolean | null>(user.isPetOwner || null)
   const actionData = useFormErrors<typeof schema>()
   return (
-    <Form method="post" replace className="space-y-10">
+    <Form className="space-y-10">
       <div>
         <h1 className="text-3xl">Have any pets that you take on the road?</h1>
         <p className="opacity-70">There&apos;s no wrong answer</p>

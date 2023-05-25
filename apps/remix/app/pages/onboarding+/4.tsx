@@ -50,7 +50,7 @@ export const action = async ({ request }: ActionArgs) => {
 export default function Onboarding3() {
   const user = useLoaderData<typeof loader>()
   return (
-    <Form method="post" replace className="space-y-10">
+    <Form className="space-y-10">
       <div>
         <h1 className="text-3xl">Tell us a little bit about your van setup?</h1>
         <p className="opacity-70">What you repping</p>

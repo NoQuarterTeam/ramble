@@ -1,8 +1,8 @@
-import * as React from "react"
 import { Link, type LinkProps } from "@remix-run/react"
+import * as React from "react"
 
-import { join, merge } from "@ramble/shared"
-import { buttonSizeStyles, type ButtonStyleProps, buttonStyles, Spinner } from "@ramble/ui"
+import { merge } from "@ramble/shared"
+import { Spinner, buttonSizeStyles, buttonStyles, type ButtonStyleProps } from "@ramble/ui"
 
 interface LinkButtonProps extends ButtonStyleProps, LinkProps {
   isLoading?: boolean
@@ -26,15 +26,16 @@ export const LinkButton = React.forwardRef<HTMLAnchorElement, LinkButtonProps>(f
         disabled && "cursor-not-allowed",
       )}
     >
-      <div className={join("center", isLoading && "opacity-0")} aria-hidden={isLoading}>
-        {leftIcon && <span className="mr-2">{leftIcon}</span>}
-        {props.children}
-        {rightIcon && <span className="ml-2">{rightIcon}</span>}
-      </div>
-      {isLoading && (
+      {isLoading ? (
         <div className="center absolute inset-0">
           <Spinner size="sm" color={variant === "primary" || variant === "destructive" ? "white" : "black"} />
         </div>
+      ) : (
+        <>
+          {leftIcon && <span className="mr-2">{leftIcon}</span>}
+          {props.children}
+          {rightIcon && <span className="ml-2">{rightIcon}</span>}
+        </>
       )}
     </Link>
   )

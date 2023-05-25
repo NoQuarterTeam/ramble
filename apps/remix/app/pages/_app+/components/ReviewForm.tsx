@@ -27,7 +27,7 @@ export function ReviewForm({ spot, review }: Props) {
         <p className="opacity-75">Be nice, be honest.</p>
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <Form method="post" replace className="space-y-2">
+        <Form className="space-y-2">
           {review && <FormAction value={Actions.Edit} />}
           <FormField
             defaultValue={review?.description || ""}

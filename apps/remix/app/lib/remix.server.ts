@@ -1,4 +1,4 @@
-import { json, redirect as remixRedirect } from "@vercel/remix"
+import { json as remixJson, redirect as remixRedirect } from "@vercel/remix"
 
 import type { FlashMessage } from "~/services/session/flash.server"
 import { FlashType } from "~/services/session/flash.server"
@@ -9,7 +9,7 @@ export async function badRequest(
   request?: Request,
   init?: ResponseInit & { flash?: FlashMessage & { type?: FlashType } },
 ) {
-  if (!request || !init) return json(data, { status: 400, ...init })
+  if (!request || !init) return remixJson(data, { status: 400, ...init })
   const { createFlash } = await getFlashSession(request)
   const headers = new Headers(init.headers)
   const flash = init.flash
@@ -17,10 +17,26 @@ export async function badRequest(
     headers.append("Set-Cookie", await createFlash(flash.type || FlashType.Error, flash.title, flash.description))
   }
 
-  return json(data, { status: 400, ...init, headers })
+  return remixJson(data, { status: 400, ...init, headers })
 }
 
-export const notFound = (data?: unknown) => json(data, { status: 404 })
+export async function json(
+  data: unknown,
+  request?: Request,
+  init?: ResponseInit & { flash?: FlashMessage & { type?: FlashType } },
+) {
+  if (!request || !init) return remixJson(data, { status: 200, ...init })
+  const { createFlash } = await getFlashSession(request)
+  const headers = new Headers(init.headers)
+  const flash = init.flash
+  if (flash) {
+    headers.append("Set-Cookie", await createFlash(flash.type || FlashType.Info, flash.title, flash.description))
+  }
+
+  return remixJson(data, { status: 200, ...init, headers })
+}
+
+export const notFound = (data?: unknown) => remixJson(data, { status: 404 })
 
 export async function redirect(
   url: string,

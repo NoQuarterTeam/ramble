@@ -24,7 +24,7 @@ export default function AccountSettings() {
       <FormField label="Email" name="something" input={<Switch />} />
 
       <hr />
-      <Form method="post" replace>
+      <Form>
         <FormButton variant="destructive">Delete account</FormButton>
       </Form>
     </div>

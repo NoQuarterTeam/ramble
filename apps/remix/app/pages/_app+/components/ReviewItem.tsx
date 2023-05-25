@@ -4,13 +4,24 @@ import { Star } from "lucide-react"
 
 import type { Prisma } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
-import { Avatar, Button } from "@ramble/ui"
+import {
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogRoot,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+  Avatar,
+  Button,
+} from "@ramble/ui"
 
 import { LinkButton } from "~/components/LinkButton"
 import { FormAction } from "~/lib/form"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 
 import { Actions } from "../spots.$id.reviews.$reviewId"
+import dayjs from "dayjs"
 
 export const reviewItemSelectFields = {
   id: true,
@@ -49,7 +60,7 @@ export function ReviewItem({ review }: Props) {
             <Link to={`/${review.user.username}`} className="text-md hover:underline">
               {review.user.firstName} {review.user.lastName}
             </Link>
-            <p className="text-sm leading-3 opacity-70">{new Date(review.createdAt).toLocaleDateString()}</p>
+            <p className="text-sm leading-3 opacity-70">{dayjs(review.createdAt).format("DD/MM/YYYY")}</p>
           </div>
         </div>
         <div className="hstack">
@@ -64,12 +75,25 @@ export function ReviewItem({ review }: Props) {
             Edit
           </LinkButton>
         )}
-        <deleteFetcher.Form method="post" action={`/spots/${review.spotId}/reviews/${review.id}`} replace>
-          <FormAction value={Actions.Delete} />
-          <Button type="submit" variant="destructive">
-            Delete
-          </Button>
-        </deleteFetcher.Form>
+        <AlertDialogRoot>
+          <AlertDialogTrigger asChild>
+            <Button variant="destructive">Delete</Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+            <AlertDialogFooter>
+              <AlertDialogCancel asChild>
+                <Button variant="ghost">Cancel</Button>
+              </AlertDialogCancel>
+
+              <deleteFetcher.Form method="post" action={`/spots/${review.spotId}/reviews/${review.id}`} replace>
+                <FormAction value={Actions.Delete} />
+                <Button type="submit">Confirm</Button>
+              </deleteFetcher.Form>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogRoot>
       </div>
     </div>
   )
