@@ -3,7 +3,7 @@ import type { VariantProps } from "class-variance-authority"
 import { cva } from "class-variance-authority"
 import * as React from "react"
 
-import { merge } from "@ramble/shared"
+import { join, merge } from "@ramble/shared"
 
 import { Spinner } from "./Spinner"
 
@@ -89,16 +89,16 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
         props.className,
       )}
     >
-      {isLoading ? (
+      <>
+        {leftIcon && <span className={join("mr-1.5", isLoading && "opacity-0")}>{leftIcon}</span>}
+        <span className={join(isLoading && "opacity-0")}>{props.children}</span>
+        {rightIcon && <span className={join("ml-1.5", isLoading && "opacity-0")}>{rightIcon}</span>}
+      </>
+
+      {isLoading && (
         <div className="absolute inset-0 flex w-full items-center justify-center">
           <Spinner size="sm" color={variant === "primary" || variant === "destructive" ? "white" : "black"} />
         </div>
-      ) : (
-        <>
-          {leftIcon && <span className="mr-1.5">{leftIcon}</span>}
-          {props.children}
-          {rightIcon && <span className="ml-1.5">{rightIcon}</span>}
-        </>
       )}
     </button>
   )
