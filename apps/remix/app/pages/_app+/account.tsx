@@ -3,7 +3,7 @@ import { Outlet, useLoaderData } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import type { LucideIcon } from "lucide-react"
-import { Settings, Truck, User } from "lucide-react"
+import { Settings, ToggleRight, Truck, User } from "lucide-react"
 
 import { createImageUrl, merge } from "@ramble/shared"
 import { Avatar, Badge, buttonSizeStyles, buttonStyles } from "@ramble/ui"
@@ -55,6 +55,9 @@ export default function AccountLayout() {
         <div className="flex w-auto flex-row space-x-2 space-y-0 overflow-x-scroll p-1 md:w-[350px] md:flex-col md:space-x-0 md:space-y-0.5">
           <AccountLink to="/account" Icon={User} end>
             Account
+          </AccountLink>
+          <AccountLink to="/account/interests" Icon={ToggleRight} end>
+            Interests
           </AccountLink>
           <AccountLink Icon={Truck} to="/account/van">
             My van

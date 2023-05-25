@@ -1,50 +1,68 @@
+import * as React from "react"
 import type { LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
-import { useLoaderData } from "@remix-run/react"
+import { useFetcher, useLoaderData } from "@remix-run/react"
 import { cacheHeader } from "pretty-cache-header"
-
-import { createImageUrl } from "@ramble/shared"
-import { Avatar } from "@ramble/ui"
 
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { notFound } from "~/lib/remix.server"
-
-import { PageContainer } from "../../components/PageContainer"
+import { SpotItem } from "./components/SpotItem"
+import type { Spot, SpotImage } from "@ramble/database/types"
+import { Button } from "@ramble/ui"
 
 export const headers = useLoaderHeaders
 
-export const loader = async ({ params }: LoaderArgs) => {
+export const loader = async ({ request, params }: LoaderArgs) => {
   const user = await db.user.findFirst({
     where: { isProfilePublic: { equals: true }, username: params.username },
-    include: { van: true },
   })
   if (!user) throw notFound(null)
+  const searchParams = new URL(request.url).searchParams
+  const skip = parseInt((searchParams.get("skip") as string) || "0")
 
-  return json(user, {
-    headers: {
-      "Cache-Control": cacheHeader({
-        maxAge: "1day",
-        sMaxage: "1day",
-        staleWhileRevalidate: "1week",
-        public: true,
-      }),
-    },
-  })
+  const spots: Array<Pick<Spot, "id" | "name" | "address"> & { rating: number; image: SpotImage["path"] }> = await db.$queryRaw`
+    SELECT Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating, (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image
+    FROM Spot
+    LEFT JOIN Review ON Spot.id = Review.spotId
+    WHERE Spot.creatorId = ${user.id}
+    GROUP BY Spot.id
+    ORDER BY Spot.createdAt DESC, Spot.id
+    LIMIT 10 OFFSET ${skip};
+  `
+  const count = await db.spot.count()
+  return json(
+    { spots, count },
+    { headers: { "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour", staleWhileRevalidate: "1day" }) } },
+  )
 }
 
-export default function Profile() {
-  const user = useLoaderData<typeof loader>()
+export default function ProfileSpots() {
+  const { spots: initialSpots, count } = useLoaderData<typeof loader>()
+
+  const spotFetcher = useFetcher<typeof loader>()
+  const [spots, setSpots] = React.useState(initialSpots)
+
+  const onNext = () => spotFetcher.load(`/latest?skip=${spots.length}`)
+
+  React.useEffect(() => {
+    if (spotFetcher.state === "loading") return
+    const data = spotFetcher.data?.spots
+    if (data) setSpots((prev) => [...prev, ...data])
+  }, [spotFetcher.data, spotFetcher.state])
 
   return (
-    <PageContainer>
-      <div className="flex flex-col items-center space-y-1">
-        <Avatar className="sq-32" src={createImageUrl(user.avatar)} name={`${user.firstName} ${user.lastName}`} />
-        <h1 className="text-3xl">{user.username}</h1>
-        <p>
-          {user.firstName} {user.lastName}
-        </p>
+    <div className="space-y-10">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        {count === 0 ? <></> : spots.map((spot) => <SpotItem key={spot.id} spot={spot} />)}
       </div>
-    </PageContainer>
+      {count > 10 && (
+        <div className="flex items-center justify-center">
+          <Button size="lg" isLoading={spotFetcher.state === "loading"} variant="outline" onClick={onNext}>
+            Load more
+          </Button>
+        </div>
+      )}
+    </div>
   )
 }

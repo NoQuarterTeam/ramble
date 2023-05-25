@@ -34,6 +34,7 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
           Filters
         </Button>
       </div>
+
       <Modal {...modalProps} size="3xl" title="Filters">
         <form className="space-y-6" onSubmit={onSubmit}>
           <div className="space-y-4">

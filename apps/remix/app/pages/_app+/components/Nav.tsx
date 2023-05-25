@@ -1,5 +1,5 @@
 import { Link, useFetcher, useNavigate, useSubmit } from "@remix-run/react"
-import { LogOut, Menu, Moon, Plus, Sun, User } from "lucide-react"
+import { Heart, LogOut, Menu, Moon, Plus, Settings, Sun, User } from "lucide-react"
 
 import { ClientOnly, createImageUrl } from "@ramble/shared"
 import {
@@ -84,8 +84,20 @@ export function Nav() {
                 </DropdownMenuItem>
                 <hr />
               </div>
+              {user.isProfilePublic && (
+                <DropdownMenuItem asChild>
+                  <LinkButton variant="ghost" to={`/${user.username}`} leftIcon={<User className="sq-4" />}>
+                    Profile
+                  </LinkButton>
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem asChild>
-                <LinkButton variant="ghost" to="/account" leftIcon={<User className="sq-4 mr-2" />}>
+                <LinkButton variant="ghost" to="/profile" leftIcon={<Heart className="sq-4" />}>
+                  Lists
+                </LinkButton>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <LinkButton variant="ghost" to="/account" leftIcon={<Settings className="sq-4" />}>
                   Account
                 </LinkButton>
               </DropdownMenuItem>
@@ -94,11 +106,7 @@ export function Nav() {
                 <input type="hidden" name="theme" value={isDark ? "light" : "dark"} />
 
                 <DropdownMenuItem onSelect={(event: Event) => event.preventDefault()} asChild>
-                  <Button
-                    variant="ghost"
-                    type="submit"
-                    leftIcon={isDark ? <Sun className="sq-4 mr-2" /> : <Moon className="sq-4 mr-2" />}
-                  >
+                  <Button variant="ghost" type="submit" leftIcon={isDark ? <Sun className="sq-4" /> : <Moon className="sq-4" />}>
                     <span>{isDark ? "Light" : "Dark"} mode</span>
                   </Button>
                 </DropdownMenuItem>
@@ -107,7 +115,7 @@ export function Nav() {
                 <Button
                   onClick={() => logoutSubmit(null, { method: "post", action: "/logout" })}
                   variant="ghost"
-                  leftIcon={<LogOut className="sq-4 mr-2" />}
+                  leftIcon={<LogOut className="sq-4" />}
                 >
                   Logout
                 </Button>

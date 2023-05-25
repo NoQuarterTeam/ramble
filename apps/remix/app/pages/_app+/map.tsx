@@ -9,7 +9,7 @@ import type { ViewStateChangeEvent } from "react-map-gl"
 import Map, { GeolocateControl, Marker, NavigationControl, type LngLatLike, type MapRef } from "react-map-gl"
 
 import type { SpotType } from "@ramble/database/types"
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
+import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
 
 import { SPOTS } from "~/lib/spots"
 import { useTheme } from "~/lib/theme"
@@ -130,7 +130,9 @@ export default function MapView() {
         </Map>
       )}
 
-      <MapFilters onChange={onParamsChange} />
+      <ClientOnly>
+        <MapFilters onChange={onParamsChange} />
+      </ClientOnly>
 
       <Outlet />
     </div>
