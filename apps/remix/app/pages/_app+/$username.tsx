@@ -46,12 +46,12 @@ export default function ProfileLists() {
 
   return (
     <PageContainer>
-      <div className="grid grid-cols-1 items-center gap-4 md:grid-cols-2">
-        <div className="flex items-center space-x-3 py-10">
-          <Avatar className="sq-32" src={createImageUrl(user.avatar)} name={`${user.firstName} ${user.lastName}`} />
+      <div className="grid grid-cols-1 items-center gap-4 py-6 md:grid-cols-2 md:py-10">
+        <div className="flex items-center space-x-3">
+          <Avatar className="sq-20 md:sq-32" src={createImageUrl(user.avatar)} name={`${user.firstName} ${user.lastName}`} />
           <div className="space-y-1">
             <div className="flex space-x-2">
-              <h1 className="text-3xl">{user.username}</h1>
+              <h1 className="text-xl md:text-3xl">{user.username}</h1>
               <LinkButton size="sm" to="/account" variant="outline">
                 Edit profile
               </LinkButton>
