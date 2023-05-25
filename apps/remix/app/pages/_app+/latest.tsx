@@ -1,17 +1,17 @@
+import * as React from "react"
 import type { LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { useFetcher, useLoaderData } from "@remix-run/react"
-import * as React from "react"
+import { cacheHeader } from "pretty-cache-header"
 
+import type { Spot, SpotImage } from "@ramble/database/types"
 import { Button } from "@ramble/ui"
 
 import { db } from "~/lib/db.server"
+import { useLoaderHeaders } from "~/lib/headers.server"
 
 import { PageContainer } from "../../components/PageContainer"
 import { SpotItem } from "./components/SpotItem"
-import type { Spot, SpotImage } from "@ramble/database/types"
-import { cacheHeader } from "pretty-cache-header"
-import { useLoaderHeaders } from "~/lib/headers.server"
 
 export const headers = useLoaderHeaders
 

@@ -1,9 +1,11 @@
+import Map, { Marker } from "react-map-gl"
 import { Form, useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LinksFunction, LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { Edit2, Heart, Share, Star, Verified } from "lucide-react"
-import Map, { Marker } from "react-map-gl"
 import mapStyles from "mapbox-gl/dist/mapbox-gl.css"
+
+import type { SpotType } from "@ramble/database/types"
 import { ClientOnly, createImageUrl } from "@ramble/shared"
 import {
   AlertDialogCancel,
@@ -22,15 +24,14 @@ import {
 
 import { FormButton } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
+import { PageContainer } from "~/components/PageContainer"
 import { db } from "~/lib/db.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { notFound, redirect } from "~/lib/remix.server"
-import { SPOTS, canManageSpot } from "~/lib/spots"
+import { canManageSpot, SPOTS } from "~/lib/spots"
+import { useTheme } from "~/lib/theme"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
-import type { SpotType } from "@ramble/database/types"
-import { PageContainer } from "~/components/PageContainer"
-import { useTheme } from "~/lib/theme"
 import { ReviewItem } from "./components/ReviewItem"
 
 export const links: LinksFunction = () => {

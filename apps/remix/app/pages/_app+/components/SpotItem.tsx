@@ -1,8 +1,9 @@
-import type { Spot } from "@ramble/database/types"
-import { createImageUrl } from "@ramble/shared"
 import type { SerializeFrom } from "@remix-run/node"
 import { Link } from "@remix-run/react"
 import { Camera, Star } from "lucide-react"
+
+import type { Spot } from "@ramble/database/types"
+import { createImageUrl } from "@ramble/shared"
 
 interface Props {
   spot: SerializeFrom<Pick<Spot, "id" | "name" | "address"> & { rating?: number; image?: string | null }>

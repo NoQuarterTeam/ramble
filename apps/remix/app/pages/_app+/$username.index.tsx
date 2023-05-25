@@ -4,12 +4,14 @@ import { json } from "@remix-run/node"
 import { useFetcher, useLoaderData } from "@remix-run/react"
 import { cacheHeader } from "pretty-cache-header"
 
+import type { Spot, SpotImage } from "@ramble/database/types"
+import { Button } from "@ramble/ui"
+
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { notFound } from "~/lib/remix.server"
+
 import { SpotItem } from "./components/SpotItem"
-import type { Spot, SpotImage } from "@ramble/database/types"
-import { Button } from "@ramble/ui"
 
 export const headers = useLoaderHeaders
 

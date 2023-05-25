@@ -2,19 +2,19 @@ import type { LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import type { NavLinkProps } from "@remix-run/react"
 import { NavLink, Outlet, useLoaderData } from "@remix-run/react"
+import type { LucideIcon } from "lucide-react"
+import { Bike, Footprints, Mountain, Waves } from "lucide-react"
+import { Dog } from "lucide-react"
 
 import { createImageUrl, merge } from "@ramble/shared"
-import { Avatar, Badge, Tooltip, buttonSizeStyles, buttonStyles } from "@ramble/ui"
+import { Avatar, Badge, buttonSizeStyles, buttonStyles, Tooltip } from "@ramble/ui"
 
+import { LinkButton } from "~/components/LinkButton"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { notFound } from "~/lib/remix.server"
 
-import type { LucideIcon } from "lucide-react"
-import { Bike, Footprints, Mountain, Waves } from "lucide-react"
-import { Dog } from "lucide-react"
 import { PageContainer } from "../../components/PageContainer"
-import { LinkButton } from "~/components/LinkButton"
 
 export const headers = useLoaderHeaders
 
