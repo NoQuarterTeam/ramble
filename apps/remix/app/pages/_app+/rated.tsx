@@ -10,6 +10,10 @@ import { db } from "~/lib/db.server"
 import type { Spot, SpotImage } from "@ramble/database/types"
 import { PageContainer } from "../../components/PageContainer"
 import { SpotItem } from "./components/SpotItem"
+import { useLoaderHeaders } from "~/lib/headers.server"
+import { cacheHeader } from "pretty-cache-header"
+
+export const headers = useLoaderHeaders
 
 export const loader = async ({ request }: LoaderArgs) => {
   const searchParams = new URL(request.url).searchParams
@@ -26,10 +30,10 @@ export const loader = async ({ request }: LoaderArgs) => {
     `
 
   const count = await db.spot.count()
-  return json({ spots, count })
+  return json({ spots, count }, { headers: { "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour" }) } })
 }
 
-export default function Latest() {
+export default function Rated() {
   const { spots: initialSpots, count } = useLoaderData<typeof loader>()
 
   const spotFetcher = useFetcher<typeof loader>()
