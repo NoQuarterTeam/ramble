@@ -43,7 +43,7 @@
     "jsonwebtoken": "9.0.0",
     "lucide-react": "^0.223.0",
     "mapbox-gl": "^2.14.1",
-    "nodemailer": "6.9.2",
+    "nodemailer": "6.9.3",
     "nprogress": "^0.2.0",
     "pretty-cache-header": "^1.0.0",
     "query-string": "^8.1.0",
