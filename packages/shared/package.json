@@ -16,7 +16,8 @@
   "dependencies": {
     "@ramble/database": "workspace:*",
     "tailwind-merge": "^1.10.0",
-    "uuid": "^3.4.0"
+    "uuid": "^3.4.0",
+    "zod": "3.21.4"
   },
   "devDependencies": {
     "@ramble/eslint-config": "workspace:*",

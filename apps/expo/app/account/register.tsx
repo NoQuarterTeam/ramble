@@ -4,14 +4,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Link, useRouter } from "expo-router"
 import { type z } from "zod"
 
-import { registerSchema } from "@ramble/api/src/router/auth"
-
 import { Button } from "../../components/Button"
 import { FormError } from "../../components/FormError"
 import { FormInput } from "../../components/FormInput"
 import { Heading } from "../../components/Heading"
 import { api, AUTH_TOKEN } from "../../lib/api"
 import { useForm } from "../../lib/hooks/useForm"
+import { registerSchema } from "@ramble/shared"
 
 export default function Register() {
   const queryClient = api.useContext()
@@ -23,7 +22,10 @@ export default function Register() {
       router.replace("/")
     },
   })
-  const form = useForm({ defaultValues: { email: "", password: "", firstName: "", lastName: "" }, schema: registerSchema })
+  const form = useForm({
+    defaultValues: { email: "", password: "", username: "", firstName: "", lastName: "" },
+    schema: registerSchema,
+  })
 
   const handleRegister = async (data: z.infer<typeof registerSchema>) => {
     await AsyncStorage.removeItem(AUTH_TOKEN)
@@ -45,6 +47,9 @@ export default function Register() {
               label="Password"
               error={login.error?.data?.zodError?.fieldErrors.password}
             />
+          </View>
+          <View>
+            <FormInput name="username" label="Username" error={login.error?.data?.zodError?.fieldErrors.username} />
           </View>
           <View>
             <FormInput name="firstName" label="First name" error={login.error?.data?.zodError?.fieldErrors.firstName} />
