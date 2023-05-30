@@ -1,8 +1,8 @@
 import { Form, Link, useLoaderData } from "@remix-run/react"
-import type { ActionArgs, LinksFunction, LoaderArgs } from "@vercel/remix"
+import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { BadgeX, Edit2, Share, Star, Trash, Verified } from "lucide-react"
-import mapStyles from "mapbox-gl/dist/mapbox-gl.css"
+
 import Map, { Marker } from "react-map-gl"
 
 import type { SpotType } from "@ramble/database/types"
@@ -30,10 +30,6 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { SaveToList } from "../api+/$spotId.save-to-list.$listId"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
-
-export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: mapStyles }]
-}
 
 export const loader = async ({ params }: LoaderArgs) => {
   const spot = await db.spot.findUnique({

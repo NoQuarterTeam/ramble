@@ -4,8 +4,6 @@ import Map, { GeolocateControl, type LngLatLike, type MapRef, Marker, Navigation
 import { Outlet, useFetcher, useNavigate, useRouteLoaderData, useSearchParams } from "@remix-run/react"
 import turfCenter from "@turf/center"
 import * as turf from "@turf/helpers"
-import { type LinksFunction } from "@vercel/remix"
-import mapStyles from "mapbox-gl/dist/mapbox-gl.css"
 import queryString from "query-string"
 
 import type { SpotType } from "@ramble/database/types"
@@ -17,10 +15,6 @@ import { MapFilters } from "~/pages/_app+/components/MapFilters"
 
 import type { Cluster, clustersLoader } from "../api+/clusters"
 import type { IpInfo } from "./_layout"
-
-export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: mapStyles }]
-}
 
 export default function MapView() {
   const clustersFetcher = useFetcher<typeof clustersLoader>()
