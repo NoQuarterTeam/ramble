@@ -171,11 +171,12 @@ model SpotImage {
 }
 
 model List {
-  id        String     @id @default(uuid())
-  name      String
-  listSpots ListSpot[]
-  creatorId String
-  creator   User       @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  id          String     @id @default(uuid())
+  name        String
+  description String?    @db.LongText
+  listSpots   ListSpot[]
+  creatorId   String
+  creator     User       @relation(fields: [creatorId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt

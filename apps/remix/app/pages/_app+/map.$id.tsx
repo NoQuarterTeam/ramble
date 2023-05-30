@@ -1,9 +1,9 @@
-import * as React from "react"
 import { Await, isRouteErrorResponse, Link, useLoaderData, useNavigate, useRouteError } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { defer } from "@vercel/remix"
-import { Badge, Frown, Star, Verified } from "lucide-react"
+import { BadgeX, Frown, Star, Verified } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
+import * as React from "react"
 
 import { createImageUrl, merge } from "@ramble/shared"
 import { CloseButton, Spinner } from "@ramble/ui"
@@ -35,7 +35,6 @@ export const loader = async ({ params }: LoaderArgs) => {
       },
     })
     .then((s) => s)
-
   const rating = db.review.aggregate({ where: { spotId: params.id }, _avg: { rating: true } }).then((r) => r)
 
   return defer(
@@ -57,13 +56,33 @@ export const loader = async ({ params }: LoaderArgs) => {
 export default function SpotPreview() {
   const user = useMaybeUser()
   const promise = useLoaderData<typeof loader>()
+
   return (
     <SpotContainer>
       <React.Suspense fallback={<SpotFallback />}>
         <Await resolve={promise.spot}>
           {(spot) => (
-            <div className="space-y-6">
-              <div className="space-y-2">
+            <div className="space-y-3">
+              {spot.verifiedAt && spot.verifier ? (
+                <div className="flex items-center space-x-1 text-sm">
+                  <Verified className="sq-5" />
+                  <p>Verified by</p>
+                  <Link to={`/${spot.verifier.username}`} className="flex hover:underline">
+                    {`${spot.verifier.firstName} ${spot.verifier.lastName}`}
+                    {/* <Avatar
+                  size="xs"
+                  src={createImageUrl(spot.verifier.avatar)}
+                  name={`${spot.verifier.firstName} ${spot.verifier.lastName}`}
+                /> */}
+                  </Link>
+                </div>
+              ) : (
+                <div className="flex items-center space-x-1 text-sm">
+                  <BadgeX className="sq-5" />
+                  <p>Unverified</p>
+                </div>
+              )}
+              <div>
                 <Link
                   target="_blank"
                   rel="noopener norefer"
@@ -72,25 +91,6 @@ export default function SpotPreview() {
                 >
                   {spot.name}
                 </Link>
-                {spot.verifiedAt && spot.verifier ? (
-                  <div className="flex items-center space-x-1 text-sm">
-                    <Verified className="sq-5" />
-                    <p>Verified by</p>
-                    <Link to={`/${spot.verifier.username}`} className="flex hover:underline">
-                      {`${spot.verifier.firstName} ${spot.verifier.lastName}`}
-                      {/* <Avatar
-                  size="xs"
-                  src={createImageUrl(spot.verifier.avatar)}
-                  name={`${spot.verifier.firstName} ${spot.verifier.lastName}`}
-                /> */}
-                    </Link>
-                  </div>
-                ) : (
-                  <div className="flex items-center space-x-1 text-sm">
-                    <Badge className="sq-5" />
-                    <p>Unverified</p>
-                  </div>
-                )}
                 <div className="flex flex-wrap items-center space-x-1 text-sm">
                   <Star className="sq-5" />
                   <React.Suspense fallback={<Spinner size="sm" />}>
@@ -100,28 +100,28 @@ export default function SpotPreview() {
                   <p>
                     {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
                   </p>
-                  <p>·</p>
-                  <p>{spot.address}</p>
-                </div>
-                <div className="relative flex h-[225px] space-x-2 overflow-scroll rounded-md">
-                  {spot.images?.map((image) => (
-                    <img
-                      alt="spot"
-                      width={350}
-                      height={225}
-                      className="min-h-[225px] rounded-md object-cover"
-                      key={image.id}
-                      src={createImageUrl(image.path)}
-                    />
-                  ))}
-                </div>
-                <div className="line-clamp-6 text-sm" dangerouslySetInnerHTML={{ __html: spot.description }} />
-                <div className="flex justify-end">
-                  <LinkButton variant="link" to={`/spots/${spot.id}`}>
-                    Read more
-                  </LinkButton>
                 </div>
               </div>
+              <div className="relative flex h-[225px] space-x-2 overflow-scroll rounded-md">
+                {spot.images?.map((image) => (
+                  <img
+                    alt="spot"
+                    width={350}
+                    height={225}
+                    className="min-h-[225px] rounded-md object-cover"
+                    key={image.id}
+                    src={createImageUrl(image.path)}
+                  />
+                ))}
+              </div>
+              <div className="line-clamp-6 text-sm" dangerouslySetInnerHTML={{ __html: spot.description }} />
+              <p className="text-sm">{spot.address}</p>
+              <div className="flex justify-end">
+                <LinkButton variant="link" to={`/spots/${spot.id}`}>
+                  Read more
+                </LinkButton>
+              </div>
+
               <hr />
               <div className="space-y-4">
                 <div className="flex justify-between">
@@ -178,7 +178,7 @@ export function Skeleton(props: React.HTMLAttributes<HTMLDivElement>) {
 function SpotContainer(props: { children: React.ReactNode }) {
   const navigate = useNavigate()
   return (
-    <div className="absolute bottom-0 left-0 top-0 z-10 w-full max-w-lg overflow-scroll border-r border-gray-100 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 md:px-8">
+    <div className="absolute bottom-0 left-0 top-0 z-10 w-full max-w-lg overflow-scroll border-r border-gray-100 bg-white p-4 pb-20 dark:border-gray-700 dark:bg-gray-800 md:px-8">
       <CloseButton className="absolute right-2 top-2 z-10" onClick={() => navigate(`..${window.location.search}`)} />
       {props.children}
     </div>

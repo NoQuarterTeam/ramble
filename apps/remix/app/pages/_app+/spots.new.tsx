@@ -1,17 +1,11 @@
-import type { ActionArgs, LinksFunction, LoaderArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
-import { redirect } from "@vercel/remix"
-import mapStyles from "mapbox-gl/dist/mapbox-gl.css"
+import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import { json, redirect } from "@vercel/remix"
 
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { requireUser } from "~/services/auth/auth.server"
 
 import { SpotForm, spotSchema } from "./components/SpotForm"
-
-export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: mapStyles }]
-}
 
 export const loader = async ({ request }: LoaderArgs) => {
   await requireUser(request)

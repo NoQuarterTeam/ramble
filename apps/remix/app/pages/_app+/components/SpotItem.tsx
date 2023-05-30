@@ -2,11 +2,20 @@ import type { SerializeFrom } from "@remix-run/node"
 import { Link } from "@remix-run/react"
 import { Camera, Star } from "lucide-react"
 
-import type { Spot } from "@ramble/database/types"
+import type { Prisma } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
+export const spotItemSelectFields = {
+  id: true,
+  name: true,
+  address: true,
+} satisfies Prisma.SpotSelect
+
+export type SpotItemType = SerializeFrom<
+  Prisma.SpotGetPayload<{ select: typeof spotItemSelectFields }> & { rating?: number | null; image?: string | null }
+>
 interface Props {
-  spot: SerializeFrom<Pick<Spot, "id" | "name" | "address"> & { rating?: number; image?: string | null }>
+  spot: SpotItemType
 }
 
 export function SpotItem({ spot }: Props) {

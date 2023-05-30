@@ -1,7 +1,6 @@
-import { ClientOnly } from "@ramble/shared"
 import type { LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
-import { Outlet, useLoaderData } from "@remix-run/react"
+import { Link, useLoaderData } from "@remix-run/react"
 import { LinkButton } from "~/components/LinkButton"
 
 import { db } from "~/lib/db.server"
@@ -33,15 +32,16 @@ export default function ProfileLists() {
       )}
       <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
         {user.lists.map((list) => (
-          <div key={list.id} className="rounded-md border border-gray-100 p-4 dark:border-gray-700">
-            <p>{list.name}</p>
-          </div>
+          <Link
+            to={list.id}
+            key={list.id}
+            className="rounded-md border border-gray-100 p-4 hover:border-gray-200 dark:border-gray-700 dark:hover:border-gray-500"
+          >
+            <p className="text-2xl">{list.name}</p>
+            <p className="text-sm">{list.description}</p>
+          </Link>
         ))}
       </div>
-
-      <ClientOnly>
-        <Outlet />
-      </ClientOnly>
     </div>
   )
 }

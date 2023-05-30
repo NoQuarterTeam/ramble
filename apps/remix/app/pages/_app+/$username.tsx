@@ -15,13 +15,17 @@ import { useLoaderHeaders } from "~/lib/headers.server"
 import { notFound } from "~/lib/remix.server"
 
 import { PageContainer } from "../../components/PageContainer"
+import { getUserSession } from "~/services/session/session.server"
+import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 
 export const headers = useLoaderHeaders
 
-export const loader = async ({ params }: LoaderArgs) => {
+export const loader = async ({ request, params }: LoaderArgs) => {
+  const { userId } = await getUserSession(request)
   const user = await db.user.findFirst({
     select: {
       id: true,
+      isProfilePublic: true,
       avatar: true,
       role: true,
       firstName: true,
@@ -34,9 +38,11 @@ export const loader = async ({ params }: LoaderArgs) => {
       isPaddleBoarder: true,
       isHiker: true,
     },
-    where: { isProfilePublic: { equals: true }, username: params.username },
+    where: { username: params.username },
   })
   if (!user) throw notFound(null)
+
+  if (userId !== user.id && !user.isProfilePublic) throw notFound(null)
 
   return json(user)
 }
@@ -44,17 +50,20 @@ export const loader = async ({ params }: LoaderArgs) => {
 export default function ProfileLists() {
   const user = useLoaderData<typeof loader>()
 
+  const currentUser = useMaybeUser()
   return (
     <PageContainer>
-      <div className="grid grid-cols-1 items-center gap-4 py-6 md:grid-cols-2 md:py-10">
+      <div className="grid grid-cols-1 items-center gap-4 py-6 md:grid-cols-2 md:py-8">
         <div className="flex items-center space-x-3">
           <Avatar className="sq-20 md:sq-32" src={createImageUrl(user.avatar)} name={`${user.firstName} ${user.lastName}`} />
           <div className="space-y-1">
             <div className="flex space-x-2">
               <h1 className="text-xl md:text-3xl">{user.username}</h1>
-              <LinkButton size="sm" to="/account" variant="outline">
-                Edit profile
-              </LinkButton>
+              {currentUser?.id === user.id && (
+                <LinkButton size="sm" to="/account" variant="outline">
+                  Edit profile
+                </LinkButton>
+              )}
             </div>
             <p>
               {user.firstName} {user.lastName}

@@ -1,9 +1,15 @@
 import { Outlet } from "@remix-run/react"
-import type { LoaderArgs, SerializeFrom } from "@vercel/remix"
+import type { LinksFunction, LoaderArgs, SerializeFrom } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
 import { getIpInfo } from "~/services/ip.server"
+
+import mapStyles from "mapbox-gl/dist/mapbox-gl.css"
+
+export const links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: mapStyles }]
+}
 
 export const loader = async ({ request }: LoaderArgs) => {
   const ipInfo = await getIpInfo(request)

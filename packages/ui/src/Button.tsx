@@ -35,7 +35,7 @@ export const buttonStyles = cva(
       {
         variant: ["ghost", "outline"],
         className:
-          "text-black dark:text-white bg-transparent hover:bg-black/10 active:bg-black/20 dark:hover:bg-white/10 dark:active:bg-white/20",
+          "text-black dark:text-white bg-transparent hover:bg-black/5 active:bg-black/20 dark:hover:bg-white/10 dark:active:bg-white/20",
       },
     ],
     defaultVariants: {

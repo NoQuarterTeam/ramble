@@ -32,7 +32,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
     ORDER BY Spot.createdAt DESC, Spot.id
     LIMIT 10 OFFSET ${skip};
   `
-  const count = await db.spot.count()
+  const count = await db.spot.count({ where: { creatorId: user.id } })
   return json(
     { spots, count },
     { headers: { "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour", staleWhileRevalidate: "1day" }) } },

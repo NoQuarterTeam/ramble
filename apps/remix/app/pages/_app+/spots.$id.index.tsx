@@ -1,7 +1,7 @@
 import { Form, Link, useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LinksFunction, LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
-import { Edit2, Share, Star, Trash, Verified } from "lucide-react"
+import { BadgeX, Edit2, Share, Star, Trash, Verified } from "lucide-react"
 import mapStyles from "mapbox-gl/dist/mapbox-gl.css"
 import Map, { Marker } from "react-map-gl"
 
@@ -130,7 +130,7 @@ export default function SpotDetail() {
               {user && <SaveToList spotId={spot.id} />}
             </div>
           </div>
-          {spot.verifiedAt && spot.verifier && (
+          {spot.verifiedAt && spot.verifier ? (
             <div className="flex items-center space-x-1 text-sm">
               <Verified className="sq-5" />
               <p>Verified by</p>
@@ -142,6 +142,11 @@ export default function SpotDetail() {
                   name={`${spot.verifier.firstName} ${spot.verifier.lastName}`}
                 /> */}
               </Link>
+            </div>
+          ) : (
+            <div className="flex items-center space-x-1 text-sm">
+              <BadgeX className="sq-5" />
+              <p>Unverified</p>
             </div>
           )}
           <div className="flex items-center space-x-1 text-sm">

@@ -5,7 +5,7 @@ import { useFetcher, useNavigate, useRouteLoaderData, useSearchParams } from "@r
 import turfCenter from "@turf/center"
 import * as turf from "@turf/helpers"
 import type { SerializeFrom } from "@vercel/remix"
-// import { redirect } from "@vercel/remix"
+
 import { CircleDot, Plus } from "lucide-react"
 import queryString from "query-string"
 import { z } from "zod"
@@ -187,7 +187,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
               ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
               : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
           }
-        ></Map>
+        />
         <>
           <CircleDot className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
         </>
