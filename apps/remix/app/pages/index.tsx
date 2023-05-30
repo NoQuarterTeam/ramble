@@ -1,29 +1,19 @@
-import { json, type LoaderArgs, redirect } from "@vercel/remix"
-
 import { LinkButton } from "~/components/LinkButton"
-import { getMaybeUser } from "~/services/auth/auth.server"
 
 import { PageContainer } from "../components/PageContainer"
-
-export const loader = async ({ request }: LoaderArgs) => {
-  const user = await getMaybeUser(request)
-
-  if (user) redirect("/map")
-  return json(null)
-}
 
 export default function Home() {
   return (
     <PageContainer>
-      <div className="flex gap-10 py-32">
-        <div className="space-y-2">
+      <div className="grid grid-cols-1 gap-6 py-10 md:grid-cols-9 md:py-32">
+        <div className="col-span-9 space-y-2 md:col-span-6">
           <h1 className="text-4xl font-medium">Everything you need for travelling Europe</h1>
           <p className="text-2xl">1000's of spots, service stations, cafes, parks and more</p>
           <LinkButton size="lg" to="map" className="max-w-min">
             Start exploring
           </LinkButton>
         </div>
-        <div>
+        <div className="col-span-9 md:col-span-3">
           <img
             src="/hero.jpg"
             width={400}
