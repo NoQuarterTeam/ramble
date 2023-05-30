@@ -1,4 +1,8 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
 
 importers:
 
@@ -102,8 +106,8 @@ importers:
         specifier: ~0.16.4
         version: 0.16.4(expo@48.0.10)
       lucide-react-native:
-        specifier: ^0.224.0
-        version: 0.224.0(prop-types@15.8.1)(react-native-svg@13.4.0)(react-native@0.71.8)(react@18.2.0)
+        specifier: ^0.229.0
+        version: 0.229.0(prop-types@15.8.1)(react-native-svg@13.4.0)(react-native@0.71.8)(react@18.2.0)
       nativewind:
         specifier: ^2.0.11
         version: 2.0.11(react@18.2.0)(tailwindcss@3.3.1)
@@ -268,8 +272,8 @@ importers:
         specifier: 9.0.0
         version: 9.0.0
       lucide-react:
-        specifier: ^0.224.0
-        version: 0.224.0(react@18.2.0)
+        specifier: ^0.229.0
+        version: 0.229.0(react@18.2.0)
       mapbox-gl:
         specifier: ^2.14.1
         version: 2.14.1
@@ -670,8 +674,8 @@ importers:
         specifier: ^0.6.0
         version: 0.6.0(typescript@5.0.4)
       lucide-react:
-        specifier: ^0.224.0
-        version: 0.224.0(react@18.2.0)
+        specifier: ^0.229.0
+        version: 0.229.0(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -12097,8 +12101,8 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
-  /lucide-react-native@0.224.0(prop-types@15.8.1)(react-native-svg@13.4.0)(react-native@0.71.8)(react@18.2.0):
-    resolution: {integrity: sha512-E9fdrfYE4S+YVI6SYkJMmo+O9H2FEEa/t5S2aZMVbMdq5quinmXlNbGbO71HGkCa2RQUDLz/UozQ/jPW4JpgSA==}
+  /lucide-react-native@0.229.0(prop-types@15.8.1)(react-native-svg@13.4.0)(react-native@0.71.8)(react@18.2.0):
+    resolution: {integrity: sha512-i4tavmQDb8TsZh0n05QS1RAOn6Z68bIiBoKnf976jrmY09tXcVVeIWEAcfwTKOrh3pPgnyipY/CZYyOOJVzGPA==}
     peerDependencies:
       prop-types: ^15.7.2
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
@@ -12111,8 +12115,8 @@ packages:
       react-native-svg: 13.4.0(react-native@0.71.8)(react@18.2.0)
     dev: false
 
-  /lucide-react@0.224.0(react@18.2.0):
-    resolution: {integrity: sha512-2QuPhbEAicN1Ak9DSeViYhZLYogW54e802IFDasoy/AXKGrnzTcBLQM8gidXbOd2DSWbrLHDgN6n4340QzyujQ==}
+  /lucide-react@0.229.0(react@18.2.0):
+    resolution: {integrity: sha512-b0/KSFXhPi++vUbnYEDUgP8Z8Rw9MQpRfBr+dRZNPMT3FD1HrVgMHXhSpkm9ZrrEtuqIfHf/O+tAGmw4WOmIog==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
