@@ -117,15 +117,6 @@ export default function SpotDetail() {
       </div>
       <PageContainer className="space-y-10 pb-40">
         <div className="space-y-2">
-          <div className="flex flex-col items-start justify-between space-y-1 md:flex-row">
-            <h1 className="text-4xl">{spot.name}</h1>
-            <div className="flex items-center space-x-1">
-              <Button variant="outline" leftIcon={<Share className="sq-4" />} aria-label="share">
-                Share
-              </Button>
-              {user && <SaveToList spotId={spot.id} />}
-            </div>
-          </div>
           {spot.verifiedAt && spot.verifier ? (
             <div className="flex items-center space-x-1 text-sm">
               <Verified className="sq-5" />
@@ -145,15 +136,22 @@ export default function SpotDetail() {
               <p>Unverified</p>
             </div>
           )}
+          <div className="flex flex-col items-start justify-between space-y-1 md:flex-row">
+            <h1 className="text-4xl">{spot.name}</h1>
+            <div className="flex items-center space-x-1">
+              <Button variant="outline" leftIcon={<Share className="sq-4" />} aria-label="share">
+                Share
+              </Button>
+              {user && <SaveToList spotId={spot.id} />}
+            </div>
+          </div>
           <div className="flex items-center space-x-1 text-sm">
             <Star className="sq-5" />
             <p>{spot.rating._avg.rating ? spot.rating._avg.rating?.toFixed(1) : "Not rated"}</p>
             <p>·</p>
-            <p>
+            <Link to="#reviews" className="hover:underline">
               {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
-            </p>
-            <p>·</p>
-            <p>{spot.address}</p>
+            </Link>
           </div>
         </div>
 
@@ -161,6 +159,7 @@ export default function SpotDetail() {
           <div className="space-y-2">
             <h3 className="text-xl font-medium">Description</h3>
             <div dangerouslySetInnerHTML={{ __html: spot.description }} />
+            <p className="text-sm">{spot.address}</p>
           </div>
 
           <div className="z-10 h-[400px] w-full overflow-hidden rounded-md">
@@ -190,7 +189,7 @@ export default function SpotDetail() {
         <hr />
 
         <div className="space-y-2">
-          <div className="flex justify-between">
+          <div id="reviews" className="flex justify-between">
             <div className="flex items-center space-x-2">
               <p className="text-xl">
                 {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}

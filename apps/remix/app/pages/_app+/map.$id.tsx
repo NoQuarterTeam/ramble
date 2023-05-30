@@ -62,32 +62,32 @@ export default function SpotPreview() {
       <React.Suspense fallback={<SpotFallback />}>
         <Await resolve={promise.spot}>
           {(spot) => (
-            <div className="space-y-3">
-              {spot.verifiedAt && spot.verifier ? (
-                <div className="flex items-center space-x-1 text-sm">
-                  <Verified className="sq-5" />
-                  <p>Verified by</p>
-                  <Link to={`/${spot.verifier.username}`} className="flex hover:underline">
-                    {`${spot.verifier.firstName} ${spot.verifier.lastName}`}
-                    {/* <Avatar
+            <div className="space-y-4">
+              <div className="space-y-1">
+                {spot.verifiedAt && spot.verifier ? (
+                  <div className="flex items-center space-x-1 text-sm">
+                    <Verified className="sq-5" />
+                    <p>Verified by</p>
+                    <Link to={`/${spot.verifier.username}`} className="flex hover:underline">
+                      {`${spot.verifier.firstName} ${spot.verifier.lastName}`}
+                      {/* <Avatar
                   size="xs"
                   src={createImageUrl(spot.verifier.avatar)}
                   name={`${spot.verifier.firstName} ${spot.verifier.lastName}`}
                 /> */}
-                  </Link>
-                </div>
-              ) : (
-                <div className="flex items-center space-x-1 text-sm">
-                  <BadgeX className="sq-5" />
-                  <p>Unverified</p>
-                </div>
-              )}
-              <div>
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="flex items-center space-x-1 text-sm">
+                    <BadgeX className="sq-5" />
+                    <p>Unverified</p>
+                  </div>
+                )}
                 <Link
                   target="_blank"
                   rel="noopener norefer"
                   to={`/spots/${spot.id}`}
-                  className="line-clamp-2 text-lg hover:underline"
+                  className="line-clamp-2 text-lg leading-6 hover:underline"
                 >
                   {spot.name}
                 </Link>

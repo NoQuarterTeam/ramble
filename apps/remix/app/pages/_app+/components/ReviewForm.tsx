@@ -12,6 +12,7 @@ import { PageContainer } from "~/components/PageContainer"
 import { FormAction } from "~/lib/form"
 
 import { Actions } from "../spots.$id.reviews.$reviewId"
+import { LinkButton } from "~/components/LinkButton"
 
 interface Props {
   spot: SerializeFrom<Pick<Spot, "name"> & { images: Pick<SpotImage, "path">[] }>
@@ -47,8 +48,17 @@ export function ReviewForm({ spot, review }: Props) {
             ))}
           </div>
           <input name="rating" type="hidden" value={rating} />
-          <FormButton>Save</FormButton>
           <FormError />
+          <div className="flex space-x-1">
+            <FormButton>Save</FormButton>
+            <LinkButton
+              variant="ghost"
+              // @ts-expect-error -1 is valid
+              to={-1}
+            >
+              Cancel
+            </LinkButton>
+          </div>
         </Form>
 
         <div className="grid grid-cols-4 gap-2">
