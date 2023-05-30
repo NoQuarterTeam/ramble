@@ -4,7 +4,6 @@
   "dependencies": {
     "turbo": "^1.9.9"
   },
-  "packageManager": "pnpm@8.6.0",
   "devDependencies": {
     "prettier": "^2.8.4",
     "prettier-plugin-tailwindcss": "^0.3.0",
@@ -24,5 +23,8 @@
   },
   "prisma": {
     "schema": "./packages/database/schema.prisma"
+  },
+  "engines": {
+    "node": ">=16"
   }
 }
