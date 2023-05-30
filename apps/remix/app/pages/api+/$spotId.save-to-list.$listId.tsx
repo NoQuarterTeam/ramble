@@ -49,7 +49,7 @@ export function SaveToList(props: Props) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="ghost" leftIcon={<Heart className="sq-4" />} aria-label="favourite">
+        <Button variant="outline" leftIcon={<Heart className="sq-4" />} aria-label="favourite">
           Save
         </Button>
       </PopoverTrigger>

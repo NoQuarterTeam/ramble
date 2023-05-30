@@ -1,4 +1,4 @@
-import { Form, useLoaderData } from "@remix-run/react"
+import { Form, Link, useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LinksFunction, LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { Edit2, Share, Star, Trash, Verified } from "lucide-react"
@@ -6,7 +6,7 @@ import mapStyles from "mapbox-gl/dist/mapbox-gl.css"
 import Map, { Marker } from "react-map-gl"
 
 import type { SpotType } from "@ramble/database/types"
-import { ClientOnly, createImageUrl } from "@ramble/shared"
+import { createImageUrl } from "@ramble/shared"
 import {
   AlertDialogCancel,
   AlertDialogContent,
@@ -48,6 +48,7 @@ export const loader = async ({ params }: LoaderArgs) => {
       latitude: true,
       longitude: true,
       ownerId: true,
+      verifier: { select: { firstName: true, username: true, lastName: true, avatar: true } },
       images: { select: { id: true, path: true } },
       _count: { select: { reviews: true } },
       reviews: {
@@ -119,39 +120,46 @@ export default function SpotDetail() {
         ))}
       </div>
       <PageContainer className="space-y-10 pb-40">
-        <div className="flex justify-between">
-          <div>
-            <h1 className="text-4xl">
-              <span>{spot.name}</span>
-              {spot.verifiedAt && <Verified className="sq-5 ml-1" />}
-            </h1>
-            <div className="flex items-center space-x-1 text-sm">
-              <Star className="sq-3" />
-              <p>{spot.rating._avg.rating ? spot.rating._avg.rating?.toFixed(1) : "Not rated"}</p>
-              <p>·</p>
-              <p>
-                {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
-              </p>
-
-              <p>·</p>
-              <p>{spot.address}</p>
+        <div className="space-y-2">
+          <div className="flex flex-col items-start justify-between space-y-1 md:flex-row">
+            <h1 className="text-4xl">{spot.name}</h1>
+            <div className="flex items-center space-x-1">
+              <Button variant="outline" leftIcon={<Share className="sq-4" />} aria-label="share">
+                Share
+              </Button>
+              {user && <SaveToList spotId={spot.id} />}
             </div>
           </div>
-          <div className="flex items-center space-x-1">
-            <Button variant="ghost" leftIcon={<Share className="sq-4" />} aria-label="share">
-              Share
-            </Button>
-
-            {user && <SaveToList spotId={spot.id} />}
+          {spot.verifiedAt && spot.verifier && (
+            <div className="flex items-center space-x-1 text-sm">
+              <Verified className="sq-5" />
+              <p>Verified by</p>
+              <Link to={`/${spot.verifier.username}`} className="flex hover:underline">
+                {`${spot.verifier.firstName} ${spot.verifier.lastName}`}
+                {/* <Avatar
+                  size="xs"
+                  src={createImageUrl(spot.verifier.avatar)}
+                  name={`${spot.verifier.firstName} ${spot.verifier.lastName}`}
+                /> */}
+              </Link>
+            </div>
+          )}
+          <div className="flex items-center space-x-1 text-sm">
+            <Star className="sq-5" />
+            <p>{spot.rating._avg.rating ? spot.rating._avg.rating?.toFixed(1) : "Not rated"}</p>
+            <p>·</p>
+            <p>
+              {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
+            </p>
+            <p>·</p>
+            <p>{spot.address}</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="space-y-2">
             <h3 className="text-xl font-medium">Description</h3>
-            <ClientOnly>
-              <p dangerouslySetInnerHTML={{ __html: spot.description }} />
-            </ClientOnly>
+            <div dangerouslySetInnerHTML={{ __html: spot.description }} />
           </div>
 
           <div className="z-10 h-[400px] w-full overflow-hidden rounded-md">
