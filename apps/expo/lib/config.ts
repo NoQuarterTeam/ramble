@@ -9,7 +9,7 @@ function getEnvironment() {
   } else {
     return {
       ENV: "production",
-      WEB_URL: "https://my-production-app.com",
+      WEB_URL: "https://ramble.noquarter.co",
     }
   }
 }

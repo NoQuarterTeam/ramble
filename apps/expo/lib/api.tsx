@@ -7,7 +7,7 @@ import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server"
 import Constants from "expo-constants"
 import superjson from "superjson"
 
-import type { AppRouter } from "@ramble/api"
+import { type AppRouter } from "@ramble/api"
 
 /**
  * A set of typesafe hooks for consuming your API.

@@ -7,7 +7,7 @@ import { ScrollView, TouchableOpacity, useColorScheme, View } from "react-native
 
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
 
-import { SpotType } from "@ramble/database/types"
+import { type SpotType } from "@ramble/database/types"
 import { Spinner } from "../../../components/Spinner"
 import { Text } from "../../../components/Text"
 import { api, type RouterOutputs } from "../../../lib/api"

@@ -14,22 +14,21 @@ import {
   Waves,
 } from "lucide-react"
 
-import type { Spot, User } from "@ramble/database/types"
-import { SpotType } from "@ramble/database/types"
+import type { Spot, SpotType, User } from "@ramble/database/types"
 
-export const SPOTS = {
-  [SpotType.CAFE]: { label: "Cafe", Icon: Coffee },
-  [SpotType.RESTAURANT]: { label: "Restaurant", Icon: Utensils },
-  [SpotType.CAMPING]: { label: "Camping", Icon: Tent },
-  [SpotType.PARKING]: { label: "Parking", Icon: ParkingCircle },
-  [SpotType.BAR]: { label: "Bar", Icon: Beer },
-  [SpotType.TIP]: { label: "Tip", Icon: Info },
-  [SpotType.SHOP]: { label: "Shop", Icon: ShoppingCart },
-  [SpotType.CLIMBING]: { label: "Climbing", Icon: Mountain },
-  [SpotType.MOUNTAIN_BIKING]: { label: "Mountain Biking", Icon: Bike },
-  [SpotType.GAS_STATION]: { label: "Gas Station", Icon: Fuel },
-  [SpotType.PADDLE_BOARDING]: { label: "Paddle Boarding", Icon: Waves },
-  [SpotType.OTHER]: { label: "Other", Icon: HelpCircle },
+export const SPOTS: { [key in SpotType]: { label: string; Icon: LucideIcon } } = {
+  CAFE: { label: "Cafe", Icon: Coffee },
+  RESTAURANT: { label: "Restaurant", Icon: Utensils },
+  CAMPING: { label: "Camping", Icon: Tent },
+  PARKING: { label: "Parking", Icon: ParkingCircle },
+  BAR: { label: "Bar", Icon: Beer },
+  TIP: { label: "Tip", Icon: Info },
+  SHOP: { label: "Shop", Icon: ShoppingCart },
+  CLIMBING: { label: "Climbing", Icon: Mountain },
+  MOUNTAIN_BIKING: { label: "Mountain Biking", Icon: Bike },
+  GAS_STATION: { label: "Gas Station", Icon: Fuel },
+  PADDLE_BOARDING: { label: "Paddle Boarding", Icon: Waves },
+  OTHER: { label: "Other", Icon: HelpCircle },
 } as const
 
 export const SPOT_OPTIONS = Object.entries(SPOTS).map(([value, { label, Icon }]) => ({ label, value, Icon })) as {
