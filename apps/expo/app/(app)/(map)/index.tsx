@@ -3,8 +3,8 @@ import * as React from "react"
 import { ScrollView, TouchableOpacity, View, useColorScheme } from "react-native"
 
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
-import { Link } from "expo-router"
-import { BadgeX, Star, Verified, X } from "lucide-react-native"
+import { Link, useRouter } from "expo-router"
+import { BadgeX, List, Star, Verified, X } from "lucide-react-native"
 import { Spinner } from "../../../components/Spinner"
 import { Text } from "../../../components/Text"
 import { api } from "../../../lib/api"
@@ -13,8 +13,9 @@ import { Image } from "expo-image"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
-export default function Home() {
-  const spots = api.spot.all.useQuery()
+export default function MapView() {
+  const router = useRouter()
+  const spots = api.spot.clusters.useQuery()
   const [activeSpot, setActiveSpot] = React.useState<(typeof spots)["data"][number] | null>(null)
   const camera = React.useRef<Camera>(null)
   React.useEffect(() => {
@@ -59,6 +60,15 @@ export default function Home() {
           )
         })}
       </Mapbox.MapView>
+
+      <TouchableOpacity
+        onPress={() => router.push("(map)/latest")}
+        className="absolute bottom-3 left-1/2 -ml-[50px] flex w-[100px] flex-row items-center justify-center space-x-2 rounded-full bg-gray-800 p-3 dark:bg-white"
+      >
+        <List size={20} className="text-white dark:text-black" />
+        <Text className="text-white dark:text-black">Latest</Text>
+      </TouchableOpacity>
+
       {activeSpot && <SpotPreview id={activeSpot.id} onClose={() => setActiveSpot(null)} />}
     </View>
   )

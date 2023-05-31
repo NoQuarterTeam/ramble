@@ -14,6 +14,7 @@ export default function AppLayout() {
 
   return (
     <Tabs
+      initialRouteName="(map)"
       sceneContainerStyle={{ flex: 1, backgroundColor: isDark ? "black" : "white" }}
       screenOptions={{
         tabBarLabelStyle: { margin: -4, color: isDark ? "white" : "black" },
@@ -22,7 +23,7 @@ export default function AppLayout() {
       }}
     >
       <Tabs.Screen
-        name="(map)/index"
+        name="(map)"
         options={{
           title: "Explore",
           tabBarIcon: (props) => <Search size={22} color={props.focused ? "green" : isDark ? "white" : "black"} />,
