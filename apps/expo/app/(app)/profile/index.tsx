@@ -1,11 +1,12 @@
 import { View } from "react-native"
-import { Heading } from "../../../components/Heading"
-import { AUTH_TOKEN, api } from "../../../lib/api"
-import { Text } from "../../../components/Text"
-import { Link } from "../../../components/Link"
-import { useQueryClient } from "@tanstack/react-query"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { useQueryClient } from "@tanstack/react-query"
+
 import { Button } from "../../../components/Button"
+import { Heading } from "../../../components/Heading"
+import { Link } from "../../../components/Link"
+import { Text } from "../../../components/Text"
+import { api, AUTH_TOKEN } from "../../../lib/api"
 
 export default function Profile() {
   const { data: me, isLoading } = api.auth.me.useQuery()

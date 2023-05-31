@@ -1,9 +1,10 @@
 import { ScrollView, TouchableOpacity, View } from "react-native"
-import { Text } from "../../../components/Text"
-import { api } from "../../../lib/api"
-import { Heading } from "../../../components/Heading"
 import { useRouter } from "expo-router"
 import { Map } from "lucide-react-native"
+
+import { Heading } from "../../../components/Heading"
+import { Text } from "../../../components/Text"
+import { api } from "../../../lib/api"
 
 export default function Latest() {
   const router = useRouter()

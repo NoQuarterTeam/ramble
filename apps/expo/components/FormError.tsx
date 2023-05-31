@@ -1,7 +1,8 @@
-import { View, ViewProps } from "react-native"
+import { View, type ViewProps } from "react-native"
+
+import { merge } from "@ramble/shared"
 
 import { Text } from "./Text"
-import { merge } from "@ramble/shared"
 
 export function FormError({ error, ...props }: ViewProps & { error: string }) {
   return (

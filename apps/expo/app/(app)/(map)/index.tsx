@@ -1,15 +1,16 @@
-import Mapbox, { Camera, MarkerView } from "@rnmapbox/maps"
 import * as React from "react"
-import { ScrollView, TouchableOpacity, View, useColorScheme } from "react-native"
-
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
+import { ScrollView, TouchableOpacity, useColorScheme, View } from "react-native"
+import Mapbox, { Camera, MarkerView } from "@rnmapbox/maps"
+import { Image } from "expo-image"
 import { Link, useRouter } from "expo-router"
 import { BadgeX, List, Star, Verified, X } from "lucide-react-native"
+
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
+
 import { Spinner } from "../../../components/Spinner"
 import { Text } from "../../../components/Text"
 import { api } from "../../../lib/api"
 import { SPOTS } from "../../../lib/spots"
-import { Image } from "expo-image"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
@@ -18,12 +19,6 @@ export default function MapView() {
   const spots = api.spot.clusters.useQuery()
   const [activeSpot, setActiveSpot] = React.useState<(typeof spots)["data"][number] | null>(null)
   const camera = React.useRef<Camera>(null)
-  React.useEffect(() => {
-    // camera.current?.setCamera({
-    //   centerCoordinate: [lon, lat],
-    // });
-  }, [])
-
   const theme = useColorScheme()
   const isDark = theme === "dark"
   return (
@@ -51,7 +46,15 @@ export default function MapView() {
             <MarkerView key={spot.id} coordinate={[spot.longitude, spot.latitude]}>
               <TouchableOpacity
                 activeOpacity={0.7}
-                onPress={() => setActiveSpot(spot)}
+                onPress={() => {
+                  setActiveSpot(spot)
+                  camera.current?.setCamera({
+                    animationMode: "linearTo",
+                    animationDuration: 300,
+                    centerCoordinate: [spot.longitude, spot.latitude],
+                    padding: { paddingBottom: 300, paddingLeft: 0, paddingRight: 0, paddingTop: 0 },
+                  })
+                }}
                 className="bg-primary-500 sq-8 flex items-center justify-center rounded-full"
               >
                 <Icon size={20} color="white" />
@@ -79,10 +82,7 @@ function SpotPreview({ id, onClose }: { id: string; onClose: () => void }) {
   const colorScheme = useColorScheme()
 
   return (
-    <View className="absolute bottom-2 left-2 right-2 rounded-md bg-white p-5 dark:bg-gray-900">
-      <TouchableOpacity onPress={onClose} className="absolute right-2 top-2">
-        <X size={24} color={colorScheme === "dark" ? "white" : "black"} />
-      </TouchableOpacity>
+    <View className="absolute bottom-2 left-2 right-2 rounded-lg bg-white p-5 dark:bg-gray-900">
       {isLoading ? (
         <Spinner />
       ) : !spot ? (
@@ -126,6 +126,9 @@ function SpotPreview({ id, onClose }: { id: string; onClose: () => void }) {
           </ScrollView>
         </View>
       )}
+      <TouchableOpacity onPress={onClose} className="absolute right-2 top-2 flex items-center justify-center p-2">
+        <X size={24} color={colorScheme === "dark" ? "white" : "black"} />
+      </TouchableOpacity>
     </View>
   )
 }

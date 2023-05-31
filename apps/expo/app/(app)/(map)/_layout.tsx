@@ -1,5 +1,5 @@
-import { Stack } from "expo-router"
 import { useColorScheme } from "react-native"
+import { Stack } from "expo-router"
 
 export default function MapLayout() {
   const colorScheme = useColorScheme()
@@ -10,6 +10,7 @@ export default function MapLayout() {
     >
       <Stack.Screen name="index" />
       <Stack.Screen name="latest" />
+      <Stack.Screen name="spots" />
     </Stack>
   )
 }

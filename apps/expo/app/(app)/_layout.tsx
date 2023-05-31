@@ -1,7 +1,6 @@
-import { Tabs } from "expo-router"
-
-import { Search, User } from "lucide-react-native"
 import { useColorScheme } from "react-native"
+import { Tabs } from "expo-router"
+import { PlusCircle, Search, User } from "lucide-react-native"
 
 // Returns ReactComponent
 
@@ -17,26 +16,30 @@ export default function AppLayout() {
       initialRouteName="(map)"
       sceneContainerStyle={{ flex: 1, backgroundColor: isDark ? "black" : "white" }}
       screenOptions={{
-        tabBarLabelStyle: { margin: -4, color: isDark ? "white" : "black" },
         tabBarStyle: { backgroundColor: isDark ? "black" : "white" },
         headerShown: false,
+        tabBarShowLabel: false,
+        // tabBarLabelStyle: { margin: -4, color: isDark ? "white" : "black" },
       }}
     >
       <Tabs.Screen
         name="(map)"
         options={{
-          title: "Explore",
-          tabBarIcon: (props) => <Search size={22} color={props.focused ? "green" : isDark ? "white" : "black"} />,
+          tabBarIcon: (props) => <Search size={24} color={props.focused ? "green" : isDark ? "white" : "black"} />,
+        }}
+      />
+      <Tabs.Screen
+        name="new"
+        options={{
+          tabBarIcon: (props) => <PlusCircle size={24} color={props.focused ? "green" : isDark ? "white" : "black"} />,
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Profile",
-          tabBarIcon: (props) => <User size={22} color={props.focused ? "green" : isDark ? "white" : "black"} />,
+          tabBarIcon: (props) => <User size={24} color={props.focused ? "green" : isDark ? "white" : "black"} />,
         }}
       />
-      <Tabs.Screen name="spots" options={{ href: null }} />
     </Tabs>
   )
 }

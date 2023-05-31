@@ -1,4 +1,4 @@
-import { View, useColorScheme } from "react-native"
+import { useColorScheme, View } from "react-native"
 import { Stack } from "expo-router"
 
 export default function ProfileLayout() {
