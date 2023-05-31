@@ -24,7 +24,6 @@
     {
       "packageNames": ["pnpm", "node"],
       "matchPackageNames": ["node", "pnpm"],
-      "matchManagers": ["dockerfile", "pnpm"],
       "enabled": false
     }
   ],
