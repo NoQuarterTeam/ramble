@@ -1,8 +1,8 @@
-import { type ConfigContext, type ExpoConfig } from "expo/config"
+import { ConfigContext, ExpoConfig } from "expo/config"
 
 const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   name: "Ramble",
-  description: "Ramble: Van Life Guide",
+  description: "Ramble: Travel Guide",
   slug: "ramble",
   scheme: "ramble",
   owner: "noquarter",
