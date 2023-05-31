@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { Link, useRouter } from "expo-router"
+import { Link, useNavigation, useRouter } from "expo-router"
 import { FormProvider } from "react-hook-form"
 import { KeyboardAvoidingView, ScrollView } from "react-native"
 
@@ -15,12 +15,16 @@ export default function Login() {
   const router = useRouter()
 
   const form = useForm({ defaultValues: { email: "jack@noquarter.co", password: "password" } })
-
+  const navigation = useNavigation()
   const { mutate, isLoading, error } = api.auth.login.useMutation({
     onSuccess: async (data) => {
       await AsyncStorage.setItem(AUTH_TOKEN, data.token)
       queryClient.auth.me.setData(undefined, data.user)
-      router.replace("/")
+      if (navigation.canGoBack()) {
+        router.back()
+      } else {
+        router.replace("/profile")
+      }
     },
   })
 
