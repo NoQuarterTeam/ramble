@@ -25,6 +25,7 @@
     "schema": "./packages/database/schema.prisma"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=16",
+    "pnpm": ">=7 <8.6.0"
   }
 }

@@ -1,8 +1,4 @@
-lockfileVersion: '6.1'
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
+lockfileVersion: '6.0'
 
 importers:
 
@@ -82,8 +78,8 @@ importers:
         specifier: ~11.1.1
         version: 11.1.1(expo@48.0.10)
       expo-image:
-        specifier: ~1.2.0
-        version: 1.2.0(expo@48.0.10)
+        specifier: 1.0.1
+        version: 1.0.1(expo@48.0.10)
       expo-linking:
         specifier: ~4.0.1
         version: 4.0.1(expo@48.0.10)
@@ -9809,8 +9805,8 @@ packages:
       fontfaceobserver: 2.3.0
     dev: false
 
-  /expo-image@1.2.0(expo@48.0.10):
-    resolution: {integrity: sha512-LMGFKBh31rW6e5TkxKMKfPK1uxvDNA3d5bdPUe3UpdzmZIhk/cUplCDiBqinJ2D+5GcpDkgeWnnqkP5lqUcBmQ==}
+  /expo-image@1.0.1(expo@48.0.10):
+    resolution: {integrity: sha512-h3xDHaw3ZWzOKar1eFXY4CsFgDstw6fo5Tzv6BXXs+Zte5betPMb567f8zCNnhpkr7UCo5CN7Cg92o+lqzdvRA==}
     peerDependencies:
       expo: '*'
     dependencies:
