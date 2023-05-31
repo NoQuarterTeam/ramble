@@ -424,6 +424,9 @@ importers:
       jsonwebtoken:
         specifier: 9.0.0
         version: 9.0.0
+      supercluster:
+        specifier: ^8.0.0
+        version: 8.0.0
       superjson:
         specifier: ^1.12.2
         version: 1.12.2
@@ -443,6 +446,9 @@ importers:
       '@types/node':
         specifier: ^18.15.3
         version: 18.15.3
+      '@types/supercluster':
+        specifier: ^7.1.0
+        version: 7.1.0
       dotenv-cli:
         specifier: ^7.1.0
         version: 7.1.0

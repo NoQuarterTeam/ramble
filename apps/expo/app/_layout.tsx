@@ -7,7 +7,6 @@ import { StatusBar } from "expo-status-bar"
 import { NewUpdate } from "../components/NewUpdate"
 import { TRPCProvider } from "../lib/api"
 import { useCheckExpoUpdates } from "../lib/hooks/useCheckExpoUpdates"
-// Returns ReactComponent
 
 // This is the main layout of the app
 // It wraps your pages with the providers they need
