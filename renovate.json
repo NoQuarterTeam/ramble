@@ -29,12 +29,12 @@
     }
   ],
   "ignoreDeps": [
+    "expo-image",
     "@react-native-async-storage/async-storage",
     "react-native-progress",
     "react-native-reanimated",
     "react-native-safe-area-context",
     "react-native-svg",
-    "expo-image",
     "react-native-web",
     "react-native",
     "uuid"
