@@ -29,6 +29,11 @@ export const t = initTRPC.context<Context>().create({
       ...shape,
       data: {
         ...shape.data,
+        formError: !(error.cause instanceof ZodError)
+          ? error.code === "INTERNAL_SERVER_ERROR"
+            ? "There was an error processing your request."
+            : error.message
+          : undefined,
         zodError: error.cause instanceof ZodError ? error.cause.flatten() : null,
       },
     }

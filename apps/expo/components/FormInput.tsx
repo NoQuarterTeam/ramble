@@ -17,7 +17,7 @@ export function FormInput({ label, name, error, rightElement, ...props }: Props)
   const { control } = useFormContext()
 
   return (
-    <View className="space-y-0.5">
+    <View className="mb-2 space-y-0.5">
       {label && <FormInputLabel label={label} />}
       <Controller
         name={name}

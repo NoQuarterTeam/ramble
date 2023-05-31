@@ -2,7 +2,6 @@ import { FormProvider } from "react-hook-form"
 import { KeyboardAvoidingView, ScrollView, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Link, useRouter } from "expo-router"
-import { type z } from "zod"
 
 import { Button } from "../../components/Button"
 import { FormError } from "../../components/FormError"
@@ -10,7 +9,6 @@ import { FormInput } from "../../components/FormInput"
 import { Heading } from "../../components/Heading"
 import { api, AUTH_TOKEN } from "../../lib/api"
 import { useForm } from "../../lib/hooks/useForm"
-import { registerSchema } from "@ramble/shared"
 
 export default function Register() {
   const queryClient = api.useContext()
@@ -24,10 +22,9 @@ export default function Register() {
   })
   const form = useForm({
     defaultValues: { email: "", password: "", username: "", firstName: "", lastName: "" },
-    schema: registerSchema,
   })
 
-  const handleRegister = async (data: z.infer<typeof registerSchema>) => {
+  const handleRegister = async (data: unknown) => {
     await AsyncStorage.removeItem(AUTH_TOKEN)
     login.mutate(data)
   }

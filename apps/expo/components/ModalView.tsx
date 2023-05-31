@@ -18,9 +18,9 @@ export function ModalView(props: Props) {
   return (
     <View className="h-full bg-white px-4 pt-6 dark:bg-black">
       <View className="flex flex-row justify-between">
-        {props.title ? <Heading className="text-3xl">{props.title}</Heading> : <Text />}
+        {props.title ? <Heading className="text-4xl">{props.title}</Heading> : <Text />}
 
-        <TouchableOpacity onPress={props.onBack ? props.onBack : router.back} className="p-2">
+        <TouchableOpacity onPress={props.onBack ? props.onBack : router.back} className="p-1">
           <Feather name="x" size={24} color={colorScheme === "dark" ? "white" : "black"} />
         </TouchableOpacity>
       </View>

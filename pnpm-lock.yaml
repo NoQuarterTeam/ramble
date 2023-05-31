@@ -48,14 +48,11 @@ importers:
         specifier: ^4.23.0
         version: 4.23.0(react-dom@18.2.0)(react-native@0.71.8)(react@18.2.0)
       '@trpc/client':
-        specifier: ^10.9.0
-        version: 10.9.0(@trpc/server@10.16.0)
-      '@trpc/react-query':
-        specifier: ^10.9.0
-        version: 10.9.0(@tanstack/react-query@4.23.0)(@trpc/client@10.9.0)(@trpc/server@10.16.0)(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^10.27.1
+        version: 10.27.1(@trpc/server@10.27.1)
       '@trpc/server':
-        specifier: ^10.16.0
-        version: 10.16.0
+        specifier: ^10.27.1
+        version: 10.27.1
       class-variance-authority:
         specifier: ^0.6.0
         version: 0.6.0(typescript@5.0.4)
@@ -6412,32 +6409,20 @@ packages:
     engines: {node: '>= 10'}
     dev: true
 
-  /@trpc/client@10.9.0(@trpc/server@10.16.0):
-    resolution: {integrity: sha512-id6318qpgqllNOuBp7nuciXFPXCe+zae5d4r1hze6Eyp5fFFNO58TqA+4Q44KIcHgpfWyW2egs6iPeql3PrdKA==}
+  /@trpc/client@10.27.1(@trpc/server@10.27.1):
+    resolution: {integrity: sha512-e9Syj6F41OHDSUg3JvT67fgoD22UbxPzYgp9Bno13NFpyeJc6vkXRlAgDc8ZuouqUPQuouJWll/I90CsuxEqvA==}
     peerDependencies:
-      '@trpc/server': 10.9.0
+      '@trpc/server': 10.27.1
     dependencies:
-      '@trpc/server': 10.16.0
-    dev: false
-
-  /@trpc/react-query@10.9.0(@tanstack/react-query@4.23.0)(@trpc/client@10.9.0)(@trpc/server@10.16.0)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-I7xtdFj/AETwc9HfY2bGxKINij39r26LvfIiTBfz2pBj1ELrcgucWmPeI2eS6pon/uI1E9Nqa6fQCg/zkg764Q==}
-    peerDependencies:
-      '@tanstack/react-query': ^4.3.8
-      '@trpc/client': 10.9.0
-      '@trpc/server': 10.9.0
-      react: '>=16.8.0'
-      react-dom: '>=16.8.0'
-    dependencies:
-      '@tanstack/react-query': 4.23.0(react-dom@18.2.0)(react-native@0.71.8)(react@18.2.0)
-      '@trpc/client': 10.9.0(@trpc/server@10.16.0)
-      '@trpc/server': 10.16.0
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
+      '@trpc/server': 10.27.1
     dev: false
 
   /@trpc/server@10.16.0:
     resolution: {integrity: sha512-lCUq7AB7vcgrNbaN+xP/AN62OjKDgrRyG7fTDPv5K633ut7KJ3m57qs60VRBOgp9vow6elAg51pKFFDtPHbTRA==}
+    dev: false
+
+  /@trpc/server@10.27.1:
+    resolution: {integrity: sha512-oMTNpei0+CAet0BuDdBE9cup0SseJAOlWRhWhcTAU05rETsJnzCA5DfNkf+aP3XiAM8rMJfrTfC0Z3aeADhHaA==}
     dev: false
 
   /@trysound/sax@0.2.0:

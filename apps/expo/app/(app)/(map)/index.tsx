@@ -5,10 +5,10 @@ import { ScrollView, TouchableOpacity, View, useColorScheme } from "react-native
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
 import { Link } from "expo-router"
 import { BadgeX, Star, Verified, X } from "lucide-react-native"
-import { Spinner } from "../../components/Spinner"
-import { Text } from "../../components/Text"
-import { api } from "../../lib/api"
-import { SPOTS } from "../../lib/spots"
+import { Spinner } from "../../../components/Spinner"
+import { Text } from "../../../components/Text"
+import { api } from "../../../lib/api"
+import { SPOTS } from "../../../lib/spots"
 import { Image } from "expo-image"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
@@ -38,7 +38,12 @@ export default function Home() {
         }
       >
         {/* <UserLocation /> */}
-        <Camera ref={camera} defaultSettings={{ centerCoordinate: [INITIAL_LONGITUDE, INITIAL_LATITUDE] }} />
+        <Camera
+          ref={camera}
+          allowUpdates
+          // followUserLocation
+          defaultSettings={{ centerCoordinate: [INITIAL_LONGITUDE, INITIAL_LATITUDE], zoomLevel: 8 }}
+        />
         {spots?.data?.map((spot) => {
           const Icon = SPOTS[spot.type].Icon
           return (
