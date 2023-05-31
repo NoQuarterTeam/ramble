@@ -24,6 +24,7 @@
     "@rnmapbox/maps": "10.0.7",
     "@tanstack/react-query": "^4.23.0",
     "@trpc/client": "^10.27.1",
+    "@trpc/react-query": "^10.28.1",
     "@trpc/server": "^10.27.1",
     "class-variance-authority": "^0.6.0",
     "dayjs": "1.11.7",
