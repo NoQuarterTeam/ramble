@@ -14,7 +14,7 @@
   "dependencies": {
     "@ramble/database": "workspace:*",
     "@ramble/shared": "workspace:*",
-    "@trpc/server": "^10.16.0",
+    "@trpc/server": "^10.28.1",
     "bcryptjs": "^2.4.3",
     "dayjs": "1.11.7",
     "jsonwebtoken": "9.0.0",

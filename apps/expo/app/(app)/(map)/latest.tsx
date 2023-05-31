@@ -1,20 +1,23 @@
-import { ScrollView, TouchableOpacity, View } from "react-native"
 import { useRouter } from "expo-router"
 import { Map } from "lucide-react-native"
 
+import { ScrollView, TouchableOpacity, View } from "react-native"
+
 import { Heading } from "../../../components/Heading"
+import { SpotItem } from "../../../components/SpotItem"
 import { Text } from "../../../components/Text"
 import { api } from "../../../lib/api"
 
 export default function Latest() {
   const router = useRouter()
-  const { data } = api.spot.latest.useQuery()
+  const { data: spots } = api.spot.latest.useQuery()
+
   return (
-    <View className="flex-1">
-      <ScrollView className="h-full px-4 pt-20">
-        <Heading className="text-4xl">Latest</Heading>
-        {data?.map((spot) => (
-          <Text key={spot.id}>{spot.name}</Text>
+    <View>
+      <ScrollView className="min-h-full px-4 pt-20" contentContainerStyle={{ paddingBottom: 120 }}>
+        <Heading className="mb-4 text-4xl">Latest</Heading>
+        {spots?.map((spot) => (
+          <SpotItem key={spot.id} spot={spot} />
         ))}
       </ScrollView>
       <TouchableOpacity

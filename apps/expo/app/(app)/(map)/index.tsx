@@ -10,14 +10,16 @@ import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
 import { SpotType } from "@ramble/database/types"
 import { Spinner } from "../../../components/Spinner"
 import { Text } from "../../../components/Text"
-import { api } from "../../../lib/api"
+import { api, type RouterOutputs } from "../../../lib/api"
 import { SPOTS } from "../../../lib/spots"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
+type Cluster = RouterOutputs["spot"]["clusters"][number]
+
 export default function MapScreen() {
   const router = useRouter()
-  const [clusters, setClusters] = React.useState([])
+  const [clusters, setClusters] = React.useState<Cluster[]>([])
 
   const [activeSpotId, setActiveSpotId] = React.useState<string | null>(null)
   const camera = React.useRef<Camera>(null)
@@ -26,19 +28,24 @@ export default function MapScreen() {
   const isDark = theme === "dark"
   const queryClient = api.useContext()
   const onMapMove = async ({ properties }: Mapbox.MapState) => {
-    // todo: filters
-    const input = {
-      isPetFriendly: false,
-      isVerified: false,
-      isVanFriendly: false,
-      minLng: properties.bounds.sw[0],
-      minLat: properties.bounds.sw[1],
-      maxLng: properties.bounds.ne[0],
-      maxLat: properties.bounds.ne[1],
-      zoom: properties.zoom,
+    try {
+      // todo: filters
+      if (!properties.bounds) return
+      const input = {
+        isPetFriendly: false,
+        isVerified: false,
+        isVanFriendly: false,
+        minLng: properties.bounds.sw[0] || 0,
+        minLat: properties.bounds.sw[1] || 0,
+        maxLng: properties.bounds.ne[0] || 0,
+        maxLat: properties.bounds.ne[1] || 0,
+        zoom: properties.zoom,
+      }
+      const data = await queryClient.spot.clusters.fetch(input)
+      setClusters(data)
+    } catch {
+      console.log("oops")
     }
-    const data = await queryClient.spot.clusters.fetch(input)
-    setClusters(data)
   }
   return (
     <View className="flex-1">

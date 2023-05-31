@@ -53,8 +53,12 @@ export const spotRouter = createTRPCRouter({
       )
       return clusters.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], zoom || 5)
     }),
-  latest: publicProcedure.query(({ ctx }) =>
-    ctx.prisma.spot.findMany({ take: 20, select: { id: true, name: true, type: true } }),
+  latest: publicProcedure.query(async ({ ctx }) =>
+    ctx.prisma.spot.findMany({
+      take: 20,
+      select: { id: true, name: true, address: true, type: true, images: { select: { id: true, path: true } } },
+      orderBy: { createdAt: "desc" },
+    }),
   ),
   byId: publicProcedure.input(z.object({ id: z.string() })).query(({ ctx, input }) =>
     ctx.prisma.spot.findUnique({
