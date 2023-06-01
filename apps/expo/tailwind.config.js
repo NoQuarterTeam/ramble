@@ -4,10 +4,10 @@ module.exports = {
   content: ["./**/*.tsx"],
   theme: {
     fontFamily: {
-      body: ["Poppins_400Regular"],
-      label: ["Poppins_600SemiBold"],
-      heading: ["Poppins_700Bold"],
-      "extra-thick": ["Poppins_900Black"],
+      400: ["Poppins_400Regular"],
+      600: ["Poppins_600SemiBold"],
+      700: ["Poppins_700Bold"],
+      900: ["Poppins_900Black"],
     },
   },
 }

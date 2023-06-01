@@ -15,7 +15,7 @@ export default function Latest() {
   return (
     <View>
       <ScrollView className="min-h-full px-4 pt-20" contentContainerStyle={{ paddingBottom: 120 }}>
-        <Heading className="mb-4 text-4xl">Latest</Heading>
+        <Heading className="mb-4 text-3xl">Latest</Heading>
         {spots?.map((spot) => (
           <SpotItem key={spot.id} spot={spot} />
         ))}

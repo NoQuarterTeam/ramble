@@ -10,15 +10,18 @@ import { Text } from "./Text"
 export const buttonStyles = cva("flex items-center justify-center rounded-md border", {
   variants: {
     size: {
-      xs: "h-8",
-      sm: "h-10",
-      md: "h-12",
-      lg: "h-14",
+      xs: "h-8 px-2",
+      sm: "h-10 px-3",
+      md: "h-12 px-4",
+      lg: "h-14 px-5",
     },
     variant: {
-      primary: "bg-primary-600 border-primary-600",
-      outline: "border-gray-100 bg-transparent dark:border-gray-600",
-      ghost: "bg-transparent border-transparent",
+      primary: "border-transparent bg-gray-900 dark:bg-white",
+      secondary: "border-transparent bg-gray-100 dark:bg-gray-800",
+      destructive: "border-transparent bg-red-500",
+      outline: "border-gray-200 dark:border-gray-700",
+      ghost: "border-transparent",
+      link: "border-transparent",
     },
   },
   defaultVariants: {
@@ -26,7 +29,7 @@ export const buttonStyles = cva("flex items-center justify-center rounded-md bor
     size: "md",
   },
 })
-export const buttonTextStyles = cva("font-heading text-center text-lg", {
+export const buttonTextStyles = cva("text-center font-600 text-md", {
   variants: {
     size: {
       xs: "text-xs",
@@ -35,9 +38,12 @@ export const buttonTextStyles = cva("font-heading text-center text-lg", {
       lg: "text-lg",
     },
     variant: {
-      primary: "text-white",
-      outline: "text-gray-900 dark:text-white",
-      ghost: "text-gray-900 dark:text-white",
+      primary: "text-white dark:text-black",
+      secondary: "text-black dark:text-white",
+      destructive: "text-white",
+      outline: "",
+      ghost: "",
+      link: "underline",
     },
   },
 })
@@ -48,9 +54,10 @@ interface Props extends TouchableOpacityProps, ButtonStyleProps {
   textClassName?: string
   children: React.ReactNode
   isLoading?: boolean
+  leftIcon?: React.ReactNode
 }
 
-export function Button({ variant = "primary", size = "md", isLoading, ...props }: Props) {
+export function Button({ variant = "primary", leftIcon, size = "md", isLoading, ...props }: Props) {
   const colorScheme = useColorScheme()
   return (
     <TouchableOpacity
@@ -58,8 +65,10 @@ export function Button({ variant = "primary", size = "md", isLoading, ...props }
       disabled={props.disabled || isLoading}
       activeOpacity={0.7}
       className={merge(
-        buttonStyles({ variant, size, className: props.className }),
+        buttonStyles({ variant, size }),
         (props.disabled || isLoading) && "opacity-70",
+        "flex flex-row items-center justify-center space-x-2",
+        props.className,
       )}
     >
       {isLoading ? (
@@ -68,7 +77,10 @@ export function Button({ variant = "primary", size = "md", isLoading, ...props }
           color={variant === "primary" ? "white" : colorScheme === "dark" ? "white" : "black"}
         />
       ) : (
-        <Text className={buttonTextStyles({ variant, className: props.textClassName })}>{props.children}</Text>
+        <>
+          {leftIcon}
+          <Text className={buttonTextStyles({ variant, className: props.textClassName })}>{props.children}</Text>
+        </>
       )}
     </TouchableOpacity>
   )

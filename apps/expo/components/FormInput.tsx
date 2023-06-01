@@ -43,7 +43,7 @@ export function FormInput({ label, name, error, rightElement, ...props }: Props)
 }
 
 export function FormInputLabel({ label }: { label: string }) {
-  return <Text className="font-label">{label}</Text>
+  return <Text className="font-400">{label}</Text>
 }
 
 export function FormInputError({ error }: { error: string }) {

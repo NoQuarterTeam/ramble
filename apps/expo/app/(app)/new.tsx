@@ -1,11 +1,11 @@
 import { View } from "react-native"
 
-import { Text } from "../../components/Text"
+import { Heading } from "../../components/Heading"
 
 export default function New() {
   return (
-    <View>
-      <Text>Hello</Text>
+    <View className="px-4 py-20">
+      <Heading className="text-3xl">New spot</Heading>
     </View>
   )
 }

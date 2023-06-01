@@ -4,7 +4,7 @@ import { merge } from "@ramble/shared"
 
 export function Heading(props: TextProps) {
   return (
-    <RText {...props} className={merge("font-heading dark:text-white", props.className)}>
+    <RText {...props} className={merge("font-bold dark:text-white", props.className)}>
       {props.children}
     </RText>
   )
