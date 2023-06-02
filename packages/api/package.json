@@ -16,7 +16,7 @@
     "@ramble/shared": "workspace:*",
     "@trpc/server": "^10.28.1",
     "bcryptjs": "^2.4.3",
-    "dayjs": "1.11.7",
+    "dayjs": "1.11.8",
     "jsonwebtoken": "9.0.0",
     "supercluster": "^8.0.0",
     "superjson": "^1.12.2",
