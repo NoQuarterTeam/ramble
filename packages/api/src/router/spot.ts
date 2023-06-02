@@ -1,7 +1,8 @@
 import { z } from "zod"
 import { createTRPCRouter, publicProcedure } from "../trpc"
-import { SpotType } from "@ramble/database/types"
+import { Spot, SpotImage, SpotType } from "@ramble/database/types"
 import Supercluster from "supercluster"
+import { TRPCError } from "@trpc/server"
 
 export const spotRouter = createTRPCRouter({
   clusters: publicProcedure
@@ -37,11 +38,8 @@ export const spotRouter = createTRPCRouter({
         },
         orderBy: { createdAt: "desc" },
       })
-
       if (spots.length === 0) return []
-
       const supercluster = new Supercluster()
-
       const clusters = supercluster.load(
         spots.map((spot) => ({
           type: "Feature",
@@ -51,17 +49,24 @@ export const spotRouter = createTRPCRouter({
       )
       return clusters.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], zoom || 5)
     }),
-  latest: publicProcedure.query(async ({ ctx }) =>
-    ctx.prisma.spot.findMany({
-      take: 20,
-      select: { id: true, name: true, address: true, type: true, images: { select: { id: true, path: true } } },
-      orderBy: { createdAt: "desc" },
-    }),
+  latest: publicProcedure.query(
+    async ({ ctx }) =>
+      ctx.prisma.$queryRaw<Array<Pick<Spot, "id" | "name" | "address"> & { rating: number; image: SpotImage["path"] }>>`
+        SELECT Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating, (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image
+        FROM Spot
+        LEFT JOIN Review ON Spot.id = Review.spotId
+        GROUP BY Spot.id
+        ORDER BY Spot.createdAt DESC, Spot.id
+        LIMIT 20
+      `,
   ),
-  byId: publicProcedure.input(z.object({ id: z.string() })).query(({ ctx, input }) =>
-    ctx.prisma.spot.findUnique({
+  byIdPreview: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
+    const spot = await ctx.prisma.spot.findUnique({
       where: { id: input.id },
       include: { verifier: true, _count: { select: { reviews: true } }, images: true },
-    }),
-  ),
+    })
+    if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
+    const rating = await ctx.prisma.review.aggregate({ where: { spotId: input.id }, _avg: { rating: true } })
+    return { ...spot, rating }
+  }),
 })

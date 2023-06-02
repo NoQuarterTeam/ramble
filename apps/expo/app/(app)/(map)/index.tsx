@@ -213,7 +213,7 @@ export default function MapScreen() {
 }
 
 const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: string; onClose: () => void }) {
-  const { data: spot, isLoading } = api.spot.byId.useQuery({ id }, { keepPreviousData: true })
+  const { data: spot, isLoading } = api.spot.byIdPreview.useQuery({ id }, { keepPreviousData: true })
   const colorScheme = useColorScheme()
   if (isLoading && !spot) return null
   return (
@@ -247,8 +247,7 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
             <View className="flex flex-row flex-wrap items-center space-x-1 text-sm">
               <Star size={16} className="text-black dark:text-white" />
 
-              {/* <Text>{rating._avg.rating?.toFixed(1) || "Not rated"}</Text>} */}
-              <Text>{5 || "Not rated"}</Text>
+              <Text>{spot.rating._avg.rating?.toFixed(1) || "Not rated"}</Text>
 
               <Text>·</Text>
               <Text>
