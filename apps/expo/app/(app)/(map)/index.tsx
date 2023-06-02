@@ -63,8 +63,6 @@ export default function MapScreen() {
 
   const onMapMove = async ({ properties }: Mapbox.MapState) => {
     try {
-      console.log("ooooo")
-
       setIsFetching(true)
       if (!properties.bounds) return
       const input = {
