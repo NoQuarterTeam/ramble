@@ -7,7 +7,7 @@ import * as Location from "expo-location"
 import { useRouter } from "expo-router"
 import { BadgeCheck, BadgeX, Dog, List, Navigation, Settings2, Star, Verified, X } from "lucide-react-native"
 
-import { type SpotType } from "@ramble/database/types"
+import { SpotImage, type SpotType } from "@ramble/database/types"
 import { createImageUrl, INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
@@ -260,16 +260,7 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
               </Text>
             </View>
           </View>
-          <Carousel
-            loop
-            width={width - 56}
-            height={200}
-            style={{ borderRadius: 10 }}
-            data={spot.images}
-            renderItem={({ item: image }) => (
-              <Image key={image.id} source={{ uri: createImageUrl(image.path) }} className="h-[200px] w-full object-cover" />
-            )}
-          />
+          <ImageCarousel key={spot.id} images={spot.images} />
         </View>
       )}
       <TouchableOpacity onPress={onClose} className="absolute right-2 top-2 flex items-center justify-center p-2">
@@ -278,6 +269,29 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
     </View>
   )
 })
+
+function ImageCarousel({ images }: { images: Pick<SpotImage, "id" | "path">[] }) {
+  const [imageIndex, setImageIndex] = React.useState(0)
+
+  return (
+    <View>
+      <Carousel
+        loop
+        width={width - 56}
+        height={200}
+        onSnapToItem={setImageIndex}
+        style={{ borderRadius: 10 }}
+        data={images}
+        renderItem={({ item: image }) => (
+          <Image key={image.id} source={{ uri: createImageUrl(image.path) }} className="h-[200px] w-full object-cover" />
+        )}
+      />
+      <View className="absolute bottom-2 right-2 rounded bg-gray-800/70 p-1">
+        <Text className="text-xs text-white">{`${imageIndex + 1}/${images.length}`}</Text>
+      </View>
+    </View>
+  )
+}
 
 interface Props {
   initialFilters: Filters
