@@ -19,19 +19,17 @@ async function getMapClusters(request: Request) {
     maxLng: NumAsString,
     type: z.array(z.string()).or(z.string()).optional(),
     isPetFriendly: CheckboxAsString.optional(),
-    isVanFriendly: CheckboxAsString.optional(),
     isVerified: CheckboxAsString.optional(),
   })
   const result = schema.safeParse(queryString.parse(new URL(request.url).search, { arrayFormat: "bracket" }))
   if (!result.success) return []
-  const { zoom, type, isVerified, isPetFriendly, isVanFriendly, ...coords } = result.data
+  const { zoom, type, isVerified, isPetFriendly, ...coords } = result.data
 
   const spots = await db.spot.findMany({
     select: { id: true, latitude: true, longitude: true, type: true },
     where: {
       verifiedAt: isVerified ? { not: { equals: null } } : undefined,
       isPetFriendly: isPetFriendly ? { equals: true } : undefined,
-      isVanFriendly: isVanFriendly ? { equals: true } : undefined,
       latitude: { gt: coords.minLat, lt: coords.maxLat },
       longitude: { gt: coords.minLng, lt: coords.maxLng },
       type: type

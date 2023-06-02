@@ -25,7 +25,7 @@ export const buttonStyles = cva(
         destructive: "border-transparent text-white bg-red-500 hover:bg-red-600 active:bg-red-700",
         outline: "border-black/10 dark:border-white/10",
         ghost: "",
-        link: "hover:underline",
+        link: "underline",
       },
       disabled: {
         true: "relative opacity-70 pointer-events-none",
@@ -33,7 +33,7 @@ export const buttonStyles = cva(
     },
     compoundVariants: [
       {
-        variant: ["ghost", "outline"],
+        variant: ["ghost", "outline", "link"],
         className:
           "text-black dark:text-white bg-transparent hover:bg-black/5 active:bg-black/20 dark:hover:bg-white/10 dark:active:bg-white/20",
       },

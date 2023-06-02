@@ -29,7 +29,7 @@ export const buttonStyles = cva("flex items-center justify-center rounded-md bor
     size: "md",
   },
 })
-export const buttonTextStyles = cva("text-center font-600 text-md", {
+export const buttonTextStyles = cva("text-center font-500 text-md", {
   variants: {
     size: {
       xs: "text-xs",

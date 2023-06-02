@@ -1,9 +1,9 @@
-import * as React from "react"
-import { Dog, Settings2, Truck, Verified } from "lucide-react"
+import { Dog, Settings2, Verified } from "lucide-react"
 import queryString from "query-string"
+import * as React from "react"
 
 import { useDisclosure } from "@ramble/shared"
-import { Button, Modal, ModalFooter, Switch } from "@ramble/ui"
+import { Button, Modal, Switch } from "@ramble/ui"
 
 import { SPOT_OPTIONS } from "~/lib/spots"
 
@@ -18,7 +18,23 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
       {
         ...existingParams,
         type: type || undefined,
+        isVerified: values.isVerified || undefined,
         isPetFriendly: values.isPetFriendly || undefined,
+      },
+      { arrayFormat: "bracket" },
+    )
+    onChange(newParams)
+    modalProps.onClose()
+  }
+
+  const onClear = () => {
+    const existingParams = queryString.parse(window.location.search, { arrayFormat: "bracket" })
+    const newParams = queryString.stringify(
+      {
+        ...existingParams,
+        isVerified: undefined,
+        type: undefined,
+        isPetFriendly: undefined,
       },
       { arrayFormat: "bracket" },
     )
@@ -85,28 +101,16 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
                 className="mt-1"
               />
             </label>
-            <label htmlFor="isVanFriendly" className="flex items-center justify-between space-x-4">
-              <div className="flex items-center space-x-4">
-                <Truck className="sq-6" />
-                <div>
-                  <p>Van allowed</p>
-                  <p className="text-sm opacity-70">Bring your van!</p>
-                </div>
-              </div>
-              <Switch
-                name="isVanFriendly"
-                id="isVanFriendly"
-                defaultChecked={Boolean(queryString.parse(window.location.search).isVanFriendly)}
-                className="mt-1"
-              />
-            </label>
           </div>
 
-          <ModalFooter>
+          <div className="flex w-full justify-between">
+            <Button variant="link" size="lg" onClick={onClear}>
+              Clear all
+            </Button>
             <Button size="lg" type="submit">
               Save filters
             </Button>
-          </ModalFooter>
+          </div>
         </form>
       </Modal>
     </>

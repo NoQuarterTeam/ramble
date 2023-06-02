@@ -1,10 +1,12 @@
+import * as React from "react"
 import { type SpotType } from "@ramble/database/types"
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE, useDisclosure } from "@ramble/shared"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
+import * as Location from "expo-location"
 import Mapbox, { Camera, MarkerView, type MapView as MapType } from "@rnmapbox/maps"
 import { Image } from "expo-image"
 import { useRouter } from "expo-router"
-import { BadgeX, List, Navigation, Settings2, Star, Verified, X } from "lucide-react-native"
-import * as React from "react"
+import { BadgeCheck, BadgeX, Dog, List, Navigation, Settings2, Star, Verified, X } from "lucide-react-native"
+
 import { Modal, ScrollView, Switch, TouchableOpacity, View, useColorScheme } from "react-native"
 import { Link } from "../../../components/Link"
 import { ModalView } from "../../../components/ModalView"
@@ -14,6 +16,7 @@ import { SPOTS, SPOT_OPTIONS } from "../../../lib/spots"
 import colors from "@ramble/tailwind-config/src/colors"
 import { Button } from "../../../components/Button"
 import { Heading } from "../../../components/Heading"
+import { Spinner } from "../../../components/Spinner"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
@@ -22,20 +25,19 @@ type Cluster = RouterOutputs["spot"]["clusters"][number]
 type Filters = {
   isPetFriendly: boolean
   isVerified: boolean
-  isVanFriendly: boolean
   types: SpotType[]
 }
 
 const initialFilters: Filters = {
   isPetFriendly: false,
   isVerified: false,
-  isVanFriendly: false,
   types: [],
 }
 
 export default function MapScreen() {
   const router = useRouter()
-  const [clusters, setClusters] = React.useState<Cluster[]>([])
+  const [location, setLocation] = React.useState<Location.LocationObjectCoords | null>(null)
+  const [clusters, setClusters] = React.useState<Cluster[] | null>(null)
   const filterModalProps = useDisclosure()
   const [activeSpotId, setActiveSpotId] = React.useState<string | null>(null)
   const [filters, setFilters] = React.useState<Filters>(initialFilters)
@@ -43,10 +45,27 @@ export default function MapScreen() {
   const mapRef = React.useRef<MapType>(null)
   const theme = useColorScheme()
   const isDark = theme === "dark"
+  const [isFetching, setIsFetching] = React.useState(false)
   const queryClient = api.useContext()
+
+  React.useEffect(() => {
+    ;(async () => {
+      try {
+        const { status } = await Location.requestForegroundPermissionsAsync()
+        if (status !== "granted") return
+        const loc = await Location.getCurrentPositionAsync()
+        setLocation(loc.coords)
+      } catch {
+        console.log("oops")
+      }
+    })()
+  }, [])
+
   const onMapMove = async ({ properties }: Mapbox.MapState) => {
     try {
-      // todo: filters
+      console.log("ooooo")
+
+      setIsFetching(true)
       if (!properties.bounds) return
       const input = {
         ...filters,
@@ -60,12 +79,14 @@ export default function MapScreen() {
       setClusters(data)
     } catch {
       console.log("oops")
+    } finally {
+      setIsFetching(false)
     }
   }
 
   const markers = React.useMemo(
     () =>
-      clusters.map((point, i) => {
+      clusters?.map((point, i) => {
         if (point.properties.cluster) {
           return (
             <MarkerView key={i} coordinate={point.geometry.coordinates}>
@@ -133,12 +154,19 @@ export default function MapScreen() {
         <Camera
           ref={camera}
           allowUpdates
-          // followUserLocation
-          defaultSettings={{ centerCoordinate: [INITIAL_LONGITUDE, INITIAL_LATITUDE], zoomLevel: 8 }}
+          defaultSettings={{
+            centerCoordinate: [location?.longitude || INITIAL_LONGITUDE, location?.latitude || INITIAL_LATITUDE],
+            zoomLevel: 8,
+          }}
         />
         {markers}
       </Mapbox.MapView>
 
+      {isFetching && !!!clusters && (
+        <View className="absolute left-4 top-10 flex items-center justify-center rounded-lg bg-white p-2 dark:bg-gray-800">
+          <Spinner />
+        </View>
+      )}
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={() => router.push("(map)/latest")}
@@ -154,12 +182,14 @@ export default function MapScreen() {
       >
         <Settings2 size={20} className="text-black" />
       </TouchableOpacity>
-      <TouchableOpacity
-        // onPress={() => router.push("(map)/latest")}
-        className="absolute bottom-3 right-3 flex flex-row items-center justify-center rounded-full bg-white p-3"
-      >
-        <Navigation size={20} className="text-black" />
-      </TouchableOpacity>
+      {!!location && (
+        <TouchableOpacity
+          onPress={() => camera.current?.moveTo([location.longitude, location.latitude])}
+          className="absolute bottom-3 right-3 flex flex-row items-center justify-center rounded-full bg-white p-3"
+        >
+          <Navigation size={20} className="text-black" />
+        </TouchableOpacity>
+      )}
 
       {activeSpotId && <SpotPreview id={activeSpotId} onClose={() => setActiveSpotId(null)} />}
       <Modal
@@ -251,28 +281,60 @@ export function MapFilters(props: Props) {
   const [filters, setFilters] = React.useState(props.initialFilters)
   return (
     <View className="flex-1 pb-10 pt-4">
-      <ScrollView className="space-y-4">
+      <ScrollView className="space-y-5">
         <View className="space-y-1">
-          <Heading className="text-xl">Spot type</Heading>
+          <Heading className="font-400 text-2xl">Spot type</Heading>
           <View className="flex flex-row flex-wrap gap-2">
-            {SPOT_OPTIONS.map((type) => (
-              <Button
-                variant={filters.types.includes(type.value) ? "primary" : "outline"}
-                size="lg"
-                leftIcon={<type.Icon size={20} className="text-black dark:text-white" />}
-                key={type.value}
-                // onPress={() => setIsSelected((s) => !s)}
-              >
-                {type.label}
-              </Button>
-            ))}
+            {SPOT_OPTIONS.map((type) => {
+              const isSelected = filters.types.includes(type.value)
+              return (
+                <Button
+                  variant={isSelected ? "primary" : "outline"}
+                  leftIcon={
+                    <type.Icon
+                      size={20}
+                      className={join(isSelected ? "text-white dark:text-black" : "text-black dark:text-white")}
+                    />
+                  }
+                  key={type.value}
+                  onPress={() =>
+                    setFilters((f) => ({
+                      ...f,
+                      types: isSelected ? f.types.filter((t) => t !== type.value) : [...f.types, type.value],
+                    }))
+                  }
+                >
+                  {type.label}
+                </Button>
+              )
+            })}
           </View>
         </View>
 
-        <View className="space-y-1">
-          <Heading className="text-xl">Options</Heading>
-          <View className="flex flex-row items-center space-x-4">
-            <Text>Pet friendly</Text>
+        <View className="space-y-2">
+          <Heading className="font-400 text-2xl">Options</Heading>
+          <View className="flex flex-row items-center justify-between space-x-4">
+            <View className="flex flex-row items-center space-x-4">
+              <BadgeCheck size={30} className="text-black dark:text-white" />
+              <View>
+                <Text className="text-lg">Verified spots</Text>
+                <Text className="text-sm opacity-75">Spots verified by an Ambassador</Text>
+              </View>
+            </View>
+            <Switch
+              trackColor={{ true: colors.primary[600] }}
+              value={filters.isVerified}
+              onValueChange={() => setFilters((f) => ({ ...f, isVerified: !f.isVerified }))}
+            />
+          </View>
+          <View className="flex flex-row items-center justify-between space-x-4">
+            <View className="flex flex-row items-center space-x-4">
+              <Dog size={30} className="text-black dark:text-white" />
+              <View>
+                <Text className="text-lg">Pet friendly</Text>
+                <Text className="text-sm opacity-75">Furry friends allowed</Text>
+              </View>
+            </View>
             <Switch
               trackColor={{ true: colors.primary[600] }}
               value={filters.isPetFriendly}
@@ -286,7 +348,7 @@ export function MapFilters(props: Props) {
           Clear all
         </Button>
         <Button className="w-[120px]" onPress={() => props.onSave(filters)}>
-          Save
+          Save filters
         </Button>
       </View>
     </View>

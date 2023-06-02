@@ -1,6 +1,15 @@
 import { useColorScheme } from "react-native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
-import { Poppins_400Regular, Poppins_600SemiBold, Poppins_700Bold, Poppins_900Black, useFonts } from "@expo-google-fonts/poppins"
+import {
+  Poppins_300Light,
+  Poppins_400Regular,
+  Poppins_500Medium,
+  Poppins_600SemiBold,
+  Poppins_700Bold,
+  Poppins_800ExtraBold,
+  Poppins_900Black,
+  useFonts,
+} from "@expo-google-fonts/poppins"
 import { SplashScreen, Stack } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 
@@ -12,9 +21,12 @@ import { useCheckExpoUpdates } from "../lib/hooks/useCheckExpoUpdates"
 // It wraps your pages with the providers they need
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
+    Poppins_300Light,
     Poppins_400Regular,
+    Poppins_500Medium,
     Poppins_600SemiBold,
     Poppins_700Bold,
+    Poppins_800ExtraBold,
     Poppins_900Black,
   })
   const { isDoneChecking, isNewUpdateAvailable } = useCheckExpoUpdates()
