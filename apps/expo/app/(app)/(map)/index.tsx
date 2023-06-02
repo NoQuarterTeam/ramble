@@ -251,11 +251,11 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
                 </Text>
               </TouchableOpacity>
             </Link>
-            <View className="flex flex-row flex-wrap items-center space-x-1 text-sm">
+            <View className="flex flex-row flex-wrap items-center space-x-1 pb-2">
               <Star size={16} className="text-black dark:text-white" />
-              <Text>{spot.rating._avg.rating?.toFixed(1) || "Not rated"}</Text>
+              <Text className="text-sm">{spot.rating._avg.rating?.toFixed(1) || "Not rated"}</Text>
               <Text>·</Text>
-              <Text>
+              <Text className="text-sm">
                 {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
               </Text>
             </View>
