@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   presets: [require("@ramble/tailwind-config")],
-  content: ["./**/*.tsx"],
+  content: ["./app/**/*.tsx", "./components/**/*.tsx", "./lib/**/*.tsx"],
   theme: {
     fontFamily: {
       400: ["Poppins_400Regular"],
