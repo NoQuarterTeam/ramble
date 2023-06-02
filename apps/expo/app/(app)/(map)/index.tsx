@@ -1,22 +1,25 @@
 import * as React from "react"
-import { type SpotType } from "@ramble/database/types"
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
-import * as Location from "expo-location"
-import Mapbox, { Camera, MarkerView, type MapView as MapType } from "@rnmapbox/maps"
+import { Modal, ScrollView, Switch, TouchableOpacity, useColorScheme, View } from "react-native"
+import Carousel from "react-native-reanimated-carousel"
+import Mapbox, { Camera, type MapView as MapType, MarkerView } from "@rnmapbox/maps"
 import { Image } from "expo-image"
+import * as Location from "expo-location"
 import { useRouter } from "expo-router"
 import { BadgeCheck, BadgeX, Dog, List, Navigation, Settings2, Star, Verified, X } from "lucide-react-native"
 
-import { Modal, ScrollView, Switch, TouchableOpacity, View, useColorScheme } from "react-native"
-import { Link } from "../../../components/Link"
-import { ModalView } from "../../../components/ModalView"
-import { Text } from "../../../components/Text"
-import { api, type RouterOutputs } from "../../../lib/api"
-import { SPOTS, SPOT_OPTIONS } from "../../../lib/spots"
+import { type SpotType } from "@ramble/database/types"
+import { createImageUrl, INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
+
 import { Button } from "../../../components/Button"
 import { Heading } from "../../../components/Heading"
+import { Link } from "../../../components/Link"
+import { ModalView } from "../../../components/ModalView"
 import { Spinner } from "../../../components/Spinner"
+import { Text } from "../../../components/Text"
+import { api, type RouterOutputs } from "../../../lib/api"
+import { SPOT_OPTIONS, SPOTS } from "../../../lib/spots"
+import { width } from "../../../lib/device"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
@@ -86,20 +89,22 @@ export default function MapScreen() {
     () =>
       clusters?.map((point, i) => {
         if (point.properties.cluster) {
+          const onPress = async () => {
+            const currentZoom = await mapRef.current?.getZoom()
+            camera.current?.setCamera({
+              zoomLevel: Math.min((currentZoom || 5) + 2, 14),
+              animationMode: "linearTo",
+              animationDuration: 300,
+              centerCoordinate: point.geometry.coordinates,
+              padding: { paddingBottom: activeSpotId ? 300 : 0, paddingLeft: 0, paddingRight: 0, paddingTop: 0 },
+            })
+          }
           return (
             <MarkerView key={i} coordinate={point.geometry.coordinates}>
               <TouchableOpacity
                 activeOpacity={0.7}
-                onPress={async () => {
-                  const currentZoom = await mapRef.current?.getZoom()
-                  camera.current?.setCamera({
-                    zoomLevel: Math.min((currentZoom || 5) + 2, 14),
-                    animationMode: "linearTo",
-                    animationDuration: 300,
-                    centerCoordinate: point.geometry.coordinates,
-                    padding: { paddingBottom: activeSpotId ? 300 : 0, paddingLeft: 0, paddingRight: 0, paddingTop: 0 },
-                  })
-                }}
+                onPress={onPress}
+                onPressIn={onPress}
                 className="sq-10 border-primary-100 bg-primary-800 dark:border-primary-700 dark:bg-primary-900 flex items-center justify-center rounded-full border"
               >
                 <Text className="text-center text-sm text-white">{point.properties.point_count_abbreviated}</Text>
@@ -109,19 +114,21 @@ export default function MapScreen() {
         } else {
           const spot = point.properties as { type: SpotType; id: string }
           const Icon = SPOTS[spot.type].Icon
+          const onPress = () => {
+            camera.current?.setCamera({
+              animationMode: "linearTo",
+              animationDuration: 300,
+              centerCoordinate: point.geometry.coordinates,
+              padding: { paddingBottom: 300, paddingLeft: 0, paddingRight: 0, paddingTop: 0 },
+            })
+            setActiveSpotId(spot.id)
+          }
           return (
             <MarkerView key={spot.id} coordinate={point.geometry.coordinates}>
               <TouchableOpacity
                 activeOpacity={0.7}
-                onPress={() => {
-                  setActiveSpotId(spot.id)
-                  camera.current?.setCamera({
-                    animationMode: "linearTo",
-                    animationDuration: 300,
-                    centerCoordinate: point.geometry.coordinates,
-                    padding: { paddingBottom: 300, paddingLeft: 0, paddingRight: 0, paddingTop: 0 },
-                  })
-                }}
+                onPress={onPress}
+                onPressIn={onPress}
                 className="sq-8 bg-primary-600 dark:bg-primary-700 border-primary-100 dark:border-primary-600 z-10 flex items-center justify-center rounded-full border shadow-md"
               >
                 <Icon size={20} color="white" />
@@ -213,7 +220,7 @@ export default function MapScreen() {
 }
 
 const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: string; onClose: () => void }) {
-  const { data: spot, isLoading } = api.spot.byIdPreview.useQuery({ id }, { keepPreviousData: true })
+  const { data: spot, isLoading } = api.spot.mapPreview.useQuery({ id }, { keepPreviousData: true })
   const colorScheme = useColorScheme()
   if (isLoading && !spot) return null
   return (
@@ -237,29 +244,32 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
                 <Text>Unverified</Text>
               </View>
             )}
-            <Link
-              numberOfLines={2}
-              href={`/spots/${spot.id}`}
-              className="text-lg leading-6 text-black hover:underline dark:text-white"
-            >
-              {spot.name}
+            <Link href={`/spots/${spot.id}`} asChild>
+              <TouchableOpacity activeOpacity={0.7}>
+                <Text numberOfLines={2} className="text-lg leading-6 text-black hover:underline dark:text-white">
+                  {spot.name}
+                </Text>
+              </TouchableOpacity>
             </Link>
             <View className="flex flex-row flex-wrap items-center space-x-1 text-sm">
               <Star size={16} className="text-black dark:text-white" />
-
               <Text>{spot.rating._avg.rating?.toFixed(1) || "Not rated"}</Text>
-
               <Text>·</Text>
               <Text>
                 {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
               </Text>
             </View>
           </View>
-          <ScrollView horizontal className="space-x-1" bounces snapToAlignment="start">
-            {spot.images.map((image) => (
-              <Image key={image.id} source={{ uri: image.path }} className="h-[200px] w-[300px] rounded-md object-cover" />
-            ))}
-          </ScrollView>
+          <Carousel
+            loop
+            width={width - 56}
+            height={200}
+            style={{ borderRadius: 10 }}
+            data={spot.images}
+            renderItem={({ item: image }) => (
+              <Image key={image.id} source={{ uri: createImageUrl(image.path) }} className="h-[200px] w-full object-cover" />
+            )}
+          />
         </View>
       )}
       <TouchableOpacity onPress={onClose} className="absolute right-2 top-2 flex items-center justify-center p-2">

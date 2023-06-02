@@ -132,6 +132,9 @@ importers:
       react-native-reanimated:
         specifier: 2.14.4
         version: 2.14.4(@babel/core@7.20.2)(react-native@0.71.8)(react@18.2.0)
+      react-native-reanimated-carousel:
+        specifier: ^3.3.2
+        version: 3.3.2(react-native-gesture-handler@2.9.0)(react-native-reanimated@2.14.4)(react-native@0.71.8)(react@18.2.0)
       react-native-safe-area-context:
         specifier: 4.5.0
         version: 4.5.0(react-native@0.71.8)(react@18.2.0)
@@ -14972,6 +14975,20 @@ packages:
     dependencies:
       prop-types: 15.8.1
       react-native-svg: 13.4.0(react-native@0.71.8)(react@18.2.0)
+    dev: false
+
+  /react-native-reanimated-carousel@3.3.2(react-native-gesture-handler@2.9.0)(react-native-reanimated@2.14.4)(react-native@0.71.8)(react@18.2.0):
+    resolution: {integrity: sha512-mlYLt43dEQzYhfioBr59/iDk25UzU3Rb48HYcI+nnDLu7bWO7y6pC22ugL0RV/XehmMxo5oK6QlaoEPgcdRxLg==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-native: '>=0.6.0'
+      react-native-gesture-handler: '*'
+      react-native-reanimated: '>=2.7.0'
+    dependencies:
+      react: 18.2.0
+      react-native: 0.71.8(@babel/core@7.20.2)(@babel/preset-env@7.20.2)(react@18.2.0)
+      react-native-gesture-handler: 2.9.0(react-native@0.71.8)(react@18.2.0)
+      react-native-reanimated: 2.14.4(@babel/core@7.20.2)(react-native@0.71.8)(react@18.2.0)
     dev: false
 
   /react-native-reanimated@2.14.4(@babel/core@7.20.2)(react-native@0.71.8)(react@18.2.0):

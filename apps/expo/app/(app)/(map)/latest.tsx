@@ -1,7 +1,6 @@
+import { ScrollView, TouchableOpacity, View } from "react-native"
 import { useRouter } from "expo-router"
 import { Map } from "lucide-react-native"
-
-import { ScrollView, TouchableOpacity, View } from "react-native"
 
 import { Heading } from "../../../components/Heading"
 import { SpotItem } from "../../../components/SpotItem"

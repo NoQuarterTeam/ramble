@@ -4,5 +4,5 @@
 module.exports = {
   root: true,
   extends: ["@ramble/eslint-config"],
-  ignorePatterns: ["*.config.js", "node_modules"],
+  ignorePatterns: ["*.config.js", "*.config.ts", "node_modules"],
 }

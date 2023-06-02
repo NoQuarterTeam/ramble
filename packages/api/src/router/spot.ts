@@ -60,7 +60,16 @@ export const spotRouter = createTRPCRouter({
         LIMIT 20
       `,
   ),
-  byIdPreview: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
+  mapPreview: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
+    const spot = await ctx.prisma.spot.findUnique({
+      where: { id: input.id },
+      include: { verifier: true, _count: { select: { reviews: true } }, images: true },
+    })
+    if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
+    const rating = await ctx.prisma.review.aggregate({ where: { spotId: input.id }, _avg: { rating: true } })
+    return { ...spot, rating }
+  }),
+  detail: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
     const spot = await ctx.prisma.spot.findUnique({
       where: { id: input.id },
       include: { verifier: true, _count: { select: { reviews: true } }, images: true },
