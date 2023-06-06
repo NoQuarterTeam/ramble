@@ -23,3 +23,5 @@ export const ENV = environment.ENV
 export const IS_DEV = ENV === "development"
 export const IS_PREVIEW = ENV === "preview"
 export const IS_PRODUCTION = ENV === "production"
+
+export const EXPO_PROFILE_TAB_ID = "__EXPO_TAB_ID__"

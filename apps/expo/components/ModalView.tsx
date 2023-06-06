@@ -17,8 +17,8 @@ export function ModalView(props: Props) {
   const colorScheme = useColorScheme()
   return (
     <View className="h-full bg-white px-4 pt-6 dark:bg-black">
-      <View className="flex flex-row justify-between">
-        {props.title ? <Heading className="text-xl">{props.title}</Heading> : <Text />}
+      <View className="flex flex-row justify-between pb-2">
+        {props.title ? <Heading className="text-2xl">{props.title}</Heading> : <Text />}
         <TouchableOpacity onPress={props.onBack || router.back} className="p-1">
           <Feather name="x" size={24} color={colorScheme === "dark" ? "white" : "black"} />
         </TouchableOpacity>

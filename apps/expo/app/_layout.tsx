@@ -14,7 +14,7 @@ import { SplashScreen, Stack } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 
 import { NewUpdate } from "../components/NewUpdate"
-import { TRPCProvider } from "../lib/api"
+import { TRPCProvider, api } from "../lib/api"
 import { useCheckExpoUpdates } from "../lib/hooks/useCheckExpoUpdates"
 
 // This is the main layout of the app
@@ -41,13 +41,21 @@ export default function RootLayout() {
         {isNewUpdateAvailable ? (
           <NewUpdate />
         ) : (
-          <Stack initialRouteName="(app)" screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="(app)" />
-            <Stack.Screen name="(auth)" options={{ presentation: "modal" }} />
-          </Stack>
+          <CurrentUser>
+            <Stack initialRouteName="(app)" screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="(app)" />
+              <Stack.Screen name="(auth)" options={{ presentation: "modal" }} />
+            </Stack>
+          </CurrentUser>
         )}
         <StatusBar style={isDark ? "light" : "dark"} />
       </SafeAreaProvider>
     </TRPCProvider>
   )
+}
+
+function CurrentUser(props: { children: React.ReactNode }) {
+  const { isLoading } = api.auth.me.useQuery()
+  if (isLoading) return <SplashScreen />
+  return <>{props.children}</>
 }

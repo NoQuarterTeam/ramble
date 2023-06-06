@@ -1,7 +1,7 @@
 import { FormProvider } from "react-hook-form"
 import { KeyboardAvoidingView, ScrollView } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { Link, useNavigation, useRouter } from "expo-router"
+import { Link, useNavigation, useRouter, useSearchParams } from "expo-router"
 
 import { Button } from "../../components/Button"
 import { FormError } from "../../components/FormError"
@@ -9,27 +9,31 @@ import { FormInput } from "../../components/FormInput"
 import { ModalView } from "../../components/ModalView"
 import { api, AUTH_TOKEN } from "../../lib/api"
 import { useForm } from "../../lib/hooks/useForm"
+import { registerSchema } from "@ramble/api/src/schemas/user"
+import { z } from "zod"
 
 export default function Register() {
   const queryClient = api.useContext()
   const router = useRouter()
   const navigation = useNavigation()
+  const { profile } = useSearchParams<{ profile: string }>()
   const login = api.auth.register.useMutation({
     onSuccess: async (data) => {
       await AsyncStorage.setItem(AUTH_TOKEN, data.token)
       queryClient.auth.me.setData(undefined, data.user)
-      if (navigation.canGoBack()) {
-        router.back()
+      if (profile === "true" || !navigation.canGoBack()) {
+        router.replace({ pathname: "/[username]", params: { username: data.user.username } })
       } else {
-        router.replace("/profile")
+        router.back()
       }
     },
   })
   const form = useForm({
+    schema: registerSchema,
     defaultValues: { email: "", password: "", username: "", firstName: "", lastName: "" },
   })
 
-  const handleRegister = async (data: unknown) => {
+  const handleRegister = async (data: z.infer<typeof registerSchema>) => {
     await AsyncStorage.removeItem(AUTH_TOKEN)
     login.mutate(data)
   }
@@ -58,7 +62,7 @@ export default function Register() {
               Register
             </Button>
             {login.error?.data?.formError && <FormError className="mb-1" error={login.error.data.formError} />}
-            <Link href="/login" className="text-lg">
+            <Link href={`/login${profile === "true" ? "?profile=true" : ""}`} className="text-lg">
               Login
             </Link>
           </ScrollView>

@@ -1,7 +1,7 @@
 import { Response as NodeResponse } from "@remix-run/node"
 import type { LoaderArgs } from "@vercel/remix"
 import axios from "axios"
-import { createHash } from "crypto"
+import * as crypto from "crypto"
 import fs from "fs"
 import fsp from "fs/promises"
 import path from "path"
@@ -40,7 +40,8 @@ export async function generateImage({ request }: LoaderArgs) {
     const fit = (url.searchParams.get("fit") as keyof sharp.FitEnum) || "cover"
 
     // Create hash of the url for unique cache key
-    const hash = createHash("sha256")
+    const hash = crypto
+      .createHash("sha256")
       .update("v1")
       .update(request.method)
       .update(request.url)

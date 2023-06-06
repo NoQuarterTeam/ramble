@@ -75,7 +75,7 @@ export const spotRouter = createTRPCRouter({
       include: {
         verifier: true,
         _count: { select: { reviews: true } },
-        reviews: { take: 5, orderBy: { createdAt: "desc" } },
+        reviews: { take: 5, include: { user: true }, orderBy: { createdAt: "desc" } },
         images: true,
       },
     })

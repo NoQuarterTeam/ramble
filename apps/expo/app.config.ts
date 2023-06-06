@@ -7,7 +7,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   scheme: "ramble",
   owner: "noquarter",
   version: "1.0.0",
-  jsEngine: "jsc",
+  jsEngine: "hermes",
   orientation: "portrait",
   icon: "./assets/icon.png",
   userInterfaceStyle: "automatic",

@@ -1,4 +1,4 @@
-import type * as React from "react"
+import * as React from "react"
 import { TouchableOpacity, type TouchableOpacityProps, useColorScheme } from "react-native"
 import { cva, type VariantProps } from "class-variance-authority"
 
@@ -34,7 +34,7 @@ export const buttonTextStyles = cva("text-center font-500 text-md", {
     size: {
       xs: "text-xs",
       sm: "text-sm",
-      md: "text-md",
+      md: "text-base",
       lg: "text-lg",
     },
     variant: {
@@ -57,10 +57,14 @@ interface Props extends TouchableOpacityProps, ButtonStyleProps {
   leftIcon?: React.ReactNode
 }
 
-export function Button({ variant = "primary", leftIcon, size = "md", isLoading, ...props }: Props) {
+export const Button = React.forwardRef(function _Button(
+  { variant = "primary", leftIcon, size = "md", isLoading, ...props }: Props,
+  ref,
+) {
   const colorScheme = useColorScheme()
   return (
     <TouchableOpacity
+      ref={ref as React.LegacyRef<TouchableOpacity>}
       {...props}
       disabled={props.disabled || isLoading}
       activeOpacity={0.7}
@@ -79,9 +83,9 @@ export function Button({ variant = "primary", leftIcon, size = "md", isLoading, 
       ) : (
         <>
           {leftIcon}
-          <Text className={buttonTextStyles({ variant, className: props.textClassName })}>{props.children}</Text>
+          <Text className={buttonTextStyles({ variant, size, className: props.textClassName })}>{props.children}</Text>
         </>
       )}
     </TouchableOpacity>
   )
-}
+})
