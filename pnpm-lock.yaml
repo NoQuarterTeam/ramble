@@ -247,8 +247,8 @@ importers:
         specifier: ^6.5.0
         version: 6.5.0
       '@vercel/remix':
-        specifier: 1.16.1
-        version: 1.16.1(react-dom@18.2.0)(react@18.2.0)
+        specifier: 1.17.0
+        version: 1.17.0(react-dom@18.2.0)(react@18.2.0)
       axios:
         specifier: ^1.3.4
         version: 1.3.4
@@ -6598,21 +6598,6 @@ packages:
       '@remix-run/node': 1.17.0
       express: 4.18.2
 
-  /@remix-run/node@1.16.1:
-    resolution: {integrity: sha512-Qp9B2htm0bGG0iuxsqezDIl89uVSBZ8xfwq2aKWgRNm1FCa4/GRXzKmTo+sbBcacj7aYe+1r+0sIS6Q1sgaEnA==}
-    engines: {node: '>=14'}
-    dependencies:
-      '@remix-run/server-runtime': 1.16.1
-      '@remix-run/web-fetch': 4.3.4
-      '@remix-run/web-file': 3.0.2
-      '@remix-run/web-stream': 1.0.3
-      '@web3-storage/multipart-parser': 1.0.0
-      abort-controller: 3.0.0
-      cookie-signature: 1.2.1
-      source-map-support: 0.5.21
-      stream-slice: 0.1.2
-    dev: false
-
   /@remix-run/node@1.17.0:
     resolution: {integrity: sha512-V7RLOwOBZci/gbIi7eALR3BFvJmN3t9RGgCEaZfzU3Cc0OBKf5+/dp4cK6tEwa9eOEagzkLV2YTFl5OA3Zws8Q==}
     engines: {node: '>=14'}
@@ -6640,11 +6625,6 @@ packages:
       react-router-dom: 6.12.0(react-dom@18.2.0)(react@18.2.0)
     dev: false
 
-  /@remix-run/router@1.6.2:
-    resolution: {integrity: sha512-LzqpSrMK/3JBAVBI9u3NWtOhWNw5AMQfrUFYB0+bDHTSw17z++WJLsPsxAuK+oSddsxk4d7F/JcdDPM1M5YAhA==}
-    engines: {node: '>=14'}
-    dev: false
-
   /@remix-run/router@1.6.3:
     resolution: {integrity: sha512-EXJysQ7J3veRECd0kZFQwYYd5sJMcq2O/m60zu1W2l3oVQ9xtub8jTOtYRE0+M2iomyG/W3Ps7+vp2kna0C27Q==}
     engines: {node: '>=14'}
@@ -6661,17 +6641,6 @@ packages:
       morgan: 1.10.0
     transitivePeerDependencies:
       - supports-color
-
-  /@remix-run/server-runtime@1.16.1:
-    resolution: {integrity: sha512-HG+f3PGE9kzTTPe5i5Hv7UGrJLmFID1Ae4BMohP5e0xXOxbdlKDPj6NN6yGDgE7OqKFuDVliW2B5LlUdJZgUFw==}
-    engines: {node: '>=14'}
-    dependencies:
-      '@remix-run/router': 1.6.2
-      '@web3-storage/multipart-parser': 1.0.0
-      cookie: 0.4.2
-      set-cookie-parser: 2.6.0
-      source-map: 0.7.4
-    dev: false
 
   /@remix-run/server-runtime@1.17.0:
     resolution: {integrity: sha512-xcUXaOibfIFZlvuyuWouz/t3fYhHCqRoKeGxQFGd1BvQBCmPaiau7B1Ao4aJFKyY7eU/L35KCaGzZBTdIF+d5w==}
@@ -7446,15 +7415,15 @@ packages:
     resolution: {integrity: sha512-17kVyLq3ePTKOkveHxXuIJZtGYs+cSoev7BlP+Lf4916qfDhk/HBjvlYDe8egrea7LNPHKwSZJK/bzZC+Q6AwQ==}
     dev: true
 
-  /@vercel/remix@1.16.1(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-WdQSSjpzr7IDO2zeGBxs+tDD45S8KtnOEWZQSrFL8ZyhpxAqfHWR04rlVAI3iU+/xF4+xJzqA40tRyA/y4N+UQ==}
+  /@vercel/remix@1.17.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-6AG9aWwibZuHdqtU1UsKqrr/1HYVS4Zh5nFydJQDuT31qLqyICpm2ZBCN9YsQv6u37CpCXM9VPitXA+FoLPfiA==}
     engines: {node: '>=14'}
     peerDependencies:
       react: '*'
       react-dom: '*'
     dependencies:
-      '@remix-run/node': 1.16.1
-      '@remix-run/server-runtime': 1.16.1
+      '@remix-run/node': 1.17.0
+      '@remix-run/server-runtime': 1.17.0
       isbot: 3.6.10
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
