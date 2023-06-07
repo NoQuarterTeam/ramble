@@ -18,7 +18,6 @@ export default function AppLayout() {
 
   if (isLoading) return <SplashScreen />
 
-  console.log({ username: data?.username })
   return (
     <Tabs
       initialRouteName="(map)"
