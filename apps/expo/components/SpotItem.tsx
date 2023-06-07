@@ -24,9 +24,9 @@ export function SpotItem({ spot }: Props) {
                 source={{ uri: createImageUrl(spot.image) }}
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center rounded-md bg-gray-50 object-cover dark:bg-gray-700">
+              <View className="flex h-full w-full items-center justify-center rounded-md bg-gray-50 dark:bg-gray-700">
                 <Camera className="opacity-50" />
-              </div>
+              </View>
             )}
           </View>
 

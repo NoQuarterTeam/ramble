@@ -45,6 +45,7 @@ export default function RootLayout() {
             <Stack initialRouteName="(app)" screenOptions={{ headerShown: false }}>
               <Stack.Screen name="(app)" />
               <Stack.Screen name="(auth)" options={{ presentation: "modal" }} />
+              <Stack.Screen name="account" options={{ presentation: "modal" }} />
             </Stack>
           </CurrentUser>
         )}
