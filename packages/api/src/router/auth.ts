@@ -7,7 +7,7 @@ import { createTRPCRouter, publicProcedure } from "../trpc"
 import { loginSchema, registerSchema } from "../schemas/user"
 
 export const authRouter = createTRPCRouter({
-  me: publicProcedure.query(({ ctx }) => ctx.user || null),
+  me: publicProcedure.query(({ ctx }) => ctx.user),
   login: publicProcedure.input(loginSchema).mutation(async ({ ctx, input }) => {
     const user = await ctx.prisma.user.findUnique({ where: { email: input.email } })
     if (!user) throw new TRPCError({ code: "BAD_REQUEST", message: "Incorrect email or password" })

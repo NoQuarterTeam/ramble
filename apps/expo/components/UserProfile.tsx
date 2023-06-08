@@ -12,6 +12,7 @@ import { Heading } from "./Heading"
 import { Spinner } from "./Spinner"
 import { SpotItem } from "./SpotItem"
 import { Text } from "./Text"
+import { useMe } from "../lib/hooks/useMe"
 
 interface Props {
   username: string
@@ -21,12 +22,14 @@ type Tab = "spots" | "lists" | "van"
 
 export function UserProfile(props: Props) {
   const [tab, setTab] = React.useState<Tab>("spots")
-  const { data: me } = api.auth.me.useQuery()
+  const { me } = useMe()
   const navigation = useNavigation()
+
   const segments = useSegments()
+  const isPublicProfileTab = segments.find((s) => s === "[username]")
+
   const { data: user, isLoading } = api.user.byUsername.useQuery({ username: props.username })
 
-  const isPublicProfileTab = segments.find((s) => s === "[username]")
   if (isLoading)
     return (
       <View className="flex items-center justify-center py-20">

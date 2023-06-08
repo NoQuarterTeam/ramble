@@ -19,6 +19,7 @@ import { NewUpdate } from "../components/NewUpdate"
 import { Text } from "../components/Text"
 import { api, TRPCProvider } from "../lib/api"
 import { useCheckExpoUpdates } from "../lib/hooks/useCheckExpoUpdates"
+import { useMe } from "../lib/hooks/useMe"
 
 // This is the main layout of the app
 // It wraps your pages with the providers they need
@@ -64,7 +65,7 @@ export default function RootLayout() {
 }
 
 function CurrentUser(props: { children: React.ReactNode }) {
-  const { isLoading, data: me } = api.auth.me.useQuery()
+  const { me, isLoading } = useMe()
   const utils = api.useContext()
   React.useEffect(() => {
     if (isLoading || !me) return

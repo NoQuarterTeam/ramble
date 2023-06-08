@@ -1,29 +1,21 @@
-import { TouchableOpacity, View } from "react-native"
 import Constants from "expo-constants"
 import * as Updates from "expo-updates"
+import { TouchableOpacity, View } from "react-native"
 
 import { Button } from "../../components/Button"
 import { Heading } from "../../components/Heading"
 import { Link } from "../../components/Link"
-import { Spinner } from "../../components/Spinner"
 import { Text } from "../../components/Text"
 import { UserProfile } from "../../components/UserProfile"
-import { api } from "../../lib/api"
 import { VERSION } from "../../lib/config"
+import { useMe } from "../../lib/hooks/useMe"
 
 const updateId = Updates.updateId
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const updateGroup = (Constants.manifest2?.metadata as any)?.["updateGroup"]
 
 export default function Profile() {
-  const { data: me, isLoading } = api.auth.me.useQuery()
-
-  if (isLoading)
-    return (
-      <View className="flex items-center justify-center py-20">
-        <Spinner />
-      </View>
-    )
+  const { me } = useMe()
 
   // LOGGED OUT - PROFILE TAB
   if (!me)
