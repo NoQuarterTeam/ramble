@@ -28,7 +28,7 @@ export function UserProfile(props: Props) {
   const segments = useSegments()
   const isPublicProfileTab = segments.find((s) => s === "[username]")
 
-  const { data: user, isLoading } = api.user.byUsername.useQuery({ username: props.username })
+  const { data: user, isLoading } = api.user.profile.useQuery({ username: props.username })
 
   if (isLoading)
     return (
@@ -115,10 +115,14 @@ export function UserProfile(props: Props) {
           <Button size="sm" variant={tab === "van" ? "secondary" : "ghost"} onPress={() => setTab("van")}>
             Van
           </Button>
+          <Button size="sm" variant={tab === "lists" ? "secondary" : "ghost"} onPress={() => setTab("lists")}>
+            Lists
+          </Button>
         </View>
         <View className="p-2">
           {tab === "spots" && <ProfileSpots username={user.username} />}
           {tab === "van" && <ProfileVan username={user.username} />}
+          {tab === "lists" && <ProfileLists username={user.username} />}
         </View>
       </ScrollView>
     </View>
@@ -126,7 +130,7 @@ export function UserProfile(props: Props) {
 }
 
 function ProfileSpots({ username }: { username: string }) {
-  const { data: spots, isLoading } = api.spot.byUsername.useQuery({ username })
+  const { data: spots, isLoading } = api.user.spots.useQuery({ username })
   if (isLoading)
     return (
       <View className="flex items-center justify-center py-4">
@@ -153,9 +157,57 @@ function ProfileSpots({ username }: { username: string }) {
 }
 
 function ProfileVan({ username }: { username: string }) {
+  const { data: van, isLoading } = api.user.van.useQuery({ username })
+  if (isLoading)
+    return (
+      <View className="flex items-center justify-center py-4">
+        <Spinner />
+      </View>
+    )
+
+  if (!van)
+    return (
+      <View className="flex items-end justify-center py-4">
+        <Text>No van yet</Text>
+      </View>
+    )
+
   return (
-    <View>
-      <Text>Van</Text>
+    <View className="space-y-2">
+      <Text className="text-2xl">{van.name}</Text>
+      <Text>{van.model}</Text>
+      <Text>{van.year}</Text>
+      <Text>{van.description}</Text>
+      {van.images.map((image) => (
+        <Image key={image.id} className="h-[300px] w-full rounded-lg object-cover" source={{ uri: createImageUrl(image.path) }} />
+      ))}
+    </View>
+  )
+}
+function ProfileLists({ username }: { username: string }) {
+  const { data: lists, isLoading } = api.user.lists.useQuery({ username })
+  if (isLoading)
+    return (
+      <View className="flex items-center justify-center py-4">
+        <Spinner />
+      </View>
+    )
+
+  if (!lists)
+    return (
+      <View className="flex items-end justify-center py-4">
+        <Text>No lists yet</Text>
+      </View>
+    )
+
+  return (
+    <View className="space-y-1">
+      {lists.map((list) => (
+        <View key={list.id} className="rounded-lg border border-gray-100 p-4 dark:border-gray-700">
+          <Text className="text-xl">{list.name}</Text>
+          <Text className="text-base">{list.description}</Text>
+        </View>
+      ))}
     </View>
   )
 }

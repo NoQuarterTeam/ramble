@@ -69,7 +69,7 @@ function CurrentUser(props: { children: React.ReactNode }) {
   const utils = api.useContext()
   React.useEffect(() => {
     if (isLoading || !me) return
-    utils.user.byUsername.prefetch({ username: me.username })
+    utils.user.profile.prefetch({ username: me.username })
   }, [me, isLoading])
   if (isLoading) return <SplashScreen />
   return <>{props.children}</>
