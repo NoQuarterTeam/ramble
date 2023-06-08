@@ -61,14 +61,16 @@ export const spotRouter = createTRPCRouter({
       `,
   ),
   byUsername: publicProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {
-    const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })
-    if (!user) throw new TRPCError({ code: "NOT_FOUND" })
-    const spots = await ctx.prisma.spot.findMany({
-      where: { creatorId: user.id },
-      take: 20,
-      include: { verifier: true, _count: { select: { reviews: true } }, images: true },
-    })
-    return spots
+    return ctx.prisma.$queryRaw<
+      Array<Pick<Spot, "id" | "name" | "address"> & { rating?: number; image?: SpotImage["path"] | null }>
+    >`
+      SELECT Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating, (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image
+      FROM Spot
+      LEFT JOIN Review ON Spot.id = Review.spotId
+      WHERE Spot.creatorId = (SELECT id FROM User WHERE username = ${input.username})
+      GROUP BY Spot.id
+      ORDER BY Spot.createdAt DESC, Spot.id
+      LIMIT 20`
   }),
   mapPreview: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
     const spot = await ctx.prisma.spot.findUnique({

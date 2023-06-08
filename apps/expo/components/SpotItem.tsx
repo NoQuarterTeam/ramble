@@ -3,19 +3,19 @@ import { Image } from "expo-image"
 import { Link } from "expo-router"
 import { Camera, Star } from "lucide-react-native"
 
+import { type Spot } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
-import { type RouterOutputs } from "../lib/api"
 import { Text } from "./Text"
 
 interface Props {
-  spot: RouterOutputs["spot"]["latest"][number]
+  spot: Pick<Spot, "id" | "name" | "address"> & { rating?: number | null; image?: string | null }
 }
 
 export function SpotItem({ spot }: Props) {
   return (
     <Link href={`/spots/${spot.id}`} asChild>
-      <TouchableOpacity activeOpacity={0.8} className="mb-1">
+      <TouchableOpacity activeOpacity={0.8}>
         <View className="flex w-full flex-row items-center justify-start space-x-2">
           <View className="h-[100px] w-[100px]">
             {spot.image ? (

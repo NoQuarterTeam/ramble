@@ -1,5 +1,5 @@
 import * as React from "react"
-import { ScrollView, TouchableOpacity, View, ViewProps } from "react-native"
+import { ScrollView, TouchableOpacity, View, type ViewProps } from "react-native"
 import Carousel from "react-native-reanimated-carousel"
 import { Image } from "expo-image"
 import { useLocalSearchParams, useNavigation } from "expo-router"

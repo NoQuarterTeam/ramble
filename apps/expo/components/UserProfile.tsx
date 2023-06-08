@@ -7,12 +7,12 @@ import { Bike, ChevronLeft, Dog, Footprints, Mountain, Settings, Waves } from "l
 import { createImageUrl } from "@ramble/shared"
 
 import { api } from "../lib/api"
+import { useMe } from "../lib/hooks/useMe"
 import { Button } from "./Button"
 import { Heading } from "./Heading"
 import { Spinner } from "./Spinner"
 import { SpotItem } from "./SpotItem"
 import { Text } from "./Text"
-import { useMe } from "../lib/hooks/useMe"
 
 interface Props {
   username: string
@@ -126,8 +126,8 @@ export function UserProfile(props: Props) {
 }
 
 function ProfileSpots({ username }: { username: string }) {
-  const { data: spots, isLoading: isLoadingSpots } = api.spot.byUsername.useQuery({ username })
-  if (isLoadingSpots)
+  const { data: spots, isLoading } = api.spot.byUsername.useQuery({ username })
+  if (isLoading)
     return (
       <View className="flex items-center justify-center py-4">
         <Spinner />
@@ -142,9 +142,11 @@ function ProfileSpots({ username }: { username: string }) {
     )
 
   return (
-    <View>
+    <View className="space-y-1">
       {spots.map((spot) => (
-        <SpotItem key={spot.id} spot={{ ...spot, image: spot.images[0]?.path }} />
+        <View key={spot.id}>
+          <SpotItem spot={spot} />
+        </View>
       ))}
     </View>
   )
