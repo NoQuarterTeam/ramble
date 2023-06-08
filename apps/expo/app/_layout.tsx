@@ -1,4 +1,4 @@
-import { useColorScheme } from "react-native"
+import { View, useColorScheme } from "react-native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import {
   Poppins_300Light,
@@ -10,12 +10,14 @@ import {
   Poppins_900Black,
   useFonts,
 } from "@expo-google-fonts/poppins"
-import { SplashScreen, Stack } from "expo-router"
+import { ErrorBoundaryProps, SplashScreen, Stack } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 
 import { NewUpdate } from "../components/NewUpdate"
 import { TRPCProvider, api } from "../lib/api"
 import { useCheckExpoUpdates } from "../lib/hooks/useCheckExpoUpdates"
+import { Text } from "../components/Text"
+import { Button } from "../components/Button"
 
 // This is the main layout of the app
 // It wraps your pages with the providers they need
@@ -42,8 +44,13 @@ export default function RootLayout() {
           <NewUpdate />
         ) : (
           <CurrentUser>
-            <Stack initialRouteName="(app)" screenOptions={{ headerShown: false }}>
+            <Stack
+              initialRouteName="(app)"
+              screenOptions={{ headerShown: false, contentStyle: { backgroundColor: isDark ? "black" : "white" } }}
+            >
               <Stack.Screen name="(app)" />
+              <Stack.Screen name="spots" />
+              <Stack.Screen name="[username]" />
               <Stack.Screen name="(auth)" options={{ presentation: "modal" }} />
               <Stack.Screen name="account" options={{ presentation: "modal" }} />
             </Stack>
@@ -59,4 +66,13 @@ function CurrentUser(props: { children: React.ReactNode }) {
   const { isLoading } = api.auth.me.useQuery()
   if (isLoading) return <SplashScreen />
   return <>{props.children}</>
+}
+
+export function ErrorBoundary(props: ErrorBoundaryProps) {
+  return (
+    <View className="space-y-4 px-4 py-20">
+      <Text>{props.error.message}</Text>
+      <Button onPress={props.retry}>Try Again?</Button>
+    </View>
+  )
 }

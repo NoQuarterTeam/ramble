@@ -11,15 +11,15 @@ import { SpotImage, type SpotType } from "@ramble/database/types"
 import { createImageUrl, INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
-import { Button } from "../../../components/Button"
-import { Heading } from "../../../components/Heading"
-import { Link } from "../../../components/Link"
-import { ModalView } from "../../../components/ModalView"
-import { Spinner } from "../../../components/Spinner"
-import { Text } from "../../../components/Text"
-import { api, type RouterOutputs } from "../../../lib/api"
-import { SPOT_OPTIONS, SPOTS } from "../../../lib/spots"
-import { width } from "../../../lib/device"
+import { Button } from "../../components/Button"
+import { Heading } from "../../components/Heading"
+import { Link } from "../../components/Link"
+import { ModalView } from "../../components/ModalView"
+import { Spinner } from "../../components/Spinner"
+import { Text } from "../../components/Text"
+import { api, type RouterOutputs } from "../../lib/api"
+import { SPOT_OPTIONS, SPOTS } from "../../lib/spots"
+import { width } from "../../lib/device"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
@@ -174,7 +174,7 @@ export default function MapScreen() {
       )}
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => router.push("(map)/latest")}
+        onPress={() => router.push("/latest")}
         className="absolute bottom-3 left-1/2 -ml-[50px] flex w-[100px] flex-row items-center justify-center space-x-2 rounded-full bg-gray-800 p-3 dark:bg-white"
       >
         <List size={20} className="text-white dark:text-black" />

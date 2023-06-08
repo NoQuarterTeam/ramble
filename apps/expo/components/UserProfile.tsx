@@ -1,0 +1,154 @@
+import * as React from "react"
+import { api } from "../lib/api"
+import { ScrollView, TouchableOpacity, View } from "react-native"
+import { Spinner } from "./Spinner"
+import { Text } from "./Text"
+import { createImageUrl } from "@ramble/shared"
+import { Dog, Mountain, Footprints, Bike, Waves, Settings, ChevronLeft } from "lucide-react-native"
+import { Image } from "expo-image"
+import { Button } from "./Button"
+import { SpotItem } from "./SpotItem"
+import { Link, useNavigation, useSegments } from "expo-router"
+import { Heading } from "./Heading"
+
+interface Props {
+  username: string
+}
+
+type Tab = "spots" | "lists" | "van"
+
+export function UserProfile(props: Props) {
+  const [tab, setTab] = React.useState<Tab>("spots")
+  const { data: me } = api.auth.me.useQuery()
+  const navigation = useNavigation()
+  const segments = useSegments()
+  const { data: user, isLoading } = api.user.byUsername.useQuery({ username: props.username })
+
+  const isPublicProfileTab = segments.find((s) => s === "[username]")
+  if (isLoading)
+    return (
+      <View className="flex items-center justify-center py-20">
+        <Spinner />
+      </View>
+    )
+
+  if (!user)
+    return (
+      <View className="px-4 py-20">
+        <Text>User not found</Text>
+      </View>
+    )
+
+  return (
+    <View className="pt-16">
+      <View className="flex flex-row items-center justify-between px-6 pb-2">
+        <View className="flex flex-row items-center space-x-2">
+          {navigation.canGoBack() && isPublicProfileTab && (
+            <TouchableOpacity onPress={navigation.goBack} activeOpacity={0.8}>
+              <ChevronLeft className="text-black dark:text-white" />
+            </TouchableOpacity>
+          )}
+          <Heading className="font-700 text-2xl">{user.username}</Heading>
+        </View>
+
+        {me?.id === user.id && !isPublicProfileTab && (
+          <Link asChild href="/account">
+            <TouchableOpacity className="flex w-10 flex-row justify-end">
+              <Settings size={20} className="text-black dark:text-white" />
+            </TouchableOpacity>
+          </Link>
+        )}
+      </View>
+      <ScrollView stickyHeaderIndices={[1]} showsVerticalScrollIndicator={false}>
+        <View className="px-4 pt-2">
+          <View className="flex flex-row items-center space-x-3">
+            <Image
+              source={{ uri: createImageUrl(user.avatar) }}
+              className="sq-20 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
+            />
+            <View className="space-y-px">
+              <Text className="text-xl">
+                {user.firstName} {user.lastName}
+              </Text>
+
+              <View className="flex flex-row items-center justify-center space-x-2">
+                {user.isPetOwner && (
+                  <View className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
+                    <Dog size={20} className="text-black dark:text-white" />
+                  </View>
+                )}
+                {user.isClimber && (
+                  <View className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
+                    <Mountain size={20} className="text-black dark:text-white" />
+                  </View>
+                )}
+                {user.isHiker && (
+                  <View className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
+                    <Footprints size={20} className="text-black dark:text-white" />
+                  </View>
+                )}
+                {user.isMountainBiker && (
+                  <View className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
+                    <Bike size={20} className="text-black dark:text-white" />
+                  </View>
+                )}
+                {user.isPaddleBoarder && (
+                  <View className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
+                    <Waves size={20} className="text-black dark:text-white" />
+                  </View>
+                )}
+              </View>
+            </View>
+          </View>
+          <Text>{user.bio}</Text>
+        </View>
+
+        <View className="flex flex-row items-center justify-center space-x-2 border-b border-gray-100 bg-white py-2 dark:border-gray-800 dark:bg-black">
+          <Button size="sm" variant={tab === "spots" ? "secondary" : "ghost"} onPress={() => setTab("spots")}>
+            Spots
+          </Button>
+          <Button size="sm" variant={tab === "van" ? "secondary" : "ghost"} onPress={() => setTab("van")}>
+            Van
+          </Button>
+        </View>
+        <View className="p-2">
+          {tab === "spots" && <ProfileSpots username={user.username} />}
+          {tab === "van" && <ProfileVan username={user.username} />}
+        </View>
+      </ScrollView>
+    </View>
+  )
+}
+
+function ProfileSpots({ username }: { username: string }) {
+  const { data: spots, isLoading: isLoadingSpots } = api.spot.byUsername.useQuery({ username })
+  if (isLoadingSpots)
+    return (
+      <View className="flex items-center justify-center py-4">
+        <Spinner />
+      </View>
+    )
+
+  if (!spots)
+    return (
+      <View className="flex items-end justify-center py-4">
+        <Text>No spots found</Text>
+      </View>
+    )
+
+  return (
+    <View>
+      {spots.map((spot) => (
+        <SpotItem key={spot.id} spot={{ ...spot, image: spot.images[0]?.path }} />
+      ))}
+    </View>
+  )
+}
+
+function ProfileVan({ username }: { username: string }) {
+  return (
+    <View>
+      <Text>Van</Text>
+    </View>
+  )
+}

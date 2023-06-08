@@ -1,46 +1,49 @@
+import { Image } from "expo-image"
+import { useLocalSearchParams, useNavigation } from "expo-router"
+import { BadgeX, ChevronLeft, Star, Verified } from "lucide-react-native"
 import * as React from "react"
 import { ScrollView, TouchableOpacity, View } from "react-native"
 import Carousel from "react-native-reanimated-carousel"
-import { Image } from "expo-image"
-import { useLocalSearchParams } from "expo-router"
-import { BadgeX, ChevronLeft, Star, Verified } from "lucide-react-native"
 
 import { createImageUrl } from "@ramble/shared"
 
-import { Heading } from "../../../../components/Heading"
-import { Link } from "../../../../components/Link"
-import { RouterOutputs, api } from "../../../../lib/api"
-import { width } from "../../../../lib/device"
 import { SpotImage } from "@ramble/database/types"
-import { Text } from "../../../../components/Text"
-import { Button } from "../../../../components/Button"
-import dayjs from "dayjs"
+import { Button } from "../../components/Button"
+import { Heading } from "../../components/Heading"
+import { Link } from "../../components/Link"
+import { ReviewItem } from "../../components/ReviewItem"
+import { Text } from "../../components/Text"
+import { api } from "../../lib/api"
+import { width } from "../../lib/device"
 
 export default function SpotDetail() {
   const { id } = useLocalSearchParams<{ id: string }>()
   const { data, isLoading } = api.spot.detail.useQuery({ id: id || "" }, { enabled: !!id })
   const spot = data
 
+  const navigation = useNavigation()
   if (isLoading) return null
   if (!spot)
     return (
-      <View className="space-y-2 text-lg">
-        <Text>Spot now found</Text>
-        <Button>Back</Button>
+      <View className="space-y-2 px-4 pt-20">
+        <Text className="text-lg">Spot now found</Text>
+        {navigation.canGoBack() && <Button onPress={navigation.goBack}>Back</Button>}
       </View>
     )
   return (
     <ScrollView>
       <ImageCarousel images={spot.images} />
 
-      <Link href=".." asChild className="absolute left-6 top-12">
+      {navigation.canGoBack() && (
         <TouchableOpacity
+          onPress={navigation.goBack}
           activeOpacity={0.8}
-          className="flex items-center justify-center rounded-lg bg-white p-1 dark:bg-gray-800"
+          className="absolute left-6 top-12 flex items-center justify-center rounded-full bg-white p-1 dark:bg-gray-800"
         >
           <ChevronLeft className="pr-1 text-black dark:text-white" />
         </TouchableOpacity>
-      </Link>
+      )}
+
       <View className="space-y-4 p-4">
         <View className="space-y-2">
           {spot.verifiedAt && spot.verifier ? (
@@ -124,32 +127,6 @@ function ImageCarousel({ images }: { images: Pick<SpotImage, "id" | "path">[] })
       <View className="absolute bottom-2 right-2 rounded bg-gray-800/70 p-1">
         <Text className="text-xs text-white">{`${imageIndex + 1}/${images.length}`}</Text>
       </View>
-    </View>
-  )
-}
-
-function ReviewItem({ review }: { review: RouterOutputs["spot"]["detail"]["reviews"][number] }) {
-  return (
-    <View className="space-y-2 rounded-lg border border-gray-200 p-4 dark:border-gray-700">
-      <View className="flex flex-row justify-between">
-        <Link href={`/${review.user.username}`} asChild>
-          <TouchableOpacity activeOpacity={0.8} className="flex flex-row space-x-2">
-            <Image source={{ uri: createImageUrl(review.user.avatar) }} className="h-10 w-10 rounded-full" />
-
-            <View>
-              <Text>
-                {review.user.firstName} {review.user.lastName}
-              </Text>
-              <Text className="text-sm   opacity-70">{dayjs(review.createdAt).format("DD/MM/YYYY")}</Text>
-            </View>
-          </TouchableOpacity>
-        </Link>
-        <View className="flex flex-row items-center space-x-2">
-          <Star size={20} className="text-black dark:text-white" />
-          <Text className="text-sm">5.0</Text>
-        </View>
-      </View>
-      <Text>{review.description}</Text>
     </View>
   )
 }

@@ -4,23 +4,17 @@ import { PlusCircle, Search, User } from "lucide-react-native"
 import { api } from "../../lib/api"
 import { Image } from "expo-image"
 import { createImageUrl, join } from "@ramble/shared"
-import { EXPO_PROFILE_TAB_ID } from "../../lib/config"
 
-// Returns ReactComponent
-
-// This is the main layout of the app
-// It wraps your pages with the providers they need
 export default function AppLayout() {
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
-  // Prevent rendering until the font has loaded
   const { data, isLoading } = api.auth.me.useQuery()
 
   if (isLoading) return <SplashScreen />
 
   return (
     <Tabs
-      initialRouteName="(map)"
+      initialRouteName="index"
       sceneContainerStyle={{ flex: 1, backgroundColor: isDark ? "black" : "white" }}
       screenOptions={{
         tabBarStyle: { backgroundColor: isDark ? "black" : "white" },
@@ -30,7 +24,7 @@ export default function AppLayout() {
       }}
     >
       <Tabs.Screen
-        name="(map)"
+        name="index"
         options={{
           tabBarIcon: (props) => <Search size={24} color={props.focused ? "green" : isDark ? "white" : "black"} />,
         }}
@@ -43,12 +37,8 @@ export default function AppLayout() {
       />
 
       <Tabs.Screen
-        name="[username]"
+        name="profile"
         options={{
-          href: {
-            pathname: "/[username]",
-            params: { username: data?.username || EXPO_PROFILE_TAB_ID },
-          },
           tabBarIcon: (props) =>
             data?.avatar ? (
               <Image
@@ -64,6 +54,7 @@ export default function AppLayout() {
             ),
         }}
       />
+      <Tabs.Screen name="latest" options={{ href: null }} />
     </Tabs>
   )
 }
