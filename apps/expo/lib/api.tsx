@@ -37,7 +37,8 @@ const getBaseUrl = () => {
    * you don't have anything else running on it, or you'd have to change it.
    */
   // return "https://ramble.app"
-  const localhost = Constants.manifest?.debuggerHost?.split(":")[0]
+  const debuggerHost = Constants.manifest?.debuggerHost ?? Constants.manifest2?.extra?.expoGo?.debuggerHost
+  const localhost = debuggerHost?.split(":")[0]
   if (!localhost) return "https://ramble.noquarter.co"
   return `http://${localhost}:3000`
 }
