@@ -1,12 +1,12 @@
 import * as React from "react"
-import { ScrollView, TouchableOpacity, View } from "react-native"
+import { ScrollView, TouchableOpacity, View, ViewProps } from "react-native"
 import Carousel from "react-native-reanimated-carousel"
 import { Image } from "expo-image"
 import { useLocalSearchParams, useNavigation } from "expo-router"
 import { BadgeX, ChevronLeft, Star, Verified } from "lucide-react-native"
 
 import { type SpotImage } from "@ramble/database/types"
-import { createImageUrl } from "@ramble/shared"
+import { createImageUrl, merge } from "@ramble/shared"
 
 import { Button } from "../../components/Button"
 import { Heading } from "../../components/Heading"
@@ -22,7 +22,7 @@ export default function SpotDetail() {
   const spot = data
 
   const navigation = useNavigation()
-  if (isLoading) return null
+  if (isLoading) return <SpotLoading />
   if (!spot)
     return (
       <View className="space-y-2 px-4 pt-20">
@@ -129,4 +129,35 @@ function ImageCarousel({ images }: { images: Pick<SpotImage, "id" | "path">[] })
       </View>
     </View>
   )
+}
+
+function SpotLoading() {
+  return (
+    <View>
+      <Skeleton className="h-[300px] w-full" />
+      <View className="space-y-4 p-4">
+        <View className="space-y-2">
+          <View className="flex flex-row items-center space-x-1">
+            <Skeleton className="sq-5 rounded-full" />
+            <Skeleton className="h-[20px] w-[80px]" />
+            <Skeleton className="h-[20px] w-[120px]" />
+          </View>
+          <Skeleton className="h-[60px] w-11/12" />
+          <View className="flex flex-row items-center space-x-1">
+            <Skeleton className="sq-5 rounded-full" />
+            <Skeleton className="h-[20px] w-7" />
+            <Skeleton className="h-[20px] w-[80px]" />
+          </View>
+          <View />
+          <Skeleton className="h-px w-full" />
+          <View />
+          <Skeleton className="h-[500px] w-full" />
+        </View>
+      </View>
+    </View>
+  )
+}
+
+function Skeleton(props: ViewProps) {
+  return <View {...props} className={merge("rounded-lg bg-gray-100 dark:bg-gray-700", props.className)} />
 }

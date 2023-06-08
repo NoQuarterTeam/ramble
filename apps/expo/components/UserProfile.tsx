@@ -73,7 +73,7 @@ export function UserProfile(props: Props) {
                 {user.firstName} {user.lastName}
               </Text>
 
-              <View className="flex flex-row items-center justify-center space-x-2">
+              <View className="flex flex-row items-center space-x-2">
                 {user.isPetOwner && (
                   <View className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
                     <Dog size={20} className="text-black dark:text-white" />

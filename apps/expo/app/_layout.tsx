@@ -1,3 +1,4 @@
+import * as React from "react"
 import { useColorScheme, View } from "react-native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import {
@@ -63,7 +64,12 @@ export default function RootLayout() {
 }
 
 function CurrentUser(props: { children: React.ReactNode }) {
-  const { isLoading } = api.auth.me.useQuery()
+  const { isLoading, data: me } = api.auth.me.useQuery()
+  const utils = api.useContext()
+  React.useEffect(() => {
+    if (isLoading || !me) return
+    utils.user.byUsername.prefetch({ username: me.username })
+  }, [me, isLoading])
   if (isLoading) return <SplashScreen />
   return <>{props.children}</>
 }
