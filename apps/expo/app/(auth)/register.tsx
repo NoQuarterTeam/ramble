@@ -1,7 +1,7 @@
 import { FormProvider } from "react-hook-form"
 import { KeyboardAvoidingView, ScrollView } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { Link, useNavigation, useRouter, useSearchParams } from "expo-router"
+import { Link, useNavigation, useRouter } from "expo-router"
 import { type z } from "zod"
 
 import { registerSchema } from "@ramble/api/src/schemas/user"
@@ -17,15 +17,14 @@ export default function Register() {
   const queryClient = api.useContext()
   const router = useRouter()
   const navigation = useNavigation()
-  const { profile } = useSearchParams<{ profile: string }>()
   const login = api.auth.register.useMutation({
     onSuccess: async (data) => {
       await AsyncStorage.setItem(AUTH_TOKEN, data.token)
       queryClient.auth.me.setData(undefined, data.user)
-      if (profile === "true" || !navigation.canGoBack()) {
-        router.replace({ pathname: "/[username]", params: { username: data.user.username } })
+      if (navigation.canGoBack()) {
+        navigation.goBack()
       } else {
-        router.back()
+        router.replace("/")
       }
     },
   })
@@ -63,7 +62,7 @@ export default function Register() {
               Register
             </Button>
             {login.error?.data?.formError && <FormError className="mb-1" error={login.error.data.formError} />}
-            <Link href={`/login${profile === "true" ? "?profile=true" : ""}`} className="text-lg">
+            <Link href={`/login`} className="text-lg">
               Login
             </Link>
           </ScrollView>

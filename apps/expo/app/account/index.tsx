@@ -8,19 +8,19 @@ import { Button } from "../../components/Button"
 import { ModalView } from "../../components/ModalView"
 import { Text } from "../../components/Text"
 import { api, AUTH_TOKEN } from "../../lib/api"
-import { EXPO_PROFILE_TAB_ID, VERSION } from "../../lib/config"
+import { VERSION } from "../../lib/config"
 
 const updateId = Updates.updateId
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const updateGroup = (Constants.manifest2?.metadata as any)?.["updateGroup"]
 
-export default function Login() {
+export default function Account() {
   const utils = api.useContext()
   const router = useRouter()
   const handleLogout = async () => {
-    router.replace({ pathname: "/[username]", params: { username: EXPO_PROFILE_TAB_ID } })
     utils.auth.me.setData(undefined, null)
     await AsyncStorage.removeItem(AUTH_TOKEN)
+    router.back()
   }
 
   return (
