@@ -18,6 +18,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   },
   updates: {
     fallbackToCacheTimeout: 0,
+    url: "https://u.expo.dev/b868666b-33e3-40d3-a88b-71c40a54e3dd",
     checkAutomatically: "ON_ERROR_RECOVERY",
   },
   assetBundlePatterns: ["**/*"],
@@ -32,6 +33,9 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
       backgroundColor: "#ffffff",
     },
     package: "co.noquarter.ramble",
+  },
+  runtimeVersion: {
+    policy: "sdkVersion",
   },
   extra: {
     eas: {
