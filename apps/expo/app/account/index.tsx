@@ -1,13 +1,13 @@
+import { View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import Constants from "expo-constants"
 import { useRouter } from "expo-router"
 import * as Updates from "expo-updates"
-import Constants from "expo-constants"
 
 import { Button } from "../../components/Button"
 import { ModalView } from "../../components/ModalView"
-import { api, AUTH_TOKEN } from "../../lib/api"
-import { View } from "react-native"
 import { Text } from "../../components/Text"
+import { api, AUTH_TOKEN } from "../../lib/api"
 import { EXPO_PROFILE_TAB_ID, VERSION } from "../../lib/config"
 
 const updateId = Updates.updateId

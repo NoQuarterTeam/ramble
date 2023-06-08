@@ -1,4 +1,4 @@
-import { View, useColorScheme } from "react-native"
+import { useColorScheme, View } from "react-native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import {
   Poppins_300Light,
@@ -10,14 +10,14 @@ import {
   Poppins_900Black,
   useFonts,
 } from "@expo-google-fonts/poppins"
-import { ErrorBoundaryProps, SplashScreen, Stack } from "expo-router"
+import { type ErrorBoundaryProps, SplashScreen, Stack } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 
-import { NewUpdate } from "../components/NewUpdate"
-import { TRPCProvider, api } from "../lib/api"
-import { useCheckExpoUpdates } from "../lib/hooks/useCheckExpoUpdates"
-import { Text } from "../components/Text"
 import { Button } from "../components/Button"
+import { NewUpdate } from "../components/NewUpdate"
+import { Text } from "../components/Text"
+import { api, TRPCProvider } from "../lib/api"
+import { useCheckExpoUpdates } from "../lib/hooks/useCheckExpoUpdates"
 
 // This is the main layout of the app
 // It wraps your pages with the providers they need

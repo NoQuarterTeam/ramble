@@ -1,7 +1,6 @@
+import { TouchableOpacity, View } from "react-native"
 import Constants from "expo-constants"
 import * as Updates from "expo-updates"
-
-import { TouchableOpacity, View } from "react-native"
 
 import { Button } from "../../components/Button"
 import { Heading } from "../../components/Heading"

@@ -1,13 +1,13 @@
-import { Image } from "expo-image"
-import { useLocalSearchParams, useNavigation } from "expo-router"
-import { BadgeX, ChevronLeft, Star, Verified } from "lucide-react-native"
 import * as React from "react"
 import { ScrollView, TouchableOpacity, View } from "react-native"
 import Carousel from "react-native-reanimated-carousel"
+import { Image } from "expo-image"
+import { useLocalSearchParams, useNavigation } from "expo-router"
+import { BadgeX, ChevronLeft, Star, Verified } from "lucide-react-native"
 
+import { type SpotImage } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
-import { SpotImage } from "@ramble/database/types"
 import { Button } from "../../components/Button"
 import { Heading } from "../../components/Heading"
 import { Link } from "../../components/Link"

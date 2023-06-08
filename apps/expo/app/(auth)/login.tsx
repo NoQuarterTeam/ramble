@@ -2,6 +2,9 @@ import { FormProvider } from "react-hook-form"
 import { KeyboardAvoidingView, ScrollView } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Link, useNavigation, useRouter, useSearchParams } from "expo-router"
+import { type z } from "zod"
+
+import { loginSchema } from "@ramble/api/src/schemas/user"
 
 import { Button } from "../../components/Button"
 import { FormError } from "../../components/FormError"
@@ -9,8 +12,6 @@ import { FormInput } from "../../components/FormInput"
 import { ModalView } from "../../components/ModalView"
 import { api, AUTH_TOKEN } from "../../lib/api"
 import { useForm } from "../../lib/hooks/useForm"
-import { loginSchema } from "@ramble/api/src/schemas/user"
-import { z } from "zod"
 
 export default function Login() {
   const queryClient = api.useContext()

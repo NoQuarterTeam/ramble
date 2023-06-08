@@ -7,7 +7,7 @@ import * as Location from "expo-location"
 import { useRouter } from "expo-router"
 import { BadgeCheck, BadgeX, Dog, List, Navigation, Settings2, Star, Verified, X } from "lucide-react-native"
 
-import { SpotImage, type SpotType } from "@ramble/database/types"
+import { type SpotImage, type SpotType } from "@ramble/database/types"
 import { createImageUrl, INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
@@ -18,8 +18,8 @@ import { ModalView } from "../../components/ModalView"
 import { Spinner } from "../../components/Spinner"
 import { Text } from "../../components/Text"
 import { api, type RouterOutputs } from "../../lib/api"
-import { SPOT_OPTIONS, SPOTS } from "../../lib/spots"
 import { width } from "../../lib/device"
+import { SPOT_OPTIONS, SPOTS } from "../../lib/spots"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 

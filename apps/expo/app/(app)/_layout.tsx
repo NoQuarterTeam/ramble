@@ -1,9 +1,11 @@
 import { useColorScheme } from "react-native"
+import { Image } from "expo-image"
 import { SplashScreen, Tabs } from "expo-router"
 import { PlusCircle, Search, User } from "lucide-react-native"
-import { api } from "../../lib/api"
-import { Image } from "expo-image"
+
 import { createImageUrl, join } from "@ramble/shared"
+
+import { api } from "../../lib/api"
 
 export default function AppLayout() {
   const colorScheme = useColorScheme()

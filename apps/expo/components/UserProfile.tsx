@@ -1,15 +1,17 @@
 import * as React from "react"
-import { api } from "../lib/api"
 import { ScrollView, TouchableOpacity, View } from "react-native"
-import { Spinner } from "./Spinner"
-import { Text } from "./Text"
-import { createImageUrl } from "@ramble/shared"
-import { Dog, Mountain, Footprints, Bike, Waves, Settings, ChevronLeft } from "lucide-react-native"
 import { Image } from "expo-image"
-import { Button } from "./Button"
-import { SpotItem } from "./SpotItem"
 import { Link, useNavigation, useSegments } from "expo-router"
+import { Bike, ChevronLeft, Dog, Footprints, Mountain, Settings, Waves } from "lucide-react-native"
+
+import { createImageUrl } from "@ramble/shared"
+
+import { api } from "../lib/api"
+import { Button } from "./Button"
 import { Heading } from "./Heading"
+import { Spinner } from "./Spinner"
+import { SpotItem } from "./SpotItem"
+import { Text } from "./Text"
 
 interface Props {
   username: string
