@@ -64,7 +64,7 @@ export function UserProfile(props: Props) {
           </Link>
         )}
       </View>
-      <ScrollView stickyHeaderIndices={[1]} showsVerticalScrollIndicator={false}>
+      <ScrollView className="min-h-full" stickyHeaderIndices={[1]} showsVerticalScrollIndicator={false}>
         <View className="px-4 pt-2">
           <View className="flex flex-row items-center space-x-3">
             <Image
@@ -203,10 +203,12 @@ function ProfileLists({ username }: { username: string }) {
   return (
     <View className="space-y-1">
       {lists.map((list) => (
-        <View key={list.id} className="rounded-lg border border-gray-100 p-4 dark:border-gray-700">
-          <Text className="text-xl">{list.name}</Text>
-          <Text className="text-base">{list.description}</Text>
-        </View>
+        <Link asChild key={list.id} href={`/${username}/lists/${list.id}`}>
+          <TouchableOpacity activeOpacity={0.8} className="rounded-lg border border-gray-100 p-4 dark:border-gray-700">
+            <Text className="text-xl">{list.name}</Text>
+            <Text className="text-base">{list.description}</Text>
+          </TouchableOpacity>
+        </Link>
       ))}
     </View>
   )

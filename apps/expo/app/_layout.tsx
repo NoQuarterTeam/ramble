@@ -48,7 +48,10 @@ export default function RootLayout() {
           <CurrentUser>
             <Stack
               initialRouteName="(app)"
-              screenOptions={{ headerShown: false, contentStyle: { backgroundColor: isDark ? "black" : "white" } }}
+              screenOptions={{
+                headerShown: false,
+                contentStyle: { backgroundColor: isDark ? "black" : "white" },
+              }}
             >
               <Stack.Screen name="(app)" />
               <Stack.Screen name="spots" />

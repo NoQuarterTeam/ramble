@@ -1,14 +1,12 @@
-import * as React from "react"
-import { Modal, ScrollView, Switch, TouchableOpacity, useColorScheme, View } from "react-native"
-import Carousel from "react-native-reanimated-carousel"
-import Mapbox, { Camera, type MapView as MapType, MarkerView } from "@rnmapbox/maps"
-import { Image } from "expo-image"
+import Mapbox, { Camera, MarkerView, type MapView as MapType } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { useRouter } from "expo-router"
 import { BadgeCheck, BadgeX, Dog, List, Navigation, Settings2, Star, Verified, X } from "lucide-react-native"
+import * as React from "react"
+import { Modal, ScrollView, Switch, TouchableOpacity, useColorScheme, View } from "react-native"
 
-import { type SpotImage, type SpotType } from "@ramble/database/types"
-import { createImageUrl, INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
+import { type SpotType } from "@ramble/database/types"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { Button } from "../../components/Button"
@@ -16,6 +14,7 @@ import { Heading } from "../../components/Heading"
 import { Link } from "../../components/Link"
 import { ModalView } from "../../components/ModalView"
 import { Spinner } from "../../components/Spinner"
+import { ImageCarousel } from "../../components/SpotImageCarousel"
 import { Text } from "../../components/Text"
 import { api, type RouterOutputs } from "../../lib/api"
 import { width } from "../../lib/device"
@@ -104,7 +103,6 @@ export default function MapScreen() {
               <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={onPress}
-                onPressIn={onPress}
                 className="sq-10 border-primary-100 bg-primary-800 dark:border-primary-700 dark:bg-primary-900 flex items-center justify-center rounded-full border"
               >
                 <Text className="text-center text-sm text-white">{point.properties.point_count_abbreviated}</Text>
@@ -128,7 +126,6 @@ export default function MapScreen() {
               <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={onPress}
-                onPressIn={onPress}
                 className="sq-8 bg-primary-600 dark:bg-primary-700 border-primary-100 dark:border-primary-600 z-10 flex items-center justify-center rounded-full border shadow-md"
               >
                 <Icon size={20} color="white" />
@@ -251,7 +248,7 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
                 </Text>
               </TouchableOpacity>
             </Link>
-            <View className="flex flex-row flex-wrap items-center space-x-1 pb-2">
+            <View className="flex flex-row flex-wrap items-center space-x-1">
               <Star size={16} className="text-black dark:text-white" />
               <Text className="text-sm">{spot.rating._avg.rating?.toFixed(1) || "Not rated"}</Text>
               <Text>·</Text>
@@ -260,7 +257,9 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
               </Text>
             </View>
           </View>
-          <ImageCarousel key={spot.id} images={spot.images} />
+          <View className="overflow-hidden rounded-lg">
+            <ImageCarousel width={width - 56} height={200} images={spot.images} />
+          </View>
         </View>
       )}
       <TouchableOpacity onPress={onClose} className="absolute right-2 top-2 flex items-center justify-center p-2">
@@ -269,29 +268,6 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
     </View>
   )
 })
-
-function ImageCarousel({ images }: { images: Pick<SpotImage, "id" | "path">[] }) {
-  const [imageIndex, setImageIndex] = React.useState(0)
-
-  return (
-    <View>
-      <Carousel
-        loop
-        width={width - 56}
-        height={200}
-        onSnapToItem={setImageIndex}
-        style={{ borderRadius: 10 }}
-        data={images}
-        renderItem={({ item: image }) => (
-          <Image key={image.id} source={{ uri: createImageUrl(image.path) }} className="h-[200px] w-full object-cover" />
-        )}
-      />
-      <View className="absolute bottom-2 right-2 rounded bg-gray-800/70 p-1">
-        <Text className="text-xs text-white">{`${imageIndex + 1}/${images.length}`}</Text>
-      </View>
-    </View>
-  )
-}
 
 interface Props {
   initialFilters: Filters

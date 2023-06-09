@@ -1,8 +1,8 @@
 import { View } from "react-native"
 import { useLocalSearchParams } from "expo-router"
 
-import { Text } from "../components/Text"
-import { UserProfile } from "../components/UserProfile"
+import { Text } from "../../components/Text"
+import { UserProfile } from "../../components/UserProfile"
 
 export default function PublicProfile() {
   const { username } = useLocalSearchParams<{ username: string }>()
