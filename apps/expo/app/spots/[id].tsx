@@ -1,11 +1,11 @@
-import { useLocalSearchParams, useNavigation } from "expo-router"
-import { BadgeX, ChevronLeft, Star, Verified } from "lucide-react-native"
 import * as React from "react"
 import { Animated, TouchableOpacity, View, type ViewProps } from "react-native"
+import { useLocalSearchParams, useNavigation } from "expo-router"
+import { StatusBar } from "expo-status-bar"
+import { BadgeX, ChevronLeft, Star, Verified } from "lucide-react-native"
 
 import { merge } from "@ramble/shared"
 
-import { StatusBar } from "expo-status-bar"
 import { Button } from "../../components/Button"
 import { Heading } from "../../components/Heading"
 import { Link } from "../../components/Link"

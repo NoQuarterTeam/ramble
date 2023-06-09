@@ -1,7 +1,7 @@
 import { TouchableOpacity, View } from "react-native"
+import { FlashList } from "@shopify/flash-list"
 import { useRouter } from "expo-router"
 import { Map } from "lucide-react-native"
-import { FlashList } from "@shopify/flash-list"
 
 import { Heading } from "../../components/Heading"
 import { SpotItem } from "../../components/SpotItem"

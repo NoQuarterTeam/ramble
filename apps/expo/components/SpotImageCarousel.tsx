@@ -1,11 +1,12 @@
-import { SpotImage } from "@ramble/database/types"
-import { createImageUrl } from "@ramble/shared"
-import { FlashList } from "@shopify/flash-list"
 import * as React from "react"
 import { View } from "react-native"
+import { FlashList } from "@shopify/flash-list"
+import { Image } from "expo-image"
+
+import { type SpotImage } from "@ramble/database/types"
+import { createImageUrl } from "@ramble/shared"
 
 import { Text } from "./Text"
-import { Image } from "expo-image"
 
 export function ImageCarousel({
   images,

@@ -1,9 +1,9 @@
-import Mapbox, { Camera, MarkerView, type MapView as MapType } from "@rnmapbox/maps"
+import * as React from "react"
+import { Modal, ScrollView, Switch, TouchableOpacity, useColorScheme, View } from "react-native"
+import Mapbox, { Camera, type MapView as MapType, MarkerView } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { useRouter } from "expo-router"
 import { BadgeCheck, BadgeX, Dog, List, Navigation, Settings2, Star, Verified, X } from "lucide-react-native"
-import * as React from "react"
-import { Modal, ScrollView, Switch, TouchableOpacity, useColorScheme, View } from "react-native"
 
 import { type SpotType } from "@ramble/database/types"
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
