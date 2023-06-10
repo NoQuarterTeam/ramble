@@ -49,7 +49,7 @@ export const buttonTextStyles = cva("text-center font-500 text-md", {
 })
 export type ButtonStyleProps = VariantProps<typeof buttonStyles>
 
-interface Props extends TouchableOpacityProps, ButtonStyleProps {
+export interface ButtonProps extends TouchableOpacityProps, ButtonStyleProps {
   className?: string
   textClassName?: string
   children: React.ReactNode
@@ -58,7 +58,7 @@ interface Props extends TouchableOpacityProps, ButtonStyleProps {
 }
 
 export const Button = React.forwardRef(function _Button(
-  { variant = "primary", leftIcon, size = "md", isLoading, ...props }: Props,
+  { variant = "primary", leftIcon, size = "md", isLoading, ...props }: ButtonProps,
   ref,
 ) {
   const colorScheme = useColorScheme()

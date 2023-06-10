@@ -7,12 +7,18 @@ import { Heading } from "../../components/Heading"
 import { SpotItem } from "../../components/SpotItem"
 import { Text } from "../../components/Text"
 import { api } from "../../lib/api"
+import { Spinner } from "../../components/Spinner"
 
 export default function Latest() {
   const router = useRouter()
   const { data: spots, isLoading } = api.spot.latest.useQuery()
 
-  if (isLoading) return null
+  if (isLoading)
+    return (
+      <View className="flex items-center justify-center pt-20">
+        <Spinner />
+      </View>
+    )
   return (
     <View className="h-full">
       <View className="relative flex-1 px-4 pt-20">

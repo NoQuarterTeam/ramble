@@ -1,21 +1,9 @@
 import { TRPCError } from "@trpc/server"
 
 import { z } from "zod"
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
+import { createTRPCRouter, protectedProcedure, publicProfileProcedure } from "../trpc"
 import { updateSchema } from "../schemas/user"
 import { Spot, SpotImage } from "@ramble/database/types"
-
-const publicProfileProcedure = publicProcedure.input(z.object({ username: z.string() })).use(async ({ ctx, next, input }) => {
-  const currentUser = ctx.user
-  if (!input) throw new TRPCError({ code: "BAD_REQUEST" })
-  const user = await ctx.prisma.user.findUnique({
-    where: { username: input.username },
-    select: { isProfilePublic: true, id: true },
-  })
-  if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
-  if (!user.isProfilePublic && (!currentUser || currentUser.id !== user.id)) throw new TRPCError({ code: "UNAUTHORIZED" })
-  return next({ ctx: { publicUser: user } })
-})
 
 export const userRouter = createTRPCRouter({
   profile: publicProfileProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {

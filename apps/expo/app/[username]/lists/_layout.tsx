@@ -5,7 +5,11 @@ export default function ListsLayout() {
   const theme = useColorScheme()
   const isDark = theme === "dark"
   return (
-    <Stack screenOptions={{ contentStyle: { backgroundColor: isDark ? "black" : "white" }, headerShown: false }}>
+    <Stack
+      initialRouteName="index"
+      screenOptions={{ contentStyle: { backgroundColor: isDark ? "black" : "white" }, headerShown: false }}
+    >
+      <Stack.Screen name="index" />
       <Stack.Screen name="[id]" />
     </Stack>
   )

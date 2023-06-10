@@ -57,7 +57,6 @@ export default function RootLayout() {
               <Stack.Screen name="spots" />
               <Stack.Screen name="[username]" />
               <Stack.Screen name="(auth)" options={{ presentation: "modal" }} />
-              <Stack.Screen name="account" options={{ presentation: "modal" }} />
             </Stack>
           </CurrentUser>
         )}

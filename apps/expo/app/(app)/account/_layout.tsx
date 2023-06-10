@@ -1,7 +1,7 @@
 import { useColorScheme } from "react-native"
 import { Stack } from "expo-router"
 
-export default function AccountLayout() {
+export default function ProfileLayout() {
   const colorScheme = useColorScheme()
   return (
     <Stack
@@ -9,6 +9,7 @@ export default function AccountLayout() {
       initialRouteName="index"
     >
       <Stack.Screen name="index" />
+      <Stack.Screen name="settings" />
     </Stack>
   )
 }

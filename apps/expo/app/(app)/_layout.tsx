@@ -1,7 +1,7 @@
 import { useColorScheme } from "react-native"
 import { Image } from "expo-image"
 import { Tabs } from "expo-router"
-import { PlusCircle, Search, User } from "lucide-react-native"
+import { List, PlusCircle, Search, User } from "lucide-react-native"
 
 import { createImageUrl, join } from "@ramble/shared"
 
@@ -35,9 +35,15 @@ export default function AppLayout() {
           tabBarIcon: (props) => <PlusCircle size={24} color={props.focused ? "green" : isDark ? "white" : "black"} />,
         }}
       />
+      <Tabs.Screen
+        name="lists"
+        options={{
+          tabBarIcon: (props) => <List size={24} color={props.focused ? "green" : isDark ? "white" : "black"} />,
+        }}
+      />
 
       <Tabs.Screen
-        name="profile"
+        name="account"
         options={{
           tabBarIcon: (props) =>
             me?.avatar ? (
@@ -54,6 +60,7 @@ export default function AppLayout() {
             ),
         }}
       />
+
       <Tabs.Screen name="latest" options={{ href: null }} />
     </Tabs>
   )
