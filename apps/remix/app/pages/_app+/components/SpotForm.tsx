@@ -21,7 +21,7 @@ import { FormNumber, NullableFormString, useFormErrors } from "~/lib/form"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { SPOT_OPTIONS } from "~/lib/spots"
 import { useTheme } from "~/lib/theme"
-import type { geocodeLoader } from "~/pages/api+/geocode"
+import type { geocodeLoader } from "~/pages/api+/mapbox+/geocode"
 
 import type { IpInfo } from "../_layout"
 
@@ -79,7 +79,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
       { arrayFormat: "bracket" },
     )
     window.history.replaceState(null, "", `${window.location.pathname}?${params}`)
-    geocodeFetcher.load(`/api/geocode?${queryString.stringify({ latitude: center.lat, longitude: center.lng })}`)
+    geocodeFetcher.load(`/api/mapbox/geocode?${queryString.stringify({ latitude: center.lat, longitude: center.lng })}`)
   }
 
   const address = geocodeFetcher.data
