@@ -9,8 +9,6 @@ import { useParams } from "../../../router"
 
 export function UsernameSpots() {
   const { params } = useParams<"UsernameLayout">()
-  console.log(params)
-
   const { data: spots, isLoading } = api.user.spots.useQuery({ username: params.username })
   if (isLoading)
     return (
