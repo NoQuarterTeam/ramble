@@ -1,22 +1,19 @@
 import { TouchableOpacity, View } from "react-native"
 import { useLocalSearchParams, useNavigation } from "expo-router"
 
-import { Text } from "../../../../components/Text"
-import { api } from "../../../../lib/api"
-import { Spinner } from "../../../../components/Spinner"
-import { Heading } from "../../../../components/Heading"
+import { Text } from "../../../components/Text"
+import { api } from "../../../lib/api"
+import { Spinner } from "../../../components/Spinner"
+import { Heading } from "../../../components/Heading"
 import { ChevronLeft, Map } from "lucide-react-native"
 import { FlashList } from "@shopify/flash-list"
-import { SpotItem } from "../../../../components/SpotItem"
-import { Link } from "../../../../components/Link"
+import { SpotItem } from "../../../components/SpotItem"
+import { Link } from "../../../components/Link"
 
 export default function ListDetail() {
-  const { id, username } = useLocalSearchParams<{ id: string; username: string }>()
+  const { id } = useLocalSearchParams<{ id: string }>()
 
-  const { data: list, isLoading } = api.list.detail.useQuery(
-    { id: id || "", username: username || "" },
-    { enabled: !!id && !!username },
-  )
+  const { data: list, isLoading } = api.list.detail.useQuery({ id: id || "" }, { enabled: !!id })
   const navigation = useNavigation()
 
   if (isLoading)
@@ -54,7 +51,7 @@ export default function ListDetail() {
           renderItem={({ item }) => <SpotItem spot={item} />}
         />
       </View>
-      <Link asChild href={`/${username}/lists/${id}/map`}>
+      <Link asChild href={`/lists/${id}/map`}>
         <TouchableOpacity className="absolute bottom-3 left-1/2 -ml-[50px] flex w-[100px] flex-row items-center justify-center space-x-2 rounded-full bg-gray-800 p-3 dark:bg-white">
           <Map size={20} className="text-white dark:text-black" />
           <Text className="text-white dark:text-black">Map</Text>

@@ -10,7 +10,7 @@ import { Text } from "../../../components/Text"
 import { VERSION } from "../../../lib/config"
 import { useMe } from "../../../lib/hooks/useMe"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { useRouter } from "expo-router"
+
 import { api, AUTH_TOKEN } from "../../../lib/api"
 
 import { Image } from "expo-image"
@@ -24,11 +24,10 @@ const updateGroup = (Constants.manifest2?.metadata as any)?.["updateGroup"]
 export default function Profile() {
   const { me } = useMe()
   const utils = api.useContext()
-  const router = useRouter()
+
   const handleLogout = async () => {
     utils.auth.me.setData(undefined, null)
     await AsyncStorage.removeItem(AUTH_TOKEN)
-    router.back()
   }
   if (!me)
     return (

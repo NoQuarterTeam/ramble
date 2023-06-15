@@ -3,7 +3,6 @@ module.exports = function (api) {
   return {
     plugins: [
       ["@babel/plugin-transform-react-jsx", { runtime: "automatic" }],
-      require.resolve("expo-router/babel"),
       "nativewind/babel",
       ["react-native-reanimated/plugin"],
     ],

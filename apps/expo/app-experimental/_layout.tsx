@@ -1,3 +1,6 @@
+import * as React from "react"
+import { useColorScheme, View } from "react-native"
+import { SafeAreaProvider } from "react-native-safe-area-context"
 import {
   Poppins_300Light,
   Poppins_400Regular,
@@ -8,28 +11,18 @@ import {
   Poppins_900Black,
   useFonts,
 } from "@expo-google-fonts/poppins"
-import * as React from "react"
-import { useColorScheme } from "react-native"
-import { SafeAreaProvider } from "react-native-safe-area-context"
-
+import { type ErrorBoundaryProps, SplashScreen, Stack } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 
+import { Button } from "../components/Button"
 import { NewUpdate } from "../components/NewUpdate"
-
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { enableScreens } from "react-native-screens"
+import { Text } from "../components/Text"
 import { api, TRPCProvider } from "../lib/api"
 import { useCheckExpoUpdates } from "../lib/hooks/useCheckExpoUpdates"
 import { useMe } from "../lib/hooks/useMe"
 
-import { NavigationContainer } from "@react-navigation/native"
-import { AppLayout } from "./(app)/_layout"
-import { AuthLayout } from "./(auth)/_layout"
-
-enableScreens()
-
-const Container = createNativeStackNavigator()
-
+// This is the main layout of the app
+// It wraps your pages with the providers they need
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
     Poppins_300Light,
@@ -44,7 +37,7 @@ export default function RootLayout() {
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
   // Prevent rendering until the font has loaded
-  if (!fontsLoaded || !isDoneChecking) return null
+  if (!fontsLoaded || !isDoneChecking) return <SplashScreen />
 
   return (
     <TRPCProvider>
@@ -52,18 +45,21 @@ export default function RootLayout() {
         {isNewUpdateAvailable ? (
           <NewUpdate />
         ) : (
-          <PrefetchTabs>
-            <NavigationContainer>
-              <Container.Navigator initialRouteName="AppLayout" screenOptions={{ headerShown: false }}>
-                <Container.Group>
-                  <Container.Screen name="AppLayout" component={AppLayout} />
-                </Container.Group>
-                <Container.Group screenOptions={{ presentation: "modal" }}>
-                  <Container.Screen name="AuthLayout" component={AuthLayout} />
-                </Container.Group>
-              </Container.Navigator>
-            </NavigationContainer>
-          </PrefetchTabs>
+          <CurrentUser>
+            <Stack
+              initialRouteName="(app)"
+              screenOptions={{
+                headerShown: false,
+                contentStyle: { backgroundColor: isDark ? "black" : "white" },
+              }}
+            >
+              <Stack.Screen name="(app)" />
+              <Stack.Screen name="spots" />
+              <Stack.Screen name="lists" />
+              <Stack.Screen name="[username]" />
+              <Stack.Screen name="(auth)" options={{ presentation: "modal" }} />
+            </Stack>
+          </CurrentUser>
         )}
         <StatusBar style={isDark ? "light" : "dark"} />
       </SafeAreaProvider>
@@ -71,14 +67,22 @@ export default function RootLayout() {
   )
 }
 
-function PrefetchTabs(props: { children: React.ReactNode }) {
+function CurrentUser(props: { children: React.ReactNode }) {
   const { me, isLoading } = useMe()
   const utils = api.useContext()
   React.useEffect(() => {
     if (isLoading || !me) return
     utils.user.profile.prefetch({ username: me.username })
-    utils.user.lists.prefetch({ username: me.username })
   }, [me, isLoading])
-  if (isLoading) return null
+  if (isLoading) return <SplashScreen />
   return <>{props.children}</>
+}
+
+export function ErrorBoundary(props: ErrorBoundaryProps) {
+  return (
+    <View className="space-y-4 px-4 py-20">
+      <Text>{props.error.message}</Text>
+      <Button onPress={props.retry}>Try Again?</Button>
+    </View>
+  )
 }

@@ -1,7 +1,7 @@
 import { FormProvider } from "react-hook-form"
-import { KeyboardAvoidingView, ScrollView, TouchableOpacity } from "react-native"
+import { KeyboardAvoidingView, ScrollView } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-
+import { Link, useNavigation, useRouter } from "expo-router"
 import { type z } from "zod"
 
 import { loginSchema } from "@ramble/api/src/schemas/user"
@@ -12,15 +12,13 @@ import { FormInput } from "../../components/FormInput"
 import { ModalView } from "../../components/ModalView"
 import { api, AUTH_TOKEN } from "../../lib/api"
 import { useForm } from "../../lib/hooks/useForm"
-import { useRouter } from "../router"
-import { Text } from "../../components/Text"
 
-export function LoginScreen() {
+export default function Login() {
   const queryClient = api.useContext()
-  const navigation = useRouter()
+  const router = useRouter()
 
   const form = useForm({ defaultValues: { email: "jack@noquarter.co", password: "password" }, schema: loginSchema })
-
+  const navigation = useNavigation()
   const { mutate, isLoading, error } = api.auth.login.useMutation({
     onSuccess: async (data) => {
       await AsyncStorage.setItem(AUTH_TOKEN, data.token)
@@ -28,7 +26,7 @@ export function LoginScreen() {
       if (navigation.canGoBack()) {
         navigation.goBack()
       } else {
-        navigation.push("AppLayout")
+        router.replace("/")
       }
     },
   })
@@ -55,9 +53,9 @@ export function LoginScreen() {
               Login
             </Button>
             {error?.data?.formError && <FormError className="mb-1" error={error.data.formError} />}
-            <TouchableOpacity onPress={() => navigation.push("AuthLayout", { screen: "RegisterScreen" })}>
-              <Text className="text-lg">Register</Text>
-            </TouchableOpacity>
+            <Link href={`/register`} className="text-lg">
+              Register
+            </Link>
           </ScrollView>
         </FormProvider>
       </KeyboardAvoidingView>

@@ -1,30 +1,21 @@
-import { Image } from "expo-image"
 import { useColorScheme } from "react-native"
-
+import { Image } from "expo-image"
+import { Tabs } from "expo-router"
 import { List, PlusCircle, Search, User } from "lucide-react-native"
 
 import { createImageUrl, join } from "@ramble/shared"
 
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { useMe } from "../../lib/hooks/useMe"
 
-import { NewSpotScreen } from "./new"
-
-import { ProfileLayout } from "./profile/_layout"
-import { SpotsLayout } from "./spots/_layout"
-import { ListsLayout } from "./lists/_layout"
-
-const Tab = createBottomTabNavigator()
-
-export function AppLayout() {
+export default function AppLayout() {
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
   const { me } = useMe()
 
   return (
-    <Tab.Navigator
-      initialRouteName="SpotsLayout"
-      sceneContainerStyle={{ backgroundColor: isDark ? "black" : "white" }}
+    <Tabs
+      initialRouteName="index"
+      sceneContainerStyle={{ flex: 1, backgroundColor: isDark ? "black" : "white" }}
       screenOptions={{
         tabBarStyle: { backgroundColor: isDark ? "black" : "white" },
         headerShown: false,
@@ -32,31 +23,27 @@ export function AppLayout() {
         // tabBarLabelStyle: { margin: -4, color: isDark ? "white" : "black" },
       }}
     >
-      <Tab.Screen
-        name="SpotsLayout"
-        component={SpotsLayout}
+      <Tabs.Screen
+        name="index"
         options={{
           tabBarIcon: (props) => <Search size={24} color={props.focused ? "green" : isDark ? "white" : "black"} />,
         }}
       />
-      <Tab.Screen
-        name="NewSpot"
-        component={NewSpotScreen}
+      <Tabs.Screen
+        name="new"
         options={{
           tabBarIcon: (props) => <PlusCircle size={24} color={props.focused ? "green" : isDark ? "white" : "black"} />,
         }}
       />
-      <Tab.Screen
-        name="ListsLayout"
-        component={ListsLayout}
+      <Tabs.Screen
+        name="lists"
         options={{
           tabBarIcon: (props) => <List size={24} color={props.focused ? "green" : isDark ? "white" : "black"} />,
         }}
       />
 
-      <Tab.Screen
-        name="ProfileLayout"
-        component={ProfileLayout}
+      <Tabs.Screen
+        name="account"
         options={{
           tabBarIcon: (props) =>
             me?.avatar ? (
@@ -73,6 +60,8 @@ export function AppLayout() {
             ),
         }}
       />
-    </Tab.Navigator>
+
+      <Tabs.Screen name="latest" options={{ href: null }} />
+    </Tabs>
   )
 }

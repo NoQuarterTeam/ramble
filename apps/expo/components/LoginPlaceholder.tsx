@@ -1,8 +1,10 @@
 import * as React from "react"
 import { ScrollView, View } from "react-native"
 import { Heading } from "./Heading"
-import { LinkButton } from "./LinkButton"
+
 import { Text } from "./Text"
+import { Button } from "./Button"
+import { useRouter } from "../app/router"
 
 interface Props {
   title: string
@@ -11,6 +13,7 @@ interface Props {
 }
 
 export function LoginPlaceholder(props: Props) {
+  const { push } = useRouter()
   return (
     <ScrollView className="h-full">
       <View className="space-y-4 px-4 pt-20">
@@ -20,7 +23,7 @@ export function LoginPlaceholder(props: Props) {
             <Text className="text-lg">{props.text}</Text>
           </View>
           <View>
-            <LinkButton href="/login">Login</LinkButton>
+            <Button onPress={() => push("AuthLayout")}>Login</Button>
           </View>
         </View>
         <View>{props.children}</View>

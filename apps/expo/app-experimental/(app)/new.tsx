@@ -5,7 +5,7 @@ import { LoginPlaceholder } from "../../components/LoginPlaceholder"
 import { useMe } from "../../lib/hooks/useMe"
 import { Text } from "../../components/Text"
 
-export function NewSpotScreen() {
+export default function New() {
   const { me } = useMe()
   if (!me) return <LoginPlaceholder title="New spot" text="Log in to start creating spots" />
   return (

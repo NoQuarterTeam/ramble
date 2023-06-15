@@ -2,10 +2,10 @@ import { Slot, useLocalSearchParams, useNavigation, useRouter, useSegments } fro
 import { ChevronLeft } from "lucide-react-native"
 
 import { ScrollView, TouchableOpacity, View } from "react-native"
+import { Button } from "../../components/Button"
 import { Heading } from "../../components/Heading"
 import { Text } from "../../components/Text"
 import { UserProfile } from "../../components/UserProfile"
-import { Button } from "../../components/Button"
 
 export default function UsernameLayout() {
   // const { me } = useMe()
@@ -15,7 +15,6 @@ export default function UsernameLayout() {
   const router = useRouter()
   const segments = useSegments()
   // const isPublicProfileTab = segments.find((s) => s === "[username]")
-  console.log(segments)
 
   if (!username)
     return (
@@ -44,7 +43,7 @@ export default function UsernameLayout() {
         <View className="flex flex-row items-center justify-center space-x-2 border-b border-gray-100 bg-white py-2 dark:border-gray-800 dark:bg-black">
           <View>
             <Button
-              onPress={() => router.push({ pathname: `/[username]`, params: { username } })}
+              onPress={() => router.push(`/${username}`)}
               variant={segments.find((s) => s === "[username]") && segments.length === 1 ? "secondary" : "ghost"}
               size="sm"
             >
@@ -53,7 +52,7 @@ export default function UsernameLayout() {
           </View>
           <View>
             <Button
-              onPress={() => router.push({ pathname: `/[username]/van`, params: { username } })}
+              onPress={() => router.push(`/${username}/van`)}
               variant={segments.find((s) => s === "van") ? "secondary" : "ghost"}
               size="sm"
             >
@@ -62,9 +61,9 @@ export default function UsernameLayout() {
           </View>
           <View>
             <Button
+              onPress={() => router.push(`/${username}/lists`)}
               variant={segments.find((s) => s === "lists") ? "secondary" : "ghost"}
               size="sm"
-              onPress={() => router.push({ pathname: `/[username]/lists`, params: { username } })}
             >
               Lists
             </Button>

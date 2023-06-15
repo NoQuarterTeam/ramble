@@ -1,14 +1,14 @@
 import { TouchableOpacity, View } from "react-native"
 import { useLocalSearchParams, useNavigation } from "expo-router"
 
-import { Text } from "../../../../components/Text"
-import { api } from "../../../../lib/api"
-import { Spinner } from "../../../../components/Spinner"
-import { Heading } from "../../../../components/Heading"
+import { Text } from "../../../components/Text"
+import { api } from "../../../lib/api"
+import { Spinner } from "../../../components/Spinner"
+import { Heading } from "../../../components/Heading"
 import { ChevronLeft, Map } from "lucide-react-native"
 import { FlashList } from "@shopify/flash-list"
-import { SpotItem } from "../../../../components/SpotItem"
-import { Link } from "../../../../components/Link"
+import { SpotItem } from "../../../components/SpotItem"
+import { Link } from "../../../components/Link"
 
 export default function ListDetailMap() {
   const { id, username } = useLocalSearchParams<{ id: string; username: string }>()

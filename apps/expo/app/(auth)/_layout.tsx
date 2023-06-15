@@ -1,15 +1,21 @@
-import { useColorScheme } from "react-native"
-import { Stack } from "expo-router"
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
-export default function AuthLayout() {
+import { RegisterScreen } from "./register"
+import { LoginScreen } from "./login"
+import { useColorScheme } from "react-native"
+
+const AuthStack = createNativeStackNavigator()
+
+export function AuthLayout() {
   const colorScheme = useColorScheme()
+  const isDark = colorScheme === "dark"
   return (
-    <Stack
-      screenOptions={{ contentStyle: { backgroundColor: colorScheme === "light" ? "white" : "black" }, headerShown: false }}
-      initialRouteName="login"
+    <AuthStack.Navigator
+      initialRouteName="LoginScreen"
+      screenOptions={{ contentStyle: { backgroundColor: isDark ? "black" : "white" }, headerShown: false }}
     >
-      <Stack.Screen name="login" />
-      <Stack.Screen name="register" />
-    </Stack>
+      <AuthStack.Screen name="LoginScreen" component={LoginScreen} />
+      <AuthStack.Screen name="RegisterScreen" component={RegisterScreen} />
+    </AuthStack.Navigator>
   )
 }
