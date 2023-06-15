@@ -42,8 +42,8 @@ importers:
         specifier: 1.17.11
         version: 1.17.11(react-native@0.71.8)
       '@rnmapbox/maps':
-        specifier: 10.0.7
-        version: 10.0.7(expo@48.0.10)(react-native@0.71.8)(react@18.2.0)
+        specifier: 10.0.8
+        version: 10.0.8(expo@48.0.10)(react-native@0.71.8)(react@18.2.0)
       '@shopify/flash-list':
         specifier: ^1.4.3
         version: 1.4.3(@babel/runtime@7.20.0)(react-native@0.71.8)(react@18.2.0)
@@ -6685,8 +6685,8 @@ packages:
     dependencies:
       web-streams-polyfill: 3.2.1
 
-  /@rnmapbox/maps@10.0.7(expo@48.0.10)(react-native@0.71.8)(react@18.2.0):
-    resolution: {integrity: sha512-Yo2MELOACcN1gRUJggS7X6W05clLyIBkga4Bn4WQ2BVfJ88QWKMNtQVvzhH0W3WPssmk5k4bsCP5c2b3CQ0REg==}
+  /@rnmapbox/maps@10.0.8(expo@48.0.10)(react-native@0.71.8)(react@18.2.0):
+    resolution: {integrity: sha512-fk1X2p3OWyKK4XyvIiEA5e9Mp78AJSiGLP1ruMdqFRJXdf/IHFeOdV9oUoQ9Uc9RvIDu3G6VL4KmJfd3kPAjfw==}
     peerDependencies:
       expo: '>=47.0.0'
       mapbox-gl: ^2.9.0

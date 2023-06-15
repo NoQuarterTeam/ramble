@@ -21,7 +21,7 @@
     "@ramble/shared": "workspace:*",
     "@ramble/tailwind-config": "workspace:*",
     "@react-native-async-storage/async-storage": "1.17.11",
-    "@rnmapbox/maps": "10.0.7",
+    "@rnmapbox/maps": "10.0.8",
     "@shopify/flash-list": "^1.4.3",
     "@tanstack/react-query": "^4.23.0",
     "@trpc/client": "^10.28.1",
