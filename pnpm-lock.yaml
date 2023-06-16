@@ -46,7 +46,7 @@ importers:
         version: 6.7.3
       '@react-navigation/bottom-tabs':
         specifier: 6.5.7
-        version: 6.5.7(@react-navigation/native@6.1.6)(react-native-safe-area-context@4.5.0)(react-native-screens@3.20.0)(react-native@0.71.8)(react@18.2.0)
+        version: 6.5.7(@react-navigation/native@6.1.6)(react-native-safe-area-context@4.5.0)(react-native-screens@3.21.0)(react-native@0.71.8)(react@18.2.0)
       '@react-navigation/core':
         specifier: 6.4.8
         version: 6.4.8(react@18.2.0)
@@ -55,13 +55,13 @@ importers:
         version: 6.1.6(react-native@0.71.8)(react@18.2.0)
       '@react-navigation/native-stack':
         specifier: 6.9.12
-        version: 6.9.12(@react-navigation/native@6.1.6)(react-native-safe-area-context@4.5.0)(react-native-screens@3.20.0)(react-native@0.71.8)(react@18.2.0)
+        version: 6.9.12(@react-navigation/native@6.1.6)(react-native-safe-area-context@4.5.0)(react-native-screens@3.21.0)(react-native@0.71.8)(react@18.2.0)
       '@react-navigation/stack':
         specifier: 6.3.16
-        version: 6.3.16(@react-navigation/native@6.1.6)(react-native-gesture-handler@2.9.0)(react-native-safe-area-context@4.5.0)(react-native-screens@3.20.0)(react-native@0.71.8)(react@18.2.0)
+        version: 6.3.16(@react-navigation/native@6.1.6)(react-native-gesture-handler@2.9.0)(react-native-safe-area-context@4.5.0)(react-native-screens@3.21.0)(react-native@0.71.8)(react@18.2.0)
       '@rnmapbox/maps':
-        specifier: 10.0.7
-        version: 10.0.7(expo@48.0.10)(react-native@0.71.8)(react@18.2.0)
+        specifier: 10.0.8
+        version: 10.0.8(expo@48.0.10)(react-native@0.71.8)(react@18.2.0)
       '@shopify/flash-list':
         specifier: ^1.4.3
         version: 1.4.3(@babel/runtime@7.20.0)(react-native@0.71.8)(react@18.2.0)
@@ -109,7 +109,7 @@ importers:
         version: 15.1.1(expo@48.0.10)
       expo-router:
         specifier: ^1.2.2
-        version: 1.2.2(@types/react@18.2.8)(expo-constants@14.2.1)(expo-linking@4.0.1)(expo-modules-autolinking@1.2.0)(expo-status-bar@1.4.4)(expo@48.0.10)(metro@0.73.9)(react-dom@18.2.0)(react-native-gesture-handler@2.9.0)(react-native-reanimated@2.14.4)(react-native-safe-area-context@4.5.0)(react-native-screens@3.20.0)(react-native@0.71.8)(react@18.2.0)
+        version: 1.2.2(@types/react@18.2.8)(expo-constants@14.2.1)(expo-linking@4.0.1)(expo-modules-autolinking@1.2.0)(expo-status-bar@1.4.4)(expo@48.0.10)(metro@0.73.9)(react-dom@18.2.0)(react-native-gesture-handler@2.9.0)(react-native-reanimated@2.14.4)(react-native-safe-area-context@4.5.0)(react-native-screens@3.21.0)(react-native@0.71.8)(react@18.2.0)
       expo-splash-screen:
         specifier: ~0.18.2
         version: 0.18.2(expo-modules-autolinking@1.2.0)(expo@48.0.10)
@@ -153,8 +153,8 @@ importers:
         specifier: 4.5.0
         version: 4.5.0(react-native@0.71.8)(react@18.2.0)
       react-native-screens:
-        specifier: ~3.20.0
-        version: 3.20.0(react-native@0.71.8)(react@18.2.0)
+        specifier: ~3.21.0
+        version: 3.21.0(react-native@0.71.8)(react@18.2.0)
       react-native-svg:
         specifier: 13.4.0
         version: 13.4.0(react-native@0.71.8)(react@18.2.0)
@@ -244,14 +244,14 @@ importers:
         specifier: workspace:*
         version: link:../../packages/ui
       '@remix-run/node':
-        specifier: 1.17.0
-        version: 1.17.0
+        specifier: 1.17.1
+        version: 1.17.1
       '@remix-run/react':
-        specifier: 1.17.0
-        version: 1.17.0(react-dom@18.2.0)(react@18.2.0)
+        specifier: 1.17.1
+        version: 1.17.1(react-dom@18.2.0)(react@18.2.0)
       '@remix-run/serve':
-        specifier: 1.17.0
-        version: 1.17.0
+        specifier: 1.17.1
+        version: 1.17.1
       '@trpc/server':
         specifier: ^10.28.1
         version: 10.28.1
@@ -317,7 +317,7 @@ importers:
         version: 7.0.23(mapbox-gl@2.14.1)(react@18.2.0)
       remix-utils:
         specifier: ^6.1.0
-        version: 6.1.0(@remix-run/react@1.17.0)(@remix-run/server-runtime@1.17.0)(react@18.2.0)(typescript@5.1.3)(zod@3.21.4)
+        version: 6.1.0(@remix-run/react@1.17.1)(@remix-run/server-runtime@1.17.1)(react@18.2.0)(typescript@5.1.3)(zod@3.21.4)
       resend:
         specifier: ^0.15.0
         version: 0.15.0
@@ -338,7 +338,7 @@ importers:
         version: 3.21.4
       zodix:
         specifier: ^0.4.0
-        version: 0.4.0(@remix-run/server-runtime@1.17.0)(zod@3.21.4)
+        version: 0.4.0(@remix-run/server-runtime@1.17.1)(zod@3.21.4)
       zustand:
         specifier: 4.3.8
         version: 4.3.8(react@18.2.0)
@@ -347,8 +347,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/config/eslint
       '@remix-run/dev':
-        specifier: 1.17.0
-        version: 1.17.0(@remix-run/serve@1.17.0)
+        specifier: 1.17.1
+        version: 1.17.1(@remix-run/serve@1.17.1)
       '@remix-run/eslint-config':
         specifier: 1.17.0
         version: 1.17.0(eslint@8.42.0)(react@18.2.0)(typescript@5.1.3)
@@ -6413,7 +6413,7 @@ packages:
       react-test-renderer: 18.2.0(react@18.2.0)
     dev: true
 
-  /@react-navigation/bottom-tabs@6.5.7(@react-navigation/native@6.1.6)(react-native-safe-area-context@4.5.0)(react-native-screens@3.20.0)(react-native@0.71.8)(react@18.2.0):
+  /@react-navigation/bottom-tabs@6.5.7(@react-navigation/native@6.1.6)(react-native-safe-area-context@4.5.0)(react-native-screens@3.21.0)(react-native@0.71.8)(react@18.2.0):
     resolution: {integrity: sha512-9oZYyRu2z7+1pr2dX5V54rHFPmlj4ztwQxFe85zwpnGcPtGIsXj7VCIdlHnjRHJBBFCszvJGQpYY6/G2+DfD+A==}
     peerDependencies:
       '@react-navigation/native': ^6.0.0
@@ -6428,7 +6428,7 @@ packages:
       react: 18.2.0
       react-native: 0.71.8(@babel/core@7.20.2)(@babel/preset-env@7.20.2)(react@18.2.0)
       react-native-safe-area-context: 4.5.0(react-native@0.71.8)(react@18.2.0)
-      react-native-screens: 3.20.0(react-native@0.71.8)(react@18.2.0)
+      react-native-screens: 3.21.0(react-native@0.71.8)(react@18.2.0)
       warn-once: 0.1.1
     dev: false
 
@@ -6460,7 +6460,7 @@ packages:
       react-native-safe-area-context: 4.5.0(react-native@0.71.8)(react@18.2.0)
     dev: false
 
-  /@react-navigation/native-stack@6.9.12(@react-navigation/native@6.1.6)(react-native-safe-area-context@4.5.0)(react-native-screens@3.20.0)(react-native@0.71.8)(react@18.2.0):
+  /@react-navigation/native-stack@6.9.12(@react-navigation/native@6.1.6)(react-native-safe-area-context@4.5.0)(react-native-screens@3.21.0)(react-native@0.71.8)(react@18.2.0):
     resolution: {integrity: sha512-kS2zXCWP0Rgt7uWaCUKrRl7U2U1Gp19rM1kyRY2YzBPXhWGVPjQ2ygBp88CTQzjgy8M07H/79jvGiZ0mlEJI+g==}
     peerDependencies:
       '@react-navigation/native': ^6.0.0
@@ -6474,7 +6474,7 @@ packages:
       react: 18.2.0
       react-native: 0.71.8(@babel/core@7.20.2)(@babel/preset-env@7.20.2)(react@18.2.0)
       react-native-safe-area-context: 4.5.0(react-native@0.71.8)(react@18.2.0)
-      react-native-screens: 3.20.0(react-native@0.71.8)(react@18.2.0)
+      react-native-screens: 3.21.0(react-native@0.71.8)(react@18.2.0)
       warn-once: 0.1.1
     dev: false
 
@@ -6498,7 +6498,7 @@ packages:
       nanoid: 3.3.6
     dev: false
 
-  /@react-navigation/stack@6.3.16(@react-navigation/native@6.1.6)(react-native-gesture-handler@2.9.0)(react-native-safe-area-context@4.5.0)(react-native-screens@3.20.0)(react-native@0.71.8)(react@18.2.0):
+  /@react-navigation/stack@6.3.16(@react-navigation/native@6.1.6)(react-native-gesture-handler@2.9.0)(react-native-safe-area-context@4.5.0)(react-native-screens@3.21.0)(react-native@0.71.8)(react@18.2.0):
     resolution: {integrity: sha512-KTOn9cNuZ6p154Htbl2DiR95Wl+c7niLPRiGs7gjOkyVDGiaGQF9ODNQTYBDE1OxZGHe/EyYc6T2CbmiItLWDg==}
     peerDependencies:
       '@react-navigation/native': ^6.0.0
@@ -6515,16 +6515,16 @@ packages:
       react-native: 0.71.8(@babel/core@7.20.2)(@babel/preset-env@7.20.2)(react@18.2.0)
       react-native-gesture-handler: 2.9.0(react-native@0.71.8)(react@18.2.0)
       react-native-safe-area-context: 4.5.0(react-native@0.71.8)(react@18.2.0)
-      react-native-screens: 3.20.0(react-native@0.71.8)(react@18.2.0)
+      react-native-screens: 3.21.0(react-native@0.71.8)(react@18.2.0)
       warn-once: 0.1.1
     dev: false
 
-  /@remix-run/dev@1.17.0(@remix-run/serve@1.17.0):
-    resolution: {integrity: sha512-UczyZdcUfQCS8a53VT4UtGFUCLYPKFiMwfvZMMgDL6kbWnYrknvXkXICqG26QbyR3bKDR6JPm5I6wVsmTGp+vQ==}
+  /@remix-run/dev@1.17.1(@remix-run/serve@1.17.1):
+    resolution: {integrity: sha512-HW6y9Ki3+3LsrqhGngHwK3CSZ91Zcfrp8JNIMQQBq083+PprStsoyEenZye3rFacjeBMjDzhfRfFn2QFuDcVhg==}
     engines: {node: '>=14'}
     hasBin: true
     peerDependencies:
-      '@remix-run/serve': ^1.17.0
+      '@remix-run/serve': ^1.17.1
     peerDependenciesMeta:
       '@remix-run/serve':
         optional: true
@@ -6539,8 +6539,8 @@ packages:
       '@babel/traverse': 7.22.4
       '@babel/types': 7.22.4
       '@npmcli/package-json': 2.0.0
-      '@remix-run/serve': 1.17.0
-      '@remix-run/server-runtime': 1.17.0
+      '@remix-run/serve': 1.17.1
+      '@remix-run/server-runtime': 1.17.1
       '@vanilla-extract/integration': 6.2.1
       arg: 5.0.2
       cacache: 15.3.0
@@ -6548,7 +6548,7 @@ packages:
       chokidar: 3.5.3
       dotenv: 16.1.3
       esbuild: 0.17.6
-      esbuild-plugin-polyfill-node: 0.2.0(esbuild@0.17.6)
+      esbuild-plugins-node-modules-polyfill: 1.0.15(esbuild@0.17.6)
       execa: 5.1.1
       exit-hook: 2.2.1
       express: 4.18.2
@@ -6589,6 +6589,7 @@ packages:
       - bufferutil
       - encoding
       - less
+      - rollup
       - sass
       - stylus
       - sugarss
@@ -6634,13 +6635,13 @@ packages:
       - supports-color
     dev: true
 
-  /@remix-run/express@1.17.0(express@4.18.2):
-    resolution: {integrity: sha512-n3NlKfX9XrIap7z8Hd2i/U/yN642dxx7UgCSXm5lgQ7NY1Xzb7KbjktqLoOlr5yKm3a9NEn4/LGJP4VZtPi9Dw==}
+  /@remix-run/express@1.17.1(express@4.18.2):
+    resolution: {integrity: sha512-VOrrdl4dh9ZLgRzdt8bf7E+iFMnxsjFl1VtfLP1KgR8Pw4q872L5pwnOEtYA2PVoXbVopvKVcy9MnL1gQsTDWg==}
     engines: {node: '>=14'}
     peerDependencies:
       express: ^4.17.1
     dependencies:
-      '@remix-run/node': 1.17.0
+      '@remix-run/node': 1.17.1
       express: 4.18.2
 
   /@remix-run/node@1.17.0:
@@ -6656,9 +6657,24 @@ packages:
       cookie-signature: 1.2.1
       source-map-support: 0.5.21
       stream-slice: 0.1.2
+    dev: false
 
-  /@remix-run/react@1.17.0(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-AptrM6QxWQoL23SnaoBH1DP8/3SeKic9U9P+enZoUqiT31+2FVZ5ve4jPhiTaIKUKYKx6sP41zFrSuu1VjrOMg==}
+  /@remix-run/node@1.17.1:
+    resolution: {integrity: sha512-TDTWOrD1uAizlNRJaw0NjdsxtiYAiwjiBdXZ0sPdA7ABSqK1BH5I4NxxGpdcDPIbEReNRUTPnlu/bYqjG4JDag==}
+    engines: {node: '>=14'}
+    dependencies:
+      '@remix-run/server-runtime': 1.17.1
+      '@remix-run/web-fetch': 4.3.4
+      '@remix-run/web-file': 3.0.2
+      '@remix-run/web-stream': 1.0.3
+      '@web3-storage/multipart-parser': 1.0.0
+      abort-controller: 3.0.0
+      cookie-signature: 1.2.1
+      source-map-support: 0.5.21
+      stream-slice: 0.1.2
+
+  /@remix-run/react@1.17.1(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-KDrkVkIFeDfn1xW3L8lqe0VlG7KsngdUKz09FSc9e3zYvJJV4ix998Y0qpfkDp/OnLFy2FtHzkh7c3OMnpOBnA==}
     engines: {node: '>=14'}
     peerDependencies:
       react: '>=16.8'
@@ -6667,20 +6683,20 @@ packages:
       '@remix-run/router': 1.6.3
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      react-router-dom: 6.12.0(react-dom@18.2.0)(react@18.2.0)
+      react-router-dom: 6.13.0(react-dom@18.2.0)(react@18.2.0)
     dev: false
 
   /@remix-run/router@1.6.3:
     resolution: {integrity: sha512-EXJysQ7J3veRECd0kZFQwYYd5sJMcq2O/m60zu1W2l3oVQ9xtub8jTOtYRE0+M2iomyG/W3Ps7+vp2kna0C27Q==}
     engines: {node: '>=14'}
 
-  /@remix-run/serve@1.17.0:
-    resolution: {integrity: sha512-cRg1D5a2nQDFQU6O78MmOV74+NLYRUcuSkiEQhZfq4qAvq71V0RTDOGuWzPtUUl0ekisvefkmfbmrutugsZj/A==}
+  /@remix-run/serve@1.17.1:
+    resolution: {integrity: sha512-ae4dGG4HlVYOjuX0cO9g4tYKVR8+d8JmJZBhS5FJ+CA4MGBgCVRa8Monu33kDvWy0IOA02tMUoy4cJxOWTf7Pg==}
     engines: {node: '>=14'}
     hasBin: true
     dependencies:
-      '@remix-run/express': 1.17.0(express@4.18.2)
-      '@remix-run/node': 1.17.0
+      '@remix-run/express': 1.17.1(express@4.18.2)
+      '@remix-run/node': 1.17.1
       compression: 1.7.4
       express: 4.18.2
       morgan: 1.10.0
@@ -6689,6 +6705,17 @@ packages:
 
   /@remix-run/server-runtime@1.17.0:
     resolution: {integrity: sha512-xcUXaOibfIFZlvuyuWouz/t3fYhHCqRoKeGxQFGd1BvQBCmPaiau7B1Ao4aJFKyY7eU/L35KCaGzZBTdIF+d5w==}
+    engines: {node: '>=14'}
+    dependencies:
+      '@remix-run/router': 1.6.3
+      '@web3-storage/multipart-parser': 1.0.0
+      cookie: 0.4.2
+      set-cookie-parser: 2.6.0
+      source-map: 0.7.4
+    dev: false
+
+  /@remix-run/server-runtime@1.17.1:
+    resolution: {integrity: sha512-PuLDaf7WmrOaQzM70yCcM6Jm+g+UHzeBFvocxdqohJnO/8+/n5pFIKHwhooqcSq2TR0WtVpSVhCakdywiOH2mA==}
     engines: {node: '>=14'}
     dependencies:
       '@remix-run/router': 1.6.3
@@ -6730,8 +6757,8 @@ packages:
     dependencies:
       web-streams-polyfill: 3.2.1
 
-  /@rnmapbox/maps@10.0.7(expo@48.0.10)(react-native@0.71.8)(react@18.2.0):
-    resolution: {integrity: sha512-Yo2MELOACcN1gRUJggS7X6W05clLyIBkga4Bn4WQ2BVfJ88QWKMNtQVvzhH0W3WPssmk5k4bsCP5c2b3CQ0REg==}
+  /@rnmapbox/maps@10.0.8(expo@48.0.10)(react-native@0.71.8)(react@18.2.0):
+    resolution: {integrity: sha512-fk1X2p3OWyKK4XyvIiEA5e9Mp78AJSiGLP1ruMdqFRJXdf/IHFeOdV9oUoQ9Uc9RvIDu3G6VL4KmJfd3kPAjfw==}
     peerDependencies:
       expo: '>=47.0.0'
       mapbox-gl: ^2.9.0
@@ -6759,6 +6786,20 @@ packages:
     resolution: {integrity: sha512-iKnFXr7NkdZAIHiIWE+BX5ULi/ucVFYWD6TbAV+rZctiRTY2PL6tsIKhoIOaoskiWAkgu+VsbXgUVDNLHf+InQ==}
     engines: {node: '>= 8.0.0'}
     dependencies:
+      estree-walker: 2.0.2
+      picomatch: 2.3.1
+    dev: true
+
+  /@rollup/pluginutils@5.0.2:
+    resolution: {integrity: sha512-pTd9rIsP92h+B6wWwFbW8RkZv4hiR/xKsqre4SIuAOaOEQRxi0lqLke9k2/7WegC85GgUs9pjmOjCUi3In4vwA==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      rollup: ^1.20.0||^2.0.0||^3.0.0
+    peerDependenciesMeta:
+      rollup:
+        optional: true
+    dependencies:
+      '@types/estree': 1.0.1
       estree-walker: 2.0.2
       picomatch: 2.3.1
     dev: true
@@ -9623,14 +9664,16 @@ packages:
       is-symbol: 1.0.4
     dev: true
 
-  /esbuild-plugin-polyfill-node@0.2.0(esbuild@0.17.6):
-    resolution: {integrity: sha512-rpCoK4mag0nehBtFlFMLSuL9bNBLEh8h3wZ/FsrJEDompA/AwOqInx6Xow01+CXAcvZYhkoJ0SIZiS37qkecDA==}
+  /esbuild-plugins-node-modules-polyfill@1.0.15(esbuild@0.17.6):
+    resolution: {integrity: sha512-UCCLY5A3+zE1t7XHfdPQGO2FRECQgNWZ/TG1Iej9qtqv/pgiFiPGGDdRbv4RkGTqsxosUVks4NYvGtSlwqgb6A==}
+    engines: {node: '>=14.0.0'}
     peerDependencies:
-      esbuild: '*'
+      esbuild: ^0.14.0 || ^0.15.0 || ^0.16.0 || ^0.17.0 || ^0.18.0
     dependencies:
-      '@jspm/core': 2.0.1
       esbuild: 0.17.6
-      import-meta-resolve: 2.2.2
+      modern-node-polyfills: 1.0.0(esbuild@0.17.6)
+    transitivePeerDependencies:
+      - rollup
     dev: true
 
   /esbuild@0.17.6:
@@ -10389,7 +10432,7 @@ packages:
       invariant: 2.2.4
     dev: false
 
-  /expo-router@1.2.2(@types/react@18.2.8)(expo-constants@14.2.1)(expo-linking@4.0.1)(expo-modules-autolinking@1.2.0)(expo-status-bar@1.4.4)(expo@48.0.10)(metro@0.73.9)(react-dom@18.2.0)(react-native-gesture-handler@2.9.0)(react-native-reanimated@2.14.4)(react-native-safe-area-context@4.5.0)(react-native-screens@3.20.0)(react-native@0.71.8)(react@18.2.0):
+  /expo-router@1.2.2(@types/react@18.2.8)(expo-constants@14.2.1)(expo-linking@4.0.1)(expo-modules-autolinking@1.2.0)(expo-status-bar@1.4.4)(expo@48.0.10)(metro@0.73.9)(react-dom@18.2.0)(react-native-gesture-handler@2.9.0)(react-native-reanimated@2.14.4)(react-native-safe-area-context@4.5.0)(react-native-screens@3.21.0)(react-native@0.71.8)(react@18.2.0):
     resolution: {integrity: sha512-+pEkJ1UpEWna3HgGZ/nkgcVzbgRiTtYeMTi7tCb2qXljeF5VEfEwC3xc4ttvH4SPzBfd6h9GB+NJsr775YDdJg==}
     peerDependencies:
       '@react-navigation/drawer': ^6.5.8
@@ -10411,9 +10454,9 @@ packages:
       '@bacons/react-views': 1.1.3(react-native@0.71.8)
       '@expo/metro-runtime': 1.1.0(react-native@0.71.8)
       '@radix-ui/react-slot': 1.0.2(@types/react@18.2.8)(react@18.2.0)
-      '@react-navigation/bottom-tabs': 6.5.7(@react-navigation/native@6.1.6)(react-native-safe-area-context@4.5.0)(react-native-screens@3.20.0)(react-native@0.71.8)(react@18.2.0)
+      '@react-navigation/bottom-tabs': 6.5.7(@react-navigation/native@6.1.6)(react-native-safe-area-context@4.5.0)(react-native-screens@3.21.0)(react-native@0.71.8)(react@18.2.0)
       '@react-navigation/native': 6.1.6(react-native@0.71.8)(react@18.2.0)
-      '@react-navigation/native-stack': 6.9.12(@react-navigation/native@6.1.6)(react-native-safe-area-context@4.5.0)(react-native-screens@3.20.0)(react-native@0.71.8)(react@18.2.0)
+      '@react-navigation/native-stack': 6.9.12(@react-navigation/native@6.1.6)(react-native-safe-area-context@4.5.0)(react-native-screens@3.21.0)(react-native@0.71.8)(react@18.2.0)
       expo: 48.0.10(@babel/core@7.20.2)
       expo-constants: 14.2.1(expo@48.0.10)
       expo-linking: 4.0.1(expo@48.0.10)
@@ -10425,7 +10468,7 @@ packages:
       react-native-gesture-handler: 2.9.0(react-native@0.71.8)(react@18.2.0)
       react-native-reanimated: 2.14.4(@babel/core@7.20.2)(react-native@0.71.8)(react@18.2.0)
       react-native-safe-area-context: 4.5.0(react-native@0.71.8)(react@18.2.0)
-      react-native-screens: 3.20.0(react-native@0.71.8)(react@18.2.0)
+      react-native-screens: 3.21.0(react-native@0.71.8)(react@18.2.0)
       url: 0.11.0
     transitivePeerDependencies:
       - '@types/react'
@@ -11582,10 +11625,6 @@ packages:
       resolve-from: 4.0.0
     dev: true
 
-  /import-meta-resolve@2.2.2:
-    resolution: {integrity: sha512-f8KcQ1D80V7RnqVm+/lirO9zkOxjGxhaTC1IPrBGd3MEfNgmNG67tSUO9gTi2F3Blr2Az6g1vocaxzkVnWl9MA==}
-    dev: true
-
   /imurmurhash@0.1.4:
     resolution: {integrity: sha512-JmXMZ6wuvDmLiHEml9ykzqO6lwFbof0GG4IkcGaENdCRDDmMVnny7s5HsIgHCbaq0w2MyPhDqkhTUgS2LU2PHA==}
     engines: {node: '>=0.8.19'}
@@ -12495,6 +12534,11 @@ packages:
   /loader-utils@3.2.1:
     resolution: {integrity: sha512-ZvFw1KWS3GVyYBYb7qkmRM/WwL2TQQBxgCK62rlvm4WpVQ23Nb4tYjApUlfjrEGvOs7KHEsmyUn75OHZrJMWPw==}
     engines: {node: '>= 12.13.0'}
+    dev: true
+
+  /local-pkg@0.4.3:
+    resolution: {integrity: sha512-SFppqq5p42fe2qcZQqqEOiVRXl+WCP1MdT6k7BDEW1j++sp5fIY+/fdRQitvKgB5BrBcmrs5m/L0v2FrU5MY1g==}
+    engines: {node: '>=14'}
     dev: true
 
   /locate-path@3.0.0:
@@ -13660,6 +13704,20 @@ packages:
       pathe: 1.1.1
       pkg-types: 1.0.3
       ufo: 1.1.2
+    dev: true
+
+  /modern-node-polyfills@1.0.0(esbuild@0.17.6):
+    resolution: {integrity: sha512-w1yb6ae5qSUJJ2u41krkUAxs+L7i9143Qam8EuXwDMeZHxl1JN8RfTSXG4S2bt0RHIRMeoWm/HCeO0pNIHmIYQ==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      esbuild: ^0.14.0 || ^0.15.0 || ^0.16.0 || ^0.17.0 || ^0.18.0
+    dependencies:
+      '@jspm/core': 2.0.1
+      '@rollup/pluginutils': 5.0.2
+      esbuild: 0.17.6
+      local-pkg: 0.4.3
+    transitivePeerDependencies:
+      - rollup
     dev: true
 
   /morgan@1.10.0:
@@ -15547,8 +15605,8 @@ packages:
       react-native: 0.71.8(@babel/core@7.20.2)(@babel/preset-env@7.20.2)(react@18.2.0)
     dev: false
 
-  /react-native-screens@3.20.0(react-native@0.71.8)(react@18.2.0):
-    resolution: {integrity: sha512-joWUKWAVHxymP3mL9gYApFHAsbd9L6ZcmpoZa6Sl3W/82bvvNVMqcfP7MeNqVCg73qZ8yL4fW+J/syusHleUgg==}
+  /react-native-screens@3.21.0(react-native@0.71.8)(react@18.2.0):
+    resolution: {integrity: sha512-SybzBhceTN2LUfzvEQxpZ9SchlFgEdsR/+YOKcpIhKg2BdRObdIyQsRoJBvduZ55lKbO9Gpyl3Ke8tngz3873g==}
     peerDependencies:
       react: '*'
       react-native: '*'
@@ -15688,8 +15746,8 @@ packages:
       use-sidecar: 1.1.2(@types/react@18.2.12)(react@18.2.0)
     dev: false
 
-  /react-router-dom@6.12.0(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-UzLwZ3ZVaDr6YV0HdjwxuwtDKgwpJx9o1ea9fU0HV4tTvzdB8WPHzlLFMo5orchpIS84e8G4Erlhu7Rl84XDFQ==}
+  /react-router-dom@6.13.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-6Nqoqd7fgwxxVGdbiMHTpDHCYPq62d7Wk1Of7B82vH7ZPwwsRaIa22zRZKPPg413R5REVNiyuQPKDG1bubcOFA==}
     engines: {node: '>=14'}
     peerDependencies:
       react: '>=16.8'
@@ -15698,11 +15756,11 @@ packages:
       '@remix-run/router': 1.6.3
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      react-router: 6.12.0(react@18.2.0)
+      react-router: 6.13.0(react@18.2.0)
     dev: false
 
-  /react-router@6.12.0(react@18.2.0):
-    resolution: {integrity: sha512-/tCGtLq9umxRvbYeIx3j94CmpQfue0E3qnetVm9luKhu58cR4t+3O4ZrQXBdXfJrBATOAj+wF/1ihJJQI8AoTw==}
+  /react-router@6.13.0(react@18.2.0):
+    resolution: {integrity: sha512-Si6KnfEnJw7gUQkNa70dlpI1bul46FuSxX5t5WwlUBxE25DAz2BjVkwaK8Y2s242bQrZPXCpmwLPtIO5pv4tXg==}
     engines: {node: '>=14'}
     peerDependencies:
       react: '>=16.8'
@@ -15928,7 +15986,7 @@ packages:
       minimatch: 5.1.6
     dev: true
 
-  /remix-utils@6.1.0(@remix-run/react@1.17.0)(@remix-run/server-runtime@1.17.0)(react@18.2.0)(typescript@5.1.3)(zod@3.21.4):
+  /remix-utils@6.1.0(@remix-run/react@1.17.1)(@remix-run/server-runtime@1.17.1)(react@18.2.0)(typescript@5.1.3)(zod@3.21.4):
     resolution: {integrity: sha512-OEuoSEBjtkxiscaTdabq/F9jnyOfygeLMpvF0b6RTH07RWUyQjiSX4aKenk4jhEnxUTqUmK9KC2GUvZo/HjPCA==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -15937,8 +15995,8 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       zod: ^3.19.1
     dependencies:
-      '@remix-run/react': 1.17.0(react-dom@18.2.0)(react@18.2.0)
-      '@remix-run/server-runtime': 1.17.0
+      '@remix-run/react': 1.17.1(react-dom@18.2.0)(react@18.2.0)
+      '@remix-run/server-runtime': 1.17.1
       intl-parse-accept-language: 1.0.0
       is-ip: 3.1.0
       react: 18.2.0
@@ -18181,13 +18239,13 @@ packages:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
     dev: false
 
-  /zodix@0.4.0(@remix-run/server-runtime@1.17.0)(zod@3.21.4):
+  /zodix@0.4.0(@remix-run/server-runtime@1.17.1)(zod@3.21.4):
     resolution: {integrity: sha512-FfQSfQsGp/rmS9eYAuLoo8hYdd/DsvrBUy+Wm31g4sb0aOqC5aJKKrdzbCGmcoeG9Z8ANAIlknwcQo/Edf1lJg==}
     peerDependencies:
       '@remix-run/server-runtime': 1.x
       zod: 3.x
     dependencies:
-      '@remix-run/server-runtime': 1.17.0
+      '@remix-run/server-runtime': 1.17.1
       zod: 3.21.4
     dev: false
 
