@@ -1,0 +1,63 @@
+import { TouchableOpacity, View } from "react-native"
+import { ModalView } from "../../../../../components/ModalView"
+import { RouterOutputs, api } from "../../../../../lib/api"
+import { useMe } from "../../../../../lib/hooks/useMe"
+import { Text } from "../../../../../components/Text"
+
+import { FlashList } from "@shopify/flash-list"
+import { LoginPlaceholder } from "../../../../../components/LoginPlaceholder"
+
+import { useParams } from "../../../../router"
+import { Heart } from "lucide-react-native"
+
+export function SaveScreen() {
+  const {
+    params: { id },
+  } = useParams<"SaveScreen">()
+  const { me } = useMe()
+  const { data: lists } = api.list.savedLists.useQuery({ spotId: id }, { enabled: !!me })
+  if (!me) return <LoginPlaceholder title="Lists" text="Log in to start saving spots" />
+  return (
+    <ModalView title="Save to list">
+      <FlashList
+        showsVerticalScrollIndicator={false}
+        estimatedItemSize={100}
+        contentContainerStyle={{ paddingVertical: 10 }}
+        ListEmptyComponent={<Text>No lists yet</Text>}
+        data={lists || []}
+        ItemSeparatorComponent={() => <View className="h-1" />}
+        renderItem={({ item }) => <ListItem spotId={id} list={item} />}
+      />
+    </ModalView>
+  )
+}
+
+interface Props {
+  spotId: string
+  list: RouterOutputs["list"]["savedLists"][number]
+}
+
+export function ListItem({ list, spotId }: Props) {
+  const utils = api.useContext()
+  const { mutate } = api.list.saveToList.useMutation({
+    onSuccess: () => utils.list.savedLists.refetch(),
+  })
+
+  const isSaved = list.listSpots.some((s) => s.spotId === spotId)
+
+  const handleToggle = () => mutate({ listId: list.id, spotId })
+
+  return (
+    <TouchableOpacity
+      onPress={handleToggle}
+      activeOpacity={0.8}
+      className="flex flex-row items-center justify-between rounded-lg border border-gray-100 p-4 dark:border-gray-700"
+    >
+      <View>
+        <Text className="text-xl">{list.name}</Text>
+        <Text className="text-base">{list.description}</Text>
+      </View>
+      {isSaved ? <Heart className="text-red-500" fill="rgb(239 68 68)" /> : <Heart className="text-black dark:text-white" />}
+    </TouchableOpacity>
+  )
+}

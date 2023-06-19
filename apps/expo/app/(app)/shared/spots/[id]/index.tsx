@@ -1,22 +1,26 @@
 import * as React from "react"
-import { Animated, TouchableOpacity, View, type ViewProps } from "react-native"
+import { Animated, TouchableOpacity, View, useColorScheme, type ViewProps } from "react-native"
 
 import { StatusBar } from "expo-status-bar"
-import { BadgeX, ChevronLeft, Star, Verified } from "lucide-react-native"
+import { BadgeX, ChevronDown, ChevronLeft, Heart, Star, Verified } from "lucide-react-native"
 
 import { merge } from "@ramble/shared"
 
-import { Button } from "../../../../components/Button"
-import { Heading } from "../../../../components/Heading"
+import { Button } from "../../../../../components/Button"
+import { Heading } from "../../../../../components/Heading"
 
-import { ReviewItem } from "../../../../components/ReviewItem"
-import { ImageCarousel } from "../../../../components/SpotImageCarousel"
-import { Text } from "../../../../components/Text"
-import { api } from "../../../../lib/api"
-import { width } from "../../../../lib/device"
-import { useParams, useRouter } from "../../../router"
+import { ReviewItem } from "../../../../../components/ReviewItem"
+import { ImageCarousel } from "../../../../../components/SpotImageCarousel"
+import { Text } from "../../../../../components/Text"
+import { api } from "../../../../../lib/api"
+import { width } from "../../../../../lib/device"
+import { useParams, useRouter } from "../../../../router"
+import { useMe } from "../../../../../lib/hooks/useMe"
 
 export function SpotDetailScreen() {
+  const colorScheme = useColorScheme()
+  const { me } = useMe()
+  const isDark = colorScheme === "dark"
   const { params } = useParams<"SpotDetailScreen">()
   const { data, isLoading } = api.spot.detail.useQuery({ id: params.id })
   const spot = data
@@ -39,7 +43,7 @@ export function SpotDetailScreen() {
     )
   return (
     <View>
-      <StatusBar animated style="dark" />
+      <StatusBar animated style={isDark ? "light" : "dark"} />
       <Animated.ScrollView
         style={{ flexGrow: 1 }}
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrolling } } }], { useNativeDriver: true })}
@@ -112,15 +116,28 @@ export function SpotDetailScreen() {
         style={{ opacity }}
       />
 
-      {navigation.canGoBack() && (
+      <View className="absolute left-0 right-0 top-14 flex flex-row justify-between px-6">
         <TouchableOpacity
-          onPress={navigation.goBack}
+          onPress={navigation.canGoBack() ? navigation.goBack : () => navigation.navigate("AppLayout")}
           activeOpacity={0.8}
-          className="absolute left-6 top-14 flex items-center justify-center rounded-full bg-white p-1 dark:bg-gray-800"
+          className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-gray-800"
         >
-          <ChevronLeft className="pr-1 text-black dark:text-white" />
+          {navigation.canGoBack() ? (
+            <ChevronLeft className="pr-1 text-black dark:text-white" />
+          ) : (
+            <ChevronDown className="pr-1 text-black dark:text-white" />
+          )}
         </TouchableOpacity>
-      )}
+        {me && (
+          <TouchableOpacity
+            onPress={() => navigation.navigate("SaveScreen", { id: spot.id })}
+            activeOpacity={0.8}
+            className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-gray-800"
+          >
+            <Heart size={20} className="text-black dark:text-white" fill={!!data.spotLists ? "rgb(239 68 68)" : undefined} />
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   )
 }

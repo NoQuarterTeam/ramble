@@ -22,6 +22,9 @@ export type ScreenParamsList = {
   ListDetailMapScreen: { id: string }
 
   UsernameLayout: { username: string; tab?: "spots" | "lists" | "van" }
+
+  // MODAL
+  SaveScreen: { id: string }
 }
 
 export type NavigationParams<T extends keyof ScreenParamsList> = NativeStackNavigationProp<ScreenParamsList, T>

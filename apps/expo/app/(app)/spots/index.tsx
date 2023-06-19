@@ -11,7 +11,7 @@ import { Spinner } from "../../../components/Spinner"
 import { useRouter } from "../../router"
 
 export function SpotsScreen() {
-  const { push } = useRouter()
+  const { navigate } = useRouter()
   const { data: spots, isLoading } = api.spot.latest.useQuery()
 
   if (isLoading)
@@ -36,7 +36,7 @@ export function SpotsScreen() {
         />
       </View>
       <TouchableOpacity
-        onPress={() => push("SpotsMapScreen")}
+        onPress={() => navigate("SpotsMapScreen")}
         className="absolute bottom-3 left-1/2 -ml-[50px] flex w-[100px] flex-row items-center justify-center space-x-2 rounded-full bg-gray-800 p-3 dark:bg-white"
       >
         <Map size={20} className="text-white dark:text-black" />
