@@ -18,8 +18,8 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "@prisma/client": "4.15.0",
-    "prisma": "4.15.0"
+    "@prisma/client": "4.16.0",
+    "prisma": "4.16.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.0",
