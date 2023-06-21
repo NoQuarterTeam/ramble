@@ -17,14 +17,14 @@ export type ScreenParamsList = {
 
   // SHARED
   SpotDetailScreen: { id: string }
+  SaveScreen: { id: string }
+  NewReviewScreen: { spotId: string }
+  ReviewDetailScreen: { id: string }
 
   ListDetailScreen: { id: string }
   ListDetailMapScreen: { id: string }
 
   UsernameLayout: { username: string; tab?: "spots" | "lists" | "van" }
-
-  // MODAL
-  SaveScreen: { id: string }
 }
 
 export type NavigationParams<T extends keyof ScreenParamsList> = NativeStackNavigationProp<ScreenParamsList, T>

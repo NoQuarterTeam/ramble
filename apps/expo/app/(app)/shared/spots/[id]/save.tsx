@@ -1,4 +1,4 @@
-import { TouchableOpacity, View } from "react-native"
+import { TouchableOpacity, View, useColorScheme } from "react-native"
 import { ModalView } from "../../../../../components/ModalView"
 import { RouterOutputs, api } from "../../../../../lib/api"
 import { useMe } from "../../../../../lib/hooks/useMe"
@@ -40,8 +40,13 @@ interface Props {
 export function ListItem({ list, spotId }: Props) {
   const utils = api.useContext()
   const { mutate } = api.list.saveToList.useMutation({
-    onSuccess: () => utils.list.savedLists.refetch(),
+    onSuccess: () => {
+      utils.list.savedLists.refetch()
+      utils.spot.detail.refetch({ id: spotId })
+    },
   })
+  const colorScheme = useColorScheme()
+  const isDark = colorScheme === "dark"
 
   const isSaved = list.listSpots.some((s) => s.spotId === spotId)
 
@@ -57,7 +62,7 @@ export function ListItem({ list, spotId }: Props) {
         <Text className="text-xl">{list.name}</Text>
         <Text className="text-base">{list.description}</Text>
       </View>
-      {isSaved ? <Heart className="text-red-500" fill="rgb(239 68 68)" /> : <Heart className="text-black dark:text-white" />}
+      <Heart size={20} className="text-black dark:text-white" fill={isSaved ? (isDark ? "white" : "black") : undefined} />
     </TouchableOpacity>
   )
 }

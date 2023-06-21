@@ -39,12 +39,17 @@ export function ReviewItem({
           </View>
         </TouchableOpacity>
 
-        <View className="flex flex-row items-center space-x-2">
+        <TouchableOpacity
+          className="flex flex-row items-center space-x-1"
+          onPress={() => push("ReviewDetailScreen", { id: review.id })}
+        >
           <Star size={20} className="text-black dark:text-white" />
-          <Text className="text-sm">5.0</Text>
-        </View>
+          <Text className="text-sm">{review.rating}</Text>
+        </TouchableOpacity>
       </View>
-      <Text>{review.description}</Text>
+      <TouchableOpacity onPress={() => push("ReviewDetailScreen", { id: review.id })}>
+        <Text>{review.description}</Text>
+      </TouchableOpacity>
     </View>
   )
 }

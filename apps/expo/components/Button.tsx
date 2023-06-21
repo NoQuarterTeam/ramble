@@ -78,7 +78,7 @@ export const Button = React.forwardRef(function _Button(
       {isLoading ? (
         <Spinner
           size={size === "md" ? 20 : size === "lg" ? 25 : 15}
-          color={variant === "primary" ? "white" : colorScheme === "dark" ? "white" : "black"}
+          color={variant === "primary" || variant === "destructive" ? "white" : colorScheme === "dark" ? "white" : "black"}
         />
       ) : (
         <>

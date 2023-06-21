@@ -26,6 +26,8 @@ import { NavigationContainer } from "@react-navigation/native"
 import { AppLayout } from "./(app)/_layout"
 import { AuthLayout } from "./(auth)/_layout"
 import { SaveScreen } from "./(app)/shared/spots/[id]/save"
+import { NewReviewScreen } from "./(app)/shared/spots/[id]/reviews/new"
+import { ReviewDetailScreen } from "./(app)/shared/spots/[id]/reviews/[id]"
 
 enableScreens()
 
@@ -67,6 +69,8 @@ export default function RootLayout() {
                   screenOptions={{ presentation: "modal", contentStyle: { backgroundColor: isDark ? "black" : "white" } }}
                 >
                   <Container.Screen name="AuthLayout" component={AuthLayout} />
+                  <Container.Screen name="NewReviewScreen" component={NewReviewScreen} />
+                  <Container.Screen name="ReviewDetailScreen" component={ReviewDetailScreen} />
                   <Container.Screen name="SaveScreen" component={SaveScreen} />
                 </Container.Group>
               </Container.Navigator>

@@ -37,7 +37,7 @@ export function SpotDetailScreen() {
   if (!spot)
     return (
       <View className="space-y-2 px-4 pt-20">
-        <Text className="text-lg">Spot now found</Text>
+        <Text className="text-lg">Spot not found</Text>
         {navigation.canGoBack() && <Button onPress={navigation.goBack}>Back</Button>}
       </View>
     )
@@ -45,6 +45,7 @@ export function SpotDetailScreen() {
     <View>
       <StatusBar animated style={isDark ? "light" : "dark"} />
       <Animated.ScrollView
+        contentContainerStyle={{ paddingBottom: 200 }}
         style={{ flexGrow: 1 }}
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrolling } } }], { useNativeDriver: true })}
       >
@@ -97,11 +98,11 @@ export function SpotDetailScreen() {
                   <Text className="pt-1">{spot.rating._avg.rating?.toFixed(1)}</Text>
                 </View>
               </View>
-              {/* {user && (
-              <LinkButton variant="secondary" to="reviews/new">
-                Add review
-              </LinkButton>
-            )} */}
+              {me && (
+                <Button onPress={() => navigation.navigate("NewReviewScreen", { spotId: spot.id })} variant="secondary">
+                  Add review
+                </Button>
+              )}
             </View>
             <View>
               {spot.reviews.map((review) => (
@@ -134,7 +135,11 @@ export function SpotDetailScreen() {
             activeOpacity={0.8}
             className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-gray-800"
           >
-            <Heart size={20} className="text-black dark:text-white" fill={!!data.spotLists ? "rgb(239 68 68)" : undefined} />
+            <Heart
+              size={20}
+              className="text-black dark:text-white"
+              fill={data.spotLists.length > 0 ? (isDark ? "white" : "black") : undefined}
+            />
           </TouchableOpacity>
         )}
       </View>
