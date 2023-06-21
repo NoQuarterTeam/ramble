@@ -1,14 +1,15 @@
-import { Bike, Dog, Footprints, LucideIcon, Mountain, Waves } from "lucide-react-native"
 import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
+import { Bike, Dog, Footprints, type LucideIcon, Mountain, Waves } from "lucide-react-native"
+
+import colors from "@ramble/tailwind-config/src/colors"
+
 import { FormError } from "../../../components/FormError"
 import { ScreenView } from "../../../components/ScreenView"
+import { Text } from "../../../components/Text"
 import { toast } from "../../../components/Toast"
 import { api } from "../../../lib/api"
 import { useMe } from "../../../lib/hooks/useMe"
-
-import colors from "@ramble/tailwind-config/src/colors"
-import { Text } from "../../../components/Text"
 
 export function InterestsScreen() {
   const { me } = useMe()

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Animated, TouchableOpacity, View, useColorScheme, type ViewProps } from "react-native"
+import { Animated, TouchableOpacity, useColorScheme, View, type ViewProps } from "react-native"
 import RenderHtml, { defaultSystemFonts } from "react-native-render-html"
 import { StatusBar } from "expo-status-bar"
 import { BadgeX, ChevronDown, ChevronLeft, Heart, Star, Verified } from "lucide-react-native"
@@ -8,14 +8,13 @@ import { merge } from "@ramble/shared"
 
 import { Button } from "../../../../../components/Button"
 import { Heading } from "../../../../../components/Heading"
-
 import { ReviewItem } from "../../../../../components/ReviewItem"
 import { ImageCarousel } from "../../../../../components/SpotImageCarousel"
 import { Text } from "../../../../../components/Text"
 import { api } from "../../../../../lib/api"
 import { width } from "../../../../../lib/device"
-import { useParams, useRouter } from "../../../../router"
 import { useMe } from "../../../../../lib/hooks/useMe"
+import { useParams, useRouter } from "../../../../router"
 
 export function SpotDetailScreen() {
   const colorScheme = useColorScheme()

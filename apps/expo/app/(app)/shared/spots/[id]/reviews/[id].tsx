@@ -1,15 +1,15 @@
-import { ModalView } from "../../../../../../components/ModalView"
-import { api } from "../../../../../../lib/api"
-
-import { reviewSchema } from "@ramble/api/src/schemas/review"
-import { Text } from "../../../../../../components/Text"
-import { useParams, useRouter } from "../../../../../router"
-
-import { z } from "zod"
-import { ReviewForm } from "./ReviewForm"
 import { ScrollView, View } from "react-native"
+import { type z } from "zod"
+
+import { type reviewSchema } from "@ramble/api/src/schemas/review"
+
 import { Button } from "../../../../../../components/Button"
+import { ModalView } from "../../../../../../components/ModalView"
+import { Text } from "../../../../../../components/Text"
 import { toast } from "../../../../../../components/Toast"
+import { api } from "../../../../../../lib/api"
+import { useParams, useRouter } from "../../../../../router"
+import { ReviewForm } from "./ReviewForm"
 
 export function ReviewDetailScreen() {
   const {

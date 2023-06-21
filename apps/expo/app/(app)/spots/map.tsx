@@ -1,8 +1,7 @@
-import Mapbox, { Camera, MarkerView, type MapView as MapType } from "@rnmapbox/maps"
-import * as Location from "expo-location"
 import * as React from "react"
 import { Modal, ScrollView, Switch, TouchableOpacity, useColorScheme, View } from "react-native"
-
+import Mapbox, { Camera, type MapView as MapType, MarkerView } from "@rnmapbox/maps"
+import * as Location from "expo-location"
 import { BadgeCheck, BadgeX, Dog, List, Navigation, Settings2, Star, Verified, X } from "lucide-react-native"
 
 import { type SpotType } from "@ramble/database/types"
@@ -11,7 +10,6 @@ import colors from "@ramble/tailwind-config/src/colors"
 
 import { Button } from "../../../components/Button"
 import { Heading } from "../../../components/Heading"
-
 import { ModalView } from "../../../components/ModalView"
 import { Spinner } from "../../../components/Spinner"
 import { ImageCarousel } from "../../../components/SpotImageCarousel"

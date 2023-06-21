@@ -1,13 +1,12 @@
+import { useColorScheme } from "react-native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
+import { type ScreenParamsList } from "../../router"
+import { getSharedScreens } from "../shared/getSharedScreens"
 import { ProfileScreen } from "."
 import { AccountScreen } from "./account"
-import { useColorScheme } from "react-native"
-
-import { getSharedScreens } from "../shared/getSharedScreens"
-import { VanScreen } from "./van"
 import { InterestsScreen } from "./interests"
-import { ScreenParamsList } from "../../router"
+import { VanScreen } from "./van"
 
 const ProfileStack = createNativeStackNavigator<ScreenParamsList>()
 

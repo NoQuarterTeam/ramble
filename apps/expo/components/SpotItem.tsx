@@ -1,13 +1,12 @@
 import { TouchableOpacity, View } from "react-native"
 import { Image } from "expo-image"
-
 import { Camera, Star } from "lucide-react-native"
 
 import { type Spot } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
-import { Text } from "./Text"
 import { useRouter } from "../app/router"
+import { Text } from "./Text"
 
 interface Props {
   spot: Pick<Spot, "id" | "name" | "address"> & { rating?: number | null; image?: string | null }

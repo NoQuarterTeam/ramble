@@ -1,14 +1,13 @@
-import { TouchableOpacity, View, useColorScheme } from "react-native"
-import { ModalView } from "../../../../../components/ModalView"
-import { RouterOutputs, api } from "../../../../../lib/api"
-import { useMe } from "../../../../../lib/hooks/useMe"
-import { Text } from "../../../../../components/Text"
-
+import { TouchableOpacity, useColorScheme, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
-import { LoginPlaceholder } from "../../../../../components/LoginPlaceholder"
-
-import { useParams } from "../../../../router"
 import { Heart } from "lucide-react-native"
+
+import { LoginPlaceholder } from "../../../../../components/LoginPlaceholder"
+import { ModalView } from "../../../../../components/ModalView"
+import { Text } from "../../../../../components/Text"
+import { api, type RouterOutputs } from "../../../../../lib/api"
+import { useMe } from "../../../../../lib/hooks/useMe"
+import { useParams } from "../../../../router"
 
 export function SaveScreen() {
   const {

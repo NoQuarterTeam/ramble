@@ -1,8 +1,8 @@
+import { useColorScheme } from "react-native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
-import { RegisterScreen } from "./register"
 import { LoginScreen } from "./login"
-import { useColorScheme } from "react-native"
+import { RegisterScreen } from "./register"
 
 const AuthStack = createNativeStackNavigator()
 

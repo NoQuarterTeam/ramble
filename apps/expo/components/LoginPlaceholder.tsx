@@ -1,10 +1,10 @@
-import * as React from "react"
+import type * as React from "react"
 import { ScrollView, View } from "react-native"
-import { Heading } from "./Heading"
 
-import { Text } from "./Text"
-import { Button } from "./Button"
 import { useRouter } from "../app/router"
+import { Button } from "./Button"
+import { Heading } from "./Heading"
+import { Text } from "./Text"
 
 interface Props {
   title: string

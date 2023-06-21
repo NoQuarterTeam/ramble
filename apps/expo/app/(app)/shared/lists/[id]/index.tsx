@@ -1,7 +1,7 @@
 import { TouchableOpacity, View } from "react-native"
-
 import { FlashList } from "@shopify/flash-list"
 import { ChevronLeft } from "lucide-react-native"
+
 import { Heading } from "../../../../../components/Heading"
 import { Spinner } from "../../../../../components/Spinner"
 import { SpotItem } from "../../../../../components/SpotItem"

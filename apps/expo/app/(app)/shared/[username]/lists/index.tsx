@@ -1,10 +1,10 @@
 import { View } from "react-native"
-import { Text } from "../../../../../components/Text"
-import { api } from "../../../../../lib/api"
 import { useLocalSearchParams } from "expo-router"
 
-import { Spinner } from "../../../../../components/Spinner"
 import { ListItem } from "../../../../../components/ListItem"
+import { Spinner } from "../../../../../components/Spinner"
+import { Text } from "../../../../../components/Text"
+import { api } from "../../../../../lib/api"
 
 export default function UsernameLists() {
   const { username } = useLocalSearchParams<{ username: string }>()

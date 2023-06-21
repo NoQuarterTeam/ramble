@@ -1,6 +1,6 @@
+import { View } from "react-native"
 import { Image } from "expo-image"
 import { Bike, Dog, Footprints, Mountain, Waves } from "lucide-react-native"
-import { View } from "react-native"
 
 import { createImageUrl } from "@ramble/shared"
 

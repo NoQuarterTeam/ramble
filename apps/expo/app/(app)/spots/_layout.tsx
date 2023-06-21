@@ -1,11 +1,10 @@
 import { useColorScheme } from "react-native"
-
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
+import { type ScreenParamsList } from "../../router"
+import { getSharedScreens } from "../shared/getSharedScreens"
 import { SpotsScreen } from "."
 import { SpotsMapScreen } from "./map"
-import { getSharedScreens } from "../shared/getSharedScreens"
-import { ScreenParamsList } from "../../router"
 
 const SpotsStack = createNativeStackNavigator<ScreenParamsList>()
 

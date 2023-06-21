@@ -1,15 +1,17 @@
-import { updateSchema } from "@ramble/api/src/schemas/user"
 import { FormProvider } from "react-hook-form"
-import { z } from "zod"
+import { ScrollView } from "react-native"
+import { type z } from "zod"
+
+import { updateSchema } from "@ramble/api/src/schemas/user"
+
 import { Button } from "../../../components/Button"
+import { FormError } from "../../../components/FormError"
 import { FormInput } from "../../../components/FormInput"
 import { ScreenView } from "../../../components/ScreenView"
+import { toast } from "../../../components/Toast"
 import { api } from "../../../lib/api"
 import { useForm } from "../../../lib/hooks/useForm"
 import { useMe } from "../../../lib/hooks/useMe"
-import { toast } from "../../../components/Toast"
-import { ScrollView } from "react-native"
-import { FormError } from "../../../components/FormError"
 
 export function AccountScreen() {
   const { me } = useMe()

@@ -1,12 +1,12 @@
 import { View } from "react-native"
-import { Heading } from "../../../components/Heading"
-import { useMe } from "../../../lib/hooks/useMe"
-import { Text } from "../../../components/Text"
-
-import { LoginPlaceholder } from "../../../components/LoginPlaceholder"
-import { api } from "../../../lib/api"
-import { ListItem } from "../../../components/ListItem"
 import { FlashList } from "@shopify/flash-list"
+
+import { Heading } from "../../../components/Heading"
+import { ListItem } from "../../../components/ListItem"
+import { LoginPlaceholder } from "../../../components/LoginPlaceholder"
+import { Text } from "../../../components/Text"
+import { api } from "../../../lib/api"
+import { useMe } from "../../../lib/hooks/useMe"
 
 export function ListsScreen() {
   const { me } = useMe()

@@ -1,18 +1,15 @@
-import { Image } from "expo-image"
 import { useColorScheme } from "react-native"
-
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import { Image } from "expo-image"
 import { List, PlusCircle, Search, User } from "lucide-react-native"
 
 import { createImageUrl, join } from "@ramble/shared"
 
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { useMe } from "../../lib/hooks/useMe"
-
+import { ListsLayout } from "./lists/_layout"
 import { NewSpotScreen } from "./new"
-
 import { ProfileLayout } from "./profile/_layout"
 import { SpotsLayout } from "./spots/_layout"
-import { ListsLayout } from "./lists/_layout"
 
 const Tab = createBottomTabNavigator()
 

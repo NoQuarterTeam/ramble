@@ -1,8 +1,9 @@
-import { List } from "@ramble/database/types"
-
 import { TouchableOpacity } from "react-native"
-import { Text } from "./Text"
+
+import { type List } from "@ramble/database/types"
+
 import { useRouter } from "../app/router"
+import { Text } from "./Text"
 
 interface Props {
   list: Pick<List, "id" | "name" | "description">

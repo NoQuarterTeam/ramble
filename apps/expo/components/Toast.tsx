@@ -1,4 +1,5 @@
-import RNToast, { BaseToast, ToastShowParams } from "react-native-toast-message"
+import RNToast, { BaseToast, type ToastShowParams } from "react-native-toast-message"
+
 import colors from "@ramble/tailwind-config/src/colors"
 
 export function Toast() {

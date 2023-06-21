@@ -1,13 +1,12 @@
 import { TouchableOpacity, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
-
 import { Map } from "lucide-react-native"
 
 import { Heading } from "../../../components/Heading"
+import { Spinner } from "../../../components/Spinner"
 import { SpotItem } from "../../../components/SpotItem"
 import { Text } from "../../../components/Text"
 import { api } from "../../../lib/api"
-import { Spinner } from "../../../components/Spinner"
 import { useRouter } from "../../router"
 
 export function SpotsScreen() {

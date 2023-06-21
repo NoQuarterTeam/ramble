@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from "./Button"
+import { Button, type ButtonProps } from "./Button"
 import { Link } from "./Link"
 
 interface Props extends ButtonProps {

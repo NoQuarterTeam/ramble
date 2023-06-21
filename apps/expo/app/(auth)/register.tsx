@@ -1,7 +1,6 @@
 import { FormProvider } from "react-hook-form"
 import { KeyboardAvoidingView, ScrollView, TouchableOpacity } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-
 import { type z } from "zod"
 
 import { registerSchema } from "@ramble/api/src/schemas/user"
@@ -10,10 +9,10 @@ import { Button } from "../../components/Button"
 import { FormError } from "../../components/FormError"
 import { FormInput } from "../../components/FormInput"
 import { ModalView } from "../../components/ModalView"
+import { Text } from "../../components/Text"
 import { api, AUTH_TOKEN } from "../../lib/api"
 import { useForm } from "../../lib/hooks/useForm"
 import { useRouter } from "../router"
-import { Text } from "../../components/Text"
 
 export function RegisterScreen() {
   const queryClient = api.useContext()

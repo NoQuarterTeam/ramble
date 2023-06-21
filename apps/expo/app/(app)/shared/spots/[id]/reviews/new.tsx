@@ -1,11 +1,10 @@
-import { ModalView } from "../../../../../../components/ModalView"
-import { api } from "../../../../../../lib/api"
-
-import { Text } from "../../../../../../components/Text"
-import { useParams, useRouter } from "../../../../../router"
-
-import { ReviewForm } from "./ReviewForm"
 import { ScrollView } from "react-native"
+
+import { ModalView } from "../../../../../../components/ModalView"
+import { Text } from "../../../../../../components/Text"
+import { api } from "../../../../../../lib/api"
+import { useParams, useRouter } from "../../../../../router"
+import { ReviewForm } from "./ReviewForm"
 
 export function NewReviewScreen() {
   const {

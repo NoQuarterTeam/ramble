@@ -1,13 +1,15 @@
 import { FormProvider, useForm } from "react-hook-form"
-import { FormInput, FormInputError } from "../../../../../../components/FormInput"
+import { TouchableOpacity, useColorScheme, View } from "react-native"
+import { type TRPCClientErrorLike } from "@trpc/client"
 import { Star } from "lucide-react-native"
-import { View, TouchableOpacity, useColorScheme } from "react-native"
-import { FormError } from "../../../../../../components/FormError"
+import { type z } from "zod"
+
+import { type reviewSchema } from "@ramble/api/src/schemas/review"
+import { type Review } from "@ramble/database/types"
+
 import { Button } from "../../../../../../components/Button"
-import { z } from "zod"
-import { reviewSchema } from "@ramble/api/src/schemas/review"
-import { Review } from "@ramble/database/types"
-import { TRPCClientErrorLike } from "@trpc/client"
+import { FormError } from "../../../../../../components/FormError"
+import { FormInput, FormInputError } from "../../../../../../components/FormInput"
 
 interface Props {
   spotId: string

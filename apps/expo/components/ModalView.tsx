@@ -1,11 +1,10 @@
 import type * as React from "react"
 import { Text, TouchableOpacity, useColorScheme, View } from "react-native"
 import Feather from "@expo/vector-icons/Feather"
-
 import { StatusBar } from "expo-status-bar"
 
-import { Heading } from "./Heading"
 import { useRouter } from "../app/router"
+import { Heading } from "./Heading"
 import { Toast } from "./Toast"
 
 interface Props {

@@ -1,3 +1,7 @@
+import * as React from "react"
+import { useColorScheme } from "react-native"
+import { SafeAreaProvider } from "react-native-safe-area-context"
+import { enableScreens } from "react-native-screens"
 import {
   Poppins_300Light,
   Poppins_400Regular,
@@ -8,28 +12,21 @@ import {
   Poppins_900Black,
   useFonts,
 } from "@expo-google-fonts/poppins"
-import * as React from "react"
-import { useColorScheme } from "react-native"
-import { SafeAreaProvider } from "react-native-safe-area-context"
-
+import { NavigationContainer } from "@react-navigation/native"
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { StatusBar } from "expo-status-bar"
 
 import { NewUpdate } from "../components/NewUpdate"
-
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { enableScreens } from "react-native-screens"
+import { Toast } from "../components/Toast"
 import { api, TRPCProvider } from "../lib/api"
 import { useCheckExpoUpdates } from "../lib/hooks/useCheckExpoUpdates"
 import { useMe } from "../lib/hooks/useMe"
-
-import { NavigationContainer } from "@react-navigation/native"
 import { AppLayout } from "./(app)/_layout"
-import { AuthLayout } from "./(auth)/_layout"
-import { SaveScreen } from "./(app)/shared/spots/[id]/save"
-import { NewReviewScreen } from "./(app)/shared/spots/[id]/reviews/new"
 import { ReviewDetailScreen } from "./(app)/shared/spots/[id]/reviews/[id]"
-import { Toast } from "../components/Toast"
-import { ScreenParamsList } from "./router"
+import { NewReviewScreen } from "./(app)/shared/spots/[id]/reviews/new"
+import { SaveScreen } from "./(app)/shared/spots/[id]/save"
+import { AuthLayout } from "./(auth)/_layout"
+import { type ScreenParamsList } from "./router"
 
 enableScreens()
 

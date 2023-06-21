@@ -1,8 +1,6 @@
 import { UsernameLayout } from "./[username]/_layout"
 import { ListDetailScreen } from "./lists/[id]"
-
 import { ListDetailMapScreen } from "./lists/[id]/map"
-
 import { SpotDetailScreen } from "./spots/[id]"
 
 // eslint-disable-next-line

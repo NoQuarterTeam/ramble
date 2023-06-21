@@ -1,22 +1,20 @@
-import Constants from "expo-constants"
-import * as Updates from "expo-updates"
 import { ScrollView, TouchableOpacity, View } from "react-native"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import Constants from "expo-constants"
+import { Image } from "expo-image"
+import * as Updates from "expo-updates"
+import { ChevronRight, type LucideIcon, ToggleRight, Truck, User } from "lucide-react-native"
+
+import { createImageUrl } from "@ramble/shared"
 
 import { Button } from "../../../components/Button"
 import { Heading } from "../../../components/Heading"
-
+import { LoginPlaceholder } from "../../../components/LoginPlaceholder"
 import { Text } from "../../../components/Text"
+import { api, AUTH_TOKEN } from "../../../lib/api"
 import { VERSION } from "../../../lib/config"
 import { useMe } from "../../../lib/hooks/useMe"
-import AsyncStorage from "@react-native-async-storage/async-storage"
-
-import { api, AUTH_TOKEN } from "../../../lib/api"
-
-import { Image } from "expo-image"
-import { createImageUrl } from "@ramble/shared"
-import { LoginPlaceholder } from "../../../components/LoginPlaceholder"
-import { ScreenParamsList, useRouter } from "../../router"
-import { ChevronRight, LucideIcon, ToggleRight, Truck, User } from "lucide-react-native"
+import { type ScreenParamsList, useRouter } from "../../router"
 
 const updateId = Updates.updateId
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

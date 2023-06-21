@@ -1,14 +1,13 @@
 import { TouchableOpacity, View } from "react-native"
 import dayjs from "dayjs"
 import { Image } from "expo-image"
-
 import { Star } from "lucide-react-native"
 
 import { type Review, type User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
-import { Text } from "./Text"
 import { useRouter } from "../app/router"
+import { Text } from "./Text"
 
 export function ReviewItem({
   review,

@@ -2,8 +2,8 @@ import { View } from "react-native"
 
 import { Heading } from "../../components/Heading"
 import { LoginPlaceholder } from "../../components/LoginPlaceholder"
-import { useMe } from "../../lib/hooks/useMe"
 import { Text } from "../../components/Text"
+import { useMe } from "../../lib/hooks/useMe"
 
 export function NewSpotScreen() {
   const { me } = useMe()
