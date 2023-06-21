@@ -3,8 +3,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { ListsScreen } from "."
 import { getSharedScreens } from "../shared/getSharedScreens"
 import { useColorScheme } from "react-native"
+import { ScreenParamsList } from "../../router"
 
-const ListsStack = createNativeStackNavigator()
+const ListsStack = createNativeStackNavigator<ScreenParamsList>()
 
 export function ListsLayout() {
   const colorScheme = useColorScheme()

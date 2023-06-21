@@ -16,7 +16,7 @@ import { Image } from "expo-image"
 import { createImageUrl } from "@ramble/shared"
 import { LoginPlaceholder } from "../../../components/LoginPlaceholder"
 import { ScreenParamsList, useRouter } from "../../router"
-import { ChevronRight } from "lucide-react-native"
+import { ChevronRight, LucideIcon, ToggleRight, Truck, User } from "lucide-react-native"
 
 const updateId = Updates.updateId
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -55,7 +55,7 @@ export function ProfileScreen() {
         <View className="space-y-4">
           <TouchableOpacity
             onPress={() => push("UsernameLayout", { username: me.username })}
-            className="flex flex-row items-center justify-between rounded-md border border-gray-100 px-3 py-4 dark:border-gray-700"
+            className="flex flex-row items-center justify-between rounded-md border border-gray-100 px-4 py-4 dark:border-gray-700"
           >
             <View className="flex flex-row items-center space-x-4">
               <Image
@@ -75,8 +75,15 @@ export function ProfileScreen() {
           </TouchableOpacity>
 
           <View>
-            <ProfileLink to="AccountScreen">Account</ProfileLink>
-            <ProfileLink to="VanScreen">Van</ProfileLink>
+            <ProfileLink to="AccountScreen" Icon={User}>
+              Account
+            </ProfileLink>
+            <ProfileLink to="InterestsScreen" Icon={ToggleRight}>
+              Interests
+            </ProfileLink>
+            <ProfileLink to="VanScreen" Icon={Truck}>
+              Van
+            </ProfileLink>
           </View>
         </View>
       </View>
@@ -91,14 +98,18 @@ export function ProfileScreen() {
   )
 }
 
-function ProfileLink({ children, to }: { to: keyof ScreenParamsList; children: string }) {
+function ProfileLink({ children, to, Icon }: { to: keyof ScreenParamsList; children: string; Icon: LucideIcon }) {
   const { push } = useRouter()
   return (
     <TouchableOpacity
-      className="mb-1 flex flex-row items-center justify-between rounded-md border border-gray-200 px-2 py-3 dark:border-gray-700"
+      activeOpacity={0.8}
+      className="mb-1 flex flex-row items-center justify-between rounded-md border border-gray-200 px-4 py-3 dark:border-gray-700"
       onPress={() => push(to)}
     >
-      <Text>{children}</Text>
+      <View className="flex flex-row items-center space-x-2">
+        <Icon size={16} className="text-black dark:text-white" />
+        <Text>{children}</Text>
+      </View>
       <ChevronRight className="text-gray-700 dark:text-white" />
     </TouchableOpacity>
   )

@@ -10,11 +10,14 @@ export type ScreenParamsList = {
   ProfileScreen: undefined
   AccountScreen: undefined
   VanScreen: undefined
+  InterestsScreen: undefined
 
   SpotsLayout: undefined
   SpotsMapScreen: undefined
   SpotsScreen: undefined
+
   ListsLayout: undefined
+  ListsScreen: undefined
 
   // SHARED
   SpotDetailScreen: { id: string }

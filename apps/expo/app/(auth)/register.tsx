@@ -18,7 +18,7 @@ import { Text } from "../../components/Text"
 export function RegisterScreen() {
   const queryClient = api.useContext()
   const navigation = useRouter()
-  const login = api.auth.register.useMutation({
+  const { mutate, error, isLoading } = api.auth.register.useMutation({
     onSuccess: async (data) => {
       await AsyncStorage.setItem(AUTH_TOKEN, data.token)
       queryClient.auth.me.setData(undefined, data.user)
@@ -36,7 +36,7 @@ export function RegisterScreen() {
 
   const handleRegister = async (data: z.infer<typeof registerSchema>) => {
     await AsyncStorage.removeItem(AUTH_TOKEN)
-    login.mutate(data)
+    mutate(data)
   }
 
   return (
@@ -44,25 +44,15 @@ export function RegisterScreen() {
       <KeyboardAvoidingView>
         <FormProvider {...form}>
           <ScrollView className="h-full">
-            <FormInput name="email" label="Email" error={login.error?.data?.zodError?.fieldErrors.email} />
-            <FormInput
-              name="password"
-              secureTextEntry
-              label="Password"
-              error={login.error?.data?.zodError?.fieldErrors.password}
-            />
-            <FormInput name="username" label="Username" error={login.error?.data?.zodError?.fieldErrors.username} />
-            <FormInput name="firstName" label="First name" error={login.error?.data?.zodError?.fieldErrors.firstName} />
-            <FormInput name="lastName" label="Last name" error={login.error?.data?.zodError?.fieldErrors.lastName} />
-            <Button
-              className="mb-1"
-              isLoading={login.isLoading}
-              disabled={login.isLoading}
-              onPress={form.handleSubmit(handleRegister)}
-            >
+            <FormInput name="email" label="Email" error={error} />
+            <FormInput name="password" secureTextEntry label="Password" error={error} />
+            <FormInput name="username" label="Username" error={error} />
+            <FormInput name="firstName" label="First name" error={error} />
+            <FormInput name="lastName" label="Last name" error={error} />
+            <Button className="mb-1" isLoading={isLoading} onPress={form.handleSubmit(handleRegister)}>
               Register
             </Button>
-            {login.error?.data?.formError && <FormError className="mb-1" error={login.error.data.formError} />}
+            <FormError className="mb-1" error={error} />
             <TouchableOpacity onPress={() => navigation.push("AuthLayout", { screen: "LoginScreen" })}>
               <Text className="text-lg">Login</Text>
             </TouchableOpacity>

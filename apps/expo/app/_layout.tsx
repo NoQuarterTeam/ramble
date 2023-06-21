@@ -29,10 +29,11 @@ import { SaveScreen } from "./(app)/shared/spots/[id]/save"
 import { NewReviewScreen } from "./(app)/shared/spots/[id]/reviews/new"
 import { ReviewDetailScreen } from "./(app)/shared/spots/[id]/reviews/[id]"
 import { Toast } from "../components/Toast"
+import { ScreenParamsList } from "./router"
 
 enableScreens()
 
-const Container = createNativeStackNavigator()
+const Container = createNativeStackNavigator<ScreenParamsList>()
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({

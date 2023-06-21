@@ -5,8 +5,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { SpotsScreen } from "."
 import { SpotsMapScreen } from "./map"
 import { getSharedScreens } from "../shared/getSharedScreens"
+import { ScreenParamsList } from "../../router"
 
-const SpotsStack = createNativeStackNavigator()
+const SpotsStack = createNativeStackNavigator<ScreenParamsList>()
 
 export function SpotsLayout() {
   const colorScheme = useColorScheme()

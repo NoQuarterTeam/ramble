@@ -59,7 +59,7 @@ export function ReviewForm(props: Props) {
       <Button isLoading={props.isLoading} onPress={form.handleSubmit(props.onSubmit)}>
         Save
       </Button>
-      {props.error?.data?.formError && <FormError className="mt-1" error={props.error.data.formError} />}
+      <FormError className="mt-1" />
     </FormProvider>
   )
 }

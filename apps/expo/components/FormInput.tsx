@@ -9,7 +9,8 @@ import { Text } from "./Text"
 interface Props extends InputProps {
   label?: string
   name: string
-  error?: string[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  error?: string | null | { data?: null | { zodError?: { fieldErrors: any } | null; formError?: string | null } }
   rightElement?: React.ReactNode
 }
 
@@ -35,9 +36,9 @@ export function FormInput({ label, name, error, rightElement, ...props }: Props)
           </View>
         )}
       />
-      {error?.map((error) => (
-        <FormInputError key={error} error={error} />
-      ))}
+      {typeof error === "string"
+        ? error
+        : error?.data?.zodError?.fieldErrors[name]?.map((error: string) => <FormInputError key={error} error={error} />)}
     </View>
   )
 }

@@ -43,18 +43,12 @@ export function LoginScreen() {
       <KeyboardAvoidingView>
         <FormProvider {...form}>
           <ScrollView className="h-full">
-            <FormInput autoCapitalize="none" name="email" label="Email" error={error?.data?.zodError?.fieldErrors.email} />
-            <FormInput
-              autoCapitalize="none"
-              name="password"
-              secureTextEntry
-              label="Password"
-              error={error?.data?.zodError?.fieldErrors.password}
-            />
+            <FormInput autoCapitalize="none" name="email" label="Email" error={error} />
+            <FormInput autoCapitalize="none" name="password" secureTextEntry label="Password" error={error} />
             <Button className="mb-1" isLoading={isLoading} disabled={isLoading} onPress={form.handleSubmit(handleLogin)}>
               Login
             </Button>
-            {error?.data?.formError && <FormError className="mb-1" error={error.data.formError} />}
+            <FormError className="mb-1" error={error} />
             <TouchableOpacity onPress={() => navigation.push("AuthLayout", { screen: "RegisterScreen" })}>
               <Text className="text-lg">Register</Text>
             </TouchableOpacity>

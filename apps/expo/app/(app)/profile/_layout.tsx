@@ -6,8 +6,10 @@ import { useColorScheme } from "react-native"
 
 import { getSharedScreens } from "../shared/getSharedScreens"
 import { VanScreen } from "./van"
+import { InterestsScreen } from "./interests"
+import { ScreenParamsList } from "../../router"
 
-const ProfileStack = createNativeStackNavigator()
+const ProfileStack = createNativeStackNavigator<ScreenParamsList>()
 
 export function ProfileLayout() {
   const colorScheme = useColorScheme()
@@ -21,6 +23,7 @@ export function ProfileLayout() {
       <ProfileStack.Screen name="ProfileScreen" component={ProfileScreen} />
       <ProfileStack.Screen name="AccountScreen" component={AccountScreen} />
       <ProfileStack.Screen name="VanScreen" component={VanScreen} />
+      <ProfileStack.Screen name="InterestsScreen" component={InterestsScreen} />
       {sharedScreens}
     </ProfileStack.Navigator>
   )
