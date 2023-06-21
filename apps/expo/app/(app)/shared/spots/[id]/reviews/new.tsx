@@ -5,6 +5,7 @@ import { Text } from "../../../../../../components/Text"
 import { useParams, useRouter } from "../../../../../router"
 
 import { ReviewForm } from "./ReviewForm"
+import { ScrollView } from "react-native"
 
 export function NewReviewScreen() {
   const {
@@ -24,8 +25,10 @@ export function NewReviewScreen() {
 
   return (
     <ModalView title={`New review for ${spot?.name}`}>
-      <Text className="mt-4 text-xl">Be nice, be honest</Text>
-      <ReviewForm isLoading={isLoading} error={error} onSubmit={mutate} spotId={spotId} />
+      <ScrollView contentContainerStyle={{ minHeight: "100%" }}>
+        <Text className="mt-4 text-xl">Be nice, be honest</Text>
+        <ReviewForm isLoading={isLoading} error={error} onSubmit={mutate} spotId={spotId} />
+      </ScrollView>
     </ModalView>
   )
 }

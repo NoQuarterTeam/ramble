@@ -7,7 +7,7 @@ import { useParams, useRouter } from "../../../../../router"
 
 import { z } from "zod"
 import { ReviewForm } from "./ReviewForm"
-import { View } from "react-native"
+import { ScrollView, View } from "react-native"
 import { Button } from "../../../../../../components/Button"
 import { toast } from "../../../../../../components/Toast"
 
@@ -41,16 +41,18 @@ export function ReviewDetailScreen() {
 
   return (
     <ModalView title={`Edit review for ${review?.spot?.name}`}>
-      {reviewLoading ? null : !review ? (
-        <Text>Review not found</Text>
-      ) : (
-        <View>
-          <ReviewForm review={review} spotId={review?.spotId} isLoading={isLoading} error={error} onSubmit={handleSubmit} />
-          <Button className="mt-2" isLoading={deleteLoading} variant="destructive" onPress={() => deleteReview({ id })}>
-            Delete
-          </Button>
-        </View>
-      )}
+      <ScrollView contentContainerStyle={{ minHeight: "100%" }}>
+        {reviewLoading ? null : !review ? (
+          <Text>Review not found</Text>
+        ) : (
+          <View>
+            <ReviewForm review={review} spotId={review?.spotId} isLoading={isLoading} error={error} onSubmit={handleSubmit} />
+            <Button className="mt-2" isLoading={deleteLoading} variant="destructive" onPress={() => deleteReview({ id })}>
+              Delete
+            </Button>
+          </View>
+        )}
+      </ScrollView>
     </ModalView>
   )
 }

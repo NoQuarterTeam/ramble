@@ -15,19 +15,21 @@ export function SaveScreen() {
     params: { id },
   } = useParams<"SaveScreen">()
   const { me } = useMe()
-  const { data: lists } = api.list.savedLists.useQuery({ spotId: id }, { enabled: !!me })
+  const { data: lists, isLoading } = api.list.savedLists.useQuery({ spotId: id }, { enabled: !!me })
   if (!me) return <LoginPlaceholder title="Lists" text="Log in to start saving spots" />
   return (
     <ModalView title="Save to list">
-      <FlashList
-        showsVerticalScrollIndicator={false}
-        estimatedItemSize={100}
-        contentContainerStyle={{ paddingVertical: 10 }}
-        ListEmptyComponent={<Text>No lists yet</Text>}
-        data={lists || []}
-        ItemSeparatorComponent={() => <View className="h-1" />}
-        renderItem={({ item }) => <ListItem spotId={id} list={item} />}
-      />
+      {isLoading ? null : (
+        <FlashList
+          showsVerticalScrollIndicator={false}
+          estimatedItemSize={100}
+          contentContainerStyle={{ paddingVertical: 10 }}
+          ListEmptyComponent={<Text>No lists yet</Text>}
+          data={lists || []}
+          ItemSeparatorComponent={() => <View className="h-1" />}
+          renderItem={({ item }) => <ListItem spotId={id} list={item} />}
+        />
+      )}
     </ModalView>
   )
 }
