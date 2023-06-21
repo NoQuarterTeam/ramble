@@ -15,7 +15,8 @@ import { api, AUTH_TOKEN } from "../../../lib/api"
 import { Image } from "expo-image"
 import { createImageUrl } from "@ramble/shared"
 import { LoginPlaceholder } from "../../../components/LoginPlaceholder"
-import { useRouter } from "../../router"
+import { ScreenParamsList, useRouter } from "../../router"
+import { ChevronRight } from "lucide-react-native"
 
 const updateId = Updates.updateId
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -52,22 +53,31 @@ export function ProfileScreen() {
       <Heading className="text-3xl">Profile</Heading>
       <View>
         <View className="space-y-4">
-          <View className="flex flex-row items-center space-x-4">
-            <Image
-              source={{ uri: createImageUrl(me.avatar) }}
-              className="sq-16 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
-            />
-            <View>
-              <Heading className="text-2xl">{me.username}</Heading>
-              <Text className="text-base">
-                {me.firstName} {me.lastName}
-              </Text>
+          <TouchableOpacity
+            onPress={() => push("UsernameLayout", { username: me.username })}
+            className="flex flex-row items-center justify-between rounded-md border border-gray-100 px-3 py-4 dark:bg-gray-700"
+          >
+            <View className="flex flex-row items-center space-x-4">
+              <Image
+                source={{ uri: createImageUrl(me.avatar) }}
+                className="sq-16 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
+              />
+              <View>
+                <Heading className="text-2xl">{me.username}</Heading>
+                <Text className="text-base">
+                  {me.firstName} {me.lastName}
+                </Text>
+              </View>
             </View>
-          </View>
+            <View>
+              <ChevronRight className="text-gray-700 dark:text-white" />
+            </View>
+          </TouchableOpacity>
 
-          <Button onPress={() => push("UsernameLayout", { username: me.username })} variant="outline">
-            Show profile
-          </Button>
+          <View>
+            <ProfileLink to="AccountScreen">Account</ProfileLink>
+            <ProfileLink to="AccountScreen">Van</ProfileLink>
+          </View>
 
           <Button onPress={handleLogout} variant="outline">
             Log out
@@ -79,5 +89,18 @@ export function ProfileScreen() {
         <Text className="text-center opacity-60">{updateGroup?.split("-")[0] || updateId?.split("-")[0] || "dev"}</Text>
       </View>
     </ScrollView>
+  )
+}
+
+function ProfileLink({ children, to }: { to: keyof ScreenParamsList; children: string }) {
+  const { push } = useRouter()
+  return (
+    <TouchableOpacity
+      className="mb-1 flex flex-row items-center justify-between rounded-md border border-gray-100 px-2 py-3 dark:border-gray-700"
+      onPress={() => push(to)}
+    >
+      <Text>{children}</Text>
+      <ChevronRight className="text-gray-700 dark:text-white" />
+    </TouchableOpacity>
   )
 }

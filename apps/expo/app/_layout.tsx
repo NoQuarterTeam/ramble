@@ -35,13 +35,13 @@ const Container = createNativeStackNavigator()
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
-    Poppins_300Light,
-    Poppins_400Regular,
-    Poppins_500Medium,
-    Poppins_600SemiBold,
-    Poppins_700Bold,
-    Poppins_800ExtraBold,
-    Poppins_900Black,
+    poppins300: Poppins_300Light,
+    poppins400: Poppins_400Regular,
+    poppins500: Poppins_500Medium,
+    poppins600: Poppins_600SemiBold,
+    poppins700: Poppins_700Bold,
+    poppins800: Poppins_800ExtraBold,
+    poppins900: Poppins_900Black,
   })
 
   const { isDoneChecking, isNewUpdateAvailable } = useCheckExpoUpdates()

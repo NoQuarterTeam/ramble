@@ -1,10 +1,10 @@
 import { View } from "react-native"
 import { Heading } from "../../../components/Heading"
 
-export function SettingsScreen() {
+export function AccountScreen() {
   return (
     <View>
-      <Heading>Settings</Heading>
+      <Heading>Account</Heading>
     </View>
   )
 }

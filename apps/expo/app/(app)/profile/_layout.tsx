@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
 import { ProfileScreen } from "."
-import { SettingsScreen } from "./settings"
+import { AccountScreen } from "./account"
 import { useColorScheme } from "react-native"
 
 import { getSharedScreens } from "../shared/getSharedScreens"
@@ -18,7 +18,7 @@ export function ProfileLayout() {
       screenOptions={{ contentStyle: { backgroundColor: isDark ? "black" : "white" }, headerShown: false }}
     >
       <ProfileStack.Screen name="ProfileScreen" component={ProfileScreen} />
-      <ProfileStack.Screen name="SettingsScreen" component={SettingsScreen} />
+      <ProfileStack.Screen name="AccountScreen" component={AccountScreen} />
       {sharedScreens}
     </ProfileStack.Navigator>
   )

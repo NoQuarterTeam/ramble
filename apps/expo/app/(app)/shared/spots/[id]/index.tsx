@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Animated, TouchableOpacity, View, useColorScheme, type ViewProps } from "react-native"
-
+import RenderHtml, { defaultSystemFonts } from "react-native-render-html"
 import { StatusBar } from "expo-status-bar"
 import { BadgeX, ChevronDown, ChevronLeft, Heart, Star, Verified } from "lucide-react-native"
 
@@ -41,6 +41,7 @@ export function SpotDetailScreen() {
         {navigation.canGoBack() && <Button onPress={navigation.goBack}>Back</Button>}
       </View>
     )
+  const fonts = ["poppins400", "poppins600", ...defaultSystemFonts]
   return (
     <View>
       <StatusBar animated style={isDark ? "light" : "dark"} />
@@ -80,9 +81,13 @@ export function SpotDetailScreen() {
 
           <View className="h-px w-full bg-gray-200 dark:bg-gray-600" />
           <View className="space-y-1">
-            <View>
-              <Text>{spot.description}</Text>
-            </View>
+            <RenderHtml
+              systemFonts={fonts}
+              baseStyle={{ fontSize: 16, fontFamily: "poppins400" }}
+              contentWidth={width}
+              source={{ html: spot.description }}
+            />
+
             <Text className="text-sm">{spot.address}</Text>
           </View>
           <View className="h-px w-full bg-gray-200 dark:bg-gray-600" />
