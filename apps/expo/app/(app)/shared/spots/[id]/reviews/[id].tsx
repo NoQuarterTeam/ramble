@@ -9,6 +9,7 @@ import { z } from "zod"
 import { ReviewForm } from "./ReviewForm"
 import { View } from "react-native"
 import { Button } from "../../../../../../components/Button"
+import { toast } from "../../../../../../components/Toast"
 
 export function ReviewDetailScreen() {
   const {
@@ -24,6 +25,7 @@ export function ReviewDetailScreen() {
       if (!review) return
       utils.spot.detail.refetch({ id: review.spotId })
       utils.spot.mapPreview.refetch({ id: review.spotId })
+      toast({ title: "Review updated" })
       goBack()
     },
   })

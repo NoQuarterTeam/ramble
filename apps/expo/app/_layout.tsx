@@ -28,6 +28,7 @@ import { AuthLayout } from "./(auth)/_layout"
 import { SaveScreen } from "./(app)/shared/spots/[id]/save"
 import { NewReviewScreen } from "./(app)/shared/spots/[id]/reviews/new"
 import { ReviewDetailScreen } from "./(app)/shared/spots/[id]/reviews/[id]"
+import { Toast } from "../components/Toast"
 
 enableScreens()
 
@@ -77,6 +78,7 @@ export default function RootLayout() {
             </NavigationContainer>
           </PrefetchTabs>
         )}
+        <Toast />
         <StatusBar style={isDark ? "light" : "dark"} />
       </SafeAreaProvider>
     </TRPCProvider>

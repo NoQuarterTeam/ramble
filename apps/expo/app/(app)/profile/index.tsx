@@ -55,7 +55,7 @@ export function ProfileScreen() {
         <View className="space-y-4">
           <TouchableOpacity
             onPress={() => push("UsernameLayout", { username: me.username })}
-            className="flex flex-row items-center justify-between rounded-md border border-gray-100 px-3 py-4 dark:bg-gray-700"
+            className="flex flex-row items-center justify-between rounded-md border border-gray-100 px-3 py-4 dark:border-gray-700"
           >
             <View className="flex flex-row items-center space-x-4">
               <Image
@@ -76,15 +76,14 @@ export function ProfileScreen() {
 
           <View>
             <ProfileLink to="AccountScreen">Account</ProfileLink>
-            <ProfileLink to="AccountScreen">Van</ProfileLink>
+            <ProfileLink to="VanScreen">Van</ProfileLink>
           </View>
-
-          <Button onPress={handleLogout} variant="outline">
-            Log out
-          </Button>
         </View>
       </View>
       <View className="pt-10">
+        <Button onPress={handleLogout} variant="link">
+          Log out
+        </Button>
         <Text className="text-center">v{VERSION}</Text>
         <Text className="text-center opacity-60">{updateGroup?.split("-")[0] || updateId?.split("-")[0] || "dev"}</Text>
       </View>
@@ -96,7 +95,7 @@ function ProfileLink({ children, to }: { to: keyof ScreenParamsList; children: s
   const { push } = useRouter()
   return (
     <TouchableOpacity
-      className="mb-1 flex flex-row items-center justify-between rounded-md border border-gray-100 px-2 py-3 dark:border-gray-700"
+      className="mb-1 flex flex-row items-center justify-between rounded-md border border-gray-200 px-2 py-3 dark:border-gray-700"
       onPress={() => push(to)}
     >
       <Text>{children}</Text>

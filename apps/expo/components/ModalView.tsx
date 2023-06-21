@@ -6,9 +6,11 @@ import { StatusBar } from "expo-status-bar"
 
 import { Heading } from "./Heading"
 import { useRouter } from "../app/router"
+import { Toast } from "./Toast"
 
 interface Props {
   title?: string
+  shouldRenderToast?: boolean
   onBack?: () => void
   children: React.ReactNode
 }
@@ -26,6 +28,7 @@ export function ModalView(props: Props) {
       </View>
       {props.children}
       <StatusBar style="light" />
+      {props.shouldRenderToast && <Toast />}
     </View>
   )
 }

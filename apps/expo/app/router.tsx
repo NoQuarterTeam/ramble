@@ -9,6 +9,7 @@ export type ScreenParamsList = {
   ProfileLayout: undefined
   ProfileScreen: undefined
   AccountScreen: undefined
+  VanScreen: undefined
 
   SpotsLayout: undefined
   SpotsMapScreen: undefined
