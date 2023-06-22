@@ -1,6 +1,5 @@
 import { FormProvider, useForm } from "react-hook-form"
 import { TouchableOpacity, useColorScheme, View } from "react-native"
-import { type TRPCClientErrorLike } from "@trpc/client"
 import { Star } from "lucide-react-native"
 import { type z } from "zod"
 
@@ -10,16 +9,12 @@ import { type Review } from "@ramble/database/types"
 import { Button } from "../../../../../../components/Button"
 import { FormError } from "../../../../../../components/FormError"
 import { FormInput, FormInputError } from "../../../../../../components/FormInput"
+import { ApiError } from "../../../../../../lib/hooks/useForm"
 
 interface Props {
   spotId: string
   isLoading: boolean
-  error?: TRPCClientErrorLike<{
-    code: number
-    message: string
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    data: { zodError?: { fieldErrors: any } | null; formError?: string | null }
-  }> | null
+  error?: ApiError
   review?: Pick<Review, "rating" | "description">
   onSubmit: (data: z.infer<typeof reviewSchema>) => void
 }
@@ -54,10 +49,10 @@ export function ReviewForm(props: Props) {
           </TouchableOpacity>
         ))}
       </View>
-      {props.error?.data?.zodError?.fieldErrors.rating?.map((error: string) => (
+      {props.error?.data?.zodError?.fieldErrors.rating?.map((error) => (
         <FormInputError key={error} error={error} />
       ))}
-      <FormError className="mb-1" />
+      <FormError className="mb-1" error={props.error} />
       <Button isLoading={props.isLoading} onPress={form.handleSubmit(props.onSubmit)}>
         Save
       </Button>

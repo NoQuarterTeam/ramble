@@ -3,9 +3,10 @@ import { View, type ViewProps } from "react-native"
 import { merge } from "@ramble/shared"
 
 import { Text } from "./Text"
+import { ApiError } from "../lib/hooks/useForm"
 
 interface Props extends ViewProps {
-  error?: null | string | { data?: { formError?: string } | null } | null | undefined
+  error?: ApiError
 }
 export function FormError({ error, ...props }: Props) {
   if (!error) return null

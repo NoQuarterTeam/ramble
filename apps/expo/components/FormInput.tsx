@@ -5,12 +5,12 @@ import { merge } from "@ramble/shared"
 
 import { Input, type InputProps } from "./Input"
 import { Text } from "./Text"
+import { ApiError } from "../lib/hooks/useForm"
 
 interface Props extends InputProps {
   label?: string
   name: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  error?: string | null | { data?: null | { zodError?: { fieldErrors: any } | null; formError?: string | null } }
+  error?: ApiError
   rightElement?: React.ReactNode
 }
 
@@ -38,7 +38,7 @@ export function FormInput({ label, name, error, rightElement, ...props }: Props)
       />
       {typeof error === "string"
         ? error
-        : error?.data?.zodError?.fieldErrors[name]?.map((error: string) => <FormInputError key={error} error={error} />)}
+        : error?.data?.zodError?.fieldErrors[name]?.map((error) => <FormInputError key={error} error={error} />)}
     </View>
   )
 }
