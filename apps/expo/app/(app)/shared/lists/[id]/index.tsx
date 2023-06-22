@@ -45,7 +45,7 @@ export function ListDetailScreen() {
           showsVerticalScrollIndicator={false}
           estimatedItemSize={100}
           contentContainerStyle={{ paddingVertical: 10 }}
-          ListEmptyComponent={<Text>Empty</Text>}
+          ListEmptyComponent={<Text className="w-full py-4 text-center">No spots yet</Text>}
           data={list.listSpots.map((l) => l.spot) || []}
           ItemSeparatorComponent={() => <View className="h-1" />}
           renderItem={({ item }) => <SpotItem spot={item} />}

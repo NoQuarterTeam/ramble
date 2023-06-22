@@ -1,8 +1,5 @@
 import { FormProvider } from "react-hook-form"
 import { ScrollView } from "react-native"
-import { type z } from "zod"
-
-import { updateSchema } from "@ramble/api/src/schemas/user"
 
 import { Button } from "../../../components/Button"
 import { FormError } from "../../../components/FormError"
@@ -16,7 +13,6 @@ import { useMe } from "../../../lib/hooks/useMe"
 export function AccountScreen() {
   const { me } = useMe()
   const form = useForm({
-    schema: updateSchema,
     defaultValues: {
       bio: me?.bio || "",
       firstName: me?.firstName || "",
@@ -34,7 +30,7 @@ export function AccountScreen() {
     },
   })
 
-  const onSubmit = (data: z.infer<typeof updateSchema>) => mutate(data)
+  const onSubmit = form.handleSubmit((data) => mutate(data))
 
   return (
     <ScreenView title="Account">
@@ -45,7 +41,7 @@ export function AccountScreen() {
           <FormInput autoCapitalize="none" name="email" label="Email" error={error} />
           <FormInput autoCapitalize="none" name="username" label="Username" error={error} />
           <FormInput multiline className="h-[100px]" name="bio" label="Bio" error={error} />
-          <Button isLoading={isLoading} onPress={form.handleSubmit(onSubmit)}>
+          <Button isLoading={isLoading} onPress={onSubmit}>
             Save
           </Button>
           <FormError error={error} />

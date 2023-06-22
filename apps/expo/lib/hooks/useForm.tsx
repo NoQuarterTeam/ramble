@@ -1,13 +1,11 @@
 import { type FieldValues, useForm as useRForm, type UseFormProps } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { type z } from "zod"
+
 import { TRPCClientErrorLike } from "@trpc/client"
 
-export function useForm<TFieldValues extends FieldValues = FieldValues, TContext = unknown>({
-  schema,
-  ...props
-}: UseFormProps<TFieldValues, TContext> & { schema?: z.ZodSchema<unknown> | undefined }) {
-  return useRForm({ resolver: schema ? zodResolver(schema) : undefined, ...props })
+export function useForm<TFieldValues extends FieldValues = FieldValues, TContext = unknown>(
+  props: UseFormProps<TFieldValues, TContext>,
+) {
+  return useRForm(props)
 }
 
 export type ApiError = TRPCClientErrorLike<{

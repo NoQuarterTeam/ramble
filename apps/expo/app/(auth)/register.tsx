@@ -1,9 +1,6 @@
 import { FormProvider } from "react-hook-form"
 import { KeyboardAvoidingView, ScrollView, TouchableOpacity } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { type z } from "zod"
-
-import { registerSchema } from "@ramble/api/src/schemas/user"
 
 import { Button } from "../../components/Button"
 import { FormError } from "../../components/FormError"
@@ -29,14 +26,13 @@ export function RegisterScreen() {
     },
   })
   const form = useForm({
-    schema: registerSchema,
     defaultValues: { email: "", password: "", username: "", firstName: "", lastName: "" },
   })
 
-  const handleRegister = async (data: z.infer<typeof registerSchema>) => {
-    await AsyncStorage.removeItem(AUTH_TOKEN)
+  const onSubmit = form.handleSubmit(async (data) => {
+    await AsyncStorage.removeItem(AUTH_TOKEN).catch()
     mutate(data)
-  }
+  })
 
   return (
     <ModalView title="Register">
@@ -48,7 +44,7 @@ export function RegisterScreen() {
             <FormInput name="username" label="Username" error={error} />
             <FormInput name="firstName" label="First name" error={error} />
             <FormInput name="lastName" label="Last name" error={error} />
-            <Button className="mb-1" isLoading={isLoading} onPress={form.handleSubmit(handleRegister)}>
+            <Button className="mb-1" isLoading={isLoading} onPress={onSubmit}>
               Register
             </Button>
             <FormError className="mb-1" error={error} />

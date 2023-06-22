@@ -1,22 +1,21 @@
 import { FormProvider, useForm } from "react-hook-form"
 import { TouchableOpacity, useColorScheme, View } from "react-native"
 import { Star } from "lucide-react-native"
-import { type z } from "zod"
 
-import { type reviewSchema } from "@ramble/api/src/schemas/review"
 import { type Review } from "@ramble/database/types"
 
 import { Button } from "../../../../../../components/Button"
 import { FormError } from "../../../../../../components/FormError"
 import { FormInput, FormInputError } from "../../../../../../components/FormInput"
 import { ApiError } from "../../../../../../lib/hooks/useForm"
+import { RouterInputs } from "../../../../../../lib/api"
 
 interface Props {
   spotId: string
   isLoading: boolean
   error?: ApiError
   review?: Pick<Review, "rating" | "description">
-  onSubmit: (data: z.infer<typeof reviewSchema>) => void
+  onSubmit: (data: RouterInputs["review"]["create"] | RouterInputs["review"]["update"]) => void
 }
 
 export function ReviewForm(props: Props) {

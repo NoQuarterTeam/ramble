@@ -18,16 +18,15 @@ export type ScreenParamsList = {
 
   ListsLayout: undefined
   ListsScreen: undefined
+  NewListScreen: undefined
 
   // SHARED
   SpotDetailScreen: { id: string }
   SaveScreen: { id: string }
   NewReviewScreen: { spotId: string }
   ReviewDetailScreen: { id: string }
-
   ListDetailScreen: { id: string }
   ListDetailMapScreen: { id: string }
-
   UsernameLayout: { username: string; tab?: "spots" | "lists" | "van" }
 }
 

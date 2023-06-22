@@ -1,6 +1,7 @@
 import { z } from "zod"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 import { TRPCError } from "@trpc/server"
+import { listSchema } from "../schemas/list"
 
 export const listRouter = createTRPCRouter({
   detail: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
@@ -67,5 +68,8 @@ export const listRouter = createTRPCRouter({
     } else {
       return ctx.prisma.listSpot.create({ data: { spotId: input.spotId, listId: input.listId } })
     }
+  }),
+  create: protectedProcedure.input(listSchema).mutation(async ({ ctx, input }) => {
+    return ctx.prisma.list.create({ data: { ...input, creatorId: ctx.user.id } })
   }),
 })

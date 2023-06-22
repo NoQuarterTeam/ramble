@@ -7,15 +7,24 @@ import { LoginPlaceholder } from "../../../components/LoginPlaceholder"
 import { Text } from "../../../components/Text"
 import { api } from "../../../lib/api"
 import { useMe } from "../../../lib/hooks/useMe"
+import { TouchableOpacity } from "react-native-gesture-handler"
+import { PlusCircle } from "lucide-react-native"
+import { useRouter } from "../../router"
 
 export function ListsScreen() {
   const { me } = useMe()
+  const { push } = useRouter()
   const { data: lists } = api.user.lists.useQuery({ username: me?.username || "" }, { enabled: !!me })
   if (!me) return <LoginPlaceholder title="Lists" text="Log in to start saving spots" />
   return (
     <View className="h-full">
       <View className="relative flex-1 px-4 pt-20">
-        <Heading className="pb-1 text-3xl">Lists</Heading>
+        <View className="flex flex-row justify-between">
+          <Heading className="pb-1 text-3xl">Lists</Heading>
+          <TouchableOpacity onPress={() => push("NewListScreen")}>
+            <PlusCircle className="text-black dark:text-white" />
+          </TouchableOpacity>
+        </View>
 
         <FlashList
           showsVerticalScrollIndicator={false}

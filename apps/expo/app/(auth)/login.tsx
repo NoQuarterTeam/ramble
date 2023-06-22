@@ -1,9 +1,6 @@
 import { FormProvider } from "react-hook-form"
 import { KeyboardAvoidingView, ScrollView, TouchableOpacity } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { type z } from "zod"
-
-import { loginSchema } from "@ramble/api/src/schemas/user"
 
 import { Button } from "../../components/Button"
 import { FormError } from "../../components/FormError"
@@ -18,7 +15,7 @@ export function LoginScreen() {
   const queryClient = api.useContext()
   const navigation = useRouter()
 
-  const form = useForm({ defaultValues: { email: "jack@noquarter.co", password: "password" }, schema: loginSchema })
+  const form = useForm({ defaultValues: { email: "jack@noquarter.co", password: "password" } })
 
   const { mutate, isLoading, error } = api.auth.login.useMutation({
     onSuccess: async (data) => {
@@ -32,10 +29,10 @@ export function LoginScreen() {
     },
   })
 
-  const handleLogin = async (data: z.infer<typeof loginSchema>) => {
+  const onSubmit = form.handleSubmit(async (data) => {
     await AsyncStorage.removeItem(AUTH_TOKEN).catch()
     mutate(data)
-  }
+  })
 
   return (
     <ModalView title="Login">
@@ -44,7 +41,7 @@ export function LoginScreen() {
           <ScrollView className="h-full">
             <FormInput autoCapitalize="none" name="email" label="Email" error={error} />
             <FormInput autoCapitalize="none" name="password" secureTextEntry label="Password" error={error} />
-            <Button className="mb-1" isLoading={isLoading} disabled={isLoading} onPress={form.handleSubmit(handleLogin)}>
+            <Button className="mb-1" isLoading={isLoading} disabled={isLoading} onPress={onSubmit}>
               Login
             </Button>
             <FormError className="mb-1" error={error} />

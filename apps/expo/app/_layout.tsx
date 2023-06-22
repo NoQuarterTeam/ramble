@@ -27,6 +27,7 @@ import { NewReviewScreen } from "./(app)/shared/spots/[id]/reviews/new"
 import { SaveScreen } from "./(app)/shared/spots/[id]/save"
 import { AuthLayout } from "./(auth)/_layout"
 import { type ScreenParamsList } from "./router"
+import { NewListScreen } from "./(app)/lists/new"
 
 enableScreens()
 
@@ -68,6 +69,7 @@ export default function RootLayout() {
                   screenOptions={{ presentation: "modal", contentStyle: { backgroundColor: isDark ? "black" : "white" } }}
                 >
                   <Container.Screen name="AuthLayout" component={AuthLayout} />
+                  <Container.Screen name="NewListScreen" component={NewListScreen} />
                   <Container.Screen name="NewReviewScreen" component={NewReviewScreen} />
                   <Container.Screen name="ReviewDetailScreen" component={ReviewDetailScreen} />
                   <Container.Screen name="SaveScreen" component={SaveScreen} />

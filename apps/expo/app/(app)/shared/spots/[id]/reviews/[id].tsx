@@ -1,12 +1,9 @@
 import { ScrollView } from "react-native"
-import { type z } from "zod"
-
-import { type reviewSchema } from "@ramble/api/src/schemas/review"
 
 import { ModalView } from "../../../../../../components/ModalView"
 import { Text } from "../../../../../../components/Text"
 import { toast } from "../../../../../../components/Toast"
-import { api } from "../../../../../../lib/api"
+import { RouterInputs, api } from "../../../../../../lib/api"
 import { useParams, useRouter } from "../../../../../router"
 import { ReviewForm } from "./ReviewForm"
 
@@ -29,7 +26,7 @@ export function ReviewDetailScreen() {
     },
   })
 
-  const handleSubmit = (data: z.infer<typeof reviewSchema>) => mutate({ ...data, id })
+  const handleSubmit = (data: Omit<RouterInputs["review"]["update"], "id">) => mutate({ ...data, id })
 
   return (
     <ModalView title={`Edit review for ${review?.spot?.name}`}>
