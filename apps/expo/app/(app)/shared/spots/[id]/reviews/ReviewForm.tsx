@@ -39,7 +39,7 @@ export function ReviewForm(props: Props) {
         placeholder="How was your stay? what did you like?"
         numberOfLines={4}
         multiline
-        error={props.error?.data?.zodError?.fieldErrors.description}
+        error={props.error}
       />
 
       <View className="mb-4 flex flex-row items-center justify-center space-x-2">
@@ -57,11 +57,10 @@ export function ReviewForm(props: Props) {
       {props.error?.data?.zodError?.fieldErrors.rating?.map((error: string) => (
         <FormInputError key={error} error={error} />
       ))}
-
+      <FormError className="mb-1" />
       <Button isLoading={props.isLoading} onPress={form.handleSubmit(props.onSubmit)}>
         Save
       </Button>
-      <FormError className="mt-1" />
     </FormProvider>
   )
 }

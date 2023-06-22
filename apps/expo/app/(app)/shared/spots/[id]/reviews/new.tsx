@@ -5,6 +5,7 @@ import { Text } from "../../../../../../components/Text"
 import { api } from "../../../../../../lib/api"
 import { useParams, useRouter } from "../../../../../router"
 import { ReviewForm } from "./ReviewForm"
+import { toast } from "../../../../../../components/Toast"
 
 export function NewReviewScreen() {
   const {
@@ -18,6 +19,9 @@ export function NewReviewScreen() {
       utils.spot.detail.refetch({ id: spotId })
       utils.spot.mapPreview.refetch({ id: spotId })
       goBack()
+    },
+    onError: ({ message }) => {
+      toast({ title: "Something went wrong", message, type: "error" })
     },
   })
   const { data: spot } = api.spot.detail.useQuery({ id: spotId })

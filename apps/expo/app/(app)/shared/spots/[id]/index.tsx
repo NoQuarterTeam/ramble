@@ -82,7 +82,7 @@ export function SpotDetailScreen() {
           <View className="space-y-1">
             <RenderHtml
               systemFonts={fonts}
-              baseStyle={{ fontSize: 16, fontFamily: "poppins400" }}
+              baseStyle={{ fontSize: 16, fontFamily: "poppins400", color: isDark ? "white" : "black" }}
               contentWidth={width}
               source={{ html: spot.description }}
             />

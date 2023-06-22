@@ -57,7 +57,7 @@ export function SpotsMapScreen() {
         const loc = await Location.getCurrentPositionAsync()
         setLocation(loc.coords)
       } catch {
-        console.log("oops")
+        console.log("oops -  getting location")
       }
     })()
   }, [])
@@ -77,7 +77,7 @@ export function SpotsMapScreen() {
       const data = await queryClient.spot.clusters.fetch(input)
       setClusters(data)
     } catch {
-      console.log("oops")
+      console.log("oops - fetching clusters on map move")
     } finally {
       setIsFetching(false)
     }
