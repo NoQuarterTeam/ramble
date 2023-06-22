@@ -14,7 +14,7 @@ export function ScreenView(props: Props) {
   const colorScheme = useColorScheme()
   const { goBack } = useRouter()
   return (
-    <View className="px-4 pt-16">
+    <View className="min-h-full px-4 pt-16">
       <View className="flex flex-row items-center space-x-2">
         <TouchableOpacity onPress={goBack} className="mb-1 p-2">
           <Feather name="chevron-left" size={24} color={colorScheme === "dark" ? "white" : "black"} />
