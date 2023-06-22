@@ -90,8 +90,6 @@ export function ProfileScreen() {
           Log out
         </Button>
         <Text className="text-center">v{VERSION}</Text>
-        <Text>{updateGroup}</Text>
-        <Text>{updateId}</Text>
         <Text className="text-center opacity-60">{updateGroup?.split("-")[0] || updateId?.split("-")[0] || "dev"}</Text>
       </View>
     </ScrollView>
