@@ -442,6 +442,15 @@ importers:
       '@trpc/server':
         specifier: ^10.28.1
         version: 10.28.1
+      '@turf/bbox':
+        specifier: ^6.5.0
+        version: 6.5.0
+      '@turf/center':
+        specifier: ^6.5.0
+        version: 6.5.0
+      '@turf/helpers':
+        specifier: ^6.5.0
+        version: 6.5.0
       bcryptjs:
         specifier: ^2.4.3
         version: 2.4.3
