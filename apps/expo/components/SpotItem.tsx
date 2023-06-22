@@ -35,8 +35,8 @@ export function SpotItem({ spot }: Props) {
             {spot.name}
           </Text>
 
-          <View className="flex flex-row space-x-1">
-            <Star className="text-black dark:text-white" size={20} />
+          <View className="flex flex-row items-center space-x-1">
+            <Star className="text-black dark:text-white" size={16} />
             <Text>{spot.rating === null ? "Not rated" : spot.rating}</Text>
           </View>
 

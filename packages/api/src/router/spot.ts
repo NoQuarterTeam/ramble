@@ -1,6 +1,6 @@
 import { z } from "zod"
-import { createTRPCRouter, publicProcedure } from "../trpc"
-import { Spot, SpotImage, SpotType } from "@ramble/database/types"
+import { createTRPCRouter, publicProcedure, publicProfileProcedure } from "../trpc"
+import type { Spot, SpotImage, SpotType } from "@ramble/database/types"
 import Supercluster from "supercluster"
 import { TRPCError } from "@trpc/server"
 
@@ -13,14 +13,13 @@ export const spotRouter = createTRPCRouter({
         maxLat: z.number(),
         minLng: z.number(),
         maxLng: z.number(),
-        type: z.array(z.string()).or(z.string()).optional(),
+        types: z.array(z.string()).or(z.string()).optional(),
         isPetFriendly: z.boolean().nullish(),
         isVerified: z.boolean().nullish(),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const { zoom, type, isVerified, isPetFriendly, ...coords } = input
-
+      const { zoom, types, isVerified, isPetFriendly, ...coords } = input
       const spots = await ctx.prisma.spot.findMany({
         select: { id: true, latitude: true, longitude: true, type: true },
         where: {
@@ -28,11 +27,11 @@ export const spotRouter = createTRPCRouter({
           isPetFriendly: isPetFriendly ? { equals: true } : undefined,
           latitude: { gt: coords.minLat, lt: coords.maxLat },
           longitude: { gt: coords.minLng, lt: coords.maxLng },
-          type: type
-            ? typeof type === "string"
-              ? { equals: type as SpotType }
-              : type.length > 0
-              ? { in: type as SpotType[] }
+          type: types
+            ? typeof types === "string"
+              ? { equals: types as SpotType }
+              : types.length > 0
+              ? { in: types as SpotType[] }
               : undefined
             : undefined,
         },
@@ -83,5 +82,17 @@ export const spotRouter = createTRPCRouter({
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
     const rating = await ctx.prisma.review.aggregate({ where: { spotId: input.id }, _avg: { rating: true } })
     return { ...spot, rating }
+  }),
+  byUser: publicProfileProcedure.query(async ({ ctx, input }) => {
+    return ctx.prisma.$queryRaw<
+      Array<Pick<Spot, "id" | "name" | "address"> & { rating?: number; image?: SpotImage["path"] | null }>
+    >`
+      SELECT Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating, (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image
+      FROM Spot
+      LEFT JOIN Review ON Spot.id = Review.spotId
+      WHERE Spot.creatorId = (SELECT id FROM User WHERE username = ${input.username})
+      GROUP BY Spot.id
+      ORDER BY Spot.createdAt DESC, Spot.id
+      LIMIT 20`
   }),
 })

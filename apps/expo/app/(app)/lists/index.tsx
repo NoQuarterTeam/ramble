@@ -14,7 +14,7 @@ import { useRouter } from "../../router"
 export function ListsScreen() {
   const { me } = useMe()
   const { push } = useRouter()
-  const { data: lists } = api.user.lists.useQuery({ username: me?.username || "" }, { enabled: !!me })
+  const { data: lists } = api.list.allByUser.useQuery({ username: me?.username || "" }, { enabled: !!me })
   if (!me) return <LoginPlaceholder title="Lists" text="Log in to start saving spots" />
   return (
     <View className="h-full">
@@ -30,7 +30,7 @@ export function ListsScreen() {
           showsVerticalScrollIndicator={false}
           estimatedItemSize={86}
           contentContainerStyle={{ paddingVertical: 10 }}
-          ListEmptyComponent={<Text>Empty</Text>}
+          ListEmptyComponent={<Text className="text-center">No lists yet</Text>}
           data={lists || []}
           ItemSeparatorComponent={() => <View className="h-1" />}
           renderItem={({ item }) => <ListItem list={item} />}

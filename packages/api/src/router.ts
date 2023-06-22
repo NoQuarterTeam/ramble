@@ -4,6 +4,7 @@ import { userRouter } from "./router/user"
 import { listRouter } from "./router/list"
 import { createTRPCRouter } from "./trpc"
 import { reviewRouter } from "./router/review"
+import { vanRouter } from "./router/van"
 
 export const appRouter = createTRPCRouter({
   auth: authRouter,
@@ -11,6 +12,7 @@ export const appRouter = createTRPCRouter({
   spot: spotRouter,
   list: listRouter,
   review: reviewRouter,
+  van: vanRouter,
 })
 
 // export type definition of API

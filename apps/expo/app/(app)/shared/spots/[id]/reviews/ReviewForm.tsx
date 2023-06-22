@@ -10,15 +10,22 @@ import { FormInput, FormInputError } from "../../../../../../components/FormInpu
 import { ApiError } from "../../../../../../lib/hooks/useForm"
 import { RouterInputs } from "../../../../../../lib/api"
 
+type UpdateSubmit = {
+  review: Pick<Review, "rating" | "description">
+  onUpdate: (data: Omit<RouterInputs["review"]["update"], "id">) => void
+}
+type CreateSubmit = {
+  review?: undefined
+  onCreate: (data: RouterInputs["review"]["create"]) => void
+}
+
 interface Props {
   spotId: string
   isLoading: boolean
   error?: ApiError
-  review?: Pick<Review, "rating" | "description">
-  onSubmit: (data: RouterInputs["review"]["create"] | RouterInputs["review"]["update"]) => void
 }
 
-export function ReviewForm(props: Props) {
+export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
   const form = useForm({
@@ -52,7 +59,7 @@ export function ReviewForm(props: Props) {
         <FormInputError key={error} error={error} />
       ))}
       <FormError className="mb-1" error={props.error} />
-      <Button isLoading={props.isLoading} onPress={form.handleSubmit(props.onSubmit)}>
+      <Button isLoading={props.isLoading} onPress={form.handleSubmit(props.review ? props.onUpdate : props.onCreate)}>
         Save
       </Button>
     </FormProvider>

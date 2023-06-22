@@ -1,17 +1,16 @@
-import { View } from "react-native"
-import { Image } from "expo-image"
 import { useLocalSearchParams } from "expo-router"
+import { View } from "react-native"
 
-import { createImageUrl } from "@ramble/shared"
-
+import { ImageCarousel } from "../../../../components/ImageCarousel"
 import { Spinner } from "../../../../components/Spinner"
 import { Text } from "../../../../components/Text"
 import { api } from "../../../../lib/api"
+import { width } from "../../../../lib/device"
 
 export function UsernameVan() {
   const { username } = useLocalSearchParams<{ username: string }>()
 
-  const { data: van, isLoading } = api.user.van.useQuery({ username: username || "" }, { enabled: !!username })
+  const { data: van, isLoading } = api.van.byUser.useQuery({ username: username || "" }, { enabled: !!username })
   if (isLoading)
     return (
       <View className="flex items-center justify-center py-4">
@@ -27,14 +26,14 @@ export function UsernameVan() {
     )
 
   return (
-    <View className="space-y-2">
-      <Text className="text-2xl">{van.name}</Text>
-      <Text>{van.model}</Text>
-      <Text>{van.year}</Text>
-      <Text>{van.description}</Text>
-      {van.images.map((image) => (
-        <Image key={image.id} className="h-[300px] w-full rounded-lg object-cover" source={{ uri: createImageUrl(image.path) }} />
-      ))}
+    <View className="space-y-2 py-2">
+      <Text className="text-3xl">{van.name}</Text>
+      <View>
+        <Text>{van.model}</Text>
+        <Text>{van.year}</Text>
+        <Text>{van.description}</Text>
+      </View>
+      <ImageCarousel width={width - 16} height={300} images={van.images} imageClassName="rounded-md" />
     </View>
   )
 }

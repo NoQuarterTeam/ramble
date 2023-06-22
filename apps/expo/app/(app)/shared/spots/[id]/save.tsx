@@ -14,7 +14,7 @@ export function SaveScreen() {
     params: { id },
   } = useParams<"SaveScreen">()
   const { me } = useMe()
-  const { data: lists, isLoading } = api.list.savedLists.useQuery({ spotId: id }, { enabled: !!me })
+  const { data: lists, isLoading } = api.list.allByUserWithSavedSpots.useQuery({ spotId: id }, { enabled: !!me })
   if (!me) return <LoginPlaceholder title="Lists" text="Log in to start saving spots" />
   return (
     <ModalView title="Save to list">
@@ -35,14 +35,14 @@ export function SaveScreen() {
 
 interface Props {
   spotId: string
-  list: RouterOutputs["list"]["savedLists"][number]
+  list: RouterOutputs["list"]["allByUserWithSavedSpots"][number]
 }
 
 export function ListItem({ list, spotId }: Props) {
   const utils = api.useContext()
   const { mutate } = api.list.saveToList.useMutation({
     onSuccess: () => {
-      utils.list.savedLists.refetch()
+      utils.list.allByUserWithSavedSpots.refetch()
       utils.spot.detail.refetch({ id: spotId })
     },
   })

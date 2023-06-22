@@ -9,7 +9,7 @@ import { api } from "../../../../../lib/api"
 export default function UsernameLists() {
   const { username } = useLocalSearchParams<{ username: string }>()
 
-  const { data: lists, isLoading } = api.user.lists.useQuery({ username: username || "" }, { enabled: !!username })
+  const { data: lists, isLoading } = api.list.allByUser.useQuery({ username: username || "" }, { enabled: !!username })
 
   if (isLoading)
     return (

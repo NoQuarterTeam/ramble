@@ -1,12 +1,11 @@
 import { TRPCError } from "@trpc/server"
 
-import { z } from "zod"
-import { createTRPCRouter, protectedProcedure, publicProfileProcedure } from "../trpc"
+import { createTRPCRouter, protectedProcedure, publicProcedure, publicProfileProcedure } from "../trpc"
 import { updateSchema } from "../schemas/user"
-import { Spot, SpotImage } from "@ramble/database/types"
 
 export const userRouter = createTRPCRouter({
-  profile: publicProfileProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {
+  me: publicProcedure.query(({ ctx }) => ctx.user),
+  profile: publicProfileProcedure.query(async ({ ctx, input }) => {
     const user = await ctx.prisma.user.findUnique({
       where: { username: input.username },
       select: {
@@ -26,24 +25,6 @@ export const userRouter = createTRPCRouter({
     })
     if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
     return user
-  }),
-  spots: publicProfileProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {
-    return ctx.prisma.$queryRaw<
-      Array<Pick<Spot, "id" | "name" | "address"> & { rating?: number; image?: SpotImage["path"] | null }>
-    >`
-      SELECT Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating, (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image
-      FROM Spot
-      LEFT JOIN Review ON Spot.id = Review.spotId
-      WHERE Spot.creatorId = (SELECT id FROM User WHERE username = ${input.username})
-      GROUP BY Spot.id
-      ORDER BY Spot.createdAt DESC, Spot.id
-      LIMIT 20`
-  }),
-  lists: publicProfileProcedure.query(async ({ ctx }) => {
-    return ctx.prisma.list.findMany({ where: { creatorId: ctx.publicUser.id }, take: 10 })
-  }),
-  van: publicProfileProcedure.query(async ({ ctx }) => {
-    return ctx.prisma.van.findUnique({ where: { userId: ctx.publicUser.id }, include: { images: true } })
   }),
   update: protectedProcedure.input(updateSchema).mutation(async ({ ctx, input }) => {
     const user = await ctx.prisma.user.update({ where: { id: ctx.user.id }, data: input })

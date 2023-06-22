@@ -20,12 +20,14 @@ export const reviewRouter = createTRPCRouter({
       throw new TRPCError({ code: "BAD_REQUEST", message: "You can only review a spot once per month." })
     return ctx.prisma.review.create({ data: { ...input, userId: ctx.user.id } })
   }),
-  update: protectedProcedure.input(reviewSchema.extend({ id: z.string() })).mutation(async ({ ctx, input: { id, ...input } }) => {
-    const review = await ctx.prisma.review.findUnique({ where: { id }, select: { userId: true } })
-    if (!review) throw new TRPCError({ code: "NOT_FOUND" })
-    if (review.userId !== ctx.user.id) throw new TRPCError({ code: "UNAUTHORIZED" })
-    return ctx.prisma.review.update({ where: { id }, data: input })
-  }),
+  update: protectedProcedure
+    .input(reviewSchema.partial().extend({ id: z.string() }))
+    .mutation(async ({ ctx, input: { id, ...input } }) => {
+      const review = await ctx.prisma.review.findUnique({ where: { id }, select: { userId: true } })
+      if (!review) throw new TRPCError({ code: "NOT_FOUND" })
+      if (review.userId !== ctx.user.id) throw new TRPCError({ code: "UNAUTHORIZED" })
+      return ctx.prisma.review.update({ where: { id }, data: input })
+    }),
   delete: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
     const review = await ctx.prisma.review.findUnique({ where: { id: input.id }, select: { userId: true } })
     if (!review) throw new TRPCError({ code: "NOT_FOUND" })

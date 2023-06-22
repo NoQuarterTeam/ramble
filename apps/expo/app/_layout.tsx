@@ -28,6 +28,7 @@ import { SaveScreen } from "./(app)/shared/spots/[id]/save"
 import { AuthLayout } from "./(auth)/_layout"
 import { type ScreenParamsList } from "./router"
 import { NewListScreen } from "./(app)/lists/new"
+import { EditListScreen } from "./(app)/shared/lists/[id]/edit"
 
 enableScreens()
 
@@ -70,6 +71,7 @@ export default function RootLayout() {
                 >
                   <Container.Screen name="AuthLayout" component={AuthLayout} />
                   <Container.Screen name="NewListScreen" component={NewListScreen} />
+                  <Container.Screen name="EditListScreen" component={EditListScreen} />
                   <Container.Screen name="NewReviewScreen" component={NewReviewScreen} />
                   <Container.Screen name="ReviewDetailScreen" component={ReviewDetailScreen} />
                   <Container.Screen name="SaveScreen" component={SaveScreen} />
@@ -91,7 +93,7 @@ function PrefetchTabs(props: { children: React.ReactNode }) {
   React.useEffect(() => {
     if (isLoading || !me) return
     utils.user.profile.prefetch({ username: me.username })
-    utils.user.lists.prefetch({ username: me.username })
+    utils.list.allByUser.prefetch({ username: me.username })
   }, [me, isLoading])
   if (isLoading) return null
   return <>{props.children}</>

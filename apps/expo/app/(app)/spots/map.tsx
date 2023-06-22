@@ -12,7 +12,7 @@ import { Button } from "../../../components/Button"
 import { Heading } from "../../../components/Heading"
 import { ModalView } from "../../../components/ModalView"
 import { Spinner } from "../../../components/Spinner"
-import { ImageCarousel } from "../../../components/SpotImageCarousel"
+import { ImageCarousel } from "../../../components/ImageCarousel"
 import { Text } from "../../../components/Text"
 import { api, type RouterOutputs } from "../../../lib/api"
 import { width } from "../../../lib/device"
@@ -61,6 +61,24 @@ export function SpotsMapScreen() {
       }
     })()
   }, [])
+
+  const onFiltersChange = async (f: Filters) => {
+    filterModalProps.onClose()
+    setFilters(f)
+    const properties = await mapRef.current?.getVisibleBounds()
+    const zoom = await mapRef.current?.getZoom()
+    if (!properties) return
+    const input = {
+      ...f,
+      minLng: properties[1][0],
+      minLat: properties[1][1],
+      maxLng: properties[0][0],
+      maxLat: properties[0][1],
+      zoom: zoom || 13,
+    }
+    const data = await queryClient.spot.clusters.fetch(input)
+    setClusters(data)
+  }
 
   const onMapMove = async ({ properties }: Mapbox.MapState) => {
     try {
@@ -135,6 +153,8 @@ export function SpotsMapScreen() {
       }),
     [clusters],
   )
+  const filterCount = (filters.isPetFriendly ? 1 : 0) + (filters.isVerified ? 1 : 0) + (filters.types.length > 0 ? 1 : 0)
+
   return (
     <View className="flex-1">
       <Mapbox.MapView
@@ -144,6 +164,7 @@ export function SpotsMapScreen() {
         onMapIdle={onMapMove}
         onPress={() => setActiveSpotId(null)}
         ref={mapRef}
+        pitchEnabled={false}
         compassFadeWhenNorth
         scaleBarEnabled={false}
         styleURL={
@@ -182,6 +203,11 @@ export function SpotsMapScreen() {
         className="absolute bottom-3 left-3 flex flex-row items-center justify-center rounded-full bg-white p-3"
       >
         <Settings2 size={20} className="text-black" />
+        {filterCount > 0 && (
+          <View className="sq-5 absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 bg-white dark:border-gray-700">
+            <Text className="text-xs text-black">{filterCount}</Text>
+          </View>
+        )}
       </TouchableOpacity>
       {!!location && (
         <TouchableOpacity
@@ -201,14 +227,7 @@ export function SpotsMapScreen() {
         onDismiss={filterModalProps.onClose}
       >
         <ModalView title="Filters" onBack={filterModalProps.onClose}>
-          <MapFilters
-            {...filterModalProps}
-            initialFilters={filters}
-            onSave={(f) => {
-              filterModalProps.onClose()
-              setFilters(f)
-            }}
-          />
+          <MapFilters {...filterModalProps} initialFilters={filters} onSave={onFiltersChange} />
         </ModalView>
       </Modal>
     </View>

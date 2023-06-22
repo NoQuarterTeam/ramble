@@ -1,17 +1,23 @@
 import { z } from "zod"
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
+import { createTRPCRouter, protectedProcedure, publicProcedure, publicProfileProcedure } from "../trpc"
 import { TRPCError } from "@trpc/server"
 import { listSchema } from "../schemas/list"
 
 export const listRouter = createTRPCRouter({
+  allByUser: publicProfileProcedure.query(async ({ ctx, input }) => {
+    return ctx.prisma.list.findMany({
+      orderBy: { createdAt: "desc" },
+      where: { creator: { username: input.username } },
+      take: 10,
+    })
+  }),
   detail: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
-    // TODO: check if user is public
     const list = await ctx.prisma.list.findFirst({
       where: { id: input.id },
       select: {
         id: true,
         creatorId: true,
-        creator: { select: { username: true, firstName: true, lastName: true } },
+        creator: { select: { isProfilePublic: true, username: true, firstName: true, lastName: true } },
         name: true,
         description: true,
         listSpots: {
@@ -34,6 +40,8 @@ export const listRouter = createTRPCRouter({
       },
     })
     if (!list) throw new TRPCError({ code: "NOT_FOUND" })
+    if (!list.creator.isProfilePublic && (!ctx.user || ctx.user.id !== list.creatorId))
+      throw new TRPCError({ code: "UNAUTHORIZED" })
 
     const formattedList = {
       ...list,
@@ -49,10 +57,9 @@ export const listRouter = createTRPCRouter({
         },
       })),
     }
-
     return formattedList
   }),
-  savedLists: protectedProcedure.input(z.object({ spotId: z.string() })).query(async ({ ctx, input }) => {
+  allByUserWithSavedSpots: protectedProcedure.input(z.object({ spotId: z.string() })).query(async ({ ctx, input }) => {
     return ctx.prisma.list.findMany({
       where: { creatorId: ctx.user.id },
       include: { listSpots: { where: { spotId: input.spotId } } },
@@ -69,7 +76,15 @@ export const listRouter = createTRPCRouter({
       return ctx.prisma.listSpot.create({ data: { spotId: input.spotId, listId: input.listId } })
     }
   }),
-  create: protectedProcedure.input(listSchema).mutation(async ({ ctx, input }) => {
+  create: protectedProcedure.input(listSchema).mutation(({ ctx, input }) => {
     return ctx.prisma.list.create({ data: { ...input, creatorId: ctx.user.id } })
+  }),
+  update: protectedProcedure
+    .input(listSchema.partial().extend({ id: z.string() }))
+    .mutation(({ ctx, input: { id, ...data } }) => {
+      return ctx.prisma.list.update({ where: { id }, data })
+    }),
+  delete: protectedProcedure.input(z.object({ id: z.string() })).mutation(({ ctx, input }) => {
+    return ctx.prisma.list.delete({ where: { id: input.id } })
   }),
 })

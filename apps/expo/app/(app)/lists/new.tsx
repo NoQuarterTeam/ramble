@@ -1,14 +1,9 @@
-import { FormProvider } from "react-hook-form"
 import { ModalView } from "../../../components/ModalView"
 
-import { useForm } from "../../../lib/hooks/useForm"
-import { FormInput } from "../../../components/FormInput"
-import { ScrollView } from "react-native"
-import { FormError } from "../../../components/FormError"
-import { Button } from "../../../components/Button"
-import { api } from "../../../lib/api"
-import { useRouter } from "../../router"
+import { RouterInputs, api } from "../../../lib/api"
 import { useMe } from "../../../lib/hooks/useMe"
+import { useRouter } from "../../router"
+import { ListForm } from "../shared/lists/[id]/ListForm"
 
 export function NewListScreen() {
   const { goBack } = useRouter()
@@ -17,26 +12,16 @@ export function NewListScreen() {
   const { mutate, error, isLoading } = api.list.create.useMutation({
     onSuccess: () => {
       if (!me) return
-      utils.user.lists.refetch({ username: me.username })
+      utils.list.allByUser.refetch({ username: me.username })
       goBack()
     },
   })
 
-  const form = useForm({ defaultValues: { name: "", description: "" } })
-  const handleSubmit = form.handleSubmit((data) => mutate(data))
+  const handleSubmit = (data: RouterInputs["list"]["create"]) => mutate(data)
 
   return (
     <ModalView title="New list">
-      <FormProvider {...form}>
-        <ScrollView contentContainerStyle={{ minHeight: "100%" }} showsVerticalScrollIndicator={false}>
-          <FormInput name="name" label="Name" error={error} />
-          <FormInput name="description" label="Description" multiline error={error} />
-          <FormError error={error} />
-          <Button isLoading={isLoading} onPress={handleSubmit}>
-            Save
-          </Button>
-        </ScrollView>
-      </FormProvider>
+      <ListForm onCreate={handleSubmit} isLoading={isLoading} error={error} />
     </ModalView>
   )
 }

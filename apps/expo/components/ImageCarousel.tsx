@@ -4,7 +4,7 @@ import { FlashList } from "@shopify/flash-list"
 import { Image } from "expo-image"
 
 import { type SpotImage } from "@ramble/database/types"
-import { createImageUrl } from "@ramble/shared"
+import { createImageUrl, merge } from "@ramble/shared"
 
 import { Text } from "./Text"
 
@@ -12,10 +12,12 @@ export function ImageCarousel({
   images,
   width,
   height,
+  imageClassName,
 }: {
   width: number
   height: number
   images: Pick<SpotImage, "id" | "path">[]
+  imageClassName?: string
 }) {
   const [imageIndex, setImageIndex] = React.useState(0)
 
@@ -34,7 +36,11 @@ export function ImageCarousel({
         showsHorizontalScrollIndicator={false}
         data={images}
         renderItem={({ item: image }) => (
-          <Image source={{ uri: createImageUrl(image.path) }} style={{ width, height }} className="object-cover" />
+          <Image
+            source={{ uri: createImageUrl(image.path) }}
+            style={{ width, height }}
+            className={merge("object-cover", imageClassName)}
+          />
         )}
       />
       <View className="absolute bottom-2 right-2 rounded bg-gray-800/70 p-1">

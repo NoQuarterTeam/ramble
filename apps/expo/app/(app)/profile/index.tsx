@@ -26,7 +26,7 @@ export function ProfileScreen() {
   const utils = api.useContext()
 
   const handleLogout = async () => {
-    utils.auth.me.setData(undefined, null)
+    utils.user.me.setData(undefined, null)
     await AsyncStorage.removeItem(AUTH_TOKEN)
   }
   if (!me)

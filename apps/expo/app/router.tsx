@@ -19,6 +19,7 @@ export type ScreenParamsList = {
   ListsLayout: undefined
   ListsScreen: undefined
   NewListScreen: undefined
+  EditListScreen: { id: string }
 
   // SHARED
   SpotDetailScreen: { id: string }
