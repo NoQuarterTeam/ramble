@@ -1,6 +1,7 @@
-import { ModalView } from "../../../components/ModalView"
+import { ScrollView } from "react-native"
 
-import { RouterInputs, api } from "../../../lib/api"
+import { ModalView } from "../../../components/ModalView"
+import { api, type RouterInputs } from "../../../lib/api"
 import { useMe } from "../../../lib/hooks/useMe"
 import { useRouter } from "../../router"
 import { ListForm } from "../shared/lists/[id]/ListForm"
@@ -21,7 +22,9 @@ export function NewListScreen() {
 
   return (
     <ModalView title="New list">
-      <ListForm onCreate={handleSubmit} isLoading={isLoading} error={error} />
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+        <ListForm onCreate={handleSubmit} isLoading={isLoading} error={error} />
+      </ScrollView>
     </ModalView>
   )
 }

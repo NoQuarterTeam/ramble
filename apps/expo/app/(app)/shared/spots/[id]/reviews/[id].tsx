@@ -28,7 +28,7 @@ export function ReviewDetailScreen() {
 
   return (
     <ModalView title={`Edit review for ${review?.spot?.name}`}>
-      <ScrollView contentContainerStyle={{ minHeight: "100%" }} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
         {reviewLoading ? null : !review ? (
           <Text>Review not found</Text>
         ) : (

@@ -1,11 +1,12 @@
 import { FormProvider } from "react-hook-form"
 
 import { type List } from "@ramble/database/types"
+
 import { Button } from "../../../../../components/Button"
 import { FormError } from "../../../../../components/FormError"
 import { FormInput } from "../../../../../components/FormInput"
-import { RouterInputs } from "../../../../../lib/api"
-import { ApiError, useForm } from "../../../../../lib/hooks/useForm"
+import { type RouterInputs } from "../../../../../lib/api"
+import { type ApiError, useForm } from "../../../../../lib/hooks/useForm"
 
 type UpdateSubmit = {
   list: Pick<List, "name" | "description">

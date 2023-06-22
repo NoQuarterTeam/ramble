@@ -7,8 +7,8 @@ import { type Review } from "@ramble/database/types"
 import { Button } from "../../../../../../components/Button"
 import { FormError } from "../../../../../../components/FormError"
 import { FormInput, FormInputError } from "../../../../../../components/FormInput"
-import { ApiError } from "../../../../../../lib/hooks/useForm"
-import { RouterInputs } from "../../../../../../lib/api"
+import { type RouterInputs } from "../../../../../../lib/api"
+import { type ApiError } from "../../../../../../lib/hooks/useForm"
 
 type UpdateSubmit = {
   review: Pick<Review, "rating" | "description">

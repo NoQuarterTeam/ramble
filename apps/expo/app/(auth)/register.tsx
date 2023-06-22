@@ -17,7 +17,7 @@ export function RegisterScreen() {
   const { mutate, error, isLoading } = api.auth.register.useMutation({
     onSuccess: async (data) => {
       await AsyncStorage.setItem(AUTH_TOKEN, data.token)
-      queryClient.auth.me.setData(undefined, data.user)
+      queryClient.user.me.setData(undefined, data.user)
       if (navigation.canGoBack()) {
         navigation.goBack()
       } else {
@@ -38,7 +38,7 @@ export function RegisterScreen() {
     <ModalView title="Register">
       <KeyboardAvoidingView>
         <FormProvider {...form}>
-          <ScrollView className="h-full">
+          <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
             <FormInput name="email" label="Email" error={error} />
             <FormInput name="password" secureTextEntry label="Password" error={error} />
             <FormInput name="username" label="Username" error={error} />

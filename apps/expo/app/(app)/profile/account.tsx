@@ -25,7 +25,7 @@ export function AccountScreen() {
   const utils = api.useContext()
   const { mutate, isLoading, error } = api.user.update.useMutation({
     onSuccess: (data) => {
-      utils.auth.me.setData(undefined, data)
+      utils.user.me.setData(undefined, data)
       toast({ title: "Account updated." })
     },
   })
@@ -35,7 +35,7 @@ export function AccountScreen() {
   return (
     <ScreenView title="Account">
       <FormProvider {...form}>
-        <ScrollView contentContainerStyle={{ minHeight: "100%" }} showsVerticalScrollIndicator={false}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
           <FormInput name="firstName" label="First name" error={error} />
           <FormInput name="lastName" label="Last name" error={error} />
           <FormInput autoCapitalize="none" name="email" label="Email" error={error} />

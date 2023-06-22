@@ -2,8 +2,8 @@ import { View, type ViewProps } from "react-native"
 
 import { merge } from "@ramble/shared"
 
+import { type ApiError } from "../lib/hooks/useForm"
 import { Text } from "./Text"
-import { ApiError } from "../lib/hooks/useForm"
 
 interface Props extends ViewProps {
   error?: ApiError

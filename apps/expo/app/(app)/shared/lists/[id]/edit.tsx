@@ -1,11 +1,11 @@
 import { ScrollView, View } from "react-native"
+
+import { DeleteButton } from "../../../../../components/DeleteButton"
 import { ModalView } from "../../../../../components/ModalView"
 import { Text } from "../../../../../components/Text"
 import { api } from "../../../../../lib/api"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { useParams, useRouter } from "../../../../router"
-
-import { DeleteButton } from "../../../../../components/DeleteButton"
 import { ListForm } from "./ListForm"
 
 export function EditListScreen() {

@@ -22,13 +22,13 @@ import { api, TRPCProvider } from "../lib/api"
 import { useCheckExpoUpdates } from "../lib/hooks/useCheckExpoUpdates"
 import { useMe } from "../lib/hooks/useMe"
 import { AppLayout } from "./(app)/_layout"
+import { NewListScreen } from "./(app)/lists/new"
+import { EditListScreen } from "./(app)/shared/lists/[id]/edit"
 import { ReviewDetailScreen } from "./(app)/shared/spots/[id]/reviews/[id]"
 import { NewReviewScreen } from "./(app)/shared/spots/[id]/reviews/new"
 import { SaveScreen } from "./(app)/shared/spots/[id]/save"
 import { AuthLayout } from "./(auth)/_layout"
 import { type ScreenParamsList } from "./router"
-import { NewListScreen } from "./(app)/lists/new"
-import { EditListScreen } from "./(app)/shared/lists/[id]/edit"
 
 enableScreens()
 

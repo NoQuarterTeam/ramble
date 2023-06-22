@@ -2,14 +2,14 @@ import { TouchableOpacity, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import { ChevronLeft, Edit } from "lucide-react-native"
 
+import { Button } from "../../../../../components/Button"
 import { Heading } from "../../../../../components/Heading"
 import { Spinner } from "../../../../../components/Spinner"
 import { SpotItem } from "../../../../../components/SpotItem"
 import { Text } from "../../../../../components/Text"
 import { api } from "../../../../../lib/api"
-import { useParams, useRouter } from "../../../../router"
 import { useMe } from "../../../../../lib/hooks/useMe"
-import { Button } from "../../../../../components/Button"
+import { useParams, useRouter } from "../../../../router"
 
 export function ListDetailScreen() {
   const { params } = useParams<"ListDetailScreen">()

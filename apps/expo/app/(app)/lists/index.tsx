@@ -1,5 +1,7 @@
 import { View } from "react-native"
+import { TouchableOpacity } from "react-native-gesture-handler"
 import { FlashList } from "@shopify/flash-list"
+import { PlusCircle } from "lucide-react-native"
 
 import { Heading } from "../../../components/Heading"
 import { ListItem } from "../../../components/ListItem"
@@ -7,8 +9,6 @@ import { LoginPlaceholder } from "../../../components/LoginPlaceholder"
 import { Text } from "../../../components/Text"
 import { api } from "../../../lib/api"
 import { useMe } from "../../../lib/hooks/useMe"
-import { TouchableOpacity } from "react-native-gesture-handler"
-import { PlusCircle } from "lucide-react-native"
 import { useRouter } from "../../router"
 
 export function ListsScreen() {

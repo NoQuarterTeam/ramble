@@ -1,6 +1,5 @@
 import { type FieldValues, useForm as useRForm, type UseFormProps } from "react-hook-form"
-
-import { TRPCClientErrorLike } from "@trpc/client"
+import { type TRPCClientErrorLike } from "@trpc/client"
 
 export function useForm<TFieldValues extends FieldValues = FieldValues, TContext = unknown>(
   props: UseFormProps<TFieldValues, TContext>,

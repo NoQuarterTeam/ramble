@@ -20,7 +20,7 @@ export function LoginScreen() {
   const { mutate, isLoading, error } = api.auth.login.useMutation({
     onSuccess: async (data) => {
       await AsyncStorage.setItem(AUTH_TOKEN, data.token)
-      queryClient.auth.me.setData(undefined, data.user)
+      queryClient.user.me.setData(undefined, data.user)
       if (navigation.canGoBack()) {
         navigation.goBack()
       } else {
@@ -38,7 +38,7 @@ export function LoginScreen() {
     <ModalView title="Login">
       <KeyboardAvoidingView>
         <FormProvider {...form}>
-          <ScrollView className="h-full">
+          <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
             <FormInput autoCapitalize="none" name="email" label="Email" error={error} />
             <FormInput autoCapitalize="none" name="password" secureTextEntry label="Password" error={error} />
             <Button className="mb-1" isLoading={isLoading} disabled={isLoading} onPress={onSubmit}>

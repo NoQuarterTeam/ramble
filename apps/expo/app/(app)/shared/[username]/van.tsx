@@ -1,5 +1,5 @@
-import { useLocalSearchParams } from "expo-router"
 import { View } from "react-native"
+import { useLocalSearchParams } from "expo-router"
 
 import { ImageCarousel } from "../../../../components/ImageCarousel"
 import { Spinner } from "../../../../components/Spinner"

@@ -15,7 +15,7 @@ interface Props {
 export function LoginPlaceholder(props: Props) {
   const { push } = useRouter()
   return (
-    <ScrollView className="h-full">
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
       <View className="space-y-4 px-4 pt-20">
         <View className="space-y-6 ">
           <View>

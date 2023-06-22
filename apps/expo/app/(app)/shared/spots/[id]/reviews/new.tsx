@@ -24,7 +24,7 @@ export function NewReviewScreen() {
 
   return (
     <ModalView title={`New review for ${spot?.name}`}>
-      <ScrollView contentContainerStyle={{ minHeight: "100%" }} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
         <Text className="mt-4 text-xl">Be nice, be honest</Text>
         <ReviewForm isLoading={isLoading} error={error} onCreate={mutate} spotId={spotId} />
       </ScrollView>

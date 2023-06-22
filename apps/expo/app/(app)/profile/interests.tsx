@@ -23,7 +23,7 @@ export function InterestsScreen() {
   const utils = api.useContext()
   const { mutate, error } = api.user.update.useMutation({
     onSuccess: (data) => {
-      utils.auth.me.setData(undefined, data)
+      utils.user.me.setData(undefined, data)
       toast({ title: "Interests updated." })
     },
   })
@@ -35,7 +35,7 @@ export function InterestsScreen() {
 
   return (
     <ScreenView title="Interests">
-      <ScrollView contentContainerStyle={{ minHeight: "100%" }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
         <InterestSelector
           onToggle={() => onToggle("isClimber")}
           Icon={Mountain}

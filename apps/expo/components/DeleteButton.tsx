@@ -1,7 +1,9 @@
-import { merge } from "@ramble/shared"
-import { TouchableOpacity, TouchableOpacityProps } from "react-native"
-import { Spinner } from "./Spinner"
+import { TouchableOpacity, type TouchableOpacityProps } from "react-native"
 import { Trash2 } from "lucide-react-native"
+
+import { merge } from "@ramble/shared"
+
+import { Spinner } from "./Spinner"
 
 interface Props extends TouchableOpacityProps {
   isLoading?: boolean
