@@ -7,7 +7,7 @@
       "channel": "development"
     },
     "preview": {
-      "channel": "development",
+      "channel": "preview",
       "distribution": "internal"
     },
     "staging": {
