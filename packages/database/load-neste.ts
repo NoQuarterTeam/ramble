@@ -62,8 +62,8 @@ async function getCards(page: puppeteer.Page) {
 
       currentData.push({
         ...spot,
-        latitude: json.features[0].center[0],
-        longitude: json.features[0].center[1],
+        longitude: json.features[0].center[0],
+        latitude: json.features[0].center[1],
       })
 
       fs.writeFileSync("./neste.json", JSON.stringify(currentData, null, 2))

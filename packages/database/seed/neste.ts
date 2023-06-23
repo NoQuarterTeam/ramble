@@ -6,10 +6,8 @@ export async function main() {
 
   await Promise.all(
     data
-      .slice(0, 1)
       .filter((s) => !!s.latitude && !!s.longitude)
       .map(async (spot) => {
-        console.log(spot)
         await prisma.spot
           .upsert({
             where: { nesteId: spot.name },
@@ -34,12 +32,6 @@ export async function main() {
               longitude: spot.longitude,
               name: spot.name,
               address: spot.address,
-              images: {
-                create: {
-                  creatorId: admin.id,
-                  path: spot.imageUrl,
-                },
-              },
             },
           })
           .catch(console.log)
