@@ -17,6 +17,8 @@ import { Layer, Source } from "react-map-gl"
 import { Map, Marker } from "react-map-gl"
 import { useTheme } from "~/lib/theme"
 import type { directionsLoader } from "../api+/mapbox+/directions"
+import { type SerializeFrom } from "@remix-run/node"
+import { SPOTS } from "~/lib/spots"
 
 export default function PlanTrip() {
   const theme = useTheme()
@@ -51,7 +53,8 @@ export default function PlanTrip() {
   }
 
   const directionsFetcher = useFetcher<typeof directionsLoader>()
-
+  const directions = directionsFetcher.data?.directions
+  const spots = directionsFetcher?.data?.foundSpots
   React.useEffect(() => {
     if (startCoords && !endCoords) {
       mapRef.current?.flyTo({ center: startCoords, duration: 1000, padding: 50 })
@@ -67,6 +70,34 @@ export default function PlanTrip() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startCoords, endCoords])
+
+  const markers = React.useMemo(
+    () =>
+      spots?.map((spot, i) => (
+        <SpotMarker
+          spot={spot}
+          key={i}
+          onClick={(e) => {
+            // e.originalEvent.stopPropagation()
+            // if (!point.properties.cluster && point.properties.id) {
+            //   navigate(`/map/${point.properties.id}${window.location.search}`)
+            // }
+            // const center = point.geometry.coordinates as LngLatLike
+            // const currentZoom = mapRef.current?.getZoom()
+            // const zoom = point.properties.cluster ? Math.min((currentZoom || 5) + 2, 14) : currentZoom
+            // mapRef.current?.flyTo({
+            //   center,
+            //   duration: 1000,
+            //   padding: 50,
+            //   zoom,
+            //   offset: point.properties.cluster ? [0, 0] : [250, 0],
+            // })
+          }}
+        />
+      )),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [spots],
+  )
 
   return (
     <PageContainer>
@@ -176,8 +207,8 @@ export default function PlanTrip() {
                 : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
             }
           >
-            {directionsFetcher.data && (
-              <Source id="directions" type="geojson" data={directionsFetcher.data.routes[0].geometry}>
+            {directions && (
+              <Source id="directions" type="geojson" data={directions.routes[0].geometry}>
                 <Layer id="line" type="line" paint={{ "line-color": colors.blue[500], "line-width": 4 }} />
               </Source>
             )}
@@ -195,9 +226,35 @@ export default function PlanTrip() {
                 </div>
               </Marker>
             )}
+            {markers}
           </Map>
+          {directionsFetcher.state === "loading" && (
+            <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center">
+              <div className="sq-10 flex items-center justify-center rounded-md bg-white dark:bg-gray-700">
+                <Spinner />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </PageContainer>
+  )
+}
+
+interface MarkerProps {
+  onClick: (e: mapboxgl.MapboxEvent<MouseEvent>) => void
+  spot: SerializeFrom<typeof directionsLoader>["foundSpots"][number]
+}
+function SpotMarker(props: MarkerProps) {
+  const Icon = SPOTS[props.spot.type].Icon
+  return (
+    <Marker onClick={props.onClick} anchor="bottom" longitude={props.spot.longitude} latitude={props.spot.latitude}>
+      <div className="relative">
+        <div className="sq-8 bg-primary-600 dark:bg-primary-700 border-primary-100 dark:border-primary-600 flex cursor-pointer items-center justify-center rounded-full border shadow-md transition-transform hover:scale-110">
+          {Icon && <Icon className="sq-4 text-white" />}
+        </div>
+        <div className="sq-3 bg-primary-600 dark:bg-primary-700 absolute -bottom-[3px] left-1/2 -z-[1] -translate-x-1/2 rotate-45 shadow" />
+      </div>
+    </Marker>
   )
 }

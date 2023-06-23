@@ -1,6 +1,10 @@
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
+import * as turf from "@turf/helpers"
+import buffer from "@turf/buffer"
+import booleanWithin from "@turf/boolean-point-in-polygon"
 import { cacheHeader } from "pretty-cache-header"
+import { db } from "~/lib/db.server"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const url = new URL(request.url)
@@ -15,9 +19,20 @@ export const loader = async ({ request }: LoaderArgs) => {
 
   const jsonResponse = (await res.json()) as Directions
 
+  const linestring = turf.lineString(jsonResponse.routes[0].geometry.coordinates)
+  const buffered = buffer(linestring, 75, { units: "kilometers" })
+  const spots = await db.spot.findMany({ select: { id: true, latitude: true, longitude: true } })
+
+  const spotsWithinBuffer = spots.filter((spot) => {
+    const point = turf.point([spot.longitude, spot.latitude])
+    return booleanWithin(point, buffered)
+  })
+
+  const foundSpots = await db.spot.findMany({ where: { id: { in: spotsWithinBuffer.map((spot) => spot.id) } } })
+
   const directions = jsonResponse
 
-  return json(directions || "Unknown address", {
+  return json({ directions, foundSpots } || "Unknown address", {
     headers: {
       "Cache-Control": cacheHeader({
         public: true,

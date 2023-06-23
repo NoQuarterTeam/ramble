@@ -32,6 +32,8 @@
     "@remix-run/serve": "1.17.1",
     "@trpc/server": "^10.28.1",
     "@turf/bbox": "^6.5.0",
+    "@turf/boolean-point-in-polygon": "^6.5.0",
+    "@turf/buffer": "^6.5.0",
     "@turf/center": "^6.5.0",
     "@turf/helpers": "^6.5.0",
     "@vercel/remix": "1.17.0",
