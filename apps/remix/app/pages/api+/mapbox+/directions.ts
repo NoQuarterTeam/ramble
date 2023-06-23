@@ -20,7 +20,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   const jsonResponse = (await res.json()) as Directions
 
   const linestring = turf.lineString(jsonResponse.routes[0].geometry.coordinates)
-  const buffered = buffer(linestring, 75, { units: "kilometers" })
+  const buffered = buffer(linestring, 35, { units: "kilometers" })
   const spots = await db.spot.findMany({ select: { id: true, latitude: true, longitude: true } })
 
   const spotsWithinBuffer = spots.filter((spot) => {
