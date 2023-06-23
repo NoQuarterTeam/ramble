@@ -20,7 +20,7 @@ interface Props {
 
 export function SpotItem({ spot }: Props) {
   return (
-    <Link to={`/spots/${spot.id}`} key={spot.id} className="flex items-center space-x-2 hover:opacity-70">
+    <Link to={`/spots/${spot.id}`} className="flex items-center space-x-2 hover:opacity-70">
       {spot.image ? (
         <img
           alt="spot"
@@ -38,8 +38,8 @@ export function SpotItem({ spot }: Props) {
       <div>
         <p className="line-clamp-2 text-xl">{spot.name}</p>
         {spot.rating && (
-          <div className="flex space-x-1">
-            <Star className="sq-5" />
+          <div className="flex items-center space-x-1">
+            <Star className="sq-4" />
             <p>{spot.rating === null ? "Not rated" : spot.rating}</p>
           </div>
         )}
