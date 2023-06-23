@@ -10,15 +10,12 @@ export const loader = async ({ request }: LoaderArgs) => {
   const endLat = url.searchParams.get("endLat")
 
   const res = await fetch(
-    `https://api.mapbox.com/directions/v5/mapbox/driving/${startLng},${startLat};${endLng},${endLat}?access_token=pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw`,
+    `https://api.mapbox.com/directions/v5/mapbox/driving/${startLng},${startLat};${endLng},${endLat}?alternatives=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw`,
   )
 
-  const jsonResponse = (await res.json()) as any
+  const jsonResponse = (await res.json()) as Directions
 
-  console.log(jsonResponse)
-
-  return []
-  const directions = jsonResponse.features.find((feature) => feature.place_type.includes("address"))?.place_name
+  const directions = jsonResponse
 
   return json(directions || "Unknown address", {
     headers: {
@@ -34,3 +31,15 @@ export const loader = async ({ request }: LoaderArgs) => {
 }
 
 export const directionsLoader = loader
+
+export interface Directions {
+  routes: Route[]
+}
+
+export type Route = {
+  distance: number
+  duration: number
+  geometry: { coordinates: [number, number][]; type: "LineString" }
+  // legs: [Object]
+  weight: number
+}

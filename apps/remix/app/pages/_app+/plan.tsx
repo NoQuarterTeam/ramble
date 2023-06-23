@@ -1,30 +1,22 @@
-import * as React from "react"
-import type { ActionArgs, LoaderArgs } from "@remix-run/node"
-import { json } from "@remix-run/node"
 import { useFetcher } from "@remix-run/react"
 import bbox from "@turf/bbox"
 import * as turf from "@turf/helpers"
+import colors from "@ramble/tailwind-config/src/colors"
 import { CircleDot, MapPin } from "lucide-react"
+import * as React from "react"
 import useOnClickOutside from "use-onclickoutside"
 
-import { useDisclosure } from "@ramble/shared"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE, useDisclosure } from "@ramble/shared"
 import { Button, Input, Spinner } from "@ramble/ui"
 
 import { PageContainer } from "../../components/PageContainer"
 import type { locationSearchLoader } from "../api+/mapbox+/location-search"
 
 import type { LngLatLike, MapRef } from "react-map-gl"
+import { Layer, Source } from "react-map-gl"
 import { Map, Marker } from "react-map-gl"
 import { useTheme } from "~/lib/theme"
-// import { Autocomplete } from "./components/Autocomplete"
-
-export const loader = async ({ request }: LoaderArgs) => {
-  return json(null)
-}
-
-export const action = async ({ request }: ActionArgs) => {
-  //
-}
+import type { directionsLoader } from "../api+/mapbox+/directions"
 
 export default function PlanTrip() {
   const theme = useTheme()
@@ -58,7 +50,7 @@ export default function PlanTrip() {
     destinationFetcher.load(`/api/mapbox/location-search?search=${query}`)
   }
 
-  const directionsFetcher = useFetcher()
+  const directionsFetcher = useFetcher<typeof directionsLoader>()
 
   React.useEffect(() => {
     if (startCoords && !endCoords) {
@@ -68,7 +60,7 @@ export default function PlanTrip() {
     } else if (startCoords && endCoords) {
       const line = turf.lineString([startCoords, endCoords])
       const bounds = bbox(line) as unknown as LngLatLike
-      mapRef.current?.fitBounds(bounds, { padding: 50 })
+      mapRef.current?.fitBounds(bounds, { padding: 100 })
       directionsFetcher.load(
         `/api/mapbox/directions?startLng=${startCoords[0]}&startLat=${startCoords[1]}&endLng=${endCoords[0]}&endLat=${endCoords[1]}&`,
       )
@@ -176,7 +168,7 @@ export default function PlanTrip() {
             // onMoveEnd={onMove}
             ref={mapRef}
             style={{ height: "100%", width: "100%" }}
-            // initialViewState={initialViewState}
+            initialViewState={{ latitude: INITIAL_LATITUDE, longitude: INITIAL_LONGITUDE, zoom: 3 }}
             attributionControl={false}
             mapStyle={
               theme === "dark"
@@ -184,6 +176,11 @@ export default function PlanTrip() {
                 : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
             }
           >
+            {directionsFetcher.data && (
+              <Source id="directions" type="geojson" data={directionsFetcher.data.routes[0].geometry}>
+                <Layer id="line" type="line" paint={{ "line-color": colors.blue[500], "line-width": 4 }} />
+              </Source>
+            )}
             {startCoords && (
               <Marker longitude={startCoords[0]} latitude={startCoords[1]}>
                 <div className="sq-5 flex items-center  justify-center rounded-full bg-green-500">
