@@ -107,7 +107,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
             required
             name="description"
             label="Description"
-            defaultValue={spot?.description}
+            defaultValue={spot?.description || ""}
             input={<Textarea rows={5} />}
           />
 

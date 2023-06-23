@@ -84,7 +84,7 @@ export function SpotDetailScreen() {
               systemFonts={fonts}
               baseStyle={{ fontSize: 16, fontFamily: "poppins400", color: isDark ? "white" : "black" }}
               contentWidth={width}
-              source={{ html: spot.description }}
+              source={{ html: spot.description || "" }}
             />
 
             <Text className="text-sm">{spot.address}</Text>

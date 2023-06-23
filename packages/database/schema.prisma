@@ -97,7 +97,7 @@ model Spot {
   id          String   @id @default(uuid())
   name        String
   type        SpotType
-  description String   @db.LongText
+  description String?  @db.LongText
   address     String
   latitude    Float
   longitude   Float

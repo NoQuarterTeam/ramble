@@ -1,11 +1,11 @@
 import { render } from "@react-email/render"
 import nodemailer from "nodemailer"
-import { type SendEmailData } from "resend/build/src/interfaces"
 
 import { IS_PRODUCTION } from "./config.server"
 import { resend } from "./resend.server"
+import type { CreateEmailOptions } from "resend/build/src/emails/interfaces"
 
-type Props = SendEmailData & { react: NonNullable<SendEmailData["react"]> }
+type Props = CreateEmailOptions & { react: NonNullable<CreateEmailOptions["react"]> }
 class Mailer {
   async send(args: Props) {
     try {

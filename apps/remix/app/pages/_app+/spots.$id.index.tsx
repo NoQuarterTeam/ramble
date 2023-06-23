@@ -158,7 +158,7 @@ export default function SpotDetail() {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="space-y-2">
             <h3 className="text-xl font-medium">Description</h3>
-            <div dangerouslySetInnerHTML={{ __html: spot.description }} />
+            <div dangerouslySetInnerHTML={{ __html: spot.description || "" }} />
             <p className="text-sm">{spot.address}</p>
           </div>
 

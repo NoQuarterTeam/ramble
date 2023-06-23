@@ -1,6 +1,7 @@
 import { Await, isRouteErrorResponse, Link, useLoaderData, useNavigate, useRouteError } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
-import { defer } from "@vercel/remix"
+// TODO: change to vercel
+import { defer } from "@remix-run/node"
 import { BadgeX, Frown, Star, Verified } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 import * as React from "react"
@@ -114,7 +115,7 @@ export default function SpotPreview() {
                   />
                 ))}
               </div>
-              <div className="line-clamp-6 text-sm" dangerouslySetInnerHTML={{ __html: spot.description }} />
+              <div className="line-clamp-6 text-sm" dangerouslySetInnerHTML={{ __html: spot.description || "" }} />
               <p className="text-sm">{spot.address}</p>
               <div className="flex justify-end">
                 <LinkButton variant="link" to={`/spots/${spot.id}`}>
