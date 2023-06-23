@@ -31,7 +31,7 @@ async function getCards(page: puppeteer.Page) {
 
     // use cheerio to return the name based on the class neste-map-item-title which is a child of a child of the card
     const name = $(card).find(".neste-map-item-title span").text()
-    const address = $(card).find(".neste-map-item-info").text()
+    const address = $(card).find(".neste-map-item-info").text().trim()
     const carIcon = $(card).find(".neste-map-list-icon-car-show")
 
     if (!id || !name || !address || !carIcon) return

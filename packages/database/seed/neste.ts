@@ -6,37 +6,43 @@ export async function main() {
 
   await Promise.all(
     data
-      .filter((s) => s.latitude || s.longitude)
+      .slice(0, 1)
+      .filter((s) => !!s.latitude && !!s.longitude)
       .map(async (spot) => {
-        await prisma.spot.upsert({
-          where: { nesteId: spot.name },
-          create: {
-            nesteId: spot.name,
-            latitude: spot.latitude || 0,
-            longitude: spot.longitude || 0,
-            name: spot.name,
-            address: spot.address,
-            images: {
-              create: {
-                creatorId: admin.id,
-                path: spot.imageUrl,
+        console.log(spot)
+        await prisma.spot
+          .upsert({
+            where: { nesteId: spot.name },
+            create: {
+              nesteId: spot.name,
+              latitude: spot.latitude || 0,
+              longitude: spot.longitude || 0,
+              name: spot.name,
+              address: spot.address,
+              images: {
+                create: {
+                  creatorId: admin.id,
+                  path: spot.imageUrl,
+                },
+              },
+              type: "GAS_STATION",
+              creator: { connect: { id: admin.id } },
+            },
+            update: {
+              nesteId: spot.name,
+              latitude: spot.latitude,
+              longitude: spot.longitude,
+              name: spot.name,
+              address: spot.address,
+              images: {
+                create: {
+                  creatorId: admin.id,
+                  path: spot.imageUrl,
+                },
               },
             },
-          },
-          update: {
-            nesteId: spot.name,
-            latitude: spot.latitude,
-            longitude: spot.longitude,
-            name: spot.name,
-            address: spot.address,
-            images: {
-              create: {
-                creatorId: admin.id,
-                path: spot.imageUrl,
-              },
-            },
-          },
-        })
+          })
+          .catch(console.log)
       }),
   )
 }
