@@ -164,7 +164,7 @@ export function SpotsMapScreen() {
         onMapIdle={onMapMove}
         onPress={() => setActiveSpotId(null)}
         ref={mapRef}
-        pitchEnabled={false}
+        // pitchEnabled={false}
         compassFadeWhenNorth
         scaleBarEnabled={false}
         styleURL={
