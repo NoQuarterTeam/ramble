@@ -7,10 +7,10 @@ import { ChevronRight, type LucideIcon, ToggleRight, Truck, User } from "lucide-
 
 import { createImageUrl } from "@ramble/shared"
 
-import { Button } from "../../../components/Button"
-import { Heading } from "../../../components/Heading"
 import { LoginPlaceholder } from "../../../components/LoginPlaceholder"
-import { Text } from "../../../components/Text"
+import { Button } from "../../../components/ui/Button"
+import { Heading } from "../../../components/ui/Heading"
+import { Text } from "../../../components/ui/Text"
 import { api, AUTH_TOKEN } from "../../../lib/api"
 import { VERSION } from "../../../lib/config"
 import { useMe } from "../../../lib/hooks/useMe"

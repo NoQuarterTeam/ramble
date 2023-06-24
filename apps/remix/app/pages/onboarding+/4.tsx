@@ -4,15 +4,14 @@ import type { LoaderArgs } from "@vercel/remix"
 import { json, redirect } from "@vercel/remix"
 import { z } from "zod"
 
-import { Textarea } from "@ramble/ui"
-
 import { Form, FormButton, FormError, FormField, ImageField } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
+import { Textarea } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { formError, FormNumber, NullableFormString, validateFormData } from "~/lib/form"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
-import Footer from "./components/Footer"
+import { Footer } from "./components/Footer"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const user = await getCurrentUser(request, {

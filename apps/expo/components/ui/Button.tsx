@@ -62,6 +62,7 @@ export const Button = React.forwardRef(function _Button(
   ref,
 ) {
   const colorScheme = useColorScheme()
+  const isDark = colorScheme === "dark"
   return (
     <TouchableOpacity
       ref={ref as React.LegacyRef<TouchableOpacity>}
@@ -78,7 +79,17 @@ export const Button = React.forwardRef(function _Button(
       {isLoading ? (
         <Spinner
           size={size === "md" ? 20 : size === "lg" ? 25 : 15}
-          color={variant === "primary" || variant === "destructive" ? "white" : colorScheme === "dark" ? "white" : "black"}
+          color={
+            variant === "primary"
+              ? isDark
+                ? "black"
+                : "white"
+              : variant === "destructive"
+              ? "white"
+              : isDark
+              ? "white"
+              : "black"
+          }
         />
       ) : (
         <>

@@ -1,5 +1,6 @@
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
+
 import { db } from "~/lib/db.server"
 import { requireUser } from "~/services/auth/auth.server"
 

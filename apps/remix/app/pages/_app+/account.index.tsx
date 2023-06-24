@@ -4,9 +4,9 @@ import { useLoaderData } from "@remix-run/react"
 import { z } from "zod"
 
 import { join } from "@ramble/shared"
-import { Checkbox, inputStyles, Textarea } from "@ramble/ui"
 
 import { Form, FormButton, FormField, ImageField } from "~/components/Form"
+import { Checkbox, inputStyles, Textarea } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { FormCheckbox, formError, NullableFormString, validateFormData } from "~/lib/form"
 import { redirect } from "~/lib/remix.server"

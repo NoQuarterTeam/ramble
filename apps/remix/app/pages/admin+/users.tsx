@@ -2,10 +2,10 @@ import { useLoaderData } from "@remix-run/react"
 import { json, type LoaderArgs, type SerializeFrom } from "@vercel/remix"
 
 import { type Prisma } from "@ramble/database/types"
-import { Tile } from "@ramble/ui"
 
 import { Search } from "~/components/Search"
 import { Column, Table } from "~/components/Table"
+import { Tile } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { getTableParams } from "~/lib/table"
 

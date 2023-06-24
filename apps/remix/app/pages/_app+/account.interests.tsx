@@ -2,40 +2,35 @@ import React from "react"
 import type { ActionArgs, LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
-import type { LucideIcon } from "lucide-react"
+import type { LucideProps } from "lucide-react"
 import { Bike, Dog, Footprints, Mountain, Waves } from "lucide-react"
 import { z } from "zod"
 import { zx } from "zodix"
 
-import { Button } from "@ramble/ui"
+import { userInterestFields } from "@ramble/shared"
 
 import { Form, FormButton, FormError } from "~/components/Form"
+import { Button, Icons } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const user = await getCurrentUser(request, {
-    isClimber: true,
-    isHiker: true,
-    isMountainBiker: true,
-    isPaddleBoarder: true,
-    isPetOwner: true,
-  })
+  const user = await getCurrentUser(request, userInterestFields)
   return json(user)
 }
 
 export const action = async ({ request }: ActionArgs) => {
   const user = await getCurrentUser(request, { id: true, van: { select: { id: true } } })
   const schema = z.object({
+    isSurfer: zx.BoolAsString,
     isClimber: zx.BoolAsString,
     isPetOwner: zx.BoolAsString,
     isMountainBiker: zx.BoolAsString,
     isPaddleBoarder: zx.BoolAsString,
     isHiker: zx.BoolAsString,
   })
-
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
 
@@ -51,6 +46,7 @@ export default function Interests() {
       <h1 className="text-3xl">Interests</h1>
 
       <div className="flex w-full flex-wrap gap-2 py-10 md:gap-4">
+        <InterestSelector field="isSurfer" Icon={Icons.Surf} label="Surfing" defaultValue={user.isSurfer} />
         <InterestSelector field="isClimber" Icon={Mountain} label="Climbing" defaultValue={user.isClimber} />
         <InterestSelector field="isMountainBiker" Icon={Bike} label="Mountain biking" defaultValue={user.isMountainBiker} />
         <InterestSelector field="isPaddleBoarder" Icon={Waves} label="Paddle Boarding" defaultValue={user.isPaddleBoarder} />
@@ -72,7 +68,7 @@ function InterestSelector({
 }: {
   label: string
   field: string
-  Icon: LucideIcon
+  Icon: (props: LucideProps) => JSX.Element
   defaultValue: boolean
 }) {
   const [isSelected, setIsSelected] = React.useState(defaultValue)
@@ -87,7 +83,7 @@ function InterestSelector({
       >
         {label}
       </Button>
-      {isSelected && <input type="hidden" name={field} value={String(isSelected)} />}
+      <input type="hidden" name={field} value={String(isSelected)} />
     </>
   )
 }

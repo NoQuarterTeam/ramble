@@ -1,12 +1,15 @@
+import Map, { Marker } from "react-map-gl"
 import { Form, Link, useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { BadgeX, Edit2, Share, Star, Trash, Verified } from "lucide-react"
 
-import Map, { Marker } from "react-map-gl"
-
 import type { SpotType } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
+
+import { FormButton } from "~/components/Form"
+import { LinkButton } from "~/components/LinkButton"
+import { PageContainer } from "~/components/PageContainer"
 import {
   AlertDialogCancel,
   AlertDialogContent,
@@ -16,15 +19,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
   Button,
-} from "@ramble/ui"
-
-import { FormButton } from "~/components/Form"
-import { LinkButton } from "~/components/LinkButton"
-import { PageContainer } from "~/components/PageContainer"
+} from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { notFound, redirect } from "~/lib/remix.server"
-import { SPOTS, canManageSpot } from "~/lib/spots"
+import { canManageSpot, SPOTS } from "~/lib/spots"
 import { useTheme } from "~/lib/theme"
 import { getCurrentUser } from "~/services/auth/auth.server"
 

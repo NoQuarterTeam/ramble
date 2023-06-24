@@ -1,8 +1,8 @@
 import { ScrollView, View } from "react-native"
 
-import { DeleteButton } from "../../../../../components/DeleteButton"
-import { ModalView } from "../../../../../components/ModalView"
-import { Text } from "../../../../../components/Text"
+import { DeleteButton } from "../../../../../components/ui/DeleteButton"
+import { ModalView } from "../../../../../components/ui/ModalView"
+import { Text } from "../../../../../components/ui/Text"
 import { api } from "../../../../../lib/api"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { useParams, useRouter } from "../../../../router"

@@ -4,9 +4,9 @@ import { Star } from "lucide-react-native"
 
 import { type Review } from "@ramble/database/types"
 
-import { Button } from "../../../../../../components/Button"
-import { FormError } from "../../../../../../components/FormError"
-import { FormInput, FormInputError } from "../../../../../../components/FormInput"
+import { Button } from "../../../../../../components/ui/Button"
+import { FormError } from "../../../../../../components/ui/FormError"
+import { FormInput, FormInputError } from "../../../../../../components/ui/FormInput"
 import { type RouterInputs } from "../../../../../../lib/api"
 import { type ApiError } from "../../../../../../lib/hooks/useForm"
 

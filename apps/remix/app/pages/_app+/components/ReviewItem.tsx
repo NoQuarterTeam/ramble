@@ -1,9 +1,12 @@
 import { Link, useFetcher } from "@remix-run/react"
 import type { SerializeFrom } from "@vercel/remix"
+import dayjs from "dayjs"
 import { Star } from "lucide-react"
 
 import type { Prisma } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
+
+import { LinkButton } from "~/components/LinkButton"
 import {
   AlertDialogCancel,
   AlertDialogContent,
@@ -14,14 +17,11 @@ import {
   AlertDialogTrigger,
   Avatar,
   Button,
-} from "@ramble/ui"
-
-import { LinkButton } from "~/components/LinkButton"
+} from "~/components/ui"
 import { FormAction } from "~/lib/form"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 
 import { Actions } from "../spots.$id.reviews.$reviewId"
-import dayjs from "dayjs"
 
 export const reviewItemSelectFields = {
   id: true,

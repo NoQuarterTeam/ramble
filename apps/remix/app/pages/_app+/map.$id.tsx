@@ -1,15 +1,15 @@
-import { Await, isRouteErrorResponse, Link, useLoaderData, useNavigate, useRouteError } from "@remix-run/react"
-import type { LoaderArgs } from "@vercel/remix"
+import * as React from "react"
 // TODO: change to vercel
 import { defer } from "@remix-run/node"
+import { Await, isRouteErrorResponse, Link, useLoaderData, useNavigate, useRouteError } from "@remix-run/react"
+import type { LoaderArgs } from "@vercel/remix"
 import { BadgeX, Frown, Star, Verified } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
-import * as React from "react"
 
 import { createImageUrl, merge } from "@ramble/shared"
-import { CloseButton, Spinner } from "@ramble/ui"
 
 import { LinkButton } from "~/components/LinkButton"
+import { CloseButton, Spinner } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 

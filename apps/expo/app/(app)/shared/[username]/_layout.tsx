@@ -1,8 +1,8 @@
 import { ScrollView, TouchableOpacity, View } from "react-native"
 import { ChevronLeft } from "lucide-react-native"
 
-import { Button } from "../../../../components/Button"
-import { Heading } from "../../../../components/Heading"
+import { Button } from "../../../../components/ui/Button"
+import { Heading } from "../../../../components/ui/Heading"
 import { UserProfile } from "../../../../components/UserProfile"
 import { useParams, useRouter } from "../../../router"
 import UsernameLists from "./lists"

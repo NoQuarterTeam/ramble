@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server"
 
 import { createTRPCRouter, protectedProcedure, publicProcedure, publicProfileProcedure } from "../trpc"
 import { updateSchema } from "../schemas/user"
+import { userInterestFields } from "@ramble/shared"
 
 export const userRouter = createTRPCRouter({
   me: publicProcedure.query(({ ctx }) => ctx.user),
@@ -14,11 +15,7 @@ export const userRouter = createTRPCRouter({
         firstName: true,
         lastName: true,
         avatar: true,
-        isMountainBiker: true,
-        isPetOwner: true,
-        isHiker: true,
-        isClimber: true,
-        isPaddleBoarder: true,
+        ...userInterestFields,
         bio: true,
         isProfilePublic: true,
       },

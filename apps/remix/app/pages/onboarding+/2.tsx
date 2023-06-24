@@ -1,28 +1,31 @@
+import * as React from "react"
 import type { ActionArgs } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json, redirect } from "@vercel/remix"
 import type { LucideIcon } from "lucide-react"
 import { Bike, Footprints, Mountain, Waves } from "lucide-react"
-import * as React from "react"
 import { z } from "zod"
 import { zx } from "zodix"
 
+import { userInterestFields } from "@ramble/shared"
+
 import { Form, FormButton, FormError } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
+import { Button, Icons } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
 
-import { Button } from "@ramble/ui"
-import Footer from "./components/Footer"
+import { Footer } from "./components/Footer"
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const user = await getCurrentUser(request, { isClimber: true, isHiker: true, isMountainBiker: true, isPaddleBoarder: true })
+  const user = await getCurrentUser(request, userInterestFields)
   return json(user)
 }
 
 const schema = z.object({
+  isSurfer: zx.BoolAsString,
   isClimber: zx.BoolAsString,
   isMountainBiker: zx.BoolAsString,
   isPaddleBoarder: zx.BoolAsString,
@@ -47,6 +50,7 @@ export default function Onboarding2() {
         <p className="opacity-70">Are you fat, basically</p>
       </div>
       <div className="flex w-full flex-wrap items-center justify-center gap-2 md:gap-4">
+        <InterestSelector field="isSurfer" Icon={Icons.Surf} label="Surfing" defaultValue={user.isClimber} />
         <InterestSelector field="isClimber" Icon={Mountain} label="Climbing" defaultValue={user.isClimber} />
         <InterestSelector field="isMountainBiker" Icon={Bike} label="Mountain biking" defaultValue={user.isMountainBiker} />
         <InterestSelector field="isPaddleBoarder" Icon={Waves} label="Paddle Boarding" defaultValue={user.isPaddleBoarder} />

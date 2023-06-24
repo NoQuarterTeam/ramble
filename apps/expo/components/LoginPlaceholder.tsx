@@ -2,9 +2,9 @@ import type * as React from "react"
 import { ScrollView, View } from "react-native"
 
 import { useRouter } from "../app/router"
-import { Button } from "./Button"
-import { Heading } from "./Heading"
-import { Text } from "./Text"
+import { Button } from "./ui/Button"
+import { Heading } from "./ui/Heading"
+import { Text } from "./ui/Text"
 
 interface Props {
   title: string

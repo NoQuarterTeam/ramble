@@ -4,7 +4,8 @@ import { SearchIcon, X } from "lucide-react"
 import queryString from "query-string"
 
 import { merge } from "@ramble/shared"
-import { IconButton, Input, type InputProps } from "@ramble/ui"
+
+import { IconButton, Input, type InputProps } from "~/components/ui"
 
 export function Search({ placeholder, name = "search", ...props }: InputProps) {
   const [params, setParams] = useSearchParams()

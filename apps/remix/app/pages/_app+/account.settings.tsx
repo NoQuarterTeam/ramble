@@ -1,9 +1,8 @@
 import type { ActionArgs, LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 
-import { Switch } from "@ramble/ui"
-
 import { Form, FormButton, FormField } from "~/components/Form"
+import { Switch } from "~/components/ui"
 import { redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 

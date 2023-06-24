@@ -1,9 +1,9 @@
 import { View } from "react-native"
 import { useLocalSearchParams } from "expo-router"
 
-import { ImageCarousel } from "../../../../components/ImageCarousel"
-import { Spinner } from "../../../../components/Spinner"
-import { Text } from "../../../../components/Text"
+import { ImageCarousel } from "../../../../components/ui/ImageCarousel"
+import { Spinner } from "../../../../components/ui/Spinner"
+import { Text } from "../../../../components/ui/Text"
 import { api } from "../../../../lib/api"
 import { width } from "../../../../lib/device"
 

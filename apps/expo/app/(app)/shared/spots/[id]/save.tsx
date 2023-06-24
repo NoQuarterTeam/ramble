@@ -3,8 +3,8 @@ import { FlashList } from "@shopify/flash-list"
 import { Heart } from "lucide-react-native"
 
 import { LoginPlaceholder } from "../../../../../components/LoginPlaceholder"
-import { ModalView } from "../../../../../components/ModalView"
-import { Text } from "../../../../../components/Text"
+import { ModalView } from "../../../../../components/ui/ModalView"
+import { Text } from "../../../../../components/ui/Text"
 import { api, type RouterOutputs } from "../../../../../lib/api"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { useParams } from "../../../../router"
@@ -38,7 +38,7 @@ interface Props {
   list: RouterOutputs["list"]["allByUserWithSavedSpots"][number]
 }
 
-export function ListItem({ list, spotId }: Props) {
+function ListItem({ list, spotId }: Props) {
   const utils = api.useContext()
   const { mutate } = api.list.saveToList.useMutation({
     onSuccess: () => {

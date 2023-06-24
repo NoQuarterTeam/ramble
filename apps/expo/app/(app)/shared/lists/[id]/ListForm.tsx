@@ -2,9 +2,9 @@ import { FormProvider } from "react-hook-form"
 
 import { type List } from "@ramble/database/types"
 
-import { Button } from "../../../../../components/Button"
-import { FormError } from "../../../../../components/FormError"
-import { FormInput } from "../../../../../components/FormInput"
+import { Button } from "../../../../../components/ui/Button"
+import { FormError } from "../../../../../components/ui/FormError"
+import { FormInput } from "../../../../../components/ui/FormInput"
 import { type RouterInputs } from "../../../../../lib/api"
 import { type ApiError, useForm } from "../../../../../lib/hooks/useForm"
 

@@ -9,8 +9,8 @@ import { createImageUrl } from "@ramble/shared"
 import { useRouter } from "../app/router"
 import { api } from "../lib/api"
 import { useMe } from "../lib/hooks/useMe"
-import { Button } from "./Button"
-import { Text } from "./Text"
+import { Button } from "./ui/Button"
+import { Text } from "./ui/Text"
 
 export function ReviewItem({
   review,

@@ -6,11 +6,11 @@ import { BadgeX, ChevronDown, ChevronLeft, Heart, Star, Verified } from "lucide-
 
 import { merge } from "@ramble/shared"
 
-import { Button } from "../../../../../components/Button"
-import { Heading } from "../../../../../components/Heading"
-import { ImageCarousel } from "../../../../../components/ImageCarousel"
 import { ReviewItem } from "../../../../../components/ReviewItem"
-import { Text } from "../../../../../components/Text"
+import { Button } from "../../../../../components/ui/Button"
+import { Heading } from "../../../../../components/ui/Heading"
+import { ImageCarousel } from "../../../../../components/ui/ImageCarousel"
+import { Text } from "../../../../../components/ui/Text"
 import { api } from "../../../../../lib/api"
 import { width } from "../../../../../lib/device"
 import { useMe } from "../../../../../lib/hooks/useMe"

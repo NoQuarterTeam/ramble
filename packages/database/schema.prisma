@@ -34,6 +34,7 @@ model User {
   isHiker         Boolean @default(false)
   isMountainBiker Boolean @default(false)
   isPaddleBoarder Boolean @default(false)
+  isSurfer        Boolean @default(false)
 
   // Relations
   createdSpots  Spot[]      @relation(name: "Creator")
@@ -87,6 +88,7 @@ enum SpotType {
   TIP
   SHOP
   CLIMBING
+  SURFING
   MOUNTAIN_BIKING
   GAS_STATION
   PADDLE_BOARDING

@@ -1,18 +1,17 @@
 import * as React from "react"
-
 import type { SerializeFrom } from "@vercel/remix"
 import { Star } from "lucide-react"
 
 import type { Review, Spot, SpotImage } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
-import { IconButton, Textarea } from "@ramble/ui"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
+import { LinkButton } from "~/components/LinkButton"
 import { PageContainer } from "~/components/PageContainer"
+import { IconButton, Textarea } from "~/components/ui"
 import { FormAction } from "~/lib/form"
 
 import { Actions } from "../spots.$id.reviews.$reviewId"
-import { LinkButton } from "~/components/LinkButton"
 
 interface Props {
   spot: SerializeFrom<Pick<Spot, "name"> & { images: Pick<SpotImage, "path">[] }>

@@ -25,8 +25,8 @@ import { json } from "@vercel/remix"
 import { Frown } from "lucide-react"
 
 import { join } from "@ramble/shared"
-import { Toaster } from "@ramble/ui"
 
+import { Toaster } from "~/components/ui"
 import appStyles from "~/styles/app.css"
 
 import { FlashMessage } from "./components/FlashMessage"

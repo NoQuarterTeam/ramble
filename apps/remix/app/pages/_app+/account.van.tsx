@@ -3,9 +3,8 @@ import { json } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 import { z } from "zod"
 
-import { Textarea } from "@ramble/ui"
-
 import { Form, FormButton, FormError, FormField, ImageField } from "~/components/Form"
+import { Textarea } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { formError, FormNumber, NullableFormString, validateFormData } from "~/lib/form"
 import { redirect } from "~/lib/remix.server"

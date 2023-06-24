@@ -8,6 +8,7 @@ export const userSchema = z.object({
   lastName: z.string().min(2),
   avatar: z.string().nullish(),
   isClimber: z.boolean(),
+  isSurfer: z.boolean(),
   isPaddleBoarder: z.boolean(),
   isHiker: z.boolean(),
   isPetOwner: z.boolean(),

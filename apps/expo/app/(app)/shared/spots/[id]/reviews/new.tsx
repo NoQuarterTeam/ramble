@@ -1,7 +1,7 @@
 import { ScrollView } from "react-native"
 
-import { ModalView } from "../../../../../../components/ModalView"
-import { Text } from "../../../../../../components/Text"
+import { ModalView } from "../../../../../../components/ui/ModalView"
+import { Text } from "../../../../../../components/ui/Text"
 import { api } from "../../../../../../lib/api"
 import { useParams, useRouter } from "../../../../../router"
 import { ReviewForm } from "./ReviewForm"

@@ -2,6 +2,8 @@ import { Link, useFetcher, useNavigate, useSubmit } from "@remix-run/react"
 import { Heart, LogOut, Menu, Moon, Plus, Settings, Sun, User } from "lucide-react"
 
 import { ClientOnly, createImageUrl } from "@ramble/shared"
+
+import { LinkButton } from "~/components/LinkButton"
 import {
   Avatar,
   Button,
@@ -11,9 +13,7 @@ import {
   DropdownMenuTrigger,
   IconButton,
   Tooltip,
-} from "@ramble/ui"
-
-import { LinkButton } from "~/components/LinkButton"
+} from "~/components/ui"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { useTheme } from "~/lib/theme"
 
@@ -28,7 +28,13 @@ export function Nav() {
   return (
     <div className="h-nav flex w-full items-center justify-between border-b border-solid border-gray-50 bg-white px-4 align-middle dark:border-gray-700 dark:bg-gray-800 md:px-8">
       <div className="flex items-center space-x-4">
-        <ClientOnly fallback={<div className="w-[70px]" />}>
+        <ClientOnly
+          fallback={
+            <Link to={`/map`} className="font-ribeye w-[70px] text-xl">
+              Ramble
+            </Link>
+          }
+        >
           <Link
             to={`/map${typeof window !== "undefined" ? window.location.search : ""}`}
             className="font-ribeye w-[70px] text-xl"
@@ -38,7 +44,13 @@ export function Nav() {
         </ClientOnly>
 
         <div className="hidden items-center md:flex">
-          <ClientOnly>
+          <ClientOnly
+            fallback={
+              <LinkButton variant="ghost" to={`/map`}>
+                Map
+              </LinkButton>
+            }
+          >
             <LinkButton variant="ghost" to={`/map${typeof window !== "undefined" ? window.location.search : ""}`}>
               Map
             </LinkButton>

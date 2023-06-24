@@ -6,10 +6,10 @@ import type { LucideIcon } from "lucide-react"
 import { Settings, ToggleRight, Truck, User } from "lucide-react"
 
 import { createImageUrl, merge } from "@ramble/shared"
-import { Avatar, Badge, buttonSizeStyles, buttonStyles } from "@ramble/ui"
 
 import { LinkButton } from "~/components/LinkButton"
 import { NavLink } from "~/components/NavLink"
+import { Avatar, Badge, buttonSizeStyles, buttonStyles } from "~/components/ui"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { PageContainer } from "../../components/PageContainer"

@@ -1,5 +1,5 @@
-import { ScreenView } from "../../../components/ScreenView"
-import { Text } from "../../../components/Text"
+import { ScreenView } from "../../../components/ui/ScreenView"
+import { Text } from "../../../components/ui/Text"
 
 export function VanScreen() {
   return (

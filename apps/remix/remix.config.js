@@ -24,7 +24,6 @@ module.exports = {
     "@ramble/emails",
     "@ramble/shared",
     "@ramble/tailwind-config",
-    "@ramble/ui",
     "axios",
     "decode-uri-component",
     "filter-obj",

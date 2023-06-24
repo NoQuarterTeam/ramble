@@ -3,7 +3,8 @@ import type { DropzoneOptions, FileRejection } from "react-dropzone"
 import { useDropzone } from "react-dropzone"
 
 import { useS3Upload } from "@ramble/shared"
-import { Spinner, useToast } from "@ramble/ui"
+
+import { Spinner, useToast } from "~/components/ui"
 
 interface Props {
   onSubmit: (key: string) => Promise<unknown> | unknown

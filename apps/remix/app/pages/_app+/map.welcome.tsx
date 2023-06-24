@@ -1,8 +1,7 @@
 import { useNavigate } from "@remix-run/react"
 
-import { Modal } from "@ramble/ui"
-
 import { LinkButton } from "~/components/LinkButton"
+import { Modal } from "~/components/ui"
 
 export default function Welcome() {
   const navigate = useNavigate()

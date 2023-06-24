@@ -1,14 +1,15 @@
-import { LinkButton } from "~/components/LinkButton"
-
-import { PageContainer } from "../components/PageContainer"
-import { db } from "~/lib/db.server"
+import { Link, useLoaderData } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
-import type { Spot, SpotImage } from "@ramble/database/types"
-import { Link, useLoaderData } from "@remix-run/react"
-
-import { createImageUrl } from "@ramble/shared"
 import { Camera, Star } from "lucide-react"
+
+import type { Spot, SpotImage } from "@ramble/database/types"
+import { createImageUrl } from "@ramble/shared"
+
+import { LinkButton } from "~/components/LinkButton"
+import { db } from "~/lib/db.server"
+
+import { PageContainer } from "../components/PageContainer"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const spots: Array<Pick<Spot, "id" | "name" | "address"> & { rating: number; image: SpotImage["path"] }> = await db.$queryRaw`

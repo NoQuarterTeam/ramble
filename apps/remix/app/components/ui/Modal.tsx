@@ -9,11 +9,13 @@ const ModalRoot = ModalPrimitive.Root
 
 const ModalTrigger = ModalPrimitive.Trigger
 
-const ModalPortal = ({ className, children, ...props }: ModalPrimitive.DialogPortalProps) => (
-  <ModalPrimitive.Portal className={merge(className)} {...props}>
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-4 sm:items-center sm:pt-0">{children}</div>
-  </ModalPrimitive.Portal>
-)
+function ModalPortal({ className, children, ...props }: ModalPrimitive.DialogPortalProps) {
+  return (
+    <ModalPrimitive.Portal className={merge(className)} {...props}>
+      <div className="fixed inset-0 z-50 flex items-start justify-center pt-4 sm:items-center sm:pt-0">{children}</div>
+    </ModalPrimitive.Portal>
+  )
+}
 ModalPortal.displayName = ModalPrimitive.Portal.displayName
 
 const ModalOverlay = React.forwardRef<
@@ -56,14 +58,14 @@ const ModalContent = React.forwardRef<
 ))
 ModalContent.displayName = ModalPrimitive.Content.displayName
 
-const ModalHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={merge("flex flex-col space-y-2 text-center sm:text-left", className)} {...props} />
-)
+function ModalHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <div className={merge("flex flex-col space-y-2 text-center sm:text-left", className)} {...props} />
+}
 ModalHeader.displayName = "ModalHeader"
 
-const ModalFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={merge("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className)} {...props} />
-)
+function ModalFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <div className={merge("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className)} {...props} />
+}
 ModalFooter.displayName = "ModalFooter"
 
 const ModalTitle = React.forwardRef<

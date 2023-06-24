@@ -5,8 +5,8 @@ import queryString from "query-string"
 
 import { Prisma } from "@ramble/database/types"
 import { join, merge } from "@ramble/shared"
-import { Button, NoData } from "@ramble/ui"
 
+import { Button, NoData } from "~/components/ui"
 import { DEFAULT_TAKE } from "~/lib/table"
 
 interface DataType {

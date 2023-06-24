@@ -2,7 +2,7 @@
 module.exports = {
   darkMode: "class",
   presets: [require("@ramble/tailwind-config")],
-  content: ["./app/**/*.{js,ts,jsx,tsx}", "!./app/pages/emails+/**/*", "../../packages/ui/src/**/*.{js,ts,jsx,tsx}"],
+  content: ["./app/**/*.{js,ts,jsx,tsx}", "!./app/pages/emails+/**/*"],
   theme: {
     extend: {
       spacing: {

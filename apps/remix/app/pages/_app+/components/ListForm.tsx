@@ -1,7 +1,8 @@
 import type { List } from "@ramble/database/types"
-import { Textarea } from "@ramble/ui"
+
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
+import { Textarea } from "~/components/ui"
 
 interface Props {
   list?: Pick<List, "id" | "name" | "description">

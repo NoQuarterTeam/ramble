@@ -2,10 +2,10 @@ import { TouchableOpacity, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import { Map } from "lucide-react-native"
 
-import { Heading } from "../../../components/Heading"
-import { Spinner } from "../../../components/Spinner"
 import { SpotItem } from "../../../components/SpotItem"
-import { Text } from "../../../components/Text"
+import { Heading } from "../../../components/ui/Heading"
+import { Spinner } from "../../../components/ui/Spinner"
+import { Text } from "../../../components/ui/Text"
 import { api } from "../../../lib/api"
 import { useRouter } from "../../router"
 

@@ -2,7 +2,7 @@ import type * as React from "react"
 import { TouchableOpacity, useColorScheme, View } from "react-native"
 import Feather from "@expo/vector-icons/Feather"
 
-import { useRouter } from "../app/router"
+import { useRouter } from "../../app/router"
 import { Heading } from "./Heading"
 
 interface Props {

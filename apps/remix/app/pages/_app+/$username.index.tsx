@@ -5,8 +5,8 @@ import { useFetcher, useLoaderData } from "@remix-run/react"
 import { cacheHeader } from "pretty-cache-header"
 
 import type { Spot, SpotImage } from "@ramble/database/types"
-import { Button } from "@ramble/ui"
 
+import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { notFound } from "~/lib/remix.server"

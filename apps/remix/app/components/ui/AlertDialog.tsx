@@ -11,11 +11,13 @@ const AlertDialogRoot = AlertDialogPrimitive.Root
 
 const AlertDialogTrigger = AlertDialogPrimitive.Trigger
 
-const AlertDialogPortal = ({ className, children, ...props }: AlertDialogPrimitive.AlertDialogPortalProps) => (
-  <AlertDialogPrimitive.Portal className={className} {...props}>
-    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">{children}</div>
-  </AlertDialogPrimitive.Portal>
-)
+function AlertDialogPortal({ className, children, ...props }: AlertDialogPrimitive.AlertDialogPortalProps) {
+  return (
+    <AlertDialogPrimitive.Portal className={className} {...props}>
+      <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">{children}</div>
+    </AlertDialogPrimitive.Portal>
+  )
+}
 AlertDialogPortal.displayName = AlertDialogPrimitive.Portal.displayName
 
 const AlertDialogOverlay = React.forwardRef<
@@ -51,14 +53,14 @@ const AlertDialogContent = React.forwardRef<
 ))
 AlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName
 
-const AlertDialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={merge("flex flex-col space-y-2 text-center sm:text-left", className)} {...props} />
-)
+function AlertDialogHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <div className={merge("flex flex-col space-y-2 text-center sm:text-left", className)} {...props} />
+}
 AlertDialogHeader.displayName = "AlertDialogHeader"
 
-const AlertDialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={merge("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className)} {...props} />
-)
+function AlertDialogFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <div className={merge("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className)} {...props} />
+}
 AlertDialogFooter.displayName = "AlertDialogFooter"
 
 const AlertDialogTitle = React.forwardRef<

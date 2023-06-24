@@ -1,24 +1,24 @@
-import { useFetcher } from "@remix-run/react"
-import bbox from "@turf/bbox"
-import * as turf from "@turf/helpers"
-import colors from "@ramble/tailwind-config/src/colors"
-import { CircleDot, MapPin } from "lucide-react"
 import * as React from "react"
-import useOnClickOutside from "use-onclickoutside"
-
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE, useDisclosure } from "@ramble/shared"
-import { Button, Input, Spinner } from "@ramble/ui"
-
-import { PageContainer } from "../../components/PageContainer"
-import type { locationSearchLoader } from "../api+/mapbox+/location-search"
-
 import type { LngLatLike, MapRef } from "react-map-gl"
 import { Layer, Source } from "react-map-gl"
 import { Map, Marker } from "react-map-gl"
-import { useTheme } from "~/lib/theme"
-import type { directionsLoader } from "../api+/mapbox+/directions"
 import { type SerializeFrom } from "@remix-run/node"
+import { useFetcher } from "@remix-run/react"
+import bbox from "@turf/bbox"
+import * as turf from "@turf/helpers"
+import { CircleDot, MapPin } from "lucide-react"
+import useOnClickOutside from "use-onclickoutside"
+
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE, useDisclosure } from "@ramble/shared"
+import colors from "@ramble/tailwind-config/src/colors"
+
+import { Button, Input, Spinner } from "~/components/ui"
 import { SPOTS } from "~/lib/spots"
+import { useTheme } from "~/lib/theme"
+
+import { PageContainer } from "../../components/PageContainer"
+import type { directionsLoader } from "../api+/mapbox+/directions"
+import type { locationSearchLoader } from "../api+/mapbox+/location-search"
 
 export default function PlanTrip() {
   const theme = useTheme()

@@ -5,9 +5,9 @@ import { Form as RemixForm, useNavigation } from "@remix-run/react"
 import { Trash } from "lucide-react"
 
 import { createImageUrl, merge } from "@ramble/shared"
-import type { InputStyleProps } from "@ramble/ui"
-import { Button, type ButtonProps, IconButton, Input, type InputProps, inputStyles } from "@ramble/ui"
 
+import type { InputStyleProps } from "~/components/ui"
+import { Button, type ButtonProps, IconButton, Input, type InputProps, inputStyles } from "~/components/ui"
 import { useFormErrors } from "~/lib/form"
 
 import { ImageUploader } from "./ImageUploader"

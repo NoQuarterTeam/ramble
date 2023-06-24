@@ -5,8 +5,9 @@ import { Bike, Dog, Footprints, Mountain, Waves } from "lucide-react-native"
 import { createImageUrl } from "@ramble/shared"
 
 import { api } from "../lib/api"
-import { Spinner } from "./Spinner"
-import { Text } from "./Text"
+import { Icons } from "./ui/Icons"
+import { Spinner } from "./ui/Spinner"
+import { Text } from "./ui/Text"
 
 interface Props {
   username: string
@@ -45,6 +46,11 @@ export function UserProfile(props: Props) {
             {user.isPetOwner && (
               <View className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
                 <Dog size={20} className="text-black dark:text-white" />
+              </View>
+            )}
+            {user.isSurfer && (
+              <View className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
+                <Icons.Surf size={20} className="text-black dark:text-white" />
               </View>
             )}
             {user.isClimber && (

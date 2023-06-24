@@ -6,7 +6,7 @@ import { type Spot } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
 import { useRouter } from "../app/router"
-import { Text } from "./Text"
+import { Text } from "./ui/Text"
 
 interface Props {
   spot: Pick<Spot, "id" | "name" | "address"> & { rating?: number | null; image?: string | null }

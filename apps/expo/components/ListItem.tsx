@@ -3,7 +3,7 @@ import { TouchableOpacity } from "react-native"
 import { type List } from "@ramble/database/types"
 
 import { useRouter } from "../app/router"
-import { Text } from "./Text"
+import { Text } from "./ui/Text"
 
 interface Props {
   list: Pick<List, "id" | "name" | "description">

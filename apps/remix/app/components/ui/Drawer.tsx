@@ -25,11 +25,13 @@ const portalVariants = cva("fixed inset-0 z-50 flex", {
 
 interface DrawerPortalProps extends DrawerPrimitive.DialogPortalProps, VariantProps<typeof portalVariants> {}
 
-const DrawerPortal = ({ position, className, children, ...props }: DrawerPortalProps) => (
-  <DrawerPrimitive.Portal className={join(className)} {...props}>
-    <div className={portalVariants({ position })}>{children}</div>
-  </DrawerPrimitive.Portal>
-)
+function DrawerPortal({ position, className, children, ...props }: DrawerPortalProps) {
+  return (
+    <DrawerPrimitive.Portal className={join(className)} {...props}>
+      <div className={portalVariants({ position })}>{children}</div>
+    </DrawerPrimitive.Portal>
+  )
+}
 DrawerPortal.displayName = DrawerPrimitive.Portal.displayName
 
 const DrawerOverlay = React.forwardRef<
@@ -152,14 +154,14 @@ const DrawerContent = React.forwardRef<React.ElementRef<typeof DrawerPrimitive.C
 )
 DrawerContent.displayName = DrawerPrimitive.Content.displayName
 
-const DrawerHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={merge("flex flex-col space-y-2 text-center sm:text-left", className)} {...props} />
-)
+function DrawerHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <div className={merge("flex flex-col space-y-2 text-center sm:text-left", className)} {...props} />
+}
 DrawerHeader.displayName = "DrawerHeader"
 
-const DrawerFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={merge("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className)} {...props} />
-)
+function DrawerFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <div className={merge("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className)} {...props} />
+}
 DrawerFooter.displayName = "DrawerFooter"
 
 const DrawerTitle = React.forwardRef<

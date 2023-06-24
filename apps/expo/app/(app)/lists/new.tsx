@@ -1,6 +1,6 @@
 import { ScrollView } from "react-native"
 
-import { ModalView } from "../../../components/ModalView"
+import { ModalView } from "../../../components/ui/ModalView"
 import { api, type RouterInputs } from "../../../lib/api"
 import { useMe } from "../../../lib/hooks/useMe"
 import { useRouter } from "../../router"

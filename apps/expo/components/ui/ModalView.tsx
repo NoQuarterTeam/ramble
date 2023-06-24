@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, useColorScheme, View } from "react-native"
 import Feather from "@expo/vector-icons/Feather"
 import { StatusBar } from "expo-status-bar"
 
-import { useRouter } from "../app/router"
+import { useRouter } from "../../app/router"
 import { Heading } from "./Heading"
 import { Toast } from "./Toast"
 

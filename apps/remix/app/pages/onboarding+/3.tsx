@@ -1,20 +1,20 @@
+import * as React from "react"
 import type { ActionArgs } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json, redirect } from "@vercel/remix"
 import { Dog, FishOff } from "lucide-react"
-import * as React from "react"
 import { z } from "zod"
 import { zx } from "zodix"
 
 import { Form, FormButton, FormError } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
+import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { formError, useFormErrors, validateFormData } from "~/lib/form"
 import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
 
-import { Button } from "@ramble/ui"
-import Footer from "./components/Footer"
+import { Footer } from "./components/Footer"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const user = await getCurrentUser(request, { isPetOwner: true })

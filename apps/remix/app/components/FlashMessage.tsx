@@ -1,8 +1,7 @@
 import * as React from "react"
 import { type SerializeFrom } from "@vercel/remix"
 
-import { useToast } from "@ramble/ui"
-
+import { useToast } from "~/components/ui"
 import { type loader } from "~/root"
 
 interface Props {

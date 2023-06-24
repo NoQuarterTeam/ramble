@@ -1,8 +1,8 @@
 import { View } from "react-native"
 
-import { Spinner } from "../../../../components/Spinner"
 import { SpotItem } from "../../../../components/SpotItem"
-import { Text } from "../../../../components/Text"
+import { Spinner } from "../../../../components/ui/Spinner"
+import { Text } from "../../../../components/ui/Text"
 import { api } from "../../../../lib/api"
 import { useParams } from "../../../router"
 

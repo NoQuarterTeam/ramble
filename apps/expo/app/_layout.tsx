@@ -17,7 +17,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { StatusBar } from "expo-status-bar"
 
 import { NewUpdate } from "../components/NewUpdate"
-import { Toast } from "../components/Toast"
+import { Toast } from "../components/ui/Toast"
 import { api, TRPCProvider } from "../lib/api"
 import { useCheckExpoUpdates } from "../lib/hooks/useCheckExpoUpdates"
 import { useMe } from "../lib/hooks/useMe"

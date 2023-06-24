@@ -6,17 +6,17 @@ import type { LucideIcon } from "lucide-react"
 import { Bike, Footprints, Mountain, Waves } from "lucide-react"
 import { Dog } from "lucide-react"
 
-import { createImageUrl, merge } from "@ramble/shared"
-import { Avatar, Badge, buttonSizeStyles, buttonStyles, Tooltip } from "@ramble/ui"
+import { createImageUrl, merge, userInterestFields } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
+import { Avatar, Badge, buttonSizeStyles, buttonStyles, Icons, Tooltip } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
+import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { notFound } from "~/lib/remix.server"
+import { getUserSession } from "~/services/session/session.server"
 
 import { PageContainer } from "../../components/PageContainer"
-import { getUserSession } from "~/services/session/session.server"
-import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 
 export const headers = useLoaderHeaders
 
@@ -32,11 +32,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
       username: true,
       lastName: true,
       bio: true,
-      isClimber: true,
-      isMountainBiker: true,
-      isPetOwner: true,
-      isPaddleBoarder: true,
-      isHiker: true,
+      ...userInterestFields,
     },
     where: { username: params.username },
   })
@@ -73,6 +69,13 @@ export default function ProfileLists() {
         </div>
         <div className="space-y-2">
           <div className="flex space-x-2">
+            {user.isSurfer && (
+              <Tooltip label="Surfer">
+                <div className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
+                  <Icons.Surf className="sq-6" />
+                </div>
+              </Tooltip>
+            )}
             {user.isPetOwner && (
               <Tooltip label="Pet owner">
                 <div className="rounded-md border border-gray-100 p-2 dark:border-gray-700">

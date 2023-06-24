@@ -3,9 +3,9 @@ import { View } from "react-native"
 import { Image } from "expo-image"
 import * as Updates from "expo-updates"
 
-import { Button } from "./Button"
-import { Heading } from "./Heading"
-import { Text } from "./Text"
+import { Button } from "./ui/Button"
+import { Heading } from "./ui/Heading"
+import { Text } from "./ui/Text"
 
 export function NewUpdate() {
   const [isLoading, setIsLoading] = React.useState(false)

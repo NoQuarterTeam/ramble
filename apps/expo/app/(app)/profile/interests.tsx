@@ -1,19 +1,21 @@
 import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
-import { Bike, Dog, Footprints, type LucideIcon, Mountain, Waves } from "lucide-react-native"
+import { Bike, Dog, Footprints, Mountain, Waves } from "lucide-react-native"
 
 import colors from "@ramble/tailwind-config/src/colors"
 
-import { FormError } from "../../../components/FormError"
-import { ScreenView } from "../../../components/ScreenView"
-import { Text } from "../../../components/Text"
-import { toast } from "../../../components/Toast"
+import { FormError } from "../../../components/ui/FormError"
+import { type IconProps, Icons } from "../../../components/ui/Icons"
+import { ScreenView } from "../../../components/ui/ScreenView"
+import { Text } from "../../../components/ui/Text"
+import { toast } from "../../../components/ui/Toast"
 import { api } from "../../../lib/api"
 import { useMe } from "../../../lib/hooks/useMe"
 
 export function InterestsScreen() {
   const { me } = useMe()
   const [interests, setInterests] = React.useState({
+    isSurfer: !!me?.isSurfer,
     isClimber: !!me?.isClimber,
     isMountainBiker: !!me?.isMountainBiker,
     isPaddleBoarder: !!me?.isPaddleBoarder,
@@ -36,6 +38,12 @@ export function InterestsScreen() {
   return (
     <ScreenView title="Interests">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+        <InterestSelector
+          onToggle={() => onToggle("isSurfer")}
+          Icon={Icons.Surf}
+          label="Surfing"
+          isSelected={interests.isSurfer}
+        />
         <InterestSelector
           onToggle={() => onToggle("isClimber")}
           Icon={Mountain}
@@ -76,7 +84,7 @@ function InterestSelector({
   isSelected: boolean
   onToggle: () => void
   label: string
-  Icon: LucideIcon
+  Icon: (props: IconProps) => JSX.Element
 }) {
   return (
     <View className="mb-2 flex w-full flex-row items-center justify-between p-4">

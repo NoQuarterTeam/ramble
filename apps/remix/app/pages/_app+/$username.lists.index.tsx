@@ -1,8 +1,8 @@
 import type { LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { Link, useLoaderData } from "@remix-run/react"
-import { LinkButton } from "~/components/LinkButton"
 
+import { LinkButton } from "~/components/LinkButton"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"

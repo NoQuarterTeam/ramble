@@ -1,8 +1,8 @@
 import { View } from "react-native"
 
-import { Heading } from "../../components/Heading"
 import { LoginPlaceholder } from "../../components/LoginPlaceholder"
-import { Text } from "../../components/Text"
+import { Heading } from "../../components/ui/Heading"
+import { Text } from "../../components/ui/Text"
 import { useMe } from "../../lib/hooks/useMe"
 
 export function NewSpotScreen() {
