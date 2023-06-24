@@ -18,7 +18,7 @@ export function ModalView(props: Props) {
   const navigation = useRouter()
   const colorScheme = useColorScheme()
   return (
-    <View className="h-full bg-white px-4 pt-6 dark:bg-black">
+    <View className="h-full flex-grow bg-white px-4 pt-6 dark:bg-black">
       <View className="flex flex-row justify-between pb-2">
         {props.title ? <Heading className="w-11/12 text-2xl">{props.title}</Heading> : <Text />}
         <TouchableOpacity onPress={props.onBack || navigation.goBack} className="p-1">

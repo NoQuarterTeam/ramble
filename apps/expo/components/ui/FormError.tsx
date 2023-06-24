@@ -2,14 +2,14 @@ import { View, type ViewProps } from "react-native"
 
 import { merge } from "@ramble/shared"
 
-import { type ApiError } from "../lib/hooks/useForm"
+import { type ApiError } from "../../lib/hooks/useForm"
 import { Text } from "./Text"
 
 interface Props extends ViewProps {
   error?: ApiError
 }
 export function FormError({ error, ...props }: Props) {
-  if (!error) return null
+  if (!error || !error.data?.formError) return null
   return (
     <View {...props} className={merge("border border-gray-100 p-2 dark:border-gray-700", props.className)}>
       <Text className="text-center text-red-500 dark:text-red-300">

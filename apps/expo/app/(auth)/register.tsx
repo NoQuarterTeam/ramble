@@ -1,12 +1,12 @@
 import { FormProvider } from "react-hook-form"
-import { KeyboardAvoidingView, ScrollView, TouchableOpacity } from "react-native"
+import { ScrollView, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 import { Button } from "../../components/ui/Button"
 import { FormError } from "../../components/ui/FormError"
 import { FormInput } from "../../components/ui/FormInput"
 import { ModalView } from "../../components/ui/ModalView"
-import { Text } from "../../components/ui/Text"
+
 import { api, AUTH_TOKEN } from "../../lib/api"
 import { useForm } from "../../lib/hooks/useForm"
 import { useRouter } from "../router"
@@ -36,9 +36,12 @@ export function RegisterScreen() {
 
   return (
     <ModalView title="Register">
-      <KeyboardAvoidingView>
-        <FormProvider {...form}>
-          <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+      <FormProvider {...form}>
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1, paddingBottom: 100, justifyContent: "space-between" }}
+          showsVerticalScrollIndicator={false}
+        >
+          <View>
             <FormInput name="email" label="Email" error={error} />
             <FormInput name="password" secureTextEntry label="Password" error={error} />
             <FormInput name="username" label="Username" error={error} />
@@ -48,12 +51,15 @@ export function RegisterScreen() {
               Register
             </Button>
             <FormError className="mb-1" error={error} />
-            <TouchableOpacity onPress={() => navigation.push("AuthLayout", { screen: "LoginScreen" })}>
-              <Text className="text-lg">Login</Text>
-            </TouchableOpacity>
-          </ScrollView>
-        </FormProvider>
-      </KeyboardAvoidingView>
+          </View>
+
+          <View className="flex flex-row items-center justify-center">
+            <Button className="px-1" variant="link" onPress={() => navigation.push("AuthLayout", { screen: "LoginScreen" })}>
+              Login
+            </Button>
+          </View>
+        </ScrollView>
+      </FormProvider>
     </ModalView>
   )
 }

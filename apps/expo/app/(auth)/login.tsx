@@ -1,5 +1,5 @@
 import { FormProvider } from "react-hook-form"
-import { KeyboardAvoidingView, ScrollView, TouchableOpacity } from "react-native"
+import { ScrollView, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 import { Button } from "../../components/ui/Button"
@@ -36,21 +36,27 @@ export function LoginScreen() {
 
   return (
     <ModalView title="Login">
-      <KeyboardAvoidingView>
-        <FormProvider {...form}>
-          <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+      <FormProvider {...form}>
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1, paddingBottom: 100, justifyContent: "space-between" }}
+          showsVerticalScrollIndicator={false}
+        >
+          <View>
             <FormInput autoCapitalize="none" name="email" label="Email" error={error} />
             <FormInput autoCapitalize="none" name="password" secureTextEntry label="Password" error={error} />
             <Button className="mb-1" isLoading={isLoading} disabled={isLoading} onPress={onSubmit}>
               Login
             </Button>
             <FormError className="mb-1" error={error} />
-            <TouchableOpacity onPress={() => navigation.push("AuthLayout", { screen: "RegisterScreen" })}>
-              <Text className="text-lg">Register</Text>
-            </TouchableOpacity>
-          </ScrollView>
-        </FormProvider>
-      </KeyboardAvoidingView>
+          </View>
+          <View className="flex flex-row items-center justify-center">
+            <Text className="text-base">No account yet?</Text>
+            <Button className="px-1" variant="link" onPress={() => navigation.push("AuthLayout", { screen: "RegisterScreen" })}>
+              Register
+            </Button>
+          </View>
+        </ScrollView>
+      </FormProvider>
     </ModalView>
   )
 }
