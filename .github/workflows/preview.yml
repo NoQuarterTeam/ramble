@@ -45,4 +45,4 @@ jobs:
         uses: expo/expo-github-action/preview@v8
         with:
           working-directory: apps/expo
-          command: eas update --branch preview
+          command: eas update --branch preview --message ${{ github.event.head_commit.message }}
