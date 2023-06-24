@@ -1,4 +1,4 @@
-import type { LucideIcon } from "lucide-react"
+import type { LucideIcon, LucideProps } from "lucide-react"
 import {
   Beer,
   Bike,
@@ -15,12 +15,14 @@ import {
 } from "lucide-react"
 
 import type { Spot, SpotType, User } from "@ramble/database/types"
+import { Icons } from "~/components/ui"
 
-export const SPOTS: { [key in SpotType]: { label: string; Icon: LucideIcon } } = {
+export const SPOTS: { [key in SpotType]: { label: string; Icon: (props: LucideProps) => JSX.Element } } = {
   CAFE: { label: "Cafe", Icon: Coffee },
   RESTAURANT: { label: "Restaurant", Icon: Utensils },
   CAMPING: { label: "Camping", Icon: Tent },
   PARKING: { label: "Parking", Icon: ParkingCircle },
+  SURFING: { label: "Surfing", Icon: Icons.Surf },
   BAR: { label: "Bar", Icon: Beer },
   TIP: { label: "Tip", Icon: Info },
   SHOP: { label: "Shop", Icon: ShoppingCart },
