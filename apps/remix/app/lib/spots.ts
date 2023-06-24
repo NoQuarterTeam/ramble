@@ -1,7 +1,9 @@
 import type { LucideIcon, LucideProps } from "lucide-react"
+
 import {
   Beer,
   Bike,
+  Footprints,
   Coffee,
   Fuel,
   HelpCircle,
@@ -23,6 +25,7 @@ export const SPOTS: { [key in SpotType]: { label: string; Icon: (props: LucidePr
   CAMPING: { label: "Camping", Icon: Tent },
   PARKING: { label: "Parking", Icon: ParkingCircle },
   SURFING: { label: "Surfing", Icon: Icons.Surf },
+  HIKING: { label: "Hiking", Icon: Footprints },
   BAR: { label: "Bar", Icon: Beer },
   TIP: { label: "Tip", Icon: Info },
   SHOP: { label: "Shop", Icon: ShoppingCart },

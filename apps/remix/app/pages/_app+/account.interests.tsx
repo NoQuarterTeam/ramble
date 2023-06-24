@@ -3,16 +3,16 @@ import type { ActionArgs, LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 import type { LucideProps } from "lucide-react"
-import { Bike, Dog, Footprints, Mountain, Waves } from "lucide-react"
 import { z } from "zod"
 import { zx } from "zodix"
 
 import { userInterestFields } from "@ramble/shared"
 
 import { Form, FormButton, FormError } from "~/components/Form"
-import { Button, Icons } from "~/components/ui"
+import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
+import { interestOptions } from "~/lib/interests"
 import { redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
@@ -46,12 +46,15 @@ export default function Interests() {
       <h1 className="text-3xl">Interests</h1>
 
       <div className="flex w-full flex-wrap gap-2 py-10 md:gap-4">
-        <InterestSelector field="isSurfer" Icon={Icons.Surf} label="Surfing" defaultValue={user.isSurfer} />
-        <InterestSelector field="isClimber" Icon={Mountain} label="Climbing" defaultValue={user.isClimber} />
-        <InterestSelector field="isMountainBiker" Icon={Bike} label="Mountain biking" defaultValue={user.isMountainBiker} />
-        <InterestSelector field="isPaddleBoarder" Icon={Waves} label="Paddle Boarding" defaultValue={user.isPaddleBoarder} />
-        <InterestSelector field="isHiker" Icon={Footprints} label="Hiking" defaultValue={user.isHiker} />
-        <InterestSelector field="isPetOwner" Icon={Dog} label="Pet owner" defaultValue={user.isPetOwner} />
+        {interestOptions.map((interest) => (
+          <InterestSelector
+            key={interest.value}
+            Icon={interest.Icon}
+            label={interest.label}
+            field={interest.value}
+            defaultValue={user[interest.value as keyof typeof user]}
+          />
+        ))}
       </div>
 
       <FormError />

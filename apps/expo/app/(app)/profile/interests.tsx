@@ -1,16 +1,16 @@
 import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
-import { Bike, Dog, Footprints, Mountain, Waves } from "lucide-react-native"
 
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { FormError } from "../../../components/ui/FormError"
-import { type IconProps, Icons } from "../../../components/ui/Icons"
+import { type IconProps } from "../../../components/ui/Icons"
 import { ScreenView } from "../../../components/ui/ScreenView"
 import { Text } from "../../../components/ui/Text"
 import { toast } from "../../../components/ui/Toast"
 import { api } from "../../../lib/api"
 import { useMe } from "../../../lib/hooks/useMe"
+import { interestOptions } from "../../../lib/interests"
 
 export function InterestsScreen() {
   const { me } = useMe()
@@ -38,37 +38,15 @@ export function InterestsScreen() {
   return (
     <ScreenView title="Interests">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
-        <InterestSelector
-          onToggle={() => onToggle("isSurfer")}
-          Icon={Icons.Surf}
-          label="Surfing"
-          isSelected={interests.isSurfer}
-        />
-        <InterestSelector
-          onToggle={() => onToggle("isClimber")}
-          Icon={Mountain}
-          label="Climbing"
-          isSelected={interests.isClimber}
-        />
-        <InterestSelector
-          onToggle={() => onToggle("isMountainBiker")}
-          Icon={Bike}
-          label="Mountain biking"
-          isSelected={interests.isMountainBiker}
-        />
-        <InterestSelector
-          onToggle={() => onToggle("isPaddleBoarder")}
-          Icon={Waves}
-          label="Paddle Boarding"
-          isSelected={interests.isPaddleBoarder}
-        />
-        <InterestSelector onToggle={() => onToggle("isHiker")} Icon={Footprints} label="Hiking" isSelected={interests.isHiker} />
-        <InterestSelector
-          onToggle={() => onToggle("isPetOwner")}
-          Icon={Dog}
-          label="Pet owner"
-          isSelected={interests.isPetOwner}
-        />
+        {interestOptions.map((interest) => (
+          <InterestSelector
+            key={interest.value}
+            onToggle={() => onToggle(interest.value as keyof typeof interests)}
+            Icon={interest.Icon}
+            label={interest.label}
+            isSelected={interests[interest.value as keyof typeof interests]}
+          />
+        ))}
         <FormError error={error} />
       </ScrollView>
     </ScreenView>
