@@ -3,16 +3,15 @@ import { json } from "@remix-run/node"
 import type { NavLinkProps } from "@remix-run/react"
 import { NavLink, Outlet, useLoaderData } from "@remix-run/react"
 import type { LucideIcon } from "lucide-react"
-import { Bike, Footprints, Mountain, Waves } from "lucide-react"
-import { Dog } from "lucide-react"
 
 import { createImageUrl, merge, userInterestFields } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
-import { Avatar, Badge, buttonSizeStyles, buttonStyles, Icons, Tooltip } from "~/components/ui"
+import { Avatar, Badge, buttonSizeStyles, buttonStyles, Tooltip } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
+import { interestOptions } from "~/lib/interests"
 import { notFound } from "~/lib/remix.server"
 import { getUserSession } from "~/services/session/session.server"
 
@@ -69,48 +68,15 @@ export default function ProfileLists() {
         </div>
         <div className="space-y-2">
           <div className="flex space-x-2">
-            {user.isSurfer && (
-              <Tooltip label="Surfer">
-                <div className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
-                  <Icons.Surf className="sq-6" />
-                </div>
-              </Tooltip>
-            )}
-            {user.isPetOwner && (
-              <Tooltip label="Pet owner">
-                <div className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
-                  <Dog className="sq-6" />
-                </div>
-              </Tooltip>
-            )}
-            {user.isClimber && (
-              <Tooltip label="Climber">
-                <div className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
-                  <Mountain className="sq-6" />
-                </div>
-              </Tooltip>
-            )}
-            {user.isHiker && (
-              <Tooltip label="Hiker">
-                <div className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
-                  <Footprints className="sq-6" />
-                </div>
-              </Tooltip>
-            )}
-            {user.isMountainBiker && (
-              <Tooltip label="Mountain biker">
-                <div className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
-                  <Bike className="sq-6" />
-                </div>
-              </Tooltip>
-            )}
-            {user.isPaddleBoarder && (
-              <Tooltip label="Paddle boarder">
-                <div className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
-                  <Waves className="sq-6" />
-                </div>
-              </Tooltip>
-            )}
+            {interestOptions
+              .filter((i) => user[i.value as keyof typeof user])
+              .map((interest) => (
+                <Tooltip key={interest.value} label={interest.label}>
+                  <div className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
+                    <interest.Icon className="sq-6" />
+                  </div>
+                </Tooltip>
+              ))}
           </div>
           <p className="text-sm">{user.bio}</p>
         </div>

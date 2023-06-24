@@ -4,7 +4,6 @@ import { useLoaderData } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json, redirect } from "@vercel/remix"
 import type { LucideIcon } from "lucide-react"
-import { Bike, Footprints, Mountain, Waves } from "lucide-react"
 import { z } from "zod"
 import { zx } from "zodix"
 
@@ -12,9 +11,10 @@ import { userInterestFields } from "@ramble/shared"
 
 import { Form, FormButton, FormError } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
-import { Button, Icons } from "~/components/ui"
+import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
+import { interestOptions } from "~/lib/interests"
 import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
 
 import { Footer } from "./components/Footer"
@@ -50,11 +50,15 @@ export default function Onboarding2() {
         <p className="opacity-70">Are you fat, basically</p>
       </div>
       <div className="flex w-full flex-wrap items-center justify-center gap-2 md:gap-4">
-        <InterestSelector field="isSurfer" Icon={Icons.Surf} label="Surfing" defaultValue={user.isClimber} />
-        <InterestSelector field="isClimber" Icon={Mountain} label="Climbing" defaultValue={user.isClimber} />
-        <InterestSelector field="isMountainBiker" Icon={Bike} label="Mountain biking" defaultValue={user.isMountainBiker} />
-        <InterestSelector field="isPaddleBoarder" Icon={Waves} label="Paddle Boarding" defaultValue={user.isPaddleBoarder} />
-        <InterestSelector field="isHiker" Icon={Footprints} label="Hiking" defaultValue={user.isHiker} />
+        {interestOptions.map((interest) => (
+          <InterestSelector
+            key={interest.value}
+            Icon={interest.Icon}
+            label={interest.label}
+            field={interest.value}
+            defaultValue={user[interest.value as keyof typeof user]}
+          />
+        ))}
       </div>
       <FormError />
       <Footer>

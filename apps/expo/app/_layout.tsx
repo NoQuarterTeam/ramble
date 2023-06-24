@@ -1,5 +1,4 @@
 import * as React from "react"
-import * as SplashScreen from "expo-splash-screen"
 import { useColorScheme, View } from "react-native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { enableScreens } from "react-native-screens"
@@ -15,6 +14,7 @@ import {
 } from "@expo-google-fonts/poppins"
 import { NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import * as SplashScreen from "expo-splash-screen"
 import { StatusBar } from "expo-status-bar"
 
 import { NewUpdate } from "../components/NewUpdate"
