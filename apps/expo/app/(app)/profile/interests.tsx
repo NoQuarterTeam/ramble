@@ -32,7 +32,7 @@ export function InterestsScreen() {
 
   const onToggle = (field: keyof typeof interests) => {
     setInterests({ ...interests, [field]: !interests[field] })
-    mutate({ [field]: interests[field] })
+    mutate({ [field]: !interests[field] })
   }
 
   return (
