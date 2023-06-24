@@ -1,5 +1,6 @@
 import * as React from "react"
-import { useColorScheme } from "react-native"
+import * as SplashScreen from "expo-splash-screen"
+import { useColorScheme, View } from "react-native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { enableScreens } from "react-native-screens"
 import {
@@ -31,6 +32,7 @@ import { AuthLayout } from "./(auth)/_layout"
 import { type ScreenParamsList } from "./router"
 
 enableScreens()
+SplashScreen.preventAutoHideAsync()
 
 const Container = createNativeStackNavigator<ScreenParamsList>()
 
@@ -48,42 +50,51 @@ export default function RootLayout() {
   const { isDoneChecking, isNewUpdateAvailable } = useCheckExpoUpdates()
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
-  // Prevent rendering until the font has loaded
-  if (!fontsLoaded || !isDoneChecking) return null
+
+  const isReady = fontsLoaded && isDoneChecking
+  const onLayoutRootView = React.useCallback(async () => {
+    if (isReady) {
+      await SplashScreen.hideAsync()
+    }
+  }, [isReady])
+
+  if (!isReady) return null
 
   return (
-    <TRPCProvider>
-      <SafeAreaProvider>
-        {isNewUpdateAvailable ? (
-          <NewUpdate />
-        ) : (
-          <PrefetchTabs>
-            <NavigationContainer>
-              <Container.Navigator
-                initialRouteName="AppLayout"
-                screenOptions={{ headerShown: false, contentStyle: { backgroundColor: isDark ? "black" : "white" } }}
-              >
-                <Container.Group>
-                  <Container.Screen name="AppLayout" component={AppLayout} />
-                </Container.Group>
-                <Container.Group
-                  screenOptions={{ presentation: "modal", contentStyle: { backgroundColor: isDark ? "black" : "white" } }}
+    <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+      <TRPCProvider>
+        <SafeAreaProvider>
+          {isNewUpdateAvailable ? (
+            <NewUpdate />
+          ) : (
+            <PrefetchTabs>
+              <NavigationContainer>
+                <Container.Navigator
+                  initialRouteName="AppLayout"
+                  screenOptions={{ headerShown: false, contentStyle: { backgroundColor: isDark ? "black" : "white" } }}
                 >
-                  <Container.Screen name="AuthLayout" component={AuthLayout} />
-                  <Container.Screen name="NewListScreen" component={NewListScreen} />
-                  <Container.Screen name="EditListScreen" component={EditListScreen} />
-                  <Container.Screen name="NewReviewScreen" component={NewReviewScreen} />
-                  <Container.Screen name="ReviewDetailScreen" component={ReviewDetailScreen} />
-                  <Container.Screen name="SaveScreen" component={SaveScreen} />
-                </Container.Group>
-              </Container.Navigator>
-            </NavigationContainer>
-          </PrefetchTabs>
-        )}
-        <Toast />
-        <StatusBar style={isDark ? "light" : "dark"} />
-      </SafeAreaProvider>
-    </TRPCProvider>
+                  <Container.Group>
+                    <Container.Screen name="AppLayout" component={AppLayout} />
+                  </Container.Group>
+                  <Container.Group
+                    screenOptions={{ presentation: "modal", contentStyle: { backgroundColor: isDark ? "black" : "white" } }}
+                  >
+                    <Container.Screen name="AuthLayout" component={AuthLayout} />
+                    <Container.Screen name="NewListScreen" component={NewListScreen} />
+                    <Container.Screen name="EditListScreen" component={EditListScreen} />
+                    <Container.Screen name="NewReviewScreen" component={NewReviewScreen} />
+                    <Container.Screen name="ReviewDetailScreen" component={ReviewDetailScreen} />
+                    <Container.Screen name="SaveScreen" component={SaveScreen} />
+                  </Container.Group>
+                </Container.Navigator>
+              </NavigationContainer>
+            </PrefetchTabs>
+          )}
+          <Toast />
+          <StatusBar style={isDark ? "light" : "dark"} />
+        </SafeAreaProvider>
+      </TRPCProvider>
+    </View>
   )
 }
 
