@@ -48,6 +48,7 @@ export function AccountScreen() {
   const [upload, { isLoading: isUploadLoading }] = useS3Upload()
 
   const onPickImage = async () => {
+    await ImagePicker.requestMediaLibraryPermissionsAsync()
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
