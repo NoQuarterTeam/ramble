@@ -96,7 +96,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
             <h1 className="text-3xl">{spot ? "Edit spot" : "Add a new spot"}</h1>
             <CloseButton onClick={() => navigate(-1)} />
           </div>
-          {user?.role === "MEMBER" && <p className="opacity-70">An Ambassador will verify it shortly</p>}
+          {user?.role === "MEMBER" && <p className="opacity-70">An Ambassador will verify it after</p>}
         </div>
         <input type="hidden" name="latitude" value={latitude || ""} />
         <input type="hidden" name="longitude" value={longitude || ""} />
@@ -194,3 +194,27 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
     </div>
   )
 }
+
+// function SpotTypeForm({ type }: { type: SpotType }) {
+//   switch (type) {
+//     case "BAR":
+//     case "CAFE":
+//     case "RESTAURANT":
+//     case "SHOP":
+//     case "CAMPING":
+//       return <></>
+//     case "CLIMBING":
+//     case "HIKING":
+//     case "PADDLE_BOARDING":
+//     case "SURFING":
+//     case "MOUNTAIN_BIKING":
+//       return <></>
+//     case "GAS_STATION":
+//     case "PARKING":
+//       return <></>
+//     case "TIP":
+//       return <></>
+//     default:
+//       return null
+//   }
+// }

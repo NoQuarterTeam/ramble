@@ -8,11 +8,11 @@ import poppins900 from "@fontsource/poppins/900.css"
 import ribeyeMarrow from "@fontsource/ribeye-marrow/400.css"
 import * as Tooltip from "@radix-ui/react-tooltip"
 import type { ShouldRevalidateFunction } from "@remix-run/react"
-import { ScrollRestoration } from "@remix-run/react"
 import {
   isRouteErrorResponse,
   Links,
   LiveReload,
+  ScrollRestoration,
   Meta,
   Outlet,
   Scripts,
