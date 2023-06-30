@@ -21,7 +21,7 @@ export function ListsScreen() {
       <View className="relative flex-1 px-4 pt-20">
         <View className="flex flex-row justify-between">
           <Heading className="pb-1 text-3xl">Lists</Heading>
-          <TouchableOpacity onPress={() => push("NewListScreen")}>
+          <TouchableOpacity onPress={() => push("NewListScreen")} className="p-2">
             <PlusCircle className="text-black dark:text-white" />
           </TouchableOpacity>
         </View>

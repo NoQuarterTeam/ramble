@@ -6,8 +6,9 @@ import { FormProvider } from "react-hook-form"
 import { api } from "../../lib/api"
 import { useMe } from "../../lib/hooks/useMe"
 import { useForm } from "../../lib/hooks/useForm"
-import { toast } from "../../components/ui/Toast"
 import { Button } from "../../components/ui/Button"
+import { useRouter } from "../router"
+import { FormError } from "../../components/ui/FormError"
 
 export default function OnboardingStep1Screen() {
   const { me } = useMe()
@@ -20,12 +21,13 @@ export default function OnboardingStep1Screen() {
       username: me?.username || "",
     },
   })
+  const router = useRouter()
 
   const utils = api.useContext()
   const { mutate, isLoading, error } = api.user.update.useMutation({
-    onSuccess: (data) => {
-      utils.user.me.setData(undefined, data)
-      toast({ title: "Account updated." })
+    onSuccess: async () => {
+      await utils.user.me.refetch()
+      router.push("OnboardingStep2Screen")
     },
   })
 
@@ -44,12 +46,18 @@ export default function OnboardingStep1Screen() {
             error={error}
           />
         </View>
+        <FormError error={error} />
       </ScrollView>
       <View className="absolute bottom-10 left-0 right-0 flex flex-row items-center justify-between px-4">
-        <Button variant="link">Skip</Button>
-        <Button isLoading={isLoading} onPress={onSubmit}>
-          Next
-        </Button>
+        <View />
+        <View className="flex flex-row items-center space-x-2">
+          <Button onPress={() => router.push("OnboardingStep2Screen")} variant="link">
+            Skip
+          </Button>
+          <Button className="w-[120px]" isLoading={isLoading} onPress={onSubmit}>
+            Next
+          </Button>
+        </View>
       </View>
     </FormProvider>
   )

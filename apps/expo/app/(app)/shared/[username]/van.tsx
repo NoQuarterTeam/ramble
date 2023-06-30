@@ -20,7 +20,7 @@ export function UsernameVan() {
 
   if (!van)
     return (
-      <View className="flex items-end justify-center py-4">
+      <View className="flex items-center justify-center py-4">
         <Text>No van yet</Text>
       </View>
     )
@@ -33,7 +33,7 @@ export function UsernameVan() {
         <Text>{van.year}</Text>
         <Text>{van.description}</Text>
       </View>
-      <ImageCarousel width={width - 16} height={300} images={van.images} imageClassName="rounded-md" />
+      {van.images.length > 0 && <ImageCarousel width={width - 16} height={300} images={van.images} imageClassName="rounded-md" />}
     </View>
   )
 }

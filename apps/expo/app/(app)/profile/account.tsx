@@ -49,7 +49,6 @@ export function AccountScreen() {
 
   const onPickImage = async () => {
     try {
-      // await ImagePicker.requestMediaLibraryPermissionsAsync()
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
@@ -64,7 +63,7 @@ export function AccountScreen() {
       let message
       if (error instanceof Error) message = error.message
       else message = String(error)
-      toast({ title: "Error selecting image", message: message, type: "error" })
+      toast({ title: "Error selecting image", message, type: "error" })
     }
   }
 
