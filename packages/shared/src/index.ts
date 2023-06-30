@@ -1,8 +1,10 @@
 export { useDisclosure, type UseDisclosure } from "./hooks/useDisclosure"
-export * from "./hooks/useS3"
-export type { UploadFile } from "./hooks/useS3"
+
 export { merge, join } from "./utils/tailwind"
 export * from "./utils/s3"
 export { useHydrated, ClientOnly } from "./components/ClientOnly"
 export * from "./map"
 export * from "./interests"
+export * from "./schemas/list"
+export * from "./schemas/user"
+export * from "./schemas/review"

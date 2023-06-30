@@ -1,7 +1,7 @@
 import { z } from "zod"
 import { createTRPCRouter, protectedProcedure, publicProcedure, publicProfileProcedure } from "../trpc"
 import { TRPCError } from "@trpc/server"
-import { listSchema } from "../schemas/list"
+import { listSchema } from "@ramble/shared"
 
 export const listRouter = createTRPCRouter({
   allByUser: publicProfileProcedure.query(async ({ ctx, input }) => {

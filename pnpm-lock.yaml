@@ -381,6 +381,9 @@ importers:
       use-onclickoutside:
         specifier: ^0.4.1
         version: 0.4.1(@types/react@18.2.14)(react@18.2.0)
+      uuid:
+        specifier: ^3.4.0
+        version: 3.4.0
       zod:
         specifier: 3.21.4
         version: 3.21.4
@@ -427,6 +430,9 @@ importers:
       '@types/supercluster':
         specifier: ^7.1.0
         version: 7.1.0
+      '@types/uuid':
+        specifier: ^9.0.1
+        version: 9.0.1
       '@typescript-eslint/eslint-plugin':
         specifier: 5.60.1
         version: 5.60.1(@typescript-eslint/parser@5.60.1)(eslint@8.43.0)(typescript@5.1.6)
@@ -475,6 +481,12 @@ importers:
 
   packages/api:
     dependencies:
+      '@aws-sdk/client-s3':
+        specifier: ^3.310.0
+        version: 3.310.0
+      '@aws-sdk/s3-request-presigner':
+        specifier: ^3.310.0
+        version: 3.310.0
       '@ramble/database':
         specifier: workspace:*
         version: link:../database
@@ -689,9 +701,6 @@ importers:
       tailwind-merge:
         specifier: ^1.10.0
         version: 1.10.0
-      uuid:
-        specifier: ^3.4.0
-        version: 3.4.0
       zod:
         specifier: 3.21.4
         version: 3.21.4
@@ -702,9 +711,6 @@ importers:
       '@types/node':
         specifier: ^18.15.3
         version: 18.15.3
-      '@types/uuid':
-        specifier: ^9.0.1
-        version: 9.0.1
       eslint:
         specifier: 8.43.0
         version: 8.43.0
@@ -728,7 +734,7 @@ packages:
     resolution: {integrity: sha512-IzSgsrxUcsrejQbPVilIKy16kAT52EwB6zSaI+M3xxIhKh5+aldEyvI+z6erM7TCLB2BJsFrtHjp6/4/sr+3dA==}
     dependencies:
       '@aws-crypto/util': 3.0.0
-      '@aws-sdk/types': 3.310.0
+      '@aws-sdk/types': 3.342.0
       tslib: 1.14.1
     dev: false
 
@@ -736,7 +742,7 @@ packages:
     resolution: {integrity: sha512-ENNPPManmnVJ4BTXlOjAgD7URidbAznURqD0KvfREyc4o20DPYdEldU1f5cQ7Jbj0CJJSPaMIk/9ZshdB3210w==}
     dependencies:
       '@aws-crypto/util': 3.0.0
-      '@aws-sdk/types': 3.310.0
+      '@aws-sdk/types': 3.342.0
       tslib: 1.14.1
     dev: false
 
@@ -752,7 +758,7 @@ packages:
       '@aws-crypto/ie11-detection': 3.0.0
       '@aws-crypto/supports-web-crypto': 3.0.0
       '@aws-crypto/util': 3.0.0
-      '@aws-sdk/types': 3.310.0
+      '@aws-sdk/types': 3.342.0
       '@aws-sdk/util-locate-window': 3.310.0
       '@aws-sdk/util-utf8-browser': 3.259.0
       tslib: 1.14.1
@@ -765,7 +771,7 @@ packages:
       '@aws-crypto/sha256-js': 3.0.0
       '@aws-crypto/supports-web-crypto': 3.0.0
       '@aws-crypto/util': 3.0.0
-      '@aws-sdk/types': 3.310.0
+      '@aws-sdk/types': 3.342.0
       '@aws-sdk/util-locate-window': 3.310.0
       '@aws-sdk/util-utf8-browser': 3.259.0
       tslib: 1.14.1
@@ -775,7 +781,7 @@ packages:
     resolution: {integrity: sha512-PnNN7os0+yd1XvXAy23CFOmTbMaDxgxXtTKHybrJ39Y8kGzBATgBFibWJKH6BhytLI/Zyszs87xCOBNyBig6vQ==}
     dependencies:
       '@aws-crypto/util': 3.0.0
-      '@aws-sdk/types': 3.310.0
+      '@aws-sdk/types': 3.342.0
       tslib: 1.14.1
     dev: false
 
@@ -788,7 +794,7 @@ packages:
   /@aws-crypto/util@3.0.0:
     resolution: {integrity: sha512-2OJlpeJpCR48CC8r+uKVChzs9Iungj9wkZrl8Z041DWEWvyIHILYKCPNzJghKsivj+S3mLo6BVc7mBNzdxA46w==}
     dependencies:
-      '@aws-sdk/types': 3.310.0
+      '@aws-sdk/types': 3.342.0
       '@aws-sdk/util-utf8-browser': 3.259.0
       tslib: 1.14.1
     dev: false

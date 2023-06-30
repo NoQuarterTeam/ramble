@@ -3,8 +3,7 @@ import bcrypt from "bcryptjs"
 
 import { createAuthToken } from "../lib/jwt"
 import { createTRPCRouter, publicProcedure } from "../trpc"
-
-import { loginSchema, registerSchema } from "../schemas/user"
+import { loginSchema, registerSchema } from "@ramble/shared"
 
 export const authRouter = createTRPCRouter({
   login: publicProcedure.input(loginSchema).mutation(async ({ ctx, input }) => {

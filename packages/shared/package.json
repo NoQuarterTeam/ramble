@@ -16,13 +16,11 @@
   "dependencies": {
     "@ramble/database": "workspace:*",
     "tailwind-merge": "^1.10.0",
-    "uuid": "^3.4.0",
     "zod": "3.21.4"
   },
   "devDependencies": {
     "@ramble/eslint-config": "workspace:*",
     "@types/node": "^18.15.3",
-    "@types/uuid": "^9.0.1",
     "eslint": "8.43.0",
     "prettier": "^2.8.4",
     "typescript": "5.1.6"

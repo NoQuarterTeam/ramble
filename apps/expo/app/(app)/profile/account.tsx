@@ -1,5 +1,6 @@
 import { FormProvider } from "react-hook-form"
-import { ScrollView, View } from "react-native"
+import { ScrollView, TouchableOpacity, View } from "react-native"
+import * as ImagePicker from "expo-image-picker"
 
 import { Button } from "../../../components/ui/Button"
 import { FormError } from "../../../components/ui/FormError"
@@ -12,9 +13,12 @@ import { useMe } from "../../../lib/hooks/useMe"
 import { Edit2, User2 } from "lucide-react-native"
 import { Image } from "expo-image"
 import { createImageUrl } from "@ramble/shared"
+import { useS3Upload } from "../../../lib/hooks/useS3"
+import { Spinner } from "../../../components/ui/Spinner"
 
 export function AccountScreen() {
   const { me } = useMe()
+
   const form = useForm({
     defaultValues: {
       bio: me?.bio || "",
@@ -35,13 +39,38 @@ export function AccountScreen() {
 
   const onSubmit = form.handleSubmit((data) => mutate(data))
 
+  const { mutate: saveAvatar, isLoading: isAvatarSavingLoading } = api.user.update.useMutation({
+    onSuccess: async () => {
+      await utils.user.me.refetch()
+      toast({ title: "Avatar updated." })
+    },
+  })
+  const [upload, { isLoading: isUploadLoading }] = useS3Upload()
+
+  const onPickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      allowsMultipleSelection: false,
+      selectionLimit: 1,
+      quality: 1,
+    })
+    if (result.canceled || !result.assets[0]?.uri) return
+    const { key } = await upload(result.assets[0].uri)
+    saveAvatar({ avatar: key })
+  }
+
   return (
     <ScreenView title="Account">
       <FormProvider {...form}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 350 }} showsVerticalScrollIndicator={false}>
           <View className="flex w-full items-center justify-center">
-            <View>
-              {me?.avatar ? (
+            <TouchableOpacity onPress={onPickImage}>
+              {isUploadLoading || isAvatarSavingLoading ? (
+                <View className="sq-20 flex items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
+                  <Spinner />
+                </View>
+              ) : me?.avatar ? (
                 <Image
                   source={{ uri: createImageUrl(me.avatar) }}
                   className="sq-20 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
@@ -52,9 +81,9 @@ export function AccountScreen() {
                 </View>
               )}
               <View className="sq-8 absolute -right-1 -top-1 flex items-center justify-center rounded-full bg-gray-50 dark:bg-gray-700">
-                <Edit2 size={16} className="text-black dark:text-white" />
+                <Edit2 size={12} className="text-black dark:text-white" />
               </View>
-            </View>
+            </TouchableOpacity>
           </View>
           <FormInput name="firstName" label="First name" error={error} />
           <FormInput name="lastName" label="Last name" error={error} />

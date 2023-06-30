@@ -7,7 +7,7 @@ export type UploadFile = {
   fileKey: string
   fileName: string
 }
-export function useS3Upload(): [(file: File) => Promise<UploadFile>, { isLoading: boolean }] {
+export function useS3Upload(): [(file: File) => Promise<{ key: string }>, { isLoading: boolean }] {
   const [isLoading, setIsLoading] = React.useState(false)
 
   async function upload(file: File) {
@@ -21,7 +21,7 @@ export function useS3Upload(): [(file: File) => Promise<UploadFile>, { isLoading
       if (!signedUrl) throw new Error("Error fetching signed url")
       await fetch(signedUrl, { method: "PUT", headers: { "Content-Type": file.type }, body: file })
       setIsLoading(false)
-      return { fileUrl: signedUrl, fileKey: key, fileName: file.name, fileType: file.type || null }
+      return { key }
     } catch (error) {
       setIsLoading(false)
       throw error

@@ -2,9 +2,8 @@ import * as React from "react"
 import type { DropzoneOptions, FileRejection } from "react-dropzone"
 import { useDropzone } from "react-dropzone"
 
-import { useS3Upload } from "@ramble/shared"
-
 import { Spinner, useToast } from "~/components/ui"
+import { useS3Upload } from "~/lib/hooks/useS3"
 
 interface Props {
   onSubmit: (key: string) => Promise<unknown> | unknown
@@ -20,8 +19,8 @@ export function ImageUploader({ children, onSubmit, dropzoneOptions, className }
   const handleSubmitImage = React.useCallback(
     async (image: File) => {
       try {
-        const uploadedFile = await upload(image)
-        await onSubmit(uploadedFile.fileKey)
+        const { key } = await upload(image)
+        await onSubmit(key)
       } catch {
         toast({ variant: "destructive", title: "Error uploading image", description: "Please try again!" })
       }

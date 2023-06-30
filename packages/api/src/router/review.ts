@@ -1,7 +1,8 @@
 import { z } from "zod"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
-import { reviewSchema } from "../schemas/review"
+
 import { TRPCError } from "@trpc/server"
+import { reviewSchema } from "@ramble/shared"
 
 export const reviewRouter = createTRPCRouter({
   detail: publicProcedure.input(z.object({ id: z.string() })).query(({ ctx, input }) => {

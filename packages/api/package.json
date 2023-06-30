@@ -12,6 +12,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.310.0",
+    "@aws-sdk/s3-request-presigner": "^3.310.0",
     "@ramble/database": "workspace:*",
     "@ramble/shared": "workspace:*",
     "@trpc/server": "^10.28.1",
