@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import Constants from "expo-constants"
 import { Image } from "expo-image"
 import * as Updates from "expo-updates"
-import { ChevronRight, type LucideIcon, ToggleRight, Truck, User } from "lucide-react-native"
+import { ChevronRight, type LucideIcon, ToggleRight, Truck, User, User2 } from "lucide-react-native"
 
 import { createImageUrl } from "@ramble/shared"
 
@@ -53,13 +53,19 @@ export function ProfileScreen() {
         <View className="space-y-4">
           <TouchableOpacity
             onPress={() => push("UsernameLayout", { username: me.username })}
-            className="flex flex-row items-center justify-between rounded-md border border-gray-100 px-4 py-4 dark:border-gray-700"
+            className="flex flex-row items-center justify-between rounded-md border border-gray-200 p-4 dark:border-gray-700"
           >
             <View className="flex flex-row items-center space-x-4">
-              <Image
-                source={{ uri: createImageUrl(me.avatar) }}
-                className="sq-16 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
-              />
+              {me.avatar ? (
+                <Image
+                  source={{ uri: createImageUrl(me.avatar) }}
+                  className="sq-16 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
+                />
+              ) : (
+                <View className="sq-16 flex items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
+                  <User2 className="text-black dark:text-white" />
+                </View>
+              )}
               <View>
                 <Heading className="text-2xl">{me.username}</Heading>
                 <Text className="text-base">

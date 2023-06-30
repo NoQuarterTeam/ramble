@@ -17,11 +17,7 @@ export function RegisterScreen() {
     onSuccess: async (data) => {
       await AsyncStorage.setItem(AUTH_TOKEN, data.token)
       queryClient.user.me.setData(undefined, data.user)
-      if (navigation.canGoBack()) {
-        navigation.goBack()
-      } else {
-        navigation.push("AppLayout")
-      }
+      navigation.replace("OnboardingLayout")
     },
   })
   const form = useForm({
@@ -41,9 +37,9 @@ export function RegisterScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View>
-            <FormInput name="email" label="Email" error={error} />
-            <FormInput name="password" secureTextEntry label="Password" error={error} />
-            <FormInput name="username" label="Username" error={error} />
+            <FormInput autoCapitalize="none" name="email" label="Email" error={error} />
+            <FormInput autoCapitalize="none" name="password" secureTextEntry label="Password" error={error} />
+            <FormInput autoCapitalize="none" name="username" label="Username" error={error} />
             <FormInput name="firstName" label="First name" error={error} />
             <FormInput name="lastName" label="Last name" error={error} />
             <Button className="mb-1" isLoading={isLoading} onPress={onSubmit}>

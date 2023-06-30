@@ -49,7 +49,7 @@ export default function Onboarding3() {
           input={<Textarea rows={10} />}
         />
         <div className="flex w-full flex-col items-center text-center">
-          <FormFieldLabel>Let&apos;s put a picture to your name</FormFieldLabel>
+          <FormFieldLabel>Let's put a picture to your name</FormFieldLabel>
           <ImageField
             name="avatar"
             className="sq-[200px] rounded-md border border-gray-100 dark:border-gray-700"

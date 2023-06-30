@@ -7,6 +7,7 @@ import { api } from "../lib/api"
 import { interestOptions } from "../lib/interests"
 import { Spinner } from "./ui/Spinner"
 import { Text } from "./ui/Text"
+import { User2 } from "lucide-react-native"
 
 interface Props {
   username: string
@@ -32,10 +33,16 @@ export function UserProfile(props: Props) {
   return (
     <View>
       <View className="flex flex-row items-center space-x-3">
-        <Image
-          source={{ uri: createImageUrl(user.avatar) }}
-          className="sq-20 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
-        />
+        {user.avatar ? (
+          <Image
+            source={{ uri: createImageUrl(user.avatar) }}
+            className="sq-20 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
+          />
+        ) : (
+          <View className="sq-20 flex items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
+            <User2 className="text-black dark:text-white" />
+          </View>
+        )}
         <View className="space-y-px">
           <Text className="text-xl">
             {user.firstName} {user.lastName}

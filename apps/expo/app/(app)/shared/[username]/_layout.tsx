@@ -10,7 +10,6 @@ import { UsernameSpots } from "./spots"
 import { UsernameVan } from "./van"
 
 export function UsernameLayout() {
-  // const { me } = useMe()
   const { params } = useParams<"UsernameLayout">()
 
   const tab = params.tab || "spots"

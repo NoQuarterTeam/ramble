@@ -50,12 +50,12 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
         locationWhenInUsePermission: "Show current location on map.",
       },
     ],
-    // [
-    //   "expo-image-picker",
-    //   {
-    //     photosPermission: "The app accesses your photos to allow you to upload a profile picture and share spot pictures",
-    //   },
-    // ],
+    [
+      "expo-image-picker",
+      {
+        photosPermission: "The app accesses your photos to allow you to upload a profile picture and share spot pictures",
+      },
+    ],
     [
       "@rnmapbox/maps",
       {

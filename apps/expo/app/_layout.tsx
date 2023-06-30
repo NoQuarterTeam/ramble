@@ -30,9 +30,11 @@ import { NewReviewScreen } from "./(app)/shared/spots/[id]/reviews/new"
 import { SaveScreen } from "./(app)/shared/spots/[id]/save"
 import { AuthLayout } from "./(auth)/_layout"
 import { type ScreenParamsList } from "./router"
+import { OnboardingLayout } from "./onboarding/_layout"
+
+SplashScreen.preventAutoHideAsync()
 
 enableScreens()
-SplashScreen.preventAutoHideAsync()
 
 const Container = createNativeStackNavigator<ScreenParamsList>()
 
@@ -52,11 +54,7 @@ export default function RootLayout() {
   const isDark = colorScheme === "dark"
 
   const isReady = fontsLoaded && isDoneChecking
-  const onLayoutRootView = React.useCallback(async () => {
-    if (isReady) {
-      await SplashScreen.hideAsync()
-    }
-  }, [isReady])
+  const onLayoutRootView = React.useCallback(SplashScreen.hideAsync, [])
 
   if (!isReady) return null
 
@@ -75,6 +73,7 @@ export default function RootLayout() {
                 >
                   <Container.Group>
                     <Container.Screen name="AppLayout" component={AppLayout} />
+                    <Container.Screen name="OnboardingLayout" component={OnboardingLayout} />
                   </Container.Group>
                   <Container.Group
                     screenOptions={{ presentation: "modal", contentStyle: { backgroundColor: isDark ? "black" : "white" } }}
