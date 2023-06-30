@@ -1,5 +1,5 @@
-import { View } from "react-native"
-import { TouchableOpacity } from "react-native-gesture-handler"
+import { View, TouchableOpacity } from "react-native"
+
 import { FlashList } from "@shopify/flash-list"
 import { PlusCircle } from "lucide-react-native"
 
@@ -22,9 +22,7 @@ export function ListsScreen() {
         <View className="flex flex-row justify-between">
           <Heading className="pb-1 text-3xl">Lists</Heading>
           <TouchableOpacity onPress={() => push("NewListScreen")} className="p-2">
-            <View>
-              <PlusCircle className="text-black dark:text-white" />
-            </View>
+            <PlusCircle className="text-black dark:text-white" />
           </TouchableOpacity>
         </View>
 
