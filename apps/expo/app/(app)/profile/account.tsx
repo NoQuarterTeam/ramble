@@ -60,8 +60,11 @@ export function AccountScreen() {
       if (result.canceled || !result.assets[0]?.uri) return
       const { key } = await upload(result.assets[0].uri)
       saveAvatar({ avatar: key })
-    } catch {
-      toast({ title: "Error selecting image", type: "error" })
+    } catch (error) {
+      let message
+      if (error instanceof Error) message = error.message
+      else message = String(error)
+      toast({ title: "Error selecting image", message: message, type: "error" })
     }
   }
 
