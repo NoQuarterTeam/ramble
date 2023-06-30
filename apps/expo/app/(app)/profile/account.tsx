@@ -48,17 +48,21 @@ export function AccountScreen() {
   const [upload, { isLoading: isUploadLoading }] = useS3Upload()
 
   const onPickImage = async () => {
-    await ImagePicker.requestMediaLibraryPermissionsAsync()
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      allowsMultipleSelection: false,
-      selectionLimit: 1,
-      quality: 1,
-    })
-    if (result.canceled || !result.assets[0]?.uri) return
-    const { key } = await upload(result.assets[0].uri)
-    saveAvatar({ avatar: key })
+    try {
+      await ImagePicker.requestMediaLibraryPermissionsAsync()
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        allowsMultipleSelection: false,
+        selectionLimit: 1,
+        quality: 1,
+      })
+      if (result.canceled || !result.assets[0]?.uri) return
+      const { key } = await upload(result.assets[0].uri)
+      saveAvatar({ avatar: key })
+    } catch {
+      toast({ title: "Error selecting image", type: "error" })
+    }
   }
 
   return (
