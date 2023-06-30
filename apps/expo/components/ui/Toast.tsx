@@ -19,6 +19,7 @@ export function Toast() {
             {...props}
             style={{ borderLeftWidth: 0, backgroundColor: colors.red[500], borderRadius: 100 }}
             text1Style={{ color: "white", fontSize: 13, fontFamily: "poppins400" }}
+            text2NumberOfLines={2}
             text2Style={{ color: "white", opacity: 0.8, fontSize: 11, fontFamily: "poppins400" }}
           />
         ),

@@ -49,7 +49,7 @@ export function AccountScreen() {
 
   const onPickImage = async () => {
     try {
-      await ImagePicker.requestMediaLibraryPermissionsAsync()
+      // await ImagePicker.requestMediaLibraryPermissionsAsync()
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
