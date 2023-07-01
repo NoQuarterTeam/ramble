@@ -1,11 +1,12 @@
-import poppins300 from "@fontsource/poppins/300.css"
-import poppins400 from "@fontsource/poppins/400.css"
-import poppins500 from "@fontsource/poppins/500.css"
-import poppins600 from "@fontsource/poppins/600.css"
-import poppins700 from "@fontsource/poppins/700.css"
-import poppins800 from "@fontsource/poppins/800.css"
-import poppins900 from "@fontsource/poppins/900.css"
-import ribeyeMarrow from "@fontsource/ribeye-marrow/400.css"
+import { cssBundleHref } from "@remix-run/css-bundle"
+import "@fontsource/poppins/300.css"
+import "@fontsource/poppins/400.css"
+import "@fontsource/poppins/500.css"
+import "@fontsource/poppins/600.css"
+import "@fontsource/poppins/700.css"
+import "@fontsource/poppins/800.css"
+import "@fontsource/poppins/900.css"
+import "@fontsource/ribeye-marrow/400.css"
 import * as Tooltip from "@radix-ui/react-tooltip"
 import type { ShouldRevalidateFunction } from "@remix-run/react"
 import {
@@ -27,7 +28,7 @@ import { Frown } from "lucide-react"
 import { join } from "@ramble/shared"
 
 import { Toaster } from "~/components/ui"
-import appStyles from "~/styles/app.css"
+import "~/styles/app.css"
 
 import { FlashMessage } from "./components/FlashMessage"
 import { LinkButton } from "./components/LinkButton"
@@ -43,17 +44,7 @@ export const meta: V2_MetaFunction = () => {
 }
 
 export const links: LinksFunction = () => {
-  return [
-    { rel: "stylesheet", href: poppins300 },
-    { rel: "stylesheet", href: poppins400 },
-    { rel: "stylesheet", href: poppins500 },
-    { rel: "stylesheet", href: poppins600 },
-    { rel: "stylesheet", href: poppins700 },
-    { rel: "stylesheet", href: poppins800 },
-    { rel: "stylesheet", href: poppins900 },
-    { rel: "stylesheet", href: ribeyeMarrow },
-    { rel: "stylesheet", href: appStyles },
-  ]
+  return cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []
 }
 
 export const loader = async ({ request }: LoaderArgs) => {

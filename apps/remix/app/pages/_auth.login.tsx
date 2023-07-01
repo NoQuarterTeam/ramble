@@ -12,6 +12,7 @@ import { getUserSession } from "~/services/session/session.server"
 export const meta: V2_MetaFunction = () => {
   return [{ title: "Login" }, { name: "description", content: "Login to the ramble" }]
 }
+
 export const headers = () => {
   return {
     "Cache-Control": "max-age=3600, s-maxage=86400",
