@@ -1,7 +1,6 @@
 import * as React from "react"
 import type { LngLatLike, MapRef } from "react-map-gl"
-import { Layer, Source } from "react-map-gl"
-import { Map, Marker } from "react-map-gl"
+import { Layer, Map, Marker, Source } from "react-map-gl"
 import { type SerializeFrom } from "@remix-run/node"
 import { useFetcher } from "@remix-run/react"
 import bbox from "@turf/bbox"

@@ -1,8 +1,7 @@
 import { json as remixJson, redirect as remixRedirect } from "@vercel/remix"
 
 import type { FlashMessage } from "~/services/session/flash.server"
-import { FlashType } from "~/services/session/flash.server"
-import { getFlashSession } from "~/services/session/flash.server"
+import { FlashType, getFlashSession } from "~/services/session/flash.server"
 
 export async function badRequest(
   data: unknown,

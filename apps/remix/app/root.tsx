@@ -1,4 +1,3 @@
-import { cssBundleHref } from "@remix-run/css-bundle"
 import "@fontsource/poppins/300.css"
 import "@fontsource/poppins/400.css"
 import "@fontsource/poppins/500.css"
@@ -7,16 +6,19 @@ import "@fontsource/poppins/700.css"
 import "@fontsource/poppins/800.css"
 import "@fontsource/poppins/900.css"
 import "@fontsource/ribeye-marrow/400.css"
+import "~/styles/app.css"
+
 import * as Tooltip from "@radix-ui/react-tooltip"
+import { cssBundleHref } from "@remix-run/css-bundle"
 import type { ShouldRevalidateFunction } from "@remix-run/react"
 import {
   isRouteErrorResponse,
   Links,
   LiveReload,
-  ScrollRestoration,
   Meta,
   Outlet,
   Scripts,
+  ScrollRestoration,
   useLoaderData,
   useMatches,
   useRouteError,
@@ -28,7 +30,6 @@ import { Frown } from "lucide-react"
 import { join } from "@ramble/shared"
 
 import { Toaster } from "~/components/ui"
-import "~/styles/app.css"
 
 import { FlashMessage } from "./components/FlashMessage"
 import { LinkButton } from "./components/LinkButton"

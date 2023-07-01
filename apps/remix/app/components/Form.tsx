@@ -6,8 +6,8 @@ import { Trash } from "lucide-react"
 
 import { createImageUrl, merge } from "@ramble/shared"
 
-import type { InputStyleProps } from "~/components/ui"
-import { Button, type ButtonProps, IconButton, Input, type InputProps, inputStyles } from "~/components/ui"
+import { type ButtonProps, type InputProps, type InputStyleProps } from "~/components/ui"
+import { Button, IconButton, Input, inputStyles } from "~/components/ui"
 import { useFormErrors } from "~/lib/form"
 
 import { ImageUploader } from "./ImageUploader"

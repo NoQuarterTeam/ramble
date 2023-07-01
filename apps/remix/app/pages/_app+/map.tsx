@@ -1,6 +1,12 @@
 import * as React from "react"
-import type { ViewStateChangeEvent } from "react-map-gl"
-import Map, { GeolocateControl, type LngLatLike, type MapRef, Marker, NavigationControl } from "react-map-gl"
+import Map, {
+  GeolocateControl,
+  type LngLatLike,
+  type MapRef,
+  Marker,
+  NavigationControl,
+  type ViewStateChangeEvent,
+} from "react-map-gl"
 import { Outlet, useFetcher, useNavigate, useRouteLoaderData, useSearchParams } from "@remix-run/react"
 import turfCenter from "@turf/center"
 import * as turf from "@turf/helpers"
