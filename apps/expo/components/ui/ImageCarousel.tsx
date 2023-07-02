@@ -23,7 +23,7 @@ export function ImageCarousel({
 
   if (images.length === 0) return <View style={{ width, height }} className="bg-gray-100 dark:bg-gray-700" />
   return (
-    <View style={{ width, height }}>
+    <View style={{ width, height }} className="bg-gray-600">
       <FlashList
         pagingEnabled
         horizontal

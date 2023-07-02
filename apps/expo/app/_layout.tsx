@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useColorScheme, View } from "react-native"
+import { useColorScheme } from "react-native"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { enableScreens } from "react-native-screens"
 import {
@@ -31,6 +31,7 @@ import { SaveScreen } from "./(app)/shared/spots/[id]/save"
 import { AuthLayout } from "./(auth)/_layout"
 import { OnboardingLayout } from "./onboarding/_layout"
 import { type ScreenParamsList } from "./router"
+import { GestureHandlerRootView } from "react-native-gesture-handler"
 
 SplashScreen.preventAutoHideAsync()
 
@@ -59,7 +60,7 @@ export default function RootLayout() {
   if (!isReady) return null
 
   return (
-    <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+    <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <TRPCProvider>
         <SafeAreaProvider>
           {isNewUpdateAvailable ? (
@@ -93,7 +94,7 @@ export default function RootLayout() {
           <StatusBar style={isDark ? "light" : "dark"} />
         </SafeAreaProvider>
       </TRPCProvider>
-    </View>
+    </GestureHandlerRootView>
   )
 }
 

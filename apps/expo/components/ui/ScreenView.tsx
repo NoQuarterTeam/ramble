@@ -20,12 +20,12 @@ export function ScreenView(props: Props) {
   return (
     <View className={join("min-h-full px-4", isAndroid ? "pt-24" : "pt-20")}>
       <View className="flex flex-row items-center justify-between">
-        <View className="flex flex-row items-center space-x-0.5">
-          <TouchableOpacity onPress={goBack} className="mb-1 p-2">
+        <View className={join("flex flex-row items-center space-x-0.5", !!props.rightElement && "w-4/5")}>
+          <TouchableOpacity onPress={goBack} className="mb-1 p-1">
             <Feather name="chevron-left" size={24} color={colorScheme === "dark" ? "white" : "black"} />
           </TouchableOpacity>
 
-          <Heading className="text-3xl dark:text-white">{props.title}</Heading>
+          <Heading className={join("text-3xl")}>{props.title}</Heading>
         </View>
         {props.rightElement}
       </View>
