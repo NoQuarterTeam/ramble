@@ -43,7 +43,7 @@ export default function OnboardingStep2Screen() {
     <View className="flex-1">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
         <View className="px-4 pt-20">
-          <Heading className="mb-4 text-2xl">What sports are you into?</Heading>
+          <Heading className="mb-4 text-2xl">What are you into?</Heading>
           {interestOptions.map((interest) => (
             <InterestSelector
               key={interest.value}

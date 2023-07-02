@@ -54,11 +54,11 @@ export default function OnboardingStep3Screen() {
     <FormProvider {...form}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 400 }} showsVerticalScrollIndicator={false}>
         <View className="px-4 pt-20">
-          <Heading className="mb-4 text-2xl">Tell us a little bit about your van setup?</Heading>
-          <FormInput name="name" label="What's it's name?" placeholder="Patrick" />
-          <FormInput name="model" label="What type of van is it?" placeholder="Citroën Jumper" />
-          <FormInput name="year" label="What year was it born?" placeholder="2013" />
-          <FormInput multiline className="h-[100px]" name="description" label="Anything else you wana mention?" error={error} />
+          <Heading className="mb-4 text-2xl">Tell us a little bit about your van?</Heading>
+          <FormInput error={error} name="name" label="What's it's name?" placeholder="Patrick" />
+          <FormInput error={error} name="model" label="What type of van is it?" placeholder="Citroën Jumper" />
+          <FormInput error={error} name="year" label="What year was it born?" placeholder="2013" />
+          <FormInput error={error} multiline className="h-[100px]" name="description" label="Anything else you wana mention?" />
         </View>
         <FormError error={error} />
       </ScrollView>
