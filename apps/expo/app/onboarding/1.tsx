@@ -36,7 +36,7 @@ export default function OnboardingStep1Screen() {
     <FormProvider {...form}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
         <View className="px-4 pt-20">
-          <Heading className="mb-4 text-2xl">Tell us a little bit youself</Heading>
+          <Heading className="mb-4 text-2xl">Tell us a bit about youself</Heading>
           <FormInput
             multiline
             className="h-[100px]"
