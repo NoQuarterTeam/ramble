@@ -143,6 +143,9 @@ importers:
       react-native:
         specifier: 0.71.8
         version: 0.71.8(@babel/core@7.20.2)(@babel/preset-env@7.20.2)(react@18.2.0)
+      react-native-avoid-softinput:
+        specifier: ^3.1.5
+        version: 3.1.5(react-native@0.71.8)(react@18.2.0)
       react-native-gesture-handler:
         specifier: ^2.9.0
         version: 2.9.0(react-native@0.71.8)(react@18.2.0)
@@ -15683,6 +15686,16 @@ packages:
       '@types/mapbox-gl': 2.7.11
       mapbox-gl: 2.14.1
       react: 18.2.0
+    dev: false
+
+  /react-native-avoid-softinput@3.1.5(react-native@0.71.8)(react@18.2.0):
+    resolution: {integrity: sha512-VdGAdizlddl2hLUJF1WJohx0PLZo0hXSZzkSjkTHabh92aJYap7zeWlPkGB2w8ci/d/LoOBFqQTeZ2gnXjkSSQ==}
+    peerDependencies:
+      react: '>=17.0.0'
+      react-native: '>=0.65.0'
+    dependencies:
+      react: 18.2.0
+      react-native: 0.71.8(@babel/core@7.20.2)(@babel/preset-env@7.20.2)(react@18.2.0)
     dev: false
 
   /react-native-codegen@0.71.5(@babel/preset-env@7.20.2):
