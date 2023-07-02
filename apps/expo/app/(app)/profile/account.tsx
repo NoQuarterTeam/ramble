@@ -17,11 +17,13 @@ import { useForm } from "../../../lib/hooks/useForm"
 import { useKeyboardController } from "../../../lib/hooks/useKeyboardController"
 import { useMe } from "../../../lib/hooks/useMe"
 import { useS3Upload } from "../../../lib/hooks/useS3"
+import { useRouter } from "../../router"
 
 export function AccountScreen() {
   useKeyboardController()
   const { me } = useMe()
 
+  const router = useRouter()
   const form = useForm({
     defaultValues: {
       bio: me?.bio || "",
@@ -36,8 +38,9 @@ export function AccountScreen() {
   const { mutate, isLoading, error } = api.user.update.useMutation({
     onSuccess: (data) => {
       utils.user.me.setData(undefined, data)
-      form.reset()
+      form.reset({}, { keepValues: true })
       toast({ title: "Account updated." })
+      router.goBack()
     },
   })
 
