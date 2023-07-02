@@ -248,15 +248,15 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
     useBottomSheetDynamicSnapPoints(initialSnapPoints)
 
   const handleSheetChanges = React.useCallback((index: number) => {
-    if (index === -1) onClose()
+    if (index === -1) handleSheetClose()
   }, [])
   const handleSheetClose = React.useCallback(() => {
     bottomSheetRef.current?.close()
     onClose()
   }, [])
   const animationConfigs = useBottomSheetSpringConfigs({
-    damping: 30,
-    overshootClamping: false,
+    damping: 40,
+    overshootClamping: true,
     stiffness: 500,
   })
 
