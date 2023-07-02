@@ -32,6 +32,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
       foregroundImage: "./assets/icon.png",
       backgroundColor: "#ffffff",
     },
+    softwareKeyboardLayoutMode: "resize",
     package: "co.noquarter.ramble",
   },
   runtimeVersion: {

@@ -1,22 +1,25 @@
-import { FormProvider } from "react-hook-form"
-import { ScrollView, TouchableOpacity, View } from "react-native"
 import * as ImagePicker from "expo-image-picker"
 
+import { FormProvider } from "react-hook-form"
+import { ScrollView, TouchableOpacity, View } from "react-native"
+
+import { createImageUrl } from "@ramble/shared"
+import { Image } from "expo-image"
+import { Edit2, User2 } from "lucide-react-native"
 import { Button } from "../../../components/ui/Button"
 import { FormError } from "../../../components/ui/FormError"
 import { FormInput } from "../../../components/ui/FormInput"
 import { ScreenView } from "../../../components/ui/ScreenView"
+import { Spinner } from "../../../components/ui/Spinner"
 import { toast } from "../../../components/ui/Toast"
 import { api } from "../../../lib/api"
 import { useForm } from "../../../lib/hooks/useForm"
+import { useKeyboardController } from "../../../lib/hooks/useKeyboardController"
 import { useMe } from "../../../lib/hooks/useMe"
-import { Edit2, User2 } from "lucide-react-native"
-import { Image } from "expo-image"
-import { createImageUrl } from "@ramble/shared"
 import { useS3Upload } from "../../../lib/hooks/useS3"
-import { Spinner } from "../../../components/ui/Spinner"
 
 export function AccountScreen() {
+  useKeyboardController()
   const { me } = useMe()
 
   const form = useForm({
@@ -33,6 +36,7 @@ export function AccountScreen() {
   const { mutate, isLoading, error } = api.user.update.useMutation({
     onSuccess: (data) => {
       utils.user.me.setData(undefined, data)
+      form.reset()
       toast({ title: "Account updated." })
     },
   })
@@ -67,10 +71,20 @@ export function AccountScreen() {
     }
   }
 
+  const isDirty = form.formState.isDirty
   return (
-    <ScreenView title="Account">
-      <FormProvider {...form}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 350 }} showsVerticalScrollIndicator={false}>
+    <FormProvider {...form}>
+      <ScreenView
+        title="Account"
+        rightElement={
+          isDirty ? (
+            <Button isLoading={isLoading} variant="link" size="sm" onPress={onSubmit}>
+              Save
+            </Button>
+          ) : undefined
+        }
+      >
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
           <View className="flex w-full items-center justify-center">
             <TouchableOpacity onPress={onPickImage}>
               {isUploadLoading || isAvatarSavingLoading ? (
@@ -96,13 +110,10 @@ export function AccountScreen() {
           <FormInput name="lastName" label="Last name" error={error} />
           <FormInput autoCapitalize="none" name="email" label="Email" error={error} />
           <FormInput autoCapitalize="none" name="username" label="Username" error={error} />
-          <FormInput multiline className="h-[100px]" name="bio" label="Bio" error={error} />
-          <Button isLoading={isLoading} onPress={onSubmit}>
-            Save
-          </Button>
+          <FormInput multiline name="bio" label="Bio" error={error} />
           <FormError error={error} />
         </ScrollView>
-      </FormProvider>
-    </ScreenView>
+      </ScreenView>
+    </FormProvider>
   )
 }

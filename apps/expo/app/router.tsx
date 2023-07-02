@@ -3,6 +3,9 @@ import { type NativeStackNavigationProp } from "@react-navigation/native-stack"
 
 export type ScreenParamsList = {
   AuthLayout: { screen?: "LoginScreen" | "RegisterScreen" } | undefined
+  LoginScreen: undefined
+  RegisterScreen: undefined
+
   OnboardingLayout: undefined
   OnboardingStep1Screen: undefined
   OnboardingStep2Screen: undefined

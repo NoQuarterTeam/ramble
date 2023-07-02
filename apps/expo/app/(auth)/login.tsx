@@ -10,12 +10,14 @@ import { Text } from "../../components/ui/Text"
 import { api, AUTH_TOKEN } from "../../lib/api"
 import { useForm } from "../../lib/hooks/useForm"
 import { useRouter } from "../router"
+import { useKeyboardController } from "../../lib/hooks/useKeyboardController"
 
 export function LoginScreen() {
+  useKeyboardController()
   const queryClient = api.useContext()
   const navigation = useRouter()
 
-  const form = useForm({ defaultValues: { email: "jack@noquarter.co", password: "password" } })
+  const form = useForm({ defaultValues: { email: "", password: "" } })
 
   const { mutate, isLoading, error } = api.auth.login.useMutation({
     onSuccess: async (data) => {
@@ -51,7 +53,7 @@ export function LoginScreen() {
           </View>
           <View className="flex flex-row items-center justify-center">
             <Text className="text-base">No account yet?</Text>
-            <Button className="px-1" variant="link" onPress={() => navigation.push("AuthLayout", { screen: "RegisterScreen" })}>
+            <Button className="px-1" variant="link" onPress={() => navigation.replace("RegisterScreen")}>
               Register
             </Button>
           </View>

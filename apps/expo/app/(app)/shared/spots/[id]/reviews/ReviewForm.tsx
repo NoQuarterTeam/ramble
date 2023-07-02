@@ -35,8 +35,9 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
   return (
     <FormProvider {...form}>
       <FormInput
-        className="mb-2 h-[100px]"
+        className="mb-2"
         name="description"
+        label="Be nice, be honest"
         placeholder="How was your stay? what did you like?"
         numberOfLines={4}
         multiline

@@ -9,8 +9,10 @@ import { ModalView } from "../../components/ui/ModalView"
 import { api, AUTH_TOKEN } from "../../lib/api"
 import { useForm } from "../../lib/hooks/useForm"
 import { useRouter } from "../router"
+import { useKeyboardController } from "../../lib/hooks/useKeyboardController"
 
 export function RegisterScreen() {
+  useKeyboardController()
   const queryClient = api.useContext()
   const navigation = useRouter()
   const { mutate, error, isLoading } = api.auth.register.useMutation({
@@ -49,7 +51,7 @@ export function RegisterScreen() {
           </View>
 
           <View className="flex flex-row items-center justify-center">
-            <Button className="px-1" variant="link" onPress={() => navigation.push("AuthLayout", { screen: "LoginScreen" })}>
+            <Button className="px-1" variant="link" onPress={() => navigation.replace("LoginScreen")}>
               Login
             </Button>
           </View>

@@ -47,58 +47,61 @@ export function ProfileScreen() {
       </LoginPlaceholder>
     )
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false} className="space-y-4 px-4 py-20">
+    <View className="flex-1 space-y-2 px-4 pt-20">
       <Heading className="text-3xl">Profile</Heading>
-      <View>
-        <View className="space-y-4">
-          <TouchableOpacity
-            onPress={() => push("UsernameLayout", { username: me.username })}
-            className="flex flex-row items-center justify-between rounded-md border border-gray-200 p-4 dark:border-gray-700"
-          >
-            <View className="flex flex-row items-center space-x-4">
-              {me.avatar ? (
-                <Image
-                  source={{ uri: createImageUrl(me.avatar) }}
-                  className="sq-16 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
-                />
-              ) : (
-                <View className="sq-16 flex items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
-                  <User2 className="text-black dark:text-white" />
-                </View>
-              )}
-              <View>
-                <Heading className="text-2xl">{me.username}</Heading>
-                <Text className="text-base">
-                  {me.firstName} {me.lastName}
-                </Text>
-              </View>
-            </View>
-            <View>
-              <ChevronRight className="text-gray-700 dark:text-white" />
-            </View>
-          </TouchableOpacity>
 
-          <View>
-            <ProfileLink to="AccountScreen" Icon={User}>
-              Account
-            </ProfileLink>
-            <ProfileLink to="InterestsScreen" Icon={ToggleRight}>
-              Interests
-            </ProfileLink>
-            <ProfileLink to="VanScreen" Icon={Truck}>
-              Van
-            </ProfileLink>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false} className="space-y-4 pt-2">
+        <View>
+          <View className="space-y-4">
+            <TouchableOpacity
+              onPress={() => push("UsernameLayout", { username: me.username })}
+              className="flex flex-row items-center justify-between rounded-md border border-gray-200 p-4 dark:border-gray-700"
+            >
+              <View className="flex flex-row items-center space-x-4">
+                {me.avatar ? (
+                  <Image
+                    source={{ uri: createImageUrl(me.avatar) }}
+                    className="sq-16 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
+                  />
+                ) : (
+                  <View className="sq-16 flex items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
+                    <User2 className="text-black dark:text-white" />
+                  </View>
+                )}
+                <View>
+                  <Heading className="text-2xl">{me.username}</Heading>
+                  <Text className="text-base">
+                    {me.firstName} {me.lastName}
+                  </Text>
+                </View>
+              </View>
+              <View>
+                <ChevronRight className="text-gray-700 dark:text-white" />
+              </View>
+            </TouchableOpacity>
+
+            <View>
+              <ProfileLink to="AccountScreen" Icon={User}>
+                Account
+              </ProfileLink>
+              <ProfileLink to="InterestsScreen" Icon={ToggleRight}>
+                Interests
+              </ProfileLink>
+              <ProfileLink to="VanScreen" Icon={Truck}>
+                Van
+              </ProfileLink>
+            </View>
           </View>
         </View>
-      </View>
-      <View className="pt-10">
-        <Button onPress={handleLogout} variant="link">
-          Log out
-        </Button>
-        <Text className="text-center">v{VERSION}</Text>
-        <Text className="text-center opacity-60">{updateGroup?.split("-")[0] || updateId?.split("-")[0] || "dev"}</Text>
-      </View>
-    </ScrollView>
+        <View className="pt-10">
+          <Button onPress={handleLogout} variant="link">
+            Log out
+          </Button>
+          <Text className="text-center">v{VERSION}</Text>
+          <Text className="text-center opacity-60">{updateGroup?.split("-")[0] || updateId?.split("-")[0] || "dev"}</Text>
+        </View>
+      </ScrollView>
+    </View>
   )
 }
 

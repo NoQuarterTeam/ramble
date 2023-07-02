@@ -6,8 +6,10 @@ import { toast } from "../../../../../../components/ui/Toast"
 import { api } from "../../../../../../lib/api"
 import { useParams, useRouter } from "../../../../../router"
 import { ReviewForm } from "./ReviewForm"
+import { useKeyboardController } from "../../../../../../lib/hooks/useKeyboardController"
 
 export function ReviewDetailScreen() {
+  useKeyboardController()
   const {
     params: { id },
   } = useParams<"ReviewDetailScreen">()

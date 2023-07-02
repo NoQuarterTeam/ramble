@@ -1,12 +1,13 @@
 import { ScrollView } from "react-native"
 
 import { ModalView } from "../../../../../../components/ui/ModalView"
-import { Text } from "../../../../../../components/ui/Text"
 import { api } from "../../../../../../lib/api"
 import { useParams, useRouter } from "../../../../../router"
 import { ReviewForm } from "./ReviewForm"
+import { useKeyboardController } from "../../../../../../lib/hooks/useKeyboardController"
 
 export function NewReviewScreen() {
+  useKeyboardController()
   const {
     params: { spotId },
   } = useParams<"NewReviewScreen">()
@@ -21,11 +22,9 @@ export function NewReviewScreen() {
     },
   })
   const { data: spot } = api.spot.detail.useQuery({ id: spotId })
-
   return (
     <ModalView title={`New review for ${spot?.name}`}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
-        <Text className="mt-4 text-xl">Be nice, be honest</Text>
         <ReviewForm isLoading={isLoading} error={error} onCreate={mutate} spotId={spotId} />
       </ScrollView>
     </ModalView>

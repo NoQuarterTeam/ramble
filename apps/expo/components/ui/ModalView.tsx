@@ -25,6 +25,7 @@ export function ModalView(props: Props) {
           <Feather name="x" size={24} color={colorScheme === "dark" ? "white" : "black"} />
         </TouchableOpacity>
       </View>
+
       {props.children}
       <StatusBar style="light" />
       {props.shouldRenderToast && <Toast />}
