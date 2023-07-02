@@ -57,7 +57,7 @@ export function AccountScreen() {
   const onPickImage = async () => {
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         allowsMultipleSelection: false,
         selectionLimit: 1,

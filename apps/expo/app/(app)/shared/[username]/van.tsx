@@ -1,11 +1,12 @@
 import { View } from "react-native"
 import { useLocalSearchParams } from "expo-router"
 
-import { ImageCarousel } from "../../../../components/ui/ImageCarousel"
 import { Spinner } from "../../../../components/ui/Spinner"
 import { Text } from "../../../../components/ui/Text"
 import { api } from "../../../../lib/api"
-import { width } from "../../../../lib/device"
+
+import { Image } from "expo-image"
+import { createImageUrl } from "@ramble/shared"
 
 export function UsernameVan() {
   const { username } = useLocalSearchParams<{ username: string }>()
@@ -27,13 +28,22 @@ export function UsernameVan() {
 
   return (
     <View className="space-y-2 py-2">
-      <Text className="text-3xl">{van.name}</Text>
       <View>
-        <Text>{van.model}</Text>
-        <Text>{van.year}</Text>
-        <Text>{van.description}</Text>
+        <Text className="text-3xl">{van.name}</Text>
+        <View className="flex flex-row items-center space-x-1">
+          <Text className="opacity-75">{van.model}</Text>
+          <Text className="opacity-75">·</Text>
+          <Text className="opacity-75">{van.year}</Text>
+        </View>
       </View>
-      {van.images.length > 0 && <ImageCarousel width={width - 16} height={300} images={van.images} imageClassName="rounded-md" />}
+      <Text>{van.description}</Text>
+      {van.images.map((image) => (
+        <Image
+          key={image.id}
+          className="min-h-[300px] w-full rounded-md object-contain"
+          source={{ uri: createImageUrl(image.path) }}
+        />
+      ))}
     </View>
   )
 }

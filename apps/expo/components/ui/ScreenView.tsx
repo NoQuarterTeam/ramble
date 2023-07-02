@@ -17,7 +17,7 @@ export function ScreenView(props: Props) {
   const colorScheme = useColorScheme()
   const { goBack } = useRouter()
   return (
-    <View className={join("min-h-full px-4", isAndroid ? "pt-20" : "pt-16")}>
+    <View className={join("min-h-full px-4", isAndroid ? "pt-24" : "pt-20")}>
       <View className="flex flex-row items-center justify-between">
         <View className="flex flex-row items-center space-x-0.5">
           <TouchableOpacity onPress={goBack} className="mb-1 p-2">

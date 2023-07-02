@@ -4,6 +4,9 @@ import { z } from "zod"
 import { TRPCError } from "@trpc/server"
 
 export const vanRouter = createTRPCRouter({
+  mine: protectedProcedure.query(async ({ ctx }) => {
+    return ctx.prisma.van.findUnique({ where: { userId: ctx.user.id }, include: { images: true } })
+  }),
   byUser: publicProfileProcedure.query(async ({ ctx }) => {
     return ctx.prisma.van.findUnique({ where: { userId: ctx.publicUser.id }, include: { images: true } })
   }),
@@ -15,6 +18,21 @@ export const vanRouter = createTRPCRouter({
       if (van.userId !== ctx.user.id) throw new TRPCError({ code: "UNAUTHORIZED" })
       return ctx.prisma.van.update({ where: { id }, data })
     }),
+  saveImages: protectedProcedure.input(z.object({ keys: z.array(z.string()) })).mutation(async ({ ctx, input }) => {
+    const van = await ctx.prisma.van.findUnique({ where: { userId: ctx.user.id } })
+    if (!van) throw new TRPCError({ code: "NOT_FOUND" })
+    if (van.userId !== ctx.user.id) throw new TRPCError({ code: "UNAUTHORIZED" })
+    return ctx.prisma.van.update({
+      where: { id: van.id },
+      data: { images: { createMany: { data: input.keys.map((path) => ({ path })) } } },
+    })
+  }),
+  removeImage: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
+    const van = await ctx.prisma.van.findUnique({ where: { userId: ctx.user.id } })
+    if (!van) throw new TRPCError({ code: "NOT_FOUND" })
+    if (van.userId !== ctx.user.id) throw new TRPCError({ code: "UNAUTHORIZED" })
+    return ctx.prisma.van.update({ where: { id: van.id }, data: { images: { delete: { id: input.id } } } })
+  }),
   upsert: protectedProcedure
     .input(vanSchema.extend({ id: z.string().nullish() }))
     .mutation(async ({ ctx, input: { id, ...data } }) => {

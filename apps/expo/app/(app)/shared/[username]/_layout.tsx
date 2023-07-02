@@ -61,7 +61,7 @@ export function UsernameLayout() {
             </Button>
           </View>
         </View>
-        <View className="p-2">
+        <View className="p-2 pb-20">
           <UsernameTabs />
         </View>
       </ScrollView>
