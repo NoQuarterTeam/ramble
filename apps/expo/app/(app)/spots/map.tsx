@@ -247,9 +247,6 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
   const { animatedHandleHeight, animatedSnapPoints, animatedContentHeight, handleContentLayout } =
     useBottomSheetDynamicSnapPoints(initialSnapPoints)
 
-  const handleSheetChanges = React.useCallback((index: number) => {
-    if (index === -1) handleSheetClose()
-  }, [])
   const handleSheetClose = React.useCallback(() => {
     bottomSheetRef.current?.close()
     onClose()
@@ -273,7 +270,6 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
       snapPoints={animatedSnapPoints}
       handleHeight={animatedHandleHeight}
       contentHeight={animatedContentHeight}
-      onChange={handleSheetChanges}
     >
       {isLoading ? null : (
         <View onLayout={handleContentLayout} className="rounded-xl bg-white p-4 dark:bg-gray-900">
