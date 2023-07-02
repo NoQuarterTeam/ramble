@@ -269,7 +269,7 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
       bottomInset={10}
       handleComponent={null}
       index={id ? 0 : -1}
-      enablePanDownToClose
+      // enablePanDownToClose
       snapPoints={animatedSnapPoints}
       handleHeight={animatedHandleHeight}
       contentHeight={animatedContentHeight}
