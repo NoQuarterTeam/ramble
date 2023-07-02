@@ -6,6 +6,8 @@ import { StatusBar } from "expo-status-bar"
 import { useRouter } from "../../app/router"
 import { Heading } from "./Heading"
 import { Toast } from "./Toast"
+import { join } from "@ramble/shared"
+import { isAndroid } from "../../lib/device"
 
 interface Props {
   title?: string
@@ -18,7 +20,7 @@ export function ModalView(props: Props) {
   const navigation = useRouter()
   const colorScheme = useColorScheme()
   return (
-    <View className="h-full flex-grow bg-white px-4 pt-6 dark:bg-black">
+    <View className={join("h-full flex-grow bg-white px-4 pt-6 dark:bg-black", isAndroid ? "pt-10" : "pt-6")}>
       <View className="flex flex-row justify-between pb-2">
         {props.title ? <Heading className="w-11/12 text-2xl">{props.title}</Heading> : <Text />}
         <TouchableOpacity onPress={props.onBack || navigation.goBack} className="p-1">
