@@ -29,6 +29,7 @@ export function FormInput({ label, name, error, rightElement, ...props }: Props)
               {...props}
               onChangeText={onChange}
               value={value}
+              textAlignVertical="top"
               onBlur={onBlur}
               className={merge(rightElement && "flex-1", props.className)}
             />
