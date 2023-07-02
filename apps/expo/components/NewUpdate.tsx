@@ -1,6 +1,5 @@
 import * as React from "react"
 import { View } from "react-native"
-
 import * as Updates from "expo-updates"
 
 import { Button } from "./ui/Button"

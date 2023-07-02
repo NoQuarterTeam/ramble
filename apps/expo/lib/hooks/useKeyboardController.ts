@@ -1,6 +1,6 @@
 import * as React from "react"
-import { useFocusEffect } from "@react-navigation/native"
 import { AvoidSoftInput } from "react-native-avoid-softinput"
+import { useFocusEffect } from "@react-navigation/native"
 
 export function useKeyboardController() {
   const onFocusEffect = React.useCallback(() => {

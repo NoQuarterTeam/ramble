@@ -4,9 +4,9 @@ import { ModalView } from "../../../../../../components/ui/ModalView"
 import { Text } from "../../../../../../components/ui/Text"
 import { toast } from "../../../../../../components/ui/Toast"
 import { api } from "../../../../../../lib/api"
+import { useKeyboardController } from "../../../../../../lib/hooks/useKeyboardController"
 import { useParams, useRouter } from "../../../../../router"
 import { ReviewForm } from "./ReviewForm"
-import { useKeyboardController } from "../../../../../../lib/hooks/useKeyboardController"
 
 export function ReviewDetailScreen() {
   useKeyboardController()

@@ -1,5 +1,6 @@
 import { useColorScheme } from "react-native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
+
 import OnboardingStep1Screen from "./1"
 import OnboardingStep2Screen from "./2"
 import OnboardingStep3Screen from "./3"

@@ -1,17 +1,14 @@
 import * as React from "react"
+import { FormProvider } from "react-hook-form"
 import { ScrollView, View } from "react-native"
 
-import { Heading } from "../../components/ui/Heading"
-import { useForm } from "../../lib/hooks/useForm"
-
-import { useRouter } from "../router"
-import { api } from "../../lib/api"
-import { FormProvider } from "react-hook-form"
-
 import { Button } from "../../components/ui/Button"
-
 import { FormError } from "../../components/ui/FormError"
 import { FormInput } from "../../components/ui/FormInput"
+import { Heading } from "../../components/ui/Heading"
+import { api } from "../../lib/api"
+import { useForm } from "../../lib/hooks/useForm"
+import { useRouter } from "../router"
 
 export default function OnboardingStep3Screen() {
   const { data, isLoading } = api.van.mine.useQuery()

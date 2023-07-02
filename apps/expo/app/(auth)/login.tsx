@@ -9,8 +9,8 @@ import { ModalView } from "../../components/ui/ModalView"
 import { Text } from "../../components/ui/Text"
 import { api, AUTH_TOKEN } from "../../lib/api"
 import { useForm } from "../../lib/hooks/useForm"
-import { useRouter } from "../router"
 import { useKeyboardController } from "../../lib/hooks/useKeyboardController"
+import { useRouter } from "../router"
 
 export function LoginScreen() {
   useKeyboardController()

@@ -1,5 +1,6 @@
 import { View } from "react-native"
 import { Image } from "expo-image"
+import { User2 } from "lucide-react-native"
 
 import { createImageUrl } from "@ramble/shared"
 
@@ -7,7 +8,6 @@ import { api } from "../lib/api"
 import { interestOptions } from "../lib/interests"
 import { Spinner } from "./ui/Spinner"
 import { Text } from "./ui/Text"
-import { User2 } from "lucide-react-native"
 
 interface Props {
   username: string

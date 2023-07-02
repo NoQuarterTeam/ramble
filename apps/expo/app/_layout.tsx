@@ -29,8 +29,8 @@ import { ReviewDetailScreen } from "./(app)/shared/spots/[id]/reviews/[id]"
 import { NewReviewScreen } from "./(app)/shared/spots/[id]/reviews/new"
 import { SaveScreen } from "./(app)/shared/spots/[id]/save"
 import { AuthLayout } from "./(auth)/_layout"
-import { type ScreenParamsList } from "./router"
 import { OnboardingLayout } from "./onboarding/_layout"
+import { type ScreenParamsList } from "./router"
 
 SplashScreen.preventAutoHideAsync()
 

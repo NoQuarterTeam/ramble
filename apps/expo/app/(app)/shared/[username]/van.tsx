@@ -1,12 +1,12 @@
 import { View } from "react-native"
+import { Image } from "expo-image"
 import { useLocalSearchParams } from "expo-router"
+
+import { createImageUrl } from "@ramble/shared"
 
 import { Spinner } from "../../../../components/ui/Spinner"
 import { Text } from "../../../../components/ui/Text"
 import { api } from "../../../../lib/api"
-
-import { Image } from "expo-image"
-import { createImageUrl } from "@ramble/shared"
 
 export function UsernameVan() {
   const { username } = useLocalSearchParams<{ username: string }>()

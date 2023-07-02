@@ -1,14 +1,14 @@
-import { ScrollView, View } from "react-native"
-import { Heading } from "../../components/ui/Heading"
-
-import { FormInput } from "../../components/ui/FormInput"
 import { FormProvider } from "react-hook-form"
-import { api } from "../../lib/api"
-import { useMe } from "../../lib/hooks/useMe"
-import { useForm } from "../../lib/hooks/useForm"
+import { ScrollView, View } from "react-native"
+
 import { Button } from "../../components/ui/Button"
-import { useRouter } from "../router"
 import { FormError } from "../../components/ui/FormError"
+import { FormInput } from "../../components/ui/FormInput"
+import { Heading } from "../../components/ui/Heading"
+import { api } from "../../lib/api"
+import { useForm } from "../../lib/hooks/useForm"
+import { useMe } from "../../lib/hooks/useMe"
+import { useRouter } from "../router"
 
 export default function OnboardingStep1Screen() {
   const { me } = useMe()

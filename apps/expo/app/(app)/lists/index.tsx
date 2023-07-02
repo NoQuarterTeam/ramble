@@ -1,5 +1,4 @@
-import { View, TouchableOpacity } from "react-native"
-
+import { TouchableOpacity, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import { PlusCircle } from "lucide-react-native"
 

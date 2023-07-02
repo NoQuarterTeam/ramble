@@ -1,17 +1,17 @@
 import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
-import colors from "@ramble/tailwind-config/src/colors"
-import { Heading } from "../../components/ui/Heading"
 
-import { useMe } from "../../lib/hooks/useMe"
-import { useRouter } from "../router"
-import { api } from "../../lib/api"
+import colors from "@ramble/tailwind-config/src/colors"
 
 import { Button } from "../../components/ui/Button"
-import { IconProps } from "../../components/ui/Icons"
-import { interestOptions } from "../../lib/interests"
-import { Text } from "../../components/ui/Text"
 import { FormError } from "../../components/ui/FormError"
+import { Heading } from "../../components/ui/Heading"
+import { type IconProps } from "../../components/ui/Icons"
+import { Text } from "../../components/ui/Text"
+import { api } from "../../lib/api"
+import { useMe } from "../../lib/hooks/useMe"
+import { interestOptions } from "../../lib/interests"
+import { useRouter } from "../router"
 
 export default function OnboardingStep2Screen() {
   const { me } = useMe()

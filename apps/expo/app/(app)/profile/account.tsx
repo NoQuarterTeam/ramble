@@ -1,11 +1,11 @@
-import * as ImagePicker from "expo-image-picker"
-
 import { FormProvider } from "react-hook-form"
 import { ScrollView, TouchableOpacity, View } from "react-native"
+import { Image } from "expo-image"
+import * as ImagePicker from "expo-image-picker"
+import { Edit2, User2 } from "lucide-react-native"
 
 import { createImageUrl } from "@ramble/shared"
-import { Image } from "expo-image"
-import { Edit2, User2 } from "lucide-react-native"
+
 import { Button } from "../../../components/ui/Button"
 import { FormError } from "../../../components/ui/FormError"
 import { FormInput } from "../../../components/ui/FormInput"

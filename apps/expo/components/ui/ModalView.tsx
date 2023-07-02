@@ -3,11 +3,12 @@ import { Text, TouchableOpacity, useColorScheme, View } from "react-native"
 import Feather from "@expo/vector-icons/Feather"
 import { StatusBar } from "expo-status-bar"
 
+import { join } from "@ramble/shared"
+
 import { useRouter } from "../../app/router"
+import { isAndroid } from "../../lib/device"
 import { Heading } from "./Heading"
 import { Toast } from "./Toast"
-import { join } from "@ramble/shared"
-import { isAndroid } from "../../lib/device"
 
 interface Props {
   title?: string
