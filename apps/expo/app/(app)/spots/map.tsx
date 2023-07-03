@@ -19,6 +19,7 @@ import { api, type RouterOutputs } from "../../../lib/api"
 import { width } from "../../../lib/device"
 import { SPOT_OPTIONS, SPOTS } from "../../../lib/spots"
 import { useRouter } from "../../router"
+import { useAsyncStorage } from "../../../lib/hooks/useAsyncStorage"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
@@ -42,7 +43,7 @@ export function SpotsMapScreen() {
   const [clusters, setClusters] = React.useState<Cluster[] | null>(null)
   const filterModalProps = useDisclosure()
   const [activeSpotId, setActiveSpotId] = React.useState<string | null>(null)
-  const [filters, setFilters] = React.useState<Filters>(initialFilters)
+  const [filters, setFilters] = useAsyncStorage("ramble.map.filters", initialFilters)
   const camera = React.useRef<Camera>(null)
   const mapRef = React.useRef<MapType>(null)
   const theme = useColorScheme()
