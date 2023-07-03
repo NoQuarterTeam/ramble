@@ -61,25 +61,31 @@ export function ReviewForm({ spot, review }: Props) {
         </Form>
 
         <div className="grid grid-cols-4 gap-2">
-          <img
-            className="col-span-4 h-[200px] w-full rounded-md object-cover"
-            height={200}
-            width={600}
-            alt="spot 1"
-            src={createImageUrl(spot.images[0].path)}
-          />
-          <img
-            className="col-span-2 h-[200px] w-full rounded-md object-cover"
-            height={200}
-            alt="spot 2"
-            src={createImageUrl(spot.images[1].path)}
-          />
-          <img
-            className="col-span-2 h-[200px] w-full rounded-md object-cover"
-            width={600}
-            alt="spot 3"
-            src={createImageUrl(spot.images[2].path)}
-          />
+          {spot.images[0] && (
+            <img
+              className="col-span-4 h-[200px] w-full rounded-md object-cover"
+              height={200}
+              width={600}
+              alt="spot 1"
+              src={createImageUrl(spot.images[0].path)}
+            />
+          )}
+          {spot.images[1] && (
+            <img
+              className="col-span-2 h-[200px] w-full rounded-md object-cover"
+              height={200}
+              alt="spot 2"
+              src={createImageUrl(spot.images[1].path)}
+            />
+          )}
+          {spot.images[2] && (
+            <img
+              className="col-span-2 h-[200px] w-full rounded-md object-cover"
+              width={600}
+              alt="spot 3"
+              src={createImageUrl(spot.images[2].path)}
+            />
+          )}
         </div>
       </div>
     </PageContainer>
