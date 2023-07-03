@@ -16,27 +16,27 @@ export const Icons = {
   Van: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: IconProps) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path
-        d="M15 16L9 16M20 16L22 16V13C22.0007 12.762 21.9165 12.3816 21.7625 12.2001C21.6085 12.0186 21.2349 12.0381 21 12L20.25 9.49998L19.875 8.24996L19.7138 7.71264C19.5869 7.28966 19.1976 7 18.756 7H18L11.25 6.99995H3.87679C3.37504 6.99995 2.95097 7.37177 2.88537 7.86922L2.64 9.72995C2.22015 10.5646 2.00099 11.4857 2 12.42V16H4"
+        d="M15 16.5L9 16.5M20 16.5L22 16.5V13.5C22.0007 13.2621 21.9165 12.8816 21.7625 12.7001C21.6085 12.5187 21.2349 12.5381 21 12.5L20.25 10L19.875 8.75001L19.7138 8.21269C19.5869 7.78971 19.1976 7.50005 18.756 7.50005H18L11.25 7.5H3.87679C3.37504 7.5 2.95097 7.87182 2.88537 8.36926L2.64 10.23C2.22015 11.0646 2.00099 11.9857 2 12.92V16.5H4"
         stroke={color}
         strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
-        d="M6.5 19C7.88071 19 9 17.8807 9 16.5C9 15.1193 7.88071 14 6.5 14C5.11929 14 4 15.1193 4 16.5C4 17.8807 5.11929 19 6.5 19Z"
+        d="M6.5 19.5C7.88071 19.5 9 18.3807 9 17C9 15.6193 7.88071 14.5 6.5 14.5C5.11929 14.5 4 15.6193 4 17C4 18.3807 5.11929 19.5 6.5 19.5Z"
         stroke={color}
         strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
-        d="M17.5 19C18.8807 19 20 17.8807 20 16.5C20 15.1193 18.8807 14 17.5 14C16.1193 14 15 15.1193 15 16.5C15 17.8807 16.1193 19 17.5 19Z"
+        d="M17.5 19.5C18.8807 19.5 20 18.3807 20 17C20 15.6193 18.8807 14.5 17.5 14.5C16.1193 14.5 15 15.6193 15 17C15 18.3807 16.1193 19.5 17.5 19.5Z"
         stroke={color}
         strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <path d="M5 4L17 4" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5 4.5L17 4.5" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ),
 }
