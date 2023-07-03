@@ -81,44 +81,44 @@ export function UserScreen() {
             {user.avatar ? (
               <Image
                 source={{ uri: createImageUrl(user.avatar) }}
-                className="sq-20 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
+                className="sq-24 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
               />
             ) : (
-              <View className="sq-20 flex items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
+              <View className="sq-24 flex items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
                 <User2 className="text-black dark:text-white" />
               </View>
             )}
             <View className="space-y-px">
-              <Text className="text-2xl">
+              <Text className="text-xl">
                 {user.firstName} {user.lastName}
               </Text>
 
               <View className="flex flex-row items-center space-x-4">
                 <TouchableOpacity
-                  className="flex flex-row space-x-1"
+                  className="flex flex-row space-x-1 pb-1"
                   onPress={() => router.push("UserFollowing", { username: params.username })}
                 >
                   <Text className="font-600">{user._count.following}</Text>
                   <Text className="opacity-70">following</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  className="flex flex-row space-x-1"
+                  className="flex flex-row space-x-1 pb-1"
                   onPress={() => router.push("UserFollowers", { username: params.username })}
                 >
                   <Text className="font-600">{user._count.followers}</Text>
                   <Text className="opacity-70">followers</Text>
                 </TouchableOpacity>
               </View>
+              <View className="flex flex-row items-center space-x-1">
+                {interestOptions
+                  .filter((i) => user[i.value as keyof typeof user])
+                  .map((interest) => (
+                    <View key={interest.value} className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
+                      <interest.Icon size={18} className="text-black dark:text-white" />
+                    </View>
+                  ))}
+              </View>
             </View>
-          </View>
-          <View className="flex flex-row items-center space-x-2">
-            {interestOptions
-              .filter((i) => user[i.value as keyof typeof user])
-              .map((interest) => (
-                <View key={interest.value} className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
-                  <interest.Icon size={20} className="text-black dark:text-white" />
-                </View>
-              ))}
           </View>
           <Text>{user.bio}</Text>
         </View>
