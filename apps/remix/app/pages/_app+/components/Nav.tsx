@@ -29,25 +29,8 @@ export function Nav() {
   return (
     <div className="h-nav flex w-full items-center justify-between border-b border-solid border-gray-50 bg-white px-4 align-middle dark:border-gray-700 dark:bg-gray-800 md:px-8">
       <div className="flex items-center space-x-4">
-        <ClientOnly
-          fallback={
-            <Link to={`/map`} className="flex w-[100px] items-center space-x-1 text-xl font-medium">
-              <span>
-                <Icons.Van />
-              </span>
-              <span>Ramble</span>
-            </Link>
-          }
-        >
-          <Link
-            to={`/map${typeof window !== "undefined" ? window.location.search : ""}`}
-            className="flex w-[100px] items-center space-x-1 text-xl font-medium"
-          >
-            <span>
-              <Icons.Van />
-            </span>
-            <span>Ramble</span>
-          </Link>
+        <ClientOnly fallback={<Logo to="/map" />}>
+          <Logo to={`/map${typeof window !== "undefined" ? window.location.search : ""}`} />
         </ClientOnly>
 
         <div className="hidden items-center md:flex">
@@ -178,5 +161,16 @@ export function Nav() {
         </DropdownMenu>
       </div>
     </div>
+  )
+}
+
+function Logo({ to }: { to: string }) {
+  return (
+    <Link to={to} className="flex w-[100px] items-center space-x-1">
+      <span>
+        <Icons.Van size={24} />
+      </span>
+      <span className="text-xl font-medium">Ramble</span>
+    </Link>
   )
 }
