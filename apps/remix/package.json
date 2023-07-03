@@ -20,7 +20,6 @@
     "@aws-sdk/lib-storage": "^3.310.0",
     "@aws-sdk/s3-request-presigner": "^3.310.0",
     "@fontsource/poppins": "^5.0.0",
-    "@fontsource/ribeye-marrow": "^5.0.0",
     "@radix-ui/react-alert-dialog": "^1.0.3",
     "@radix-ui/react-avatar": "^1.0.2",
     "@radix-ui/react-checkbox": "^1.0.3",

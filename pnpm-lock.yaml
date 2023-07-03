@@ -237,9 +237,6 @@ importers:
       '@fontsource/poppins':
         specifier: ^5.0.0
         version: 5.0.0
-      '@fontsource/ribeye-marrow':
-        specifier: ^5.0.0
-        version: 5.0.0
       '@radix-ui/react-alert-dialog':
         specifier: ^1.0.3
         version: 1.0.3(@types/react@18.2.14)(react-dom@18.2.0)(react@18.2.0)
@@ -5219,10 +5216,6 @@ packages:
 
   /@fontsource/poppins@5.0.0:
     resolution: {integrity: sha512-YdJlR5Q/XXvp1rd0668YtzBM/QQmR/1T/oMyatcn648wkLiAt4FOhi6CT1xxo6PeucqX/+w8gAhP5XvToeMg0Q==}
-    dev: false
-
-  /@fontsource/ribeye-marrow@5.0.0:
-    resolution: {integrity: sha512-yuu0dHFrLcwjpT7LhQWPJp/sbp+RG/WKTrxBYceHTkGCabDI1ISIPcgCw7oZO3WMM8PlUm6aGqR1qmR6H0+VnA==}
     dev: false
 
   /@gar/promisify@1.1.3:

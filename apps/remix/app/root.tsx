@@ -5,7 +5,6 @@ import "@fontsource/poppins/600.css"
 import "@fontsource/poppins/700.css"
 import "@fontsource/poppins/800.css"
 import "@fontsource/poppins/900.css"
-import "@fontsource/ribeye-marrow/400.css"
 import "~/styles/app.css"
 
 import * as Tooltip from "@radix-ui/react-tooltip"

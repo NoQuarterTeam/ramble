@@ -30,14 +30,14 @@ export function Nav() {
       <div className="flex items-center space-x-4">
         <ClientOnly
           fallback={
-            <Link to={`/map`} className="font-ribeye w-[70px] text-xl">
+            <Link to={`/map`} className="w-[70px] text-xl font-medium">
               Ramble
             </Link>
           }
         >
           <Link
             to={`/map${typeof window !== "undefined" ? window.location.search : ""}`}
-            className="font-ribeye w-[70px] text-xl"
+            className="w-[70px] text-xl font-medium"
           >
             Ramble
           </Link>
