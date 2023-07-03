@@ -20,6 +20,7 @@ import { width } from "../../../lib/device"
 import { SPOT_OPTIONS, SPOTS } from "../../../lib/spots"
 import { useRouter } from "../../router"
 import { useAsyncStorage } from "../../../lib/hooks/useAsyncStorage"
+import { toast } from "../../../components/ui/Toast"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
@@ -65,21 +66,26 @@ export function SpotsMapScreen() {
   }, [])
 
   const onFiltersChange = async (f: Filters) => {
-    filterModalProps.onClose()
-    setFilters(f)
-    const properties = await mapRef.current?.getVisibleBounds()
-    const zoom = await mapRef.current?.getZoom()
-    if (!properties) return
-    const input = {
-      ...f,
-      minLng: properties[1][0],
-      minLat: properties[1][1],
-      maxLng: properties[0][0],
-      maxLat: properties[0][1],
-      zoom: zoom || 13,
+    try {
+      filterModalProps.onClose()
+      setFilters(f)
+      const properties = await mapRef.current?.getVisibleBounds()
+      const zoom = await mapRef.current?.getZoom()
+      if (!properties) return
+      const input = {
+        ...f,
+        minLng: properties[1][0],
+        minLat: properties[1][1],
+        maxLng: properties[0][0],
+        maxLat: properties[0][1],
+        zoom: zoom || 13,
+      }
+      const data = await queryClient.spot.clusters.fetch(input)
+      setClusters(data)
+    } catch {
+      toast({ title: "Error fetching spots", type: "error" })
+      console.log("oops - fetching clusters on filter")
     }
-    const data = await queryClient.spot.clusters.fetch(input)
-    setClusters(data)
   }
 
   const onMapMove = async ({ properties }: Mapbox.MapState) => {
@@ -97,6 +103,7 @@ export function SpotsMapScreen() {
       const data = await queryClient.spot.clusters.fetch(input)
       setClusters(data)
     } catch {
+      toast({ title: "Error fetching spots", type: "error" })
       console.log("oops - fetching clusters on map move")
     } finally {
       setIsFetching(false)
