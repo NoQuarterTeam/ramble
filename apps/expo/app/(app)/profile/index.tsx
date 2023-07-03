@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import Constants from "expo-constants"
 import { Image } from "expo-image"
 import * as Updates from "expo-updates"
-import { ChevronRight, type LucideIcon, ToggleRight, Truck, User, User2 } from "lucide-react-native"
+import { ChevronRight, type LucideIcon, ToggleRight, User, User2 } from "lucide-react-native"
 
 import { createImageUrl } from "@ramble/shared"
 
@@ -15,6 +15,7 @@ import { api, AUTH_TOKEN } from "../../../lib/api"
 import { VERSION } from "../../../lib/config"
 import { useMe } from "../../../lib/hooks/useMe"
 import { type ScreenParamsList, useRouter } from "../../router"
+import { Icons } from "../../../components/ui/Icons"
 
 const updateId = Updates.updateId
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -87,7 +88,7 @@ export function ProfileScreen() {
               <ProfileLink to="InterestsScreen" Icon={ToggleRight}>
                 Interests
               </ProfileLink>
-              <ProfileLink to="VanScreen" Icon={Truck}>
+              <ProfileLink to="VanScreen" Icon={Icons.Van}>
                 Van
               </ProfileLink>
             </View>
