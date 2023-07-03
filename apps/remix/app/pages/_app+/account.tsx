@@ -3,13 +3,13 @@ import { Outlet, useLoaderData } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import type { LucideIcon } from "lucide-react"
-import { Settings, ToggleRight, Truck, User } from "lucide-react"
+import { Settings, ToggleRight, User } from "lucide-react"
 
 import { createImageUrl, merge } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
 import { NavLink } from "~/components/NavLink"
-import { Avatar, Badge, buttonSizeStyles, buttonStyles } from "~/components/ui"
+import { Avatar, Badge, Icons, buttonSizeStyles, buttonStyles } from "~/components/ui"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { PageContainer } from "../../components/PageContainer"
@@ -59,7 +59,7 @@ export default function AccountLayout() {
           <AccountLink to="/account/interests" Icon={ToggleRight} end>
             Interests
           </AccountLink>
-          <AccountLink Icon={Truck} to="/account/van">
+          <AccountLink Icon={Icons.Van} to="/account/van">
             My van
           </AccountLink>
           <AccountLink Icon={Settings} to="/account/settings">

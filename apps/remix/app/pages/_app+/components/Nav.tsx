@@ -12,6 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   IconButton,
+  Icons,
   Tooltip,
 } from "~/components/ui"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
@@ -30,16 +31,22 @@ export function Nav() {
       <div className="flex items-center space-x-4">
         <ClientOnly
           fallback={
-            <Link to={`/map`} className="w-[70px] text-xl font-medium">
-              Ramble
+            <Link to={`/map`} className="flex w-[100px] items-center space-x-1 text-xl font-medium">
+              <span>
+                <Icons.Van />
+              </span>
+              <span>Ramble</span>
             </Link>
           }
         >
           <Link
             to={`/map${typeof window !== "undefined" ? window.location.search : ""}`}
-            className="w-[70px] text-xl font-medium"
+            className="flex w-[100px] items-center space-x-1 text-xl font-medium"
           >
-            Ramble
+            <span>
+              <Icons.Van />
+            </span>
+            <span>Ramble</span>
           </Link>
         </ClientOnly>
 
