@@ -35,7 +35,9 @@ export type ScreenParamsList = {
   ReviewDetailScreen: { id: string }
   ListDetailScreen: { id: string }
   ListDetailMapScreen: { id: string }
-  UsernameLayout: { username: string; tab?: "spots" | "lists" | "van" }
+  UserScreen: { username: string; tab?: "spots" | "lists" | "van" }
+  UserFollowers: { username: string }
+  UserFollowing: { username: string }
 }
 
 export type NavigationParams<T extends keyof ScreenParamsList> = NativeStackNavigationProp<ScreenParamsList, T>

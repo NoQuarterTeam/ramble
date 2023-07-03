@@ -6,8 +6,8 @@ import { Text } from "../../../../components/ui/Text"
 import { api } from "../../../../lib/api"
 import { useParams } from "../../../router"
 
-export function UsernameSpots() {
-  const { params } = useParams<"UsernameLayout">()
+export function UserSpots() {
+  const { params } = useParams<"UserScreen">()
   const { data: spots, isLoading } = api.spot.byUser.useQuery({ username: params.username })
   if (isLoading)
     return (

@@ -6,7 +6,7 @@ import { Spinner } from "../../../../components/ui/Spinner"
 import { Text } from "../../../../components/ui/Text"
 import { api } from "../../../../lib/api"
 
-export default function UsernameLists() {
+export default function UserLists() {
   const { username } = useLocalSearchParams<{ username: string }>()
 
   const { data: lists, isLoading } = api.list.allByUser.useQuery({ username: username || "" }, { enabled: !!username })

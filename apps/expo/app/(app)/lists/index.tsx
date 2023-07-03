@@ -30,7 +30,7 @@ export function ListsScreen() {
           estimatedItemSize={86}
           contentContainerStyle={{ paddingVertical: 10 }}
           ListEmptyComponent={<Text className="text-center">No lists yet</Text>}
-          data={lists || []}
+          data={lists}
           ItemSeparatorComponent={() => <View className="h-1" />}
           renderItem={({ item }) => <ListItem list={item} />}
         />

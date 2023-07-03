@@ -8,7 +8,7 @@ import { Spinner } from "../../../../components/ui/Spinner"
 import { Text } from "../../../../components/ui/Text"
 import { api } from "../../../../lib/api"
 
-export function UsernameVan() {
+export function UserVan() {
   const { username } = useLocalSearchParams<{ username: string }>()
 
   const { data: van, isLoading } = api.van.byUser.useQuery({ username: username || "" }, { enabled: !!username })

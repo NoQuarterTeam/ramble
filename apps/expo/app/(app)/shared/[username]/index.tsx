@@ -5,29 +5,35 @@ import { Button } from "../../../../components/ui/Button"
 import { Heading } from "../../../../components/ui/Heading"
 
 import { useParams, useRouter } from "../../../router"
-import UsernameLists from "./lists"
-import { UsernameSpots } from "./spots"
-import { UsernameVan } from "./van"
+import UserLists from "./lists"
+import { UserSpots } from "./spots"
+import { UserVan } from "./van"
 import { useMe } from "../../../../lib/hooks/useMe"
 import { api } from "../../../../lib/api"
 import { Image } from "expo-image"
-import { createImageUrl } from "@ramble/shared"
+import { createImageUrl, join } from "@ramble/shared"
 import { Spinner } from "../../../../components/ui/Spinner"
 import { Text } from "../../../../components/ui/Text"
 import { interestOptions } from "../../../../lib/interests"
+import { isAndroid } from "../../../../lib/device"
 
-export function UsernameLayout() {
+export function UserScreen() {
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
   const { me } = useMe()
-  const { params } = useParams<"UsernameLayout">()
+  const { params } = useParams<"UserScreen">()
   const { data: user, isLoading } = api.user.profile.useQuery({ username: params.username })
   const tab = params.tab || "spots"
   const router = useRouter()
   const utils = api.useContext()
   const { mutate } = api.user.toggleFollow.useMutation({
     onSuccess: () => {
+      if (!me) return
+      void utils.user.followers.refetch({ username: params.username })
       void utils.user.profile.refetch({ username: params.username })
+
+      void utils.user.following.refetch({ username: me.username })
+      void utils.user.profile.refetch({ username: me.username })
     },
   })
   const onToggleFollow = () => mutate({ username: params.username })
@@ -45,8 +51,8 @@ export function UsernameLayout() {
       </View>
     )
   return (
-    <View className="pt-16">
-      <View className="flex flex-row items-center justify-between px-6 pb-2">
+    <View className={join(isAndroid ? "pt-24" : "pt-20")}>
+      <View className="flex flex-row items-center justify-between px-4 pb-2">
         <View className="flex flex-row items-center space-x-2">
           {router.canGoBack() && (
             <TouchableOpacity onPress={router.goBack} activeOpacity={0.8}>
@@ -55,7 +61,7 @@ export function UsernameLayout() {
           )}
           <Heading className="font-700 text-2xl">{params.username}</Heading>
         </View>
-        {me && me?.username !== params.username && (
+        {me && me.username !== params.username && (
           <TouchableOpacity
             onPress={onToggleFollow}
             activeOpacity={0.8}
@@ -64,49 +70,63 @@ export function UsernameLayout() {
             <Heart
               size={20}
               className="text-black dark:text-white"
-              fill={user.followedBy && user.followedBy.length > 0 ? (isDark ? "white" : "black") : undefined}
+              fill={user.followers && user.followers.length > 0 ? (isDark ? "white" : "black") : undefined}
             />
           </TouchableOpacity>
         )}
       </View>
       <ScrollView className="min-h-full" stickyHeaderIndices={[1]} showsVerticalScrollIndicator={false}>
-        <View className="px-4 py-2">
-          <View>
-            <View className="flex flex-row items-center space-x-3">
-              {user.avatar ? (
-                <Image
-                  source={{ uri: createImageUrl(user.avatar) }}
-                  className="sq-20 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
-                />
-              ) : (
-                <View className="sq-20 flex items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
-                  <User2 className="text-black dark:text-white" />
-                </View>
-              )}
-              <View className="space-y-px">
-                <Text className="text-xl">
-                  {user.firstName} {user.lastName}
-                </Text>
+        <View className="space-y-2 px-4 py-2">
+          <View className="flex flex-row items-center space-x-3">
+            {user.avatar ? (
+              <Image
+                source={{ uri: createImageUrl(user.avatar) }}
+                className="sq-20 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
+              />
+            ) : (
+              <View className="sq-20 flex items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
+                <User2 className="text-black dark:text-white" />
+              </View>
+            )}
+            <View className="space-y-px">
+              <Text className="text-2xl">
+                {user.firstName} {user.lastName}
+              </Text>
 
-                <View className="flex flex-row items-center space-x-2">
-                  {interestOptions
-                    .filter((i) => user[i.value as keyof typeof user])
-                    .map((interest) => (
-                      <View key={interest.value} className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
-                        <interest.Icon size={20} className="text-black dark:text-white" />
-                      </View>
-                    ))}
-                </View>
+              <View className="flex flex-row items-center space-x-4">
+                <TouchableOpacity
+                  className="flex flex-row space-x-1"
+                  onPress={() => router.push("UserFollowing", { username: params.username })}
+                >
+                  <Text className="font-600">{user._count.following}</Text>
+                  <Text className="opacity-70">following</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  className="flex flex-row space-x-1"
+                  onPress={() => router.push("UserFollowers", { username: params.username })}
+                >
+                  <Text className="font-600">{user._count.followers}</Text>
+                  <Text className="opacity-70">followers</Text>
+                </TouchableOpacity>
               </View>
             </View>
-            <Text>{user.bio}</Text>
           </View>
+          <View className="flex flex-row items-center space-x-2">
+            {interestOptions
+              .filter((i) => user[i.value as keyof typeof user])
+              .map((interest) => (
+                <View key={interest.value} className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
+                  <interest.Icon size={20} className="text-black dark:text-white" />
+                </View>
+              ))}
+          </View>
+          <Text>{user.bio}</Text>
         </View>
 
         <View className="flex flex-row items-center justify-center space-x-2 border-b border-gray-100 bg-white py-2 dark:border-gray-800 dark:bg-black">
           <View>
             <Button
-              onPress={() => router.navigate("UsernameLayout", { tab: "spots", username: params.username })}
+              onPress={() => router.navigate("UserScreen", { tab: "spots", username: params.username })}
               variant={tab === "spots" ? "secondary" : "ghost"}
               size="sm"
             >
@@ -116,7 +136,7 @@ export function UsernameLayout() {
           <View>
             <Button
               variant={tab === "van" ? "secondary" : "ghost"}
-              onPress={() => router.navigate("UsernameLayout", { tab: "van", username: params.username })}
+              onPress={() => router.navigate("UserScreen", { tab: "van", username: params.username })}
               size="sm"
             >
               Van
@@ -125,7 +145,7 @@ export function UsernameLayout() {
           <View>
             <Button
               variant={tab === "lists" ? "secondary" : "ghost"}
-              onPress={() => router.navigate("UsernameLayout", { tab: "lists", username: params.username })}
+              onPress={() => router.navigate("UserScreen", { tab: "lists", username: params.username })}
               size="sm"
             >
               Lists
@@ -141,15 +161,15 @@ export function UsernameLayout() {
 }
 
 function UsernameTabs() {
-  const { params } = useParams<"UsernameLayout">()
+  const { params } = useParams<"UserScreen">()
   switch (params.tab) {
     case "van":
-      return <UsernameVan />
+      return <UserVan />
     case "lists":
-      return <UsernameLists />
+      return <UserLists />
     case "spots":
-      return <UsernameSpots />
+      return <UserSpots />
     default:
-      return <UsernameSpots />
+      return <UserSpots />
   }
 }

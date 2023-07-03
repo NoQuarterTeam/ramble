@@ -290,7 +290,7 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
                   <View className="flex flex-row items-center space-x-1 text-sm">
                     <Verified size={16} className="text-black dark:text-white" />
                     <Text>Verified by</Text>
-                    <TouchableOpacity onPress={() => push("UsernameLayout", { username: spot.verifier?.username || "" })}>
+                    <TouchableOpacity onPress={() => push("UserScreen", { username: spot.verifier?.username || "" })}>
                       <Text className="flex flex-row">{`${spot.verifier.firstName} ${spot.verifier.lastName}`}</Text>
                     </TouchableOpacity>
                   </View>

@@ -55,7 +55,7 @@ export function ProfileScreen() {
         <View>
           <View className="space-y-4">
             <TouchableOpacity
-              onPress={() => push("UsernameLayout", { username: me.username })}
+              onPress={() => push("UserScreen", { username: me.username })}
               className="flex flex-row items-center justify-between rounded-md border border-gray-200 p-4 dark:border-gray-700"
             >
               <View className="flex flex-row items-center space-x-4">

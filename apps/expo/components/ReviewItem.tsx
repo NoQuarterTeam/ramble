@@ -1,7 +1,7 @@
 import { TouchableOpacity, View } from "react-native"
 import dayjs from "dayjs"
 import { Image } from "expo-image"
-import { Star } from "lucide-react-native"
+import { Star, User2 } from "lucide-react-native"
 
 import { type Review, type User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
@@ -33,14 +33,20 @@ export function ReviewItem({
     <View className="space-y-2 rounded-lg border border-gray-200 p-4 dark:border-gray-700">
       <View className="flex flex-row justify-between">
         <TouchableOpacity
-          onPress={() => push("UsernameLayout", { username: review.user.username })}
+          onPress={() => push("UserScreen", { username: review.user.username })}
           activeOpacity={0.8}
           className="flex flex-row space-x-2"
         >
-          <Image
-            source={{ uri: createImageUrl(review.user.avatar) }}
-            className="h-10 w-10 rounded-full bg-gray-100 dark:bg-gray-700"
-          />
+          {review.user.avatar ? (
+            <Image
+              source={{ uri: createImageUrl(review.user.avatar) }}
+              className="sq-10 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
+            />
+          ) : (
+            <View className="sq-10 flex items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
+              <User2 className="text-black dark:text-white" />
+            </View>
+          )}
 
           <View>
             <Text>

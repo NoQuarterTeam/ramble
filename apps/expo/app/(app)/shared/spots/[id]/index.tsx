@@ -57,7 +57,7 @@ export function SpotDetailScreen() {
               <View className="flex flex-row items-center space-x-1">
                 <Verified size={20} className="text-black dark:text-white" />
                 <Text className="text-sm">Verified by</Text>
-                <TouchableOpacity onPress={() => navigation.push("UsernameLayout", { username: spot.verifier?.username || "" })}>
+                <TouchableOpacity onPress={() => navigation.push("UserScreen", { username: spot.verifier?.username || "" })}>
                   <Text className="flex text-sm">{`${spot.verifier.firstName} ${spot.verifier.lastName}`}</Text>
                 </TouchableOpacity>
               </View>
