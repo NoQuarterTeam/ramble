@@ -1,10 +1,10 @@
 import { z } from "zod"
-import { createTRPCRouter, protectedProcedure, publicProcedure, publicProfileProcedure } from "../trpc"
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 import { TRPCError } from "@trpc/server"
 import { listSchema } from "@ramble/shared"
 
 export const listRouter = createTRPCRouter({
-  allByUser: publicProfileProcedure.query(async ({ ctx, input }) => {
+  allByUser: publicProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {
     return ctx.prisma.list.findMany({
       orderBy: { createdAt: "desc" },
       where: { creator: { username: input.username } },
@@ -17,7 +17,7 @@ export const listRouter = createTRPCRouter({
       select: {
         id: true,
         creatorId: true,
-        creator: { select: { isProfilePublic: true, username: true, firstName: true, lastName: true } },
+        creator: { select: { username: true, firstName: true, lastName: true } },
         name: true,
         description: true,
         listSpots: {
@@ -40,8 +40,6 @@ export const listRouter = createTRPCRouter({
       },
     })
     if (!list) throw new TRPCError({ code: "NOT_FOUND" })
-    if (!list.creator.isProfilePublic && (!ctx.user || ctx.user.id !== list.creatorId))
-      throw new TRPCError({ code: "UNAUTHORIZED" })
 
     const formattedList = {
       ...list,

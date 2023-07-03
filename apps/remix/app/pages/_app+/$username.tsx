@@ -13,18 +13,16 @@ import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { interestOptions } from "~/lib/interests"
 import { notFound } from "~/lib/remix.server"
-import { getUserSession } from "~/services/session/session.server"
 
 import { PageContainer } from "../../components/PageContainer"
 
 export const headers = useLoaderHeaders
 
-export const loader = async ({ request, params }: LoaderArgs) => {
-  const { userId } = await getUserSession(request)
-  const user = await db.user.findFirst({
+export const loader = async ({ params }: LoaderArgs) => {
+  const user = await db.user.findUnique({
+    where: { username: params.username },
     select: {
       id: true,
-      isProfilePublic: true,
       avatar: true,
       role: true,
       firstName: true,
@@ -33,11 +31,8 @@ export const loader = async ({ request, params }: LoaderArgs) => {
       bio: true,
       ...userInterestFields,
     },
-    where: { username: params.username },
   })
   if (!user) throw notFound(null)
-
-  if (userId !== user.id && !user.isProfilePublic) throw notFound(null)
 
   return json(user)
 }

@@ -18,7 +18,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   const user = await getCurrentUser(request, {
     firstName: true,
     username: true,
-    isProfilePublic: true,
+
     role: true,
     lastName: true,
     avatar: true,
@@ -45,11 +45,10 @@ export default function AccountLayout() {
             </Badge>
           </div>
         </div>
-        {user.isProfilePublic && (
-          <LinkButton size="sm" variant="outline" to={`/${user.username}`}>
-            Go to your public profile
-          </LinkButton>
-        )}
+
+        <LinkButton size="sm" variant="outline" to={`/${user.username}`}>
+          Go to your public profile
+        </LinkButton>
       </div>
       <div className="flex flex-col gap-4 md:flex-row md:gap-10">
         <div className="flex w-auto flex-row space-x-2 space-y-0 overflow-x-scroll p-1 md:w-[350px] md:flex-col md:space-x-0 md:space-y-0.5">

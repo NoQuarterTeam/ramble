@@ -22,7 +22,6 @@ const userSelectFields = {
   avatar: true,
   username: true,
   role: true,
-  isProfilePublic: true,
   createdAt: true,
 } satisfies Prisma.UserSelect
 

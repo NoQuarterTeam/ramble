@@ -17,16 +17,15 @@ enum Role {
 }
 
 model User {
-  id              String  @id @default(uuid())
-  email           String  @unique
-  password        String
-  firstName       String
-  lastName        String
-  username        String  @unique
-  role            Role    @default(MEMBER)
-  avatar          String?
-  bio             String? @db.LongText
-  isProfilePublic Boolean @default(true)
+  id        String  @id @default(uuid())
+  email     String  @unique
+  password  String
+  firstName String
+  lastName  String
+  username  String  @unique
+  role      Role    @default(MEMBER)
+  avatar    String?
+  bio       String? @db.LongText
 
   // Preferences
   isPetOwner      Boolean @default(false)
@@ -37,6 +36,8 @@ model User {
   isSurfer        Boolean @default(false)
 
   // Relations
+  followedBy    User[]      @relation("UserFollows")
+  following     User[]      @relation("UserFollows")
   createdSpots  Spot[]      @relation(name: "Creator")
   ownedSpots    Spot[]      @relation(name: "Owner")
   verifiedSpots Spot[]      @relation(name: "Verifier")

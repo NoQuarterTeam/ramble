@@ -1,5 +1,5 @@
 import { vanSchema } from "@ramble/shared"
-import { createTRPCRouter, protectedProcedure, publicProfileProcedure } from "../trpc"
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 import { z } from "zod"
 import { TRPCError } from "@trpc/server"
 
@@ -7,8 +7,10 @@ export const vanRouter = createTRPCRouter({
   mine: protectedProcedure.query(async ({ ctx }) => {
     return ctx.prisma.van.findUnique({ where: { userId: ctx.user.id }, include: { images: true } })
   }),
-  byUser: publicProfileProcedure.query(async ({ ctx }) => {
-    return ctx.prisma.van.findUnique({ where: { userId: ctx.publicUser.id }, include: { images: true } })
+  byUser: publicProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {
+    const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })
+    if (!user) throw new TRPCError({ code: "NOT_FOUND" })
+    return ctx.prisma.van.findUnique({ where: { userId: user.id }, include: { images: true } })
   }),
   update: protectedProcedure
     .input(vanSchema.partial().extend({ id: z.string() }))

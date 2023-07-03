@@ -6,9 +6,9 @@ import { z } from "zod"
 import { join } from "@ramble/shared"
 
 import { Form, FormButton, FormField, ImageField } from "~/components/Form"
-import { Checkbox, inputStyles, Textarea } from "~/components/ui"
+import { inputStyles, Textarea } from "~/components/ui"
 import { db } from "~/lib/db.server"
-import { FormCheckbox, formError, NullableFormString, validateFormData } from "~/lib/form"
+import { formError, NullableFormString, validateFormData } from "~/lib/form"
 import { redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
@@ -17,7 +17,7 @@ export const loader = async ({ request }: LoaderArgs) => {
     email: true,
     username: true,
     firstName: true,
-    isProfilePublic: true,
+
     lastName: true,
     avatar: true,
     bio: true,
@@ -32,7 +32,7 @@ export const action = async ({ request }: ActionArgs) => {
     lastName: z.string().min(1),
     username: z.string().min(2),
     email: z.string().email(),
-    isProfilePublic: FormCheckbox,
+
     bio: NullableFormString,
     avatar: NullableFormString,
   })
@@ -60,11 +60,7 @@ export default function Account() {
         </div>
         <div className="space-y-2">
           <FormField autoCapitalize="none" defaultValue={user.username || ""} name="username" label="Username" />
-          <FormField
-            name="isProfilePublic"
-            input={<Checkbox defaultChecked={user.isProfilePublic} />}
-            label="Is profile public?"
-          />
+
           <ImageField className={join("sq-52", inputStyles())} defaultValue={user.avatar} name="avatar" label="Avatar" />
         </div>
       </div>

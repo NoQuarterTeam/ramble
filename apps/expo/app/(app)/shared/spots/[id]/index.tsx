@@ -17,8 +17,8 @@ import { useMe } from "../../../../../lib/hooks/useMe"
 import { useParams, useRouter } from "../../../../router"
 
 export function SpotDetailScreen() {
-  const colorScheme = useColorScheme()
   const { me } = useMe()
+  const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
   const { params } = useParams<"SpotDetailScreen">()
   const { data, isLoading } = api.spot.detail.useQuery({ id: params.id })

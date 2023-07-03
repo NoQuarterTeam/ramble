@@ -16,9 +16,7 @@ import { SpotItem } from "./components/SpotItem"
 export const headers = useLoaderHeaders
 
 export const loader = async ({ request, params }: LoaderArgs) => {
-  const user = await db.user.findFirst({
-    where: { isProfilePublic: { equals: true }, username: params.username },
-  })
+  const user = await db.user.findUnique({ where: { username: params.username } })
   if (!user) throw notFound(null)
   const searchParams = new URL(request.url).searchParams
   const skip = parseInt((searchParams.get("skip") as string) || "0")

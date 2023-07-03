@@ -101,15 +101,14 @@ export function Nav() {
               </DropdownMenuItem>
               <hr />
             </div>
-            {user?.isProfilePublic && (
-              <DropdownMenuItem asChild>
-                <LinkButton variant="ghost" to={`/${user.username}`} leftIcon={<User className="sq-4" />}>
-                  Profile
-                </LinkButton>
-              </DropdownMenuItem>
-            )}
+
             {user && (
               <>
+                <DropdownMenuItem asChild>
+                  <LinkButton variant="ghost" to={`/${user.username}`} leftIcon={<User className="sq-4" />}>
+                    Profile
+                  </LinkButton>
+                </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <LinkButton variant="ghost" to={`/${user.username}/lists`} leftIcon={<Heart className="sq-4" />}>
                     Lists

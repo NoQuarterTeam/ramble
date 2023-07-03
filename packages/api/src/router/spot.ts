@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { createTRPCRouter, publicProcedure, publicProfileProcedure } from "../trpc"
+import { createTRPCRouter, publicProcedure } from "../trpc"
 import type { Spot, SpotImage, SpotType } from "@ramble/database/types"
 import Supercluster from "supercluster"
 import { TRPCError } from "@trpc/server"
@@ -83,7 +83,7 @@ export const spotRouter = createTRPCRouter({
     const rating = await ctx.prisma.review.aggregate({ where: { spotId: input.id }, _avg: { rating: true } })
     return { ...spot, rating }
   }),
-  byUser: publicProfileProcedure.query(async ({ ctx, input }) => {
+  byUser: publicProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {
     return ctx.prisma.$queryRaw<
       Array<Pick<Spot, "id" | "name" | "address"> & { rating?: number; image?: SpotImage["path"] | null }>
     >`
