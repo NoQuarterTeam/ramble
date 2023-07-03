@@ -132,7 +132,7 @@ export default function SpotDetail() {
           ) : (
             <div className="flex items-center space-x-1 text-sm">
               <BadgeX className="sq-5" />
-              <p>Unverified like</p>
+              <p>Unverified</p>
             </div>
           )}
           <div className="flex flex-col items-start justify-between space-y-1 md:flex-row">
