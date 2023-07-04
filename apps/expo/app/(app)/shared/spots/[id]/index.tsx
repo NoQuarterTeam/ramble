@@ -51,7 +51,6 @@ export function SpotDetailScreen() {
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrolling } } }], { useNativeDriver: true })}
       >
         <ImageCarousel width={width} height={300} images={spot.images} />
-
         <View className="space-y-3 p-4">
           <View className="space-y-2">
             <Heading className="text-2xl leading-7">{spot.name}</Heading>
