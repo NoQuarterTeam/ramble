@@ -64,20 +64,22 @@ export function SpotDetailScreen() {
               </Text>
             </View>
           </View>
-
-          
-            <VerifiedCard spot={spot} />
-            <View className="space-y-1">
+          <View className="space-y-1">
+            <View>
+              <VerifiedCard spot={spot} />
+            </View>
+            <View>
               <RenderHtml
                 systemFonts={fonts}
                 baseStyle={{ fontSize: 16, fontFamily: "poppins400", color: isDark ? "white" : "black" }}
                 contentWidth={width}
                 source={{ html: spot.description || "" }}
               />
-
-              <Text className="text-sm">{spot.address}</Text>
             </View>
-          
+
+            <Text className="text-sm">{spot.address}</Text>
+          </View>
+
           <View className="h-px w-full bg-gray-200 dark:bg-gray-600" />
           <View className="space-y-2">
             <View className="flex flex-row justify-between">
