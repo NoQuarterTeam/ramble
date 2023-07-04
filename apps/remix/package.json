@@ -73,7 +73,7 @@
     "uuid": "^3.4.0",
     "zod": "3.21.4",
     "zodix": "^0.4.0",
-    "zustand": "4.3.8"
+    "zustand": "4.3.9"
   },
   "devDependencies": {
     "@ramble/eslint-config": "workspace:*",
