@@ -34,7 +34,10 @@ export const action = async ({ request }: ActionArgs) => {
         if (formData.get("passwordConfirmation")) return redirect("/")
         const registerSchema = z.object({
           email: z.string().min(3).email("Invalid email"),
-          username: z.string().min(2),
+          username: z
+            .string()
+            .min(2)
+            .refine((username) => !username.trim().includes(" "), "Username can not contain empty spaces"),
           password: z.string().min(8, "Must be at least 8 characters"),
           firstName: z.string().min(2, "Must be at least 2 characters"),
           lastName: z.string().min(2, "Must be at least 2 characters"),

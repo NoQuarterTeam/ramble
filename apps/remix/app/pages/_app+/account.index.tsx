@@ -30,9 +30,11 @@ export const action = async ({ request }: ActionArgs) => {
   const schema = z.object({
     firstName: z.string().min(1),
     lastName: z.string().min(1),
-    username: z.string().min(2),
+    username: z
+      .string()
+      .min(2)
+      .refine((username) => !username.trim().includes(" "), "Username can not contain empty spaces"),
     email: z.string().email(),
-
     bio: NullableFormString,
     avatar: NullableFormString,
   })

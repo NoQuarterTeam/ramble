@@ -3,7 +3,10 @@ import { z } from "zod"
 export const userSchema = z.object({
   email: z.string().email().min(2),
   password: z.string().min(2),
-  username: z.string().min(2),
+  username: z
+    .string()
+    .min(2)
+    .refine((username) => !username.trim().includes(" "), "Username can not contain empty spaces"),
   bio: z.string().nullish(),
   firstName: z.string().min(2),
   lastName: z.string().min(2),

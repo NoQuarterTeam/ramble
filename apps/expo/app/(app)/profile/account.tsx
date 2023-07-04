@@ -17,13 +17,11 @@ import { useForm } from "../../../lib/hooks/useForm"
 import { useKeyboardController } from "../../../lib/hooks/useKeyboardController"
 import { useMe } from "../../../lib/hooks/useMe"
 import { useS3Upload } from "../../../lib/hooks/useS3"
-import { useRouter } from "../../router"
 
 export function AccountScreen() {
   useKeyboardController()
   const { me } = useMe()
 
-  const router = useRouter()
   const form = useForm({
     defaultValues: {
       bio: me?.bio || "",
@@ -40,11 +38,13 @@ export function AccountScreen() {
       utils.user.me.setData(undefined, data)
       form.reset({}, { keepValues: true })
       toast({ title: "Account updated." })
-      router.goBack()
     },
   })
 
-  const onSubmit = form.handleSubmit((data) => mutate(data))
+  const onSubmit = form.handleSubmit((data) => {
+    if (data.username.trim().includes(" ")) return toast({ title: "Username can not contain empty spaces" })
+    mutate(data)
+  })
 
   const { mutate: saveAvatar, isLoading: isAvatarSavingLoading } = api.user.update.useMutation({
     onSuccess: async () => {

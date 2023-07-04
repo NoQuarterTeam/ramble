@@ -26,7 +26,8 @@ export const userRouter = createTRPCRouter({
     return user
   }),
   update: protectedProcedure.input(updateSchema).mutation(async ({ ctx, input }) => {
-    const user = await ctx.prisma.user.update({ where: { id: ctx.user.id }, data: input })
+    const username = input.username?.toLowerCase().trim()
+    const user = await ctx.prisma.user.update({ where: { id: ctx.user.id }, data: { ...input, username } })
     return user
   }),
   followers: publicProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {
