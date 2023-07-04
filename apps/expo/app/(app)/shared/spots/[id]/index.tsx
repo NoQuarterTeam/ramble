@@ -1,8 +1,8 @@
+import { StatusBar } from "expo-status-bar"
+import { ChevronDown, ChevronLeft, Heart, Star } from "lucide-react-native"
 import * as React from "react"
 import { Animated, TouchableOpacity, useColorScheme, View, type ViewProps } from "react-native"
 import RenderHtml, { defaultSystemFonts } from "react-native-render-html"
-import { StatusBar } from "expo-status-bar"
-import { BadgeX, ChevronDown, ChevronLeft, Heart, Star, Verified } from "lucide-react-native"
 
 import { merge } from "@ramble/shared"
 
@@ -11,6 +11,7 @@ import { Button } from "../../../../../components/ui/Button"
 import { Heading } from "../../../../../components/ui/Heading"
 import { ImageCarousel } from "../../../../../components/ui/ImageCarousel"
 import { Text } from "../../../../../components/ui/Text"
+import { VerifiedCard } from "../../../../../components/VerifiedCard"
 import { api } from "../../../../../lib/api"
 import { width } from "../../../../../lib/device"
 import { useMe } from "../../../../../lib/hooks/useMe"
@@ -51,22 +52,8 @@ export function SpotDetailScreen() {
       >
         <ImageCarousel width={width} height={300} images={spot.images} />
 
-        <View className="space-y-4 p-4">
+        <View className="space-y-3 p-4">
           <View className="space-y-2">
-            {spot.verifiedAt && spot.verifier ? (
-              <View className="flex flex-row items-center space-x-1">
-                <Verified size={20} className="text-black dark:text-white" />
-                <Text className="text-sm">Verified by</Text>
-                <TouchableOpacity onPress={() => navigation.push("UserScreen", { username: spot.verifier?.username || "" })}>
-                  <Text className="flex text-sm">{`${spot.verifier.firstName} ${spot.verifier.lastName}`}</Text>
-                </TouchableOpacity>
-              </View>
-            ) : (
-              <View className="flex flex-row items-center space-x-1">
-                <BadgeX size={20} className="text-black dark:text-white" />
-                <Text className="text-sm">Unverified</Text>
-              </View>
-            )}
             <Heading className="text-2xl leading-7">{spot.name}</Heading>
             <View className="flex flex-row items-center space-x-1">
               <Star size={20} className="text-black dark:text-white" />
@@ -78,16 +65,18 @@ export function SpotDetailScreen() {
             </View>
           </View>
 
-          <View className="h-px w-full bg-gray-200 dark:bg-gray-600" />
-          <View className="space-y-1">
-            <RenderHtml
-              systemFonts={fonts}
-              baseStyle={{ fontSize: 16, fontFamily: "poppins400", color: isDark ? "white" : "black" }}
-              contentWidth={width}
-              source={{ html: spot.description || "" }}
-            />
+          <View>
+            <VerifiedCard spot={spot} />
+            <View className="space-y-1">
+              <RenderHtml
+                systemFonts={fonts}
+                baseStyle={{ fontSize: 16, fontFamily: "poppins400", color: isDark ? "white" : "black" }}
+                contentWidth={width}
+                source={{ html: spot.description || "" }}
+              />
 
-            <Text className="text-sm">{spot.address}</Text>
+              <Text className="text-sm">{spot.address}</Text>
+            </View>
           </View>
           <View className="h-px w-full bg-gray-200 dark:bg-gray-600" />
           <View className="space-y-2">
