@@ -65,7 +65,7 @@ export function SpotDetailScreen() {
             </View>
           </View>
 
-          <View>
+          
             <VerifiedCard spot={spot} />
             <View className="space-y-1">
               <RenderHtml
@@ -77,7 +77,7 @@ export function SpotDetailScreen() {
 
               <Text className="text-sm">{spot.address}</Text>
             </View>
-          </View>
+          
           <View className="h-px w-full bg-gray-200 dark:bg-gray-600" />
           <View className="space-y-2">
             <View className="flex flex-row justify-between">
