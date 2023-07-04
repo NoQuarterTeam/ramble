@@ -2,7 +2,7 @@ import Map, { Marker } from "react-map-gl"
 import { Form, Link, useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
-import { BadgeX, Edit2, Share, Star, Trash, Verified } from "lucide-react"
+import { Edit2, Share, Star, Trash } from "lucide-react"
 
 import type { SpotType } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
@@ -29,6 +29,7 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { SaveToList } from "../api+/$spotId.save-to-list.$listId"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
+import { VerifiedCard } from "~/components/VerifiedCard"
 
 export const loader = async ({ params }: LoaderArgs) => {
   const spot = await db.spot.findUnique({
@@ -115,73 +116,57 @@ export default function SpotDetail() {
         ))}
       </div>
       <PageContainer className="space-y-10 pb-40">
-        <div className="space-y-2">
-          {spot.verifiedAt && spot.verifier ? (
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <div className="flex flex-col items-start justify-between space-y-1 md:flex-row">
+              <h1 className="text-4xl">{spot.name}</h1>
+              <div className="flex items-center space-x-1">
+                <Button variant="outline" leftIcon={<Share className="sq-4" />} aria-label="share">
+                  Share
+                </Button>
+                {user && <SaveToList spotId={spot.id} />}
+              </div>
+            </div>
             <div className="flex items-center space-x-1 text-sm">
-              <Verified className="sq-5" />
-              <p>Verified by</p>
-              <Link to={`/${spot.verifier.username}`} className="flex hover:underline">
-                {`${spot.verifier.firstName} ${spot.verifier.lastName}`}
-                {/* <Avatar
-                  size="xs"
-                  src={createImageUrl(spot.verifier.avatar)}
-                  name={`${spot.verifier.firstName} ${spot.verifier.lastName}`}
-                /> */}
+              <Star className="sq-5" />
+              <p>{spot.rating._avg.rating ? spot.rating._avg.rating?.toFixed(1) : "Not rated"}</p>
+              <p>·</p>
+              <Link to="#reviews" className="hover:underline">
+                {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
               </Link>
             </div>
-          ) : (
-            <div className="flex items-center space-x-1 text-sm">
-              <BadgeX className="sq-5" />
-              <p>Unverified</p>
-            </div>
-          )}
-          <div className="flex flex-col items-start justify-between space-y-1 md:flex-row">
-            <h1 className="text-4xl">{spot.name}</h1>
-            <div className="flex items-center space-x-1">
-              <Button variant="outline" leftIcon={<Share className="sq-4" />} aria-label="share">
-                Share
-              </Button>
-              {user && <SaveToList spotId={spot.id} />}
-            </div>
-          </div>
-          <div className="flex items-center space-x-1 text-sm">
-            <Star className="sq-5" />
-            <p>{spot.rating._avg.rating ? spot.rating._avg.rating?.toFixed(1) : "Not rated"}</p>
-            <p>·</p>
-            <Link to="#reviews" className="hover:underline">
-              {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
-            </Link>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div className="space-y-2">
-            <h3 className="text-xl font-medium">Description</h3>
-            <div dangerouslySetInnerHTML={{ __html: spot.description || "" }} />
-            <p className="text-sm">{spot.address}</p>
           </div>
 
-          <div className="z-10 h-[400px] w-full overflow-hidden rounded-md">
-            <Map
-              mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
-              style={{ height: "100%", width: "100%" }}
-              initialViewState={{ latitude: spot.latitude, longitude: spot.longitude, zoom: 10 }}
-              attributionControl={false}
-              mapStyle={
-                theme === "dark"
-                  ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
-                  : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
-              }
-            >
-              <Marker anchor="bottom" longitude={spot.longitude} latitude={spot.latitude}>
-                <div className="relative">
-                  <div className="sq-8 bg-primary-600 dark:bg-primary-700 border-primary-100 dark:border-primary-600 flex items-center justify-center rounded-full border shadow-md">
-                    <Icon className="sq-4 text-white" />
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="space-y-2">
+              <VerifiedCard spot={spot} />
+              <h3 className="text-xl font-medium">Description</h3>
+              <div dangerouslySetInnerHTML={{ __html: spot.description || "" }} />
+              <p className="text-sm">{spot.address}</p>
+            </div>
+
+            <div className="z-10 h-[400px] w-full overflow-hidden rounded-md">
+              <Map
+                mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
+                style={{ height: "100%", width: "100%" }}
+                initialViewState={{ latitude: spot.latitude, longitude: spot.longitude, zoom: 10 }}
+                attributionControl={false}
+                mapStyle={
+                  theme === "dark"
+                    ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
+                    : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
+                }
+              >
+                <Marker anchor="bottom" longitude={spot.longitude} latitude={spot.latitude}>
+                  <div className="relative">
+                    <div className="sq-8 bg-primary-600 dark:bg-primary-700 border-primary-100 dark:border-primary-600 flex items-center justify-center rounded-full border shadow-md">
+                      <Icon className="sq-4 text-white" />
+                    </div>
+                    <div className="sq-3 bg-primary-600 dark:bg-primary-700 absolute -bottom-[3px] left-1/2 -z-[1] -translate-x-1/2 rotate-45 shadow" />
                   </div>
-                  <div className="sq-3 bg-primary-600 dark:bg-primary-700 absolute -bottom-[3px] left-1/2 -z-[1] -translate-x-1/2 rotate-45 shadow" />
-                </div>
-              </Marker>
-            </Map>
+                </Marker>
+              </Map>
+            </div>
           </div>
         </div>
 

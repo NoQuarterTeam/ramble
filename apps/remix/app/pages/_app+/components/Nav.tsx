@@ -72,7 +72,7 @@ export function Nav() {
           </div>
         )}
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild={!user}>
             {user ? (
               <Avatar
                 className="hover:opacity-70"
