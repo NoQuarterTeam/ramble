@@ -49,5 +49,6 @@ export const canManageSpot = (spot: Pick<Spot, "ownerId"> | null, user: Pick<Use
   if (user.role === "AMBASSADOR") return true
   if (!spot.ownerId) return false
   if (user.role === "OWNER" && user.id === spot.ownerId) return true
+  if (spot.ownerId === user.id) return true
   return false
 }
