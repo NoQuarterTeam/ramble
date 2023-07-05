@@ -1,21 +1,22 @@
 import * as React from "react"
-import type { ViewStateChangeEvent } from "react-map-gl"
+import type { MapRef, ViewStateChangeEvent } from "react-map-gl"
 import Map from "react-map-gl"
 import { useFetcher, useNavigate, useRouteLoaderData, useSearchParams } from "@remix-run/react"
 import turfCenter from "@turf/center"
 import * as turf from "@turf/helpers"
 import type { SerializeFrom } from "@vercel/remix"
-import { CircleDot, Plus } from "lucide-react"
+import { CircleDot, Plus, Search } from "lucide-react"
 import queryString from "query-string"
 import { z } from "zod"
 
+import type { locationSearchLoader } from "../../api+/mapbox+/location-search"
 import type { Spot, SpotImage } from "@ramble/database/types"
 import { SpotType } from "@ramble/database/types"
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
 
 import { Form, FormButton, FormError, FormField, FormFieldError, FormFieldLabel, ImageField } from "~/components/Form"
 import { ImageUploader } from "~/components/ImageUploader"
-import { Button, CloseButton, IconButton, Spinner, Textarea } from "~/components/ui"
+import { Button, CloseButton, IconButton, Input, Textarea } from "~/components/ui"
 import { FormNumber, NullableFormString, useFormErrors } from "~/lib/form"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { SPOT_OPTIONS } from "~/lib/spots"
@@ -35,6 +36,7 @@ export const spotSchema = z.object({
 })
 
 export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotImage[] }> }) {
+  const mapRef = React.useRef<MapRef>(null)
   const ipInfo = useRouteLoaderData("pages/_app") as IpInfo
   const errors = useFormErrors<typeof spotSchema>()
   const [searchParams] = useSearchParams()
@@ -60,13 +62,13 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+  const inputRef = React.useRef<HTMLInputElement>(null)
 
   const [latitude, setLatitude] = React.useState<number | null>(spot?.latitude || initialViewState.latitude)
   const [longitude, setLongitude] = React.useState<number | null>(spot?.longitude || initialViewState.longitude)
   const [type, setType] = React.useState<SpotType | null>(spot?.type || null)
-
+  const [address, setAddress] = React.useState("")
   const geocodeFetcher = useFetcher<typeof geocodeLoader>()
-
   const onMove = (e: mapboxgl.MapboxEvent<undefined> | ViewStateChangeEvent) => {
     const center = e.target.getCenter()
     setLatitude(center.lat)
@@ -81,7 +83,29 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
     geocodeFetcher.load(`/api/mapbox/geocode?${queryString.stringify({ latitude: center.lat, longitude: center.lng })}`)
   }
 
-  const address = geocodeFetcher.data
+  React.useEffect(() => {
+    if (geocodeFetcher.state === "loading") return
+    if (!geocodeFetcher.data || geocodeFetcher.data.length === 0) return
+    setAddress(geocodeFetcher.data)
+    if (inputRef.current) inputRef.current.value = geocodeFetcher.data
+  }, [geocodeFetcher])
+
+  const locationSearch = useFetcher<typeof locationSearchLoader>()
+
+  React.useEffect(() => {
+    if (locationSearch.state === "loading") return
+    if (!locationSearch.data || locationSearch.data.length === 0) return
+    mapRef.current?.flyTo({ center: locationSearch.data[0].center, zoom: 12, animate: false })
+  }, [locationSearch])
+
+  const handleAddressChange = (e: React.FormEvent) => {
+    e.preventDefault()
+    // get lat lng
+    const add = inputRef.current?.value
+    if (!add) return
+    setAddress(add)
+    locationSearch.load(`/api/mapbox/location-search?${queryString.stringify({ search: add })}`)
+  }
 
   const navigate = useNavigate()
   const theme = useTheme()
@@ -96,7 +120,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
             <h1 className="text-3xl">{spot ? "Edit spot" : "Add a new spot"}</h1>
             <CloseButton onClick={() => navigate(-1)} />
           </div>
-          {user?.role === "MEMBER" && <p className="opacity-70">An Ambassador will verify it after</p>}
+          {user?.role === "MEMBER" && !spot && <p className="opacity-70">An Ambassador will verify it shortly</p>}
         </div>
         <input type="hidden" name="latitude" value={latitude || ""} />
         <input type="hidden" name="longitude" value={longitude || ""} />
@@ -110,14 +134,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
             input={<Textarea rows={5} />}
           />
 
-          <div>
-            <FormFieldLabel name="address">Address</FormFieldLabel>
-            <div className="relative">
-              <FormField readOnly name="address" value={address || ""} />
-              {geocodeFetcher.state === "loading" && <Spinner size="xs" className="absolute -left-5 top-2" />}
-            </div>
-          </div>
-          <FormField name="customAddress" defaultValue={spot?.address} label="Write a custom address" />
+          <input type="hidden" name="address" value={address || ""} />
 
           <div className="space-y-0.5">
             <FormFieldLabel required>Type</FormFieldLabel>
@@ -177,7 +194,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
           mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
           onLoad={onMove}
           onMoveEnd={onMove}
-          // ref={mapRef}
+          ref={mapRef}
           style={{ height: "100%", width: "100%" }}
           initialViewState={initialViewState}
           attributionControl={false}
@@ -187,9 +204,23 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
               : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
           }
         />
-        <>
-          <CircleDot className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
-        </>
+
+        <CircleDot className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute left-0 right-0 top-0">
+          <form onSubmit={handleAddressChange} className="relative m-1 rounded-lg bg-white dark:bg-black">
+            <div className="absolute bottom-0 left-5 top-0 flex h-full items-center justify-center">
+              <IconButton
+                size="xs"
+                variant="outline"
+                className="absolute"
+                icon={<Search className="sq-3" />}
+                aria-label="search address"
+                type="submit"
+              />
+            </div>
+            <Input className="pl-10" ref={inputRef} placeholder="Move map or enter address" />
+          </form>
+        </div>
       </div>
     </div>
   )
