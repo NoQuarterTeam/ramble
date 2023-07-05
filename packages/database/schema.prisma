@@ -26,6 +26,7 @@ model User {
   role      Role    @default(MEMBER)
   avatar    String?
   bio       String? @db.LongText
+  instagram String?
 
   // Preferences
   isPetOwner      Boolean @default(false)

@@ -13,14 +13,14 @@ export function UserFollowers() {
   const { data, isLoading } = api.user.followers.useQuery({ username: params.username })
   if (isLoading)
     return (
-      <View className="flex items-center justify-center py-4">
+      <View className="flex items-center justify-center pt-16">
         <Spinner />
       </View>
     )
 
   if (!data)
     return (
-      <View className="flex items-end justify-center py-4">
+      <View className="flex items-end justify-center pt-16">
         <Text>No user found</Text>
       </View>
     )

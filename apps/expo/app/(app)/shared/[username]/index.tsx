@@ -11,11 +11,10 @@ import { UserVan } from "./van"
 import { useMe } from "../../../../lib/hooks/useMe"
 import { api } from "../../../../lib/api"
 import { Image } from "expo-image"
-import { createImageUrl, join } from "@ramble/shared"
+import { createImageUrl } from "@ramble/shared"
 import { Spinner } from "../../../../components/ui/Spinner"
 import { Text } from "../../../../components/ui/Text"
 import { interestOptions } from "../../../../lib/interests"
-import { isAndroid } from "../../../../lib/device"
 
 export function UserScreen() {
   const colorScheme = useColorScheme()
@@ -51,7 +50,7 @@ export function UserScreen() {
       </View>
     )
   return (
-    <View className={join(isAndroid ? "pt-24" : "pt-20")}>
+    <View className="pt-16">
       <View className="flex flex-row items-center justify-between px-4 pb-2">
         <View className="flex flex-row items-center space-x-2">
           {router.canGoBack() && (

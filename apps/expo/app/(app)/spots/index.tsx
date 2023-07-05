@@ -15,13 +15,13 @@ export function SpotsScreen() {
 
   if (isLoading)
     return (
-      <View className="flex items-center justify-center pt-20">
+      <View className="flex items-center justify-center pt-16">
         <Spinner />
       </View>
     )
   return (
     <View className="h-full">
-      <View className="relative flex-1 px-4 pt-20">
+      <View className="relative flex-1 px-4 pt-16">
         <Heading className="pb-1 text-3xl">Latest</Heading>
 
         <FlashList

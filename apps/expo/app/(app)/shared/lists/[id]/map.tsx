@@ -29,7 +29,7 @@ export function ListDetailMapScreen() {
     )
   return (
     <View className="h-full">
-      <View className="relative flex-1 px-4 pt-20">
+      <View className="relative flex-1 px-4 pt-16">
         <View className="flex flex-row items-center space-x-2">
           {navigation.canGoBack() && (
             <TouchableOpacity onPress={navigation.goBack} activeOpacity={0.8}>

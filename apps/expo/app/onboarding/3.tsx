@@ -49,7 +49,7 @@ export default function OnboardingStep3Screen() {
   return (
     <FormProvider {...form}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 400 }} showsVerticalScrollIndicator={false}>
-        <View className="px-4 pt-20">
+        <View className="px-4 pt-16">
           <Heading className="mb-4 text-2xl">Tell us a little bit about your van?</Heading>
           <FormInput error={error} name="name" label="What's it's name?" placeholder="Patrick" />
           <FormInput error={error} name="model" label="What type of van is it?" placeholder="Citroën Jumper" />

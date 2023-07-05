@@ -31,7 +31,7 @@ export const action = async ({ request }: ActionArgs) => {
   return redirect("/onboarding/2")
 }
 
-export default function Onboarding3() {
+export default function Onboarding() {
   const user = useLoaderData<typeof loader>()
   return (
     <Form className="space-y-10">

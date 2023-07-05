@@ -48,7 +48,7 @@ export function ProfileScreen() {
       </LoginPlaceholder>
     )
   return (
-    <View className="flex-1 space-y-2 px-4 pt-20">
+    <View className="flex-1 space-y-2 px-4 pt-16">
       <Heading className="text-3xl">Profile</Heading>
 
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false} className="space-y-4 pt-2">

@@ -17,7 +17,7 @@ export const loader = async ({ request }: LoaderArgs) => {
     email: true,
     username: true,
     firstName: true,
-
+    instagram: true,
     lastName: true,
     avatar: true,
     bio: true,
@@ -30,6 +30,7 @@ export const action = async ({ request }: ActionArgs) => {
   const schema = z.object({
     firstName: z.string().min(1),
     lastName: z.string().min(1),
+    instagram: NullableFormString,
     username: z
       .string()
       .min(2)
@@ -59,6 +60,7 @@ export default function Account() {
           <FormField defaultValue={user.lastName} name="lastName" label="Last name" />
           <FormField autoCapitalize="none" defaultValue={user.email} name="email" label="Email" />
           <FormField defaultValue={user.bio || ""} name="bio" label="Bio" input={<Textarea rows={5} />} />
+          <FormField defaultValue={user.instagram || ""} name="instagram" label="Instragram handle" />
         </div>
         <div className="space-y-2">
           <FormField autoCapitalize="none" defaultValue={user.username || ""} name="username" label="Username" />

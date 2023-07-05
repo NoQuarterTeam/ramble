@@ -36,7 +36,7 @@ export function SpotDetailScreen() {
   if (isLoading) return <SpotLoading />
   if (!spot)
     return (
-      <View className="space-y-2 px-4 pt-20">
+      <View className="space-y-2 px-4 pt-16">
         <Text className="text-lg">Spot not found</Text>
         {navigation.canGoBack() && <Button onPress={navigation.goBack}>Back</Button>}
       </View>

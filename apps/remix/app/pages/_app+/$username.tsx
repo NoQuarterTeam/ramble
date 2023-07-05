@@ -2,7 +2,7 @@ import type { LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import type { NavLinkProps } from "@remix-run/react"
 import { NavLink, Outlet, useLoaderData } from "@remix-run/react"
-import type { LucideIcon } from "lucide-react"
+import { Instagram, type LucideIcon } from "lucide-react"
 
 import { createImageUrl, merge, userInterestFields } from "@ramble/shared"
 
@@ -27,6 +27,7 @@ export const loader = async ({ params }: LoaderArgs) => {
       role: true,
       firstName: true,
       username: true,
+      instagram: true,
       lastName: true,
       bio: true,
       ...userInterestFields,
@@ -47,6 +48,7 @@ export default function ProfileLists() {
         <div className="flex items-center space-x-3">
           <Avatar className="sq-20 md:sq-32" src={createImageUrl(user.avatar)} name={`${user.firstName} ${user.lastName}`} />
           <div className="space-y-1">
+            {user.role === "AMBASSADOR" && <Badge colorScheme="green">Ambassador</Badge>}
             <div className="flex space-x-2">
               <h1 className="text-xl md:text-3xl">{user.username}</h1>
               {currentUser?.id === user.id && (
@@ -58,7 +60,11 @@ export default function ProfileLists() {
             <p>
               {user.firstName} {user.lastName}
             </p>
-            {user.role === "AMBASSADOR" && <Badge colorScheme="green">Ambassador</Badge>}
+            {user.instagram && (
+              <a rel="noopener noreferrer" target="_blank" href={`https://www.instagram.com/${user.instagram}`}>
+                <Instagram />
+              </a>
+            )}
           </div>
         </div>
         <div className="space-y-2">

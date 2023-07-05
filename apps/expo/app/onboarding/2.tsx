@@ -42,7 +42,7 @@ export default function OnboardingStep2Screen() {
   return (
     <View className="flex-1">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
-        <View className="px-4 pt-20">
+        <View className="px-4 pt-16">
           <Heading className="mb-4 text-2xl">What are you into?</Heading>
           {interestOptions.map((interest) => (
             <InterestSelector

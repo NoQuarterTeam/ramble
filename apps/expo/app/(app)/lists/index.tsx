@@ -17,7 +17,7 @@ export function ListsScreen() {
   if (!me) return <LoginPlaceholder title="Lists" text="Log in to start saving spots" />
   return (
     <View className="h-full">
-      <View className="relative flex-1 px-4 pt-20">
+      <View className="relative flex-1 px-4 pt-16">
         <View className="flex flex-row justify-between">
           <Heading className="pb-1 text-3xl">Lists</Heading>
           <TouchableOpacity onPress={() => push("NewListScreen")} className="p-2">
