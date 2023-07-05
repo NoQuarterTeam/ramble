@@ -1,5 +1,5 @@
-import { ScrollView, TouchableOpacity, View, useColorScheme } from "react-native"
-import { ChevronLeft, Heart, User2 } from "lucide-react-native"
+import { Linking, ScrollView, TouchableOpacity, View, useColorScheme } from "react-native"
+import { ChevronLeft, Heart, Instagram, User2 } from "lucide-react-native"
 
 import { Button } from "../../../../components/ui/Button"
 import { Heading } from "../../../../components/ui/Heading"
@@ -119,6 +119,16 @@ export function UserScreen() {
               </View>
             </View>
           </View>
+          {user.instagram && (
+            <TouchableOpacity
+              activeOpacity={0.8}
+              className="flex flex-row items-center space-x-1"
+              onPress={() => Linking.openURL(`https://www.instagram.com/${user.instagram}`)}
+            >
+              <Instagram className="text-black dark:text-white" />
+              <Text>{user.instagram}</Text>
+            </TouchableOpacity>
+          )}
           <Text>{user.bio}</Text>
         </View>
 

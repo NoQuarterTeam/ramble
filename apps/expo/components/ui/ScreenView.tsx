@@ -18,13 +18,13 @@ export function ScreenView(props: Props) {
   const { goBack } = useRouter()
   return (
     <View className="min-h-full px-4 pt-16">
-      <View className="flex flex-row items-center justify-between">
+      <View className="flex flex-row  items-center justify-between">
         <View className={join("flex flex-row items-center space-x-0.5", !!props.rightElement && "w-4/5")}>
           <TouchableOpacity onPress={goBack} className="mb-1 p-1">
             <Feather name="chevron-left" size={24} color={colorScheme === "dark" ? "white" : "black"} />
           </TouchableOpacity>
 
-          <Heading className={join("text-3xl")}>{props.title}</Heading>
+          <Heading className="py-2 text-3xl">{props.title}</Heading>
         </View>
         {props.rightElement}
       </View>

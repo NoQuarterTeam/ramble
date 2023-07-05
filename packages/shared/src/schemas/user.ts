@@ -8,6 +8,7 @@ export const userSchema = z.object({
     .min(2)
     .refine((username) => !username.trim().includes(" "), "Username can not contain empty spaces"),
   bio: z.string().nullish(),
+  instagram: z.string().nullish(),
   firstName: z.string().min(2),
   lastName: z.string().min(2),
   avatar: z.string().nullish(),

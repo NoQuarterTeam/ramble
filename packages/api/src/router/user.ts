@@ -13,6 +13,7 @@ export const userRouter = createTRPCRouter({
       select: {
         id: true,
         username: true,
+        instagram: true,
         firstName: true,
         lastName: true,
         avatar: true,
@@ -56,10 +57,7 @@ export const userRouter = createTRPCRouter({
         data: { followers: { disconnect: { id: ctx.user.id } } },
       })
     } else {
-      await ctx.prisma.user.update({
-        where: { username: input.username },
-        data: { followers: { connect: { id: ctx.user.id } } },
-      })
+      await ctx.prisma.user.update({ where: { username: input.username }, data: { followers: { connect: { id: ctx.user.id } } } })
     }
     return true
   }),

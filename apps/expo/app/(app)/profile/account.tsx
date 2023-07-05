@@ -29,6 +29,7 @@ export function AccountScreen() {
       lastName: me?.lastName || "",
       email: me?.email || "",
       username: me?.username || "",
+      instagram: me?.instagram || "",
     },
   })
 
@@ -114,6 +115,7 @@ export function AccountScreen() {
           <FormInput autoCapitalize="none" name="email" label="Email" error={error} />
           <FormInput autoCapitalize="none" name="username" label="Username" error={error} />
           <FormInput multiline name="bio" label="Bio" error={error} />
+          <FormInput autoCapitalize="none" name="instagram" label="Instagram handle" error={error} />
           <FormError error={error} />
         </ScrollView>
       </ScreenView>
