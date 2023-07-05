@@ -158,7 +158,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
               />
             ))}
 
-            <ImageUploader onSubmit={(path) => setImages((i) => [...i, { path }])}>
+            <ImageUploader isMulti onMultiSubmit={(keys) => setImages((i) => [...i, ...keys.map((k) => ({ path: k }))])}>
               <IconButton variant="outline" icon={<Plus className="sq-4" />} aria-label="Add image" />
             </ImageUploader>
           </div>

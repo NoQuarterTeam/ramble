@@ -1,22 +1,27 @@
+import * as React from "react"
 import type { ActionArgs } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json, redirect } from "@vercel/remix"
 import { z } from "zod"
 
-import { Form, FormButton, FormError, FormField, ImageField } from "~/components/Form"
+import { Form, FormButton, FormError, FormField, FormFieldLabel, ImageField } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
-import { Textarea } from "~/components/ui"
+import { IconButton, Textarea } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { formError, FormNumber, NullableFormString, validateFormData } from "~/lib/form"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { Footer } from "./components/Footer"
+import { type VanImage } from "@ramble/database/types"
+import { ImageUploader } from "~/components/ImageUploader"
+import { Plus } from "lucide-react"
+import { raise } from "~/lib/helpers/utils"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const user = await getCurrentUser(request, {
     id: true,
-    van: { select: { name: true, description: true, model: true, year: true, images: { take: 1, select: { path: true } } } },
+    van: { select: { name: true, description: true, model: true, year: true, images: { select: { path: true } } } },
   })
   return json(user)
 }
@@ -26,28 +31,46 @@ const schema = z.object({
   model: z.string().min(1),
   year: FormNumber.min(1950).max(new Date().getFullYear() + 2),
   description: NullableFormString,
-  image: NullableFormString,
 })
 
 export const action = async ({ request }: ActionArgs) => {
-  const result = await validateFormData(request, schema)
+  const formData = await request.formData()
+  const result = await validateFormData(formData, schema)
   if (!result.success) return formError(result)
   const user = await getCurrentUser(request, { id: true, van: { select: { id: true } } })
-  const { image, ...data } = result.data
+  const images = (formData.getAll("image") as string[]).filter(Boolean)
+  const data = result.data
   if (user.van) {
     await db.van.update({
       where: { id: user.van.id },
-      data: { userId: user.id, ...data, images: image ? { create: { path: image } } : undefined },
+      data: {
+        userId: user.id,
+        ...data,
+        images: {
+          deleteMany: { path: { notIn: images } },
+          connectOrCreate: images.map((image) => ({
+            where: { vanId_path: { path: image, vanId: user.van?.id ?? raise("id required") } },
+            create: { path: image },
+          })),
+        },
+      },
     })
   } else {
-    await db.van.create({ data: { userId: user.id, ...data, images: image ? { create: { path: image } } : undefined } })
+    await db.van.create({
+      data: {
+        userId: user.id,
+        ...data,
+        images: { createMany: { data: images.map((image) => ({ path: image })) } },
+      },
+    })
   }
 
   return redirect("/map/welcome")
 }
 
-export default function Onboarding3() {
+export default function Onboarding4() {
   const user = useLoaderData<typeof loader>()
+  const [images, setImages] = React.useState<Pick<VanImage, "path">[]>(user.van?.images || [])
   return (
     <Form className="space-y-10">
       <div>
@@ -80,12 +103,28 @@ export default function Onboarding3() {
           <FormError />
         </div>
         <div>
-          <ImageField
-            name="image"
-            defaultValue={user.van?.images?.[0]?.path}
-            label="Have an image you want to share?"
-            placeholder="Click or drop an image here"
-          />
+          <div className="space-y-0.5">
+            <FormFieldLabel>Have some images you want to share?</FormFieldLabel>
+            <div className="flex flex-wrap gap-2">
+              {images.map(({ path }) => (
+                <ImageField
+                  className="sq-32 overflow-hidden rounded"
+                  onRemove={() => setImages(images.filter((image) => image.path !== path))}
+                  defaultValue={path}
+                  key={path}
+                  name="image"
+                />
+              ))}
+
+              <ImageUploader
+                className="sq-32"
+                isMulti
+                onMultiSubmit={(keys) => setImages((i) => [...i, ...keys.map((k) => ({ path: k }))])}
+              >
+                <IconButton className="sq-full" variant="outline" icon={<Plus className="sq-4" />} aria-label="Add image" />
+              </ImageUploader>
+            </div>
+          </div>
         </div>
       </div>
       <Footer>

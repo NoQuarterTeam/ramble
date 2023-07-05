@@ -6,26 +6,49 @@ import { Spinner, useToast } from "~/components/ui"
 import { useS3Upload } from "~/lib/hooks/useS3"
 
 interface Props {
-  onSubmit: (key: string) => Promise<unknown> | unknown
   children: React.ReactNode
   dropzoneOptions?: Omit<DropzoneOptions, "multiple" | "onDrop">
   className?: string
 }
 
-export function ImageUploader({ children, onSubmit, dropzoneOptions, className }: Props) {
+type MultiSubmit = {
+  isMulti: true
+  onSubmit?: undefined
+  onMultiSubmit: (keys: string[]) => Promise<unknown> | unknown
+}
+
+type SingleSubmit = {
+  isMulti?: false
+  onMultiSubmit?: undefined
+  onSubmit: (key: string) => Promise<unknown> | unknown
+}
+
+export function ImageUploader({
+  children,
+  isMulti = false,
+  onSubmit,
+  onMultiSubmit,
+  dropzoneOptions,
+  className,
+}: Props & (MultiSubmit | SingleSubmit)) {
   const { toast } = useToast()
   const [upload, { isLoading }] = useS3Upload()
 
-  const handleSubmitImage = React.useCallback(
-    async (image: File) => {
+  const handleSubmitImages = React.useCallback(
+    async (images: File[]) => {
       try {
-        const { key } = await upload(image)
-        await onSubmit(key)
+        if (isMulti) {
+          const keys = await Promise.all(images.map(upload))
+          await onMultiSubmit?.(keys.map((k) => k.key))
+        } else {
+          const { key } = await upload(images[0])
+          await onSubmit?.(key)
+        }
       } catch {
         toast({ variant: "destructive", title: "Error uploading image", description: "Please try again!" })
       }
     },
-    [onSubmit, upload, toast],
+    [onSubmit, upload, toast, isMulti, onMultiSubmit],
   )
 
   const onDrop = React.useCallback(
@@ -45,16 +68,16 @@ export function ImageUploader({ children, onSubmit, dropzoneOptions, className }
         return
       }
       if (files.length === 0) return toast({ variant: "destructive", description: "No file, please add one" })
-      const image = files[0]
-      handleSubmitImage(image)
+
+      return handleSubmitImages(files)
     },
-    [toast, dropzoneOptions, handleSubmitImage],
+    [toast, dropzoneOptions, handleSubmitImages],
   )
   const { getRootProps, getInputProps } = useDropzone({
     maxSize: 5000000, // 5MB
     ...dropzoneOptions,
     onDrop,
-    multiple: false,
+    multiple: isMulti,
   })
 
   return (

@@ -2,7 +2,7 @@
 import * as React from "react"
 import type { FormProps as RemixFormProps } from "@remix-run/react"
 import { Form as RemixForm, useNavigation } from "@remix-run/react"
-import { Trash } from "lucide-react"
+import { X } from "lucide-react"
 
 import { createImageUrl, merge } from "@ramble/shared"
 
@@ -202,9 +202,11 @@ export function ImageField(props: ImageFieldProps) {
         </ImageUploader>
         {props.onRemove && image && (
           <IconButton
-            className="absolute right-2 top-2"
+            variant="secondary"
+            size="xs"
+            className="absolute right-1 top-1"
             aria-label="remove image"
-            icon={<Trash className="sq-3" />}
+            icon={<X className="sq-3" />}
             onClick={props.onRemove}
           />
         )}

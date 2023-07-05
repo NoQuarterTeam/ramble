@@ -77,6 +77,7 @@ model VanImage {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
+  @@unique([vanId, path])
   @@index([vanId])
 }
 

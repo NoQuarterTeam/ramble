@@ -46,19 +46,21 @@ export default function Onboarding2() {
   return (
     <Form className="space-y-10">
       <div>
-        <h1 className="text-3xl">What sports are you into?</h1>
-        <p className="opacity-70">Are you fat, basically</p>
+        <h1 className="text-3xl">What are you into?</h1>
+        <p className="opacity-70">Some things that may interest you</p>
       </div>
       <div className="flex w-full flex-wrap items-center justify-center gap-2 md:gap-4">
-        {interestOptions.map((interest) => (
-          <InterestSelector
-            key={interest.value}
-            Icon={interest.Icon}
-            label={interest.label}
-            field={interest.value}
-            defaultValue={user[interest.value as keyof typeof user]}
-          />
-        ))}
+        {interestOptions
+          .filter((i) => i.value !== "isPetOwner")
+          .map((interest) => (
+            <InterestSelector
+              key={interest.value}
+              Icon={interest.Icon}
+              label={interest.label}
+              field={interest.value}
+              defaultValue={user[interest.value as keyof typeof user]}
+            />
+          ))}
       </div>
       <FormError />
       <Footer>
