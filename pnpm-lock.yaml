@@ -63,8 +63,8 @@ importers:
         specifier: 6.3.17
         version: 6.3.17(@react-navigation/native@6.1.7)(react-native-gesture-handler@2.9.0)(react-native-safe-area-context@4.5.0)(react-native-screens@3.22.0)(react-native@0.71.8)(react@18.2.0)
       '@rnmapbox/maps':
-        specifier: 10.0.8
-        version: 10.0.8(expo@48.0.10)(react-native@0.71.8)(react@18.2.0)
+        specifier: 10.0.9
+        version: 10.0.9(expo@48.0.10)(react-native@0.71.8)(react@18.2.0)
       '@shopify/flash-list':
         specifier: ^1.4.3
         version: 1.4.3(@babel/runtime@7.20.0)(react-native@0.71.8)(react@18.2.0)
@@ -6875,8 +6875,8 @@ packages:
     dependencies:
       web-streams-polyfill: 3.2.1
 
-  /@rnmapbox/maps@10.0.8(expo@48.0.10)(react-native@0.71.8)(react@18.2.0):
-    resolution: {integrity: sha512-fk1X2p3OWyKK4XyvIiEA5e9Mp78AJSiGLP1ruMdqFRJXdf/IHFeOdV9oUoQ9Uc9RvIDu3G6VL4KmJfd3kPAjfw==}
+  /@rnmapbox/maps@10.0.9(expo@48.0.10)(react-native@0.71.8)(react@18.2.0):
+    resolution: {integrity: sha512-ExlhirztyTFgAcZ+hFwMZTKr5iZD14TURN4c0Bcj8LcRP4SBPsOSdMgAcMHUFS5/+/PeKndhcRBRm1ZEcApjAQ==}
     peerDependencies:
       expo: '>=47.0.0'
       mapbox-gl: ^2.9.0
