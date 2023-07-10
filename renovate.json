@@ -25,10 +25,12 @@
       "packageNames": ["pnpm", "node"],
       "matchPackageNames": ["node", "pnpm"],
       "enabled": false
+    },
+    {
+      "excludePackagePrefixes": ["expo"]
     }
   ],
   "ignoreDeps": [
-    "expo-image",
     "@react-native-async-storage/async-storage",
     "react-native-progress",
     "react-native-reanimated",
