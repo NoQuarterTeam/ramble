@@ -1,8 +1,8 @@
-import { StatusBar } from "expo-status-bar"
-import { ChevronDown, ChevronLeft, Heart, Star } from "lucide-react-native"
 import * as React from "react"
 import { Animated, TouchableOpacity, useColorScheme, View, type ViewProps } from "react-native"
 import RenderHtml, { defaultSystemFonts } from "react-native-render-html"
+import { StatusBar } from "expo-status-bar"
+import { ChevronDown, ChevronLeft, Heart, Star } from "lucide-react-native"
 
 import { merge } from "@ramble/shared"
 

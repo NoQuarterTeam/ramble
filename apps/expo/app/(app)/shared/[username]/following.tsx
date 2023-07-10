@@ -1,11 +1,11 @@
 import { View } from "react-native"
+import { FlashList } from "@shopify/flash-list"
 
+import { ScreenView } from "../../../../components/ui/ScreenView"
 import { Spinner } from "../../../../components/ui/Spinner"
 import { Text } from "../../../../components/ui/Text"
 import { api } from "../../../../lib/api"
 import { useParams } from "../../../router"
-import { ScreenView } from "../../../../components/ui/ScreenView"
-import { FlashList } from "@shopify/flash-list"
 import { UserItem } from "./UserItem"
 
 export function UserFollowing() {

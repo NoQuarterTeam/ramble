@@ -1,5 +1,6 @@
 import * as React from "react"
 import { useColorScheme } from "react-native"
+import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { enableScreens } from "react-native-screens"
 import {
@@ -31,7 +32,6 @@ import { SaveScreen } from "./(app)/shared/spots/[id]/save"
 import { AuthLayout } from "./(auth)/_layout"
 import { OnboardingLayout } from "./onboarding/_layout"
 import { type ScreenParamsList } from "./router"
-import { GestureHandlerRootView } from "react-native-gesture-handler"
 
 SplashScreen.preventAutoHideAsync()
 

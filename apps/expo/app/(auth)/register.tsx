@@ -6,11 +6,11 @@ import { Button } from "../../components/ui/Button"
 import { FormError } from "../../components/ui/FormError"
 import { FormInput } from "../../components/ui/FormInput"
 import { ModalView } from "../../components/ui/ModalView"
+import { toast } from "../../components/ui/Toast"
 import { api, AUTH_TOKEN } from "../../lib/api"
 import { useForm } from "../../lib/hooks/useForm"
 import { useKeyboardController } from "../../lib/hooks/useKeyboardController"
 import { useRouter } from "../router"
-import { toast } from "../../components/ui/Toast"
 
 export function RegisterScreen() {
   useKeyboardController()

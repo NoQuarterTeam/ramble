@@ -1,20 +1,20 @@
-import { Linking, ScrollView, TouchableOpacity, View, useColorScheme } from "react-native"
+import { Linking, ScrollView, TouchableOpacity, useColorScheme, View } from "react-native"
+import { Image } from "expo-image"
 import { ChevronLeft, Heart, Instagram, User2 } from "lucide-react-native"
+
+import { createImageUrl } from "@ramble/shared"
 
 import { Button } from "../../../../components/ui/Button"
 import { Heading } from "../../../../components/ui/Heading"
-
+import { Spinner } from "../../../../components/ui/Spinner"
+import { Text } from "../../../../components/ui/Text"
+import { api } from "../../../../lib/api"
+import { useMe } from "../../../../lib/hooks/useMe"
+import { interestOptions } from "../../../../lib/interests"
 import { useParams, useRouter } from "../../../router"
 import UserLists from "./lists"
 import { UserSpots } from "./spots"
 import { UserVan } from "./van"
-import { useMe } from "../../../../lib/hooks/useMe"
-import { api } from "../../../../lib/api"
-import { Image } from "expo-image"
-import { createImageUrl } from "@ramble/shared"
-import { Spinner } from "../../../../components/ui/Spinner"
-import { Text } from "../../../../components/ui/Text"
-import { interestOptions } from "../../../../lib/interests"
 
 export function UserScreen() {
   const colorScheme = useColorScheme()

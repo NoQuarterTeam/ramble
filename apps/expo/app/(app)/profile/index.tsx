@@ -9,12 +9,12 @@ import { createImageUrl } from "@ramble/shared"
 import { LoginPlaceholder } from "../../../components/LoginPlaceholder"
 import { Button } from "../../../components/ui/Button"
 import { Heading } from "../../../components/ui/Heading"
+import { Icons } from "../../../components/ui/Icons"
 import { Text } from "../../../components/ui/Text"
 import { api, AUTH_TOKEN } from "../../../lib/api"
 import { VERSION } from "../../../lib/config"
 import { useMe } from "../../../lib/hooks/useMe"
 import { type ScreenParamsList, useRouter } from "../../router"
-import { Icons } from "../../../components/ui/Icons"
 
 const updateId = Updates.updateId
 

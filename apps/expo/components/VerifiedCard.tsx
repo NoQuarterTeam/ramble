@@ -1,11 +1,12 @@
-import { Spot, type User } from "@ramble/database/types"
-import { createImageUrl } from "@ramble/shared"
+import { TouchableOpacity, View } from "react-native"
+import { Image } from "expo-image"
 import { BadgeX, User2, Verified } from "lucide-react-native"
 
-import { TouchableOpacity, View } from "react-native"
-import { Text } from "./ui/Text"
-import { Image } from "expo-image"
+import { type Spot, type User } from "@ramble/database/types"
+import { createImageUrl } from "@ramble/shared"
+
 import { useRouter } from "../app/router"
+import { Text } from "./ui/Text"
 
 interface Props {
   spot: Pick<Spot, "verifiedAt"> & { verifier: null | Pick<User, "avatar" | "firstName" | "lastName" | "username"> }

@@ -1,10 +1,11 @@
-import { User } from "@ramble/database/types"
-import { Image } from "expo-image"
-
 import { TouchableOpacity, View } from "react-native"
-import { Text } from "../../../../components/ui/Text"
-import { createImageUrl } from "@ramble/shared"
+import { Image } from "expo-image"
 import { User2 } from "lucide-react-native"
+
+import { type User } from "@ramble/database/types"
+import { createImageUrl } from "@ramble/shared"
+
+import { Text } from "../../../../components/ui/Text"
 import { useRouter } from "../../../router"
 
 interface Props {

@@ -4,12 +4,12 @@ import { Edit } from "lucide-react-native"
 
 import { SpotItem } from "../../../../../components/SpotItem"
 import { Button } from "../../../../../components/ui/Button"
+import { ScreenView } from "../../../../../components/ui/ScreenView"
 import { Spinner } from "../../../../../components/ui/Spinner"
 import { Text } from "../../../../../components/ui/Text"
 import { api } from "../../../../../lib/api"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { useParams, useRouter } from "../../../../router"
-import { ScreenView } from "../../../../../components/ui/ScreenView"
 
 export function ListDetailScreen() {
   const { params } = useParams<"ListDetailScreen">()
