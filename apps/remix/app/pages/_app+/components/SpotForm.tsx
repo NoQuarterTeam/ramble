@@ -137,9 +137,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
               ))}
               {errors?.fieldErrors?.type && (
                 <ul id="type-error">
-                  {errors?.fieldErrors?.type?.map((error, i) => (
-                    <FormFieldError key={i}>{error}</FormFieldError>
-                  ))}
+                  {errors?.fieldErrors?.type?.map((error, i) => <FormFieldError key={i}>{error}</FormFieldError>)}
                 </ul>
               )}
             </div>
@@ -147,13 +145,13 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
           <div className="space-y-0.5">
             <FormFieldLabel required>Images</FormFieldLabel>
 
-            {images.map(({ path }, i) => (
+            {images.map(({ path }) => (
               <ImageField
                 className="h-[300px] overflow-hidden rounded"
                 errors={[]}
                 onRemove={() => setImages(images.filter((image) => image.path !== path))}
                 defaultValue={path}
-                key={i}
+                key={path}
                 name="image"
               />
             ))}
