@@ -27,7 +27,8 @@
       "enabled": false
     },
     {
-      "excludePackagePrefixes": ["expo"]
+      "matchPackagePrefixes": ["expo"],
+      "enabled": false
     }
   ],
   "ignoreDeps": [
