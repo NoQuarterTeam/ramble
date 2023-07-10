@@ -1,15 +1,18 @@
 import { View } from "react-native"
-import { useLocalSearchParams } from "expo-router"
 
 import { ListItem } from "../../../../components/ListItem"
 import { Spinner } from "../../../../components/ui/Spinner"
 import { Text } from "../../../../components/ui/Text"
 import { api } from "../../../../lib/api"
+import { useParams } from "../../../router"
 
 export default function UserLists() {
-  const { username } = useLocalSearchParams<{ username: string }>()
+  const { params } = useParams<"UserScreen">()
 
-  const { data: lists, isLoading } = api.list.allByUser.useQuery({ username: username || "" }, { enabled: !!username })
+  const { data: lists, isLoading } = api.list.allByUser.useQuery(
+    { username: params.username || "" },
+    { enabled: !!params.username },
+  )
 
   if (isLoading)
     return (
@@ -18,7 +21,7 @@ export default function UserLists() {
       </View>
     )
 
-  if (!lists || !username)
+  if (!lists)
     return (
       <View className="flex items-end justify-center py-4">
         <Text>No lists yet</Text>

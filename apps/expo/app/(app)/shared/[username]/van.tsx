@@ -1,17 +1,18 @@
 import { View } from "react-native"
 import { Image } from "expo-image"
-import { useLocalSearchParams } from "expo-router"
 
 import { createImageUrl } from "@ramble/shared"
 
 import { Spinner } from "../../../../components/ui/Spinner"
 import { Text } from "../../../../components/ui/Text"
 import { api } from "../../../../lib/api"
+import { useParams } from "../../../router"
 
 export function UserVan() {
-  const { username } = useLocalSearchParams<{ username: string }>()
+  const { params } = useParams<"UserScreen">()
 
-  const { data: van, isLoading } = api.van.byUser.useQuery({ username: username || "" }, { enabled: !!username })
+  const { data: van, isLoading } = api.van.byUser.useQuery({ username: params.username || "" }, { enabled: !!params.username })
+
   if (isLoading)
     return (
       <View className="flex items-center justify-center py-4">
