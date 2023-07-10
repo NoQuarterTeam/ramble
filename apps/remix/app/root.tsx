@@ -22,6 +22,7 @@ import {
   useMatches,
   useRouteError,
 } from "@remix-run/react"
+import { Analytics } from "@vercel/analytics/react"
 import type { LinksFunction, LoaderArgs, SerializeFrom, V2_MetaFunction } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { Frown } from "lucide-react"
@@ -171,6 +172,7 @@ function Document({ theme, children }: DocumentProps) {
         <ScrollRestoration />
         {!shouldDisableScripts && <Scripts />}
         <LiveReload />
+        <Analytics />
       </body>
     </html>
   )
