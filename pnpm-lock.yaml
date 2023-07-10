@@ -48,9 +48,6 @@ importers:
       '@react-native-async-storage/async-storage':
         specifier: 1.17.11
         version: 1.17.11(react-native@0.71.8)
-      '@react-native-community/datetimepicker':
-        specifier: 6.7.5
-        version: 6.7.5
       '@react-navigation/bottom-tabs':
         specifier: 6.5.8
         version: 6.5.8(@react-navigation/native@6.1.7)(react-native-safe-area-context@4.5.0)(react-native-screens@3.22.0)(react-native@0.71.8)(react@18.2.0)
@@ -67,8 +64,8 @@ importers:
         specifier: 6.3.17
         version: 6.3.17(@react-navigation/native@6.1.7)(react-native-gesture-handler@2.9.0)(react-native-safe-area-context@4.5.0)(react-native-screens@3.22.0)(react-native@0.71.8)(react@18.2.0)
       '@rnmapbox/maps':
-        specifier: 10.0.8
-        version: 10.0.8(expo@48.0.10)(react-native@0.71.8)(react@18.2.0)
+        specifier: 10.0.10-rc.0
+        version: 10.0.10-rc.0(expo@48.0.10)(react-native@0.71.8)(react@18.2.0)
       '@shopify/flash-list':
         specifier: ^1.4.3
         version: 1.4.3(@babel/runtime@7.20.0)(react-native@0.71.8)(react@18.2.0)
@@ -117,9 +114,6 @@ importers:
       expo-location:
         specifier: ~15.1.1
         version: 15.1.1(expo@48.0.10)
-      expo-router:
-        specifier: ^1.2.2
-        version: 1.2.2(@types/react@18.2.8)(expo-constants@14.2.1)(expo-linking@4.0.1)(expo-modules-autolinking@1.2.0)(expo-status-bar@1.4.4)(expo@48.0.10)(metro@0.73.9)(react-dom@18.2.0)(react-native-gesture-handler@2.9.0)(react-native-reanimated@2.14.4)(react-native-safe-area-context@4.5.0)(react-native-screens@3.22.0)(react-native@0.71.8)(react@18.2.0)
       expo-splash-screen:
         specifier: ~0.18.2
         version: 0.18.2(expo-modules-autolinking@1.2.0)(expo@48.0.10)
@@ -4552,14 +4546,6 @@ packages:
       '@babel/helper-validator-identifier': 7.19.1
       to-fast-properties: 2.0.0
 
-  /@bacons/react-views@1.1.3(react-native@0.71.8):
-    resolution: {integrity: sha512-aLipQAkQKRzG64e28XHBpByyBPfANz0A6POqYHGyryHizG9vLCLNQwLe8gwFANEMBWW2Mx5YdQ7RkNdQMQ+CXQ==}
-    peerDependencies:
-      react-native: '*'
-    dependencies:
-      react-native: 0.71.8(@babel/core@7.20.2)(@babel/preset-env@7.20.2)(react@18.2.0)
-    dev: false
-
   /@cspotcode/source-map-support@0.8.1:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
@@ -5065,16 +5051,6 @@ packages:
       sucrase: 3.32.0
     transitivePeerDependencies:
       - supports-color
-    dev: false
-
-  /@expo/metro-runtime@1.1.0(react-native@0.71.8):
-    resolution: {integrity: sha512-H+Ske1L/fIiRiZbtchQEZ2qRqGGOgs474XWq5wRtq9m1GzRh05beZU+yuNXWtqUQT+oa3fPzaJNI9DOc/05k1A==}
-    peerDependencies:
-      react-native: '*'
-    dependencies:
-      '@bacons/react-views': 1.1.3(react-native@0.71.8)
-      qs: 6.11.2
-      react-native: 0.71.8(@babel/core@7.20.2)(@babel/preset-env@7.20.2)(react@18.2.0)
     dev: false
 
   /@expo/osascript@2.0.33:
@@ -5705,20 +5681,6 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@radix-ui/react-compose-refs@1.0.1(@types/react@18.2.8)(react@18.2.0):
-    resolution: {integrity: sha512-fDSBgd44FKHa1FRMU59qBMPFcl2PZE+2nmqunj+BWFyYYjnhIDWL2ItDs3rrbJDQOtzt5nIebLCQc4QRfz6LJw==}
-    peerDependencies:
-      '@types/react': '*'
-      react: ^16.8 || ^17.0 || ^18.0
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-    dependencies:
-      '@babel/runtime': 7.22.3
-      '@types/react': 18.2.8
-      react: 18.2.0
-    dev: false
-
   /@radix-ui/react-context@1.0.0(react@18.2.0):
     resolution: {integrity: sha512-1pVM9RfOQ+n/N5PJK33kRSKsr1glNxomxONs5c49MliinBY6Yw2Q995qfBUUo0/Mbg05B/sGA0gkgPI7kmSHBg==}
     peerDependencies:
@@ -6011,21 +5973,6 @@ packages:
     dependencies:
       '@babel/runtime': 7.22.3
       '@radix-ui/react-compose-refs': 1.0.0(react@18.2.0)
-      react: 18.2.0
-    dev: false
-
-  /@radix-ui/react-slot@1.0.2(@types/react@18.2.8)(react@18.2.0):
-    resolution: {integrity: sha512-YeTpuq4deV+6DusvVUW4ivBgnkHwECUu0BiN43L5UCDFgdhsRUWAghhTF5MbvNTPzmiFOx90asDSUjWuCNapwg==}
-    peerDependencies:
-      '@types/react': '*'
-      react: ^16.8 || ^17.0 || ^18.0
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-    dependencies:
-      '@babel/runtime': 7.22.3
-      '@radix-ui/react-compose-refs': 1.0.1(@types/react@18.2.8)(react@18.2.0)
-      '@types/react': 18.2.8
       react: 18.2.0
     dev: false
 
@@ -6459,12 +6406,6 @@ packages:
       - supports-color
       - utf-8-validate
 
-  /@react-native-community/datetimepicker@6.7.5:
-    resolution: {integrity: sha512-E2Zh6mwvZ6CFEMKP++rdxxjJiB45fYPpdZhJwdZ2vUVwqovqu1cQRDLZmz4XrcHSyuacgR4WUnkYFf0F2nnNIg==}
-    dependencies:
-      invariant: 2.2.4
-    dev: false
-
   /@react-native/assets@1.0.0:
     resolution: {integrity: sha512-KrwSpS1tKI70wuKl68DwJZYEvXktDHdZMG0k2AXD/rJVSlB23/X2CB2cutVR0HwNMJIal9HOUOBB2rVfa6UGtQ==}
 
@@ -6850,8 +6791,8 @@ packages:
     dependencies:
       web-streams-polyfill: 3.2.1
 
-  /@rnmapbox/maps@10.0.8(expo@48.0.10)(react-native@0.71.8)(react@18.2.0):
-    resolution: {integrity: sha512-fk1X2p3OWyKK4XyvIiEA5e9Mp78AJSiGLP1ruMdqFRJXdf/IHFeOdV9oUoQ9Uc9RvIDu3G6VL4KmJfd3kPAjfw==}
+  /@rnmapbox/maps@10.0.10-rc.0(expo@48.0.10)(react-native@0.71.8)(react@18.2.0):
+    resolution: {integrity: sha512-LmkH/x5k4Z2yIJuXGQWB3x+y+jtQ89tDT9yFrpf9BmqrmRveyPLgaOR2jbVOBo5JSl9EaxoSNCQi/rVX29KEUA==}
     peerDependencies:
       expo: '>=47.0.0'
       mapbox-gl: ^2.9.0
@@ -10627,54 +10568,6 @@ packages:
     dependencies:
       compare-versions: 3.6.0
       invariant: 2.2.4
-    dev: false
-
-  /expo-router@1.2.2(@types/react@18.2.8)(expo-constants@14.2.1)(expo-linking@4.0.1)(expo-modules-autolinking@1.2.0)(expo-status-bar@1.4.4)(expo@48.0.10)(metro@0.73.9)(react-dom@18.2.0)(react-native-gesture-handler@2.9.0)(react-native-reanimated@2.14.4)(react-native-safe-area-context@4.5.0)(react-native-screens@3.22.0)(react-native@0.71.8)(react@18.2.0):
-    resolution: {integrity: sha512-+pEkJ1UpEWna3HgGZ/nkgcVzbgRiTtYeMTi7tCb2qXljeF5VEfEwC3xc4ttvH4SPzBfd6h9GB+NJsr775YDdJg==}
-    peerDependencies:
-      '@react-navigation/drawer': ^6.5.8
-      expo: ^48.0.0
-      expo-constants: '*'
-      expo-linking: '*'
-      expo-status-bar: '*'
-      metro: ~0.73.7
-      react-native-gesture-handler: '*'
-      react-native-reanimated: '*'
-      react-native-safe-area-context: '*'
-      react-native-screens: '*'
-    peerDependenciesMeta:
-      '@react-navigation/drawer':
-        optional: true
-      react-native-reanimated:
-        optional: true
-    dependencies:
-      '@bacons/react-views': 1.1.3(react-native@0.71.8)
-      '@expo/metro-runtime': 1.1.0(react-native@0.71.8)
-      '@radix-ui/react-slot': 1.0.2(@types/react@18.2.8)(react@18.2.0)
-      '@react-navigation/bottom-tabs': 6.5.8(@react-navigation/native@6.1.7)(react-native-safe-area-context@4.5.0)(react-native-screens@3.22.0)(react-native@0.71.8)(react@18.2.0)
-      '@react-navigation/native': 6.1.7(react-native@0.71.8)(react@18.2.0)
-      '@react-navigation/native-stack': 6.9.13(@react-navigation/native@6.1.7)(react-native-safe-area-context@4.5.0)(react-native-screens@3.22.0)(react-native@0.71.8)(react@18.2.0)
-      expo: 48.0.10(@babel/core@7.20.2)
-      expo-constants: 14.2.1(expo@48.0.10)
-      expo-linking: 4.0.1(expo@48.0.10)
-      expo-splash-screen: 0.18.2(expo-modules-autolinking@1.2.0)(expo@48.0.10)
-      expo-status-bar: 1.4.4
-      metro: 0.73.9
-      query-string: 7.1.3
-      react-helmet-async: 1.3.0(react-dom@18.2.0)(react@18.2.0)
-      react-native-gesture-handler: 2.9.0(react-native@0.71.8)(react@18.2.0)
-      react-native-reanimated: 2.14.4(@babel/core@7.20.2)(react-native@0.71.8)(react@18.2.0)
-      react-native-safe-area-context: 4.5.0(react-native@0.71.8)(react@18.2.0)
-      react-native-screens: 3.22.0(react-native@0.71.8)(react@18.2.0)
-      url: 0.11.0
-    transitivePeerDependencies:
-      - '@types/react'
-      - encoding
-      - expo-modules-autolinking
-      - react
-      - react-dom
-      - react-native
-      - supports-color
     dev: false
 
   /expo-splash-screen@0.18.2(expo-modules-autolinking@1.2.0)(expo@48.0.10):
@@ -15507,10 +15400,6 @@ packages:
       pump: 2.0.1
     dev: true
 
-  /punycode@1.3.2:
-    resolution: {integrity: sha512-RofWgt/7fL5wP1Y7fxE7/EmTLzQVnB0ycyibJ0OOHIlJqTNzglYFxVwETOcIoJqJmpDXJ9xImDv+Fq34F/d4Dw==}
-    dev: false
-
   /punycode@2.3.0:
     resolution: {integrity: sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==}
     engines: {node: '>=6'}
@@ -15589,12 +15478,6 @@ packages:
       decode-uri-component: 0.4.1
       filter-obj: 5.1.0
       split-on-first: 3.0.0
-    dev: false
-
-  /querystring@0.2.0:
-    resolution: {integrity: sha512-X/xY82scca2tau62i9mDyU9K+I+djTMUsvwf7xnUX5GLvVzgJybOJf4Y6o9Zx3oJK/LSXg5tTZBjwzqVPaPO2g==}
-    engines: {node: '>=0.4.x'}
-    deprecated: The querystring API is considered Legacy. new code should use the URLSearchParams API instead.
     dev: false
 
   /querystringify@2.2.0:
@@ -15685,10 +15568,6 @@ packages:
       react: 18.2.0
     dev: false
 
-  /react-fast-compare@3.2.2:
-    resolution: {integrity: sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==}
-    dev: false
-
   /react-freeze@1.0.3(react@18.2.0):
     resolution: {integrity: sha512-ZnXwLQnGzrDpHBHiC56TXFXvmolPeMjTn1UOm610M4EXGzbEDR7oOIyS2ZiItgbs6eZc4oU/a0hpk8PrcKvv5g==}
     engines: {node: '>=10'}
@@ -15696,21 +15575,6 @@ packages:
       react: '>=17.0.0'
     dependencies:
       react: 18.2.0
-    dev: false
-
-  /react-helmet-async@1.3.0(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-9jZ57/dAn9t3q6hneQS0wukqC2ENOBgMNVEhb/ZG9ZSxUetzVIw4iAmEU38IaVg3QGYauQPhSeUTuIUtFglWpg==}
-    peerDependencies:
-      react: ^16.6.0 || ^17.0.0 || ^18.0.0
-      react-dom: ^16.6.0 || ^17.0.0 || ^18.0.0
-    dependencies:
-      '@babel/runtime': 7.22.3
-      invariant: 2.2.4
-      prop-types: 15.8.1
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      react-fast-compare: 3.2.2
-      shallowequal: 1.1.0
     dev: false
 
   /react-hook-form@7.43.9(react@18.2.0):
@@ -16619,10 +16483,6 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       kind-of: 6.0.3
-
-  /shallowequal@1.1.0:
-    resolution: {integrity: sha512-y0m1JoUZSlPAjXVtPPW70aZWfIL/dSP7AFkRnniLCrK/8MDKog3TySTBmckD+RObVxH0v4Tox67+F14PdED2oQ==}
-    dev: false
 
   /sharp@0.32.0:
     resolution: {integrity: sha512-yLAypVcqj1toSAqRSwbs86nEzfyZVDYqjuUX8grhFpeij0DDNagKJXELS/auegDBRDg1XBtELdOGfo2X1cCpeA==}
@@ -17944,13 +17804,6 @@ packages:
     dependencies:
       querystringify: 2.2.0
       requires-port: 1.0.0
-    dev: false
-
-  /url@0.11.0:
-    resolution: {integrity: sha512-kbailJa29QrtXnxgq+DdCEGlbTeYM2eJUxsz6vjZavrCYPMIFHMKQmSKYAIuUK2i7hgPm28a8piX5NTUtM/LKQ==}
-    dependencies:
-      punycode: 1.3.2
-      querystring: 0.2.0
     dev: false
 
   /use-callback-ref@1.3.0(@types/react@18.2.14)(react@18.2.0):

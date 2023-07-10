@@ -1,6 +1,5 @@
 import { ScrollView, TouchableOpacity, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import Constants from "expo-constants"
 import { Image } from "expo-image"
 import * as Updates from "expo-updates"
 import { ChevronRight, type LucideIcon, ToggleRight, User, User2 } from "lucide-react-native"
@@ -18,8 +17,6 @@ import { type ScreenParamsList, useRouter } from "../../router"
 import { Icons } from "../../../components/ui/Icons"
 
 const updateId = Updates.updateId
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const updateGroup = (Constants.manifest2?.metadata as any)?.["updateGroup"]
 
 export function ProfileScreen() {
   const { me } = useMe()
@@ -42,7 +39,7 @@ export function ProfileScreen() {
 
           <View className="pt-10">
             <Text className="text-center">v{VERSION}</Text>
-            <Text className="text-center opacity-60">{updateGroup?.split("-")[0] || updateId?.split("-")[0] || "dev"}</Text>
+            <Text className="text-center opacity-60">{updateId?.split("-")[0] || "dev"}</Text>
           </View>
         </View>
       </LoginPlaceholder>
@@ -99,7 +96,7 @@ export function ProfileScreen() {
             Log out
           </Button>
           <Text className="text-center">v{VERSION}</Text>
-          <Text className="text-center opacity-60">{updateGroup?.split("-")[0] || updateId?.split("-")[0] || "dev"}</Text>
+          <Text className="text-center opacity-60">{updateId?.split("-")[0] || "dev"}</Text>
         </View>
       </ScrollView>
     </View>
