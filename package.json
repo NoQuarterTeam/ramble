@@ -5,7 +5,7 @@
     "turbo": "^1.9.9"
   },
   "devDependencies": {
-    "prettier": "^2.8.4",
+    "prettier": "^3.0.0",
     "prettier-plugin-tailwindcss": "^0.3.0",
     "typescript": "5.1.6"
   },
@@ -24,9 +24,9 @@
   "prisma": {
     "schema": "./packages/database/schema.prisma"
   },
-  "packageManager": "pnpm@8.5.1",
+  "packageManager": "pnpm@8.6.7",
   "engines": {
     "node": ">=16",
-    "pnpm": ">=7 <=8.5.1"
+    "pnpm": ">=7 <=8.6.7"
   }
 }
