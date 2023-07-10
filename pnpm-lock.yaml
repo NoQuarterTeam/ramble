@@ -197,8 +197,8 @@ importers:
         specifier: ^7.20.0
         version: 7.20.0
       '@expo/config-plugins':
-        specifier: ^6.0.0
-        version: 6.0.0
+        specifier: ^7.0.0
+        version: 7.0.0
       '@ramble/eslint-config':
         specifier: workspace:*
         version: link:../../packages/config/eslint
@@ -4894,28 +4894,6 @@ packages:
       nullthrows: 1.1.1
     dev: false
 
-  /@expo/config-plugins@6.0.0:
-    resolution: {integrity: sha512-Hp9ZbAvonzPTJFcoBBfmxwLwxHFOQuj8YcbYzSW2UiXeco79Q0itsCEKenvfc16V+ZwMkcjpbahy5/8uVn6aiA==}
-    dependencies:
-      '@expo/config-types': 48.0.0
-      '@expo/json-file': 8.2.37
-      '@expo/plist': 0.0.20
-      '@expo/sdk-runtime-versions': 1.0.0
-      '@react-native/normalize-color': 2.1.0
-      chalk: 4.1.2
-      debug: 4.3.4
-      find-up: 5.0.0
-      getenv: 1.0.0
-      glob: 7.1.6
-      resolve-from: 5.0.0
-      semver: 7.5.1
-      slash: 3.0.0
-      xcode: 3.0.1
-      xml2js: 0.4.23
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
-
   /@expo/config-plugins@6.0.1:
     resolution: {integrity: sha512-6mqZutxeibXFeqFfoZApFUEH2n1RxGXYMHCdJrDj4eXDBBFZ3aJ0XBoroZcHHHvfRieEsf54vNyJoWp7JZGj8g==}
     dependencies:
@@ -4938,8 +4916,35 @@ packages:
       - supports-color
     dev: false
 
+  /@expo/config-plugins@7.0.0:
+    resolution: {integrity: sha512-4YqBAlcr9rdBk8NVc+40+e6k2tBRv3ZmWRenImNBd3MYxD4FEAZ3aHhm0FylQGXWgfOPnPoAqm0E2a9shNeZMQ==}
+    dependencies:
+      '@expo/config-types': 49.0.0
+      '@expo/json-file': 8.2.37
+      '@expo/plist': 0.0.20
+      '@expo/sdk-runtime-versions': 1.0.0
+      '@react-native/normalize-color': 2.1.0
+      chalk: 4.1.2
+      debug: 4.3.4
+      find-up: 5.0.0
+      getenv: 1.0.0
+      glob: 7.1.6
+      resolve-from: 5.0.0
+      semver: 7.5.4
+      slash: 3.0.0
+      xcode: 3.0.1
+      xml2js: 0.4.23
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
   /@expo/config-types@48.0.0:
     resolution: {integrity: sha512-DwyV4jTy/+cLzXGAo1xftS6mVlSiLIWZjl9DjTCLPFVgNYQxnh7htPilRv4rBhiNs7KaznWqKU70+4zQoKVT9A==}
+    dev: false
+
+  /@expo/config-types@49.0.0:
+    resolution: {integrity: sha512-8eyREVi+K2acnMBe/rTIu1dOfyR2+AMnTLHlut+YpMV9OZPdeKV0Bs9BxAewGqBA2slslbQ9N39IS2CuTKpXkA==}
+    dev: true
 
   /@expo/config@8.0.2:
     resolution: {integrity: sha512-WubrzTNNdAXy1FU8TdyQ7D9YtDj2tN3fWXDq+C8In+nB7Qc08zwH9cVdaGZ+rBVmjFZBh5ACfObKq/m9cm4QQA==}
