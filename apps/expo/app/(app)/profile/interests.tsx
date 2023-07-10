@@ -65,9 +65,9 @@ function InterestSelector({
   Icon: (props: IconProps) => JSX.Element
 }) {
   return (
-    <View className="mb-2 flex w-full flex-row items-center justify-between p-4">
+    <View className="flex w-full flex-row items-center justify-between p-4">
       <View className="flex flex-row items-center space-x-2">
-        <Icon className="sq-4 text-black dark:text-white" />
+        <Icon size={20} className="text-black dark:text-white" />
         <Text className="text-xl">{label}</Text>
       </View>
       <Switch trackColor={{ true: colors.primary[600] }} value={isSelected} onValueChange={onToggle} />
