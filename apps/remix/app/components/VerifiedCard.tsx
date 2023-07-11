@@ -1,8 +1,10 @@
+import { Link } from "@remix-run/react"
+import { BadgeX, Verified } from "lucide-react"
+
 import { type User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
-import { BadgeX, Verified } from "lucide-react"
+
 import { Avatar } from "./ui/Avatar"
-import { Link } from "@remix-run/react"
 
 interface Props {
   spot: { verifiedAt: string | null } & { verifier: null | Pick<User, "avatar" | "firstName" | "lastName" | "username"> }

@@ -20,6 +20,7 @@ import {
   AlertDialogTrigger,
   Button,
 } from "~/components/ui"
+import { VerifiedCard } from "~/components/VerifiedCard"
 import { db } from "~/lib/db.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { notFound, redirect } from "~/lib/remix.server"
@@ -29,7 +30,6 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { SaveToList } from "../api+/$spotId.save-to-list.$listId"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
-import { VerifiedCard } from "~/components/VerifiedCard"
 
 export const loader = async ({ params }: LoaderArgs) => {
   const spot = await db.spot.findUnique({

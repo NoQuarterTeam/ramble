@@ -97,11 +97,7 @@ export const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(func
       {typeof fieldErrors === "string" ? (
         <FormFieldError>{fieldErrors}</FormFieldError>
       ) : fieldErrors?.length ? (
-        <ul id={props.name + "-error"}>
-          {fieldErrors?.map((error, i) => (
-            <FormFieldError key={i}>{error}</FormFieldError>
-          ))}
-        </ul>
+        <ul id={props.name + "-error"}>{fieldErrors?.map((error, i) => <FormFieldError key={i}>{error}</FormFieldError>)}</ul>
       ) : null}
     </div>
   )
@@ -141,11 +137,7 @@ export const InlineFormField = React.forwardRef<HTMLInputElement, FormFieldProps
       {typeof fieldErrors === "string" ? (
         <FormFieldError>{fieldErrors}</FormFieldError>
       ) : fieldErrors?.length ? (
-        <ul id={props.name + "-error"}>
-          {fieldErrors?.map((error, i) => (
-            <FormFieldError key={i}>{error}</FormFieldError>
-          ))}
-        </ul>
+        <ul id={props.name + "-error"}>{fieldErrors?.map((error, i) => <FormFieldError key={i}>{error}</FormFieldError>)}</ul>
       ) : null}
     </div>
   )
@@ -215,11 +207,7 @@ export function ImageField(props: ImageFieldProps) {
       {typeof fieldErrors === "string" ? (
         <FormFieldError>{fieldErrors}</FormFieldError>
       ) : fieldErrors?.length ? (
-        <ul id={props.name + "-error"}>
-          {fieldErrors?.map((error, i) => (
-            <FormFieldError key={i}>{error}</FormFieldError>
-          ))}
-        </ul>
+        <ul id={props.name + "-error"}>{fieldErrors?.map((error, i) => <FormFieldError key={i}>{error}</FormFieldError>)}</ul>
       ) : null}
     </div>
   )

@@ -9,7 +9,7 @@ import { createImageUrl, merge } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
 import { NavLink } from "~/components/NavLink"
-import { Avatar, Badge, Icons, buttonSizeStyles, buttonStyles } from "~/components/ui"
+import { Avatar, Badge, buttonSizeStyles, buttonStyles, Icons } from "~/components/ui"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { PageContainer } from "../../components/PageContainer"

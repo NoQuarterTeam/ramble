@@ -133,11 +133,7 @@ export default function SpotPreview() {
                     </LinkButton>
                   )}
                 </div>
-                <div className="space-y-6">
-                  {spot.reviews?.map((review) => (
-                    <ReviewItem key={review.id} review={review} />
-                  ))}
-                </div>
+                <div className="space-y-6">{spot.reviews?.map((review) => <ReviewItem key={review.id} review={review} />)}</div>
               </div>
             </div>
           )}
