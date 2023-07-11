@@ -365,8 +365,8 @@ importers:
         specifier: ^6.1.0
         version: 6.1.0(@remix-run/react@1.18.1)(@remix-run/server-runtime@1.18.1)(react@18.2.0)(typescript@5.1.6)(zod@3.21.4)
       resend:
-        specifier: ^0.16.0
-        version: 0.16.0
+        specifier: ^0.17.0
+        version: 0.17.0
       sharp:
         specifier: ^0.32.0
         version: 0.32.0
@@ -16149,8 +16149,8 @@ packages:
     resolution: {integrity: sha512-ab9EmR80F/zQTMNeneUr4cv+jSwPJgIlvEmVwLerwrWVbpLlBuls9XHzIeTFy4cegU2NHBp3va0LKOzU5qFEYQ==}
     dev: false
 
-  /resend@0.16.0:
-    resolution: {integrity: sha512-6NnrtEapGD6FtnhRUrtDdfgQFH2av5cTkrnElUh6AjTzGrHXiMpD/GRwT46pqpA6i/AXSDXKV7Wh/hHQJLKFew==}
+  /resend@0.17.0:
+    resolution: {integrity: sha512-KYl4fC33f2AkJ134blSS1ZAbmpuYrzcKQVl72I1Fx67z+iXmOAOBs66OTKXJ0wmXaAy0ls8lSRo927/QXD1E8w==}
     dependencies:
       '@react-email/render': 0.0.7
       axios: 1.4.0
