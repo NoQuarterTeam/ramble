@@ -1,6 +1,8 @@
 name: preview
 on:
   push:
+    paths:
+      - "apps/expo/**"
     branches:
       - develop
 permissions:
