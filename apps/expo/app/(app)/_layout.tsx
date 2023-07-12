@@ -26,7 +26,6 @@ export function AppLayout() {
         tabBarStyle: { backgroundColor: isDark ? "black" : "white" },
         headerShown: false,
         tabBarShowLabel: false,
-        // tabBarLabelStyle: { margin: -4, color: isDark ? "white" : "black" },
       }}
     >
       <Tab.Screen
@@ -50,7 +49,6 @@ export function AppLayout() {
           tabBarIcon: (props) => <List size={24} color={props.focused ? "green" : isDark ? "white" : "black"} />,
         }}
       />
-
       <Tab.Screen
         name="ProfileLayout"
         component={ProfileLayout}
