@@ -1,7 +1,9 @@
-import { vanSchema } from "@ramble/shared"
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
-import { z } from "zod"
 import { TRPCError } from "@trpc/server"
+import { z } from "zod"
+
+import { vanSchema } from "@ramble/shared"
+
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const vanRouter = createTRPCRouter({
   mine: protectedProcedure.query(async ({ ctx }) => {

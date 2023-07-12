@@ -5,7 +5,7 @@ import type { CreateEmailOptions } from "resend/build/src/emails/interfaces"
 import { IS_PRODUCTION } from "./config.server"
 import { resend } from "./resend.server"
 
-type Props = CreateEmailOptions & { react: NonNullable<CreateEmailOptions["react"]> }
+type Props = CreateEmailOptions & { react: React.ReactElement<any> }
 class Mailer {
   async send(args: Props) {
     try {

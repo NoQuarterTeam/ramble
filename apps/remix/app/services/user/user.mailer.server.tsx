@@ -11,6 +11,7 @@ export async function sendResetPasswordEmail(user: User, token: string) {
     await mailer.send({
       react: <ResetPasswordEmail link={`${FULL_WEB_URL}/reset-password/${token}`} />,
       to: user.email,
+      text: `Reset your password: ${FULL_WEB_URL}/reset-password/${token}`,
       from: "info@noquarter.co",
       subject: "Reset Password",
     })

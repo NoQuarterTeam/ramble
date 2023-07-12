@@ -1,9 +1,9 @@
 import { TRPCError } from "@trpc/server"
-
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
+import { z } from "zod"
 
 import { updateSchema, userInterestFields } from "@ramble/shared"
-import { z } from "zod"
+
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const userRouter = createTRPCRouter({
   me: publicProcedure.query(({ ctx }) => ctx.user),

@@ -1,8 +1,10 @@
-import { z } from "zod"
-import { createTRPCRouter, publicProcedure } from "../trpc"
-import type { Spot, SpotImage, SpotType } from "@ramble/database/types"
-import Supercluster from "supercluster"
 import { TRPCError } from "@trpc/server"
+import Supercluster from "supercluster"
+import { z } from "zod"
+
+import type { Spot, SpotImage, SpotType } from "@ramble/database/types"
+
+import { createTRPCRouter, publicProcedure } from "../trpc"
 
 export const spotRouter = createTRPCRouter({
   clusters: publicProcedure

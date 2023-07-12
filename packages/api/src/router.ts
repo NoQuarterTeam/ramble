@@ -1,11 +1,11 @@
 import { authRouter } from "./router/auth"
+import { listRouter } from "./router/list"
+import { reviewRouter } from "./router/review"
+import { s3Router } from "./router/s3"
 import { spotRouter } from "./router/spot"
 import { userRouter } from "./router/user"
-import { listRouter } from "./router/list"
-import { createTRPCRouter } from "./trpc"
-import { reviewRouter } from "./router/review"
 import { vanRouter } from "./router/van"
-import { s3Router } from "./router/s3"
+import { createTRPCRouter } from "./trpc"
 
 export const appRouter = createTRPCRouter({
   auth: authRouter,
