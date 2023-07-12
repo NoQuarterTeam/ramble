@@ -1,9 +1,10 @@
 import * as React from "react"
 import { Animated, TouchableOpacity, useColorScheme, View, type ViewProps } from "react-native"
+import * as Location from "expo-location"
 import RenderHtml, { defaultSystemFonts } from "react-native-render-html"
 import { StatusBar } from "expo-status-bar"
 import { ChevronDown, ChevronLeft, Heart, Star } from "lucide-react-native"
-
+import { showLocation } from "react-native-map-link"
 import { merge } from "@ramble/shared"
 
 import { ReviewItem } from "../../../../../components/ReviewItem"
@@ -33,6 +34,22 @@ export function SpotDetailScreen() {
     extrapolate: "clamp",
   })
 
+  const handleGetDirections = async () => {
+    await Location.requestForegroundPermissionsAsync().catch()
+    const loc = await Location.getCurrentPositionAsync().catch()
+    if (!spot) return
+    showLocation({
+      latitude: spot.latitude,
+      longitude: spot.longitude,
+      sourceLatitude: loc?.coords.latitude,
+      sourceLongitude: loc?.coords.longitude,
+      title: spot.name,
+      googleForceLatLon: true,
+      alwaysIncludeGoogle: true,
+      directionsMode: "car",
+    })
+  }
+
   if (isLoading) return <SpotLoading />
   if (!spot)
     return (
@@ -54,13 +71,18 @@ export function SpotDetailScreen() {
         <View className="space-y-3 p-4">
           <View className="space-y-2">
             <Heading className="text-2xl leading-7">{spot.name}</Heading>
-            <View className="flex flex-row items-center space-x-1">
-              <Star size={20} className="text-black dark:text-white" />
-              <Text className="text-sm">{spot.rating._avg.rating ? spot.rating._avg.rating?.toFixed(1) : "Not rated"}</Text>
-              <Text className="text-sm">·</Text>
-              <Text className="text-sm">
-                {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
-              </Text>
+            <View className="flex flex-row justify-between">
+              <View className="flex flex-row items-center space-x-1">
+                <Star size={20} className="text-black dark:text-white" />
+                <Text className="text-sm">{spot.rating._avg.rating ? spot.rating._avg.rating?.toFixed(1) : "Not rated"}</Text>
+                <Text className="text-sm">·</Text>
+                <Text className="text-sm">
+                  {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
+                </Text>
+              </View>
+              <TouchableOpacity onPress={handleGetDirections}>
+                <Text>Directions</Text>
+              </TouchableOpacity>
             </View>
           </View>
           <View className="space-y-1">

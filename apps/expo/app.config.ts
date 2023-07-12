@@ -26,6 +26,9 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     supportsTablet: true,
     icon: "./assets/icon.png",
     bundleIdentifier: "co.noquarter.ramble",
+    infoPlist: {
+      LSApplicationQueriesSchemes: ["comgooglemaps"],
+    },
   },
   android: {
     adaptiveIcon: {
@@ -45,6 +48,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   },
   plugins: [
     "./expo-plugins/with-modify-gradle.js",
+    "./expo-plugins/android-manifest.plugin.js",
     [
       "expo-location",
       {

@@ -56,6 +56,7 @@
     "react-native": "0.71.8",
     "react-native-avoid-softinput": "^3.1.5",
     "react-native-gesture-handler": "^2.9.0",
+    "react-native-map-link": "^2.11.1",
     "react-native-progress": "^5.0.0",
     "react-native-reanimated": "2.14.4",
     "react-native-render-html": "^6.3.4",
