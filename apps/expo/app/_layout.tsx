@@ -60,13 +60,13 @@ export default function RootLayout() {
   if (!isReady) return null
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <TRPCProvider>
-        <SafeAreaProvider>
-          {isNewUpdateAvailable ? (
-            <NewUpdate />
-          ) : (
-            <PrefetchTabs>
+    <TRPCProvider>
+      <PrefetchTabs>
+        <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
+          <SafeAreaProvider>
+            {isNewUpdateAvailable ? (
+              <NewUpdate />
+            ) : (
               <NavigationContainer>
                 <Container.Navigator
                   initialRouteName="AppLayout"
@@ -88,13 +88,13 @@ export default function RootLayout() {
                   </Container.Group>
                 </Container.Navigator>
               </NavigationContainer>
-            </PrefetchTabs>
-          )}
-          <Toast />
-          <StatusBar style={isDark ? "light" : "dark"} />
-        </SafeAreaProvider>
-      </TRPCProvider>
-    </GestureHandlerRootView>
+            )}
+            <Toast />
+            <StatusBar style={isDark ? "light" : "dark"} />
+          </SafeAreaProvider>
+        </GestureHandlerRootView>
+      </PrefetchTabs>
+    </TRPCProvider>
   )
 }
 

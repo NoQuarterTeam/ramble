@@ -49,7 +49,7 @@ export function VerifiedCard({ spot }: Props) {
       ) : (
         <View className="flex flex-row items-center space-x-1">
           <BadgeX size={18} className="text-black dark:text-white" />
-          <Text>Unverified</Text>
+          <Text className="text-sm">Unverified</Text>
         </View>
       )}
     </>

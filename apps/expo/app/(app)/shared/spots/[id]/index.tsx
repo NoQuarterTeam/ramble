@@ -3,7 +3,7 @@ import { Animated, TouchableOpacity, useColorScheme, View, type ViewProps } from
 import * as Location from "expo-location"
 import RenderHtml, { defaultSystemFonts } from "react-native-render-html"
 import { StatusBar } from "expo-status-bar"
-import { ChevronDown, ChevronLeft, Heart, Star } from "lucide-react-native"
+import { Compass, ChevronDown, ChevronLeft, Heart, Star } from "lucide-react-native"
 import { showLocation } from "react-native-map-link"
 import { merge } from "@ramble/shared"
 
@@ -19,6 +19,7 @@ import { useMe } from "../../../../../lib/hooks/useMe"
 import { useParams, useRouter } from "../../../../router"
 
 export function SpotDetailScreen() {
+  const [location, setLocation] = React.useState<Location.LocationObjectCoords | null>(null)
   const { me } = useMe()
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
@@ -34,15 +35,26 @@ export function SpotDetailScreen() {
     extrapolate: "clamp",
   })
 
+  React.useEffect(() => {
+    ;(async () => {
+      try {
+        const { status } = await Location.requestForegroundPermissionsAsync()
+        if (status !== "granted") return
+        const loc = await Location.getCurrentPositionAsync()
+        setLocation(loc.coords)
+      } catch {
+        console.log("oops -  getting location")
+      }
+    })()
+  }, [])
+
   const handleGetDirections = async () => {
-    await Location.requestForegroundPermissionsAsync().catch()
-    const loc = await Location.getCurrentPositionAsync().catch()
     if (!spot) return
     showLocation({
       latitude: spot.latitude,
       longitude: spot.longitude,
-      sourceLatitude: loc?.coords.latitude,
-      sourceLongitude: loc?.coords.longitude,
+      sourceLatitude: location?.latitude,
+      sourceLongitude: location?.longitude,
       title: spot.name,
       googleForceLatLon: true,
       alwaysIncludeGoogle: true,
@@ -71,7 +83,7 @@ export function SpotDetailScreen() {
         <View className="space-y-3 p-4">
           <View className="space-y-2">
             <Heading className="text-2xl leading-7">{spot.name}</Heading>
-            <View className="flex flex-row justify-between">
+            <View className="flex flex-row items-start justify-between">
               <View className="flex flex-row items-center space-x-1">
                 <Star size={20} className="text-black dark:text-white" />
                 <Text className="text-sm">{spot.rating._avg.rating ? spot.rating._avg.rating?.toFixed(1) : "Not rated"}</Text>
@@ -80,9 +92,6 @@ export function SpotDetailScreen() {
                   {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
                 </Text>
               </View>
-              <TouchableOpacity onPress={handleGetDirections}>
-                <Text>Directions</Text>
-              </TouchableOpacity>
             </View>
           </View>
           <View className="space-y-1">
@@ -145,19 +154,28 @@ export function SpotDetailScreen() {
             <ChevronDown className="pr-1 text-black dark:text-white" />
           )}
         </TouchableOpacity>
-        {me && (
+        <View className="flex flex-row items-center space-x-3">
           <TouchableOpacity
-            onPress={() => navigation.navigate("SaveScreen", { id: spot.id })}
+            onPress={handleGetDirections}
             activeOpacity={0.8}
             className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-gray-800"
           >
-            <Heart
-              size={20}
-              className="text-black dark:text-white"
-              fill={data.spotLists.length > 0 ? (isDark ? "white" : "black") : undefined}
-            />
+            <Compass size={20} className="text-black dark:text-white" />
           </TouchableOpacity>
-        )}
+          {me && (
+            <TouchableOpacity
+              onPress={() => navigation.navigate("SaveScreen", { id: spot.id })}
+              activeOpacity={0.8}
+              className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-gray-800"
+            >
+              <Heart
+                size={20}
+                className="text-black dark:text-white"
+                fill={data.spotLists.length > 0 ? (isDark ? "white" : "black") : undefined}
+              />
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
     </View>
   )
