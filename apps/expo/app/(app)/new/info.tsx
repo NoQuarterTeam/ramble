@@ -1,14 +1,16 @@
 import * as React from "react"
-import { ScreenView } from "../../../components/ui/ScreenView"
-import colors from "@ramble/tailwind-config/src/colors"
 import { ScrollView, Switch, View } from "react-native"
-import { Button } from "../../../components/ui/Button"
-import { useParams, useRouter } from "../../router"
-import { Input } from "../../../components/ui/Input"
-import { useKeyboardController } from "../../../lib/hooks/useKeyboardController"
-import { FormInputLabel } from "../../../components/ui/FormInput"
 import { Dog, X } from "lucide-react-native"
+
+import colors from "@ramble/tailwind-config/src/colors"
+
+import { Button } from "../../../components/ui/Button"
+import { FormInputLabel } from "../../../components/ui/FormInput"
+import { Input } from "../../../components/ui/Input"
+import { ScreenView } from "../../../components/ui/ScreenView"
 import { Text } from "../../../components/ui/Text"
+import { useKeyboardController } from "../../../lib/hooks/useKeyboardController"
+import { useParams, useRouter } from "../../router"
 
 export function NewSpotOptionsScreen() {
   useKeyboardController()

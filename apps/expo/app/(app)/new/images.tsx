@@ -1,13 +1,13 @@
 import * as React from "react"
-import { ScreenView } from "../../../components/ui/ScreenView"
-import * as ImagePicker from "expo-image-picker"
-
 import { ScrollView, TouchableOpacity, View } from "react-native"
-import { Button } from "../../../components/ui/Button"
-import { useParams, useRouter } from "../../router"
-import { toast } from "../../../components/ui/Toast"
 import { Image } from "expo-image"
+import * as ImagePicker from "expo-image-picker"
 import { Plus, X } from "lucide-react-native"
+
+import { Button } from "../../../components/ui/Button"
+import { ScreenView } from "../../../components/ui/ScreenView"
+import { toast } from "../../../components/ui/Toast"
+import { useParams, useRouter } from "../../router"
 
 export function NewSpotImagesScreen() {
   const { params } = useParams<"NewSpotImagesScreen">()

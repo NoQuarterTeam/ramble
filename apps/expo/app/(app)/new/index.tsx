@@ -1,13 +1,15 @@
 import * as React from "react"
-import { TouchableOpacity, View, useColorScheme } from "react-native"
+import { TouchableOpacity, useColorScheme, View } from "react-native"
 import Mapbox, { Camera, type MapView as MapType } from "@rnmapbox/maps"
 import * as Location from "expo-location"
+import { CircleDot, Navigation } from "lucide-react-native"
+
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
+
 import { LoginPlaceholder } from "../../../components/LoginPlaceholder"
+import { Button } from "../../../components/ui/Button"
 import { Heading } from "../../../components/ui/Heading"
 import { useMe } from "../../../lib/hooks/useMe"
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
-import { Navigation, CircleDot } from "lucide-react-native"
-import { Button } from "../../../components/ui/Button"
 import { useRouter } from "../../router"
 
 export function NewSpotLocationScreen() {

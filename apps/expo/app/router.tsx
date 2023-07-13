@@ -1,6 +1,7 @@
-import { type SpotType } from "@ramble/database/types"
 import { type RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { type NativeStackNavigationProp } from "@react-navigation/native-stack"
+
+import { type SpotType } from "@ramble/database/types"
 
 type NewSpotParams = {
   location: { latitude: number; longitude: number }

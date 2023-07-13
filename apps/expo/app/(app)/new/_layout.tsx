@@ -3,11 +3,11 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
 import { type ScreenParamsList } from "../../router"
 import { NewSpotLocationScreen } from "."
-import { NewSpotTypeScreen } from "./type"
-import { NewSpotOptionsScreen } from "./info"
 import { NewSpotAmenitiesScreen } from "./amenities"
-import { NewSpotImagesScreen } from "./images"
 import { NewSpotConfirmScreen } from "./confirm"
+import { NewSpotImagesScreen } from "./images"
+import { NewSpotOptionsScreen } from "./info"
+import { NewSpotTypeScreen } from "./type"
 
 const NewSpotStack = createNativeStackNavigator<ScreenParamsList>()
 

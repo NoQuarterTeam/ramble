@@ -1,10 +1,11 @@
 import * as React from "react"
 import { Animated, TouchableOpacity, useColorScheme, View, type ViewProps } from "react-native"
-import * as Location from "expo-location"
-import RenderHtml, { defaultSystemFonts } from "react-native-render-html"
-import { StatusBar } from "expo-status-bar"
-import { Compass, ChevronDown, ChevronLeft, Heart, Star } from "lucide-react-native"
 import { showLocation } from "react-native-map-link"
+import RenderHtml, { defaultSystemFonts } from "react-native-render-html"
+import * as Location from "expo-location"
+import { StatusBar } from "expo-status-bar"
+import { ChevronDown, ChevronLeft, Compass, Heart, Star } from "lucide-react-native"
+
 import { merge } from "@ramble/shared"
 
 import { ReviewItem } from "../../../../../components/ReviewItem"

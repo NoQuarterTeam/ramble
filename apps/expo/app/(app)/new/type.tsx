@@ -1,13 +1,14 @@
 import * as React from "react"
-import { ScreenView } from "../../../components/ui/ScreenView"
-
-import { SPOT_OPTIONS } from "../../../lib/spots"
-import { Button } from "../../../components/ui/Button"
-import { join } from "@ramble/shared"
-import { type SpotType } from "@ramble/database/types"
 import { ScrollView, View } from "react-native"
-import { useParams, useRouter } from "../../router"
 import { X } from "lucide-react-native"
+
+import { type SpotType } from "@ramble/database/types"
+import { join } from "@ramble/shared"
+
+import { Button } from "../../../components/ui/Button"
+import { ScreenView } from "../../../components/ui/ScreenView"
+import { SPOT_OPTIONS } from "../../../lib/spots"
+import { useParams, useRouter } from "../../router"
 
 export function NewSpotTypeScreen() {
   const { params } = useParams<"NewSpotTypeScreen">()

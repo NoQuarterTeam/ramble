@@ -1,13 +1,14 @@
-import colors from "@ramble/tailwind-config/src/colors"
-import { X } from "lucide-react-native"
 import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
+import { X } from "lucide-react-native"
+
+import { AMENITIES } from "@ramble/shared"
+import colors from "@ramble/tailwind-config/src/colors"
+
 import { Button } from "../../../components/ui/Button"
 import { ScreenView } from "../../../components/ui/ScreenView"
 import { Text } from "../../../components/ui/Text"
-
 import { useParams, useRouter } from "../../router"
-import { AMENITIES } from "@ramble/shared"
 
 export function NewSpotAmenitiesScreen() {
   const { params } = useParams<"NewSpotAmenitiesScreen">()

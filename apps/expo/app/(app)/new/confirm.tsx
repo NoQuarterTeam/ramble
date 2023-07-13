@@ -1,17 +1,18 @@
 import * as React from "react"
+import { ScrollView, View } from "react-native"
+import { Image } from "expo-image"
 import { Check, X } from "lucide-react-native"
 
-import { Image } from "expo-image"
-import { ScrollView, View } from "react-native"
+import { AMENITIES } from "@ramble/shared"
+
 import { Button } from "../../../components/ui/Button"
 import { ScreenView } from "../../../components/ui/ScreenView"
 import { Text } from "../../../components/ui/Text"
+import { toast } from "../../../components/ui/Toast"
+import { api } from "../../../lib/api"
+import { useS3Upload } from "../../../lib/hooks/useS3"
 import { SPOTS } from "../../../lib/spots"
 import { useParams, useRouter } from "../../router"
-import { api } from "../../../lib/api"
-import { toast } from "../../../components/ui/Toast"
-import { useS3Upload } from "../../../lib/hooks/useS3"
-import { AMENITIES } from "@ramble/shared"
 
 export function NewSpotConfirmScreen() {
   const { params } = useParams<"NewSpotConfirmScreen">()

@@ -2,15 +2,15 @@ import { useColorScheme } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { Image } from "expo-image"
 import { List, PlusCircle, Search, User } from "lucide-react-native"
-import colors from "@ramble/tailwind-config/src/colors"
+
 import { createImageUrl, join } from "@ramble/shared"
+import colors from "@ramble/tailwind-config/src/colors"
 
 import { useMe } from "../../lib/hooks/useMe"
 import { ListsLayout } from "./lists/_layout"
-
+import { NewSpotLayout } from "./new/_layout"
 import { ProfileLayout } from "./profile/_layout"
 import { SpotsLayout } from "./spots/_layout"
-import { NewSpotLayout } from "./new/_layout"
 
 const Tab = createBottomTabNavigator()
 
