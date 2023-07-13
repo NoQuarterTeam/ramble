@@ -55,7 +55,7 @@ export function NewSpotConfirmScreen() {
           isLoading={createLoading || isLoading}
           variant="primary"
           size="sm"
-          leftIcon={<Check size={20} className="text-white" />}
+          leftIcon={<Check size={20} className="text-white dark:text-black" />}
           className="rounded-full"
           onPress={handleCreateSpot}
         >
