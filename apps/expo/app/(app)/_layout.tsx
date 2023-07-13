@@ -2,14 +2,15 @@ import { useColorScheme } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { Image } from "expo-image"
 import { List, PlusCircle, Search, User } from "lucide-react-native"
-
+import colors from "@ramble/tailwind-config/src/colors"
 import { createImageUrl, join } from "@ramble/shared"
 
 import { useMe } from "../../lib/hooks/useMe"
 import { ListsLayout } from "./lists/_layout"
-import { NewSpotScreen } from "./new"
+
 import { ProfileLayout } from "./profile/_layout"
 import { SpotsLayout } from "./spots/_layout"
+import { NewSpotLayout } from "./new/_layout"
 
 const Tab = createBottomTabNavigator()
 
@@ -32,21 +33,21 @@ export function AppLayout() {
         name="SpotsLayout"
         component={SpotsLayout}
         options={{
-          tabBarIcon: (props) => <Search size={24} color={props.focused ? "green" : isDark ? "white" : "black"} />,
+          tabBarIcon: (props) => <Search size={24} color={props.focused ? colors.green[600] : isDark ? "white" : "black"} />,
         }}
       />
       <Tab.Screen
-        name="NewSpot"
-        component={NewSpotScreen}
+        name="NewSpotLayout"
+        component={NewSpotLayout}
         options={{
-          tabBarIcon: (props) => <PlusCircle size={24} color={props.focused ? "green" : isDark ? "white" : "black"} />,
+          tabBarIcon: (props) => <PlusCircle size={24} color={props.focused ? colors.green[600] : isDark ? "white" : "black"} />,
         }}
       />
       <Tab.Screen
         name="ListsLayout"
         component={ListsLayout}
         options={{
-          tabBarIcon: (props) => <List size={24} color={props.focused ? "green" : isDark ? "white" : "black"} />,
+          tabBarIcon: (props) => <List size={24} color={props.focused ? colors.green[600] : isDark ? "white" : "black"} />,
         }}
       />
       <Tab.Screen
@@ -64,7 +65,7 @@ export function AppLayout() {
                 )}
               />
             ) : (
-              <User size={24} color={props.focused ? "green" : isDark ? "white" : "black"} />
+              <User size={24} color={props.focused ? colors.green[600] : isDark ? "white" : "black"} />
             ),
         }}
       />

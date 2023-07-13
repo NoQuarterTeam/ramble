@@ -1,5 +1,26 @@
+import { type SpotType } from "@ramble/database/types"
 import { type RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { type NativeStackNavigationProp } from "@react-navigation/native-stack"
+
+type NewSpotParams = {
+  location: { latitude: number; longitude: number }
+  type: SpotType
+  info: { name: string; description: string; isPetFriendly: boolean }
+  images: string[]
+  amenities?: {
+    hotWater: boolean
+    wifi: boolean
+    shower: boolean
+    toilet: boolean
+    kitchen: boolean
+    electricity: boolean
+    water: boolean
+    firePit: boolean
+    sauna: boolean
+    pool: boolean
+    bbq: boolean
+  }
+}
 
 export type ScreenParamsList = {
   AuthLayout: { screen?: "LoginScreen" | "RegisterScreen" } | undefined
@@ -22,6 +43,14 @@ export type ScreenParamsList = {
   SpotsLayout: undefined
   SpotsMapScreen: undefined
   SpotsScreen: undefined
+
+  NewSpotLayout: undefined
+  NewSpotLocationScreen: undefined
+  NewSpotTypeScreen: Pick<NewSpotParams, "location">
+  NewSpotOptionsScreen: Pick<NewSpotParams, "location" | "type">
+  NewSpotAmenitiesScreen: Pick<NewSpotParams, "location" | "type" | "info">
+  NewSpotImagesScreen: Pick<NewSpotParams, "location" | "type" | "info" | "amenities">
+  NewSpotConfirmScreen: NewSpotParams
 
   ListsLayout: undefined
   ListsScreen: undefined

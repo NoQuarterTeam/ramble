@@ -72,8 +72,9 @@ export const Button = React.forwardRef(function _Button(
       className={merge(
         buttonStyles({ variant, size }),
         (props.disabled || isLoading) && "opacity-70",
-        "flex flex-row items-center justify-center space-x-2",
+        "flex flex-row items-center justify-center",
         props.className,
+        size === "sm" || size === "xs" ? "space-x-1" : "space-x-2",
       )}
     >
       {isLoading ? (

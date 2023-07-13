@@ -2,9 +2,11 @@ import { TRPCError } from "@trpc/server"
 import Supercluster from "supercluster"
 import { z } from "zod"
 
-import type { Spot, SpotImage, SpotType } from "@ramble/database/types"
+import { Spot, SpotImage, SpotType } from "@ramble/database/types"
 
-import { createTRPCRouter, publicProcedure } from "../trpc"
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
+import { spotAmenitiesSchema, spotSchemaWithoutType } from "@ramble/shared"
+import { geocodeCoords } from "../services/geocode.server"
 
 export const spotRouter = createTRPCRouter({
   clusters: publicProcedure
@@ -86,9 +88,8 @@ export const spotRouter = createTRPCRouter({
     return { ...spot, rating }
   }),
   byUser: publicProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {
-    return ctx.prisma.$queryRaw<
-      Array<Pick<Spot, "id" | "name" | "address"> & { rating?: number; image?: SpotImage["path"] | null }>
-    >`
+    const res: Array<Pick<Spot, "id" | "name" | "address"> & { rating?: number; image?: SpotImage["path"] | null }> = await ctx
+      .prisma.$queryRaw`
       SELECT Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating, (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image
       FROM Spot
       LEFT JOIN Review ON Spot.id = Review.spotId
@@ -96,5 +97,49 @@ export const spotRouter = createTRPCRouter({
       GROUP BY Spot.id
       ORDER BY Spot.createdAt DESC, Spot.id
       LIMIT 20`
+    return res
   }),
+  create: protectedProcedure
+    .input(
+      spotSchemaWithoutType.extend({
+        type: z.nativeEnum(SpotType),
+        images: z.array(z.object({ path: z.string() })),
+        amenities: spotAmenitiesSchema.partial().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const amenities = input.amenities
+      let address = input.address
+      if (!address) {
+        address = await geocodeCoords({ latitude: input.latitude, longitude: input.longitude })
+      }
+      const spot = await ctx.prisma.spot.create({
+        data: {
+          ...input,
+          address: address || "Unknown address",
+          creator: { connect: { id: ctx.user.id } },
+          verifiedAt: ctx.user.role === "ADMIN" || ctx.user.role === "AMBASSADOR" ? new Date() : null,
+          verifier: ctx.user.role === "ADMIN" || ctx.user.role === "AMBASSADOR" ? { connect: { id: ctx.user.id } } : undefined,
+          images: { createMany: { data: input.images.map((image) => ({ path: image.path, creatorId: ctx.user.id })) } },
+          amenities: amenities
+            ? {
+                create: {
+                  hotWater: !!amenities.hotWater,
+                  wifi: !!amenities.wifi,
+                  shower: !!amenities.shower,
+                  toilet: !!amenities.toilet,
+                  kitchen: !!amenities.kitchen,
+                  electricity: !!amenities.electricity,
+                  water: !!amenities.water,
+                  firePit: !!amenities.firePit,
+                  sauna: !!amenities.sauna,
+                  pool: !!amenities.pool,
+                  bbq: !!amenities.bbq,
+                },
+              }
+            : undefined,
+        },
+      })
+      return spot
+    }),
 })
