@@ -55,7 +55,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.9",
     "react-native": "0.71.8",
-    "react-native-avoid-softinput": "^3.1.5",
+    "react-native-avoid-softinput": "^4.0.0",
     "react-native-gesture-handler": "^2.9.0",
     "react-native-map-link": "^2.11.1",
     "react-native-progress": "^5.0.0",
