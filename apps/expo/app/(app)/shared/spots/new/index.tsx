@@ -67,7 +67,7 @@ export function NewSpotLocationScreen() {
           style={{ transform: [{ translateX: -15 }, { translateY: -15 }] }}
           className="absolute flex items-center justify-center top-1/2 left-1/2"
         >
-          <CircleDot size={30} className="text-black" />
+          <CircleDot size={30} className="text-black dark:text-white" />
         </View>
       </Mapbox.MapView>
 
