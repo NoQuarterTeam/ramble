@@ -32,6 +32,7 @@ import { SaveScreen } from "./(app)/shared/spots/[id]/save"
 import { AuthLayout } from "./(auth)/_layout"
 import { OnboardingLayout } from "./onboarding/_layout"
 import { type ScreenParamsList } from "./router"
+import { NewSpotLayout } from "./(app)/shared/spots/new/_layout"
 
 SplashScreen.preventAutoHideAsync()
 
@@ -80,6 +81,7 @@ export default function RootLayout() {
                     screenOptions={{ presentation: "modal", contentStyle: { backgroundColor: isDark ? "black" : "white" } }}
                   >
                     <Container.Screen name="AuthLayout" component={AuthLayout} />
+                    <Container.Screen name="NewSpotLayout" component={NewSpotLayout} />
                     <Container.Screen name="NewListScreen" component={NewListScreen} />
                     <Container.Screen name="EditListScreen" component={EditListScreen} />
                     <Container.Screen name="NewReviewScreen" component={NewReviewScreen} />
@@ -102,6 +104,7 @@ function PrefetchTabs(props: { children: React.ReactNode }) {
   const { me, isLoading } = useMe()
   const utils = api.useContext()
   React.useEffect(() => {
+    utils.spot.latest.prefetch()
     if (isLoading || !me) return
     utils.user.profile.prefetch({ username: me.username })
     utils.list.allByUser.prefetch({ username: me.username })

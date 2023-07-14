@@ -4,10 +4,10 @@ import { Image } from "expo-image"
 import * as ImagePicker from "expo-image-picker"
 import { Plus, X } from "lucide-react-native"
 
-import { Button } from "../../../components/ui/Button"
-import { ScreenView } from "../../../components/ui/ScreenView"
-import { toast } from "../../../components/ui/Toast"
-import { useParams, useRouter } from "../../router"
+import { Button } from "../../../../../components/ui/Button"
+import { toast } from "../../../../../components/ui/Toast"
+import { useParams, useRouter } from "../../../../router"
+import { NewModalView } from "./NewModalView"
 
 export function NewSpotImagesScreen() {
   const { params } = useParams<"NewSpotImagesScreen">()
@@ -33,16 +33,7 @@ export function NewSpotImagesScreen() {
 
   const router = useRouter()
   return (
-    <ScreenView
-      title="Upload images"
-      rightElement={
-        images.length > 0 && (
-          <Button size="sm" variant="link" onPress={() => router.push("NewSpotConfirmScreen", { ...params, images })}>
-            Next
-          </Button>
-        )
-      }
-    >
+    <NewModalView title="Upload images">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View className="flex flex-row flex-wrap">
           {images.map((image) => (
@@ -60,17 +51,18 @@ export function NewSpotImagesScreen() {
           </View>
         </View>
       </ScrollView>
-      <View className="absolute bottom-4 left-4 flex flex-row right-4 items-center justify-center">
-        <Button
-          variant="secondary"
-          leftIcon={<X size={20} className="text-black dark:text-white" />}
-          className="rounded-full"
-          size="sm"
-          onPress={router.popToTop}
-        >
-          Cancel
-        </Button>
-      </View>
-    </ScreenView>
+
+      {images.length > 0 && (
+        <View className="absolute bottom-12 left-4 flex space-y-2 right-4 items-center justify-center">
+          <Button
+            // leftIcon={<X size={20} className="text-black dark:text-white" />}
+            className="rounded-full"
+            onPress={() => router.push("NewSpotConfirmScreen", { ...params, images })}
+          >
+            Next
+          </Button>
+        </View>
+      )}
+    </NewModalView>
   )
 }

@@ -6,11 +6,11 @@ import { CircleDot, Navigation } from "lucide-react-native"
 
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
 
-import { LoginPlaceholder } from "../../../components/LoginPlaceholder"
-import { Button } from "../../../components/ui/Button"
-import { Heading } from "../../../components/ui/Heading"
-import { useMe } from "../../../lib/hooks/useMe"
-import { useRouter } from "../../router"
+import { LoginPlaceholder } from "../../../../../components/LoginPlaceholder"
+import { Button } from "../../../../../components/ui/Button"
+import { useMe } from "../../../../../lib/hooks/useMe"
+import { useRouter } from "../../../../router"
+import { NewModalView } from "./NewModalView"
 
 export function NewSpotLocationScreen() {
   const theme = useColorScheme()
@@ -39,24 +39,9 @@ export function NewSpotLocationScreen() {
 
   if (!me) return <LoginPlaceholder title="New spot" text="Log in to start creating spots" />
   return (
-    <View className="p-4 pt-16 h-full">
-      <View className="flex mb-4 flex-row items-start justify-between">
-        <Heading className="text-3xl">New spot</Heading>
-        {coords && (
-          <Button
-            size="sm"
-            variant="link"
-            onPress={() =>
-              router.push("NewSpotTypeScreen", { location: { longitude: coords[0] as number, latitude: coords[1] as number } })
-            }
-          >
-            Next
-          </Button>
-        )}
-      </View>
-
+    <NewModalView title="New spot" canGoBack={false}>
       <Mapbox.MapView
-        className="flex-1  rounded-lg overflow-hidden"
+        className="flex-1 mb-10 mt-4 rounded-lg overflow-hidden"
         logoEnabled={false}
         compassEnabled
         onMapIdle={onMapMove}
@@ -90,11 +75,24 @@ export function NewSpotLocationScreen() {
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => camera.current?.moveTo([location.longitude, location.latitude])}
-          className="absolute bottom-6 right-6 flex flex-row items-center justify-center rounded-full bg-white p-3"
+          className="absolute bottom-12 right-6 flex flex-row items-center justify-center rounded-full bg-white p-3"
         >
           <Navigation size={20} className="text-black" />
         </TouchableOpacity>
       )}
-    </View>
+      {coords && (
+        <View className="absolute bottom-12 left-4 flex space-y-2 right-4 items-center justify-center">
+          <Button
+            // leftIcon={<X size={20} className="text-black dark:text-white" />}
+            className="rounded-full"
+            onPress={() =>
+              router.push("NewSpotTypeScreen", { location: { longitude: coords[0] as number, latitude: coords[1] as number } })
+            }
+          >
+            Next
+          </Button>
+        </View>
+      )}
+    </NewModalView>
   )
 }

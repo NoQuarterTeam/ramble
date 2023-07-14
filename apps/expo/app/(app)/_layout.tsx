@@ -1,16 +1,17 @@
 import { useColorScheme } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { Image } from "expo-image"
-import { List, PlusCircle, Search, User } from "lucide-react-native"
+import { Heart, List, Search, User } from "lucide-react-native"
 
 import { createImageUrl, join } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { useMe } from "../../lib/hooks/useMe"
 import { ListsLayout } from "./lists/_layout"
-import { NewSpotLayout } from "./new/_layout"
+
 import { ProfileLayout } from "./profile/_layout"
-import { SpotsLayout } from "./spots/_layout"
+import { SpotsLayout } from "./map/_layout"
+import { LatestLayout } from "./latest/_layout"
 
 const Tab = createBottomTabNavigator()
 
@@ -37,17 +38,17 @@ export function AppLayout() {
         }}
       />
       <Tab.Screen
-        name="NewSpotLayout"
-        component={NewSpotLayout}
+        name="LatestLayout"
+        component={LatestLayout}
         options={{
-          tabBarIcon: (props) => <PlusCircle size={24} color={props.focused ? colors.green[600] : isDark ? "white" : "black"} />,
+          tabBarIcon: (props) => <List size={24} color={props.focused ? colors.green[600] : isDark ? "white" : "black"} />,
         }}
       />
       <Tab.Screen
         name="ListsLayout"
         component={ListsLayout}
         options={{
-          tabBarIcon: (props) => <List size={24} color={props.focused ? colors.green[600] : isDark ? "white" : "black"} />,
+          tabBarIcon: (props) => <Heart size={24} color={props.focused ? colors.green[600] : isDark ? "white" : "black"} />,
         }}
       />
       <Tab.Screen

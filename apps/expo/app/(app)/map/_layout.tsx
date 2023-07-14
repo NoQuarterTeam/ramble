@@ -3,8 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
 import { type ScreenParamsList } from "../../router"
 import { getSharedScreens } from "../shared/getSharedScreens"
-import { SpotsScreen } from "."
-import { SpotsMapScreen } from "./map"
+import { SpotsMapScreen } from "."
 
 const SpotsStack = createNativeStackNavigator<ScreenParamsList>()
 
@@ -18,7 +17,6 @@ export function SpotsLayout() {
       screenOptions={{ contentStyle: { backgroundColor: isDark ? "black" : "white" }, headerShown: false }}
     >
       <SpotsStack.Screen name="SpotsMapScreen" component={SpotsMapScreen} />
-      <SpotsStack.Screen name="SpotsScreen" component={SpotsScreen} />
       {sharedScreens}
     </SpotsStack.Navigator>
   )

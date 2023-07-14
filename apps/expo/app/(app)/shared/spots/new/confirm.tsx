@@ -1,26 +1,31 @@
 import * as React from "react"
 import { ScrollView, View } from "react-native"
 import { Image } from "expo-image"
-import { Check, X } from "lucide-react-native"
+import { Check } from "lucide-react-native"
 
 import { AMENITIES } from "@ramble/shared"
 
-import { Button } from "../../../components/ui/Button"
-import { ScreenView } from "../../../components/ui/ScreenView"
-import { Text } from "../../../components/ui/Text"
-import { toast } from "../../../components/ui/Toast"
-import { api } from "../../../lib/api"
-import { useS3Upload } from "../../../lib/hooks/useS3"
-import { SPOTS } from "../../../lib/spots"
-import { useParams, useRouter } from "../../router"
+import { Button } from "../../../../../components/ui/Button"
+import { Text } from "../../../../../components/ui/Text"
+import { toast } from "../../../../../components/ui/Toast"
+import { api } from "../../../../../lib/api"
+import { useS3Upload } from "../../../../../lib/hooks/useS3"
+import { SPOTS } from "../../../../../lib/spots"
+import { useParams, useRouter } from "../../../../router"
+import { NewModalView } from "./NewModalView"
 
 export function NewSpotConfirmScreen() {
   const { params } = useParams<"NewSpotConfirmScreen">()
   const router = useRouter()
   const Icon = SPOTS[params.type].Icon
+
+  const utils = api.useContext()
   const { mutate, isLoading: createLoading } = api.spot.create.useMutation({
     onSuccess: (data) => {
-      router.navigate("SpotsMapScreen")
+      utils.spot.latest.refetch()
+
+      router.navigate("AppLayout")
+      router.navigate("SpotDetailScreen", { id: data.id })
       toast({ title: "Spot created!" })
     },
     onError: () => {
@@ -48,21 +53,7 @@ export function NewSpotConfirmScreen() {
   }
 
   return (
-    <ScreenView
-      title="Confirm"
-      rightElement={
-        <Button
-          isLoading={createLoading || isLoading}
-          variant="primary"
-          size="sm"
-          leftIcon={<Check size={20} className="text-white dark:text-black" />}
-          className="rounded-full"
-          onPress={handleCreateSpot}
-        >
-          Create
-        </Button>
-      }
-    >
+    <NewModalView title="Confirm">
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}>
         <View className="space-y-2">
           <Icon className="text-black dark:text-white" />
@@ -80,17 +71,17 @@ export function NewSpotConfirmScreen() {
           </View>
         </View>
       </ScrollView>
-      <View className="absolute bottom-16 left-4 flex space-y-2 right-4 items-center justify-center">
+
+      <View className="absolute bottom-12 left-4 flex space-y-2 right-4 items-center justify-center">
         <Button
-          variant="secondary"
-          leftIcon={<X size={20} className="text-black dark:text-white" />}
+          isLoading={createLoading || isLoading}
+          leftIcon={<Check size={20} className="text-white dark:text-black" />}
           className="rounded-full"
-          size="sm"
-          onPress={router.popToTop}
+          onPress={handleCreateSpot}
         >
-          Cancel
+          Create
         </Button>
       </View>
-    </ScreenView>
+    </NewModalView>
   )
 }

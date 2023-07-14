@@ -34,7 +34,7 @@ export function RegisterScreen() {
   })
 
   return (
-    <ModalView title="Register">
+    <ModalView title="Register" onBack={() => navigation.navigate("AppLayout")}>
       <FormProvider {...form}>
         <ScrollView
           contentContainerStyle={{ flexGrow: 1, paddingBottom: 100, justifyContent: "space-between" }}

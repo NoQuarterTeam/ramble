@@ -1,7 +1,7 @@
 import { useColorScheme } from "react-native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
-import { type ScreenParamsList } from "../../router"
+import { type ScreenParamsList } from "../../../../router"
 import { NewSpotLocationScreen } from "."
 import { NewSpotAmenitiesScreen } from "./amenities"
 import { NewSpotConfirmScreen } from "./confirm"

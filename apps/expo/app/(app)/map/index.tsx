@@ -3,7 +3,7 @@ import { Modal, ScrollView, Switch, TouchableOpacity, useColorScheme, View } fro
 import BottomSheet, { useBottomSheetDynamicSnapPoints, useBottomSheetSpringConfigs } from "@gorhom/bottom-sheet"
 import Mapbox, { Camera, type MapView as MapType, MarkerView } from "@rnmapbox/maps"
 import * as Location from "expo-location"
-import { BadgeCheck, BadgeX, Dog, List, Navigation, Settings2, Star, Verified, X } from "lucide-react-native"
+import { BadgeCheck, BadgeX, Dog, Navigation, PlusCircle, Settings2, Star, Verified, X } from "lucide-react-native"
 
 import { type SpotType } from "@ramble/database/types"
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
@@ -21,6 +21,7 @@ import { width } from "../../../lib/device"
 import { useAsyncStorage } from "../../../lib/hooks/useAsyncStorage"
 import { SPOT_OPTIONS, SPOTS } from "../../../lib/spots"
 import { useRouter } from "../../router"
+import { useMe } from "../../../lib/hooks/useMe"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
@@ -40,6 +41,7 @@ const initialFilters: Filters = {
 
 export function SpotsMapScreen() {
   const { push } = useRouter()
+  const { me } = useMe()
   const [location, setLocation] = React.useState<Location.LocationObjectCoords | null>(null)
   const [clusters, setClusters] = React.useState<Cluster[] | null>(null)
   const filterModalProps = useDisclosure()
@@ -198,14 +200,16 @@ export function SpotsMapScreen() {
           <Spinner />
         </View>
       )}
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() => push("SpotsScreen")}
-        className="absolute bottom-3 left-1/2 -ml-[50px] flex w-[100px] flex-row items-center justify-center space-x-2 rounded-full bg-gray-800 p-3 dark:bg-white"
-      >
-        <List size={20} className="text-white dark:text-black" />
-        <Text className="text-white dark:text-black">Latest</Text>
-      </TouchableOpacity>
+      {me && (
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => push("NewSpotLayout")}
+          style={{ transform: [{ translateX: -26 }] }}
+          className="absolute bottom-3 left-1/2 rounded-full bg-gray-800 p-4 dark:bg-white"
+        >
+          <PlusCircle size={20} className="text-white dark:text-black" />
+        </TouchableOpacity>
+      )}
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={filterModalProps.onOpen}
@@ -339,7 +343,7 @@ export function MapFilters(props: Props) {
   const [filters, setFilters] = React.useState(props.initialFilters)
   return (
     <View className="flex-1 pb-10 pt-4">
-      <ScrollView className="space-y-5">
+      <ScrollView className="space-y-5 pb-20">
         <View className="space-y-1">
           <Heading className="font-400 text-2xl">Spot type</Heading>
           <View className="flex flex-row flex-wrap gap-2">
