@@ -29,10 +29,10 @@ import { EditListScreen } from "./(app)/shared/lists/[id]/edit"
 import { ReviewDetailScreen } from "./(app)/shared/spots/[id]/reviews/[id]"
 import { NewReviewScreen } from "./(app)/shared/spots/[id]/reviews/new"
 import { SaveScreen } from "./(app)/shared/spots/[id]/save"
+import { NewSpotLayout } from "./(app)/shared/spots/new/_layout"
 import { AuthLayout } from "./(auth)/_layout"
 import { OnboardingLayout } from "./onboarding/_layout"
 import { type ScreenParamsList } from "./router"
-import { NewSpotLayout } from "./(app)/shared/spots/new/_layout"
 
 SplashScreen.preventAutoHideAsync()
 

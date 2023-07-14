@@ -7,8 +7,8 @@ import { Heading } from "../../../components/ui/Heading"
 import { Spinner } from "../../../components/ui/Spinner"
 import { Text } from "../../../components/ui/Text"
 import { api } from "../../../lib/api"
-import { useRouter } from "../../router"
 import { useMe } from "../../../lib/hooks/useMe"
+import { useRouter } from "../../router"
 
 export function LatestScreen() {
   const { me } = useMe()

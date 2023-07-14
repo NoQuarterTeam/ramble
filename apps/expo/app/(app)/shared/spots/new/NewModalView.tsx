@@ -4,6 +4,7 @@ import Feather from "@expo/vector-icons/Feather"
 import { StatusBar } from "expo-status-bar"
 
 import { join } from "@ramble/shared"
+
 import { Heading } from "../../../../../components/ui/Heading"
 import { Toast } from "../../../../../components/ui/Toast"
 import { isAndroid } from "../../../../../lib/device"

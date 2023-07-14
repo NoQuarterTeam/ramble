@@ -7,11 +7,10 @@ import { createImageUrl, join } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { useMe } from "../../lib/hooks/useMe"
-import { ListsLayout } from "./lists/_layout"
-
-import { ProfileLayout } from "./profile/_layout"
-import { SpotsLayout } from "./map/_layout"
 import { LatestLayout } from "./latest/_layout"
+import { ListsLayout } from "./lists/_layout"
+import { SpotsLayout } from "./map/_layout"
+import { ProfileLayout } from "./profile/_layout"
 
 const Tab = createBottomTabNavigator()
 

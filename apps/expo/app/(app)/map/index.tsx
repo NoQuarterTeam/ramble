@@ -19,9 +19,9 @@ import { toast } from "../../../components/ui/Toast"
 import { api, type RouterOutputs } from "../../../lib/api"
 import { width } from "../../../lib/device"
 import { useAsyncStorage } from "../../../lib/hooks/useAsyncStorage"
+import { useMe } from "../../../lib/hooks/useMe"
 import { SPOT_OPTIONS, SPOTS } from "../../../lib/spots"
 import { useRouter } from "../../router"
-import { useMe } from "../../../lib/hooks/useMe"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
