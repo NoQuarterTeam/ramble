@@ -1,5 +1,5 @@
 import * as React from "react"
-import { TouchableOpacity, useColorScheme, View } from "react-native"
+import { TouchableOpacity, View } from "react-native"
 import Mapbox, { Camera, type MapView as MapType } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { CircleDot, Navigation } from "lucide-react-native"
@@ -13,9 +13,8 @@ import { useRouter } from "../../../../router"
 import { NewModalView } from "./NewModalView"
 
 export function NewSpotLocationScreen() {
-  const theme = useColorScheme()
   const [coords, setCoords] = React.useState<number[] | null>(null)
-  const isDark = theme === "dark"
+
   const camera = React.useRef<Camera>(null)
   const mapRef = React.useRef<MapType>(null)
   const [location, setLocation] = React.useState<Location.LocationObjectCoords | null>(null)
@@ -49,9 +48,7 @@ export function NewSpotLocationScreen() {
         pitchEnabled={false}
         compassFadeWhenNorth
         scaleBarEnabled={false}
-        styleURL={
-          isDark ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1" : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
-        }
+        styleURL={"mapbox://styles/mapbox/satellite-v9"}
       >
         <Mapbox.UserLocation />
 
