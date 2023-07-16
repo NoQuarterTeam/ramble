@@ -67,7 +67,7 @@ export function NewSpotLocationScreen() {
             scaleBarEnabled={false}
             styleURL="mapbox://styles/mapbox/satellite-v9"
           >
-            <Mapbox.UserLocation showsUserHeadingIndicator />
+            <Mapbox.UserLocation />
 
             <Camera
               ref={camera}
