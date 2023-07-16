@@ -42,7 +42,6 @@ const initialFilters: Filters = {
 export function SpotsMapScreen() {
   const { push } = useRouter()
   const { me } = useMe()
-  const [location, setLocation] = React.useState<Location.LocationObjectCoords | null>(null)
   const [clusters, setClusters] = React.useState<Cluster[] | null>(null)
   const filterModalProps = useDisclosure()
   const [activeSpotId, setActiveSpotId] = React.useState<string | null>(null)
@@ -59,14 +58,25 @@ export function SpotsMapScreen() {
       try {
         const { status } = await Location.requestForegroundPermissionsAsync()
         if (status !== "granted") return
-        const loc = await Location.getCurrentPositionAsync()
-        setLocation(loc.coords)
+        await handleSetUserLocation()
       } catch {
         console.log("oops -  getting location")
       }
     })()
   }, [])
 
+  const handleSetUserLocation = async () => {
+    try {
+      const loc = await Location.getCurrentPositionAsync()
+      camera.current?.setCamera({
+        animationDuration: 0,
+        animationMode: "none",
+        centerCoordinate: [loc.coords.longitude, loc.coords.latitude],
+      })
+    } catch {
+      console.log("oops -  setting location")
+    }
+  }
   const onFiltersChange = async (f: Filters) => {
     try {
       filterModalProps.onClose()
@@ -187,10 +197,7 @@ export function SpotsMapScreen() {
         <Camera
           ref={camera}
           allowUpdates
-          defaultSettings={{
-            centerCoordinate: [location?.longitude || INITIAL_LONGITUDE, location?.latitude || INITIAL_LATITUDE],
-            zoomLevel: 8,
-          }}
+          defaultSettings={{ centerCoordinate: [INITIAL_LONGITUDE, INITIAL_LATITUDE], zoomLevel: 8 }}
         />
         {markers}
       </Mapbox.MapView>
@@ -213,7 +220,7 @@ export function SpotsMapScreen() {
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={filterModalProps.onOpen}
-        className="absolute bottom-3 left-3 flex flex-row items-center justify-center rounded-full bg-white p-3"
+        className="absolute bottom-3 left-3 flex flex-row items-center justify-center rounded-full bg-white sq-12"
       >
         <Settings2 size={20} className="text-black" />
         {filterCount > 0 && (
@@ -222,14 +229,13 @@ export function SpotsMapScreen() {
           </View>
         )}
       </TouchableOpacity>
-      {!!location && (
-        <TouchableOpacity
-          onPress={() => camera.current?.moveTo([location.longitude, location.latitude])}
-          className="absolute bottom-3 right-3 flex flex-row items-center justify-center rounded-full bg-white p-3"
-        >
-          <Navigation size={20} className="text-black" />
-        </TouchableOpacity>
-      )}
+
+      <TouchableOpacity
+        onPress={handleSetUserLocation}
+        className="absolute bottom-3 right-3 flex flex-row items-center justify-center rounded-full bg-white sq-12"
+      >
+        <Navigation size={20} className="text-black" />
+      </TouchableOpacity>
 
       <SpotPreview id={activeSpotId} onClose={() => setActiveSpotId(null)} />
       <Modal

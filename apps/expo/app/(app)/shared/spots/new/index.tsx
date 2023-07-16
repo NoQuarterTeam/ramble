@@ -14,81 +14,101 @@ import { NewModalView } from "./NewModalView"
 
 export function NewSpotLocationScreen() {
   const [coords, setCoords] = React.useState<number[] | null>(null)
-
+  const [isLoadingLocation, setIsLoadingLocation] = React.useState(true)
+  const [location, setLocation] = React.useState<Location.LocationObjectCoords | null>(null)
   const camera = React.useRef<Camera>(null)
   const mapRef = React.useRef<MapType>(null)
-  const [location, setLocation] = React.useState<Location.LocationObjectCoords | null>(null)
+
   const { me } = useMe()
   const router = useRouter()
 
   React.useEffect(() => {
     ;(async () => {
       try {
-        const { status } = await Location.requestForegroundPermissionsAsync()
-        if (status !== "granted") return
         const loc = await Location.getCurrentPositionAsync()
         setLocation(loc.coords)
       } catch {
         console.log("oops -  getting location")
+      } finally {
+        setIsLoadingLocation(false)
       }
     })()
   }, [])
 
+  const handleSetUserLocation = async () => {
+    try {
+      const loc = await Location.getCurrentPositionAsync()
+      camera.current?.setCamera({
+        zoomLevel: 14,
+        animationDuration: 0,
+        animationMode: "none",
+        centerCoordinate: [loc.coords.longitude, loc.coords.latitude],
+      })
+    } catch {
+      console.log("oops -  setting location")
+    }
+  }
   const onMapMove = ({ properties }: Mapbox.MapState) => setCoords(properties.center)
 
   if (!me) return <LoginPlaceholder title="New spot" text="Log in to start creating spots" />
+
   return (
     <NewModalView title="New spot" canGoBack={false}>
-      <Mapbox.MapView
-        className="flex-1 mb-10 mt-4 rounded-lg overflow-hidden"
-        logoEnabled={false}
-        compassEnabled
-        onMapIdle={onMapMove}
-        ref={mapRef}
-        pitchEnabled={false}
-        compassFadeWhenNorth
-        scaleBarEnabled={false}
-        styleURL={"mapbox://styles/mapbox/satellite-v9"}
-      >
-        <Mapbox.UserLocation />
-
-        <Camera
-          ref={camera}
-          allowUpdates
-          defaultSettings={{
-            centerCoordinate: [location?.longitude || INITIAL_LONGITUDE, location?.latitude || INITIAL_LATITUDE],
-            zoomLevel: 14,
-          }}
-        />
-        <View
-          style={{ transform: [{ translateX: -15 }, { translateY: -15 }] }}
-          className="absolute flex items-center justify-center top-1/2 left-1/2"
-        >
-          <CircleDot size={30} className="text-white" />
-        </View>
-      </Mapbox.MapView>
-
-      {!!location && (
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={() => camera.current?.moveTo([location.longitude, location.latitude])}
-          className="absolute bottom-12 right-6 flex flex-row items-center justify-center rounded-full bg-white p-3"
-        >
-          <Navigation size={20} className="text-black" />
-        </TouchableOpacity>
-      )}
-      {coords && (
-        <View className="absolute bottom-12 left-4 flex space-y-2 right-4 items-center justify-center">
-          <Button
-            // leftIcon={<X size={20} className="text-black dark:text-white" />}
-            className="rounded-full"
-            onPress={() =>
-              router.push("NewSpotTypeScreen", { location: { longitude: coords[0] as number, latitude: coords[1] as number } })
-            }
+      {!isLoadingLocation && (
+        <>
+          <Mapbox.MapView
+            className="flex-1 mb-10 mt-4 rounded-lg overflow-hidden"
+            logoEnabled={false}
+            compassEnabled
+            onMapIdle={onMapMove}
+            ref={mapRef}
+            pitchEnabled={false}
+            compassFadeWhenNorth
+            scaleBarEnabled={false}
+            styleURL="mapbox://styles/mapbox/satellite-v9"
           >
-            Next
-          </Button>
-        </View>
+            <Mapbox.UserLocation showsUserHeadingIndicator />
+
+            <Camera
+              ref={camera}
+              allowUpdates
+              defaultSettings={{
+                centerCoordinate: [location?.longitude || INITIAL_LONGITUDE, location?.latitude || INITIAL_LATITUDE],
+                zoomLevel: 14,
+              }}
+            />
+            <View
+              style={{ transform: [{ translateX: -15 }, { translateY: -15 }] }}
+              className="absolute flex items-center justify-center top-1/2 left-1/2"
+            >
+              <CircleDot size={30} className="text-white" />
+            </View>
+          </Mapbox.MapView>
+
+          <View className="absolute bottom-12 flex-row left-5 flex space-y-2 right-5 items-center justify-between">
+            <View className="w-12" />
+            {coords && (
+              <Button
+                className="rounded-full"
+                onPress={() =>
+                  router.push("NewSpotTypeScreen", {
+                    location: { longitude: coords[0] as number, latitude: coords[1] as number },
+                  })
+                }
+              >
+                Next
+              </Button>
+            )}
+
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={handleSetUserLocation}
+              className="flex flex-row items-center justify-center rounded-full bg-white sq-12"
+            >
+              <Navigation size={20} className="text-black" />
+            </TouchableOpacity>
+          </View>
+        </>
       )}
     </NewModalView>
   )
