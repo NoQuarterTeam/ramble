@@ -37,7 +37,7 @@ export default function ResetPassword() {
   const { token } = useParams()
 
   return (
-    <Form method="post">
+    <Form>
       <div className="stack">
         <div>
           <h1 className="text-4xl font-bold">Reset password</h1>

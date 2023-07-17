@@ -1,5 +1,5 @@
 import Map, { Marker } from "react-map-gl"
-import { Form, Link, useLoaderData } from "@remix-run/react"
+import { Link, useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { Edit2, Share, Star, Trash } from "lucide-react"
@@ -7,7 +7,7 @@ import { Edit2, Share, Star, Trash } from "lucide-react"
 import type { SpotType } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
-import { FormButton } from "~/components/Form"
+import { Form, FormButton } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { PageContainer } from "~/components/PageContainer"
 import {

@@ -1,9 +1,8 @@
-import * as React from "react"
 import type { ActionArgs } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json, redirect } from "@vercel/remix"
-import type { LucideIcon } from "lucide-react"
+import * as React from "react"
 import { z } from "zod"
 import { zx } from "zodix"
 
@@ -14,6 +13,7 @@ import { LinkButton } from "~/components/LinkButton"
 import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
+import type { RambleIcon } from "~/lib/interests"
 import { interestOptions } from "~/lib/interests"
 import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
 
@@ -82,7 +82,7 @@ function InterestSelector({
 }: {
   label: string
   field: string
-  Icon: LucideIcon
+  Icon: RambleIcon
   defaultValue: boolean
 }) {
   const [isSelected, setIsSelected] = React.useState(defaultValue)
