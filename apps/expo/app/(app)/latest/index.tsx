@@ -7,11 +7,9 @@ import { Heading } from "../../../components/ui/Heading"
 import { Spinner } from "../../../components/ui/Spinner"
 import { Text } from "../../../components/ui/Text"
 import { api } from "../../../lib/api"
-import { useMe } from "../../../lib/hooks/useMe"
 import { useRouter } from "../../router"
 
 export function LatestScreen() {
-  const { me } = useMe()
   const { push } = useRouter()
   const { data: spots, isLoading } = api.spot.latest.useQuery()
 
@@ -26,11 +24,10 @@ export function LatestScreen() {
       <View className="relative flex-1 px-4 pt-16">
         <View className="flex flex-row justify-between">
           <Heading className="pb-1 text-3xl">Latest</Heading>
-          {me && (
-            <TouchableOpacity onPress={() => push("NewSpotLayout")} className="p-2">
-              <PlusCircle className="text-black dark:text-white" />
-            </TouchableOpacity>
-          )}
+
+          <TouchableOpacity onPress={() => push("NewSpotLayout")} className="p-2">
+            <PlusCircle className="text-black dark:text-white" />
+          </TouchableOpacity>
         </View>
 
         <FlashList

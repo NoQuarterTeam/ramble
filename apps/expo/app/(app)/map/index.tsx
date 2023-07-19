@@ -19,7 +19,6 @@ import { toast } from "../../../components/ui/Toast"
 import { api, type RouterOutputs } from "../../../lib/api"
 import { width } from "../../../lib/device"
 import { useAsyncStorage } from "../../../lib/hooks/useAsyncStorage"
-import { useMe } from "../../../lib/hooks/useMe"
 import { SPOT_OPTIONS, SPOTS } from "../../../lib/spots"
 import { useRouter } from "../../router"
 
@@ -41,7 +40,6 @@ const initialFilters: Filters = {
 
 export function SpotsMapScreen() {
   const { push } = useRouter()
-  const { me } = useMe()
   const [clusters, setClusters] = React.useState<Cluster[] | null>(null)
   const filterModalProps = useDisclosure()
   const [activeSpotId, setActiveSpotId] = React.useState<string | null>(null)
@@ -209,16 +207,16 @@ export function SpotsMapScreen() {
           <Spinner />
         </View>
       )}
-      {me && (
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={() => push("NewSpotLayout")}
-          style={{ transform: [{ translateX: -26 }] }}
-          className="absolute bottom-3 left-1/2 rounded-full bg-gray-800 p-4 dark:bg-white"
-        >
-          <PlusCircle size={20} className="text-white dark:text-black" />
-        </TouchableOpacity>
-      )}
+
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => push("NewSpotLayout")}
+        style={{ transform: [{ translateX: -26 }] }}
+        className="absolute bottom-3 left-1/2 rounded-full bg-gray-800 p-4 dark:bg-white"
+      >
+        <PlusCircle size={20} className="text-white dark:text-black" />
+      </TouchableOpacity>
+
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={filterModalProps.onOpen}
