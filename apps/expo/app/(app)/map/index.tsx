@@ -67,7 +67,8 @@ export function SpotsMapScreen() {
 
   const handleSetUserLocation = async () => {
     try {
-      const loc = await Location.getCurrentPositionAsync()
+      const loc = await Location.getLastKnownPositionAsync()
+      if (!loc) return
       camera.current?.setCamera({
         animationDuration: 0,
         animationMode: "none",
@@ -179,6 +180,7 @@ export function SpotsMapScreen() {
   return (
     <View className="flex-1">
       <Mapbox.MapView
+        onLayout={handleSetUserLocation}
         className="flex-1"
         logoEnabled={false}
         compassEnabled

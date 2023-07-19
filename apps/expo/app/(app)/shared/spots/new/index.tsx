@@ -25,7 +25,8 @@ export function NewSpotLocationScreen() {
   React.useEffect(() => {
     ;(async () => {
       try {
-        const loc = await Location.getCurrentPositionAsync()
+        const loc = await Location.getLastKnownPositionAsync()
+        if (!loc) return
         setLocation(loc.coords)
       } catch {
         console.log("oops -  getting location")
@@ -37,7 +38,8 @@ export function NewSpotLocationScreen() {
 
   const handleSetUserLocation = async () => {
     try {
-      const loc = await Location.getCurrentPositionAsync()
+      const loc = await Location.getLastKnownPositionAsync()
+      if (!loc) return
       camera.current?.setCamera({
         zoomLevel: 14,
         animationDuration: 0,
