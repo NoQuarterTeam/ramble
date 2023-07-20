@@ -83,6 +83,7 @@ function AccountLink({ Icon, children, ...props }: NavLinkProps & { Icon: Lucide
           buttonStyles({ size: "md", variant: isActive ? "secondary" : "ghost" }),
           buttonSizeStyles({ size: "md" }),
           "flex w-full items-center justify-start space-x-2 text-left",
+          isActive && "!text-black",
         )
       }
     >

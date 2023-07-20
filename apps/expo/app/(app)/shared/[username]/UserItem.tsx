@@ -1,5 +1,4 @@
 import { TouchableOpacity, View } from "react-native"
-import { Image } from "expo-image"
 import { User2 } from "lucide-react-native"
 
 import { type User } from "@ramble/database/types"
@@ -7,6 +6,7 @@ import { createImageUrl } from "@ramble/shared"
 
 import { Text } from "../../../../components/ui/Text"
 import { useRouter } from "../../../router"
+import { OptimizedImage } from "../../../../components/ui/OptimisedImage"
 
 interface Props {
   user: Pick<User, "avatar" | "username" | "firstName" | "lastName">
@@ -21,7 +21,9 @@ export function UserItem(props: Props) {
       onPress={() => router.push("UserScreen", { username: props.user.username })}
     >
       {props.user.avatar ? (
-        <Image
+        <OptimizedImage
+          height={60}
+          width={60}
           source={{ uri: createImageUrl(props.user.avatar) }}
           className="sq-14 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
         />

@@ -1,4 +1,4 @@
-import type * as React from "react"
+import * as React from "react"
 
 type Fit = "cover" | "contain" | "fill" | "inside" | "outside"
 
@@ -17,12 +17,15 @@ export const transformImageSrc = (
   src
     ? "/api/image/?src=" +
       encodeURIComponent(src) +
-      `&width=${options.width || ""}&height=${options.height || ""}&quality=${options.quality || ""}&fit=${
+      `&width=${options.width || ""}&height=${options.height || ""}&quality=${options.quality || "90"}&fit=${
         options.fit || "cover"
       }`
     : undefined
 
-export function OptimizedImage({ src, quality, fit, ...props }: Props) {
+export const OptimizedImage = React.forwardRef<HTMLImageElement, Props>(function _OptimizedImage(
+  { src, quality, fit, ...props }: Props,
+  ref,
+) {
   const newSrc = transformImageSrc(src, { width: props.width, height: props.height, quality, fit })
-  return <img {...props} alt={props.alt} src={newSrc} />
-}
+  return <img ref={ref} {...props} alt={props.alt} src={newSrc} />
+})

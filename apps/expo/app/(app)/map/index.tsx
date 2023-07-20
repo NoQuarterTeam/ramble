@@ -1,16 +1,13 @@
-import * as React from "react"
-import { Modal, ScrollView, Switch, TouchableOpacity, useColorScheme, View } from "react-native"
 import BottomSheet, { useBottomSheetDynamicSnapPoints, useBottomSheetSpringConfigs } from "@gorhom/bottom-sheet"
-import Mapbox, { Camera, type MapView as MapType, MarkerView } from "@rnmapbox/maps"
+import Mapbox, { Camera, MarkerView, type MapView as MapType } from "@rnmapbox/maps"
 import * as Location from "expo-location"
-import { BadgeCheck, BadgeX, Dog, Navigation, PlusCircle, Settings2, Star, Verified, X } from "lucide-react-native"
+import { BadgeX, Navigation, PlusCircle, Settings2, Star, Verified, X } from "lucide-react-native"
+import * as React from "react"
+import { Modal, TouchableOpacity, useColorScheme, View } from "react-native"
 
 import { type SpotType } from "@ramble/database/types"
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
-import colors from "@ramble/tailwind-config/src/colors"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE, useDisclosure } from "@ramble/shared"
 
-import { Button } from "../../../components/ui/Button"
-import { Heading } from "../../../components/ui/Heading"
 import { ImageCarousel } from "../../../components/ui/ImageCarousel"
 import { ModalView } from "../../../components/ui/ModalView"
 import { Spinner } from "../../../components/ui/Spinner"
@@ -19,31 +16,20 @@ import { toast } from "../../../components/ui/Toast"
 import { api, type RouterOutputs } from "../../../lib/api"
 import { width } from "../../../lib/device"
 import { useAsyncStorage } from "../../../lib/hooks/useAsyncStorage"
-import { SPOT_OPTIONS, SPOTS } from "../../../lib/spots"
+import { SPOTS } from "../../../lib/spots"
 import { useRouter } from "../../router"
+import { Filters, initialFilters, MapFilters } from "./MapFilters"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
 type Cluster = RouterOutputs["spot"]["clusters"][number]
-
-type Filters = {
-  isPetFriendly: boolean
-  isVerified: boolean
-  types: SpotType[]
-}
-
-const initialFilters: Filters = {
-  isPetFriendly: false,
-  isVerified: false,
-  types: [],
-}
 
 export function SpotsMapScreen() {
   const { push } = useRouter()
   const [clusters, setClusters] = React.useState<Cluster[] | null>(null)
   const filterModalProps = useDisclosure()
   const [activeSpotId, setActiveSpotId] = React.useState<string | null>(null)
-  const [filters, setFilters] = useAsyncStorage("ramble.map.filters", initialFilters)
+  const [filters, setFilters] = useAsyncStorage<Filters>("ramble.map.filters", initialFilters)
   const camera = React.useRef<Camera>(null)
   const mapRef = React.useRef<MapType>(null)
   const theme = useColorScheme()
@@ -339,86 +325,3 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
     </BottomSheet>
   )
 })
-
-interface Props {
-  initialFilters: Filters
-  onSave: (filters: Filters) => void
-}
-
-export function MapFilters(props: Props) {
-  const [filters, setFilters] = React.useState(props.initialFilters)
-  return (
-    <View className="flex-1 pb-10 pt-4">
-      <ScrollView className="space-y-5 pb-20">
-        <View className="space-y-1">
-          <Heading className="font-400 text-2xl">Spot type</Heading>
-          <View className="flex flex-row flex-wrap gap-2">
-            {SPOT_OPTIONS.map((type) => {
-              const isSelected = filters.types.includes(type.value)
-              return (
-                <Button
-                  variant={isSelected ? "primary" : "outline"}
-                  leftIcon={
-                    <type.Icon
-                      size={20}
-                      className={join(isSelected ? "text-white dark:text-black" : "text-black dark:text-white")}
-                    />
-                  }
-                  key={type.value}
-                  onPress={() =>
-                    setFilters((f) => ({
-                      ...f,
-                      types: isSelected ? f.types.filter((t) => t !== type.value) : [...f.types, type.value],
-                    }))
-                  }
-                >
-                  {type.label}
-                </Button>
-              )
-            })}
-          </View>
-        </View>
-
-        <View className="space-y-2">
-          <Heading className="font-400 text-2xl">Options</Heading>
-          <View className="flex flex-row items-center justify-between space-x-4">
-            <View className="flex flex-row items-center space-x-4">
-              <BadgeCheck size={30} className="text-black dark:text-white" />
-              <View>
-                <Text className="text-lg">Verified spots</Text>
-                <Text className="text-sm opacity-75">Spots verified by an Ambassador</Text>
-              </View>
-            </View>
-            <Switch
-              trackColor={{ true: colors.primary[600] }}
-              value={filters.isVerified}
-              onValueChange={() => setFilters((f) => ({ ...f, isVerified: !f.isVerified }))}
-            />
-          </View>
-          <View className="flex flex-row items-center justify-between space-x-4">
-            <View className="flex flex-row items-center space-x-4">
-              <Dog size={30} className="text-black dark:text-white" />
-              <View>
-                <Text className="text-lg">Pet friendly</Text>
-                <Text className="text-sm opacity-75">Furry friends allowed</Text>
-              </View>
-            </View>
-            <Switch
-              trackColor={{ true: colors.primary[600] }}
-              value={filters.isPetFriendly}
-              onValueChange={() => setFilters((f) => ({ ...f, isPetFriendly: !f.isPetFriendly }))}
-            />
-          </View>
-        </View>
-      </ScrollView>
-      <View className="flex flex-row justify-between">
-        <Button variant="link" onPress={() => props.onSave(initialFilters)}>
-          Clear all
-        </Button>
-        <Button className="w-[120px]" onPress={() => props.onSave(filters)}>
-          Save filters
-        </Button>
-      </View>
-    </View>
-  )
-}

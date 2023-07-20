@@ -30,6 +30,7 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { SaveToList } from "../api+/$spotId.save-to-list.$listId"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
+import { OptimizedImage } from "~/components/OptimisedImage"
 
 export const loader = async ({ params }: LoaderArgs) => {
   const spot = await db.spot.findUnique({
@@ -105,7 +106,7 @@ export default function SpotDetail() {
       )}
       <div className="flex gap-2 overflow-scroll p-2">
         {spot.images.map((image) => (
-          <img
+          <OptimizedImage
             alt="spot"
             key={image.id}
             src={createImageUrl(image.path)}

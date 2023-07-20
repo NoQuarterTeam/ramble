@@ -7,6 +7,7 @@ import { createImageUrl } from "@ramble/shared"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { notFound } from "~/lib/remix.server"
+import { OptimizedImage } from "~/components/OptimisedImage"
 
 export const headers = useLoaderHeaders
 
@@ -32,7 +33,7 @@ export default function ProfileLists() {
           </div>
           <div className="flex space-x-2">
             {user.van.images.map((image) => (
-              <img
+              <OptimizedImage
                 key={image.id}
                 alt="van"
                 src={createImageUrl(image.path)}

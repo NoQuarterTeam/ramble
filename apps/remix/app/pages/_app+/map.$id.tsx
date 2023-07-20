@@ -14,6 +14,7 @@ import { db } from "~/lib/db.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
+import { OptimizedImage } from "~/components/OptimisedImage"
 
 export const loader = async ({ params }: LoaderArgs) => {
   const spot = db.spot
@@ -105,7 +106,7 @@ export default function SpotPreview() {
               </div>
               <div className="relative flex h-[225px] space-x-2 overflow-scroll rounded-md">
                 {spot.images?.map((image) => (
-                  <img
+                  <OptimizedImage
                     alt="spot"
                     width={350}
                     height={225}

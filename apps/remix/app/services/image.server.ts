@@ -2,12 +2,13 @@ import { Response as NodeResponse } from "@remix-run/node"
 import type { LoaderArgs } from "@vercel/remix"
 import axios from "axios"
 import * as crypto from "crypto"
-import fs from "fs"
-import fsp from "fs/promises"
-import path from "path"
 import sharp from "sharp"
+import { getHead, uploadStream } from "@ramble/api"
 
-import { FULL_WEB_URL, IS_PRODUCTION } from "~/lib/config.server"
+import { NotFound } from "@aws-sdk/client-s3"
+import { s3Url } from "@ramble/shared"
+
+const srcWhitelist = ["https://ramble.s3", "https://campspace.com"]
 
 const badImageBase64 = "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
 
@@ -34,6 +35,8 @@ export async function generateImage({ request }: LoaderArgs) {
     const src = url.searchParams.get("src")
     if (!src) return badImageResponse()
 
+    if (!srcWhitelist.some((s) => src.startsWith(s))) return badImageResponse()
+
     const width = getIntOrNull(url.searchParams.get("width"))
     const height = getIntOrNull(url.searchParams.get("height"))
     const quality = getIntOrNull(url.searchParams.get("quality")) || 90
@@ -45,35 +48,27 @@ export async function generateImage({ request }: LoaderArgs) {
       .update("v1")
       .update(request.method)
       .update(request.url)
+      .update(src)
       .update(width?.toString() || "0")
       .update(height?.toString() || "0")
-      .update(quality?.toString() || "80")
+      .update(quality?.toString() || "90")
       .update(fit)
 
-    const key = hash.digest("hex")
+    const key = "transforms/" + hash.digest("hex")
 
-    const cachedFile = path.resolve(path.join(IS_PRODUCTION ? "data/cache/images" : ".data/cache/images", key + ".webp"))
-
-    const exists = await fsp
-      .stat(cachedFile)
-      .then((s) => s.isFile())
-      .catch(() => false)
-
-    // if image key is in cache return it
-    if (exists) {
-      console.log({ Cache: "HIT", src })
-      const fileStream = fs.createReadStream(cachedFile)
-      return new NodeResponse(fileStream, {
-        status: 200,
-        headers: { "Content-Type": "image/webp", "Cache-Control": "public, max-age=31536000, immutable" },
+    const isInCache = await getHead(key)
+      .then(() => true)
+      .catch((e) => {
+        if (!(e instanceof NotFound)) throw badImageResponse()
+        return false
       })
-    } else {
-      console.log({ Cache: "MISS", src })
-    }
+    const cacheSrc = s3Url + key
+
+    // if in cache, return cached image
+    if (isInCache) return getCachedImage(cacheSrc)
 
     // fetch from original source
-    const parsedSrc = src.startsWith("http") ? src : `${FULL_WEB_URL}${src}`
-    const res = await axios.get(parsedSrc, { responseType: "stream" })
+    const res = await axios.get(src, { responseType: "stream" })
     if (!res) return badImageResponse()
 
     // transform image
@@ -83,36 +78,24 @@ export async function generateImage({ request }: LoaderArgs) {
     })
 
     if (width || height) sharpInstance.resize(width, height, { fit })
-    sharpInstance.webp({ quality })
+    sharpInstance.png({ quality })
 
-    // save to cache
-    await fsp.mkdir(path.dirname(cachedFile), { recursive: true }).catch(() => {
-      // dont need to throw here, just isnt cached in file system
-    })
-    const cacheFileStream = fs.createWriteStream(cachedFile)
-    const imageTransformStream = res.data.pipe(sharpInstance)
-    await new Promise<void>((resolve) => {
-      imageTransformStream.pipe(cacheFileStream)
-      imageTransformStream.on("end", () => {
-        resolve()
-      })
-      imageTransformStream.on("error", async () => {
-        // remove file if transform fails
-        await fsp.rm(cachedFile).catch(() => {
-          // dont need to throw here, just isnt removed from file system
-        })
-      })
-    })
+    // upload to s3
+    await uploadStream(key, res.data.pipe(sharpInstance))
 
     // return transformed image
-    const fileStream = fs.createReadStream(cachedFile)
-    return new NodeResponse(fileStream, {
-      status: 200,
-      headers: { "Content-Type": "image/webp", "Cache-Control": "public, max-age=31536000, immutable" },
-    })
+    return getCachedImage(cacheSrc)
   } catch (e) {
     console.log(e)
-
     return badImageResponse()
   }
+}
+
+async function getCachedImage(src: string) {
+  const res = await axios.get(src, { responseType: "stream" })
+
+  return new NodeResponse(res.data, {
+    status: 200,
+    headers: { "Content-Type": "image/png", "Cache-Control": "public, max-age=31536000, immutable" },
+  })
 }

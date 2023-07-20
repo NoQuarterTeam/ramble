@@ -1,6 +1,5 @@
 import * as React from "react"
 import { ScrollView, View } from "react-native"
-import { Image } from "expo-image"
 import { Check } from "lucide-react-native"
 
 import { AMENITIES } from "@ramble/shared"
@@ -13,6 +12,7 @@ import { useS3Upload } from "../../../../../lib/hooks/useS3"
 import { SPOTS } from "../../../../../lib/spots"
 import { useParams, useRouter } from "../../../../router"
 import { NewModalView } from "./NewModalView"
+import { OptimizedImage } from "../../../../../components/ui/OptimisedImage"
 
 export function NewSpotConfirmScreen() {
   const { params } = useParams<"NewSpotConfirmScreen">()
@@ -65,7 +65,12 @@ export function NewSpotConfirmScreen() {
           <View className="flex flex-row flex-wrap">
             {params.images.map((image, i) => (
               <View key={i} className="p-1 w-1/3">
-                <Image className="h-[100px] w-full rounded-md bg-gray-50 object-cover dark:bg-gray-700" source={{ uri: image }} />
+                <OptimizedImage
+                  height={100}
+                  width={200}
+                  className="h-[100px] w-full rounded-md bg-gray-50 object-cover dark:bg-gray-700"
+                  source={{ uri: image }}
+                />
               </View>
             ))}
           </View>

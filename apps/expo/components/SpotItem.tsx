@@ -1,5 +1,5 @@
 import { TouchableOpacity, View } from "react-native"
-import { Image } from "expo-image"
+
 import { Camera, Star } from "lucide-react-native"
 
 import { type Spot } from "@ramble/database/types"
@@ -7,6 +7,7 @@ import { createImageUrl } from "@ramble/shared"
 
 import { useRouter } from "../app/router"
 import { Text } from "./ui/Text"
+import { OptimizedImage } from "./ui/OptimisedImage"
 
 interface Props {
   spot: Pick<Spot, "id" | "name" | "address"> & { rating?: number | null; image?: string | null }
@@ -19,7 +20,9 @@ export function SpotItem({ spot }: Props) {
       <View className="flex w-full flex-row items-center justify-start space-x-2">
         <View className="h-[100px] w-[100px]">
           {spot.image ? (
-            <Image
+            <OptimizedImage
+              width={100}
+              height={100}
               className="h-full w-full rounded-md bg-gray-50 object-cover dark:bg-gray-700"
               source={{ uri: createImageUrl(spot.image) }}
             />

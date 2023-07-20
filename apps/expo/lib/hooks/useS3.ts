@@ -2,6 +2,7 @@ import * as React from "react"
 import { v4 } from "uuid"
 
 import { api } from "../api"
+import { assetPrefix } from "@ramble/shared"
 
 export function useS3Upload(): [(fileUrl: string) => Promise<{ key: string }>, { isLoading: boolean }] {
   const [isLoading, setIsLoading] = React.useState(false)
@@ -10,7 +11,7 @@ export function useS3Upload(): [(fileUrl: string) => Promise<{ key: string }>, {
     try {
       setIsLoading(true)
       const key = v4()
-      const res = await mutateAsync({ key })
+      const res = await mutateAsync({ key: assetPrefix + key })
       const resp = await fetch(fileUrl)
       const imageBody = await resp.blob()
       await fetch(res, { method: "PUT", body: imageBody })

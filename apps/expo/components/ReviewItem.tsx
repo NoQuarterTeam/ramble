@@ -1,6 +1,5 @@
 import { TouchableOpacity, View } from "react-native"
 import dayjs from "dayjs"
-import { Image } from "expo-image"
 import { Star, User2 } from "lucide-react-native"
 
 import { type Review, type User } from "@ramble/database/types"
@@ -11,6 +10,7 @@ import { api } from "../lib/api"
 import { useMe } from "../lib/hooks/useMe"
 import { Button } from "./ui/Button"
 import { Text } from "./ui/Text"
+import { OptimizedImage } from "./ui/OptimisedImage"
 
 export function ReviewItem({
   review,
@@ -38,7 +38,9 @@ export function ReviewItem({
           className="flex flex-row space-x-2"
         >
           {review.user.avatar ? (
-            <Image
+            <OptimizedImage
+              height={40}
+              width={40}
               source={{ uri: createImageUrl(review.user.avatar) }}
               className="sq-10 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
             />

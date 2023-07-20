@@ -12,6 +12,7 @@ import { IconButton, Textarea } from "~/components/ui"
 import { FormAction } from "~/lib/form"
 
 import { Actions } from "../spots.$id.reviews.$reviewId"
+import { OptimizedImage } from "~/components/OptimisedImage"
 
 interface Props {
   spot: SerializeFrom<Pick<Spot, "name"> & { images: Pick<SpotImage, "path">[] }>
@@ -62,26 +63,28 @@ export function ReviewForm({ spot, review }: Props) {
 
         <div className="grid grid-cols-4 gap-2">
           {spot.images[0] && (
-            <img
-              className="col-span-4 h-[200px] w-full rounded-md object-cover"
-              height={200}
+            <OptimizedImage
+              className="col-span-4 h-[300px] w-full rounded-md object-cover"
+              height={300}
               width={600}
               alt="spot 1"
               src={createImageUrl(spot.images[0].path)}
             />
           )}
           {spot.images[1] && (
-            <img
+            <OptimizedImage
               className="col-span-2 h-[200px] w-full rounded-md object-cover"
               height={200}
+              width={400}
               alt="spot 2"
               src={createImageUrl(spot.images[1].path)}
             />
           )}
           {spot.images[2] && (
-            <img
+            <OptimizedImage
               className="col-span-2 h-[200px] w-full rounded-md object-cover"
-              width={600}
+              height={200}
+              width={400}
               alt="spot 3"
               src={createImageUrl(spot.images[2].path)}
             />

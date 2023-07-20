@@ -1,6 +1,5 @@
 import { ScrollView, TouchableOpacity, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { Image } from "expo-image"
 import * as Updates from "expo-updates"
 import { ChevronRight, type LucideIcon, ToggleRight, User, User2 } from "lucide-react-native"
 
@@ -15,6 +14,7 @@ import { api, AUTH_TOKEN } from "../../../lib/api"
 import { VERSION } from "../../../lib/config"
 import { useMe } from "../../../lib/hooks/useMe"
 import { type ScreenParamsList, useRouter } from "../../router"
+import { OptimizedImage } from "../../../components/ui/OptimisedImage"
 
 const updateId = Updates.updateId
 
@@ -57,7 +57,9 @@ export function ProfileScreen() {
             >
               <View className="flex flex-row items-center space-x-4">
                 {me.avatar ? (
-                  <Image
+                  <OptimizedImage
+                    width={64}
+                    height={64}
                     source={{ uri: createImageUrl(me.avatar) }}
                     className="sq-16 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
                   />

@@ -1,5 +1,4 @@
 import { Linking, ScrollView, TouchableOpacity, useColorScheme, View } from "react-native"
-import { Image } from "expo-image"
 import { ChevronLeft, Heart, Instagram, User2 } from "lucide-react-native"
 
 import { createImageUrl } from "@ramble/shared"
@@ -15,6 +14,7 @@ import { useParams, useRouter } from "../../../router"
 import UserLists from "./lists"
 import { UserSpots } from "./spots"
 import { UserVan } from "./van"
+import { OptimizedImage } from "../../../../components/ui/OptimisedImage"
 
 export function UserScreen() {
   const colorScheme = useColorScheme()
@@ -78,7 +78,9 @@ export function UserScreen() {
         <View className="space-y-2 px-4 py-2">
           <View className="flex flex-row items-center space-x-3">
             {user.avatar ? (
-              <Image
+              <OptimizedImage
+                width={100}
+                height={100}
                 source={{ uri: createImageUrl(user.avatar) }}
                 className="sq-24 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
               />

@@ -10,6 +10,7 @@ import { LinkButton } from "~/components/LinkButton"
 import { db } from "~/lib/db.server"
 
 import { PageContainer } from "../components/PageContainer"
+import { OptimizedImage } from "~/components/OptimisedImage"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const spots: Array<Pick<Spot, "id" | "name" | "address"> & { rating: number; image: SpotImage["path"] }> = await db.$queryRaw`
@@ -61,7 +62,7 @@ export default function Home() {
         {spots.map((spot) => (
           <Link to={`/spots/${spot.id}`} key={spot.id} className="w-[420px] flex-shrink-0 hover:opacity-70">
             {spot.image ? (
-              <img
+              <OptimizedImage
                 alt="spot"
                 width={450}
                 height={250}

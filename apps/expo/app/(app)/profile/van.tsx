@@ -1,6 +1,6 @@
 import * as React from "react"
 import { FormProvider } from "react-hook-form"
-import { Image, ScrollView, TouchableOpacity, View } from "react-native"
+import { ScrollView, TouchableOpacity, View } from "react-native"
 import * as ImagePicker from "expo-image-picker"
 import { Plus, X } from "lucide-react-native"
 
@@ -15,6 +15,7 @@ import { api } from "../../../lib/api"
 import { useForm } from "../../../lib/hooks/useForm"
 import { useKeyboardController } from "../../../lib/hooks/useKeyboardController"
 import { useS3Upload } from "../../../lib/hooks/useS3"
+import { OptimizedImage } from "../../../components/ui/OptimisedImage"
 
 export function VanScreen() {
   useKeyboardController()
@@ -110,7 +111,9 @@ export function VanScreen() {
               <View className="flex flex-row flex-wrap">
                 {data?.images.map((image) => (
                   <TouchableOpacity key={image.id} onPress={() => removeImage({ id: image.id })} className="w-1/3 p-1">
-                    <Image
+                    <OptimizedImage
+                      height={200}
+                      width={300}
                       className="h-[100px] w-full rounded-md bg-gray-50 object-cover dark:bg-gray-700"
                       source={{ uri: createImageUrl(image.path) }}
                     />

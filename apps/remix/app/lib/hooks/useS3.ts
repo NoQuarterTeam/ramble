@@ -1,4 +1,5 @@
 "use client"
+import { assetPrefix } from "@ramble/shared"
 import * as React from "react"
 import { v4 } from "uuid"
 
@@ -7,6 +8,7 @@ export type UploadFile = {
   fileKey: string
   fileName: string
 }
+
 export function useS3Upload(): [(file: File) => Promise<{ key: string }>, { isLoading: boolean }] {
   const [isLoading, setIsLoading] = React.useState(false)
 
@@ -15,7 +17,7 @@ export function useS3Upload(): [(file: File) => Promise<{ key: string }>, { isLo
       setIsLoading(true)
       const key = v4()
       const formData = new FormData()
-      formData.append("key", key)
+      formData.append("key", assetPrefix + key)
       const res = await fetch("/api/s3/createSignedUrl", { method: "post", body: formData })
       const signedUrl = (await res.json()) as string
       if (!signedUrl) throw new Error("Error fetching signed url")

@@ -3,6 +3,7 @@ import * as RAvatar from "@radix-ui/react-avatar"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { merge } from "@ramble/shared"
+import { OptimizedImage } from "../OptimisedImage"
 
 export const avatarStyles = cva("center rounded-full capitalize", {
   variants: {
@@ -32,7 +33,9 @@ export function Avatar({ size, src, name, ...props }: Props) {
     .join("")
   return (
     <RAvatar.Root className={merge(avatarStyles({ size }), props.className)}>
-      <RAvatar.Image className="h-full w-full rounded-[inherit] object-cover" src={src || undefined} alt="avatar" />
+      <RAvatar.Image asChild className="h-full w-full rounded-[inherit] object-cover" src={src || undefined} alt="avatar">
+        <OptimizedImage src={src || undefined} width={150} height={150} alt="avatar" />
+      </RAvatar.Image>
       <RAvatar.Fallback
         className="center bg-primary-700 h-full w-full rounded-[inherit] object-cover text-xs font-semibold text-white"
         delayMs={600}

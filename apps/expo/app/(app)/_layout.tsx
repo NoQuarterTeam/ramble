@@ -1,6 +1,5 @@
 import { useColorScheme } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import { Image } from "expo-image"
 import { Heart, List, Search, User } from "lucide-react-native"
 
 import { createImageUrl, join } from "@ramble/shared"
@@ -11,6 +10,7 @@ import { LatestLayout } from "./latest/_layout"
 import { ListsLayout } from "./lists/_layout"
 import { SpotsLayout } from "./map/_layout"
 import { ProfileLayout } from "./profile/_layout"
+import { OptimizedImage } from "../../components/ui/OptimisedImage"
 
 const Tab = createBottomTabNavigator()
 
@@ -56,7 +56,9 @@ export function AppLayout() {
         options={{
           tabBarIcon: (props) =>
             me?.avatar ? (
-              <Image
+              <OptimizedImage
+                width={40}
+                height={40}
                 style={{ width: 26, height: 26 }}
                 source={{ uri: createImageUrl(me.avatar) }}
                 className={join(

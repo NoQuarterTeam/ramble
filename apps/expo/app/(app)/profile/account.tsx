@@ -1,6 +1,5 @@
 import { FormProvider } from "react-hook-form"
 import { ScrollView, TouchableOpacity, View } from "react-native"
-import { Image } from "expo-image"
 import * as ImagePicker from "expo-image-picker"
 import { Edit2, User2 } from "lucide-react-native"
 
@@ -17,6 +16,7 @@ import { useForm } from "../../../lib/hooks/useForm"
 import { useKeyboardController } from "../../../lib/hooks/useKeyboardController"
 import { useMe } from "../../../lib/hooks/useMe"
 import { useS3Upload } from "../../../lib/hooks/useS3"
+import { OptimizedImage } from "../../../components/ui/OptimisedImage"
 
 export function AccountScreen() {
   useKeyboardController()
@@ -96,7 +96,9 @@ export function AccountScreen() {
                   <Spinner />
                 </View>
               ) : me?.avatar ? (
-                <Image
+                <OptimizedImage
+                  width={80}
+                  height={80}
                   source={{ uri: createImageUrl(me.avatar) }}
                   className="sq-20 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
                 />

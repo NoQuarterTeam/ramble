@@ -1,12 +1,12 @@
 import * as React from "react"
 import { View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
-import { Image } from "expo-image"
 
 import { type SpotImage } from "@ramble/database/types"
 import { createImageUrl, merge } from "@ramble/shared"
 
 import { Text } from "./Text"
+import { OptimizedImage } from "./OptimisedImage"
 
 export function ImageCarousel({
   images,
@@ -36,7 +36,9 @@ export function ImageCarousel({
         showsHorizontalScrollIndicator={false}
         data={images}
         renderItem={({ item: image }) => (
-          <Image
+          <OptimizedImage
+            width={width}
+            height={height}
             source={{ uri: createImageUrl(image.path) }}
             style={{ width, height }}
             className={merge("object-cover", imageClassName)}
