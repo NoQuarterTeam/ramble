@@ -2,7 +2,6 @@ import * as React from "react"
 import { View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 
-import { type SpotImage } from "@ramble/database/types"
 import { createImageUrl, merge } from "@ramble/shared"
 
 import { Text } from "./Text"
@@ -16,7 +15,7 @@ export function ImageCarousel({
 }: {
   width: number
   height: number
-  images: Pick<SpotImage, "id" | "path">[]
+  images: { id: string; path: string; blurHash?: string | null }[]
   imageClassName?: string
 }) {
   const [imageIndex, setImageIndex] = React.useState(0)
@@ -39,6 +38,7 @@ export function ImageCarousel({
           <OptimizedImage
             width={width}
             height={height}
+            placeholder={image.blurHash}
             source={{ uri: createImageUrl(image.path) }}
             style={{ width, height }}
             className={merge("object-cover", imageClassName)}

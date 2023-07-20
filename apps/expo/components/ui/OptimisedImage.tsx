@@ -22,7 +22,7 @@ interface Props extends ImageProps, Options {
 
 export function OptimizedImage({ source, height, width, quality, fit, ...props }: Props) {
   const newSrc = transformImageSrc(source.uri, { height, width, quality, fit })
-  return <Image placeholder={blurhash} {...props} source={{ uri: newSrc }} />
+  return <Image {...props} placeholder={props.placeholder || blurhash} source={{ uri: newSrc }} />
 }
 
 export function transformImageSrc(src: string | undefined | null, options: Options) {

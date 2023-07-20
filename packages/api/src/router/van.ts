@@ -4,6 +4,7 @@ import { z } from "zod"
 import { vanSchema } from "@ramble/shared"
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
+import { generateBlurHash } from "../services/createBlurHash.server"
 
 export const vanRouter = createTRPCRouter({
   mine: protectedProcedure.query(async ({ ctx }) => {
@@ -26,10 +27,13 @@ export const vanRouter = createTRPCRouter({
     const van = await ctx.prisma.van.findUnique({ where: { userId: ctx.user.id } })
     if (!van) throw new TRPCError({ code: "NOT_FOUND" })
     if (van.userId !== ctx.user.id) throw new TRPCError({ code: "UNAUTHORIZED" })
-    return ctx.prisma.van.update({
-      where: { id: van.id },
-      data: { images: { createMany: { data: input.keys.map((path) => ({ path })) } } },
-    })
+    const imageData = await Promise.all(
+      input.keys.map(async (path) => {
+        const blurHash = await generateBlurHash(path)
+        return { path, blurHash }
+      }),
+    )
+    return ctx.prisma.van.update({ where: { id: van.id }, data: { images: { create: imageData } } })
   }),
   removeImage: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
     const van = await ctx.prisma.van.findUnique({ where: { userId: ctx.user.id } })

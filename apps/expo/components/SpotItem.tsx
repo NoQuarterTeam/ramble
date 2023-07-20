@@ -2,15 +2,15 @@ import { TouchableOpacity, View } from "react-native"
 
 import { Camera, Star } from "lucide-react-native"
 
-import { type Spot } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
 import { useRouter } from "../app/router"
 import { Text } from "./ui/Text"
 import { OptimizedImage } from "./ui/OptimisedImage"
+import { type SpotItemWithImage } from "@ramble/api/src/router/spot"
 
 interface Props {
-  spot: Pick<Spot, "id" | "name" | "address"> & { rating?: number | null; image?: string | null }
+  spot: SpotItemWithImage
 }
 
 export function SpotItem({ spot }: Props) {
@@ -22,13 +22,14 @@ export function SpotItem({ spot }: Props) {
           {spot.image ? (
             <OptimizedImage
               width={100}
+              placeholder={spot.blurHash}
               height={100}
               className="h-full w-full rounded-md bg-gray-50 object-cover dark:bg-gray-700"
               source={{ uri: createImageUrl(spot.image) }}
             />
           ) : (
             <View className="flex h-full w-full items-center justify-center rounded-md bg-gray-50 dark:bg-gray-700">
-              <Camera className="opacity-50" />
+              <Camera className="opacity-50 text-black dark:text-white" />
             </View>
           )}
         </View>

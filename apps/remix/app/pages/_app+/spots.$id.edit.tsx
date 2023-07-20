@@ -9,6 +9,7 @@ import { canManageSpot } from "~/lib/spots"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { SpotForm, spotSchema } from "./components/SpotForm"
+import { generateBlurHash } from "@ramble/api"
 
 export const loader = async ({ request, params }: LoaderArgs) => {
   const user = await getCurrentUser(request, { role: true, id: true })
@@ -32,23 +33,22 @@ export const action = async ({ request, params }: ActionArgs) => {
 
   const { customAddress, ...data } = result.data
 
-  const spot = await db.spot.findUnique({ where: { id: params.id } })
+  const spot = await db.spot.findUnique({ where: { id: params.id }, include: { images: true } })
   if (!spot) throw notFound(null)
-
   if (!canManageSpot(spot, user)) throw redirect("/latest")
+
+  const imagesToDelete = spot.images.filter((image) => !images.includes(image.path))
+  const imagesToCreate = images.filter((image) => !spot.images.find((i) => i.path === image))
+
+  const imageData = await Promise.all(
+    imagesToCreate.map(async (image) => {
+      const blurHash = await generateBlurHash(image)
+      return { path: image, blurHash, creator: { connect: { id: user.id } } }
+    }),
+  )
   await db.spot.update({
     where: { id: spot.id },
-    data: {
-      ...data,
-      images: {
-        deleteMany: { path: { notIn: images } },
-        connectOrCreate: images.map((image) => ({
-          where: { spotId_path: { path: image, spotId: spot.id } },
-          create: { path: image, creator: { connect: { id: user.id } } },
-        })),
-      },
-      address: customAddress ?? data.address,
-    },
+    data: { ...data, images: { delete: imagesToDelete, create: imageData }, address: customAddress ?? data.address },
   })
 
   return redirect(`/spots/${spot.id}`)

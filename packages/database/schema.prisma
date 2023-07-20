@@ -68,8 +68,9 @@ model Van {
 }
 
 model VanImage {
-  id   String @id @default(uuid())
-  path String
+  id       String  @id @default(uuid())
+  path     String
+  blurHash String?
 
   vanId String
   van   Van    @relation(fields: [vanId], references: [id], onDelete: Cascade)
@@ -165,6 +166,7 @@ model SpotAmenities {
 model SpotImage {
   id        String   @id @default(uuid())
   path      String
+  blurHash  String?
   spotId    String
   spot      Spot     @relation(fields: [spotId], references: [id], onDelete: Cascade)
   creatorId String

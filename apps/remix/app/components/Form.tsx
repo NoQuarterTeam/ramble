@@ -196,7 +196,7 @@ export function ImageField(props: ImageFieldProps) {
           <IconButton
             variant="secondary"
             size="xs"
-            className="absolute right-1 top-1"
+            className="absolute right-1 top-1 !text-black"
             aria-label="remove image"
             icon={<X className="sq-3" />}
             onClick={props.onRemove}

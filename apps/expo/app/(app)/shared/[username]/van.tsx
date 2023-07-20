@@ -1,5 +1,4 @@
 import { View } from "react-native"
-import { Image } from "expo-image"
 
 import { createImageUrl } from "@ramble/shared"
 
@@ -7,6 +6,7 @@ import { Spinner } from "../../../../components/ui/Spinner"
 import { Text } from "../../../../components/ui/Text"
 import { api } from "../../../../lib/api"
 import { useParams } from "../../../router"
+import { OptimizedImage } from "../../../../components/ui/OptimisedImage"
 
 export function UserVan() {
   const { params } = useParams<"UserScreen">()
@@ -39,8 +39,10 @@ export function UserVan() {
       </View>
       <Text>{van.description}</Text>
       {van.images.map((image) => (
-        <Image
+        <OptimizedImage
           key={image.id}
+          width={500}
+          placeholder={image.blurHash}
           className="min-h-[300px] w-full rounded-md object-contain"
           source={{ uri: createImageUrl(image.path) }}
         />

@@ -6,6 +6,7 @@ import { formError, validateFormData } from "~/lib/form"
 import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
 
 import { SpotForm, spotSchema } from "./components/SpotForm"
+import { generateBlurHash } from "@ramble/api"
 
 export const loader = async ({ request }: LoaderArgs) => {
   await requireUser(request)
@@ -22,6 +23,13 @@ export const action = async ({ request }: ActionArgs) => {
 
   if (!result.success) return formError(result)
 
+  const imageData = await Promise.all(
+    images.map(async (image) => {
+      const blurHash = await generateBlurHash(image)
+      return { path: image, blurHash, creator: { connect: { id } } }
+    }),
+  )
+
   const { customAddress, ...data } = result.data
   const spot = await db.spot.create({
     data: {
@@ -29,7 +37,7 @@ export const action = async ({ request }: ActionArgs) => {
       verifiedAt: role === "AMBASSADOR" || role === "ADMIN" ? new Date() : undefined,
       verifier: role === "AMBASSADOR" || role === "ADMIN" ? { connect: { id } } : undefined,
       ...data,
-      images: { create: images.map((image) => ({ path: image, creator: { connect: { id } } })) },
+      images: { create: imageData },
       address: customAddress ?? data.address,
     },
   })

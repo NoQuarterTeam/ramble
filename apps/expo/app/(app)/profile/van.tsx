@@ -113,6 +113,7 @@ export function VanScreen() {
                   <TouchableOpacity key={image.id} onPress={() => removeImage({ id: image.id })} className="w-1/3 p-1">
                     <OptimizedImage
                       height={200}
+                      placeholder={image.blurHash}
                       width={300}
                       className="h-[100px] w-full rounded-md bg-gray-50 object-cover dark:bg-gray-700"
                       source={{ uri: createImageUrl(image.path) }}
