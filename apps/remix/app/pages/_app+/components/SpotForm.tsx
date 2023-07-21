@@ -24,15 +24,23 @@ import type { geocodeLoader } from "~/pages/api+/mapbox+/geocode"
 
 import type { IpInfo } from "../_layout"
 
-export const spotSchema = z.object({
-  latitude: FormNumber,
-  longitude: FormNumber,
-  name: z.string().min(2),
-  address: z.string().min(2),
-  customAddress: NullableFormString,
-  type: z.nativeEnum(SpotType),
-  description: z.string().min(50),
-})
+export const spotSchema = z
+  .object({
+    latitude: FormNumber,
+    longitude: FormNumber,
+    name: z.string().min(2),
+    address: z.string().min(2),
+    customAddress: NullableFormString,
+    type: z.nativeEnum(SpotType),
+    description: NullableFormString,
+  })
+  .refine(
+    (data) => {
+      if (data.type === "CAMPING" && (!data.description || data.description.length < 50)) return false
+      return true
+    },
+    { message: "Description must be at least 50 characters long", path: ["description"] },
+  )
 
 export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotImage[] }> }) {
   const ipInfo = useRouteLoaderData("pages/_app") as IpInfo
@@ -103,7 +111,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
         <div className="space-y-2">
           <FormField required name="name" label="Name" defaultValue={spot?.name} />
           <FormField
-            required
+            required={type === "CAMPING"}
             name="description"
             label="Description"
             defaultValue={spot?.description || ""}
