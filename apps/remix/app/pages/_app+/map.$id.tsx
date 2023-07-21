@@ -9,12 +9,12 @@ import { cacheHeader } from "pretty-cache-header"
 import { createImageUrl, merge } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
+import { OptimizedImage } from "~/components/OptimisedImage"
 import { CloseButton, Spinner } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
-import { OptimizedImage } from "~/components/OptimisedImage"
 
 export const loader = async ({ params }: LoaderArgs) => {
   const spot = db.spot

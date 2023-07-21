@@ -1,21 +1,20 @@
 import { Link, useLoaderData } from "@remix-run/react"
-import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { Camera, Star } from "lucide-react"
 
-import type { Spot, SpotImage } from "@ramble/database/types"
+import { type SpotItemWithImage } from "@ramble/api/src/router/spot"
 import { createImageUrl } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
+import { OptimizedImage } from "~/components/OptimisedImage"
 import { db } from "~/lib/db.server"
 
 import { PageContainer } from "../components/PageContainer"
-import { OptimizedImage } from "~/components/OptimisedImage"
 
-export const loader = async ({ request }: LoaderArgs) => {
-  const spots: Array<Pick<Spot, "id" | "name" | "address"> & { rating: number; image: SpotImage["path"] }> = await db.$queryRaw`
+export const loader = async () => {
+  const spots: Array<SpotItemWithImage> = await db.$queryRaw`
       SELECT Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating,
-        (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id LIMIT 1) AS image
+        (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id LIMIT 1) AS image, (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash
       FROM Spot
       LEFT JOIN Review ON Spot.id = Review.spotId
       GROUP BY Spot.id

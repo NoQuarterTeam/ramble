@@ -4,10 +4,10 @@ import { useLoaderData } from "@remix-run/react"
 
 import { createImageUrl } from "@ramble/shared"
 
+import { OptimizedImage } from "~/components/OptimisedImage"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { notFound } from "~/lib/remix.server"
-import { OptimizedImage } from "~/components/OptimisedImage"
 
 export const headers = useLoaderHeaders
 

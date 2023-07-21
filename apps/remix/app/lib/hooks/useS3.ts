@@ -1,7 +1,8 @@
 "use client"
-import { assetPrefix } from "@ramble/shared"
 import * as React from "react"
 import { v4 } from "uuid"
+
+import { assetPrefix } from "@ramble/shared"
 
 export type UploadFile = {
   fileUrl: string

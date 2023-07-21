@@ -20,6 +20,7 @@ const userSelectFields = {
   firstName: true,
   lastName: true,
   avatar: true,
+  avatarBlurHash: true,
   username: true,
   role: true,
   createdAt: true,

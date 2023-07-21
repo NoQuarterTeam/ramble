@@ -14,6 +14,7 @@ export type SpotItemWithImage = Pick<Spot, "id" | "name" | "address"> & {
   image?: SpotImage["path"] | null
   blurHash?: SpotImage["blurHash"] | null
 }
+
 export const spotRouter = createTRPCRouter({
   clusters: publicProcedure
     .input(

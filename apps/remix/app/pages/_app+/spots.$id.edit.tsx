@@ -2,6 +2,8 @@ import { useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 import { json, redirect } from "@vercel/remix"
 
+import { generateBlurHash } from "@ramble/api"
+
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { notFound } from "~/lib/remix.server"
@@ -9,7 +11,6 @@ import { canManageSpot } from "~/lib/spots"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { SpotForm, spotSchema } from "./components/SpotForm"
-import { generateBlurHash } from "@ramble/api"
 
 export const loader = async ({ request, params }: LoaderArgs) => {
   const user = await getCurrentUser(request, { role: true, id: true })

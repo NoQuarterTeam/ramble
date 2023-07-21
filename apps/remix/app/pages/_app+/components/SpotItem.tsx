@@ -1,22 +1,13 @@
-import type { SerializeFrom } from "@remix-run/node"
 import { Link } from "@remix-run/react"
 import { Camera, Star } from "lucide-react"
 
-import type { Prisma } from "@ramble/database/types"
+import type { SpotItemWithImage } from "@ramble/api/src/router/spot"
 import { createImageUrl } from "@ramble/shared"
+
 import { OptimizedImage } from "~/components/OptimisedImage"
 
-export const spotItemSelectFields = {
-  id: true,
-  name: true,
-  address: true,
-} satisfies Prisma.SpotSelect
-
-export type SpotItemType = SerializeFrom<
-  Prisma.SpotGetPayload<{ select: typeof spotItemSelectFields }> & { rating?: number | null; image?: string | null }
->
 interface Props {
-  spot: SpotItemType
+  spot: SpotItemWithImage
 }
 
 export function SpotItem({ spot }: Props) {
@@ -25,14 +16,15 @@ export function SpotItem({ spot }: Props) {
       {spot.image ? (
         <OptimizedImage
           alt="spot"
-          quality={60}
-          width={200}
+          placeholder={spot.blurHash}
+          quality={90}
+          width={150}
           height={100}
-          className="h-[100px] min-w-[200px] rounded-md bg-gray-50 object-cover dark:bg-gray-700"
+          className="h-[100px] min-w-[150px] rounded-md object-cover"
           src={createImageUrl(spot.image)}
         />
       ) : (
-        <div className="flex h-[100px] min-w-[200px] items-center justify-center rounded-md bg-gray-50 object-cover dark:bg-gray-700">
+        <div className="flex h-[100px] min-w-[150px] items-center justify-center rounded-md bg-gray-50 object-cover dark:bg-gray-700">
           <Camera className="opacity-50" />
         </div>
       )}

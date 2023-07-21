@@ -22,7 +22,7 @@ import { SPOTS } from "~/lib/spots"
 import { useTheme } from "~/lib/theme"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
-import { SpotItem, spotItemSelectFields } from "./components/SpotItem"
+import { SpotItem } from "./components/SpotItem"
 
 export const headers = useLoaderHeaders
 
@@ -40,9 +40,11 @@ export const loader = async ({ params }: LoaderArgs) => {
           id: true,
           spot: {
             select: {
+              id: true,
               type: true,
               reviews: { select: { rating: true } },
-              ...spotItemSelectFields,
+              name: true,
+              address: true,
               latitude: true,
               longitude: true,
               images: { take: 1 },
@@ -61,10 +63,11 @@ export const loader = async ({ params }: LoaderArgs) => {
       spot: {
         ...listSpot.spot,
         image: listSpot.spot.images[0]?.path,
+        blurHash: listSpot.spot.images[0]?.blurHash,
         rating:
           listSpot.spot.reviews.length > 0
             ? Math.round(listSpot.spot.reviews.reduce((acc, review) => acc + review.rating, 0) / listSpot.spot.reviews.length)
-            : null,
+            : undefined,
       },
     })),
   }

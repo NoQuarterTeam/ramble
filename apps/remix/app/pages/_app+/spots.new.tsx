@@ -1,12 +1,13 @@
 import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 import { json, redirect } from "@vercel/remix"
 
+import { generateBlurHash } from "@ramble/api"
+
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
 
 import { SpotForm, spotSchema } from "./components/SpotForm"
-import { generateBlurHash } from "@ramble/api"
 
 export const loader = async ({ request }: LoaderArgs) => {
   await requireUser(request)

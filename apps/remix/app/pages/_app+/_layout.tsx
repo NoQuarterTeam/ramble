@@ -1,8 +1,9 @@
+import "mapbox-gl/dist/mapbox-gl.css"
+
+import { cssBundleHref } from "@remix-run/css-bundle"
 import { Outlet } from "@remix-run/react"
 import type { LinksFunction, LoaderArgs, SerializeFrom } from "@vercel/remix"
-import { cssBundleHref } from "@remix-run/css-bundle"
 import { json } from "@vercel/remix"
-import "mapbox-gl/dist/mapbox-gl.css"
 import { cacheHeader } from "pretty-cache-header"
 
 import { getIpInfo } from "~/services/ip.server"

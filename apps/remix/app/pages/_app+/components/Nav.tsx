@@ -75,6 +75,8 @@ export function Nav() {
           <DropdownMenuTrigger asChild={!user}>
             {user ? (
               <Avatar
+                size={40}
+                placeholder={user.avatarBlurHash}
                 className="hover:opacity-70"
                 src={createImageUrl(user.avatar)}
                 name={user.firstName + " " + user.lastName}
@@ -114,7 +116,6 @@ export function Nav() {
                     Lists
                   </LinkButton>
                 </DropdownMenuItem>
-
                 <DropdownMenuItem asChild>
                   <LinkButton variant="ghost" to="/account" leftIcon={<Settings className="sq-4" />}>
                     Account
@@ -122,7 +123,6 @@ export function Nav() {
                 </DropdownMenuItem>
                 <themeFetcher.Form action="/api/theme" method="post" replace className="w-full">
                   <input type="hidden" name="theme" value={isDark ? "light" : "dark"} />
-
                   <DropdownMenuItem onSelect={(event: Event) => event.preventDefault()} asChild>
                     <Button
                       variant="ghost"

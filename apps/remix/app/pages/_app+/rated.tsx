@@ -4,7 +4,7 @@ import { json } from "@remix-run/node"
 import { useFetcher, useLoaderData } from "@remix-run/react"
 import { cacheHeader } from "pretty-cache-header"
 
-import type { Spot, SpotImage } from "@ramble/database/types"
+import { type SpotItemWithImage } from "@ramble/api/src/router/spot"
 
 import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
@@ -19,9 +19,9 @@ export const loader = async ({ request }: LoaderArgs) => {
   const searchParams = new URL(request.url).searchParams
   const skip = parseInt((searchParams.get("skip") as string) || "0")
 
-  const spots: Array<Pick<Spot, "id" | "name" | "address"> & { rating: number; image: SpotImage["path"] }> = await db.$queryRaw`
+  const spots: Array<SpotItemWithImage> = await db.$queryRaw`
       SELECT Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating,
-        (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id LIMIT 1) AS image
+        (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id LIMIT 1) AS image, (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash
       FROM Spot
       LEFT JOIN Review ON Spot.id = Review.spotId
       GROUP BY Spot.id

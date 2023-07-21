@@ -18,7 +18,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   const user = await getCurrentUser(request, {
     firstName: true,
     username: true,
-
+    avatarBlurHash: true,
     role: true,
     lastName: true,
     avatar: true,
@@ -32,7 +32,12 @@ export default function AccountLayout() {
     <PageContainer>
       <div className="flex flex-wrap items-center justify-between">
         <div className="flex items-center space-x-2 py-2">
-          <Avatar size="lg" name={`${user.firstName} ${user.lastName}`} src={createImageUrl(user.avatar)} />
+          <Avatar
+            size={60}
+            name={`${user.firstName} ${user.lastName}`}
+            placeholder={user.avatarBlurHash}
+            src={createImageUrl(user.avatar)}
+          />
           <div>
             <p>
               {user.firstName} {user.lastName}

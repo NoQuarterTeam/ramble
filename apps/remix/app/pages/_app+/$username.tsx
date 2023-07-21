@@ -24,6 +24,7 @@ export const loader = async ({ params }: LoaderArgs) => {
     select: {
       id: true,
       avatar: true,
+      avatarBlurHash: true,
       role: true,
       firstName: true,
       username: true,
@@ -46,7 +47,13 @@ export default function ProfileLists() {
     <PageContainer>
       <div className="grid grid-cols-1 items-center gap-4 py-6 md:grid-cols-2 md:py-8">
         <div className="flex items-center space-x-3">
-          <Avatar className="sq-20 md:sq-32" src={createImageUrl(user.avatar)} name={`${user.firstName} ${user.lastName}`} />
+          <Avatar
+            size={100}
+            placeholder={user.avatarBlurHash}
+            className="sq-20 md:sq-32"
+            src={createImageUrl(user.avatar)}
+            name={`${user.firstName} ${user.lastName}`}
+          />
           <div className="space-y-1">
             {user.role === "AMBASSADOR" && <Badge colorScheme="green">Ambassador</Badge>}
             <div className="flex space-x-2">

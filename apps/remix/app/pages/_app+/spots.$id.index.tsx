@@ -9,6 +9,7 @@ import { createImageUrl } from "@ramble/shared"
 
 import { Form, FormButton } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
+import { OptimizedImage } from "~/components/OptimisedImage"
 import { PageContainer } from "~/components/PageContainer"
 import {
   AlertDialogCancel,
@@ -30,7 +31,6 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { SaveToList } from "../api+/$spotId.save-to-list.$listId"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
-import { OptimizedImage } from "~/components/OptimisedImage"
 
 export const loader = async ({ params }: LoaderArgs) => {
   const spot = await db.spot.findUnique({
@@ -45,8 +45,8 @@ export const loader = async ({ params }: LoaderArgs) => {
       latitude: true,
       longitude: true,
       ownerId: true,
-      verifier: { select: { firstName: true, username: true, lastName: true, avatar: true } },
-      images: { select: { id: true, path: true } },
+      verifier: { select: { firstName: true, username: true, lastName: true, avatar: true, avatarBlurHash: true } },
+      images: { select: { id: true, path: true, blurHash: true } },
       _count: { select: { reviews: true } },
       reviews: {
         take: 5,
@@ -79,7 +79,7 @@ export default function SpotDetail() {
   return (
     <div className="relative">
       {canManageSpot(spot, user) && (
-        <div className="absolute left-10 top-10 flex space-x-2">
+        <div className="absolute z-10 left-10 top-10 flex space-x-2">
           <LinkButton to="edit" leftIcon={<Edit2 className="sq-3" />}>
             Edit
           </LinkButton>
@@ -104,17 +104,21 @@ export default function SpotDetail() {
           </AlertDialogRoot>
         </div>
       )}
-      <div className="flex gap-2 overflow-scroll p-2">
-        {spot.images.map((image) => (
-          <OptimizedImage
-            alt="spot"
-            key={image.id}
-            src={createImageUrl(image.path)}
-            className="h-[300px] w-[400px] rounded-md object-cover"
-            height={300}
-            width={400}
-          />
-        ))}
+      <div className="w-screen overflow-x-scroll">
+        <div className="flex gap-2 w-max p-2">
+          {spot.images.map((image) => (
+            <div key={image.id}>
+              <OptimizedImage
+                alt="spot"
+                placeholder={image.blurHash}
+                src={createImageUrl(image.path)}
+                className="rounded-md object-cover"
+                height={300}
+                width={400}
+              />
+            </div>
+          ))}
+        </div>
       </div>
       <PageContainer className="space-y-10 pb-40">
         <div className="space-y-4">

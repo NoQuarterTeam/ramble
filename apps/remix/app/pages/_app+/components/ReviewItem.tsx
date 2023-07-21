@@ -52,6 +52,7 @@ export function ReviewItem({ review }: Props) {
       <div className="flex justify-between">
         <div className="hstack">
           <Avatar
+            size={40}
             className="sq-10 rounded-full"
             name={`${review.user.firstName} ${review.user.lastName}`}
             src={createImageUrl(review.user.avatar)}

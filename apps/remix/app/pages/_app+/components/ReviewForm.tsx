@@ -7,12 +7,12 @@ import { createImageUrl } from "@ramble/shared"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
+import { OptimizedImage } from "~/components/OptimisedImage"
 import { PageContainer } from "~/components/PageContainer"
 import { IconButton, Textarea } from "~/components/ui"
 import { FormAction } from "~/lib/form"
 
 import { Actions } from "../spots.$id.reviews.$reviewId"
-import { OptimizedImage } from "~/components/OptimisedImage"
 
 interface Props {
   spot: SerializeFrom<Pick<Spot, "name"> & { images: Pick<SpotImage, "path">[] }>

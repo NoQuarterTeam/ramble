@@ -1,48 +1,36 @@
 "use client"
-import * as RAvatar from "@radix-ui/react-avatar"
-import { cva, type VariantProps } from "class-variance-authority"
 
 import { merge } from "@ramble/shared"
+
+import type { OptimizedImageProps } from "../OptimisedImage"
 import { OptimizedImage } from "../OptimisedImage"
 
-export const avatarStyles = cva("center rounded-full capitalize", {
-  variants: {
-    size: {
-      xs: "sq-5 text-xs",
-      sm: "sq-8 text-sm",
-      md: "sq-10 text-md",
-      lg: "sq-12 text-lg",
-    },
-  },
-  defaultVariants: {
-    size: "md",
-  },
-})
-
-export type AvatarProps = VariantProps<typeof avatarStyles>
-
-interface Props extends AvatarProps, Omit<RAvatar.AvatarProps, "placeholder"> {
+interface Props extends Omit<OptimizedImageProps, "height" | "width" | "alt"> {
   name: string
-  src?: string | null | undefined
-  placeholder?: string | null
+  size?: number
 }
 
-export function Avatar({ size, src, placeholder, name, ...props }: Props) {
+export function Avatar({ size = 100, src, placeholder, name, ...props }: Props) {
   const initials = name
     .split(" ")
     .map((n) => n[0])
     .join("")
+
+  if (!src)
+    return (
+      <div className="flex items-center justify-center" style={{ width: size, height: size }}>
+        <p>{initials}</p>
+      </div>
+    )
   return (
-    <RAvatar.Root className={merge(avatarStyles({ size }), props.className)}>
-      <RAvatar.Image asChild className="h-full w-full rounded-[inherit] object-cover" src={src || undefined} alt="avatar">
-        <OptimizedImage src={src || undefined} width={150} height={150} alt="avatar" />
-      </RAvatar.Image>
-      <RAvatar.Fallback
-        className="center bg-primary-700 h-full w-full rounded-[inherit] object-cover text-xs font-semibold text-white"
-        delayMs={600}
-      >
-        {initials}
-      </RAvatar.Fallback>
-    </RAvatar.Root>
+    <OptimizedImage
+      placeholder={placeholder}
+      src={src}
+      width={size}
+      height={size}
+      alt="avatar"
+      {...props}
+      className={merge(props.className, "rounded-full")}
+    />
   )
 }
