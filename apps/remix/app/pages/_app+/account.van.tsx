@@ -45,7 +45,7 @@ export const action = async ({ request }: ActionArgs) => {
     const imageData = await Promise.all(
       imagesToCreate.map(async (image) => {
         const blurHash = await generateBlurHash(image)
-        return { path: image, blurHash, creator: { connect: { id: user.id } } }
+        return { path: image, blurHash }
       }),
     )
     await db.van.update({
@@ -56,7 +56,7 @@ export const action = async ({ request }: ActionArgs) => {
     const imageData = await Promise.all(
       images.map(async (image) => {
         const blurHash = await generateBlurHash(image)
-        return { path: image, blurHash, creator: { connect: { id: user.id } } }
+        return { path: image, blurHash }
       }),
     )
     await db.van.create({ data: { userId: user.id, ...data, images: { create: imageData } } })
