@@ -414,8 +414,8 @@ importers:
         specifier: 1.19.0
         version: 1.19.0(@remix-run/serve@1.19.0)
       '@remix-run/eslint-config':
-        specifier: 1.19.0
-        version: 1.19.0(eslint@8.45.0)(react@18.2.0)(typescript@5.1.6)
+        specifier: 1.19.1
+        version: 1.19.1(eslint@8.45.0)(react@18.2.0)(typescript@5.1.6)
       '@tailwindcss/forms':
         specifier: ^0.5.3
         version: 0.5.3(tailwindcss@3.3.1)
@@ -6630,8 +6630,8 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@remix-run/eslint-config@1.19.0(eslint@8.45.0)(react@18.2.0)(typescript@5.1.6):
-    resolution: {integrity: sha512-pfGJnZ+Fv5+e/kF67K00dj1AA7okcsiUf/PqPwRr66mgGEe9CeLJQ5IZcczQx6TmIi574yy1G5sblz5L9EGlUg==}
+  /@remix-run/eslint-config@1.19.1(eslint@8.45.0)(react@18.2.0)(typescript@5.1.6):
+    resolution: {integrity: sha512-N4/IrN3Z6Rq+lB6zHbiqpA0XuP2fC+rRAi3jUsZvx0PppnKSNPW8f/qR9dD92RGxRAMOiv+ZLrrKBAwwfzPJ2w==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: ^8.0.0
