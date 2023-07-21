@@ -59,6 +59,7 @@ export function AppLayout() {
               <OptimizedImage
                 width={40}
                 height={40}
+                placeholder={me.avatarBlurHash}
                 style={{ width: 26, height: 26 }}
                 source={{ uri: createImageUrl(me.avatar) }}
                 className={join(

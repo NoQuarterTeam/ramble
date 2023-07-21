@@ -7,7 +7,9 @@ import { createImageUrl } from "@ramble/shared"
 import { Avatar } from "./ui/Avatar"
 
 interface Props {
-  spot: { verifiedAt: string | null } & { verifier: null | Pick<User, "avatar" | "firstName" | "lastName" | "username"> }
+  spot: { verifiedAt: string | null } & {
+    verifier: null | Pick<User, "avatar" | "avatarBlurHash" | "firstName" | "lastName" | "username">
+  }
 }
 
 export function VerifiedCard({ spot }: Props) {

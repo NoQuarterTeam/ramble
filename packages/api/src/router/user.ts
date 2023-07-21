@@ -4,6 +4,7 @@ import { z } from "zod"
 import { updateSchema, userInterestFields } from "@ramble/shared"
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
+import { generateBlurHash } from "../services/createBlurHash.server"
 
 export const userRouter = createTRPCRouter({
   me: publicProcedure.query(({ ctx }) => ctx.user),
@@ -17,6 +18,7 @@ export const userRouter = createTRPCRouter({
         firstName: true,
         lastName: true,
         avatar: true,
+        avatarBlurHash: true,
         ...userInterestFields,
         followers: ctx.user ? { where: { id: ctx.user.id } } : undefined,
         _count: { select: { followers: true, following: true } },
@@ -28,7 +30,15 @@ export const userRouter = createTRPCRouter({
   }),
   update: protectedProcedure.input(updateSchema).mutation(async ({ ctx, input }) => {
     const username = input.username?.toLowerCase().trim()
-    const user = await ctx.prisma.user.update({ where: { id: ctx.user.id }, data: { ...input, username } })
+    if (username && username !== ctx.user.username) {
+      const user = await ctx.prisma.user.findUnique({ where: { username } })
+      if (user) throw new TRPCError({ code: "BAD_REQUEST", message: "Username already taken" })
+    }
+    let avatarBlurHash = ctx.user.avatarBlurHash
+    if (input.avatar && input.avatar !== ctx.user.avatar) {
+      avatarBlurHash = await generateBlurHash(input.avatar)
+    }
+    const user = await ctx.prisma.user.update({ where: { id: ctx.user.id }, data: { ...input, username, avatarBlurHash } })
     return user
   }),
   followers: publicProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {

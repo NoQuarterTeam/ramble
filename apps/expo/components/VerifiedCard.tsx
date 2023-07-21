@@ -9,7 +9,9 @@ import { Text } from "./ui/Text"
 import { OptimizedImage } from "./ui/OptimisedImage"
 
 interface Props {
-  spot: Pick<Spot, "verifiedAt"> & { verifier: null | Pick<User, "avatar" | "firstName" | "lastName" | "username"> }
+  spot: Pick<Spot, "verifiedAt"> & {
+    verifier: null | Pick<User, "avatar" | "avatarBlurHash" | "firstName" | "lastName" | "username">
+  }
 }
 
 export function VerifiedCard({ spot }: Props) {
@@ -38,6 +40,7 @@ export function VerifiedCard({ spot }: Props) {
               <OptimizedImage
                 height={40}
                 width={40}
+                placeholder={spot.verifier.avatarBlurHash}
                 source={{ uri: createImageUrl(spot.verifier.avatar) }}
                 className="sq-10 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
               />

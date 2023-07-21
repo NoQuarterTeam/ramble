@@ -11,6 +11,7 @@ import { db } from "~/lib/db.server"
 import { formError, NullableFormString, validateFormData } from "~/lib/form"
 import { redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
+import { generateBlurHash } from "@ramble/api"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const user = await getCurrentUser(request, {
@@ -26,7 +27,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 }
 
 export const action = async ({ request }: ActionArgs) => {
-  const user = await getCurrentUser(request, { id: true, van: { select: { id: true } } })
+  const user = await getCurrentUser(request, { id: true, avatarBlurHash: true, avatar: true, van: { select: { id: true } } })
   const schema = z.object({
     firstName: z.string().min(1),
     lastName: z.string().min(1),
@@ -44,7 +45,11 @@ export const action = async ({ request }: ActionArgs) => {
   const username = result.data.username.toLowerCase().trim()
   const existingUsername = await db.user.findFirst({ where: { username, id: { not: { equals: user.id } } } })
   if (existingUsername) return formError({ formError: "User with this username already exists" })
-  await db.user.update({ where: { id: user.id }, data: result.data })
+  let avatarBlurHash = user.avatarBlurHash
+  if (result.data.avatar && result.data.avatar !== user.avatar) {
+    avatarBlurHash = await generateBlurHash(result.data.avatar)
+  }
+  await db.user.update({ where: { id: user.id }, data: { ...result.data, avatarBlurHash } })
   return redirect("/account", request, { flash: { title: "Account updated" } })
 }
 

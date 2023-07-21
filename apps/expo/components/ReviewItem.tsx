@@ -16,7 +16,7 @@ export function ReviewItem({
   review,
 }: {
   review: Pick<Review, "id" | "createdAt" | "description" | "rating" | "spotId"> & {
-    user: Pick<User, "id" | "avatar" | "firstName" | "lastName" | "username">
+    user: Pick<User, "id" | "avatar" | "firstName" | "lastName" | "username" | "avatarBlurHash">
   }
 }) {
   const { me } = useMe()
@@ -41,6 +41,7 @@ export function ReviewItem({
             <OptimizedImage
               height={40}
               width={40}
+              placeholder={review.user.avatarBlurHash}
               source={{ uri: createImageUrl(review.user.avatar) }}
               className="sq-10 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
             />

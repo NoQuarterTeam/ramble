@@ -80,6 +80,7 @@ export function UserScreen() {
             {user.avatar ? (
               <OptimizedImage
                 width={100}
+                placeholder={user.avatarBlurHash}
                 height={100}
                 source={{ uri: createImageUrl(user.avatar) }}
                 className="sq-24 rounded-full bg-gray-100 object-cover dark:bg-gray-700"

@@ -60,6 +60,7 @@ export function ProfileScreen() {
                   <OptimizedImage
                     width={64}
                     height={64}
+                    placeholder={me.avatarBlurHash}
                     source={{ uri: createImageUrl(me.avatar) }}
                     className="sq-16 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
                   />

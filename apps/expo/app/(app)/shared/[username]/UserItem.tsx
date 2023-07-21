@@ -9,7 +9,7 @@ import { useRouter } from "../../../router"
 import { OptimizedImage } from "../../../../components/ui/OptimisedImage"
 
 interface Props {
-  user: Pick<User, "avatar" | "username" | "firstName" | "lastName">
+  user: Pick<User, "avatar" | "username" | "firstName" | "lastName" | "avatarBlurHash">
 }
 
 export function UserItem(props: Props) {
@@ -24,6 +24,7 @@ export function UserItem(props: Props) {
         <OptimizedImage
           height={60}
           width={60}
+          placeholder={props.user.avatarBlurHash}
           source={{ uri: createImageUrl(props.user.avatar) }}
           className="sq-14 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
         />

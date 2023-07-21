@@ -99,6 +99,7 @@ export function AccountScreen() {
                 <OptimizedImage
                   width={80}
                   height={80}
+                  placeholder={me.avatarBlurHash}
                   source={{ uri: createImageUrl(me.avatar) }}
                   className="sq-20 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
                 />

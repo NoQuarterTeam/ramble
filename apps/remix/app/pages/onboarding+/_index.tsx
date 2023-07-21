@@ -9,9 +9,10 @@ import { LinkButton } from "~/components/LinkButton"
 import { Textarea } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { formError, NullableFormString, validateFormData } from "~/lib/form"
-import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
+import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { Footer } from "./components/Footer"
+import { generateBlurHash } from "@ramble/api"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const user = await getCurrentUser(request, { id: true, bio: true, avatar: true })
@@ -26,8 +27,12 @@ const schema = z.object({
 export const action = async ({ request }: ActionArgs) => {
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
-  const id = await requireUser(request)
-  await db.user.update({ where: { id }, data: result.data })
+  const user = await getCurrentUser(request, { id: true, avatar: true, avatarBlurHash: true })
+  let avatarBlurHash = user.avatarBlurHash
+  if (result.data.avatar && result.data.avatar !== user.avatar) {
+    avatarBlurHash = await generateBlurHash(result.data.avatar)
+  }
+  await db.user.update({ where: { id: user.id }, data: { ...result.data, avatarBlurHash } })
   return redirect("/onboarding/2")
 }
 

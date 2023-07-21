@@ -21,12 +21,13 @@ export const avatarStyles = cva("center rounded-full capitalize", {
 
 export type AvatarProps = VariantProps<typeof avatarStyles>
 
-interface Props extends AvatarProps, RAvatar.AvatarProps {
+interface Props extends AvatarProps, Omit<RAvatar.AvatarProps, "placeholder"> {
   name: string
   src?: string | null | undefined
+  placeholder?: string | null
 }
 
-export function Avatar({ size, src, name, ...props }: Props) {
+export function Avatar({ size, src, placeholder, name, ...props }: Props) {
   const initials = name
     .split(" ")
     .map((n) => n[0])
