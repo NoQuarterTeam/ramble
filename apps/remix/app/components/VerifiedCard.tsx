@@ -34,12 +34,7 @@ export function VerifiedCard({ spot }: Props) {
           </div>
 
           <div>
-            <Avatar
-              size={40}
-              placeholder={spot.verifier.avatarBlurHash}
-              src={createImageUrl(spot.verifier.avatar)}
-              name={`${spot.verifier.firstName} ${spot.verifier.lastName}`}
-            />
+            <Avatar size={40} placeholder={spot.verifier.avatarBlurHash} src={createImageUrl(spot.verifier.avatar)} />
           </div>
         </Link>
       ) : (

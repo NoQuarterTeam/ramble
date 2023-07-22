@@ -79,7 +79,6 @@ export function Nav() {
                 placeholder={user.avatarBlurHash}
                 className="hover:opacity-70"
                 src={createImageUrl(user.avatar)}
-                name={user.firstName + " " + user.lastName}
               />
             ) : (
               <IconButton

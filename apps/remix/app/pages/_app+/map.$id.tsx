@@ -75,7 +75,6 @@ export default function SpotPreview() {
                       {/* <Avatar
                   size="xs"
                   src={createImageUrl(spot.verifier.avatar)}
-                  name={`${spot.verifier.firstName} ${spot.verifier.lastName}`}
                 /> */}
                     </Link>
                   </div>

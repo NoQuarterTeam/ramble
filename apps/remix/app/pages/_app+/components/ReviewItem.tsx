@@ -51,12 +51,7 @@ export function ReviewItem({ review }: Props) {
     <div className="stack space-y-2 rounded-md border border-gray-100 px-4 py-3 dark:border-gray-700">
       <div className="flex justify-between">
         <div className="hstack">
-          <Avatar
-            size={40}
-            className="sq-10 rounded-full"
-            name={`${review.user.firstName} ${review.user.lastName}`}
-            src={createImageUrl(review.user.avatar)}
-          />
+          <Avatar size={40} className="sq-10 rounded-full" src={createImageUrl(review.user.avatar)} />
           <div>
             <Link to={`/${review.user.username}`} className="text-md hover:underline">
               {review.user.firstName} {review.user.lastName}

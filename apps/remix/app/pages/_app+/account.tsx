@@ -32,12 +32,7 @@ export default function AccountLayout() {
     <PageContainer>
       <div className="flex flex-wrap items-center justify-between">
         <div className="flex items-center space-x-2 py-2">
-          <Avatar
-            size={60}
-            name={`${user.firstName} ${user.lastName}`}
-            placeholder={user.avatarBlurHash}
-            src={createImageUrl(user.avatar)}
-          />
+          <Avatar size={60} placeholder={user.avatarBlurHash} src={createImageUrl(user.avatar)} />
           <div>
             <p>
               {user.firstName} {user.lastName}

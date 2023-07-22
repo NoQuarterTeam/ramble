@@ -4,22 +4,20 @@ import { merge } from "@ramble/shared"
 
 import type { OptimizedImageProps } from "../OptimisedImage"
 import { OptimizedImage } from "../OptimisedImage"
+import { User2 } from "lucide-react"
 
 interface Props extends Omit<OptimizedImageProps, "height" | "width" | "alt"> {
-  name: string
   size?: number
 }
 
-export function Avatar({ size = 100, src, name, ...props }: Props) {
-  const initials = name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-
+export function Avatar({ size = 100, src, ...props }: Props) {
   if (!src)
     return (
-      <div className="flex items-center justify-center" style={{ width: size, height: size }}>
-        <p>{initials}</p>
+      <div
+        className="flex items-center bg-gray-50 dark:bg-gray-800 rounded-full justify-center"
+        style={{ width: size, height: size }}
+      >
+        <User2 size={16} />
       </div>
     )
   return (
