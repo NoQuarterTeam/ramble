@@ -2,7 +2,7 @@ import { Link, useLoaderData } from "@remix-run/react"
 import { json } from "@vercel/remix"
 import { Camera, Star } from "lucide-react"
 
-import { type SpotItemWithImage } from "@ramble/api/src/router/spot"
+import { type SpotItemWithImageAndRating } from "@ramble/api/src/router/spot"
 import { createImageUrl } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
@@ -12,7 +12,7 @@ import { db } from "~/lib/db.server"
 import { PageContainer } from "../components/PageContainer"
 
 export const loader = async () => {
-  const spots: Array<SpotItemWithImage> = await db.$queryRaw`
+  const spots: Array<SpotItemWithImageAndRating> = await db.$queryRaw`
       SELECT Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating,
         (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id LIMIT 1) AS image, (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash
       FROM Spot

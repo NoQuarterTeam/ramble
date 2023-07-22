@@ -1,13 +1,13 @@
 import { Link } from "@remix-run/react"
 import { Camera, Star } from "lucide-react"
 
-import type { SpotItemWithImage } from "@ramble/api/src/router/spot"
+import type { SpotItemWithImageAndRating } from "@ramble/api/src/router/spot"
 import { createImageUrl } from "@ramble/shared"
 
 import { OptimizedImage } from "~/components/OptimisedImage"
 
 interface Props {
-  spot: SpotItemWithImage
+  spot: SpotItemWithImageAndRating
 }
 
 export function SpotItem({ spot }: Props) {

@@ -7,10 +7,10 @@ import { createImageUrl } from "@ramble/shared"
 import { useRouter } from "../app/router"
 import { Text } from "./ui/Text"
 import { OptimizedImage } from "./ui/OptimisedImage"
-import { type SpotItemWithImage } from "@ramble/api/src/router/spot"
+import { type SpotItemWithImageAndRating } from "@ramble/api/src/router/spot"
 
 interface Props {
-  spot: SpotItemWithImage
+  spot: SpotItemWithImageAndRating
 }
 
 export function SpotItem({ spot }: Props) {

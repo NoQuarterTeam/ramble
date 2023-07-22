@@ -50,10 +50,11 @@ export const listRouter = createTRPCRouter({
         spot: {
           ...listSpot.spot,
           image: listSpot.spot.images[0]?.path,
+          blurHash: listSpot.spot.images[0]?.blurHash,
           rating:
             listSpot.spot.reviews.length > 0
               ? Math.round(listSpot.spot.reviews.reduce((acc, review) => acc + review.rating, 0) / listSpot.spot.reviews.length)
-              : null,
+              : undefined,
         },
       })),
     }

@@ -9,7 +9,7 @@ import { spotAmenitiesSchema, spotSchemaWithoutType } from "@ramble/shared"
 import { geocodeCoords } from "../services/geocode.server"
 import { generateBlurHash } from "../services/createBlurHash.server"
 
-export type SpotItemWithImage = Pick<Spot, "id" | "name" | "address"> & {
+export type SpotItemWithImageAndRating = Pick<Spot, "id" | "name" | "address"> & {
   rating?: number
   image?: SpotImage["path"] | null
   blurHash?: SpotImage["blurHash"] | null
@@ -61,12 +61,19 @@ export const spotRouter = createTRPCRouter({
     }),
   latest: publicProcedure.query(
     async ({ ctx }) =>
-      ctx.prisma.$queryRaw<Array<SpotItemWithImage>>`
-        SELECT Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating, (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image, (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash
-        FROM Spot
-        LEFT JOIN Review ON Spot.id = Review.spotId
-        GROUP BY Spot.id
-        ORDER BY Spot.createdAt DESC, Spot.id
+      ctx.prisma.$queryRaw<Array<SpotItemWithImageAndRating>>`
+        SELECT
+          Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating,
+          (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image,
+          (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash
+        FROM
+          Spot
+        LEFT JOIN
+          Review ON Spot.id = Review.spotId
+        GROUP BY
+          Spot.id
+        ORDER BY
+          Spot.createdAt DESC, Spot.id
         LIMIT 20
       `,
   ),
@@ -95,13 +102,21 @@ export const spotRouter = createTRPCRouter({
     return { ...spot, rating }
   }),
   byUser: publicProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {
-    const res: Array<SpotItemWithImage> = await ctx.prisma.$queryRaw`
-      SELECT Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating, (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image, (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash
-      FROM Spot
-      LEFT JOIN Review ON Spot.id = Review.spotId
-      WHERE Spot.creatorId = (SELECT id FROM User WHERE username = ${input.username})
-      GROUP BY Spot.id
-      ORDER BY Spot.createdAt DESC, Spot.id
+    const res: Array<SpotItemWithImageAndRating> = await ctx.prisma.$queryRaw`
+      SELECT
+        Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating,
+        (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image, 
+        (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash
+      FROM
+        Spot
+      LEFT JOIN
+        Review ON Spot.id = Review.spotId
+      WHERE
+        Spot.creatorId = (SELECT id FROM User WHERE username = ${input.username})
+      GROUP BY
+        Spot.id
+      ORDER BY
+        Spot.createdAt DESC, Spot.id
       LIMIT 20`
     return res
   }),
