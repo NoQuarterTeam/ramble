@@ -11,7 +11,7 @@ import Animated, {
 import RenderHtml, { defaultSystemFonts } from "react-native-render-html"
 import * as Location from "expo-location"
 import { StatusBar } from "expo-status-bar"
-import { ChevronDown, ChevronLeft, Compass, Heart, Share2, Star } from "lucide-react-native"
+import { ChevronDown, ChevronLeft, Compass, Heart, Star } from "lucide-react-native"
 
 import { merge } from "@ramble/shared"
 
@@ -169,13 +169,13 @@ export function SpotDetailScreen() {
           )}
         </TouchableOpacity>
         <View className="flex flex-row items-center space-x-3">
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={handleGetDirections}
             activeOpacity={0.8}
             className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-gray-800"
           >
             <Share2 size={20} className="text-black dark:text-white" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             onPress={handleGetDirections}
             activeOpacity={0.8}

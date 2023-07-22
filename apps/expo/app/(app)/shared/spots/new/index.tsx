@@ -96,7 +96,8 @@ export function NewSpotLocationScreen() {
             <View className="w-12" />
             {coords && (
               <Button
-                className="rounded-full"
+                className="rounded-full bg-white"
+                textClassName="text-black"
                 onPress={() =>
                   router.push("NewSpotTypeScreen", {
                     location: { longitude: coords[0] as number, latitude: coords[1] as number },
