@@ -15,7 +15,7 @@ import { FormAction } from "~/lib/form"
 import { Actions } from "../spots.$id.reviews.$reviewId"
 
 interface Props {
-  spot: SerializeFrom<Pick<Spot, "name"> & { images: Pick<SpotImage, "path">[] }>
+  spot: SerializeFrom<Pick<Spot, "name"> & { images: Pick<SpotImage, "path" | "blurHash">[] }>
   review?: SerializeFrom<Pick<Review, "rating" | "description">>
 }
 
@@ -67,12 +67,14 @@ export function ReviewForm({ spot, review }: Props) {
               className="col-span-4 h-[300px] w-full rounded-md object-cover"
               height={300}
               width={600}
+              placeholder={spot.images[0].blurHash}
               alt="spot 1"
               src={createImageUrl(spot.images[0].path)}
             />
           )}
           {spot.images[1] && (
             <OptimizedImage
+              placeholder={spot.images[1].blurHash}
               className="col-span-2 h-[200px] w-full rounded-md object-cover"
               height={200}
               width={400}
@@ -82,6 +84,7 @@ export function ReviewForm({ spot, review }: Props) {
           )}
           {spot.images[2] && (
             <OptimizedImage
+              placeholder={spot.images[2].blurHash}
               className="col-span-2 h-[200px] w-full rounded-md object-cover"
               height={200}
               width={400}

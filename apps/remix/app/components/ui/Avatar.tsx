@@ -10,7 +10,7 @@ interface Props extends Omit<OptimizedImageProps, "height" | "width" | "alt"> {
   size?: number
 }
 
-export function Avatar({ size = 100, src, placeholder, name, ...props }: Props) {
+export function Avatar({ size = 100, src, name, ...props }: Props) {
   const initials = name
     .split(" ")
     .map((n) => n[0])
@@ -24,7 +24,6 @@ export function Avatar({ size = 100, src, placeholder, name, ...props }: Props) 
     )
   return (
     <OptimizedImage
-      placeholder={placeholder}
       src={src}
       width={size}
       height={size}

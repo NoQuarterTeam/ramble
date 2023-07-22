@@ -28,7 +28,7 @@ export const loader = async ({ params }: LoaderArgs) => {
         description: true,
         verifier: { select: { firstName: true, username: true, lastName: true, avatar: true } },
         verifiedAt: true,
-        images: { select: { id: true, path: true } },
+        images: { select: { id: true, path: true, blurHash: true } },
         reviews: {
           take: 5,
           orderBy: { createdAt: "desc" },
@@ -104,17 +104,20 @@ export default function SpotPreview() {
                   </p>
                 </div>
               </div>
-              <div className="relative flex h-[225px] space-x-2 overflow-scroll rounded-md">
-                {spot.images?.map((image) => (
-                  <OptimizedImage
-                    alt="spot"
-                    width={350}
-                    height={225}
-                    className="min-h-[225px] rounded-md object-cover"
-                    key={image.id}
-                    src={createImageUrl(image.path)}
-                  />
-                ))}
+              <div className="overflow-x-scroll w-full rounded-md">
+                <div className="relative flex h-[225px] space-x-2 w-max">
+                  {spot.images?.map((image) => (
+                    <OptimizedImage
+                      alt="spot"
+                      width={350}
+                      placeholder={image.blurHash}
+                      height={225}
+                      className="min-h-[225px] rounded-md object-cover"
+                      key={image.id}
+                      src={createImageUrl(image.path)}
+                    />
+                  ))}
+                </div>
               </div>
               <div className="line-clamp-6 text-sm" dangerouslySetInnerHTML={{ __html: spot.description || "" }} />
               <p className="text-sm">{spot.address}</p>

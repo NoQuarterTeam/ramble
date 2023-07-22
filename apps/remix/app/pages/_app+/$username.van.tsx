@@ -36,6 +36,7 @@ export default function ProfileLists() {
               <OptimizedImage
                 key={image.id}
                 alt="van"
+                placeholder={image.blurHash}
                 src={createImageUrl(image.path)}
                 width={300}
                 height={200}
