@@ -34,7 +34,14 @@ export const OptimizedImage = React.forwardRef<HTMLImageElement, OptimizedImageP
   const newSrc = transformImageSrc(src, { width: props.width * 1.5, height: props.height * 1.5, quality, fit })
   return (
     <div className={merge("relative overflow-hidden", props.className)}>
-      {placeholder && <BlurCanvas blurHash={placeholder} height={props.height} width={props.width} />}
+      {placeholder ? (
+        <BlurCanvas blurHash={placeholder} height={props.height} width={props.width} />
+      ) : (
+        <div
+          className="absolute rounded-md bg-gray-50 dark:bg-gray-700 animate-pulse"
+          style={{ height: props.height, width: props.width }}
+        />
+      )}
       <img ref={ref} {...props} className={merge("relative z-[1]", props.className)} alt={props.alt} src={newSrc} />
     </div>
   )

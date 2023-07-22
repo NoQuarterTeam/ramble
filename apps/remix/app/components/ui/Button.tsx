@@ -21,7 +21,7 @@ export const buttonStyles = cva(
         primary:
           "border-transparent text-white dark:text-black bg-gray-900 hover:bg-gray-600 active:bg-gray-500 dark:bg-white dark:hover:bg-white/90 dark:active:bg-white/80",
         secondary:
-          "border-transparent text-black dark:text-white bg-gray-100 hover:bg-gray-200 active:bg-gray-300 dark:bg-black-800 dark:hover:bg-black-700 dark:active:bg-black-600",
+          "border-transparent text-black dark:text-white bg-gray-100 hover:bg-gray-200 active:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 dark:active:bg-gray-500",
         destructive: "border-transparent text-white bg-red-500 hover:bg-red-600 active:bg-red-700",
         outline: "border-black/10 dark:border-white/10",
         ghost: "",
