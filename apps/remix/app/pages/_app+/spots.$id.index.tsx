@@ -5,7 +5,7 @@ import { json } from "@vercel/remix"
 import { Edit2, Share, Star, Trash } from "lucide-react"
 
 import type { SpotType } from "@ramble/database/types"
-import { createImageUrl } from "@ramble/shared"
+import { AMENITIES, createImageUrl } from "@ramble/shared"
 
 import { Form, FormButton } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -40,6 +40,7 @@ export const loader = async ({ params }: LoaderArgs) => {
       name: true,
       type: true,
       verifiedAt: true,
+      amenities: true,
       address: true,
       description: true,
       latitude: true,
@@ -148,6 +149,60 @@ export default function SpotDetail() {
               <h3 className="text-xl font-medium">Description</h3>
               <div dangerouslySetInnerHTML={{ __html: spot.description || "" }} />
               <p className="text-sm">{spot.address}</p>
+              {spot.amenities && (
+                <div className="flex flex-wrap flex-row gap-2">
+                  {spot.amenities.toilet && (
+                    <div className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
+                      <p className="text-sm">{AMENITIES.toilet}</p>
+                    </div>
+                  )}
+                  {spot.amenities.shower && (
+                    <div className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
+                      <p className="text-sm">{AMENITIES.shower}</p>
+                    </div>
+                  )}
+                  {spot.amenities.electricity && (
+                    <div className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
+                      <p className="text-sm">{AMENITIES.electricity}</p>
+                    </div>
+                  )}
+                  {spot.amenities.water && (
+                    <div className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
+                      <p className="text-sm">{AMENITIES.water}</p>
+                    </div>
+                  )}
+                  {spot.amenities.hotWater && (
+                    <div className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
+                      <p className="text-sm">{AMENITIES.hotWater}</p>
+                    </div>
+                  )}
+                  {spot.amenities.kitchen && (
+                    <div className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
+                      <p className="text-sm">{AMENITIES.kitchen}</p>
+                    </div>
+                  )}
+                  {spot.amenities.bbq && (
+                    <div className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
+                      <p className="text-sm">{AMENITIES.bbq}</p>
+                    </div>
+                  )}
+                  {spot.amenities.firePit && (
+                    <div className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
+                      <p className="text-sm">{AMENITIES.firePit}</p>
+                    </div>
+                  )}
+                  {spot.amenities.pool && (
+                    <div className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
+                      <p className="text-sm">{AMENITIES.pool}</p>
+                    </div>
+                  )}
+                  {spot.amenities.sauna && (
+                    <div className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
+                      <p className="text-sm">{AMENITIES.sauna}</p>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             <div className="z-10 h-[400px] w-full overflow-hidden rounded-md">
