@@ -13,7 +13,7 @@ import * as Location from "expo-location"
 import { StatusBar } from "expo-status-bar"
 import { ChevronDown, ChevronLeft, Compass, Heart, Star } from "lucide-react-native"
 
-import { merge } from "@ramble/shared"
+import { AMENITIES, merge } from "@ramble/shared"
 
 import { ReviewItem } from "../../../../../components/ReviewItem"
 import { Button } from "../../../../../components/ui/Button"
@@ -89,6 +89,7 @@ export function SpotDetailScreen() {
       <StatusBar animated style={isDark ? "light" : "dark"} />
       <Animated.ScrollView
         scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 200 }}
         style={{ flexGrow: 1 }}
         onScroll={scrollHandler}
@@ -122,9 +123,63 @@ export function SpotDetailScreen() {
             </View>
 
             <Text className="text-sm">{spot.address}</Text>
+            {spot.amenities && (
+              <View className="flex flex-wrap flex-row gap-2">
+                {spot.amenities.toilet && (
+                  <View className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
+                    <Text className="text-sm">{AMENITIES.toilet}</Text>
+                  </View>
+                )}
+                {spot.amenities.shower && (
+                  <View className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
+                    <Text className="text-sm">{AMENITIES.shower}</Text>
+                  </View>
+                )}
+                {spot.amenities.electricity && (
+                  <View className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
+                    <Text className="text-sm">{AMENITIES.electricity}</Text>
+                  </View>
+                )}
+                {spot.amenities.water && (
+                  <View className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
+                    <Text className="text-sm">{AMENITIES.water}</Text>
+                  </View>
+                )}
+                {spot.amenities.hotWater && (
+                  <View className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
+                    <Text className="text-sm">{AMENITIES.hotWater}</Text>
+                  </View>
+                )}
+                {spot.amenities.kitchen && (
+                  <View className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
+                    <Text className="text-sm">{AMENITIES.kitchen}</Text>
+                  </View>
+                )}
+                {spot.amenities.bbq && (
+                  <View className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
+                    <Text className="text-sm">{AMENITIES.bbq}</Text>
+                  </View>
+                )}
+                {spot.amenities.firePit && (
+                  <View className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
+                    <Text className="text-sm">{AMENITIES.firePit}</Text>
+                  </View>
+                )}
+                {spot.amenities.pool && (
+                  <View className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
+                    <Text className="text-sm">{AMENITIES.pool}</Text>
+                  </View>
+                )}
+                {spot.amenities.sauna && (
+                  <View className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
+                    <Text className="text-sm">{AMENITIES.sauna}</Text>
+                  </View>
+                )}
+              </View>
+            )}
           </View>
 
-          <View className="h-px w-full bg-gray-200 dark:bg-gray-600" />
+          <View className="h-px w-full bg-gray-200 dark:bg-gray-700" />
           <View className="space-y-2">
             <View className="flex flex-row justify-between">
               <View className="flex flex-row items-center space-x-2">
@@ -153,7 +208,7 @@ export function SpotDetailScreen() {
       </Animated.ScrollView>
       <Animated.View
         className="absolute left-0 right-0 top-0 h-[100px] border border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-black"
-        style={[topBarStyle]}
+        style={topBarStyle}
       />
 
       <View className="absolute left-0 right-0 top-14 flex flex-row justify-between px-6">
