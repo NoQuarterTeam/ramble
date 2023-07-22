@@ -15,7 +15,12 @@ export function SaveScreen() {
   } = useParams<"SaveScreen">()
   const { me } = useMe()
   const { data: lists, isLoading } = api.list.allByUserWithSavedSpots.useQuery({ spotId: id }, { enabled: !!me })
-  if (!me) return <LoginPlaceholder title="Lists" text="Log in to start saving spots" />
+  if (!me)
+    return (
+      <ModalView title="Save to list">
+        <LoginPlaceholder text="Log in to start saving spots" />
+      </ModalView>
+    )
   return (
     <ModalView title="Save to list">
       {isLoading ? null : (

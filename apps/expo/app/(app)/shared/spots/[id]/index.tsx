@@ -1,10 +1,17 @@
 import * as React from "react"
-import { Animated, TouchableOpacity, useColorScheme, View, type ViewProps } from "react-native"
+import { TouchableOpacity, useColorScheme, View, type ViewProps } from "react-native"
 import { showLocation } from "react-native-map-link"
+import Animated, {
+  Extrapolation,
+  interpolate,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
+} from "react-native-reanimated"
 import RenderHtml, { defaultSystemFonts } from "react-native-render-html"
 import * as Location from "expo-location"
 import { StatusBar } from "expo-status-bar"
-import { ChevronDown, ChevronLeft, Compass, Heart, Star } from "lucide-react-native"
+import { ChevronDown, ChevronLeft, Compass, Heart, Share2, Star } from "lucide-react-native"
 
 import { merge } from "@ramble/shared"
 
@@ -27,13 +34,18 @@ export function SpotDetailScreen() {
   const { params } = useParams<"SpotDetailScreen">()
   const { data, isLoading } = api.spot.detail.useQuery({ id: params.id })
   const spot = data
-  const scrolling = React.useRef(new Animated.Value(0)).current
+  const translationY = useSharedValue(0)
 
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      translationY.value = event.contentOffset.y
+    },
+  })
   const navigation = useRouter()
-  const opacity = scrolling.interpolate({
-    inputRange: [100, 180],
-    outputRange: [0, 1],
-    extrapolate: "clamp",
+
+  const topBarStyle = useAnimatedStyle(() => {
+    const opacity = interpolate(translationY.value, [100, 180], [0, 1], Extrapolation.CLAMP)
+    return { opacity }
   })
 
   React.useEffect(() => {
@@ -76,9 +88,10 @@ export function SpotDetailScreen() {
     <View>
       <StatusBar animated style={isDark ? "light" : "dark"} />
       <Animated.ScrollView
+        scrollEventThrottle={16}
         contentContainerStyle={{ paddingBottom: 200 }}
         style={{ flexGrow: 1 }}
-        onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrolling } } }], { useNativeDriver: true })}
+        onScroll={scrollHandler}
       >
         <ImageCarousel width={width} height={300} images={spot.images} />
         <View className="space-y-3 p-4">
@@ -140,7 +153,7 @@ export function SpotDetailScreen() {
       </Animated.ScrollView>
       <Animated.View
         className="absolute left-0 right-0 top-0 h-[100px] border border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-black"
-        style={{ opacity }}
+        style={[topBarStyle]}
       />
 
       <View className="absolute left-0 right-0 top-14 flex flex-row justify-between px-6">
@@ -161,21 +174,27 @@ export function SpotDetailScreen() {
             activeOpacity={0.8}
             className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-gray-800"
           >
+            <Share2 size={20} className="text-black dark:text-white" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleGetDirections}
+            activeOpacity={0.8}
+            className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-gray-800"
+          >
             <Compass size={20} className="text-black dark:text-white" />
           </TouchableOpacity>
-          {me && (
-            <TouchableOpacity
-              onPress={() => navigation.navigate("SaveScreen", { id: spot.id })}
-              activeOpacity={0.8}
-              className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-gray-800"
-            >
-              <Heart
-                size={20}
-                className="text-black dark:text-white"
-                fill={data.spotLists.length > 0 ? (isDark ? "white" : "black") : undefined}
-              />
-            </TouchableOpacity>
-          )}
+
+          <TouchableOpacity
+            onPress={() => navigation.navigate("SaveScreen", { id: spot.id })}
+            activeOpacity={0.8}
+            className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-gray-800"
+          >
+            <Heart
+              size={20}
+              className="text-black dark:text-white"
+              fill={data.spotLists && data.spotLists.length > 0 ? (isDark ? "white" : "black") : undefined}
+            />
+          </TouchableOpacity>
         </View>
       </View>
     </View>

@@ -2,11 +2,11 @@ import { View } from "react-native"
 
 import { createImageUrl } from "@ramble/shared"
 
+import { OptimizedImage } from "../../../../components/ui/OptimisedImage"
 import { Spinner } from "../../../../components/ui/Spinner"
 import { Text } from "../../../../components/ui/Text"
 import { api } from "../../../../lib/api"
 import { useParams } from "../../../router"
-import { OptimizedImage } from "../../../../components/ui/OptimisedImage"
 
 export function UserVan() {
   const { params } = useParams<"UserScreen">()

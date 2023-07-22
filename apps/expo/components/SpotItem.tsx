@@ -1,13 +1,12 @@
 import { TouchableOpacity, View } from "react-native"
-
 import { Camera, Star } from "lucide-react-native"
 
+import { type SpotItemWithImageAndRating } from "@ramble/api/src/router/spot"
 import { createImageUrl } from "@ramble/shared"
 
 import { useRouter } from "../app/router"
-import { Text } from "./ui/Text"
 import { OptimizedImage } from "./ui/OptimisedImage"
-import { type SpotItemWithImageAndRating } from "@ramble/api/src/router/spot"
+import { Text } from "./ui/Text"
 
 interface Props {
   spot: SpotItemWithImageAndRating

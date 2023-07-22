@@ -1,7 +1,7 @@
 import type * as React from "react"
-import { Text, TouchableOpacity, useColorScheme, View } from "react-native"
-import Feather from "@expo/vector-icons/Feather"
+import { Text, TouchableOpacity, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
+import { ChevronLeft, X } from "lucide-react-native"
 
 import { join } from "@ramble/shared"
 
@@ -17,24 +17,23 @@ interface Props {
   children: React.ReactNode
 }
 
-export function NewModalView({ canGoBack = true, ...props }: Props) {
+export function NewSpotModalView({ canGoBack = true, ...props }: Props) {
   const navigation = useRouter()
 
-  const colorScheme = useColorScheme()
   return (
-    <View className={join("h-full flex-grow bg-white px-4 pt-6 dark:bg-black", isAndroid ? "pt-10" : "pt-6")}>
+    <View className={join("h-full flex-grow bg-white px-4 dark:bg-black", isAndroid ? "pt-10" : "pt-6")}>
       <View className="flex flex-row justify-between pb-2">
         <View className={join("flex flex-row items-center space-x-0.5")}>
           {canGoBack && (
             <TouchableOpacity onPress={navigation.goBack} className="mb-1 p-1">
-              <Feather name="chevron-left" size={24} color={colorScheme === "dark" ? "white" : "black"} />
+              <ChevronLeft size={24} className="text-black dark:text-white" />
             </TouchableOpacity>
           )}
 
           {props.title ? <Heading className="text-2xl">{props.title}</Heading> : <Text />}
         </View>
         <TouchableOpacity onPress={() => navigation.navigate("AppLayout")} className="p-1">
-          <Feather name="x" size={24} color={colorScheme === "dark" ? "white" : "black"} />
+          <X size={24} className="text-black dark:text-white" />
         </TouchableOpacity>
       </View>
 

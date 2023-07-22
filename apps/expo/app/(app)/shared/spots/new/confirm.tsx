@@ -1,7 +1,7 @@
 import * as React from "react"
 import { ScrollView, View } from "react-native"
-import { Check } from "lucide-react-native"
 import { Image } from "expo-image"
+import { Check } from "lucide-react-native"
 
 import { AMENITIES } from "@ramble/shared"
 
@@ -12,7 +12,7 @@ import { api } from "../../../../../lib/api"
 import { useS3Upload } from "../../../../../lib/hooks/useS3"
 import { SPOTS } from "../../../../../lib/spots"
 import { useParams, useRouter } from "../../../../router"
-import { NewModalView } from "./NewModalView"
+import { NewSpotModalView } from "./NewSpotModalView"
 
 export function NewSpotConfirmScreen() {
   const { params } = useParams<"NewSpotConfirmScreen">()
@@ -53,7 +53,7 @@ export function NewSpotConfirmScreen() {
   }
 
   return (
-    <NewModalView title="Confirm">
+    <NewSpotModalView title="Confirm">
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}>
         <View className="space-y-2">
           <Icon className="text-black dark:text-white" />
@@ -82,6 +82,6 @@ export function NewSpotConfirmScreen() {
           Create
         </Button>
       </View>
-    </NewModalView>
+    </NewSpotModalView>
   )
 }

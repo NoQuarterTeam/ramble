@@ -7,14 +7,14 @@ import { join } from "@ramble/shared"
 import { Button } from "../../../../../components/ui/Button"
 import { SPOT_OPTIONS } from "../../../../../lib/spots"
 import { useParams, useRouter } from "../../../../router"
-import { NewModalView } from "./NewModalView"
+import { NewSpotModalView } from "./NewSpotModalView"
 
 export function NewSpotTypeScreen() {
   const { params } = useParams<"NewSpotTypeScreen">()
   const [type, setType] = React.useState<SpotType>()
   const router = useRouter()
   return (
-    <NewModalView title="What type?">
+    <NewSpotModalView title="What type?">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View className="pt-4 flex flex-row flex-wrap gap-2">
           {SPOT_OPTIONS.map((spotType) => (
@@ -45,6 +45,6 @@ export function NewSpotTypeScreen() {
           </Button>
         </View>
       )}
-    </NewModalView>
+    </NewSpotModalView>
   )
 }

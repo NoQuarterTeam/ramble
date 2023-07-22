@@ -7,7 +7,7 @@ import colors from "@ramble/tailwind-config/src/colors"
 import { Button } from "../../../../../components/ui/Button"
 import { Text } from "../../../../../components/ui/Text"
 import { useParams, useRouter } from "../../../../router"
-import { NewModalView } from "./NewModalView"
+import { NewSpotModalView } from "./NewSpotModalView"
 
 export function NewSpotAmenitiesScreen() {
   const { params } = useParams<"NewSpotAmenitiesScreen">()
@@ -17,7 +17,7 @@ export function NewSpotAmenitiesScreen() {
 
   const router = useRouter()
   return (
-    <NewModalView title="What it's got?">
+    <NewSpotModalView title="What it's got?">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         {Object.entries(AMENITIES).map(([key, label]) => (
           <AmenitySelector
@@ -38,7 +38,7 @@ export function NewSpotAmenitiesScreen() {
           Next
         </Button>
       </View>
-    </NewModalView>
+    </NewSpotModalView>
   )
 }
 

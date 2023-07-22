@@ -8,6 +8,7 @@ import { createImageUrl } from "@ramble/shared"
 import { Button } from "../../../components/ui/Button"
 import { FormError } from "../../../components/ui/FormError"
 import { FormInput } from "../../../components/ui/FormInput"
+import { OptimizedImage } from "../../../components/ui/OptimisedImage"
 import { ScreenView } from "../../../components/ui/ScreenView"
 import { Spinner } from "../../../components/ui/Spinner"
 import { toast } from "../../../components/ui/Toast"
@@ -16,7 +17,6 @@ import { useForm } from "../../../lib/hooks/useForm"
 import { useKeyboardController } from "../../../lib/hooks/useKeyboardController"
 import { useMe } from "../../../lib/hooks/useMe"
 import { useS3Upload } from "../../../lib/hooks/useS3"
-import { OptimizedImage } from "../../../components/ui/OptimisedImage"
 
 export function AccountScreen() {
   useKeyboardController()

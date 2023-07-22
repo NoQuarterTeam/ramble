@@ -1,29 +1,21 @@
 import type * as React from "react"
-import { TouchableOpacity, View } from "react-native"
-import { ChevronLeft } from "lucide-react-native"
+import { View } from "react-native"
 
 import { join } from "@ramble/shared"
 
-import { useRouter } from "../../app/router"
 import { Heading } from "./Heading"
 
 interface Props {
   title: string
   children?: React.ReactNode
-  onBack?: () => void
   rightElement?: React.ReactNode
 }
 
-export function ScreenView(props: Props) {
-  const { goBack } = useRouter()
+export function TabView(props: Props) {
   return (
     <View className="min-h-full px-4 pt-16">
       <View className="flex flex-row items-center justify-between">
         <View className={join("flex flex-row items-center space-x-0.5")}>
-          <TouchableOpacity onPress={props.onBack || goBack} className="mb-1">
-            <ChevronLeft size={24} className="text-black dark:text-white" />
-          </TouchableOpacity>
-
           <Heading className="py-2 text-3xl">{props.title}</Heading>
         </View>
         {props.rightElement}

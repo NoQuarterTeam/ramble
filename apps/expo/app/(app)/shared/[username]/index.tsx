@@ -5,6 +5,7 @@ import { createImageUrl } from "@ramble/shared"
 
 import { Button } from "../../../../components/ui/Button"
 import { Heading } from "../../../../components/ui/Heading"
+import { OptimizedImage } from "../../../../components/ui/OptimisedImage"
 import { Spinner } from "../../../../components/ui/Spinner"
 import { Text } from "../../../../components/ui/Text"
 import { api } from "../../../../lib/api"
@@ -14,7 +15,6 @@ import { useParams, useRouter } from "../../../router"
 import UserLists from "./lists"
 import { UserSpots } from "./spots"
 import { UserVan } from "./van"
-import { OptimizedImage } from "../../../../components/ui/OptimisedImage"
 
 export function UserScreen() {
   const colorScheme = useColorScheme()

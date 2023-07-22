@@ -10,7 +10,7 @@ import { LoginPlaceholder } from "../../../../../components/LoginPlaceholder"
 import { Button } from "../../../../../components/ui/Button"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { useRouter } from "../../../../router"
-import { NewModalView } from "./NewModalView"
+import { NewSpotModalView } from "./NewSpotModalView"
 
 export function NewSpotLocationScreen() {
   const [coords, setCoords] = React.useState<number[] | null>(null)
@@ -52,10 +52,15 @@ export function NewSpotLocationScreen() {
   }
   const onMapMove = ({ properties }: Mapbox.MapState) => setCoords(properties.center)
 
-  if (!me) return <LoginPlaceholder title="New spot" text="Log in to start creating spots" />
+  if (!me)
+    return (
+      <NewSpotModalView title="New spot" canGoBack={false}>
+        <LoginPlaceholder text="Log in to start creating spots" />
+      </NewSpotModalView>
+    )
 
   return (
-    <NewModalView title="New spot" canGoBack={false}>
+    <NewSpotModalView title="New spot" canGoBack={false}>
       {!isLoadingLocation && (
         <>
           <Mapbox.MapView
@@ -112,6 +117,6 @@ export function NewSpotLocationScreen() {
           </View>
         </>
       )}
-    </NewModalView>
+    </NewSpotModalView>
   )
 }

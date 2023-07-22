@@ -1,9 +1,9 @@
-import BottomSheet, { useBottomSheetDynamicSnapPoints, useBottomSheetSpringConfigs } from "@gorhom/bottom-sheet"
-import Mapbox, { Camera, MarkerView, type MapView as MapType } from "@rnmapbox/maps"
-import * as Location from "expo-location"
-import { BadgeX, Navigation, PlusCircle, Settings2, Star, Verified, X } from "lucide-react-native"
 import * as React from "react"
 import { Modal, TouchableOpacity, useColorScheme, View } from "react-native"
+import BottomSheet, { useBottomSheetDynamicSnapPoints, useBottomSheetSpringConfigs } from "@gorhom/bottom-sheet"
+import Mapbox, { Camera, type MapView as MapType, MarkerView } from "@rnmapbox/maps"
+import * as Location from "expo-location"
+import { BadgeX, Navigation, PlusCircle, Settings2, Star, Verified, X } from "lucide-react-native"
 
 import { type SpotType } from "@ramble/database/types"
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, useDisclosure } from "@ramble/shared"
@@ -18,7 +18,7 @@ import { width } from "../../../lib/device"
 import { useAsyncStorage } from "../../../lib/hooks/useAsyncStorage"
 import { SPOTS } from "../../../lib/spots"
 import { useRouter } from "../../router"
-import { Filters, initialFilters, MapFilters } from "./MapFilters"
+import { type Filters, initialFilters, MapFilters } from "./MapFilters"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 

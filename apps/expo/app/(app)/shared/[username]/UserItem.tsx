@@ -4,9 +4,9 @@ import { User2 } from "lucide-react-native"
 import { type User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
+import { OptimizedImage } from "../../../../components/ui/OptimisedImage"
 import { Text } from "../../../../components/ui/Text"
 import { useRouter } from "../../../router"
-import { OptimizedImage } from "../../../../components/ui/OptimisedImage"
 
 interface Props {
   user: Pick<User, "avatar" | "username" | "firstName" | "lastName" | "avatarBlurHash">

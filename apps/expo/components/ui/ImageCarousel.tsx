@@ -4,8 +4,8 @@ import { FlashList } from "@shopify/flash-list"
 
 import { createImageUrl, merge } from "@ramble/shared"
 
-import { Text } from "./Text"
 import { OptimizedImage } from "./OptimisedImage"
+import { Text } from "./Text"
 
 export function ImageCarousel({
   images,

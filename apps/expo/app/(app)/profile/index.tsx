@@ -9,12 +9,13 @@ import { LoginPlaceholder } from "../../../components/LoginPlaceholder"
 import { Button } from "../../../components/ui/Button"
 import { Heading } from "../../../components/ui/Heading"
 import { Icons } from "../../../components/ui/Icons"
+import { OptimizedImage } from "../../../components/ui/OptimisedImage"
+import { TabView } from "../../../components/ui/TabView"
 import { Text } from "../../../components/ui/Text"
 import { api, AUTH_TOKEN } from "../../../lib/api"
 import { VERSION } from "../../../lib/config"
 import { useMe } from "../../../lib/hooks/useMe"
 import { type ScreenParamsList, useRouter } from "../../router"
-import { OptimizedImage } from "../../../components/ui/OptimisedImage"
 
 const updateId = Updates.updateId
 
@@ -29,25 +30,25 @@ export function ProfileScreen() {
   }
   if (!me)
     return (
-      <LoginPlaceholder title="Profile" text="Log in to start saving spots">
-        <View className="space-y-4">
-          <TouchableOpacity onPress={() => push("AuthLayout", { screen: "RegisterScreen" })}>
-            <Text className="text-lg">
-              Don't have an account yet? <Text className="text-lg underline">Sign up</Text>
-            </Text>
-          </TouchableOpacity>
+      <TabView title="Profile">
+        <LoginPlaceholder text="Log in to start saving spots">
+          <View className="space-y-4">
+            <TouchableOpacity onPress={() => push("AuthLayout", { screen: "RegisterScreen" })}>
+              <Text className="text-lg">
+                Don't have an account yet? <Text className="text-lg underline">Sign up</Text>
+              </Text>
+            </TouchableOpacity>
 
-          <View className="pt-10">
-            <Text className="text-center">v{VERSION}</Text>
-            <Text className="text-center opacity-60">{updateId?.split("-")[0] || "dev"}</Text>
+            <View className="pt-10">
+              <Text className="text-center">v{VERSION}</Text>
+              <Text className="text-center opacity-60">{updateId?.split("-")[0] || "dev"}</Text>
+            </View>
           </View>
-        </View>
-      </LoginPlaceholder>
+        </LoginPlaceholder>
+      </TabView>
     )
   return (
-    <View className="flex-1 space-y-2 px-4 pt-16">
-      <Heading className="text-3xl">Profile</Heading>
-
+    <TabView title="Profile">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false} className="space-y-4 pt-2">
         <View>
           <View className="space-y-4">
@@ -102,7 +103,7 @@ export function ProfileScreen() {
           <Text className="text-center opacity-60">{updateId?.split("-")[0] || "dev"}</Text>
         </View>
       </ScrollView>
-    </View>
+    </TabView>
   )
 }
 

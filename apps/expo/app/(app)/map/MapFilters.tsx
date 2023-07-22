@@ -1,13 +1,15 @@
+import * as React from "react"
+import { ScrollView, Switch, View } from "react-native"
+import { BadgeCheck, Dog } from "lucide-react-native"
+
+import { type SpotType } from "@ramble/database/types"
 import { join } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
-import { BadgeCheck, Dog } from "lucide-react-native"
-import * as React from "react"
-import { View, ScrollView, Switch } from "react-native"
-import { SPOT_OPTIONS } from "../../../lib/spots"
-import { Heading } from "../../../components/ui/Heading"
+
 import { Button } from "../../../components/ui/Button"
+import { Heading } from "../../../components/ui/Heading"
 import { Text } from "../../../components/ui/Text"
-import { type SpotType } from "@ramble/database/types"
+import { SPOT_OPTIONS } from "../../../lib/spots"
 
 export type Filters = {
   isPetFriendly: boolean

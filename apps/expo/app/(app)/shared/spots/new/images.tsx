@@ -7,7 +7,7 @@ import { Plus, X } from "lucide-react-native"
 import { Button } from "../../../../../components/ui/Button"
 import { toast } from "../../../../../components/ui/Toast"
 import { useParams, useRouter } from "../../../../router"
-import { NewModalView } from "./NewModalView"
+import { NewSpotModalView } from "./NewSpotModalView"
 
 export function NewSpotImagesScreen() {
   const { params } = useParams<"NewSpotImagesScreen">()
@@ -33,7 +33,7 @@ export function NewSpotImagesScreen() {
 
   const router = useRouter()
   return (
-    <NewModalView title="Upload images">
+    <NewSpotModalView title="Upload images">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View className="flex flex-row flex-wrap">
           {images.map((image) => (
@@ -63,6 +63,6 @@ export function NewSpotImagesScreen() {
           </Button>
         </View>
       )}
-    </NewModalView>
+    </NewSpotModalView>
   )
 }

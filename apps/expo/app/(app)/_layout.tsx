@@ -5,12 +5,12 @@ import { Heart, List, Search, User } from "lucide-react-native"
 import { createImageUrl, join } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
+import { OptimizedImage } from "../../components/ui/OptimisedImage"
 import { useMe } from "../../lib/hooks/useMe"
 import { LatestLayout } from "./latest/_layout"
 import { ListsLayout } from "./lists/_layout"
 import { SpotsLayout } from "./map/_layout"
 import { ProfileLayout } from "./profile/_layout"
-import { OptimizedImage } from "../../components/ui/OptimisedImage"
 
 const Tab = createBottomTabNavigator()
 

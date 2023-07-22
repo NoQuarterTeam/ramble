@@ -10,7 +10,7 @@ import { Input } from "../../../../../components/ui/Input"
 import { Text } from "../../../../../components/ui/Text"
 import { useKeyboardController } from "../../../../../lib/hooks/useKeyboardController"
 import { useParams, useRouter } from "../../../../router"
-import { NewModalView } from "./NewModalView"
+import { NewSpotModalView } from "./NewSpotModalView"
 
 export function NewSpotOptionsScreen() {
   useKeyboardController()
@@ -20,7 +20,7 @@ export function NewSpotOptionsScreen() {
   const [isPetFriendly, setIsPetFriendly] = React.useState(false)
   const router = useRouter()
   return (
-    <NewModalView title="Some info">
+    <NewSpotModalView title="Some info">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <FormInputLabel label="Name" />
         <Input value={name} onChangeText={setName} />
@@ -54,6 +54,6 @@ export function NewSpotOptionsScreen() {
           </Button>
         </View>
       )}
-    </NewModalView>
+    </NewSpotModalView>
   )
 }
