@@ -14,7 +14,7 @@ export function Avatar({ size = 100, src, ...props }: Props) {
   if (!src)
     return (
       <div
-        className="flex items-center bg-gray-50 dark:bg-gray-800 rounded-full justify-center"
+        className="flex items-center bg-gray-50 dark:bg-gray-700 rounded-full justify-center"
         style={{ width: size, height: size }}
       >
         <User2 size={16} />
