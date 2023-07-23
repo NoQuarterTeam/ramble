@@ -32,7 +32,7 @@ export function MapFilters(props: Props) {
   const [filters, setFilters] = React.useState(props.initialFilters)
   return (
     <View className="flex-1 pb-10 pt-4">
-      <ScrollView className="space-y-5 pb-20">
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }} className="space-y-5">
         <View className="space-y-1">
           <Heading className="font-400 text-2xl">Spot type</Heading>
           <View className="flex flex-row flex-wrap gap-2">
