@@ -62,7 +62,12 @@ export default function ProfileLists() {
               {user.firstName} {user.lastName}
             </p>
             {user.instagram && (
-              <a rel="noopener noreferrer" target="_blank" href={`https://www.instagram.com/${user.instagram}`}>
+              <a
+                rel="noopener noreferrer"
+                aria-label="Go to user's instagram"
+                target="_blank"
+                href={`https://www.instagram.com/${user.instagram}`}
+              >
                 <Instagram />
               </a>
             )}

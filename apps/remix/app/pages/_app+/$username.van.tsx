@@ -25,7 +25,7 @@ export default function ProfileLists() {
       {user.van ? (
         <div className="space-y-2">
           <div>
-            <h3 className="text-xl">{user.van.name}</h3>
+            <h2 className="text-xl">{user.van.name}</h2>
             <p>
               {user.van.model} · {user.van.year}
             </p>
