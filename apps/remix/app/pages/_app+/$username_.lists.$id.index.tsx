@@ -18,7 +18,7 @@ import { FORM_ACTION } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { badRequest, notFound, redirect } from "~/lib/remix.server"
-import { SPOTS } from "~/lib/spots"
+import { SPOTS } from "~/lib/static/spots"
 import { useTheme } from "~/lib/theme"
 import { getCurrentUser } from "~/services/auth/auth.server"
 

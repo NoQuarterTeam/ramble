@@ -12,7 +12,7 @@ import { INITIAL_LATITUDE, INITIAL_LONGITUDE, useDisclosure } from "@ramble/shar
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { Button, Input, Spinner } from "~/components/ui"
-import { SPOTS } from "~/lib/spots"
+import { SPOTS } from "~/lib/static/spots"
 import { useTheme } from "~/lib/theme"
 
 import { PageContainer } from "../../components/PageContainer"

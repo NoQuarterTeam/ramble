@@ -5,7 +5,7 @@ import { type SpotType } from "@ramble/database/types"
 import { join } from "@ramble/shared"
 
 import { Button } from "../../../../../components/ui/Button"
-import { SPOT_OPTIONS } from "../../../../../lib/spots"
+import { SPOT_OPTIONS } from "../../../../../lib/static/spots"
 import { useParams, useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
 

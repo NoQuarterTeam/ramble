@@ -8,6 +8,8 @@ import { Button } from "../../../../../components/ui/Button"
 import { Text } from "../../../../../components/ui/Text"
 import { useParams, useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
+import { AMENITIES_ICONS } from "../../../../../lib/static/amenities"
+import { RambleIcon } from "../../../../../components/ui/Icons"
 
 export function NewSpotAmenitiesScreen() {
   const { params } = useParams<"NewSpotAmenitiesScreen">()
@@ -23,6 +25,7 @@ export function NewSpotAmenitiesScreen() {
           <AmenitySelector
             key={key}
             label={label}
+            Icon={AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]}
             isSelected={!!amenities[key as keyof typeof AMENITIES]}
             onToggle={() => setAmenities((a) => ({ ...a, [key]: !a[key as keyof typeof AMENITIES] }))}
           />
@@ -30,11 +33,7 @@ export function NewSpotAmenitiesScreen() {
       </ScrollView>
 
       <View className="absolute bottom-12 left-4 flex space-y-2 right-4 items-center justify-center">
-        <Button
-          // leftIcon={<X size={20} className="text-black dark:text-white" />}
-          className="rounded-full"
-          onPress={() => router.push("NewSpotImagesScreen", { ...params, amenities })}
-        >
+        <Button className="rounded-full" onPress={() => router.push("NewSpotImagesScreen", { ...params, amenities })}>
           Next
         </Button>
       </View>
@@ -42,10 +41,23 @@ export function NewSpotAmenitiesScreen() {
   )
 }
 
-function AmenitySelector({ label, isSelected, onToggle }: { label: string; isSelected: boolean; onToggle: () => void }) {
+function AmenitySelector({
+  label,
+  isSelected,
+  onToggle,
+  Icon,
+}: {
+  label: string
+  isSelected: boolean
+  onToggle: () => void
+  Icon: RambleIcon | null
+}) {
   return (
     <View className="flex w-full flex-row items-center justify-between py-1">
-      <Text className="text-xl">{label}</Text>
+      <View className="flex items-center flex-row space-x-1">
+        {Icon && <Icon size={20} className="text-black dark:text-white" />}
+        <Text className="text-xl">{label}</Text>
+      </View>
       <Switch trackColor={{ true: colors.primary[600] }} value={isSelected} onValueChange={onToggle} />
     </View>
   )

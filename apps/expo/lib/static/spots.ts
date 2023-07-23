@@ -16,7 +16,7 @@ import {
 
 import type { Spot, SpotType, User } from "@ramble/database/types"
 
-import { Icons } from "../components/ui/Icons"
+import { Icons } from "../../components/ui/Icons"
 
 export const SPOTS: { [key in SpotType]: { label: string; Icon: (props: LucideProps) => JSX.Element } } = {
   CAFE: { label: "Cafe", Icon: Coffee },

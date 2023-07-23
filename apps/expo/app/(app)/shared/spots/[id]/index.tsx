@@ -24,6 +24,7 @@ import { VerifiedCard } from "../../../../../components/VerifiedCard"
 import { api } from "../../../../../lib/api"
 import { width } from "../../../../../lib/device"
 import { useMe } from "../../../../../lib/hooks/useMe"
+import { AMENITIES_ICONS } from "../../../../../lib/static/amenities"
 import { useParams, useRouter } from "../../../../router"
 
 export function SpotDetailScreen() {
@@ -124,58 +125,21 @@ export function SpotDetailScreen() {
 
             <Text className="text-sm">{spot.address}</Text>
             {spot.amenities && (
-              <View className="flex flex-wrap flex-row gap-2">
-                {spot.amenities.toilet && (
-                  <View className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
-                    <Text className="text-sm">{AMENITIES.toilet}</Text>
-                  </View>
-                )}
-                {spot.amenities.shower && (
-                  <View className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
-                    <Text className="text-sm">{AMENITIES.shower}</Text>
-                  </View>
-                )}
-                {spot.amenities.electricity && (
-                  <View className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
-                    <Text className="text-sm">{AMENITIES.electricity}</Text>
-                  </View>
-                )}
-                {spot.amenities.water && (
-                  <View className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
-                    <Text className="text-sm">{AMENITIES.water}</Text>
-                  </View>
-                )}
-                {spot.amenities.hotWater && (
-                  <View className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
-                    <Text className="text-sm">{AMENITIES.hotWater}</Text>
-                  </View>
-                )}
-                {spot.amenities.kitchen && (
-                  <View className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
-                    <Text className="text-sm">{AMENITIES.kitchen}</Text>
-                  </View>
-                )}
-                {spot.amenities.bbq && (
-                  <View className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
-                    <Text className="text-sm">{AMENITIES.bbq}</Text>
-                  </View>
-                )}
-                {spot.amenities.firePit && (
-                  <View className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
-                    <Text className="text-sm">{AMENITIES.firePit}</Text>
-                  </View>
-                )}
-                {spot.amenities.pool && (
-                  <View className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
-                    <Text className="text-sm">{AMENITIES.pool}</Text>
-                  </View>
-                )}
-                {spot.amenities.sauna && (
-                  <View className="p-2 border border-gray-200 dark:border-gray-700 rounded-md">
-                    <Text className="text-sm">{AMENITIES.sauna}</Text>
-                  </View>
-                )}
-              </View>
+              <div className="flex flex-wrap flex-row gap-2">
+                {Object.entries(AMENITIES).map(([key, value]) => {
+                  if (!spot.amenities?.[key as keyof typeof AMENITIES]) return null
+                  const Icon = AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]
+                  return (
+                    <View
+                      key={key}
+                      className="p-2 flex flex-row space-x-1 border border-gray-200 dark:border-gray-700 rounded-md"
+                    >
+                      {Icon && <Icon size={20} />}
+                      <Text className="text-sm">{value}</Text>
+                    </View>
+                  )
+                })}
+              </div>
             )}
           </View>
 

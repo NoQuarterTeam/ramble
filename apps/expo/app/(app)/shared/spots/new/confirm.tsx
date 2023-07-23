@@ -10,7 +10,7 @@ import { Text } from "../../../../../components/ui/Text"
 import { toast } from "../../../../../components/ui/Toast"
 import { api } from "../../../../../lib/api"
 import { useS3Upload } from "../../../../../lib/hooks/useS3"
-import { SPOTS } from "../../../../../lib/spots"
+import { SPOTS } from "../../../../../lib/static/spots"
 import { useParams, useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
 

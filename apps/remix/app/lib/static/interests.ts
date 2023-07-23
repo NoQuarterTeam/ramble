@@ -1,9 +1,7 @@
-import type { LucideIcon, LucideProps } from "lucide-react"
 import { Bike, Dog, Footprints, Mountain, Waves } from "lucide-react"
 
-import { Icons } from "../components/ui/Icons"
-
-export type RambleIcon = LucideIcon | ((props: LucideProps) => JSX.Element)
+import type { RambleIcon } from "../../components/ui/Icons"
+import { Icons } from "../../components/ui/Icons"
 
 export const interestOptions: { label: string; value: string; Icon: RambleIcon }[] = [
   {

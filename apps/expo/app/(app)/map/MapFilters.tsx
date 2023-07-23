@@ -9,7 +9,7 @@ import colors from "@ramble/tailwind-config/src/colors"
 import { Button } from "../../../components/ui/Button"
 import { Heading } from "../../../components/ui/Heading"
 import { Text } from "../../../components/ui/Text"
-import { SPOT_OPTIONS } from "../../../lib/spots"
+import { SPOT_OPTIONS } from "../../../lib/static/spots"
 
 export type Filters = {
   isPetFriendly: boolean

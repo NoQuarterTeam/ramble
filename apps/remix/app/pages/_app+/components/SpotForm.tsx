@@ -15,15 +15,17 @@ import { AMENITIES, INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
 
 import { Form, FormButton, FormError, FormField, FormFieldError, FormFieldLabel, ImageField } from "~/components/Form"
 import { ImageUploader } from "~/components/ImageUploader"
+import type { RambleIcon } from "~/components/ui"
 import { Button, CloseButton, IconButton, Spinner, Textarea } from "~/components/ui"
 import { FormNumber, NullableFormString, useFormErrors } from "~/lib/form"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
-import { SPOT_OPTIONS } from "~/lib/spots"
+import { SPOT_OPTIONS } from "~/lib/static/spots"
 import { useTheme } from "~/lib/theme"
 import type { geocodeLoader } from "~/pages/api+/mapbox+/geocode"
 
 import type { IpInfo } from "../_layout"
 import { zx } from "zodix"
+import { AMENITIES_ICONS } from "~/lib/static/amenities"
 
 export const amenitiesSchema = z.object({
   bbq: zx.BoolAsString.optional(),
@@ -173,6 +175,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
                 {Object.entries(AMENITIES).map(([key, label]) => (
                   <AmenitySelector
                     key={key}
+                    Icon={AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]}
                     label={label}
                     value={key}
                     defaultIsSelected={(spot?.amenities?.[key as keyof Omit<typeof spot.amenities, "id">] as boolean) || false}
@@ -235,11 +238,27 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
   )
 }
 
-function AmenitySelector({ label, defaultIsSelected, value }: { label: string; defaultIsSelected: boolean; value: string }) {
+function AmenitySelector({
+  label,
+  defaultIsSelected,
+  value,
+  Icon,
+}: {
+  label: string
+  defaultIsSelected: boolean
+  value: string
+  Icon: RambleIcon | null
+}) {
   const [isSelected, setIsSelected] = React.useState(defaultIsSelected)
   return (
     <div>
-      <Button variant={isSelected ? "primary" : "outline"} type="button" size="md" onClick={() => setIsSelected(!isSelected)}>
+      <Button
+        leftIcon={Icon && <Icon size={20} />}
+        variant={isSelected ? "primary" : "outline"}
+        type="button"
+        size="md"
+        onClick={() => setIsSelected(!isSelected)}
+      >
         {label}
       </Button>
       <input type="hidden" name={value} value={String(isSelected)} />

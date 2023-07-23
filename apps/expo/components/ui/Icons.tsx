@@ -1,4 +1,7 @@
+import { LucideIcon, LucideProps } from "lucide-react-native"
 import { Path, Svg } from "react-native-svg"
+
+export type RambleIcon = LucideIcon | ((props: LucideProps) => JSX.Element)
 
 // copy from web icons
 export interface IconProps {
@@ -8,6 +11,7 @@ export interface IconProps {
   strokeWidth?: number | string
   className?: string
 }
+
 export const Icons = {
   Surf: ({ strokeWidth = 2, size = 24, color = "currentColor", fill = "none", ...props }: IconProps) => (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill={fill} {...props}>

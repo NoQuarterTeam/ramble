@@ -12,7 +12,7 @@ import { Form, FormButton, FormError } from "~/components/Form"
 import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
-import { interestOptions } from "~/lib/interests"
+import { interestOptions } from "~/lib/static/interests"
 import { redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 

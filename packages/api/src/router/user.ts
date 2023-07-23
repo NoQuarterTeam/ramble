@@ -45,14 +45,14 @@ export const userRouter = createTRPCRouter({
     const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })
     if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
     return ctx.prisma.user.findUnique({ where: { username: input.username } }).followers({
-      select: { id: true, username: true, firstName: true, lastName: true, avatar: true },
+      select: { id: true, username: true, firstName: true, lastName: true, avatar: true, avatarBlurHash: true },
     })
   }),
   following: publicProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {
     const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })
     if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
     return ctx.prisma.user.findUnique({ where: { username: input.username } }).following({
-      select: { id: true, username: true, firstName: true, lastName: true, avatar: true },
+      select: { id: true, username: true, firstName: true, lastName: true, avatar: true, avatarBlurHash: true },
     })
   }),
   toggleFollow: protectedProcedure.input(z.object({ username: z.string() })).mutation(async ({ ctx, input }) => {

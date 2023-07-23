@@ -11,7 +11,7 @@
     "lint": "eslint --config .eslintrc.js --ext .ts,.tsx .",
     "prettier": "prettier --check .",
     "prettier:fix": "prettier --write .",
-    "typecheck-todo": "tsc --noEmit"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@expo-google-fonts/poppins": "^0.2.3",

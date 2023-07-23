@@ -1,3 +1,7 @@
+import type { LucideIcon, LucideProps } from "lucide-react"
+
+export type RambleIcon = LucideIcon | ((props: LucideProps) => JSX.Element)
+
 export interface IconProps extends React.SVGProps<SVGSVGElement> {
   size?: number | string
 }

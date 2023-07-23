@@ -7,7 +7,7 @@ import { generateBlurHash } from "@ramble/api"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { notFound } from "~/lib/remix.server"
-import { canManageSpot } from "~/lib/spots"
+import { canManageSpot } from "~/lib/static/spots"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { SpotForm, spotSchema } from "./components/SpotForm"

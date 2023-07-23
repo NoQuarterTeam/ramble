@@ -10,7 +10,7 @@ import { Text } from "../../../components/ui/Text"
 import { toast } from "../../../components/ui/Toast"
 import { api } from "../../../lib/api"
 import { useMe } from "../../../lib/hooks/useMe"
-import { interestOptions } from "../../../lib/interests"
+import { interestOptions } from "../../../lib/static/interests"
 
 export function InterestsScreen() {
   const { me } = useMe()
