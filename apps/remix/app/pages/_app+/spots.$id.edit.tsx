@@ -60,7 +60,7 @@ export const action = async ({ request, params }: ActionArgs) => {
       amenities:
         spot.type === "CAMPING" && type !== "CAMPING"
           ? { delete: true }
-          : spot.type !== "CAMPING" && type === "CAMPING"
+          : type === "CAMPING" && (spot.type !== "CAMPING" || !spot.amenities)
           ? { create: amenities }
           : spot.type === "CAMPING" && type === "CAMPING"
           ? { update: amenities }
