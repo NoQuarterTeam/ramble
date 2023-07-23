@@ -59,8 +59,8 @@ export const spotRouter = createTRPCRouter({
       )
       return clusters.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], zoom || 5)
     }),
-  latest: publicProcedure.query(
-    async ({ ctx }) =>
+  latest: publicProcedure.input(z.object({ skip: z.number().optional() })).query(
+    async ({ ctx, input }) =>
       ctx.prisma.$queryRaw<Array<SpotItemWithImageAndRating>>`
         SELECT
           Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating,
@@ -75,6 +75,7 @@ export const spotRouter = createTRPCRouter({
         ORDER BY
           Spot.createdAt DESC, Spot.id
         LIMIT 20
+        OFFSET ${input.skip || 0}
       `,
   ),
   mapPreview: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {

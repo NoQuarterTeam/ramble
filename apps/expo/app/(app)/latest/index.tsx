@@ -1,3 +1,4 @@
+import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import { PlusCircle } from "lucide-react-native"
@@ -11,7 +12,20 @@ import { useRouter } from "../../router"
 
 export function LatestScreen() {
   const { push } = useRouter()
-  const { data: spots, isLoading } = api.spot.latest.useQuery()
+  const { data: initialSpots, isLoading } = api.spot.latest.useQuery({ skip: 0 })
+
+  const [spots, setSpots] = React.useState(initialSpots)
+
+  React.useEffect(() => {
+    setSpots(initialSpots)
+  }, [initialSpots])
+
+  const utils = api.useContext()
+
+  const handleLoadMore = React.useCallback(async () => {
+    const newSpots = await utils.spot.latest.fetch({ skip: spots?.length || 0 })
+    setSpots([...(spots || []), ...newSpots])
+  }, [spots])
 
   return (
     <TabView
@@ -30,9 +44,11 @@ export function LatestScreen() {
         <FlashList
           showsVerticalScrollIndicator={false}
           estimatedItemSize={100}
+          onEndReachedThreshold={0.8}
           contentContainerStyle={{ paddingVertical: 10 }}
-          ListEmptyComponent={<Text>Empty</Text>}
-          data={spots || []}
+          ListEmptyComponent={<Text>No spots yet</Text>}
+          onEndReached={handleLoadMore}
+          data={spots}
           ItemSeparatorComponent={() => <View className="h-1" />}
           renderItem={({ item }) => <SpotItem spot={item} />}
         />

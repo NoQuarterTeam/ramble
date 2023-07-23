@@ -50,7 +50,7 @@ export function ListDetailScreen() {
         ListEmptyComponent={
           <View>
             <Text className="w-full py-4 text-xl">No spots yet</Text>
-            <Button variant="outline" onPress={() => navigation.navigate("SpotsLayout")} className="w-full">
+            <Button variant="outline" onPress={() => navigation.navigate("MapLayout")} className="w-full">
               Explore
             </Button>
           </View>
