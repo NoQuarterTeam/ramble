@@ -125,7 +125,7 @@ export function SpotDetailScreen() {
 
             <Text className="text-sm">{spot.address}</Text>
             {spot.amenities && (
-              <div className="flex flex-wrap flex-row gap-2">
+              <View className="flex flex-wrap flex-row gap-2">
                 {Object.entries(AMENITIES).map(([key, value]) => {
                   if (!spot.amenities?.[key as keyof typeof AMENITIES]) return null
                   const Icon = AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]
@@ -139,7 +139,7 @@ export function SpotDetailScreen() {
                     </View>
                   )
                 })}
-              </div>
+              </View>
             )}
           </View>
 
