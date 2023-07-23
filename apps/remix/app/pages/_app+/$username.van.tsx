@@ -31,16 +31,16 @@ export default function ProfileLists() {
             </p>
             <p>{user.van.description}</p>
           </div>
-          <div className="flex space-x-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
             {user.van.images.map((image) => (
               <OptimizedImage
                 key={image.id}
                 alt="van"
                 placeholder={image.blurHash}
                 src={createImageUrl(image.path)}
-                width={300}
-                height={200}
-                className="rounded-md object-contain"
+                width={500}
+                height={350}
+                className="rounded-md object-cover"
               />
             ))}
           </div>
