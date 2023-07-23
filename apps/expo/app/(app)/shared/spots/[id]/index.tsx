@@ -123,7 +123,7 @@ export function SpotDetailScreen() {
               />
             </View>
 
-            <Text className="text-sm">{spot.address}</Text>
+            <Text className="text-sm font-400-italic">{spot.address}</Text>
             {spot.amenities && (
               <View className="flex flex-wrap flex-row gap-2">
                 {Object.entries(AMENITIES).map(([key, value]) => {
@@ -134,7 +134,7 @@ export function SpotDetailScreen() {
                       key={key}
                       className="p-2 flex flex-row space-x-1 border border-gray-200 dark:border-gray-700 rounded-md"
                     >
-                      {Icon && <Icon size={20} />}
+                      {Icon && <Icon size={20} className="text-black dark:text-white" />}
                       <Text className="text-sm">{value}</Text>
                     </View>
                   )
@@ -189,11 +189,11 @@ export function SpotDetailScreen() {
         </TouchableOpacity>
         <View className="flex flex-row items-center space-x-3">
           {/* <TouchableOpacity
-            onPress={handleGetDirections}
+            // onPress={handleGetDirections}
             activeOpacity={0.8}
             className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-gray-800"
           >
-            <Share2 size={20} className="text-black dark:text-white" />
+            <Share size={20} className="text-black dark:text-white" />
           </TouchableOpacity> */}
           <TouchableOpacity
             onPress={handleGetDirections}

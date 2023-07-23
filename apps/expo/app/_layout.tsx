@@ -6,6 +6,7 @@ import { enableScreens } from "react-native-screens"
 import {
   Poppins_300Light,
   Poppins_400Regular,
+  Poppins_400Regular_Italic,
   Poppins_500Medium,
   Poppins_600SemiBold,
   Poppins_700Bold,
@@ -69,6 +70,7 @@ export default function RootLayout() {
   const [fontsLoaded] = useFonts({
     poppins300: Poppins_300Light,
     poppins400: Poppins_400Regular,
+    poppins400Italic: Poppins_400Regular_Italic,
     poppins500: Poppins_500Medium,
     poppins600: Poppins_600SemiBold,
     poppins700: Poppins_700Bold,
