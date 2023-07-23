@@ -83,7 +83,7 @@ export function ImageUploader({
   return (
     <div {...getRootProps({ className })}>
       {isLoading ? (
-        <div className="flex h-full w-full items-center justify-center">
+        <div className="flex h-full p-2 w-full items-center justify-center">
           <Spinner />
         </div>
       ) : (

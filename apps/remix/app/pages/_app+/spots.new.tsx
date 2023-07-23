@@ -31,15 +31,22 @@ export const action = async ({ request }: ActionArgs) => {
     }),
   )
 
-  const { customAddress, ...data } = result.data
+  const { customAddress, latitude, longitude, name, address, type, description, ...amenities } = result.data
   const spot = await db.spot.create({
     data: {
       creator: { connect: { id } },
       verifiedAt: role === "AMBASSADOR" || role === "ADMIN" ? new Date() : undefined,
       verifier: role === "AMBASSADOR" || role === "ADMIN" ? { connect: { id } } : undefined,
-      ...data,
+      latitude,
+      longitude,
+      name,
+      type,
+      description,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore -- when camping these will be true or false
+      amenities: type === "CAMPING" ? { create: amenities } : undefined,
       images: { create: imageData },
-      address: customAddress ?? data.address,
+      address: customAddress ?? address,
     },
   })
 

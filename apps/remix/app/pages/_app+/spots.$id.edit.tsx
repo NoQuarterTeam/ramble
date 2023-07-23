@@ -16,7 +16,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
   const user = await getCurrentUser(request, { role: true, id: true })
   const spot = await db.spot.findUniqueOrThrow({
     where: { id: params.id },
-    include: { images: true },
+    include: { images: true, amenities: true },
   })
   if (!canManageSpot(spot, user)) throw redirect("/latest")
   return json(spot)
@@ -32,9 +32,9 @@ export const action = async ({ request, params }: ActionArgs) => {
 
   if (!result.success) return formError(result)
 
-  const { customAddress, ...data } = result.data
+  const { customAddress, latitude, longitude, name, address, type, description, ...amenities } = result.data
 
-  const spot = await db.spot.findUnique({ where: { id: params.id }, include: { images: true } })
+  const spot = await db.spot.findUnique({ where: { id: params.id }, include: { images: true, amenities: true } })
   if (!spot) throw notFound(null)
   if (!canManageSpot(spot, user)) throw redirect("/latest")
 
@@ -49,7 +49,25 @@ export const action = async ({ request, params }: ActionArgs) => {
   )
   await db.spot.update({
     where: { id: spot.id },
-    data: { ...data, images: { delete: imagesToDelete, create: imageData }, address: customAddress ?? data.address },
+    data: {
+      latitude,
+      longitude,
+      name,
+      type,
+      description,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore -- when camping these will be true or false
+      amenities:
+        spot.type === "CAMPING" && type !== "CAMPING"
+          ? { delete: true }
+          : spot.type !== "CAMPING" && type === "CAMPING"
+          ? { create: amenities }
+          : spot.type === "CAMPING" && type === "CAMPING"
+          ? { update: amenities }
+          : undefined,
+      images: { delete: imagesToDelete, create: imageData },
+      address: customAddress ?? address,
+    },
   })
 
   return redirect(`/spots/${spot.id}`)
