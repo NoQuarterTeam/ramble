@@ -46,8 +46,6 @@ export async function generateImage({ request }: LoaderArgs) {
     const hash = crypto
       .createHash("sha256")
       .update("v1")
-      .update(request.method)
-      .update(request.url)
       .update(src)
       .update(width?.toString() || "0")
       .update(height?.toString() || "0")
