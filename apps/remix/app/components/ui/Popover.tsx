@@ -12,7 +12,7 @@ export const PopoverContent = React.forwardRef<HTMLDivElement, Popover.PopoverCo
       ref={ref}
       {...props}
       className={merge(
-        "z-[100] w-80 rounded-md border border-gray-100 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700",
+        "z-50 w-80 rounded-md border border-gray-100 bg-white shadow-lg dark:border-gray-600 dark:bg-gray-700",
         props.className,
       )}
     >
@@ -25,7 +25,7 @@ export const PopoverArrow = React.forwardRef<SVGSVGElement, Popover.PopperArrowP
     <Popover.Arrow
       ref={ref}
       {...props}
-      className={merge("fill-white text-white  dark:fill-gray-700 dark:text-gray-700", props.className)}
+      className={merge("fill-white text-white dark:fill-gray-700 dark:text-gray-700", props.className)}
     />
   )
 })

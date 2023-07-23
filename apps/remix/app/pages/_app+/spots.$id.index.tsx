@@ -29,7 +29,7 @@ import { canManageSpot, SPOTS } from "~/lib/spots"
 import { useTheme } from "~/lib/theme"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
-import { SaveToList } from "../api+/$spotId.save-to-list.$listId"
+import { SaveToList } from "../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 
 export const loader = async ({ params }: LoaderArgs) => {

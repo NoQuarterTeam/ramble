@@ -29,20 +29,21 @@ export async function validateFormData<Schema extends z.ZodType<unknown>>(
   return { fieldErrors, success: false }
 }
 
-export function formError<Schema extends z.ZodType<unknown>>(args: ActionData<Schema>) {
-  return badRequest(args)
+export function formError<Schema extends z.ZodType<unknown>>(args: Omit<ActionDataErrorResponse<Schema>, "success">) {
+  return badRequest({ ...args, success: false })
 }
 
 export type FormError<T> = { formError?: string; fieldErrors?: FieldErrors<T>; data?: Record<string, unknown> }
 
-export type ActionData<Schema extends z.ZodType<unknown>> = {
+export type ActionDataErrorResponse<Schema extends z.ZodType<unknown>> = {
+  success: false
   formError?: string
   fieldErrors?: FieldErrors<z.infer<Schema>>
   data?: z.infer<Schema>
 }
 
 export function useFormErrors<Schema extends z.ZodType<unknown>>() {
-  return useActionData() as Partial<ActionData<Schema>> | null
+  return useActionData() as Partial<ActionDataErrorResponse<Schema>> | null
 }
 
 export const NullableFormString = z.preprocess((v) => (v === "" ? null : v), z.string().nullish())

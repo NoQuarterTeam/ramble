@@ -1,0 +1,202 @@
+import * as React from "react"
+import { useFetcher } from "@remix-run/react"
+import type { ActionArgs, LoaderArgs, SerializeFrom } from "@vercel/remix"
+import { Heart, Plus } from "lucide-react"
+import { z } from "zod"
+import { zx } from "zodix"
+
+import {
+  Button,
+  Checkbox,
+  IconButton,
+  Modal,
+  Popover,
+  PopoverArrow,
+  PopoverContent,
+  PopoverTrigger,
+  Tooltip,
+} from "~/components/ui"
+import { db } from "~/lib/db.server"
+import type { ActionDataErrorResponse } from "~/lib/form"
+import { FORM_ACTION, formError, validateFormData } from "~/lib/form"
+import { badRequest, json } from "~/lib/remix.server"
+import { requireUser } from "~/services/auth/auth.server"
+import { useDisclosure } from "@ramble/shared"
+import { FormButton, FormError, FormField } from "~/components/Form"
+
+export const loader = async ({ request }: LoaderArgs) => {
+  const userId = await requireUser(request)
+  const lists = await db.list.findMany({
+    where: { creatorId: userId },
+    select: { id: true, name: true, listSpots: { select: { spotId: true } } },
+    orderBy: { createdAt: "desc" },
+  })
+  return json(lists)
+}
+
+enum Actions {
+  Save = "save",
+  CreateAndSaveToList = "create-and-save-to-list",
+}
+
+const createListSchema = z.object({ name: z.string().min(1), description: z.string().optional(), spotId: z.string() })
+
+export const action = async ({ request }: ActionArgs) => {
+  const userId = await requireUser(request)
+  const formData = await request.formData()
+  const action = formData.get("_action") as Actions
+
+  switch (action) {
+    case Actions.Save:
+      try {
+        const schema = z.object({ shouldSave: zx.BoolAsString, listId: z.string(), spotId: z.string() })
+        const result = await validateFormData(formData, schema)
+        if (!result.success) return badRequest("Error saving to list", request, { flash: { title: "Error saving to list" } })
+        const { shouldSave, listId, spotId } = result.data
+        await db.list.findFirstOrThrow({ select: { id: true }, where: { id: listId, creator: { id: userId } } })
+        const listSpot = await db.listSpot.findFirst({ where: { listId, spotId, list: { creator: { id: userId } } } })
+
+        if (shouldSave) {
+          if (listSpot) return badRequest("Already saved to list", request, { flash: { title: "Already saved to list" } })
+          await db.listSpot.create({ data: { listId, spotId } })
+          return json({ success: true }, request, { flash: { title: "Saved to list" } })
+        } else {
+          if (!listSpot) return badRequest("Not saved to list", request, { flash: { title: "Not saved to list" } })
+          await db.listSpot.delete({ where: { id: listSpot.id } })
+          return json({ success: true }, request, { flash: { title: "Removed from list" } })
+        }
+      } catch {
+        return badRequest("Request failed", request, { flash: { title: "Failed to save" } })
+      }
+    case Actions.CreateAndSaveToList:
+      try {
+        const result = await validateFormData(formData, createListSchema)
+        if (!result.success) return formError(result)
+        const { name, description, spotId } = result.data
+        await db.list.create({ data: { name, description, creatorId: userId, listSpots: { create: { spotId } } } })
+        return json({ success: true }, request, { flash: { title: "List created", description: "Spot saved to new list" } })
+      } catch {
+        return formError({ formError: "Failed to create list" })
+      }
+    default:
+      return badRequest("Invalid action", request, { flash: { title: "Invalid action" } })
+  }
+}
+const SAVE_TO_LIST_URL = "/api/save-to-list"
+
+interface Props {
+  spotId: string
+}
+
+export function SaveToList(props: Props) {
+  const listsFetcher = useFetcher<typeof loader>()
+  const newListModalProps = useDisclosure()
+  const lists = listsFetcher.data
+  React.useEffect(() => {
+    listsFetcher.load(SAVE_TO_LIST_URL)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const listCreateFetcher = useFetcher<ActionDataErrorResponse<typeof createListSchema> | { success: true }>()
+
+  React.useEffect(() => {
+    if (listCreateFetcher.data?.success) {
+      newListModalProps.onClose()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listCreateFetcher.data])
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outline" leftIcon={<Heart className="sq-4" />} aria-label="favourite">
+          Save
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent
+        onOpenAutoFocus={(e) => {
+          e.preventDefault()
+        }}
+        side="bottom"
+        align="end"
+      >
+        <PopoverArrow />
+        <div className="space-y-2 p-2">
+          <div className="flex items-center justify-between">
+            <p className="pl-1">Save to list</p>
+            <Tooltip label="New list">
+              <IconButton
+                onClick={newListModalProps.onOpen}
+                size="xs"
+                variant="outline"
+                icon={<Plus className="sq-2" />}
+                aria-label="new"
+              />
+            </Tooltip>
+          </div>
+          {!lists ? null : lists.length === 0 ? (
+            <div className="p-3 space-y-3 flex-col flex items-center justify-center">
+              <p>You haven't got any lists yet</p>
+              <Button variant="outline" onClick={newListModalProps.onOpen}>
+                Create a new list
+              </Button>
+            </div>
+          ) : (
+            lists.map((list) => (
+              <ListItem
+                key={list.id}
+                spotId={props.spotId}
+                list={list}
+                isSaved={!!list.listSpots.find((s) => s.spotId === props.spotId)}
+              />
+            ))
+          )}
+          <Modal title="Create new list" {...newListModalProps}>
+            <listCreateFetcher.Form method="post" replace className="space-y-2" action={SAVE_TO_LIST_URL}>
+              <input type="hidden" name="spotId" value={props.spotId} />
+              <FormField
+                required
+                errors={!listCreateFetcher.data?.success ? listCreateFetcher.data?.fieldErrors?.name : undefined}
+                name="name"
+                label="Name"
+              />
+              <FormField name="description" label="Description" />
+              <FormError error={!listCreateFetcher.data?.success ? listCreateFetcher.data?.formError : undefined} />
+              <FormButton
+                isLoading={listCreateFetcher.state === "submitting"}
+                name={FORM_ACTION}
+                value={Actions.CreateAndSaveToList}
+              >
+                Create
+              </FormButton>
+            </listCreateFetcher.Form>
+          </Modal>
+        </div>
+      </PopoverContent>
+    </Popover>
+  )
+}
+
+function ListItem({ list, isSaved, spotId }: { spotId: string; list: SerializeFrom<typeof loader>[number]; isSaved: boolean }) {
+  const listFetcher = useFetcher<typeof action>()
+
+  return (
+    <Button
+      disabled={listFetcher.state === "submitting"}
+      className="w-full px-2"
+      onClick={() =>
+        listFetcher.submit(
+          { [FORM_ACTION]: Actions.Save, shouldSave: String(!isSaved), listId: list.id, spotId },
+          { method: "post", replace: true, action: SAVE_TO_LIST_URL },
+        )
+      }
+      size="md"
+      variant="outline"
+    >
+      <div className="flex w-full items-center justify-between">
+        <span>{list.name}</span>
+        <Checkbox readOnly checked={isSaved} />
+      </div>
+    </Button>
+  )
+}

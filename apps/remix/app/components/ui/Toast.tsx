@@ -15,7 +15,7 @@ export const ToastViewport = React.forwardRef<
   <ToastPrimitives.Viewport
     ref={ref}
     className={merge(
-      "fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]",
+      "fixed top-0 z-50 flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]",
       className,
     )}
     {...props}
@@ -83,7 +83,7 @@ export const ToastTitle = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Title>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Title>
 >(({ className, ...props }, ref) => (
-  <ToastPrimitives.Title ref={ref} className={merge("text-sm font-semibold", className)} {...props} />
+  <ToastPrimitives.Title ref={ref} className={merge("text-sm font-normal", className)} {...props} />
 ))
 ToastTitle.displayName = ToastPrimitives.Title.displayName
 
@@ -91,7 +91,7 @@ export const ToastDescription = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Description>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Description>
 >(({ className, ...props }, ref) => (
-  <ToastPrimitives.Description ref={ref} className={merge("text-sm opacity-90", className)} {...props} />
+  <ToastPrimitives.Description ref={ref} className={merge("text-sm opacity-80", className)} {...props} />
 ))
 ToastDescription.displayName = ToastPrimitives.Description.displayName
 

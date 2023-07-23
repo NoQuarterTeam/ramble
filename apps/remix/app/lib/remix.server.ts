@@ -19,11 +19,7 @@ export async function badRequest(
   return remixJson(data, { status: 400, ...init, headers })
 }
 
-export async function json(
-  data: unknown,
-  request?: Request,
-  init?: ResponseInit & { flash?: FlashMessage & { type?: FlashType } },
-) {
+export async function json<T>(data: T, request?: Request, init?: ResponseInit & { flash?: FlashMessage & { type?: FlashType } }) {
   if (!request || !init) return remixJson(data, { status: 200, ...init })
   const { createFlash } = await getFlashSession(request)
   const headers = new Headers(init.headers)
