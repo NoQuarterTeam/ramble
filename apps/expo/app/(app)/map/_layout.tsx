@@ -10,7 +10,7 @@ const MapStack = createNativeStackNavigator<ScreenParamsList>()
 export function MapLayout() {
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
-  const sharedScreens = getSharedScreens(MapLayout)
+  const sharedScreens = getSharedScreens(MapStack)
   return (
     <MapStack.Navigator
       initialRouteName="SpotsMapScreen"
