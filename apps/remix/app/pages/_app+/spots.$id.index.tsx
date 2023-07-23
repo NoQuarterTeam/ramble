@@ -2,7 +2,7 @@ import Map, { Marker } from "react-map-gl"
 import { Link, useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
-import { Edit2, Share, Star, Trash } from "lucide-react"
+import { Edit2, Star, Trash } from "lucide-react"
 
 import type { SpotType } from "@ramble/database/types"
 import { AMENITIES, createImageUrl } from "@ramble/shared"
@@ -100,12 +100,7 @@ export default function SpotDetail() {
           <div className="space-y-2">
             <div className="flex flex-col items-start justify-between space-y-1 md:flex-row">
               <h1 className="text-4xl">{spot.name}</h1>
-              <div className="flex items-center space-x-1">
-                <Button variant="outline" leftIcon={<Share className="sq-4" />} aria-label="share">
-                  Share
-                </Button>
-                {user && <SaveToList spotId={spot.id} />}
-              </div>
+              <div className="flex items-center space-x-1">{user && <SaveToList spotId={spot.id} />}</div>
             </div>
             <div className="flex items-center space-x-1 text-sm">
               <Star className="sq-5" />
