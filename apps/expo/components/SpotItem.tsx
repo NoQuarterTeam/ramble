@@ -40,7 +40,7 @@ export function SpotItem({ spot }: Props) {
 
           <View className="flex flex-row items-center space-x-1">
             <Star className="text-black dark:text-white" size={16} />
-            <Text>{spot.rating === null ? "Not rated" : spot.rating}</Text>
+            <Text className="text-sm">{spot.rating === null ? "Not rated" : spot.rating}</Text>
           </View>
 
           <Text numberOfLines={1} className="font-300 text-sm opacity-80">
