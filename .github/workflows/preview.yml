@@ -3,6 +3,9 @@ on:
   push:
     paths:
       - "apps/expo/**"
+      - "packages/shared/**"
+      - "packages/database/**"
+      - "packages/config/**"
     branches:
       - develop
 permissions:
