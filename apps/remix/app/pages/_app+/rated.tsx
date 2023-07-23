@@ -21,12 +21,18 @@ export const loader = async ({ request }: LoaderArgs) => {
 
   const spots: Array<SpotItemWithImageAndRating> = await db.$queryRaw`
       SELECT Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating,
-        (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id LIMIT 1) AS image, (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash
-      FROM Spot
-      LEFT JOIN Review ON Spot.id = Review.spotId
-      GROUP BY Spot.id
-      ORDER BY rating DESC, Spot.id
-      LIMIT 10 OFFSET ${skip};
+        (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id LIMIT 1) AS image,
+        (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash
+      FROM
+        Spot
+      LEFT JOIN
+        Review ON Spot.id = Review.spotId
+      GROUP BY
+        Spot.id
+      ORDER BY
+        rating DESC, Spot.id
+      LIMIT 10
+      OFFSET ${skip};
     `
 
   const count = await db.spot.count()
