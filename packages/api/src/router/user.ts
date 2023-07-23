@@ -5,6 +5,8 @@ import { updateSchema, userInterestFields } from "@ramble/shared"
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 import { generateBlurHash } from "../services/createBlurHash.server"
+import { createAuthToken } from "../lib/jwt"
+import { sendAccountVerificationEmail } from "../services/user.mailer.server"
 
 export const userRouter = createTRPCRouter({
   me: publicProcedure.query(({ ctx }) => ctx.user),
@@ -54,6 +56,11 @@ export const userRouter = createTRPCRouter({
     return ctx.prisma.user.findUnique({ where: { username: input.username } }).following({
       select: { id: true, username: true, firstName: true, lastName: true, avatar: true, avatarBlurHash: true },
     })
+  }),
+  sendVerificationEmail: protectedProcedure.mutation(async ({ ctx }) => {
+    const token = createAuthToken({ id: ctx.user.id })
+    await sendAccountVerificationEmail(ctx.user, token)
+    return true
   }),
   toggleFollow: protectedProcedure.input(z.object({ username: z.string() })).mutation(async ({ ctx, input }) => {
     if (input.username === ctx.user.username) throw new TRPCError({ code: "BAD_REQUEST" })

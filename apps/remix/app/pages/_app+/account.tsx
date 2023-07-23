@@ -1,24 +1,28 @@
 import type { NavLinkProps } from "@remix-run/react"
-import { Outlet, useLoaderData } from "@remix-run/react"
-import type { LoaderArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
-import type { LucideIcon } from "lucide-react"
-import { Settings, ToggleRight, User } from "lucide-react"
+import { Outlet, useActionData, useLoaderData } from "@remix-run/react"
+import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import { AlertCircle, Settings, ToggleRight, User } from "lucide-react"
 
 import { createImageUrl, merge } from "@ramble/shared"
 
+import { Form, FormButton } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { NavLink } from "~/components/NavLink"
+import type { RambleIcon } from "~/components/ui"
 import { Avatar, Badge, buttonSizeStyles, buttonStyles, Icons } from "~/components/ui"
+import { createToken } from "~/lib/jwt.server"
+import { json } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { PageContainer } from "../../components/PageContainer"
+import { sendAccountVerificationEmail } from "@ramble/api"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const user = await getCurrentUser(request, {
     firstName: true,
     username: true,
     avatarBlurHash: true,
+    isVerified: true,
     role: true,
     lastName: true,
     avatar: true,
@@ -26,10 +30,33 @@ export const loader = async ({ request }: LoaderArgs) => {
   return json(user)
 }
 
+export const action = async ({ request }: ActionArgs) => {
+  const user = await getCurrentUser(request, { email: true, id: true })
+  const token = createToken({ id: user.id })
+  await sendAccountVerificationEmail(user, token)
+  return json({ success: true }, request, {
+    flash: { title: "Verification email sent", description: "Please check yout emails to verify your account" },
+  })
+}
+
 export default function AccountLayout() {
   const user = useLoaderData<typeof loader>()
+  const data = useActionData<typeof action>()
   return (
     <PageContainer>
+      {!user.isVerified && (
+        <div className="p-2 pl-4 flex items-center justify-between border border-gray-200 dark:border-gray-700 rounded-md">
+          <div className="flex items-center space-x-2">
+            <AlertCircle size={16} />
+            <p>Your account is not yet verified</p>
+          </div>
+          <Form>
+            <FormButton disabled={!!data?.success} size="sm">
+              Send verification email
+            </FormButton>
+          </Form>
+        </div>
+      )}
       <div className="flex flex-wrap items-center justify-between">
         <div className="flex items-center space-x-2 py-2">
           <Avatar size={60} placeholder={user.avatarBlurHash} src={createImageUrl(user.avatar)} />
@@ -73,7 +100,7 @@ export default function AccountLayout() {
   )
 }
 
-function AccountLink({ Icon, children, ...props }: NavLinkProps & { Icon: LucideIcon; children: React.ReactNode }) {
+function AccountLink({ Icon, children, ...props }: NavLinkProps & { Icon: RambleIcon; children: React.ReactNode }) {
   return (
     <NavLink
       {...props}
@@ -83,7 +110,6 @@ function AccountLink({ Icon, children, ...props }: NavLinkProps & { Icon: Lucide
           buttonStyles({ size: "md", variant: isActive ? "secondary" : "ghost" }),
           buttonSizeStyles({ size: "md" }),
           "flex w-full items-center justify-start space-x-2 text-left",
-          isActive && "!text-black",
         )
       }
     >

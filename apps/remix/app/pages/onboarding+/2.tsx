@@ -10,10 +10,10 @@ import { userInterestFields } from "@ramble/shared"
 
 import { Form, FormButton, FormError } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
+import type { RambleIcon } from "~/components/ui"
 import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
-import type { RambleIcon } from "~/lib/static/interests"
 import { interestOptions } from "~/lib/static/interests"
 import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
 

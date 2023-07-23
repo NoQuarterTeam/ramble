@@ -1,3 +1,4 @@
+import { sendAccountVerificationEmail } from "@ramble/api"
 import { Link } from "@remix-run/react"
 import type { ActionArgs, V2_MetaFunction } from "@vercel/remix"
 import { redirect } from "@vercel/remix"
@@ -6,6 +7,7 @@ import { z } from "zod"
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
+import { createToken } from "~/lib/jwt.server"
 import { badRequest } from "~/lib/remix.server"
 import { hashPassword } from "~/services/auth/password.server"
 import { FlashType, getFlashSession } from "~/services/session/flash.server"
@@ -31,7 +33,7 @@ export const action = async ({ request }: ActionArgs) => {
   switch (action) {
     case Actions.Register:
       try {
-        if (formData.get("passwordConfirmation")) return redirect("/")
+        if (formData.get("passwordConfirmation")) return redirect("/") // honey pot
         const registerSchema = z.object({
           email: z.string().min(3).email("Invalid email"),
           username: z
@@ -57,6 +59,8 @@ export const action = async ({ request }: ActionArgs) => {
         })
         const { setUser } = await getUserSession(request)
         const { createFlash } = await getFlashSession(request)
+        const token = createToken({ id: user.id })
+        await sendAccountVerificationEmail(user, token)
         const headers = new Headers([
           ["Set-Cookie", await setUser(user.id)],
           ["Set-Cookie", await createFlash(FlashType.Info, `Welcome to Ramble, ${data.firstName}!`, "Let's get you setup.")],

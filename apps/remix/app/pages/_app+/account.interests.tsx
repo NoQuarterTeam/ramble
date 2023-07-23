@@ -2,18 +2,18 @@ import React from "react"
 import type { ActionArgs, LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
-import type { LucideProps } from "lucide-react"
 import { z } from "zod"
 import { zx } from "zodix"
 
 import { userInterestFields } from "@ramble/shared"
 
 import { Form, FormButton, FormError } from "~/components/Form"
+import type { RambleIcon } from "~/components/ui"
 import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
-import { interestOptions } from "~/lib/static/interests"
 import { redirect } from "~/lib/remix.server"
+import { interestOptions } from "~/lib/static/interests"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderArgs) => {
@@ -71,7 +71,7 @@ function InterestSelector({
 }: {
   label: string
   field: string
-  Icon: (props: LucideProps) => JSX.Element
+  Icon: RambleIcon
   defaultValue: boolean
 }) {
   const [isSelected, setIsSelected] = React.useState(defaultValue)

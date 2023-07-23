@@ -1,4 +1,4 @@
-import { Beef, Droplet, Zap, ShowerHead, UtensilsCrossed, Waves, Wifi, Flame } from "lucide-react"
+import { Beef, Droplet, Flame, ShowerHead, UtensilsCrossed, Waves, Wifi, Zap } from "lucide-react"
 
 export const AMENITIES_ICONS = {
   bbq: Beef,

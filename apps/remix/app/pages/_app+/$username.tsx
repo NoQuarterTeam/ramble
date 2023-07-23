@@ -11,8 +11,8 @@ import { Avatar, Badge, buttonSizeStyles, buttonStyles, Tooltip } from "~/compon
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
-import { interestOptions } from "~/lib/static/interests"
 import { notFound } from "~/lib/remix.server"
+import { interestOptions } from "~/lib/static/interests"
 
 import { PageContainer } from "../../components/PageContainer"
 

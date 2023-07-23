@@ -27,6 +27,7 @@ model User {
   avatarBlurHash String?
   bio            String? @db.LongText
   instagram      String?
+  isVerified     Boolean @default(false)
 
   // Preferences
   isPetOwner      Boolean @default(false)

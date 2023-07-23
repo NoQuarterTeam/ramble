@@ -5,7 +5,7 @@ import { json } from "@vercel/remix"
 import { Edit2, Star, Trash } from "lucide-react"
 
 import type { SpotType } from "@ramble/database/types"
-import { AMENITIES, createImageUrl } from "@ramble/shared"
+import { AMENITIES, canManageSpot, createImageUrl } from "@ramble/shared"
 
 import { Form, FormButton } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -25,13 +25,13 @@ import { VerifiedCard } from "~/components/VerifiedCard"
 import { db } from "~/lib/db.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { notFound, redirect } from "~/lib/remix.server"
-import { canManageSpot, SPOTS } from "~/lib/static/spots"
+import { AMENITIES_ICONS } from "~/lib/static/amenities"
+import { SPOTS } from "~/lib/static/spots"
 import { useTheme } from "~/lib/theme"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { SaveToList } from "../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
-import { AMENITIES_ICONS } from "~/lib/static/amenities"
 
 export const loader = async ({ params }: LoaderArgs) => {
   const spot = await db.spot.findUnique({
@@ -65,7 +65,7 @@ export const loader = async ({ params }: LoaderArgs) => {
 }
 
 export const action = async ({ request, params }: ActionArgs) => {
-  const user = await getCurrentUser(request, { id: true, role: true })
+  const user = await getCurrentUser(request, { id: true, role: true, isVerified: true })
   const spot = await db.spot.findUniqueOrThrow({ where: { id: params.id }, select: { ownerId: true } })
   if (!canManageSpot(spot, user)) return redirect("/latest")
   await db.spot.delete({ where: { id: params.id } })

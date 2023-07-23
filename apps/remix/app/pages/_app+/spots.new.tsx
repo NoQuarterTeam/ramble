@@ -1,21 +1,23 @@
 import type { ActionArgs, LoaderArgs } from "@vercel/remix"
-import { json, redirect } from "@vercel/remix"
 
 import { generateBlurHash } from "@ramble/api"
 
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
-import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
+import { json, redirect } from "~/lib/remix.server"
+import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { SpotForm, spotSchema } from "./components/SpotForm"
 
 export const loader = async ({ request }: LoaderArgs) => {
-  await requireUser(request)
+  const user = await getCurrentUser(request, { isVerified: true })
+  if (!user.isVerified) return redirect("/account", request, { flash: { title: "Account not verified" } })
   return json(null)
 }
 
 export const action = async ({ request }: ActionArgs) => {
-  const { id, role } = await getCurrentUser(request)
+  const { id, role, isVerified } = await getCurrentUser(request)
+  if (!isVerified) return redirect("/account", request, { flash: { title: "Account not verified" } })
   const formData = await request.formData()
 
   const result = await validateFormData(formData, spotSchema)

@@ -8,6 +8,7 @@ import type { SerializeFrom } from "@vercel/remix"
 import { CircleDot, Plus } from "lucide-react"
 import queryString from "query-string"
 import { z } from "zod"
+import { zx } from "zodix"
 
 import type { Spot, SpotAmenities, SpotImage } from "@ramble/database/types"
 import { SpotType } from "@ramble/database/types"
@@ -19,13 +20,12 @@ import type { RambleIcon } from "~/components/ui"
 import { Button, CloseButton, IconButton, Spinner, Textarea } from "~/components/ui"
 import { FormNumber, NullableFormString, useFormErrors } from "~/lib/form"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
+import { AMENITIES_ICONS } from "~/lib/static/amenities"
 import { SPOT_OPTIONS } from "~/lib/static/spots"
 import { useTheme } from "~/lib/theme"
 import type { geocodeLoader } from "~/pages/api+/mapbox+/geocode"
 
 import type { IpInfo } from "../_layout"
-import { zx } from "zodix"
-import { AMENITIES_ICONS } from "~/lib/static/amenities"
 
 export const amenitiesSchema = z.object({
   bbq: zx.BoolAsString.optional(),

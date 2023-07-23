@@ -343,9 +343,6 @@ importers:
       mapbox-gl:
         specifier: ^2.14.1
         version: 2.14.1
-      nodemailer:
-        specifier: 6.9.4
-        version: 6.9.4
       nprogress:
         specifier: ^0.2.0
         version: 0.2.0
@@ -370,9 +367,6 @@ importers:
       remix-utils:
         specifier: ^6.1.0
         version: 6.1.0(@remix-run/react@1.19.1)(@remix-run/server-runtime@1.19.1)(react@18.2.0)(typescript@5.1.6)(zod@3.21.4)
-      resend:
-        specifier: ^0.17.0
-        version: 0.17.0
       sharp:
         specifier: ^0.32.0
         version: 0.32.0
@@ -503,6 +497,9 @@ importers:
       '@ramble/database':
         specifier: workspace:*
         version: link:../database
+      '@ramble/emails':
+        specifier: workspace:*
+        version: link:../emails
       '@ramble/shared':
         specifier: workspace:*
         version: link:../shared
@@ -530,6 +527,12 @@ importers:
       jsonwebtoken:
         specifier: 9.0.1
         version: 9.0.1
+      nodemailer:
+        specifier: 6.9.4
+        version: 6.9.4
+      resend:
+        specifier: ^0.17.0
+        version: 0.17.0
       supercluster:
         specifier: ^8.0.0
         version: 8.0.0

@@ -1,10 +1,11 @@
 "use client"
 
+import { User2 } from "lucide-react"
+
 import { merge } from "@ramble/shared"
 
 import type { OptimizedImageProps } from "../OptimisedImage"
 import { OptimizedImage } from "../OptimisedImage"
-import { User2 } from "lucide-react"
 
 interface Props extends Omit<OptimizedImageProps, "height" | "width" | "alt"> {
   size?: number

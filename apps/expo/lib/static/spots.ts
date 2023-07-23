@@ -1,8 +1,8 @@
-import { Footprints, type LucideIcon, type LucideProps } from "lucide-react-native"
 import {
   Beer,
   Bike,
   Coffee,
+  Footprints,
   Fuel,
   HelpCircle,
   Info,
@@ -12,9 +12,11 @@ import {
   Tent,
   Utensils,
   Waves,
+  type LucideIcon,
+  type LucideProps,
 } from "lucide-react-native"
 
-import type { Spot, SpotType, User } from "@ramble/database/types"
+import type { SpotType } from "@ramble/database/types"
 
 import { Icons } from "../../components/ui/Icons"
 
@@ -40,14 +42,3 @@ export const SPOT_OPTIONS = Object.entries(SPOTS).map(([value, { label, Icon }])
   value: SpotType
   Icon: LucideIcon
 }[]
-
-export const canManageSpot = (spot: Pick<Spot, "ownerId"> | null, user: Pick<User, "id" | "role"> | null) => {
-  if (!user) return false
-  if (!spot) return false
-  if (user.role === "ADMIN") return true
-  if (user.role === "AMBASSADOR") return true
-  if (!spot.ownerId) return false
-  if (user.role === "OWNER" && user.id === spot.ownerId) return true
-  if (spot.ownerId === user.id) return true
-  return false
-}

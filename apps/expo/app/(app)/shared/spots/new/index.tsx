@@ -11,6 +11,7 @@ import { Button } from "../../../../../components/ui/Button"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
+import { toast } from "../../../../../components/ui/Toast"
 
 export function NewSpotLocationScreen() {
   const [coords, setCoords] = React.useState<number[] | null>(null)
@@ -60,7 +61,7 @@ export function NewSpotLocationScreen() {
     )
 
   return (
-    <NewSpotModalView title="New spot" canGoBack={false}>
+    <NewSpotModalView shouldRenderToast title="New spot" canGoBack={false}>
       {!isLoadingLocation && (
         <>
           <Mapbox.MapView
@@ -98,11 +99,13 @@ export function NewSpotLocationScreen() {
               <Button
                 className="rounded-full bg-white"
                 textClassName="text-black"
-                onPress={() =>
+                onPress={() => {
+                  if (!me) return
+                  if (!me.isVerified) return toast({ title: "Please verify your account" })
                   router.push("NewSpotTypeScreen", {
                     location: { longitude: coords[0] as number, latitude: coords[1] as number },
                   })
-                }
+                }}
               >
                 Next
               </Button>

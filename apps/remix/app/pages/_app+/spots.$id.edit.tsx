@@ -3,17 +3,17 @@ import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 import { json, redirect } from "@vercel/remix"
 
 import { generateBlurHash } from "@ramble/api"
+import { canManageSpot } from "@ramble/shared"
 
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { notFound } from "~/lib/remix.server"
-import { canManageSpot } from "~/lib/static/spots"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { SpotForm, spotSchema } from "./components/SpotForm"
 
 export const loader = async ({ request, params }: LoaderArgs) => {
-  const user = await getCurrentUser(request, { role: true, id: true })
+  const user = await getCurrentUser(request, { role: true, id: true, isVerified: true })
   const spot = await db.spot.findUniqueOrThrow({
     where: { id: params.id },
     include: { images: true, amenities: true },
@@ -23,7 +23,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
 }
 
 export const action = async ({ request, params }: ActionArgs) => {
-  const user = await getCurrentUser(request, { id: true, role: true })
+  const user = await getCurrentUser(request, { id: true, role: true, isVerified: true })
   const formData = await request.formData()
 
   const result = await validateFormData(formData, spotSchema)

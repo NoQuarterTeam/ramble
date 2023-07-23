@@ -1,7 +1,7 @@
 import { ScrollView, TouchableOpacity, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import * as Updates from "expo-updates"
-import { ChevronRight, type LucideIcon, ToggleRight, User, User2 } from "lucide-react-native"
+import { ChevronRight, type LucideIcon, ToggleRight, User, User2, AlertCircle } from "lucide-react-native"
 
 import { createImageUrl } from "@ramble/shared"
 
@@ -16,6 +16,7 @@ import { api, AUTH_TOKEN } from "../../../lib/api"
 import { VERSION } from "../../../lib/config"
 import { useMe } from "../../../lib/hooks/useMe"
 import { type ScreenParamsList, useRouter } from "../../router"
+import { toast } from "../../../components/ui/Toast"
 
 const updateId = Updates.updateId
 
@@ -23,6 +24,12 @@ export function ProfileScreen() {
   const { me } = useMe()
   const { push } = useRouter()
   const utils = api.useContext()
+
+  const { mutate, data } = api.user.sendVerificationEmail.useMutation({
+    onSuccess: () => {
+      toast({ title: "Verification email sent" })
+    },
+  })
 
   const handleLogout = async () => {
     utils.user.me.setData(undefined, null)
@@ -50,6 +57,17 @@ export function ProfileScreen() {
   return (
     <TabView title="Profile">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false} className="space-y-4 pt-2">
+        {!me.isVerified && (
+          <View className="p-2 pl-4 flex-col space-y-3 flex border border-gray-200 dark:border-gray-700 rounded-md">
+            <View className="flex flex-row items-center space-x-2">
+              <AlertCircle size={20} className="text-black dark:text-white" />
+              <Text className="text-lg">Your account is not yet verified</Text>
+            </View>
+            <Button onPress={() => mutate()} disabled={!!data} size="sm">
+              Send verification email
+            </Button>
+          </View>
+        )}
         <View>
           <View className="space-y-4">
             <TouchableOpacity

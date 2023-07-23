@@ -17,6 +17,7 @@ export async function requireUser(request: Request) {
 const userSelectFields = {
   id: true,
   email: true,
+  isVerified: true,
   firstName: true,
   lastName: true,
   avatar: true,
