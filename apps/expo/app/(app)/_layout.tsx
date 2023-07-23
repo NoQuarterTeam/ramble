@@ -1,6 +1,6 @@
 import { useColorScheme } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import { Heart, List, Search, User } from "lucide-react-native"
+import { Heart, List, Map, User } from "lucide-react-native"
 
 import { createImageUrl, join } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
@@ -33,7 +33,7 @@ export function AppLayout() {
         name="MapLayout"
         component={MapLayout}
         options={{
-          tabBarIcon: (props) => <Search size={24} color={props.focused ? colors.green[600] : isDark ? "white" : "black"} />,
+          tabBarIcon: (props) => <Map size={24} color={props.focused ? colors.green[600] : isDark ? "white" : "black"} />,
         }}
       />
       <Tab.Screen
