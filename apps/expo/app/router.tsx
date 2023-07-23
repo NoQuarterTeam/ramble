@@ -41,7 +41,7 @@ export type ScreenParamsList = {
   VanScreen: undefined
   InterestsScreen: undefined
 
-  SpotsLayout: undefined
+  MapLayout: undefined
   SpotsMapScreen: undefined
 
   LatestLayout: undefined

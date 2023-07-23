@@ -13,10 +13,11 @@ import {
   Poppins_900Black,
   useFonts,
 } from "@expo-google-fonts/poppins"
-import { NavigationContainer } from "@react-navigation/native"
+import { LinkingOptions, NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import * as SplashScreen from "expo-splash-screen"
 import { StatusBar } from "expo-status-bar"
+import * as Linking from "expo-linking"
 
 import { NewUpdate } from "../components/NewUpdate"
 import { Toast } from "../components/ui/Toast"
@@ -35,8 +36,8 @@ import { OnboardingLayout } from "./onboarding/_layout"
 import { type ScreenParamsList } from "./router"
 
 SplashScreen.preventAutoHideAsync()
-
 enableScreens()
+const prefix = Linking.createURL("/")
 
 const Container = createNativeStackNavigator<ScreenParamsList>()
 
@@ -50,6 +51,32 @@ export default function RootLayout() {
     poppins800: Poppins_800ExtraBold,
     poppins900: Poppins_900Black,
   })
+
+  const linking: LinkingOptions<ScreenParamsList> = {
+    prefixes: [prefix],
+    config: {
+      screens: {
+        AppLayout: {
+          screens: {
+            MapLayout: {
+              screens: {
+                SpotsMapScreen: "map",
+                SpotDetailScreen: "spots/:id",
+                UserScreen: ":username",
+              },
+            },
+            ProfileLayout: {
+              screens: {
+                ProfileScreen: "account",
+                VanScreen: "account/van",
+                InterestScreen: "account/interests",
+              },
+            },
+          },
+        },
+      },
+    },
+  }
 
   const { isDoneChecking, isNewUpdateAvailable } = useCheckExpoUpdates()
   const colorScheme = useColorScheme()
@@ -68,7 +95,7 @@ export default function RootLayout() {
             {isNewUpdateAvailable ? (
               <NewUpdate />
             ) : (
-              <NavigationContainer>
+              <NavigationContainer linking={linking}>
                 <Container.Navigator
                   initialRouteName="AppLayout"
                   screenOptions={{ headerShown: false, contentStyle: { backgroundColor: isDark ? "black" : "white" } }}

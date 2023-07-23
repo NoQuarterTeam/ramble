@@ -5,19 +5,19 @@ import { type ScreenParamsList } from "../../router"
 import { getSharedScreens } from "../shared/getSharedScreens"
 import { SpotsMapScreen } from "."
 
-const SpotsStack = createNativeStackNavigator<ScreenParamsList>()
+const MapStack = createNativeStackNavigator<ScreenParamsList>()
 
-export function SpotsLayout() {
+export function MapLayout() {
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
-  const sharedScreens = getSharedScreens(SpotsStack)
+  const sharedScreens = getSharedScreens(MapLayout)
   return (
-    <SpotsStack.Navigator
+    <MapStack.Navigator
       initialRouteName="SpotsMapScreen"
       screenOptions={{ contentStyle: { backgroundColor: isDark ? "black" : "white" }, headerShown: false }}
     >
-      <SpotsStack.Screen name="SpotsMapScreen" component={SpotsMapScreen} />
+      <MapStack.Screen name="SpotsMapScreen" component={SpotsMapScreen} />
       {sharedScreens}
-    </SpotsStack.Navigator>
+    </MapStack.Navigator>
   )
 }

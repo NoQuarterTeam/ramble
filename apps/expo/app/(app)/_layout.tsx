@@ -9,7 +9,7 @@ import { OptimizedImage } from "../../components/ui/OptimisedImage"
 import { useMe } from "../../lib/hooks/useMe"
 import { LatestLayout } from "./latest/_layout"
 import { ListsLayout } from "./lists/_layout"
-import { SpotsLayout } from "./map/_layout"
+import { MapLayout } from "./map/_layout"
 import { ProfileLayout } from "./profile/_layout"
 
 const Tab = createBottomTabNavigator()
@@ -21,7 +21,7 @@ export function AppLayout() {
 
   return (
     <Tab.Navigator
-      initialRouteName="SpotsLayout"
+      initialRouteName="MapLayout"
       sceneContainerStyle={{ backgroundColor: isDark ? "black" : "white" }}
       screenOptions={{
         tabBarStyle: { backgroundColor: isDark ? "black" : "white" },
@@ -30,8 +30,8 @@ export function AppLayout() {
       }}
     >
       <Tab.Screen
-        name="SpotsLayout"
-        component={SpotsLayout}
+        name="MapLayout"
+        component={MapLayout}
         options={{
           tabBarIcon: (props) => <Search size={24} color={props.focused ? colors.green[600] : isDark ? "white" : "black"} />,
         }}
