@@ -79,32 +79,6 @@ export default function SpotDetail() {
   const Icon = SPOTS[spot.type as SpotType].Icon
   return (
     <div className="relative">
-      {canManageSpot(spot, user) && (
-        <div className="absolute z-10 left-10 top-10 flex space-x-2">
-          <LinkButton to="edit" leftIcon={<Edit2 className="sq-3" />}>
-            Edit
-          </LinkButton>
-          <AlertDialogRoot>
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive" leftIcon={<Trash className="sq-3" />}>
-                Delete
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-              <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
-              <AlertDialogFooter>
-                <AlertDialogCancel asChild>
-                  <Button variant="ghost">Cancel</Button>
-                </AlertDialogCancel>
-                <Form>
-                  <FormButton>Confirm</FormButton>
-                </Form>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialogRoot>
-        </div>
-      )}
       <div className="w-screen overflow-x-scroll">
         <div className="flex gap-2 w-max p-2">
           {spot.images.map((image) => (
@@ -144,7 +118,7 @@ export default function SpotDetail() {
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div className="space-y-2">
+            <div className="space-y-4">
               <VerifiedCard spot={spot} />
               <h3 className="text-xl font-medium">Description</h3>
               <div dangerouslySetInnerHTML={{ __html: spot.description || "" }} />
@@ -201,6 +175,32 @@ export default function SpotDetail() {
                       <p className="text-sm">{AMENITIES.sauna}</p>
                     </div>
                   )}
+                </div>
+              )}
+              {canManageSpot(spot, user) && (
+                <div className="flex space-x-2">
+                  <LinkButton to="edit" leftIcon={<Edit2 className="sq-3" />}>
+                    Edit
+                  </LinkButton>
+                  <AlertDialogRoot>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="destructive" leftIcon={<Trash className="sq-3" />}>
+                        Delete
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                      <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel asChild>
+                          <Button variant="ghost">Cancel</Button>
+                        </AlertDialogCancel>
+                        <Form>
+                          <FormButton>Confirm</FormButton>
+                        </Form>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialogRoot>
                 </div>
               )}
             </div>
