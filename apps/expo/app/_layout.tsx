@@ -38,7 +38,31 @@ import { type ScreenParamsList } from "./router"
 SplashScreen.preventAutoHideAsync()
 enableScreens()
 const prefix = Linking.createURL("/")
-
+const linking: LinkingOptions<ScreenParamsList> = {
+  prefixes: [prefix, "ramble.noquarter.co", "ramble://"],
+  config: {
+    screens: {
+      AppLayout: {
+        screens: {
+          MapLayout: {
+            screens: {
+              SpotsMapScreen: "map",
+              SpotDetailScreen: "spots/:id",
+              UserScreen: ":username",
+            },
+          },
+          ProfileLayout: {
+            screens: {
+              ProfileScreen: "account",
+              VanScreen: "account/van",
+              InterestScreen: "account/interests",
+            },
+          },
+        },
+      },
+    },
+  },
+}
 const Container = createNativeStackNavigator<ScreenParamsList>()
 
 export default function RootLayout() {
@@ -51,32 +75,6 @@ export default function RootLayout() {
     poppins800: Poppins_800ExtraBold,
     poppins900: Poppins_900Black,
   })
-
-  const linking: LinkingOptions<ScreenParamsList> = {
-    prefixes: [prefix],
-    config: {
-      screens: {
-        AppLayout: {
-          screens: {
-            MapLayout: {
-              screens: {
-                SpotsMapScreen: "map",
-                SpotDetailScreen: "spots/:id",
-                UserScreen: ":username",
-              },
-            },
-            ProfileLayout: {
-              screens: {
-                ProfileScreen: "account",
-                VanScreen: "account/van",
-                InterestScreen: "account/interests",
-              },
-            },
-          },
-        },
-      },
-    },
-  }
 
   const { isDoneChecking, isNewUpdateAvailable } = useCheckExpoUpdates()
   const colorScheme = useColorScheme()
