@@ -1,7 +1,7 @@
 import type { LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import type { NavLinkProps } from "@remix-run/react"
-import { NavLink, Outlet, useLoaderData } from "@remix-run/react"
+import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react"
 import { Instagram, type LucideIcon } from "lucide-react"
 
 import { createImageUrl, merge, userInterestFields } from "@ramble/shared"
@@ -31,6 +31,9 @@ export const loader = async ({ params }: LoaderArgs) => {
       instagram: true,
       lastName: true,
       bio: true,
+      _count: {
+        select: { followers: true, following: true },
+      },
       ...userInterestFields,
     },
   })
@@ -74,6 +77,14 @@ export default function ProfileLists() {
           </div>
         </div>
         <div className="space-y-2">
+          <div className="flex items-center space-x-4">
+            <Link to="following" className="hover:underline">
+              <span className="font-semibold">{user._count?.following}</span> following
+            </Link>
+            <Link to="followers" className="hover:underline">
+              <span className="font-semibold">{user._count?.followers}</span> followers
+            </Link>
+          </div>
           <div className="flex space-x-2">
             {interestOptions
               .filter((i) => user[i.value as keyof typeof user])
