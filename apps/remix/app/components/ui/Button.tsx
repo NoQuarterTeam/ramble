@@ -8,34 +8,34 @@ import { join, merge } from "@ramble/shared"
 import { Spinner } from "./Spinner"
 
 export const buttonStyles = cva(
-  "outline-none w-min focus:outline-none whitespace-nowrap font-normal rounded-md focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-gray-500 dark:focus:ring-offset-gray-900 flex center border border-transparent transition-colors duration-200",
+  "center flex w-min whitespace-nowrap rounded-md border border-transparent font-normal outline-none transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-gray-500 dark:focus:ring-offset-gray-900",
   {
     variants: {
       size: {
         xs: "text-xxs px-2",
-        sm: "text-xs px-2",
-        md: "text-sm px-3",
+        sm: "px-2 text-xs",
+        md: "px-3 text-sm",
         lg: "text-md px-5",
       },
       variant: {
         primary:
-          "border-transparent text-white dark:text-black bg-gray-900 hover:bg-gray-600 active:bg-gray-500 dark:bg-white dark:hover:bg-white/90 dark:active:bg-white/80",
+          "border-transparent bg-gray-900 text-white hover:bg-gray-600 active:bg-gray-500 dark:bg-white dark:text-black dark:hover:bg-white/90 dark:active:bg-white/80",
         secondary:
-          "border-transparent text-black dark:text-white bg-gray-100 hover:bg-gray-200 active:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 dark:active:bg-gray-500",
-        destructive: "border-transparent text-white bg-red-500 hover:bg-red-600 active:bg-red-700",
+          "border-transparent bg-gray-100 text-black hover:bg-gray-200 active:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 dark:active:bg-gray-500",
+        destructive: "border-transparent bg-red-500 text-white hover:bg-red-600 active:bg-red-700",
         outline: "border-black/10 dark:border-white/10",
         ghost: "",
         link: "underline",
       },
       disabled: {
-        true: "relative opacity-70 pointer-events-none",
+        true: "pointer-events-none relative opacity-70",
       },
     },
     compoundVariants: [
       {
         variant: ["ghost", "outline", "link"],
         className:
-          "text-black dark:text-white bg-transparent hover:bg-black/5 active:bg-black/20 dark:hover:bg-white/10 dark:active:bg-white/20",
+          "bg-transparent text-black hover:bg-black/5 active:bg-black/20 dark:text-white dark:hover:bg-white/10 dark:active:bg-white/20",
       },
     ],
     defaultVariants: {

@@ -126,7 +126,7 @@ function Header({
   onClick?: () => void
 }) {
   const sharedClassName = join(
-    "flex items-center min-w-auto text-sm h-auto font-semibold",
+    "min-w-auto flex h-auto items-center text-sm font-semibold",
     className,
     isButton ? "cursor-pointer" : "cursor-default",
   )
@@ -154,7 +154,7 @@ export function Column<T extends DataType>(_: ColumnProps<T>) {
 
 function _ColumnField<T>({ isLast, hasNoLink, href, className, ...props }: ColumnProps<T> & { href?: string; isLast?: boolean }) {
   const sharedClassName = merge(
-    "flex flex-1 items-center h-12 overflow-x-auto text-sm",
+    "flex h-12 flex-1 items-center overflow-x-auto text-sm",
     isLast ? "justify-end" : "justify-start",
     className,
   )
