@@ -49,6 +49,7 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
         <Button
           onClick={modalProps.onOpen}
           variant="outline"
+          size="lg"
           className="border-none"
           leftIcon={<Settings2 className="sq-4" />}
           aria-label="filters"
