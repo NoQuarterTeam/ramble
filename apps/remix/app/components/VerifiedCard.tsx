@@ -18,7 +18,7 @@ export function VerifiedCard({ spot }: Props) {
       {spot.verifiedAt && spot.verifier ? (
         <Link
           to={`/${spot.verifier.username}`}
-          className=" flex flex-row items-center justify-between whitespace-nowrap rounded border border-gray-200 p-3 px-4 text-sm hover:opacity-70 dark:border-gray-700"
+          className="flex flex-row items-center justify-between whitespace-nowrap rounded border border-gray-200 p-3 px-4 text-sm hover:opacity-70 dark:border-gray-700"
         >
           <div>
             <div className="flex items-center space-x-1">
@@ -33,8 +33,13 @@ export function VerifiedCard({ spot }: Props) {
             {/* <p className="text-sm">{spot.verifier.username}</p> */}
           </div>
 
-          <div>
-            <Avatar size={40} placeholder={spot.verifier.avatarBlurHash} src={createImageUrl(spot.verifier.avatar)} />
+          <div className="block">
+            <Avatar
+              className="sq-10"
+              size={40}
+              placeholder={spot.verifier.avatarBlurHash}
+              src={createImageUrl(spot.verifier.avatar)}
+            />
           </div>
         </Link>
       ) : (

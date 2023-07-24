@@ -47,7 +47,7 @@ export default function ProfileLists() {
     <PageContainer>
       <div className="grid grid-cols-1 items-center gap-4 py-6 md:grid-cols-2 md:py-8">
         <div className="flex items-center space-x-3">
-          <Avatar size={100} placeholder={user.avatarBlurHash} className="sq-20 md:sq-32" src={createImageUrl(user.avatar)} />
+          <Avatar size={200} placeholder={user.avatarBlurHash} className="sq-20 md:sq-32" src={createImageUrl(user.avatar)} />
           <div className="space-y-1">
             {user.role === "AMBASSADOR" && <Badge colorScheme="green">Ambassador</Badge>}
             <div className="flex space-x-2">

@@ -83,16 +83,15 @@ export default function SpotDetail() {
       <div className="w-screen overflow-x-scroll">
         <div className="flex w-max gap-2 p-2">
           {spot.images.map((image) => (
-            <div key={image.id}>
-              <OptimizedImage
-                alt="spot"
-                placeholder={image.blurHash}
-                src={createImageUrl(image.path)}
-                className="rounded-md object-cover"
-                height={300}
-                width={400}
-              />
-            </div>
+            <OptimizedImage
+              alt="spot"
+              key={image.id}
+              placeholder={image.blurHash}
+              src={createImageUrl(image.path)}
+              className="h-[300px] max-w-[400px] rounded-md"
+              height={300}
+              width={400}
+            />
           ))}
         </div>
       </div>

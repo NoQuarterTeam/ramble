@@ -44,7 +44,12 @@ export default function Spots() {
             header="Creator"
             row={(spot) => (
               <div className="flex items-center space-x-2">
-                <Avatar size={30} placeholder={spot.creator.avatarBlurHash} src={createImageUrl(spot.creator.avatar)} />
+                <Avatar
+                  className="sq-8"
+                  size={40}
+                  placeholder={spot.creator.avatarBlurHash}
+                  src={createImageUrl(spot.creator.avatar)}
+                />
                 <p>{spot.creator.firstName}</p>
               </div>
             )}

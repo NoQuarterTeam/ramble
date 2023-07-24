@@ -75,9 +75,9 @@ export function Nav() {
           <DropdownMenuTrigger asChild={!user}>
             {user ? (
               <Avatar
-                size={40}
+                size={60}
                 placeholder={user.avatarBlurHash}
-                className="hover:opacity-70"
+                className="sq-10 hover:opacity-70"
                 src={createImageUrl(user.avatar)}
               />
             ) : (

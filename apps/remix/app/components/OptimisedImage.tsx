@@ -31,18 +31,18 @@ export const OptimizedImage = React.forwardRef<HTMLImageElement, OptimizedImageP
   ref,
 ) {
   // increase the width and height so quality is higher
-  const newSrc = transformImageSrc(src, { width: props.width * 1.5, height: props.height * 1.5, quality, fit })
+  const newSrc = transformImageSrc(src, { width: props.width, height: props.height, quality, fit })
   return (
-    <div className={merge("relative h-full w-full overflow-hidden", props.className)}>
+    <div className={merge("relative overflow-hidden", props.className)}>
       {placeholder ? (
         <BlurCanvas blurHash={placeholder} />
       ) : (
-        <div className="absolute h-full w-full animate-pulse rounded-md bg-gray-50 dark:bg-gray-700" />
+        <div className="absolute h-full w-full rounded-[inherit] bg-gray-50 dark:bg-gray-700" />
       )}
       <img
         ref={ref}
         {...props}
-        className={merge("relative z-[1] h-full w-full object-cover", props.className)}
+        className="relative z-[1] h-full w-full rounded-[inherit] object-cover"
         alt={props.alt}
         src={newSrc}
       />
@@ -65,5 +65,5 @@ function BlurCanvas(props: BlurCanvasProps) {
     ctx.putImageData(imageData, 0, 0)
   }, [props.blurHash])
 
-  return <canvas ref={ref} width={32} height={32} className="absolute h-full w-full" />
+  return <canvas ref={ref} width={32} height={32} className="absolute h-full w-full rounded-[inherit]" />
 }

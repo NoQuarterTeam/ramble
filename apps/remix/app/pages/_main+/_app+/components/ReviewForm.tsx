@@ -64,7 +64,7 @@ export function ReviewForm({ spot, review }: Props) {
         <div className="grid grid-cols-4 gap-2">
           {spot.images[0] && (
             <OptimizedImage
-              className="col-span-4 h-[300px] w-full rounded-md object-cover"
+              className="col-span-4 h-[300px] w-full rounded-md"
               height={300}
               width={600}
               placeholder={spot.images[0].blurHash}
@@ -75,7 +75,7 @@ export function ReviewForm({ spot, review }: Props) {
           {spot.images[1] && (
             <OptimizedImage
               placeholder={spot.images[1].blurHash}
-              className="col-span-2 h-[200px] w-full rounded-md object-cover"
+              className="col-span-2 h-[200px] w-full rounded-md"
               height={200}
               width={400}
               alt="spot 2"
@@ -85,7 +85,7 @@ export function ReviewForm({ spot, review }: Props) {
           {spot.images[2] && (
             <OptimizedImage
               placeholder={spot.images[2].blurHash}
-              className="col-span-2 h-[200px] w-full rounded-md object-cover"
+              className="col-span-2 h-[200px] w-full rounded-md"
               height={200}
               width={400}
               alt="spot 3"

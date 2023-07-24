@@ -17,7 +17,7 @@ export const loader = async ({ params }: LoaderArgs) => {
   return json(user)
 }
 
-export default function ProfileLists() {
+export default function ProfileVan() {
   const user = useLoaderData<typeof loader>()
 
   return (

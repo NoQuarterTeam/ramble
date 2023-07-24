@@ -12,27 +12,26 @@ interface Props {
 
 export function SpotItem({ spot }: Props) {
   return (
-    <Link to={`/spots/${spot.id}`} className="flex flex-col items-start space-x-2 hover:opacity-70 md:flex-row md:items-center">
-      <div className="h-[300px] w-full md:h-[100px] md:w-[150px]">
+    <Link to={`/spots/${spot.id}`} className="flex flex-col items-start space-x-2 hover:opacity-80 md:flex-row md:items-center">
+      <div className="h-[250px] w-full md:h-[150px] md:w-[150px] md:min-w-[150px] md:max-w-[150px]">
         {spot.image ? (
           <OptimizedImage
             alt="spot"
             placeholder={spot.blurHash}
-            quality={90}
             width={450}
             height={300}
-            className="rounded-md object-cover"
+            className="h-full w-full rounded-md"
             src={createImageUrl(spot.image)}
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center rounded-md bg-gray-50 object-cover dark:bg-gray-700">
+          <div className="flex h-full w-full items-center justify-center rounded-md bg-gray-50 dark:bg-gray-700">
             <Camera className="opacity-50" />
           </div>
         )}
       </div>
 
       <div>
-        <p className="line-clamp-2 text-xl">{spot.name}</p>
+        <p className="line-clamp-2 text-xl md:text-lg lg:text-xl">{spot.name}</p>
         {spot.rating && (
           <div className="flex items-center space-x-1">
             <Star className="sq-4" />
