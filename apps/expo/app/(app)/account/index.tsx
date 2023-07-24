@@ -18,7 +18,7 @@ import { useMe } from "../../../lib/hooks/useMe"
 import { type ScreenParamsList, useRouter } from "../../router"
 import { toast } from "../../../components/ui/Toast"
 
-export function ProfileScreen() {
+export function AccountScreen() {
   const { me } = useMe()
   const { push } = useRouter()
   const utils = api.useContext()
@@ -35,7 +35,7 @@ export function ProfileScreen() {
   }
   if (!me)
     return (
-      <TabView title="Profile">
+      <TabView title="Account">
         <LoginPlaceholder text="Log in to start saving spots">
           <View className="space-y-4">
             <TouchableOpacity onPress={() => push("AuthLayout", { screen: "RegisterScreen" })}>
@@ -53,7 +53,7 @@ export function ProfileScreen() {
       </TabView>
     )
   return (
-    <TabView title="Profile">
+    <TabView title="Account">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false} className="space-y-4 pt-2">
         {!me.isVerified && (
           <View className="flex flex-col space-y-3 rounded-md border border-gray-200 p-2 pl-4 dark:border-gray-700">

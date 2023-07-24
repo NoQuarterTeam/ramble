@@ -10,7 +10,7 @@ import { useMe } from "../../lib/hooks/useMe"
 import { LatestLayout } from "./latest/_layout"
 import { ListsLayout } from "./lists/_layout"
 import { MapLayout } from "./map/_layout"
-import { ProfileLayout } from "./profile/_layout"
+import { AccountLayout } from "./account/_layout"
 
 const Tab = createBottomTabNavigator()
 
@@ -51,8 +51,8 @@ export function AppLayout() {
         }}
       />
       <Tab.Screen
-        name="ProfileLayout"
-        component={ProfileLayout}
+        name="AccountLayout"
+        component={AccountLayout}
         options={{
           tabBarIcon: (props) =>
             me?.avatar ? (

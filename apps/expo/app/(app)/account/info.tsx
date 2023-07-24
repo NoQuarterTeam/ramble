@@ -18,7 +18,7 @@ import { useKeyboardController } from "../../../lib/hooks/useKeyboardController"
 import { useMe } from "../../../lib/hooks/useMe"
 import { useS3Upload } from "../../../lib/hooks/useS3"
 
-export function AccountScreen() {
+export function AccountInfoScreen() {
   useKeyboardController()
   const { me } = useMe()
 
@@ -79,7 +79,7 @@ export function AccountScreen() {
   return (
     <FormProvider {...form}>
       <ScreenView
-        title="Account"
+        title="Info"
         rightElement={
           isDirty ? (
             <Button isLoading={isLoading} variant="link" size="sm" onPress={onSubmit}>

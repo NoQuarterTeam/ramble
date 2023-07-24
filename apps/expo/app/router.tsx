@@ -35,9 +35,9 @@ export type ScreenParamsList = {
 
   AppLayout: undefined
 
-  ProfileLayout: undefined
-  ProfileScreen: undefined
+  AccountLayout: undefined
   AccountScreen: undefined
+  AccountInfoScreen: undefined
   VanScreen: undefined
   InterestsScreen: undefined
 
