@@ -12,7 +12,6 @@ export async function sendResetPasswordEmail(user: Pick<User, "email">, token: s
       react: <ResetPasswordEmail link={link} />,
       to: user.email,
       text: `Reset your password: ${link}`,
-      from: "info@noquarter.co",
       subject: "Reset Password",
     })
   } catch (error) {
@@ -29,7 +28,6 @@ export async function sendAccountVerificationEmail(user: Pick<User, "email">, to
       react: <VerifyEmail link={link} />,
       to: user.email,
       text: `Verify email: ${link}`,
-      from: "info@noquarter.co",
       subject: "Verify email",
     })
   } catch (error) {

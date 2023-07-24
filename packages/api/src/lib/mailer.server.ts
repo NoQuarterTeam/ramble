@@ -5,14 +5,15 @@ import type { CreateEmailOptions } from "resend/build/src/emails/interfaces"
 import { resend } from "./resend.server"
 import { IS_PRODUCTION } from "./config"
 
-type Props = CreateEmailOptions & { react: React.ReactElement<unknown> }
+type Props = Omit<CreateEmailOptions, "from"> & { react: React.ReactElement<unknown>; from?: string }
 class Mailer {
   async send(args: Props) {
     try {
+      const from = args.from || "hello@ramble.guide"
       if (IS_PRODUCTION) {
-        await resend.sendEmail(args)
+        await resend.sendEmail({ ...args, from, text: args.text || "" })
       } else {
-        await this.sendDev(args)
+        await this.sendDev({ ...args, from })
       }
     } catch (err) {
       // Sentry.captureException(err)
