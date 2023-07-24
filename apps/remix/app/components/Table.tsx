@@ -7,7 +7,7 @@ import { Prisma } from "@ramble/database/types"
 import { join, merge } from "@ramble/shared"
 
 import { Button, NoData } from "~/components/ui"
-import { DEFAULT_TAKE } from "~/lib/table"
+// import { DEFAULT_TAKE } from "~/lib/table"
 
 interface DataType {
   id: string
@@ -44,12 +44,13 @@ export function Table<T extends DataType>(props: Props<T>) {
       <div className="flex px-4 py-3">
         {columns.map(({ sortKey, header, row, hasNoLink, ...column }: ColumnProps<T>, i: number) => (
           <div
+            {...column}
             className={join(
               "flex flex-1 items-center overflow-hidden",
               i === columns.length - 1 ? "justify-end" : "justify-start",
+              column.className,
             )}
             key={i.toString()}
-            {...column}
           >
             {header && row && (
               <Header
@@ -85,7 +86,7 @@ export function Table<T extends DataType>(props: Props<T>) {
             <div
               key={item.id}
               className={join(
-                "flex w-full items-center border-t border-black/10 px-4 dark:border-white/10",
+                "flex items-center border-t border-black/10 px-4 dark:border-white/10",
                 !!props.getRowHref && "cursor-pointer hover:bg-gray-900",
               )}
             >
@@ -185,7 +186,7 @@ export interface PaginationProps {
 }
 
 export function Pagination(props: PaginationProps) {
-  const numberOfPages = props.count ? Math.ceil(props.count / (props.take || DEFAULT_TAKE)) : 0
+  // const numberOfPages = props.count ? Math.ceil(props.count / (props.take || DEFAULT_TAKE)) : 0
   const [params, setParams] = useSearchParams()
   const currentPage = parseInt(params.get("page") || "1") as number
   const handleSetPage = (page: number) => {
@@ -193,7 +194,7 @@ export function Pagination(props: PaginationProps) {
     setParams(queryString.stringify({ ...existingParams, page: page.toString() }))
   }
 
-  const pageArray = [...Array(numberOfPages)].map((_, i) => i)
+  // const pageArray = [...Array(numberOfPages)].map((_, i) => i).slice(0, 10)
   return (
     <div className="hstack space-x-1">
       <Button
@@ -204,16 +205,7 @@ export function Pagination(props: PaginationProps) {
       >
         Prev
       </Button>
-      {pageArray.map((page) => (
-        <Button
-          size="xs"
-          key={page}
-          variant={currentPage === page + 1 ? "primary" : "ghost"}
-          onClick={() => handleSetPage(page + 1)}
-        >
-          {page + 1}
-        </Button>
-      ))}
+      <p className="rounded border border-gray-300 p-1 px-2 dark:border-gray-600">Current: {currentPage}</p>
       <Button
         size="xs"
         variant="ghost"

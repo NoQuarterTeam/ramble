@@ -14,19 +14,18 @@ export const loader = async ({ request }: LoaderArgs) => {
 export default function AdminLayout() {
   return (
     <div className="flex">
-      <div className="p-8">
-        <ul>
-          <li>
-            <NavLink end to="/admin" className={({ isActive }) => join("", isActive && "text-primary-500")}>
-              Admin
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="users" className={({ isActive }) => join("", isActive && "text-primary-500")}>
-              Users
-            </NavLink>
-          </li>
-        </ul>
+      <div className="flex flex-col space-y-2 p-8">
+        <NavLink end to="/admin" className={({ isActive }) => join("", isActive && "text-primary-500")}>
+          Admin
+        </NavLink>
+
+        <NavLink to="users" className={({ isActive }) => join("", isActive && "text-primary-500")}>
+          Users
+        </NavLink>
+
+        <NavLink to="spots" className={({ isActive }) => join("", isActive && "text-primary-500")}>
+          Spots
+        </NavLink>
       </div>
       <div className="w-full p-8">
         <Outlet />
