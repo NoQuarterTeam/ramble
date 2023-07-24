@@ -14,11 +14,11 @@ import {
   Poppins_900Black,
   useFonts,
 } from "@expo-google-fonts/poppins"
-import { LinkingOptions, NavigationContainer } from "@react-navigation/native"
+import { type LinkingOptions, NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import * as Linking from "expo-linking"
 import * as SplashScreen from "expo-splash-screen"
 import { StatusBar } from "expo-status-bar"
-import * as Linking from "expo-linking"
 
 import { NewUpdate } from "../components/NewUpdate"
 import { Toast } from "../components/ui/Toast"

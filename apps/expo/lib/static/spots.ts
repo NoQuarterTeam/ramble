@@ -6,14 +6,14 @@ import {
   Fuel,
   HelpCircle,
   Info,
+  type LucideIcon,
+  type LucideProps,
   Mountain,
   ParkingCircle,
   ShoppingCart,
   Tent,
   Utensils,
   Waves,
-  type LucideIcon,
-  type LucideProps,
 } from "lucide-react-native"
 
 import type { SpotType } from "@ramble/database/types"

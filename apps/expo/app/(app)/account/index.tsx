@@ -1,7 +1,6 @@
 import { ScrollView, TouchableOpacity, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-
-import { ChevronRight, type LucideIcon, ToggleRight, User, User2, AlertCircle } from "lucide-react-native"
+import { AlertCircle, ChevronRight, type LucideIcon, ToggleRight, User, User2 } from "lucide-react-native"
 
 import { createImageUrl } from "@ramble/shared"
 
@@ -12,11 +11,11 @@ import { Icons } from "../../../components/ui/Icons"
 import { OptimizedImage } from "../../../components/ui/OptimisedImage"
 import { TabView } from "../../../components/ui/TabView"
 import { Text } from "../../../components/ui/Text"
+import { toast } from "../../../components/ui/Toast"
 import { api, AUTH_TOKEN } from "../../../lib/api"
 import { UPDATE_ID, VERSION } from "../../../lib/config"
 import { useMe } from "../../../lib/hooks/useMe"
 import { type ScreenParamsList, useRouter } from "../../router"
-import { toast } from "../../../components/ui/Toast"
 
 export function AccountScreen() {
   const { me } = useMe()

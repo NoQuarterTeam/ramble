@@ -4,8 +4,8 @@ import * as Updates from "expo-updates"
 
 import { Button } from "./ui/Button"
 import { Heading } from "./ui/Heading"
-import { Text } from "./ui/Text"
 import { Icons } from "./ui/Icons"
+import { Text } from "./ui/Text"
 
 export function NewUpdate() {
   const [isLoading, setIsLoading] = React.useState(false)
