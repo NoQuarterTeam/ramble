@@ -12,22 +12,24 @@ interface Props {
 
 export function SpotItem({ spot }: Props) {
   return (
-    <Link to={`/spots/${spot.id}`} className="flex items-center space-x-2 hover:opacity-70">
-      {spot.image ? (
-        <OptimizedImage
-          alt="spot"
-          placeholder={spot.blurHash}
-          quality={90}
-          width={150}
-          height={100}
-          className="h-[100px] min-w-[150px] rounded-md"
-          src={createImageUrl(spot.image)}
-        />
-      ) : (
-        <div className="flex h-[100px] min-w-[150px] items-center justify-center rounded-md bg-gray-50 object-cover dark:bg-gray-700">
-          <Camera className="opacity-50" />
-        </div>
-      )}
+    <Link to={`/spots/${spot.id}`} className="flex flex-col items-start space-x-2 hover:opacity-70 md:flex-row md:items-center">
+      <div className="h-[300px] w-full md:h-[100px] md:w-[150px]">
+        {spot.image ? (
+          <OptimizedImage
+            alt="spot"
+            placeholder={spot.blurHash}
+            quality={90}
+            width={450}
+            height={300}
+            className="rounded-md object-cover"
+            src={createImageUrl(spot.image)}
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center rounded-md bg-gray-50 object-cover dark:bg-gray-700">
+            <Camera className="opacity-50" />
+          </div>
+        )}
+      </div>
 
       <div>
         <p className="line-clamp-2 text-xl">{spot.name}</p>

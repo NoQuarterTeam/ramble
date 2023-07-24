@@ -57,9 +57,11 @@ export default function Latest() {
     <PageContainer>
       <h1 className="text-3xl">Latest Spots</h1>
       <div className="space-y-2">
-        {spots.map((spot) => (
-          <SpotItem key={spot.id} spot={spot} />
-        ))}
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-1">
+          {spots.map((spot) => (
+            <SpotItem key={spot.id} spot={spot} />
+          ))}
+        </div>
         {count > 10 && (
           <div className="flex items-center justify-center">
             <Button size="lg" isLoading={spotFetcher.state === "loading"} variant="outline" onClick={onNext}>

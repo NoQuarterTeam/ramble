@@ -33,7 +33,7 @@ export const OptimizedImage = React.forwardRef<HTMLImageElement, OptimizedImageP
   // increase the width and height so quality is higher
   const newSrc = transformImageSrc(src, { width: props.width * 1.5, height: props.height * 1.5, quality, fit })
   return (
-    <div className={merge("relative overflow-hidden", props.className)} style={{ height: props.height, width: props.width }}>
+    <div className={merge("relative h-full w-full overflow-hidden", props.className)}>
       {placeholder ? (
         <BlurCanvas blurHash={placeholder} />
       ) : (
