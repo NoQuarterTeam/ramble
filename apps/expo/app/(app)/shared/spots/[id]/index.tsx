@@ -123,16 +123,16 @@ export function SpotDetailScreen() {
               />
             </View>
 
-            <Text className="text-sm font-400-italic">{spot.address}</Text>
+            <Text className="font-400-italic text-sm">{spot.address}</Text>
             {spot.amenities && (
-              <View className="flex flex-wrap flex-row gap-2">
+              <View className="flex flex-row flex-wrap gap-2">
                 {Object.entries(AMENITIES).map(([key, value]) => {
                   if (!spot.amenities?.[key as keyof typeof AMENITIES]) return null
                   const Icon = AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]
                   return (
                     <View
                       key={key}
-                      className="p-2 flex flex-row space-x-1 border border-gray-200 dark:border-gray-700 rounded-md"
+                      className="flex flex-row space-x-1 rounded-md border border-gray-200 p-2 dark:border-gray-700"
                     >
                       {Icon && <Icon size={20} className="text-black dark:text-white" />}
                       <Text className="text-sm">{value}</Text>

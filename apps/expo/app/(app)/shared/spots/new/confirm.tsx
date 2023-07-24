@@ -64,7 +64,7 @@ export function NewSpotConfirmScreen() {
             Object.keys(params.amenities).map((key) => <Text key={key}>{AMENITIES[key as keyof typeof AMENITIES]}</Text>)}
           <View className="flex flex-row flex-wrap">
             {params.images.map((image, i) => (
-              <View key={i} className="p-1 w-1/3">
+              <View key={i} className="w-1/3 p-1">
                 <Image className="h-[100px] w-full rounded-md bg-gray-50 object-cover dark:bg-gray-700" source={{ uri: image }} />
               </View>
             ))}
@@ -72,7 +72,7 @@ export function NewSpotConfirmScreen() {
         </View>
       </ScrollView>
 
-      <View className="absolute bottom-12 left-4 flex space-y-2 right-4 items-center justify-center">
+      <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
         <Button
           isLoading={createLoading || isLoading}
           leftIcon={<Check size={20} className="text-white dark:text-black" />}

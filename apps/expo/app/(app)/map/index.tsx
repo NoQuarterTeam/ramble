@@ -206,7 +206,7 @@ export function SpotsMapScreen() {
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={filterModalProps.onOpen}
-        className="absolute bottom-3 left-3 flex flex-row items-center justify-center rounded-full bg-white sq-12"
+        className="sq-12 absolute bottom-3 left-3 flex flex-row items-center justify-center rounded-full bg-white"
       >
         <Settings2 size={20} className="text-black" />
         {filterCount > 0 && (
@@ -218,7 +218,7 @@ export function SpotsMapScreen() {
 
       <TouchableOpacity
         onPress={handleSetUserLocation}
-        className="absolute bottom-3 right-3 flex flex-row items-center justify-center rounded-full bg-white sq-12"
+        className="sq-12 absolute bottom-3 right-3 flex flex-row items-center justify-center rounded-full bg-white"
       >
         <Navigation size={20} className="text-black" />
       </TouchableOpacity>

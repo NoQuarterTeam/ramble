@@ -28,7 +28,7 @@ export function SpotItem({ spot }: Props) {
             />
           ) : (
             <View className="flex h-full w-full items-center justify-center rounded-md bg-gray-50 dark:bg-gray-700">
-              <Camera className="opacity-50 text-black dark:text-white" />
+              <Camera className="text-black opacity-50 dark:text-white" />
             </View>
           )}
         </View>

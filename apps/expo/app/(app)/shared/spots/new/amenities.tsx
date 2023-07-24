@@ -32,7 +32,7 @@ export function NewSpotAmenitiesScreen() {
         ))}
       </ScrollView>
 
-      <View className="absolute bottom-12 left-4 flex space-y-2 right-4 items-center justify-center">
+      <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
         <Button className="rounded-full" onPress={() => router.push("NewSpotImagesScreen", { ...params, amenities })}>
           Next
         </Button>
@@ -54,7 +54,7 @@ function AmenitySelector({
 }) {
   return (
     <View className="flex w-full flex-row items-center justify-between py-1">
-      <View className="flex items-center flex-row space-x-1">
+      <View className="flex flex-row items-center space-x-1">
         {Icon && <Icon size={20} className="text-black dark:text-white" />}
         <Text className="text-xl">{label}</Text>
       </View>

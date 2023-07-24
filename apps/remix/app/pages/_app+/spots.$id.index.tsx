@@ -81,7 +81,7 @@ export default function SpotDetail() {
   return (
     <div className="relative">
       <div className="w-screen overflow-x-scroll">
-        <div className="flex gap-2 w-max p-2">
+        <div className="flex w-max gap-2 p-2">
           {spot.images.map((image) => (
             <div key={image.id}>
               <OptimizedImage
@@ -120,12 +120,12 @@ export default function SpotDetail() {
               <div dangerouslySetInnerHTML={{ __html: spot.description || "" }} />
               <p className="text-sm italic">{spot.address}</p>
               {spot.amenities && (
-                <div className="flex flex-wrap flex-row gap-2">
+                <div className="flex flex-row flex-wrap gap-2">
                   {Object.entries(AMENITIES).map(([key, value]) => {
                     if (!spot.amenities?.[key as keyof typeof AMENITIES]) return null
                     const Icon = AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]
                     return (
-                      <div key={key} className="p-2 flex space-x-1 border border-gray-200 dark:border-gray-700 rounded-md">
+                      <div key={key} className="flex space-x-1 rounded-md border border-gray-200 p-2 dark:border-gray-700">
                         {Icon && <Icon size={20} />}
                         <p className="text-sm">{value}</p>
                       </div>

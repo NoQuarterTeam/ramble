@@ -103,8 +103,8 @@ export default function SpotPreview() {
                   </p>
                 </div>
               </div>
-              <div className="overflow-x-scroll w-full rounded-md">
-                <div className="relative flex h-[225px] space-x-2 w-max">
+              <div className="w-full overflow-x-scroll rounded-md">
+                <div className="relative flex h-[225px] w-max space-x-2">
                   {spot.images?.map((image) => (
                     <OptimizedImage
                       alt="spot"

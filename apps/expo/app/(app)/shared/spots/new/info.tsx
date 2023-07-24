@@ -39,7 +39,7 @@ export function NewSpotOptionsScreen() {
         <Input value={description} onChangeText={setDescription} multiline numberOfLines={4} />
       </ScrollView>
       {description && name && (
-        <View className="absolute bottom-12 left-4 flex space-y-2 right-4 items-center justify-center">
+        <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
           <Button
             // leftIcon={<X size={20} className="text-black dark:text-white" />}
             className="rounded-full"

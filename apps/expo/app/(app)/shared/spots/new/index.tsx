@@ -65,7 +65,7 @@ export function NewSpotLocationScreen() {
       {!isLoadingLocation && (
         <>
           <Mapbox.MapView
-            className="flex-1 mb-10 mt-4 rounded-lg overflow-hidden"
+            className="mb-10 mt-4 flex-1 overflow-hidden rounded-lg"
             logoEnabled={false}
             compassEnabled
             onMapIdle={onMapMove}
@@ -87,13 +87,13 @@ export function NewSpotLocationScreen() {
             />
             <View
               style={{ transform: [{ translateX: -15 }, { translateY: -15 }] }}
-              className="absolute flex items-center justify-center top-1/2 left-1/2"
+              className="absolute left-1/2 top-1/2 flex items-center justify-center"
             >
               <CircleDot size={30} className="text-white" />
             </View>
           </Mapbox.MapView>
 
-          <View className="absolute bottom-12 flex-row left-5 flex space-y-2 right-5 items-center justify-between">
+          <View className="absolute bottom-12 left-5 right-5 flex flex-row items-center justify-between space-y-2">
             <View className="w-12" />
             {coords && (
               <Button
@@ -114,7 +114,7 @@ export function NewSpotLocationScreen() {
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={handleSetUserLocation}
-              className="flex flex-row items-center justify-center rounded-full bg-white sq-12"
+              className="sq-12 flex flex-row items-center justify-center rounded-full bg-white"
             >
               <Navigation size={20} className="text-black" />
             </TouchableOpacity>

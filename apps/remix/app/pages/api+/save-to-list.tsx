@@ -136,7 +136,7 @@ export function SaveToList(props: Props) {
             </Tooltip>
           </div>
           {!lists ? null : lists.length === 0 ? (
-            <div className="p-3 space-y-3 flex-col flex items-center justify-center">
+            <div className="flex flex-col items-center justify-center space-y-3 p-3">
               <p>You haven't got any lists yet</p>
               <Button variant="outline" onClick={newListModalProps.onOpen}>
                 Create a new list

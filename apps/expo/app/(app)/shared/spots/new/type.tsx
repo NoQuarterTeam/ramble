@@ -16,7 +16,7 @@ export function NewSpotTypeScreen() {
   return (
     <NewSpotModalView title="What type?">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <View className="pt-4 flex flex-row flex-wrap gap-2">
+        <View className="flex flex-row flex-wrap gap-2 pt-4">
           {SPOT_OPTIONS.map((spotType) => (
             <Button
               variant={type === spotType.value ? "primary" : "outline"}
@@ -35,7 +35,7 @@ export function NewSpotTypeScreen() {
         </View>
       </ScrollView>
       {type && (
-        <View className="absolute bottom-12 left-4 flex space-y-2 right-4 items-center justify-center">
+        <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
           <Button
             // leftIcon={<X size={20} className="text-black dark:text-white" />}
             className="rounded-full"

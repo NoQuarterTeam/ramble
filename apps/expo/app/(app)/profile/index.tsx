@@ -58,7 +58,7 @@ export function ProfileScreen() {
     <TabView title="Profile">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false} className="space-y-4 pt-2">
         {!me.isVerified && (
-          <View className="p-2 pl-4 flex-col space-y-3 flex border border-gray-200 dark:border-gray-700 rounded-md">
+          <View className="flex flex-col space-y-3 rounded-md border border-gray-200 p-2 pl-4 dark:border-gray-700">
             <View className="flex flex-row items-center space-x-2">
               <AlertCircle size={20} className="text-black dark:text-white" />
               <Text className="text-lg">Your account is not yet verified</Text>
