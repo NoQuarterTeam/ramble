@@ -30,7 +30,7 @@ import { SPOTS } from "~/lib/static/spots"
 import { useTheme } from "~/lib/theme"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
-import { SaveToList } from "../api+/save-to-list"
+import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 
 export const loader = async ({ params }: LoaderArgs) => {

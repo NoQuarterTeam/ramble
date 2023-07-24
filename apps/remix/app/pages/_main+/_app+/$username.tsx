@@ -14,7 +14,7 @@ import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { notFound } from "~/lib/remix.server"
 import { interestOptions } from "~/lib/static/interests"
 
-import { PageContainer } from "../../components/PageContainer"
+import { PageContainer } from "../../../components/PageContainer"
 
 export const headers = useLoaderHeaders
 

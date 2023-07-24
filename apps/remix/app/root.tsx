@@ -35,7 +35,6 @@ import { FlashMessage } from "./components/FlashMessage"
 import { LinkButton } from "./components/LinkButton"
 import { FULL_WEB_URL } from "./lib/config.server"
 import { type Theme } from "./lib/theme"
-import { Nav } from "./pages/_app+/components/Nav"
 import { getMaybeUser } from "./services/auth/auth.server"
 import { getFlashSession } from "./services/session/flash.server"
 import { getThemeSession } from "./services/session/theme.server"
@@ -83,7 +82,6 @@ export default function App() {
     <Document theme={theme}>
       <Tooltip.Provider>
         <FlashMessage flash={flash} />
-        <Nav />
         <Outlet />
       </Tooltip.Provider>
       <Toaster />

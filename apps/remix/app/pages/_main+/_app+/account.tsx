@@ -14,7 +14,7 @@ import { createToken } from "~/lib/jwt.server"
 import { json } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
-import { PageContainer } from "../../components/PageContainer"
+import { PageContainer } from "../../../components/PageContainer"
 import { sendAccountVerificationEmail } from "@ramble/api"
 
 export const loader = async ({ request }: LoaderArgs) => {

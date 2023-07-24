@@ -17,9 +17,9 @@ import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
 
 import { SPOTS } from "~/lib/static/spots"
 import { useTheme } from "~/lib/theme"
-import { MapFilters } from "~/pages/_app+/components/MapFilters"
+import { MapFilters } from "~/pages/_main+/_app+/components/MapFilters"
 
-import type { Cluster, clustersLoader } from "../api+/clusters"
+import type { Cluster, clustersLoader } from "../../api+/clusters"
 import type { IpInfo } from "./_layout"
 
 export default function MapView() {

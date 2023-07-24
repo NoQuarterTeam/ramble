@@ -15,9 +15,9 @@ import { Button, Input, Spinner } from "~/components/ui"
 import { SPOTS } from "~/lib/static/spots"
 import { useTheme } from "~/lib/theme"
 
-import { PageContainer } from "../../components/PageContainer"
-import type { directionsLoader } from "../api+/mapbox+/directions"
-import type { locationSearchLoader } from "../api+/mapbox+/location-search"
+import { PageContainer } from "../../../components/PageContainer"
+import type { directionsLoader } from "../../api+/mapbox+/directions"
+import type { locationSearchLoader } from "../../api+/mapbox+/location-search"
 
 export default function PlanTrip() {
   const theme = useTheme()

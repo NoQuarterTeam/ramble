@@ -10,7 +10,7 @@ import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 
-import { PageContainer } from "../../components/PageContainer"
+import { PageContainer } from "../../../components/PageContainer"
 import { SpotItem } from "./components/SpotItem"
 
 export const headers = useLoaderHeaders
@@ -20,32 +20,32 @@ export const loader = async ({ request }: LoaderArgs) => {
   const skip = parseInt((searchParams.get("skip") as string) || "0")
 
   const spots: Array<SpotItemWithImageAndRating> = await db.$queryRaw`
-      SELECT Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating,
-        (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id LIMIT 1) AS image,
-        (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash
-      FROM
-        Spot
-      LEFT JOIN
-        Review ON Spot.id = Review.spotId
-      GROUP BY
-        Spot.id
-      ORDER BY
-        rating DESC, Spot.id
-      LIMIT 10
-      OFFSET ${skip};
-    `
-
+    SELECT 
+      Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating,
+      (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image,
+      (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash
+    FROM
+      Spot
+    LEFT JOIN
+      Review ON Spot.id = Review.spotId
+    GROUP BY
+      Spot.id
+    ORDER BY
+      Spot.createdAt DESC, Spot.id
+    LIMIT 10
+    OFFSET ${skip};
+  `
   const count = await db.spot.count()
   return json({ spots, count }, { headers: { "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour" }) } })
 }
 
-export default function Rated() {
+export default function Latest() {
   const { spots: initialSpots, count } = useLoaderData<typeof loader>()
 
   const spotFetcher = useFetcher<typeof loader>()
   const [spots, setSpots] = React.useState(initialSpots)
 
-  const onNext = () => spotFetcher.load(`/rated?skip=${spots.length}`)
+  const onNext = () => spotFetcher.load(`/latest?skip=${spots.length}`)
 
   React.useEffect(() => {
     if (spotFetcher.state === "loading") return
@@ -55,7 +55,7 @@ export default function Rated() {
 
   return (
     <PageContainer>
-      <h1 className="text-3xl">Top rated</h1>
+      <h1 className="text-3xl">Latest Spots</h1>
       <div className="space-y-2">
         {spots.map((spot) => (
           <SpotItem key={spot.id} spot={spot} />

@@ -30,9 +30,5 @@ export type IpInfo = SerializeFrom<typeof loader>
 export const shouldRevalidate = () => false
 
 export default function App() {
-  return (
-    <>
-      <Outlet />
-    </>
-  )
+  return <Outlet />
 }

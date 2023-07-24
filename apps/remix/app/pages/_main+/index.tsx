@@ -9,7 +9,7 @@ import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { db } from "~/lib/db.server"
 
-import { PageContainer } from "../components/PageContainer"
+import { PageContainer } from "../../components/PageContainer"
 
 export const loader = async () => {
   const spots: Array<SpotItemWithImageAndRating> = await db.$queryRaw`
