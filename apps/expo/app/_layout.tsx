@@ -40,7 +40,7 @@ SplashScreen.preventAutoHideAsync()
 enableScreens()
 const prefix = Linking.createURL("/")
 const linking: LinkingOptions<ScreenParamsList> = {
-  prefixes: [prefix, "ramble.noquarter.co", "ramble://"],
+  prefixes: [prefix, "ramble.guide", "dev.ramble.guide", "ramble://"],
   config: {
     screens: {
       AppLayout: {

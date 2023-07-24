@@ -26,7 +26,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     supportsTablet: true,
     icon: "./assets/icon.png",
     bundleIdentifier: "co.noquarter.ramble",
-    associatedDomains: ["applinks:ramble.noquarter.co"],
+    associatedDomains: ["applinks:ramble.guide", "applinks:dev.ramble.guide"],
     infoPlist: {
       LSApplicationQueriesSchemes: ["comgooglemaps"],
     },

@@ -10,10 +10,6 @@
       "channel": "preview",
       "distribution": "internal"
     },
-    "staging": {
-      "channel": "staging",
-      "distribution": "store"
-    },
     "production": {
       "channel": "production",
       "distribution": "store"

@@ -63,20 +63,20 @@ export default function Home() {
       </div>
 
       <h2 className="text-2xl">Check out some top rated spots</h2>
-      <div className="scrollbar-hide flex space-x-4 overflow-x-scroll  py-4">
+      <div className="scrollbar-hide flex space-x-4 overflow-x-scroll py-4">
         {spots.map((spot) => (
-          <Link to={`/spots/${spot.id}`} key={spot.id} className="w-[420px] flex-shrink-0 hover:opacity-70">
+          <Link to={`/spots/${spot.id}`} key={spot.id} className="w-[450px] flex-shrink-0 hover:opacity-70">
             {spot.image ? (
               <OptimizedImage
                 alt="spot"
                 width={450}
                 height={250}
-                className="h-[250px] min-w-[420px] rounded-md bg-gray-50 object-cover dark:bg-gray-700"
+                className="min-h-[250px] min-w-[450px] rounded-md bg-gray-50 object-cover dark:bg-gray-700"
                 src={createImageUrl(spot.image)}
               />
             ) : (
-              <div className="flex h-[100px] min-w-[200px] items-center justify-center rounded-md bg-gray-50 object-cover dark:bg-gray-700">
-                <Camera className="opacity-50" />
+              <div className="flex h-[250px] min-w-[450px] items-center justify-center rounded-md bg-gray-50 object-cover dark:bg-gray-700">
+                <Camera size={70} className="opacity-50" />
               </div>
             )}
             <div>

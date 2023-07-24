@@ -1,6 +1,6 @@
 import { ScrollView, TouchableOpacity, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import * as Updates from "expo-updates"
+
 import { ChevronRight, type LucideIcon, ToggleRight, User, User2, AlertCircle } from "lucide-react-native"
 
 import { createImageUrl } from "@ramble/shared"
@@ -13,12 +13,10 @@ import { OptimizedImage } from "../../../components/ui/OptimisedImage"
 import { TabView } from "../../../components/ui/TabView"
 import { Text } from "../../../components/ui/Text"
 import { api, AUTH_TOKEN } from "../../../lib/api"
-import { VERSION } from "../../../lib/config"
+import { UPDATE_ID, VERSION } from "../../../lib/config"
 import { useMe } from "../../../lib/hooks/useMe"
 import { type ScreenParamsList, useRouter } from "../../router"
 import { toast } from "../../../components/ui/Toast"
-
-const updateId = Updates.updateId
 
 export function ProfileScreen() {
   const { me } = useMe()
@@ -48,7 +46,7 @@ export function ProfileScreen() {
 
             <View className="pt-10">
               <Text className="text-center">v{VERSION}</Text>
-              <Text className="text-center opacity-60">{updateId?.split("-")[0] || "dev"}</Text>
+              <Text className="text-center opacity-60">{UPDATE_ID}</Text>
             </View>
           </View>
         </LoginPlaceholder>
@@ -118,7 +116,7 @@ export function ProfileScreen() {
             Log out
           </Button>
           <Text className="text-center">v{VERSION}</Text>
-          <Text className="text-center opacity-60">{updateId?.split("-")[0] || "dev"}</Text>
+          <Text className="text-center opacity-60">{UPDATE_ID}</Text>
         </View>
       </ScrollView>
     </TabView>
