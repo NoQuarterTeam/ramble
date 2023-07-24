@@ -98,8 +98,8 @@ export function AccountScreen() {
             </TouchableOpacity>
 
             <View>
-              <ProfileLink to="AccountScreen" Icon={User}>
-                Account
+              <ProfileLink to="AccountInfoScreen" Icon={User}>
+                Info
               </ProfileLink>
               <ProfileLink to="InterestsScreen" Icon={ToggleRight}>
                 Interests
