@@ -10,7 +10,7 @@ datasource db {
 
 enum Role {
   ADMIN
-  AMBASSADOR
+  GUIDE
   OWNER
   MEMBER
 }

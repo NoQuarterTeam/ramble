@@ -83,7 +83,7 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
                 <Verified className="sq-6" />
                 <div>
                   <p>Verified spots</p>
-                  <p className="text-sm opacity-70">Spots that have been verified by an Ambassador</p>
+                  <p className="text-sm opacity-70">Spots that have been verified by an Guide</p>
                 </div>
               </div>
               <Switch

@@ -147,8 +147,8 @@ export const spotRouter = createTRPCRouter({
           ...input,
           address: address || "Unknown address",
           creator: { connect: { id: ctx.user.id } },
-          verifiedAt: ctx.user.role === "ADMIN" || ctx.user.role === "AMBASSADOR" ? new Date() : null,
-          verifier: ctx.user.role === "ADMIN" || ctx.user.role === "AMBASSADOR" ? { connect: { id: ctx.user.id } } : undefined,
+          verifiedAt: ctx.user.role === "ADMIN" || ctx.user.role === "GUIDE" ? new Date() : null,
+          verifier: ctx.user.role === "ADMIN" || ctx.user.role === "GUIDE" ? { connect: { id: ctx.user.id } } : undefined,
           images: { create: imageData },
           amenities: amenities
             ? {
