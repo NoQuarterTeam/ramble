@@ -52,7 +52,7 @@ export default function ProfileLists() {
         <div className="flex items-center space-x-3">
           <Avatar size={200} placeholder={user.avatarBlurHash} className="sq-20 md:sq-32" src={createImageUrl(user.avatar)} />
           <div className="space-y-1">
-            {user.role === "AMBASSADOR" && <Badge colorScheme="green">Ambassador</Badge>}
+            {user.role === "GUIDE" && <Badge colorScheme="green">Guide</Badge>}
             <div className="flex space-x-2">
               <h1 className="text-xl md:text-3xl">{user.username}</h1>
               {currentUser?.id === user.id && (

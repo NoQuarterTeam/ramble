@@ -64,10 +64,7 @@ export default function AccountLayout() {
             <p>
               {user.firstName} {user.lastName}
             </p>
-            <Badge
-              colorScheme={user.role === "AMBASSADOR" ? "green" : user.role === "OWNER" ? "orange" : "gray"}
-              className="w-min"
-            >
+            <Badge colorScheme={user.role === "GUIDE" ? "green" : user.role === "OWNER" ? "orange" : "gray"} className="w-min">
               {user.role}
             </Badge>
           </div>

@@ -69,7 +69,7 @@ export function MapFilters(props: Props) {
               <BadgeCheck size={30} className="text-black dark:text-white" />
               <View>
                 <Text className="text-lg">Verified spots</Text>
-                <Text className="text-sm opacity-75">Spots verified by an Ambassador</Text>
+                <Text className="text-sm opacity-75">Spots verified by an Guide</Text>
               </View>
             </View>
             <Switch
