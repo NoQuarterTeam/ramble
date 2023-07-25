@@ -7,7 +7,7 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const user = await getCurrentUser(request)
-  if (user.role !== "ADMIN") return redirect("/")
+  if (!user.isAdmin) return redirect("/")
   return json(null)
 }
 

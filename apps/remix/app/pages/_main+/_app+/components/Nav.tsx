@@ -1,7 +1,8 @@
-import { Link, useFetcher, useNavigate, useSubmit } from "@remix-run/react"
+import type { NavLinkProps } from "@remix-run/react"
+import { Link, NavLink, useFetcher, useNavigate, useSubmit } from "@remix-run/react"
 import { Heart, LogOut, Menu, Moon, Plus, Settings, Sun, User } from "lucide-react"
 
-import { ClientOnly, createImageUrl } from "@ramble/shared"
+import { ClientOnly, createImageUrl, merge } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
 import {
@@ -14,6 +15,8 @@ import {
   IconButton,
   Icons,
   Tooltip,
+  buttonSizeStyles,
+  buttonStyles,
 } from "~/components/ui"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { useTheme } from "~/lib/theme"
@@ -33,24 +36,13 @@ export function Nav() {
           <Logo to={`/map${typeof window !== "undefined" ? window.location.search : ""}`} />
         </ClientOnly>
 
-        <div className="hidden items-center md:flex">
-          <ClientOnly
-            fallback={
-              <LinkButton variant="ghost" to={`/map`}>
-                Map
-              </LinkButton>
-            }
-          >
-            <LinkButton variant="ghost" to={`/map${typeof window !== "undefined" ? window.location.search : ""}`}>
-              Map
-            </LinkButton>
+        <div className="hidden items-center space-x-1 md:flex">
+          <ClientOnly fallback={<NavbarLink to={`/map`}>Map</NavbarLink>}>
+            <NavbarLink to={`/map${typeof window !== "undefined" ? window.location.search : ""}`}>Map</NavbarLink>
           </ClientOnly>
-          <LinkButton variant="ghost" to="/latest">
-            Latest
-          </LinkButton>
-          <LinkButton variant="ghost" to="/rated">
-            Top rated
-          </LinkButton>
+          <NavbarLink to="/latest">Latest</NavbarLink>
+          <NavbarLink to="/rated">Top rated</NavbarLink>
+          <NavbarLink to="/guides">Guides</NavbarLink>
         </div>
       </div>
       <div className="hstack space-x-3">
@@ -170,5 +162,19 @@ function Logo({ to }: { to: string }) {
       </span>
       <span className="text-xl font-medium">Ramble</span>
     </Link>
+  )
+}
+
+function NavbarLink(props: NavLinkProps) {
+  return (
+    <NavLink
+      {...props}
+      to={props.to}
+      className={({ isActive }) =>
+        merge(buttonStyles({ size: "md", variant: isActive ? "secondary" : "ghost" }), buttonSizeStyles({ size: "md" }))
+      }
+    >
+      {props.children}
+    </NavLink>
   )
 }

@@ -9,7 +9,6 @@ datasource db {
 }
 
 enum Role {
-  ADMIN
   GUIDE
   OWNER
   MEMBER
@@ -28,6 +27,7 @@ model User {
   bio            String? @db.LongText
   instagram      String?
   isVerified     Boolean @default(false)
+  isAdmin        Boolean @default(false)
 
   // Preferences
   isPetOwner      Boolean @default(false)
