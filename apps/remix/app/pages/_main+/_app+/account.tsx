@@ -1,7 +1,7 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Outlet, useActionData, useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs } from "@vercel/remix"
-import { AlertCircle, Settings, ToggleRight, User } from "lucide-react"
+import { AlertCircle, Settings, ToggleRight, User, UserPlus } from "lucide-react"
 
 import { createImageUrl, merge } from "@ramble/shared"
 
@@ -87,6 +87,9 @@ export default function AccountLayout() {
           </AccountLink>
           <AccountLink Icon={Icons.Van} to="/account/van">
             My van
+          </AccountLink>
+          <AccountLink Icon={UserPlus} to="/account/invite">
+            Invite
           </AccountLink>
           <AccountLink Icon={Settings} to="/account/settings">
             Settings

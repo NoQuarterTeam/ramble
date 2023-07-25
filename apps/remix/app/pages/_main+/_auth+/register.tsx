@@ -1,12 +1,12 @@
-import { sendAccountVerificationEmail } from "@ramble/api"
-import { Link } from "@remix-run/react"
+import { generateInviteCodes, sendAccountVerificationEmail } from "@ramble/api"
+import { Link, useSearchParams } from "@remix-run/react"
 import type { ActionArgs, V2_MetaFunction } from "@vercel/remix"
 import { redirect } from "@vercel/remix"
 import { z } from "zod"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { db } from "~/lib/db.server"
-import { formError, validateFormData } from "~/lib/form"
+import { FORM_ACTION, formError, validateFormData } from "~/lib/form"
 import { createToken } from "~/lib/jwt.server"
 import { badRequest } from "~/lib/remix.server"
 import { hashPassword } from "~/services/auth/password.server"
@@ -43,20 +43,35 @@ export const action = async ({ request }: ActionArgs) => {
           password: z.string().min(8, "Must be at least 8 characters"),
           firstName: z.string().min(2, "Must be at least 2 characters"),
           lastName: z.string().min(2, "Must be at least 2 characters"),
+          code: z.string().min(4, "Must be at least 2 characters"),
         })
         const result = await validateFormData(formData, registerSchema)
         if (!result.success) return formError(result)
-        const data = result.data
+        const { code, ...data } = result.data
         const email = data.email.toLowerCase().trim()
         const existingEmail = await db.user.findFirst({ where: { email } })
         if (existingEmail) return formError({ data, formError: "User with this email already exists" })
         const username = data.username.toLowerCase().trim()
         const existingUsername = await db.user.findFirst({ where: { username } })
         if (existingUsername) return formError({ data, formError: "User with this username already exists" })
+
+        const trimmedCode = code.toUpperCase().trim()
+        const inviteCode = await db.inviteCode.findFirst({ where: { code: trimmedCode, acceptedAt: null } })
+        if (!inviteCode) return formError({ data, formError: "Invalid invite code" })
+
         const password = await hashPassword(data.password)
         const user = await db.user.create({
-          data: { ...data, email, password, lists: { create: { name: "Favourites", description: "All my favourite spots" } } },
+          data: {
+            ...data,
+            usedInviteCode: { connect: { id: inviteCode.id } },
+            email,
+            password,
+            lists: { create: { name: "Favourites", description: "All my favourite spots" } },
+          },
         })
+        const codes = generateInviteCodes(user.id)
+        await db.inviteCode.createMany({ data: codes.map((c) => ({ code: c, ownerId: user.id })) })
+        await db.inviteCode.update({ where: { id: inviteCode.id }, data: { acceptedAt: new Date() } })
         const { setUser } = await getUserSession(request)
         const { createFlash } = await getFlashSession(request)
         const token = createToken({ id: user.id })
@@ -66,7 +81,8 @@ export const action = async ({ request }: ActionArgs) => {
           ["Set-Cookie", await createFlash(FlashType.Info, `Welcome to Ramble, ${data.firstName}!`, "Let's get you setup.")],
         ])
         return redirect("/onboarding", { headers })
-      } catch {
+      } catch (e) {
+        console.log(e)
         return badRequest("Error registering your account")
       }
 
@@ -76,17 +92,23 @@ export const action = async ({ request }: ActionArgs) => {
 }
 
 export default function Register() {
+  const [searchParams] = useSearchParams()
+
   return (
     <Form className="space-y-2">
       <h1 className="text-4xl font-bold">Register</h1>
+      <p>For now we are invite only!</p>
+      <FormField required label="Invite code" name="code" defaultValue={searchParams.get("code") || ""} />
+      <hr />
       <FormField autoCapitalize="none" required label="Email address" name="email" placeholder="jim@gmail.com" />
       <FormField required label="Password" name="password" type="password" placeholder="********" />
       <input name="passwordConfirmation" className="hidden" />
       <FormField autoCapitalize="none" required label="Choose a username" name="username" placeholder="Jim93" />
       <FormField required label="First name" name="firstName" placeholder="Jim" />
       <FormField required label="Last name" name="lastName" placeholder="Bob" />
+
       <div>
-        <FormButton name="_action" value={Actions.Register} className="w-full">
+        <FormButton name={FORM_ACTION} value={Actions.Register} className="w-full">
           Register
         </FormButton>
         <FormError />
