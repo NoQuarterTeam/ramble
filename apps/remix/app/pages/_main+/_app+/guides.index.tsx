@@ -49,14 +49,14 @@ export default function Guides() {
   const { guides: initialGuides, count } = useLoaderData<LoaderData>()
 
   const guideFetcher = useFetcher<LoaderData>()
-  const [guides, setSpots] = React.useState(initialGuides)
+  const [guides, setGuides] = React.useState(initialGuides)
 
   const onNext = () => guideFetcher.load(`/guides?skip=${guides.length}`)
 
   React.useEffect(() => {
     if (guideFetcher.state === "loading") return
     const data = guideFetcher.data?.guides
-    if (data) setSpots((prev) => [...prev, ...data])
+    if (data) setGuides((prev) => [...prev, ...data])
   }, [guideFetcher.data, guideFetcher.state])
 
   return (
