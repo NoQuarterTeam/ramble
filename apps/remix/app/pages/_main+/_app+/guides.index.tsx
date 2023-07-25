@@ -85,9 +85,9 @@ function GuideItem(props: { guide: SerializeFrom<typeof loader>["guides"][number
       className="flex items-center justify-between space-x-4 rounded-md border border-gray-200 p-4 transition-colors hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600"
     >
       <div className="flex items-center space-x-2">
-        <Avatar className="sq-12" size={80} placeholder={props.guide.avatarBlurHash} src={createImageUrl(props.guide.avatar)} />
+        <Avatar className="sq-20" size={100} placeholder={props.guide.avatarBlurHash} src={createImageUrl(props.guide.avatar)} />
         <div>
-          <p className="text-xl leading-5">
+          <p className="text-2xl leading-5">
             {props.guide.firstName} {props.guide.lastName}
           </p>
           <p className="text-sm">{props.guide.username}</p>
