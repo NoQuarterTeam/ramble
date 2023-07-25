@@ -92,6 +92,9 @@ export function Nav() {
               <DropdownMenuItem asChild>
                 <Link to="/rated">Top rated</Link>
               </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/guides">Guides</Link>
+              </DropdownMenuItem>
               <hr />
             </div>
 
