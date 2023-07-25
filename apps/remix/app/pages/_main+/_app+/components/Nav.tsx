@@ -40,8 +40,8 @@ export function Nav() {
           <ClientOnly fallback={<NavbarLink to={`/map`}>Map</NavbarLink>}>
             <NavbarLink to={`/map${typeof window !== "undefined" ? window.location.search : ""}`}>Map</NavbarLink>
           </ClientOnly>
-          <NavbarLink to="/latest">Latest</NavbarLink>
-          <NavbarLink to="/rated">Top rated</NavbarLink>
+          <NavbarLink to="/latest">Latest spots</NavbarLink>
+          <NavbarLink to="/rated">Top spots</NavbarLink>
           <NavbarLink to="/guides">Guides</NavbarLink>
         </div>
       </div>
@@ -91,6 +91,9 @@ export function Nav() {
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link to="/rated">Top rated</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/guides">Guides</Link>
               </DropdownMenuItem>
               <hr />
             </div>

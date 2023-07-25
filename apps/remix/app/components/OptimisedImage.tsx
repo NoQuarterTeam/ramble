@@ -5,6 +5,9 @@ import { merge } from "@ramble/shared"
 
 type Fit = "cover" | "contain" | "fill" | "inside" | "outside"
 
+const blurhash =
+  "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj["
+
 export interface OptimizedImageProps extends Omit<React.ComponentPropsWithoutRef<"img">, "placeholder"> {
   height: number
   width: number
@@ -34,11 +37,8 @@ export const OptimizedImage = React.forwardRef<HTMLImageElement, OptimizedImageP
   const newSrc = transformImageSrc(src, { width: props.width, height: props.height, quality, fit })
   return (
     <div className={merge("relative overflow-hidden", props.className)}>
-      {placeholder ? (
-        <BlurCanvas blurHash={placeholder} />
-      ) : (
-        <div className="absolute h-full w-full rounded-[inherit] bg-gray-50 dark:bg-gray-700" />
-      )}
+      <BlurCanvas blurHash={placeholder || blurhash} />
+
       <img
         ref={ref}
         {...props}
