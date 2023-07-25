@@ -21,6 +21,7 @@ const userSelectFields = {
   firstName: true,
   lastName: true,
   avatar: true,
+  isAdmin: true,
   avatarBlurHash: true,
   username: true,
   role: true,
