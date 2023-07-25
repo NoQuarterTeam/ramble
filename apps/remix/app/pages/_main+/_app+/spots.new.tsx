@@ -37,8 +37,8 @@ export const action = async ({ request }: ActionArgs) => {
   const spot = await db.spot.create({
     data: {
       creator: { connect: { id } },
-      verifiedAt: role === "GUIDE" || role === "ADMIN" ? new Date() : undefined,
-      verifier: role === "GUIDE" || role === "ADMIN" ? { connect: { id } } : undefined,
+      verifiedAt: role === "GUIDE" ? new Date() : undefined,
+      verifier: role === "GUIDE" ? { connect: { id } } : undefined,
       latitude,
       longitude,
       name,

@@ -1,9 +1,12 @@
 import type { Spot, User } from "@ramble/database/types"
 
-export const canManageSpot = (spot: Pick<Spot, "ownerId"> | null, user: Pick<User, "id" | "role" | "isVerified"> | null) => {
+export const canManageSpot = (
+  spot: Pick<Spot, "ownerId"> | null,
+  user: Pick<User, "id" | "isAdmin" | "role" | "isVerified"> | null,
+) => {
   if (!user) return false
   if (!spot) return false
-  if (user.role === "ADMIN") return true
+  if (user.isAdmin) return true
   if (!user.isVerified) return false
   if (user.role === "GUIDE") return true
   if (!spot.ownerId) return false

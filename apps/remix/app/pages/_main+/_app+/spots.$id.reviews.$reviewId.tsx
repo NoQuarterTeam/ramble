@@ -44,7 +44,7 @@ export const action = async ({ request, params }: ActionArgs) => {
         if (!spot) throw notFound(null)
 
         const review = await db.review.findUnique({ where: { id: params.reviewId } })
-        if (!review || (review.userId !== user.id && user.role !== "ADMIN")) throw notFound(null)
+        if (!review || review.userId !== user.id) throw notFound(null)
 
         await db.review.update({
           where: { id: review.id },
@@ -57,7 +57,7 @@ export const action = async ({ request, params }: ActionArgs) => {
     case Actions.Delete:
       try {
         const review = await db.review.findUnique({ where: { id: params.reviewId } })
-        if (!review || (review.userId !== user.id && user.role !== "ADMIN")) throw notFound(null)
+        if (!review || review.userId !== user.id) throw notFound(null)
         await db.review.delete({ where: { id: review.id } })
 
         return redirect("/spots/" + params.id, request, { flash: { title: "Review deleted" } })
