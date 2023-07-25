@@ -55,7 +55,7 @@ export default function Rated() {
 
   return (
     <PageContainer>
-      <h1 className="text-3xl">Top rated</h1>
+      <h1 className="text-3xl">Top rated spots</h1>
       <div className="space-y-2">
         {spots.map((spot) => (
           <SpotItem key={spot.id} spot={spot} />

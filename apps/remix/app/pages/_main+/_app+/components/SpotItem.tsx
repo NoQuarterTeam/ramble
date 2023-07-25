@@ -13,7 +13,7 @@ interface Props {
 export function SpotItem({ spot }: Props) {
   return (
     <Link to={`/spots/${spot.id}`} className="flex flex-col items-start space-x-2 hover:opacity-80 md:flex-row md:items-center">
-      <div className="h-[250px] w-full md:h-[150px] md:w-[150px] md:min-w-[150px] md:max-w-[150px]">
+      <div className="h-[250px] w-full md:h-[150px] md:w-[250px] md:min-w-[250px] md:max-w-[250px]">
         {spot.image ? (
           <OptimizedImage
             alt="spot"
@@ -31,7 +31,7 @@ export function SpotItem({ spot }: Props) {
       </div>
 
       <div>
-        <p className="line-clamp-2 text-xl md:text-lg lg:text-xl">{spot.name}</p>
+        <p className="line-clamp-2 text-xl md:text-lg lg:text-2xl">{spot.name}</p>
         {spot.rating && (
           <div className="flex items-center space-x-1">
             <Star className="sq-4" />

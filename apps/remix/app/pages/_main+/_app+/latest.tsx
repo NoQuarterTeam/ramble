@@ -55,7 +55,7 @@ export default function Latest() {
 
   return (
     <PageContainer>
-      <h1 className="text-3xl">Latest Spots</h1>
+      <h1 className="text-3xl">Latest spots</h1>
       <div className="space-y-2">
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-1">
           {spots.map((spot) => (
