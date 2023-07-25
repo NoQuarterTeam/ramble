@@ -1,9 +1,9 @@
 import { NotFound } from "@aws-sdk/client-s3"
-import { Response as NodeResponse } from "@remix-run/node"
 import type { LoaderArgs } from "@vercel/remix"
 import axios from "axios"
 import * as crypto from "crypto"
 import sharp from "sharp"
+import { cacheHeader } from "pretty-cache-header"
 
 import { getHead, uploadStream } from "@ramble/api"
 import { s3Url } from "@ramble/shared"
@@ -92,8 +92,13 @@ export async function generateImage({ request }: LoaderArgs) {
 async function getCachedImage(src: string) {
   const res = await axios.get(src, { responseType: "stream" })
 
-  return new NodeResponse(res.data, {
+  return new Response(res.data, {
     status: 200,
-    headers: { "Content-Type": "image/png", "Cache-Control": "public, max-age=31536000, immutable" },
+    headers: {
+      "Content-Type": "image/png",
+      "Vercel-CDN-Cache-Control": cacheHeader({ public: true, maxAge: "1year", sMaxage: "1year", immutable: true }),
+      "CDN-Cache-Control": cacheHeader({ public: true, maxAge: "1year", sMaxage: "1year", immutable: true }),
+      "Cache-Control": cacheHeader({ public: true, maxAge: "1year", sMaxage: "1year", immutable: true }),
+    },
   })
 }
