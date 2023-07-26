@@ -8,29 +8,18 @@ type Fit = "cover" | "contain" | "fill" | "inside" | "outside"
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj["
 
-export interface OptimizedImageProps extends Omit<React.ComponentPropsWithoutRef<"img">, "placeholder"> {
+export interface OptimizedImageProps extends Omit<React.ComponentPropsWithoutRef<"img">, "placeholder" | "srcSet"> {
   height: number
   width: number
   alt: string
   quality?: number
   fit?: Fit
   placeholder?: string | null
+  srcSet?: number[]
 }
 
-export const transformImageSrc = (
-  src: string | undefined | null,
-  options: { width: number; height: number; quality?: number; fit?: Fit },
-) =>
-  src
-    ? "/api/image/?src=" +
-      encodeURIComponent(src) +
-      `&width=${options.width || ""}&height=${options.height || ""}&quality=${options.quality || "90"}&fit=${
-        options.fit || "cover"
-      }`
-    : undefined
-
 export const OptimizedImage = React.forwardRef<HTMLImageElement, OptimizedImageProps>(function _OptimizedImage(
-  { src, quality, placeholder, fit, ...props }: OptimizedImageProps,
+  { src, quality, srcSet, placeholder, fit, ...props }: OptimizedImageProps,
   ref,
 ) {
   // increase the width and height so quality is higher
@@ -49,6 +38,19 @@ export const OptimizedImage = React.forwardRef<HTMLImageElement, OptimizedImageP
     </div>
   )
 })
+
+export function transformImageSrc(
+  src: string | undefined | null,
+  options: { width: number; height?: number; quality?: number; fit?: Fit },
+) {
+  if (!src) return undefined
+  const optionsString = Object.entries(options).reduce((acc, [key, value]) => {
+    if (value === undefined) return acc
+    return acc + `&${key}=${value}`
+  }, "")
+
+  return "/api/image/?src=" + encodeURIComponent(src) + optionsString
+}
 
 interface BlurCanvasProps {
   blurHash: string
