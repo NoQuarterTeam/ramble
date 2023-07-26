@@ -229,9 +229,8 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
         >
           <NavigationControl position="bottom-right" />
         </Map>
-        <>
-          <CircleDot className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
-        </>
+
+        <CircleDot className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
       </div>
     </div>
   )
@@ -248,6 +247,8 @@ function AmenitySelector({
   value: string
   Icon: RambleIcon | null
 }) {
+  const form = useFormErrors<typeof amenitiesSchema>()
+  const errors = form?.fieldErrors?.[value as keyof typeof form.fieldErrors]
   const [isSelected, setIsSelected] = React.useState(defaultIsSelected)
   return (
     <div>
@@ -260,6 +261,7 @@ function AmenitySelector({
       >
         {label}
       </Button>
+      {errors && <ul id="type-error">{errors?.map((error, i) => <FormFieldError key={i}>{error}</FormFieldError>)}</ul>}
       <input type="hidden" name={value} value={String(isSelected)} />
     </div>
   )
