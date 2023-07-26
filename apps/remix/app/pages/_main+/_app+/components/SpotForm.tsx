@@ -135,14 +135,22 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
             input={<Textarea rows={3} />}
           />
 
-          <div>
-            <FormFieldLabel name="address">Address</FormFieldLabel>
-            <div className="relative">
-              <FormField readOnly name="address" value={address || ""} />
-              {geocodeFetcher.state === "loading" && <Spinner size="xs" className="absolute -left-5 top-2" />}
+          <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+            <div className="opacity-70">
+              <FormFieldLabel name="address">Address - move map to set</FormFieldLabel>
+              <div className="relative">
+                <FormField
+                  className="hover:border-gray-200 dark:hover:border-gray-700"
+                  disabled
+                  readOnly
+                  name="address"
+                  value={address || ""}
+                />
+                {geocodeFetcher.state === "loading" && <Spinner size="xs" className="absolute -left-5 top-2" />}
+              </div>
             </div>
+            <FormField name="customAddress" defaultValue={spot?.address} label="Or write a custom address" />
           </div>
-          <FormField name="customAddress" defaultValue={spot?.address} label="Write a custom address" />
 
           <div className="space-y-0.5">
             <FormFieldLabel required>Type</FormFieldLabel>
