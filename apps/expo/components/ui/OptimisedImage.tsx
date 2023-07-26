@@ -8,7 +8,7 @@ const blurhash =
 type Fit = "cover" | "contain" | "fill" | "inside" | "outside"
 
 type Options = {
-  width?: number
+  width: number
   height?: number
   quality?: number
   fit?: Fit
@@ -25,15 +25,15 @@ export function OptimizedImage({ source, height, width, quality, fit, ...props }
   return <Image {...props} placeholder={props.placeholder || blurhash} source={{ uri: newSrc }} />
 }
 
-export function transformImageSrc(src: string | undefined | null, options: Options) {
+export function transformImageSrc(
+  src: string | undefined | null,
+  options: { width: number; height?: number; quality?: number; fit?: Fit },
+) {
   if (!src) return undefined
+  const optionsString = Object.entries(options).reduce((acc, [key, value]) => {
+    if (value === undefined) return acc
+    return acc + `&${key}=${value}`
+  }, "")
 
-  return (
-    WEB_URL +
-    "/api/image/?src=" +
-    encodeURIComponent(src) +
-    `&width=${options.width || ""}&height=${options.height || ""}&quality=${options.quality || "90"}&fit=${
-      options.fit || "cover"
-    }`
-  )
+  return WEB_URL + "/api/image/?src=" + encodeURIComponent(src) + optionsString
 }

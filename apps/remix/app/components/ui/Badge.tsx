@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { merge } from "@ramble/shared"
 
-export const badgeProps = cva("w-min rounded-md font-medium uppercase", {
+export const badgeProps = cva("w-min whitespace-nowrap rounded-md font-medium uppercase", {
   variants: {
     colorScheme: {
       orange: "dark:color-orange-200 bg-orange-300/40 text-orange-900 dark:bg-orange-300/20 dark:text-orange-200",
@@ -19,7 +19,7 @@ export const badgeProps = cva("w-min rounded-md font-medium uppercase", {
     },
   },
   defaultVariants: {
-    size: "sm",
+    size: "md",
     colorScheme: "gray",
   },
 })
@@ -30,8 +30,8 @@ interface Props extends BadgeStyleProps, React.DetailedHTMLProps<React.HTMLAttri
 
 export function Badge({ size, colorScheme, ...props }: Props) {
   return (
-    <div {...props} className={merge(badgeProps({ size, colorScheme }), props.className)}>
+    <p {...props} className={merge(badgeProps({ size, colorScheme }), props.className)}>
       {props.children}
-    </div>
+    </p>
   )
 }
