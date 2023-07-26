@@ -118,8 +118,8 @@ function ProfileLink({ Icon, children, ...props }: NavLinkProps & { Icon?: Lucid
       to={props.to}
       className={({ isActive }) =>
         merge(
-          buttonStyles({ size: "md", variant: isActive ? "secondary" : "ghost" }),
-          buttonSizeStyles({ size: "md" }),
+          buttonStyles({ size: "lg", variant: isActive ? "secondary" : "ghost" }),
+          buttonSizeStyles({ size: "lg" }),
           "flex w-full items-center justify-start space-x-2 text-left",
         )
       }
