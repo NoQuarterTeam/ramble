@@ -65,7 +65,7 @@ export const loader = async ({ params }: LoaderArgs) => {
 }
 
 export const action = async ({ request, params }: ActionArgs) => {
-  const user = await getCurrentUser(request, { id: true, role: true, isVerified: true })
+  const user = await getCurrentUser(request, { id: true, role: true, isVerified: true, isAdmin: true })
   const spot = await db.spot.findUniqueOrThrow({ where: { id: params.id }, select: { ownerId: true } })
   if (!canManageSpot(spot, user)) return redirect("/latest")
   await db.spot.delete({ where: { id: params.id } })

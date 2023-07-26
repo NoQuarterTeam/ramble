@@ -28,17 +28,17 @@ import type { geocodeLoader } from "~/pages/api+/mapbox+/geocode"
 import type { IpInfo } from "../_layout"
 
 export const amenitiesSchema = z.object({
-  bbq: zx.BoolAsString.optional(),
-  electricity: zx.BoolAsString.optional(),
-  water: zx.BoolAsString.optional(),
-  toilet: zx.BoolAsString.optional(),
-  shower: zx.BoolAsString.optional(),
-  wifi: zx.BoolAsString.optional(),
-  kitchen: zx.BoolAsString.optional(),
-  pool: zx.BoolAsString.optional(),
-  hotWater: zx.BoolAsString.optional(),
-  firePit: zx.BoolAsString.optional(),
-  sauna: zx.BoolAsString.optional(),
+  bbq: zx.BoolAsString,
+  electricity: zx.BoolAsString,
+  water: zx.BoolAsString,
+  toilet: zx.BoolAsString,
+  shower: zx.BoolAsString,
+  wifi: zx.BoolAsString,
+  kitchen: zx.BoolAsString,
+  pool: zx.BoolAsString,
+  hotWater: zx.BoolAsString,
+  firePit: zx.BoolAsString,
+  sauna: zx.BoolAsString,
 })
 
 export const spotSchema = z
@@ -51,7 +51,6 @@ export const spotSchema = z
     type: z.nativeEnum(SpotType),
     description: NullableFormString,
   })
-  .merge(amenitiesSchema)
   .refine(
     (data) => {
       if (data.type === "CAMPING" && (!data.description || data.description.length < 50)) return false
