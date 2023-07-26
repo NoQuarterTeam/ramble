@@ -13,10 +13,28 @@ export interface IconProps {
 }
 
 export const Icons = {
-  Surf: ({ strokeWidth = 2, size = 24, color = "currentColor", fill = "none", ...props }: IconProps) => (
+  Surfboard: ({ strokeWidth = 2, size = 24, color = "currentColor", fill = "none", ...props }: IconProps) => (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill={fill} {...props}>
       <Path
         d="M7 17L9 15M4 20L2 19L2.53519 17.9296C4.16772 14.6646 6.31595 11.684 8.89721 9.10279L9.6133 8.3867C10.536 7.464 11.5376 6.6237 12.6066 5.87539C14.8498 4.30511 17.362 3.15949 20.0185 2.49537L22 2L21.6969 3.21231C20.9057 6.37727 19.5408 9.37031 17.6699 12.0429C17.2242 12.6798 16.7236 13.2764 16.1739 13.8261L15.5899 14.4101C12.5499 17.4501 9.03958 19.9802 5.19418 21.9029L5 22L4 20Z"
+        stroke={color}
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  ),
+  Surf: ({ strokeWidth = 2, size = 24, color = "currentColor", fill = "none", ...props }: IconProps) => (
+    <Svg width={size} height={size} viewBox="0 0 24 24" fill={fill} {...props}>
+      <Path
+        d="M2 12C2.6 12.5 3.2 13 4.5 13C7 13 6.5 10.5 8 7.5C9.5 4.5 11 4 12.5 4C15.5 4 16 7.5 15.5 7.5C14.7929 7.5 13 6 12 7.5C11 9 12.0167 10.9983 12.5 11.5C13.2294 12.2572 14.2056 13 15 13C17.5 13 17 11 19.5 11C20.8 11 21.4 11.5 22 12"
+        stroke={color}
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <Path
+        d="M2 17C2.6 17.5 3.2 18 4.5 18C7 18 7 16 9.5 16C12.1 16 11.9 18 14.5 18C17 18 17 16 19.5 16C20.8 16 21.4 16.5 22 17"
         stroke={color}
         strokeWidth={strokeWidth}
         strokeLinecap="round"
