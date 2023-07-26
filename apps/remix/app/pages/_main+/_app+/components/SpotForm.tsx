@@ -28,17 +28,17 @@ import type { geocodeLoader } from "~/pages/api+/mapbox+/geocode"
 import type { IpInfo } from "../_layout"
 
 export const amenitiesSchema = z.object({
-  bbq: zx.BoolAsString.optional(),
-  electricity: zx.BoolAsString.optional(),
-  water: zx.BoolAsString.optional(),
-  toilet: zx.BoolAsString.optional(),
-  shower: zx.BoolAsString.optional(),
-  wifi: zx.BoolAsString.optional(),
-  kitchen: zx.BoolAsString.optional(),
-  pool: zx.BoolAsString.optional(),
-  hotWater: zx.BoolAsString.optional(),
-  firePit: zx.BoolAsString.optional(),
-  sauna: zx.BoolAsString.optional(),
+  bbq: zx.BoolAsString,
+  electricity: zx.BoolAsString,
+  water: zx.BoolAsString,
+  toilet: zx.BoolAsString,
+  shower: zx.BoolAsString,
+  wifi: zx.BoolAsString,
+  kitchen: zx.BoolAsString,
+  pool: zx.BoolAsString,
+  hotWater: zx.BoolAsString,
+  firePit: zx.BoolAsString,
+  sauna: zx.BoolAsString,
 })
 
 export const spotSchema = z
@@ -51,7 +51,6 @@ export const spotSchema = z
     type: z.nativeEnum(SpotType),
     description: NullableFormString,
   })
-  .merge(amenitiesSchema)
   .refine(
     (data) => {
       if (data.type === "CAMPING" && (!data.description || data.description.length < 50)) return false
@@ -136,14 +135,22 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
             input={<Textarea rows={3} />}
           />
 
-          <div>
-            <FormFieldLabel name="address">Address</FormFieldLabel>
-            <div className="relative">
-              <FormField readOnly name="address" value={address || ""} />
-              {geocodeFetcher.state === "loading" && <Spinner size="xs" className="absolute -left-5 top-2" />}
+          <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+            <div className="opacity-70">
+              <FormFieldLabel name="address">Address - move map to set</FormFieldLabel>
+              <div className="relative">
+                <FormField
+                  className="hover:border-gray-200 dark:hover:border-gray-700"
+                  disabled
+                  readOnly
+                  name="address"
+                  value={address || ""}
+                />
+                {geocodeFetcher.state === "loading" && <Spinner size="xs" className="absolute -left-5 top-2" />}
+              </div>
             </div>
+            <FormField name="customAddress" defaultValue={spot?.address} label="Or write a custom address" />
           </div>
-          <FormField name="customAddress" defaultValue={spot?.address} label="Write a custom address" />
 
           <div className="space-y-0.5">
             <FormFieldLabel required>Type</FormFieldLabel>
@@ -230,9 +237,8 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
         >
           <NavigationControl position="bottom-right" />
         </Map>
-        <>
-          <CircleDot className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
-        </>
+
+        <CircleDot className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
       </div>
     </div>
   )
@@ -249,6 +255,8 @@ function AmenitySelector({
   value: string
   Icon: RambleIcon | null
 }) {
+  const form = useFormErrors<typeof amenitiesSchema>()
+  const errors = form?.fieldErrors?.[value as keyof typeof form.fieldErrors]
   const [isSelected, setIsSelected] = React.useState(defaultIsSelected)
   return (
     <div>
@@ -261,6 +269,7 @@ function AmenitySelector({
       >
         {label}
       </Button>
+      {errors && <ul id="type-error">{errors?.map((error, i) => <FormFieldError key={i}>{error}</FormFieldError>)}</ul>}
       <input type="hidden" name={value} value={String(isSelected)} />
     </div>
   )

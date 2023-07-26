@@ -27,7 +27,7 @@ export const Icons = {
   Surf2: ({ strokeWidth = 2, size = 24, color = "currentColor", fill = "none", ...props }: IconProps) => (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill={fill} {...props}>
       <Path
-        d="M2 12C2.6 12.5 3.2 13 4.5 13C7 13 6.5 10.5 8 7.5C9.5 4.5 11 4 12.5 4C15.5 4 16 7.5 15.5 7.5C14.7929 7.5 13 6 12 7.5C11 9 12.0167 10.9983 12.5 11.5C13.2294 12.2572 14.2056 13 15 13C17.5 13 17 11 19.5 11C20.8 11 21.4 11.5 22 12"
+        d="M21.5 12C19 12 18.5 13.5 16 13.5C14.5 13.5 13.2294 12.7572 12.5 12C11.5 10.9618 11.1695 10.0761 12 8C12.7227 6.1933 15.5 5.5 16 7.5C17.5 6.5 18 5.07721 16.5 3.5C15 1.92278 12.5 2 10.5 3C7.32131 4.98668 6.35288 8.23638 5.58737 10.7417C5.24354 11.867 4.35623 12.7146 3.24001 13.0867L2 13.5"
         stroke={color}
         strokeWidth={strokeWidth}
         strokeLinecap="round"
@@ -35,6 +35,13 @@ export const Icons = {
       />
       <Path
         d="M2 17C2.6 17.5 3.2 18 4.5 18C7 18 7 16 9.5 16C12.1 16 11.9 18 14.5 18C17 18 17 16 19.5 16C20.8 16 21.4 16.5 22 17"
+        stroke={color}
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <Path
+        d="M2 21C2.6 21.5 3.2 22 4.5 22C7 22 7 20 9.5 20C12.1 20 11.9 22 14.5 22C17 22 17 20 19.5 20C20.8 20 21.4 20.5 22 21"
         stroke={color}
         strokeWidth={strokeWidth}
         strokeLinecap="round"

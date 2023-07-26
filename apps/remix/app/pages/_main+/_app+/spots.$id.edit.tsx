@@ -10,10 +10,10 @@ import { formError, validateFormData } from "~/lib/form"
 import { notFound } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
-import { SpotForm, spotSchema } from "./components/SpotForm"
+import { SpotForm, amenitiesSchema, spotSchema } from "./components/SpotForm"
 
 export const loader = async ({ request, params }: LoaderArgs) => {
-  const user = await getCurrentUser(request, { role: true, id: true, isVerified: true })
+  const user = await getCurrentUser(request, { role: true, id: true, isAdmin: true, isVerified: true })
   const spot = await db.spot.findUniqueOrThrow({
     where: { id: params.id },
     include: { images: true, amenities: true },
@@ -23,7 +23,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
 }
 
 export const action = async ({ request, params }: ActionArgs) => {
-  const user = await getCurrentUser(request, { id: true, role: true, isVerified: true })
+  const user = await getCurrentUser(request, { id: true, role: true, isAdmin: true, isVerified: true })
   const formData = await request.formData()
 
   const result = await validateFormData(formData, spotSchema)
@@ -32,11 +32,16 @@ export const action = async ({ request, params }: ActionArgs) => {
 
   if (!result.success) return formError(result)
 
-  const { customAddress, latitude, longitude, name, address, type, description, ...amenities } = result.data
-
   const spot = await db.spot.findUnique({ where: { id: params.id }, include: { images: true, amenities: true } })
   if (!spot) throw notFound(null)
   if (!canManageSpot(spot, user)) throw redirect("/latest")
+
+  let amenities
+  if (result.data.type === "CAMPING") {
+    const amenitiesResult = await validateFormData(formData, amenitiesSchema)
+    if (!amenitiesResult.success) return formError(amenitiesResult)
+    amenities = amenitiesResult.data
+  }
 
   const imagesToDelete = spot.images.filter((image) => !images.includes(image.path))
   const imagesToCreate = images.filter((image) => !spot.images.find((i) => i.path === image))
@@ -47,26 +52,22 @@ export const action = async ({ request, params }: ActionArgs) => {
       return { path: image, blurHash, creator: { connect: { id: user.id } } }
     }),
   )
+
+  const { customAddress, ...data } = result.data
   await db.spot.update({
     where: { id: spot.id },
     data: {
-      latitude,
-      longitude,
-      name,
-      type,
-      description,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore -- when camping these will be true or false
+      ...data,
+      address: customAddress || result.data.address,
       amenities:
-        spot.type === "CAMPING" && type !== "CAMPING"
+        spot.type === "CAMPING" && result.data.type !== "CAMPING"
           ? { delete: true }
-          : type === "CAMPING" && (spot.type !== "CAMPING" || !spot.amenities)
+          : result.data.type === "CAMPING" && (spot.type !== "CAMPING" || !spot.amenities)
           ? { create: amenities }
-          : spot.type === "CAMPING" && type === "CAMPING"
+          : spot.type === "CAMPING" && result.data.type === "CAMPING"
           ? { update: amenities }
           : undefined,
       images: { delete: imagesToDelete, create: imageData },
-      address: customAddress ?? address,
     },
   })
 
