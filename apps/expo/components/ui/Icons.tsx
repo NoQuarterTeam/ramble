@@ -13,7 +13,7 @@ export interface IconProps {
 }
 
 export const Icons = {
-  Surfboard: ({ strokeWidth = 2, size = 24, color = "currentColor", fill = "none", ...props }: IconProps) => (
+  Surf: ({ strokeWidth = 2, size = 24, color = "currentColor", fill = "none", ...props }: IconProps) => (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill={fill} {...props}>
       <Path
         d="M7 17L9 15M4 20L2 19L2.53519 17.9296C4.16772 14.6646 6.31595 11.684 8.89721 9.10279L9.6133 8.3867C10.536 7.464 11.5376 6.6237 12.6066 5.87539C14.8498 4.30511 17.362 3.15949 20.0185 2.49537L22 2L21.6969 3.21231C20.9057 6.37727 19.5408 9.37031 17.6699 12.0429C17.2242 12.6798 16.7236 13.2764 16.1739 13.8261L15.5899 14.4101C12.5499 17.4501 9.03958 19.9802 5.19418 21.9029L5 22L4 20Z"
@@ -24,7 +24,7 @@ export const Icons = {
       />
     </Svg>
   ),
-  Surf: ({ strokeWidth = 2, size = 24, color = "currentColor", fill = "none", ...props }: IconProps) => (
+  Surf2: ({ strokeWidth = 2, size = 24, color = "currentColor", fill = "none", ...props }: IconProps) => (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill={fill} {...props}>
       <Path
         d="M2 12C2.6 12.5 3.2 13 4.5 13C7 13 6.5 10.5 8 7.5C9.5 4.5 11 4 12.5 4C15.5 4 16 7.5 15.5 7.5C14.7929 7.5 13 6 12 7.5C11 9 12.0167 10.9983 12.5 11.5C13.2294 12.2572 14.2056 13 15 13C17.5 13 17 11 19.5 11C20.8 11 21.4 11.5 22 12"
@@ -86,6 +86,25 @@ export const Icons = {
       />
       <Path
         d="M6 15V13M6 13H15M6 13V9.1875M10 6V5C10 3.89543 9.10457 3 8 3C6.89543 3 6 3.89543 6 5V9.1875M6 9.1875H15M15 15V5C15 3.89543 15.8954 3 17 3C18.1046 3 19 3.89543 19 5V6"
+        stroke={color}
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  ),
+  Sup: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: IconProps) => (
+    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" {...props}>
+      <Path
+        d="M14.2857 22L13.3066 19.0013C12.8179 17.5049 12.4932 15.9598 12.3382 14.3932C12.1139 12.1262 12.2173 9.83876 12.6453 7.60128L12.7725 6.93606C13.0177 5.65419 13.4733 4.42171 14.1208 3.28855L14.333 2.9172C15.0701 1.62736 16.9299 1.62736 17.667 2.9172L17.8792 3.28855C18.5267 4.42171 18.9823 5.65419 19.2275 6.93607L19.3547 7.60129C19.7827 9.83876 19.8861 12.1262 19.6618 14.3932C19.5068 15.9598 19.1821 17.5049 18.6934 19.0013L17.7143 22H14.2857Z"
+        stroke={color}
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <Path d="M16 16V19" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
+      <Path
+        d="M6 3V14M4 3H8M6 13.5L4.39527 16.3083C4.13625 16.7616 4 17.2746 4 17.7967V21H8V17.7967C8 17.2746 7.86375 16.7616 7.60473 16.3083L6 13.5Z"
         stroke={color}
         strokeWidth={strokeWidth}
         strokeLinecap="round"
