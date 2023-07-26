@@ -50,4 +50,22 @@ export const Icons = {
       />
     </svg>
   ),
+  Pool: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: IconProps) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path
+        d="M2 19C2.6 19.5 3.2 20 4.5 20C7 20 7 18 9.5 18C12.1 18 11.9 20 14.5 20C17 20 17 18 19.5 18C20.8 18 21.4 18.5 22 19"
+        stroke={color}
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M6 15V13M6 13H15M6 13V9.1875M10 6V5C10 3.89543 9.10457 3 8 3C6.89543 3 6 3.89543 6 5V9.1875M6 9.1875H15M15 15V5C15 3.89543 15.8954 3 17 3C18.1046 3 19 3.89543 19 5V6"
+        stroke={color}
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  ),
 }
