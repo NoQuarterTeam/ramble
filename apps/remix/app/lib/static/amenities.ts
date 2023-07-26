@@ -1,4 +1,4 @@
-import { Beef, Droplet, Flame, ShowerHead, UtensilsCrossed, Waves, Wifi, Zap } from "lucide-react"
+import { Beef, Droplet, Flame, ShowerHead, Thermometer, UtensilsCrossed, Waves, Wifi, Zap } from "lucide-react"
 import { Icons } from "~/components/ui"
 
 export const AMENITIES_ICONS = {
@@ -10,7 +10,7 @@ export const AMENITIES_ICONS = {
   wifi: Wifi,
   kitchen: UtensilsCrossed,
   pool: Waves,
-  hotWater: null,
+  hotWater: Thermometer,
   firePit: Flame,
-  sauna: null,
+  sauna: Icons.Sauna,
 }

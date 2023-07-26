@@ -39,4 +39,15 @@ export const Icons = {
       />
     </svg>
   ),
+  Sauna: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: IconProps) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path
+        d="M7 18C7 16.336 9 16.464 9 14.8C9 13.2 7 13.2 7 11.6C7 10.768 7.5 10.384 8 10M11 18C11 16.336 13 16.464 13 14.8C13 13.2 11 13.2 11 11.6C11 10.768 11.5 10.384 12 10M15 18C15 16.336 17 16.464 17 14.8C17 13.2 15 13.2 15 11.6C15 10.768 15.5 10.384 16 10M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z"
+        stroke={color}
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  ),
 }
