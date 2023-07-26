@@ -1,4 +1,4 @@
-import { Bike, Dog, Footprints, type LucideProps, Mountain, Waves } from "lucide-react-native"
+import { Bike, Dog, Footprints, type LucideProps, Mountain } from "lucide-react-native"
 
 import { Icons } from "../../components/ui/Icons"
 
@@ -31,6 +31,6 @@ export const interestOptions: { label: string; value: string; Icon: (props: Luci
   {
     label: "Paddle Boarding",
     value: "isPaddleBoarder",
-    Icon: Waves,
+    Icon: Icons.Sup,
   },
 ]
