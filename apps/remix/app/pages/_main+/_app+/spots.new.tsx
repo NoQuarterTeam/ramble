@@ -9,11 +9,6 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { amenitiesSchema, SpotForm, spotSchema } from "./components/SpotForm"
 
-export const config = {
-  runtime: "edge",
-  regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
-}
-
 export const loader = async ({ request }: LoaderArgs) => {
   const user = await getCurrentUser(request, { isVerified: true })
   if (!user.isVerified) return redirect("/account", request, { flash: { title: "Account not verified" } })
