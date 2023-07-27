@@ -12,7 +12,7 @@ import { PageContainer } from "~/components/PageContainer"
 import { IconButton, Textarea } from "~/components/ui"
 import { FormAction } from "~/lib/form"
 
-import { Actions } from "../spots.$id.reviews.$reviewId"
+import { Actions } from "../spots.$id_.reviews.$reviewId"
 
 interface Props {
   spot: SerializeFrom<Pick<Spot, "name"> & { images: Pick<SpotImage, "path" | "blurHash">[] }>

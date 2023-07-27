@@ -142,7 +142,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
               <div className="relative">
                 <FormField
                   className="hover:border-gray-200 dark:hover:border-gray-700"
-                  disabled
+                  // disabled
                   readOnly
                   name="address"
                   value={address || ""}
