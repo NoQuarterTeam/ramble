@@ -1,4 +1,4 @@
-import { Prisma } from "@ramble/database/types"
+import { type Prisma } from "@ramble/database/types"
 
 export const userInterestFields = {
   isSurfer: true,

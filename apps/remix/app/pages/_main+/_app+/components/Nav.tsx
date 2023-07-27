@@ -8,6 +8,8 @@ import { LinkButton } from "~/components/LinkButton"
 import {
   Avatar,
   Button,
+  buttonSizeStyles,
+  buttonStyles,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -15,8 +17,6 @@ import {
   IconButton,
   Icons,
   Tooltip,
-  buttonSizeStyles,
-  buttonStyles,
 } from "~/components/ui"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { useTheme } from "~/lib/theme"

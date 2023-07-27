@@ -1,8 +1,9 @@
-import { sendAccountVerificationEmail } from "@ramble/api"
 import { Link } from "@remix-run/react"
 import type { ActionArgs, V2_MetaFunction } from "@vercel/remix"
 import { redirect } from "@vercel/remix"
 import { z } from "zod"
+
+import { sendAccountVerificationEmail } from "@ramble/api"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { db } from "~/lib/db.server"

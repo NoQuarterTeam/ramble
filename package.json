@@ -2,7 +2,7 @@
   "name": "@ramble/root",
   "private": true,
   "dependencies": {
-    "turbo": "^1.10.9"
+    "turbo": "^1.10.12"
   },
   "devDependencies": {
     "prettier": "^3.0.0",

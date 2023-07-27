@@ -3,10 +3,10 @@ import { z } from "zod"
 
 import { updateSchema, userInterestFields } from "@ramble/shared"
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
-import { generateBlurHash } from "../services/createBlurHash.server"
 import { createAuthToken } from "../lib/jwt"
+import { generateBlurHash } from "../services/createBlurHash.server"
 import { sendAccountVerificationEmail } from "../services/user.mailer.server"
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const userRouter = createTRPCRouter({
   me: publicProcedure.query(({ ctx }) => ctx.user),

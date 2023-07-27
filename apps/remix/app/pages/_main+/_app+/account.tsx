@@ -3,6 +3,7 @@ import { Outlet, useActionData, useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 import { AlertCircle, Settings, ToggleRight, User } from "lucide-react"
 
+import { sendAccountVerificationEmail } from "@ramble/api"
 import { createImageUrl, merge } from "@ramble/shared"
 
 import { Form, FormButton } from "~/components/Form"
@@ -15,7 +16,6 @@ import { json } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { PageContainer } from "../../../components/PageContainer"
-import { sendAccountVerificationEmail } from "@ramble/api"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const user = await getCurrentUser(request, {
