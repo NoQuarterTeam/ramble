@@ -1,6 +1,6 @@
+import { useLoaderData } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
-import { useLoaderData } from "@remix-run/react"
 
 import { createImageUrl } from "@ramble/shared"
 

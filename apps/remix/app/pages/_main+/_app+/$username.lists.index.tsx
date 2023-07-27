@@ -1,6 +1,6 @@
+import { Link, useLoaderData } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
-import { Link, useLoaderData } from "@remix-run/react"
 
 import { LinkButton } from "~/components/LinkButton"
 import { db } from "~/lib/db.server"

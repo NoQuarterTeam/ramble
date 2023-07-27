@@ -1,6 +1,6 @@
+import { useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
-import { useLoaderData } from "@remix-run/react"
 import { z } from "zod"
 
 import { generateBlurHash } from "@ramble/api"

@@ -22,6 +22,7 @@ import {
   Button,
 } from "~/components/ui"
 import { VerifiedCard } from "~/components/VerifiedCard"
+import { FULL_WEB_URL } from "~/lib/config.server"
 import { db } from "~/lib/db.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { notFound, redirect } from "~/lib/remix.server"
@@ -32,7 +33,6 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
-import { FULL_WEB_URL } from "~/lib/config.server"
 
 export const loader = async ({ params }: LoaderArgs) => {
   const spot = await db.spot.findUnique({

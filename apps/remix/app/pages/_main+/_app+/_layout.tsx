@@ -1,8 +1,9 @@
 import "mapbox-gl/dist/mapbox-gl.css"
-import type { Geo } from "@vercel/edge"
-import { geolocation } from "@vercel/edge"
+
 import { cssBundleHref } from "@remix-run/css-bundle"
 import { Outlet } from "@remix-run/react"
+import type { Geo } from "@vercel/edge"
+import { geolocation } from "@vercel/edge"
 import type { LinksFunction, LoaderArgs, SerializeFrom } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
