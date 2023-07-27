@@ -11,6 +11,10 @@ import { Avatar, Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 
+export const config = {
+  runtime: "edge",
+}
+
 export const headers = useLoaderHeaders
 
 export const loader = async ({ request }: LoaderArgs) => {

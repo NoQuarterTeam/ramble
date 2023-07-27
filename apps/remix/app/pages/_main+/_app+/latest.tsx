@@ -13,6 +13,10 @@ import { useLoaderHeaders } from "~/lib/headers.server"
 import { PageContainer } from "../../../components/PageContainer"
 import { SpotItem } from "./components/SpotItem"
 
+export const config = {
+  runtime: "edge",
+}
+
 export const headers = useLoaderHeaders
 
 export const loader = async ({ request }: LoaderArgs) => {
