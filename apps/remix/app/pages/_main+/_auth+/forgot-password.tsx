@@ -10,10 +10,6 @@ import { formError, validateFormData } from "~/lib/form"
 import { createToken } from "~/lib/jwt.server"
 import { redirect } from "~/lib/remix.server"
 
-export const config = {
-  runtime: "edge",
-}
-
 export const headers = () => {
   return {
     "Cache-Control": "max-age=3600, s-maxage=86400",

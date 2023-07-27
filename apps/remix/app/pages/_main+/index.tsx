@@ -14,6 +14,7 @@ import { PageContainer } from "../../components/PageContainer"
 
 export const config = {
   runtime: "edge",
+  regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
 }
 
 export const loader = async () => {

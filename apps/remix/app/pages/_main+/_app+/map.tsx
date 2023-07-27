@@ -31,6 +31,7 @@ import type { Cluster, clustersLoader } from "../../api+/clusters"
 
 export const config = {
   runtime: "edge",
+  regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
 }
 
 export const links: LinksFunction = () => {

@@ -14,10 +14,6 @@ import { hashPassword } from "~/services/auth/password.server"
 import { FlashType, getFlashSession } from "~/services/session/flash.server"
 import { getUserSession } from "~/services/session/session.server"
 
-export const config = {
-  runtime: "edge",
-}
-
 export const meta: V2_MetaFunction = () => {
   return [{ title: "Register" }, { name: "description", content: "Sign up to the ramble" }]
 }
