@@ -18,6 +18,11 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { Footer } from "./components/Footer"
 
+export const config = {
+  runtime: "edge",
+  regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
+}
+
 export const loader = async ({ request }: LoaderArgs) => {
   const user = await getCurrentUser(request, {
     id: true,
