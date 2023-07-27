@@ -14,8 +14,9 @@ import { db } from "~/lib/db.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
+import { badRequest } from "~/lib/remix.server"
 
-export const loader = async ({ params }: LoaderArgs) => {
+export const loader = async ({ params, request }: LoaderArgs) => {
   const spot = db.spot
     .findUniqueOrThrow({
       where: { id: params.id },
@@ -34,6 +35,10 @@ export const loader = async ({ params }: LoaderArgs) => {
           select: reviewItemSelectFields,
         },
       },
+    })
+    .catch((e) => {
+      console.log(e)
+      throw badRequest("Not found", request, { status: 404 })
     })
     .then((s) => s)
   const rating = db.review.aggregate({ where: { spotId: params.id }, _avg: { rating: true } }).then((r) => r)
