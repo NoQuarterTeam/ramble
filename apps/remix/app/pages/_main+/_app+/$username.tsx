@@ -37,7 +37,7 @@ export const loader = async ({ params }: LoaderArgs) => {
       ...userInterestFields,
     },
   })
-  if (!user) throw notFound(null)
+  if (!user) throw notFound()
 
   return json(user)
 }

@@ -31,7 +31,7 @@ export async function json<T>(data: T, request?: Request, init?: ResponseInit & 
   return remixJson(data, { status: 200, ...init, headers })
 }
 
-export const notFound = (data?: unknown) => remixJson(data, { status: 404 })
+export const notFound = (data?: BodyInit) => new Response(data || null, { status: 404, statusText: "Not Found" })
 
 export async function redirect(
   url: string,

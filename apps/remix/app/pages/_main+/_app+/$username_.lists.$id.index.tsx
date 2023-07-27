@@ -54,7 +54,7 @@ export const loader = async ({ params }: LoaderArgs) => {
       },
     },
   })
-  if (!list) throw notFound(null)
+  if (!list) throw notFound()
 
   const formattedList = {
     ...list,
@@ -99,7 +99,7 @@ export const action = async ({ request, params }: ActionArgs) => {
       return redirect(`/${user.username}/lists`, request, { flash: { title: "List deleted" } })
     case Actions.Copy:
       const list = await db.list.findFirst({ where: { id: params.id }, include: { listSpots: true } })
-      if (!list) throw notFound(null)
+      if (!list) throw notFound()
       const newList = await db.list.create({
         data: {
           name: list.name,

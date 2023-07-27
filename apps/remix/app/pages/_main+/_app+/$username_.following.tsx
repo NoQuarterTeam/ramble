@@ -16,7 +16,7 @@ export const headers = useLoaderHeaders
 
 export const loader = async ({ params }: LoaderArgs) => {
   const user = await db.user.findUnique({ where: { username: params.username }, include: { following: true } })
-  if (!user) throw notFound(null)
+  if (!user) throw notFound()
   return json(user)
 }
 

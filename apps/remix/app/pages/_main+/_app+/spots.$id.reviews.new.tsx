@@ -17,7 +17,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
     where: { id: params.id },
     select: { id: true, name: true, images: { orderBy: { createdAt: "asc" }, take: 3 } },
   })
-  if (!spot) throw notFound(null)
+  if (!spot) throw notFound()
   return json(spot)
 }
 
@@ -30,7 +30,7 @@ export const action = async ({ request, params }: ActionArgs) => {
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
   const spot = await db.spot.findUnique({ where: { id: params.id } })
-  if (!spot) throw notFound(null)
+  if (!spot) throw notFound()
 
   const existingReviewsWithin1Month = await db.review.count({
     where: {

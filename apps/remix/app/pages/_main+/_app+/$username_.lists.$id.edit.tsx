@@ -19,7 +19,7 @@ export const loader = async ({ params, request }: LoaderArgs) => {
     where: { id: params.id, creatorId: userId },
     select: { id: true, name: true, description: true },
   })
-  if (!list) throw notFound(null)
+  if (!list) throw notFound()
   return json(list)
 }
 

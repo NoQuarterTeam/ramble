@@ -17,10 +17,10 @@ export const loader = async ({ request, params }: LoaderArgs) => {
     where: { id: params.id },
     select: { id: true, name: true, images: { orderBy: { createdAt: "asc" }, take: 3 } },
   })
-  if (!spot) throw notFound(null)
+  if (!spot) throw notFound()
   const review = await db.review.findUnique({ where: { id: params.reviewId } })
 
-  if (!review || review.userId !== userId) throw notFound(null)
+  if (!review || review.userId !== userId) throw notFound()
   return json({ spot, review })
 }
 
@@ -41,10 +41,10 @@ export const action = async ({ request, params }: ActionArgs) => {
         const result = await validateFormData(formData, schema)
         if (!result.success) return formError(result)
         const spot = await db.spot.findUnique({ where: { id: params.id } })
-        if (!spot) throw notFound(null)
+        if (!spot) throw notFound()
 
         const review = await db.review.findUnique({ where: { id: params.reviewId } })
-        if (!review || review.userId !== user.id) throw notFound(null)
+        if (!review || review.userId !== user.id) throw notFound()
 
         await db.review.update({
           where: { id: review.id },
@@ -57,7 +57,7 @@ export const action = async ({ request, params }: ActionArgs) => {
     case Actions.Delete:
       try {
         const review = await db.review.findUnique({ where: { id: params.reviewId } })
-        if (!review || review.userId !== user.id) throw notFound(null)
+        if (!review || review.userId !== user.id) throw notFound()
         await db.review.delete({ where: { id: review.id } })
 
         return redirect("/spots/" + params.id, request, { flash: { title: "Review deleted" } })

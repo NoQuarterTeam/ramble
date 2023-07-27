@@ -14,8 +14,8 @@ export const headers = useLoaderHeaders
 
 export const loader = async ({ request, params }: LoaderArgs) => {
   const user = await getCurrentUser(request)
-  if (!user) throw notFound(null)
-  if (user.username !== params.username) throw notFound(null)
+  if (!user) throw notFound()
+  if (user.username !== params.username) throw notFound()
   return json(user)
 }
 
