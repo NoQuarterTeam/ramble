@@ -10,7 +10,7 @@ import { formError, validateFormData } from "~/lib/form"
 import { notFound } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
-import { SpotForm, amenitiesSchema, spotSchema } from "./components/SpotForm"
+import { amenitiesSchema, SpotForm, spotSchema } from "./components/SpotForm"
 
 export const loader = async ({ request, params }: LoaderArgs) => {
   const user = await getCurrentUser(request, { role: true, id: true, isAdmin: true, isVerified: true })

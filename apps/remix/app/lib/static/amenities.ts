@@ -1,4 +1,5 @@
 import { Beef, Droplet, Flame, ShowerHead, Thermometer, UtensilsCrossed, Wifi, Zap } from "lucide-react"
+
 import { Icons } from "~/components/ui"
 
 export const AMENITIES_ICONS = {

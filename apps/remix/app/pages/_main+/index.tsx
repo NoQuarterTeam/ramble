@@ -7,10 +7,10 @@ import { createImageUrl } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
+import { Badge } from "~/components/ui"
 import { db } from "~/lib/db.server"
 
 import { PageContainer } from "../../components/PageContainer"
-import { Badge } from "~/components/ui"
 
 export const loader = async () => {
   const spots: Array<SpotItemWithImageAndRating> = await db.$queryRaw`

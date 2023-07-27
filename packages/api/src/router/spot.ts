@@ -2,12 +2,12 @@ import { TRPCError } from "@trpc/server"
 import Supercluster from "supercluster"
 import { z } from "zod"
 
-import { Spot, SpotImage, SpotType } from "@ramble/database/types"
-
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
+import { type Spot, type SpotImage, SpotType } from "@ramble/database/types"
 import { spotAmenitiesSchema, spotSchemaWithoutType } from "@ramble/shared"
-import { geocodeCoords } from "../services/geocode.server"
+
 import { generateBlurHash } from "../services/createBlurHash.server"
+import { geocodeCoords } from "../services/geocode.server"
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export type SpotItemWithImageAndRating = Pick<Spot, "id" | "name" | "address"> & {
   rating?: number
