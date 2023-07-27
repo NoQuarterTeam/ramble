@@ -1,6 +1,6 @@
 import Map, { Marker } from "react-map-gl"
 import { Link, useLoaderData } from "@remix-run/react"
-import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { Edit2, Star, Trash } from "lucide-react"
 
@@ -9,7 +9,7 @@ import { AMENITIES, canManageSpot, createImageUrl } from "@ramble/shared"
 
 import { Form, FormButton } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
-import { OptimizedImage } from "~/components/OptimisedImage"
+import { OptimizedImage, transformImageSrc } from "~/components/OptimisedImage"
 import { PageContainer } from "~/components/PageContainer"
 import {
   AlertDialogCancel,
@@ -32,6 +32,7 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
+import { FULL_WEB_URL } from "~/lib/config.server"
 
 export const loader = async ({ params }: LoaderArgs) => {
   const spot = await db.spot.findUnique({
@@ -48,7 +49,7 @@ export const loader = async ({ params }: LoaderArgs) => {
       longitude: true,
       ownerId: true,
       verifier: { select: { firstName: true, username: true, lastName: true, avatar: true, avatarBlurHash: true } },
-      images: { select: { id: true, path: true, blurHash: true } },
+      images: { orderBy: { createdAt: "asc" }, select: { id: true, path: true, blurHash: true } },
       _count: { select: { reviews: true } },
       reviews: {
         take: 5,
@@ -62,6 +63,19 @@ export const loader = async ({ params }: LoaderArgs) => {
   const rating = await db.review.aggregate({ where: { spotId: params.id }, _avg: { rating: true } })
 
   return json({ ...spot, rating })
+}
+
+export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
+  return [
+    { title: data?.name },
+    { name: "description", content: data?.description },
+    { name: "og:title", content: data?.name },
+    { name: "og:description", content: data?.description },
+    {
+      name: "og:image",
+      content: FULL_WEB_URL + transformImageSrc(createImageUrl(data?.images[0].path), { width: 600, height: 400 }),
+    },
+  ]
 }
 
 export const action = async ({ request, params }: ActionArgs) => {
