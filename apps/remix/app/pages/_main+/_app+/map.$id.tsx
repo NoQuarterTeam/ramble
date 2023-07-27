@@ -1,7 +1,6 @@
 import * as React from "react"
 import { Await, isRouteErrorResponse, Link, useLoaderData, useNavigate, useRouteError } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
-// TODO: change to vercel
 import { defer } from "@vercel/remix"
 import { BadgeX, Frown, Star, Verified } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
