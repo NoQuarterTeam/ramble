@@ -1,8 +1,8 @@
-import Map, { Marker } from "react-map-gl"
 import { Link, useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { Edit2, Star, Trash } from "lucide-react"
+import Map, { Marker } from "react-map-gl"
 
 import type { SpotType } from "@ramble/database/types"
 import { AMENITIES, canManageSpot, createImageUrl } from "@ramble/shared"
@@ -22,7 +22,6 @@ import {
   Button,
 } from "~/components/ui"
 import { VerifiedCard } from "~/components/VerifiedCard"
-import { FULL_WEB_URL } from "~/lib/config.server"
 import { db } from "~/lib/db.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { notFound, redirect } from "~/lib/remix.server"
@@ -31,6 +30,7 @@ import { SPOTS } from "~/lib/static/spots"
 import { useTheme } from "~/lib/theme"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
+import type { loader as rootLoader } from "~/root"
 import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 
@@ -65,7 +65,8 @@ export const loader = async ({ params }: LoaderArgs) => {
   return json({ ...spot, rating })
 }
 
-export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
+export const meta: V2_MetaFunction<typeof loader, { root: typeof rootLoader }> = ({ data, matches }) => {
+  const WEB_URL = matches.find((r) => r.id === "root")?.data.config.WEB_URL || "localhost:3000"
   return [
     { title: data?.name },
     { name: "description", content: data?.description },
@@ -73,7 +74,7 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => {
     { name: "og:description", content: data?.description },
     {
       name: "og:image",
-      content: FULL_WEB_URL + transformImageSrc(createImageUrl(data?.images[0].path), { width: 600, height: 400 }),
+      content: WEB_URL + transformImageSrc(createImageUrl(data?.images[0].path), { width: 600, height: 400 }),
     },
   ]
 }
