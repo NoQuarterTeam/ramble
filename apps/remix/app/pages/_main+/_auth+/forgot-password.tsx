@@ -23,7 +23,7 @@ export const action = async ({ request }: ActionArgs) => {
   const data = result.data
   const user = await db.user.findUnique({ where: { email: data.email } })
   if (user) {
-    const token = createToken({ id: user.id })
+    const token = await createToken({ id: user.id })
     await sendResetPasswordEmail(user, token)
   }
 

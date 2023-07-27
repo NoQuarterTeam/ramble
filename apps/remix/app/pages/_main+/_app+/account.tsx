@@ -32,7 +32,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export const action = async ({ request }: ActionArgs) => {
   const user = await getCurrentUser(request, { email: true, id: true })
-  const token = createToken({ id: user.id })
+  const token = await createToken({ id: user.id })
   await sendAccountVerificationEmail(user, token)
   return json({ success: true }, request, {
     flash: { title: "Verification email sent", description: "Please check yout emails to verify your account" },

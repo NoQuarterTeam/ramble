@@ -10,6 +10,11 @@ import { decryptToken } from "~/lib/jwt.server"
 import { hashPassword } from "~/services/auth/password.server"
 import { FlashType, getFlashSession } from "~/services/session/flash.server"
 
+export const config = {
+  runtime: "edge",
+  regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
+}
+
 export const headers = () => {
   return {
     "Cache-Control": "max-age=3600, s-maxage=86400",
@@ -24,7 +29,7 @@ export const action = async ({ request }: ActionArgs) => {
   const result = await validateFormData(request, resetPasswordSchema)
   if (!result.success) return formError(result)
   const data = result.data
-  const payload = decryptToken<{ id: string }>(data.token)
+  const payload = await decryptToken<{ id: string }>(data.token)
   const hashedPassword = await hashPassword(data.password)
   await db.user.update({ where: { id: payload.id }, data: { password: hashedPassword } })
   const { createFlash } = await getFlashSession(request)

@@ -1,11 +1,11 @@
 import * as React from "react"
 import type { LngLatLike } from "react-map-gl"
 import Map, { Marker } from "react-map-gl"
-import type { ActionArgs, LoaderArgs } from "@remix-run/node"
-import { json } from "@remix-run/node"
 import { Link, useFetcher, useLoaderData, useNavigate } from "@remix-run/react"
 import bbox from "@turf/bbox"
 import * as turf from "@turf/helpers"
+import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import { json } from "@vercel/remix"
 import { ChevronLeft, Copy } from "lucide-react"
 
 import type { SpotType } from "@ramble/database/types"
@@ -54,7 +54,7 @@ export const loader = async ({ params }: LoaderArgs) => {
       },
     },
   })
-  if (!list) throw notFound(null)
+  if (!list) throw notFound()
 
   const formattedList = {
     ...list,
@@ -99,7 +99,7 @@ export const action = async ({ request, params }: ActionArgs) => {
       return redirect(`/${user.username}/lists`, request, { flash: { title: "List deleted" } })
     case Actions.Copy:
       const list = await db.list.findFirst({ where: { id: params.id }, include: { listSpots: true } })
-      if (!list) throw notFound(null)
+      if (!list) throw notFound()
       const newList = await db.list.create({
         data: {
           name: list.name,

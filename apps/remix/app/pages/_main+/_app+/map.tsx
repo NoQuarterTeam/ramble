@@ -1,3 +1,5 @@
+import "mapbox-gl/dist/mapbox-gl.css"
+
 import * as React from "react"
 import Map, {
   GeolocateControl,
@@ -7,9 +9,15 @@ import Map, {
   NavigationControl,
   type ViewStateChangeEvent,
 } from "react-map-gl"
-import { Outlet, useFetcher, useNavigate, useRouteLoaderData, useSearchParams } from "@remix-run/react"
+import { cssBundleHref } from "@remix-run/css-bundle"
+import { Outlet, useFetcher, useLoaderData, useNavigate, useSearchParams } from "@remix-run/react"
 import turfCenter from "@turf/center"
 import * as turf from "@turf/helpers"
+import type { Geo } from "@vercel/edge"
+import { geolocation } from "@vercel/edge"
+import type { LinksFunction, LoaderArgs, SerializeFrom } from "@vercel/remix"
+import { json } from "@vercel/remix"
+import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 
 import type { SpotType } from "@ramble/database/types"
@@ -20,11 +28,44 @@ import { useTheme } from "~/lib/theme"
 import { MapFilters } from "~/pages/_main+/_app+/components/MapFilters"
 
 import type { Cluster, clustersLoader } from "../../api+/clusters"
-import type { IpInfo } from "./_layout"
+
+export const config = {
+  runtime: "edge",
+}
+
+export const links: LinksFunction = () => {
+  return cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []
+}
+
+export const loader = async ({ request }: LoaderArgs) => {
+  const geo = geolocation(request) as Geo | undefined
+  if (!geo) return json({ latitude: null, longitude: null, city: null, country: null })
+  return json(
+    {
+      latitude: geo.latitude ? parseFloat(geo.latitude) : null,
+      longitude: geo.longitude ? parseFloat(geo.longitude) : null,
+      city: geo.city,
+      country: geo.country,
+    },
+    {
+      headers: {
+        "Cache-Control": cacheHeader({
+          private: true,
+          maxAge: "10hour",
+          sMaxage: "20hour",
+          staleWhileRevalidate: "1day",
+          staleIfError: "1day",
+        }),
+      },
+    },
+  )
+}
+export type IpInfo = SerializeFrom<typeof loader> | undefined
+export const shouldRevalidate = () => false
 
 export default function MapView() {
   const clustersFetcher = useFetcher<typeof clustersLoader>()
-  const ipInfo = useRouteLoaderData("pages/_app") as IpInfo
+  const ipInfo = useLoaderData<typeof loader>()
 
   const clusters = clustersFetcher.data
 

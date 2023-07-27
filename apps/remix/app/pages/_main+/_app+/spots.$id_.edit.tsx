@@ -33,7 +33,7 @@ export const action = async ({ request, params }: ActionArgs) => {
   if (!result.success) return formError(result)
 
   const spot = await db.spot.findUnique({ where: { id: params.id }, include: { images: true, amenities: true } })
-  if (!spot) throw notFound(null)
+  if (!spot) throw notFound()
   if (!canManageSpot(spot, user)) throw redirect("/latest")
 
   let amenities

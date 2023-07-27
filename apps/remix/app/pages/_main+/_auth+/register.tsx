@@ -76,7 +76,7 @@ export const action = async ({ request }: ActionArgs) => {
         await db.inviteCode.update({ where: { id: inviteCode.id }, data: { acceptedAt: new Date() } })
         const { setUser } = await getUserSession(request)
         const { createFlash } = await getFlashSession(request)
-        const token = createToken({ id: user.id })
+        const token = await createToken({ id: user.id })
         await sendAccountVerificationEmail(user, token)
         const headers = new Headers([
           ["Set-Cookie", await setUser(user.id)],

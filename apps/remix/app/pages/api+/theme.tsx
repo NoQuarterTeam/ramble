@@ -3,6 +3,10 @@ import { type ActionArgs, json, redirect } from "@vercel/remix"
 import { isTheme } from "~/lib/theme"
 import { getThemeSession } from "~/services/session/theme.server"
 
+export const config = {
+  runtime: "edge",
+}
+
 export const action = async ({ request }: ActionArgs) => {
   const themeSession = await getThemeSession(request)
   const requestText = await request.text()

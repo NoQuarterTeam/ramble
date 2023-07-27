@@ -313,6 +313,9 @@ importers:
       '@vercel/analytics':
         specifier: ^1.0.1
         version: 1.0.1
+      '@vercel/edge':
+        specifier: ^0.3.4
+        version: 0.3.4
       '@vercel/remix':
         specifier: 1.19.1
         version: 1.19.1(react-dom@18.2.0)(react@18.2.0)
@@ -337,9 +340,9 @@ importers:
       isbot:
         specifier: latest
         version: 3.6.13
-      jsonwebtoken:
-        specifier: 9.0.1
-        version: 9.0.1
+      jose:
+        specifier: ^4.14.4
+        version: 4.14.4
       lucide-react:
         specifier: ^0.263.0
         version: 0.263.0(react@18.2.0)
@@ -462,8 +465,8 @@ importers:
         specifier: 8.45.0
         version: 8.45.0
       eslint-config-prettier:
-        specifier: 8.8.0
-        version: 8.8.0(eslint@8.45.0)
+        specifier: 8.9.0
+        version: 8.9.0(eslint@8.45.0)
       eslint-plugin-import:
         specifier: 2.27.5
         version: 2.27.5(@typescript-eslint/parser@5.62.0)(eslint-import-resolver-typescript@3.5.5)(eslint@8.45.0)
@@ -586,8 +589,8 @@ importers:
         specifier: 8.45.0
         version: 8.45.0
       eslint-config-prettier:
-        specifier: 8.8.0
-        version: 8.8.0(eslint@8.45.0)
+        specifier: 8.9.0
+        version: 8.9.0(eslint@8.45.0)
       eslint-plugin-import:
         specifier: 2.27.5
         version: 2.27.5(@typescript-eslint/parser@5.62.0)(eslint-import-resolver-typescript@3.5.5)(eslint@8.45.0)
@@ -7585,6 +7588,10 @@ packages:
     resolution: {integrity: sha512-Ux0c9qUfkcPqng3vrR0GTrlQdqNJ2JREn/2ydrVuKwM3RtMfF2mWX31Ijqo1opSjNAq6rK76PwtANw6kl6TAow==}
     dev: false
 
+  /@vercel/edge@0.3.4:
+    resolution: {integrity: sha512-dFU+yAUDQRwpuRGxRDlEO1LMq0y1LGsBgkyryQWe4w15/Fy2/lCnpvdIoAhHl3QvIGAxCLHzwRHsqfLRdpxgJQ==}
+    dev: false
+
   /@vercel/remix@1.19.1(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-lIiLbXq5y8g2vQmDkxBsYEWvr38LCqU45ThZ+v1as8P6U6PEBtVFtdWq9YRsG1IaOP15sgJyXglB43gpIJol4Q==}
     engines: {node: '>=14'}
@@ -9861,8 +9868,8 @@ packages:
       source-map: 0.6.1
     dev: true
 
-  /eslint-config-prettier@8.8.0(eslint@8.45.0):
-    resolution: {integrity: sha512-wLbQiFre3tdGgpDv67NQKnJuTlcUVYHas3k+DZCc2U2BadthoEY4B7hLPvAxaqdyOGCzuLfii2fqGph10va7oA==}
+  /eslint-config-prettier@8.9.0(eslint@8.45.0):
+    resolution: {integrity: sha512-+sbni7NfVXnOpnRadUA8S28AUlsZt9GjgFvABIRL9Hkn8KqNzOp+7Lw4QWtrwn20KzU3wqu1QoOj2m+7rKRqkA==}
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
@@ -12358,6 +12365,10 @@ packages:
 
   /join-component@1.1.0:
     resolution: {integrity: sha512-bF7vcQxbODoGK1imE2P9GS9aw4zD0Sd+Hni68IMZLj7zRnquH7dXUmMw9hDI5S/Jzt7q+IyTXN0rSg2GI0IKhQ==}
+    dev: false
+
+  /jose@4.14.4:
+    resolution: {integrity: sha512-j8GhLiKmUAh+dsFXlX1aJCbt5KMibuKb+d7j1JaOJG6s2UjX1PQlW+OKB/sD4a/5ZYF4RcmYmLSndOoU3Lt/3g==}
     dev: false
 
   /js-beautify@1.14.8:

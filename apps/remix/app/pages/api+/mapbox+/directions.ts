@@ -7,6 +7,10 @@ import { cacheHeader } from "pretty-cache-header"
 
 import { db } from "~/lib/db.server"
 
+export const config = {
+  runtime: "edge",
+}
+
 export const loader = async ({ request }: LoaderArgs) => {
   const url = new URL(request.url)
   const startLng = url.searchParams.get("startLng")

@@ -1,7 +1,7 @@
 import * as React from "react"
-import type { LoaderArgs } from "@remix-run/node"
-import { json } from "@remix-run/node"
 import { useFetcher, useLoaderData } from "@remix-run/react"
+import type { LoaderArgs } from "@vercel/remix"
+import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
 import { type SpotItemWithImageAndRating } from "@ramble/api/src/router/spot"
@@ -12,6 +12,11 @@ import { useLoaderHeaders } from "~/lib/headers.server"
 
 import { PageContainer } from "../../../components/PageContainer"
 import { SpotItem } from "./components/SpotItem"
+
+export const config = {
+  runtime: "edge",
+  regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
+}
 
 export const headers = useLoaderHeaders
 

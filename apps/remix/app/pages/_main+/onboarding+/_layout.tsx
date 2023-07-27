@@ -1,6 +1,6 @@
-import type { LoaderArgs } from "@remix-run/node"
-import { json } from "@remix-run/node"
 import { Outlet } from "@remix-run/react"
+import type { LoaderArgs } from "@vercel/remix"
+import { json } from "@vercel/remix"
 import { ArrowRight } from "lucide-react"
 
 import { LinkButton } from "~/components/LinkButton"

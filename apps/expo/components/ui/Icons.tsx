@@ -13,6 +13,17 @@ export interface IconProps {
 }
 
 export const Icons = {
+  Bbq: ({ strokeWidth = 2, size = 24, color = "currentColor", fill = "none", ...props }: IconProps) => (
+    <Svg width={size} height={size} viewBox="0 0 24 24" fill={fill} {...props}>
+      <Path
+        d="M7 14L5 22M17 14L19 19M8 6C7.09 4.42383 8.89205 3.54508 7.98205 1.96891M12 6C11.09 4.42383 12.8921 3.54508 11.9821 1.96891M16 6C15.09 4.42383 16.8921 3.54508 15.9821 1.96891M7 18H18M5 9C5 9 5 15 12 15C19 15 19 9 19 9L5 9ZM22 20.5C22 21.8807 20.8807 23 19.5 23C18.1193 23 17 21.8807 17 20.5C17 19.1193 18.1193 18 19.5 18C20.8807 18 22 19.1193 22 20.5Z"
+        stroke={color}
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  ),
   Surf: ({ strokeWidth = 2, size = 24, color = "currentColor", fill = "none", ...props }: IconProps) => (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill={fill} {...props}>
       <Path

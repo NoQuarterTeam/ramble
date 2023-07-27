@@ -1,7 +1,7 @@
 import * as React from "react"
 import type { ViewStateChangeEvent } from "react-map-gl"
 import Map, { NavigationControl } from "react-map-gl"
-import { useFetcher, useNavigate, useRouteLoaderData, useSearchParams } from "@remix-run/react"
+import { useFetcher, useNavigate, useSearchParams } from "@remix-run/react"
 import turfCenter from "@turf/center"
 import * as turf from "@turf/helpers"
 import type { SerializeFrom } from "@vercel/remix"
@@ -24,8 +24,6 @@ import { AMENITIES_ICONS } from "~/lib/static/amenities"
 import { SPOT_OPTIONS } from "~/lib/static/spots"
 import { useTheme } from "~/lib/theme"
 import type { geocodeLoader } from "~/pages/api+/mapbox+/geocode"
-
-import type { IpInfo } from "../_layout"
 
 export const amenitiesSchema = z.object({
   bbq: zx.BoolAsString,
@@ -60,7 +58,7 @@ export const spotSchema = z
   )
 
 export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotImage[]; amenities?: SpotAmenities | null }> }) {
-  const ipInfo = useRouteLoaderData("pages/_app") as IpInfo
+  // const ipInfo = useRouteLoaderData("pages/_app") as IpInfo
   const errors = useFormErrors<typeof spotSchema>()
   const [searchParams] = useSearchParams()
   const initialViewState = React.useMemo(() => {
@@ -79,9 +77,12 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
       )
     }
     return {
-      zoom: zoom ? parseInt(zoom) : ipInfo ? 6 : 5,
-      longitude: spot?.longitude || centerFromParams?.geometry.coordinates[0] || ipInfo?.longitude || INITIAL_LONGITUDE,
-      latitude: spot?.latitude || centerFromParams?.geometry.coordinates[1] || ipInfo?.latitude || INITIAL_LATITUDE,
+      // zoom: zoom ? parseInt(zoom) : ipInfo ? 6 : 5,
+      zoom: zoom ? parseInt(zoom) : 5,
+      longitude: spot?.longitude || centerFromParams?.geometry.coordinates[0] || INITIAL_LONGITUDE,
+      latitude: spot?.latitude || centerFromParams?.geometry.coordinates[1] || INITIAL_LATITUDE,
+      // longitude: spot?.longitude || centerFromParams?.geometry.coordinates[0] || ipInfo?.longitude || INITIAL_LONGITUDE,
+      // latitude: spot?.latitude || centerFromParams?.geometry.coordinates[1] || ipInfo?.latitude || INITIAL_LATITUDE,
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -141,7 +142,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
               <div className="relative">
                 <FormField
                   className="hover:border-gray-200 dark:hover:border-gray-700"
-                  disabled
+                  // disabled
                   readOnly
                   name="address"
                   value={address || ""}

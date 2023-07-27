@@ -21,7 +21,7 @@ import {
 import { FormAction } from "~/lib/form"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 
-import { Actions } from "../spots.$id.reviews.$reviewId"
+import { Actions } from "../spots.$id_.reviews.$reviewId"
 
 export const reviewItemSelectFields = {
   id: true,

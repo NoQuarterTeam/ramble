@@ -1,7 +1,7 @@
 import * as React from "react"
-import type { LoaderArgs } from "@remix-run/node"
-import { json } from "@remix-run/node"
 import { useFetcher, useLoaderData } from "@remix-run/react"
+import type { LoaderArgs } from "@vercel/remix"
+import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
 import { type SpotItemWithImageAndRating } from "@ramble/api/src/router/spot"
@@ -17,7 +17,7 @@ export const headers = useLoaderHeaders
 
 export const loader = async ({ request, params }: LoaderArgs) => {
   const user = await db.user.findUnique({ where: { username: params.username } })
-  if (!user) throw notFound(null)
+  if (!user) throw notFound()
   const searchParams = new URL(request.url).searchParams
   const skip = parseInt((searchParams.get("skip") as string) || "0")
 

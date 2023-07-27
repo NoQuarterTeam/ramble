@@ -1,7 +1,7 @@
-import type { LoaderArgs } from "@remix-run/node"
-import { json } from "@remix-run/node"
 import type { NavLinkProps } from "@remix-run/react"
 import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react"
+import type { LoaderArgs } from "@vercel/remix"
+import { json } from "@vercel/remix"
 import { Instagram, type LucideIcon } from "lucide-react"
 
 import { createImageUrl, merge, userInterestFields } from "@ramble/shared"
@@ -37,7 +37,7 @@ export const loader = async ({ params }: LoaderArgs) => {
       ...userInterestFields,
     },
   })
-  if (!user) throw notFound(null)
+  if (!user) throw notFound()
 
   return json(user)
 }

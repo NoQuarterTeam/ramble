@@ -1,16 +1,18 @@
-import jwt from "jsonwebtoken"
-
+import { SignJWT, jwtVerify } from "jose"
 import { APP_SECRET } from "./config.server"
 
 type Payload = Record<string, unknown>
 
-export const createToken = (payload: Payload, options?: jwt.SignOptions): string => {
+const secret = new TextEncoder().encode(APP_SECRET)
+const alg = "HS256"
+export const createToken = async (payload: Payload) => {
   try {
-    const token = jwt.sign(payload, APP_SECRET, {
-      issuer: "@ramble",
-      expiresIn: "4w",
-      ...options,
-    })
+    const token = await new SignJWT(payload)
+      .setIssuer("@ramble")
+      .setIssuedAt()
+      .setExpirationTime("4w")
+      .setProtectedHeader({ alg })
+      .sign(secret)
     return token
   } catch (error) {
     // Oops
@@ -18,10 +20,9 @@ export const createToken = (payload: Payload, options?: jwt.SignOptions): string
   }
 }
 
-export function decryptToken<T>(token: string): T {
+export async function decryptToken<T>(token: string): Promise<T> {
   try {
-    jwt.verify(token, APP_SECRET)
-    const payload = jwt.decode(token)
+    const { payload } = await jwtVerify(token, secret, { algorithms: [alg] })
     return payload as T
   } catch (error) {
     // Oops

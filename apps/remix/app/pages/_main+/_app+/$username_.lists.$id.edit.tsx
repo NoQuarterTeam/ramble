@@ -1,6 +1,6 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node"
-import { json } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
+import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import { json } from "@vercel/remix"
 import { z } from "zod"
 
 import { db } from "~/lib/db.server"
@@ -19,7 +19,7 @@ export const loader = async ({ params, request }: LoaderArgs) => {
     where: { id: params.id, creatorId: userId },
     select: { id: true, name: true, description: true },
   })
-  if (!list) throw notFound(null)
+  if (!list) throw notFound()
   return json(list)
 }
 

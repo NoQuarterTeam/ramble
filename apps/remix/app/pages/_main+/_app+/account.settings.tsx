@@ -1,5 +1,5 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node"
-import { json } from "@remix-run/node"
+import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import { json } from "@vercel/remix"
 
 import { Form, FormButton, FormField } from "~/components/Form"
 import { Switch } from "~/components/ui"

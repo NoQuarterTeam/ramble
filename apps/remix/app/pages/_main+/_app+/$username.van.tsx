@@ -1,6 +1,6 @@
-import type { LoaderArgs } from "@remix-run/node"
-import { json } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
+import type { LoaderArgs } from "@vercel/remix"
+import { json } from "@vercel/remix"
 
 import { createImageUrl } from "@ramble/shared"
 
@@ -13,7 +13,7 @@ export const headers = useLoaderHeaders
 
 export const loader = async ({ params }: LoaderArgs) => {
   const user = await db.user.findUnique({ where: { username: params.username }, include: { van: { include: { images: true } } } })
-  if (!user) throw notFound(null)
+  if (!user) throw notFound()
   return json(user)
 }
 
