@@ -2,7 +2,7 @@ import { z } from "zod"
 
 // Only use on the server
 const envSchema = z.object({
-  NODE_ENV: z.enum(["development", "production"]),
+  NODE_ENV: z.enum(["development", "production"]).optional(),
   VERCEL_ENV: z.enum(["development", "production", "preview"]).optional(),
   VERCEL_GIT_COMMIT_REF: z.string().optional(),
   VERCEL_URL: z.string().optional(),
