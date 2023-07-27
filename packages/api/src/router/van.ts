@@ -3,7 +3,7 @@ import { z } from "zod"
 
 import { vanSchema } from "@ramble/shared"
 
-import { generateBlurHash } from "../services/createBlurHash.server"
+import { generateBlurHash } from "../services/generateBlurHash.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const vanRouter = createTRPCRouter({

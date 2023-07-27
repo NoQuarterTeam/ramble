@@ -76,7 +76,7 @@ export async function generateImage({ request }: LoaderArgs) {
     })
 
     if (width || height) sharpInstance.resize(width, height, { fit })
-    sharpInstance.png({ quality })
+    sharpInstance.avif({ quality })
 
     // upload to s3
     await uploadStream(key, res.data.pipe(sharpInstance))
@@ -95,10 +95,16 @@ async function getCachedImage(src: string) {
   return new Response(res.data, {
     status: 200,
     headers: {
-      "Content-Type": "image/png",
-      "Vercel-CDN-Cache-Control": cacheHeader({ public: true, maxAge: "1year", sMaxage: "1year", immutable: true }),
-      "CDN-Cache-Control": cacheHeader({ public: true, maxAge: "1year", sMaxage: "1year", immutable: true }),
-      "Cache-Control": cacheHeader({ public: true, maxAge: "1year", sMaxage: "1year", immutable: true }),
+      "Content-Type": "image/avif",
+      "Vercel-CDN-Cache-Control": cacheHeader({
+        public: true,
+        noTransform: true,
+        maxAge: "1year",
+        sMaxage: "1year",
+        immutable: true,
+      }),
+      "CDN-Cache-Control": cacheHeader({ public: true, noTransform: true, maxAge: "1year", sMaxage: "1year", immutable: true }),
+      "Cache-Control": cacheHeader({ public: true, noTransform: true, maxAge: "1year", sMaxage: "1year", immutable: true }),
     },
   })
 }
