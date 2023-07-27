@@ -8,6 +8,10 @@ import { cacheHeader } from "pretty-cache-header"
 
 import { getIpInfo } from "~/services/ip.server"
 
+export const config = {
+  runtime: "edge",
+}
+
 export const links: LinksFunction = () => {
   return cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []
 }
