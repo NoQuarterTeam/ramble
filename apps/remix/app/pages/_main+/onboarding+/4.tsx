@@ -13,10 +13,11 @@ import { LinkButton } from "~/components/LinkButton"
 import { IconButton, Textarea } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { formError, FormNumber, NullableFormString, validateFormData } from "~/lib/form"
-import { raise } from "~/lib/helpers/utils"
+
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { Footer } from "./components/Footer"
+import { generateBlurHash } from "@ramble/api"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const user = await getCurrentUser(request, {
@@ -39,32 +40,31 @@ export const action = async ({ request }: ActionArgs) => {
   if (!result.success) return formError(result)
   const user = await getCurrentUser(request, { id: true, van: { select: { id: true } } })
   const images = (formData.getAll("image") as string[]).filter(Boolean)
+
   const data = result.data
   if (user.van) {
+    const van = await db.van.findUniqueOrThrow({ where: { id: user.van.id }, include: { images: true } })
+    const imagesToDelete = van.images.filter((image) => !images.includes(image.path))
+    const imagesToCreate = images.filter((image) => !van.images.find((i) => i.path === image))
+    const imageData = await Promise.all(
+      imagesToCreate.map(async (image) => {
+        const blurHash = await generateBlurHash(image)
+        return { path: image, blurHash }
+      }),
+    )
     await db.van.update({
       where: { id: user.van.id },
-      data: {
-        userId: user.id,
-        ...data,
-        images: {
-          deleteMany: { path: { notIn: images } },
-          connectOrCreate: images.map((image) => ({
-            where: { vanId_path: { path: image, vanId: user.van?.id ?? raise("id required") } },
-            create: { path: image },
-          })),
-        },
-      },
+      data: { userId: user.id, ...data, images: { delete: imagesToDelete, create: imageData } },
     })
   } else {
-    await db.van.create({
-      data: {
-        userId: user.id,
-        ...data,
-        images: { createMany: { data: images.map((image) => ({ path: image })) } },
-      },
-    })
+    const imageData = await Promise.all(
+      images.map(async (image) => {
+        const blurHash = await generateBlurHash(image)
+        return { path: image, blurHash }
+      }),
+    )
+    await db.van.create({ data: { userId: user.id, ...data, images: { create: imageData } } })
   }
-
   return redirect("/map/welcome")
 }
 
