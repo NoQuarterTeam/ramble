@@ -34,11 +34,6 @@ import type { loader as rootLoader } from "~/root"
 import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 
-export const config = {
-  runtime: "edge",
-  regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
-}
-
 export const loader = async ({ params }: LoaderArgs) => {
   const spot = await db.spot.findUnique({
     where: { id: params.id },
