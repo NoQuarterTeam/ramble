@@ -6,6 +6,7 @@ datasource db {
   provider     = "mysql"
   relationMode = "prisma"
   url          = env("DATABASE_URL")
+  directUrl    = env("DIRECT_URL")
 }
 
 enum Role {

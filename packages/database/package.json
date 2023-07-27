@@ -12,9 +12,9 @@
     "db:seed": "pnpm with-env ts-node ./seed",
     "db:campspace": "pnpm with-env ts-node ./seed/campspace.ts",
     "load-campspace": "pnpm with-env ts-node ./load-campspace.ts",
-    "db:generate": "pnpm with-env prisma generate",
+    "db:generate": "pnpm with-env prisma generate --data-proxy",
     "with-env": "dotenv -e ../../.env --",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate --data-proxy"
   },
   "sideEffects": false,
   "dependencies": {
