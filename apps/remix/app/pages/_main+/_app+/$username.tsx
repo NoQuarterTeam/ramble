@@ -1,5 +1,5 @@
-import type { LoaderArgs } from "@remix-run/node"
-import { json } from "@remix-run/node"
+import type { LoaderArgs } from "@vercel/remix"
+import { json } from "@vercel/remix"
 import type { NavLinkProps } from "@remix-run/react"
 import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react"
 import { Instagram, type LucideIcon } from "lucide-react"

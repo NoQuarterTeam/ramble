@@ -1,6 +1,6 @@
 import * as React from "react"
-import type { ActionArgs, LoaderArgs } from "@remix-run/node"
-import { json } from "@remix-run/node"
+import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import { json } from "@vercel/remix"
 import { useLoaderData } from "@remix-run/react"
 import { Plus } from "lucide-react"
 import { z } from "zod"

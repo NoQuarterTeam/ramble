@@ -1,5 +1,5 @@
 import * as React from "react"
-import type { ActionArgs } from "@remix-run/node"
+import type { ActionArgs } from "@vercel/remix"
 import { useLoaderData } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json, redirect } from "@vercel/remix"
