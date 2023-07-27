@@ -10,6 +10,10 @@ import type { SpotType } from "@ramble/database/types"
 
 import { db } from "~/lib/db.server"
 
+export const config = {
+  runtime: "edge",
+}
+
 async function getMapClusters(request: Request) {
   const schema = z.object({
     zoom: NumAsString,

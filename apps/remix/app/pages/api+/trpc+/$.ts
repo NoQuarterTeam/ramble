@@ -3,6 +3,10 @@ import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 
 import { appRouter, createContext } from "@ramble/api"
 
+export const config = {
+  runtime: "edge",
+}
+
 function handleRequest(args: LoaderArgs | ActionArgs) {
   return trpcFetch.fetchRequestHandler({
     endpoint: "/api/trpc",

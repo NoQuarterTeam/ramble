@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useActionData } from "react-router"
+import { useActionData } from "@remix-run/react"
 import { z } from "zod"
 
 import { badRequest } from "./remix.server"
