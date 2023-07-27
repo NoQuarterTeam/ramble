@@ -5,6 +5,10 @@ import { redirect } from "@vercel/remix"
 import { db } from "~/lib/db.server"
 import { getUserSession } from "~/services/session/session.server"
 
+export const config = {
+  runtime: "edge",
+}
+
 export const handle = {
   disableScripts: false,
 }

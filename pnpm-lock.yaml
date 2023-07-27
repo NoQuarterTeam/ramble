@@ -337,6 +337,9 @@ importers:
       isbot:
         specifier: latest
         version: 3.6.13
+      jose:
+        specifier: ^4.14.4
+        version: 4.14.4
       jsonwebtoken:
         specifier: 9.0.1
         version: 9.0.1
@@ -12356,6 +12359,10 @@ packages:
 
   /join-component@1.1.0:
     resolution: {integrity: sha512-bF7vcQxbODoGK1imE2P9GS9aw4zD0Sd+Hni68IMZLj7zRnquH7dXUmMw9hDI5S/Jzt7q+IyTXN0rSg2GI0IKhQ==}
+    dev: false
+
+  /jose@4.14.4:
+    resolution: {integrity: sha512-j8GhLiKmUAh+dsFXlX1aJCbt5KMibuKb+d7j1JaOJG6s2UjX1PQlW+OKB/sD4a/5ZYF4RcmYmLSndOoU3Lt/3g==}
     dev: false
 
   /js-beautify@1.14.8:

@@ -14,6 +14,10 @@ import { hashPassword } from "~/services/auth/password.server"
 import { FlashType, getFlashSession } from "~/services/session/flash.server"
 import { getUserSession } from "~/services/session/session.server"
 
+export const config = {
+  runtime: "edge",
+}
+
 export const meta: V2_MetaFunction = () => {
   return [{ title: "Register" }, { name: "description", content: "Sign up to the ramble" }]
 }
@@ -60,7 +64,7 @@ export const action = async ({ request }: ActionArgs) => {
         })
         const { setUser } = await getUserSession(request)
         const { createFlash } = await getFlashSession(request)
-        const token = createToken({ id: user.id })
+        const token = await createToken({ id: user.id })
         await sendAccountVerificationEmail(user, token)
         const headers = new Headers([
           ["Set-Cookie", await setUser(user.id)],

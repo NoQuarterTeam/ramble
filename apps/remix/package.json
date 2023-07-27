@@ -53,6 +53,7 @@
     "class-variance-authority": "^0.7.0",
     "dayjs": "1.11.9",
     "isbot": "latest",
+    "jose": "^4.14.4",
     "jsonwebtoken": "9.0.1",
     "lucide-react": "^0.263.0",
     "mapbox-gl": "^2.14.1",

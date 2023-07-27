@@ -10,6 +10,10 @@ import { formError, validateFormData } from "~/lib/form"
 import { createToken } from "~/lib/jwt.server"
 import { redirect } from "~/lib/remix.server"
 
+export const config = {
+  runtime: "edge",
+}
+
 export const headers = () => {
   return {
     "Cache-Control": "max-age=3600, s-maxage=86400",
@@ -23,7 +27,7 @@ export const action = async ({ request }: ActionArgs) => {
   const data = result.data
   const user = await db.user.findUnique({ where: { email: data.email } })
   if (user) {
-    const token = createToken({ id: user.id })
+    const token = await createToken({ id: user.id })
     await sendResetPasswordEmail(user, token)
   }
 
