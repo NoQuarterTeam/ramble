@@ -12,6 +12,10 @@ import { db } from "~/lib/db.server"
 
 import { PageContainer } from "../../components/PageContainer"
 
+export const config = {
+  runtime: "edge",
+}
+
 export const loader = async () => {
   const spots: Array<SpotItemWithImageAndRating> = await db.$queryRaw`
       SELECT 
