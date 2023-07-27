@@ -5,7 +5,7 @@ import { z } from "zod"
 import { type Spot, type SpotImage, SpotType } from "@ramble/database/types"
 import { spotAmenitiesSchema, spotSchemaWithoutType } from "@ramble/shared"
 
-import { generateBlurHash } from "../services/createBlurHash.server"
+import { generateBlurHash } from "../services/generateBlurHash.server"
 import { geocodeCoords } from "../services/geocode.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 

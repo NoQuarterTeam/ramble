@@ -4,7 +4,7 @@ import { z } from "zod"
 import { updateSchema, userInterestFields } from "@ramble/shared"
 
 import { createAuthToken } from "../lib/jwt"
-import { generateBlurHash } from "../services/createBlurHash.server"
+import { generateBlurHash } from "../services/generateBlurHash.server"
 import { sendAccountVerificationEmail } from "../services/user.mailer.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
