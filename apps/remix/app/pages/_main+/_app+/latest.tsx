@@ -41,7 +41,10 @@ export const loader = async ({ request }: LoaderArgs) => {
     OFFSET ${skip};
   `
   const count = await db.spot.count()
-  return json({ spots, count }, { headers: { "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour" }) } })
+  return json(
+    { spots, count },
+    { headers: { "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour", maxAge: "1hour" }) } },
+  )
 }
 
 export default function Latest() {

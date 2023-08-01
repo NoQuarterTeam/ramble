@@ -11,11 +11,15 @@ import { Badge } from "~/components/ui"
 import { db } from "~/lib/db.server"
 
 import { PageContainer } from "../../components/PageContainer"
+import { cacheHeader } from "pretty-cache-header"
+import { useLoaderHeaders } from "~/lib/headers.server"
 
 export const config = {
   runtime: "edge",
   regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
 }
+
+export const headers = useLoaderHeaders
 
 export const loader = async () => {
   const spots: Array<SpotItemWithImageAndRating> = await db.$queryRaw`
@@ -33,7 +37,17 @@ export const loader = async () => {
         rating DESC, Spot.id
       LIMIT 5;
     `
-  return json(spots)
+  return json(spots, {
+    headers: {
+      "Cache-Control": cacheHeader({
+        public: true,
+        maxAge: "1day",
+        sMaxage: "1day",
+        staleWhileRevalidate: "1hour",
+        staleIfError: "1hour",
+      }),
+    },
+  })
 }
 
 export default function Home() {
