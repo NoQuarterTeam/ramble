@@ -13,13 +13,14 @@ import { badRequest } from "~/lib/remix.server"
 import { hashPassword } from "~/services/auth/password.server"
 import { FlashType, getFlashSession } from "~/services/session/flash.server"
 import { getUserSession } from "~/services/session/session.server"
+import { cacheHeader } from "pretty-cache-header"
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "Register" }, { name: "description", content: "Sign up to the ramble" }]
 }
 export const headers = () => {
   return {
-    "Cache-Control": "max-age=3600, s-maxage=86400",
+    "Cache-Control": cacheHeader({ maxAge: "1hour", sMaxage: "1hour", public: true }),
   }
 }
 

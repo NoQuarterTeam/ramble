@@ -25,13 +25,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   }))
   return json(places || "Unknown address", {
     headers: {
-      "Cache-Control": cacheHeader({
-        public: true,
-        maxAge: "1hour",
-        sMaxage: "1hour",
-        staleWhileRevalidate: "1day",
-        staleIfError: "1day",
-      }),
+      "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }),
     },
   })
 }

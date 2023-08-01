@@ -67,13 +67,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   const spots = await getMapClusters(request)
   return json(spots, {
     headers: {
-      "Cache-Control": cacheHeader({
-        public: true,
-        maxAge: "1hour",
-        sMaxage: "1hour",
-        staleWhileRevalidate: "1day",
-        staleIfError: "1day",
-      }),
+      "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }),
     },
   })
 }

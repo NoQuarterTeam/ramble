@@ -1,6 +1,7 @@
 import { Link, useParams } from "@remix-run/react"
 import type { ActionArgs } from "@vercel/remix"
 import { redirect } from "@vercel/remix"
+import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
@@ -17,7 +18,7 @@ export const config = {
 
 export const headers = () => {
   return {
-    "Cache-Control": "max-age=3600, s-maxage=86400",
+    "Cache-Control": cacheHeader({ maxAge: "1hour", sMaxage: "1hour", public: true }),
   }
 }
 

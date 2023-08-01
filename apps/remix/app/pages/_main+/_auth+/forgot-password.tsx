@@ -9,10 +9,11 @@ import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { createToken } from "~/lib/jwt.server"
 import { redirect } from "~/lib/remix.server"
+import { cacheHeader } from "pretty-cache-header"
 
 export const headers = () => {
   return {
-    "Cache-Control": "max-age=3600, s-maxage=86400",
+    "Cache-Control": cacheHeader({ maxAge: "1hour", sMaxage: "1hour", public: true }),
   }
 }
 

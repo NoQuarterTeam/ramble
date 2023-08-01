@@ -42,7 +42,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
   const count = await db.spot.count({ where: { creatorId: user.id } })
   return json(
     { spots, count },
-    { headers: { "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour", staleWhileRevalidate: "1day" }) } },
+    { headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }) } },
   )
 }
 
