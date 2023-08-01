@@ -187,8 +187,8 @@ importers:
         specifier: 3.21.4
         version: 3.21.4
       zustand:
-        specifier: 4.3.9
-        version: 4.3.9(react@18.2.0)
+        specifier: 4.4.0
+        version: 4.4.0(@types/react@18.0.38)(react@18.2.0)
     devDependencies:
       '@babel/core':
         specifier: ^7.20.0
@@ -401,8 +401,8 @@ importers:
         specifier: ^0.4.0
         version: 0.4.0(@remix-run/server-runtime@1.19.1)(zod@3.21.4)
       zustand:
-        specifier: 4.3.9
-        version: 4.3.9(react@18.2.0)
+        specifier: 4.4.0
+        version: 4.4.0(@types/react@18.2.18)(react@18.2.0)
     devDependencies:
       '@ramble/eslint-config':
         specifier: workspace:*
@@ -18530,18 +18530,42 @@ packages:
       zod: 3.21.4
     dev: false
 
-  /zustand@4.3.9(react@18.2.0):
-    resolution: {integrity: sha512-Tat5r8jOMG1Vcsj8uldMyqYKC5IZvQif8zetmLHs9WoZlntTHmIoNM8TpLRY31ExncuUvUOXehd0kvahkuHjDw==}
+  /zustand@4.4.0(@types/react@18.0.38)(react@18.2.0):
+    resolution: {integrity: sha512-2dq6wq4dSxbiPTamGar0NlIG/av0wpyWZJGeQYtUOLegIUvhM2Bf86ekPlmgpUtS5uR7HyetSiktYrGsdsyZgQ==}
     engines: {node: '>=12.7.0'}
     peerDependencies:
+      '@types/react': '>=16.8'
       immer: '>=9.0'
       react: '>=16.8'
     peerDependenciesMeta:
+      '@types/react':
+        optional: true
       immer:
         optional: true
       react:
         optional: true
     dependencies:
+      '@types/react': 18.0.38
+      react: 18.2.0
+      use-sync-external-store: 1.2.0(react@18.2.0)
+    dev: false
+
+  /zustand@4.4.0(@types/react@18.2.18)(react@18.2.0):
+    resolution: {integrity: sha512-2dq6wq4dSxbiPTamGar0NlIG/av0wpyWZJGeQYtUOLegIUvhM2Bf86ekPlmgpUtS5uR7HyetSiktYrGsdsyZgQ==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      '@types/react': '>=16.8'
+      immer: '>=9.0'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      immer:
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      '@types/react': 18.2.18
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
