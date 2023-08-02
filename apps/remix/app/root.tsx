@@ -7,6 +7,7 @@ import "@fontsource/poppins/800.css"
 import "@fontsource/poppins/900.css"
 import "~/styles/app.css"
 
+import * as React from "react"
 import * as Tooltip from "@radix-ui/react-tooltip"
 import { cssBundleHref } from "@remix-run/css-bundle"
 import type { ShouldRevalidateFunction } from "@remix-run/react"
@@ -18,14 +19,17 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useFetchers,
   useLoaderData,
   useMatches,
+  useNavigation,
   useRouteError,
 } from "@remix-run/react"
 import { Analytics } from "@vercel/analytics/react"
 import type { LinksFunction, LoaderArgs, SerializeFrom, V2_MetaFunction } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { Frown } from "lucide-react"
+import NProgress from "nprogress"
 
 import { join } from "@ramble/shared"
 
@@ -75,6 +79,19 @@ export type RootLoader = SerializeFrom<typeof loader>
 
 export default function App() {
   const { flash, theme } = useLoaderData<typeof loader>()
+
+  const transition = useNavigation()
+  const fetchers = useFetchers()
+  const state = React.useMemo<"idle" | "loading">(() => {
+    const states = [transition.state, ...fetchers.map((fetcher) => fetcher.state)]
+    if (states.every((state) => state === "idle")) return "idle"
+    return "loading"
+  }, [transition.state, fetchers])
+
+  React.useEffect(() => {
+    if (state === "loading") NProgress.start()
+    if (state === "idle") NProgress.done()
+  }, [transition.state, state])
 
   return (
     <Document theme={theme}>
