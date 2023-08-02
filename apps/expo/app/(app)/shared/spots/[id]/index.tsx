@@ -54,8 +54,8 @@ export function SpotDetailScreen() {
   })
 
   const imageStyle = useAnimatedStyle(() => {
-    const scale = interpolate(translationY.value, [-400, 0], [2.5, 1], Extrapolation.CLAMP)
-    const translateY = interpolate(translationY.value, [-400, 0], [-150, 0], Extrapolation.CLAMP)
+    const scale = interpolate(translationY.value, [-400, 0], [2.7, 1], Extrapolation.CLAMP)
+    const translateY = interpolate(translationY.value, [-400, 0], [-180, 0], Extrapolation.CLAMP)
     return { transform: [{ scale }, { translateY }] }
   })
 
@@ -100,9 +100,8 @@ export function SpotDetailScreen() {
       <StatusBar animated style={isDark ? "light" : "dark"} />
       <Animated.ScrollView
         scrollEventThrottle={16}
-        stickyHeaderIndices={[1]}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 200 }}
+        contentContainerStyle={{ paddingBottom: 300 }}
         style={{ flexGrow: 1 }}
         onScroll={scrollHandler}
       >
