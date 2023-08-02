@@ -79,6 +79,7 @@ export const loader = async ({ params }: LoaderArgs) => {
 
 export const meta: V2_MetaFunction<typeof loader, { root: typeof rootLoader }> = ({ data, matches }) => {
   const WEB_URL = matches.find((r) => r.id === "root")?.data.config.WEB_URL || "localhost:3000"
+  const image = data?.images[0]?.path
   return [
     { title: data?.name },
     { name: "description", content: data?.description },
@@ -86,7 +87,7 @@ export const meta: V2_MetaFunction<typeof loader, { root: typeof rootLoader }> =
     { name: "og:description", content: data?.description },
     {
       name: "og:image",
-      content: WEB_URL + transformImageSrc(createImageUrl(data?.images[0].path), { width: 600, height: 400 }),
+      content: image ? WEB_URL + transformImageSrc(createImageUrl(image), { width: 600, height: 400 }) : null,
     },
   ]
 }
