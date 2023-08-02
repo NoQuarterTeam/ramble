@@ -35,15 +35,18 @@ export async function getCurrentUser<T extends Prisma.UserSelect>(request: Reque
     select: select ?? userSelectFields,
   })
   if (!user) throw redirect(`/login`)
-  return user as Prisma.UserGetPayload<{ select: T }>
+  return user as unknown as Prisma.UserGetPayload<{ select: T }>
 }
 export type CurrentUser = Await<typeof getCurrentUser>
 
-export async function getMaybeUser(request: Request) {
+export async function getMaybeUser<T extends Prisma.UserSelect>(request: Request, select?: T) {
   const { userId } = await getUserSession(request)
   if (!userId) return null
-  const user = await db.user.findFirst({ where: { id: userId }, select: userSelectFields })
+  const user = await db.user.findFirst({
+    where: { id: userId },
+    select: select ?? userSelectFields,
+  })
   if (!user) return null
-  return user
+  return user as unknown as Prisma.UserGetPayload<{ select: T }>
 }
 export type MayubeUser = Await<typeof getMaybeUser>
