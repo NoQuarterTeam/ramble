@@ -67,10 +67,8 @@ export const loader = async ({ request }: LoaderArgs) => {
   )
 }
 
-export const shouldRevalidate: ShouldRevalidateFunction = ({ currentUrl, formAction }) => {
-  const rootActions = ["/api/theme", "/logout"]
-  if (formAction && rootActions.includes(formAction)) return true
-  return currentUrl.pathname !== "/map"
+export const shouldRevalidate: ShouldRevalidateFunction = (args) => {
+  return args.formMethod === "POST"
 }
 
 export type RootLoader = SerializeFrom<typeof loader>

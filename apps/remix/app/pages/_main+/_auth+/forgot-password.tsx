@@ -1,5 +1,6 @@
 import { Link } from "@remix-run/react"
 import { type ActionArgs } from "@vercel/remix"
+import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
 import { sendResetPasswordEmail } from "@ramble/api"
@@ -12,7 +13,7 @@ import { redirect } from "~/lib/remix.server"
 
 export const headers = () => {
   return {
-    "Cache-Control": "max-age=3600, s-maxage=86400",
+    "Cache-Control": cacheHeader({ maxAge: "1hour", sMaxage: "1hour", public: true }),
   }
 }
 

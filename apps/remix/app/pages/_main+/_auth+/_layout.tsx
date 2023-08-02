@@ -1,6 +1,7 @@
 import { Outlet } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { redirect } from "@vercel/remix"
+import { cacheHeader } from "pretty-cache-header"
 
 import { db } from "~/lib/db.server"
 import { getUserSession } from "~/services/session/session.server"
@@ -11,7 +12,7 @@ export const handle = {
 
 export const headers = () => {
   return {
-    "Cache-Control": "max-age=3600, s-maxage=86400",
+    "Cache-Control": cacheHeader({ maxAge: "1hour", sMaxage: "1hour", public: true }),
   }
 }
 

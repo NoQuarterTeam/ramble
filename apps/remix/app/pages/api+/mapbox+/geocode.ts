@@ -1,6 +1,7 @@
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
+
 import { geocodeCoords } from "@ramble/api"
 
 export const config = {
@@ -15,13 +16,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 
   return json(address || "Unknown address", {
     headers: {
-      "Cache-Control": cacheHeader({
-        public: true,
-        maxAge: "1hour",
-        sMaxage: "1hour",
-        staleWhileRevalidate: "1day",
-        staleIfError: "1day",
-      }),
+      "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }),
     },
   })
 }

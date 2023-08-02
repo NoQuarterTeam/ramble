@@ -1,9 +1,9 @@
+import * as React from "react"
 import { Await, Link, useLoaderData, useNavigate } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { defer } from "@vercel/remix"
 import { BadgeX, Frown, Star, Verified } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
-import * as React from "react"
 
 import { createImageUrl, merge } from "@ramble/shared"
 
@@ -42,15 +42,7 @@ export const loader = async ({ params }: LoaderArgs) => {
   return defer(
     { spot, rating },
     {
-      headers: {
-        "Cache-Control": cacheHeader({
-          public: true,
-          maxAge: "1hour",
-          sMaxage: "1hour",
-          staleWhileRevalidate: "1day",
-          staleIfError: "1day",
-        }),
-      },
+      headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }) },
     },
   )
 }

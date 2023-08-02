@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { Instagram, type LucideIcon } from "lucide-react"
+import { cacheHeader } from "pretty-cache-header"
 
 import { createImageUrl, merge, userInterestFields } from "@ramble/shared"
 
@@ -39,7 +40,7 @@ export const loader = async ({ params }: LoaderArgs) => {
   })
   if (!user) throw notFound()
 
-  return json(user)
+  return json(user, { headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }) } })
 }
 
 export default function ProfileLists() {

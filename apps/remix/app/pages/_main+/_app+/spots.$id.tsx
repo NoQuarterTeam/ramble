@@ -1,8 +1,9 @@
+import Map, { Marker } from "react-map-gl"
 import { Link, useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { Edit2, Star, Trash } from "lucide-react"
-import Map, { Marker } from "react-map-gl"
+import { cacheHeader } from "pretty-cache-header"
 
 import type { SpotType } from "@ramble/database/types"
 import { AMENITIES, canManageSpot, createImageUrl } from "@ramble/shared"
@@ -23,14 +24,15 @@ import {
 } from "~/components/ui"
 import { VerifiedCard } from "~/components/VerifiedCard"
 import { db } from "~/lib/db.server"
+import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { notFound, redirect } from "~/lib/remix.server"
 import { AMENITIES_ICONS } from "~/lib/static/amenities"
 import { SPOTS } from "~/lib/static/spots"
 import { useTheme } from "~/lib/theme"
+import type { loader as rootLoader } from "~/root"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
-import type { loader as rootLoader } from "~/root"
 import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 
@@ -38,6 +40,8 @@ export const config = {
   runtime: "edge",
   regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
 }
+
+export const headers = useLoaderHeaders
 
 export const loader = async ({ params }: LoaderArgs) => {
   const spot = await db.spot.findUnique({
@@ -67,7 +71,10 @@ export const loader = async ({ params }: LoaderArgs) => {
 
   const rating = await db.review.aggregate({ where: { spotId: params.id }, _avg: { rating: true } })
 
-  return json({ ...spot, rating })
+  return json(
+    { ...spot, rating },
+    { headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1day", sMaxage: "1day" }) } },
+  )
 }
 
 export const meta: V2_MetaFunction<typeof loader, { root: typeof rootLoader }> = ({ data, matches }) => {

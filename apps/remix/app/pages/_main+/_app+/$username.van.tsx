@@ -1,6 +1,7 @@
 import { useLoaderData } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
+import { cacheHeader } from "pretty-cache-header"
 
 import { createImageUrl } from "@ramble/shared"
 
@@ -14,7 +15,7 @@ export const headers = useLoaderHeaders
 export const loader = async ({ params }: LoaderArgs) => {
   const user = await db.user.findUnique({ where: { username: params.username }, include: { van: { include: { images: true } } } })
   if (!user) throw notFound()
-  return json(user)
+  return json(user, { headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }) } })
 }
 
 export default function ProfileVan() {

@@ -15,19 +15,19 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const user = await getCurrentUser(request, {
+    bio: true,
     email: true,
+    avatar: true,
     username: true,
     firstName: true,
     instagram: true,
     lastName: true,
-    avatar: true,
-    bio: true,
   })
   return json(user)
 }
 
 export const action = async ({ request }: ActionArgs) => {
-  const user = await getCurrentUser(request, { id: true, avatarBlurHash: true, avatar: true, van: { select: { id: true } } })
+  const user = await getCurrentUser(request, { id: true, avatarBlurHash: true, avatar: true })
   const schema = z.object({
     firstName: z.string().min(1),
     lastName: z.string().min(1),

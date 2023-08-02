@@ -1,6 +1,7 @@
 import { Link, useLoaderData } from "@remix-run/react"
 import { json } from "@vercel/remix"
 import { Camera, Star } from "lucide-react"
+import { cacheHeader } from "pretty-cache-header"
 
 import { type SpotItemWithImageAndRating } from "@ramble/api/src/router/spot"
 import { createImageUrl } from "@ramble/shared"
@@ -9,6 +10,7 @@ import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { Badge } from "~/components/ui"
 import { db } from "~/lib/db.server"
+import { useLoaderHeaders } from "~/lib/headers.server"
 
 import { PageContainer } from "../../components/PageContainer"
 
@@ -16,6 +18,8 @@ export const config = {
   runtime: "edge",
   regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
 }
+
+export const headers = useLoaderHeaders
 
 export const loader = async () => {
   const spots: Array<SpotItemWithImageAndRating> = await db.$queryRaw`
@@ -33,7 +37,7 @@ export const loader = async () => {
         rating DESC, Spot.id
       LIMIT 5;
     `
-  return json(spots)
+  return json(spots, { headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1day", sMaxage: "1day" }) } })
 }
 
 export default function Home() {

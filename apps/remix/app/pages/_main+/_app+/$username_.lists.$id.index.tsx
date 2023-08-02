@@ -7,6 +7,7 @@ import * as turf from "@turf/helpers"
 import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { ChevronLeft, Copy } from "lucide-react"
+import { cacheHeader } from "pretty-cache-header"
 
 import type { SpotType } from "@ramble/database/types"
 import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
@@ -80,7 +81,10 @@ export const loader = async ({ params }: LoaderArgs) => {
     bounds = bbox(line) as unknown as LngLatLike
   }
 
-  return json({ list: formattedList, bounds })
+  return json(
+    { list: formattedList, bounds },
+    { headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }) } },
+  )
 }
 
 enum Actions {

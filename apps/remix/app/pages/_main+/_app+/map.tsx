@@ -49,13 +49,7 @@ export const loader = async ({ request }: LoaderArgs) => {
     },
     {
       headers: {
-        "Cache-Control": cacheHeader({
-          private: true,
-          maxAge: "10hour",
-          sMaxage: "20hour",
-          staleWhileRevalidate: "1day",
-          staleIfError: "1day",
-        }),
+        "Cache-Control": cacheHeader({ private: true, maxAge: "1day", sMaxage: "1day" }),
       },
     },
   )
