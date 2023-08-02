@@ -1,5 +1,7 @@
-User-agent: Googlebot
-Disallow: /admin/
-
 User-agent: *
+
 Allow: /
+
+Disallow: /admin/
+Disallow: /api/
+Disallow: /healthcheck
