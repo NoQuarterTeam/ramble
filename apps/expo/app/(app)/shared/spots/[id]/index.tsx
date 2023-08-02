@@ -45,8 +45,18 @@ export function SpotDetailScreen() {
   const navigation = useRouter()
 
   const topBarStyle = useAnimatedStyle(() => {
-    const opacity = interpolate(translationY.value, [100, 180], [0, 1], Extrapolation.CLAMP)
+    const opacity = interpolate(translationY.value, [100, 200], [0, 1], Extrapolation.CLAMP)
     return { opacity }
+  })
+  const nameStyle = useAnimatedStyle(() => {
+    const opacity = interpolate(translationY.value, [240, 320], [0, 1], Extrapolation.CLAMP)
+    return { opacity }
+  })
+
+  const imageStyle = useAnimatedStyle(() => {
+    const scale = interpolate(translationY.value, [-400, 0], [2.7, 1], Extrapolation.CLAMP)
+    const translateY = interpolate(translationY.value, [-400, 0], [-180, 0], Extrapolation.CLAMP)
+    return { transform: [{ scale }, { translateY }] }
   })
 
   React.useEffect(() => {
@@ -91,11 +101,13 @@ export function SpotDetailScreen() {
       <Animated.ScrollView
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 200 }}
+        contentContainerStyle={{ paddingBottom: 300 }}
         style={{ flexGrow: 1 }}
         onScroll={scrollHandler}
       >
-        <ImageCarousel width={width} height={300} images={spot.images} />
+        <Animated.View style={imageStyle}>
+          <ImageCarousel width={width} height={300} images={spot.images} />
+        </Animated.View>
         <View className="space-y-3 p-4">
           <View className="space-y-2">
             <Heading className="text-2xl leading-7">{spot.name}</Heading>
@@ -170,35 +182,43 @@ export function SpotDetailScreen() {
           </View>
         </View>
       </Animated.ScrollView>
+
       <Animated.View
         className="absolute left-0 right-0 top-0 h-[100px] border border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-black"
         style={topBarStyle}
       />
 
-      <View className="absolute left-0 right-0 top-14 flex flex-row justify-between px-6">
-        <TouchableOpacity
-          onPress={navigation.canGoBack() ? navigation.goBack : () => navigation.navigate("AppLayout")}
-          activeOpacity={0.8}
-          className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-gray-800"
-        >
-          {navigation.canGoBack() ? (
-            <ChevronLeft className="pr-1 text-black dark:text-white" />
-          ) : (
-            <ChevronDown className="pr-1 text-black dark:text-white" />
-          )}
-        </TouchableOpacity>
+      <View className="absolute left-0 right-0 top-14 flex flex-row justify-between px-4">
+        <View className="flex flex-row items-center space-x-0.5">
+          <TouchableOpacity
+            onPress={navigation.canGoBack() ? navigation.goBack : () => navigation.navigate("AppLayout")}
+            activeOpacity={0.8}
+            className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-black"
+          >
+            {navigation.canGoBack() ? (
+              <ChevronLeft className="pr-1 text-black dark:text-white" />
+            ) : (
+              <ChevronDown className="pr-1 text-black dark:text-white" />
+            )}
+          </TouchableOpacity>
+          <Animated.View style={[{ width: width - 148 }, nameStyle]}>
+            <Text className="text-lg text-black dark:text-white" numberOfLines={1}>
+              {spot.name}
+            </Text>
+          </Animated.View>
+        </View>
         <View className="flex flex-row items-center space-x-3">
           {/* <TouchableOpacity
             // onPress={handleGetDirections}
             activeOpacity={0.8}
-            className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-gray-800"
+            className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-black"
           >
             <Share size={20} className="text-black dark:text-white" />
           </TouchableOpacity> */}
           <TouchableOpacity
             onPress={handleGetDirections}
             activeOpacity={0.8}
-            className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-gray-800"
+            className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-black"
           >
             <Compass size={20} className="text-black dark:text-white" />
           </TouchableOpacity>
@@ -206,7 +226,7 @@ export function SpotDetailScreen() {
           <TouchableOpacity
             onPress={() => navigation.navigate("SaveScreen", { id: spot.id })}
             activeOpacity={0.8}
-            className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-gray-800"
+            className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-black"
           >
             <Heart
               size={20}

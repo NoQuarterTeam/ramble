@@ -65,7 +65,7 @@ export type ScreenParamsList = {
   SaveScreen: { id: string }
   NewReviewScreen: { spotId: string }
   ReviewDetailScreen: { id: string }
-  ListDetailScreen: { id: string }
+  ListDetailScreen: { id: string; name: string }
   ListDetailMapScreen: { id: string }
   UserScreen: { username: string; tab?: "spots" | "lists" | "van" }
   UserFollowers: { username: string }

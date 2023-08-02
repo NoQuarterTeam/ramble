@@ -89,7 +89,7 @@ export function AccountInfoScreen() {
         }
       >
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
-          <View className="flex w-full items-center justify-center pt-4">
+          <View className="flex w-full items-center justify-center pt-2">
             <TouchableOpacity onPress={onPickImage}>
               {isUploadLoading || isAvatarSavingLoading ? (
                 <View className="sq-20 flex items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">

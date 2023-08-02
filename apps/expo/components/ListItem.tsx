@@ -13,7 +13,7 @@ export function ListItem({ list }: Props) {
   const { push } = useRouter()
   return (
     <TouchableOpacity
-      onPress={() => push("ListDetailScreen", { id: list.id })}
+      onPress={() => push("ListDetailScreen", { id: list.id, name: list.name })}
       activeOpacity={0.8}
       className="rounded-lg border border-gray-100 p-4 dark:border-gray-700"
     >
