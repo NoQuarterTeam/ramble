@@ -33,11 +33,15 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 import type { loader as rootLoader } from "~/root"
 import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
+import { cacheHeader } from "pretty-cache-header"
+import { useLoaderHeaders } from "~/lib/headers.server"
 
 export const config = {
   runtime: "edge",
   regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
 }
+
+export const headers = useLoaderHeaders
 
 export const loader = async ({ params }: LoaderArgs) => {
   const spot = await db.spot.findUnique({
@@ -67,7 +71,10 @@ export const loader = async ({ params }: LoaderArgs) => {
 
   const rating = await db.review.aggregate({ where: { spotId: params.id }, _avg: { rating: true } })
 
-  return json({ ...spot, rating })
+  return json(
+    { ...spot, rating },
+    { headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1day", sMaxage: "1day" }) } },
+  )
 }
 
 export const meta: V2_MetaFunction<typeof loader, { root: typeof rootLoader }> = ({ data, matches }) => {

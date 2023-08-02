@@ -11,13 +11,14 @@ import { Avatar } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { notFound } from "~/lib/remix.server"
+import { cacheHeader } from "pretty-cache-header"
 
 export const headers = useLoaderHeaders
 
 export const loader = async ({ params }: LoaderArgs) => {
   const user = await db.user.findUnique({ where: { username: params.username }, include: { following: true } })
   if (!user) throw notFound()
-  return json(user)
+  return json(user, { headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }) } })
 }
 
 export default function ProfileFollowers() {

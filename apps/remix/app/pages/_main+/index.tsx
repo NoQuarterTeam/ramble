@@ -37,17 +37,7 @@ export const loader = async () => {
         rating DESC, Spot.id
       LIMIT 5;
     `
-  return json(spots, {
-    headers: {
-      "Cache-Control": cacheHeader({
-        public: true,
-        maxAge: "1day",
-        sMaxage: "1day",
-        staleWhileRevalidate: "1hour",
-        staleIfError: "1hour",
-      }),
-    },
-  })
+  return json(spots, { headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1day", sMaxage: "1day" }) } })
 }
 
 export default function Home() {
