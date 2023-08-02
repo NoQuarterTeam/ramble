@@ -1,6 +1,7 @@
 import { Link } from "@remix-run/react"
 import type { ActionArgs, V2_MetaFunction } from "@vercel/remix"
 import { redirect } from "@vercel/remix"
+import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
 import { sendAccountVerificationEmail } from "@ramble/api"
@@ -13,7 +14,6 @@ import { badRequest } from "~/lib/remix.server"
 import { hashPassword } from "~/services/auth/password.server"
 import { FlashType, getFlashSession } from "~/services/session/flash.server"
 import { getUserSession } from "~/services/session/session.server"
-import { cacheHeader } from "pretty-cache-header"
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "Register" }, { name: "description", content: "Sign up to the ramble" }]

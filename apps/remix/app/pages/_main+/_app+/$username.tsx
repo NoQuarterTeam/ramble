@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { Instagram, type LucideIcon } from "lucide-react"
+import { cacheHeader } from "pretty-cache-header"
 
 import { createImageUrl, merge, userInterestFields } from "@ramble/shared"
 
@@ -15,7 +16,6 @@ import { notFound } from "~/lib/remix.server"
 import { interestOptions } from "~/lib/static/interests"
 
 import { PageContainer } from "../../../components/PageContainer"
-import { cacheHeader } from "pretty-cache-header"
 
 export const headers = useLoaderHeaders
 

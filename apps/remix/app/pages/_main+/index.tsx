@@ -1,6 +1,7 @@
 import { Link, useLoaderData } from "@remix-run/react"
 import { json } from "@vercel/remix"
 import { Camera, Star } from "lucide-react"
+import { cacheHeader } from "pretty-cache-header"
 
 import { type SpotItemWithImageAndRating } from "@ramble/api/src/router/spot"
 import { createImageUrl } from "@ramble/shared"
@@ -9,10 +10,9 @@ import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { Badge } from "~/components/ui"
 import { db } from "~/lib/db.server"
+import { useLoaderHeaders } from "~/lib/headers.server"
 
 import { PageContainer } from "../../components/PageContainer"
-import { cacheHeader } from "pretty-cache-header"
-import { useLoaderHeaders } from "~/lib/headers.server"
 
 export const config = {
   runtime: "edge",

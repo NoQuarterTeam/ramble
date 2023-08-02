@@ -1,8 +1,9 @@
+import Map, { Marker } from "react-map-gl"
 import { Link, useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { Edit2, Star, Trash } from "lucide-react"
-import Map, { Marker } from "react-map-gl"
+import { cacheHeader } from "pretty-cache-header"
 
 import type { SpotType } from "@ramble/database/types"
 import { AMENITIES, canManageSpot, createImageUrl } from "@ramble/shared"
@@ -23,18 +24,17 @@ import {
 } from "~/components/ui"
 import { VerifiedCard } from "~/components/VerifiedCard"
 import { db } from "~/lib/db.server"
+import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { notFound, redirect } from "~/lib/remix.server"
 import { AMENITIES_ICONS } from "~/lib/static/amenities"
 import { SPOTS } from "~/lib/static/spots"
 import { useTheme } from "~/lib/theme"
+import type { loader as rootLoader } from "~/root"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
-import type { loader as rootLoader } from "~/root"
 import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
-import { cacheHeader } from "pretty-cache-header"
-import { useLoaderHeaders } from "~/lib/headers.server"
 
 export const config = {
   runtime: "edge",

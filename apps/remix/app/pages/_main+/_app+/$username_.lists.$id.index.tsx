@@ -7,6 +7,7 @@ import * as turf from "@turf/helpers"
 import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { ChevronLeft, Copy } from "lucide-react"
+import { cacheHeader } from "pretty-cache-header"
 
 import type { SpotType } from "@ramble/database/types"
 import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
@@ -23,7 +24,6 @@ import { useTheme } from "~/lib/theme"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { SpotItem } from "./components/SpotItem"
-import { cacheHeader } from "pretty-cache-header"
 
 export const headers = useLoaderHeaders
 
