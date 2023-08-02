@@ -37,30 +37,18 @@ export function UserScreen() {
   })
   const onToggleFollow = () => mutate({ username: params.username })
 
-  if (isLoading)
-    return (
-      <View className="flex items-center justify-center py-20">
-        <Spinner />
-      </View>
-    )
-  if (!user)
-    return (
-      <View className="px-4 py-20">
-        <Text>User not found</Text>
-      </View>
-    )
   return (
     <View className="pt-16">
       <View className="flex flex-row items-center justify-between px-4 pb-2">
-        <View className="flex flex-row items-center space-x-2">
+        <View className="flex flex-row items-center space-x-1">
           {router.canGoBack() && (
-            <TouchableOpacity onPress={router.goBack} activeOpacity={0.8}>
+            <TouchableOpacity className="sq-8 flex items-center justify-center" onPress={router.goBack} activeOpacity={0.8}>
               <ChevronLeft className="text-black dark:text-white" />
             </TouchableOpacity>
           )}
           <Heading className="font-700 text-2xl">{params.username}</Heading>
         </View>
-        {me && me.username !== params.username && (
+        {user && me && me.username !== params.username && (
           <TouchableOpacity
             onPress={onToggleFollow}
             activeOpacity={0.8}
@@ -74,100 +62,110 @@ export function UserScreen() {
           </TouchableOpacity>
         )}
       </View>
-      <ScrollView className="min-h-full" stickyHeaderIndices={[1]} showsVerticalScrollIndicator={false}>
-        <View className="space-y-2 px-4 py-2">
-          <View className="flex flex-row items-center space-x-3">
-            {user.avatar ? (
-              <OptimizedImage
-                width={100}
-                placeholder={user.avatarBlurHash}
-                height={100}
-                source={{ uri: createImageUrl(user.avatar) }}
-                className="sq-24 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
-              />
-            ) : (
-              <View className="sq-24 flex items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
-                <User2 className="text-black dark:text-white" />
-              </View>
-            )}
-            <View className="space-y-px">
-              <Text className="text-xl">
-                {user.firstName} {user.lastName}
-              </Text>
+      {isLoading ? (
+        <View className="flex items-center justify-center p-4">
+          <Spinner />
+        </View>
+      ) : !user ? (
+        <View className="p-4">
+          <Text>User not found</Text>
+        </View>
+      ) : (
+        <ScrollView className="min-h-full" stickyHeaderIndices={[1]} showsVerticalScrollIndicator={false}>
+          <View className="space-y-2 px-4 py-2">
+            <View className="flex flex-row items-center space-x-3">
+              {user.avatar ? (
+                <OptimizedImage
+                  width={100}
+                  placeholder={user.avatarBlurHash}
+                  height={100}
+                  source={{ uri: createImageUrl(user.avatar) }}
+                  className="sq-24 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
+                />
+              ) : (
+                <View className="sq-24 flex items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
+                  <User2 className="text-black dark:text-white" />
+                </View>
+              )}
+              <View className="space-y-px">
+                <Text className="text-xl">
+                  {user.firstName} {user.lastName}
+                </Text>
 
-              <View className="flex flex-row items-center space-x-4">
-                <TouchableOpacity
-                  className="flex flex-row space-x-1 pb-1"
-                  onPress={() => router.push("UserFollowing", { username: params.username })}
-                >
-                  <Text className="font-600">{user._count.following}</Text>
-                  <Text className="opacity-70">following</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  className="flex flex-row space-x-1 pb-1"
-                  onPress={() => router.push("UserFollowers", { username: params.username })}
-                >
-                  <Text className="font-600">{user._count.followers}</Text>
-                  <Text className="opacity-70">followers</Text>
-                </TouchableOpacity>
-              </View>
-              <View className="flex flex-row items-center space-x-1">
-                {interestOptions
-                  .filter((i) => user[i.value as keyof typeof user])
-                  .map((interest) => (
-                    <View key={interest.value} className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
-                      <interest.Icon size={18} className="text-black dark:text-white" />
-                    </View>
-                  ))}
+                <View className="flex flex-row items-center space-x-4">
+                  <TouchableOpacity
+                    className="flex flex-row space-x-1 pb-1"
+                    onPress={() => router.push("UserFollowing", { username: params.username })}
+                  >
+                    <Text className="font-600">{user._count.following}</Text>
+                    <Text className="opacity-70">following</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    className="flex flex-row space-x-1 pb-1"
+                    onPress={() => router.push("UserFollowers", { username: params.username })}
+                  >
+                    <Text className="font-600">{user._count.followers}</Text>
+                    <Text className="opacity-70">followers</Text>
+                  </TouchableOpacity>
+                </View>
+                <View className="flex flex-row items-center space-x-1">
+                  {interestOptions
+                    .filter((i) => user[i.value as keyof typeof user])
+                    .map((interest) => (
+                      <View key={interest.value} className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
+                        <interest.Icon size={18} className="text-black dark:text-white" />
+                      </View>
+                    ))}
+                </View>
               </View>
             </View>
+            {user.instagram && (
+              <TouchableOpacity
+                activeOpacity={0.8}
+                className="flex flex-row items-center space-x-1"
+                onPress={() => Linking.openURL(`https://www.instagram.com/${user.instagram}`)}
+              >
+                <Instagram className="text-black dark:text-white" />
+                <Text>{user.instagram}</Text>
+              </TouchableOpacity>
+            )}
+            <Text>{user.bio}</Text>
           </View>
-          {user.instagram && (
-            <TouchableOpacity
-              activeOpacity={0.8}
-              className="flex flex-row items-center space-x-1"
-              onPress={() => Linking.openURL(`https://www.instagram.com/${user.instagram}`)}
-            >
-              <Instagram className="text-black dark:text-white" />
-              <Text>{user.instagram}</Text>
-            </TouchableOpacity>
-          )}
-          <Text>{user.bio}</Text>
-        </View>
 
-        <View className="flex flex-row items-center justify-center space-x-2 border-b border-gray-100 bg-white py-2 dark:border-gray-800 dark:bg-black">
-          <View>
-            <Button
-              onPress={() => router.navigate("UserScreen", { tab: "spots", username: params.username })}
-              variant={tab === "spots" ? "secondary" : "ghost"}
-              size="sm"
-            >
-              Spots
-            </Button>
+          <View className="flex flex-row items-center justify-center space-x-2 border-b border-gray-100 bg-white py-2 dark:border-gray-800 dark:bg-black">
+            <View>
+              <Button
+                onPress={() => router.navigate("UserScreen", { tab: "spots", username: params.username })}
+                variant={tab === "spots" ? "secondary" : "ghost"}
+                size="sm"
+              >
+                Spots
+              </Button>
+            </View>
+            <View>
+              <Button
+                variant={tab === "van" ? "secondary" : "ghost"}
+                onPress={() => router.navigate("UserScreen", { tab: "van", username: params.username })}
+                size="sm"
+              >
+                Van
+              </Button>
+            </View>
+            <View>
+              <Button
+                variant={tab === "lists" ? "secondary" : "ghost"}
+                onPress={() => router.navigate("UserScreen", { tab: "lists", username: params.username })}
+                size="sm"
+              >
+                Lists
+              </Button>
+            </View>
           </View>
-          <View>
-            <Button
-              variant={tab === "van" ? "secondary" : "ghost"}
-              onPress={() => router.navigate("UserScreen", { tab: "van", username: params.username })}
-              size="sm"
-            >
-              Van
-            </Button>
+          <View className="p-2 pb-20">
+            <UsernameTabs />
           </View>
-          <View>
-            <Button
-              variant={tab === "lists" ? "secondary" : "ghost"}
-              onPress={() => router.navigate("UserScreen", { tab: "lists", username: params.username })}
-              size="sm"
-            >
-              Lists
-            </Button>
-          </View>
-        </View>
-        <View className="p-2 pb-20">
-          <UsernameTabs />
-        </View>
-      </ScrollView>
+        </ScrollView>
+      )}
     </View>
   )
 }
