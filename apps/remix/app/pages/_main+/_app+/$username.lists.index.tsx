@@ -1,6 +1,7 @@
 import { Link, useLoaderData } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
+import { cacheHeader } from "pretty-cache-header"
 
 import { LinkButton } from "~/components/LinkButton"
 import { db } from "~/lib/db.server"
@@ -13,7 +14,7 @@ export const headers = useLoaderHeaders
 export const loader = async ({ params }: LoaderArgs) => {
   const user = await db.user.findUnique({ where: { username: params.username }, include: { lists: true } })
   if (!user) throw notFound()
-  return json(user)
+  return json(user, { headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }) } })
 }
 
 export default function ProfileLists() {

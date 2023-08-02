@@ -23,6 +23,7 @@ import { useTheme } from "~/lib/theme"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { SpotItem } from "./components/SpotItem"
+import { cacheHeader } from "pretty-cache-header"
 
 export const headers = useLoaderHeaders
 
@@ -80,7 +81,10 @@ export const loader = async ({ params }: LoaderArgs) => {
     bounds = bbox(line) as unknown as LngLatLike
   }
 
-  return json({ list: formattedList, bounds })
+  return json(
+    { list: formattedList, bounds },
+    { headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }) } },
+  )
 }
 
 enum Actions {
