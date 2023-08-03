@@ -41,6 +41,7 @@ export function ImageUploader({
           const keys = await Promise.all(images.map(upload))
           await onMultiSubmit?.(keys.map((k) => k.key))
         } else {
+          if (!images[0]) return
           const { key } = await upload(images[0])
           await onSubmit?.(key)
         }
@@ -56,7 +57,7 @@ export function ImageUploader({
       window.URL = window.URL || window.webkitURL
       if (rejectedFiles.length > 0) {
         const rejectedFile = rejectedFiles[0]
-        if (rejectedFile.errors[0]?.code.includes("file-too-large")) {
+        if (rejectedFile?.errors[0]?.code.includes("file-too-large")) {
           const description = `File too large, must be under ${
             (dropzoneOptions?.maxSize && `${dropzoneOptions.maxSize / 1000000}MB`) || "5MB"
           }`

@@ -6,6 +6,7 @@ import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
 import { db } from "~/lib/db.server"
+import { badRequest } from "~/lib/remix.server"
 
 export const config = {
   runtime: "edge",
@@ -23,7 +24,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   )
 
   const jsonResponse = (await res.json()) as Directions
-
+  if (!jsonResponse.routes[0]) throw badRequest("Unknown address")
   const linestring = turf.lineString(jsonResponse.routes[0].geometry.coordinates)
   const buffered = buffer(linestring, 35, { units: "kilometers" })
   const spots = await db.spot.findMany({ select: { id: true, latitude: true, longitude: true } })

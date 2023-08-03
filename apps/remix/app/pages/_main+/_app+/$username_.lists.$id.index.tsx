@@ -230,8 +230,8 @@ export default function ListDetail() {
                 bounds
                   ? { bounds, fitBoundsOptions: { padding: 50 } }
                   : {
-                      latitude: list.listSpots.length === 0 ? INITIAL_LATITUDE : list.listSpots[0].spot.latitude,
-                      longitude: list.listSpots.length === 0 ? INITIAL_LONGITUDE : list.listSpots[0].spot.longitude,
+                      latitude: list.listSpots[0] ? list.listSpots[0].spot.latitude : INITIAL_LATITUDE,
+                      longitude: list.listSpots[0] ? list.listSpots[0].spot.longitude : INITIAL_LONGITUDE,
                       zoom: 10,
                     }
               }
