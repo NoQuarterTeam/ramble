@@ -1,11 +1,9 @@
 import * as cheerio from "cheerio"
-import * as puppeteer from "puppeteer"
 import fs from "fs"
 
 const url = `https://www.neste.nl/neste-my-renewable-diesel/distributeurs`
 
 import data from "./neste.json"
-import { add } from "cheerio/lib/api/traversing"
 
 export type Spot = {
   id: string
@@ -18,7 +16,7 @@ export type Spot = {
 
 let currentData: Spot[] = data
 
-async function getCards(page: puppeteer.Page) {
+async function getCards() {
   const res = await fetch(url)
   const html = await res.text()
 
@@ -73,12 +71,7 @@ async function getCards(page: puppeteer.Page) {
 
 async function main() {
   try {
-    const browser = await puppeteer.launch()
-    const page = await browser.newPage()
-
-    await getCards(page)
-
-    await browser.close()
+    await getCards()
   } catch (error) {
     console.log(error)
     process.exit(1)
