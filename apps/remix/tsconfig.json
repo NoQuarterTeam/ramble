@@ -5,6 +5,7 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
+    "noUncheckedIndexedAccess": true,
     "module": "CommonJS",
     "outDir": "build",
     "moduleResolution": "node",

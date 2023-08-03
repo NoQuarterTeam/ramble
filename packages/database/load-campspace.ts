@@ -1,5 +1,4 @@
 import * as cheerio from "cheerio"
-import * as puppeteer from "puppeteer"
 import fs from "fs"
 
 // const url = "https://www.pureportugal.co.uk/properties/?cat=54+54+99+54+54+54-&landmin=0&landmax=0&order=ASC&v="
@@ -33,7 +32,7 @@ export type Spot = {
 
 let currentData: Spot[] = data
 
-async function getPageCards(page: puppeteer.Page, currentPage: number) {
+async function getPageCards(currentPage: number) {
   const res = await fetch(url + currentPage)
   const html = await res.text()
 
@@ -66,11 +65,10 @@ async function getPageCards(page: puppeteer.Page, currentPage: number) {
       const exists = currentData.find((s) => s.id === spot.id)
       if (exists) continue
 
-      // use puppeteer to open link, parse html, and find the img with class "leaflet-marker-icon" and click it
-      await page.goto(spot.link, { waitUntil: "domcontentloaded" })
+      const spotDetail = await fetch(spot.link)
 
-      const html = await page.content()
-      const $ = cheerio.load(html)
+      const spotDetailHtml = await spotDetail.text()
+      const $ = cheerio.load(spotDetailHtml)
 
       let images: string[] = []
       $(".space-images .space-images--img").each((_, img) => {
@@ -127,14 +125,10 @@ async function getPageCards(page: puppeteer.Page, currentPage: number) {
 
 async function main() {
   try {
-    const browser = await puppeteer.launch()
-    const page = await browser.newPage()
-
     // loop over each page
     for (let currentPage = 1; currentPage < pageCount + 1; currentPage++) {
-      await getPageCards(page, currentPage)
+      await getPageCards(currentPage)
     }
-    await browser.close()
   } catch (error) {
     console.log(error)
     process.exit(1)

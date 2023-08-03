@@ -206,7 +206,7 @@ export default function PlanTrip() {
                 : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
             }
           >
-            {directions && (
+            {directions?.routes[0] && (
               <Source id="directions" type="geojson" data={directions.routes[0].geometry}>
                 <Layer id="line" type="line" paint={{ "line-color": colors.blue[500], "line-width": 4 }} />
               </Source>
