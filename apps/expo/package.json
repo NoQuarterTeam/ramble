@@ -68,7 +68,7 @@
     "superjson": "^1.12.2",
     "uuid": "^3.4.0",
     "zod": "3.21.4",
-    "zustand": "4.4.0"
+    "zustand": "4.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
