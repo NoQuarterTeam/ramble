@@ -48,7 +48,7 @@
     "expo-status-bar": "~1.4.4",
     "expo-system-ui": "^2.2.1",
     "expo-updates": "~0.16.4",
-    "lucide-react-native": "^0.263.0",
+    "lucide-react-native": "^0.264.0",
     "nativewind": "^2.0.11",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -68,7 +68,7 @@
     "superjson": "^1.12.2",
     "uuid": "^3.4.0",
     "zod": "3.21.4",
-    "zustand": "4.4.0"
+    "zustand": "4.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
