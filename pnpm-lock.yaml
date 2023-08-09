@@ -411,8 +411,8 @@ importers:
         specifier: 1.19.2
         version: 1.19.2(@remix-run/serve@1.19.2)
       '@remix-run/eslint-config':
-        specifier: 1.19.2
-        version: 1.19.2(eslint@8.46.0)(react@18.2.0)(typescript@5.1.6)
+        specifier: 1.19.3
+        version: 1.19.3(eslint@8.46.0)(react@18.2.0)(typescript@5.1.6)
       '@tailwindcss/forms':
         specifier: ^0.5.3
         version: 0.5.3(tailwindcss@3.3.1)
@@ -1949,7 +1949,7 @@ packages:
       '@babel/helper-plugin-utils': 7.21.5
       debug: 4.3.4
       lodash.debounce: 4.0.8
-      resolve: 1.22.2
+      resolve: 1.22.3
       semver: 6.3.1
     transitivePeerDependencies:
       - supports-color
@@ -1964,7 +1964,7 @@ packages:
       '@babel/helper-plugin-utils': 7.21.5
       debug: 4.3.4
       lodash.debounce: 4.0.8
-      resolve: 1.22.2
+      resolve: 1.22.3
       semver: 6.3.1
     transitivePeerDependencies:
       - supports-color
@@ -1979,7 +1979,7 @@ packages:
       '@babel/helper-plugin-utils': 7.21.5
       debug: 4.3.4
       lodash.debounce: 4.0.8
-      resolve: 1.22.2
+      resolve: 1.22.3
       semver: 6.3.1
     transitivePeerDependencies:
       - supports-color
@@ -6614,8 +6614,8 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@remix-run/eslint-config@1.19.2(eslint@8.46.0)(react@18.2.0)(typescript@5.1.6):
-    resolution: {integrity: sha512-YvB3uulbSdwsvkcQSUPXtZG2AbVq1v49jVf5IsPj0xApNcRMtkk4Y/6cethbtHJOIpHhbAnJyPtoHOVvlRWQHQ==}
+  /@remix-run/eslint-config@1.19.3(eslint@8.46.0)(react@18.2.0)(typescript@5.1.6):
+    resolution: {integrity: sha512-8yvPtsJj1hBKp6ypTTDhHmJ2ftoPmBV1xPPOIqhMLDQ1fwmzocwnkz9RHTeMYkdNSzUuqGnpGaMTHgrT3WfckQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: ^8.0.0
@@ -7992,7 +7992,7 @@ packages:
       glob: 7.2.3
       pkg-up: 3.1.0
       reselect: 4.1.8
-      resolve: 1.22.2
+      resolve: 1.22.3
     dev: false
 
   /babel-plugin-polyfill-corejs2@0.3.3(@babel/core@7.20.2):
@@ -9833,7 +9833,7 @@ packages:
     dependencies:
       debug: 3.2.7
       is-core-module: 2.12.1
-      resolve: 1.22.2
+      resolve: 1.22.3
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -10008,7 +10008,7 @@ packages:
       eslint-utils: 2.1.0
       ignore: 5.2.4
       minimatch: 3.1.2
-      resolve: 1.22.2
+      resolve: 1.22.3
       semver: 6.3.1
     dev: true
 
@@ -14629,7 +14629,7 @@ packages:
       postcss: 8.4.21
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
-      resolve: 1.22.2
+      resolve: 1.22.3
 
   /postcss-import@14.1.0(postcss@8.4.24):
     resolution: {integrity: sha512-flwI+Vgm4SElObFVPpTIT7SU7R3qk2L7PyduMcokiaVKuWv9d/U+Gm/QAd8NDLuykTWTkcrjOeD2Pp1rMeBTGw==}
@@ -14640,7 +14640,7 @@ packages:
       postcss: 8.4.24
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
-      resolve: 1.22.2
+      resolve: 1.22.3
 
   /postcss-js@4.0.1(postcss@8.4.21):
     resolution: {integrity: sha512-dDLF8pEO191hJMtlHFPRa8xsizHaM82MLfNkUHdUtVEV3tgTp5oj+8qbEqYM57SLfc74KSbw//4SeJma2LRVIw==}
@@ -16110,7 +16110,6 @@ packages:
       is-core-module: 2.12.1
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
-    dev: true
 
   /resolve@1.7.1:
     resolution: {integrity: sha512-c7rwLofp8g1U+h1KNyHL/jicrKg1Ek4q+Lr33AL65uZTinUZHe30D5HlyN5V9NW0JX1D5dXQ4jqW5l7Sy/kGfw==}
@@ -16982,7 +16981,7 @@ packages:
       postcss-selector-parser: 6.0.13
       postcss-value-parser: 4.2.0
       quick-lru: 5.1.1
-      resolve: 1.22.2
+      resolve: 1.22.3
     transitivePeerDependencies:
       - ts-node
     dev: false
