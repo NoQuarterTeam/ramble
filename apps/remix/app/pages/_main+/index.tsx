@@ -23,20 +23,20 @@ export const headers = useLoaderHeaders
 
 export const loader = async () => {
   const spots: Array<SpotItemWithImageAndRating> = await db.$queryRaw`
-      SELECT 
-        Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating,
-        (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id LIMIT 1) AS image,
-        (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash
-      FROM
-        Spot
-      LEFT JOIN
-        Review ON Spot.id = Review.spotId
-      GROUP BY
-        Spot.id
-      ORDER BY
-        rating DESC, Spot.id
-      LIMIT 5;
-    `
+    SELECT 
+      Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating,
+      (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image,
+      (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash
+    FROM
+      Spot
+    LEFT JOIN
+      Review ON Spot.id = Review.spotId
+    GROUP BY
+      Spot.id
+    ORDER BY
+      rating DESC, Spot.id
+    LIMIT 5;
+  `
   return json(spots, { headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1day", sMaxage: "1day" }) } })
 }
 
