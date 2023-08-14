@@ -127,8 +127,8 @@ importers:
         specifier: ~0.16.4
         version: 0.16.4(expo@48.0.10)
       lucide-react-native:
-        specifier: ^0.264.0
-        version: 0.264.0(prop-types@15.8.1)(react-native-svg@13.4.0)(react-native@0.71.8)(react@18.2.0)
+        specifier: ^0.267.0
+        version: 0.267.0(prop-types@15.8.1)(react-native-svg@13.4.0)(react-native@0.71.8)(react@18.2.0)
       nativewind:
         specifier: ^2.0.11
         version: 2.0.11(react@18.2.0)(tailwindcss@3.3.1)
@@ -12714,8 +12714,8 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
-  /lucide-react-native@0.264.0(prop-types@15.8.1)(react-native-svg@13.4.0)(react-native@0.71.8)(react@18.2.0):
-    resolution: {integrity: sha512-9cvvposJPdP8zBxHoyAhbNRUqUuZFssshw6m9YcRc+eNIq8Yt3JxhyjTK/3ECiszF0Zs7riNBd763H/qo7/ewA==}
+  /lucide-react-native@0.267.0(prop-types@15.8.1)(react-native-svg@13.4.0)(react-native@0.71.8)(react@18.2.0):
+    resolution: {integrity: sha512-/X5WHrpxUgJpMDVVpV2iUSTjVLA1O8HoGIKwkcIhT0QtP33M/uWFLXXDERRlgBhf9YoKQtzfH/QX423gxgz8+g==}
     peerDependencies:
       prop-types: ^15.7.2
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
