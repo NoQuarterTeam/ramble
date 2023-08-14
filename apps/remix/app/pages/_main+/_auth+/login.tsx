@@ -10,6 +10,11 @@ import { formError, NullableFormString, validateFormData } from "~/lib/form"
 import { comparePasswords } from "~/services/auth/password.server"
 import { getUserSession } from "~/services/session/session.server"
 
+export const config = {
+  runtime: "edge",
+  regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
+}
+
 export const meta: V2_MetaFunction = () => {
   return [{ title: "Login" }, { name: "description", content: "Login to the ramble" }]
 }
