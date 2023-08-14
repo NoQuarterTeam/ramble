@@ -26,6 +26,7 @@ module.exports = {
     "@ramble/shared",
     "@ramble/tailwind-config",
     "axios",
+    "bcryptjs",
     "decode-uri-component",
     "filter-obj",
     "kdbush",
