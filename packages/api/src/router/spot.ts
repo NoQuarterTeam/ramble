@@ -119,7 +119,8 @@ export const spotRouter = createTRPCRouter({
         Spot.id
       ORDER BY
         Spot.createdAt DESC, Spot.id
-      LIMIT 20`
+      LIMIT 20
+    `
     return res
   }),
   create: protectedProcedure
