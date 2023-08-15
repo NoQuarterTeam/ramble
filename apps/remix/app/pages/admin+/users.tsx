@@ -4,10 +4,13 @@ import { json, type LoaderArgs, type SerializeFrom } from "@vercel/remix"
 import { type Prisma } from "@ramble/database/types"
 
 import { Search } from "~/components/Search"
-import { Column, Table } from "~/components/Table"
-import { Tile } from "~/components/ui"
+
+import { Avatar } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { getTableParams } from "~/lib/table"
+import { Table } from "~/components/Table"
+import { createColumnHelper } from "@tanstack/react-table"
+import { createImageUrl } from "@ramble/shared"
 
 const TAKE = 10
 export const loader = async ({ request }: LoaderArgs) => {
@@ -29,19 +32,43 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 type User = SerializeFrom<typeof loader>["users"][number]
 
+const columnHelper = createColumnHelper<User>()
+const columns = [
+  columnHelper.accessor("firstName", {
+    id: "firstName",
+    size: 300,
+    header: () => "First name",
+    cell: (info) => (
+      <div className="flex items-center space-x-2">
+        <Avatar
+          className="sq-10"
+          src={createImageUrl(info.row.original.avatar)}
+          placeholder={info.row.original.avatarBlurHash}
+          size={60}
+        />
+        <p>{info.getValue()}</p>
+      </div>
+    ),
+  }),
+  columnHelper.accessor("lastName", {
+    id: "lastName",
+    size: 300,
+    header: () => "Last name",
+    cell: (info) => info.getValue(),
+  }),
+]
 export default function Users() {
   const { users, count } = useLoaderData<typeof loader>()
   return (
     <div className="stack">
       <h1 className="text-4xl">Users</h1>
-      <Search />
-      <Tile>
-        <Table<User> data={users} take={TAKE} count={count}>
-          <Column<User> sortKey="firstName" header="Name" row={(user) => user.firstName} />
-          <Column<User> sortKey="email" header="Email" row={(user) => user.email} />
-          <Column<User> sortKey="createdAt" header="Signed up" row={(user) => user.createdAt} />
-        </Table>
-      </Tile>
+      <div className="flex gap-2">
+        <div>
+          <p className="text-sm font-medium">Search</p>
+          <Search className="max-w-[400px]" />
+        </div>
+      </div>
+      <Table data={users} count={count} take={TAKE} columns={columns} />
     </div>
   )
 }

@@ -36,7 +36,7 @@ export const SPOTS: { [key in SpotType]: { label: string; Icon: RambleIcon } } =
   OTHER: { label: "Other", Icon: HelpCircle },
 } as const
 
-export const SPOT_OPTIONS = Object.entries(SPOTS).map(([value, { label, Icon }]) => ({ label, value, Icon })) as {
+export const SPOT_TYPE_OPTIONS = Object.entries(SPOTS).map(([value, { label, Icon }]) => ({ label, value, Icon })) as {
   label: string
   value: SpotType
   Icon: LucideIcon

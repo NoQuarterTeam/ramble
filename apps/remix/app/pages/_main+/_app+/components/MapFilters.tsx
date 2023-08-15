@@ -5,7 +5,7 @@ import queryString from "query-string"
 import { useDisclosure } from "@ramble/shared"
 
 import { Button, Modal, Switch } from "~/components/ui"
-import { SPOT_OPTIONS } from "~/lib/static/spots"
+import { SPOT_TYPE_OPTIONS } from "~/lib/static/spots"
 
 export function MapFilters({ onChange }: { onChange: (params: string) => void }) {
   const onSubmit = (e: React.SyntheticEvent) => {
@@ -63,7 +63,7 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
           <div className="space-y-4">
             <p className="text-xl">Spot type</p>
             <div className="flex flex-wrap gap-2">
-              {SPOT_OPTIONS.map((type) => (
+              {SPOT_TYPE_OPTIONS.map((type) => (
                 <SpotTypeSelector
                   key={type.value}
                   type={type}
@@ -124,7 +124,7 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
   )
 }
 
-function SpotTypeSelector({ type, defaultValue }: { type: (typeof SPOT_OPTIONS)[number]; defaultValue: boolean }) {
+function SpotTypeSelector({ type, defaultValue }: { type: (typeof SPOT_TYPE_OPTIONS)[number]; defaultValue: boolean }) {
   const [isSelected, setIsSelected] = React.useState(defaultValue)
   return (
     <>

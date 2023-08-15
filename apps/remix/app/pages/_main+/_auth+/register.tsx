@@ -8,7 +8,7 @@ import { sendAccountVerificationEmail } from "@ramble/api"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { db } from "~/lib/db.server"
-import { formError, validateFormData } from "~/lib/form"
+import { FORM_ACTION, formError, validateFormData } from "~/lib/form"
 import { createToken } from "~/lib/jwt.server"
 import { badRequest } from "~/lib/remix.server"
 import { hashPassword } from "~/services/auth/password.server"
@@ -30,7 +30,7 @@ enum Actions {
 
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData()
-  const action = formData.get("_action") as Actions | undefined
+  const action = formData.get(FORM_ACTION) as Actions | undefined
 
   switch (action) {
     case Actions.Register:
