@@ -127,7 +127,12 @@ export default function SpotDetail() {
         <div className="space-y-4">
           <div className="space-y-2">
             <div className="flex flex-col items-start justify-between space-y-1 md:flex-row">
-              <h1 className="text-4xl">{spot.name}</h1>
+              <div className="flex items-center space-x-2">
+                <div className="sq-12 flex items-center justify-center rounded-full border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+                  <Icon size={20} />
+                </div>
+                <h1 className="text-4xl">{spot.name}</h1>
+              </div>
               <div className="flex items-center space-x-1">{user && <SaveToList spotId={spot.id} />}</div>
             </div>
             <div className="flex items-center space-x-1 text-sm">

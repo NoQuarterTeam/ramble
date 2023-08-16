@@ -90,7 +90,7 @@ export default function Latest() {
 
   return (
     <PageContainer className="pt-4">
-      <div className="sticky top-0 z-[1] bg-white py-4 dark:bg-gray-700">
+      <div className="sticky top-0 z-[1] bg-white py-4 dark:bg-gray-800">
         <div className="flex items-center space-x-2">
           <div className="relative w-10/12">
             <div className="scrollbar-hide flex gap-1 overflow-x-scroll pr-10">
@@ -119,7 +119,7 @@ export default function Latest() {
                 </Button>
               ))}
             </div>
-            <div className="absolute right-0 top-0 h-full w-20 bg-gradient-to-r from-transparent to-white" />
+            <div className="absolute right-0 top-0 h-full w-20 bg-gradient-to-r from-transparent to-white dark:to-gray-800" />
           </div>
           <div className="w-2/12">
             <Select
