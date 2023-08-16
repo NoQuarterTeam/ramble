@@ -20,19 +20,19 @@ import type { RambleIcon } from "~/components/ui"
 import { Icons } from "~/components/ui"
 
 export const SPOTS: { [key in SpotType]: { label: string; Icon: RambleIcon } } = {
-  CAFE: { label: "Cafe", Icon: Coffee },
-  RESTAURANT: { label: "Restaurant", Icon: Utensils },
   CAMPING: { label: "Camping", Icon: Tent },
   PARKING: { label: "Parking", Icon: ParkingCircle },
+  BAR: { label: "Bar", Icon: Beer },
+  GAS_STATION: { label: "Gas Station", Icon: Fuel },
   SURFING: { label: "Surfing", Icon: Icons.Surf },
   HIKING: { label: "Hiking", Icon: Footprints },
-  BAR: { label: "Bar", Icon: Beer },
-  TIP: { label: "Tip", Icon: Info },
-  SHOP: { label: "Shop", Icon: ShoppingCart },
   CLIMBING: { label: "Climbing", Icon: Mountain },
   MOUNTAIN_BIKING: { label: "Mountain Biking", Icon: Bike },
-  GAS_STATION: { label: "Gas Station", Icon: Fuel },
   PADDLE_BOARDING: { label: "Paddle Boarding", Icon: Icons.Sup },
+  CAFE: { label: "Cafe", Icon: Coffee },
+  RESTAURANT: { label: "Restaurant", Icon: Utensils },
+  TIP: { label: "Tip", Icon: Info },
+  SHOP: { label: "Shop", Icon: ShoppingCart },
   OTHER: { label: "Other", Icon: HelpCircle },
 } as const
 

@@ -9,7 +9,7 @@ import { generateBlurHash } from "../services/generateBlurHash.server"
 import { geocodeCoords } from "../services/geocode.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
-export type SpotItemWithImageAndRating = Pick<Spot, "id" | "name" | "address"> & {
+export type SpotItemWithImageAndRating = Pick<Spot, "id" | "name" | "address" | "type"> & {
   rating?: number
   image?: SpotImage["path"] | null
   blurHash?: SpotImage["blurHash"] | null
@@ -63,7 +63,7 @@ export const spotRouter = createTRPCRouter({
     async ({ ctx, input }) =>
       ctx.prisma.$queryRaw<Array<SpotItemWithImageAndRating>>`
         SELECT
-          Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating,
+          Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
           (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image,
           (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash
         FROM
@@ -106,7 +106,7 @@ export const spotRouter = createTRPCRouter({
   byUser: publicProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {
     const res: Array<SpotItemWithImageAndRating> = await ctx.prisma.$queryRaw`
       SELECT
-        Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating,
+        Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
         (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image, 
         (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash
       FROM

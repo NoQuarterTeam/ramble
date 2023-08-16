@@ -18,7 +18,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
     where: { id: params.id },
     include: { images: true, amenities: true },
   })
-  if (!canManageSpot(spot, user)) throw redirect("/latest")
+  if (!canManageSpot(spot, user)) throw redirect("/spots")
   return json(spot)
 }
 
@@ -34,7 +34,7 @@ export const action = async ({ request, params }: ActionArgs) => {
 
   const spot = await db.spot.findUnique({ where: { id: params.id }, include: { images: true, amenities: true } })
   if (!spot) throw notFound()
-  if (!canManageSpot(spot, user)) throw redirect("/latest")
+  if (!canManageSpot(spot, user)) throw redirect("/spots")
 
   let amenities
   if (result.data.type === "CAMPING") {

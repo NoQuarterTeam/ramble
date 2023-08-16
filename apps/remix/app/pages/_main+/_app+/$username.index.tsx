@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useFetcher, useLoaderData } from "@remix-run/react"
+import { useFetcher, useLoaderData, useParams } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
@@ -23,7 +23,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
 
   const spots: Array<SpotItemWithImageAndRating> = await db.$queryRaw`
     SELECT
-      Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating,
+      Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
       (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image,
       (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash
     FROM
@@ -48,11 +48,11 @@ export const loader = async ({ request, params }: LoaderArgs) => {
 
 export default function ProfileSpots() {
   const { spots: initialSpots, count } = useLoaderData<typeof loader>()
-
+  const { username } = useParams()
   const spotFetcher = useFetcher<typeof loader>()
   const [spots, setSpots] = React.useState(initialSpots)
 
-  const onNext = () => spotFetcher.load(`/latest?skip=${spots.length}`)
+  const onNext = () => spotFetcher.load(`/${username}?skip=${spots.length}`)
 
   React.useEffect(() => {
     if (spotFetcher.state === "loading") return

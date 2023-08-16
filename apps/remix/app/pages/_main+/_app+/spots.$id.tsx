@@ -58,7 +58,7 @@ export const loader = async ({ params }: LoaderArgs) => {
       longitude: true,
       ownerId: true,
       verifier: { select: { firstName: true, username: true, lastName: true, avatar: true, avatarBlurHash: true } },
-      images: { orderBy: { createdAt: "asc" }, select: { id: true, path: true, blurHash: true } },
+      images: { orderBy: { createdAt: "desc" }, select: { id: true, path: true, blurHash: true } },
       _count: { select: { reviews: true } },
       reviews: {
         take: 5,
@@ -95,9 +95,9 @@ export const meta: V2_MetaFunction<typeof loader, { root: typeof rootLoader }> =
 export const action = async ({ request, params }: ActionArgs) => {
   const user = await getCurrentUser(request, { id: true, role: true, isVerified: true, isAdmin: true })
   const spot = await db.spot.findUniqueOrThrow({ where: { id: params.id }, select: { ownerId: true } })
-  if (!canManageSpot(spot, user)) return redirect("/latest")
+  if (!canManageSpot(spot, user)) return redirect("/spots")
   await db.spot.delete({ where: { id: params.id } })
-  return redirect("/latest", request, { flash: { title: "Spot deleted!" } })
+  return redirect("/spots", request, { flash: { title: "Spot deleted!" } })
 }
 
 export default function SpotDetail() {

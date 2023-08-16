@@ -27,14 +27,7 @@ export const OptimizedImage = React.forwardRef<HTMLImageElement, OptimizedImageP
   return (
     <div className={merge("relative overflow-hidden", props.className)}>
       <BlurCanvas blurHash={placeholder || blurhash} />
-
-      <img
-        ref={ref}
-        {...props}
-        className="relative z-[1] h-full w-full rounded-[inherit] object-cover"
-        alt={props.alt}
-        src={newSrc}
-      />
+      <img ref={ref} {...props} className="relative h-full w-full rounded-[inherit] object-cover" alt={props.alt} src={newSrc} />
     </div>
   )
 })
@@ -67,5 +60,5 @@ function BlurCanvas(props: BlurCanvasProps) {
     ctx.putImageData(imageData, 0, 0)
   }, [props.blurHash])
 
-  return <canvas ref={ref} width={32} height={32} className="absolute h-full w-full rounded-[inherit]" />
+  return <canvas ref={ref} width={32} height={32} className="absolute -z-[1] h-full w-full rounded-[inherit]" />
 }

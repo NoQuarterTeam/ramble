@@ -108,6 +108,8 @@ export function ErrorBoundary() {
   const error = useRouteError()
   const isCatchError = isRouteErrorResponse(error)
 
+  console.log(error)
+
   return (
     <Document theme="dark">
       <div className="flex items-center overflow-scroll p-20 pt-40">
