@@ -58,7 +58,7 @@ export const loader = async ({ params }: LoaderArgs) => {
       longitude: true,
       ownerId: true,
       verifier: { select: { firstName: true, username: true, lastName: true, avatar: true, avatarBlurHash: true } },
-      images: { orderBy: { createdAt: "asc" }, select: { id: true, path: true, blurHash: true } },
+      images: { orderBy: { createdAt: "desc" }, select: { id: true, path: true, blurHash: true } },
       _count: { select: { reviews: true } },
       reviews: {
         take: 5,
@@ -95,9 +95,9 @@ export const meta: V2_MetaFunction<typeof loader, { root: typeof rootLoader }> =
 export const action = async ({ request, params }: ActionArgs) => {
   const user = await getCurrentUser(request, { id: true, role: true, isVerified: true, isAdmin: true })
   const spot = await db.spot.findUniqueOrThrow({ where: { id: params.id }, select: { ownerId: true } })
-  if (!canManageSpot(spot, user)) return redirect("/latest")
+  if (!canManageSpot(spot, user)) return redirect("/spots")
   await db.spot.delete({ where: { id: params.id } })
-  return redirect("/latest", request, { flash: { title: "Spot deleted!" } })
+  return redirect("/spots", request, { flash: { title: "Spot deleted!" } })
 }
 
 export default function SpotDetail() {
@@ -127,7 +127,12 @@ export default function SpotDetail() {
         <div className="space-y-4">
           <div className="space-y-2">
             <div className="flex flex-col items-start justify-between space-y-1 md:flex-row">
-              <h1 className="text-4xl">{spot.name}</h1>
+              <div className="flex items-center space-x-2">
+                <div className="sq-12 flex items-center justify-center rounded-full border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+                  <Icon size={20} />
+                </div>
+                <h1 className="text-4xl">{spot.name}</h1>
+              </div>
               <div className="flex items-center space-x-1">{user && <SaveToList spotId={spot.id} />}</div>
             </div>
             <div className="flex items-center space-x-1 text-sm">
@@ -141,10 +146,10 @@ export default function SpotDetail() {
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div className="space-y-4">
+            <div className="space-y-3">
               <VerifiedCard spot={spot} />
-              <h3 className="text-xl font-medium">Description</h3>
-              <div dangerouslySetInnerHTML={{ __html: spot.description || "" }} />
+              <h3 className="text-lg font-medium">Description</h3>
+              <p className="whitespace-pre-wrap">{spot.description}</p>
               <p className="text-sm italic">{spot.address}</p>
               {spot.amenities && (
                 <div className="flex flex-row flex-wrap gap-2">

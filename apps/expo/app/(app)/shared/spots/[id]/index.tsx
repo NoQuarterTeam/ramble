@@ -8,7 +8,6 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated"
-import RenderHtml, { defaultSystemFonts } from "react-native-render-html"
 import * as Location from "expo-location"
 import { StatusBar } from "expo-status-bar"
 import { ChevronDown, ChevronLeft, Compass, Heart, Star } from "lucide-react-native"
@@ -94,7 +93,6 @@ export function SpotDetailScreen() {
         {navigation.canGoBack() && <Button onPress={navigation.goBack}>Back</Button>}
       </View>
     )
-  const fonts = ["poppins400", "poppins600", ...defaultSystemFonts]
   return (
     <View>
       <StatusBar animated style={isDark ? "light" : "dark"} />
@@ -126,15 +124,7 @@ export function SpotDetailScreen() {
             <View>
               <VerifiedCard spot={spot} />
             </View>
-            <View>
-              <RenderHtml
-                systemFonts={fonts}
-                baseStyle={{ fontSize: 16, fontFamily: "poppins400", color: isDark ? "white" : "black" }}
-                contentWidth={width}
-                source={{ html: spot.description || "" }}
-              />
-            </View>
-
+            <Text>{spot.description}</Text>
             <Text className="font-400-italic text-sm">{spot.address}</Text>
             {spot.amenities && (
               <View className="flex flex-row flex-wrap gap-2">

@@ -13,7 +13,7 @@ const mapAppIntents = supportedApps.map((app) => {
 })
 
 module.exports = function androidManifestPlugin(config) {
-  return withAndroidManifest(config, async (config) => {
+  return withAndroidManifest(config, (config) => {
     const androidManifest = config.modResults.manifest
     const existingIntent = androidManifest.queries[0].intent
 

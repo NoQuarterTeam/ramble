@@ -21,7 +21,7 @@ import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 
 import type { SpotType } from "@ramble/database/types"
-import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
+import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE, join } from "@ramble/shared"
 
 import { SPOTS } from "~/lib/static/spots"
 import { useTheme } from "~/lib/theme"
@@ -200,6 +200,7 @@ interface MarkerProps {
 }
 function SpotMarker(props: MarkerProps) {
   const Icon = !props.point.properties.cluster && SPOTS[props.point.properties.type as SpotType].Icon
+  const isPrimary = !props.point.properties.cluster && SPOTS[props.point.properties.type as SpotType].isPrimary
   return (
     <Marker
       onClick={props.onClick}
@@ -213,10 +214,22 @@ function SpotMarker(props: MarkerProps) {
         </div>
       ) : (
         <div className="relative">
-          <div className="sq-8 bg-primary-600 dark:bg-primary-700 border-primary-100 dark:border-primary-600 flex cursor-pointer items-center justify-center rounded-full border shadow-md transition-transform hover:scale-110">
-            {Icon && <Icon className="sq-4 text-white" />}
+          <div
+            className={join(
+              "sq-8 flex cursor-pointer items-center justify-center rounded-full border shadow-md transition-transform hover:scale-110",
+              isPrimary
+                ? "bg-primary-600 dark:bg-primary-700 border-primary-100 dark:border-primary-600"
+                : "border-gray-500 bg-gray-50 dark:border-gray-400 dark:bg-black",
+            )}
+          >
+            {Icon && <Icon className={join("sq-4", isPrimary ? "text-white" : "text-black")} />}
           </div>
-          <div className="sq-3 bg-primary-600 dark:bg-primary-700 absolute -bottom-[3px] left-1/2 -z-[1] -translate-x-1/2 rotate-45 shadow" />
+          <div
+            className={join(
+              "sq-3 absolute -bottom-[3px] left-1/2 -z-[1] -translate-x-1/2 rotate-45 shadow",
+              isPrimary ? "bg-primary-600 dark:bg-primary-700" : "bg-white dark:bg-black",
+            )}
+          />
         </div>
       )}
     </Marker>

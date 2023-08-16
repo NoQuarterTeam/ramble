@@ -14,11 +14,11 @@ interface Props {
 
 export function VerifiedCard({ spot }: Props) {
   return (
-    <>
+    <div className="rounded border border-gray-200 dark:border-gray-700">
       {spot.verifiedAt && spot.verifier ? (
         <Link
           to={`/${spot.verifier.username}`}
-          className="flex flex-row items-center justify-between whitespace-nowrap rounded border border-gray-200 p-3 px-4 text-sm hover:opacity-70 dark:border-gray-700"
+          className="flex flex-row items-center justify-between whitespace-nowrap p-3 px-4 text-sm hover:opacity-70 "
         >
           <div>
             <div className="flex items-center space-x-1">
@@ -43,11 +43,11 @@ export function VerifiedCard({ spot }: Props) {
           </div>
         </Link>
       ) : (
-        <div className="flex items-center space-x-1 text-sm">
+        <div className="flex items-center space-x-1 p-3 px-4 text-sm">
           <BadgeX className="sq-5" />
           <p>Unverified</p>
         </div>
       )}
-    </>
+    </div>
   )
 }

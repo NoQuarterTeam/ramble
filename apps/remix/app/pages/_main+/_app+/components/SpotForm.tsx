@@ -21,7 +21,7 @@ import { Button, CloseButton, IconButton, Spinner, Textarea } from "~/components
 import { FormNumber, NullableFormString, useFormErrors } from "~/lib/form"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { AMENITIES_ICONS } from "~/lib/static/amenities"
-import { SPOT_OPTIONS } from "~/lib/static/spots"
+import { SPOT_TYPE_OPTIONS } from "~/lib/static/spots"
 import { useTheme } from "~/lib/theme"
 import type { geocodeLoader } from "~/pages/api+/mapbox+/geocode"
 
@@ -157,7 +157,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
             <FormFieldLabel required>Type</FormFieldLabel>
             <input type="hidden" name="type" value={type || ""} />
             <div className="flex flex-wrap gap-1">
-              {SPOT_OPTIONS.map((spotType) => (
+              {SPOT_TYPE_OPTIONS.map((spotType) => (
                 <Button
                   key={spotType.value}
                   variant={type === spotType.value ? "primary" : "outline"}

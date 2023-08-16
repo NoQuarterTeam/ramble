@@ -25,7 +25,7 @@ export type IconButtonStyleProps = VariantProps<typeof iconbuttonStyles>
 export type IconButtonProps = IconButtonStyleProps & ButtonProps & { icon: React.ReactNode; "aria-label": string }
 
 export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(function _IconButton(
-  { variant, size, isLoading, disabled, icon, ...props },
+  { variant = "secondary", size, isLoading, disabled, icon, ...props },
   ref,
 ) {
   return (

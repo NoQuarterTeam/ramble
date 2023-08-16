@@ -31,7 +31,7 @@ enum Actions {
 
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData()
-  const action = formData.get("_action") as Actions | undefined
+  const action = formData.get(FORM_ACTION) as Actions | undefined
 
   switch (action) {
     case Actions.Register:

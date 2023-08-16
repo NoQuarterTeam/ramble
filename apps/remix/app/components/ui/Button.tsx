@@ -23,6 +23,8 @@ export const buttonStyles = cva(
         secondary:
           "border-transparent bg-gray-100 text-black hover:bg-gray-200 active:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 dark:active:bg-gray-500",
         destructive: "border-transparent bg-red-500 text-white hover:bg-red-600 active:bg-red-700",
+        "destructive-secondary":
+          "border-red-500 bg-white text-red-600 hover:border-red-600 hover:bg-red-500/10 active:border-red-700 dark:bg-black",
         outline: "border-black/10 dark:border-white/10",
         ghost: "",
         link: "underline",

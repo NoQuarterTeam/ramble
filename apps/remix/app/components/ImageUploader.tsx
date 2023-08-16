@@ -1,8 +1,9 @@
 import * as React from "react"
 import type { DropzoneOptions, FileRejection } from "react-dropzone"
 import { useDropzone } from "react-dropzone"
+import { toast } from "sonner"
 
-import { Spinner, useToast } from "~/components/ui"
+import { Spinner } from "~/components/ui"
 import { useS3Upload } from "~/lib/hooks/useS3"
 
 interface Props {
@@ -31,7 +32,6 @@ export function ImageUploader({
   dropzoneOptions,
   className,
 }: Props & (MultiSubmit | SingleSubmit)) {
-  const { toast } = useToast()
   const [upload, { isLoading }] = useS3Upload()
 
   const handleSubmitImages = React.useCallback(
@@ -46,10 +46,10 @@ export function ImageUploader({
           await onSubmit?.(key)
         }
       } catch {
-        toast({ variant: "destructive", title: "Error uploading image", description: "Please try again!" })
+        toast.error("Error uploading image", { description: "Please try again!" })
       }
     },
-    [onSubmit, upload, toast, isMulti, onMultiSubmit],
+    [onSubmit, upload, isMulti, onMultiSubmit],
   )
 
   const onDrop = React.useCallback(
@@ -61,18 +61,18 @@ export function ImageUploader({
           const description = `File too large, must be under ${
             (dropzoneOptions?.maxSize && `${dropzoneOptions.maxSize / 1000000}MB`) || "5MB"
           }`
-          toast({ variant: "destructive", title: "Invalid file", description })
+          toast.error("Invalid file", { description })
         } else {
           // TODO: add remaining error handlers
-          toast({ variant: "destructive", description: "Invalid file, please try another" })
+          toast.error("Invalid file", { description: "Please try another" })
         }
         return
       }
-      if (files.length === 0) return toast({ variant: "destructive", description: "No file, please add one" })
+      if (files.length === 0) return toast.error("No file added", { description: "Please add one" })
 
       return handleSubmitImages(files)
     },
-    [toast, dropzoneOptions, handleSubmitImages],
+    [dropzoneOptions, handleSubmitImages],
   )
   const { getRootProps, getInputProps } = useDropzone({
     maxSize: 5000000, // 5MB
