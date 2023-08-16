@@ -118,7 +118,7 @@ export default function SpotPreview() {
                     ))}
                   </div>
                 </div>
-                <div className="line-clamp-6 text-sm" dangerouslySetInnerHTML={{ __html: spot.description || "" }} />
+                <p className="line-clamp-6 whitespace-pre-wrap text-sm">{spot.description}</p>
                 <p className="text-sm">{spot.address}</p>
                 <div className="flex justify-end">
                   <LinkButton variant="link" to={`/spots/${spot.id}`}>

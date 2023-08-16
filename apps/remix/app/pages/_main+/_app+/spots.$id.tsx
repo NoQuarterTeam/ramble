@@ -141,10 +141,10 @@ export default function SpotDetail() {
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div className="space-y-4">
+            <div className="space-y-3">
               <VerifiedCard spot={spot} />
-              <h3 className="text-xl font-medium">Description</h3>
-              <div dangerouslySetInnerHTML={{ __html: spot.description || "" }} />
+              <h3 className="text-lg font-medium">Description</h3>
+              <p className="whitespace-pre-wrap">{spot.description}</p>
               <p className="text-sm italic">{spot.address}</p>
               {spot.amenities && (
                 <div className="flex flex-row flex-wrap gap-2">

@@ -1,5 +1,5 @@
 import { prisma } from ".."
-import data from "../neste.json"
+import data from "../scripts/neste.json"
 
 export async function main() {
   const admin = await prisma.user.findFirstOrThrow({ where: { email: "jack@noquarter.co" } })
