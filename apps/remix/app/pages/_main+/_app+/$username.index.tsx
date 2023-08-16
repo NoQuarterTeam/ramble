@@ -15,6 +15,7 @@ import { SpotItem } from "./components/SpotItem"
 
 export const headers = useLoaderHeaders
 
+const TAKE = 12
 export const loader = async ({ request, params }: LoaderArgs) => {
   const user = await db.user.findUnique({ where: { username: params.username } })
   if (!user) throw notFound()
@@ -36,7 +37,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
       Spot.id
     ORDER BY
       Spot.createdAt DESC, Spot.id
-    LIMIT 10
+    LIMIT ${TAKE}
     OFFSET ${skip};
   `
   const count = await db.spot.count({ where: { creatorId: user.id } })
@@ -62,10 +63,10 @@ export default function ProfileSpots() {
 
   return (
     <div className="space-y-10">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {count === 0 ? <></> : spots.map((spot) => <SpotItem key={spot.id} spot={spot} />)}
       </div>
-      {count > 10 && (
+      {count > TAKE && (
         <div className="flex items-center justify-center">
           <Button size="lg" isLoading={spotFetcher.state === "loading"} variant="outline" onClick={onNext}>
             Load more

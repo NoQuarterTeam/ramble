@@ -93,7 +93,7 @@ export default function Latest() {
       <div className="sticky top-0 z-[1] bg-white py-4 dark:bg-gray-700">
         <div className="flex items-center space-x-2">
           <div className="relative w-10/12">
-            <div className="scrollbar-hide flex gap-2 overflow-x-scroll pr-10">
+            <div className="scrollbar-hide flex gap-1 overflow-x-scroll pr-10">
               <Button
                 onClick={() => {
                   const existingParams = queryString.parse(searchParams.toString())
@@ -151,7 +151,7 @@ export default function Latest() {
             )}
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {spots.map((spot) => (
               <SpotItem key={spot.id} spot={spot} />
             ))}
