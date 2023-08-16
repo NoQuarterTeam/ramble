@@ -219,7 +219,7 @@ function SpotMarker(props: MarkerProps) {
               "sq-8 flex cursor-pointer items-center justify-center rounded-full border shadow-md transition-transform hover:scale-110",
               isPrimary
                 ? "bg-primary-600 dark:bg-primary-700 border-primary-100 dark:border-primary-600"
-                : "border-gray-500 bg-gray-200 dark:border-gray-400 dark:bg-black",
+                : "border-gray-500 bg-gray-50 dark:border-gray-400 dark:bg-black",
             )}
           >
             {Icon && <Icon className={join("sq-4", isPrimary ? "text-white" : "text-black")} />}
