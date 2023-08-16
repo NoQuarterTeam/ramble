@@ -35,7 +35,6 @@ import { join } from "@ramble/shared"
 
 import { Toaster } from "~/components/ui"
 
-import { FlashMessage } from "./components/FlashMessage"
 import { LinkButton } from "./components/LinkButton"
 import { FULL_WEB_URL } from "./lib/config.server"
 import { type Theme } from "./lib/theme"
@@ -96,10 +95,9 @@ export default function App() {
   return (
     <Document theme={theme}>
       <Tooltip.Provider>
-        <FlashMessage flash={flash} />
         <Outlet />
       </Tooltip.Provider>
-      <Toaster />
+      <Toaster flash={flash} />
     </Document>
   )
 }
@@ -107,8 +105,6 @@ export default function App() {
 export function ErrorBoundary() {
   const error = useRouteError()
   const isCatchError = isRouteErrorResponse(error)
-
-  console.log(error)
 
   return (
     <Document theme="dark">
