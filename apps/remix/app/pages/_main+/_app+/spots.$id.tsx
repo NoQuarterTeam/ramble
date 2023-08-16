@@ -1,8 +1,8 @@
 import Map, { Marker } from "react-map-gl"
 import { Link, useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@vercel/remix"
-import { json } from "@vercel/remix"
-import { Edit2, Star, Trash } from "lucide-react"
+
+import { Check, Edit2, Star, Trash } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
 import type { SpotType } from "@ramble/database/types"
@@ -26,7 +26,7 @@ import { VerifiedCard } from "~/components/VerifiedCard"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
-import { notFound, redirect } from "~/lib/remix.server"
+import { badRequest, json, notFound, redirect } from "~/lib/remix.server"
 import { AMENITIES_ICONS } from "~/lib/static/amenities"
 import { SPOTS } from "~/lib/static/spots"
 import { useTheme } from "~/lib/theme"
@@ -35,6 +35,7 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
+import { FORM_ACTION } from "~/lib/form"
 
 export const config = {
   runtime: "edge",
@@ -43,7 +44,7 @@ export const config = {
 
 export const headers = useLoaderHeaders
 
-export const loader = async ({ params }: LoaderArgs) => {
+export const loader = async ({ params, request }: LoaderArgs) => {
   const spot = await db.spot.findUnique({
     where: { id: params.id },
     select: {
@@ -60,21 +61,16 @@ export const loader = async ({ params }: LoaderArgs) => {
       verifier: { select: { firstName: true, username: true, lastName: true, avatar: true, avatarBlurHash: true } },
       images: { orderBy: { createdAt: "desc" }, select: { id: true, path: true, blurHash: true } },
       _count: { select: { reviews: true } },
-      reviews: {
-        take: 5,
-        orderBy: { createdAt: "desc" },
-        select: reviewItemSelectFields,
-      },
+      reviews: { take: 5, orderBy: { createdAt: "desc" }, select: reviewItemSelectFields },
     },
   })
   if (!spot) throw notFound()
 
   const rating = await db.review.aggregate({ where: { spotId: params.id }, _avg: { rating: true } })
 
-  return json(
-    { ...spot, rating },
-    { headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1day", sMaxage: "1day" }) } },
-  )
+  return json({ ...spot, rating }, request, {
+    headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1day", sMaxage: "1day" }) },
+  })
 }
 
 export const meta: V2_MetaFunction<typeof loader, { root: typeof rootLoader }> = ({ data, matches }) => {
@@ -92,12 +88,42 @@ export const meta: V2_MetaFunction<typeof loader, { root: typeof rootLoader }> =
   ]
 }
 
+enum Actions {
+  Delete = "delete",
+  Verify = "verify",
+}
+
 export const action = async ({ request, params }: ActionArgs) => {
   const user = await getCurrentUser(request, { id: true, role: true, isVerified: true, isAdmin: true })
-  const spot = await db.spot.findUniqueOrThrow({ where: { id: params.id }, select: { ownerId: true } })
-  if (!canManageSpot(spot, user)) return redirect("/spots")
-  await db.spot.delete({ where: { id: params.id } })
-  return redirect("/spots", request, { flash: { title: "Spot deleted!" } })
+  const formData = await request.formData()
+  const action = formData.get(FORM_ACTION) as Actions | undefined
+
+  switch (action) {
+    case Actions.Delete:
+      try {
+        const spot = await db.spot.findUniqueOrThrow({ where: { id: params.id }, select: { ownerId: true } })
+        if (!canManageSpot(spot, user)) return redirect("/spots")
+        await db.spot.delete({ where: { id: params.id } })
+        return redirect("/spots", request, { flash: { title: "Spot deleted!" } })
+      } catch (error) {
+        return badRequest("Error deleting spot your account", request, { flash: { title: "Error deleting spot" } })
+      }
+
+    case Actions.Verify:
+      try {
+        const spot = await db.spot.findUniqueOrThrow({ where: { id: params.id }, select: { ownerId: true } })
+        if (!canManageSpot(spot, user)) return redirect("/spots")
+        await db.spot.update({
+          where: { id: params.id },
+          data: { verifiedAt: new Date(), verifier: { connect: { id: user.id } } },
+        })
+        return json({ success: true }, request, { flash: { title: "Spot verified!" } })
+      } catch (error) {
+        return badRequest("Error verifying spot ", request, { flash: { title: "Error verifying spot" } })
+      }
+    default:
+      break
+  }
 }
 
 export default function SpotDetail() {
@@ -167,12 +193,19 @@ export default function SpotDetail() {
               )}
               {canManageSpot(spot, user) && (
                 <div className="flex space-x-2">
-                  <LinkButton to="edit" leftIcon={<Edit2 className="sq-3" />}>
+                  {!spot.verifiedAt && (
+                    <Form>
+                      <FormButton name={FORM_ACTION} value={Actions.Verify} leftIcon={<Check className="sq-3" />}>
+                        Verify
+                      </FormButton>
+                    </Form>
+                  )}
+                  <LinkButton to="edit" variant="outline" leftIcon={<Edit2 className="sq-3" />}>
                     Edit
                   </LinkButton>
                   <AlertDialogRoot>
                     <AlertDialogTrigger asChild>
-                      <Button variant="destructive" leftIcon={<Trash className="sq-3" />}>
+                      <Button variant="destructive-secondary" leftIcon={<Trash className="sq-3" />}>
                         Delete
                       </Button>
                     </AlertDialogTrigger>
@@ -184,7 +217,9 @@ export default function SpotDetail() {
                           <Button variant="ghost">Cancel</Button>
                         </AlertDialogCancel>
                         <Form>
-                          <FormButton>Confirm</FormButton>
+                          <FormButton name={FORM_ACTION} value={Actions.Delete}>
+                            Confirm
+                          </FormButton>
                         </Form>
                       </AlertDialogFooter>
                     </AlertDialogContent>
