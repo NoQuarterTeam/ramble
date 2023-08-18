@@ -1,7 +1,7 @@
 import Map, { Marker } from "react-map-gl"
-import { Link, useLoaderData } from "@remix-run/react"
+import { useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@vercel/remix"
-import { Check, Edit2, Star, Trash } from "lucide-react"
+import { Check, Edit2, Heart, Star, Trash } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
 import type { SpotType } from "@ramble/database/types"
@@ -21,7 +21,7 @@ import {
   AlertDialogTrigger,
   Button,
 } from "~/components/ui"
-import { VerifiedCard } from "~/components/VerifiedCard"
+import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
 import { db } from "~/lib/db.server"
 import { FORM_ACTION } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
@@ -35,6 +35,7 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
+import { SpotMarker } from "./components/SpotMarker"
 
 export const config = {
   runtime: "edge",
@@ -59,7 +60,7 @@ export const loader = async ({ params, request }: LoaderArgs) => {
       ownerId: true,
       verifier: { select: { firstName: true, username: true, lastName: true, avatar: true, avatarBlurHash: true } },
       images: { orderBy: { createdAt: "desc" }, select: { id: true, path: true, blurHash: true } },
-      _count: { select: { reviews: true } },
+      _count: { select: { reviews: true, listSpots: true } },
       reviews: { take: 5, orderBy: { createdAt: "desc" }, select: reviewItemSelectFields },
     },
   })
@@ -160,13 +161,16 @@ export default function SpotDetail() {
               </div>
               <div className="flex items-center space-x-1">{user && <SaveToList spotId={spot.id} />}</div>
             </div>
-            <div className="flex items-center space-x-1 text-sm">
-              <Star className="sq-5" />
-              <p>{displayRating(spot.rating._avg.rating)}</p>
-              <p>·</p>
-              <Link to="#reviews" className="hover:underline">
-                {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
-              </Link>
+
+            <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1 text-sm">
+                <Star className="sq-4" />
+                <p>{displayRating(spot.rating._avg.rating)}</p>
+              </div>
+              <div className="flex items-center space-x-1 text-sm">
+                <Heart className="sq-4" />
+                <p>{spot._count.listSpots || 0}</p>
+              </div>
             </div>
           </div>
 
@@ -240,12 +244,7 @@ export default function SpotDetail() {
                 }
               >
                 <Marker anchor="bottom" longitude={spot.longitude} latitude={spot.latitude}>
-                  <div className="relative">
-                    <div className="sq-8 bg-primary-600 dark:bg-primary-700 border-primary-100 dark:border-primary-600 flex items-center justify-center rounded-full border shadow-md">
-                      <Icon className="sq-4 text-white" />
-                    </div>
-                    <div className="sq-3 bg-primary-600 dark:bg-primary-700 absolute -bottom-[3px] left-1/2 -z-[1] -translate-x-1/2 rotate-45 shadow" />
-                  </div>
+                  <SpotMarker spot={spot} />
                 </Marker>
               </Map>
             </div>

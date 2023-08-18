@@ -103,8 +103,8 @@ export default function Latest() {
   }, [spotFetcher.data, spotFetcher.state])
 
   return (
-    <PageContainer className="pt-4">
-      <div className="sticky top-0 z-[1] bg-white py-4 dark:bg-gray-800">
+    <PageContainer className="pt-0">
+      <div className="top-nav sticky z-[1] bg-white py-4 dark:bg-gray-800">
         <div className="flex items-center space-x-2">
           <div className="relative w-10/12">
             <div className="scrollbar-hide flex gap-1 overflow-x-scroll pr-10">

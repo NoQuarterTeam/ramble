@@ -17,6 +17,7 @@ import {
   PopoverArrow,
   PopoverContent,
   PopoverTrigger,
+  Spinner,
   Tooltip,
 } from "~/components/ui"
 import { db } from "~/lib/db.server"
@@ -87,16 +88,20 @@ const SAVE_TO_LIST_URL = "/api/save-to-list"
 
 interface Props {
   spotId: string
+  trigger?: React.ReactElement
 }
 
 export function SaveToList(props: Props) {
   const listsFetcher = useFetcher<typeof loader>()
+  const popoverProps = useDisclosure()
   const newListModalProps = useDisclosure()
   const lists = listsFetcher.data
+
   React.useEffect(() => {
+    if (!popoverProps.isOpen) return
     listsFetcher.load(SAVE_TO_LIST_URL)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [popoverProps.isOpen])
 
   const listCreateFetcher = useFetcher<ActionDataErrorResponse<typeof createListSchema> | { success: true }>()
 
@@ -106,13 +111,15 @@ export function SaveToList(props: Props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listCreateFetcher.data])
-
+  const trigger = props.trigger && React.cloneElement(props.trigger, { onClick: popoverProps.onOpen })
   return (
-    <Popover>
+    <Popover {...popoverProps}>
       <PopoverTrigger asChild>
-        <Button variant="outline" leftIcon={<Heart className="sq-4" />} aria-label="favourite">
-          Save
-        </Button>
+        {trigger || (
+          <Button variant="outline" onClick={popoverProps.onOpen} leftIcon={<Heart className="sq-4" />} aria-label="favourite">
+            Save
+          </Button>
+        )}
       </PopoverTrigger>
       <PopoverContent
         onOpenAutoFocus={(e) => {
@@ -135,7 +142,11 @@ export function SaveToList(props: Props) {
               />
             </Tooltip>
           </div>
-          {!lists ? null : lists.length === 0 ? (
+          {listsFetcher.state === "loading" && !lists ? (
+            <div className="flex items-center justify-center p-4">
+              <Spinner />
+            </div>
+          ) : !lists ? null : lists.length === 0 ? (
             <div className="flex flex-col items-center justify-center space-y-3 p-3">
               <p>You haven't got any lists yet</p>
               <Button variant="outline" onClick={newListModalProps.onOpen}>

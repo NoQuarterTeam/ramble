@@ -6,7 +6,9 @@ export default function MainLayout() {
   return (
     <>
       <Nav />
-      <Outlet />
+      <div className="pt-nav">
+        <Outlet />
+      </div>
     </>
   )
 }

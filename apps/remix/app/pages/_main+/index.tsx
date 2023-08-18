@@ -76,9 +76,11 @@ export default function Home() {
         </div>
 
         <h2 className="text-2xl">Check out some top rated spots</h2>
-        <div className="scrollbar-hide flex space-x-4 overflow-x-scroll py-4">
+        <div className="scrollbar-hide flex space-x-3 overflow-x-scroll py-4">
           {spots.map((spot) => (
-            <SpotItem key={spot.id} spot={spot} />
+            <div key={spot.id} className="min-w-[350px]">
+              <SpotItem spot={spot} />
+            </div>
           ))}
         </div>
 

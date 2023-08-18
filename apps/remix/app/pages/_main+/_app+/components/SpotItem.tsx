@@ -6,6 +6,9 @@ import { createImageUrl, displayRating } from "@ramble/shared"
 
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { SPOTS } from "~/lib/static/spots"
+import { SaveToList } from "~/pages/api+/save-to-list"
+import { IconButton } from "~/components/ui"
+import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 
 interface Props {
   spot: SpotItemWithStats
@@ -13,43 +16,60 @@ interface Props {
 
 export function SpotItem({ spot }: Props) {
   const Icon = SPOTS[spot.type].Icon
+  const currentUser = useMaybeUser()
 
   return (
-    <Link to={`/spots/${spot.id}`} className="space-y-2 hover:opacity-80">
-      <div className="relative h-[250px] w-full">
-        {spot.image ? (
-          <OptimizedImage
-            alt="spot"
-            placeholder={spot.blurHash}
-            width={450}
-            height={300}
-            className="h-full w-full rounded-md"
-            src={createImageUrl(spot.image)}
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center rounded-md bg-gray-50 dark:bg-gray-700">
-            <Camera className="opacity-50" />
+    <div className="relative">
+      <Link to={`/spots/${spot.id}`} className="space-y-2 hover:opacity-80">
+        <div className="relative h-[250px] w-full">
+          {spot.image ? (
+            <OptimizedImage
+              alt="spot"
+              placeholder={spot.blurHash}
+              width={450}
+              height={300}
+              className="h-full w-full rounded-md"
+              src={createImageUrl(spot.image)}
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center rounded-md bg-gray-50 dark:bg-gray-700">
+              <Camera className="opacity-50" />
+            </div>
+          )}
+          <div className="sq-10 absolute left-2 top-2 flex items-center justify-center rounded-full bg-white shadow dark:bg-black">
+            <Icon size={20} />
           </div>
-        )}
-        <div className="sq-10 absolute left-2 top-2 flex items-center justify-center rounded-full bg-white shadow dark:bg-black">
-          <Icon size={20} />
         </div>
-      </div>
 
-      <div className="space-y-1">
-        <p className="line-clamp-2 text-lg leading-tight">{spot.name}</p>
-        <p className="line-clamp-1 text-sm font-thin opacity-70">{spot.address}</p>
-        <div className="flex items-center space-x-2">
-          <div className="flex items-center space-x-1 text-sm">
-            <Star className="sq-4" />
-            <p>{displayRating(spot.rating)}</p>
-          </div>
-          <div className="flex items-center space-x-1 text-sm">
-            <Heart className="sq-4" />
-            <p>{spot.savedCount}</p>
+        <div className="space-y-1">
+          <p className="line-clamp-2 text-lg leading-tight">{spot.name}</p>
+          <p className="line-clamp-1 text-sm font-thin opacity-70">{spot.address}</p>
+          <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1 text-sm">
+              <Star className="sq-4" />
+              <p>{displayRating(spot.rating)}</p>
+            </div>
+            <div className="flex items-center space-x-1 text-sm">
+              <Heart className="sq-4" />
+              <p>{spot.savedCount}</p>
+            </div>
           </div>
         </div>
-      </div>
-    </Link>
+      </Link>
+      {currentUser && (
+        <div className="absolute right-2 top-2">
+          <SaveToList
+            spotId={spot.id}
+            trigger={
+              <IconButton
+                className="rounded-full bg-white hover:bg-white hover:opacity-90 dark:bg-black dark:hover:bg-black dark:hover:opacity-80"
+                aria-label="save to list"
+                icon={<Heart size={16} />}
+              />
+            }
+          />
+        </div>
+      )}
+    </div>
   )
 }

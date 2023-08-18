@@ -4,7 +4,7 @@ import { BadgeX, Verified } from "lucide-react"
 import { type User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
-import { Avatar } from "./ui/Avatar"
+import { Avatar } from "../../../../components/ui/Avatar"
 
 interface Props {
   spot: { verifiedAt: string | null } & {

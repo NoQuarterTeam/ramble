@@ -22,6 +22,7 @@ function ShowToast({ flash }: { flash: Flash }) {
     const { flashError, flashInfo } = flash
     const type = flashError ? "error" : "success"
     const message = flashError || flashInfo
+    if (!message) return
     const timeout = setTimeout(() => {
       toast[type](message.title, { description: message.description })
     }, 0)

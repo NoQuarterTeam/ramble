@@ -1,6 +1,3 @@
-import * as React from "react"
-import type { LngLatLike } from "react-map-gl"
-import Map, { Marker } from "react-map-gl"
 import { Link, useFetcher, useLoaderData, useNavigate } from "@remix-run/react"
 import bbox from "@turf/bbox"
 import * as turf from "@turf/helpers"
@@ -8,8 +5,11 @@ import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { ChevronLeft, Copy } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
+import * as React from "react"
+import type { LngLatLike } from "react-map-gl"
+import Map, { Marker, NavigationControl } from "react-map-gl"
 
-import type { SpotType } from "@ramble/database/types"
+import type { Prisma } from "@ramble/database/types"
 import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
@@ -19,61 +19,53 @@ import { FORM_ACTION } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { badRequest, notFound, redirect } from "~/lib/remix.server"
-import { SPOTS } from "~/lib/static/spots"
 import { useTheme } from "~/lib/theme"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
+import type { SpotItemWithStats } from "@ramble/api/src/router/spot"
 import { SpotItem } from "./components/SpotItem"
+import { SpotMarker } from "./components/SpotMarker"
+import { PageContainer } from "~/components/PageContainer"
 
 export const headers = useLoaderHeaders
 
+type SpotItemWithStatsAndCoords = SpotItemWithStats & { longitude: number; latitude: number }
 export const loader = async ({ params }: LoaderArgs) => {
-  const list = await db.list.findFirst({
-    where: { id: params.id },
-    select: {
-      id: true,
-      creatorId: true,
-      creator: { select: { username: true, firstName: true, lastName: true } },
-      name: true,
-      description: true,
-      listSpots: {
-        select: {
-          id: true,
-          spot: {
-            select: {
-              id: true,
-              type: true,
-              reviews: { select: { rating: true } },
-              name: true,
-              address: true,
-              latitude: true,
-              longitude: true,
-              images: { take: 1 },
-            },
-          },
-        },
+  const [list, spots] = await Promise.all([
+    db.list.findFirst({
+      where: { id: params.id },
+      select: {
+        id: true,
+        creatorId: true,
+        creator: { select: { username: true, firstName: true, lastName: true } },
+        name: true,
+        description: true,
       },
-    },
-  })
+    }),
+    db.$queryRaw`
+      SELECT 
+        Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
+        Spot.latitude, Spot.longitude,
+        (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image,
+        (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash,
+        (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
+      FROM
+        Spot
+      LEFT JOIN
+        Review ON Spot.id = Review.spotId
+      LEFT JOIN
+        ListSpot ON Spot.id = ListSpot.spotId
+      WHERE
+        ListSpot.listId = ${params.id}
+      GROUP BY
+        Spot.id
+      ORDER BY
+        Spot.id
+    ` as Prisma.PrismaPromise<SpotItemWithStatsAndCoords[]>,
+  ])
   if (!list) throw notFound()
 
-  const formattedList = {
-    ...list,
-    listSpots: list.listSpots.map((listSpot) => ({
-      ...listSpot,
-      spot: {
-        ...listSpot.spot,
-        image: listSpot.spot.images[0]?.path,
-        blurHash: listSpot.spot.images[0]?.blurHash,
-        rating:
-          listSpot.spot.reviews.length > 0
-            ? Math.round(listSpot.spot.reviews.reduce((acc, review) => acc + review.rating, 0) / listSpot.spot.reviews.length)
-            : undefined,
-      },
-    })),
-  }
-  const coords =
-    formattedList.listSpots.length > 1 ? formattedList.listSpots.map(({ spot }) => [spot.longitude, spot.latitude]) : null
+  const coords = spots.length > 1 ? spots.map((spot) => [spot.longitude, spot.latitude]) : null
 
   let bounds: LngLatLike | undefined = undefined
   if (coords) {
@@ -82,7 +74,7 @@ export const loader = async ({ params }: LoaderArgs) => {
   }
 
   return json(
-    { list: formattedList, bounds },
+    { list, spots, bounds },
     { headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }) } },
   )
 }
@@ -119,7 +111,7 @@ export const action = async ({ request, params }: ActionArgs) => {
 }
 
 export default function ListDetail() {
-  const { list, bounds } = useLoaderData<typeof loader>()
+  const { list, spots, bounds } = useLoaderData<typeof loader>()
   const currentUser = useMaybeUser()
   const theme = useTheme()
 
@@ -128,8 +120,7 @@ export default function ListDetail() {
   const copyFetcher = useFetcher()
   const markers = React.useMemo(
     () =>
-      list.listSpots.map(({ spot }) => {
-        const Icon = SPOTS[spot.type as SpotType].Icon
+      spots.map((spot) => {
         return (
           <Marker
             key={spot.id}
@@ -138,24 +129,19 @@ export default function ListDetail() {
             longitude={spot.longitude}
             latitude={spot.latitude}
           >
-            <div className="relative cursor-pointer transition-transform hover:scale-110">
-              <div className="sq-8 bg-primary-600 dark:bg-primary-700 border-primary-100 dark:border-primary-600 flex items-center justify-center rounded-full border shadow-md">
-                <Icon className="sq-4 text-white" />
-              </div>
-              <div className="sq-3 bg-primary-600 dark:bg-primary-700 absolute -bottom-[3px] left-1/2 -z-[1] -translate-x-1/2 rotate-45 shadow" />
-            </div>
+            <SpotMarker spot={spot} />
           </Marker>
         )
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [list.listSpots],
+    [spots],
   )
   return (
-    <div className="space-y-4">
-      <div className="flex items-start justify-between">
+    <PageContainer className="space-y-0 pb-0 pt-0">
+      <div className="top-nav sticky z-[1] flex flex-col items-start justify-between bg-white py-4 dark:bg-gray-800 md:flex-row">
         <div className="space-y-1">
-          <div className="flex items-end space-x-2">
-            <div className="flex space-x-2">
+          <div className="flex flex-col items-start md:flex-row md:items-end md:space-x-2">
+            <div className="flex flex-col md:flex-row md:space-x-2">
               <LinkButton
                 size="sm"
                 leftIcon={<ChevronLeft className="sq-3" />}
@@ -211,27 +197,29 @@ export default function ListDetail() {
           </div>
         )}
       </div>
-      <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-        <div className="space-y-2">
-          {list.listSpots.length === 0 ? (
+      <div className="grid grid-cols-12 gap-4">
+        <div className="scrollbar-hide col-span-12 space-y-4 overflow-y-scroll md:col-span-4 md:h-[80vh] md:pb-20">
+          {spots.length === 0 ? (
             <div className="flex items-center justify-center py-10">
               <p>Nothing added yet</p>
             </div>
           ) : (
-            list.listSpots.map(({ spot }) => <SpotItem key={spot.id} spot={spot} />)
+            spots.map((spot) => <SpotItem key={spot.id} spot={spot} />)
           )}
         </div>
-        <div className="sticky top-0 h-[400px] w-full overflow-hidden rounded-md">
+        <div className="col-span-12 h-[80vh] w-full overflow-hidden rounded-md pb-4 md:col-span-8 md:pb-0">
           <ClientOnly>
             <Map
+              doubleClickZoom={true}
+              scrollZoom={false}
               mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
               style={{ height: "100%", width: "100%" }}
               initialViewState={
                 bounds
                   ? { bounds, fitBoundsOptions: { padding: 50 } }
                   : {
-                      latitude: list.listSpots[0] ? list.listSpots[0].spot.latitude : INITIAL_LATITUDE,
-                      longitude: list.listSpots[0] ? list.listSpots[0].spot.longitude : INITIAL_LONGITUDE,
+                      latitude: spots[0]?.latitude || INITIAL_LATITUDE,
+                      longitude: spots[0]?.longitude || INITIAL_LONGITUDE,
                       zoom: 10,
                     }
               }
@@ -243,10 +231,11 @@ export default function ListDetail() {
               }
             >
               {markers}
+              <NavigationControl position="bottom-right" />
             </Map>
           </ClientOnly>
         </div>
       </div>
-    </div>
+    </PageContainer>
   )
 }

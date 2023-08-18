@@ -2,7 +2,7 @@ import * as React from "react"
 import { Await, Link, useLoaderData, useNavigate } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { defer } from "@vercel/remix"
-import { Frown, Star } from "lucide-react"
+import { Frown, Heart, Star } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
 import { createImageUrl, displayRating, merge } from "@ramble/shared"
@@ -10,11 +10,12 @@ import { createImageUrl, displayRating, merge } from "@ramble/shared"
 import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { CloseButton, Spinner } from "~/components/ui"
-import { VerifiedCard } from "~/components/VerifiedCard"
+import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
 import { db } from "~/lib/db.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
+import { SaveToList } from "~/pages/api+/save-to-list"
 
 export const loader = async ({ params }: LoaderArgs) => {
   const spot = db.spot
@@ -75,15 +76,21 @@ export default function SpotPreview() {
                   >
                     {spot.name}
                   </Link>
-                  <div className="flex flex-wrap items-center space-x-1 text-sm">
-                    <Star className="sq-5" />
-                    <React.Suspense fallback={<Spinner size="sm" />}>
-                      <Await resolve={promise.rating}>{(rating) => <p>{displayRating(rating._avg.rating)}</p>}</Await>
-                    </React.Suspense>
-                    <p>·</p>
-                    <p>
-                      {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
-                    </p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-1 text-sm">
+                        <Star className="sq-4" />
+                        <React.Suspense fallback={<Spinner size="sm" />}>
+                          <Await resolve={promise.rating}>{(rating) => <p>{displayRating(rating._avg.rating)}</p>}</Await>
+                        </React.Suspense>
+                      </div>
+                      <div className="flex items-center space-x-1 text-sm">
+                        <Heart className="sq-4" />
+                        <p>{spot._count.listSpots || 0}</p>
+                      </div>
+                    </div>
+
+                    {user && <SaveToList spotId={spot.id} />}
                   </div>
                 </div>
                 <div className="w-full overflow-x-scroll rounded-md">
@@ -113,7 +120,18 @@ export default function SpotPreview() {
                 <hr />
                 <div className="space-y-4">
                   <div className="flex justify-between">
-                    <h2 className="text-lg font-semibold">Reviews</h2>
+                    <div className="flex items-center space-x-2">
+                      <p className="text-xl">
+                        {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
+                      </p>
+                      <p>·</p>
+                      <div className="flex items-center space-x-1">
+                        <Star className="sq-5" />
+                        <React.Suspense fallback={<Spinner size="sm" />}>
+                          <Await resolve={promise.rating}>{(rating) => <p>{displayRating(rating._avg.rating)}</p>}</Await>
+                        </React.Suspense>
+                      </div>
+                    </div>
                     {user && (
                       <LinkButton variant="secondary" to={`/spots/${spot.id}/reviews/new`}>
                         Add review
