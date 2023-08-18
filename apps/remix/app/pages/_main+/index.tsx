@@ -1,8 +1,11 @@
 import { useLoaderData } from "@remix-run/react"
+import type { LinksFunction } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
 import { type SpotItemWithStats } from "@ramble/api/src/router/spot"
+
+import landingStyles from "~/styles/landing.css"
 
 import { LinkButton } from "~/components/LinkButton"
 import { Badge } from "~/components/ui"
@@ -15,6 +18,10 @@ import { SpotItem } from "./_app+/components/SpotItem"
 export const config = {
   runtime: "edge",
   regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
+}
+
+export const links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: landingStyles }]
 }
 
 export const headers = useLoaderHeaders
@@ -67,7 +74,7 @@ export default function Home() {
         </div>
 
         <div className="max-w-3xl space-y-4 pb-40">
-          <h2 className="text-2xl">What is Ramble?</h2>
+          <h2 className="text-3xl">What is Ramble?</h2>
           <p>
             Ramble is more than just a platform for finding camper spots. It's a comprehensive guide to nomadic life, designed
             with remote workers, travellers, and outdoor sports enthusiasts in mind. Whether you're a climber, mountain biker,
@@ -75,7 +82,7 @@ export default function Home() {
           </p>
         </div>
 
-        <h2 className="text-2xl">Check out some top rated spots</h2>
+        <h2 className="text-3xl">Check out some top rated spots</h2>
         <div className="scrollbar-hide flex space-x-3 overflow-x-scroll py-4">
           {spots.map((spot) => (
             <div key={spot.id} className="min-w-[350px]">
