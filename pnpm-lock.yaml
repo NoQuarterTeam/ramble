@@ -638,9 +638,6 @@ importers:
       '@faker-js/faker':
         specifier: ^8.0.0
         version: 8.0.0
-      '@ramble/api':
-        specifier: workspace:*
-        version: link:../api
       '@types/html-to-text':
         specifier: ^9.0.1
         version: 9.0.1
