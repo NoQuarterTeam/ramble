@@ -208,9 +208,6 @@ importers:
       eslint:
         specifier: 8.47.0
         version: 8.47.0
-      postcss:
-        specifier: ^8.4.21
-        version: 8.4.21
       tailwindcss:
         specifier: ^3.3.2
         version: 3.3.2
