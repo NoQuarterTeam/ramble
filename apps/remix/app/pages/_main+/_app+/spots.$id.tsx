@@ -1,12 +1,11 @@
 import Map, { Marker } from "react-map-gl"
 import { Link, useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@vercel/remix"
-
 import { Check, Edit2, Star, Trash } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
 import type { SpotType } from "@ramble/database/types"
-import { AMENITIES, canManageSpot, createImageUrl } from "@ramble/shared"
+import { AMENITIES, canManageSpot, createImageUrl, displayRating } from "@ramble/shared"
 
 import { Form, FormButton } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -24,6 +23,7 @@ import {
 } from "~/components/ui"
 import { VerifiedCard } from "~/components/VerifiedCard"
 import { db } from "~/lib/db.server"
+import { FORM_ACTION } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { badRequest, json, notFound, redirect } from "~/lib/remix.server"
@@ -35,7 +35,6 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
-import { FORM_ACTION } from "~/lib/form"
 
 export const config = {
   runtime: "edge",
@@ -119,10 +118,10 @@ export const action = async ({ request, params }: ActionArgs) => {
         })
         return json({ success: true }, request, { flash: { title: "Spot verified!" } })
       } catch (error) {
-        return badRequest("Error verifying spot ", request, { flash: { title: "Error verifying spot" } })
+        return badRequest("Error verifying spot", request, { flash: { title: "Error verifying spot" } })
       }
     default:
-      break
+      return badRequest("Invalid action")
   }
 }
 
@@ -149,21 +148,21 @@ export default function SpotDetail() {
           ))}
         </div>
       </div>
-      <PageContainer className="space-y-10 pb-40">
+      <PageContainer className="space-y-10 pb-40 pt-4 lg:pt-8">
         <div className="space-y-4">
           <div className="space-y-2">
             <div className="flex flex-col items-start justify-between space-y-1 md:flex-row">
               <div className="flex items-center space-x-2">
-                <div className="sq-12 flex items-center justify-center rounded-full border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
-                  <Icon size={20} />
+                <div className="sq-8 md:sq-12 flex items-center justify-center rounded-full border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+                  <Icon className="sq-4 md:sq-5" />
                 </div>
-                <h1 className="text-4xl">{spot.name}</h1>
+                <h1 className="text-lg md:text-2xl lg:text-4xl">{spot.name}</h1>
               </div>
               <div className="flex items-center space-x-1">{user && <SaveToList spotId={spot.id} />}</div>
             </div>
             <div className="flex items-center space-x-1 text-sm">
               <Star className="sq-5" />
-              <p>{spot.rating._avg.rating ? spot.rating._avg.rating?.toFixed(1) : "Not rated"}</p>
+              <p>{displayRating(spot.rating._avg.rating)}</p>
               <p>·</p>
               <Link to="#reviews" className="hover:underline">
                 {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
@@ -171,7 +170,7 @@ export default function SpotDetail() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <div className="space-y-3">
               <VerifiedCard spot={spot} />
               <h3 className="text-lg font-medium">Description</h3>
@@ -264,7 +263,7 @@ export default function SpotDetail() {
               <p>·</p>
               <div className="flex items-center space-x-1">
                 <Star className="sq-5" />
-                <p className="pt-1">{spot.rating._avg.rating?.toFixed(1)}</p>
+                <p className="pt-1">{displayRating(spot.rating._avg.rating)}</p>
               </div>
             </div>
             {user && (

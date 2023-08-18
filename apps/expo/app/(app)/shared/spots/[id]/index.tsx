@@ -12,7 +12,7 @@ import * as Location from "expo-location"
 import { StatusBar } from "expo-status-bar"
 import { ChevronDown, ChevronLeft, Compass, Heart, Star } from "lucide-react-native"
 
-import { AMENITIES, merge } from "@ramble/shared"
+import { AMENITIES, displayRating, merge } from "@ramble/shared"
 
 import { ReviewItem } from "../../../../../components/ReviewItem"
 import { Button } from "../../../../../components/ui/Button"
@@ -112,7 +112,7 @@ export function SpotDetailScreen() {
             <View className="flex flex-row items-start justify-between">
               <View className="flex flex-row items-center space-x-1">
                 <Star size={20} className="text-black dark:text-white" />
-                <Text className="text-sm">{spot.rating._avg.rating ? spot.rating._avg.rating?.toFixed(1) : "Not rated"}</Text>
+                <Text className="text-sm">{displayRating(spot.rating._avg.rating)}</Text>
                 <Text className="text-sm">·</Text>
                 <Text className="text-sm">
                   {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
@@ -155,7 +155,7 @@ export function SpotDetailScreen() {
                 <Text>·</Text>
                 <View className="flex flex-row items-center space-x-1">
                   <Star size={20} className="text-black dark:text-white" />
-                  <Text className="pt-1">{spot.rating._avg.rating?.toFixed(1)}</Text>
+                  <Text className="pt-1">{displayRating(spot.rating._avg.rating)}</Text>
                 </View>
               </View>
               {me && (
@@ -221,7 +221,7 @@ export function SpotDetailScreen() {
             <Heart
               size={20}
               className="text-black dark:text-white"
-              fill={data.spotLists && data.spotLists.length > 0 ? (isDark ? "white" : "black") : undefined}
+              fill={data.listSpots && data.listSpots.length > 0 ? (isDark ? "white" : "black") : undefined}
             />
           </TouchableOpacity>
         </View>

@@ -1,20 +1,21 @@
 import { Link } from "@remix-run/react"
-import { Camera, Star } from "lucide-react"
+import { Camera, Heart, Star } from "lucide-react"
 
-import type { SpotItemWithImageAndRating } from "@ramble/api/src/router/spot"
-import { createImageUrl } from "@ramble/shared"
+import type { SpotItemWithStats } from "@ramble/api/src/router/spot"
+import { createImageUrl, displayRating } from "@ramble/shared"
 
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { SPOTS } from "~/lib/static/spots"
 
 interface Props {
-  spot: SpotItemWithImageAndRating
+  spot: SpotItemWithStats
 }
 
 export function SpotItem({ spot }: Props) {
   const Icon = SPOTS[spot.type].Icon
+
   return (
-    <Link to={`/spots/${spot.id}`} className="flex flex-col items-start space-x-2 hover:opacity-80 ">
+    <Link to={`/spots/${spot.id}`} className="space-y-2 hover:opacity-80">
       <div className="relative h-[250px] w-full">
         {spot.image ? (
           <OptimizedImage
@@ -35,14 +36,19 @@ export function SpotItem({ spot }: Props) {
         </div>
       </div>
 
-      <div>
-        <p className="line-clamp-2 py-1 text-lg">{spot.name}</p>
-        <div className="flex items-center space-x-1 text-sm">
-          <Star className="sq-4" />
-          <p>{spot.rating === null ? "Not rated" : spot.rating}</p>
-        </div>
-
+      <div className="space-y-1">
+        <p className="line-clamp-2 text-lg leading-tight">{spot.name}</p>
         <p className="line-clamp-1 text-sm font-thin opacity-70">{spot.address}</p>
+        <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1 text-sm">
+            <Star className="sq-4" />
+            <p>{displayRating(spot.rating)}</p>
+          </div>
+          <div className="flex items-center space-x-1 text-sm">
+            <Heart className="sq-4" />
+            <p>{spot.savedCount}</p>
+          </div>
+        </div>
       </div>
     </Link>
   )

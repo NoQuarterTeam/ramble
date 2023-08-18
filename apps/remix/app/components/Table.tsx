@@ -1,12 +1,13 @@
 import * as React from "react"
+import { useSearchParams } from "@remix-run/react"
 import type { ColumnDef, Row } from "@tanstack/react-table"
 import { flexRender, getCoreRowModel, getExpandedRowModel, useReactTable } from "@tanstack/react-table"
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react"
+import queryString from "query-string"
+
+import { join } from "@ramble/shared"
 
 import { IconButton, Tile } from "./ui"
-import { join } from "@ramble/shared"
-import { useSearchParams } from "@remix-run/react"
-import { ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight } from "lucide-react"
-import queryString from "query-string"
 
 export function Table<T>({
   data,

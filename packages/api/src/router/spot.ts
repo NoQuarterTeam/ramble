@@ -9,10 +9,11 @@ import { generateBlurHash } from "../services/generateBlurHash.server"
 import { geocodeCoords } from "../services/geocode.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
-export type SpotItemWithImageAndRating = Pick<Spot, "id" | "name" | "address" | "type"> & {
-  rating?: number
-  image?: SpotImage["path"] | null
-  blurHash?: SpotImage["blurHash"] | null
+export type SpotItemWithStats = Pick<Spot, "id" | "name" | "address" | "type"> & {
+  rating: string
+  savedCount: string
+  image: SpotImage["path"] | null
+  blurHash: SpotImage["blurHash"] | null
 }
 
 export const spotRouter = createTRPCRouter({
@@ -61,15 +62,18 @@ export const spotRouter = createTRPCRouter({
     }),
   latest: publicProcedure.input(z.object({ skip: z.number().optional() })).query(
     async ({ ctx, input }) =>
-      ctx.prisma.$queryRaw<Array<SpotItemWithImageAndRating>>`
+      ctx.prisma.$queryRaw<Array<SpotItemWithStats>>`
         SELECT
           Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
           (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image,
-          (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash
+          (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash,
+          (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
         FROM
           Spot
         LEFT JOIN
           Review ON Spot.id = Review.spotId
+        LEFT JOIN
+          ListSpot ON Spot.id = ListSpot.spotId
         GROUP BY
           Spot.id
         ORDER BY
@@ -96,7 +100,7 @@ export const spotRouter = createTRPCRouter({
         reviews: { take: 5, include: { user: true }, orderBy: { createdAt: "desc" } },
         images: true,
         amenities: true,
-        spotLists: ctx.user ? { where: { list: { creatorId: ctx.user.id } } } : undefined,
+        listSpots: ctx.user ? { where: { list: { creatorId: ctx.user.id } } } : undefined,
       },
     })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
@@ -104,7 +108,7 @@ export const spotRouter = createTRPCRouter({
     return { ...spot, rating }
   }),
   byUser: publicProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {
-    const res: Array<SpotItemWithImageAndRating> = await ctx.prisma.$queryRaw`
+    const res: Array<SpotItemWithStats> = await ctx.prisma.$queryRaw`
       SELECT
         Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
         (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image, 

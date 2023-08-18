@@ -1,15 +1,15 @@
 import { TouchableOpacity, View } from "react-native"
 import { Camera, Star } from "lucide-react-native"
 
-import { type SpotItemWithImageAndRating } from "@ramble/api/src/router/spot"
-import { createImageUrl } from "@ramble/shared"
+import { type SpotItemWithStats } from "@ramble/api/src/router/spot"
+import { createImageUrl, displayRating } from "@ramble/shared"
 
 import { useRouter } from "../app/router"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
 
 interface Props {
-  spot: SpotItemWithImageAndRating
+  spot: SpotItemWithStats
 }
 
 export function SpotItem({ spot }: Props) {
@@ -40,7 +40,7 @@ export function SpotItem({ spot }: Props) {
 
           <View className="flex flex-row items-center space-x-1">
             <Star className="text-black dark:text-white" size={16} />
-            <Text className="text-sm">{spot.rating === null ? "Not rated" : spot.rating}</Text>
+            <Text className="text-sm">{displayRating(spot.rating)}</Text>
           </View>
 
           <Text numberOfLines={1} className="font-300 text-sm opacity-80">

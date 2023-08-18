@@ -122,7 +122,7 @@ model Spot {
   verifier   User?          @relation(name: "Verifier", fields: [verifierId], references: [id])
   creatorId  String
   creator    User           @relation(name: "Creator", fields: [creatorId], references: [id])
-  spotLists  ListSpot[]
+  listSpots  ListSpot[]
   ownerId    String?
   owner      User?          @relation(name: "Owner", fields: [ownerId], references: [id])
   reviews    Review[]

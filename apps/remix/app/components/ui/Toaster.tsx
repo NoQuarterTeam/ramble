@@ -1,6 +1,7 @@
 "use client"
 import * as React from "react"
-import { Toaster as SToaster, toast } from "sonner"
+import { toast, Toaster as SToaster } from "sonner"
+
 import type { FlashMessage } from "~/services/session/flash.server"
 
 type Flash = {

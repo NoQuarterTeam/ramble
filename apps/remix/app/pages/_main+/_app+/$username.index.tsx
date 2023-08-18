@@ -4,7 +4,7 @@ import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
-import { type SpotItemWithImageAndRating } from "@ramble/api/src/router/spot"
+import { type SpotItemWithStats } from "@ramble/api/src/router/spot"
 
 import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
@@ -22,15 +22,18 @@ export const loader = async ({ request, params }: LoaderArgs) => {
   const searchParams = new URL(request.url).searchParams
   const skip = parseInt((searchParams.get("skip") as string) || "0")
 
-  const spots: Array<SpotItemWithImageAndRating> = await db.$queryRaw`
+  const spots: Array<SpotItemWithStats> = await db.$queryRaw`
     SELECT
       Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
       (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image,
-      (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash
+      (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash,
+      (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
     FROM
       Spot
     LEFT JOIN
       Review ON Spot.id = Review.spotId
+    LEFT JOIN
+      ListSpot ON Spot.id = ListSpot.spotId
     WHERE
       Spot.creatorId = ${user.id}
     GROUP BY

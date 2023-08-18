@@ -14,40 +14,41 @@ interface Props {
 
 export function VerifiedCard({ spot }: Props) {
   return (
-    <div className="rounded border border-gray-200 dark:border-gray-700">
-      {spot.verifiedAt && spot.verifier ? (
-        <Link
-          to={`/${spot.verifier.username}`}
-          className="flex flex-row items-center justify-between whitespace-nowrap p-3 px-4 text-sm hover:opacity-70 "
-        >
-          <div>
-            <div className="flex items-center space-x-1">
-              <Verified className="sq-5" />
-              <p className="text-lg">
-                Verified by{" "}
-                <span className="font-medium">
-                  {spot.verifier.firstName} {spot.verifier.lastName}
-                </span>
-              </p>
+    <div className="@container">
+      <div className="@lg:h-16 flex h-12 items-center rounded border border-gray-200 dark:border-gray-700">
+        {spot.verifiedAt && spot.verifier ? (
+          <Link
+            to={`/${spot.verifier.username}`}
+            className="flex w-full flex-row items-center justify-between whitespace-nowrap px-4 hover:opacity-70"
+          >
+            <div>
+              <div className="flex items-center space-x-1">
+                <Verified className="sq-5" />
+                <p className="@lg:text-lg text-base">
+                  Verified by{" "}
+                  <span className="font-medium">
+                    {spot.verifier.firstName} {spot.verifier.lastName}
+                  </span>
+                </p>
+              </div>
+              {/* <p className="text-sm">{spot.verifier.username}</p> */}
             </div>
-            {/* <p className="text-sm">{spot.verifier.username}</p> */}
+            <div className="block">
+              <Avatar
+                className="sq-8 @lg:sq-10"
+                size={40}
+                placeholder={spot.verifier.avatarBlurHash}
+                src={createImageUrl(spot.verifier.avatar)}
+              />
+            </div>
+          </Link>
+        ) : (
+          <div className="@lg:text-lg flex items-center space-x-1 px-4 text-base">
+            <BadgeX className="sq-5" />
+            <p>Unverified</p>
           </div>
-
-          <div className="block">
-            <Avatar
-              className="sq-10"
-              size={40}
-              placeholder={spot.verifier.avatarBlurHash}
-              src={createImageUrl(spot.verifier.avatar)}
-            />
-          </div>
-        </Link>
-      ) : (
-        <div className="flex items-center space-x-1 p-3 px-4 text-sm">
-          <BadgeX className="sq-5" />
-          <p>Unverified</p>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }
