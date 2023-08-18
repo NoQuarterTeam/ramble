@@ -72,7 +72,7 @@ export default function ProfileSpots() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {count === 0 ? <></> : spots.map((spot) => <SpotItem key={spot.id} spot={spot} />)}
       </div>
-      {count > TAKE && (
+      {count > spots.length && (
         <div className="flex items-center justify-center">
           <Button size="lg" isLoading={spotFetcher.state === "loading"} variant="outline" onClick={onNext}>
             Load more
