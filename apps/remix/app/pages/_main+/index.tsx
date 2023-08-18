@@ -52,8 +52,8 @@ export default function Home() {
   const spots = useLoaderData<typeof loader>()
   return (
     <div>
-      <PageContainer>
-        <div className="grid grid-cols-1 gap-6 py-10 md:grid-cols-9 md:py-32">
+      <PageContainer className="space-y-20">
+        <div className="grid grid-cols-1 gap-6 pb-10 pt-10 md:grid-cols-9 md:pb-20 md:pt-32">
           <div className="col-span-9 space-y-2 md:col-span-6">
             <Badge colorScheme="green">Coming soon</Badge>
             <h1 className="text-4xl font-medium">Everything you need for travelling Europe</h1>
@@ -73,7 +73,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="max-w-3xl space-y-4 pb-40">
+        <div className="max-w-3xl space-y-4">
           <h2 className="text-3xl">What is Ramble?</h2>
           <p>
             Ramble is more than just a platform for finding camper spots. It's a comprehensive guide to nomadic life, designed
@@ -82,13 +82,37 @@ export default function Home() {
           </p>
         </div>
 
-        <h2 className="text-3xl">Check out some top rated spots</h2>
-        <div className="scrollbar-hide flex space-x-3 overflow-x-scroll py-4">
-          {spots.map((spot) => (
-            <div key={spot.id} className="min-w-[350px]">
-              <SpotItem spot={spot} />
+        <div className="space-y-4">
+          {/* <h2 className="text-3xl">This is Ramble.</h2> */}
+          <div className="grid grid-cols-3 gap-4">
+            <div className="space-y-4">
+              <img src={`/landing/8.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
+              <img src={`/landing/3.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
+              <img src={`/landing/1.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
+              <img src={`/landing/10.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
             </div>
-          ))}
+            <div className="space-y-4">
+              <img src={`/landing/6.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
+              <img src={`/landing/9.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
+              <img src={`/landing/4.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
+            </div>
+            <div className="space-y-4">
+              <img src={`/landing/5.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
+              <img src={`/landing/7.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
+              <img src={`/landing/2.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <h2 className="text-3xl">Check out some top rated spots</h2>
+          <div className="scrollbar-hide flex space-x-3 overflow-x-scroll py-4">
+            {spots.map((spot) => (
+              <div key={spot.id} className="min-w-[350px]">
+                <SpotItem spot={spot} />
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* <div className="flex flex-col items-center justify-center py-20">
