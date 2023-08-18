@@ -9,7 +9,6 @@ import * as React from "react"
 import type { LngLatLike } from "react-map-gl"
 import Map, { Marker, NavigationControl } from "react-map-gl"
 
-import type { Prisma } from "@ramble/database/types"
 import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
@@ -23,9 +22,9 @@ import { useTheme } from "~/lib/theme"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import type { SpotItemWithStats } from "@ramble/api/src/router/spot"
+import { PageContainer } from "~/components/PageContainer"
 import { SpotItem } from "./components/SpotItem"
 import { SpotMarker } from "./components/SpotMarker"
-import { PageContainer } from "~/components/PageContainer"
 
 export const headers = useLoaderHeaders
 
@@ -42,7 +41,7 @@ export const loader = async ({ params }: LoaderArgs) => {
         description: true,
       },
     }),
-    db.$queryRaw`
+    db.$queryRaw<SpotItemWithStatsAndCoords[]>`
       SELECT 
         Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
         Spot.latitude, Spot.longitude,
@@ -61,7 +60,7 @@ export const loader = async ({ params }: LoaderArgs) => {
         Spot.id
       ORDER BY
         Spot.id
-    ` as Prisma.PrismaPromise<SpotItemWithStatsAndCoords[]>,
+    `,
   ])
   if (!list) throw notFound()
 
