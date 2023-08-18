@@ -109,14 +109,14 @@ export function SpotDetailScreen() {
         <View className="space-y-3 p-4">
           <View className="space-y-2">
             <Heading className="text-2xl leading-7">{spot.name}</Heading>
-            <View className="flex flex-row items-start justify-between">
+            <View className="flex flex-row items-center space-x-2">
               <View className="flex flex-row items-center space-x-1">
-                <Star size={20} className="text-black dark:text-white" />
+                <Star size={16} className="text-black dark:text-white" />
                 <Text className="text-sm">{displayRating(spot.rating._avg.rating)}</Text>
-                <Text className="text-sm">·</Text>
-                <Text className="text-sm">
-                  {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
-                </Text>
+              </View>
+              <View className="flex flex-row flex-wrap items-center space-x-1">
+                <Heart size={16} className="text-black dark:text-white" />
+                <Text className="text-sm">{spot._count.listSpots || 0}</Text>
               </View>
             </View>
           </View>

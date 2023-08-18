@@ -44,8 +44,8 @@ export type ScreenParamsList = {
   MapLayout: undefined
   SpotsMapScreen: undefined
 
-  LatestLayout: undefined
-  LatestScreen: undefined
+  SpotsLayout: undefined
+  SpotsScreen: undefined
 
   NewSpotLayout: undefined
   NewSpotLocationScreen: undefined
