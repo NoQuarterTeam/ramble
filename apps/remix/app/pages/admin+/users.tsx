@@ -1,16 +1,15 @@
 import { useLoaderData } from "@remix-run/react"
+import { createColumnHelper } from "@tanstack/react-table"
 import { json, type LoaderArgs, type SerializeFrom } from "@vercel/remix"
 
 import { type Prisma } from "@ramble/database/types"
+import { createImageUrl } from "@ramble/shared"
 
 import { Search } from "~/components/Search"
-
+import { Table } from "~/components/Table"
 import { Avatar } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { getTableParams } from "~/lib/table"
-import { Table } from "~/components/Table"
-import { createColumnHelper } from "@tanstack/react-table"
-import { createImageUrl } from "@ramble/shared"
 
 const TAKE = 10
 export const loader = async ({ request }: LoaderArgs) => {

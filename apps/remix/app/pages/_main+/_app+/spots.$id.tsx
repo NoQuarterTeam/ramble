@@ -1,12 +1,11 @@
 import Map, { Marker } from "react-map-gl"
-import { Link, useLoaderData } from "@remix-run/react"
+import { useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@vercel/remix"
-import { json } from "@vercel/remix"
-import { Edit2, Star, Trash } from "lucide-react"
+import { Check, Edit2, Heart, Star, Trash } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
 import type { SpotType } from "@ramble/database/types"
-import { AMENITIES, canManageSpot, createImageUrl } from "@ramble/shared"
+import { AMENITIES, canManageSpot, createImageUrl, displayRating } from "@ramble/shared"
 
 import { Form, FormButton } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -22,11 +21,12 @@ import {
   AlertDialogTrigger,
   Button,
 } from "~/components/ui"
-import { VerifiedCard } from "~/components/VerifiedCard"
+import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
 import { db } from "~/lib/db.server"
+import { FORM_ACTION } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
-import { notFound, redirect } from "~/lib/remix.server"
+import { badRequest, json, notFound, redirect } from "~/lib/remix.server"
 import { AMENITIES_ICONS } from "~/lib/static/amenities"
 import { SPOTS } from "~/lib/static/spots"
 import { useTheme } from "~/lib/theme"
@@ -35,6 +35,7 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
+import { SpotMarker } from "./components/SpotMarker"
 
 export const config = {
   runtime: "edge",
@@ -43,7 +44,7 @@ export const config = {
 
 export const headers = useLoaderHeaders
 
-export const loader = async ({ params }: LoaderArgs) => {
+export const loader = async ({ params, request }: LoaderArgs) => {
   const spot = await db.spot.findUnique({
     where: { id: params.id },
     select: {
@@ -59,22 +60,17 @@ export const loader = async ({ params }: LoaderArgs) => {
       ownerId: true,
       verifier: { select: { firstName: true, username: true, lastName: true, avatar: true, avatarBlurHash: true } },
       images: { orderBy: { createdAt: "desc" }, select: { id: true, path: true, blurHash: true } },
-      _count: { select: { reviews: true } },
-      reviews: {
-        take: 5,
-        orderBy: { createdAt: "desc" },
-        select: reviewItemSelectFields,
-      },
+      _count: { select: { reviews: true, listSpots: true } },
+      reviews: { take: 5, orderBy: { createdAt: "desc" }, select: reviewItemSelectFields },
     },
   })
   if (!spot) throw notFound()
 
   const rating = await db.review.aggregate({ where: { spotId: params.id }, _avg: { rating: true } })
 
-  return json(
-    { ...spot, rating },
-    { headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1day", sMaxage: "1day" }) } },
-  )
+  return json({ ...spot, rating }, request, {
+    headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1day", sMaxage: "1day" }) },
+  })
 }
 
 export const meta: V2_MetaFunction<typeof loader, { root: typeof rootLoader }> = ({ data, matches }) => {
@@ -92,12 +88,42 @@ export const meta: V2_MetaFunction<typeof loader, { root: typeof rootLoader }> =
   ]
 }
 
+enum Actions {
+  Delete = "delete",
+  Verify = "verify",
+}
+
 export const action = async ({ request, params }: ActionArgs) => {
   const user = await getCurrentUser(request, { id: true, role: true, isVerified: true, isAdmin: true })
-  const spot = await db.spot.findUniqueOrThrow({ where: { id: params.id }, select: { ownerId: true } })
-  if (!canManageSpot(spot, user)) return redirect("/spots")
-  await db.spot.delete({ where: { id: params.id } })
-  return redirect("/spots", request, { flash: { title: "Spot deleted!" } })
+  const formData = await request.formData()
+  const action = formData.get(FORM_ACTION) as Actions | undefined
+
+  switch (action) {
+    case Actions.Delete:
+      try {
+        const spot = await db.spot.findUniqueOrThrow({ where: { id: params.id }, select: { ownerId: true } })
+        if (!canManageSpot(spot, user)) return redirect("/spots")
+        await db.spot.delete({ where: { id: params.id } })
+        return redirect("/spots", request, { flash: { title: "Spot deleted!" } })
+      } catch (error) {
+        return badRequest("Error deleting spot your account", request, { flash: { title: "Error deleting spot" } })
+      }
+
+    case Actions.Verify:
+      try {
+        const spot = await db.spot.findUniqueOrThrow({ where: { id: params.id }, select: { ownerId: true } })
+        if (!canManageSpot(spot, user)) return redirect("/spots")
+        await db.spot.update({
+          where: { id: params.id },
+          data: { verifiedAt: new Date(), verifier: { connect: { id: user.id } } },
+        })
+        return json({ success: true }, request, { flash: { title: "Spot verified!" } })
+      } catch (error) {
+        return badRequest("Error verifying spot", request, { flash: { title: "Error verifying spot" } })
+      }
+    default:
+      return badRequest("Invalid action")
+  }
 }
 
 export default function SpotDetail() {
@@ -123,29 +149,32 @@ export default function SpotDetail() {
           ))}
         </div>
       </div>
-      <PageContainer className="space-y-10 pb-40">
+      <PageContainer className="space-y-10 pb-40 pt-4 lg:pt-8">
         <div className="space-y-4">
           <div className="space-y-2">
             <div className="flex flex-col items-start justify-between space-y-1 md:flex-row">
               <div className="flex items-center space-x-2">
-                <div className="sq-12 flex items-center justify-center rounded-full border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
-                  <Icon size={20} />
+                <div className="sq-8 md:sq-12 flex items-center justify-center rounded-full border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+                  <Icon className="sq-4 md:sq-5" />
                 </div>
-                <h1 className="text-4xl">{spot.name}</h1>
+                <h1 className="text-lg md:text-2xl lg:text-4xl">{spot.name}</h1>
               </div>
               <div className="flex items-center space-x-1">{user && <SaveToList spotId={spot.id} />}</div>
             </div>
-            <div className="flex items-center space-x-1 text-sm">
-              <Star className="sq-5" />
-              <p>{spot.rating._avg.rating ? spot.rating._avg.rating?.toFixed(1) : "Not rated"}</p>
-              <p>·</p>
-              <Link to="#reviews" className="hover:underline">
-                {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
-              </Link>
+
+            <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1 text-sm">
+                <Star className="sq-4" />
+                <p>{displayRating(spot.rating._avg.rating)}</p>
+              </div>
+              <div className="flex items-center space-x-1 text-sm">
+                <Heart className="sq-4" />
+                <p>{spot._count.listSpots || 0}</p>
+              </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <div className="space-y-3">
               <VerifiedCard spot={spot} />
               <h3 className="text-lg font-medium">Description</h3>
@@ -167,12 +196,19 @@ export default function SpotDetail() {
               )}
               {canManageSpot(spot, user) && (
                 <div className="flex space-x-2">
-                  <LinkButton to="edit" leftIcon={<Edit2 className="sq-3" />}>
+                  {!spot.verifiedAt && (
+                    <Form>
+                      <FormButton name={FORM_ACTION} value={Actions.Verify} leftIcon={<Check className="sq-3" />}>
+                        Verify
+                      </FormButton>
+                    </Form>
+                  )}
+                  <LinkButton to="edit" variant="outline" leftIcon={<Edit2 className="sq-3" />}>
                     Edit
                   </LinkButton>
                   <AlertDialogRoot>
                     <AlertDialogTrigger asChild>
-                      <Button variant="destructive" leftIcon={<Trash className="sq-3" />}>
+                      <Button variant="destructive-secondary" leftIcon={<Trash className="sq-3" />}>
                         Delete
                       </Button>
                     </AlertDialogTrigger>
@@ -184,7 +220,9 @@ export default function SpotDetail() {
                           <Button variant="ghost">Cancel</Button>
                         </AlertDialogCancel>
                         <Form>
-                          <FormButton>Confirm</FormButton>
+                          <FormButton name={FORM_ACTION} value={Actions.Delete}>
+                            Confirm
+                          </FormButton>
                         </Form>
                       </AlertDialogFooter>
                     </AlertDialogContent>
@@ -206,12 +244,7 @@ export default function SpotDetail() {
                 }
               >
                 <Marker anchor="bottom" longitude={spot.longitude} latitude={spot.latitude}>
-                  <div className="relative">
-                    <div className="sq-8 bg-primary-600 dark:bg-primary-700 border-primary-100 dark:border-primary-600 flex items-center justify-center rounded-full border shadow-md">
-                      <Icon className="sq-4 text-white" />
-                    </div>
-                    <div className="sq-3 bg-primary-600 dark:bg-primary-700 absolute -bottom-[3px] left-1/2 -z-[1] -translate-x-1/2 rotate-45 shadow" />
-                  </div>
+                  <SpotMarker spot={spot} />
                 </Marker>
               </Map>
             </div>
@@ -229,7 +262,7 @@ export default function SpotDetail() {
               <p>·</p>
               <div className="flex items-center space-x-1">
                 <Star className="sq-5" />
-                <p className="pt-1">{spot.rating._avg.rating?.toFixed(1)}</p>
+                <p className="pt-1">{displayRating(spot.rating._avg.rating)}</p>
               </div>
             </div>
             {user && (

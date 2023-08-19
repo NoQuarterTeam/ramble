@@ -22,7 +22,7 @@ export function NewSpotConfirmScreen() {
   const utils = api.useContext()
   const { mutate, isLoading: createLoading } = api.spot.create.useMutation({
     onSuccess: (data) => {
-      utils.spot.latest.refetch()
+      utils.spot.list.refetch({ sort: "latest", skip: 0 })
 
       router.navigate("AppLayout")
       router.navigate("SpotDetailScreen", { id: data.id })

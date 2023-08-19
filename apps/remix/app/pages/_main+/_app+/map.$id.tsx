@@ -2,18 +2,20 @@ import * as React from "react"
 import { Await, Link, useLoaderData, useNavigate } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { defer } from "@vercel/remix"
-import { BadgeX, Frown, Star, Verified } from "lucide-react"
+import { Frown, Heart, Star } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
-import { createImageUrl, merge } from "@ramble/shared"
+import { createImageUrl, displayRating, merge } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { CloseButton, Spinner } from "~/components/ui"
+import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
 import { db } from "~/lib/db.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
+import { SaveToList } from "~/pages/api+/save-to-list"
 
 export const loader = async ({ params }: LoaderArgs) => {
   const spot = db.spot
@@ -23,7 +25,7 @@ export const loader = async ({ params }: LoaderArgs) => {
         id: true,
         name: true,
         address: true,
-        _count: { select: { reviews: true } },
+        _count: { select: { reviews: true, listSpots: true } },
         description: true,
         verifier: { select: { firstName: true, username: true, lastName: true, avatar: true } },
         verifiedAt: true,
@@ -66,41 +68,29 @@ export default function SpotPreview() {
             ) : (
               <div className="space-y-4">
                 <div className="space-y-1">
-                  {spot.verifiedAt && spot.verifier ? (
-                    <div className="flex items-center space-x-1 text-sm">
-                      <Verified className="sq-5" />
-                      <p>Verified by</p>
-                      <Link to={`/${spot.verifier.username}`} className="flex hover:underline">
-                        {`${spot.verifier.firstName} ${spot.verifier.lastName}`}
-                        {/* <Avatar
-                  size="xs"
-                  src={createImageUrl(spot.verifier.avatar)}
-                /> */}
-                      </Link>
-                    </div>
-                  ) : (
-                    <div className="flex items-center space-x-1 text-sm">
-                      <BadgeX className="sq-5" />
-                      <p>Unverified</p>
-                    </div>
-                  )}
                   <Link
                     target="_blank"
                     rel="noopener norefer"
                     to={`/spots/${spot.id}`}
-                    className="line-clamp-2 text-lg leading-6 hover:underline"
+                    className="line-clamp-2 text-xl leading-6 hover:underline"
                   >
                     {spot.name}
                   </Link>
-                  <div className="flex flex-wrap items-center space-x-1 text-sm">
-                    <Star className="sq-5" />
-                    <React.Suspense fallback={<Spinner size="sm" />}>
-                      <Await resolve={promise.rating}>{(rating) => <p>{rating._avg.rating?.toFixed(1) || "Not rated"}</p>}</Await>
-                    </React.Suspense>
-                    <p>·</p>
-                    <p>
-                      {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
-                    </p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-1 text-sm">
+                        <Star className="sq-4" />
+                        <React.Suspense fallback={<Spinner size="sm" />}>
+                          <Await resolve={promise.rating}>{(rating) => <p>{displayRating(rating._avg.rating)}</p>}</Await>
+                        </React.Suspense>
+                      </div>
+                      <div className="flex items-center space-x-1 text-sm">
+                        <Heart className="sq-4" />
+                        <p>{spot._count.listSpots || 0}</p>
+                      </div>
+                    </div>
+
+                    {user && <SaveToList spotId={spot.id} />}
                   </div>
                 </div>
                 <div className="w-full overflow-x-scroll rounded-md">
@@ -118,8 +108,9 @@ export default function SpotPreview() {
                     ))}
                   </div>
                 </div>
+                <VerifiedCard spot={spot} />
                 <p className="line-clamp-6 whitespace-pre-wrap text-sm">{spot.description}</p>
-                <p className="text-sm">{spot.address}</p>
+                <p className="text-sm italic">{spot.address}</p>
                 <div className="flex justify-end">
                   <LinkButton variant="link" to={`/spots/${spot.id}`}>
                     Read more
@@ -129,7 +120,18 @@ export default function SpotPreview() {
                 <hr />
                 <div className="space-y-4">
                   <div className="flex justify-between">
-                    <h2 className="text-lg font-semibold">Reviews</h2>
+                    <div className="flex items-center space-x-2">
+                      <p className="text-xl">
+                        {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
+                      </p>
+                      <p>·</p>
+                      <div className="flex items-center space-x-1">
+                        <Star className="sq-5" />
+                        <React.Suspense fallback={<Spinner size="sm" />}>
+                          <Await resolve={promise.rating}>{(rating) => <p>{displayRating(rating._avg.rating)}</p>}</Await>
+                        </React.Suspense>
+                      </div>
+                    </div>
                     {user && (
                       <LinkButton variant="secondary" to={`/spots/${spot.id}/reviews/new`}>
                         Add review

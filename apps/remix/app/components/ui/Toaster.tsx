@@ -1,6 +1,7 @@
 "use client"
 import * as React from "react"
-import { Toaster as SToaster, toast } from "sonner"
+import { toast, Toaster as SToaster } from "sonner"
+
 import type { FlashMessage } from "~/services/session/flash.server"
 
 type Flash = {
@@ -21,6 +22,7 @@ function ShowToast({ flash }: { flash: Flash }) {
     const { flashError, flashInfo } = flash
     const type = flashError ? "error" : "success"
     const message = flashError || flashInfo
+    if (!message) return
     const timeout = setTimeout(() => {
       toast[type](message.title, { description: message.description })
     }, 0)

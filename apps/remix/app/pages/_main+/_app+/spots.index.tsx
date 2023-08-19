@@ -3,18 +3,18 @@ import { useFetcher, useLoaderData, useSearchParams } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
+import queryString from "query-string"
 
-import { type SpotItemWithImageAndRating } from "@ramble/api/src/router/spot"
+import { type SpotItemWithStats } from "@ramble/api/src/router/spot"
+import { Prisma, SpotType } from "@ramble/database/types"
 
 import { Button, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
+import { SPOT_TYPE_OPTIONS } from "~/lib/static/spots"
 
 import { PageContainer } from "../../../components/PageContainer"
 import { SpotItem } from "./components/SpotItem"
-import { SPOT_TYPE_OPTIONS } from "~/lib/static/spots"
-import queryString from "query-string"
-import { Prisma, SpotType } from "@ramble/database/types"
 
 export const config = {
   runtime: "edge",
@@ -23,7 +23,12 @@ export const config = {
 
 export const headers = useLoaderHeaders
 
-const SORT_OPTIONS = ["latest", "rated"] as const
+const SORT_OPTIONS = [
+  { value: "latest", label: "Latest" },
+  { value: "rated", label: "Top rated" },
+  { value: "saved", label: "Most saved" },
+] as const
+
 const TAKE = 12
 export const loader = async ({ request }: LoaderArgs) => {
   const searchParams = new URL(request.url).searchParams
@@ -32,31 +37,40 @@ export const loader = async ({ request }: LoaderArgs) => {
   let type = searchParams.get("type") as SpotType | undefined
   if (type && !SpotType[type as SpotType]) type = undefined
   let sort = searchParams.get("sort") || "latest"
-  if (!SORT_OPTIONS.includes(sort as any)) sort = "latest"
+  if (!SORT_OPTIONS.find((o) => o.value === (sort as any))) sort = "latest"
 
-  const where = type
+  const WHERE = type
     ? Prisma.sql // prepared where
       `WHERE Spot.type = ${type}`
     : Prisma.empty
 
-  const orderBy = Prisma.sql // prepared orderBy
+  const ORDER_BY = Prisma.sql // prepared orderBy
   `ORDER BY
-      ${sort === "latest" ? Prisma.sql`Spot.createdAt DESC, Spot.id` : Prisma.sql`AVG(Review.rating) DESC, Spot.id`}
-    `
+    ${
+      sort === "latest"
+        ? Prisma.sql`Spot.createdAt DESC, Spot.id`
+        : sort === "saved"
+        ? Prisma.sql`savedCount DESC, Spot.id`
+        : Prisma.sql`AVG(Review.rating) DESC, Spot.id`
+    }
+  `
 
-  const spots: Array<SpotItemWithImageAndRating> = await db.$queryRaw`
+  const spots: Array<SpotItemWithStats> = await db.$queryRaw`
     SELECT 
       Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
       (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image,
-      (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash
+      (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash,
+      (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
     FROM
       Spot
     LEFT JOIN
       Review ON Spot.id = Review.spotId
-    ${where}
+    LEFT JOIN
+      ListSpot ON Spot.id = ListSpot.spotId
+    ${WHERE}
     GROUP BY
       Spot.id
-    ${orderBy}
+    ${ORDER_BY}
     LIMIT ${TAKE}
     OFFSET ${skip};
   `
@@ -89,8 +103,8 @@ export default function Latest() {
   }, [spotFetcher.data, spotFetcher.state])
 
   return (
-    <PageContainer className="pt-4">
-      <div className="sticky top-0 z-[1] bg-white py-4 dark:bg-gray-800">
+    <PageContainer className="pt-0">
+      <div className="top-nav sticky z-[1] bg-white py-4 dark:bg-gray-800">
         <div className="flex items-center space-x-2">
           <div className="relative w-10/12">
             <div className="scrollbar-hide flex gap-1 overflow-x-scroll pr-10">
@@ -119,7 +133,7 @@ export default function Latest() {
                 </Button>
               ))}
             </div>
-            <div className="absolute right-0 top-0 h-full w-20 bg-gradient-to-r from-transparent to-white dark:to-gray-800" />
+            <div className="pointer-events-none absolute right-0 top-0 h-full w-20 bg-gradient-to-r from-transparent to-white dark:to-gray-800" />
           </div>
           <div className="w-2/12">
             <Select
@@ -129,8 +143,11 @@ export default function Latest() {
                 setSearchParams(queryString.stringify({ ...existingParams, sort: e.target.value }))
               }}
             >
-              <option value="latest">Latest</option>
-              <option value="rated">Top Rated</option>
+              {SORT_OPTIONS.map(({ value, label }) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
             </Select>
           </div>
         </div>
@@ -151,13 +168,13 @@ export default function Latest() {
             )}
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {spots.map((spot) => (
               <SpotItem key={spot.id} spot={spot} />
             ))}
           </div>
         )}
-        {count > 0 && count > TAKE && (
+        {count > spots.length && (
           <div className="flex items-center justify-center">
             <Button size="lg" isLoading={spotFetcher.state === "loading"} variant="outline" onClick={onNext}>
               Load more

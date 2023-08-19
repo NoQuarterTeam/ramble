@@ -3,13 +3,15 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { merge } from "@ramble/shared"
 
-export const badgeProps = cva("w-min whitespace-nowrap rounded-md font-medium uppercase", {
+export const badgeProps = cva("w-min whitespace-nowrap rounded-md border font-medium uppercase", {
   variants: {
     colorScheme: {
-      orange: "dark:color-orange-200 bg-orange-300/40 text-orange-900 dark:bg-orange-300/20 dark:text-orange-200",
-      gray: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-100",
-      red: "dark:color-red-200 bg-red-300/40 text-red-900 dark:bg-red-300/20 dark:text-red-200",
-      green: "dark:color-green-200 bg-green-300/40 text-green-900 dark:bg-green-300/20 dark:text-green-200",
+      orange:
+        "dark:color-orange-200 border-orange-800/30 bg-orange-300/40 text-orange-900 dark:border-orange-300/40 dark:bg-orange-300/20 dark:text-orange-200",
+      gray: "border-gray-300 bg-gray-100 text-gray-800 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-50",
+      red: "dark:color-red-200 border-red-800/30 bg-red-300/40 text-red-900 dark:border-red-300/40 dark:bg-red-300/20 dark:text-red-200",
+      green:
+        "border-green-800/30 bg-green-300/40 text-green-900 dark:border-green-300/40 dark:bg-green-300/20 dark:text-green-200",
     },
     size: {
       xs: "text-xxs px-1 py-px",

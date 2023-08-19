@@ -3,10 +3,10 @@ import { Modal, TouchableOpacity, useColorScheme, View } from "react-native"
 import BottomSheet, { useBottomSheetDynamicSnapPoints, useBottomSheetSpringConfigs } from "@gorhom/bottom-sheet"
 import Mapbox, { Camera, type MapView as MapType, MarkerView } from "@rnmapbox/maps"
 import * as Location from "expo-location"
-import { BadgeX, Navigation, PlusCircle, Settings2, Star, Verified, X } from "lucide-react-native"
+import { BadgeX, Heart, Navigation, PlusCircle, Settings2, Star, Verified, X } from "lucide-react-native"
 
 import { type SpotType } from "@ramble/database/types"
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE, useDisclosure } from "@ramble/shared"
+import { displayRating, INITIAL_LATITUDE, INITIAL_LONGITUDE, useDisclosure } from "@ramble/shared"
 
 import { ImageCarousel } from "../../../components/ui/ImageCarousel"
 import { ModalView } from "../../../components/ui/ModalView"
@@ -303,13 +303,15 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
                   </Text>
                 </TouchableOpacity>
 
-                <View className="flex flex-row flex-wrap items-center space-x-1">
-                  <Star size={16} className="text-black dark:text-white" />
-                  <Text className="text-sm">{spot.rating._avg.rating?.toFixed(1) || "Not rated"}</Text>
-                  <Text>·</Text>
-                  <Text className="text-sm">
-                    {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
-                  </Text>
+                <View className="flex flex-row items-center space-x-2">
+                  <View className="flex flex-row items-center space-x-1">
+                    <Star size={16} className="text-black dark:text-white" />
+                    <Text className="text-sm">{displayRating(spot.rating._avg.rating)}</Text>
+                  </View>
+                  <View className="flex flex-row flex-wrap items-center space-x-1">
+                    <Heart size={16} className="text-black dark:text-white" />
+                    <Text className="text-sm">{spot._count.listSpots || 0}</Text>
+                  </View>
                 </View>
               </View>
               <View className="overflow-hidden rounded-lg">

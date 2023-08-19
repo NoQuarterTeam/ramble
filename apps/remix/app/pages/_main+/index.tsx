@@ -1,36 +1,44 @@
-import { Link, useLoaderData } from "@remix-run/react"
+import { useLoaderData } from "@remix-run/react"
+import type { LinksFunction } from "@vercel/remix"
 import { json } from "@vercel/remix"
-import { Camera, Star } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
-import { type SpotItemWithImageAndRating } from "@ramble/api/src/router/spot"
-import { createImageUrl } from "@ramble/shared"
+import { type SpotItemWithStats } from "@ramble/api/src/router/spot"
+
+import landingStyles from "~/styles/landing.css"
 
 import { LinkButton } from "~/components/LinkButton"
-import { OptimizedImage } from "~/components/OptimisedImage"
 import { Badge } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 
 import { PageContainer } from "../../components/PageContainer"
+import { SpotItem } from "./_app+/components/SpotItem"
 
 export const config = {
   runtime: "edge",
   regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
 }
 
+export const links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: landingStyles }]
+}
+
 export const headers = useLoaderHeaders
 
 export const loader = async () => {
-  const spots: Array<SpotItemWithImageAndRating> = await db.$queryRaw`
+  const spots: Array<SpotItemWithStats> = await db.$queryRaw`
     SELECT 
       Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
       (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image,
-      (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash
+      (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash,
+      (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
     FROM
       Spot
     LEFT JOIN
       Review ON Spot.id = Review.spotId
+    LEFT JOIN
+      ListSpot ON Spot.id = ListSpot.spotId
     GROUP BY
       Spot.id
     ORDER BY
@@ -44,8 +52,8 @@ export default function Home() {
   const spots = useLoaderData<typeof loader>()
   return (
     <div>
-      <PageContainer>
-        <div className="grid grid-cols-1 gap-6 py-10 md:grid-cols-9 md:py-32">
+      <PageContainer className="space-y-20">
+        <div className="grid grid-cols-1 gap-6 pb-10 pt-10 md:grid-cols-9 md:pb-20 md:pt-32">
           <div className="col-span-9 space-y-2 md:col-span-6">
             <Badge colorScheme="green">Coming soon</Badge>
             <h1 className="text-4xl font-medium">Everything you need for travelling Europe</h1>
@@ -65,8 +73,8 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="max-w-3xl space-y-4 pb-40">
-          <h2 className="text-2xl">What is Ramble?</h2>
+        <div className="max-w-3xl space-y-4">
+          <h2 className="text-3xl">What is Ramble?</h2>
           <p>
             Ramble is more than just a platform for finding camper spots. It's a comprehensive guide to nomadic life, designed
             with remote workers, travellers, and outdoor sports enthusiasts in mind. Whether you're a climber, mountain biker,
@@ -74,35 +82,37 @@ export default function Home() {
           </p>
         </div>
 
-        <h2 className="text-2xl">Check out some top rated spots</h2>
-        <div className="scrollbar-hide flex space-x-4 overflow-x-scroll py-4">
-          {spots.map((spot) => (
-            <Link to={`/spots/${spot.id}`} key={spot.id} className="w-[450px] flex-shrink-0 hover:opacity-70">
-              {spot.image ? (
-                <OptimizedImage
-                  alt="spot"
-                  width={450}
-                  height={250}
-                  className="min-h-[250px] min-w-[450px] rounded-md bg-gray-50 object-cover dark:bg-gray-700"
-                  src={createImageUrl(spot.image)}
-                />
-              ) : (
-                <div className="flex h-[250px] min-w-[450px] items-center justify-center rounded-md bg-gray-50 object-cover dark:bg-gray-700">
-                  <Camera size={70} className="opacity-50" />
-                </div>
-              )}
-              <div>
-                <p className="line-clamp-2 text-xl">{spot.name}</p>
-                {spot.rating && (
-                  <div className="flex items-center space-x-1">
-                    <Star className="sq-4" />
-                    <p>{spot.rating === null ? "Not rated" : spot.rating}</p>
-                  </div>
-                )}
-                <p className="text-sm font-thin opacity-70">{spot.address}</p>
+        <div className="space-y-4">
+          {/* <h2 className="text-3xl">This is Ramble.</h2> */}
+          <div className="grid grid-cols-3 gap-4">
+            <div className="space-y-4">
+              <img src={`/landing/8.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
+              <img src={`/landing/3.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
+              <img src={`/landing/1.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
+              <img src={`/landing/10.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
+            </div>
+            <div className="space-y-4">
+              <img src={`/landing/6.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
+              <img src={`/landing/9.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
+              <img src={`/landing/4.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
+            </div>
+            <div className="space-y-4">
+              <img src={`/landing/5.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
+              <img src={`/landing/7.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
+              <img src={`/landing/2.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <h2 className="text-3xl">Check out some top rated spots</h2>
+          <div className="scrollbar-hide flex space-x-3 overflow-x-scroll py-4">
+            {spots.map((spot) => (
+              <div key={spot.id} className="min-w-[350px]">
+                <SpotItem spot={spot} />
               </div>
-            </Link>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* <div className="flex flex-col items-center justify-center py-20">

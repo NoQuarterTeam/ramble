@@ -14,3 +14,8 @@ export const canManageSpot = (
   if (spot.ownerId === user.id) return true
   return false
 }
+
+export function displayRating(rating: number | string | null | undefined) {
+  if (!rating) return "New"
+  return Math.round(Number(rating) * 100) / 100
+}

@@ -10,6 +10,7 @@ import { notFound, redirect } from "~/lib/remix.server"
 import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
 
 import { ListForm } from "./components/ListForm"
+import { PageContainer } from "~/components/PageContainer"
 
 export const headers = useLoaderHeaders
 
@@ -47,5 +48,9 @@ export const action = async ({ request, params }: ActionArgs) => {
 
 export default function ListDetail() {
   const list = useLoaderData<typeof loader>()
-  return <ListForm list={list} />
+  return (
+    <PageContainer>
+      <ListForm list={list} />
+    </PageContainer>
+  )
 }
