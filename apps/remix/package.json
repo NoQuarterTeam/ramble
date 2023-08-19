@@ -75,7 +75,7 @@
     "turbo": "^1.9.9",
     "use-onclickoutside": "^0.4.1",
     "uuid": "^3.4.0",
-    "zod": "3.22.1",
+    "zod": "3.22.2",
     "zodix": "^0.4.0",
     "zustand": "4.4.1"
   },
