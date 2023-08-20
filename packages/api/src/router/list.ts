@@ -1,64 +1,55 @@
-import { TRPCError } from "@trpc/server"
-import { z } from "zod"
+import { TRPCError } from '@trpc/server'
+import { z } from 'zod'
 
-import { listSchema } from "@ramble/shared"
+import { listSchema } from '@ramble/shared'
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
+import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
+import { SpotItemWithStats } from './spot'
 
 export const listRouter = createTRPCRouter({
   allByUser: publicProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {
     return ctx.prisma.list.findMany({
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
       where: { creator: { username: input.username } },
       take: 10,
     })
   }),
   detail: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
-    const list = await ctx.prisma.list.findFirst({
-      where: { id: input.id },
-      select: {
-        id: true,
-        creatorId: true,
-        creator: { select: { username: true, firstName: true, lastName: true } },
-        name: true,
-        description: true,
-        listSpots: {
-          select: {
-            id: true,
-            spot: {
-              select: {
-                type: true,
-                reviews: { select: { rating: true } },
-                id: true,
-                name: true,
-                address: true,
-                description: true,
-                verifier: { select: { username: true, firstName: true, lastName: true, avatar: true } },
-                images: { take: 1 },
-              },
-            },
-          },
+    const [list, spots] = await Promise.all([
+      ctx.prisma.list.findFirst({
+        where: { id: input.id },
+        select: {
+          id: true,
+          creatorId: true,
+          creator: { select: { username: true, firstName: true, lastName: true } },
+          name: true,
+          description: true,
         },
-      },
-    })
-    if (!list) throw new TRPCError({ code: "NOT_FOUND" })
+      }),
+      ctx.prisma.$queryRaw<Array<SpotItemWithStats>>`
+      SELECT 
+        Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
+        Spot.latitude, Spot.longitude,
+        (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image,
+        (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash,
+        (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
+      FROM
+        Spot
+      LEFT JOIN
+        Review ON Spot.id = Review.spotId
+      LEFT JOIN
+        ListSpot ON Spot.id = ListSpot.spotId
+      WHERE
+        ListSpot.listId = ${input.id}
+      GROUP BY
+        Spot.id
+      ORDER BY
+        Spot.id
+      `,
+    ])
+    if (!list) throw new TRPCError({ code: 'NOT_FOUND' })
 
-    const formattedList = {
-      ...list,
-      listSpots: list.listSpots.map((listSpot) => ({
-        ...listSpot,
-        spot: {
-          ...listSpot.spot,
-          image: listSpot.spot.images[0]?.path,
-          blurHash: listSpot.spot.images[0]?.blurHash,
-          rating:
-            listSpot.spot.reviews.length > 0
-              ? Math.round(listSpot.spot.reviews.reduce((acc, review) => acc + review.rating, 0) / listSpot.spot.reviews.length)
-              : undefined,
-        },
-      })),
-    }
-    return formattedList
+    return { list, spots }
   }),
   allByUserWithSavedSpots: protectedProcedure.input(z.object({ spotId: z.string() })).query(async ({ ctx, input }) => {
     return ctx.prisma.list.findMany({

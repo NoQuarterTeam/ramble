@@ -12,7 +12,9 @@ import { useParams, useRouter } from "../../../../router"
 export function ListDetailMapScreen() {
   const { params } = useParams<"ListDetailMapScreen">()
 
-  const { data: list, isLoading } = api.list.detail.useQuery({ id: params.id })
+  const { data, isLoading } = api.list.detail.useQuery({ id: params.id })
+  const list = data?.list
+
   const navigation = useRouter()
 
   if (isLoading)
@@ -44,8 +46,8 @@ export function ListDetailMapScreen() {
           showsVerticalScrollIndicator={false}
           estimatedItemSize={100}
           contentContainerStyle={{ paddingVertical: 10 }}
-          ListEmptyComponent={<Text>Empty</Text>}
-          data={list.listSpots.map((l) => l.spot) || []}
+          ListEmptyComponent={<Text>No spots</Text>}
+          data={data.spots}
           ItemSeparatorComponent={() => <View className="h-1" />}
           renderItem={({ item }) => <SpotItem spot={item} />}
         />

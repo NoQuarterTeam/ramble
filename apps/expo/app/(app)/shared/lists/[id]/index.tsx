@@ -13,8 +13,10 @@ import { useParams, useRouter } from "../../../../router"
 export function ListDetailScreen() {
   const { params } = useParams<"ListDetailScreen">()
   const { me } = useMe()
-  const { data: list, isLoading } = api.list.detail.useQuery({ id: params.id })
+  const { data, isLoading } = api.list.detail.useQuery({ id: params.id })
   const navigation = useRouter()
+
+  const list = data?.list
 
   return (
     <ScreenView
@@ -52,7 +54,7 @@ export function ListDetailScreen() {
               </Button>
             </View>
           }
-          data={list.listSpots.map((l) => l.spot) || []}
+          data={data.spots}
           ItemSeparatorComponent={() => <View className="h-1" />}
           renderItem={({ item }) => <SpotItem spot={item} />}
         />
