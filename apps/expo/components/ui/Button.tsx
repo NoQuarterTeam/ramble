@@ -1,13 +1,13 @@
 import * as React from "react"
-import { TouchableOpacity, type TouchableOpacityProps, useColorScheme } from "react-native"
+import { TouchableOpacity, type TouchableOpacityProps, useColorScheme, View } from "react-native"
 import { cva, type VariantProps } from "class-variance-authority"
 
-import { merge } from "@ramble/shared"
+import { join, merge } from "@ramble/shared"
 
 import { Spinner } from "./Spinner"
 import { Text } from "./Text"
 
-export const buttonStyles = cva("flex items-center justify-center rounded-md border", {
+export const buttonStyles = cva("flex flex-row items-center justify-center rounded-md border", {
   variants: {
     size: {
       xs: "h-8 px-2",
@@ -72,13 +72,18 @@ export const Button = React.forwardRef(function _Button(
       className={merge(
         buttonStyles({ variant, size }),
         (props.disabled || isLoading) && "opacity-70",
-        "flex flex-row items-center justify-center",
-        props.className,
         size === "sm" || size === "xs" ? "space-x-1" : "space-x-2",
+        props.className,
       )}
     >
-      {isLoading ? (
+      <View className={join(isLoading && "opacity-0")}>{leftIcon}</View>
+      <Text className={buttonTextStyles({ variant, size, className: join(props.textClassName, isLoading && "opacity-0") })}>
+        {props.children}
+      </Text>
+
+      {isLoading && (
         <Spinner
+          className="absolute"
           size={size === "md" ? 20 : size === "lg" ? 25 : 15}
           color={
             variant === "primary"
@@ -92,11 +97,6 @@ export const Button = React.forwardRef(function _Button(
               : "black"
           }
         />
-      ) : (
-        <>
-          {leftIcon}
-          <Text className={buttonTextStyles({ variant, size, className: props.textClassName })}>{props.children}</Text>
-        </>
       )}
     </TouchableOpacity>
   )

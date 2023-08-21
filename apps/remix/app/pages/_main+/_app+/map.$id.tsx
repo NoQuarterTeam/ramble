@@ -20,7 +20,7 @@ import { SaveToList } from "~/pages/api+/save-to-list"
 export const loader = async ({ params }: LoaderArgs) => {
   const spot = db.spot
     .findUnique({
-      where: { id: params.id },
+      where: { id: params.id, deletedAt: { equals: null } },
       select: {
         id: true,
         name: true,

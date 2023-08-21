@@ -9,10 +9,10 @@ import { api, type RouterOutputs } from "../../../../../lib/api"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { useParams } from "../../../../router"
 
-export function SaveScreen() {
+export function SaveSpotScreen() {
   const {
     params: { id },
-  } = useParams<"SaveScreen">()
+  } = useParams<"SaveSpotScreen">()
   const { me } = useMe()
   const { data: lists, isLoading } = api.list.allByUserWithSavedSpots.useQuery({ spotId: id }, { enabled: !!me })
   if (!me)

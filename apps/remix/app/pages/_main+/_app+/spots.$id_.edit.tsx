@@ -15,7 +15,7 @@ import { amenitiesSchema, SpotForm, spotSchema } from "./components/SpotForm"
 export const loader = async ({ request, params }: LoaderArgs) => {
   const user = await getCurrentUser(request, { role: true, id: true, isAdmin: true, isVerified: true })
   const spot = await db.spot.findUniqueOrThrow({
-    where: { id: params.id },
+    where: { id: params.id, deletedAt: { equals: null } },
     include: { images: true, amenities: true },
   })
   if (!canManageSpot(spot, user)) throw redirect("/spots")

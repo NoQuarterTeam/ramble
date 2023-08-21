@@ -55,7 +55,7 @@ export const loader = async ({ params }: LoaderArgs) => {
       LEFT JOIN
         ListSpot ON Spot.id = ListSpot.spotId
       WHERE
-        ListSpot.listId = ${params.id}
+        ListSpot.listId = ${params.id} AND Spot.deletedAt IS NULL
       GROUP BY
         Spot.id
       ORDER BY

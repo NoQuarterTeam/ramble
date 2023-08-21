@@ -46,7 +46,7 @@ export const headers = useLoaderHeaders
 
 export const loader = async ({ params, request }: LoaderArgs) => {
   const spot = await db.spot.findUnique({
-    where: { id: params.id },
+    where: { id: params.id, deletedAt: { equals: null } },
     select: {
       id: true,
       name: true,
@@ -54,6 +54,7 @@ export const loader = async ({ params, request }: LoaderArgs) => {
       verifiedAt: true,
       amenities: true,
       address: true,
+      deletedAt: true,
       description: true,
       latitude: true,
       longitude: true,
@@ -101,8 +102,7 @@ export const action = async ({ request, params }: ActionArgs) => {
   switch (action) {
     case Actions.Delete:
       try {
-        const spot = await db.spot.findUniqueOrThrow({ where: { id: params.id }, select: { ownerId: true } })
-        if (!canManageSpot(spot, user)) return redirect("/spots")
+        if (!user.isAdmin) return redirect("/spots")
         await db.spot.delete({ where: { id: params.id } })
         return redirect("/spots", request, { flash: { title: "Spot deleted!" } })
       } catch (error) {
@@ -111,7 +111,7 @@ export const action = async ({ request, params }: ActionArgs) => {
 
     case Actions.Verify:
       try {
-        const spot = await db.spot.findUniqueOrThrow({ where: { id: params.id }, select: { ownerId: true } })
+        const spot = await db.spot.findUniqueOrThrow({ where: { id: params.id }, select: { ownerId: true, deletedAt: true } })
         if (!canManageSpot(spot, user)) return redirect("/spots")
         await db.spot.update({
           where: { id: params.id },
@@ -194,18 +194,22 @@ export default function SpotDetail() {
                   })}
                 </div>
               )}
-              {canManageSpot(spot, user) && (
-                <div className="flex space-x-2">
-                  {!spot.verifiedAt && (
-                    <Form>
-                      <FormButton name={FORM_ACTION} value={Actions.Verify} leftIcon={<Check className="sq-3" />}>
-                        Verify
-                      </FormButton>
-                    </Form>
-                  )}
-                  <LinkButton to="edit" variant="outline" leftIcon={<Edit2 className="sq-3" />}>
-                    Edit
-                  </LinkButton>
+              <div className="flex space-x-2">
+                {canManageSpot(spot, user) && (
+                  <>
+                    {!spot.verifiedAt && (
+                      <Form>
+                        <FormButton name={FORM_ACTION} value={Actions.Verify} leftIcon={<Check className="sq-3" />}>
+                          Verify
+                        </FormButton>
+                      </Form>
+                    )}
+                    <LinkButton to="edit" variant="outline" leftIcon={<Edit2 className="sq-3" />}>
+                      Edit
+                    </LinkButton>
+                  </>
+                )}
+                {user?.isAdmin && (
                   <AlertDialogRoot>
                     <AlertDialogTrigger asChild>
                       <Button variant="destructive-secondary" leftIcon={<Trash className="sq-3" />}>
@@ -227,8 +231,8 @@ export default function SpotDetail() {
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialogRoot>
-                </div>
-              )}
+                )}
+              </div>
             </div>
 
             <div className="z-10 h-[400px] w-full overflow-hidden rounded-md">

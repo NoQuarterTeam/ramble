@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "dev": "pnpm with-env prisma studio",
-    "db:push": "pnpm with-env prisma db push",
+    "db:push": "pnpm with-env prisma db push && pnpm db:generate",
     "db:seed": "pnpm with-env ts-node ./seed",
     "db:campspace": "pnpm with-env ts-node ./seed/campspace.ts",
     "load-campspace": "pnpm with-env ts-node ./scripts/load-campspace.ts",
