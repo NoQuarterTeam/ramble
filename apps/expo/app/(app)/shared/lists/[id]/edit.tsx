@@ -12,8 +12,8 @@ export function EditListScreen() {
   const {
     params: { id },
   } = useParams<"EditListScreen">()
-  const { data: list, isLoading: listLoading } = api.list.detail.useQuery({ id })
-
+  const { data, isLoading: listLoading } = api.list.detail.useQuery({ id })
+  const list = data?.list
   const { goBack, navigate } = useRouter()
   const { me } = useMe()
   const utils = api.useContext()
