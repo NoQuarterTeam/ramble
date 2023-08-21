@@ -311,8 +311,8 @@ importers:
         specifier: ^1.0.1
         version: 1.0.1
       '@vercel/edge':
-        specifier: ^0.3.4
-        version: 0.3.4
+        specifier: ^1.0.0
+        version: 1.0.0
       '@vercel/remix':
         specifier: 1.19.2
         version: 1.19.2(react-dom@18.2.0)(react@18.2.0)
@@ -7606,8 +7606,8 @@ packages:
     resolution: {integrity: sha512-Ux0c9qUfkcPqng3vrR0GTrlQdqNJ2JREn/2ydrVuKwM3RtMfF2mWX31Ijqo1opSjNAq6rK76PwtANw6kl6TAow==}
     dev: false
 
-  /@vercel/edge@0.3.4:
-    resolution: {integrity: sha512-dFU+yAUDQRwpuRGxRDlEO1LMq0y1LGsBgkyryQWe4w15/Fy2/lCnpvdIoAhHl3QvIGAxCLHzwRHsqfLRdpxgJQ==}
+  /@vercel/edge@1.0.0:
+    resolution: {integrity: sha512-eL6mACcJMVVcbDOJd8llBRPaB3FbClV4LS0K4e+IU2HmU44JjOTWQYT30pWLkJ0AdbcHYRpBMN9Ebynx5DmDfg==}
     dev: false
 
   /@vercel/remix@1.19.2(react-dom@18.2.0)(react@18.2.0):
