@@ -209,7 +209,7 @@ importers:
         specifier: 8.47.0
         version: 8.47.0
       tailwindcss:
-        specifier: ^3.3.2
+        specifier: 3.3.2
         version: 3.3.2
       typescript:
         specifier: 5.1.6
@@ -483,7 +483,7 @@ importers:
         specifier: 0.5.10
         version: 0.5.10(@remix-run/dev@1.19.3)
       tailwindcss:
-        specifier: ^3.3.2
+        specifier: 3.3.2
         version: 3.3.2
       typescript:
         specifier: 5.1.6
@@ -598,7 +598,7 @@ importers:
         specifier: ^3.11.0
         version: 3.11.0(tailwindcss@3.3.2)
       tailwindcss:
-        specifier: ^3.3.2
+        specifier: 3.3.2
         version: 3.3.2
 
   packages/config/tailwind:
@@ -620,7 +620,7 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
       tailwindcss:
-        specifier: ^3.3.2
+        specifier: 3.3.2
         version: 3.3.2
       typescript:
         specifier: 5.1.6
@@ -715,7 +715,7 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
       tailwindcss:
-        specifier: ^3.3.2
+        specifier: 3.3.2
         version: 3.3.2
       typescript:
         specifier: 5.1.6
@@ -9942,7 +9942,7 @@ packages:
       eslint-plugin-import: 2.28.1(@typescript-eslint/parser@5.62.0)(eslint-import-resolver-typescript@3.5.5)(eslint@8.47.0)
       get-tsconfig: 4.6.0
       globby: 13.1.4
-      is-core-module: 2.12.1
+      is-core-module: 2.13.0
       is-glob: 4.0.3
       synckit: 0.8.5
     transitivePeerDependencies:
@@ -11954,12 +11954,6 @@ packages:
   /is-callable@1.2.7:
     resolution: {integrity: sha512-1BC0BVFhS/p0qtw6enp8e+8OD0UrK0oFLztSjNzhcKA3WDuJxxAPXzPuPtKkjEY9UUoEWlX/8fgKeu2S8i9JTA==}
     engines: {node: '>= 0.4'}
-
-  /is-core-module@2.12.1:
-    resolution: {integrity: sha512-Q4ZuBAe2FUsKtyQJoQHlvP8OvBERxO3jEmy1I7hcRXcJBGGHFh/aJBswbXuS9sgrDH2QUO8ilkwNPHvHMd8clg==}
-    dependencies:
-      has: 1.0.3
-    dev: true
 
   /is-core-module@2.13.0:
     resolution: {integrity: sha512-Z7dk6Qo8pOCp3l4tsX2C5ZVas4V+UxwQodwZhLopL91TX8UyyHEXafPcyoeeWuLrwzHcr3igO78wNLwHJHsMCQ==}
@@ -16336,7 +16330,7 @@ packages:
     resolution: {integrity: sha512-iMDbmAWtfU+MHpxt/I5iWI7cY6YVEZUQ3MBgPQ++XD1PELuJHIl82xBmObyP2KyQmkNB2dsqF7seoQQiAn5yDQ==}
     hasBin: true
     dependencies:
-      is-core-module: 2.12.1
+      is-core-module: 2.13.0
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
     dev: true
