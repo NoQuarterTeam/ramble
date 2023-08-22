@@ -20,7 +20,11 @@ export function EditSpotConfirmScreen() {
   const Icon = SPOTS[params.type].Icon
 
   const utils = api.useContext()
-  const { mutate, isLoading: updateLoading } = api.spot.update.useMutation({
+  const {
+    mutate,
+    isLoading: updateLoading,
+    error,
+  } = api.spot.update.useMutation({
     onSuccess: (data) => {
       utils.spot.list.refetch({ sort: "latest", skip: 0 })
       utils.spot.detail.refetch({ id: data.id })
@@ -74,6 +78,7 @@ export function EditSpotConfirmScreen() {
       </ScrollView>
 
       <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
+        {error && <Text className="text-red-500">{error.message}</Text>}
         <Button
           isLoading={updateLoading || isLoading}
           leftIcon={<Check size={20} className="text-white dark:text-black" />}
