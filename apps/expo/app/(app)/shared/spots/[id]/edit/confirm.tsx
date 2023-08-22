@@ -3,7 +3,7 @@ import { ScrollView, View } from "react-native"
 import { Image } from "expo-image"
 import { Check } from "lucide-react-native"
 
-import { AMENITIES } from "@ramble/shared"
+import { AMENITIES, createImageUrl } from "@ramble/shared"
 
 import { Button } from "../../../../../../components/ui/Button"
 import { Text } from "../../../../../../components/ui/Text"
@@ -76,7 +76,10 @@ export function EditSpotConfirmScreen() {
           <View className="flex flex-row flex-wrap">
             {params.images.map((image, i) => (
               <View key={i} className="w-1/3 p-1">
-                <Image className="h-[100px] w-full rounded-md bg-gray-50 object-cover dark:bg-gray-700" source={{ uri: image }} />
+                <Image
+                  className="h-[100px] w-full rounded-md bg-gray-50 object-cover dark:bg-gray-700"
+                  source={{ uri: image.startsWith("file://") ? image : createImageUrl(image) }}
+                />
               </View>
             ))}
           </View>
