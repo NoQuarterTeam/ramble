@@ -217,9 +217,13 @@ export const spotRouter = createTRPCRouter({
           address: address || "Unknown address",
           images: { create: imageData, delete: imagesToDelete },
           amenities:
-            data.type === "CAMPING" && amenities
-              ? { upsert: { where: { id: spot.amenities?.id }, create: amenities, update: amenities } }
-              : { delete: true },
+            spot.type === "CAMPING" && data.type !== "CAMPING"
+              ? { delete: true }
+              : data.type === "CAMPING" && (spot.type !== "CAMPING" || !spot.amenities)
+              ? { create: amenities }
+              : spot.type === "CAMPING" && data.type === "CAMPING"
+              ? { update: amenities }
+              : undefined,
         },
       })
     }),
