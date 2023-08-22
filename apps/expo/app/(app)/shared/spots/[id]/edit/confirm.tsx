@@ -57,7 +57,7 @@ export function EditSpotConfirmScreen() {
       latitude: params.latitude,
       longitude: params.longitude,
       type: params.type,
-      images: [...newImageKeys.map((i) => ({ path: i.key })), ...existingImages.map((i) => ({ path: i }))],
+      images: [...newImageKeys, ...existingImages].map((i) => ({ path: i })),
       amenities: params.amenities,
       isPetFriendly: params.isPetFriendly,
     })

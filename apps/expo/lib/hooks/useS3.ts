@@ -5,7 +5,7 @@ import { assetPrefix } from "@ramble/shared"
 
 import { api } from "../api"
 
-export function useS3Upload(): [(fileUrl: string) => Promise<{ key: string }>, { isLoading: boolean }] {
+export function useS3Upload(): [(fileUrl: string) => Promise<string>, { isLoading: boolean }] {
   const [isLoading, setIsLoading] = React.useState(false)
   const { mutateAsync } = api.s3.createSignedUrl.useMutation()
   async function upload(fileUrl: string) {
@@ -17,7 +17,7 @@ export function useS3Upload(): [(fileUrl: string) => Promise<{ key: string }>, {
       const imageBody = await resp.blob()
       await fetch(res, { method: "PUT", body: imageBody })
       setIsLoading(false)
-      return { key }
+      return key
     } catch (error) {
       setIsLoading(false)
       throw error

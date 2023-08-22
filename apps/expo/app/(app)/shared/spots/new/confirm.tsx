@@ -50,7 +50,7 @@ export function NewSpotConfirmScreen() {
       longitude: params.longitude,
       isPetFriendly: params.isPetFriendly,
       type: params.type,
-      images: images.map((i) => ({ path: i.key })),
+      images: images.map((i) => ({ path: i })),
       amenities: params.amenities,
     })
   }

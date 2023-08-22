@@ -76,8 +76,8 @@ export function VanScreen() {
         quality: 1,
       })
       if (result.canceled || result.assets.length === 0) return
-      const images = await Promise.all(result.assets.map((asset) => upload(asset.uri)))
-      saveImages({ keys: images.map((image) => image.key) })
+      const paths = await Promise.all(result.assets.map((asset) => upload(asset.uri)))
+      saveImages({ paths })
     } catch (error) {
       let message
       if (error instanceof Error) message = error.message

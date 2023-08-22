@@ -39,10 +39,10 @@ export function ImageUploader({
       try {
         if (isMulti) {
           const keys = await Promise.all(images.map(upload))
-          await onMultiSubmit?.(keys.map((k) => k.key))
+          await onMultiSubmit?.(keys)
         } else {
           if (!images[0]) return
-          const { key } = await upload(images[0])
+          const key = await upload(images[0])
           await onSubmit?.(key)
         }
       } catch {
