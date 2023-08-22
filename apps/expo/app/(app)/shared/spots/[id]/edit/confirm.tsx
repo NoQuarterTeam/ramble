@@ -43,7 +43,13 @@ export function EditSpotConfirmScreen() {
   const handleCreateSpot = async () => {
     // upload images
     setLoading(true)
-    const images = await Promise.all(params.images.map((i) => upload(i)))
+    const imagesToUpload: string[] = []
+    const existingImages: string[] = []
+    for (const image of params.images) {
+      if (image.startsWith("file://")) imagesToUpload.push(image)
+      else existingImages.push(image)
+    }
+    const newImageKeys = await Promise.all(imagesToUpload.map((i) => upload(i)))
     mutate({
       id: params.id,
       description: params.description,
@@ -51,7 +57,7 @@ export function EditSpotConfirmScreen() {
       latitude: params.latitude,
       longitude: params.longitude,
       type: params.type,
-      images: images.map((i) => ({ path: i.key })),
+      images: [...newImageKeys.map((i) => ({ path: i.key })), ...existingImages.map((i) => ({ path: i }))],
       amenities: params.amenities,
       isPetFriendly: params.isPetFriendly,
     })

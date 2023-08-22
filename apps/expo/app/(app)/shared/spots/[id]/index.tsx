@@ -12,7 +12,7 @@ import * as Location from "expo-location"
 import { StatusBar } from "expo-status-bar"
 import { Check, ChevronDown, ChevronLeft, Compass, Edit2, Heart, Star, Trash } from "lucide-react-native"
 
-import { AMENITIES, canManageSpot, createImageUrl, displayRating, merge } from "@ramble/shared"
+import { AMENITIES, canManageSpot, displayRating, merge } from "@ramble/shared"
 
 import { ReviewItem } from "../../../../../components/ReviewItem"
 import { Button } from "../../../../../components/ui/Button"
@@ -180,7 +180,7 @@ export function SpotDetailScreen() {
                         description: spot.description,
                         isPetFriendly: spot.isPetFriendly,
                         amenities: spot.amenities || undefined,
-                        images: spot.images.map((i) => createImageUrl(i.path)),
+                        images: spot.images.map((i) => i.path),
                       })
                     }
                     variant="outline"

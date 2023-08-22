@@ -8,6 +8,7 @@ import { Button } from "../../../../../../components/ui/Button"
 import { toast } from "../../../../../../components/ui/Toast"
 import { useParams, useRouter } from "../../../../../router"
 import { EditSpotModalView } from "./EditSpotModalView"
+import { createImageUrl } from "@ramble/shared"
 
 export function EditSpotImagesScreen() {
   const { params } = useParams<"EditSpotImagesScreen">()
@@ -38,7 +39,10 @@ export function EditSpotImagesScreen() {
         <View className="flex flex-row flex-wrap">
           {images.map((image) => (
             <TouchableOpacity key={image} onPress={() => setImages((im) => im.filter((i) => i !== image))} className="w-1/3 p-1">
-              <Image className="h-[100px] w-full rounded-md bg-gray-50 object-cover dark:bg-gray-700" source={{ uri: image }} />
+              <Image
+                className="h-[100px] w-full rounded-md bg-gray-50 object-cover dark:bg-gray-700"
+                source={{ uri: image.startsWith("file://") ? image : createImageUrl(image) }}
+              />
               <View className="absolute -right-1 -top-1 rounded-full bg-gray-100 p-1 dark:bg-gray-900">
                 <X className="text-gray-800 dark:text-white" size={16} />
               </View>
