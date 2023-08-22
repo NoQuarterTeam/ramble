@@ -102,9 +102,8 @@ export function NewSpotLocationScreen() {
                 onPress={() => {
                   if (!me) return
                   if (!me.isVerified) return toast({ title: "Please verify your account" })
-                  router.push("NewSpotTypeScreen", {
-                    location: { longitude: coords[0] as number, latitude: coords[1] as number },
-                  })
+                  if (!coords[0] || !coords[1]) return toast({ title: "Please select a location" })
+                  router.push("NewSpotTypeScreen", { longitude: coords[0], latitude: coords[1] })
                 }}
               >
                 Next

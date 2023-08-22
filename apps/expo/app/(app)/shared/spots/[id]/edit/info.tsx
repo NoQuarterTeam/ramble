@@ -4,23 +4,23 @@ import { Dog } from "lucide-react-native"
 
 import colors from "@ramble/tailwind-config/src/colors"
 
-import { Button } from "../../../../../components/ui/Button"
-import { FormInputLabel } from "../../../../../components/ui/FormInput"
-import { Input } from "../../../../../components/ui/Input"
-import { Text } from "../../../../../components/ui/Text"
-import { useKeyboardController } from "../../../../../lib/hooks/useKeyboardController"
-import { useParams, useRouter } from "../../../../router"
-import { NewSpotModalView } from "./NewSpotModalView"
+import { Button } from "../../../../../../components/ui/Button"
+import { FormInputLabel } from "../../../../../../components/ui/FormInput"
+import { Input } from "../../../../../../components/ui/Input"
+import { Text } from "../../../../../../components/ui/Text"
+import { useKeyboardController } from "../../../../../../lib/hooks/useKeyboardController"
+import { useParams, useRouter } from "../../../../../router"
+import { EditSpotModalView } from "./EditSpotModalView"
 
-export function NewSpotOptionsScreen() {
+export function EditSpotOptionsScreen() {
   useKeyboardController()
-  const { params } = useParams<"NewSpotOptionsScreen">()
-  const [name, setName] = React.useState<string>()
+  const { params } = useParams<"EditSpotOptionsScreen">()
+  const [name, setName] = React.useState<string>(params.name)
   const [description, setDescription] = React.useState<string>()
   const [isPetFriendly, setIsPetFriendly] = React.useState(false)
   const router = useRouter()
   return (
-    <NewSpotModalView title="Some info">
+    <EditSpotModalView title="Some info">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <FormInputLabel label="Name" />
         <Input value={name} onChangeText={setName} />
@@ -38,15 +38,15 @@ export function NewSpotOptionsScreen() {
         <FormInputLabel label="Describe the spot" />
         <Input value={description} onChangeText={setDescription} multiline numberOfLines={4} />
       </ScrollView>
-      {description && name && (
+      {(params.type === "CAMPING" ? !!description && !!name : !!name) && (
         <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
           <Button
             className="rounded-full"
             onPress={() =>
-              router.push(params.type === "CAMPING" ? "NewSpotAmenitiesScreen" : "NewSpotImagesScreen", {
+              router.push(params.type === "CAMPING" ? "EditSpotAmenitiesScreen" : "EditSpotImagesScreen", {
                 ...params,
                 name,
-                description,
+                description: description || null,
                 isPetFriendly,
               })
             }
@@ -55,6 +55,6 @@ export function NewSpotOptionsScreen() {
           </Button>
         </View>
       )}
-    </NewSpotModalView>
+    </EditSpotModalView>
   )
 }

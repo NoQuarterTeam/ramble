@@ -10,15 +10,16 @@ import Animated, {
 } from "react-native-reanimated"
 import * as Location from "expo-location"
 import { StatusBar } from "expo-status-bar"
-import { ChevronDown, ChevronLeft, Compass, Heart, Star } from "lucide-react-native"
+import { Check, ChevronDown, ChevronLeft, Compass, Edit2, Heart, Star, Trash } from "lucide-react-native"
 
-import { AMENITIES, displayRating, merge } from "@ramble/shared"
+import { AMENITIES, canManageSpot, createImageUrl, displayRating, merge } from "@ramble/shared"
 
 import { ReviewItem } from "../../../../../components/ReviewItem"
 import { Button } from "../../../../../components/ui/Button"
 import { Heading } from "../../../../../components/ui/Heading"
 import { ImageCarousel } from "../../../../../components/ui/ImageCarousel"
 import { Text } from "../../../../../components/ui/Text"
+import { toast } from "../../../../../components/ui/Toast"
 import { VerifiedCard } from "../../../../../components/VerifiedCard"
 import { api } from "../../../../../lib/api"
 import { width } from "../../../../../lib/device"
@@ -41,7 +42,7 @@ export function SpotDetailScreen() {
       translationY.value = event.contentOffset.y
     },
   })
-  const navigation = useRouter()
+  const router = useRouter()
 
   const topBarStyle = useAnimatedStyle(() => {
     const opacity = interpolate(translationY.value, [100, 200], [0, 1], Extrapolation.CLAMP)
@@ -84,13 +85,25 @@ export function SpotDetailScreen() {
       directionsMode: "car",
     })
   }
+  const utils = api.useContext()
+  const { mutate: verifySpot, isLoading: isVerifyingLoading } = api.spot.verify.useMutation({
+    onSuccess: async () => {
+      if (!spot) return
+      try {
+        await utils.spot.detail.refetch({ id: spot.id })
+        toast({ title: "Spot verified!" })
+      } catch {
+        toast({ type: "error", title: "Error refetching spot" })
+      }
+    },
+  })
 
   if (isLoading) return <SpotLoading />
   if (!spot)
     return (
       <View className="space-y-2 px-4 pt-16">
         <Text className="text-lg">Spot not found</Text>
-        {navigation.canGoBack() && <Button onPress={navigation.goBack}>Back</Button>}
+        {router.canGoBack() && <Button onPress={router.goBack}>Back</Button>}
       </View>
     )
   return (
@@ -143,6 +156,50 @@ export function SpotDetailScreen() {
                 })}
               </View>
             )}
+            <View className="flex flex-row space-x-2">
+              {canManageSpot(spot, me) && (
+                <>
+                  {!spot.verifiedAt && (
+                    <Button
+                      onPress={() => verifySpot({ id: spot.id })}
+                      isLoading={isVerifyingLoading}
+                      leftIcon={<Check size={18} className="text-white dark:text-black" />}
+                    >
+                      Verify
+                    </Button>
+                  )}
+                  <Button
+                    onPress={() =>
+                      router.push("EditSpotLayout", {
+                        ...spot,
+                        id: spot.id,
+                        latitude: spot.latitude,
+                        longitude: spot.longitude,
+                        type: spot.type,
+                        name: spot.name,
+                        description: spot.description,
+                        isPetFriendly: spot.isPetFriendly,
+                        amenities: spot.amenities || undefined,
+                        images: spot.images.map((i) => createImageUrl(i.path)),
+                      })
+                    }
+                    variant="outline"
+                    leftIcon={<Edit2 size={18} className="text-black dark:text-white" />}
+                  >
+                    Edit
+                  </Button>
+                </>
+              )}
+              {me?.isAdmin && (
+                <Button
+                  onPress={() => router.push("DeleteSpotScreen", { id: spot.id })}
+                  variant="destructive"
+                  leftIcon={<Trash size={18} className="text-white" />}
+                >
+                  Delete
+                </Button>
+              )}
+            </View>
           </View>
 
           <View className="h-px w-full bg-gray-200 dark:bg-gray-700" />
@@ -159,7 +216,7 @@ export function SpotDetailScreen() {
                 </View>
               </View>
               {me && (
-                <Button onPress={() => navigation.navigate("NewReviewScreen", { spotId: spot.id })} variant="secondary">
+                <Button onPress={() => router.navigate("NewReviewScreen", { spotId: spot.id })} variant="secondary">
                   Add review
                 </Button>
               )}
@@ -181,11 +238,11 @@ export function SpotDetailScreen() {
       <View className="absolute left-0 right-0 top-14 flex flex-row justify-between px-4">
         <View className="flex flex-row items-center space-x-0.5">
           <TouchableOpacity
-            onPress={navigation.canGoBack() ? navigation.goBack : () => navigation.navigate("AppLayout")}
+            onPress={router.canGoBack() ? router.goBack : () => router.navigate("AppLayout")}
             activeOpacity={0.8}
             className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-black"
           >
-            {navigation.canGoBack() ? (
+            {router.canGoBack() ? (
               <ChevronLeft className="pr-1 text-black dark:text-white" />
             ) : (
               <ChevronDown className="pr-1 text-black dark:text-white" />
@@ -214,7 +271,7 @@ export function SpotDetailScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => navigation.navigate("SaveScreen", { id: spot.id })}
+            onPress={() => router.navigate("SaveSpotScreen", { id: spot.id })}
             activeOpacity={0.8}
             className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-black"
           >

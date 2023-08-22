@@ -3,7 +3,7 @@ import { z } from "zod"
 // cant use spot type from database package as it imports prisma to browser
 export const spotSchemaWithoutType = z.object({
   name: z.string().min(1),
-  description: z.string(),
+  description: z.string().nullable(),
   address: z.string().optional(),
   latitude: z.number(),
   longitude: z.number(),

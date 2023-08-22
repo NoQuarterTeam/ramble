@@ -1,15 +1,15 @@
-import { TRPCError } from '@trpc/server'
-import { z } from 'zod'
+import { TRPCError } from "@trpc/server"
+import { z } from "zod"
 
-import { listSchema } from '@ramble/shared'
+import { listSchema } from "@ramble/shared"
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
-import { SpotItemWithStats } from './spot'
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
+import { SpotItemWithStats } from "./spot"
 
 export const listRouter = createTRPCRouter({
   allByUser: publicProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {
     return ctx.prisma.list.findMany({
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
       where: { creator: { username: input.username } },
       take: 10,
     })
@@ -40,14 +40,14 @@ export const listRouter = createTRPCRouter({
       LEFT JOIN
         ListSpot ON Spot.id = ListSpot.spotId
       WHERE
-        ListSpot.listId = ${input.id}
+        ListSpot.listId = ${input.id} AND Spot.deletedAt IS NULL
       GROUP BY
         Spot.id
       ORDER BY
         Spot.id
       `,
     ])
-    if (!list) throw new TRPCError({ code: 'NOT_FOUND' })
+    if (!list) throw new TRPCError({ code: "NOT_FOUND" })
 
     return { list, spots }
   }),

@@ -36,7 +36,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
       LEFT JOIN
         ListSpot ON Spot.id = ListSpot.spotId
       WHERE
-        Spot.creatorId = ${user.id}
+        Spot.creatorId = ${user.id} AND Spot.deletedAt IS NULL
       GROUP BY
         Spot.id
       ORDER BY

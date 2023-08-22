@@ -39,10 +39,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   let sort = searchParams.get("sort") || "latest"
   if (!SORT_OPTIONS.find((o) => o.value === (sort as any))) sort = "latest"
 
-  const WHERE = type
-    ? Prisma.sql // prepared where
-      `WHERE Spot.type = ${type}`
-    : Prisma.empty
+  const WHERE = type ? Prisma.sql`WHERE Spot.type = ${type} AND Spot.deletedAt IS NULL` : Prisma.sql`WHERE Spot.deletedAt IS NULL`
 
   const ORDER_BY = Prisma.sql // prepared orderBy
   `ORDER BY

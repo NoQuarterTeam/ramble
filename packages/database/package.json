@@ -8,20 +8,20 @@
   ],
   "scripts": {
     "dev": "pnpm with-env prisma studio",
-    "db:push": "pnpm with-env prisma db push",
+    "db:push": "pnpm with-env prisma db push && pnpm db:generate",
     "db:seed": "pnpm with-env ts-node ./seed",
     "db:campspace": "pnpm with-env ts-node ./seed/campspace.ts",
     "load-campspace": "pnpm with-env ts-node ./scripts/load-campspace.ts",
     "parse-html": "pnpm with-env ts-node ./scripts/parse-html.ts",
     "blurhash": "pnpm with-env ts-node ./scripts/gen-blurhash.ts",
-    "db:generate": "pnpm with-env prisma generate --data-proxy",
+    "generate": "pnpm with-env prisma generate --no-engine",
     "with-env": "dotenv -e ../../.env --",
-    "postinstall": "prisma generate --data-proxy"
+    "postinstall": "prisma generate --no-engine"
   },
   "sideEffects": false,
   "dependencies": {
-    "@prisma/client": "5.1.1",
-    "prisma": "5.1.1"
+    "@prisma/client": "5.2.0",
+    "prisma": "5.2.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.0",
