@@ -14,9 +14,9 @@
     "load-campspace": "pnpm with-env ts-node ./scripts/load-campspace.ts",
     "parse-html": "pnpm with-env ts-node ./scripts/parse-html.ts",
     "blurhash": "pnpm with-env ts-node ./scripts/gen-blurhash.ts",
-    "generate": "pnpm with-env prisma generate --data-proxy",
+    "generate": "pnpm with-env prisma generate --no-engine",
     "with-env": "dotenv -e ../../.env --",
-    "postinstall": "prisma generate --data-proxy"
+    "postinstall": "prisma generate --no-engine"
   },
   "sideEffects": false,
   "dependencies": {
