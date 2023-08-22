@@ -76,7 +76,7 @@ export const Button = React.forwardRef(function _Button(
         props.className,
       )}
     >
-      <View className={join(isLoading && "opacity-0")}>{leftIcon}</View>
+      {leftIcon && <View className={join(isLoading && "opacity-0")}>{leftIcon}</View>}
       <Text className={buttonTextStyles({ variant, size, className: join(props.textClassName, isLoading && "opacity-0") })}>
         {props.children}
       </Text>

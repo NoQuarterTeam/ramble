@@ -8,9 +8,9 @@ import colors from "@ramble/tailwind-config/src/colors"
 import { OptimizedImage } from "../../components/ui/OptimisedImage"
 import { useMe } from "../../lib/hooks/useMe"
 import { AccountLayout } from "./account/_layout"
-import { SpotsLayout } from "./spots/_layout"
 import { ListsLayout } from "./lists/_layout"
 import { MapLayout } from "./map/_layout"
+import { SpotsLayout } from "./spots/_layout"
 
 const Tab = createBottomTabNavigator()
 

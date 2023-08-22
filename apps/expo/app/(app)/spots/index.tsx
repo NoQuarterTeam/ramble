@@ -3,15 +3,16 @@ import { TouchableOpacity, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import { ChevronDown, PlusCircle } from "lucide-react-native"
 
+import { join, useDisclosure } from "@ramble/shared"
+
 import { SpotItem } from "../../../components/SpotItem"
+import { Heading } from "../../../components/ui/Heading"
 import { Spinner } from "../../../components/ui/Spinner"
 import { TabView } from "../../../components/ui/TabView"
 import { Text } from "../../../components/ui/Text"
 import { api } from "../../../lib/api"
-import { useRouter } from "../../router"
-import { Heading } from "../../../components/ui/Heading"
-import { join, useDisclosure } from "@ramble/shared"
 import { height, width } from "../../../lib/device"
+import { useRouter } from "../../router"
 
 const SORT_OPTIONS = { latest: "Latest", rated: "Top rated", saved: "Most saved" } as const
 export function SpotsScreen() {

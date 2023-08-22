@@ -1,27 +1,11 @@
 import { type RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { type NativeStackNavigationProp } from "@react-navigation/native-stack"
 
-import { type SpotType } from "@ramble/database/types"
+import { type Spot, type SpotAmenities } from "@ramble/database/types"
 
-type NewSpotParams = {
-  location: { latitude: number; longitude: number }
-  type: SpotType
-  info: { name: string; description: string; isPetFriendly: boolean }
+type SpotFormParams = Pick<Spot, "latitude" | "longitude" | "type" | "name" | "description" | "isPetFriendly"> & {
   images: string[]
-  amenities?: {
-    hotWater: boolean
-    wifi: boolean
-    shower: boolean
-    toilet: boolean
-    kitchen: boolean
-    electricity: boolean
-    water: boolean
-    firePit: boolean
-    sauna: boolean
-    pool: boolean
-    bbq: boolean
-  }
-}
+} & { amenities?: Omit<SpotAmenities, "id" | "spotId" | "createdAt" | "updatedAt"> }
 
 export type ScreenParamsList = {
   AuthLayout: { screen?: "LoginScreen" | "RegisterScreen" } | undefined
@@ -49,11 +33,22 @@ export type ScreenParamsList = {
 
   NewSpotLayout: undefined
   NewSpotLocationScreen: undefined
-  NewSpotTypeScreen: Pick<NewSpotParams, "location">
-  NewSpotOptionsScreen: Pick<NewSpotParams, "location" | "type">
-  NewSpotAmenitiesScreen: Pick<NewSpotParams, "location" | "type" | "info">
-  NewSpotImagesScreen: Pick<NewSpotParams, "location" | "type" | "info" | "amenities">
-  NewSpotConfirmScreen: NewSpotParams
+  NewSpotTypeScreen: Pick<SpotFormParams, "latitude" | "longitude">
+  NewSpotOptionsScreen: Pick<SpotFormParams, "latitude" | "longitude" | "type">
+  NewSpotAmenitiesScreen: Pick<SpotFormParams, "latitude" | "longitude" | "type" | "name" | "description" | "isPetFriendly">
+  NewSpotImagesScreen: Pick<
+    SpotFormParams,
+    "latitude" | "longitude" | "type" | "name" | "description" | "isPetFriendly" | "amenities"
+  >
+  NewSpotConfirmScreen: SpotFormParams
+
+  EditSpotLayout: { id: string } & SpotFormParams
+  EditSpotLocationScreen: { id: string } & SpotFormParams
+  EditSpotTypeScreen: { id: string } & SpotFormParams
+  EditSpotOptionsScreen: { id: string } & SpotFormParams
+  EditSpotAmenitiesScreen: { id: string } & SpotFormParams
+  EditSpotImagesScreen: { id: string } & SpotFormParams
+  EditSpotConfirmScreen: { id: string } & SpotFormParams
 
   ListsLayout: undefined
   ListsScreen: undefined

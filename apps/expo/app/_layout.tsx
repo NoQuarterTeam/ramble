@@ -28,6 +28,8 @@ import { useMe } from "../lib/hooks/useMe"
 import { AppLayout } from "./(app)/_layout"
 import { NewListScreen } from "./(app)/lists/new"
 import { EditListScreen } from "./(app)/shared/lists/[id]/edit"
+import { DeleteSpotScreen } from "./(app)/shared/spots/[id]/delete"
+import { EditSpotLayout } from "./(app)/shared/spots/[id]/edit/_layout"
 import { ReviewDetailScreen } from "./(app)/shared/spots/[id]/reviews/[id]"
 import { NewReviewScreen } from "./(app)/shared/spots/[id]/reviews/new"
 import { SaveSpotScreen } from "./(app)/shared/spots/[id]/save"
@@ -35,7 +37,6 @@ import { NewSpotLayout } from "./(app)/shared/spots/new/_layout"
 import { AuthLayout } from "./(auth)/_layout"
 import { OnboardingLayout } from "./onboarding/_layout"
 import { type ScreenParamsList } from "./router"
-import { DeleteSpotScreen } from "./(app)/shared/spots/[id]/delete"
 
 SplashScreen.preventAutoHideAsync()
 enableScreens()
@@ -110,6 +111,7 @@ export default function RootLayout() {
                   >
                     <Container.Screen name="AuthLayout" component={AuthLayout} />
                     <Container.Screen name="NewSpotLayout" component={NewSpotLayout} />
+                    <Container.Screen name="EditSpotLayout" component={EditSpotLayout} />
                     <Container.Screen name="NewListScreen" component={NewListScreen} />
                     <Container.Screen name="EditListScreen" component={EditListScreen} />
                     <Container.Screen name="NewReviewScreen" component={NewReviewScreen} />

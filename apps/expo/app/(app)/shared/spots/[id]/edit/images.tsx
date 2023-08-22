@@ -4,14 +4,14 @@ import { Image } from "expo-image"
 import * as ImagePicker from "expo-image-picker"
 import { Plus, X } from "lucide-react-native"
 
-import { Button } from "../../../../../components/ui/Button"
-import { toast } from "../../../../../components/ui/Toast"
-import { useParams, useRouter } from "../../../../router"
-import { NewSpotModalView } from "./NewSpotModalView"
+import { Button } from "../../../../../../components/ui/Button"
+import { toast } from "../../../../../../components/ui/Toast"
+import { useParams, useRouter } from "../../../../../router"
+import { EditSpotModalView } from "./EditSpotModalView"
 
-export function NewSpotImagesScreen() {
-  const { params } = useParams<"NewSpotImagesScreen">()
-  const [images, setImages] = React.useState<string[]>([])
+export function EditSpotImagesScreen() {
+  const { params } = useParams<"EditSpotImagesScreen">()
+  const [images, setImages] = React.useState<string[]>(params.images)
 
   const onPickImage = async () => {
     try {
@@ -33,7 +33,7 @@ export function NewSpotImagesScreen() {
 
   const router = useRouter()
   return (
-    <NewSpotModalView title="Upload images">
+    <EditSpotModalView title="Upload images">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View className="flex flex-row flex-wrap">
           {images.map((image) => (
@@ -54,11 +54,11 @@ export function NewSpotImagesScreen() {
 
       {images.length > 0 && (
         <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
-          <Button className="rounded-full" onPress={() => router.push("NewSpotConfirmScreen", { ...params, images })}>
+          <Button className="rounded-full" onPress={() => router.push("EditSpotConfirmScreen", { ...params, images })}>
             Next
           </Button>
         </View>
       )}
-    </NewSpotModalView>
+    </EditSpotModalView>
   )
 }

@@ -12,20 +12,20 @@ import * as Location from "expo-location"
 import { StatusBar } from "expo-status-bar"
 import { Check, ChevronDown, ChevronLeft, Compass, Edit2, Heart, Star, Trash } from "lucide-react-native"
 
-import { AMENITIES, canManageSpot, displayRating, merge } from "@ramble/shared"
+import { AMENITIES, canManageSpot, createImageUrl, displayRating, merge } from "@ramble/shared"
 
 import { ReviewItem } from "../../../../../components/ReviewItem"
 import { Button } from "../../../../../components/ui/Button"
 import { Heading } from "../../../../../components/ui/Heading"
 import { ImageCarousel } from "../../../../../components/ui/ImageCarousel"
 import { Text } from "../../../../../components/ui/Text"
+import { toast } from "../../../../../components/ui/Toast"
 import { VerifiedCard } from "../../../../../components/VerifiedCard"
 import { api } from "../../../../../lib/api"
 import { width } from "../../../../../lib/device"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { AMENITIES_ICONS } from "../../../../../lib/static/amenities"
 import { useParams, useRouter } from "../../../../router"
-import { toast } from "../../../../../components/ui/Toast"
 
 export function SpotDetailScreen() {
   const [location, setLocation] = React.useState<Location.LocationObjectCoords | null>(null)
@@ -156,7 +156,7 @@ export function SpotDetailScreen() {
                 })}
               </View>
             )}
-            <View className="flex flex-row">
+            <View className="flex flex-row space-x-2">
               {canManageSpot(spot, me) && (
                 <>
                   {!spot.verifiedAt && (
@@ -168,7 +168,24 @@ export function SpotDetailScreen() {
                       Verify
                     </Button>
                   )}
-                  <Button variant="outline" leftIcon={<Edit2 size={18} className="text-black dark:text-white" />}>
+                  <Button
+                    onPress={() =>
+                      router.push("EditSpotLayout", {
+                        ...spot,
+                        id: spot.id,
+                        latitude: spot.latitude,
+                        longitude: spot.longitude,
+                        type: spot.type,
+                        name: spot.name,
+                        description: spot.description,
+                        isPetFriendly: spot.isPetFriendly,
+                        amenities: spot.amenities || undefined,
+                        images: spot.images.map((i) => createImageUrl(i.path)),
+                      })
+                    }
+                    variant="outline"
+                    leftIcon={<Edit2 size={18} className="text-black dark:text-white" />}
+                  >
                     Edit
                   </Button>
                 </>
