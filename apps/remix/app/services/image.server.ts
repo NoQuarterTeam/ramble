@@ -76,7 +76,7 @@ export async function generateImage({ request }: LoaderArgs) {
     })
 
     if (width || height) sharpInstance.resize(width, height, { fit })
-    sharpInstance.avif({ quality })
+    sharpInstance.avif({ quality }).withMetadata()
 
     // upload to s3
     await uploadStream(key, res.data.pipe(sharpInstance))
