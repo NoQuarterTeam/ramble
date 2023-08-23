@@ -65,7 +65,7 @@ export function AccountInfoScreen() {
         quality: 1,
       })
       if (result.canceled || !result.assets[0]?.uri) return
-      const { key } = await upload(result.assets[0].uri)
+      const key = await upload(result.assets[0].uri)
       saveAvatar({ avatar: key })
     } catch (error) {
       let message

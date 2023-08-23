@@ -16,7 +16,7 @@ export function EditSpotOptionsScreen() {
   useKeyboardController()
   const { params } = useParams<"EditSpotOptionsScreen">()
   const [name, setName] = React.useState<string>(params.name)
-  const [description, setDescription] = React.useState<string>()
+  const [description, setDescription] = React.useState(params.description)
   const [isPetFriendly, setIsPetFriendly] = React.useState(false)
   const router = useRouter()
   return (
@@ -36,7 +36,7 @@ export function EditSpotOptionsScreen() {
           />
         </View>
         <FormInputLabel label="Describe the spot" />
-        <Input value={description} onChangeText={setDescription} multiline numberOfLines={4} />
+        <Input value={description || ""} onChangeText={setDescription} multiline numberOfLines={4} />
       </ScrollView>
       {(params.type === "CAMPING" ? !!description && !!name : !!name) && (
         <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
@@ -46,7 +46,7 @@ export function EditSpotOptionsScreen() {
               router.push(params.type === "CAMPING" ? "EditSpotAmenitiesScreen" : "EditSpotImagesScreen", {
                 ...params,
                 name,
-                description: description || null,
+                description,
                 isPetFriendly,
               })
             }

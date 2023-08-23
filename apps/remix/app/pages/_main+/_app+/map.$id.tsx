@@ -27,7 +27,7 @@ export const loader = async ({ params }: LoaderArgs) => {
         address: true,
         _count: { select: { reviews: true, listSpots: true } },
         description: true,
-        verifier: { select: { firstName: true, username: true, lastName: true, avatar: true } },
+        verifier: { select: { firstName: true, username: true, lastName: true, avatar: true, avatarBlurHash: true } },
         verifiedAt: true,
         images: { select: { id: true, path: true, blurHash: true } },
         reviews: {

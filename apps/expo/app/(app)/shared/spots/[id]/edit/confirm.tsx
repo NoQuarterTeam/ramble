@@ -3,7 +3,7 @@ import { ScrollView, View } from "react-native"
 import { Image } from "expo-image"
 import { Check } from "lucide-react-native"
 
-import { AMENITIES } from "@ramble/shared"
+import { AMENITIES, createImageUrl } from "@ramble/shared"
 
 import { Button } from "../../../../../../components/ui/Button"
 import { Text } from "../../../../../../components/ui/Text"
@@ -20,7 +20,11 @@ export function EditSpotConfirmScreen() {
   const Icon = SPOTS[params.type].Icon
 
   const utils = api.useContext()
-  const { mutate, isLoading: updateLoading } = api.spot.update.useMutation({
+  const {
+    mutate,
+    isLoading: updateLoading,
+    error,
+  } = api.spot.update.useMutation({
     onSuccess: (data) => {
       utils.spot.list.refetch({ sort: "latest", skip: 0 })
       utils.spot.detail.refetch({ id: data.id })
@@ -39,7 +43,13 @@ export function EditSpotConfirmScreen() {
   const handleCreateSpot = async () => {
     // upload images
     setLoading(true)
-    const images = await Promise.all(params.images.map((i) => upload(i)))
+    const imagesToUpload: string[] = []
+    const existingImages: string[] = []
+    for (const image of params.images) {
+      if (image.startsWith("file://")) imagesToUpload.push(image)
+      else existingImages.push(image)
+    }
+    const newImageKeys = await Promise.all(imagesToUpload.map((i) => upload(i)))
     mutate({
       id: params.id,
       description: params.description,
@@ -47,7 +57,7 @@ export function EditSpotConfirmScreen() {
       latitude: params.latitude,
       longitude: params.longitude,
       type: params.type,
-      images: images.map((i) => ({ path: i.key })),
+      images: [...newImageKeys, ...existingImages].map((i) => ({ path: i })),
       amenities: params.amenities,
       isPetFriendly: params.isPetFriendly,
     })
@@ -66,7 +76,10 @@ export function EditSpotConfirmScreen() {
           <View className="flex flex-row flex-wrap">
             {params.images.map((image, i) => (
               <View key={i} className="w-1/3 p-1">
-                <Image className="h-[100px] w-full rounded-md bg-gray-50 object-cover dark:bg-gray-700" source={{ uri: image }} />
+                <Image
+                  className="h-[100px] w-full rounded-md bg-gray-50 object-cover dark:bg-gray-700"
+                  source={{ uri: image.startsWith("file://") ? image : createImageUrl(image) }}
+                />
               </View>
             ))}
           </View>
@@ -74,6 +87,7 @@ export function EditSpotConfirmScreen() {
       </ScrollView>
 
       <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
+        {error && <Text className="text-red-500">{error.message}</Text>}
         <Button
           isLoading={updateLoading || isLoading}
           leftIcon={<Check size={20} className="text-white dark:text-black" />}

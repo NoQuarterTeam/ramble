@@ -23,12 +23,12 @@ export const vanRouter = createTRPCRouter({
       if (van.userId !== ctx.user.id) throw new TRPCError({ code: "UNAUTHORIZED" })
       return ctx.prisma.van.update({ where: { id }, data })
     }),
-  saveImages: protectedProcedure.input(z.object({ keys: z.array(z.string()) })).mutation(async ({ ctx, input }) => {
+  saveImages: protectedProcedure.input(z.object({ paths: z.array(z.string()) })).mutation(async ({ ctx, input }) => {
     const van = await ctx.prisma.van.findUnique({ where: { userId: ctx.user.id } })
     if (!van) throw new TRPCError({ code: "NOT_FOUND" })
     if (van.userId !== ctx.user.id) throw new TRPCError({ code: "UNAUTHORIZED" })
     const imageData = await Promise.all(
-      input.keys.map(async (path) => {
+      input.paths.map(async (path) => {
         const blurHash = await generateBlurHash(path)
         return { path, blurHash }
       }),
