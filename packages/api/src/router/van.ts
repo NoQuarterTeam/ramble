@@ -7,7 +7,7 @@ import { generateBlurHash } from "../services/generateBlurHash.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const vanRouter = createTRPCRouter({
-  mine: protectedProcedure.query(async ({ ctx }) => {
+  mine: protectedProcedure.query(({ ctx }) => {
     return ctx.prisma.van.findUnique({ where: { userId: ctx.user.id }, include: { images: true } })
   }),
   byUser: publicProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {
