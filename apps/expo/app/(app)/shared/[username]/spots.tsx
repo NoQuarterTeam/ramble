@@ -1,11 +1,11 @@
 import { View } from "react-native"
+import { FlashList } from "@shopify/flash-list"
 
 import { SpotItem } from "../../../../components/SpotItem"
 import { Spinner } from "../../../../components/ui/Spinner"
 import { Text } from "../../../../components/ui/Text"
 import { api } from "../../../../lib/api"
 import { useParams } from "../../../router"
-import { FlashList } from "@shopify/flash-list"
 
 export function UserSpots() {
   const { params } = useParams<"UserScreen">()
