@@ -1,12 +1,11 @@
 import * as React from "react"
-import { View } from "react-native"
+import { View, TouchableOpacity } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 
 import { createImageUrl, merge } from "@ramble/shared"
 
 import { OptimizedImage } from "./OptimisedImage"
 import { Text } from "./Text"
-import { TouchableOpacity } from "react-native-gesture-handler"
 
 export function ImageCarousel({
   images,
