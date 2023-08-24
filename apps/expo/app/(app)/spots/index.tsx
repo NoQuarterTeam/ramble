@@ -52,7 +52,7 @@ export function SpotsScreen() {
         <TouchableOpacity
           activeOpacity={1}
           onPress={sortProps.onClose}
-          className="absolute inset-0 z-10 px-4 pt-[110px] shadow-md"
+          className="absolute inset-0 z-10 px-4 pt-[100px] shadow-md"
           style={{ width, height }}
         >
           <View className="w-[200px] rounded-md bg-white px-4 py-2 dark:bg-black">
@@ -83,7 +83,7 @@ export function SpotsScreen() {
           ListEmptyComponent={<Text>No spots yet</Text>}
           onEndReached={handleLoadMore}
           data={spots}
-          ItemSeparatorComponent={() => <View className="h-4" />}
+          ItemSeparatorComponent={() => <View className="h-6" />}
           renderItem={({ item }) => <SpotItem spot={item} />}
         />
       )}

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { View } from "react-native"
+import { View, TouchableOpacity } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 
 import { createImageUrl, merge } from "@ramble/shared"
@@ -12,11 +12,13 @@ export function ImageCarousel({
   width,
   height,
   imageClassName,
+  onPress,
 }: {
   width: number
   height: number
   images: { id: string; path: string; blurHash?: string | null }[]
   imageClassName?: string
+  onPress?: () => void
 }) {
   const [imageIndex, setImageIndex] = React.useState(0)
 
@@ -35,14 +37,16 @@ export function ImageCarousel({
         showsHorizontalScrollIndicator={false}
         data={images}
         renderItem={({ item: image }) => (
-          <OptimizedImage
-            width={width}
-            height={height}
-            placeholder={image.blurHash}
-            source={{ uri: createImageUrl(image.path) }}
-            style={{ width, height }}
-            className={merge("object-cover", imageClassName)}
-          />
+          <TouchableOpacity onPress={onPress} activeOpacity={1}>
+            <OptimizedImage
+              width={width}
+              height={height}
+              placeholder={image.blurHash}
+              source={{ uri: createImageUrl(image.path) }}
+              style={{ width, height }}
+              className={merge("object-cover", imageClassName)}
+            />
+          </TouchableOpacity>
         )}
       />
       <View className="absolute bottom-2 right-2 rounded bg-gray-800/70 p-1">

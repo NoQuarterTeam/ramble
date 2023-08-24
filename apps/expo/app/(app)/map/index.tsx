@@ -321,7 +321,13 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
                   </View>
                 </View>
                 <View className="overflow-hidden rounded-lg">
-                  <ImageCarousel key={spot.id} width={width - 52} height={200} images={spot.images} />
+                  <ImageCarousel
+                    onPress={() => push("SpotDetailScreen", { id: spot.id })}
+                    key={spot.id}
+                    width={width - 52}
+                    height={200}
+                    images={spot.images}
+                  />
                 </View>
               </View>
             )}

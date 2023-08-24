@@ -13,8 +13,6 @@ import { EditSpotModalView } from "./EditSpotModalView"
 export function EditSpotLocationScreen() {
   const { params } = useParams<"EditSpotLocationScreen">()
 
-  console.log({ params })
-
   const [coords, setCoords] = React.useState<number[]>([params.longitude, params.latitude])
 
   const camera = React.useRef<Camera>(null)

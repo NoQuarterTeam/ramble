@@ -17,7 +17,7 @@ export function EditSpotOptionsScreen() {
   const { params } = useParams<"EditSpotOptionsScreen">()
   const [name, setName] = React.useState<string>(params.name)
   const [description, setDescription] = React.useState(params.description)
-  const [isPetFriendly, setIsPetFriendly] = React.useState(false)
+  const [isPetFriendly, setIsPetFriendly] = React.useState(params.isPetFriendly)
   const router = useRouter()
   return (
     <EditSpotModalView title="Some info">

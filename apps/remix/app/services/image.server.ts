@@ -75,7 +75,7 @@ export async function generateImage({ request }: LoaderArgs) {
       console.error(error)
     })
 
-    if (width || height) sharpInstance.resize(width, height, { fit })
+    if (width || height) sharpInstance.rotate().resize(width, height, { fit })
     sharpInstance.avif({ quality })
 
     // upload to s3
