@@ -5,6 +5,7 @@ import { Spinner } from "../../../../components/ui/Spinner"
 import { Text } from "../../../../components/ui/Text"
 import { api } from "../../../../lib/api"
 import { useParams } from "../../../router"
+import { FlashList } from "@shopify/flash-list"
 
 export function UserSpots() {
   const { params } = useParams<"UserScreen">()
@@ -24,12 +25,15 @@ export function UserSpots() {
     )
 
   return (
-    <View className="space-y-1">
-      {spots.map((spot) => (
-        <View key={spot.id}>
-          <SpotItem spot={spot} />
-        </View>
-      ))}
-    </View>
+    <FlashList
+      showsVerticalScrollIndicator={false}
+      estimatedItemSize={322}
+      ListEmptyComponent={<Text>No spots yet</Text>}
+      // onEndReachedThreshold={0.8}
+      // onEndReached={handleLoadMore}
+      data={spots}
+      ItemSeparatorComponent={() => <View className="h-6" />}
+      renderItem={({ item }) => <SpotItem spot={item} />}
+    />
   )
 }
