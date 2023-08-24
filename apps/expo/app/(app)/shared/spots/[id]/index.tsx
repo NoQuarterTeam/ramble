@@ -169,6 +169,7 @@ export function SpotDetailScreen() {
                     </Button>
                   )}
                   <Button
+                    size="sm"
                     onPress={() =>
                       router.push("EditSpotLayout", {
                         ...spot,
@@ -192,6 +193,7 @@ export function SpotDetailScreen() {
               )}
               {me?.isAdmin && (
                 <Button
+                  size="sm"
                   onPress={() => router.push("DeleteSpotScreen", { id: spot.id })}
                   variant="destructive"
                   leftIcon={<Trash size={18} className="text-white" />}

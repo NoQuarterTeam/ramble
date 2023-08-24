@@ -32,14 +32,13 @@ export function SpotItem({ spot }: Props) {
         )}
       </View>
 
-      <View className="flex-shrink pt-1">
+      <View className="pt-1">
         <Text numberOfLines={2} className="text-xl">
           {spot.name}
         </Text>
-        <Text numberOfLines={1} className="font-300 text-sm opacity-80">
+        <Text numberOfLines={1} className="font-300 pb-0.5 text-sm opacity-80">
           {spot.address}
         </Text>
-
         <View className="flex flex-row items-center space-x-2">
           <View className="flex flex-row items-center space-x-1">
             <Star size={16} className="text-black dark:text-white" />
