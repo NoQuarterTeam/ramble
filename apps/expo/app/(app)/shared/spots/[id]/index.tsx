@@ -172,7 +172,6 @@ export function SpotDetailScreen() {
                     size="sm"
                     onPress={() =>
                       router.push("EditSpotLayout", {
-                        ...spot,
                         id: spot.id,
                         latitude: spot.latitude,
                         longitude: spot.longitude,
