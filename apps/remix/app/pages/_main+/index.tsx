@@ -86,7 +86,7 @@ export default function Home() {
 
         <div className="space-y-4">
           {/* <h2 className="text-3xl">This is Ramble.</h2> */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 gap-2 md:gap-4">
             <div className="space-y-4">
               <img src={`/landing/8.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
               <img src={`/landing/3.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
