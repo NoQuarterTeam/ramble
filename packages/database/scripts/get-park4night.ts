@@ -8,6 +8,19 @@ import { prisma } from ".."
 import { SpotType } from "../types"
 
 async function getCards({ lat, lng }: { lat: number; lng: number }) {
+  // const fixes = await prisma.spot.findMany({
+  //   select: { id: true, name: true },
+  //   where: { type: "FREE_CAMPING", name: { startsWith: "-" } },
+  // })
+
+  // for (let index = 0; index < fixes.length; index++) {
+  //   const spot = fixes[index]
+  //   const newNameWithoutHypenAtStart = spot.name.replace(/^-/, "").trim()
+  //   await prisma.spot.update({ where: { id: spot.id }, data: { name: newNameWithoutHypenAtStart } })
+  // }
+
+  // return
+
   const res = await fetch(url + `lat=${lat}&lng=${lng}`)
   const newSpots = (await res.json()) as typeof exampleData
 
@@ -15,7 +28,7 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
 
   const dbSpots = await prisma.spot.findMany({
     select: { park4nightId: true },
-    where: { park4nightId: { in: newSpots.map((s) => s.id) } },
+    where: { type: "FREE_CAMPING", park4nightId: { in: newSpots.map((s) => s.id) } },
   })
 
   // number of new spots
@@ -32,7 +45,7 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
         type: SpotType.FREE_CAMPING,
         park4nightId: spot.id,
         address: spot.address.street + ", " + spot.address.city + ", " + spot.address.country + ", " + spot.address.zipcode,
-        name: spot.title_short,
+        name: spot.title_short.replace(/\([^)]*-(?:[^)]*)\)\s*/, "").trim(),
         createdAt: new Date(spot.created_at),
         description: spot.description,
         latitude: spot.lat,
@@ -84,7 +97,7 @@ async function main() {
   try {
     // lat and lng coords of europe in large squares
 
-    await getCards({ lat: 48.25744095909484, lng: 9.744850246652686 })
+    await getCards({ lat: 45.00885571770821, lng: -0.8788928050084053 })
   } catch (error) {
     console.log(error)
     process.exit(1)

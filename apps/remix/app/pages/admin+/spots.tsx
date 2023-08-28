@@ -39,6 +39,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   const result = schema.safeParse(queryString.parse(new URL(request.url).search, { arrayFormat: "bracket" }))
   if (!result.success) throw badRequest(result.error.message)
   const where = {
+    deletedAt: null,
     OR: search ? [{ name: { contains: search } }] : undefined,
     type: result.data.type ? { equals: result.data.type as SpotType } : undefined,
     verifiedAt: result.data.unverified === "true" ? { equals: null } : undefined,
@@ -79,7 +80,7 @@ export const action = async ({ request }: ActionArgs) => {
         const result = await validateFormData(formData, deleteSchema)
         if (!result.success) return formError(result)
         const data = result.data
-        await db.spot.delete({ where: { id: data.id } })
+        await db.spot.update({ where: { id: data.id }, data: { deletedAt: new Date() } })
         return json({ success: true })
       } catch {
         return badRequest("Error deleting spot")
