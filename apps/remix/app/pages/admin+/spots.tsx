@@ -54,7 +54,7 @@ export const loader = async ({ request }: LoaderArgs) => {
       include: { creator: true, verifier: true, images: true },
     }),
     db.spot.count({ where, take: undefined, skip: undefined }),
-    db.spot.count({ where: { verifiedAt: null }, take: undefined, skip: undefined }),
+    db.spot.count({ where: { ...where, verifiedAt: null }, take: undefined, skip: undefined }),
   ])
 
   return json({ spots, count, unverifiedSpotsCount }, request, {
