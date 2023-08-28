@@ -180,6 +180,7 @@ export default function MapView() {
 //       CAFE: "bg-blue-700 dark:bg-blue-900",
 //       RESTAURANT: "bg-purple-500 dark:bg-purple-900",
 //       CAMPING: "bg-green-500 dark:bg-green-900",
+//       FREE_CAMPING: "bg-green-500 dark:bg-green-900",
 //       PARKING: "bg-gray-500 dark:bg-gray-900",
 //       BAR: "bg-red-500 dark:bg-red-900",
 //       TIP: "bg-white dark:bg-gray-900",

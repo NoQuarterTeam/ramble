@@ -21,6 +21,7 @@ import { Icons } from "~/components/ui"
 
 export const SPOTS: { [key in SpotType]: { label: string; Icon: RambleIcon; isPrimary: boolean } } = {
   CAMPING: { isPrimary: true, label: "Camping", Icon: Tent },
+  FREE_CAMPING: { isPrimary: true, label: "Free Camping", Icon: Tent },
   SURFING: { isPrimary: true, label: "Surfing", Icon: Icons.Surf },
   CLIMBING: { isPrimary: true, label: "Climbing", Icon: Mountain },
   MOUNTAIN_BIKING: { isPrimary: true, label: "Mountain Biking", Icon: Bike },

@@ -36,6 +36,7 @@ export async function main() {
   const types = [
     "CAFE",
     "CAMPING",
+    "FREE_CAMPING",
     "RESTAURANT",
     "PARKING",
     "BAR",

@@ -10,10 +10,7 @@
     "dev": "pnpm with-env prisma studio",
     "db:push": "pnpm with-env prisma db push && pnpm generate",
     "db:seed": "pnpm with-env ts-node ./seed",
-    "db:campspace": "pnpm with-env ts-node ./seed/campspace.ts",
-    "load-campspace": "pnpm with-env ts-node ./scripts/load-campspace.ts",
-    "parse-html": "pnpm with-env ts-node ./scripts/parse-html.ts",
-    "blurhash": "pnpm with-env ts-node ./scripts/gen-blurhash.ts",
+    "park4night": "pnpm with-env ts-node ./scripts/get-park4night.ts",
     "generate": "pnpm with-env prisma generate --no-engine",
     "with-env": "dotenv -e ../../.env --",
     "postinstall": "prisma generate --no-engine"

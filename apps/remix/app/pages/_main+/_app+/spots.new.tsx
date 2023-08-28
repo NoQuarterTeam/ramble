@@ -8,6 +8,8 @@ import { json, redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { amenitiesSchema, SpotForm, spotSchema } from "./components/SpotForm"
+import type { z } from "zod"
+import { doesSpotTypeRequireAmenities } from "@ramble/shared"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const user = await getCurrentUser(request, { isVerified: true })
@@ -34,8 +36,8 @@ export const action = async ({ request }: ActionArgs) => {
     }),
   )
 
-  let amenities
-  if (result.data.type === "CAMPING") {
+  let amenities: undefined | z.infer<typeof amenitiesSchema>
+  if (doesSpotTypeRequireAmenities(result.data.type)) {
     const amenitiesResult = await validateFormData(formData, amenitiesSchema)
     if (!amenitiesResult.success) return formError(amenitiesResult)
     amenities = amenitiesResult.data

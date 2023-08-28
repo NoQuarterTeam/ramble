@@ -12,7 +12,13 @@ import { zx } from "zodix"
 
 import type { Spot, SpotAmenities, SpotImage } from "@ramble/database/types"
 import { SpotType } from "@ramble/database/types"
-import { AMENITIES, INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
+import {
+  AMENITIES,
+  INITIAL_LATITUDE,
+  INITIAL_LONGITUDE,
+  doesSpotTypeRequireAmenities,
+  doesSpotTypeRequireDescription,
+} from "@ramble/shared"
 
 import { Form, FormButton, FormError, FormField, FormFieldError, FormFieldLabel, ImageField } from "~/components/Form"
 import { ImageUploader } from "~/components/ImageUploader"
@@ -51,7 +57,7 @@ export const spotSchema = z
   })
   .refine(
     (data) => {
-      if (data.type === "CAMPING" && (!data.description || data.description.length < 50)) return false
+      if (doesSpotTypeRequireDescription(data.type) && (!data.description || data.description.length < 50)) return false
       return true
     },
     { message: "Description must be at least 50 characters long", path: ["description"] },
@@ -129,7 +135,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
         <div className="space-y-2">
           <FormField required name="name" label="Name" defaultValue={spot?.name} />
           <FormField
-            required={type === "CAMPING"}
+            required={doesSpotTypeRequireDescription(type)}
             name="description"
             label="Description"
             defaultValue={spot?.description || ""}
@@ -176,7 +182,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
               )}
             </div>
           </div>
-          {type === "CAMPING" && (
+          {doesSpotTypeRequireAmenities(type) && (
             <div className="space-y-0.5">
               <FormFieldLabel required>Amenities</FormFieldLabel>
               <div className="flex flex-wrap gap-1">

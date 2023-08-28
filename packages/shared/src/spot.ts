@@ -1,4 +1,4 @@
-import type { Spot, User } from "@ramble/database/types"
+import { Spot, SpotType, User } from "@ramble/database/types"
 
 export const canManageSpot = (
   spot: (Pick<Spot, "ownerId"> & { deletedAt: string | Date | null }) | null,
@@ -19,4 +19,13 @@ export const canManageSpot = (
 export function displayRating(rating: number | string | null | undefined) {
   if (!rating) return "New"
   return Math.round(Number(rating) * 100) / 100
+}
+
+export function doesSpotTypeRequireAmenities(type?: SpotType | null | undefined) {
+  if (!type) return false
+  return type === SpotType.CAMPING || type === SpotType.FREE_CAMPING
+}
+export function doesSpotTypeRequireDescription(type?: SpotType | null | undefined) {
+  if (!type) return false
+  return type === SpotType.CAMPING || type === SpotType.FREE_CAMPING
 }

@@ -88,6 +88,7 @@ model VanImage {
 enum SpotType {
   CAFE
   CAMPING
+  FREE_CAMPING
   RESTAURANT
   PARKING
   BAR
@@ -136,6 +137,9 @@ model Spot {
 
   // Neste
   nesteId String? @unique
+
+  // park4night
+  park4nightId Int? @unique
 
   @@index([createdAt])
   @@index([latitude])

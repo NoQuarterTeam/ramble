@@ -11,6 +11,7 @@ import { Text } from "../../../../../components/ui/Text"
 import { useKeyboardController } from "../../../../../lib/hooks/useKeyboardController"
 import { useParams, useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
+import { doesSpotTypeRequireAmenities } from "@ramble/shared"
 
 export function NewSpotOptionsScreen() {
   useKeyboardController()
@@ -43,7 +44,7 @@ export function NewSpotOptionsScreen() {
           <Button
             className="rounded-full"
             onPress={() =>
-              router.push(params.type === "CAMPING" ? "NewSpotAmenitiesScreen" : "NewSpotImagesScreen", {
+              router.push(doesSpotTypeRequireAmenities(params.type) ? "NewSpotAmenitiesScreen" : "NewSpotImagesScreen", {
                 ...params,
                 name,
                 description,
