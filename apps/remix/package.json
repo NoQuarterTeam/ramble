@@ -12,6 +12,7 @@
     "lint": "eslint --config .eslintrc.js --ext .ts,.tsx app",
     "prettier": "prettier --check app",
     "prettier:fix": "prettier --write app",
+    "format": "pnpm run lint:fix && pnpm run prettier:fix",
     "typecheck": "tsc --noEmit",
     "with-env": "dotenv -e ../../.env --"
   },

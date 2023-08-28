@@ -5,12 +5,11 @@ import { cacheHeader } from "pretty-cache-header"
 
 import { type SpotItemWithStats } from "@ramble/api/src/router/spot"
 
-import landingStyles from "~/styles/landing.css"
-
 import { LinkButton } from "~/components/LinkButton"
 import { Badge } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
+import landingStyles from "~/styles/landing.css"
 
 import { PageContainer } from "../../components/PageContainer"
 import { SpotItem } from "./_app+/components/SpotItem"

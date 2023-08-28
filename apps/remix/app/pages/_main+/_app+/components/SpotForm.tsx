@@ -14,10 +14,10 @@ import type { Spot, SpotAmenities, SpotImage } from "@ramble/database/types"
 import { SpotType } from "@ramble/database/types"
 import {
   AMENITIES,
-  INITIAL_LATITUDE,
-  INITIAL_LONGITUDE,
   doesSpotTypeRequireAmenities,
   doesSpotTypeRequireDescription,
+  INITIAL_LATITUDE,
+  INITIAL_LONGITUDE,
 } from "@ramble/shared"
 
 import { Form, FormButton, FormError, FormField, FormFieldError, FormFieldLabel, ImageField } from "~/components/Form"

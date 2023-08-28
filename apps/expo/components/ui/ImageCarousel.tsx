@@ -1,5 +1,5 @@
 import * as React from "react"
-import { View, TouchableOpacity } from "react-native"
+import { TouchableOpacity, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 
 import { createImageUrl, merge } from "@ramble/shared"

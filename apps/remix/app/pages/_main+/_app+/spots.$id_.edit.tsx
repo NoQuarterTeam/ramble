@@ -1,6 +1,7 @@
 import { useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 import { json, redirect } from "@vercel/remix"
+import type { z } from "zod"
 
 import { generateBlurHash } from "@ramble/api"
 import { canManageSpot, doesSpotTypeRequireAmenities } from "@ramble/shared"
@@ -11,7 +12,6 @@ import { notFound } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { amenitiesSchema, SpotForm, spotSchema } from "./components/SpotForm"
-import type { z } from "zod"
 
 export const loader = async ({ request, params }: LoaderArgs) => {
   const user = await getCurrentUser(request, { role: true, id: true, isAdmin: true, isVerified: true })

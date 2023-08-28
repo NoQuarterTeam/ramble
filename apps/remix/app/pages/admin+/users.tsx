@@ -1,6 +1,8 @@
 import { useLoaderData } from "@remix-run/react"
 import { createColumnHelper } from "@tanstack/react-table"
 import { type LoaderArgs, type SerializeFrom } from "@vercel/remix"
+import dayjs from "dayjs"
+import { cacheHeader } from "pretty-cache-header"
 
 import { type Prisma } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
@@ -9,11 +11,9 @@ import { Search } from "~/components/Search"
 import { Table } from "~/components/Table"
 import { Avatar } from "~/components/ui"
 import { db } from "~/lib/db.server"
-import { getTableParams } from "~/lib/table"
-import dayjs from "dayjs"
-import { json } from "~/lib/remix.server"
-import { cacheHeader } from "pretty-cache-header"
 import { useLoaderHeaders } from "~/lib/headers.server"
+import { json } from "~/lib/remix.server"
+import { getTableParams } from "~/lib/table"
 
 export const headers = useLoaderHeaders
 

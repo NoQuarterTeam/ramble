@@ -2,6 +2,7 @@ import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
 import { Dog } from "lucide-react-native"
 
+import { doesSpotTypeRequireAmenities } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { Button } from "../../../../../../components/ui/Button"
@@ -11,7 +12,6 @@ import { Text } from "../../../../../../components/ui/Text"
 import { useKeyboardController } from "../../../../../../lib/hooks/useKeyboardController"
 import { useParams, useRouter } from "../../../../../router"
 import { EditSpotModalView } from "./EditSpotModalView"
-import { doesSpotTypeRequireAmenities } from "@ramble/shared"
 
 export function EditSpotOptionsScreen() {
   useKeyboardController()

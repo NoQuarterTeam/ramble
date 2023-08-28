@@ -21,7 +21,6 @@ import {
   AlertDialogTrigger,
   Button,
 } from "~/components/ui"
-import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
 import { db } from "~/lib/db.server"
 import { FORM_ACTION } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
@@ -30,6 +29,7 @@ import { badRequest, json, notFound, redirect } from "~/lib/remix.server"
 import { AMENITIES_ICONS } from "~/lib/static/amenities"
 import { SPOTS } from "~/lib/static/spots"
 import { useTheme } from "~/lib/theme"
+import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
 import type { loader as rootLoader } from "~/root"
 import { getCurrentUser } from "~/services/auth/auth.server"
 

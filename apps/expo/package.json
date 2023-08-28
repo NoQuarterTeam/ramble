@@ -11,6 +11,7 @@
     "lint": "eslint --config .eslintrc.js --ext .ts,.tsx .",
     "prettier": "prettier --check .",
     "prettier:fix": "prettier --write .",
+    "format": "pnpm run lint:fix && pnpm run prettier:fix",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
