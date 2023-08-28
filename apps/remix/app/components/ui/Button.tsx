@@ -30,7 +30,7 @@ export const buttonStyles = cva(
         link: "underline",
       },
       disabled: {
-        true: "pointer-events-none relative opacity-70",
+        true: "pointer-events-none relative cursor-not-allowed opacity-70",
       },
     },
     compoundVariants: [
@@ -81,12 +81,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
       disabled={isLoading || !!disabled}
       {...props}
       className={merge(
-        (isLoading || disabled) && "cursor-not-allowed",
-        buttonStyles({
-          size,
-          disabled: disabled || isLoading,
-          variant,
-        }),
+        buttonStyles({ size, disabled: disabled || isLoading, variant }),
         buttonSizeStyles({ size }),
         props.className,
       )}
