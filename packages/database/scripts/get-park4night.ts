@@ -11,10 +11,14 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
   const res = await fetch(url + `lat=${lat}&lng=${lng}`)
   const newSpots = (await res.json()) as typeof exampleData
 
+  console.log(newSpots.length)
+
   const dbSpots = await prisma.spot.findMany({
     select: { park4nightId: true },
     where: { park4nightId: { in: newSpots.map((s) => s.id) } },
   })
+
+  // number of new spots
 
   for (let index = 0; index < newSpots.length; index++) {
     const spot = newSpots[index]
@@ -80,7 +84,7 @@ async function main() {
   try {
     // lat and lng coords of europe in large squares
 
-    await getCards({ lat: 48.25744095909484, lng: 3.3044850246652686 })
+    await getCards({ lat: 48.25744095909484, lng: 9.744850246652686 })
   } catch (error) {
     console.log(error)
     process.exit(1)

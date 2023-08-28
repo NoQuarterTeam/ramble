@@ -8,8 +8,10 @@
     "lint:fix": "eslint --config .eslintrc.commit.js --fix --cache --ext .ts,.tsx src",
     "lint": "eslint --config .eslintrc.js --ext .ts,.tsx src",
     "prettier": "prettier --check src",
+    "blur": "pnpm with-env ts-node ./src/seed/gen-blurhash.ts",
     "prettier:fix": "prettier --write src",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.310.0",

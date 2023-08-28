@@ -16,9 +16,10 @@ import { toast } from "../../../components/ui/Toast"
 import { api, type RouterOutputs } from "../../../lib/api"
 import { width } from "../../../lib/device"
 import { useAsyncStorage } from "../../../lib/hooks/useAsyncStorage"
-import { SPOTS } from "../../../lib/static/spots"
+
 import { useRouter } from "../../router"
 import { type Filters, initialFilters, MapFilters } from "./MapFilters"
+import { SpotMarker } from "../../../components/SpotMarker"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
@@ -134,7 +135,6 @@ export function SpotsMapScreen() {
           )
         } else {
           const spot = point.properties as { type: SpotType; id: string }
-          const Icon = SPOTS[spot.type].Icon
           const onPress = () => {
             camera.current?.setCamera({
               animationMode: "linearTo",
@@ -146,12 +146,8 @@ export function SpotsMapScreen() {
           }
           return (
             <MarkerView key={spot.id} coordinate={point.geometry.coordinates}>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={onPress}
-                className="sq-8 bg-primary-600 dark:bg-primary-700 border-primary-100 dark:border-primary-600 z-10 flex items-center justify-center rounded-full border shadow-md"
-              >
-                <Icon size={20} color="white" />
+              <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
+                <SpotMarker spot={spot} />
               </TouchableOpacity>
             </MarkerView>
           )
