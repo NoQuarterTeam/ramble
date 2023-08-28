@@ -86,8 +86,8 @@ export function Table<T>({
         <tbody>
           {table.getRowModel().rows.length === 0 ? (
             <tr>
-              <td colSpan={table.getAllFlatColumns().length} className="p-4 text-center">
-                No spots found
+              <td colSpan={table.getAllFlatColumns().length} className="p-8 text-center">
+                No items found
               </td>
             </tr>
           ) : (

@@ -40,7 +40,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   if (!result.success) throw badRequest(result.error.message)
   const where = {
     deletedAt: null,
-    OR: search ? [{ name: { contains: search } }] : undefined,
+    OR: search ? [{ name: { contains: search } }, { description: { contains: search } }] : undefined,
     type: result.data.type ? { equals: result.data.type as SpotType } : undefined,
     verifiedAt: result.data.unverified === "true" ? { equals: null } : undefined,
   } satisfies Prisma.SpotWhereInput
