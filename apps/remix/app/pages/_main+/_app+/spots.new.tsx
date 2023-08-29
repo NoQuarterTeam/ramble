@@ -1,6 +1,8 @@
 import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import type { z } from "zod"
 
 import { generateBlurHash } from "@ramble/api"
+import { doesSpotTypeRequireAmenities } from "@ramble/shared"
 
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
@@ -34,8 +36,8 @@ export const action = async ({ request }: ActionArgs) => {
     }),
   )
 
-  let amenities
-  if (result.data.type === "CAMPING") {
+  let amenities: undefined | z.infer<typeof amenitiesSchema>
+  if (doesSpotTypeRequireAmenities(result.data.type)) {
     const amenitiesResult = await validateFormData(formData, amenitiesSchema)
     if (!amenitiesResult.success) return formError(amenitiesResult)
     amenities = amenitiesResult.data

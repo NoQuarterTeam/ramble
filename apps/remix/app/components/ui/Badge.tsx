@@ -11,7 +11,7 @@ export const badgeProps = cva("w-min whitespace-nowrap rounded-md border font-me
       gray: "border-gray-300 bg-gray-100 text-gray-800 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-50",
       red: "dark:color-red-200 border-red-800/30 bg-red-300/40 text-red-900 dark:border-red-300/40 dark:bg-red-300/20 dark:text-red-200",
       green:
-        "border-green-800/30 bg-green-300/40 text-green-900 dark:border-green-300/40 dark:bg-green-300/20 dark:text-green-200",
+        "border-green-800/20 bg-green-300/40 text-green-900 dark:border-green-300/40 dark:bg-green-300/20 dark:text-green-200",
     },
     size: {
       xs: "text-xxs px-1 py-px",

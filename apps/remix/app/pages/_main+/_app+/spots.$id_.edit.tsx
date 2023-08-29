@@ -1,9 +1,10 @@
 import { useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 import { json, redirect } from "@vercel/remix"
+import type { z } from "zod"
 
 import { generateBlurHash } from "@ramble/api"
-import { canManageSpot } from "@ramble/shared"
+import { canManageSpot, doesSpotTypeRequireAmenities } from "@ramble/shared"
 
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
@@ -36,8 +37,8 @@ export const action = async ({ request, params }: ActionArgs) => {
   if (!spot) throw notFound()
   if (!canManageSpot(spot, user)) throw redirect("/spots")
 
-  let amenities
-  if (result.data.type === "CAMPING") {
+  let amenities: undefined | z.infer<typeof amenitiesSchema>
+  if (doesSpotTypeRequireAmenities(result.data.type)) {
     const amenitiesResult = await validateFormData(formData, amenitiesSchema)
     if (!amenitiesResult.success) return formError(amenitiesResult)
     amenities = amenitiesResult.data
@@ -59,14 +60,9 @@ export const action = async ({ request, params }: ActionArgs) => {
     data: {
       ...data,
       address: customAddress || result.data.address,
-      amenities:
-        spot.type === "CAMPING" && result.data.type !== "CAMPING"
-          ? { delete: true }
-          : result.data.type === "CAMPING" && (spot.type !== "CAMPING" || !spot.amenities)
-          ? { create: amenities }
-          : spot.type === "CAMPING" && result.data.type === "CAMPING"
-          ? { update: amenities }
-          : undefined,
+      amenities: amenities
+        ? { update: spot.amenities ? amenities : undefined, create: spot.amenities ? undefined : amenities }
+        : { delete: spot.amenities ? true : undefined },
       images: { delete: imagesToDelete, create: imageData },
     },
   })

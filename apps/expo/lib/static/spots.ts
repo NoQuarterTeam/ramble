@@ -23,6 +23,7 @@ export const SPOTS: { [key in SpotType]: { label: string; Icon: (props: LucidePr
   CAFE: { label: "Cafe", Icon: Coffee },
   RESTAURANT: { label: "Restaurant", Icon: Utensils },
   CAMPING: { label: "Camping", Icon: Tent },
+  FREE_CAMPING: { label: "Free Camping", Icon: Tent },
   PARKING: { label: "Parking", Icon: ParkingCircle },
   BAR: { label: "Bar", Icon: Beer },
   SURFING: { label: "Surfing", Icon: Icons.Surf },

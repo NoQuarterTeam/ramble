@@ -4,7 +4,7 @@ import { z } from "zod"
 import { listSchema } from "@ramble/shared"
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
-import { SpotItemWithStats } from "./spot"
+import { type SpotItemWithStats } from "@ramble/shared"
 
 export const listRouter = createTRPCRouter({
   allByUser: publicProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {

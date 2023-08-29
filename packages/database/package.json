@@ -8,12 +8,7 @@
   ],
   "scripts": {
     "dev": "pnpm with-env prisma studio",
-    "db:push": "pnpm with-env prisma db push && pnpm db:generate",
-    "db:seed": "pnpm with-env ts-node ./seed",
-    "db:campspace": "pnpm with-env ts-node ./seed/campspace.ts",
-    "load-campspace": "pnpm with-env ts-node ./scripts/load-campspace.ts",
-    "parse-html": "pnpm with-env ts-node ./scripts/parse-html.ts",
-    "blurhash": "pnpm with-env ts-node ./scripts/gen-blurhash.ts",
+    "db:push": "pnpm with-env prisma db push && pnpm generate",
     "generate": "pnpm with-env prisma generate --no-engine",
     "with-env": "dotenv -e ../../.env --",
     "postinstall": "prisma generate --no-engine"
@@ -24,13 +19,8 @@
     "prisma": "5.2.0"
   },
   "devDependencies": {
-    "@faker-js/faker": "^8.0.0",
-    "@types/html-to-text": "^9.0.1",
     "@types/node": "^18.15.3",
-    "cheerio": "1.0.0-rc.12",
     "dotenv-cli": "^7.1.0",
-    "html-to-text": "^9.0.5",
-    "ts-node": "^10.9.1",
     "typescript": "5.2.2"
   },
   "prisma": {

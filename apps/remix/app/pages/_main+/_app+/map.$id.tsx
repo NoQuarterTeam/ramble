@@ -10,12 +10,12 @@ import { createImageUrl, displayRating, merge } from "@ramble/shared"
 import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { CloseButton, Spinner } from "~/components/ui"
-import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
 import { db } from "~/lib/db.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
+import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
+import { SaveToList } from "~/pages/api+/save-to-list"
 
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
-import { SaveToList } from "~/pages/api+/save-to-list"
 
 export const loader = async ({ params }: LoaderArgs) => {
   const spot = db.spot

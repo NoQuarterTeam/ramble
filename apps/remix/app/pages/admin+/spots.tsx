@@ -2,8 +2,9 @@ import { useLoaderData, useRouteError, useSearchParams } from "@remix-run/react"
 import type { Row } from "@tanstack/react-table"
 import { createColumnHelper } from "@tanstack/react-table"
 import type { ActionArgs, LoaderArgs, SerializeFrom } from "@vercel/remix"
-import { json } from "@vercel/remix"
+import dayjs from "dayjs"
 import { Check, Eye, EyeOff, Trash } from "lucide-react"
+import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 import { z } from "zod"
 
@@ -17,24 +18,29 @@ import { Table } from "~/components/Table"
 import { Avatar, Button, IconButton, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { FORM_ACTION, formError, validateFormData } from "~/lib/form"
+import { useLoaderHeaders } from "~/lib/headers.server"
 import { useFetcherSubmit } from "~/lib/hooks/useFetcherSubmit"
-import { badRequest } from "~/lib/remix.server"
-import { SPOT_TYPE_OPTIONS } from "~/lib/static/spots"
+import { badRequest, json } from "~/lib/remix.server"
+import { SPOTS, SPOT_TYPE_OPTIONS } from "~/lib/static/spots"
 import { getTableParams } from "~/lib/table"
 import { useTheme } from "~/lib/theme"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
 
-const TAKE = 20
+const TAKE = 15
+const DEFAULT_ORDER_BY = "createdAt"
 
 const schema = z.object({ type: z.string().optional(), unverified: z.string().optional() })
 
+export const headers = useLoaderHeaders
+
 export const loader = async ({ request }: LoaderArgs) => {
-  const { orderBy, search, skip, take } = getTableParams(request, TAKE, { orderBy: "createdAt", order: "desc" })
+  const { orderBy, search, skip, take } = getTableParams(request, TAKE, { orderBy: DEFAULT_ORDER_BY, order: "desc" })
 
   const result = schema.safeParse(queryString.parse(new URL(request.url).search, { arrayFormat: "bracket" }))
   if (!result.success) throw badRequest(result.error.message)
   const where = {
-    OR: search ? [{ name: { contains: search } }] : undefined,
+    deletedAt: null,
+    OR: search ? [{ name: { contains: search } }, { description: { contains: search } }] : undefined,
     type: result.data.type ? { equals: result.data.type as SpotType } : undefined,
     verifiedAt: result.data.unverified === "true" ? { equals: null } : undefined,
   } satisfies Prisma.SpotWhereInput
@@ -45,13 +51,29 @@ export const loader = async ({ request }: LoaderArgs) => {
       skip,
       take,
       where,
-      include: { creator: true, verifier: true, images: true },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        createdAt: true,
+        verifiedAt: true,
+        latitude: true,
+        longitude: true,
+        type: true,
+        creator: true,
+        verifier: true,
+        images: true,
+      },
     }),
     db.spot.count({ where, take: undefined, skip: undefined }),
-    db.spot.count({ where: { verifiedAt: null }, take: undefined, skip: undefined }),
+    db.spot.count({ where: { ...where, verifiedAt: null }, take: undefined, skip: undefined }),
   ])
 
-  return json({ spots, count, unverifiedSpotsCount })
+  return json({ spots, count, unverifiedSpotsCount }, request, {
+    headers: {
+      "Cache-Control": cacheHeader({ public: true, maxAge: "10mins", sMaxage: "10mins" }),
+    },
+  })
 }
 
 enum Actions {
@@ -70,7 +92,7 @@ export const action = async ({ request }: ActionArgs) => {
         const result = await validateFormData(formData, deleteSchema)
         if (!result.success) return formError(result)
         const data = result.data
-        await db.spot.delete({ where: { id: data.id } })
+        await db.spot.update({ where: { id: data.id }, data: { deletedAt: new Date() } })
         return json({ success: true })
       } catch {
         return badRequest("Error deleting spot")
@@ -100,16 +122,27 @@ const columns = [
     id: "name",
     size: 300,
     header: () => "Name",
-    cell: (info) => info.getValue(),
+    cell: (info) => {
+      const Icon = SPOTS[info.row.original.type].Icon
+      return (
+        <div className="flex items-center space-x-2">
+          <Icon size={16} className="flex-shrink-0" />
+          <p className="truncate">{info.getValue()}</p>
+        </div>
+      )
+    },
   }),
   columnHelper.accessor((row) => row.description, {
     id: "description",
-    size: 600,
+    size: 400,
+    enableSorting: false,
     cell: (info) => info.getValue(),
     header: () => "Description",
   }),
   columnHelper.accessor((row) => row.creator, {
     id: "creator",
+    size: 120,
+    enableSorting: false,
     cell: (info) => (
       <div className="flex items-center space-x-2">
         <Avatar
@@ -125,6 +158,8 @@ const columns = [
   }),
   columnHelper.display({
     id: "verifier",
+    size: 120,
+    enableSorting: false,
     header: () => "Verifier",
     cell: ({ row }) =>
       row.original.verifiedAt && row.original.verifier ? (
@@ -141,8 +176,16 @@ const columns = [
         <SpotVerifyAction spot={row.original} />
       ),
   }),
+  columnHelper.accessor((row) => row.createdAt, {
+    id: "createdAt",
+    size: 120,
+    cell: (info) => dayjs(info.getValue()).format("DD/MM/YYYY"),
+    header: () => "Created At",
+  }),
   columnHelper.display({
     id: "actions",
+    size: 90,
+    enableSorting: false,
     header: () => null,
     cell: ({ row }) => (
       <div className="flex space-x-1">
@@ -186,22 +229,24 @@ export default function Spots() {
             ))}
           </Select>
         </div>
-        <div>
-          <Button
-            variant={searchParams.get("unverified") === "true" ? "primary" : "outline"}
-            onClick={() => {
-              const existingParams = queryString.parse(searchParams.toString())
-              setSearchParams(
-                queryString.stringify({
-                  ...existingParams,
-                  unverified: searchParams.get("unverified") === "true" ? undefined : true,
-                }),
-              )
-            }}
-          >
-            Show {unverifiedSpotsCount} unverified
-          </Button>
-        </div>
+        {unverifiedSpotsCount > 0 && (
+          <div>
+            <Button
+              variant={searchParams.get("unverified") === "true" ? "primary" : "outline"}
+              onClick={() => {
+                const existingParams = queryString.parse(searchParams.toString())
+                setSearchParams(
+                  queryString.stringify({
+                    ...existingParams,
+                    unverified: searchParams.get("unverified") === "true" ? undefined : true,
+                  }),
+                )
+              }}
+            >
+              Show {unverifiedSpotsCount} unverified
+            </Button>
+          </div>
+        )}
         <div>
           <Search className="max-w-[400px]" />
         </div>
@@ -223,12 +268,13 @@ function RenderSubComponent({ row }: { row: Row<Spot> }) {
   },4/300x200@2x?access_token=pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw`
 
   return (
-    <div className="max-w-[1136px] overflow-x-scroll p-1">
-      <div className="relative flex w-max space-x-1">
+    <div className="flex w-full gap-1 overflow-x-scroll p-1">
+      <div className="flex-shrink-0">
         <img height={200} width={300} className="h-[200px] w-[300px] rounded" alt="location" src={mapImageUrl} />
-        {spot.images.map((image) => (
+      </div>
+      {spot.images.map((image) => (
+        <div key={image.id}>
           <OptimizedImage
-            key={image.id}
             height={200}
             width={300}
             placeholder={image.blurHash}
@@ -237,8 +283,8 @@ function RenderSubComponent({ row }: { row: Row<Spot> }) {
             alt="spot"
             src={createImageUrl(image.path)}
           />
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   )
 }

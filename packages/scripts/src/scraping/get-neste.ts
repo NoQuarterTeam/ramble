@@ -1,9 +1,8 @@
 import * as cheerio from "cheerio"
-import fs from "fs"
 
 const url = `https://www.neste.nl/neste-my-renewable-diesel/distributeurs`
 
-import data from "./neste.json"
+import { prisma } from "@ramble/database"
 
 export type Spot = {
   id: string
@@ -13,8 +12,6 @@ export type Spot = {
   latitude?: number
   longitude?: number
 }
-
-let currentData: Spot[] = data
 
 async function getCards() {
   const res = await fetch(url)
@@ -41,13 +38,14 @@ async function getCards() {
         "https://lh3.googleusercontent.com/IT2gbAip6StRHkmGQis6wbbjvXSebPK9GvLab4Ml8bCfG8DCJSDG5oxSepshXBQfCj9zudEUSW7Y85yx0ZXmLtu31TOxsnek5NLzcSXog9TGJdYYB2x4CJED2iE1zmDZuhlGuR5a",
     })
   })
+  const existingSpots = await prisma.spot.findMany({ where: { nesteId: { in: spots.map((s) => s.id) } } })
 
   for (let index = 0; index < spots.length; index++) {
     const spot = spots[index]
 
     try {
       // if in data.json, continue
-      const exists = currentData.find((s) => s.name === spot.name)
+      const exists = existingSpots.find((s) => s.nesteId === spot.name)
       if (exists) continue
 
       // geocode to get lat and lng based on address with mapbox
@@ -58,13 +56,19 @@ async function getCards() {
       )
       const json = await res.json()
 
-      currentData.push({
-        ...spot,
-        longitude: json.features[0].center[0],
-        latitude: json.features[0].center[1],
+      await prisma.spot.create({
+        data: {
+          name: spot.name,
+          address: spot.address,
+          latitude: json.features[0].center[1],
+          longitude: json.features[0].center[0],
+          creator: { connect: { email: "george@noquarter.co" } },
+          verifier: { connect: { email: "george@noquarter.co" } },
+          nesteId: spot.name,
+          type: "GAS_STATION",
+          images: { create: [{ path: spot.imageUrl, creator: { connect: { email: "george@noquarter.co" } } }] },
+        },
       })
-
-      fs.writeFileSync("./neste.json", JSON.stringify(currentData, null, 2))
     } catch {}
   }
 }

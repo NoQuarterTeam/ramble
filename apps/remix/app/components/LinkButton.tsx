@@ -18,14 +18,8 @@ export const LinkButton = React.forwardRef<HTMLAnchorElement, LinkButtonProps>(f
   return (
     <Link
       ref={ref}
-      style={{ pointerEvents: disabled ? "none" : undefined }}
       {...props}
-      className={merge(
-        buttonStyles({ size, variant, disabled }),
-        buttonSizeStyles({ size }),
-        props.className,
-        disabled && "cursor-not-allowed",
-      )}
+      className={merge(buttonStyles({ size, variant, disabled }), buttonSizeStyles({ size }), props.className)}
     >
       {isLoading ? (
         <div className="center absolute inset-0">

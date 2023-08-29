@@ -4,6 +4,7 @@ import { decode } from "blurhash"
 import { merge } from "@ramble/shared"
 
 type Fit = "cover" | "contain" | "fill" | "inside" | "outside"
+export const srcWhitelist = ["https://ramble.s3"]
 
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj["
@@ -37,6 +38,8 @@ export function transformImageSrc(
   options: { width: number; height?: number; quality?: number; fit?: Fit },
 ) {
   if (!src) return undefined
+
+  if (!srcWhitelist.some((s) => src.startsWith(s))) return src
   const optionsString = Object.entries(options).reduce((acc, [key, value]) => {
     if (value === undefined) return acc
     return acc + `&${key}=${value}`

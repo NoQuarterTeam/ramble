@@ -1,6 +1,8 @@
 import { useLoaderData } from "@remix-run/react"
 import { createColumnHelper } from "@tanstack/react-table"
-import { json, type LoaderArgs, type SerializeFrom } from "@vercel/remix"
+import { type LoaderArgs, type SerializeFrom } from "@vercel/remix"
+import dayjs from "dayjs"
+import { cacheHeader } from "pretty-cache-header"
 
 import { type Prisma } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
@@ -9,9 +11,14 @@ import { Search } from "~/components/Search"
 import { Table } from "~/components/Table"
 import { Avatar } from "~/components/ui"
 import { db } from "~/lib/db.server"
+import { useLoaderHeaders } from "~/lib/headers.server"
+import { json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"
 
+export const headers = useLoaderHeaders
+
 const TAKE = 10
+
 export const loader = async ({ request }: LoaderArgs) => {
   const { orderBy, search, skip, take } = getTableParams(request, TAKE, { orderBy: "createdAt", order: "desc" })
   const where = {
@@ -26,7 +33,9 @@ export const loader = async ({ request }: LoaderArgs) => {
     where,
   })
   const count = await db.user.count({ where })
-  return json({ users, count })
+  return json({ users, count }, request, {
+    headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "10mins", sMaxage: "10mins" }) },
+  })
 }
 
 type User = SerializeFrom<typeof loader>["users"][number]
@@ -35,7 +44,6 @@ const columnHelper = createColumnHelper<User>()
 const columns = [
   columnHelper.accessor("firstName", {
     id: "firstName",
-    size: 300,
     header: () => "First name",
     cell: (info) => (
       <div className="flex items-center space-x-2">
@@ -51,9 +59,18 @@ const columns = [
   }),
   columnHelper.accessor("lastName", {
     id: "lastName",
-    size: 300,
     header: () => "Last name",
     cell: (info) => info.getValue(),
+  }),
+  columnHelper.accessor("email", {
+    id: "email",
+    header: () => "Email",
+    cell: (info) => info.getValue(),
+  }),
+  columnHelper.accessor("createdAt", {
+    id: "createdAt",
+    header: () => "Created",
+    cell: (info) => dayjs(info.getValue()).format("DD/MM/YYYY"),
   }),
 ]
 export default function Users() {
@@ -63,7 +80,6 @@ export default function Users() {
       <h1 className="text-4xl">Users</h1>
       <div className="flex gap-2">
         <div>
-          <p className="text-sm font-medium">Search</p>
           <Search className="max-w-[400px]" />
         </div>
       </div>

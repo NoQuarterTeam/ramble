@@ -3,14 +3,13 @@ import type { LinksFunction } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
-import { type SpotItemWithStats } from "@ramble/api/src/router/spot"
-
-import landingStyles from "~/styles/landing.css"
+import { type SpotItemWithStats } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
 import { Badge } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
+import landingStyles from "~/styles/landing.css"
 
 import { PageContainer } from "../../components/PageContainer"
 import { SpotItem } from "./_app+/components/SpotItem"
@@ -86,19 +85,19 @@ export default function Home() {
 
         <div className="space-y-4">
           {/* <h2 className="text-3xl">This is Ramble.</h2> */}
-          <div className="grid grid-cols-3 gap-4">
-            <div className="space-y-4">
+          <div className="grid grid-cols-3 gap-2 md:gap-4">
+            <div className="space-y-2 md:space-y-4">
               <img src={`/landing/8.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
               <img src={`/landing/3.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
               <img src={`/landing/1.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
               <img src={`/landing/10.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
             </div>
-            <div className="space-y-4">
+            <div className="space-y-2 md:space-y-4">
               <img src={`/landing/6.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
               <img src={`/landing/9.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
               <img src={`/landing/4.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
             </div>
-            <div className="space-y-4">
+            <div className="space-y-2 md:space-y-4">
               <img src={`/landing/5.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
               <img src={`/landing/7.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
               <img src={`/landing/2.png`} className="w-full rounded-md object-contain" alt="landing inspo" />

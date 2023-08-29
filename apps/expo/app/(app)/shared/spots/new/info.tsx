@@ -2,6 +2,7 @@ import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
 import { Dog } from "lucide-react-native"
 
+import { doesSpotTypeRequireAmenities } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { Button } from "../../../../../components/ui/Button"
@@ -43,7 +44,7 @@ export function NewSpotOptionsScreen() {
           <Button
             className="rounded-full"
             onPress={() =>
-              router.push(params.type === "CAMPING" ? "NewSpotAmenitiesScreen" : "NewSpotImagesScreen", {
+              router.push(doesSpotTypeRequireAmenities(params.type) ? "NewSpotAmenitiesScreen" : "NewSpotImagesScreen", {
                 ...params,
                 name,
                 description,

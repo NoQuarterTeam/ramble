@@ -5,7 +5,7 @@ import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 
-import { type SpotItemWithStats } from "@ramble/api/src/router/spot"
+import { type SpotItemWithStats } from "@ramble/shared"
 import { Prisma, SpotType } from "@ramble/database/types"
 
 import { Button, Select } from "~/components/ui"

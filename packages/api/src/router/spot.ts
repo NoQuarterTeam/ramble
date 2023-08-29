@@ -2,19 +2,12 @@ import { TRPCError } from "@trpc/server"
 import Supercluster from "supercluster"
 import { z } from "zod"
 
-import { type Spot, type SpotImage, SpotType, Prisma } from "@ramble/database/types"
-import { spotAmenitiesSchema, spotSchemaWithoutType } from "@ramble/shared"
+import { Prisma, SpotType } from "@ramble/database/types"
+import { SpotItemWithStats, spotAmenitiesSchema, spotSchemaWithoutType } from "@ramble/shared"
 
 import { generateBlurHash } from "../services/generateBlurHash.server"
 import { geocodeCoords } from "../services/geocode.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
-
-export type SpotItemWithStats = Pick<Spot, "id" | "name" | "address" | "type"> & {
-  rating: string
-  savedCount: string
-  image: SpotImage["path"] | null
-  blurHash: SpotImage["blurHash"] | null
-}
 
 export const spotRouter = createTRPCRouter({
   clusters: publicProcedure
@@ -216,14 +209,9 @@ export const spotRouter = createTRPCRouter({
           ...data,
           address: address || "Unknown address",
           images: { create: imageData, delete: imagesToDelete },
-          amenities:
-            spot.type === "CAMPING" && data.type !== "CAMPING"
-              ? { delete: true }
-              : data.type === "CAMPING" && (spot.type !== "CAMPING" || !spot.amenities)
-              ? { create: amenities }
-              : spot.type === "CAMPING" && data.type === "CAMPING"
-              ? { update: amenities }
-              : undefined,
+          amenities: amenities
+            ? { update: spot.amenities ? amenities : undefined, create: spot.amenities ? undefined : amenities }
+            : { delete: spot.amenities ? true : undefined },
         },
       })
     }),
