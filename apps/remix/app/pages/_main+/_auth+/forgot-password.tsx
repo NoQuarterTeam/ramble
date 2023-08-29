@@ -34,7 +34,7 @@ export const action = async ({ request }: ActionArgs) => {
 export default function ForgotPassword() {
   return (
     <Form className="space-y-2">
-      <h1 className="text-4xl font-bold">Forgot password?</h1>
+      <h1 className="text-4xl">Forgot password?</h1>
       <p>Enter your email below to receive your password reset instructions.</p>
       <FormField required label="Email address" name="email" placeholder="jim@gmail.com" />
       <FormError />

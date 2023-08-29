@@ -5,8 +5,6 @@ import { redirect } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
-import { sendAccountVerificationEmail } from "@ramble/api"
-
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { db } from "~/lib/db.server"
 import { FORM_ACTION, formError, validateFormData } from "~/lib/form"
@@ -99,16 +97,16 @@ export default function Register() {
 
   return (
     <Form className="space-y-2">
-      <h1 className="text-4xl font-bold">Register</h1>
+      <h1 className="text-4xl">Register</h1>
       <p>For now we are invite only!</p>
-      <FormField required label="Invite code" name="code" defaultValue={searchParams.get("code") || ""} />
+      <FormField required label="Invite code" placeholder="1234ABCD" name="code" defaultValue={searchParams.get("code") || ""} />
       <hr />
-      <FormField autoCapitalize="none" required label="Email address" name="email" placeholder="jim@gmail.com" />
+      <FormField autoCapitalize="none" required label="Email address" name="email" placeholder="sally@yahoo.com" />
       <FormField required label="Password" name="password" type="password" placeholder="********" />
       <input name="passwordConfirmation" className="hidden" />
-      <FormField autoCapitalize="none" required label="Choose a username" name="username" placeholder="Jim93" />
-      <FormField required label="First name" name="firstName" placeholder="Jim" />
-      <FormField required label="Last name" name="lastName" placeholder="Bob" />
+      <FormField autoCapitalize="none" required label="Choose a username" name="username" placeholder="Sally93" />
+      <FormField required label="First name" name="firstName" placeholder="Sally" />
+      <FormField required label="Last name" name="lastName" placeholder="Jones" />
 
       <div>
         <FormButton name={FORM_ACTION} value={Actions.Register} className="w-full">
