@@ -1,5 +1,6 @@
-import { prisma } from ".."
+import { prisma } from "@ramble/database"
 import { convert } from "html-to-text"
+
 async function main() {
   const spots = await prisma.spot.findMany({
     where: { AND: [{ description: { not: null } }, { description: { not: { equals: "" } } }] },

@@ -1,0 +1,27 @@
+{
+  "name": "@ramble/scripts",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "pnpm with-env ts-node src/index.ts",
+    "blur": "pnpm with-env ts-node ./src/seed/gen-blurhash.ts",
+    "park4night": "pnpm with-env ts-node ./scripts/get-park4night.ts",
+    "with-env": "dotenv -e ../../.env --"
+  },
+  "sideEffects": false,
+  "devDependencies": {
+    "@faker-js/faker": "^8.0.0",
+    "@inquirer/prompts": "^3.0.4",
+    "@inquirer/select": "^1.2.9",
+    "@ramble/api": "workspace:*",
+    "@ramble/database": "workspace:*",
+    "@ramble/eslint-config": "workspace:*",
+    "@ramble/shared": "workspace:*",
+    "@types/html-to-text": "^9.0.1",
+    "@types/node": "^18.15.3",
+    "cheerio": "1.0.0-rc.12",
+    "dotenv-cli": "^7.1.0",
+    "html-to-text": "^9.0.5",
+    "ts-node": "^10.9.1",
+    "typescript": "5.2.2"
+  }
+}

@@ -1,11 +1,11 @@
 import { prisma } from "@ramble/database"
-import { generateBlurHash } from "../services/generateBlurHash.server"
+import { generateBlurHash } from "@ramble/api"
 
 async function main() {
   const images = await prisma.spotImage.findMany({
     where: { blurHash: { equals: null } },
   })
-  console.log(images.length)
+  console.log(images.length, " images")
 
   for (const image of images) {
     const hash = await generateBlurHash(image.path)
@@ -14,5 +14,6 @@ async function main() {
 }
 
 main()
+  .then(() => console.log("Done!"))
   .catch(console.log)
   .finally(() => prisma.$disconnect())

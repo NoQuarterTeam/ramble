@@ -8,8 +8,9 @@ const url = `https://www.park4night.com/api/places/around?lang=en&filter=%7B%22t
 
 // lat=48.25744095909484&lng=3.3044850246652686
 import exampleData from "./park4night.json"
-import { prisma } from ".."
-import { SpotType } from "../types"
+
+import { prisma } from "@ramble/database"
+import { SpotType } from "@ramble/database/types"
 
 async function getCards({ lat, lng }: { lat: number; lng: number }) {
   // const fixes = await prisma.spot.findMany({
@@ -28,7 +29,7 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
   const res = await fetch(url + `lat=${lat}&lng=${lng}`)
   const newSpots = (await res.json()) as typeof exampleData
 
-  console.log(newSpots.length)
+  console.log(newSpots.length + " spots")
 
   const dbSpots = await prisma.spot.findMany({
     select: { park4nightId: true },
@@ -81,10 +82,8 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
         if (href) images.push(href)
       })
 
-      await prisma.spot.upsert({
-        where: { park4nightId: spot.id },
-        update: { ...data, amenities: { update: amenities } },
-        create: {
+      await prisma.spot.create({
+        data: {
           ...data,
           amenities: { create: amenities },
           images: {
@@ -108,4 +107,8 @@ async function main() {
   }
 }
 
-main().finally(() => process.exit(0))
+main()
+  .then(() => {
+    console.log("Done!")
+  })
+  .finally(() => process.exit(0))

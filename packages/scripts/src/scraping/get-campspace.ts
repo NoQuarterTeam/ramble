@@ -1,13 +1,12 @@
 import * as cheerio from "cheerio"
-import fs from "fs"
 
-// const url = "https://www.pureportugal.co.uk/properties/?cat=54+54+99+54+54+54-&landmin=0&landmax=0&order=ASC&v="
 const url = `https://campspace.com/en/campsites?location=&startDate=&endDate=&numberOfAdults=2&numberOfChildren=0&filter%5Baccommodations%5D%5B%5D=bring_motorhome&filter%5Baccommodations%5D%5B%5D=bring_minivan&filter%5Bsurfaces%5D%5B%5D=grass&filter%5BspaceSize%5D=no_maximum&filter%5Bamenities%5D%5B%5D=pets_allowed&filter%5Bactivities%5D%5B%5D=sightseeing&page=`
+
 const pageCount = 9
 
-import data from "./campspace.json"
+import { prisma } from "@ramble/database"
 
-export type Spot = {
+export type CampspaceSpot = {
   id: number
   latitude: number
   longitude: number
@@ -16,21 +15,7 @@ export type Spot = {
   images?: string[]
   address?: string
   description?: string
-  isPetFriendly?: boolean
-  hotWater?: boolean
-  wifi?: boolean
-  shower?: boolean
-  toilet?: boolean
-  kitchen?: boolean
-  electricity?: boolean
-  water?: boolean
-  firePit?: boolean
-  sauna?: boolean
-  pool?: boolean
-  bbq?: boolean
 }
-
-let currentData: Spot[] = data
 
 async function getPageCards(currentPage: number) {
   const res = await fetch(url + currentPage)
@@ -38,7 +23,7 @@ async function getPageCards(currentPage: number) {
 
   const $ = cheerio.load(html)
 
-  const spots: Spot[] = []
+  const spots: CampspaceSpot[] = []
 
   $("article.card").each((_, card) => {
     const id = $(card).attr("data-id")
@@ -48,21 +33,19 @@ async function getPageCards(currentPage: number) {
     const name = $(card).find(".card-header-a").text()
 
     if (!id || !latitude || !longitude || !link || !name) return
-    spots.push({
-      id: parseInt(id),
-      latitude: parseFloat(latitude),
-      longitude: parseFloat(longitude),
-      name,
-      link,
-    })
+    spots.push({ id: parseInt(id), latitude: parseFloat(latitude), longitude: parseFloat(longitude), name, link })
+  })
+
+  const currentData = await prisma.spot.findMany({
+    where: { campspaceId: { in: spots.map((s) => s.id) } },
   })
 
   for (let index = 0; index < spots.length; index++) {
     const spot = spots[index]
 
     try {
-      // if in data.json, continue
-      const exists = currentData.find((s) => s.id === spot.id)
+      // if in db, continue
+      const exists = currentData.find((s) => s.campspaceId === spot.id)
       if (exists) continue
 
       const spotDetail = await fetch(spot.link)
@@ -100,25 +83,25 @@ async function getPageCards(currentPage: number) {
       const firePit = $("p").filter((_, p) => $(p).text().includes("Fire")).length > 0
       const sauna = $("p").filter((_, p) => $(p).text().includes("Sauna")).length > 0
 
-      currentData.push({
-        ...spot,
-        description,
-        images,
-        bbq,
-        shower,
-        kitchen,
-        sauna,
-        firePit,
-        wifi,
-        toilet,
-        address,
-        water,
-        electricity,
-        hotWater,
-        pool,
-        isPetFriendly,
+      await prisma.spot.create({
+        data: {
+          name: spot.name,
+          address,
+          latitude: spot.latitude,
+          longitude: spot.longitude,
+          description,
+          images: { create: images.map((image) => ({ path: image, creator: { connect: { email: "jack@noquarter.co" } } })) },
+          campspaceId: spot.id,
+          type: "CAMPING",
+          isPetFriendly,
+          campspaceUrl: spot.link,
+          creator: { connect: { email: "jack@noquarter.co" } },
+          verifier: { connect: { email: "jack@noquarter.co" } },
+          amenities: {
+            create: { bbq, shower, kitchen, sauna, firePit, wifi, toilet, water, electricity, hotWater, pool },
+          },
+        },
       })
-      fs.writeFileSync("./campspace.json", JSON.stringify(currentData, null, 2))
     } catch {}
   }
 }
