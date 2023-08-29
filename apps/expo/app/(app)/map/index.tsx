@@ -8,6 +8,7 @@ import { BadgeX, Heart, Navigation, PlusCircle, Settings2, Star, Verified, X } f
 import { type SpotType } from "@ramble/database/types"
 import { displayRating, INITIAL_LATITUDE, INITIAL_LONGITUDE, useDisclosure } from "@ramble/shared"
 
+import { SpotMarker } from "../../../components/SpotMarker"
 import { ImageCarousel } from "../../../components/ui/ImageCarousel"
 import { ModalView } from "../../../components/ui/ModalView"
 import { Spinner } from "../../../components/ui/Spinner"
@@ -16,10 +17,8 @@ import { toast } from "../../../components/ui/Toast"
 import { api, type RouterOutputs } from "../../../lib/api"
 import { width } from "../../../lib/device"
 import { useAsyncStorage } from "../../../lib/hooks/useAsyncStorage"
-
 import { useRouter } from "../../router"
 import { type Filters, initialFilters, MapFilters } from "./MapFilters"
-import { SpotMarker } from "../../../components/SpotMarker"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 

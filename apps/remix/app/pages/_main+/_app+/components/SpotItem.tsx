@@ -1,7 +1,7 @@
 import { Link } from "@remix-run/react"
 import { Camera, Heart, Star } from "lucide-react"
 
-import type { SpotItemWithStats } from "@ramble/api/src/router/spot"
+import { type SpotItemWithStats } from "@ramble/shared"
 import { createImageUrl, displayRating } from "@ramble/shared"
 
 import { OptimizedImage } from "~/components/OptimisedImage"

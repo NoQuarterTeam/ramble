@@ -1,7 +1,7 @@
 import { TouchableOpacity, View } from "react-native"
 import { Camera, Heart, Star } from "lucide-react-native"
 
-import { type SpotItemWithStats } from "@ramble/api/src/router/spot"
+import { type SpotItemWithStats } from "@ramble/shared"
 import { createImageUrl, displayRating } from "@ramble/shared"
 
 import { useRouter } from "../app/router"

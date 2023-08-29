@@ -1,7 +1,9 @@
-import type { SpotType } from "@ramble/database/types"
-import { cva } from "class-variance-authority"
-import { SPOTS } from "../lib/static/spots"
 import { View } from "react-native"
+import { cva } from "class-variance-authority"
+
+import type { SpotType } from "@ramble/database/types"
+
+import { SPOTS } from "../lib/static/spots"
 
 interface MarkerProps {
   spot: { type: SpotType }
@@ -13,38 +15,35 @@ export function SpotMarker(props: MarkerProps) {
   return (
     <View className="relative">
       <View className={spotMarkerColors({ type: props.spot.type })}>
-        {Icon && <Icon className={spotMarkerIconColors({ type: props.spot.type })} />}
+        {Icon && <Icon size={18} className={spotMarkerIconColors({ type: props.spot.type })} />}
       </View>
       <View className={spotTriangleColors({ type: props.spot.type })} />
     </View>
   )
 }
 
-const spotMarkerColors = cva(
-  "sq-8 flex cursor-pointer items-center justify-center rounded-full border shadow-md transition-transform hover:scale-110",
-  {
-    variants: {
-      type: {
-        CAMPING: "bg-primary-700 border-primary-100",
-        FREE_CAMPING: "border-cyan-100 bg-cyan-800",
-        SURFING: "border-blue-100 bg-blue-500",
-        CLIMBING: "border-blue-100 bg-blue-500",
-        MOUNTAIN_BIKING: "border-blue-100 bg-blue-500",
-        PADDLE_BOARDING: "border-blue-100 bg-blue-500",
-        HIKING: "border-blue-100 bg-blue-500",
-        CAFE: "border-gray-500 bg-gray-50",
-        GAS_STATION: "border-gray-500 bg-gray-50",
-        BAR: "border-gray-500 bg-gray-50",
-        RESTAURANT: "border-gray-500 bg-gray-50",
-        PARKING: "border-gray-500 bg-gray-50",
-        TIP: "border-gray-500 bg-gray-50",
-        SHOP: "border-gray-500 bg-gray-50",
-        OTHER: "border-gray-500 bg-gray-50",
-      },
+const spotMarkerColors = cva("sq-8 flex items-center justify-center rounded-full border shadow-md", {
+  variants: {
+    type: {
+      CAMPING: "bg-primary-700 border-primary-100",
+      FREE_CAMPING: "border-cyan-100 bg-cyan-800",
+      SURFING: "border-blue-100 bg-blue-500",
+      CLIMBING: "border-blue-100 bg-blue-500",
+      MOUNTAIN_BIKING: "border-blue-100 bg-blue-500",
+      PADDLE_BOARDING: "border-blue-100 bg-blue-500",
+      HIKING: "border-blue-100 bg-blue-500",
+      CAFE: "border-gray-500 bg-gray-50",
+      GAS_STATION: "border-gray-500 bg-gray-50",
+      BAR: "border-gray-500 bg-gray-50",
+      RESTAURANT: "border-gray-500 bg-gray-50",
+      PARKING: "border-gray-500 bg-gray-50",
+      TIP: "border-gray-500 bg-gray-50",
+      SHOP: "border-gray-500 bg-gray-50",
+      OTHER: "border-gray-500 bg-gray-50",
     },
   },
-)
-const spotMarkerIconColors = cva("sq-4", {
+})
+const spotMarkerIconColors = cva("", {
   variants: {
     type: {
       CAMPING: "text-white",
@@ -66,7 +65,7 @@ const spotMarkerIconColors = cva("sq-4", {
   },
 })
 
-export const spotTriangleColors = cva("sq-3 absolute -bottom-[3px] left-1/2 -z-[1] -translate-x-1/2 rotate-45 shadow", {
+export const spotTriangleColors = cva("sq-2 absolute -bottom-[2px] left-[12.5px] -z-[1] rotate-45 shadow", {
   variants: {
     type: {
       CAMPING: "bg-primary-600",

@@ -3,7 +3,7 @@ import type { LinksFunction } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
-import { type SpotItemWithStats } from "@ramble/api/src/router/spot"
+import { type SpotItemWithStats } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
 import { Badge } from "~/components/ui"
