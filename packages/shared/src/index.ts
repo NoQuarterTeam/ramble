@@ -2,6 +2,7 @@ export { useDisclosure, type UseDisclosure } from "./hooks/useDisclosure"
 
 export { merge, join } from "./utils/tailwind"
 export * from "./utils/s3"
+export * from "./utils/image"
 export { useHydrated, ClientOnly } from "./components/ClientOnly"
 export * from "./map"
 export * from "./spot"

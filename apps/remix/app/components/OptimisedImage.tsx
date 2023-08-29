@@ -1,10 +1,9 @@
 import * as React from "react"
 import { decode } from "blurhash"
 
-import { merge } from "@ramble/shared"
+import { merge, srcWhitelist } from "@ramble/shared"
 
 type Fit = "cover" | "contain" | "fill" | "inside" | "outside"
-export const srcWhitelist = ["https://ramble.s3"]
 
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj["
