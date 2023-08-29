@@ -2,6 +2,7 @@ import * as React from "react"
 import { decode } from "blurhash"
 
 import { merge } from "@ramble/shared"
+import { srcWhitelist } from "~/services/image.server"
 
 type Fit = "cover" | "contain" | "fill" | "inside" | "outside"
 
@@ -37,6 +38,8 @@ export function transformImageSrc(
   options: { width: number; height?: number; quality?: number; fit?: Fit },
 ) {
   if (!src) return undefined
+
+  if (!srcWhitelist.some((s) => src.startsWith(s))) return src
   const optionsString = Object.entries(options).reduce((acc, [key, value]) => {
     if (value === undefined) return acc
     return acc + `&${key}=${value}`

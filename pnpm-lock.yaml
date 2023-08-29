@@ -714,9 +714,6 @@ importers:
       '@inquirer/prompts':
         specifier: ^3.0.4
         version: 3.0.4
-      '@inquirer/select':
-        specifier: ^1.2.9
-        version: 1.2.9
       '@ramble/api':
         specifier: workspace:*
         version: link:../api

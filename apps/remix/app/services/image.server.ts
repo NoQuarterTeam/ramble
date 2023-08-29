@@ -8,7 +8,7 @@ import sharp from "sharp"
 import { getHead, uploadStream } from "@ramble/api"
 import { s3Url } from "@ramble/shared"
 
-const srcWhitelist = ["https://ramble.s3", "https://campspace.com", "https://cdn3.park4night.com"]
+export const srcWhitelist = ["https://ramble.s3"]
 
 const badImageBase64 = "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
 

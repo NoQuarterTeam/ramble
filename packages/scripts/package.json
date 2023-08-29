@@ -11,7 +11,6 @@
   "devDependencies": {
     "@faker-js/faker": "^8.0.0",
     "@inquirer/prompts": "^3.0.4",
-    "@inquirer/select": "^1.2.9",
     "@ramble/api": "workspace:*",
     "@ramble/database": "workspace:*",
     "@ramble/eslint-config": "workspace:*",

@@ -33,9 +33,9 @@ async function main() {
       return
     }
     if (stderr) {
-      console.error(`stderr: ${stderr}`)
+      console.error(`Error: ${stderr}`)
     }
-    console.log(`stdout: ${stdout}`)
+    console.log(stdout)
   })
 }
 main()

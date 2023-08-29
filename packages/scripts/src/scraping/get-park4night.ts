@@ -100,7 +100,7 @@ async function main() {
   try {
     // lat and lng coords of europe in large squares
 
-    await getCards({ lat: 42, lng: -7 })
+    await getCards({ lat: 50, lng: 4 })
   } catch (error) {
     console.log(error)
     process.exit(1)
