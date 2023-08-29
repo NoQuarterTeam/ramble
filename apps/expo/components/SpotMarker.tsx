@@ -65,7 +65,7 @@ const spotMarkerIconColors = cva("", {
   },
 })
 
-export const spotTriangleColors = cva("sq-2 absolute -bottom-[2px] left-[12.5px] -z-[1] rotate-45 shadow", {
+export const spotTriangleColors = cva("sq-2 absolute -bottom-[2px] left-[12.5px] -z-[1] rotate-45", {
   variants: {
     type: {
       CAMPING: "bg-primary-600",
