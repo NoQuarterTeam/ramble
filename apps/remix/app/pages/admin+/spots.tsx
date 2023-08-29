@@ -21,7 +21,7 @@ import { FORM_ACTION, formError, validateFormData } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useFetcherSubmit } from "~/lib/hooks/useFetcherSubmit"
 import { badRequest, json } from "~/lib/remix.server"
-import { SPOT_TYPE_OPTIONS } from "~/lib/static/spots"
+import { SPOTS, SPOT_TYPE_OPTIONS } from "~/lib/static/spots"
 import { getTableParams } from "~/lib/table"
 import { useTheme } from "~/lib/theme"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
@@ -51,7 +51,19 @@ export const loader = async ({ request }: LoaderArgs) => {
       skip,
       take,
       where,
-      include: { creator: true, verifier: true, images: true },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        createdAt: true,
+        verifiedAt: true,
+        latitude: true,
+        longitude: true,
+        type: true,
+        creator: true,
+        verifier: true,
+        images: true,
+      },
     }),
     db.spot.count({ where, take: undefined, skip: undefined }),
     db.spot.count({ where: { ...where, verifiedAt: null }, take: undefined, skip: undefined }),
@@ -110,7 +122,15 @@ const columns = [
     id: "name",
     size: 300,
     header: () => "Name",
-    cell: (info) => info.getValue(),
+    cell: (info) => {
+      const Icon = SPOTS[info.row.original.type].Icon
+      return (
+        <div className="flex items-center space-x-2">
+          <Icon size={16} className="flex-shrink-0" />
+          <p className="truncate">{info.getValue()}</p>
+        </div>
+      )
+    },
   }),
   columnHelper.accessor((row) => row.description, {
     id: "description",
