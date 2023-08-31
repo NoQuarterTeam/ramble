@@ -21,6 +21,7 @@ import { useAsyncStorage } from "../../../lib/hooks/useAsyncStorage"
 import { usePreferences } from "../../../lib/hooks/usePreferences"
 import { useRouter } from "../../router"
 import { type Filters, initialFilters, MapFilters } from "./MapFilters"
+import { useQuery } from "@tanstack/react-query"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
@@ -155,7 +156,9 @@ export function SpotsMapScreen() {
           )
         }
       }),
-    [activeSpotId, clusters],
+    // activeSpotId breaks here
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [clusters],
   )
   const filterCount = (filters.isPetFriendly ? 1 : 0) + (filters.isVerified ? 1 : 0) + (filters.types.length > 0 ? 1 : 0)
 
@@ -384,23 +387,20 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
 })
 
 function RainRadar({ shouldRender }: { shouldRender: boolean }) {
-  const [series, setSeries] = React.useState<number | null>(null)
-  React.useEffect(() => {
-    async function GetData() {
-      try {
-        const res = await fetch(
-          "https://api.weather.com/v3/TileServer/series/productSet/PPAcore?apiKey=d7adbfe03bf54ea0adbfe03bf5fea065",
-        )
-        const jsonData = await res.json()
-        const data = jsonData.seriesInfo.radarEurope.series[0]?.ts as number | undefined
-        if (!data) return
-        setSeries(data)
-      } catch (error) {}
-    }
-    GetData()
-  }, [])
-
-  if (!series) return null
+  const { data, isLoading } = useQuery({
+    queryKey: ["rainRadar"],
+    queryFn: async () => {
+      const res = await fetch(
+        "https://api.weather.com/v3/TileServer/series/productSet/PPAcore?apiKey=d7adbfe03bf54ea0adbfe03bf5fea065",
+      )
+      const jsonData = await res.json()
+      const data = jsonData.seriesInfo.radarEurope.series[0]?.ts as number | undefined
+      return data
+    },
+    keepPreviousData: true,
+    refetchInterval: 1000 * 60 * 5,
+  })
+  if (!data || isLoading) return null
 
   return (
     <>
@@ -408,7 +408,7 @@ function RainRadar({ shouldRender }: { shouldRender: boolean }) {
         id="twcRadar"
         tileSize={256}
         tileUrlTemplates={[
-          `https://api.weather.com/v3/TileServer/tile/radarEurope?ts=${series}&xyz={x}:{y}:{z}&apiKey=d7adbfe03bf54ea0adbfe03bf5fea065`,
+          `https://api.weather.com/v3/TileServer/tile/radarEurope?ts=${data}&xyz={x}:{y}:{z}&apiKey=d7adbfe03bf54ea0adbfe03bf5fea065`,
         ]}
       />
       <RasterLayer sourceID="twcRadar" id="radar" style={{ visibility: shouldRender ? "visible" : "none", rasterOpacity: 0.4 }} />
