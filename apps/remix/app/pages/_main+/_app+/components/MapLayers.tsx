@@ -49,7 +49,7 @@ export function MapLayers() {
           </div>
 
           <div className="flex w-full justify-between">
-            <Button size="lg" type="submit">
+            <Button size="lg" type="submit" isLoading={savePreferencesFetcher.state !== "idle"}>
               Save
             </Button>
           </div>
