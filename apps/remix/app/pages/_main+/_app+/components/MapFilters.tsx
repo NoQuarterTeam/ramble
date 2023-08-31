@@ -48,7 +48,6 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
       <div className="absolute left-1/2 top-4 -translate-x-1/2 rounded-md bg-white dark:bg-gray-800">
         <Button
           onClick={modalProps.onOpen}
-          // variant="outline"
           size="lg"
           className="border-none"
           leftIcon={<Settings2 className="sq-4" />}

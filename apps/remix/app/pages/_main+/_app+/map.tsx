@@ -8,9 +8,19 @@ import Map, {
   Marker,
   NavigationControl,
   type ViewStateChangeEvent,
+  Layer,
+  Source,
 } from "react-map-gl"
 import { cssBundleHref } from "@remix-run/css-bundle"
-import { Outlet, useFetcher, useLoaderData, useNavigate, useSearchParams } from "@remix-run/react"
+import {
+  Outlet,
+  isRouteErrorResponse,
+  useFetcher,
+  useLoaderData,
+  useNavigate,
+  useRouteError,
+  useSearchParams,
+} from "@remix-run/react"
 import turfCenter from "@turf/center"
 import * as turf from "@turf/helpers"
 import type { Geo } from "@vercel/edge"
@@ -28,6 +38,8 @@ import { MapFilters } from "~/pages/_main+/_app+/components/MapFilters"
 
 import type { Cluster, clustersLoader } from "../../api+/clusters"
 import { SpotMarker } from "./components/SpotMarker"
+import { usePreferences } from "~/lib/hooks/usePreferences"
+import { MapLayers } from "./components/MapLayers"
 
 export const config = {
   runtime: "edge",
@@ -47,11 +59,7 @@ export const loader = async ({ request }: LoaderArgs) => {
       city: geo.city,
       country: geo.country,
     },
-    {
-      headers: {
-        "Cache-Control": cacheHeader({ private: true, maxAge: "1day", sMaxage: "1day" }),
-      },
-    },
+    { headers: { "Cache-Control": cacheHeader({ private: true, maxAge: "1day" }) } },
   )
 }
 export type IpInfo = SerializeFrom<typeof loader> | undefined
@@ -60,7 +68,7 @@ export const shouldRevalidate = () => false
 export default function MapView() {
   const clustersFetcher = useFetcher<typeof clustersLoader>()
   const ipInfo = useLoaderData<typeof loader>()
-
+  const preferences = usePreferences()
   const clusters = clustersFetcher.data
 
   const theme = useTheme()
@@ -158,6 +166,7 @@ export default function MapView() {
               : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
           }
         >
+          {preferences.mapLayerRain && <RainRadar />}
           {markers}
 
           <GeolocateControl position="bottom-right" />
@@ -168,6 +177,7 @@ export default function MapView() {
       <ClientOnly>
         <MapFilters onChange={onParamsChange} />
       </ClientOnly>
+      <MapLayers />
 
       <Outlet />
     </div>
@@ -194,5 +204,70 @@ function ClusterMarker(props: MarkerProps) {
         <SpotMarker spot={props.point.properties as { type: SpotType }} />
       )}
     </Marker>
+  )
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError()
+  const isCatchError = isRouteErrorResponse(error)
+  return (
+    <div className="space-y-3 p-4">
+      <div>
+        <h1 className="text-2xl">Oops, something went wrong there!</h1>
+        <p>
+          There was an error displaying the map, please try again later. We have been notified and are currently working on a fix!
+        </p>
+      </div>
+      {isCatchError ? null : error instanceof Error ? (
+        <div className="max-w-4xl space-y-4 rounded-md bg-gray-200 p-4 dark:bg-gray-700 ">
+          <p>{error.message}</p>
+          <pre className="overflow-scroll text-sm">{error.stack}</pre>
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
+function RainRadar() {
+  // const seriesFetcher = useFetcher()
+
+  // React.useEffect(() => {
+  //   seriesFetcher.load("/api/mapbox/weather-series")
+  // }, [])
+
+  // const series = seriesFetcher.data
+
+  const [series, setSeries] = React.useState<number | null>(null)
+  React.useEffect(() => {
+    async function GetData() {
+      try {
+        const res = await fetch(
+          "https://api.weather.com/v3/TileServer/series/productSet/PPAcore?apiKey=d7adbfe03bf54ea0adbfe03bf5fea065",
+        )
+        const jsonData = await res.json()
+        const data = jsonData.seriesInfo.radarEurope.series[0]?.ts as number | undefined
+        if (!data) return
+        setSeries(data)
+      } catch (error) {}
+    }
+    GetData()
+  }, [])
+
+  return (
+    <>
+      {series ? (
+        <>
+          <Source
+            id="twcRadar"
+            type="raster"
+            tileSize={256}
+            tiles={[
+              `https://api.weather.com/v3/TileServer/tile/radarEurope?ts=${series}&xyz={x}:{y}:{z}&apiKey=d7adbfe03bf54ea0adbfe03bf5fea065`,
+            ]}
+          />
+          <Layer type="raster" source="twcRadar" id="radar" paint={{ "raster-opacity": 0.5 }} />
+        </>
+      ) : undefined}
+    </>
   )
 }

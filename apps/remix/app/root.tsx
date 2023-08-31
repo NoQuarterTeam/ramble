@@ -41,6 +41,8 @@ import { type Theme } from "./lib/theme"
 import { getMaybeUser } from "./services/auth/auth.server"
 import { getFlashSession } from "./services/session/flash.server"
 import { getThemeSession } from "./services/session/theme.server"
+import type { Preferences } from "./pages/api+/preferences"
+import { defaultPreferences, preferencesCookies } from "./pages/api+/preferences"
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "Ramble" }, { name: "description", content: "Created by No Quarter" }]
@@ -52,15 +54,13 @@ export const links: LinksFunction = () => {
 
 export const loader = async ({ request }: LoaderArgs) => {
   const { flash, commit } = await getFlashSession(request)
-  const { getTheme, commit: commitTheme } = await getThemeSession(request)
+  const { theme, commit: commitTheme } = await getThemeSession(request)
+  const cookieHeader = request.headers.get("Cookie")
+  const preferences: Preferences = (await preferencesCookies.parse(cookieHeader)) || defaultPreferences
+
   const user = await getMaybeUser(request)
   return json(
-    {
-      user,
-      flash,
-      theme: getTheme(),
-      config: { WEB_URL: FULL_WEB_URL },
-    },
+    { user, flash, preferences, theme, config: { WEB_URL: FULL_WEB_URL } },
     {
       headers: [
         ["Set-Cookie", await commit()],
