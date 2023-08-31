@@ -32,7 +32,7 @@ export function SpotsScreen() {
   const handleLoadMore = React.useCallback(async () => {
     const newSpots = await utils.spot.list.fetch({ skip: spots?.length || 0 })
     setSpots([...(spots || []), ...newSpots])
-  }, [spots])
+  }, [spots, utils.spot.list])
 
   return (
     <TabView

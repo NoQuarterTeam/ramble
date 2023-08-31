@@ -38,11 +38,11 @@ import { Toaster } from "~/components/ui"
 import { LinkButton } from "./components/LinkButton"
 import { FULL_WEB_URL } from "./lib/config.server"
 import { type Theme } from "./lib/theme"
+import type { Preferences } from "./pages/api+/preferences"
+import { defaultPreferences, preferencesCookies } from "./pages/api+/preferences"
 import { getMaybeUser } from "./services/auth/auth.server"
 import { getFlashSession } from "./services/session/flash.server"
 import { getThemeSession } from "./services/session/theme.server"
-import type { Preferences } from "./pages/api+/preferences"
-import { defaultPreferences, preferencesCookies } from "./pages/api+/preferences"
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "Ramble" }, { name: "description", content: "Created by No Quarter" }]

@@ -1,4 +1,5 @@
 import { useRouteLoaderData } from "@remix-run/react"
+
 import type { RootLoader } from "~/root"
 
 export function usePreferences() {

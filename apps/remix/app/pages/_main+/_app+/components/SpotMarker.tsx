@@ -1,5 +1,6 @@
-import type { SpotType } from "@ramble/database/types"
 import { cva } from "class-variance-authority"
+
+import type { SpotType } from "@ramble/database/types"
 
 import { SPOTS } from "~/lib/static/spots"
 

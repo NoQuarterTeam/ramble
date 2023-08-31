@@ -1,12 +1,13 @@
 import * as React from "react"
 import { Modal, Switch, TouchableOpacity, useColorScheme, View } from "react-native"
 import BottomSheet, { useBottomSheetDynamicSnapPoints, useBottomSheetSpringConfigs } from "@gorhom/bottom-sheet"
-import Mapbox, { Camera, type MapView as MapType, MarkerView, RasterSource, RasterLayer } from "@rnmapbox/maps"
+import Mapbox, { Camera, type MapView as MapType, MarkerView, RasterLayer, RasterSource } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { BadgeX, CloudRain, Heart, Layers, Navigation, PlusCircle, Settings2, Star, Verified, X } from "lucide-react-native"
 
 import { type SpotType } from "@ramble/database/types"
 import { displayRating, INITIAL_LATITUDE, INITIAL_LONGITUDE, useDisclosure } from "@ramble/shared"
+import colors from "@ramble/tailwind-config/src/colors"
 
 import { SpotMarker } from "../../../components/SpotMarker"
 import { ImageCarousel } from "../../../components/ui/ImageCarousel"
@@ -17,10 +18,9 @@ import { toast } from "../../../components/ui/Toast"
 import { api, type RouterOutputs } from "../../../lib/api"
 import { width } from "../../../lib/device"
 import { useAsyncStorage } from "../../../lib/hooks/useAsyncStorage"
+import { usePreferences } from "../../../lib/hooks/usePreferences"
 import { useRouter } from "../../router"
 import { type Filters, initialFilters, MapFilters } from "./MapFilters"
-import { usePreferences } from "../../../lib/hooks/usePreferences"
-import colors from "@ramble/tailwind-config/src/colors"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
@@ -155,7 +155,7 @@ export function SpotsMapScreen() {
           )
         }
       }),
-    [clusters],
+    [activeSpotId, clusters],
   )
   const filterCount = (filters.isPetFriendly ? 1 : 0) + (filters.isVerified ? 1 : 0) + (filters.types.length > 0 ? 1 : 0)
 
@@ -296,7 +296,7 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
   const handleSheetClose = React.useCallback(() => {
     bottomSheetRef.current?.close()
     onClose()
-  }, [])
+  }, [onClose])
   const animationConfigs = useBottomSheetSpringConfigs({
     damping: 40,
     overshootClamping: true,

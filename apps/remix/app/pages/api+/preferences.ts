@@ -1,10 +1,9 @@
 import type { ActionArgs } from "@vercel/remix"
+import { createCookie } from "@vercel/remix"
+import { z } from "zod"
 
 import { FormCheckbox, formError, validateFormData } from "~/lib/form"
 import { json } from "~/lib/remix.server"
-
-import { createCookie } from "@vercel/remix"
-import { z } from "zod"
 
 export const preferencesCookies = createCookie("ramble_preferences", { maxAge: 60 * 60 * 24 * 365 })
 

@@ -5,7 +5,7 @@ export function useAsyncStorage<T>(key: string, initialValue: T) {
   const [isReady, setIsReady] = React.useState(false)
   const [state, setState] = React.useState<T>(initialValue)
 
-  const getState = async () => {
+  const getState = React.useCallback(async () => {
     try {
       const value = await AsyncStorage.getItem(key)
       if (value) setState(JSON.parse(value))
@@ -13,7 +13,7 @@ export function useAsyncStorage<T>(key: string, initialValue: T) {
     } finally {
       setIsReady(true)
     }
-  }
+  }, [key])
   const setAsyncState = async (val: T) => {
     try {
       const payload = JSON.stringify(val)
@@ -24,7 +24,7 @@ export function useAsyncStorage<T>(key: string, initialValue: T) {
 
   React.useEffect(() => {
     getState()
-  }, [])
+  }, [getState])
 
   return [state, setAsyncState, isReady] as const
 }

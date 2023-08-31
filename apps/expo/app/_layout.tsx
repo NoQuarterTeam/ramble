@@ -85,7 +85,7 @@ export default function RootLayout() {
   const isDark = colorScheme === "dark"
 
   const isReady = fontsLoaded && isDoneChecking
-  const onLayoutRootView = React.useCallback(SplashScreen.hideAsync, [])
+  const onLayoutRootView = React.useCallback(() => SplashScreen.hideAsync(), [])
 
   if (!isReady) return null
 
@@ -139,7 +139,7 @@ function PrefetchTabs(props: { children: React.ReactNode }) {
     if (isLoading || !me) return
     utils.user.profile.prefetch({ username: me.username })
     utils.list.allByUser.prefetch({ username: me.username })
-  }, [me, isLoading])
+  }, [me, isLoading, utils.spot.list, utils.user.profile, utils.list.allByUser])
   if (isLoading) return null
   return <>{props.children}</>
 }

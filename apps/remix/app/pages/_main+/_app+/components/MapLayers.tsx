@@ -3,10 +3,9 @@ import { CloudRain, Layers } from "lucide-react"
 import { useDisclosure } from "@ramble/shared"
 
 import { Button, IconButton, Modal, Switch, Tooltip } from "~/components/ui"
+import { useFetcherSubmit } from "~/lib/hooks/useFetcherSubmit"
 import { usePreferences } from "~/lib/hooks/usePreferences"
 import { preferencesUrl } from "~/pages/api+/preferences"
-
-import { useFetcherSubmit } from "~/lib/hooks/useFetcherSubmit"
 
 export function MapLayers() {
   const modalProps = useDisclosure()

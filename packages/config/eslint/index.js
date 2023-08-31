@@ -8,7 +8,13 @@ module.exports = {
   root: true,
   parser: "@typescript-eslint/parser",
   plugins: ["@typescript-eslint", "tailwindcss"],
-  extends: ["plugin:@typescript-eslint/recommended", "plugin:react/recommended", "plugin:react/jsx-runtime", "prettier"],
+  extends: [
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:react/jsx-runtime",
+    "prettier",
+  ],
   rules: {
     "@typescript-eslint/no-var-requires": OFF,
     "react/function-component-definition": ERROR,

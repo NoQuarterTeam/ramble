@@ -3,18 +3,18 @@ import "mapbox-gl/dist/mapbox-gl.css"
 import * as React from "react"
 import Map, {
   GeolocateControl,
+  Layer,
   type LngLatLike,
   type MapRef,
   Marker,
   NavigationControl,
-  type ViewStateChangeEvent,
-  Layer,
   Source,
+  type ViewStateChangeEvent,
 } from "react-map-gl"
 import { cssBundleHref } from "@remix-run/css-bundle"
 import {
-  Outlet,
   isRouteErrorResponse,
+  Outlet,
   useFetcher,
   useLoaderData,
   useNavigate,
@@ -33,13 +33,13 @@ import queryString from "query-string"
 import type { SpotType } from "@ramble/database/types"
 import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
 
+import { usePreferences } from "~/lib/hooks/usePreferences"
 import { useTheme } from "~/lib/theme"
 import { MapFilters } from "~/pages/_main+/_app+/components/MapFilters"
 
 import type { Cluster, clustersLoader } from "../../api+/clusters"
-import { SpotMarker } from "./components/SpotMarker"
-import { usePreferences } from "~/lib/hooks/usePreferences"
 import { MapLayers } from "./components/MapLayers"
+import { SpotMarker } from "./components/SpotMarker"
 
 export const config = {
   runtime: "edge",
