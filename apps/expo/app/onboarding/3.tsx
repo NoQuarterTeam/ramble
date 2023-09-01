@@ -30,7 +30,7 @@ export default function OnboardingStep3Screen() {
       year: data?.year ? String(data?.year) : "",
       description: data.description || "",
     })
-  }, [data, isLoading])
+  }, [data, form, isLoading])
   const router = useRouter()
 
   const utils = api.useContext()

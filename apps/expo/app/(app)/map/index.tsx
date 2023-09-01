@@ -1,12 +1,13 @@
 import * as React from "react"
-import { Modal, TouchableOpacity, useColorScheme, View } from "react-native"
+import { Modal, Switch, TouchableOpacity, useColorScheme, View } from "react-native"
 import BottomSheet, { useBottomSheetDynamicSnapPoints, useBottomSheetSpringConfigs } from "@gorhom/bottom-sheet"
-import Mapbox, { Camera, type MapView as MapType, MarkerView } from "@rnmapbox/maps"
+import Mapbox, { Camera, type MapView as MapType, MarkerView, RasterLayer, RasterSource } from "@rnmapbox/maps"
 import * as Location from "expo-location"
-import { BadgeX, Heart, Navigation, PlusCircle, Settings2, Star, Verified, X } from "lucide-react-native"
+import { BadgeX, CloudRain, Heart, Layers, Navigation, PlusCircle, Settings2, Star, Verified, X } from "lucide-react-native"
 
 import { type SpotType } from "@ramble/database/types"
 import { displayRating, INITIAL_LATITUDE, INITIAL_LONGITUDE, useDisclosure } from "@ramble/shared"
+import colors from "@ramble/tailwind-config/src/colors"
 
 import { SpotMarker } from "../../../components/SpotMarker"
 import { ImageCarousel } from "../../../components/ui/ImageCarousel"
@@ -17,8 +18,10 @@ import { toast } from "../../../components/ui/Toast"
 import { api, type RouterOutputs } from "../../../lib/api"
 import { width } from "../../../lib/device"
 import { useAsyncStorage } from "../../../lib/hooks/useAsyncStorage"
+import { usePreferences } from "../../../lib/hooks/usePreferences"
 import { useRouter } from "../../router"
 import { type Filters, initialFilters, MapFilters } from "./MapFilters"
+import { useQuery } from "@tanstack/react-query"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
@@ -28,6 +31,7 @@ export function SpotsMapScreen() {
   const { push } = useRouter()
   const [clusters, setClusters] = React.useState<Cluster[] | null>(null)
   const filterModalProps = useDisclosure()
+  const mapLayerModalProps = useDisclosure()
   const [activeSpotId, setActiveSpotId] = React.useState<string | null>(null)
   const [filters, setFilters] = useAsyncStorage<Filters>("ramble.map.filters", initialFilters)
   const camera = React.useRef<Camera>(null)
@@ -152,10 +156,13 @@ export function SpotsMapScreen() {
           )
         }
       }),
+    // activeSpotId breaks here
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [clusters],
   )
   const filterCount = (filters.isPetFriendly ? 1 : 0) + (filters.isVerified ? 1 : 0) + (filters.types.length > 0 ? 1 : 0)
 
+  const [preferences, setPreferences, isReady] = usePreferences()
   return (
     <View className="flex-1">
       <Mapbox.MapView
@@ -175,11 +182,13 @@ export function SpotsMapScreen() {
       >
         <Mapbox.UserLocation />
 
+        <RainRadar shouldRender={isReady && preferences.mapLayerRain} />
         <Camera
           ref={camera}
           allowUpdates
           defaultSettings={{ centerCoordinate: [INITIAL_LONGITUDE, INITIAL_LATITUDE], zoomLevel: 8 }}
         />
+
         {markers}
       </Mapbox.MapView>
 
@@ -198,18 +207,32 @@ export function SpotsMapScreen() {
         <PlusCircle size={20} className="text-white dark:text-black" />
       </TouchableOpacity>
 
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={filterModalProps.onOpen}
-        className="sq-12 absolute bottom-3 left-3 flex flex-row items-center justify-center rounded-full bg-white"
-      >
-        <Settings2 size={20} className="text-black" />
-        {filterCount > 0 && (
-          <View className="sq-5 absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 bg-white dark:border-gray-700">
-            <Text className="text-xs text-black">{filterCount}</Text>
-          </View>
-        )}
-      </TouchableOpacity>
+      <View className="absolute bottom-3 left-3 flex space-y-2">
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={mapLayerModalProps.onOpen}
+          className="sq-12 flex flex-row items-center justify-center rounded-full bg-white"
+        >
+          <Layers size={20} className="text-black" />
+          {preferences.mapLayerRain && (
+            <View className="sq-5 absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 bg-white dark:border-gray-700">
+              <Text className="text-xs text-black">{1}</Text>
+            </View>
+          )}
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={filterModalProps.onOpen}
+          className="sq-12 flex flex-row items-center justify-center rounded-full bg-white"
+        >
+          <Settings2 size={20} className="text-black" />
+          {filterCount > 0 && (
+            <View className="sq-5 absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 bg-white dark:border-gray-700">
+              <Text className="text-xs text-black">{filterCount}</Text>
+            </View>
+          )}
+        </TouchableOpacity>
+      </View>
 
       <TouchableOpacity
         onPress={handleSetUserLocation}
@@ -228,6 +251,33 @@ export function SpotsMapScreen() {
       >
         <ModalView title="Filters" onBack={filterModalProps.onClose}>
           <MapFilters {...filterModalProps} initialFilters={filters} onSave={onFiltersChange} />
+        </ModalView>
+      </Modal>
+      <Modal
+        animationType="slide"
+        presentationStyle="formSheet"
+        visible={mapLayerModalProps.isOpen}
+        onRequestClose={mapLayerModalProps.onClose}
+        onDismiss={mapLayerModalProps.onClose}
+      >
+        <ModalView title="Map layers" onBack={mapLayerModalProps.onClose}>
+          <View className="flex flex-row items-center justify-between space-x-2">
+            <View className="flex flex-row items-center space-x-4">
+              <CloudRain size={30} className="text-black dark:text-white" />
+              <View>
+                <Text className="text-lg">Rain</Text>
+                <Text numberOfLines={2} className="max-w-[200px] text-sm opacity-75">
+                  Shows the current rain radar over europe
+                </Text>
+              </View>
+            </View>
+
+            <Switch
+              trackColor={{ true: colors.primary[600] }}
+              value={preferences.mapLayerRain}
+              onValueChange={() => setPreferences({ ...preferences, mapLayerRain: !preferences.mapLayerRain })}
+            />
+          </View>
         </ModalView>
       </Modal>
     </View>
@@ -249,7 +299,7 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
   const handleSheetClose = React.useCallback(() => {
     bottomSheetRef.current?.close()
     onClose()
-  }, [])
+  }, [onClose])
   const animationConfigs = useBottomSheetSpringConfigs({
     damping: 40,
     overshootClamping: true,
@@ -335,3 +385,33 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
     </>
   )
 })
+
+function RainRadar({ shouldRender }: { shouldRender: boolean }) {
+  const { data, isLoading } = useQuery({
+    queryKey: ["rainRadar"],
+    queryFn: async () => {
+      const res = await fetch(
+        "https://api.weather.com/v3/TileServer/series/productSet/PPAcore?apiKey=d7adbfe03bf54ea0adbfe03bf5fea065",
+      )
+      const jsonData = await res.json()
+      const data = jsonData.seriesInfo.radarEurope.series[0]?.ts as number | undefined
+      return data
+    },
+    keepPreviousData: true,
+    refetchInterval: 1000 * 60 * 5,
+  })
+  if (!data || isLoading) return null
+
+  return (
+    <>
+      <RasterSource
+        id="twcRadar"
+        tileSize={256}
+        tileUrlTemplates={[
+          `https://api.weather.com/v3/TileServer/tile/radarEurope?ts=${data}&xyz={x}:{y}:{z}&apiKey=d7adbfe03bf54ea0adbfe03bf5fea065`,
+        ]}
+      />
+      <RasterLayer sourceID="twcRadar" id="radar" style={{ visibility: shouldRender ? "visible" : "none", rasterOpacity: 0.4 }} />
+    </>
+  )
+}

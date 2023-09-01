@@ -17,6 +17,7 @@ export function Table<T>({
   ExpandComponent,
 }: {
   data: T[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   columns: ColumnDef<T, any>[]
   count: number
   take: number

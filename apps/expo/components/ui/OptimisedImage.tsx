@@ -1,5 +1,7 @@
 import { Image, type ImageProps } from "expo-image"
 
+import { srcWhitelist } from "@ramble/shared"
+
 import { WEB_URL } from "../../lib/config"
 
 const blurhash =
@@ -30,6 +32,7 @@ export function transformImageSrc(
   options: { width: number; height?: number; quality?: number; fit?: Fit },
 ) {
   if (!src) return undefined
+  if (!srcWhitelist.some((s) => src.startsWith(s))) return src
   const optionsString = Object.entries(options).reduce((acc, [key, value]) => {
     if (value === undefined) return acc
     return acc + `&${key}=${value}`

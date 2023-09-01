@@ -156,39 +156,38 @@ export function SpotDetailScreen() {
                 })}
               </View>
             )}
-            <View className="flex flex-row space-x-2">
+            <View className="flex flex-row space-x-2 py-4">
+              {canManageSpot(spot, me) && !spot.verifiedAt && (
+                <Button
+                  size="sm"
+                  onPress={() => verifySpot({ id: spot.id })}
+                  isLoading={isVerifyingLoading}
+                  leftIcon={<Check size={18} className="text-white dark:text-black" />}
+                >
+                  Verify
+                </Button>
+              )}
               {canManageSpot(spot, me) && (
-                <>
-                  {!spot.verifiedAt && (
-                    <Button
-                      onPress={() => verifySpot({ id: spot.id })}
-                      isLoading={isVerifyingLoading}
-                      leftIcon={<Check size={18} className="text-white dark:text-black" />}
-                    >
-                      Verify
-                    </Button>
-                  )}
-                  <Button
-                    size="sm"
-                    onPress={() =>
-                      router.push("EditSpotLayout", {
-                        id: spot.id,
-                        latitude: spot.latitude,
-                        longitude: spot.longitude,
-                        type: spot.type,
-                        name: spot.name,
-                        description: spot.description,
-                        isPetFriendly: spot.isPetFriendly,
-                        amenities: spot.amenities || undefined,
-                        images: spot.images.map((i) => i.path),
-                      })
-                    }
-                    variant="outline"
-                    leftIcon={<Edit2 size={18} className="text-black dark:text-white" />}
-                  >
-                    Edit
-                  </Button>
-                </>
+                <Button
+                  size="sm"
+                  onPress={() =>
+                    router.push("EditSpotLayout", {
+                      id: spot.id,
+                      latitude: spot.latitude,
+                      longitude: spot.longitude,
+                      type: spot.type,
+                      name: spot.name,
+                      description: spot.description,
+                      isPetFriendly: spot.isPetFriendly,
+                      amenities: spot.amenities || undefined,
+                      images: spot.images.map((i) => i.path),
+                    })
+                  }
+                  variant="outline"
+                  leftIcon={<Edit2 size={18} className="text-black dark:text-white" />}
+                >
+                  Edit
+                </Button>
               )}
               {me?.isAdmin && (
                 <Button

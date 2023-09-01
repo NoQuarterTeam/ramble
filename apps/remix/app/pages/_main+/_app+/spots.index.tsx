@@ -5,8 +5,8 @@ import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 
-import { type SpotItemWithStats } from "@ramble/shared"
 import { Prisma, SpotType } from "@ramble/database/types"
+import { type SpotItemWithStats } from "@ramble/shared"
 
 import { Button, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
@@ -37,7 +37,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   let type = searchParams.get("type") as SpotType | undefined
   if (type && !SpotType[type as SpotType]) type = undefined
   let sort = searchParams.get("sort") || "latest"
-  if (!SORT_OPTIONS.find((o) => o.value === (sort as any))) sort = "latest"
+  if (!SORT_OPTIONS.find((o) => o.value === sort)) sort = "latest"
 
   const WHERE = type ? Prisma.sql`WHERE Spot.type = ${type} AND Spot.deletedAt IS NULL` : Prisma.sql`WHERE Spot.deletedAt IS NULL`
 

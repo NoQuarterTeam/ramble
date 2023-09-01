@@ -6,8 +6,7 @@ import { cacheHeader } from "pretty-cache-header"
 import sharp from "sharp"
 
 import { getHead, uploadStream } from "@ramble/api"
-import { s3Url } from "@ramble/shared"
-import { srcWhitelist } from "~/components/OptimisedImage"
+import { s3Url, srcWhitelist } from "@ramble/shared"
 
 const badImageBase64 = "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
 

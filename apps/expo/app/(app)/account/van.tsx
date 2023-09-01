@@ -39,7 +39,7 @@ export function VanScreen() {
       year: data?.year ? String(data?.year) : "",
       description: data.description || "",
     })
-  }, [data, isLoading])
+  }, [data, form, isLoading])
 
   const utils = api.useContext()
   const {
