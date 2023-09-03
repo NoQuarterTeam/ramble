@@ -41,8 +41,8 @@ export function SpotItem({ spot }: Props) {
           </div>
         </div>
 
-        <div className="space-y-1">
-          <p className="line-clamp-2 text-lg leading-tight">{spot.name}</p>
+        <div className="space-y-0.5">
+          <p className="line-clamp-2 text-base leading-tight">{spot.name}</p>
           <p className="line-clamp-1 text-sm font-thin opacity-70">{spot.address}</p>
           <div className="flex items-center space-x-2">
             <div className="flex items-center space-x-1 text-sm">

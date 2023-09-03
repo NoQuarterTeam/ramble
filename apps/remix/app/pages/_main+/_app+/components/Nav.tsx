@@ -30,7 +30,7 @@ export function Nav() {
   const theme = useTheme()
   const isDark = theme === "dark"
   return (
-    <div className="h-nav fixed left-0 top-0 z-10 flex w-full items-center justify-between border-b border-solid border-gray-50 bg-white px-4 align-middle dark:border-gray-700 dark:bg-gray-800">
+    <div className="h-nav fixed left-0 top-0 z-10 flex w-full items-center justify-between border-b border-solid border-gray-50 bg-white px-4 align-middle dark:border-gray-700 dark:bg-gray-800 md:px-12">
       <div className="flex items-center space-x-4">
         <ClientOnly fallback={<Logo to="/map" />}>
           <Logo to={`/map${typeof window !== "undefined" ? window.location.search : ""}`} />
