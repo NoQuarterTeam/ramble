@@ -38,7 +38,7 @@ import { useTheme } from "~/lib/theme"
 import { MapFilters } from "~/pages/_main+/_app+/components/MapFilters"
 
 import type { Cluster, clustersLoader } from "../../api+/clusters"
-import { MapLayers } from "./components/MapLayers"
+import { MapLayerControls } from "./components/MapLayerControls"
 import { SpotMarker } from "./components/SpotMarker"
 
 export const config = {
@@ -68,7 +68,6 @@ export const shouldRevalidate = () => false
 export default function MapView() {
   const clustersFetcher = useFetcher<typeof clustersLoader>()
   const ipInfo = useLoaderData<typeof loader>()
-  const preferences = usePreferences()
   const clusters = clustersFetcher.data
 
   const theme = useTheme()
@@ -149,26 +148,43 @@ export default function MapView() {
     [clusters],
   )
   const noMap = searchParams.get("noMap")
+
+  React.useEffect(() => {
+    if (mapRef.current) {
+      console.log("stufffff")
+      console.log(mapRef.current)
+      console.log("done")
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      mapRef.current.setConfigProperty("basemap", "lightPreset", theme === "light" ? "day" : "night")
+    }
+  }, [theme])
+
   return (
     <div className="h-nav-screen relative w-screen overflow-hidden">
       {!noMap && (
         <Map
           mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
-          onLoad={onMove}
+          onLoad={(e) => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            e.target.setConfigProperty("basemap", "lightPreset", theme === "light" ? "day" : "dusk")
+            onMove(e)
+          }}
           onMoveEnd={onMove}
           ref={mapRef}
           style={{ height: "100%", width: "100%" }}
           initialViewState={initialViewState}
           attributionControl={false}
-          mapStyle={
-            theme === "dark"
-              ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
-              : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
-          }
+          // mapStyle={
+          //   theme === "dark"
+          //     ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
+          //     : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
+          // }
+          mapStyle={"mapbox://styles/mapbox/standard-beta"}
         >
-          {preferences.mapLayerRain && <RainRadar />}
+          <MapLayers />
           {markers}
-
           <GeolocateControl position="bottom-right" />
           <NavigationControl position="bottom-right" />
         </Map>
@@ -177,7 +193,7 @@ export default function MapView() {
       <ClientOnly>
         <MapFilters onChange={onParamsChange} />
       </ClientOnly>
-      <MapLayers />
+      <MapLayerControls />
 
       <Outlet />
     </div>
@@ -197,7 +213,7 @@ function ClusterMarker(props: MarkerProps) {
       latitude={props.point.geometry.coordinates[1]}
     >
       {props.point.properties.cluster ? (
-        <div className="sq-10 border-primary-100 bg-primary-800 dark:border-primary-700 dark:bg-primary-900 flex cursor-pointer items-center justify-center rounded-full border text-white shadow transition-transform hover:scale-110">
+        <div className="sq-10 flex cursor-pointer items-center justify-center rounded-full border border-green-100 bg-green-800 text-white shadow transition-transform hover:scale-110 dark:border-green-700 dark:bg-green-900">
           <p className="text-center text-sm">{props.point.properties.point_count_abbreviated}</p>
         </div>
       ) : (
@@ -228,46 +244,59 @@ export function ErrorBoundary() {
   )
 }
 
-function RainRadar() {
-  // const seriesFetcher = useFetcher()
-
-  // React.useEffect(() => {
-  //   seriesFetcher.load("/api/mapbox/weather-series")
-  // }, [])
-
-  // const series = seriesFetcher.data
-
-  const [series, setSeries] = React.useState<number | null>(null)
-  React.useEffect(() => {
-    async function GetData() {
-      try {
-        const res = await fetch(
-          "https://api.weather.com/v3/TileServer/series/productSet/PPAcore?apiKey=d7adbfe03bf54ea0adbfe03bf5fea065",
-        )
-        const jsonData = await res.json()
-        const data = jsonData.seriesInfo.radarEurope.series[0]?.ts as number | undefined
-        if (!data) return
-        setSeries(data)
-      } catch (error) {}
-    }
-    GetData()
-  }, [])
+function MapLayers() {
+  const preferences = usePreferences()
 
   return (
     <>
-      {series ? (
+      {preferences.mapLayerTemp && (
         <>
           <Source
-            id="twcRadar"
+            id="temp"
+            type="raster"
+            tileSize={256}
+            tiles={[`https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63`]}
+          />
+          <Layer
+            id="tempLayer"
+            source="temp"
+            type="raster"
+            // paint={{
+            //   "raster-scaling": "lanczos",
+            //   "raster-colorizer-default-mode": "linear",
+            //   "raster-colorizer-default-color": "transparent",
+            //   "raster-colorizer-stops": `
+            //     stop(0, rgba(225, 200, 100, 0))
+            //     stop(0.1, rgba(200, 150, 150, 0))
+            //     stop(0.2, rgba(150, 150, 170, 0))
+            //     stop(0.5, rgba(120, 120, 190, 0))
+            //     stop(1, rgba(210, 110, 205, 0.3))
+            //     stop(10, rgba(20,80, 225, 0.7))
+            //     stop(140, rgba(200, 20, 255, 0.9))
+            //   `,
+            // }}
+          />
+        </>
+      )}
+      {preferences.mapLayerRain && (
+        <>
+          <Source
+            id="rain"
             type="raster"
             tileSize={256}
             tiles={[
-              `https://api.weather.com/v3/TileServer/tile/radarEurope?ts=${series}&xyz={x}:{y}:{z}&apiKey=d7adbfe03bf54ea0adbfe03bf5fea065`,
+              `https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63`,
             ]}
           />
-          <Layer type="raster" source="twcRadar" id="radar" paint={{ "raster-opacity": 0.5 }} />
+          <Layer type="raster" source="rain" id="rainLayer" />
+          {/* <Source
+              id="rain"
+              type="raster"
+              tileSize={256}
+              tiles={[`http://maps.openweathermap.org/maps/2.0/weather/TA2/{z}/{x}/{y}?appid=0937eef5e79a9078196f43c47db32b63`]}
+            /> */}
         </>
-      ) : undefined}
+      )}
     </>
   )
 }

@@ -1,4 +1,4 @@
-import { CloudRain, Layers } from "lucide-react"
+import { CloudRain, Layers, Thermometer } from "lucide-react"
 
 import { useDisclosure } from "@ramble/shared"
 
@@ -7,7 +7,7 @@ import { useFetcherSubmit } from "~/lib/hooks/useFetcherSubmit"
 import { usePreferences } from "~/lib/hooks/usePreferences"
 import { preferencesUrl } from "~/pages/api+/preferences"
 
-export function MapLayers() {
+export function MapLayerControls() {
   const modalProps = useDisclosure()
   const savePreferencesFetcher = useFetcherSubmit({ onSuccess: modalProps.onClose })
   const preferences = usePreferences()
@@ -25,9 +25,9 @@ export function MapLayers() {
             aria-label="filters"
           />
         </Tooltip>
-        {preferences.mapLayerRain && (
+        {(preferences.mapLayerRain || preferences.mapLayerTemp) && (
           <div className="sq-5 absolute -right-2 -top-2 flex items-center justify-center rounded-full border border-gray-500 bg-white dark:border-white dark:bg-black">
-            <p className="text-xs">1</p>
+            <p className="text-xs">{+preferences.mapLayerRain + +preferences.mapLayerTemp}</p>
           </div>
         )}
       </div>
@@ -40,10 +40,20 @@ export function MapLayers() {
                 <CloudRain className="sq-6" />
                 <div>
                   <p>Rain</p>
-                  <p className="text-sm opacity-70">Shows the current rain radar over europe</p>
+                  <p className="text-sm opacity-70">Shows the current rain radar</p>
                 </div>
               </div>
               <Switch name="mapLayerRain" id="mapLayerRain" defaultChecked={preferences.mapLayerRain} className="mt-1" />
+            </label>
+            <label htmlFor="mapLayerTemp" className="flex items-center justify-between space-x-4">
+              <div className="flex items-center space-x-4">
+                <Thermometer className="sq-6" />
+                <div>
+                  <p>Temperature</p>
+                  <p className="text-sm opacity-70">Shows the current temperature</p>
+                </div>
+              </div>
+              <Switch name="mapLayerTemp" id="mapLayerTemp" defaultChecked={preferences.mapLayerTemp} className="mt-1" />
             </label>
           </div>
 

@@ -1,5 +1,4 @@
 import { useLoaderData } from "@remix-run/react"
-import type { LinksFunction } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
@@ -9,7 +8,6 @@ import { LinkButton } from "~/components/LinkButton"
 import { Badge } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
-import landingStyles from "~/styles/landing.css"
 
 import { PageContainer } from "../../components/PageContainer"
 import { SpotItem } from "./_app+/components/SpotItem"
@@ -17,10 +15,6 @@ import { SpotItem } from "./_app+/components/SpotItem"
 export const config = {
   runtime: "edge",
   regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
-}
-
-export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: landingStyles }]
 }
 
 export const headers = useLoaderHeaders
