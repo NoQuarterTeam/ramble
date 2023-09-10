@@ -15,6 +15,7 @@ import { height, width } from "../../../lib/device"
 import { useRouter } from "../../router"
 
 const SORT_OPTIONS = { latest: "Latest", rated: "Top rated", saved: "Most saved" } as const
+
 export function SpotsScreen() {
   const sortProps = useDisclosure()
   const [sort, setSort] = React.useState<keyof typeof SORT_OPTIONS>("latest")
@@ -30,7 +31,7 @@ export function SpotsScreen() {
   const utils = api.useContext()
 
   const handleLoadMore = React.useCallback(async () => {
-    const newSpots = await utils.spot.list.fetch({ skip: spots?.length || 0 })
+    const newSpots = await utils.spot.list.fetch({ skip: spots?.length || 0, sort: "latest" })
     setSpots([...(spots || []), ...newSpots])
   }, [spots, utils.spot.list])
 
@@ -52,10 +53,10 @@ export function SpotsScreen() {
         <TouchableOpacity
           activeOpacity={1}
           onPress={sortProps.onClose}
-          className="absolute inset-0 z-10 px-4 pt-[100px] shadow-md"
+          className="absolute inset-0 z-10 px-4 pt-[100px]"
           style={{ width, height }}
         >
-          <View className="w-[200px] rounded-md bg-white px-4 py-2 dark:bg-black">
+          <View className="w-[200px] rounded-md bg-white px-4 py-2 shadow-md dark:bg-black">
             {Object.entries(SORT_OPTIONS).map(([key, label]) => (
               <TouchableOpacity
                 key={key}

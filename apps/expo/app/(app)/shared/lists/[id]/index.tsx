@@ -48,14 +48,14 @@ export function ListDetailScreen() {
           contentContainerStyle={{ paddingVertical: 10 }}
           ListEmptyComponent={
             <View>
-              <Text className="w-full py-4 text-xl">No spots yet</Text>
+              <Text className="w-full py-4 text-center text-xl">No spots yet</Text>
               <Button variant="outline" onPress={() => navigation.navigate("MapLayout")} className="w-full">
                 Explore
               </Button>
             </View>
           }
           data={data.spots}
-          ItemSeparatorComponent={() => <View className="h-1" />}
+          ItemSeparatorComponent={() => <View className="h-6" />}
           renderItem={({ item }) => <SpotItem spot={item} />}
         />
       )}

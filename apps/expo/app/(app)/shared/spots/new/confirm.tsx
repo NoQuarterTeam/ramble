@@ -26,7 +26,7 @@ export function NewSpotConfirmScreen() {
     error,
   } = api.spot.create.useMutation({
     onSuccess: (data) => {
-      utils.spot.list.refetch({ sort: "latest", skip: 0 })
+      utils.spot.list.refetch({ skip: 0, sort: "latest" })
       router.navigate("AppLayout")
       router.navigate("SpotDetailScreen", { id: data.id })
       toast({ title: "Spot created!" })

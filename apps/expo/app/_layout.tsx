@@ -135,7 +135,7 @@ function PrefetchTabs(props: { children: React.ReactNode }) {
   const { me, isLoading } = useMe()
   const utils = api.useContext()
   React.useEffect(() => {
-    utils.spot.list.prefetch({ skip: 0 })
+    utils.spot.list.prefetch({ skip: 0, sort: "latest" })
     if (isLoading || !me) return
     utils.user.profile.prefetch({ username: me.username })
     utils.list.allByUser.prefetch({ username: me.username })
