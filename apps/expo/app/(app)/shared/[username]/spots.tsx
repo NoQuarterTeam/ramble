@@ -25,15 +25,17 @@ export function UserSpots() {
     )
 
   return (
-    <FlashList
-      showsVerticalScrollIndicator={false}
-      estimatedItemSize={322}
-      ListEmptyComponent={<Text>No spots yet</Text>}
-      // onEndReachedThreshold={0.8}
-      // onEndReached={handleLoadMore}
-      data={spots}
-      ItemSeparatorComponent={() => <View className="h-6" />}
-      renderItem={({ item }) => <SpotItem spot={item} />}
-    />
+    <View className="min-h-full">
+      <FlashList
+        showsVerticalScrollIndicator={false}
+        estimatedItemSize={376}
+        ListEmptyComponent={<Text>No spots yet</Text>}
+        // onEndReachedThreshold={0.8}
+        // onEndReached={handleLoadMore}
+        data={spots}
+        ItemSeparatorComponent={() => <View className="h-6" />}
+        renderItem={({ item }) => <SpotItem spot={item} />}
+      />
+    </View>
   )
 }

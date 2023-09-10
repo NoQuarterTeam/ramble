@@ -21,7 +21,7 @@ import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { badRequest, notFound, redirect } from "~/lib/remix.server"
 import { useTheme } from "~/lib/theme"
-import { getCurrentUser } from "~/services/auth/auth.server"
+import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
 
 import { SpotItem } from "./components/SpotItem"
 import { SpotMarker } from "./components/SpotMarker"
@@ -29,10 +29,11 @@ import { SpotMarker } from "./components/SpotMarker"
 export const headers = useLoaderHeaders
 
 type SpotItemWithStatsAndCoords = SpotItemWithStats & { longitude: number; latitude: number }
-export const loader = async ({ params }: LoaderArgs) => {
+export const loader = async ({ params, request }: LoaderArgs) => {
+  const user = await getMaybeUser(request)
   const [list, spots] = await Promise.all([
     db.list.findFirst({
-      where: { id: params.id },
+      where: { id: params.id, isPrivate: !user || user.username !== params.username ? false : undefined },
       select: {
         id: true,
         creatorId: true,

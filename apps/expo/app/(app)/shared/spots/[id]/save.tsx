@@ -1,6 +1,6 @@
 import { TouchableOpacity, useColorScheme, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
-import { Heart } from "lucide-react-native"
+import { Heart, Lock } from "lucide-react-native"
 
 import { LoginPlaceholder } from "../../../../../components/LoginPlaceholder"
 import { ModalView } from "../../../../../components/ui/ModalView"
@@ -31,7 +31,7 @@ export function SaveSpotScreen() {
           ListEmptyComponent={<Text>No lists yet</Text>}
           data={lists || []}
           ItemSeparatorComponent={() => <View className="h-1" />}
-          renderItem={({ item }) => <ListItem spotId={id} list={item} />}
+          renderItem={({ item }) => <SaveableListItem spotId={id} list={item} />}
         />
       )}
     </ModalView>
@@ -43,7 +43,7 @@ interface Props {
   list: RouterOutputs["list"]["allByUserWithSavedSpots"][number]
 }
 
-function ListItem({ list, spotId }: Props) {
+function SaveableListItem({ list, spotId }: Props) {
   const utils = api.useContext()
   const { mutate } = api.list.saveToList.useMutation({
     onSuccess: () => {
@@ -65,7 +65,10 @@ function ListItem({ list, spotId }: Props) {
       className="flex flex-row items-center justify-between rounded-lg border border-gray-100 p-4 dark:border-gray-700"
     >
       <View>
-        <Text className="text-xl">{list.name}</Text>
+        <View className="flex flex-row items-center space-x-2">
+          {list.isPrivate && <Lock className="text-black dark:text-white" size={20} />}
+          <Text className="text-xl">{list.name}</Text>
+        </View>
         <Text className="text-base">{list.description}</Text>
       </View>
       <Heart size={20} className="text-black dark:text-white" fill={isSaved ? (isDark ? "white" : "black") : undefined} />

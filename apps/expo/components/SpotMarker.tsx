@@ -25,7 +25,7 @@ export function SpotMarker(props: MarkerProps) {
 const spotMarkerColors = cva("sq-8 flex items-center justify-center rounded-full border shadow-md", {
   variants: {
     type: {
-      CAMPING: "bg-primary-700 border-primary-100",
+      CAMPING: "border-green-100 bg-green-700",
       FREE_CAMPING: "border-cyan-100 bg-cyan-800",
       SURFING: "border-blue-100 bg-blue-500",
       CLIMBING: "border-blue-100 bg-blue-500",
@@ -68,7 +68,7 @@ const spotMarkerIconColors = cva("", {
 export const spotTriangleColors = cva("sq-2 absolute -bottom-[2px] left-[12.5px] -z-[1] rotate-45", {
   variants: {
     type: {
-      CAMPING: "bg-primary-600",
+      CAMPING: "bg-green-600",
       FREE_CAMPING: "bg-cyan-800",
       SURFING: "bg-blue-700",
       CLIMBING: "bg-blue-700",

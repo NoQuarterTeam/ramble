@@ -18,7 +18,11 @@ export function NewListScreen() {
     },
   })
 
-  const handleSubmit = (data: RouterInputs["list"]["create"]) => mutate(data)
+  const handleSubmit = (data: RouterInputs["list"]["create"]) => {
+    console.log(data)
+
+    mutate(data)
+  }
 
   return (
     <ModalView title="New list">

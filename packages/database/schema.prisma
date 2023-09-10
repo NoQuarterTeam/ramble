@@ -194,6 +194,7 @@ model List {
   listSpots   ListSpot[]
   creatorId   String
   creator     User       @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  isPrivate   Boolean    @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
