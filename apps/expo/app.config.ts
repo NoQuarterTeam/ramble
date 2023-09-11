@@ -42,7 +42,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   android: {
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",
-      backgroundColor: "#ffffff",
+      backgroundColor: "#fffefe",
     },
     softwareKeyboardLayoutMode: "resize",
     package: "co.noquarter.ramble",
