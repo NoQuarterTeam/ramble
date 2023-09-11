@@ -57,7 +57,7 @@ export default function Onboarding() {
           <FormFieldLabel>Let's put a picture to your name</FormFieldLabel>
           <ImageField
             name="avatar"
-            className="sq-[200px] rounded-md border border-gray-100 dark:border-gray-700"
+            className="sq-[200px] rounded-md border"
             defaultValue={user.avatar}
             placeholder="Click here"
           />

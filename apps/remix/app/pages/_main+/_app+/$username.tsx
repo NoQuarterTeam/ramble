@@ -91,7 +91,7 @@ export default function ProfileLists() {
               .filter((i) => user[i.value as keyof typeof user])
               .map((interest) => (
                 <Tooltip key={interest.value} label={interest.label}>
-                  <div className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
+                  <div className="rounded-md border p-2">
                     <interest.Icon className="sq-6" />
                   </div>
                 </Tooltip>

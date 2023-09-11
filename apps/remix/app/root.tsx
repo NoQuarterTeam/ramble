@@ -180,7 +180,7 @@ function Document({ theme, children }: DocumentProps) {
         <Meta />
         <Links />
       </head>
-      <body className="bg-background">
+      <body>
         {children}
         <ScrollRestoration />
         {!shouldDisableScripts && <Scripts />}

@@ -181,7 +181,7 @@ export function Skeleton(props: React.HTMLAttributes<HTMLDivElement>) {
 function SpotContainer(props: { children: React.ReactNode }) {
   const navigate = useNavigate()
   return (
-    <div className="bg-background absolute bottom-0 left-0 top-0 z-10 w-full max-w-lg overflow-scroll border-r border-gray-100 p-4 pb-20 dark:border-gray-700 md:px-8">
+    <div className="bg-background absolute bottom-0 left-0 top-0 z-10 w-full max-w-lg overflow-scroll border-r p-4 pb-20 md:px-8">
       <CloseButton className="absolute right-2 top-2 z-10" onClick={() => navigate(`..${window.location.search}`)} />
       {props.children}
     </div>

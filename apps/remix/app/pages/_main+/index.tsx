@@ -123,7 +123,7 @@ export default function Home() {
       </PageContainer>
       <div className="bg-gray-50 py-10 dark:bg-gray-950">
         <PageContainer>
-          <h3>Ramble</h3>
+          <h3 className="font-urbanist text-xl italic">ramble</h3>
         </PageContainer>
       </div>
     </div>

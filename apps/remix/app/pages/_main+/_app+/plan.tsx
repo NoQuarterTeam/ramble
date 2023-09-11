@@ -116,7 +116,7 @@ export default function PlanTrip() {
               onChange={onStartPointQuery}
             />
             {startingPointQuery && startingPointMenu.isOpen && (
-              <div className="bg-background absolute left-0 top-full z-10 mt-1 w-full rounded-md border border-gray-100 p-2 shadow-lg dark:border-gray-600">
+              <div className="bg-background absolute left-0 top-full z-10 mt-1 w-full rounded-md border p-2 shadow-lg">
                 {startingPointFetcher.state === "loading" ? (
                   <Spinner />
                 ) : !startingPointFetcher.data ? (
@@ -159,7 +159,7 @@ export default function PlanTrip() {
               onChange={onDestinationQuery}
             />
             {destinationQuery && destinationMenu.isOpen && (
-              <div className="absolute left-0 top-full z-10 mt-1 w-full rounded-md border border-gray-100 bg-white p-2 shadow-lg dark:border-gray-600 dark:bg-gray-700">
+              <div className="bg-background absolute left-0 top-full z-10 mt-1 w-full rounded-md border p-2 shadow-lg">
                 {destinationFetcher.state === "loading" ? (
                   <Spinner />
                 ) : !destinationFetcher.data ? (

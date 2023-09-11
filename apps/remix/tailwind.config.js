@@ -15,6 +15,7 @@ module.exports = {
       },
       colors: {
         background: "var(--background)",
+        border: "var(--border)",
       },
       fontFamily: {
         urbanist: ["Urbanist", "sans-serif"],

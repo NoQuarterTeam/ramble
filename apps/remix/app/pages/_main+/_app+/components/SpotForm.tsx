@@ -219,7 +219,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
 
           <FormError />
         </div>
-        <div className="bg-background fixed bottom-0 left-0 z-10 flex w-full justify-end border-t border-gray-100 px-10 py-4 dark:border-gray-600 md:w-1/2">
+        <div className="bg-background fixed bottom-0 left-0 z-10 flex w-full justify-end border-t px-10 py-4 md:w-1/2">
           <FormButton disabled={!address} size="lg">
             Save
           </FormButton>

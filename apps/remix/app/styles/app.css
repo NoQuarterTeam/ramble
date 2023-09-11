@@ -4,13 +4,18 @@
 
 :root {
   --background: #fffefe;
+  --border: theme(colors.gray.100);
 }
 
 .dark {
   --background: #241c17;
+  --border: theme(colors.gray.700);
 }
 
 @layer base {
+  * {
+    @apply border-border;
+  }
   html {
     @apply font-sans;
   }
@@ -25,10 +30,10 @@
   }
 
   hr {
-    @apply border-gray-100 dark:border-gray-700;
+    @apply border;
   }
   body {
-    @apply text-black dark:text-white;
+    @apply bg-background text-black dark:text-white;
   }
 }
 
@@ -44,6 +49,9 @@
   }
   .center {
     @apply flex items-center justify-center;
+  }
+  .border-hover {
+    @apply hover:border-gray-200 dark:hover:border-gray-600;
   }
 }
 

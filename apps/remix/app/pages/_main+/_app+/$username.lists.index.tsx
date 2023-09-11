@@ -33,11 +33,7 @@ export default function ProfileLists() {
       )}
       <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
         {lists.map((list) => (
-          <Link
-            to={list.id}
-            key={list.id}
-            className="rounded-md border border-gray-100 p-4 hover:border-gray-200 dark:border-gray-700 dark:hover:border-gray-500"
-          >
+          <Link to={list.id} key={list.id} className="border-hover rounded-md border p-4">
             <div className="flex items-center space-x-2">
               {list.isPrivate && <Lock size={20} />}
               <p className="text-2xl">{list.name}</p>
