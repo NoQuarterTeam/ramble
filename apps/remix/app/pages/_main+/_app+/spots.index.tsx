@@ -101,7 +101,7 @@ export default function Latest() {
 
   return (
     <PageContainer className="pt-0">
-      <div className="top-nav sticky z-[1] bg-white py-4 dark:bg-gray-800">
+      <div className="top-nav bg-background sticky z-[1] py-4">
         <div className="flex w-full items-center gap-2">
           <div className="relative w-[calc(100%-120px)]">
             <div className="scrollbar-hide flex gap-1 overflow-x-scroll pr-10">

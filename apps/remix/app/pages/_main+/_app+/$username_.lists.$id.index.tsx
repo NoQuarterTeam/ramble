@@ -138,7 +138,7 @@ export default function ListDetail() {
   )
   return (
     <PageContainer className="space-y-0 pb-0 pt-0">
-      <div className="top-nav sticky z-[1] flex flex-col items-start justify-between bg-white py-4 dark:bg-gray-800 md:flex-row">
+      <div className="top-nav bg-background sticky z-[1] flex flex-col items-start justify-between py-4 md:flex-row">
         <div className="space-y-1">
           <div className="flex flex-col items-start md:flex-row md:items-end md:space-x-2">
             <div className="flex flex-col md:flex-row md:space-x-2">

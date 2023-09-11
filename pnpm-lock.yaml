@@ -232,6 +232,9 @@ importers:
       '@fontsource/red-rose':
         specifier: ^5.0.11
         version: 5.0.11
+      '@fontsource/urbanist':
+        specifier: ^5.0.12
+        version: 5.0.12
       '@radix-ui/react-alert-dialog':
         specifier: ^1.0.3
         version: 1.0.3(@types/react@18.2.21)(react-dom@18.2.0)(react@18.2.0)
@@ -5298,6 +5301,10 @@ packages:
 
   /@fontsource/red-rose@5.0.11:
     resolution: {integrity: sha512-AoV+jJfX7Of6qNKsPkGFzwSNyHQpJtRYv3rZoPfNQC3L8XkMvVefub5D4AC2lNcKRDcuQ1vyApjA4SK/JUH4DQ==}
+    dev: false
+
+  /@fontsource/urbanist@5.0.12:
+    resolution: {integrity: sha512-xoCULjDtH0fd6s2RQN0gAAD59Lxvhr8G5flhYxL1yI0ISmFw/WPTusZblw8sRFUIAvQaJRPohbizQy2q/k89Lw==}
     dev: false
 
   /@gar/promisify@1.1.3:

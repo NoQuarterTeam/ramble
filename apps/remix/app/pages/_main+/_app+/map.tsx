@@ -149,16 +149,16 @@ export default function MapView() {
   )
   const noMap = searchParams.get("noMap")
 
-  React.useEffect(() => {
-    if (mapRef.current) {
-      console.log("stufffff")
-      console.log(mapRef.current)
-      console.log("done")
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      mapRef.current.setConfigProperty("basemap", "lightPreset", theme === "light" ? "day" : "night")
-    }
-  }, [theme])
+  // React.useEffect(() => {
+  //   if (mapRef.current) {
+  //     console.log("stufffff")
+  //     console.log(mapRef.current)
+  //     console.log("done")
+  //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  //     // @ts-ignore
+  //     mapRef.current.setConfigProperty("basemap", "lightPreset", theme === "light" ? "day" : "night")
+  //   }
+  // }, [theme])
 
   return (
     <div className="h-nav-screen relative w-screen overflow-hidden">
@@ -168,7 +168,7 @@ export default function MapView() {
           onLoad={(e) => {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            e.target.setConfigProperty("basemap", "lightPreset", theme === "light" ? "day" : "dusk")
+            // e.target.setConfigProperty("basemap", "lightPreset", theme === "light" ? "day" : "dusk")
             onMove(e)
           }}
           onMoveEnd={onMove}
@@ -176,12 +176,12 @@ export default function MapView() {
           style={{ height: "100%", width: "100%" }}
           initialViewState={initialViewState}
           attributionControl={false}
-          // mapStyle={
-          //   theme === "dark"
-          //     ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
-          //     : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
-          // }
-          mapStyle={"mapbox://styles/mapbox/standard-beta"}
+          mapStyle={
+            theme === "dark"
+              ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
+              : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
+          }
+          // mapStyle={"mapbox://styles/mapbox/standard-beta"}
         >
           <MapLayers />
           {markers}

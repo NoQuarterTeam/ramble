@@ -11,6 +11,7 @@ declare const _exports: {
         '800': "#9a3412";
         '900': "#7c2d12";
         '950': "#431407";
+        DEFAULT: "#ea580c";
     };
     gray: {
         '50': "#fafaf9";
