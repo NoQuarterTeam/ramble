@@ -1,6 +1,6 @@
 import { ConfigContext, ExpoConfig } from "expo/config"
 
-const splash = {
+const splash: ExpoConfig["splash"] = {
   image: "./assets/splash.png",
   resizeMode: "contain",
   backgroundColor: "#fffefe",
@@ -9,7 +9,7 @@ const splash = {
     resizeMode: "contain",
     backgroundColor: "#241c17",
   },
-} as const satisfies ExpoConfig["splash"]
+}
 
 const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   name: "Ramble",
