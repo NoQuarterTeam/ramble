@@ -27,9 +27,13 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export default function AuthLayout() {
   return (
-    <div className="vstack">
-      <div className="w-full max-w-md p-4 pt-10">
-        <Outlet />
+    <div className="center flex-col pt-10">
+      <div className="vstack w-full">
+        <div className="vstack bg-background w-full max-w-md space-y-8 p-4">
+          <div className="w-full">
+            <Outlet />
+          </div>
+        </div>
       </div>
     </div>
   )

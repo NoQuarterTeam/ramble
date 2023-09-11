@@ -49,7 +49,7 @@ const DrawerOverlay = React.forwardRef<
 ))
 DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName
 
-const sheetVariants = cva("fixed z-50 scale-100 gap-4 bg-white p-6 opacity-100 dark:bg-gray-900", {
+const sheetVariants = cva("bg-background fixed z-50 scale-100 gap-4 p-6 opacity-100", {
   variants: {
     position: {
       top: "animate-in slide-in-from-top w-full duration-300",

@@ -1,5 +1,4 @@
 import { useLoaderData } from "@remix-run/react"
-import type { LinksFunction } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
@@ -9,7 +8,6 @@ import { LinkButton } from "~/components/LinkButton"
 import { Badge } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
-import landingStyles from "~/styles/landing.css"
 
 import { PageContainer } from "../../components/PageContainer"
 import { SpotItem } from "./_app+/components/SpotItem"
@@ -17,10 +15,6 @@ import { SpotItem } from "./_app+/components/SpotItem"
 export const config = {
   runtime: "edge",
   regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
-}
-
-export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: landingStyles }]
 }
 
 export const headers = useLoaderHeaders
@@ -56,7 +50,7 @@ export default function Home() {
       <PageContainer className="space-y-20">
         <div className="grid grid-cols-1 gap-6 pb-10 pt-10 md:grid-cols-9 md:pb-20 md:pt-32">
           <div className="col-span-9 space-y-2 md:col-span-6">
-            <Badge colorScheme="green">Coming soon</Badge>
+            <Badge colorScheme="orange">Coming soon</Badge>
             <h1 className="text-4xl font-medium">Everything you need for travelling Europe</h1>
             <p className="text-2xl">1000's of spots, service stations, cafes, parks and more</p>
             <LinkButton size="lg" to="map" className="max-w-min">

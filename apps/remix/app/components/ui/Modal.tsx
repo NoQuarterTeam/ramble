@@ -42,8 +42,7 @@ const ModalContent = React.forwardRef<
     <ModalPrimitive.Content
       ref={ref}
       className={merge(
-        "animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 sm:zoom-in-90 data-[state=open]:sm:slide-in-from-bottom-0 fixed z-50 grid w-full gap-4 rounded-lg bg-white p-6",
-        "dark:bg-gray-900",
+        "animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 sm:zoom-in-90 data-[state=open]:sm:slide-in-from-bottom-0 bg-background fixed z-50 grid w-full gap-4 rounded-lg p-6",
         className,
       )}
       {...props}

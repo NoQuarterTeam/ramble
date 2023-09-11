@@ -5,7 +5,7 @@ import { z } from "zod"
 
 import { PageContainer } from "~/components/PageContainer"
 import { db } from "~/lib/db.server"
-import { formError, NullableFormString, validateFormData } from "~/lib/form"
+import { FormCheckbox, formError, NullableFormString, validateFormData } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { notFound, redirect } from "~/lib/remix.server"
 import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
@@ -18,7 +18,7 @@ export const loader = async ({ params, request }: LoaderArgs) => {
   const userId = await requireUser(request)
   const list = await db.list.findFirst({
     where: { id: params.id, creatorId: userId },
-    select: { id: true, name: true, description: true },
+    select: { id: true, name: true, description: true, isPrivate: true },
   })
   if (!list) throw notFound()
   return json(list)
@@ -33,6 +33,7 @@ export const action = async ({ request, params }: ActionArgs) => {
   const schema = z.object({
     name: z.string().min(1, "List name must be at least 1 character"),
     description: NullableFormString,
+    isPrivate: FormCheckbox,
   })
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)

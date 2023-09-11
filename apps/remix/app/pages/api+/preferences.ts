@@ -9,12 +9,14 @@ export const preferencesCookies = createCookie("ramble_preferences", { maxAge: 6
 
 export const preferencesSchema = z.object({
   mapLayerRain: FormCheckbox,
+  mapLayerTemp: FormCheckbox,
 })
 
 export type Preferences = z.infer<typeof preferencesSchema>
 
 export const defaultPreferences = {
   mapLayerRain: false,
+  mapLayerTemp: false,
 } satisfies Preferences
 
 export async function action({ request }: ActionArgs) {
@@ -22,8 +24,6 @@ export async function action({ request }: ActionArgs) {
 
   const result = await validateFormData(formData, preferencesSchema)
   if (!result.success) return formError(result)
-
-  console.log(result.data)
 
   const cookieHeader = request.headers.get("Cookie")
   let cookie = (await preferencesCookies.parse(cookieHeader)) || defaultPreferences

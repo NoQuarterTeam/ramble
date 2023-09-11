@@ -1,18 +1,23 @@
 import { Link, useLoaderData, useParams } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
-import { cacheHeader } from "pretty-cache-header"
+import { Lock } from "lucide-react"
 
 import { LinkButton } from "~/components/LinkButton"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
+import { getMaybeUser } from "~/services/auth/auth.server"
 
 export const headers = useLoaderHeaders
 
-export const loader = async ({ params }: LoaderArgs) => {
-  const lists = await db.list.findMany({ orderBy: { createdAt: "desc" }, where: { creator: { username: params.username } } })
-  return json(lists, { headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }) } })
+export const loader = async ({ params, request }: LoaderArgs) => {
+  const user = await getMaybeUser(request)
+  const lists = await db.list.findMany({
+    orderBy: { createdAt: "desc" },
+    where: { creator: { username: params.username }, isPrivate: !user || user.username !== params.username ? false : undefined },
+  })
+  return json(lists)
 }
 
 export default function ProfileLists() {
@@ -33,7 +38,10 @@ export default function ProfileLists() {
             key={list.id}
             className="rounded-md border border-gray-100 p-4 hover:border-gray-200 dark:border-gray-700 dark:hover:border-gray-500"
           >
-            <p className="text-2xl">{list.name}</p>
+            <div className="flex items-center space-x-2">
+              {list.isPrivate && <Lock size={20} />}
+              <p className="text-2xl">{list.name}</p>
+            </div>
             <p className="text-sm">{list.description}</p>
           </Link>
         ))}

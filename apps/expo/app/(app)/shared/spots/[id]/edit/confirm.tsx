@@ -26,7 +26,7 @@ export function EditSpotConfirmScreen() {
     error,
   } = api.spot.update.useMutation({
     onSuccess: (data) => {
-      utils.spot.list.refetch({ sort: "latest", skip: 0 })
+      utils.spot.list.refetch({ skip: 0, sort: "latest" })
       utils.spot.detail.refetch({ id: data.id })
       router.navigate("AppLayout")
       router.navigate("SpotDetailScreen", { id: data.id })

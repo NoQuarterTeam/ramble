@@ -21,7 +21,7 @@ import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { badRequest, notFound, redirect } from "~/lib/remix.server"
 import { useTheme } from "~/lib/theme"
-import { getCurrentUser } from "~/services/auth/auth.server"
+import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
 
 import { SpotItem } from "./components/SpotItem"
 import { SpotMarker } from "./components/SpotMarker"
@@ -29,10 +29,11 @@ import { SpotMarker } from "./components/SpotMarker"
 export const headers = useLoaderHeaders
 
 type SpotItemWithStatsAndCoords = SpotItemWithStats & { longitude: number; latitude: number }
-export const loader = async ({ params }: LoaderArgs) => {
+export const loader = async ({ params, request }: LoaderArgs) => {
+  const user = await getMaybeUser(request)
   const [list, spots] = await Promise.all([
     db.list.findFirst({
-      where: { id: params.id },
+      where: { id: params.id, isPrivate: !user || user.username !== params.username ? false : undefined },
       select: {
         id: true,
         creatorId: true,
@@ -137,7 +138,7 @@ export default function ListDetail() {
   )
   return (
     <PageContainer className="space-y-0 pb-0 pt-0">
-      <div className="top-nav sticky z-[1] flex flex-col items-start justify-between bg-white py-4 dark:bg-gray-800 md:flex-row">
+      <div className="top-nav bg-background sticky z-[1] flex flex-col items-start justify-between py-4 md:flex-row">
         <div className="space-y-1">
           <div className="flex flex-col items-start md:flex-row md:items-end md:space-x-2">
             <div className="flex flex-col md:flex-row md:space-x-2">

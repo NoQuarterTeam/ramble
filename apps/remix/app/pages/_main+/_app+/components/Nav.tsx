@@ -15,7 +15,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   IconButton,
-  Icons,
   Tooltip,
 } from "~/components/ui"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
@@ -30,7 +29,7 @@ export function Nav() {
   const theme = useTheme()
   const isDark = theme === "dark"
   return (
-    <div className="h-nav fixed left-0 top-0 z-10 flex w-full items-center justify-between border-b border-solid border-gray-50 bg-white px-4 align-middle dark:border-gray-700 dark:bg-gray-800">
+    <div className="h-nav bg-background fixed left-0 top-0 z-10 flex w-full items-center justify-between border-b border-solid border-gray-50 px-4 align-middle dark:border-gray-700 xl:px-12">
       <div className="flex items-center space-x-4">
         <ClientOnly fallback={<Logo to="/map" />}>
           <Logo to={`/map${typeof window !== "undefined" ? window.location.search : ""}`} />
@@ -164,11 +163,8 @@ export function Nav() {
 
 function Logo({ to }: { to: string }) {
   return (
-    <Link to={to} className="flex w-[100px] items-center space-x-1">
-      <span>
-        <Icons.Van size={24} />
-      </span>
-      <span className="text-xl font-medium">Ramble</span>
+    <Link to={to} className="text-primary font-urbanist font flex w-[100px] items-center space-x-1 text-2xl italic">
+      ramble
     </Link>
   )
 }
@@ -179,7 +175,11 @@ function NavbarLink(props: NavLinkProps) {
       {...props}
       to={props.to}
       className={({ isActive }) =>
-        merge(buttonStyles({ size: "md", variant: isActive ? "secondary" : "ghost" }), buttonSizeStyles({ size: "md" }))
+        merge(
+          buttonStyles({ size: "md", variant: isActive ? "secondary" : "ghost" }),
+          buttonSizeStyles({ size: "md" }),
+          "text-sm",
+        )
       }
     >
       {props.children}

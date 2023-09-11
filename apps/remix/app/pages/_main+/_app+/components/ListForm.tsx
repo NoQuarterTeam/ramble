@@ -2,10 +2,10 @@ import type { List } from "@ramble/database/types"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
-import { Textarea } from "~/components/ui"
+import { Checkbox, Textarea } from "~/components/ui"
 
 interface Props {
-  list?: Pick<List, "id" | "name" | "description">
+  list?: Pick<List, "id" | "name" | "description" | "isPrivate">
 }
 
 export function ListForm(props: Props) {
@@ -18,6 +18,12 @@ export function ListForm(props: Props) {
         label="Description"
         name="description"
         input={<Textarea rows={3} />}
+      />
+      <FormField
+        defaultChecked={props.list?.isPrivate || false}
+        name="isPrivate"
+        label="Should this list be private?"
+        input={<Checkbox />}
       />
       <FormError />
       <div className="flex space-x-1">

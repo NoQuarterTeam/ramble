@@ -7,20 +7,36 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 import { type SpotItemWithStats } from "@ramble/shared"
 
 export const listRouter = createTRPCRouter({
-  allByUser: publicProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {
-    return ctx.prisma.list.findMany({
-      orderBy: { createdAt: "desc" },
-      where: { creator: { username: input.username } },
-      take: 10,
-    })
-  }),
+  allByUser: publicProcedure
+    .input(z.object({ username: z.string(), showFollowing: z.boolean().optional() }))
+    .query(async ({ ctx, input }) => {
+      const currentUser = ctx.user?.username
+      const followers =
+        ctx.user &&
+        input.showFollowing &&
+        (await ctx.prisma.user.findUnique({ where: { id: ctx.user.id } }).following({ select: { id: true } }))
+
+      return ctx.prisma.list.findMany({
+        orderBy: { createdAt: "desc" },
+        where: {
+          creator: input.showFollowing && followers ? { id: { in: followers.map((f) => f.id) } } : { username: input.username },
+          isPrivate: !currentUser || currentUser !== input.username ? false : undefined,
+        },
+        include: input.showFollowing
+          ? { creator: { select: { avatar: true, avatarBlurHash: true, firstName: true, lastName: true } } }
+          : undefined,
+        take: 10,
+      })
+    }),
   detail: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
+    const currentUser = ctx.user?.username
     const [list, spots] = await Promise.all([
       ctx.prisma.list.findFirst({
         where: { id: input.id },
         select: {
           id: true,
           creatorId: true,
+          isPrivate: true,
           creator: { select: { username: true, firstName: true, lastName: true } },
           name: true,
           description: true,
@@ -47,13 +63,15 @@ export const listRouter = createTRPCRouter({
         Spot.id
       `,
     ])
-    if (!list) throw new TRPCError({ code: "NOT_FOUND" })
+    if (!list || (list.isPrivate && (!currentUser || currentUser !== list.creator.username)))
+      throw new TRPCError({ code: "NOT_FOUND" })
 
     return { list, spots }
   }),
   allByUserWithSavedSpots: protectedProcedure.input(z.object({ spotId: z.string() })).query(async ({ ctx, input }) => {
     return ctx.prisma.list.findMany({
       where: { creatorId: ctx.user.id },
+      orderBy: { createdAt: "desc" },
       include: { listSpots: { where: { spotId: input.spotId } } },
       take: 10,
     })

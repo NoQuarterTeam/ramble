@@ -45,7 +45,7 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
 
   return (
     <>
-      <div className="absolute left-1/2 top-4 -translate-x-1/2 rounded-md bg-white dark:bg-gray-800">
+      <div className="bg-background absolute left-1/2 top-4 -translate-x-1/2 rounded-md">
         <Button
           onClick={modalProps.onOpen}
           size="lg"

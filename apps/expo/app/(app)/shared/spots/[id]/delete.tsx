@@ -17,7 +17,7 @@ export function DeleteSpotScreen() {
   const utils = api.useContext()
   const { mutate, isLoading } = api.spot.delete.useMutation({
     onSuccess: async () => {
-      await utils.spot.list.refetch()
+      await utils.spot.list.refetch({ skip: 0, sort: "latest" })
       router.goBack()
       router.popToTop()
       toast({ title: "Spot deleted" })

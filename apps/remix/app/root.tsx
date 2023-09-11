@@ -1,3 +1,5 @@
+import "@fontsource/urbanist/600.css"
+
 import "@fontsource/poppins/300.css"
 import "@fontsource/poppins/400.css"
 import "@fontsource/poppins/500.css"
@@ -178,7 +180,7 @@ function Document({ theme, children }: DocumentProps) {
         <Meta />
         <Links />
       </head>
-      <body className="bg-white dark:bg-gray-800">
+      <body className="bg-background">
         {children}
         <ScrollRestoration />
         {!shouldDisableScripts && <Scripts />}

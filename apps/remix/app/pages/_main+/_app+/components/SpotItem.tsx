@@ -36,13 +36,13 @@ export function SpotItem({ spot }: Props) {
               <Camera className="opacity-50" />
             </div>
           )}
-          <div className="sq-10 absolute left-2 top-2 flex items-center justify-center rounded-full bg-white shadow dark:bg-black">
+          <div className="sq-10 bg-background absolute left-2 top-2 flex items-center justify-center rounded-full shadow">
             <Icon size={20} />
           </div>
         </div>
 
-        <div className="space-y-1">
-          <p className="line-clamp-2 text-lg leading-tight">{spot.name}</p>
+        <div className="space-y-0.5">
+          <p className="line-clamp-2 text-base leading-tight">{spot.name}</p>
           <p className="line-clamp-1 text-sm font-thin opacity-70">{spot.address}</p>
           <div className="flex items-center space-x-2">
             <div className="flex items-center space-x-1 text-sm">
@@ -62,7 +62,7 @@ export function SpotItem({ spot }: Props) {
             spotId={spot.id}
             trigger={
               <IconButton
-                className="rounded-full bg-white hover:bg-white hover:opacity-90 dark:bg-black dark:hover:bg-black dark:hover:opacity-80"
+                className="bg-background hover:bg-background rounded-full hover:opacity-90 dark:hover:opacity-80"
                 aria-label="save to list"
                 icon={<Heart size={16} />}
               />
