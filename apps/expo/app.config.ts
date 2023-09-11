@@ -1,5 +1,16 @@
 import { ConfigContext, ExpoConfig } from "expo/config"
 
+const splash = {
+  image: "./assets/splash.png",
+  resizeMode: "contain",
+  backgroundColor: "#fffefe",
+  dark: {
+    image: "./assets/splash.png",
+    resizeMode: "contain",
+    backgroundColor: "#241c17",
+  },
+} as const satisfies ExpoConfig["splash"]
+
 const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   name: "Ramble",
   description: "Ramble: Travel Guide",
@@ -11,16 +22,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   orientation: "portrait",
   icon: "./assets/icon.png",
   userInterfaceStyle: "automatic",
-  splash: {
-    image: "./assets/splash.png",
-    resizeMode: "contain",
-    backgroundColor: "#fffefe",
-    dark: {
-      image: "./assets/splash.png",
-      resizeMode: "contain",
-      backgroundColor: "#241c17",
-    },
-  },
+  splash,
   updates: {
     fallbackToCacheTimeout: 0,
     url: "https://u.expo.dev/b868666b-33e3-40d3-a88b-71c40a54e3dd",
@@ -32,6 +34,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     icon: "./assets/icon.png",
     bundleIdentifier: "co.noquarter.ramble",
     associatedDomains: ["applinks:ramble.guide", "applinks:dev.ramble.guide"],
+    splash,
     infoPlist: {
       LSApplicationQueriesSchemes: ["comgooglemaps"],
     },
@@ -43,6 +46,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     },
     softwareKeyboardLayoutMode: "resize",
     package: "co.noquarter.ramble",
+    splash,
   },
   runtimeVersion: {
     policy: "sdkVersion",
