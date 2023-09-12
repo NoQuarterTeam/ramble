@@ -131,7 +131,7 @@ export function ErrorBoundary() {
             {error.stack && (
               <>
                 <hr />
-                <div className="rounded-md bg-gray-200 p-4 dark:bg-gray-700 ">
+                <div className="rounded-xs bg-gray-200 p-4 dark:bg-gray-700 ">
                   <pre className="overflow-scroll text-sm">{error.stack}</pre>
                 </div>
               </>

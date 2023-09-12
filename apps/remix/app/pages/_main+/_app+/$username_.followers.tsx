@@ -44,7 +44,7 @@ export default function ProfileFollowers() {
             <Link
               to={`/${user.username}`}
               key={user.id}
-              className="border-hover flex items-center space-x-2 rounded-md border p-4"
+              className="border-hover rounded-xs flex items-center space-x-2 border p-4"
             >
               <Avatar size={100} className="sq-16" src={createImageUrl(user.avatar)} placeholder={user.avatarBlurHash} />
               <p className="text-2xl">{user.firstName}</p>

@@ -4,7 +4,7 @@ type DivProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HT
 
 export function Tile({ children, ...props }: DivProps) {
   return (
-    <div {...props} className={merge("w-full rounded-md border", props.className)}>
+    <div {...props} className={merge("rounded-xs w-full border", props.className)}>
       {children}
     </div>
   )

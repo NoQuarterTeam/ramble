@@ -15,7 +15,7 @@ interface Props {
 export function VerifiedCard({ spot }: Props) {
   return (
     <div className="@container">
-      <div className="@lg:h-16 flex h-12 items-center rounded border border-gray-200 dark:border-gray-700">
+      <div className="@lg:h-16 rounded-xsborder flex h-12 items-center border-gray-200 dark:border-gray-700">
         {spot.verifiedAt && spot.verifier ? (
           <Link
             to={`/${spot.verifier.username}`}

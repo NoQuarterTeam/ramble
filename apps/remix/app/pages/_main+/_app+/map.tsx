@@ -235,7 +235,7 @@ export function ErrorBoundary() {
         </p>
       </div>
       {isCatchError ? null : error instanceof Error ? (
-        <div className="max-w-4xl space-y-4 rounded-md bg-gray-200 p-4 dark:bg-gray-700 ">
+        <div className="rounded-xs max-w-4xl space-y-4 bg-gray-200 p-4 dark:bg-gray-700 ">
           <p>{error.message}</p>
           <pre className="overflow-scroll text-sm">{error.stack}</pre>
         </div>

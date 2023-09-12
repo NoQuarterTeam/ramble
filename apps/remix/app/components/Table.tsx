@@ -69,7 +69,7 @@ export function Table<T>({
                   <div
                     className={join(
                       "mb-1 flex items-center justify-between whitespace-nowrap px-2 py-1 text-left font-medium",
-                      header.column.getCanSort() && "cursor-pointer select-none rounded hover:bg-gray-100",
+                      header.column.getCanSort() && "rounded-xshover:bg-gray-100 cursor-pointer select-none",
                     )}
                   >
                     {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}

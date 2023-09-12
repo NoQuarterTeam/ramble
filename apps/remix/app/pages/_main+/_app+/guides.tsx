@@ -85,7 +85,7 @@ function GuideItem(props: { guide: SerializeFrom<typeof loader>["guides"][number
   return (
     <Link
       to={`/${props.guide.username}`}
-      className="border-hover flex items-center justify-between space-x-4 rounded-md border p-4 transition-colors"
+      className="border-hover rounded-xs flex items-center justify-between space-x-4 border p-4 transition-colors"
     >
       <div className="flex items-center space-x-2">
         <Avatar className="sq-20" size={100} placeholder={props.guide.avatarBlurHash} src={createImageUrl(props.guide.avatar)} />

@@ -338,7 +338,7 @@ export function ErrorBoundary() {
           <LinkButton to="/admin/spots" variant="outline">
             Back to list
           </LinkButton>
-          <pre className="rounded bg-gray-100 p-1 text-sm dark:bg-gray-950">{error.message}</pre>
+          <pre className="rounded-xsbg-gray-100 p-1 text-sm dark:bg-gray-950">{error.message}</pre>
         </div>
       ) : (
         <p>Unknown error</p>

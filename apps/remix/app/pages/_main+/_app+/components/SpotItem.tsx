@@ -28,11 +28,11 @@ export function SpotItem({ spot }: Props) {
               placeholder={spot.blurHash}
               width={450}
               height={300}
-              className="h-full w-full rounded-md"
+              className="rounded-xs h-full w-full"
               src={createImageUrl(spot.image)}
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center rounded-md bg-gray-50 dark:bg-gray-700">
+            <div className="rounded-xs flex h-full w-full items-center justify-center bg-gray-50 dark:bg-gray-700">
               <Camera className="opacity-50" />
             </div>
           )}

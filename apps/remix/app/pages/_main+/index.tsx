@@ -63,7 +63,7 @@ export default function Home() {
               width={400}
               height={400}
               alt="two vans in the forest"
-              className="sq-[400px] rounded-md object-cover"
+              className="sq-[400px] rounded-xs object-cover"
             />
           </div>
         </div>
@@ -81,20 +81,20 @@ export default function Home() {
           {/* <h2 className="text-3xl">This is Ramble.</h2> */}
           <div className="grid grid-cols-3 gap-2 md:gap-4">
             <div className="space-y-2 md:space-y-4">
-              <img src={`/landing/8.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
-              <img src={`/landing/3.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
-              <img src={`/landing/1.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
-              <img src={`/landing/10.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
+              <img src={`/landing/8.png`} className="rounded-xs w-full object-contain" alt="landing inspo" />
+              <img src={`/landing/3.png`} className="rounded-xs w-full object-contain" alt="landing inspo" />
+              <img src={`/landing/1.png`} className="rounded-xs w-full object-contain" alt="landing inspo" />
+              <img src={`/landing/10.png`} className="rounded-xs w-full object-contain" alt="landing inspo" />
             </div>
             <div className="space-y-2 md:space-y-4">
-              <img src={`/landing/6.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
-              <img src={`/landing/9.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
-              <img src={`/landing/4.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
+              <img src={`/landing/6.png`} className="rounded-xs w-full object-contain" alt="landing inspo" />
+              <img src={`/landing/9.png`} className="rounded-xs w-full object-contain" alt="landing inspo" />
+              <img src={`/landing/4.png`} className="rounded-xs w-full object-contain" alt="landing inspo" />
             </div>
             <div className="space-y-2 md:space-y-4">
-              <img src={`/landing/5.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
-              <img src={`/landing/7.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
-              <img src={`/landing/2.png`} className="w-full rounded-md object-contain" alt="landing inspo" />
+              <img src={`/landing/5.png`} className="rounded-xs w-full object-contain" alt="landing inspo" />
+              <img src={`/landing/7.png`} className="rounded-xs w-full object-contain" alt="landing inspo" />
+              <img src={`/landing/2.png`} className="rounded-xs w-full object-contain" alt="landing inspo" />
             </div>
           </div>
         </div>
@@ -117,7 +117,7 @@ export default function Home() {
           width={400}
           height={200}
           alt="van at campside"
-          className="w-[400px] rounded-md object-cover"
+          className="w-[400px] rounded-xs object-cover"
         />
       </div> */}
       </PageContainer>

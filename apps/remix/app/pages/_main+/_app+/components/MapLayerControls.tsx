@@ -14,7 +14,7 @@ export function MapLayerControls() {
 
   return (
     <>
-      <div className="absolute right-4 top-4 rounded-md bg-white shadow dark:bg-gray-800">
+      <div className="rounded-xs absolute right-4 top-4 bg-white shadow dark:bg-gray-800">
         <Tooltip label="Map layers" side="bottom">
           <IconButton
             onClick={modalProps.onOpen}

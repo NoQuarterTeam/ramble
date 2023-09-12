@@ -93,7 +93,7 @@ export default function SpotPreview() {
                     {user && <SaveToList spotId={spot.id} />}
                   </div>
                 </div>
-                <div className="w-full overflow-x-scroll rounded-md">
+                <div className="rounded-xs w-full overflow-x-scroll">
                   <div className="relative flex h-[225px] w-max space-x-2">
                     {spot.images?.map((image) => (
                       <OptimizedImage
@@ -101,7 +101,7 @@ export default function SpotPreview() {
                         width={350}
                         placeholder={image.blurHash}
                         height={225}
-                        className="h-[225px] rounded-md object-cover"
+                        className="rounded-xs h-[225px] object-cover"
                         key={image.id}
                         src={createImageUrl(image.path)}
                       />
@@ -155,9 +155,9 @@ function SpotFallback() {
       <Skeleton className="h-12 w-11/12" />
       <Skeleton className="h-6 w-10" />
       <Skeleton className="h-5 w-40" />
-      <div className="flex h-[225px] w-full space-x-2 overflow-hidden rounded-md">
-        <Skeleton className="h-[225px] min-w-[350px] rounded-md" />
-        <Skeleton className="h-[225px] min-w-[75px] rounded-md" />
+      <div className="rounded-xs flex h-[225px] w-full space-x-2 overflow-hidden">
+        <Skeleton className="rounded-xs h-[225px] min-w-[350px]" />
+        <Skeleton className="rounded-xs h-[225px] min-w-[75px]" />
       </div>
       <Skeleton className="h-32 w-full" />
       <div className="flex justify-end">
@@ -175,7 +175,7 @@ function SpotFallback() {
   )
 }
 export function Skeleton(props: React.HTMLAttributes<HTMLDivElement>) {
-  return <div {...props} className={merge("animate-pulse rounded-md bg-gray-100 dark:bg-gray-700", props.className)} />
+  return <div {...props} className={merge("rounded-xs animate-pulse bg-gray-100 dark:bg-gray-700", props.className)} />
 }
 
 function SpotContainer(props: { children: React.ReactNode }) {

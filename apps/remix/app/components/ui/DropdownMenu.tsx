@@ -28,7 +28,7 @@ const DropdownMenuSubTrigger = React.forwardRef<
   <DropdownMenuPrimitive.SubTrigger
     ref={ref}
     className={merge(
-      "flex cursor-default select-none items-center rounded-md px-2 py-1.5 text-sm font-medium outline-none focus:bg-gray-100 data-[state=open]:bg-gray-100 dark:focus:bg-gray-700 dark:data-[state=open]:bg-gray-700",
+      "rounded-xs flex cursor-default select-none items-center px-2 py-1.5 text-sm font-medium outline-none focus:bg-gray-100 data-[state=open]:bg-gray-100 dark:focus:bg-gray-700 dark:data-[state=open]:bg-gray-700",
       inset && "pl-8",
       className,
     )}
@@ -47,7 +47,7 @@ const DropdownMenuSubContent = React.forwardRef<
   <DropdownMenuPrimitive.SubContent
     ref={ref}
     className={merge(
-      "animate-in slide-in-from-left-1 bg-background z-50 min-w-[8rem] overflow-hidden rounded-md border border-gray-100 p-1 text-gray-700 shadow-md dark:border-gray-800 dark:text-gray-400",
+      "animate-in slide-in-from-left-1 bg-background rounded-xs z-50 min-w-[8rem] overflow-hidden border border-gray-100 p-1 text-gray-700 shadow-md dark:border-gray-800 dark:text-gray-400",
       className,
     )}
     {...props}
@@ -64,7 +64,7 @@ const DropdownMenuContent = React.forwardRef<
       ref={ref}
       sideOffset={sideOffset}
       className={merge(
-        "animate-in data-[side=right]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 bg-background z-50 min-w-[8rem] overflow-hidden rounded-md border border-gray-100 p-1 text-gray-700 shadow-xl dark:border-gray-700 dark:text-gray-400",
+        "animate-in data-[side=right]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 bg-background rounded-xs z-50 min-w-[8rem] overflow-hidden border border-gray-100 p-1 text-gray-700 shadow-xl dark:border-gray-700 dark:text-gray-400",
         className,
       )}
       {...props}
@@ -97,7 +97,7 @@ DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName
 //   <DropdownMenuPrimitive.CheckboxItem
 //     ref={ref}
 //     className={merge(
-//       "relative flex cursor-default select-none items-center rounded-md py-1.5 pl-8 pr-2 text-sm font-medium outline-none focus:bg-gray-100 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 dark:focus:bg-gray-700",
+//       "relative flex cursor-default select-none items-center rounded-xs py-1.5 pl-8 pr-2 text-sm font-medium outline-none focus:bg-gray-100 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 dark:focus:bg-gray-700",
 //       className
 //     )}
 //     checked={checked}
@@ -121,7 +121,7 @@ DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName
 //   <DropdownMenuPrimitive.RadioItem
 //     ref={ref}
 //     className={merge(
-//       "relative flex cursor-default select-none items-center rounded-md py-1.5 pl-8 pr-2 text-sm font-medium outline-none focus:bg-gray-100 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 dark:focus:bg-gray-700",
+//       "relative flex cursor-default select-none items-center rounded-xs py-1.5 pl-8 pr-2 text-sm font-medium outline-none focus:bg-gray-100 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 dark:focus:bg-gray-700",
 //       className
 //     )}
 //     {...props}

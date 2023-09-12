@@ -48,7 +48,7 @@ export function ReviewItem({ review }: Props) {
   const user = useMaybeUser()
   const deleteFetcher = useFetcher()
   return (
-    <div className="stack space-y-2 rounded-md border px-4 py-3">
+    <div className="stack rounded-xs space-y-2 border px-4 py-3">
       <div className="flex justify-between">
         <div className="hstack">
           <Avatar size={40} className="sq-10 rounded-full" src={createImageUrl(review.user.avatar)} />

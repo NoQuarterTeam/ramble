@@ -207,7 +207,7 @@ export default function ListDetail() {
             spots.map((spot) => <SpotItem key={spot.id} spot={spot} />)
           )}
         </div>
-        <div className="col-span-12 h-[80vh] w-full overflow-hidden rounded-md pb-4 md:col-span-8 md:pb-0">
+        <div className="rounded-xs col-span-12 h-[80vh] w-full overflow-hidden pb-4 md:col-span-8 md:pb-0">
           <ClientOnly>
             <Map
               doubleClickZoom={true}

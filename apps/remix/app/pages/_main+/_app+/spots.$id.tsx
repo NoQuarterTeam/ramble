@@ -142,7 +142,7 @@ export default function SpotDetail() {
               key={image.id}
               placeholder={image.blurHash}
               src={createImageUrl(image.path)}
-              className="h-[300px] max-w-[400px] rounded-md"
+              className="rounded-xs h-[300px] max-w-[400px]"
               height={300}
               width={400}
             />
@@ -186,7 +186,7 @@ export default function SpotDetail() {
                     if (!spot.amenities?.[key as keyof typeof AMENITIES]) return null
                     const Icon = AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]
                     return (
-                      <div key={key} className="flex space-x-1 rounded-md border border-gray-200 p-2 dark:border-gray-700">
+                      <div key={key} className="rounded-xs flex space-x-1 border border-gray-200 p-2 dark:border-gray-700">
                         {Icon && <Icon size={20} />}
                         <p className="text-sm">{value}</p>
                       </div>
@@ -235,7 +235,7 @@ export default function SpotDetail() {
               </div>
             </div>
 
-            <div className="z-10 h-[400px] w-full overflow-hidden rounded-md">
+            <div className="rounded-xs z-10 h-[400px] w-full overflow-hidden">
               <Map
                 mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
                 style={{ height: "100%", width: "100%" }}

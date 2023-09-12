@@ -41,7 +41,7 @@ export default function ProfileVan() {
                 src={createImageUrl(image.path)}
                 width={500}
                 height={350}
-                className="rounded-md object-cover"
+                className="rounded-xs object-cover"
               />
             ))}
           </div>

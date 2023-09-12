@@ -45,7 +45,7 @@ export default function AccountLayout() {
   return (
     <PageContainer>
       {!user.isVerified && (
-        <div className="border-hover flex items-center justify-between rounded-md border p-2 pl-4">
+        <div className="border-hover rounded-xs flex items-center justify-between border p-2 pl-4">
           <div className="flex items-center space-x-2">
             <AlertCircle size={16} />
             <p>Your account is not yet verified</p>
