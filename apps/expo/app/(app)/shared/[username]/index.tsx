@@ -112,7 +112,7 @@ export function UserScreen() {
                   {interestOptions
                     .filter((i) => user[i.value as keyof typeof user])
                     .map((interest) => (
-                      <View key={interest.value} className="rounded-md border border-gray-100 p-2 dark:border-gray-700">
+                      <View key={interest.value} className="rounded-xs border border-gray-100 p-2 dark:border-gray-700">
                         <interest.Icon size={18} className="text-black dark:text-white" />
                       </View>
                     ))}

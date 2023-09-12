@@ -147,7 +147,7 @@ export function SpotDetailScreen() {
                   return (
                     <View
                       key={key}
-                      className="flex flex-row space-x-1 rounded-md border border-gray-200 p-2 dark:border-gray-700"
+                      className="rounded-xs flex flex-row space-x-1 border border-gray-200 p-2 dark:border-gray-700"
                     >
                       {Icon && <Icon size={20} className="text-black dark:text-white" />}
                       <Text className="text-sm">{value}</Text>
@@ -315,5 +315,5 @@ function SpotLoading() {
 }
 
 function Skeleton(props: ViewProps) {
-  return <View {...props} className={merge("rounded-lg bg-gray-100 dark:bg-gray-700", props.className)} />
+  return <View {...props} className={merge("rounded-xs bg-gray-100 dark:bg-gray-700", props.className)} />
 }

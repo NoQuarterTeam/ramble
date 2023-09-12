@@ -65,7 +65,7 @@ export function NewSpotLocationScreen() {
       {!isLoadingLocation && (
         <>
           <Mapbox.MapView
-            className="mb-10 mt-4 flex-1 overflow-hidden rounded-lg"
+            className="rounded-xs mb-10 mt-4 flex-1 overflow-hidden"
             logoEnabled={false}
             compassEnabled
             onMapIdle={onMapMove}

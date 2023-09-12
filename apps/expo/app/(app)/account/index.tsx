@@ -55,7 +55,7 @@ export function AccountScreen() {
     <TabView title="Account">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false} className="space-y-4 pt-2">
         {!me.isVerified && (
-          <View className="flex flex-col space-y-3 rounded-md border border-gray-200 p-2 pl-4 dark:border-gray-700">
+          <View className="rounded-xs flex flex-col space-y-3 border border-gray-200 p-2 pl-4 dark:border-gray-700">
             <View className="flex flex-row items-center space-x-2">
               <AlertCircle size={20} className="text-black dark:text-white" />
               <Text className="text-lg">Your account is not yet verified</Text>
@@ -69,7 +69,7 @@ export function AccountScreen() {
           <View className="space-y-4">
             <TouchableOpacity
               onPress={() => push("UserScreen", { username: me.username })}
-              className="flex flex-row items-center justify-between rounded-md border border-gray-200 p-4 dark:border-gray-700"
+              className="rounded-xs flex flex-row items-center justify-between border border-gray-200 p-4 dark:border-gray-700"
             >
               <View className="flex flex-row items-center space-x-4">
                 {me.avatar ? (
@@ -127,7 +127,7 @@ function ProfileLink({ children, to, Icon }: { to: keyof ScreenParamsList; child
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      className="mb-1 flex flex-row items-center justify-between rounded-md border border-gray-200 px-4 py-3 dark:border-gray-700"
+      className="rounded-xs mb-1 flex flex-row items-center justify-between border border-gray-200 px-4 py-3 dark:border-gray-700"
       onPress={() => push(to)}
     >
       <View className="flex flex-row items-center space-x-2">

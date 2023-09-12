@@ -62,7 +62,7 @@ function SaveableListItem({ list, spotId }: Props) {
     <TouchableOpacity
       onPress={handleToggle}
       activeOpacity={0.8}
-      className="flex flex-row items-center justify-between rounded-lg border border-gray-100 p-4 dark:border-gray-700"
+      className="rounded-xs flex flex-row items-center justify-between border border-gray-100 p-4 dark:border-gray-700"
     >
       <View>
         <View className="flex flex-row items-center space-x-2">

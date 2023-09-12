@@ -68,7 +68,7 @@ export function NewSpotConfirmScreen() {
           <View className="flex flex-row flex-wrap">
             {params.images.map((image, i) => (
               <View key={i} className="w-1/3 p-1">
-                <Image className="h-[100px] w-full rounded-md bg-gray-50 object-cover dark:bg-gray-700" source={{ uri: image }} />
+                <Image className="rounded-xs h-[100px] w-full bg-gray-50 object-cover dark:bg-gray-700" source={{ uri: image }} />
               </View>
             ))}
           </View>

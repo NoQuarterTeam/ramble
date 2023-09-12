@@ -193,7 +193,7 @@ export function SpotsMapScreen() {
       </Mapbox.MapView>
 
       {isFetching && !!!clusters && (
-        <View className="absolute left-4 top-10 flex items-center justify-center rounded-lg bg-white p-2 dark:bg-gray-800">
+        <View className="rounded-xs absolute left-4 top-10 flex items-center justify-center bg-white p-2 dark:bg-gray-800">
           <Spinner />
         </View>
       )}
@@ -309,7 +309,7 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
   return (
     <>
       {isLoading && !!id && (
-        <View className="absolute left-4 top-10 flex items-center justify-center rounded-lg bg-white p-2 dark:bg-gray-800">
+        <View className="rounded-xs absolute left-4 top-10 flex items-center justify-center bg-white p-2 dark:bg-gray-800">
           <Spinner />
         </View>
       )}
@@ -365,7 +365,7 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
                     </View>
                   </View>
                 </View>
-                <View className="overflow-hidden rounded-lg">
+                <View className="rounded-xs overflow-hidden">
                   <ImageCarousel
                     onPress={() => push("SpotDetailScreen", { id: spot.id })}
                     key={spot.id}
