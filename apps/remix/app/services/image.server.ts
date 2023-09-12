@@ -5,7 +5,7 @@ import * as crypto from "crypto"
 import { cacheHeader } from "pretty-cache-header"
 import sharp from "sharp"
 
-import { getHead, uploadStream } from "@ramble/api"
+import { getHead, deleteObject, uploadStream } from "@ramble/api"
 import { s3Url, srcWhitelist } from "@ramble/shared"
 
 const badImageBase64 = "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
@@ -32,7 +32,6 @@ export async function generateImage({ request }: LoaderArgs) {
 
     const src = url.searchParams.get("src")
     if (!src) return badImageResponse()
-
     if (!srcWhitelist.some((s) => src.startsWith(s))) return badImageResponse()
 
     const width = getIntOrNull(url.searchParams.get("width"))
@@ -50,6 +49,8 @@ export async function generateImage({ request }: LoaderArgs) {
       .update(quality?.toString() || "90")
       .update(fit)
 
+    const shouldPurge = url.searchParams.get("purge") === "true"
+
     const key = "transforms/" + hash.digest("hex")
 
     const isInCache = await getHead(key)
@@ -58,10 +59,17 @@ export async function generateImage({ request }: LoaderArgs) {
         if (!(e instanceof NotFound)) throw badImageResponse()
         return false
       })
+
     const cacheSrc = s3Url + key
 
     // if in cache, return cached image
-    if (isInCache) return getCachedImage(cacheSrc)
+    if (isInCache) {
+      if (shouldPurge) {
+        await deleteObject(key)
+      } else {
+        return getCachedImage(cacheSrc)
+      }
+    }
 
     // fetch from original source
     const res = await axios.get(src, { responseType: "stream" })
