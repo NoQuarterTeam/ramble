@@ -38,7 +38,7 @@ export function Table<T>({
   })
   return (
     <Tile className="space-y-1 p-2">
-      <table className="w-full text-sm">
+      <table className="w-full table-fixed text-sm">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
@@ -46,6 +46,7 @@ export function Table<T>({
                 <th
                   key={header.id}
                   colSpan={header.colSpan}
+                  style={{ width: header.getSize() }}
                   onClick={
                     header.column.getCanSort()
                       ? () => {
@@ -95,11 +96,7 @@ export function Table<T>({
               <React.Fragment key={row.id}>
                 <tr className={join(i % 2 === 0 ? "bg-gray-100 dark:bg-gray-700" : "bg-background")}>
                   {row.getVisibleCells().map((cell) => (
-                    <td
-                      key={cell.id}
-                      className="truncate px-2 py-1"
-                      style={{ width: cell.column.getSize(), maxWidth: cell.column.getSize() }}
-                    >
+                    <td key={cell.id} className="truncate px-2 py-1" style={{ width: cell.column.getSize() }}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}

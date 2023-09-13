@@ -93,30 +93,40 @@ export function Select({ variant, size, ...props }: SelectProps) {
 export const checkboxSizeStyles = cva("", {
   variants: {
     size: {
-      sm: "sq-5",
-      md: "sq-7",
-      lg: "sq-9",
+      sm: "sq-4",
+      md: "sq-5",
+      lg: "sq-7",
     },
   },
   defaultVariants: {
-    size: "sm",
+    size: "md",
   },
 })
 export type CheckboxSizeStyleProps = VariantProps<typeof checkboxSizeStyles>
 
 export function Checkbox({
-  size = "sm",
+  size = "md",
+  isInderterminate,
   ...props
 }: Omit<React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "size"> &
-  CheckboxSizeStyleProps) {
+  CheckboxSizeStyleProps & { isInderterminate?: boolean }) {
+  const ref = React.useRef<HTMLInputElement>(null)
+  React.useEffect(() => {
+    if (!ref.current) return
+    if (isInderterminate) {
+      ref.current.indeterminate = !props.checked && isInderterminate
+    }
+  }, [isInderterminate, props.checked])
+
   return (
     <input
+      ref={ref}
       type="checkbox"
       {...props}
       className={merge(
-        inputStyles({ variant: "outline", size: "xs" }),
+        inputStyles({ variant: "outline" }),
         checkboxSizeStyles({ size }),
-        "text-primary-500 checked:bg-primary-500 hover:text-primary-600 focus:ring-primary-300 dark:checked:bg-primary-500 dark:hover:checked:bg-primary-600 dark:focus:ring-primary-300  cursor-pointer transition-all ",
+        "text-primary-500 checked:bg-primary-500 hover:text-primary-600 focus:ring-primary-300 dark:checked:bg-primary-500 dark:hover:checked:bg-primary-600 dark:focus:ring-primary-300 flex-shrink-0 cursor-pointer p-0 transition-all",
         props.className,
       )}
     />
