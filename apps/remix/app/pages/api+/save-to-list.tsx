@@ -143,7 +143,7 @@ export function SaveToList(props: Props) {
             </Tooltip>
           </div>
           {listsFetcher.state === "loading" && !lists ? (
-            <div className="flex items-center justify-center p-4">
+            <div className="center p-4">
               <Spinner />
             </div>
           ) : !lists ? null : lists.length === 0 ? (

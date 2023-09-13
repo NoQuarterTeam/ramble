@@ -71,7 +71,7 @@ const columns = [
 export default function Users() {
   const { users, count } = useLoaderData<typeof loader>()
   return (
-    <div className="stack">
+    <div className="space-y-2">
       <h1 className="text-4xl">Users</h1>
       <div className="flex gap-2">
         <div>

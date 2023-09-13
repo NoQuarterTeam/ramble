@@ -31,7 +31,7 @@ export function Nav() {
   return (
     <div className="h-nav bg-background fixed left-0 top-0 z-10 flex w-full items-center justify-between border-b px-4 align-middle xl:px-12">
       <div className="flex items-center space-x-4">
-        <Link to="/" className="text-primary font-urbanist font flex w-[100px] items-center space-x-1 text-2xl italic">
+        <Link to="/" className="brand-header font flex w-[100px] items-center space-x-1 text-2xl">
           ramble
         </Link>
 

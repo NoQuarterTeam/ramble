@@ -20,7 +20,7 @@ export default function AdminLayout() {
     <div className="flex">
       <div className="flex flex-col space-y-2 px-4 py-8">
         <div className="pl-3">
-          <p className="font-urbanist text-primary text-lg italic">ramble</p>
+          <p className="brand-header text-lg">ramble</p>
         </div>
         <AdminLink end to="/admin">
           Admin

@@ -59,7 +59,7 @@ export default function Home() {
           </div>
           <div className="col-span-9 md:col-span-3">
             <img
-              src="/landing/hero.jpg"
+              src="/landing/hero.png"
               width={400}
               height={400}
               alt="two vans in the forest"
@@ -68,30 +68,43 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="max-w-3xl space-y-4">
-          <h2 className="text-3xl">What is Ramble?</h2>
-          <p>
-            Ramble is more than just a platform for finding camper spots. It's a comprehensive guide to nomadic life, designed
-            with remote workers, travellers, and outdoor sports enthusiasts in mind. Whether you're a climber, mountain biker,
-            SUP-er, or just someone who loves exploring new places, Ramble has something for you.
-          </p>
+        <div className="space-y-4">
+          <h2 className="brand-header text-3xl">what is ramble?</h2>
+          <div className="max-w-3xl">
+            <p className="font-light">
+              Ramble is the ultimate guide for sustainable and authentic camper van travel. For the outdoor enthusiasts who seek
+              adventure, authenticity and community.
+              <br />
+              <br />
+              A curated list of camper spots, verified by experienced van travelers.
+              <br />
+              <br />
+              Discover the most authentic, creative and non-commercial spots. Community of creative and nature loving van folk.
+            </p>
+          </div>
         </div>
 
         <div className="space-y-4">
-          {/* <h2 className="text-3xl">This is Ramble.</h2> */}
-          <div className="grid grid-cols-3 gap-2 md:gap-4">
-            <div className="space-y-2 md:space-y-4">
+          <h2 className="brand-header text-3xl">inspiration</h2>
+          <p className="max-w-3xl font-light">
+            Inspired by the great outdoors and the spirit of the environmental movement of the 60s and 70s.
+            <br />
+            <br />A new generation of remote working, digitally connected travelers looking for authentic nature, genuine
+            connection and a more sustainable way to travel.
+          </p>
+          <div className="grid grid-cols-3 gap-2">
+            <div className="space-y-2">
               <img src={`/landing/8.png`} className="rounded-xs w-full object-contain" alt="landing inspo" />
               <img src={`/landing/3.png`} className="rounded-xs w-full object-contain" alt="landing inspo" />
               <img src={`/landing/1.png`} className="rounded-xs w-full object-contain" alt="landing inspo" />
               <img src={`/landing/10.png`} className="rounded-xs w-full object-contain" alt="landing inspo" />
             </div>
-            <div className="space-y-2 md:space-y-4">
+            <div className="space-y-2">
               <img src={`/landing/6.png`} className="rounded-xs w-full object-contain" alt="landing inspo" />
               <img src={`/landing/9.png`} className="rounded-xs w-full object-contain" alt="landing inspo" />
               <img src={`/landing/4.png`} className="rounded-xs w-full object-contain" alt="landing inspo" />
             </div>
-            <div className="space-y-2 md:space-y-4">
+            <div className="space-y-2">
               <img src={`/landing/5.png`} className="rounded-xs w-full object-contain" alt="landing inspo" />
               <img src={`/landing/7.png`} className="rounded-xs w-full object-contain" alt="landing inspo" />
               <img src={`/landing/2.png`} className="rounded-xs w-full object-contain" alt="landing inspo" />
@@ -100,7 +113,7 @@ export default function Home() {
         </div>
 
         <div className="space-y-4">
-          <h2 className="text-3xl">Check out some top rated spots</h2>
+          <h2 className="brand-header text-3xl">some top rated spots</h2>
           <div className="scrollbar-hide flex space-x-3 overflow-x-scroll py-4">
             {spots.map((spot) => (
               <div key={spot.id} className="min-w-[350px]">
@@ -123,7 +136,7 @@ export default function Home() {
       </PageContainer>
       <div className="bg-gray-50 py-10 dark:bg-gray-950">
         <PageContainer>
-          <h3 className="font-urbanist text-xl italic">ramble</h3>
+          <h3 className="text-xl italic">ramble</h3>
         </PageContainer>
       </div>
     </div>

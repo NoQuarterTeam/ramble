@@ -112,8 +112,8 @@ export function ErrorBoundary() {
     <Document theme="dark">
       <div className="flex items-center overflow-scroll p-20 pt-40">
         {isCatchError ? (
-          <div className="stack space-y-6">
-            <div className="stack">
+          <div className="space-y-6">
+            <div className="space-y-2">
               <h1 className="text-9xl">{error.status}</h1>
               <p className="text-lg">
                 {error.status === 404
@@ -124,7 +124,7 @@ export function ErrorBoundary() {
             {error.status === 404 && <LinkButton to="/">Take me home</LinkButton>}
           </div>
         ) : error instanceof Error ? (
-          <div className="stack max-w-4xl space-y-6">
+          <div className="max-w-4xl space-y-6">
             <Frown className="sq-20" />
             <h1 className="text-3xl">Oops, there was an error.</h1>
             <p>{error.message}</p>

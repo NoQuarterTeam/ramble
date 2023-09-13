@@ -199,7 +199,7 @@ export default function Spots() {
   const { spots, count, unverifiedSpotsCount } = useLoaderData<typeof loader>()
 
   return (
-    <div className="stack">
+    <div className="space-y-2">
       <h1 className="text-4xl">Spots</h1>
       <div className="flex items-end gap-2">
         <div>

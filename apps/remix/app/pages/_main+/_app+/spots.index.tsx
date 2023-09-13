@@ -172,7 +172,7 @@ export default function Latest() {
           </div>
         )}
         {count > spots.length && (
-          <div className="flex items-center justify-center">
+          <div className="center">
             <Button size="lg" isLoading={spotFetcher.state === "loading"} variant="outline" onClick={onNext}>
               Load more
             </Button>

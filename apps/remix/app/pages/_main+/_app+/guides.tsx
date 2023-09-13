@@ -71,7 +71,7 @@ export default function Guides() {
         ))}
       </div>
       {count > guides.length && (
-        <div className="flex items-center justify-center">
+        <div className="center">
           <Button size="lg" isLoading={guideFetcher.state === "loading"} variant="outline" onClick={onNext}>
             Load more
           </Button>

@@ -73,7 +73,7 @@ export default function ProfileSpots() {
         {count === 0 ? <></> : spots.map((spot) => <SpotItem key={spot.id} spot={spot} />)}
       </div>
       {count > spots.length && (
-        <div className="flex items-center justify-center">
+        <div className="center">
           <Button size="lg" isLoading={spotFetcher.state === "loading"} variant="outline" onClick={onNext}>
             Load more
           </Button>

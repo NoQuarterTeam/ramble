@@ -200,7 +200,7 @@ export default function ListDetail() {
       <div className="grid grid-cols-12 gap-4">
         <div className="scrollbar-hide col-span-12 space-y-4 overflow-y-scroll md:col-span-4 md:h-[80vh] md:pb-20">
           {spots.length === 0 ? (
-            <div className="flex items-center justify-center py-10">
+            <div className="center py-10">
               <p>Nothing added yet</p>
             </div>
           ) : (

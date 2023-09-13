@@ -60,7 +60,7 @@ export default function SpotPreview() {
           {(spot) =>
             !spot ? (
               <div className="flex items-center p-2">
-                <div className="stack w-full space-y-6">
+                <div className="w-full space-y-6">
                   <Frown className="sq-10" />
                   <h1 className="text-2xl">Oops, error loading spot!</h1>
                 </div>
@@ -192,7 +192,7 @@ export function ErrorBoundary() {
   return (
     <SpotContainer>
       <div className="flex items-center p-2">
-        <div className="stack w-full space-y-6">
+        <div className="w-full space-y-6">
           <Frown className="sq-10" />
           <h1 className="text-2xl">Oops, error loading spot!</h1>
         </div>
