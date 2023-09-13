@@ -69,7 +69,8 @@ export function Table<T>({
                   <div
                     className={join(
                       "mb-1 flex items-center justify-between whitespace-nowrap px-2 py-1 text-left font-medium",
-                      header.column.getCanSort() && "rounded-xs cursor-pointer select-none hover:bg-gray-100",
+                      header.column.getCanSort() &&
+                        "rounded-xs cursor-pointer select-none hover:bg-gray-100 dark:hover:bg-gray-700",
                     )}
                   >
                     {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
@@ -94,7 +95,7 @@ export function Table<T>({
           ) : (
             table.getRowModel().rows.map((row, i) => (
               <React.Fragment key={row.id}>
-                <tr className={join(i % 2 === 0 ? "bg-gray-100 dark:bg-gray-700" : "white dark:bg-black")}>
+                <tr className={join(i % 2 === 0 ? "bg-gray-100 dark:bg-gray-700" : "bg-background")}>
                   {row.getVisibleCells().map((cell) => (
                     <td
                       key={cell.id}
@@ -106,7 +107,7 @@ export function Table<T>({
                   ))}
                 </tr>
                 {ExpandComponent && row.getIsExpanded() && (
-                  <tr className={join(i % 2 === 0 ? "bg-gray-100 dark:bg-gray-700" : "white dark:bg-black")}>
+                  <tr className={join(i % 2 === 0 ? "bg-gray-100 dark:bg-gray-700" : "bg-background")}>
                     <td style={{ maxWidth: table.getTotalSize() }} colSpan={row.getVisibleCells().length}>
                       {ExpandComponent && <ExpandComponent row={row} />}
                     </td>

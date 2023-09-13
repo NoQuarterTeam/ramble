@@ -43,7 +43,11 @@ export const loader = async ({ request }: LoaderArgs) => {
 
   const [spots, count, unverifiedSpotsCount] = await Promise.all([
     db.spot.findMany({
-      orderBy,
+      orderBy: orderBy?.verifier
+        ? { verifier: { firstName: orderBy.verifier } }
+        : orderBy?.creator
+        ? { creator: { firstName: orderBy.creator } }
+        : orderBy,
       skip,
       take,
       where,
@@ -134,7 +138,6 @@ const columns = [
   columnHelper.accessor((row) => row.creator, {
     id: "creator",
     size: 120,
-    enableSorting: false,
     cell: (info) => (
       <div className="flex items-center space-x-2">
         <Avatar
@@ -148,10 +151,9 @@ const columns = [
     ),
     header: () => "Creator",
   }),
-  columnHelper.display({
+  columnHelper.accessor((row) => row.verifier, {
     id: "verifier",
     size: 120,
-    enableSorting: false,
     header: () => "Verifier",
     cell: ({ row }) =>
       row.original.verifiedAt && row.original.verifier ? (
