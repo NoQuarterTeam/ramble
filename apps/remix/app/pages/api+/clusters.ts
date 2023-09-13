@@ -33,6 +33,7 @@ async function getMapClusters(request: Request) {
   const spots = await db.spot.findMany({
     select: { id: true, latitude: true, longitude: true, type: true },
     where: {
+      deletedAt: { equals: null },
       verifiedAt: isVerified ? { not: { equals: null } } : undefined,
       isPetFriendly: isPetFriendly ? { equals: true } : undefined,
       latitude: { gt: coords.minLat, lt: coords.maxLat },
