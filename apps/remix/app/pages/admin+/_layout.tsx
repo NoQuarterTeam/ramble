@@ -1,8 +1,8 @@
 import type { NavLinkProps } from "@remix-run/react"
-import { NavLink, Outlet } from "@remix-run/react"
+import { Link, NavLink, Outlet } from "@remix-run/react"
 import { json, type LoaderArgs, redirect } from "@vercel/remix"
 
-import { join } from "@ramble/shared"
+import { merge } from "@ramble/shared"
 
 import { buttonSizeStyles, buttonStyles } from "~/components/ui/Button"
 import { getCurrentUser } from "~/services/auth/auth.server"
@@ -20,10 +20,12 @@ export default function AdminLayout() {
     <div className="flex">
       <div className="flex flex-col space-y-2 px-4 py-8">
         <div className="pl-3">
-          <p className="brand-header text-lg">ramble</p>
+          <Link to="/" className="brand-header text-lg">
+            ramble
+          </Link>
         </div>
         <AdminLink end to="/admin">
-          Admin
+          Dashboard
         </AdminLink>
         <AdminLink to="users">Users</AdminLink>
         <AdminLink to="spots">Spots</AdminLink>
@@ -41,7 +43,7 @@ function AdminLink({ to, children, ...props }: NavLinkProps) {
       {...props}
       to={to}
       className={({ isActive }) =>
-        join(buttonStyles({ variant: isActive ? "secondary" : "ghost" }), buttonSizeStyles(), "min-w-[150px] justify-start")
+        merge(buttonStyles({ variant: isActive ? "secondary" : "ghost" }), buttonSizeStyles(), "min-w-[150px] justify-start")
       }
     >
       {children}
