@@ -23,14 +23,12 @@ import { SPOT_TYPE_OPTIONS, SPOTS } from "~/lib/static/spots"
 import { getTableParams } from "~/lib/table"
 import { useTheme } from "~/lib/theme"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
-
-const TAKE = 15
-const DEFAULT_ORDER_BY = "createdAt"
+import { promiseHash } from "remix-utils"
 
 const schema = z.object({ type: z.string().optional(), unverified: z.string().optional() })
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const { orderBy, search, skip, take } = getTableParams(request, TAKE, { orderBy: DEFAULT_ORDER_BY, order: "desc" })
+  const { orderBy, search, skip, take } = getTableParams(request)
 
   const result = schema.safeParse(queryString.parse(new URL(request.url).search, { arrayFormat: "bracket" }))
   if (!result.success) throw badRequest(result.error.message)
@@ -41,13 +39,9 @@ export const loader = async ({ request }: LoaderArgs) => {
     verifiedAt: result.data.unverified === "true" ? { equals: null } : undefined,
   } satisfies Prisma.SpotWhereInput
 
-  const [spots, count, unverifiedSpotsCount] = await Promise.all([
-    db.spot.findMany({
-      orderBy: orderBy?.verifier
-        ? { verifier: { firstName: orderBy.verifier } }
-        : orderBy?.creator
-        ? { creator: { firstName: orderBy.creator } }
-        : orderBy,
+  const data = await promiseHash({
+    spots: db.spot.findMany({
+      orderBy,
       skip,
       take,
       where,
@@ -65,11 +59,10 @@ export const loader = async ({ request }: LoaderArgs) => {
         images: true,
       },
     }),
-    db.spot.count({ where, take: undefined, skip: undefined }),
-    db.spot.count({ where: { ...where, verifiedAt: null }, take: undefined, skip: undefined }),
-  ])
-
-  return json({ spots, count, unverifiedSpotsCount }, request)
+    count: db.spot.count({ where, take: undefined, skip: undefined }),
+    unverifiedSpotsCount: db.spot.count({ where: { ...where, verifiedAt: null }, take: undefined, skip: undefined }),
+  })
+  return json(data)
 }
 
 enum Actions {
@@ -136,7 +129,7 @@ const columns = [
     header: () => "Description",
   }),
   columnHelper.accessor((row) => row.creator, {
-    id: "creator",
+    id: "creator.firstName",
     size: 120,
     cell: (info) => (
       <div className="flex items-center space-x-2">
@@ -152,7 +145,7 @@ const columns = [
     header: () => "Creator",
   }),
   columnHelper.accessor((row) => row.verifier, {
-    id: "verifier",
+    id: "verifier.firstName",
     size: 120,
     header: () => "Verifier",
     cell: ({ row }) =>
@@ -245,7 +238,7 @@ export default function Spots() {
           <Search className="max-w-[400px]" />
         </div>
       </div>
-      <Table data={spots} count={count} columns={columns} take={TAKE} ExpandComponent={RenderSubComponent} />
+      <Table data={spots} count={count} columns={columns} ExpandComponent={RenderSubComponent} />
     </div>
   )
 }

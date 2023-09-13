@@ -13,24 +13,21 @@ import { db } from "~/lib/db.server"
 
 import { json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"
-
-const TAKE = 10
+import { promiseHash } from "remix-utils"
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const { orderBy, search, skip, take } = getTableParams(request, TAKE, { orderBy: "createdAt", order: "desc" })
+  const { orderBy, search, skip, take } = getTableParams(request)
   const where = {
     OR: search
       ? [{ email: { contains: search } }, { firstName: { contains: search } }, { lastName: { contains: search } }]
       : undefined,
   } satisfies Prisma.UserWhereInput
-  const users = await db.user.findMany({
-    orderBy,
-    skip,
-    take,
-    where,
+
+  const data = await promiseHash({
+    users: db.user.findMany({ orderBy, skip, take, where }),
+    count: db.user.count({ where }),
   })
-  const count = await db.user.count({ where })
-  return json({ users, count }, request)
+  return json(data)
 }
 
 type User = SerializeFrom<typeof loader>["users"][number]
@@ -78,7 +75,7 @@ export default function Users() {
           <Search className="max-w-[400px]" />
         </div>
       </div>
-      <Table data={users} count={count} take={TAKE} columns={columns} />
+      <Table data={users} count={count} columns={columns} />
     </div>
   )
 }

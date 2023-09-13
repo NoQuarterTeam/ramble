@@ -23,13 +23,12 @@ export default function AdminLayout() {
   const isDark = useTheme() === "dark"
   return (
     <div className="flex">
-      <div className="flex h-screen flex-col justify-between pb-10">
-        <div className="flex flex-col space-y-2 px-4 py-8">
-          <div className="pl-3">
-            <Link to="/" className="brand-header text-lg">
-              ramble
-            </Link>
-          </div>
+      <div className="fixed left-0 top-0 flex h-screen w-[200px] flex-col justify-between border-r px-4 pb-10">
+        <div className="flex flex-col space-y-2 py-8">
+          <Link to="/" className="brand-header pl-3 text-lg">
+            ramble
+          </Link>
+
           <AdminLink Icon={GaugeCircle} end to="/admin">
             Dashboard
           </AdminLink>
@@ -40,14 +39,19 @@ export default function AdminLayout() {
             Spots
           </AdminLink>
         </div>
-        <themeFetcher.Form action="/api/theme" method="post" replace className="center w-full">
+        <themeFetcher.Form action="/api/theme" method="post" replace className="w-full">
           <input type="hidden" name="theme" value={isDark ? "light" : "dark"} />
-          <Button variant="ghost" type="submit" leftIcon={isDark ? <Sun className="sq-4" /> : <Moon className="sq-4" />}>
+          <Button
+            variant="ghost"
+            className="w-full"
+            type="submit"
+            leftIcon={isDark ? <Sun className="sq-4" /> : <Moon className="sq-4" />}
+          >
             <span>{isDark ? "Light" : "Dark"} mode</span>
           </Button>
         </themeFetcher.Form>
       </div>
-      <div className="w-full px-4 py-8">
+      <div className="ml-[200px] w-full px-4 py-8">
         <Outlet />
       </div>
     </div>
@@ -60,11 +64,7 @@ function AdminLink({ to, children, Icon, ...props }: NavLinkProps & { children: 
       {...props}
       to={to}
       className={({ isActive }) =>
-        merge(
-          buttonStyles({ variant: isActive ? "secondary" : "ghost" }),
-          buttonSizeStyles(),
-          "min-w-[150px] justify-start space-x-2",
-        )
+        merge(buttonStyles({ variant: isActive ? "secondary" : "ghost" }), buttonSizeStyles(), "w-full justify-start space-x-2")
       }
     >
       <Icon size={16} />
