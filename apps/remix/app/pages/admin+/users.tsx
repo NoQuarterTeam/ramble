@@ -2,7 +2,6 @@ import { useLoaderData } from "@remix-run/react"
 import { createColumnHelper } from "@tanstack/react-table"
 import { type LoaderArgs, type SerializeFrom } from "@vercel/remix"
 import dayjs from "dayjs"
-import { cacheHeader } from "pretty-cache-header"
 
 import { type Prisma } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
@@ -11,11 +10,9 @@ import { Search } from "~/components/Search"
 import { Table } from "~/components/Table"
 import { Avatar } from "~/components/ui"
 import { db } from "~/lib/db.server"
-import { useLoaderHeaders } from "~/lib/headers.server"
+
 import { json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"
-
-export const headers = useLoaderHeaders
 
 const TAKE = 10
 
@@ -33,9 +30,7 @@ export const loader = async ({ request }: LoaderArgs) => {
     where,
   })
   const count = await db.user.count({ where })
-  return json({ users, count }, request, {
-    headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "10mins", sMaxage: "10mins" }) },
-  })
+  return json({ users, count }, request)
 }
 
 type User = SerializeFrom<typeof loader>["users"][number]

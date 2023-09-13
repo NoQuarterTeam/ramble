@@ -4,7 +4,6 @@ import { json, type LoaderArgs, redirect } from "@vercel/remix"
 
 import { join } from "@ramble/shared"
 
-import { Icons } from "~/components/ui"
 import { buttonSizeStyles, buttonStyles } from "~/components/ui/Button"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
@@ -21,7 +20,7 @@ export default function AdminLayout() {
     <div className="flex">
       <div className="flex flex-col space-y-2 px-4 py-8">
         <div className="pl-3">
-          <Icons.Van />
+          <p className="font-urbanist text-primary text-lg italic">ramble</p>
         </div>
         <AdminLink end to="/admin">
           Admin

@@ -4,7 +4,6 @@ import { createColumnHelper } from "@tanstack/react-table"
 import type { ActionArgs, LoaderArgs, SerializeFrom } from "@vercel/remix"
 import dayjs from "dayjs"
 import { Check, Eye, EyeOff, Trash } from "lucide-react"
-import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 import { z } from "zod"
 
@@ -18,7 +17,6 @@ import { Table } from "~/components/Table"
 import { Avatar, Button, IconButton, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { FORM_ACTION, formError, validateFormData } from "~/lib/form"
-import { useLoaderHeaders } from "~/lib/headers.server"
 import { useFetcherSubmit } from "~/lib/hooks/useFetcherSubmit"
 import { badRequest, json } from "~/lib/remix.server"
 import { SPOT_TYPE_OPTIONS, SPOTS } from "~/lib/static/spots"
@@ -30,8 +28,6 @@ const TAKE = 15
 const DEFAULT_ORDER_BY = "createdAt"
 
 const schema = z.object({ type: z.string().optional(), unverified: z.string().optional() })
-
-export const headers = useLoaderHeaders
 
 export const loader = async ({ request }: LoaderArgs) => {
   const { orderBy, search, skip, take } = getTableParams(request, TAKE, { orderBy: DEFAULT_ORDER_BY, order: "desc" })
@@ -69,11 +65,7 @@ export const loader = async ({ request }: LoaderArgs) => {
     db.spot.count({ where: { ...where, verifiedAt: null }, take: undefined, skip: undefined }),
   ])
 
-  return json({ spots, count, unverifiedSpotsCount }, request, {
-    headers: {
-      "Cache-Control": cacheHeader({ public: true, maxAge: "10mins", sMaxage: "10mins" }),
-    },
-  })
+  return json({ spots, count, unverifiedSpotsCount }, request)
 }
 
 enum Actions {
