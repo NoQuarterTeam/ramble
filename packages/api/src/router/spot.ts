@@ -3,17 +3,12 @@ import Supercluster from "supercluster"
 import { z } from "zod"
 
 import { Prisma, SpotType } from "@ramble/database/types"
-import {
-  SpotItemWithStats,
-  publicSpotWhereClause,
-  publicSpotWhereClauseRaw,
-  spotAmenitiesSchema,
-  spotSchemaWithoutType,
-} from "@ramble/shared"
+import { SpotItemWithStats, spotAmenitiesSchema, spotSchemaWithoutType } from "@ramble/shared"
 
 import { generateBlurHash } from "../services/generateBlurHash.server"
 import { geocodeCoords } from "../services/geocode.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
+import { publicSpotWhereClause, publicSpotWhereClauseRaw } from "../shared/spot.server"
 
 export const spotRouter = createTRPCRouter({
   clusters: publicProcedure

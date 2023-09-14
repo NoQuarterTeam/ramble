@@ -2,7 +2,7 @@ import { useLoaderData } from "@remix-run/react"
 import { LoaderArgs, json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
-import { publicSpotWhereClauseRaw, type SpotItemWithStats } from "@ramble/shared"
+import { type SpotItemWithStats } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
 import { Badge } from "~/components/ui"
@@ -12,6 +12,7 @@ import { useLoaderHeaders } from "~/lib/headers.server"
 import { PageContainer } from "../../components/PageContainer"
 import { SpotItem } from "./_app+/components/SpotItem"
 import { getUserSession } from "~/services/session/session.server"
+import { publicSpotWhereClauseRaw } from "@ramble/api"
 
 export const config = {
   runtime: "edge",

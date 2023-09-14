@@ -1,4 +1,4 @@
-import { Prisma, Spot, SpotImage, SpotType, User } from "@ramble/database/types"
+import type { Spot, SpotImage, SpotType, User } from "@ramble/database/types"
 
 export type SpotItemWithStats = Pick<Spot, "id" | "name" | "address" | "type"> & {
   rating: string
@@ -35,18 +35,4 @@ export function doesSpotTypeRequireAmenities(type?: SpotType | null | undefined)
 export function doesSpotTypeRequireDescription(type?: SpotType | null | undefined) {
   if (!type) return false
   return type === "CAMPING" || type === "FREE_CAMPING"
-}
-
-export const publicSpotWhereClause = (userId?: string | null) => {
-  return {
-    deletedAt: { equals: null },
-    AND: userId
-      ? { OR: [{ creatorId: { equals: userId } }, { OR: [{ publishedAt: null }, { publishedAt: { lt: new Date() } }] }] }
-      : { OR: [{ publishedAt: null }, { publishedAt: { lt: new Date() } }] },
-  } satisfies Omit<Prisma.SpotWhereUniqueInput, "id">
-}
-export const publicSpotWhereClauseRaw = (userId?: string | null) => {
-  return userId
-    ? Prisma.sql`Spot.deletedAt IS NULL AND (Spot.creatorId = ${userId} OR (Spot.publishedAt IS NULL OR Spot.publishedAt < NOW()))`
-    : Prisma.sql`Spot.deletedAt IS NULL AND (Spot.publishedAt IS NULL OR Spot.publishedAt < NOW())`
 }

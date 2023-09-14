@@ -3,8 +3,8 @@ import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 import { json, redirect } from "@vercel/remix"
 import type { z } from "zod"
 
-import { generateBlurHash } from "@ramble/api"
-import { canManageSpot, doesSpotTypeRequireAmenities, publicSpotWhereClause } from "@ramble/shared"
+import { generateBlurHash, publicSpotWhereClause } from "@ramble/api"
+import { canManageSpot, doesSpotTypeRequireAmenities } from "@ramble/shared"
 
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"

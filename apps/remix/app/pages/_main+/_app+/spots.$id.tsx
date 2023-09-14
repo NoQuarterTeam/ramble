@@ -5,7 +5,7 @@ import { Check, Edit2, Heart, Star, Trash } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
 import type { SpotType } from "@ramble/database/types"
-import { AMENITIES, canManageSpot, createImageUrl, displayRating, publicSpotWhereClause } from "@ramble/shared"
+import { AMENITIES, canManageSpot, createImageUrl, displayRating } from "@ramble/shared"
 
 import { Form, FormButton } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -38,6 +38,7 @@ import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { SpotMarker } from "./components/SpotMarker"
 import dayjs from "dayjs"
 import { getUserSession } from "~/services/session/session.server"
+import { publicSpotWhereClause } from "@ramble/api"
 
 export const config = {
   runtime: "edge",

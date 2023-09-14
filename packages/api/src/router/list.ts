@@ -1,10 +1,11 @@
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
-import { listSchema, publicSpotWhereClauseRaw } from "@ramble/shared"
+import { listSchema } from "@ramble/shared"
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 import { type SpotItemWithStats } from "@ramble/shared"
+import { publicSpotWhereClauseRaw } from "../shared/spot.server"
 
 export const listRouter = createTRPCRouter({
   allByUser: publicProcedure
