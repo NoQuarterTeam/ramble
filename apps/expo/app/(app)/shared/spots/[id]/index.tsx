@@ -26,6 +26,7 @@ import { width } from "../../../../../lib/device"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { AMENITIES_ICONS } from "../../../../../lib/static/amenities"
 import { useParams, useRouter } from "../../../../router"
+import dayjs from "dayjs"
 
 export function SpotDetailScreen() {
   const [location, setLocation] = React.useState<Location.LocationObjectCoords | null>(null)
@@ -156,6 +157,18 @@ export function SpotDetailScreen() {
                 })}
               </View>
             )}
+            <View className="flex flex-row py-2">
+              <Text className="text-sm">Added by </Text>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => router.push("UserScreen", { username: spot.creator.username })}
+              >
+                <Text className="text-sm">
+                  {spot.creator.firstName} {spot.creator.lastName}
+                </Text>
+              </TouchableOpacity>
+              <Text className="text-sm"> on the {dayjs(spot.createdAt).format("DD/MM/YYYY")}</Text>
+            </View>
             <View className="flex flex-row space-x-2 py-4">
               {canManageSpot(spot, me) && !spot.verifiedAt && (
                 <Button

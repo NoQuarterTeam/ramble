@@ -9,6 +9,7 @@ import { generateBlurHash } from "../services/generateBlurHash.server"
 import { geocodeCoords } from "../services/geocode.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 import { publicSpotWhereClause, publicSpotWhereClauseRaw } from "../shared/spot.server"
+import dayjs from "dayjs"
 
 export const spotRouter = createTRPCRouter({
   clusters: publicProcedure
@@ -118,6 +119,7 @@ export const spotRouter = createTRPCRouter({
       where: { id: input.id, ...publicSpotWhereClause(ctx.user?.id) },
       include: {
         verifier: true,
+        creator: true,
         _count: { select: { reviews: true, listSpots: true } },
         reviews: { take: 5, include: { user: true }, orderBy: { createdAt: "desc" } },
         images: true,
@@ -157,9 +159,11 @@ export const spotRouter = createTRPCRouter({
         type: z.nativeEnum(SpotType),
         images: z.array(z.object({ path: z.string() })),
         amenities: spotAmenitiesSchema.optional(),
+        shouldPublishLater: z.boolean().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const { shouldPublishLater } = input
       const amenities = input.amenities
       const address = await geocodeCoords({ latitude: input.latitude, longitude: input.longitude })
       const imageData = await Promise.all(
@@ -171,6 +175,7 @@ export const spotRouter = createTRPCRouter({
       const spot = await ctx.prisma.spot.create({
         data: {
           ...input,
+          publishedAt: shouldPublishLater ? dayjs().add(2, "weeks").toDate() : undefined,
           address: address || "Unknown address",
           creator: { connect: { id: ctx.user.id } },
           verifiedAt: ctx.user.role === "GUIDE" ? new Date() : null,
