@@ -4,7 +4,7 @@ import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
-import { type SpotItemWithStats } from "@ramble/shared"
+import { publicSpotWhereClause, publicSpotWhereClauseRaw, type SpotItemWithStats } from "@ramble/shared"
 
 import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
@@ -12,6 +12,7 @@ import { useLoaderHeaders } from "~/lib/headers.server"
 import { notFound } from "~/lib/remix.server"
 
 import { SpotItem } from "./components/SpotItem"
+import { getUserSession } from "~/services/session/session.server"
 
 export const headers = useLoaderHeaders
 
@@ -21,7 +22,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
   if (!user) throw notFound()
   const searchParams = new URL(request.url).searchParams
   const skip = parseInt((searchParams.get("skip") as string) || "0")
-
+  const { userId } = await getUserSession(request)
   const [spots, count] = await Promise.all([
     db.$queryRaw<SpotItemWithStats[]>`
       SELECT
@@ -36,7 +37,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
       LEFT JOIN
         ListSpot ON Spot.id = ListSpot.spotId
       WHERE
-        Spot.creatorId = ${user.id} AND Spot.deletedAt IS NULL
+        Spot.creatorId = ${user.id} AND ${publicSpotWhereClauseRaw(userId)}
       GROUP BY
         Spot.id
       ORDER BY
@@ -44,7 +45,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
       LIMIT ${TAKE}
       OFFSET ${skip};
     `,
-    db.spot.count({ where: { creatorId: user.id } }),
+    db.spot.count({ where: { creatorId: user.id, ...publicSpotWhereClause(userId) } }),
   ])
 
   return json(

@@ -10,6 +10,7 @@ import { json, redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { amenitiesSchema, SpotForm, spotSchema } from "./components/SpotForm"
+import dayjs from "dayjs"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const user = await getCurrentUser(request, { isVerified: true })
@@ -23,10 +24,10 @@ export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData()
 
   const result = await validateFormData(formData, spotSchema)
+  if (!result.success) return formError(result)
 
   const images = (formData.getAll("image") as string[]).filter(Boolean)
-
-  if (!result.success) return formError(result)
+  const shouldPublishLater = formData.get("shouldPublishLater") === "on"
 
   const { customAddress, ...data } = result.data
   const imageData = await Promise.all(
@@ -46,6 +47,7 @@ export const action = async ({ request }: ActionArgs) => {
   const spot = await db.spot.create({
     data: {
       ...data,
+      publishedAt: shouldPublishLater ? dayjs().add(2, "weeks").toDate() : undefined,
       address: customAddress || result.data.address,
       creator: { connect: { id } },
       verifiedAt: role === "GUIDE" ? new Date() : undefined,

@@ -104,13 +104,14 @@ enum SpotType {
 }
 
 model Spot {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   name        String
   type        SpotType
-  description String?  @db.LongText
+  description String?   @db.LongText
   address     String
   latitude    Float
   longitude   Float
+  publishedAt DateTime?
 
   // Options 
   isPetFriendly Boolean @default(true)

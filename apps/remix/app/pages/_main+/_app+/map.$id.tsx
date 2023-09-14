@@ -5,7 +5,7 @@ import { defer } from "@vercel/remix"
 import { Frown, Heart, Star } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
-import { createImageUrl, displayRating, merge } from "@ramble/shared"
+import { createImageUrl, displayRating, merge, publicSpotWhereClause } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
@@ -16,11 +16,14 @@ import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
 import { SaveToList } from "~/pages/api+/save-to-list"
 
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
+import { getUserSession } from "~/services/session/session.server"
 
-export const loader = async ({ params }: LoaderArgs) => {
+export const loader = async ({ params, request }: LoaderArgs) => {
+  const { userId } = await getUserSession(request)
+
   const spot = db.spot
     .findUnique({
-      where: { id: params.id, deletedAt: { equals: null } },
+      where: { id: params.id, ...publicSpotWhereClause(userId) },
       select: {
         id: true,
         name: true,
@@ -62,7 +65,7 @@ export default function SpotPreview() {
               <div className="flex items-center p-2">
                 <div className="w-full space-y-6">
                   <Frown className="sq-10" />
-                  <h1 className="text-2xl">Oops, error loading spot!</h1>
+                  <h1 className="text-2xl">Oops, spot not found!</h1>
                 </div>
               </div>
             ) : (

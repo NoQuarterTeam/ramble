@@ -1,11 +1,11 @@
 import Map, { Marker } from "react-map-gl"
-import { useLoaderData } from "@remix-run/react"
+import { Link, useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@vercel/remix"
 import { Check, Edit2, Heart, Star, Trash } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
 import type { SpotType } from "@ramble/database/types"
-import { AMENITIES, canManageSpot, createImageUrl, displayRating } from "@ramble/shared"
+import { AMENITIES, canManageSpot, createImageUrl, displayRating, publicSpotWhereClause } from "@ramble/shared"
 
 import { Form, FormButton } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -36,6 +36,8 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { SpotMarker } from "./components/SpotMarker"
+import dayjs from "dayjs"
+import { getUserSession } from "~/services/session/session.server"
 
 export const config = {
   runtime: "edge",
@@ -45,8 +47,9 @@ export const config = {
 export const headers = useLoaderHeaders
 
 export const loader = async ({ params, request }: LoaderArgs) => {
+  const { userId } = await getUserSession(request)
   const spot = await db.spot.findUnique({
-    where: { id: params.id, deletedAt: { equals: null } },
+    where: { id: params.id, ...publicSpotWhereClause(userId) },
     select: {
       id: true,
       name: true,
@@ -59,6 +62,8 @@ export const loader = async ({ params, request }: LoaderArgs) => {
       latitude: true,
       longitude: true,
       ownerId: true,
+      createdAt: true,
+      creator: { select: { firstName: true, username: true, lastName: true } },
       verifier: { select: { firstName: true, username: true, lastName: true, avatar: true, avatarBlurHash: true } },
       images: { orderBy: { createdAt: "desc" }, select: { id: true, path: true, blurHash: true } },
       _count: { select: { reviews: true, listSpots: true } },
@@ -194,6 +199,13 @@ export default function SpotDetail() {
                   })}
                 </div>
               )}
+              <p className="text-sm">
+                Added by{" "}
+                <Link to={`/${spot.creator.username}`} className="hover:underline">
+                  {spot.creator.firstName} {spot.creator.lastName}
+                </Link>{" "}
+                on the {dayjs(spot.createdAt).format("DD/MM/YYYY")}
+              </p>
               <div className="flex space-x-2">
                 {canManageSpot(spot, user) && (
                   <>

@@ -9,7 +9,7 @@ import { json } from "@vercel/remix"
 import { ChevronLeft, Copy } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
-import { type SpotItemWithStats } from "@ramble/shared"
+import { publicSpotWhereClauseRaw, type SpotItemWithStats } from "@ramble/shared"
 import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
@@ -56,7 +56,7 @@ export const loader = async ({ params, request }: LoaderArgs) => {
       LEFT JOIN
         ListSpot ON Spot.id = ListSpot.spotId
       WHERE
-        ListSpot.listId = ${params.id} AND Spot.deletedAt IS NULL
+        ListSpot.listId = ${params.id} AND ${publicSpotWhereClauseRaw(user?.id)}
       GROUP BY
         Spot.id
       ORDER BY

@@ -9,6 +9,8 @@ import { CheckboxAsString, NumAsString } from "zodix"
 import type { SpotType } from "@ramble/database/types"
 
 import { db } from "~/lib/db.server"
+import { publicSpotWhereClause } from "@ramble/shared"
+import { getUserSession } from "~/services/session/session.server"
 
 export const config = {
   runtime: "edge",
@@ -16,6 +18,7 @@ export const config = {
 }
 
 async function getMapClusters(request: Request) {
+  const { userId } = await getUserSession(request)
   const schema = z.object({
     zoom: NumAsString,
     minLat: NumAsString,
@@ -33,7 +36,7 @@ async function getMapClusters(request: Request) {
   const spots = await db.spot.findMany({
     select: { id: true, latitude: true, longitude: true, type: true },
     where: {
-      deletedAt: { equals: null },
+      ...publicSpotWhereClause(userId),
       verifiedAt: isVerified ? { not: { equals: null } } : undefined,
       isPetFriendly: isPetFriendly ? { equals: true } : undefined,
       latitude: { gt: coords.minLat, lt: coords.maxLat },

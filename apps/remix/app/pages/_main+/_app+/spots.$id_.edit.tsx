@@ -4,7 +4,7 @@ import { json, redirect } from "@vercel/remix"
 import type { z } from "zod"
 
 import { generateBlurHash } from "@ramble/api"
-import { canManageSpot, doesSpotTypeRequireAmenities } from "@ramble/shared"
+import { canManageSpot, doesSpotTypeRequireAmenities, publicSpotWhereClause } from "@ramble/shared"
 
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
@@ -16,7 +16,7 @@ import { amenitiesSchema, SpotForm, spotSchema } from "./components/SpotForm"
 export const loader = async ({ request, params }: LoaderArgs) => {
   const user = await getCurrentUser(request, { role: true, id: true, isAdmin: true, isVerified: true })
   const spot = await db.spot.findUniqueOrThrow({
-    where: { id: params.id, deletedAt: { equals: null } },
+    where: { id: params.id, ...publicSpotWhereClause(user.id) },
     include: { images: true, amenities: true },
   })
   if (!canManageSpot(spot, user)) throw redirect("/spots")

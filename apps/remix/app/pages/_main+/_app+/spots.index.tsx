@@ -6,7 +6,7 @@ import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 
 import { Prisma, SpotType } from "@ramble/database/types"
-import { type SpotItemWithStats } from "@ramble/shared"
+import { publicSpotWhereClauseRaw, type SpotItemWithStats } from "@ramble/shared"
 
 import { Button, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
@@ -15,6 +15,7 @@ import { SPOT_TYPE_OPTIONS } from "~/lib/static/spots"
 
 import { PageContainer } from "../../../components/PageContainer"
 import { SpotItem } from "./components/SpotItem"
+import { getUserSession } from "~/services/session/session.server"
 
 export const config = {
   runtime: "edge",
@@ -31,6 +32,7 @@ const SORT_OPTIONS = [
 
 const TAKE = 12
 export const loader = async ({ request }: LoaderArgs) => {
+  const { userId } = await getUserSession(request)
   const searchParams = new URL(request.url).searchParams
   const skip = parseInt((searchParams.get("skip") as string) || "0")
 
@@ -39,7 +41,9 @@ export const loader = async ({ request }: LoaderArgs) => {
   let sort = searchParams.get("sort") || "latest"
   if (!SORT_OPTIONS.find((o) => o.value === sort)) sort = "latest"
 
-  const WHERE = type ? Prisma.sql`WHERE Spot.type = ${type} AND Spot.deletedAt IS NULL` : Prisma.sql`WHERE Spot.deletedAt IS NULL`
+  const WHERE = type
+    ? Prisma.sql`WHERE Spot.type = ${type} AND ${publicSpotWhereClauseRaw(userId)}`
+    : Prisma.sql`WHERE ${publicSpotWhereClauseRaw(userId)}`
 
   const ORDER_BY = Prisma.sql // prepared orderBy
   `ORDER BY

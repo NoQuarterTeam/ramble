@@ -1,8 +1,8 @@
 import { useLoaderData } from "@remix-run/react"
-import { json } from "@vercel/remix"
+import { LoaderArgs, json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
-import { type SpotItemWithStats } from "@ramble/shared"
+import { publicSpotWhereClauseRaw, type SpotItemWithStats } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
 import { Badge } from "~/components/ui"
@@ -11,6 +11,7 @@ import { useLoaderHeaders } from "~/lib/headers.server"
 
 import { PageContainer } from "../../components/PageContainer"
 import { SpotItem } from "./_app+/components/SpotItem"
+import { getUserSession } from "~/services/session/session.server"
 
 export const config = {
   runtime: "edge",
@@ -19,7 +20,8 @@ export const config = {
 
 export const headers = useLoaderHeaders
 
-export const loader = async () => {
+export const loader = async ({ request }: LoaderArgs) => {
+  const { userId } = await getUserSession(request)
   const spots: Array<SpotItemWithStats> = await db.$queryRaw`
     SELECT 
       Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
@@ -33,7 +35,7 @@ export const loader = async () => {
     LEFT JOIN
       ListSpot ON Spot.id = ListSpot.spotId
     WHERE
-      Spot.deletedAt IS NULL
+      ${publicSpotWhereClauseRaw(userId)}
     GROUP BY
       Spot.id
     ORDER BY

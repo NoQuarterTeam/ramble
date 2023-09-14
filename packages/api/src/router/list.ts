@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
-import { listSchema } from "@ramble/shared"
+import { listSchema, publicSpotWhereClauseRaw } from "@ramble/shared"
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 import { type SpotItemWithStats } from "@ramble/shared"
@@ -43,24 +43,24 @@ export const listRouter = createTRPCRouter({
         },
       }),
       ctx.prisma.$queryRaw<Array<SpotItemWithStats>>`
-      SELECT 
-        Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
-        Spot.latitude, Spot.longitude,
-        (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image,
-        (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash,
-        (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
-      FROM
-        Spot
-      LEFT JOIN
-        Review ON Spot.id = Review.spotId
-      LEFT JOIN
-        ListSpot ON Spot.id = ListSpot.spotId
-      WHERE
-        ListSpot.listId = ${input.id} AND Spot.deletedAt IS NULL
-      GROUP BY
-        Spot.id
-      ORDER BY
-        Spot.id
+        SELECT 
+          Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
+          Spot.latitude, Spot.longitude,
+          (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image,
+          (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash,
+          (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
+        FROM
+          Spot
+        LEFT JOIN
+          Review ON Spot.id = Review.spotId
+        LEFT JOIN
+          ListSpot ON Spot.id = ListSpot.spotId
+        WHERE
+          ListSpot.listId = ${input.id} AND ${publicSpotWhereClauseRaw(ctx.user?.id)}
+        GROUP BY
+          Spot.id
+        ORDER BY
+          Spot.id
       `,
     ])
     if (!list || (list.isPrivate && (!currentUser || currentUser !== list.creator.username)))

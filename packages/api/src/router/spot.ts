@@ -3,7 +3,13 @@ import Supercluster from "supercluster"
 import { z } from "zod"
 
 import { Prisma, SpotType } from "@ramble/database/types"
-import { SpotItemWithStats, spotAmenitiesSchema, spotSchemaWithoutType } from "@ramble/shared"
+import {
+  SpotItemWithStats,
+  publicSpotWhereClause,
+  publicSpotWhereClauseRaw,
+  spotAmenitiesSchema,
+  spotSchemaWithoutType,
+} from "@ramble/shared"
 
 import { generateBlurHash } from "../services/generateBlurHash.server"
 import { geocodeCoords } from "../services/geocode.server"
@@ -28,7 +34,7 @@ export const spotRouter = createTRPCRouter({
       const spots = await ctx.prisma.spot.findMany({
         select: { id: true, latitude: true, longitude: true, type: true },
         where: {
-          deletedAt: { equals: null },
+          ...publicSpotWhereClause(ctx.user?.id),
           verifiedAt: isVerified ? { not: { equals: null } } : undefined,
           isPetFriendly: isPetFriendly ? { equals: true } : undefined,
           latitude: { gt: coords.minLat, lt: coords.maxLat },
@@ -95,7 +101,7 @@ export const spotRouter = createTRPCRouter({
         LEFT JOIN
           ListSpot ON Spot.id = ListSpot.spotId
         WHERE
-          Spot.deletedAt IS NULL
+        ${publicSpotWhereClauseRaw(ctx.user?.id)}
         GROUP BY
           Spot.id
         ${ORDER_BY}
@@ -105,7 +111,7 @@ export const spotRouter = createTRPCRouter({
     }),
   mapPreview: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
     const spot = await ctx.prisma.spot.findUnique({
-      where: { id: input.id, deletedAt: { equals: null } },
+      where: { id: input.id, ...publicSpotWhereClause(ctx.user?.id) },
       include: { verifier: true, _count: { select: { listSpots: true, reviews: true } }, images: true },
     })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
@@ -114,7 +120,7 @@ export const spotRouter = createTRPCRouter({
   }),
   detail: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
     const spot = await ctx.prisma.spot.findUnique({
-      where: { id: input.id, deletedAt: { equals: null } },
+      where: { id: input.id, ...publicSpotWhereClause(ctx.user?.id) },
       include: {
         verifier: true,
         _count: { select: { reviews: true, listSpots: true } },
@@ -129,6 +135,8 @@ export const spotRouter = createTRPCRouter({
     return { ...spot, rating }
   }),
   byUser: publicProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {
+    const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })
+    if (!user) throw new TRPCError({ code: "NOT_FOUND" })
     const res: Array<SpotItemWithStats> = await ctx.prisma.$queryRaw`
       SELECT
         Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
@@ -139,7 +147,7 @@ export const spotRouter = createTRPCRouter({
       LEFT JOIN
         Review ON Spot.id = Review.spotId
       WHERE
-        Spot.creatorId = (SELECT id FROM User WHERE username = ${input.username}) AND Spot.deletedAt IS NULL
+        Spot.creatorId = ${user.id} AND ${publicSpotWhereClauseRaw(user.id)}
       GROUP BY
         Spot.id
       ORDER BY
