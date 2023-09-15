@@ -15,8 +15,8 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "@prisma/client": "5.3.0",
-    "prisma": "5.3.0"
+    "@prisma/client": "5.3.1",
+    "prisma": "5.3.1"
   },
   "devDependencies": {
     "@types/node": "^18.15.3",
