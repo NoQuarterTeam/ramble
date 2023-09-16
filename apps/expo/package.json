@@ -28,7 +28,7 @@
     "@react-navigation/native": "6.1.7",
     "@react-navigation/native-stack": "6.9.13",
     "@react-navigation/stack": "6.3.17",
-    "@rnmapbox/maps": "10.0.14",
+    "@rnmapbox/maps": "10.0.15",
     "@shopify/flash-list": "^1.4.0",
     "@tanstack/react-query": "^4.23.0",
     "@trpc/client": "^10.28.1",
