@@ -15,8 +15,6 @@ import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { notFound } from "~/lib/remix.server"
 import { interestOptions } from "~/lib/static/interests"
 
-import { PageContainer } from "../../../components/PageContainer"
-
 export const headers = useLoaderHeaders
 
 export const loader = async ({ params }: LoaderArgs) => {
@@ -48,67 +46,85 @@ export default function ProfileLists() {
 
   const currentUser = useMaybeUser()
   return (
-    <PageContainer>
-      <div className="grid grid-cols-1 items-center gap-4 py-6 md:grid-cols-2 md:py-8">
-        <div className="flex items-center space-x-3">
-          <Avatar size={200} placeholder={user.avatarBlurHash} className="sq-20 md:sq-32" src={createImageUrl(user.avatar)} />
-          <div className="space-y-1">
-            {user.role === "GUIDE" && <Badge colorScheme="green">Guide</Badge>}
-            <div className="flex space-x-2">
-              <h1 className="text-xl md:text-3xl">{user.username}</h1>
-              {currentUser?.id === user.id && (
-                <LinkButton size="sm" to="/account" variant="outline">
-                  Edit profile
-                </LinkButton>
-              )}
+    <div className="mx-auto px-4 pb-20 lg:px-20">
+      <div className="grid grid-cols-10 gap-6">
+        <div className="col-span-10 md:col-span-3">
+          <div className="md:top-nav relative flex flex-col gap-4 py-6 md:sticky md:py-16">
+            <div className="flex items-center space-x-3">
+              <Avatar
+                size={200}
+                placeholder={user.avatarBlurHash}
+                className="sq-28 md:sq-20 xl:sq-32"
+                src={createImageUrl(user.avatar)}
+              />
+              <div className="space-y-1">
+                {user.role === "GUIDE" && <Badge colorScheme="green">Guide</Badge>}
+
+                <h1 className="text-2xl md:text-xl lg:text-3xl">{user.username}</h1>
+
+                <p>
+                  {user.firstName} {user.lastName}
+                </p>
+                {user.instagram && (
+                  <a
+                    rel="noopener noreferrer"
+                    aria-label="Go to user's instagram"
+                    target="_blank"
+                    href={`https://www.instagram.com/${user.instagram}`}
+                  >
+                    <Instagram />
+                  </a>
+                )}
+              </div>
             </div>
-            <p>
-              {user.firstName} {user.lastName}
-            </p>
-            {user.instagram && (
-              <a
-                rel="noopener noreferrer"
-                aria-label="Go to user's instagram"
-                target="_blank"
-                href={`https://www.instagram.com/${user.instagram}`}
-              >
-                <Instagram />
-              </a>
+            <div className="space-y-2">
+              <div className="flex items-center space-x-4">
+                <Link to="following" className="hover:underline">
+                  <span className="font-semibold">{user._count?.following}</span> following
+                </Link>
+                <Link to="followers" className="hover:underline">
+                  <span className="font-semibold">{user._count?.followers}</span> followers
+                </Link>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {interestOptions
+                  .filter((i) => user[i.value as keyof typeof user])
+                  .map((interest) => (
+                    <Tooltip key={interest.value} label={interest.label}>
+                      <div className="rounded-xs border p-2">
+                        <interest.Icon className="sq-4 lg:sq-6" />
+                      </div>
+                    </Tooltip>
+                  ))}
+              </div>
+              <p className="text-sm">{user.bio}</p>
+            </div>
+            {currentUser?.id === user.id && (
+              <LinkButton size="sm" to="/account" variant="outline">
+                Edit profile
+              </LinkButton>
             )}
           </div>
         </div>
-        <div className="space-y-2">
-          <div className="flex items-center space-x-4">
-            <Link to="following" className="hover:underline">
-              <span className="font-semibold">{user._count?.following}</span> following
-            </Link>
-            <Link to="followers" className="hover:underline">
-              <span className="font-semibold">{user._count?.followers}</span> followers
-            </Link>
+
+        <div className="col-span-10 space-y-4 md:col-span-7">
+          <div className="top-nav bg-background sticky z-[1] mx-auto flex w-full items-center justify-center space-x-1 py-4">
+            <div>
+              <ProfileLink to={`/${user.username}`} end>
+                Spots
+              </ProfileLink>
+            </div>
+            <div>
+              <ProfileLink to={`/${user.username}/van`}>Van</ProfileLink>
+            </div>
+            <div>
+              <ProfileLink to={`/${user.username}/lists`}>Lists</ProfileLink>
+            </div>
           </div>
-          <div className="flex space-x-2">
-            {interestOptions
-              .filter((i) => user[i.value as keyof typeof user])
-              .map((interest) => (
-                <Tooltip key={interest.value} label={interest.label}>
-                  <div className="rounded-xs border p-2">
-                    <interest.Icon className="sq-6" />
-                  </div>
-                </Tooltip>
-              ))}
-          </div>
-          <p className="text-sm">{user.bio}</p>
+          <Outlet />
         </div>
       </div>
-      <div className="mx-auto flex w-min space-x-1">
-        <ProfileLink to={`/${user.username}`} end>
-          Spots
-        </ProfileLink>
-        <ProfileLink to={`/${user.username}/van`}>Van</ProfileLink>
-        <ProfileLink to={`/${user.username}/lists`}>Lists</ProfileLink>
-      </div>
-      <Outlet />
-    </PageContainer>
+    </div>
   )
 }
 
