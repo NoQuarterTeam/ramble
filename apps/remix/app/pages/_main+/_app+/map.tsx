@@ -11,6 +11,7 @@ import Map, {
   Source,
   type ViewStateChangeEvent,
 } from "react-map-gl"
+import { type MarkerEvent, type MarkerInstance } from "react-map-gl/dist/esm/types"
 import { cssBundleHref } from "@remix-run/css-bundle"
 import {
   isRouteErrorResponse,
@@ -40,7 +41,6 @@ import { MapFilters } from "~/pages/_main+/_app+/components/MapFilters"
 import type { Cluster, clustersLoader } from "../../api+/clusters"
 import { MapLayerControls } from "./components/MapLayerControls"
 import { SpotMarker } from "./components/SpotMarker"
-import { MarkerEvent, MarkerInstance } from "react-map-gl/dist/esm/types"
 
 export const config = {
   runtime: "edge",

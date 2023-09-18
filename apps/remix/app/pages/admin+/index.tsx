@@ -1,9 +1,9 @@
-import { LoaderArgs } from "@remix-run/node"
+import { type LoaderArgs } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 import { cacheHeader } from "pretty-cache-header"
 import { promiseHash } from "remix-utils"
-import { Tile, TileBody, TileHeader } from "~/components/ui"
 
+import { Tile, TileBody, TileHeader } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { json } from "~/lib/remix.server"
 

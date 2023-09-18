@@ -5,6 +5,7 @@ import type { ActionArgs, LoaderArgs, SerializeFrom } from "@vercel/remix"
 import dayjs from "dayjs"
 import { Check, Eye, EyeOff, Trash } from "lucide-react"
 import queryString from "query-string"
+import { promiseHash } from "remix-utils"
 import { z } from "zod"
 
 import type { Prisma, SpotType } from "@ramble/database/types"
@@ -23,7 +24,6 @@ import { SPOT_TYPE_OPTIONS, SPOTS } from "~/lib/static/spots"
 import { getTableParams } from "~/lib/table"
 import { useTheme } from "~/lib/theme"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
-import { promiseHash } from "remix-utils"
 
 const schema = z.object({ type: z.string().optional(), unverified: z.string().optional() })
 

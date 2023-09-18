@@ -2,6 +2,7 @@ import { useLoaderData } from "@remix-run/react"
 import { createColumnHelper } from "@tanstack/react-table"
 import { type LoaderArgs, type SerializeFrom } from "@vercel/remix"
 import dayjs from "dayjs"
+import { promiseHash } from "remix-utils"
 
 import { type Prisma } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
@@ -10,10 +11,8 @@ import { Search } from "~/components/Search"
 import { Table } from "~/components/Table"
 import { Avatar } from "~/components/ui"
 import { db } from "~/lib/db.server"
-
 import { json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"
-import { promiseHash } from "remix-utils"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const { orderBy, search, skip, take } = getTableParams(request)

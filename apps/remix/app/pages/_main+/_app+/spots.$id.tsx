@@ -1,9 +1,11 @@
 import Map, { Marker } from "react-map-gl"
 import { Link, useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@vercel/remix"
+import dayjs from "dayjs"
 import { Check, Edit2, Heart, Star, Trash } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
+import { publicSpotWhereClause } from "@ramble/api"
 import type { SpotType } from "@ramble/database/types"
 import { AMENITIES, canManageSpot, createImageUrl, displayRating } from "@ramble/shared"
 
@@ -32,13 +34,11 @@ import { useTheme } from "~/lib/theme"
 import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
 import type { loader as rootLoader } from "~/root"
 import { getCurrentUser } from "~/services/auth/auth.server"
+import { getUserSession } from "~/services/session/session.server"
 
 import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { SpotMarker } from "./components/SpotMarker"
-import dayjs from "dayjs"
-import { getUserSession } from "~/services/session/session.server"
-import { publicSpotWhereClause } from "@ramble/api"
 
 export const config = {
   runtime: "edge",

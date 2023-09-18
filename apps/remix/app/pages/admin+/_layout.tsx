@@ -1,14 +1,14 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Link, NavLink, Outlet, useFetcher } from "@remix-run/react"
 import { json, type LoaderArgs, redirect } from "@vercel/remix"
+import { GaugeCircle, MapPin, Moon, Sun, User } from "lucide-react"
 
 import { merge } from "@ramble/shared"
 
+import { type RambleIcon } from "~/components/ui"
 import { Button, buttonSizeStyles, buttonStyles } from "~/components/ui/Button"
-import { getCurrentUser } from "~/services/auth/auth.server"
 import { useTheme } from "~/lib/theme"
-import { Sun, Moon, GaugeCircle, User, MapPin } from "lucide-react"
-import { RambleIcon } from "~/components/ui"
+import { getCurrentUser } from "~/services/auth/auth.server"
 
 export const shouldRevalidate = () => false
 

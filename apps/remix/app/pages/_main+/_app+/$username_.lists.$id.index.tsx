@@ -9,6 +9,7 @@ import { json } from "@vercel/remix"
 import { ChevronLeft, Copy } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
+import { publicSpotWhereClauseRaw } from "@ramble/api"
 import { type SpotItemWithStats } from "@ramble/shared"
 import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
 
@@ -25,7 +26,6 @@ import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
 
 import { SpotItem } from "./components/SpotItem"
 import { SpotMarker } from "./components/SpotMarker"
-import { publicSpotWhereClauseRaw } from "@ramble/api"
 
 export const headers = useLoaderHeaders
 

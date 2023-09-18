@@ -5,6 +5,7 @@ import { defer } from "@vercel/remix"
 import { Frown, Heart, Star } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
+import { publicSpotWhereClause } from "@ramble/api"
 import { createImageUrl, displayRating, merge } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
@@ -14,10 +15,9 @@ import { db } from "~/lib/db.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
 import { SaveToList } from "~/pages/api+/save-to-list"
+import { getUserSession } from "~/services/session/session.server"
 
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
-import { getUserSession } from "~/services/session/session.server"
-import { publicSpotWhereClause } from "@ramble/api"
 
 export const loader = async ({ params, request }: LoaderArgs) => {
   const { userId } = await getUserSession(request)

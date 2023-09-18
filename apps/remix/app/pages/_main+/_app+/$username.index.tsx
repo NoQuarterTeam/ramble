@@ -4,16 +4,16 @@ import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
+import { publicSpotWhereClause, publicSpotWhereClauseRaw } from "@ramble/api"
 import { type SpotItemWithStats } from "@ramble/shared"
 
 import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { notFound } from "~/lib/remix.server"
+import { getUserSession } from "~/services/session/session.server"
 
 import { SpotItem } from "./components/SpotItem"
-import { getUserSession } from "~/services/session/session.server"
-import { publicSpotWhereClauseRaw, publicSpotWhereClause } from "@ramble/api"
 
 export const headers = useLoaderHeaders
 

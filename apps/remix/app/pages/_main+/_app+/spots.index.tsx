@@ -5,6 +5,7 @@ import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 
+import { publicSpotWhereClauseRaw } from "@ramble/api"
 import { Prisma, SpotType } from "@ramble/database/types"
 import { type SpotItemWithStats } from "@ramble/shared"
 
@@ -12,11 +13,10 @@ import { Button, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { SPOT_TYPE_OPTIONS } from "~/lib/static/spots"
+import { getUserSession } from "~/services/session/session.server"
 
 import { PageContainer } from "../../../components/PageContainer"
 import { SpotItem } from "./components/SpotItem"
-import { getUserSession } from "~/services/session/session.server"
-import { publicSpotWhereClauseRaw } from "@ramble/api"
 
 export const config = {
   runtime: "edge",

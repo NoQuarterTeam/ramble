@@ -1,4 +1,5 @@
 import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import dayjs from "dayjs"
 import type { z } from "zod"
 
 import { generateBlurHash } from "@ramble/api"
@@ -10,7 +11,6 @@ import { json, redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { amenitiesSchema, SpotForm, spotSchema } from "./components/SpotForm"
-import dayjs from "dayjs"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const user = await getCurrentUser(request, { isVerified: true })

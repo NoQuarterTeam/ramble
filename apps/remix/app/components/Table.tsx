@@ -7,8 +7,9 @@ import queryString from "query-string"
 
 import { join } from "@ramble/shared"
 
-import { IconButton, Select, Tile } from "./ui"
 import { DEFAULT_TAKE } from "~/lib/table"
+
+import { IconButton, Select, Tile } from "./ui"
 
 export function Table<T>({
   data,

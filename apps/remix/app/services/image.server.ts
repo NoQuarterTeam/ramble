@@ -5,7 +5,7 @@ import * as crypto from "crypto"
 import { cacheHeader } from "pretty-cache-header"
 import sharp from "sharp"
 
-import { getHead, deleteObject, uploadStream } from "@ramble/api"
+import { deleteObject, getHead, uploadStream } from "@ramble/api"
 import { s3Url, srcWhitelist } from "@ramble/shared"
 
 const badImageBase64 = "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"

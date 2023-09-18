@@ -6,12 +6,11 @@ import Supercluster from "supercluster"
 import { z } from "zod"
 import { CheckboxAsString, NumAsString } from "zodix"
 
+import { publicSpotWhereClause } from "@ramble/api"
 import type { SpotType } from "@ramble/database/types"
 
 import { db } from "~/lib/db.server"
-
 import { getUserSession } from "~/services/session/session.server"
-import { publicSpotWhereClause } from "@ramble/api"
 
 export const config = {
   runtime: "edge",
