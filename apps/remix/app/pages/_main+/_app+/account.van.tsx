@@ -33,9 +33,9 @@ export const action = async ({ request }: ActionArgs) => {
     year: FormNumber.min(1950).max(new Date().getFullYear() + 2),
     description: NullableFormString,
   })
-  const formData = await request.formData()
-  const result = await validateFormData(formData, schema)
+  const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
+  const formData = await request.formData()
   const images = (formData.getAll("image") as string[]).filter(Boolean)
   const data = result.data
   if (user.van) {

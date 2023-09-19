@@ -9,6 +9,7 @@ import { type RambleIcon } from "~/components/ui"
 import { Button, buttonSizeStyles, buttonStyles } from "~/components/ui/Button"
 import { useTheme } from "~/lib/theme"
 import { getCurrentUser } from "~/services/auth/auth.server"
+import { AuthenticityTokenInput } from "remix-utils"
 
 export const shouldRevalidate = () => false
 
@@ -40,6 +41,7 @@ export default function AdminLayout() {
           </AdminLink>
         </div>
         <themeFetcher.Form action="/api/theme" method="post" replace className="w-full">
+          <AuthenticityTokenInput />
           <input type="hidden" name="theme" value={isDark ? "light" : "dark"} />
           <Button
             variant="ghost"

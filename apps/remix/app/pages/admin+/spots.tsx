@@ -5,7 +5,7 @@ import type { ActionArgs, LoaderArgs, SerializeFrom } from "@vercel/remix"
 import dayjs from "dayjs"
 import { Check, Eye, EyeOff, Trash } from "lucide-react"
 import queryString from "query-string"
-import { promiseHash } from "remix-utils"
+import { AuthenticityTokenInput, promiseHash } from "remix-utils"
 import { z } from "zod"
 
 import type { Prisma, SpotType } from "@ramble/database/types"
@@ -17,7 +17,7 @@ import { Search } from "~/components/Search"
 import { Table } from "~/components/Table"
 import { Avatar, Button, IconButton, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
-import { FORM_ACTION, formError, validateFormData } from "~/lib/form"
+import { FormActionInput, formError, getFormAction, validateFormData } from "~/lib/form"
 import { useFetcherSubmit } from "~/lib/hooks/useFetcherSubmit"
 import { badRequest, json } from "~/lib/remix.server"
 import { SPOT_TYPE_OPTIONS, SPOTS } from "~/lib/static/spots"
@@ -72,13 +72,12 @@ enum Actions {
 
 export const action = async ({ request }: ActionArgs) => {
   const user = await getCurrentAdmin(request)
-  const formData = await request.formData()
-  const action = formData.get(FORM_ACTION) as Actions | undefined
-  switch (action) {
+  const formAction = await getFormAction<Actions>(request)
+  switch (formAction) {
     case Actions.Delete:
       try {
         const deleteSchema = z.object({ id: z.string() })
-        const result = await validateFormData(formData, deleteSchema)
+        const result = await validateFormData(request, deleteSchema)
         if (!result.success) return formError(result)
         const data = result.data
         await db.spot.update({ where: { id: data.id }, data: { deletedAt: new Date() } })
@@ -89,7 +88,7 @@ export const action = async ({ request }: ActionArgs) => {
     case Actions.Verify:
       try {
         const verifySchema = z.object({ id: z.string() })
-        const result = await validateFormData(formData, verifySchema)
+        const result = await validateFormData(request, verifySchema)
         if (!result.success) return formError(result)
         const data = result.data
         await db.spot.update({ where: { id: data.id }, data: { verifiedAt: new Date(), verifier: { connect: { id: user.id } } } })
@@ -280,15 +279,10 @@ function SpotVerifyAction({ spot }: { spot: Spot }) {
   const verifyFetcher = useFetcherSubmit()
   return (
     <verifyFetcher.Form method="post" replace>
+      <AuthenticityTokenInput />
+      <FormActionInput value={Actions.Verify} />
       <input type="hidden" name="id" value={spot.id} />
-      <Button
-        type="submit"
-        isLoading={verifyFetcher.state !== "idle"}
-        name={FORM_ACTION}
-        value={Actions.Verify}
-        size="sm"
-        leftIcon={<Check size={16} />}
-      >
+      <Button type="submit" isLoading={verifyFetcher.state !== "idle"} size="sm" leftIcon={<Check size={16} />}>
         Verify
       </Button>
     </verifyFetcher.Form>
@@ -300,10 +294,10 @@ function SpotDeleteAction({ spot }: { spot: Spot }) {
   return (
     <deleteFetcher.Form method="post" replace>
       <input type="hidden" name="id" value={spot.id} />
+      <AuthenticityTokenInput />
+      <FormActionInput value={Actions.Delete} />
       <IconButton
         type="submit"
-        name={FORM_ACTION}
-        value={Actions.Delete}
         isLoading={deleteFetcher.state !== "idle"}
         aria-label="delete"
         size="sm"

@@ -19,6 +19,7 @@ import {
 } from "~/components/ui"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { useTheme } from "~/lib/theme"
+import { AuthenticityTokenInput } from "remix-utils"
 
 export function Nav() {
   const user = useMaybeUser()
@@ -113,6 +114,7 @@ export function Nav() {
                   </LinkButton>
                 </DropdownMenuItem>
                 <themeFetcher.Form action="/api/theme" method="post" replace className="w-full">
+                  <AuthenticityTokenInput />
                   <input type="hidden" name="theme" value={isDark ? "light" : "dark"} />
                   <DropdownMenuItem onSelect={(event: Event) => event.preventDefault()} asChild>
                     <Button

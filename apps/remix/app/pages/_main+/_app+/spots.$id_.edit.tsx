@@ -25,11 +25,8 @@ export const loader = async ({ request, params }: LoaderArgs) => {
 
 export const action = async ({ request, params }: ActionArgs) => {
   const user = await getCurrentUser(request, { id: true, role: true, isAdmin: true, isVerified: true })
-  const formData = await request.formData()
 
-  const result = await validateFormData(formData, spotSchema)
-
-  const images = (formData.getAll("image") as string[]).filter(Boolean)
+  const result = await validateFormData(request, spotSchema)
 
   if (!result.success) return formError(result)
 
@@ -39,11 +36,13 @@ export const action = async ({ request, params }: ActionArgs) => {
 
   let amenities: undefined | z.infer<typeof amenitiesSchema>
   if (doesSpotTypeRequireAmenities(result.data.type)) {
-    const amenitiesResult = await validateFormData(formData, amenitiesSchema)
+    const amenitiesResult = await validateFormData(request, amenitiesSchema)
     if (!amenitiesResult.success) return formError(amenitiesResult)
     amenities = amenitiesResult.data
   }
 
+  const formData = await request.formData()
+  const images = (formData.getAll("image") as string[]).filter(Boolean)
   const imagesToDelete = spot.images.filter((image) => !images.includes(image.path))
   const imagesToCreate = images.filter((image) => !spot.images.find((i) => i.path === image))
 

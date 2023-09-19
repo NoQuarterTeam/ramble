@@ -24,7 +24,7 @@ import {
   Button,
 } from "~/components/ui"
 import { db } from "~/lib/db.server"
-import { FORM_ACTION } from "~/lib/form"
+import { FormActionInput, getFormAction } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { badRequest, json, notFound, redirect } from "~/lib/remix.server"
@@ -102,10 +102,9 @@ enum Actions {
 
 export const action = async ({ request, params }: ActionArgs) => {
   const user = await getCurrentUser(request, { id: true, role: true, isVerified: true, isAdmin: true })
-  const formData = await request.formData()
-  const action = formData.get(FORM_ACTION) as Actions | undefined
+  const formAction = await getFormAction<Actions>(request)
 
-  switch (action) {
+  switch (formAction) {
     case Actions.Delete:
       try {
         if (!user.isAdmin) return redirect("/spots")
@@ -212,9 +211,8 @@ export default function SpotDetail() {
                   <>
                     {!spot.verifiedAt && (
                       <Form>
-                        <FormButton name={FORM_ACTION} value={Actions.Verify} leftIcon={<Check className="sq-3" />}>
-                          Verify
-                        </FormButton>
+                        <FormActionInput value={Actions.Verify} />
+                        <FormButton leftIcon={<Check className="sq-3" />}>Verify</FormButton>
                       </Form>
                     )}
                     <LinkButton to="edit" variant="outline" leftIcon={<Edit2 className="sq-3" />}>
@@ -237,9 +235,8 @@ export default function SpotDetail() {
                           <Button variant="ghost">Cancel</Button>
                         </AlertDialogCancel>
                         <Form>
-                          <FormButton name={FORM_ACTION} value={Actions.Delete}>
-                            Confirm
-                          </FormButton>
+                          <FormActionInput value={Actions.Delete} />
+                          <FormButton>Confirm</FormButton>
                         </Form>
                       </AlertDialogFooter>
                     </AlertDialogContent>

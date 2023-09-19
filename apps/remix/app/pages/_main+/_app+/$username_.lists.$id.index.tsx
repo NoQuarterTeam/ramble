@@ -17,7 +17,7 @@ import { LinkButton } from "~/components/LinkButton"
 import { PageContainer } from "~/components/PageContainer"
 import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
-import { FORM_ACTION } from "~/lib/form"
+import { FormActionInput, getFormAction } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { badRequest, notFound, redirect } from "~/lib/remix.server"
@@ -26,6 +26,7 @@ import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
 
 import { SpotItem } from "./components/SpotItem"
 import { SpotMarker } from "./components/SpotMarker"
+import { AuthenticityTokenInput } from "remix-utils"
 
 export const headers = useLoaderHeaders
 
@@ -87,10 +88,8 @@ enum Actions {
 
 export const action = async ({ request, params }: ActionArgs) => {
   const user = await getCurrentUser(request)
-  const formData = await request.formData()
-  const action = formData.get(FORM_ACTION) as Actions
-
-  switch (action) {
+  const formAction = await getFormAction<Actions>(request)
+  switch (formAction) {
     case Actions.Delete:
       await db.list.delete({ where: { id: params.id } })
       return redirect(`/${user.username}/lists`, request, { flash: { title: "List deleted" } })
@@ -164,11 +163,11 @@ export default function ListDetail() {
           <div className="flex space-x-1">
             {currentUser.id !== list.creatorId && (
               <copyFetcher.Form method="post" replace>
+                <AuthenticityTokenInput />
+                <FormActionInput value={Actions.Copy} />
                 <Button
                   leftIcon={<Copy className="sq-4" />}
                   isLoading={copyFetcher.state === "submitting"}
-                  name={FORM_ACTION}
-                  value={Actions.Copy}
                   type="submit"
                   variant="outline"
                 >
@@ -183,13 +182,9 @@ export default function ListDetail() {
                   Edit
                 </LinkButton>
                 <deleteFetcher.Form method="post" replace>
-                  <Button
-                    type="submit"
-                    isLoading={deleteFetcher.state === "submitting"}
-                    name={FORM_ACTION}
-                    value={Actions.Delete}
-                    variant="destructive"
-                  >
+                  <AuthenticityTokenInput />
+                  <FormActionInput value={Actions.Delete} />
+                  <Button type="submit" isLoading={deleteFetcher.state === "submitting"} variant="destructive">
                     Delete
                   </Button>
                 </deleteFetcher.Form>

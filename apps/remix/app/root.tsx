@@ -44,6 +44,8 @@ import { defaultPreferences, preferencesCookies } from "./pages/api+/preferences
 import { getMaybeUser } from "./services/auth/auth.server"
 import { getFlashSession } from "./services/session/flash.server"
 import { getThemeSession } from "./services/session/theme.server"
+import { AuthenticityTokenProvider, promiseHash } from "remix-utils"
+import { getCsrfSession } from "./services/session/csrf.server.ts"
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "Ramble" }, { name: "description", content: "Created by No Quarter" }]
@@ -54,18 +56,29 @@ export const links: LinksFunction = () => {
 }
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const { flash, commit } = await getFlashSession(request)
-  const { theme, commit: commitTheme } = await getThemeSession(request)
   const cookieHeader = request.headers.get("Cookie")
-  const preferences: Preferences = (await preferencesCookies.parse(cookieHeader)) || defaultPreferences
 
-  const user = await getMaybeUser(request)
+  const { flashSession, themeSession, csrfSession, user, preferences } = await promiseHash({
+    flashSession: getFlashSession(request),
+    themeSession: getThemeSession(request),
+    csrfSession: getCsrfSession(request),
+    user: getMaybeUser(request),
+    preferences: preferencesCookies.parse(cookieHeader) as Promise<Preferences>,
+  })
   return json(
-    { user, flash, preferences, theme, config: { WEB_URL: FULL_WEB_URL } },
+    {
+      user,
+      csrf: csrfSession.token,
+      flash: flashSession.flash,
+      preferences: preferences || defaultPreferences,
+      theme: themeSession.theme,
+      config: { WEB_URL: FULL_WEB_URL },
+    },
     {
       headers: [
-        ["Set-Cookie", await commit()],
-        ["Set-Cookie", await commitTheme()],
+        ["Set-Cookie", await csrfSession.commit()],
+        ["Set-Cookie", await flashSession.commit()],
+        ["Set-Cookie", await themeSession.commit()],
       ],
     },
   )
@@ -78,8 +91,7 @@ export const shouldRevalidate: ShouldRevalidateFunction = (args) => {
 export type RootLoader = SerializeFrom<typeof loader>
 
 export default function App() {
-  const { flash, theme } = useLoaderData<typeof loader>()
-
+  const { csrf, flash, theme } = useLoaderData<typeof loader>()
   const transition = useNavigation()
   const fetchers = useFetchers()
   const state = React.useMemo<"idle" | "loading">(() => {
@@ -94,12 +106,14 @@ export default function App() {
   }, [transition.state, state])
 
   return (
-    <Document theme={theme}>
-      <Tooltip.Provider>
-        <Outlet />
-      </Tooltip.Provider>
-      <Toaster flash={flash} />
-    </Document>
+    <AuthenticityTokenProvider token={csrf}>
+      <Document theme={theme}>
+        <Tooltip.Provider>
+          <Outlet />
+        </Tooltip.Provider>
+        <Toaster flash={flash} />
+      </Document>
+    </AuthenticityTokenProvider>
   )
 }
 

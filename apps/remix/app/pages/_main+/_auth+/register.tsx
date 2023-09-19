@@ -8,7 +8,7 @@ import { sendAccountVerificationEmail } from "@ramble/api"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { db } from "~/lib/db.server"
-import { FORM_ACTION, formError, validateFormData } from "~/lib/form"
+import { FormActionInput, formError, getFormAction, validateFormData } from "~/lib/form"
 import { createToken } from "~/lib/jwt.server"
 import { badRequest } from "~/lib/remix.server"
 import { hashPassword } from "~/services/auth/password.server"
@@ -29,12 +29,12 @@ enum Actions {
 }
 
 export const action = async ({ request }: ActionArgs) => {
-  const formData = await request.formData()
-  const action = formData.get(FORM_ACTION) as Actions | undefined
+  const formAction = await getFormAction(request)
 
-  switch (action) {
+  switch (formAction) {
     case Actions.Register:
       try {
+        const formData = await request.formData()
         if (formData.get("passwordConfirmation")) return redirect("/") // honey pot
         const registerSchema = z.object({
           email: z.string().min(3).email("Invalid email"),
@@ -46,7 +46,7 @@ export const action = async ({ request }: ActionArgs) => {
           firstName: z.string().min(2, "Must be at least 2 characters"),
           lastName: z.string().min(2, "Must be at least 2 characters"),
         })
-        const result = await validateFormData(formData, registerSchema)
+        const result = await validateFormData(request, registerSchema)
         if (!result.success) return formError(result)
         const data = result.data
         const email = data.email.toLowerCase().trim()
@@ -87,10 +87,9 @@ export default function Register() {
       <FormField autoCapitalize="none" required label="Choose a username" name="username" placeholder="Jim93" />
       <FormField required label="First name" name="firstName" placeholder="Jim" />
       <FormField required label="Last name" name="lastName" placeholder="Bob" />
+      <FormActionInput value={Actions.Register} />
       <div>
-        <FormButton name="_action" value={Actions.Register} className="w-full">
-          Register
-        </FormButton>
+        <FormButton className="w-full">Register</FormButton>
         <FormError />
       </div>
 

@@ -18,10 +18,11 @@ import {
   Avatar,
   Button,
 } from "~/components/ui"
-import { FormAction } from "~/lib/form"
+import { FormActionInput } from "~/lib/form"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 
 import { Actions } from "../spots.$id_.reviews.$reviewId"
+import { AuthenticityTokenInput } from "remix-utils"
 
 export const reviewItemSelectFields = {
   id: true,
@@ -83,7 +84,8 @@ export function ReviewItem({ review }: Props) {
                 </AlertDialogCancel>
 
                 <deleteFetcher.Form method="post" action={`/spots/${review.spotId}/reviews/${review.id}`} replace>
-                  <FormAction value={Actions.Delete} />
+                  <AuthenticityTokenInput />
+                  <FormActionInput value={Actions.Delete} />
                   <Button type="submit">Confirm</Button>
                 </deleteFetcher.Form>
               </AlertDialogFooter>

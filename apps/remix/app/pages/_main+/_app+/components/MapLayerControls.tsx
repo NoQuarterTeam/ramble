@@ -6,6 +6,7 @@ import { Button, IconButton, Modal, Switch, Tooltip } from "~/components/ui"
 import { useFetcherSubmit } from "~/lib/hooks/useFetcherSubmit"
 import { usePreferences } from "~/lib/hooks/usePreferences"
 import { preferencesUrl } from "~/pages/api+/preferences"
+import { AuthenticityTokenInput } from "remix-utils"
 
 export function MapLayerControls() {
   const modalProps = useDisclosure()
@@ -34,6 +35,7 @@ export function MapLayerControls() {
 
       <Modal {...modalProps} size="xl" title="Map layers">
         <savePreferencesFetcher.Form method="post" replace className="space-y-6" action={preferencesUrl}>
+          <AuthenticityTokenInput />
           <div className="space-y-4">
             <label htmlFor="mapLayerRain" className="flex items-center justify-between space-x-4">
               <div className="flex items-center space-x-4">

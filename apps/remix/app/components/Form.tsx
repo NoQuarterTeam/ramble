@@ -11,6 +11,7 @@ import { Button, IconButton, Input, inputStyles } from "~/components/ui"
 import { useFormErrors } from "~/lib/form"
 
 import { ImageUploader } from "./ImageUploader"
+import { AuthenticityTokenInput } from "remix-utils"
 
 export const Form = React.forwardRef(function _Form(props: RemixFormProps, ref: React.ForwardedRef<HTMLFormElement> | null) {
   const form = useFormErrors()
@@ -23,6 +24,7 @@ export const Form = React.forwardRef(function _Form(props: RemixFormProps, ref: 
       ref={ref}
       {...props}
     >
+      <AuthenticityTokenInput />
       {props.children}
     </RemixForm>
   )

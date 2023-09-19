@@ -10,7 +10,7 @@ import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { PageContainer } from "~/components/PageContainer"
 import { IconButton, Textarea } from "~/components/ui"
-import { FormAction } from "~/lib/form"
+import { FormActionInput } from "~/lib/form"
 
 import { Actions } from "../spots.$id_.reviews.$reviewId"
 
@@ -29,7 +29,7 @@ export function ReviewForm({ spot, review }: Props) {
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <Form className="space-y-2">
-          {review && <FormAction value={Actions.Edit} />}
+          {review && <FormActionInput value={Actions.Edit} />}
           <FormField
             defaultValue={review?.description || ""}
             placeholder="How was your stay? what did you like?"

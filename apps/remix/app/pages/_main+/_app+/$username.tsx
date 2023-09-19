@@ -46,7 +46,7 @@ export default function ProfileLists() {
 
   const currentUser = useMaybeUser()
   return (
-    <div className="mx-auto px-4 pb-20 lg:px-20">
+    <div className="mx-auto px-4 pb-20 lg:px-12">
       <div className="grid grid-cols-10 gap-6">
         <div className="col-span-10 md:col-span-3">
           <div className="md:top-nav relative flex flex-col gap-4 py-6 md:sticky md:py-16">
