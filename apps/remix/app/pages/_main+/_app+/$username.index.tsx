@@ -71,7 +71,7 @@ export default function ProfileSpots() {
 
   return (
     <div className="space-y-10">
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         {count === 0 ? <></> : spots.map((spot) => <SpotItem key={spot.id} spot={spot} />)}
       </div>
       {count > spots.length && (

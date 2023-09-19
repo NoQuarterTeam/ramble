@@ -56,6 +56,7 @@ export const action = async ({ request, params }: ActionArgs) => {
   const schema = z.object({ shouldFollow: zx.BoolAsString })
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
+  if (user.username === params.username) return json({ success: false, message: "You can't follow yourself" })
   const shouldFollow = result.data.shouldFollow
   await db.user.update({
     where: { username: params.username },
@@ -71,7 +72,7 @@ export default function ProfileLists() {
   return (
     <div className="mx-auto px-4 pb-20 lg:px-12">
       <div className="grid grid-cols-10 gap-6">
-        <div className="col-span-10 md:col-span-3">
+        <div className="col-span-10 lg:col-span-4 xl:col-span-3">
           <div className="md:top-nav relative pt-4 md:sticky">
             <div className="rounded-xs flex flex-col gap-4 border p-4">
               <div className="flex items-center space-x-3">
@@ -108,7 +109,7 @@ export default function ProfileLists() {
                     <span className="font-semibold">{user._count?.followers}</span> followers
                   </Link>
                 </div>
-                {!currentUser ? null : (
+                {!currentUser || currentUser.username === user.username ? null : (
                   <Form>
                     <input type="hidden" name="shouldFollow" value={String(!user.isFollowed)} />
                     <FormButton variant={user.isFollowed ? "outline" : "primary"} size="sm">
@@ -138,7 +139,7 @@ export default function ProfileLists() {
           </div>
         </div>
 
-        <div className="col-span-10 space-y-4 md:col-span-7">
+        <div className="col-span-10 space-y-4 lg:col-span-6 xl:col-span-7">
           <div className="top-nav bg-background sticky z-[1] mx-auto flex w-full items-center justify-center space-x-1 py-4">
             <div>
               <ProfileLink to={`/${user.username}`} end>
