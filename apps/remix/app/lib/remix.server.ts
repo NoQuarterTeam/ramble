@@ -9,10 +9,10 @@ export async function badRequest(
   init?: ResponseInit & { flash?: FlashMessage & { type?: FlashType } },
 ) {
   if (!request || !init) return remixJson(data, { status: 400, ...init })
-  const { createFlash } = await getFlashSession(request)
   const headers = new Headers(init.headers)
   const flash = init.flash
   if (flash) {
+    const { createFlash } = await getFlashSession(request)
     headers.append("Set-Cookie", await createFlash(flash.type || FlashType.Error, flash.title, flash.description))
   }
 
@@ -21,10 +21,10 @@ export async function badRequest(
 
 export async function json<T>(data: T, request?: Request, init?: ResponseInit & { flash?: FlashMessage & { type?: FlashType } }) {
   if (!request || !init) return remixJson(data, { status: 200, ...init })
-  const { createFlash } = await getFlashSession(request)
   const headers = new Headers(init.headers)
   const flash = init.flash
   if (flash) {
+    const { createFlash } = await getFlashSession(request)
     headers.append("Set-Cookie", await createFlash(flash.type || FlashType.Info, flash.title, flash.description))
   }
 
@@ -39,10 +39,10 @@ export async function redirect(
   init?: ResponseInit & { flash?: FlashMessage & { type?: FlashType } },
 ) {
   if (!request || !init) return remixRedirect(url)
-  const { createFlash } = await getFlashSession(request)
   const headers = new Headers(init.headers)
   const flash = init.flash
   if (flash) {
+    const { createFlash } = await getFlashSession(request)
     headers.append("Set-Cookie", await createFlash(flash.type || FlashType.Info, flash.title, flash.description))
   }
 

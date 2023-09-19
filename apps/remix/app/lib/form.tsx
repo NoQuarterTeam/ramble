@@ -1,24 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useActionData } from "@remix-run/react"
+import { badRequest } from "remix-utils"
 import { z } from "zod"
 
-import { badRequest } from "./remix.server"
 import { verifyCsrf } from "~/services/session/csrf.server.ts"
 
 export type FieldErrors<T> = {
   [Property in keyof T]: string[]
 }
 
-type ValidForm<Schema extends z.ZodType<unknown>> = {
+type ValidForm<Schema extends z.ZodTypeAny> = {
   success: true
   data: z.infer<Schema>
 }
-export type InvalidForm<Schema extends z.ZodType<unknown>> = {
+export type InvalidForm<Schema extends z.ZodTypeAny> = {
   success: false
   fieldErrors: FieldErrors<z.infer<Schema>>
+  data: z.infer<Schema>
 }
 
-export async function validateFormData<Schema extends z.ZodType<unknown>>(
+export async function validateFormData<Schema extends z.ZodTypeAny>(
   request: Request,
   schema: Schema,
 ): Promise<ValidForm<Schema> | InvalidForm<Schema>> {
@@ -29,23 +30,23 @@ export async function validateFormData<Schema extends z.ZodType<unknown>>(
   const validations = schema.safeParse(data)
   if (validations.success) return validations
   const fieldErrors = validations.error.flatten().fieldErrors as FieldErrors<Schema>
-  return { fieldErrors, success: false }
+  return { fieldErrors, success: false, data }
 }
 
-export function formError<Schema extends z.ZodType<unknown>>(args: Omit<ActionDataErrorResponse<Schema>, "success">) {
+export function formError<Schema extends z.ZodTypeAny>(args: Omit<ActionDataErrorResponse<Schema>, "success">) {
   return badRequest({ ...args, success: false })
 }
 
 export type FormError<T> = { formError?: string; fieldErrors?: FieldErrors<T>; data?: Record<string, unknown> }
 
-export type ActionDataErrorResponse<Schema extends z.ZodType<unknown>> = {
+export type ActionDataErrorResponse<Schema extends z.ZodTypeAny> = {
   success: false
   formError?: string
   fieldErrors?: FieldErrors<z.infer<Schema>>
   data?: z.infer<Schema>
 }
 
-export function useFormErrors<Schema extends z.ZodType<unknown>>() {
+export function useFormErrors<Schema extends z.ZodTypeAny>() {
   return useActionData() as Partial<ActionDataErrorResponse<Schema>> | null
 }
 
