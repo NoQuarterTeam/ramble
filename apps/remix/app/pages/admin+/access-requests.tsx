@@ -22,13 +22,13 @@ export const loader = async ({ request }: LoaderArgs) => {
   } satisfies Prisma.UserWhereInput
 
   const data = await promiseHash({
-    inviteRequests: db.inviteRequest.findMany({ orderBy, skip, take, where }),
-    count: db.inviteRequest.count({ where }),
+    accessRequests: db.accessRequest.findMany({ orderBy, skip, take, where }),
+    count: db.accessRequest.count({ where }),
   })
   return json(data)
 }
 
-type InviteRequest = SerializeFrom<typeof loader>["inviteRequests"][number]
+type InviteRequest = SerializeFrom<typeof loader>["accessRequests"][number]
 
 const columnHelper = createColumnHelper<InviteRequest>()
 const columns = [
@@ -44,7 +44,7 @@ const columns = [
   }),
 ]
 export default function InviteRequests() {
-  const { inviteRequests, count } = useLoaderData<typeof loader>()
+  const { accessRequests, count } = useLoaderData<typeof loader>()
   return (
     <div className="space-y-2">
       <h1 className="text-4xl">Invite Requests</h1>
@@ -53,7 +53,7 @@ export default function InviteRequests() {
           <Search className="max-w-[400px]" />
         </div>
       </div>
-      <Table data={inviteRequests} count={count} columns={columns} />
+      <Table data={accessRequests} count={count} columns={columns} />
     </div>
   )
 }

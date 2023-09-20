@@ -20,9 +20,9 @@ export const action = async ({ request }: LoaderArgs) => {
   const schema = z.object({ email: z.string().email() })
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
-  const inviteRequest = await db.inviteRequest.findFirst({ where: { email: result.data.email } })
-  if (inviteRequest) return formError({ formError: "Email already requested access" })
-  await db.inviteRequest.create({ data: { email: result.data.email } })
+  const accessRequest = await db.accessRequest.findFirst({ where: { email: result.data.email } })
+  if (accessRequest) return formError({ formError: "Email already requested access" })
+  await db.accessRequest.create({ data: { email: result.data.email } })
   return json({ success: true })
 }
 
@@ -174,7 +174,7 @@ function RequestAccessForm({ mode }: { mode?: "light" | "dark" }) {
           mode === "dark" && "bg-white text-black",
         )}
       >
-        Join waiting list
+        Request access
       </button>
     </accessFetcher.Form>
   )

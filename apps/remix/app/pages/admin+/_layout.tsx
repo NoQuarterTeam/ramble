@@ -39,8 +39,8 @@ export default function AdminLayout() {
           <AdminLink Icon={MapPin} to="spots">
             Spots
           </AdminLink>
-          <AdminLink Icon={HelpingHand} to="invite-requests">
-            Invite requests
+          <AdminLink Icon={HelpingHand} to="access-requests">
+            Access requests
           </AdminLink>
         </div>
         <themeFetcher.Form action="/api/theme" method="post" replace className="w-full">

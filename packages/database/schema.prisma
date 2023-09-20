@@ -236,7 +236,7 @@ model Review {
   @@index([userId])
 }
 
-model InviteRequest {
+model AccessRequest {
   id    String @id @default(uuid())
   email String
 
