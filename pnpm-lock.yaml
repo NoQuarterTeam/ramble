@@ -339,7 +339,7 @@ importers:
         version: 1.11.10
       isbot:
         specifier: latest
-        version: 3.6.13
+        version: 3.7.0
       jose:
         specifier: ^4.14.4
         version: 4.14.4
@@ -377,8 +377,8 @@ importers:
         specifier: ^0.32.0
         version: 0.32.0
       sonner:
-        specifier: ^0.7.0
-        version: 0.7.0(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^1.0.0
+        version: 1.0.0(react-dom@18.2.0)(react@18.2.0)
       supercluster:
         specifier: ^8.0.0
         version: 8.0.0
@@ -7918,7 +7918,7 @@ packages:
     dependencies:
       '@remix-run/node': 1.19.3
       '@remix-run/server-runtime': 1.19.3
-      isbot: 3.6.13
+      isbot: 3.7.0
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
@@ -12739,8 +12739,8 @@ packages:
     resolution: {integrity: sha512-xHjhDr3cNBK0BzdUJSPXZntQUx/mwMS5Rw4A7lPJ90XGAO6ISP/ePDNuo0vhqOZU+UD5JoodwCAAoZQd3FeAKw==}
     dev: true
 
-  /isbot@3.6.13:
-    resolution: {integrity: sha512-uoP4uK5Dc2CrabmK+Gue1jTL+scHiCc1c9rblRpJwG8CPxjLIv8jmGyyGRGkbPOweayhkskdZsEQXG6p+QCQrg==}
+  /isbot@3.7.0:
+    resolution: {integrity: sha512-9BcjlI89966BqWJmYdTnRub85sit931MyCthSIPtgoOsTjoW7A2MVa09HzPpYE2+G4vyAxfDvR0AbUGV0FInQg==}
     engines: {node: '>=12'}
     dev: false
 
@@ -17300,8 +17300,8 @@ packages:
       smart-buffer: 4.2.0
     dev: true
 
-  /sonner@0.7.0(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-vAlXCrE6/183yt64ktIUnPv85RmAPYiicl5z35fDDFhWRIUpg7N62TsiIbHjwGuxbVJu/5hYlh92HHImsS27dA==}
+  /sonner@1.0.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-9K3zuIysC+clCgmRSlrdPwYS36+WI33FPuRzId1PRtbUkB/pOKB/k97zNLOSADQTQKWY9RWhZeSfljl40i5iHQ==}
     peerDependencies:
       react: ^18.0.0
       react-dom: ^18.0.0
