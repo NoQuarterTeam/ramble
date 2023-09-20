@@ -1,6 +1,7 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Link, NavLink, useFetcher, useNavigate, useSubmit } from "@remix-run/react"
 import { Heart, LogOut, Menu, Moon, Plus, Settings, Sun, User } from "lucide-react"
+import { AuthenticityTokenInput } from "remix-utils"
 
 import { ClientOnly, createImageUrl, merge } from "@ramble/shared"
 
@@ -19,7 +20,6 @@ import {
 } from "~/components/ui"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { useTheme } from "~/lib/theme"
-import { AuthenticityTokenInput } from "remix-utils"
 
 export function Nav() {
   const user = useMaybeUser()
@@ -32,7 +32,7 @@ export function Nav() {
   return (
     <div className="h-nav bg-background fixed left-0 top-0 z-10 flex w-full items-center justify-between border-b px-4 align-middle xl:px-12">
       <div className="flex items-center space-x-4">
-        <Link to="/" className="brand-header font flex w-[100px] items-center space-x-1 text-2xl">
+        <Link to="/map" className="brand-header font flex w-[100px] items-center space-x-1 text-2xl">
           ramble
         </Link>
 

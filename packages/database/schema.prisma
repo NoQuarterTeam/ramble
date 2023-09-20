@@ -239,3 +239,11 @@ model Review {
   @@index([spotId])
   @@index([userId])
 }
+
+model AccessRequest {
+  id    String @id @default(uuid())
+  email String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}

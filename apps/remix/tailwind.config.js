@@ -29,7 +29,7 @@ module.exports = {
     plugin(function ({ addUtilities, theme, config }) {
       addUtilities({
         ".brand-header": {
-          "@apply font-serif italic text-primary": {},
+          "@apply font-serif font-bold italic text-primary": {},
         },
         ".center": {
           "@apply flex items-center justify-center": {},

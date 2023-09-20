@@ -1,7 +1,8 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Link, NavLink, Outlet, useFetcher } from "@remix-run/react"
 import { json, type LoaderArgs, redirect } from "@vercel/remix"
-import { GaugeCircle, MapPin, Moon, Sun, User } from "lucide-react"
+import { GaugeCircle, HelpingHand, MapPin, Moon, Sun, User } from "lucide-react"
+import { AuthenticityTokenInput } from "remix-utils"
 
 import { merge } from "@ramble/shared"
 
@@ -9,7 +10,6 @@ import { type RambleIcon } from "~/components/ui"
 import { Button, buttonSizeStyles, buttonStyles } from "~/components/ui/Button"
 import { useTheme } from "~/lib/theme"
 import { getCurrentUser } from "~/services/auth/auth.server"
-import { AuthenticityTokenInput } from "remix-utils"
 
 export const shouldRevalidate = () => false
 
@@ -38,6 +38,9 @@ export default function AdminLayout() {
           </AdminLink>
           <AdminLink Icon={MapPin} to="spots">
             Spots
+          </AdminLink>
+          <AdminLink Icon={HelpingHand} to="access-requests">
+            Access requests
           </AdminLink>
         </div>
         <themeFetcher.Form action="/api/theme" method="post" replace className="w-full">
