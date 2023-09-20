@@ -2,6 +2,7 @@ import * as React from "react"
 import { useFetcher } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs, SerializeFrom } from "@vercel/remix"
 import { Heart, Plus } from "lucide-react"
+import { AuthenticityTokenInput, useAuthenticityToken } from "remix-utils"
 import { z } from "zod"
 import { zx } from "zodix"
 
@@ -25,7 +26,6 @@ import type { ActionDataErrorResponse } from "~/lib/form"
 import { FORM_ACTION, FormActionInput, formError, getFormAction, validateFormData } from "~/lib/form"
 import { badRequest, json } from "~/lib/remix.server"
 import { requireUser } from "~/services/auth/auth.server"
-import { AuthenticityTokenInput, useAuthenticityToken } from "remix-utils"
 
 export const loader = async ({ request }: LoaderArgs) => {
   const userId = await requireUser(request)

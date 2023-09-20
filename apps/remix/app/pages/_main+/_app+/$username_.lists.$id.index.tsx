@@ -8,6 +8,7 @@ import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { ChevronLeft, Copy } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
+import { AuthenticityTokenInput } from "remix-utils"
 
 import { publicSpotWhereClauseRaw } from "@ramble/api"
 import { type SpotItemWithStats } from "@ramble/shared"
@@ -26,7 +27,6 @@ import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
 
 import { SpotItem } from "./components/SpotItem"
 import { SpotMarker } from "./components/SpotMarker"
-import { AuthenticityTokenInput } from "remix-utils"
 
 export const headers = useLoaderHeaders
 

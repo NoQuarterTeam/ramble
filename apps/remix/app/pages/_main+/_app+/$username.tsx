@@ -4,21 +4,21 @@ import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { Instagram, type LucideIcon } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
+import { z } from "zod"
+import { zx } from "zodix"
 
 import { createImageUrl, merge, userInterestFields } from "@ramble/shared"
 
+import { Form, FormButton } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { Avatar, Badge, buttonSizeStyles, buttonStyles, Tooltip } from "~/components/ui"
 import { db } from "~/lib/db.server"
+import { formError, validateFormData } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { notFound } from "~/lib/remix.server"
 import { interestOptions } from "~/lib/static/interests"
 import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
-import { Form, FormButton } from "~/components/Form"
-import { z } from "zod"
-import { zx } from "zodix"
-import { formError, validateFormData } from "~/lib/form"
 
 export const headers = useLoaderHeaders
 

@@ -2,6 +2,7 @@ import { Link, useFetcher } from "@remix-run/react"
 import type { SerializeFrom } from "@vercel/remix"
 import dayjs from "dayjs"
 import { Star } from "lucide-react"
+import { AuthenticityTokenInput } from "remix-utils"
 
 import type { Prisma } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
@@ -22,7 +23,6 @@ import { FormActionInput } from "~/lib/form"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 
 import { Actions } from "../spots.$id_.reviews.$reviewId"
-import { AuthenticityTokenInput } from "remix-utils"
 
 export const reviewItemSelectFields = {
   id: true,

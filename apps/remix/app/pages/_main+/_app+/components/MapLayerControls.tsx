@@ -1,4 +1,5 @@
 import { CloudRain, Layers, Thermometer } from "lucide-react"
+import { AuthenticityTokenInput } from "remix-utils"
 
 import { useDisclosure } from "@ramble/shared"
 
@@ -6,7 +7,6 @@ import { Button, IconButton, Modal, Switch, Tooltip } from "~/components/ui"
 import { useFetcherSubmit } from "~/lib/hooks/useFetcherSubmit"
 import { usePreferences } from "~/lib/hooks/usePreferences"
 import { preferencesUrl } from "~/pages/api+/preferences"
-import { AuthenticityTokenInput } from "remix-utils"
 
 export function MapLayerControls() {
   const modalProps = useDisclosure()

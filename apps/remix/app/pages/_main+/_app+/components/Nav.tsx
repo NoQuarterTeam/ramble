@@ -1,6 +1,7 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Link, NavLink, useFetcher, useNavigate, useSubmit } from "@remix-run/react"
 import { Heart, LogOut, Menu, Moon, Plus, Settings, Sun, User } from "lucide-react"
+import { AuthenticityTokenInput } from "remix-utils"
 
 import { ClientOnly, createImageUrl, merge } from "@ramble/shared"
 
@@ -19,7 +20,6 @@ import {
 } from "~/components/ui"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { useTheme } from "~/lib/theme"
-import { AuthenticityTokenInput } from "remix-utils"
 
 export function Nav() {
   const user = useMaybeUser()
