@@ -1,31 +1,55 @@
 import * as React from "react"
 import type { DropzoneOptions, FileRejection } from "react-dropzone"
 import { useDropzone } from "react-dropzone"
+import { toast } from "sonner"
 
-import { useS3Upload } from "@ramble/shared"
-import { Spinner, useToast } from "@ramble/ui"
+import { Spinner } from "~/components/ui"
+import { useS3Upload } from "~/lib/hooks/useS3"
 
 interface Props {
-  onSubmit: (key: string) => Promise<unknown> | unknown
   children: React.ReactNode
   dropzoneOptions?: Omit<DropzoneOptions, "multiple" | "onDrop">
   className?: string
 }
 
-export function ImageUploader({ children, onSubmit, dropzoneOptions, className }: Props) {
-  const { toast } = useToast()
+type MultiSubmit = {
+  isMulti: true
+  onSubmit?: undefined
+  onMultiSubmit: (keys: string[]) => Promise<unknown> | unknown
+}
+
+type SingleSubmit = {
+  isMulti?: false
+  onMultiSubmit?: undefined
+  onSubmit: (key: string) => Promise<unknown> | unknown
+}
+
+export function ImageUploader({
+  children,
+  isMulti = false,
+  onSubmit,
+  onMultiSubmit,
+  dropzoneOptions,
+  className,
+}: Props & (MultiSubmit | SingleSubmit)) {
   const [upload, { isLoading }] = useS3Upload()
 
-  const handleSubmitImage = React.useCallback(
-    async (image: File) => {
+  const handleSubmitImages = React.useCallback(
+    async (images: File[]) => {
       try {
-        const uploadedFile = await upload(image)
-        await onSubmit(uploadedFile.fileKey)
+        if (isMulti) {
+          const keys = await Promise.all(images.map(upload))
+          await onMultiSubmit?.(keys)
+        } else {
+          if (!images[0]) return
+          const key = await upload(images[0])
+          await onSubmit?.(key)
+        }
       } catch {
-        toast({ variant: "destructive", title: "Error uploading image", description: "Please try again!" })
+        toast.error("Error uploading image", { description: "Please try again!" })
       }
     },
-    [onSubmit, upload, toast],
+    [onSubmit, upload, isMulti, onMultiSubmit],
   )
 
   const onDrop = React.useCallback(
@@ -33,34 +57,34 @@ export function ImageUploader({ children, onSubmit, dropzoneOptions, className }
       window.URL = window.URL || window.webkitURL
       if (rejectedFiles.length > 0) {
         const rejectedFile = rejectedFiles[0]
-        if (rejectedFile.errors[0]?.code.includes("file-too-large")) {
+        if (rejectedFile?.errors[0]?.code.includes("file-too-large")) {
           const description = `File too large, must be under ${
             (dropzoneOptions?.maxSize && `${dropzoneOptions.maxSize / 1000000}MB`) || "5MB"
           }`
-          toast({ variant: "destructive", title: "Invalid file", description })
+          toast.error("Invalid file", { description })
         } else {
           // TODO: add remaining error handlers
-          toast({ variant: "destructive", description: "Invalid file, please try another" })
+          toast.error("Invalid file", { description: "Please try another" })
         }
         return
       }
-      if (files.length === 0) return toast({ variant: "destructive", description: "No file, please add one" })
-      const image = files[0]
-      handleSubmitImage(image)
+      if (files.length === 0) return toast.error("No file added", { description: "Please add one" })
+
+      return handleSubmitImages(files)
     },
-    [toast, dropzoneOptions, handleSubmitImage],
+    [dropzoneOptions, handleSubmitImages],
   )
   const { getRootProps, getInputProps } = useDropzone({
     maxSize: 5000000, // 5MB
     ...dropzoneOptions,
     onDrop,
-    multiple: false,
+    multiple: isMulti,
   })
 
   return (
     <div {...getRootProps({ className })}>
       {isLoading ? (
-        <div className="flex h-full w-full items-center justify-center">
+        <div className="flex h-full w-full items-center justify-center p-2">
           <Spinner />
         </div>
       ) : (

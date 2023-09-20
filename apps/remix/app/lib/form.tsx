@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useActionData } from "react-router"
+import { useActionData } from "@remix-run/react"
 import { z } from "zod"
 
 import { badRequest } from "./remix.server"
+import { verifyCsrf } from "~/services/session/csrf.server.ts"
 
 export type FieldErrors<T> = {
   [Property in keyof T]: string[]
@@ -18,31 +19,34 @@ export type InvalidForm<Schema extends z.ZodType<unknown>> = {
 }
 
 export async function validateFormData<Schema extends z.ZodType<unknown>>(
-  init: FormData | Request,
+  request: Request,
   schema: Schema,
 ): Promise<ValidForm<Schema> | InvalidForm<Schema>> {
-  const maybeFormData = init instanceof FormData ? init : await init.formData()
-  const data = Object.fromEntries(maybeFormData)
+  await verifyCsrf(request)
+  const clonedRequest = request.clone()
+  const formData = await clonedRequest.formData()
+  const data = Object.fromEntries(formData)
   const validations = schema.safeParse(data)
   if (validations.success) return validations
   const fieldErrors = validations.error.flatten().fieldErrors as FieldErrors<Schema>
   return { fieldErrors, success: false }
 }
 
-export function formError<Schema extends z.ZodType<unknown>>(args: ActionData<Schema>) {
-  return badRequest(args)
+export function formError<Schema extends z.ZodType<unknown>>(args: Omit<ActionDataErrorResponse<Schema>, "success">) {
+  return badRequest({ ...args, success: false })
 }
 
 export type FormError<T> = { formError?: string; fieldErrors?: FieldErrors<T>; data?: Record<string, unknown> }
 
-export type ActionData<Schema extends z.ZodType<unknown>> = {
+export type ActionDataErrorResponse<Schema extends z.ZodType<unknown>> = {
+  success: false
   formError?: string
   fieldErrors?: FieldErrors<z.infer<Schema>>
   data?: z.infer<Schema>
 }
 
 export function useFormErrors<Schema extends z.ZodType<unknown>>() {
-  return useActionData() as Partial<ActionData<Schema>> | null
+  return useActionData() as Partial<ActionDataErrorResponse<Schema>> | null
 }
 
 export const NullableFormString = z.preprocess((v) => (v === "" ? null : v), z.string().nullish())
@@ -60,6 +64,12 @@ export const FormCheckbox = z
 
 export const FORM_ACTION = "_action"
 
-export function FormAction({ value }: { value: string }) {
+export function FormActionInput({ value }: { value: string }) {
   return <input type="hidden" name={FORM_ACTION} value={value} />
+}
+
+export async function getFormAction<T>(request: Request): Promise<T> {
+  const clonedRequest = request.clone()
+  const formData = await clonedRequest.formData()
+  return formData.get(FORM_ACTION) as T
 }

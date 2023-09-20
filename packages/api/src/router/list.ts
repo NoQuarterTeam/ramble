@@ -1,67 +1,78 @@
-import { z } from "zod"
-import { createTRPCRouter, protectedProcedure, publicProcedure, publicProfileProcedure } from "../trpc"
 import { TRPCError } from "@trpc/server"
-import { listSchema } from "../schemas/list"
+import { z } from "zod"
+
+import { listSchema } from "@ramble/shared"
+
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
+import { type SpotItemWithStats } from "@ramble/shared"
+import { publicSpotWhereClauseRaw } from "../shared/spot.server"
 
 export const listRouter = createTRPCRouter({
-  allByUser: publicProfileProcedure.query(async ({ ctx, input }) => {
-    return ctx.prisma.list.findMany({
-      orderBy: { createdAt: "desc" },
-      where: { creator: { username: input.username } },
-      take: 10,
-    })
-  }),
-  detail: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
-    const list = await ctx.prisma.list.findFirst({
-      where: { id: input.id },
-      select: {
-        id: true,
-        creatorId: true,
-        creator: { select: { isProfilePublic: true, username: true, firstName: true, lastName: true } },
-        name: true,
-        description: true,
-        listSpots: {
-          select: {
-            id: true,
-            spot: {
-              select: {
-                type: true,
-                reviews: { select: { rating: true } },
-                id: true,
-                name: true,
-                address: true,
-                description: true,
-                verifier: { select: { username: true, firstName: true, lastName: true, avatar: true } },
-                images: { take: 1 },
-              },
-            },
-          },
-        },
-      },
-    })
-    if (!list) throw new TRPCError({ code: "NOT_FOUND" })
-    if (!list.creator.isProfilePublic && (!ctx.user || ctx.user.id !== list.creatorId))
-      throw new TRPCError({ code: "UNAUTHORIZED" })
+  allByUser: publicProcedure
+    .input(z.object({ username: z.string(), showFollowing: z.boolean().optional() }))
+    .query(async ({ ctx, input }) => {
+      const currentUser = ctx.user?.username
+      const followers =
+        ctx.user &&
+        input.showFollowing &&
+        (await ctx.prisma.user.findUnique({ where: { id: ctx.user.id } }).following({ select: { id: true } }))
 
-    const formattedList = {
-      ...list,
-      listSpots: list.listSpots.map((listSpot) => ({
-        ...listSpot,
-        spot: {
-          ...listSpot.spot,
-          image: listSpot.spot.images[0]?.path,
-          rating:
-            listSpot.spot.reviews.length > 0
-              ? Math.round(listSpot.spot.reviews.reduce((acc, review) => acc + review.rating, 0) / listSpot.spot.reviews.length)
-              : null,
+      return ctx.prisma.list.findMany({
+        orderBy: { createdAt: "desc" },
+        where: {
+          creator: input.showFollowing && followers ? { id: { in: followers.map((f) => f.id) } } : { username: input.username },
+          isPrivate: !currentUser || currentUser !== input.username ? false : undefined,
         },
-      })),
-    }
-    return formattedList
+        include: input.showFollowing
+          ? { creator: { select: { avatar: true, avatarBlurHash: true, firstName: true, lastName: true } } }
+          : undefined,
+        take: 10,
+      })
+    }),
+  detail: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
+    const currentUser = ctx.user?.username
+    const [list, spots] = await Promise.all([
+      ctx.prisma.list.findFirst({
+        where: { id: input.id },
+        select: {
+          id: true,
+          creatorId: true,
+          isPrivate: true,
+          creator: { select: { username: true, firstName: true, lastName: true } },
+          name: true,
+          description: true,
+        },
+      }),
+      ctx.prisma.$queryRaw<Array<SpotItemWithStats>>`
+        SELECT 
+          Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
+          Spot.latitude, Spot.longitude,
+          (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image,
+          (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash,
+          (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
+        FROM
+          Spot
+        LEFT JOIN
+          Review ON Spot.id = Review.spotId
+        LEFT JOIN
+          ListSpot ON Spot.id = ListSpot.spotId
+        WHERE
+          ListSpot.listId = ${input.id} AND ${publicSpotWhereClauseRaw(ctx.user?.id)}
+        GROUP BY
+          Spot.id
+        ORDER BY
+          Spot.id
+      `,
+    ])
+    if (!list || (list.isPrivate && (!currentUser || currentUser !== list.creator.username)))
+      throw new TRPCError({ code: "NOT_FOUND" })
+
+    return { list, spots }
   }),
   allByUserWithSavedSpots: protectedProcedure.input(z.object({ spotId: z.string() })).query(async ({ ctx, input }) => {
     return ctx.prisma.list.findMany({
       where: { creatorId: ctx.user.id },
+      orderBy: { createdAt: "desc" },
       include: { listSpots: { where: { spotId: input.spotId } } },
       take: 10,
     })

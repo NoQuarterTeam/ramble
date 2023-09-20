@@ -4,6 +4,10 @@ import { cacheHeader } from "pretty-cache-header"
 
 // import { requireUser } from "~/services/auth/auth.server"
 
+export const config = {
+  runtime: "edge",
+}
+
 export const loader = async ({ request }: LoaderArgs) => {
   const url = new URL(request.url)
   const search = url.searchParams.get("search")
@@ -21,13 +25,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   }))
   return json(places || "Unknown address", {
     headers: {
-      "Cache-Control": cacheHeader({
-        public: true,
-        maxAge: "1hour",
-        sMaxage: "1hour",
-        staleWhileRevalidate: "1day",
-        staleIfError: "1day",
-      }),
+      "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }),
     },
   })
 }

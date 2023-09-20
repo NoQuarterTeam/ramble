@@ -1,15 +1,15 @@
 import colors = require("./colors");
-export const content: any[];
+export let content: any[];
 export namespace theme {
     namespace extend {
         export namespace spacing {
-            const full: string;
+            let full: string;
         }
         export namespace borderRadius {
-            const xs: string;
+            let xs: string;
         }
         export { colors };
     }
 }
-export const plugins: any[];
+export let plugins: any[];
 //# sourceMappingURL=index.d.ts.map

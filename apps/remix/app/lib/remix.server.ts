@@ -1,8 +1,7 @@
 import { json as remixJson, redirect as remixRedirect } from "@vercel/remix"
 
 import type { FlashMessage } from "~/services/session/flash.server"
-import { FlashType } from "~/services/session/flash.server"
-import { getFlashSession } from "~/services/session/flash.server"
+import { FlashType, getFlashSession } from "~/services/session/flash.server"
 
 export async function badRequest(
   data: unknown,
@@ -20,11 +19,7 @@ export async function badRequest(
   return remixJson(data, { status: 400, ...init, headers })
 }
 
-export async function json(
-  data: unknown,
-  request?: Request,
-  init?: ResponseInit & { flash?: FlashMessage & { type?: FlashType } },
-) {
+export async function json<T>(data: T, request?: Request, init?: ResponseInit & { flash?: FlashMessage & { type?: FlashType } }) {
   if (!request || !init) return remixJson(data, { status: 200, ...init })
   const { createFlash } = await getFlashSession(request)
   const headers = new Headers(init.headers)
@@ -36,7 +31,7 @@ export async function json(
   return remixJson(data, { status: 200, ...init, headers })
 }
 
-export const notFound = (data?: unknown) => remixJson(data, { status: 404 })
+export const notFound = (data?: BodyInit) => new Response(data || null, { status: 404, statusText: "Not Found" })
 
 export async function redirect(
   url: string,

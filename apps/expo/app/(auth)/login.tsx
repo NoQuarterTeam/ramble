@@ -1,21 +1,23 @@
 import { FormProvider } from "react-hook-form"
-import { KeyboardAvoidingView, ScrollView, TouchableOpacity } from "react-native"
+import { ScrollView, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
-import { Button } from "../../components/Button"
-import { FormError } from "../../components/FormError"
-import { FormInput } from "../../components/FormInput"
-import { ModalView } from "../../components/ModalView"
-import { Text } from "../../components/Text"
+import { Button } from "../../components/ui/Button"
+import { FormError } from "../../components/ui/FormError"
+import { FormInput } from "../../components/ui/FormInput"
+import { ModalView } from "../../components/ui/ModalView"
+import { Text } from "../../components/ui/Text"
 import { api, AUTH_TOKEN } from "../../lib/api"
 import { useForm } from "../../lib/hooks/useForm"
+import { useKeyboardController } from "../../lib/hooks/useKeyboardController"
 import { useRouter } from "../router"
 
 export function LoginScreen() {
+  useKeyboardController()
   const queryClient = api.useContext()
   const navigation = useRouter()
 
-  const form = useForm({ defaultValues: { email: "jack@noquarter.co", password: "password" } })
+  const form = useForm({ defaultValues: { email: "", password: "" } })
 
   const { mutate, isLoading, error } = api.auth.login.useMutation({
     onSuccess: async (data) => {
@@ -35,22 +37,28 @@ export function LoginScreen() {
   })
 
   return (
-    <ModalView title="Login">
-      <KeyboardAvoidingView>
-        <FormProvider {...form}>
-          <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+    <ModalView title="Login" onBack={() => navigation.navigate("AppLayout")}>
+      <FormProvider {...form}>
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1, paddingBottom: 100, justifyContent: "space-between" }}
+          showsVerticalScrollIndicator={false}
+        >
+          <View>
             <FormInput autoCapitalize="none" name="email" label="Email" error={error} />
             <FormInput autoCapitalize="none" name="password" secureTextEntry label="Password" error={error} />
             <Button className="mb-1" isLoading={isLoading} disabled={isLoading} onPress={onSubmit}>
               Login
             </Button>
             <FormError className="mb-1" error={error} />
-            <TouchableOpacity onPress={() => navigation.push("AuthLayout", { screen: "RegisterScreen" })}>
-              <Text className="text-lg">Register</Text>
-            </TouchableOpacity>
-          </ScrollView>
-        </FormProvider>
-      </KeyboardAvoidingView>
+          </View>
+          <View className="flex flex-row items-center justify-center">
+            <Text className="text-base">No account yet?</Text>
+            <Button className="px-1" variant="link" onPress={() => navigation.replace("RegisterScreen")}>
+              Register
+            </Button>
+          </View>
+        </ScrollView>
+      </FormProvider>
     </ModalView>
   )
 }

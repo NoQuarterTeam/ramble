@@ -1,11 +1,12 @@
-import { z } from "zod"
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
-import { reviewSchema } from "../schemas/review"
 import { TRPCError } from "@trpc/server"
+import { z } from "zod"
+
+import { reviewSchema } from "@ramble/shared"
+
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const reviewRouter = createTRPCRouter({
   detail: publicProcedure.input(z.object({ id: z.string() })).query(({ ctx, input }) => {
-    // TODO: check if user is public
     return ctx.prisma.review.findUnique({ where: { id: input.id }, include: { spot: true } })
   }),
   create: protectedProcedure.input(reviewSchema).mutation(async ({ ctx, input }) => {

@@ -6,11 +6,19 @@ import Supercluster from "supercluster"
 import { z } from "zod"
 import { CheckboxAsString, NumAsString } from "zodix"
 
+import { publicSpotWhereClause } from "@ramble/api"
 import type { SpotType } from "@ramble/database/types"
 
 import { db } from "~/lib/db.server"
+import { getUserSession } from "~/services/session/session.server"
+
+export const config = {
+  runtime: "edge",
+  regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
+}
 
 async function getMapClusters(request: Request) {
+  const { userId } = await getUserSession(request)
   const schema = z.object({
     zoom: NumAsString,
     minLat: NumAsString,
@@ -28,6 +36,7 @@ async function getMapClusters(request: Request) {
   const spots = await db.spot.findMany({
     select: { id: true, latitude: true, longitude: true, type: true },
     where: {
+      ...publicSpotWhereClause(userId),
       verifiedAt: isVerified ? { not: { equals: null } } : undefined,
       isPetFriendly: isPetFriendly ? { equals: true } : undefined,
       latitude: { gt: coords.minLat, lt: coords.maxLat },
@@ -62,13 +71,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   const spots = await getMapClusters(request)
   return json(spots, {
     headers: {
-      "Cache-Control": cacheHeader({
-        public: true,
-        maxAge: "1hour",
-        sMaxage: "1hour",
-        staleWhileRevalidate: "1day",
-        staleIfError: "1day",
-      }),
+      "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }),
     },
   })
 }

@@ -4,9 +4,9 @@ import { Star } from "lucide-react-native"
 
 import { type Review } from "@ramble/database/types"
 
-import { Button } from "../../../../../../components/Button"
-import { FormError } from "../../../../../../components/FormError"
-import { FormInput, FormInputError } from "../../../../../../components/FormInput"
+import { Button } from "../../../../../../components/ui/Button"
+import { FormError } from "../../../../../../components/ui/FormError"
+import { FormInput, FormInputError } from "../../../../../../components/ui/FormInput"
 import { type RouterInputs } from "../../../../../../lib/api"
 import { type ApiError } from "../../../../../../lib/hooks/useForm"
 
@@ -35,8 +35,9 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
   return (
     <FormProvider {...form}>
       <FormInput
-        className="mb-2 h-[100px]"
+        className="mb-2"
         name="description"
+        label="Be nice, be honest"
         placeholder="How was your stay? what did you like?"
         numberOfLines={4}
         multiline
@@ -55,9 +56,7 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
           </TouchableOpacity>
         ))}
       </View>
-      {props.error?.data?.zodError?.fieldErrors.rating?.map((error) => (
-        <FormInputError key={error} error={error} />
-      ))}
+      {props.error?.data?.zodError?.fieldErrors.rating?.map((error) => <FormInputError key={error} error={error} />)}
       <FormError className="mb-1" error={props.error} />
       <Button isLoading={props.isLoading} onPress={form.handleSubmit(props.review ? props.onUpdate : props.onCreate)}>
         Save

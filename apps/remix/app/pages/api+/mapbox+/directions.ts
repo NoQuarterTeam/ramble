@@ -1,10 +1,16 @@
+import booleanWithin from "@turf/boolean-point-in-polygon"
+import buffer from "@turf/buffer"
+import * as turf from "@turf/helpers"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
-import * as turf from "@turf/helpers"
-import buffer from "@turf/buffer"
-import booleanWithin from "@turf/boolean-point-in-polygon"
 import { cacheHeader } from "pretty-cache-header"
+
 import { db } from "~/lib/db.server"
+import { badRequest } from "~/lib/remix.server"
+
+export const config = {
+  runtime: "edge",
+}
 
 export const loader = async ({ request }: LoaderArgs) => {
   const url = new URL(request.url)
@@ -18,7 +24,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   )
 
   const jsonResponse = (await res.json()) as Directions
-
+  if (!jsonResponse.routes[0]) throw badRequest("Unknown address")
   const linestring = turf.lineString(jsonResponse.routes[0].geometry.coordinates)
   const buffered = buffer(linestring, 35, { units: "kilometers" })
   const spots = await db.spot.findMany({ select: { id: true, latitude: true, longitude: true } })
@@ -34,13 +40,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 
   return json({ directions, foundSpots } || "Unknown address", {
     headers: {
-      "Cache-Control": cacheHeader({
-        public: true,
-        maxAge: "1hour",
-        sMaxage: "1hour",
-        staleWhileRevalidate: "1day",
-        staleIfError: "1day",
-      }),
+      "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }),
     },
   })
 }

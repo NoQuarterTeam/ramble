@@ -1,13 +1,15 @@
 import { ScrollView } from "react-native"
 
-import { ModalView } from "../../../../../../components/ModalView"
-import { Text } from "../../../../../../components/Text"
-import { toast } from "../../../../../../components/Toast"
+import { ModalView } from "../../../../../../components/ui/ModalView"
+import { Text } from "../../../../../../components/ui/Text"
+import { toast } from "../../../../../../components/ui/Toast"
 import { api } from "../../../../../../lib/api"
+import { useKeyboardController } from "../../../../../../lib/hooks/useKeyboardController"
 import { useParams, useRouter } from "../../../../../router"
 import { ReviewForm } from "./ReviewForm"
 
 export function ReviewDetailScreen() {
+  useKeyboardController()
   const {
     params: { id },
   } = useParams<"ReviewDetailScreen">()

@@ -1,13 +1,14 @@
 import { View } from "react-native"
+import { FlashList } from "@shopify/flash-list"
 
-import { Spinner } from "../../../../components/Spinner"
 import { SpotItem } from "../../../../components/SpotItem"
-import { Text } from "../../../../components/Text"
+import { Spinner } from "../../../../components/ui/Spinner"
+import { Text } from "../../../../components/ui/Text"
 import { api } from "../../../../lib/api"
 import { useParams } from "../../../router"
 
-export function UsernameSpots() {
-  const { params } = useParams<"UsernameLayout">()
+export function UserSpots() {
+  const { params } = useParams<"UserScreen">()
   const { data: spots, isLoading } = api.spot.byUser.useQuery({ username: params.username })
   if (isLoading)
     return (
@@ -24,12 +25,17 @@ export function UsernameSpots() {
     )
 
   return (
-    <View className="space-y-1">
-      {spots.map((spot) => (
-        <View key={spot.id}>
-          <SpotItem spot={spot} />
-        </View>
-      ))}
+    <View className="min-h-full">
+      <FlashList
+        showsVerticalScrollIndicator={false}
+        estimatedItemSize={376}
+        ListEmptyComponent={<Text>No spots yet</Text>}
+        // onEndReachedThreshold={0.8}
+        // onEndReached={handleLoadMore}
+        data={spots}
+        ItemSeparatorComponent={() => <View className="h-6" />}
+        renderItem={({ item }) => <SpotItem spot={item} />}
+      />
     </View>
   )
 }

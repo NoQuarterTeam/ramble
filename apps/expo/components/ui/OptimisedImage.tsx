@@ -1,0 +1,42 @@
+import { Image, type ImageProps } from "expo-image"
+
+import { srcWhitelist } from "@ramble/shared"
+
+import { WEB_URL } from "../../lib/config"
+
+const blurhash =
+  "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj["
+
+type Fit = "cover" | "contain" | "fill" | "inside" | "outside"
+
+type Options = {
+  width: number
+  height?: number
+  quality?: number
+  fit?: Fit
+}
+
+interface Props extends ImageProps, Options {
+  source: {
+    uri: string | undefined
+  }
+}
+
+export function OptimizedImage({ source, height, width, quality, fit, ...props }: Props) {
+  const newSrc = transformImageSrc(source.uri, { height, width, quality, fit })
+  return <Image {...props} placeholder={props.placeholder || blurhash} source={{ uri: newSrc }} />
+}
+
+export function transformImageSrc(
+  src: string | undefined | null,
+  options: { width: number; height?: number; quality?: number; fit?: Fit },
+) {
+  if (!src) return undefined
+  if (!srcWhitelist.some((s) => src.startsWith(s))) return src
+  const optionsString = Object.entries(options).reduce((acc, [key, value]) => {
+    if (value === undefined) return acc
+    return acc + `&${key}=${value}`
+  }, "")
+
+  return WEB_URL + "/api/image/?src=" + encodeURIComponent(src) + optionsString
+}

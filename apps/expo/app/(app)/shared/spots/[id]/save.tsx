@@ -1,21 +1,26 @@
 import { TouchableOpacity, useColorScheme, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
-import { Heart } from "lucide-react-native"
+import { Heart, Lock } from "lucide-react-native"
 
 import { LoginPlaceholder } from "../../../../../components/LoginPlaceholder"
-import { ModalView } from "../../../../../components/ModalView"
-import { Text } from "../../../../../components/Text"
+import { ModalView } from "../../../../../components/ui/ModalView"
+import { Text } from "../../../../../components/ui/Text"
 import { api, type RouterOutputs } from "../../../../../lib/api"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { useParams } from "../../../../router"
 
-export function SaveScreen() {
+export function SaveSpotScreen() {
   const {
     params: { id },
-  } = useParams<"SaveScreen">()
+  } = useParams<"SaveSpotScreen">()
   const { me } = useMe()
   const { data: lists, isLoading } = api.list.allByUserWithSavedSpots.useQuery({ spotId: id }, { enabled: !!me })
-  if (!me) return <LoginPlaceholder title="Lists" text="Log in to start saving spots" />
+  if (!me)
+    return (
+      <ModalView title="Save to list">
+        <LoginPlaceholder text="Log in to start saving spots" />
+      </ModalView>
+    )
   return (
     <ModalView title="Save to list">
       {isLoading ? null : (
@@ -26,7 +31,7 @@ export function SaveScreen() {
           ListEmptyComponent={<Text>No lists yet</Text>}
           data={lists || []}
           ItemSeparatorComponent={() => <View className="h-1" />}
-          renderItem={({ item }) => <ListItem spotId={id} list={item} />}
+          renderItem={({ item }) => <SaveableListItem spotId={id} list={item} />}
         />
       )}
     </ModalView>
@@ -38,7 +43,7 @@ interface Props {
   list: RouterOutputs["list"]["allByUserWithSavedSpots"][number]
 }
 
-export function ListItem({ list, spotId }: Props) {
+function SaveableListItem({ list, spotId }: Props) {
   const utils = api.useContext()
   const { mutate } = api.list.saveToList.useMutation({
     onSuccess: () => {
@@ -57,10 +62,13 @@ export function ListItem({ list, spotId }: Props) {
     <TouchableOpacity
       onPress={handleToggle}
       activeOpacity={0.8}
-      className="flex flex-row items-center justify-between rounded-lg border border-gray-100 p-4 dark:border-gray-700"
+      className="rounded-xs flex flex-row items-center justify-between border border-gray-100 p-4 dark:border-gray-700"
     >
       <View>
-        <Text className="text-xl">{list.name}</Text>
+        <View className="flex flex-row items-center space-x-2">
+          {list.isPrivate && <Lock className="text-black dark:text-white" size={20} />}
+          <Text className="text-xl">{list.name}</Text>
+        </View>
         <Text className="text-base">{list.description}</Text>
       </View>
       <Heart size={20} className="text-black dark:text-white" fill={isSaved ? (isDark ? "white" : "black") : undefined} />

@@ -1,28 +1,26 @@
 import { FormProvider } from "react-hook-form"
-import { KeyboardAvoidingView, ScrollView, TouchableOpacity } from "react-native"
+import { ScrollView, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
-import { Button } from "../../components/Button"
-import { FormError } from "../../components/FormError"
-import { FormInput } from "../../components/FormInput"
-import { ModalView } from "../../components/ModalView"
-import { Text } from "../../components/Text"
+import { Button } from "../../components/ui/Button"
+import { FormError } from "../../components/ui/FormError"
+import { FormInput } from "../../components/ui/FormInput"
+import { ModalView } from "../../components/ui/ModalView"
+import { toast } from "../../components/ui/Toast"
 import { api, AUTH_TOKEN } from "../../lib/api"
 import { useForm } from "../../lib/hooks/useForm"
+import { useKeyboardController } from "../../lib/hooks/useKeyboardController"
 import { useRouter } from "../router"
 
 export function RegisterScreen() {
+  useKeyboardController()
   const queryClient = api.useContext()
   const navigation = useRouter()
   const { mutate, error, isLoading } = api.auth.register.useMutation({
     onSuccess: async (data) => {
       await AsyncStorage.setItem(AUTH_TOKEN, data.token)
       queryClient.user.me.setData(undefined, data.user)
-      if (navigation.canGoBack()) {
-        navigation.goBack()
-      } else {
-        navigation.push("AppLayout")
-      }
+      navigation.replace("OnboardingLayout")
     },
   })
   const form = useForm({
@@ -30,30 +28,37 @@ export function RegisterScreen() {
   })
 
   const onSubmit = form.handleSubmit(async (data) => {
+    if (data.username.trim().includes(" ")) return toast({ title: "Username can not contain empty spaces" })
     await AsyncStorage.removeItem(AUTH_TOKEN).catch()
     mutate(data)
   })
 
   return (
-    <ModalView title="Register">
-      <KeyboardAvoidingView>
-        <FormProvider {...form}>
-          <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
-            <FormInput name="email" label="Email" error={error} />
-            <FormInput name="password" secureTextEntry label="Password" error={error} />
-            <FormInput name="username" label="Username" error={error} />
+    <ModalView title="Register" onBack={() => navigation.navigate("AppLayout")}>
+      <FormProvider {...form}>
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1, paddingBottom: 100, justifyContent: "space-between" }}
+          showsVerticalScrollIndicator={false}
+        >
+          <View>
+            <FormInput autoCapitalize="none" name="email" label="Email" error={error} />
+            <FormInput autoCapitalize="none" name="password" secureTextEntry label="Password" error={error} />
+            <FormInput autoCapitalize="none" name="username" label="Username" error={error} />
             <FormInput name="firstName" label="First name" error={error} />
             <FormInput name="lastName" label="Last name" error={error} />
             <Button className="mb-1" isLoading={isLoading} onPress={onSubmit}>
               Register
             </Button>
             <FormError className="mb-1" error={error} />
-            <TouchableOpacity onPress={() => navigation.push("AuthLayout", { screen: "LoginScreen" })}>
-              <Text className="text-lg">Login</Text>
-            </TouchableOpacity>
-          </ScrollView>
-        </FormProvider>
-      </KeyboardAvoidingView>
+          </View>
+
+          <View className="flex flex-row items-center justify-center">
+            <Button className="px-1" variant="link" onPress={() => navigation.replace("LoginScreen")}>
+              Login
+            </Button>
+          </View>
+        </ScrollView>
+      </FormProvider>
     </ModalView>
   )
 }

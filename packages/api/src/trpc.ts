@@ -2,7 +2,7 @@ import { initTRPC, TRPCError } from "@trpc/server"
 import { type inferAsyncReturnType } from "@trpc/server"
 import type * as trpcFetch from "@trpc/server/adapters/fetch"
 import superjson from "superjson"
-import { z, ZodError } from "zod"
+import { ZodError } from "zod"
 
 import { prisma } from "@ramble/database"
 import { type User } from "@ramble/database/types"
@@ -50,17 +50,3 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
 })
 
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed)
-
-export const publicProfileProcedure = publicProcedure
-  .input(z.object({ username: z.string() }))
-  .use(async ({ ctx, next, input }) => {
-    const currentUser = ctx.user
-    if (!input) throw new TRPCError({ code: "BAD_REQUEST" })
-    const user = await ctx.prisma.user.findUnique({
-      where: { username: input.username },
-      select: { isProfilePublic: true, id: true },
-    })
-    if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
-    if (!user.isProfilePublic && (!currentUser || currentUser.id !== user.id)) throw new TRPCError({ code: "UNAUTHORIZED" })
-    return next({ ctx: { publicUser: user } })
-  })

@@ -6,6 +6,7 @@ module.exports = {
     fontFamily: {
       300: ["poppins300"],
       400: ["poppins400"],
+      "400-italic": ["poppins400Italic"],
       500: ["poppins500"],
       600: ["poppins600"],
       700: ["poppins700"],

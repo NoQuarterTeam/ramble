@@ -2,7 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --background: #fffefe;
+  --border: theme(colors.gray.100);
+}
+
+.dark {
+  --background: #241c17;
+  --border: theme(colors.gray.700);
+}
+
 @layer base {
+  * {
+    @apply border-border;
+  }
   html {
     @apply font-sans;
   }
@@ -12,29 +25,45 @@
   h4,
   h5,
   h6 {
-    @apply font-serif;
-    @apply font-medium;
+    @apply font-serif font-medium;
   }
 
   hr {
-    @apply border-gray-100 dark:border-gray-600;
+    @apply border;
   }
   body {
-    @apply text-black dark:text-white;
+    @apply bg-background text-black dark:text-white;
   }
 }
 
-@layer components {
-  .stack {
-    @apply space-y-2;
-  }
-  .hstack {
-    @apply flex flex-row items-center space-x-2;
-  }
-  .vstack {
-    @apply flex flex-col items-center space-y-2;
-  }
-  .center {
-    @apply flex items-center justify-center;
-  }
+/* Make clicks pass-through */
+#nprogress {
+  pointer-events: none;
+}
+
+#nprogress .bar {
+  @apply bg-primary-500;
+  position: fixed;
+  z-index: 1031;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+}
+
+/* Fancy blur effect */
+#nprogress .peg {
+  display: block;
+  position: absolute;
+  right: 0px;
+  width: 100px;
+  height: 100%;
+  opacity: 1;
+  box-shadow:
+    0 0 10px theme(colors.primary.700),
+    0 0 5px theme(colors.primary.700);
+  opacity: 1;
+  -webkit-transform: rotate(3deg) translate(0px, -4px);
+  -ms-transform: rotate(3deg) translate(0px, -4px);
+  transform: rotate(3deg) translate(0px, -4px);
 }

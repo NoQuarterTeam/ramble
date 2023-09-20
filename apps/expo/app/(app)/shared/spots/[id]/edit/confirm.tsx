@@ -1,0 +1,102 @@
+import * as React from "react"
+import { ScrollView, View } from "react-native"
+import { Image } from "expo-image"
+import { Check } from "lucide-react-native"
+
+import { AMENITIES, createImageUrl } from "@ramble/shared"
+
+import { Button } from "../../../../../../components/ui/Button"
+import { Text } from "../../../../../../components/ui/Text"
+import { toast } from "../../../../../../components/ui/Toast"
+import { api } from "../../../../../../lib/api"
+import { useS3Upload } from "../../../../../../lib/hooks/useS3"
+import { SPOTS } from "../../../../../../lib/static/spots"
+import { useParams, useRouter } from "../../../../../router"
+import { EditSpotModalView } from "./EditSpotModalView"
+
+export function EditSpotConfirmScreen() {
+  const { params } = useParams<"EditSpotConfirmScreen">()
+  const router = useRouter()
+  const Icon = SPOTS[params.type].Icon
+
+  const utils = api.useContext()
+  const {
+    mutate,
+    isLoading: updateLoading,
+    error,
+  } = api.spot.update.useMutation({
+    onSuccess: (data) => {
+      utils.spot.list.refetch({ skip: 0, sort: "latest" })
+      utils.spot.detail.refetch({ id: data.id })
+      router.navigate("AppLayout")
+      router.navigate("SpotDetailScreen", { id: data.id })
+      toast({ title: "Spot updated!" })
+    },
+    onError: () => {
+      setLoading(false)
+    },
+  })
+
+  const [isLoading, setLoading] = React.useState(false)
+  const [upload] = useS3Upload()
+
+  const handleCreateSpot = async () => {
+    // upload images
+    setLoading(true)
+    const imagesToUpload: string[] = []
+    const existingImages: string[] = []
+    for (const image of params.images) {
+      if (image.startsWith("file://")) imagesToUpload.push(image)
+      else existingImages.push(image)
+    }
+    const newImageKeys = await Promise.all(imagesToUpload.map((i) => upload(i)))
+    mutate({
+      id: params.id,
+      description: params.description,
+      name: params.name,
+      latitude: params.latitude,
+      longitude: params.longitude,
+      type: params.type,
+      images: [...newImageKeys, ...existingImages].map((i) => ({ path: i })),
+      amenities: params.amenities,
+      isPetFriendly: params.isPetFriendly,
+    })
+  }
+
+  return (
+    <EditSpotModalView title="Confirm">
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}>
+        <View className="space-y-2">
+          <Icon className="text-black dark:text-white" />
+          <Text>{params.name}</Text>
+          <Text>{params.description}</Text>
+          {params.isPetFriendly && <Text>Pet friendly</Text>}
+          {params.amenities &&
+            Object.keys(params.amenities).map((key) => <Text key={key}>{AMENITIES[key as keyof typeof AMENITIES]}</Text>)}
+          <View className="flex flex-row flex-wrap">
+            {params.images.map((image, i) => (
+              <View key={i} className="w-1/3 p-1">
+                <Image
+                  className="rounded-xs h-[100px] w-full bg-gray-50 object-cover dark:bg-gray-700"
+                  source={{ uri: image.startsWith("file://") ? image : createImageUrl(image) }}
+                />
+              </View>
+            ))}
+          </View>
+        </View>
+      </ScrollView>
+
+      <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
+        {error && <Text className="text-red-500">{error.message}</Text>}
+        <Button
+          isLoading={updateLoading || isLoading}
+          leftIcon={<Check size={20} className="text-white dark:text-black" />}
+          className="rounded-full"
+          onPress={handleCreateSpot}
+        >
+          Update
+        </Button>
+      </View>
+    </EditSpotModalView>
+  )
+}

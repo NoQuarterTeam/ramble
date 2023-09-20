@@ -2,15 +2,16 @@
 import * as React from "react"
 import type { FormProps as RemixFormProps } from "@remix-run/react"
 import { Form as RemixForm, useNavigation } from "@remix-run/react"
-import { Trash } from "lucide-react"
+import { X } from "lucide-react"
 
 import { createImageUrl, merge } from "@ramble/shared"
-import type { InputStyleProps } from "@ramble/ui"
-import { Button, type ButtonProps, IconButton, Input, type InputProps, inputStyles } from "@ramble/ui"
 
+import { type ButtonProps, type InputProps, type InputStyleProps } from "~/components/ui"
+import { Button, IconButton, Input, inputStyles } from "~/components/ui"
 import { useFormErrors } from "~/lib/form"
 
 import { ImageUploader } from "./ImageUploader"
+import { AuthenticityTokenInput } from "remix-utils"
 
 export const Form = React.forwardRef(function _Form(props: RemixFormProps, ref: React.ForwardedRef<HTMLFormElement> | null) {
   const form = useFormErrors()
@@ -23,6 +24,7 @@ export const Form = React.forwardRef(function _Form(props: RemixFormProps, ref: 
       ref={ref}
       {...props}
     >
+      <AuthenticityTokenInput />
       {props.children}
     </RemixForm>
   )
@@ -97,11 +99,7 @@ export const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(func
       {typeof fieldErrors === "string" ? (
         <FormFieldError>{fieldErrors}</FormFieldError>
       ) : fieldErrors?.length ? (
-        <ul id={props.name + "-error"}>
-          {fieldErrors?.map((error, i) => (
-            <FormFieldError key={i}>{error}</FormFieldError>
-          ))}
-        </ul>
+        <ul id={props.name + "-error"}>{fieldErrors?.map((error, i) => <FormFieldError key={i}>{error}</FormFieldError>)}</ul>
       ) : null}
     </div>
   )
@@ -141,11 +139,7 @@ export const InlineFormField = React.forwardRef<HTMLInputElement, FormFieldProps
       {typeof fieldErrors === "string" ? (
         <FormFieldError>{fieldErrors}</FormFieldError>
       ) : fieldErrors?.length ? (
-        <ul id={props.name + "-error"}>
-          {fieldErrors?.map((error, i) => (
-            <FormFieldError key={i}>{error}</FormFieldError>
-          ))}
-        </ul>
+        <ul id={props.name + "-error"}>{fieldErrors?.map((error, i) => <FormFieldError key={i}>{error}</FormFieldError>)}</ul>
       ) : null}
     </div>
   )
@@ -202,9 +196,11 @@ export function ImageField(props: ImageFieldProps) {
         </ImageUploader>
         {props.onRemove && image && (
           <IconButton
-            className="absolute right-2 top-2"
+            variant="secondary"
+            size="xs"
+            className="absolute right-1 top-1"
             aria-label="remove image"
-            icon={<Trash className="sq-3" />}
+            icon={<X className="sq-3" />}
             onClick={props.onRemove}
           />
         )}
@@ -213,11 +209,7 @@ export function ImageField(props: ImageFieldProps) {
       {typeof fieldErrors === "string" ? (
         <FormFieldError>{fieldErrors}</FormFieldError>
       ) : fieldErrors?.length ? (
-        <ul id={props.name + "-error"}>
-          {fieldErrors?.map((error, i) => (
-            <FormFieldError key={i}>{error}</FormFieldError>
-          ))}
-        </ul>
+        <ul id={props.name + "-error"}>{fieldErrors?.map((error, i) => <FormFieldError key={i}>{error}</FormFieldError>)}</ul>
       ) : null}
     </div>
   )

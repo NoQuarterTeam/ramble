@@ -12,6 +12,7 @@
     "isolatedModules": true,
     "moduleResolution": "node",
     "noUnusedLocals": false,
+    "noUncheckedIndexedAccess": true,
     "noUnusedParameters": false,
     "preserveWatchOutput": true,
     "experimentalDecorators": true,

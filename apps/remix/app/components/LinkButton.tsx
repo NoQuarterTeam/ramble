@@ -1,8 +1,9 @@
-import { Link, type LinkProps } from "@remix-run/react"
 import * as React from "react"
+import { Link, type LinkProps } from "@remix-run/react"
 
 import { merge } from "@ramble/shared"
-import { Spinner, buttonSizeStyles, buttonStyles, type ButtonStyleProps } from "@ramble/ui"
+
+import { buttonSizeStyles, type ButtonStyleProps, buttonStyles, Spinner } from "~/components/ui"
 
 interface LinkButtonProps extends ButtonStyleProps, LinkProps {
   isLoading?: boolean
@@ -17,14 +18,8 @@ export const LinkButton = React.forwardRef<HTMLAnchorElement, LinkButtonProps>(f
   return (
     <Link
       ref={ref}
-      style={{ pointerEvents: disabled ? "none" : undefined }}
       {...props}
-      className={merge(
-        buttonStyles({ size, variant, disabled }),
-        buttonSizeStyles({ size }),
-        props.className,
-        disabled && "cursor-not-allowed",
-      )}
+      className={merge(buttonStyles({ size, variant, disabled }), buttonSizeStyles({ size }), props.className)}
     >
       {isLoading ? (
         <div className="center absolute inset-0">

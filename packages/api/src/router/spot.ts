@@ -1,8 +1,15 @@
-import { z } from "zod"
-import { createTRPCRouter, publicProcedure, publicProfileProcedure } from "../trpc"
-import type { Spot, SpotImage, SpotType } from "@ramble/database/types"
-import Supercluster from "supercluster"
 import { TRPCError } from "@trpc/server"
+import Supercluster from "supercluster"
+import { z } from "zod"
+
+import { Prisma, SpotType } from "@ramble/database/types"
+import { SpotItemWithStats, spotAmenitiesSchema, spotSchemaWithoutType } from "@ramble/shared"
+
+import { generateBlurHash } from "../services/generateBlurHash.server"
+import { geocodeCoords } from "../services/geocode.server"
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
+import { publicSpotWhereClause, publicSpotWhereClauseRaw } from "../shared/spot.server"
+import dayjs from "dayjs"
 
 export const spotRouter = createTRPCRouter({
   clusters: publicProcedure
@@ -23,6 +30,7 @@ export const spotRouter = createTRPCRouter({
       const spots = await ctx.prisma.spot.findMany({
         select: { id: true, latitude: true, longitude: true, type: true },
         where: {
+          ...publicSpotWhereClause(ctx.user?.id),
           verifiedAt: isVerified ? { not: { equals: null } } : undefined,
           isPetFriendly: isPetFriendly ? { equals: true } : undefined,
           latitude: { gt: coords.minLat, lt: coords.maxLat },
@@ -48,21 +56,59 @@ export const spotRouter = createTRPCRouter({
       )
       return clusters.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], zoom || 5)
     }),
-  latest: publicProcedure.query(
-    async ({ ctx }) =>
-      ctx.prisma.$queryRaw<Array<Pick<Spot, "id" | "name" | "address"> & { rating?: number; image?: SpotImage["path"] | null }>>`
-        SELECT Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating, (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image
-        FROM Spot
-        LEFT JOIN Review ON Spot.id = Review.spotId
-        GROUP BY Spot.id
-        ORDER BY Spot.createdAt DESC, Spot.id
+  verify: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
+    const spot = await ctx.prisma.spot.findUnique({ where: { id: input.id } })
+    if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
+    if (spot.verifiedAt) throw new TRPCError({ code: "BAD_REQUEST", message: "Already verified" })
+    return ctx.prisma.spot.update({
+      where: { id: input.id },
+      data: { verifiedAt: new Date(), verifier: { connect: { id: ctx.user.id } } },
+    })
+  }),
+  delete: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
+    const spot = await ctx.prisma.spot.findUnique({ where: { id: input.id } })
+    if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
+    return ctx.prisma.spot.update({ where: { id: input.id }, data: { deletedAt: new Date() } })
+  }),
+  list: publicProcedure
+    .input(z.object({ skip: z.number().optional(), sort: z.enum(["latest", "rated", "saved"]).optional() }))
+    .query(async ({ ctx, input }) => {
+      const sort = input.sort || "latest"
+      const ORDER_BY = Prisma.sql // prepared orderBy
+      `ORDER BY
+        ${
+          sort === "latest"
+            ? Prisma.sql`Spot.createdAt DESC, Spot.id`
+            : sort === "saved"
+            ? Prisma.sql`savedCount DESC, Spot.id`
+            : Prisma.sql`AVG(Review.rating) DESC, Spot.id`
+        }
+      `
+      return ctx.prisma.$queryRaw<Array<SpotItemWithStats>>`
+        SELECT
+          Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
+          (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image,
+          (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash,
+          (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
+        FROM
+          Spot
+        LEFT JOIN
+          Review ON Spot.id = Review.spotId
+        LEFT JOIN
+          ListSpot ON Spot.id = ListSpot.spotId
+        WHERE
+        ${publicSpotWhereClauseRaw(ctx.user?.id)}
+        GROUP BY
+          Spot.id
+        ${ORDER_BY}
         LIMIT 20
-      `,
-  ),
+        OFFSET ${input.skip || 0}
+      `
+    }),
   mapPreview: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
     const spot = await ctx.prisma.spot.findUnique({
-      where: { id: input.id },
-      include: { verifier: true, _count: { select: { reviews: true } }, images: true },
+      where: { id: input.id, ...publicSpotWhereClause(ctx.user?.id) },
+      include: { verifier: true, _count: { select: { listSpots: true, reviews: true } }, images: true },
     })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
     const rating = await ctx.prisma.review.aggregate({ where: { spotId: input.id }, _avg: { rating: true } })
@@ -70,29 +116,111 @@ export const spotRouter = createTRPCRouter({
   }),
   detail: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
     const spot = await ctx.prisma.spot.findUnique({
-      where: { id: input.id },
+      where: { id: input.id, ...publicSpotWhereClause(ctx.user?.id) },
       include: {
         verifier: true,
-        _count: { select: { reviews: true } },
+        creator: true,
+        _count: { select: { reviews: true, listSpots: true } },
         reviews: { take: 5, include: { user: true }, orderBy: { createdAt: "desc" } },
         images: true,
-        spotLists: ctx.user ? { where: { list: { creatorId: ctx.user.id } } } : undefined,
+        amenities: true,
+        listSpots: ctx.user ? { where: { list: { creatorId: ctx.user.id } } } : undefined,
       },
     })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
     const rating = await ctx.prisma.review.aggregate({ where: { spotId: input.id }, _avg: { rating: true } })
     return { ...spot, rating }
   }),
-  byUser: publicProfileProcedure.query(async ({ ctx, input }) => {
-    return ctx.prisma.$queryRaw<
-      Array<Pick<Spot, "id" | "name" | "address"> & { rating?: number; image?: SpotImage["path"] | null }>
-    >`
-      SELECT Spot.id, Spot.name, Spot.address, AVG(Review.rating) as rating, (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image
-      FROM Spot
-      LEFT JOIN Review ON Spot.id = Review.spotId
-      WHERE Spot.creatorId = (SELECT id FROM User WHERE username = ${input.username})
-      GROUP BY Spot.id
-      ORDER BY Spot.createdAt DESC, Spot.id
-      LIMIT 20`
+  byUser: publicProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {
+    const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })
+    if (!user) throw new TRPCError({ code: "NOT_FOUND" })
+    const res: Array<SpotItemWithStats> = await ctx.prisma.$queryRaw`
+      SELECT
+        Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
+        (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image, 
+        (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash
+      FROM
+        Spot
+      LEFT JOIN
+        Review ON Spot.id = Review.spotId
+      WHERE
+        Spot.creatorId = ${user.id} AND ${publicSpotWhereClauseRaw(user.id)}
+      GROUP BY
+        Spot.id
+      ORDER BY
+        Spot.createdAt DESC, Spot.id
+      LIMIT 20
+    `
+    return res
   }),
+  create: protectedProcedure
+    .input(
+      spotSchemaWithoutType.extend({
+        type: z.nativeEnum(SpotType),
+        images: z.array(z.object({ path: z.string() })),
+        amenities: spotAmenitiesSchema.optional(),
+        shouldPublishLater: z.boolean().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { shouldPublishLater } = input
+      const amenities = input.amenities
+      const address = await geocodeCoords({ latitude: input.latitude, longitude: input.longitude })
+      const imageData = await Promise.all(
+        input.images.map(async ({ path }) => {
+          const blurHash = await generateBlurHash(path)
+          return { path, blurHash, creator: { connect: { id: ctx.user.id } } }
+        }),
+      )
+      const spot = await ctx.prisma.spot.create({
+        data: {
+          ...input,
+          publishedAt: shouldPublishLater ? dayjs().add(2, "weeks").toDate() : undefined,
+          address: address || "Unknown address",
+          creator: { connect: { id: ctx.user.id } },
+          verifiedAt: ctx.user.role === "GUIDE" ? new Date() : null,
+          verifier: ctx.user.role === "GUIDE" ? { connect: { id: ctx.user.id } } : undefined,
+          images: { create: imageData },
+          amenities: amenities ? { create: amenities } : undefined,
+        },
+      })
+      return spot
+    }),
+  update: protectedProcedure
+    .input(
+      spotSchemaWithoutType.extend({
+        id: z.string(),
+        type: z.nativeEnum(SpotType),
+        images: z.array(z.object({ path: z.string() })),
+        amenities: spotAmenitiesSchema.optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, ...data } = input
+      const spot = await ctx.prisma.spot.findUnique({ where: { id }, include: { images: true, amenities: true } })
+      if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
+      const amenities = data.amenities
+      const address = await geocodeCoords({ latitude: data.latitude, longitude: data.longitude })
+
+      const imagesToDelete = spot.images.filter((image) => !data.images.find((i) => i.path === image.path))
+      const imagesToCreate = data.images.filter((image) => !spot.images.find((i) => i.path === image.path))
+
+      const imageData = await Promise.all(
+        imagesToCreate.map(async ({ path }) => {
+          const blurHash = await generateBlurHash(path)
+          return { path, blurHash, creator: { connect: { id: ctx.user.id } } }
+        }),
+      )
+      return ctx.prisma.spot.update({
+        where: { id },
+        data: {
+          ...data,
+          address: address || "Unknown address",
+          images: { create: imageData, delete: imagesToDelete },
+          amenities: amenities
+            ? { update: spot.amenities ? amenities : undefined, create: spot.amenities ? undefined : amenities }
+            : { delete: spot.amenities ? true : undefined },
+        },
+      })
+    }),
 })

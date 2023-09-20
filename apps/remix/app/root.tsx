@@ -1,14 +1,17 @@
-import poppins300 from "@fontsource/poppins/300.css"
-import poppins400 from "@fontsource/poppins/400.css"
-import poppins500 from "@fontsource/poppins/500.css"
-import poppins600 from "@fontsource/poppins/600.css"
-import poppins700 from "@fontsource/poppins/700.css"
-import poppins800 from "@fontsource/poppins/800.css"
-import poppins900 from "@fontsource/poppins/900.css"
-import ribeyeMarrow from "@fontsource/ribeye-marrow/400.css"
+import "@fontsource/urbanist/600.css"
+import "@fontsource/poppins/300.css"
+import "@fontsource/poppins/400.css"
+import "@fontsource/poppins/500.css"
+import "@fontsource/poppins/600.css"
+import "@fontsource/poppins/700.css"
+import "@fontsource/poppins/800.css"
+import "@fontsource/poppins/900.css"
+import "~/styles/app.css"
+
+import * as React from "react"
 import * as Tooltip from "@radix-ui/react-tooltip"
+import { cssBundleHref } from "@remix-run/css-bundle"
 import type { ShouldRevalidateFunction } from "@remix-run/react"
-import { ScrollRestoration } from "@remix-run/react"
 import {
   isRouteErrorResponse,
   Links,
@@ -16,86 +19,101 @@ import {
   Meta,
   Outlet,
   Scripts,
+  ScrollRestoration,
+  useFetchers,
   useLoaderData,
   useMatches,
+  useNavigation,
   useRouteError,
 } from "@remix-run/react"
+import { Analytics } from "@vercel/analytics/react"
 import type { LinksFunction, LoaderArgs, SerializeFrom, V2_MetaFunction } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { Frown } from "lucide-react"
+import NProgress from "nprogress"
 
 import { join } from "@ramble/shared"
-import { Toaster } from "@ramble/ui"
 
-import appStyles from "~/styles/app.css"
+import { Toaster } from "~/components/ui"
 
-import { FlashMessage } from "./components/FlashMessage"
 import { LinkButton } from "./components/LinkButton"
 import { FULL_WEB_URL } from "./lib/config.server"
 import { type Theme } from "./lib/theme"
-import { Nav } from "./pages/_app+/components/Nav"
+import type { Preferences } from "./pages/api+/preferences"
+import { defaultPreferences, preferencesCookies } from "./pages/api+/preferences"
 import { getMaybeUser } from "./services/auth/auth.server"
 import { getFlashSession } from "./services/session/flash.server"
 import { getThemeSession } from "./services/session/theme.server"
+import { AuthenticityTokenProvider, promiseHash } from "remix-utils"
+import { getCsrfSession } from "./services/session/csrf.server.ts"
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "Ramble" }, { name: "description", content: "Created by No Quarter" }]
 }
 
 export const links: LinksFunction = () => {
-  return [
-    { rel: "stylesheet", href: poppins300 },
-    { rel: "stylesheet", href: poppins400 },
-    { rel: "stylesheet", href: poppins500 },
-    { rel: "stylesheet", href: poppins600 },
-    { rel: "stylesheet", href: poppins700 },
-    { rel: "stylesheet", href: poppins800 },
-    { rel: "stylesheet", href: poppins900 },
-    { rel: "stylesheet", href: ribeyeMarrow },
-    { rel: "stylesheet", href: appStyles },
-  ]
+  return cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []
 }
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const { flash, commit } = await getFlashSession(request)
-  const { getTheme, commit: commitTheme } = await getThemeSession(request)
-  const user = await getMaybeUser(request)
+  const cookieHeader = request.headers.get("Cookie")
+
+  const { flashSession, themeSession, csrfSession, user, preferences } = await promiseHash({
+    flashSession: getFlashSession(request),
+    themeSession: getThemeSession(request),
+    csrfSession: getCsrfSession(request),
+    user: getMaybeUser(request),
+    preferences: preferencesCookies.parse(cookieHeader) as Promise<Preferences>,
+  })
   return json(
     {
       user,
-      flash,
-      theme: getTheme(),
+      csrf: csrfSession.token,
+      flash: flashSession.flash,
+      preferences: preferences || defaultPreferences,
+      theme: themeSession.theme,
       config: { WEB_URL: FULL_WEB_URL },
     },
     {
       headers: [
-        ["Set-Cookie", await commit()],
-        ["Set-Cookie", await commitTheme()],
+        ["Set-Cookie", await csrfSession.commit()],
+        ["Set-Cookie", await flashSession.commit()],
+        ["Set-Cookie", await themeSession.commit()],
       ],
     },
   )
 }
 
-export const shouldRevalidate: ShouldRevalidateFunction = ({ currentUrl, formAction }) => {
-  const rootActions = ["/api/theme", "/logout"]
-  if (formAction && rootActions.includes(formAction)) return true
-  return currentUrl.pathname !== "/map"
+export const shouldRevalidate: ShouldRevalidateFunction = (args) => {
+  return args.formMethod === "POST"
 }
 
 export type RootLoader = SerializeFrom<typeof loader>
 
 export default function App() {
-  const { flash, theme } = useLoaderData<typeof loader>()
+  const { csrf, flash, theme } = useLoaderData<typeof loader>()
+  const transition = useNavigation()
+  const fetchers = useFetchers()
+  const state = React.useMemo<"idle" | "loading">(() => {
+    const states = [transition.state, ...fetchers.map((fetcher) => fetcher.state)]
+    if (states.every((state) => state === "idle")) return "idle"
+    return "loading"
+  }, [transition.state, fetchers])
+
+  React.useEffect(() => {
+    if (state === "loading") NProgress.start()
+    if (state === "idle") NProgress.done()
+  }, [transition.state, state])
 
   return (
-    <Document theme={theme}>
-      <Tooltip.Provider>
-        <FlashMessage flash={flash} />
-        <Nav />
-        <Outlet />
-      </Tooltip.Provider>
-      <Toaster />
-    </Document>
+    <AuthenticityTokenProvider token={csrf}>
+      <Document theme={theme}>
+        <Tooltip.Provider>
+          <Outlet />
+        </Tooltip.Provider>
+        <Toaster flash={flash} />
+      </Document>
+    </AuthenticityTokenProvider>
   )
 }
 
@@ -107,8 +125,8 @@ export function ErrorBoundary() {
     <Document theme="dark">
       <div className="flex items-center overflow-scroll p-20 pt-40">
         {isCatchError ? (
-          <div className="stack space-y-6">
-            <div className="stack">
+          <div className="space-y-6">
+            <div className="space-y-2">
               <h1 className="text-9xl">{error.status}</h1>
               <p className="text-lg">
                 {error.status === 404
@@ -119,14 +137,14 @@ export function ErrorBoundary() {
             {error.status === 404 && <LinkButton to="/">Take me home</LinkButton>}
           </div>
         ) : error instanceof Error ? (
-          <div className="stack max-w-4xl space-y-6">
+          <div className="max-w-4xl space-y-6">
             <Frown className="sq-20" />
             <h1 className="text-3xl">Oops, there was an error.</h1>
             <p>{error.message}</p>
             {error.stack && (
               <>
                 <hr />
-                <div className="rounded-md bg-gray-200 p-4 dark:bg-gray-700 ">
+                <div className="rounded-xs bg-gray-200 p-4 dark:bg-gray-700 ">
                   <pre className="overflow-scroll text-sm">{error.stack}</pre>
                 </div>
               </>
@@ -175,11 +193,12 @@ function Document({ theme, children }: DocumentProps) {
         <Meta />
         <Links />
       </head>
-      <body className="bg-white dark:bg-gray-800">
+      <body>
         {children}
         <ScrollRestoration />
         {!shouldDisableScripts && <Scripts />}
         <LiveReload />
+        <Analytics />
       </body>
     </html>
   )

@@ -19,11 +19,10 @@ const themeStorage = createCookieSessionStorage({
 
 export async function getThemeSession(request: Request) {
   const session = await themeStorage.getSession(request.headers.get("Cookie"))
+  const themeValue = session.get("theme")
+  const theme = isTheme(themeValue) ? themeValue : "light"
   return {
-    getTheme: () => {
-      const themeValue = session.get("theme")
-      return isTheme(themeValue) ? themeValue : "light"
-    },
+    theme,
     setTheme: (theme: Theme) => session.set("theme", theme),
     commit: () => themeStorage.commitSession(session),
   }
