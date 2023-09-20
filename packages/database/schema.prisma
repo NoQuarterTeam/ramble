@@ -142,6 +142,9 @@ model Spot {
   // park4night
   park4nightId Int? @unique
 
+  // komoot
+  komootId Int? @unique
+
   @@index([createdAt])
   @@index([type])
   @@index([type, longitude])
@@ -152,6 +155,7 @@ model Spot {
   @@index([creatorId])
   @@index([campspaceId])
   @@index([park4nightId])
+  @@index([komootId])
 }
 
 model SpotAmenities {
