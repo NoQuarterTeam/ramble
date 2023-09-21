@@ -54,7 +54,7 @@ export function ListsScreen() {
           className="absolute inset-0 z-10 px-4 pt-[100px]"
           style={{ width, height }}
         >
-          <View className="rounded-xs bg-background dark:bg-background-dark w-[200px] px-4 py-2 shadow-md">
+          <View className="rounded-xs w-[200px] bg-white px-4 py-2 shadow-md dark:bg-gray-950">
             {Object.entries(SORT_OPTIONS).map(([key, label]) => (
               <TouchableOpacity
                 key={key}
