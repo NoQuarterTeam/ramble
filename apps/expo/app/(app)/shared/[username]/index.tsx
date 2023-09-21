@@ -3,8 +3,8 @@ import { ChevronLeft, Heart, Instagram, User2 } from "lucide-react-native"
 
 import { createImageUrl } from "@ramble/shared"
 
+import { BrandHeading } from "../../../../components/ui/BrandHeading"
 import { Button } from "../../../../components/ui/Button"
-import { Heading } from "../../../../components/ui/Heading"
 import { OptimizedImage } from "../../../../components/ui/OptimisedImage"
 import { Spinner } from "../../../../components/ui/Spinner"
 import { Text } from "../../../../components/ui/Text"
@@ -40,13 +40,13 @@ export function UserScreen() {
   return (
     <View className="pt-16">
       <View className="flex flex-row items-center justify-between px-4 pb-2">
-        <View className="flex flex-row items-center space-x-1">
+        <View className="flex flex-row items-center">
           {router.canGoBack() && (
             <TouchableOpacity className="sq-8 flex items-center justify-center" onPress={router.goBack} activeOpacity={0.8}>
-              <ChevronLeft className="text-black dark:text-white" />
+              <ChevronLeft className="text-primary mt-2" />
             </TouchableOpacity>
           )}
-          <Heading className="font-700 text-2xl">{params.username}</Heading>
+          <BrandHeading className="pl-1 text-3xl">{params.username}</BrandHeading>
         </View>
         {user && me && me.username !== params.username && (
           <TouchableOpacity

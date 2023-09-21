@@ -5,7 +5,7 @@ import { ChevronLeft } from "lucide-react-native"
 import { join } from "@ramble/shared"
 
 import { useRouter } from "../../app/router"
-import { Text } from "./Text"
+import { BrandHeading } from "./BrandHeading"
 
 interface Props {
   title: string
@@ -21,9 +21,9 @@ export function ScreenView(props: Props) {
       <View className="flex flex-row items-center justify-between pb-2">
         <View className={join("flex flex-row items-center space-x-0.5")}>
           <TouchableOpacity onPress={props.onBack || goBack} className="sq-8 flex items-center justify-center">
-            <ChevronLeft className="text-black dark:text-white" />
+            <ChevronLeft className="text-primary" />
           </TouchableOpacity>
-          <Text className="text-lg">{props.title}</Text>
+          <BrandHeading>{props.title.toLowerCase()}</BrandHeading>
         </View>
         {props.rightElement}
       </View>
