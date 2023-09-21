@@ -27,14 +27,13 @@ export const loader = async ({ request, params }: LoaderArgs) => {
   const [spots, count] = await Promise.all([
     db.$queryRaw<SpotItemWithStats[]>`
       SELECT
-        Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
-        (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image,
-        (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash,
+        Spot.id, Spot.name, Spot.type, Spot.address,
+        (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
+        (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY SpotImage.createdAt DESC LIMIT 1) AS image,
+        (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY SpotImage.createdAt DESC LIMIT 1) AS blurHash,
         (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
       FROM
         Spot
-      LEFT JOIN
-        Review ON Spot.id = Review.spotId
       LEFT JOIN
         ListSpot ON Spot.id = ListSpot.spotId
       WHERE
