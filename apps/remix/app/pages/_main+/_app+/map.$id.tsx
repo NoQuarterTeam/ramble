@@ -105,7 +105,7 @@ export default function SpotPreview() {
                         width={350}
                         placeholder={image.blurHash}
                         height={225}
-                        className="rounded-xs h-[225px] object-cover"
+                        className="rounded-xs h-[225px] max-w-[350px] object-cover"
                         key={image.id}
                         src={createImageUrl(image.path)}
                       />
