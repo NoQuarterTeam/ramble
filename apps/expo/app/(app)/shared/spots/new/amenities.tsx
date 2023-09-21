@@ -19,7 +19,7 @@ export function NewSpotAmenitiesScreen() {
 
   const router = useRouter()
   return (
-    <NewSpotModalView title="What it's got?">
+    <NewSpotModalView title="what it's got?">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         {Object.entries(AMENITIES).map(([key, label]) => (
           <AmenitySelector

@@ -1,12 +1,12 @@
 import { TouchableOpacity, View } from "react-native"
+import { Lock, User2 } from "lucide-react-native"
 
-import { User, type List } from "@ramble/database/types"
+import { type List, type User } from "@ramble/database/types"
+import { createImageUrl } from "@ramble/shared"
 
 import { useRouter } from "../app/router"
-import { Text } from "./ui/Text"
-import { Lock, User2 } from "lucide-react-native"
 import { OptimizedImage } from "./ui/OptimisedImage"
-import { createImageUrl } from "@ramble/shared"
+import { Text } from "./ui/Text"
 
 interface Props {
   list: Pick<List, "id" | "name" | "description" | "isPrivate"> & {

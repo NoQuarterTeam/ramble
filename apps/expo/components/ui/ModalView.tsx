@@ -7,7 +7,7 @@ import { join } from "@ramble/shared"
 
 import { useRouter } from "../../app/router"
 import { isAndroid } from "../../lib/device"
-import { Heading } from "./Heading"
+import { BrandHeading } from "./BrandHeading"
 import { Toast } from "./Toast"
 
 interface Props {
@@ -21,9 +21,9 @@ export function ModalView(props: Props) {
   const navigation = useRouter()
 
   return (
-    <View className={join("h-full flex-grow bg-white px-4 pt-6 dark:bg-black", isAndroid ? "pt-10" : "pt-6")}>
+    <View className={join("bg-background dark:bg-background-dark h-full flex-grow px-4 pt-6", isAndroid ? "pt-10" : "pt-6")}>
       <View className="flex flex-row justify-between pb-2">
-        {props.title ? <Heading className="w-11/12 text-xl">{props.title}</Heading> : <Text />}
+        {props.title ? <BrandHeading className="w-11/12 text-4xl">{props.title}</BrandHeading> : <Text />}
         <TouchableOpacity onPress={props.onBack || navigation.goBack} className="p-1">
           <X size={24} className="text-black dark:text-white" />
         </TouchableOpacity>

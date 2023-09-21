@@ -1,6 +1,6 @@
-import { useColorScheme } from "react-native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
+import { useBackgroundColor } from "../../../lib/tailwind"
 import { type ScreenParamsList } from "../../router"
 import { getSharedScreens } from "../shared/getSharedScreens"
 import { AccountScreen } from "."
@@ -11,13 +11,13 @@ import { VanScreen } from "./van"
 const AccountStack = createNativeStackNavigator<ScreenParamsList>()
 
 export function AccountLayout() {
-  const colorScheme = useColorScheme()
-  const isDark = colorScheme === "dark"
+  const backgroundColor = useBackgroundColor()
   const sharedScreens = getSharedScreens(AccountStack)
+
   return (
     <AccountStack.Navigator
       initialRouteName="AccountScreen"
-      screenOptions={{ contentStyle: { backgroundColor: isDark ? "black" : "white" }, headerShown: false }}
+      screenOptions={{ contentStyle: { backgroundColor }, headerShown: false }}
     >
       <AccountStack.Screen name="AccountScreen" component={AccountScreen} />
       <AccountStack.Screen name="AccountInfoScreen" component={AccountInfoScreen} />

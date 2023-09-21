@@ -17,12 +17,12 @@ export function SaveSpotScreen() {
   const { data: lists, isLoading } = api.list.allByUserWithSavedSpots.useQuery({ spotId: id }, { enabled: !!me })
   if (!me)
     return (
-      <ModalView title="Save to list">
+      <ModalView title="save to list">
         <LoginPlaceholder text="Log in to start saving spots" />
       </ModalView>
     )
   return (
-    <ModalView title="Save to list">
+    <ModalView title="save to list">
       {isLoading ? null : (
         <FlashList
           showsVerticalScrollIndicator={false}

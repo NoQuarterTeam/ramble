@@ -52,7 +52,7 @@ export function UserScreen() {
           <TouchableOpacity
             onPress={onToggleFollow}
             activeOpacity={0.8}
-            className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-gray-800"
+            className="sq-8 bg-background flex items-center justify-center rounded-full dark:bg-gray-800"
           >
             <Heart
               size={20}
@@ -132,7 +132,7 @@ export function UserScreen() {
             <Text>{user.bio}</Text>
           </View>
 
-          <View className="flex flex-row items-center justify-center space-x-2 border-b border-gray-100 bg-white py-2 dark:border-gray-800 dark:bg-black">
+          <View className="bg-background dark:bg-background-dark flex flex-row items-center justify-center space-x-2 border-b border-gray-100 py-2 dark:border-gray-800">
             <View>
               <Button
                 onPress={() => router.navigate("UserScreen", { tab: "spots", username: params.username })}

@@ -27,9 +27,12 @@ importers:
       '@expo-google-fonts/poppins':
         specifier: ^0.2.3
         version: 0.2.3
+      '@expo-google-fonts/urbanist':
+        specifier: ^0.2.3
+        version: 0.2.3
       '@gorhom/bottom-sheet':
         specifier: ^4
-        version: 4.4.7(@types/react@18.0.38)(react-native-gesture-handler@2.9.0)(react-native-reanimated@2.14.4)(react-native@0.71.8)(react@18.2.0)
+        version: 4.4.7(@types/react@18.2.22)(react-native-gesture-handler@2.9.0)(react-native-reanimated@2.14.4)(react-native@0.71.8)(react@18.2.0)
       '@hookform/resolvers':
         specifier: ^3.1.0
         version: 3.1.0(react-hook-form@7.43.9)
@@ -185,7 +188,7 @@ importers:
         version: 3.22.2
       zustand:
         specifier: 4.4.1
-        version: 4.4.1(@types/react@18.0.38)(react@18.2.0)
+        version: 4.4.1(@types/react@18.2.22)(react@18.2.0)
     devDependencies:
       '@babel/core':
         specifier: ^7.20.0
@@ -203,8 +206,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/config/eslint
       '@types/react':
-        specifier: ^18.0.38
-        version: 18.0.38
+        specifier: 18.2.22
+        version: 18.2.22
       eslint:
         specifier: 8.49.0
         version: 8.49.0
@@ -4902,6 +4905,10 @@ packages:
     resolution: {integrity: sha512-PXkur1ZY/puy1PwVFYPJx8qiI3dtBzC2ig1bo53swCt7/sI7krCGYRO6hLBNp15M0kcNh2J4cCR9ZQyFxsving==}
     dev: false
 
+  /@expo-google-fonts/urbanist@0.2.3:
+    resolution: {integrity: sha512-kVnvzjfnqTL3ueYQfxk3TDdfhcmcRyWRqbvws7uBp/916DKu5gocRcunDqaik4IAZ3olmFW6qe0lMKkIu2ks2A==}
+    dev: false
+
   /@expo/bunyan@4.0.0:
     resolution: {integrity: sha512-Ydf4LidRB/EBI+YrB+cVLqIseiRfjUI/AeHBgjGMtq3GroraDu81OV7zqophRgupngoL3iS3JUMDMnxO7g39qA==}
     engines: {'0': node >=0.10.0}
@@ -5314,7 +5321,7 @@ packages:
   /@gar/promisify@1.1.3:
     resolution: {integrity: sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==}
 
-  /@gorhom/bottom-sheet@4.4.7(@types/react@18.0.38)(react-native-gesture-handler@2.9.0)(react-native-reanimated@2.14.4)(react-native@0.71.8)(react@18.2.0):
+  /@gorhom/bottom-sheet@4.4.7(@types/react@18.2.22)(react-native-gesture-handler@2.9.0)(react-native-reanimated@2.14.4)(react-native@0.71.8)(react@18.2.0):
     resolution: {integrity: sha512-ukTuTqDQi2heo68hAJsBpUQeEkdqP9REBcn47OpuvPKhdPuO1RBOOADjqXJNCnZZRcY+HqbnGPMSLFVc31zylQ==}
     peerDependencies:
       '@types/react': '*'
@@ -5330,7 +5337,7 @@ packages:
         optional: true
     dependencies:
       '@gorhom/portal': 1.0.14(react-native@0.71.8)(react@18.2.0)
-      '@types/react': 18.0.38
+      '@types/react': 18.2.22
       invariant: 2.2.4
       react: 18.2.0
       react-native: 0.71.8(@babel/core@7.20.2)(@babel/preset-env@7.20.2)(react@18.2.0)
@@ -7488,13 +7495,6 @@ packages:
     dependencies:
       '@types/react': 18.2.22
     dev: true
-
-  /@types/react@18.0.38:
-    resolution: {integrity: sha512-ExsidLLSzYj4cvaQjGnQCk4HFfVT9+EZ9XZsQ8Hsrcn8QNgXtpZ3m9vSIC2MWtx7jHictK6wYhQgGh6ic58oOw==}
-    dependencies:
-      '@types/prop-types': 15.7.5
-      '@types/scheduler': 0.16.3
-      csstype: 3.1.2
 
   /@types/react@18.2.22:
     resolution: {integrity: sha512-60fLTOLqzarLED2O3UQImc/lsNRgG0jE/a1mPW9KjMemY0LMITWEsbS4VvZ4p6rorEHd5YKxxmMKSDK505GHpA==}
@@ -19135,26 +19135,6 @@ packages:
     dependencies:
       '@remix-run/server-runtime': 1.19.3
       zod: 3.22.2
-    dev: false
-
-  /zustand@4.4.1(@types/react@18.0.38)(react@18.2.0):
-    resolution: {integrity: sha512-QCPfstAS4EBiTQzlaGP1gmorkh/UL1Leaj2tdj+zZCZ/9bm0WS7sI2wnfD5lpOszFqWJ1DcPnGoY8RDL61uokw==}
-    engines: {node: '>=12.7.0'}
-    peerDependencies:
-      '@types/react': '>=16.8'
-      immer: '>=9.0'
-      react: '>=16.8'
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-      immer:
-        optional: true
-      react:
-        optional: true
-    dependencies:
-      '@types/react': 18.0.38
-      react: 18.2.0
-      use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
 
   /zustand@4.4.1(@types/react@18.2.22)(react@18.2.0):

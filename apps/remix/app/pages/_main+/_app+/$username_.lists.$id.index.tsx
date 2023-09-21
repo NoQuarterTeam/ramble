@@ -48,7 +48,7 @@ export const loader = async ({ params, request }: LoaderArgs) => {
       SELECT 
         Spot.id, Spot.name, Spot.type, Spot.address,
         Spot.latitude, Spot.longitude,
-        (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating
+        (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
         (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY SpotImage.createdAt DESC LIMIT 1) AS image,
         (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY SpotImage.createdAt DESC LIMIT 1) AS blurHash,
         (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount

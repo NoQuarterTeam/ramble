@@ -35,7 +35,7 @@ export function EditListScreen() {
   })
 
   return (
-    <ModalView title={`Edit ${list?.name}`}>
+    <ModalView title="edit list">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
         {listLoading ? null : !list ? (
           <Text>List not found</Text>

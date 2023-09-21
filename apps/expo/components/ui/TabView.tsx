@@ -3,7 +3,7 @@ import { View } from "react-native"
 
 import { join } from "@ramble/shared"
 
-import { Heading } from "./Heading"
+import { BrandHeading } from "./BrandHeading"
 
 interface Props {
   title: string | React.ReactNode
@@ -16,7 +16,7 @@ export function TabView(props: Props) {
     <View className="min-h-full px-4 pt-14">
       <View className="flex flex-row items-center justify-between">
         <View className={join("flex flex-row items-center space-x-0.5")}>
-          {typeof props.title === "string" ? <Heading className="py-2 text-3xl">{props.title}</Heading> : props.title}
+          {typeof props.title === "string" ? <BrandHeading className="py-2 text-4xl">{props.title}</BrandHeading> : props.title}
         </View>
         {props.rightElement}
       </View>

@@ -82,13 +82,14 @@ export const spotRouter = createTRPCRouter({
             ? Prisma.sql`Spot.createdAt DESC, Spot.id`
             : sort === "saved"
             ? Prisma.sql`savedCount DESC, Spot.id`
-            : Prisma.sql`AVG(Review.rating) DESC, Spot.id`
+            : Prisma.sql`rating DESC, Spot.id`
         }
       `
-      return ctx.prisma.$queryRaw<Array<SpotItemWithStats>>`
+      try {
+        return await ctx.prisma.$queryRaw<Array<SpotItemWithStats>>`
         SELECT
           Spot.id, Spot.name, Spot.type, Spot.address,
-          (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating
+          (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
           (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY SpotImage.createdAt DESC LIMIT 1) AS image,
           (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY SpotImage.createdAt DESC LIMIT 1) AS blurHash,
           (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
@@ -97,13 +98,17 @@ export const spotRouter = createTRPCRouter({
         LEFT JOIN
           ListSpot ON Spot.id = ListSpot.spotId
         WHERE
-        ${publicSpotWhereClauseRaw(ctx.user?.id)}
+          ${publicSpotWhereClauseRaw(ctx.user?.id)}
         GROUP BY
           Spot.id
         ${ORDER_BY}
         LIMIT 20
         OFFSET ${input.skip || 0}
       `
+      } catch (error) {
+        console.log(error)
+        return []
+      }
     }),
   mapPreview: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
     const spot = await ctx.prisma.spot.findUnique({

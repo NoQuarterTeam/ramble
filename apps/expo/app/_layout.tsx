@@ -14,6 +14,7 @@ import {
   Poppins_900Black,
   useFonts,
 } from "@expo-google-fonts/poppins"
+import { Urbanist_700Bold_Italic } from "@expo-google-fonts/urbanist"
 import { type LinkingOptions, NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import * as Linking from "expo-linking"
@@ -25,6 +26,7 @@ import { Toast } from "../components/ui/Toast"
 import { api, TRPCProvider } from "../lib/api"
 import { useCheckExpoUpdates } from "../lib/hooks/useCheckExpoUpdates"
 import { useMe } from "../lib/hooks/useMe"
+import { useBackgroundColor } from "../lib/tailwind"
 import { AppLayout } from "./(app)/_layout"
 import { NewListScreen } from "./(app)/lists/new"
 import { EditListScreen } from "./(app)/shared/lists/[id]/edit"
@@ -78,7 +80,10 @@ export default function RootLayout() {
     poppins700: Poppins_700Bold,
     poppins800: Poppins_800ExtraBold,
     poppins900: Poppins_900Black,
+    urbanist700Italic: Urbanist_700Bold_Italic,
   })
+
+  const backgroundColor = useBackgroundColor()
 
   const { isDoneChecking, isNewUpdateAvailable } = useCheckExpoUpdates()
   const colorScheme = useColorScheme()
@@ -100,15 +105,13 @@ export default function RootLayout() {
               <NavigationContainer linking={linking}>
                 <Container.Navigator
                   initialRouteName="AppLayout"
-                  screenOptions={{ headerShown: false, contentStyle: { backgroundColor: isDark ? "black" : "white" } }}
+                  screenOptions={{ headerShown: false, contentStyle: { backgroundColor } }}
                 >
                   <Container.Group>
                     <Container.Screen name="AppLayout" component={AppLayout} />
                     <Container.Screen name="OnboardingLayout" component={OnboardingLayout} />
                   </Container.Group>
-                  <Container.Group
-                    screenOptions={{ presentation: "modal", contentStyle: { backgroundColor: isDark ? "black" : "white" } }}
-                  >
+                  <Container.Group screenOptions={{ presentation: "modal", contentStyle: { backgroundColor } }}>
                     <Container.Screen name="AuthLayout" component={AuthLayout} />
                     <Container.Screen name="NewSpotLayout" component={NewSpotLayout} />
                     <Container.Screen name="EditSpotLayout" component={EditSpotLayout} />

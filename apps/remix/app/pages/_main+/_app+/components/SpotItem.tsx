@@ -1,5 +1,5 @@
 import { Link } from "@remix-run/react"
-import { Camera, Heart, Star } from "lucide-react"
+import { Heart, Star } from "lucide-react"
 
 import { type SpotItemWithStats } from "@ramble/shared"
 import { createImageUrl, displayRating } from "@ramble/shared"
@@ -32,13 +32,17 @@ export function SpotItem({ spot }: Props) {
               src={createImageUrl(spot.image)}
             />
           ) : (
-            <div className="rounded-xs flex h-full w-full items-center justify-center bg-gray-50 dark:bg-gray-700">
-              <Camera className="opacity-50" />
+            <div className="rounded-xs flex h-full w-full items-center justify-center bg-gray-50 dark:bg-gray-800">
+              <div className="bg-background rounded-full p-4">
+                <Icon size={40} />
+              </div>
             </div>
           )}
-          <div className="sq-10 bg-background absolute left-2 top-2 flex items-center justify-center rounded-full shadow">
-            <Icon size={20} />
-          </div>
+          {spot.image && (
+            <div className="sq-10 bg-background absolute left-2 top-2 flex items-center justify-center rounded-full shadow">
+              <Icon size={20} />
+            </div>
+          )}
         </div>
 
         <div className="space-y-0.5">
