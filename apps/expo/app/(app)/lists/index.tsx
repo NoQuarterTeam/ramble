@@ -38,7 +38,7 @@ export function ListsScreen() {
       title={
         <TouchableOpacity onPress={sortProps.onOpen} className="flex flex-row items-center">
           <BrandHeading className="py-2 text-4xl">{SORT_OPTIONS[sort]}</BrandHeading>
-          <ChevronDown size={20} className="text-black dark:text-white" />
+          <ChevronDown size={20} className="text-primary" />
         </TouchableOpacity>
       }
       rightElement={
