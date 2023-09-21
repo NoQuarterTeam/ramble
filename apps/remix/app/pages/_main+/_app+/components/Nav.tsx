@@ -44,6 +44,7 @@ export function Nav() {
             Latest spots
           </NavbarLink>
           <NavbarLink to="/guides">Guides</NavbarLink>
+          <NavbarLink to="/vans">Vans</NavbarLink>
         </div>
       </div>
       <div className="hstack space-x-3">
