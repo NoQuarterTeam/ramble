@@ -10,6 +10,7 @@ import { PageContainer } from "~/components/PageContainer"
 import { Avatar, Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
+import { promiseHash } from "remix-utils"
 
 export const config = {
   runtime: "edge",
@@ -22,28 +23,27 @@ export const loader = async ({ request }: LoaderArgs) => {
   const searchParams = new URL(request.url).searchParams
   const skip = parseInt((searchParams.get("skip") as string) || "0")
 
-  const guides = await db.user.findMany({
-    where: { role: "GUIDE" },
-    take: 12,
-    skip,
-    orderBy: { createdAt: "desc" },
-    select: {
-      id: true,
-      firstName: true,
-      lastName: true,
-      username: true,
-      avatar: true,
-      avatarBlurHash: true,
-      _count: { select: { createdSpots: true } },
-    },
+  const data = await promiseHash({
+    guides: db.user.findMany({
+      where: { role: "GUIDE" },
+      take: 12,
+      skip,
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        username: true,
+        avatar: true,
+        avatarBlurHash: true,
+        _count: { select: { createdSpots: { where: { deletedAt: null } } } },
+      },
+    }),
+
+    count: db.user.count({ where: { role: "GUIDE" } }),
   })
 
-  const count = await db.user.count({ where: { role: "GUIDE" } })
-
-  return json(
-    { guides, count },
-    { headers: { "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour", maxAge: "1hour" }) } },
-  )
+  return json(data, { headers: { "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour", maxAge: "1hour" }) } })
 }
 
 type LoaderData = typeof loader
@@ -97,7 +97,7 @@ function GuideItem(props: { guide: SerializeFrom<typeof loader>["guides"][number
         </div>
       </div>
       <div className="text-center text-sm">
-        <p className="font-medium leading-tight">{props.guide._count?.createdSpots}</p>
+        <p className="font-medium leading-tight">{props.guide._count?.createdSpots.toLocaleString()}</p>
         <p>spots</p>
       </div>
     </Link>
