@@ -28,7 +28,7 @@ export const action = async ({ request }: LoaderArgs) => {
 
 export default function Home() {
   return (
-    <div className="pb-20 font-serif">
+    <div className="bg-background dark pb-20 font-serif text-white">
       <div className="h-[90vh] w-screen space-y-20 bg-[url('/landing/landing1.png')] pt-10 md:pt-28">
         <div className="mx-auto flex max-w-6xl flex-col items-start space-y-12">
           <div className="flex flex-col items-center">
@@ -39,7 +39,6 @@ export default function Home() {
             <h1 className="text-3xl text-black">Everything you need for remote working & van life in Europe.</h1>
             <h2 className="text-xl text-black">For the outdoor enthusiasts who seek adventure, authenticity and community.</h2>
           </div>
-
           <div>
             <RequestAccessForm />
           </div>
