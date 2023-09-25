@@ -96,44 +96,45 @@ export default function RootLayout() {
 
   return (
     <TRPCProvider>
-      <PrefetchTabs />
-      <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
-        <SafeAreaProvider>
-          {isNewUpdateAvailable ? (
-            <NewUpdate />
-          ) : (
-            <NavigationContainer linking={linking}>
-              <Container.Navigator
-                initialRouteName="AppLayout"
-                screenOptions={{ headerShown: false, contentStyle: { backgroundColor } }}
-              >
-                <Container.Group>
-                  <Container.Screen name="AppLayout" component={AppLayout} />
-                  <Container.Screen name="OnboardingLayout" component={OnboardingLayout} />
-                </Container.Group>
-                <Container.Group screenOptions={{ presentation: "modal", contentStyle: { backgroundColor } }}>
-                  <Container.Screen name="AuthLayout" component={AuthLayout} />
-                  <Container.Screen name="NewSpotLayout" component={NewSpotLayout} />
-                  <Container.Screen name="EditSpotLayout" component={EditSpotLayout} />
-                  <Container.Screen name="NewListScreen" component={NewListScreen} />
-                  <Container.Screen name="EditListScreen" component={EditListScreen} />
-                  <Container.Screen name="NewReviewScreen" component={NewReviewScreen} />
-                  <Container.Screen name="ReviewDetailScreen" component={ReviewDetailScreen} />
-                  <Container.Screen name="SaveSpotScreen" component={SaveSpotScreen} />
-                  <Container.Screen name="DeleteSpotScreen" component={DeleteSpotScreen} />
-                </Container.Group>
-              </Container.Navigator>
-            </NavigationContainer>
-          )}
-          <Toast />
-          <StatusBar style={isDark ? "light" : "dark"} />
-        </SafeAreaProvider>
-      </GestureHandlerRootView>
+      <PrefetchTabs>
+        <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
+          <SafeAreaProvider>
+            {isNewUpdateAvailable ? (
+              <NewUpdate />
+            ) : (
+              <NavigationContainer linking={linking}>
+                <Container.Navigator
+                  initialRouteName="AppLayout"
+                  screenOptions={{ headerShown: false, contentStyle: { backgroundColor } }}
+                >
+                  <Container.Group>
+                    <Container.Screen name="AppLayout" component={AppLayout} />
+                    <Container.Screen name="OnboardingLayout" component={OnboardingLayout} />
+                  </Container.Group>
+                  <Container.Group screenOptions={{ presentation: "modal", contentStyle: { backgroundColor } }}>
+                    <Container.Screen name="AuthLayout" component={AuthLayout} />
+                    <Container.Screen name="NewSpotLayout" component={NewSpotLayout} />
+                    <Container.Screen name="EditSpotLayout" component={EditSpotLayout} />
+                    <Container.Screen name="NewListScreen" component={NewListScreen} />
+                    <Container.Screen name="EditListScreen" component={EditListScreen} />
+                    <Container.Screen name="NewReviewScreen" component={NewReviewScreen} />
+                    <Container.Screen name="ReviewDetailScreen" component={ReviewDetailScreen} />
+                    <Container.Screen name="SaveSpotScreen" component={SaveSpotScreen} />
+                    <Container.Screen name="DeleteSpotScreen" component={DeleteSpotScreen} />
+                  </Container.Group>
+                </Container.Navigator>
+              </NavigationContainer>
+            )}
+            <Toast />
+            <StatusBar style={isDark ? "light" : "dark"} />
+          </SafeAreaProvider>
+        </GestureHandlerRootView>
+      </PrefetchTabs>
     </TRPCProvider>
   )
 }
 
-function PrefetchTabs() {
+function PrefetchTabs(props: { children: React.ReactNode }) {
   const { me, isLoading } = useMe()
   const utils = api.useContext()
   React.useEffect(() => {
@@ -142,5 +143,7 @@ function PrefetchTabs() {
     utils.user.profile.prefetch({ username: me.username })
     utils.list.allByUser.prefetch({ username: me.username })
   }, [me, isLoading, utils.spot.list, utils.user.profile, utils.list.allByUser])
-  return null
+  if (isLoading) return null
+
+  return <>{props.children}</>
 }
