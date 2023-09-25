@@ -29,7 +29,7 @@ export const action = async ({ request }: LoaderArgs) => {
 export default function Home() {
   return (
     <div className="bg-background dark pb-20 font-serif text-white">
-      <div className="h-[90vh] w-screen space-y-20 bg-[url('/landing/landing1.png')] pt-10 md:pt-28">
+      <div className="h-[90vh] w-screen space-y-20 bg-[url('/landing/landing1.png')] px-4 pt-10 md:pt-28">
         <div className="mx-auto flex max-w-6xl flex-col items-start space-y-12">
           <div className="flex flex-col items-center">
             <p className="brand-header text-5xl">ramble</p>
@@ -39,13 +39,12 @@ export default function Home() {
             <h1 className="text-3xl text-black">Everything you need for remote working & van life in Europe.</h1>
             <h2 className="text-xl text-black">For the outdoor enthusiasts who seek adventure, authenticity and community.</h2>
           </div>
-          <div>
-            <RequestAccessForm />
-          </div>
+
+          <RequestAccessForm />
         </div>
       </div>
 
-      <div className="mx-auto max-w-3xl py-32">
+      <div className="mx-auto max-w-3xl px-4 py-20 md:py-32">
         <p className="text-xl">
           Built for a new generation of{" "}
           <span className="text-primary font-semibold">remote working, digitally connected travelers</span> looking for{" "}
@@ -56,7 +55,7 @@ export default function Home() {
           Inspired by the great outdoors and the spirit of the environmental movement of the 60s and 70s.
         </p>
       </div>
-      <div className="mx-auto flex max-w-6xl justify-between gap-20 py-20">
+      <div className="mx-auto flex max-w-6xl flex-col justify-between gap-20 px-4 py-20 md:flex-row">
         <div className="space-y-6">
           <h3 className="brand-header text-4xl">our mission</h3>
           <p className="text-lg">
@@ -80,7 +79,7 @@ export default function Home() {
         </div>
         <img src="/landing/landing2.png" className="rounded-xs w-full max-w-[400px] object-cover" />
       </div>
-      <div className="py-32">
+      <div className="px-4 py-20 md:py-32">
         <div className="mx-auto max-w-6xl space-y-4">
           <div>
             <h3 className="brand-header text-4xl">request access now</h3>
@@ -89,7 +88,7 @@ export default function Home() {
           <RequestAccessForm mode="dark" />
         </div>
       </div>
-      <div className="mx-auto flex max-w-6xl justify-between gap-20 py-20">
+      <div className="mx-auto flex max-w-6xl flex-col justify-between gap-20 px-4 py-20 md:flex-row">
         <div className="space-y-6">
           <h3 className="brand-header text-4xl">features</h3>
           <p className="text-lg">
@@ -115,7 +114,7 @@ export default function Home() {
         <img src="/landing/landing3.png" className="rounded-xs w-full max-w-[400px] object-cover" />
       </div>
 
-      <div className="flex flex-col items-center space-y-4 py-24">
+      <div className="flex flex-col items-center space-y-4 px-4 py-24">
         <p className="max-w-md text-center text-lg">
           “Finally a van life app that is purpose built for authentic, nature lovers from the digital age.”
         </p>
@@ -126,7 +125,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="mx-auto flex max-w-6xl flex-col items-center space-y-8 py-32 text-center">
+      <div className="mx-auto flex max-w-6xl flex-col items-center space-y-8 px-4 py-20 text-center md:py-32">
         <div>
           <h3 className="brand-header text-4xl">get access now</h3>
           <p className="text-lg">To maintain an authentic and trustworthy community, members can only join via invite.</p>
@@ -148,7 +147,7 @@ function RequestAccessForm({ mode }: { mode?: "light" | "dark" }) {
     )
 
   return (
-    <accessFetcher.Form action="/home" method="POST" replace className="flex gap-2">
+    <accessFetcher.Form action="/home" method="POST" replace className="flex flex-col gap-2 sm:flex-row">
       <AuthenticityTokenInput />
       <div>
         <input
@@ -166,15 +165,17 @@ function RequestAccessForm({ mode }: { mode?: "light" | "dark" }) {
         )}
       </div>
 
-      <button
-        disabled={accessFetcher.state === "submitting"}
-        className={merge(
-          "border-xs rounded-xs h-10 whitespace-nowrap bg-black px-4 text-center text-white hover:opacity-80 disabled:opacity-70",
-          mode === "dark" && "bg-white text-black",
-        )}
-      >
-        Request access
-      </button>
+      <div>
+        <button
+          disabled={accessFetcher.state === "submitting"}
+          className={merge(
+            "border-xs rounded-xs h-10 whitespace-nowrap bg-black px-4 text-center text-white hover:opacity-80 disabled:opacity-70",
+            mode === "dark" && "bg-white text-black",
+          )}
+        >
+          Request access
+        </button>
+      </div>
     </accessFetcher.Form>
   )
 }
