@@ -34,7 +34,7 @@ export function ReviewForm({ spot, review }: Props) {
             defaultValue={review?.description || ""}
             placeholder="How was your stay? what did you like?"
             name="description"
-            input={<Textarea minRows={5} />}
+            input={<Textarea rows={5} />}
           />
           <div className="flex space-x-1">
             {Array.from({ length: 5 }).map((_, i) => (

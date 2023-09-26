@@ -51,7 +51,7 @@ export default function Onboarding() {
           defaultValue={user.bio || ""}
           placeholder="Sustainability, nature, and the outdoors are my passions. I love to ramble and meet new people."
           label="A little bio, just a few words about yourself and your interests"
-          input={<Textarea minRows={8} />}
+          input={<Textarea rows={8} />}
         />
         <div className="flex w-full flex-col items-center text-center">
           <FormFieldLabel>Let's put a picture to your name</FormFieldLabel>

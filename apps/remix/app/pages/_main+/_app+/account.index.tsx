@@ -64,7 +64,7 @@ export default function Account() {
           <FormField defaultValue={user.firstName} name="firstName" label="First name" />
           <FormField defaultValue={user.lastName} name="lastName" label="Last name" />
           <FormField autoCapitalize="none" defaultValue={user.email} name="email" label="Email" />
-          <FormField defaultValue={user.bio || ""} name="bio" label="Bio" input={<Textarea minRows={5} />} />
+          <FormField defaultValue={user.bio || ""} name="bio" label="Bio" input={<Textarea rows={5} />} />
           <FormField defaultValue={user.instagram || ""} name="instagram" label="Instragram handle" />
         </div>
         <div className="space-y-2">

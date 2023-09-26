@@ -69,7 +69,6 @@
     "react-dom": "18.2.0",
     "react-dropzone": "14.2.3",
     "react-map-gl": "^7.1.5",
-    "react-textarea-autosize": "^8.5.3",
     "remix-utils": "^6.1.0",
     "sharp": "^0.32.0",
     "sonner": "^1.0.0",

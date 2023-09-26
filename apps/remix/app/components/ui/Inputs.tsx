@@ -2,8 +2,6 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { merge } from "@ramble/shared"
-import { TextareaAutosizeProps } from "react-textarea-autosize"
-import { TextareaResize } from "./TextareaResize"
 
 export const inputStyles = cva(
   "focus:border-primary-500 focus:ring-primary-500 rounded-xs block w-full border text-base text-black placeholder-gray-500 ring-0 transition-colors placeholder:font-thin focus:bg-transparent focus:ring-2 focus:ring-transparent read-only:focus:ring-transparent dark:text-white",
@@ -64,18 +62,14 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(function _In
   )
 })
 
-export interface TextareaProps extends TextareaAutosizeProps, InputStyleProps {
+export interface TextareaProps
+  extends React.DetailedHTMLProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>,
+    InputStyleProps {
   name?: string
 }
 
 export function Textarea({ variant, size, ...props }: TextareaProps) {
-  return (
-    <TextareaResize
-      id={props.name}
-      {...props}
-      className={merge(inputStyles({ variant, size }), "resize-none", props.className)}
-    />
-  )
+  return <textarea id={props.name} {...props} className={merge(inputStyles({ variant, size }), "resize-none", props.className)} />
 }
 
 export interface SelectProps
