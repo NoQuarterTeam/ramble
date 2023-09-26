@@ -1,7 +1,7 @@
 import { TouchableOpacity, View } from "react-native"
 import { Heart, Star } from "lucide-react-native"
 
-import { type SpotItemWithStats } from "@ramble/shared"
+import { type SpotItemWithStatsAndImage } from "@ramble/shared"
 import { createImageUrl, displayRating } from "@ramble/shared"
 
 import { useRouter } from "../app/router"
@@ -10,7 +10,7 @@ import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
 
 interface Props {
-  spot: SpotItemWithStats
+  spot: SpotItemWithStatsAndImage
 }
 
 export function SpotItem({ spot }: Props) {

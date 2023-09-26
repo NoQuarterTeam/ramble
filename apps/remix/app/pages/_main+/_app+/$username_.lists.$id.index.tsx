@@ -9,8 +9,8 @@ import { json } from "@vercel/remix"
 import { ChevronLeft, Copy } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
-import { publicSpotWhereClauseRaw } from "@ramble/api"
-import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE, type SpotItemWithStats } from "@ramble/shared"
+import { LatestSpotImages, joinSpotImages, publicSpotWhereClauseRaw, spotImagesRawQuery } from "@ramble/api"
+import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE, type SpotItemWithStatsAndImage } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -26,14 +26,16 @@ import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
 
 import { SpotItem } from "./components/SpotItem"
 import { SpotMarker } from "./components/SpotMarker"
+import { promiseHash } from "remix-utils"
 
 export const headers = useLoaderHeaders
 
-type SpotItemWithStatsAndCoords = SpotItemWithStats & { longitude: number; latitude: number }
+type SpotItemWithStatsAndCoords = SpotItemWithStatsAndImage & { longitude: number; latitude: number }
+
 export const loader = async ({ params, request }: LoaderArgs) => {
   const user = await getMaybeUser(request)
-  const [list, spots] = await Promise.all([
-    db.list.findFirst({
+  const { list, spots } = await promiseHash({
+    list: db.list.findFirst({
       where: { id: params.id, isPrivate: !user || user.username !== params.username ? false : undefined },
       select: {
         id: true,
@@ -43,13 +45,11 @@ export const loader = async ({ params, request }: LoaderArgs) => {
         description: true,
       },
     }),
-    db.$queryRaw<SpotItemWithStatsAndCoords[]>`
+    spots: db.$queryRaw<SpotItemWithStatsAndCoords[]>`
       SELECT 
-        Spot.id, Spot.name, Spot.type, Spot.address,
+        Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
         Spot.latitude, Spot.longitude,
         (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
-        (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY SpotImage.createdAt DESC LIMIT 1) AS image,
-        (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY SpotImage.createdAt DESC LIMIT 1) AS blurHash,
         (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
       FROM
         Spot
@@ -62,8 +62,11 @@ export const loader = async ({ params, request }: LoaderArgs) => {
       ORDER BY
         Spot.id
     `,
-  ])
+  })
   if (!list) throw notFound()
+
+  const images = await db.$queryRaw<LatestSpotImages>(spotImagesRawQuery(spots.map((s) => s.id)))
+  joinSpotImages(spots, images)
 
   const coords = spots.length > 1 ? spots.map((spot) => [spot.longitude, spot.latitude]) : null
 

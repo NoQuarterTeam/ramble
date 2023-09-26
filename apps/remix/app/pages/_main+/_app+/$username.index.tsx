@@ -4,8 +4,14 @@ import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
-import { publicSpotWhereClause, publicSpotWhereClauseRaw } from "@ramble/api"
-import { type SpotItemWithStats } from "@ramble/shared"
+import {
+  LatestSpotImages,
+  joinSpotImages,
+  publicSpotWhereClause,
+  publicSpotWhereClauseRaw,
+  spotImagesRawQuery,
+} from "@ramble/api"
+import { type SpotItemWithStatsAndImage } from "@ramble/shared"
 
 import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
@@ -14,6 +20,7 @@ import { notFound } from "~/lib/remix.server"
 import { getUserSession } from "~/services/session/session.server"
 
 import { SpotItem } from "./components/SpotItem"
+import { promiseHash } from "remix-utils"
 
 export const headers = useLoaderHeaders
 
@@ -24,13 +31,11 @@ export const loader = async ({ request, params }: LoaderArgs) => {
   const searchParams = new URL(request.url).searchParams
   const skip = parseInt((searchParams.get("skip") as string) || "0")
   const { userId } = await getUserSession(request)
-  const [spots, count] = await Promise.all([
-    db.$queryRaw<SpotItemWithStats[]>`
+  const { spots, count } = await promiseHash({
+    spots: db.$queryRaw<SpotItemWithStatsAndImage[]>`
       SELECT
-        Spot.id, Spot.name, Spot.type, Spot.address,
+        Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
         (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
-        (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY SpotImage.createdAt DESC LIMIT 1) AS image,
-        (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY SpotImage.createdAt DESC LIMIT 1) AS blurHash,
         (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
       FROM
         Spot
@@ -45,8 +50,11 @@ export const loader = async ({ request, params }: LoaderArgs) => {
       LIMIT ${TAKE}
       OFFSET ${skip};
     `,
-    db.spot.count({ where: { creatorId: user.id, ...publicSpotWhereClause(userId) } }),
-  ])
+    count: db.spot.count({ where: { creatorId: user.id, ...publicSpotWhereClause(userId) } }),
+  })
+
+  const images = await db.$queryRaw<LatestSpotImages>(spotImagesRawQuery(spots.map((s) => s.id)))
+  joinSpotImages(spots, images)
 
   return json(
     { spots, count },

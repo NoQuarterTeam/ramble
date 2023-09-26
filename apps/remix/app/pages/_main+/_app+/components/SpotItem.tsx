@@ -1,7 +1,7 @@
 import { Link } from "@remix-run/react"
 import { Heart, Star } from "lucide-react"
 
-import { type SpotItemWithStats } from "@ramble/shared"
+import { SpotItemWithStatsAndImage } from "@ramble/shared"
 import { createImageUrl, displayRating } from "@ramble/shared"
 
 import { OptimizedImage } from "~/components/OptimisedImage"
@@ -11,7 +11,7 @@ import { SPOTS } from "~/lib/static/spots"
 import { SaveToList } from "~/pages/api+/save-to-list"
 
 interface Props {
-  spot: SpotItemWithStats
+  spot: SpotItemWithStatsAndImage
 }
 
 export function SpotItem({ spot }: Props) {

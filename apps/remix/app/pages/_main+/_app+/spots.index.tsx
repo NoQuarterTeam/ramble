@@ -1,13 +1,19 @@
 import * as React from "react"
-import { useFetcher, useLoaderData, useSearchParams } from "@remix-run/react"
+import { useLoaderData, useSearchParams } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 
-import { publicSpotWhereClauseRaw } from "@ramble/api"
+import {
+  LatestSpotImages,
+  joinSpotImages,
+  publicSpotWhereClause,
+  publicSpotWhereClauseRaw,
+  spotImagesRawQuery,
+} from "@ramble/api"
 import { Prisma, SpotType } from "@ramble/database/types"
-import { type SpotItemWithStats } from "@ramble/shared"
+import { type SpotItemWithStatsAndImage } from "@ramble/shared"
 
 import { Button, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
@@ -17,6 +23,8 @@ import { getUserSession } from "~/services/session/session.server"
 
 import { PageContainer } from "../../../components/PageContainer"
 import { SpotItem } from "./components/SpotItem"
+import { promiseHash } from "remix-utils"
+import { useFetcher } from "~/components/Form"
 
 export const config = {
   runtime: "edge",
@@ -31,7 +39,6 @@ const SORT_OPTIONS = [
   { value: "saved", label: "Most saved" },
 ] as const
 
-const TAKE = 12
 export const loader = async ({ request }: LoaderArgs) => {
   const { userId } = await getUserSession(request)
   const searchParams = new URL(request.url).searchParams
@@ -54,29 +61,34 @@ export const loader = async ({ request }: LoaderArgs) => {
         : sort === "saved"
         ? Prisma.sql`savedCount DESC, Spot.id`
         : Prisma.sql`rating DESC, Spot.id`
-    }
-  `
+    }`
 
-  const spots: Array<SpotItemWithStats> = await db.$queryRaw`
-    SELECT 
-      Spot.id, Spot.name, Spot.type, Spot.address,
-      (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
-      (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY SpotImage.createdAt DESC LIMIT 1) AS image,
-      (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY SpotImage.createdAt DESC LIMIT 1) AS blurHash,
-      (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
-    FROM
-      Spot
-    LEFT JOIN
-      ListSpot ON Spot.id = ListSpot.spotId
-    ${WHERE}
-    GROUP BY
-      Spot.id
-    ${ORDER_BY}
-    LIMIT ${TAKE}
-    OFFSET ${skip};
-  `
+  const { spots, count } = await promiseHash({
+    spots: db.$queryRaw<Array<SpotItemWithStatsAndImage>>`
+      SELECT 
+        Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
+        (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
+        (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
+      FROM
+        Spot
+      LEFT JOIN
+        ListSpot ON Spot.id = ListSpot.spotId
+      ${WHERE}
+      GROUP BY
+        Spot.id
+      ${ORDER_BY}
+      LIMIT 12
+      OFFSET ${skip};
+    `,
+    count: db.spot.count({
+      where: type ? { type: type as SpotType, ...publicSpotWhereClause(userId) } : publicSpotWhereClause(userId),
+    }),
+  })
 
-  const count = await db.spot.count({ where: type ? { type: type as SpotType } : undefined })
+  // get spot images and join to original spot payload
+  const images = await db.$queryRaw<LatestSpotImages>(spotImagesRawQuery(spots.map((s) => s.id)))
+  joinSpotImages(spots, images)
+
   return json(
     { spots, count },
     { headers: { "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour", maxAge: "1hour" }) } },
