@@ -41,6 +41,7 @@ import { MapFilters } from "~/pages/_main+/_app+/components/MapFilters"
 import type { Cluster, clustersLoader } from "../../api+/clusters"
 import { MapLayerControls } from "./components/MapLayerControls"
 import { SpotMarker } from "./components/SpotMarker"
+import { MapSearch } from "./components/MapSearch"
 
 export const config = {
   runtime: "edge",
@@ -195,7 +196,7 @@ export default function MapView() {
         <MapFilters onChange={onParamsChange} />
       </ClientOnly>
       <MapLayerControls />
-
+      <MapSearch mapRef={mapRef} />
       <Outlet />
     </div>
   )
