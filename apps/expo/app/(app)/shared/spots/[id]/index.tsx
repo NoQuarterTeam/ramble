@@ -8,6 +8,7 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated"
+import dayjs from "dayjs"
 import * as Location from "expo-location"
 import { StatusBar } from "expo-status-bar"
 import { Check, ChevronDown, ChevronLeft, Compass, Edit2, Heart, Star, Trash } from "lucide-react-native"
@@ -147,7 +148,7 @@ export function SpotDetailScreen() {
                   return (
                     <View
                       key={key}
-                      className="flex flex-row space-x-1 rounded-md border border-gray-200 p-2 dark:border-gray-700"
+                      className="rounded-xs flex flex-row space-x-1 border border-gray-200 p-2 dark:border-gray-700"
                     >
                       {Icon && <Icon size={20} className="text-black dark:text-white" />}
                       <Text className="text-sm">{value}</Text>
@@ -156,6 +157,18 @@ export function SpotDetailScreen() {
                 })}
               </View>
             )}
+            <View className="flex flex-row py-2">
+              <Text className="text-sm">Added by </Text>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => router.push("UserScreen", { username: spot.creator.username })}
+              >
+                <Text className="text-sm">
+                  {spot.creator.firstName} {spot.creator.lastName}
+                </Text>
+              </TouchableOpacity>
+              <Text className="text-sm"> on the {dayjs(spot.createdAt).format("DD/MM/YYYY")}</Text>
+            </View>
             <View className="flex flex-row space-x-2 py-4">
               {canManageSpot(spot, me) && !spot.verifiedAt && (
                 <Button
@@ -231,7 +244,7 @@ export function SpotDetailScreen() {
       </Animated.ScrollView>
 
       <Animated.View
-        className="absolute left-0 right-0 top-0 h-[100px] border border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-black"
+        className="bg-background dark:bg-background-dark absolute left-0 right-0 top-0 h-[100px] border border-b border-gray-200 dark:border-gray-800"
         style={topBarStyle}
       />
 
@@ -240,7 +253,7 @@ export function SpotDetailScreen() {
           <TouchableOpacity
             onPress={router.canGoBack() ? router.goBack : () => router.navigate("AppLayout")}
             activeOpacity={0.8}
-            className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-black"
+            className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
           >
             {router.canGoBack() ? (
               <ChevronLeft className="pr-1 text-black dark:text-white" />
@@ -258,14 +271,14 @@ export function SpotDetailScreen() {
           {/* <TouchableOpacity
             // onPress={handleGetDirections}
             activeOpacity={0.8}
-            className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-black"
+            className="sq-8 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
           >
             <Share size={20} className="text-black dark:text-white" />
           </TouchableOpacity> */}
           <TouchableOpacity
             onPress={handleGetDirections}
             activeOpacity={0.8}
-            className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-black"
+            className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
           >
             <Compass size={20} className="text-black dark:text-white" />
           </TouchableOpacity>
@@ -273,7 +286,7 @@ export function SpotDetailScreen() {
           <TouchableOpacity
             onPress={() => router.navigate("SaveSpotScreen", { id: spot.id })}
             activeOpacity={0.8}
-            className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-black"
+            className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
           >
             <Heart
               size={20}
@@ -315,5 +328,5 @@ function SpotLoading() {
 }
 
 function Skeleton(props: ViewProps) {
-  return <View {...props} className={merge("rounded-lg bg-gray-100 dark:bg-gray-700", props.className)} />
+  return <View {...props} className={merge("rounded-xs bg-gray-100 dark:bg-gray-700", props.className)} />
 }

@@ -1,20 +1,24 @@
 import * as React from "react"
-import { useFetcher, useLoaderData, useSearchParams } from "@remix-run/react"
+import { useLoaderData, useSearchParams } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 
+import { LatestSpotImages, joinSpotImages, publicSpotWhereClauseRaw, spotImagesRawQuery } from "@ramble/api"
 import { Prisma, SpotType } from "@ramble/database/types"
-import { type SpotItemWithStats } from "@ramble/shared"
+import { type SpotItemWithStatsAndImage } from "@ramble/shared"
 
 import { Button, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { SPOT_TYPE_OPTIONS } from "~/lib/static/spots"
+import { getUserSession } from "~/services/session/session.server"
 
 import { PageContainer } from "../../../components/PageContainer"
 import { SpotItem } from "./components/SpotItem"
+import { promiseHash } from "remix-utils"
+import { useFetcher } from "~/components/Form"
 
 export const config = {
   runtime: "edge",
@@ -31,6 +35,7 @@ const SORT_OPTIONS = [
 
 const TAKE = 12
 export const loader = async ({ request }: LoaderArgs) => {
+  const { userId } = await getUserSession(request)
   const searchParams = new URL(request.url).searchParams
   const skip = parseInt((searchParams.get("skip") as string) || "0")
 
@@ -39,7 +44,9 @@ export const loader = async ({ request }: LoaderArgs) => {
   let sort = searchParams.get("sort") || "latest"
   if (!SORT_OPTIONS.find((o) => o.value === sort)) sort = "latest"
 
-  const WHERE = type ? Prisma.sql`WHERE Spot.type = ${type} AND Spot.deletedAt IS NULL` : Prisma.sql`WHERE Spot.deletedAt IS NULL`
+  const WHERE = type
+    ? Prisma.sql`WHERE Spot.type = ${type} AND ${publicSpotWhereClauseRaw(userId)}`
+    : Prisma.sql`WHERE ${publicSpotWhereClauseRaw(userId)}`
 
   const ORDER_BY = Prisma.sql // prepared orderBy
   `ORDER BY
@@ -48,39 +55,37 @@ export const loader = async ({ request }: LoaderArgs) => {
         ? Prisma.sql`Spot.createdAt DESC, Spot.id`
         : sort === "saved"
         ? Prisma.sql`savedCount DESC, Spot.id`
-        : Prisma.sql`AVG(Review.rating) DESC, Spot.id`
-    }
-  `
+        : Prisma.sql`rating DESC, Spot.id`
+    }`
 
-  const spots: Array<SpotItemWithStats> = await db.$queryRaw`
-    SELECT 
-      Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
-      (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image,
-      (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash,
-      (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
-    FROM
-      Spot
-    LEFT JOIN
-      Review ON Spot.id = Review.spotId
-    LEFT JOIN
-      ListSpot ON Spot.id = ListSpot.spotId
-    ${WHERE}
-    GROUP BY
-      Spot.id
-    ${ORDER_BY}
-    LIMIT ${TAKE}
-    OFFSET ${skip};
-  `
+  const { spots } = await promiseHash({
+    spots: db.$queryRaw<Array<SpotItemWithStatsAndImage>>`
+      SELECT 
+        Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
+        (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
+        (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
+      FROM
+        Spot
+      LEFT JOIN
+        ListSpot ON Spot.id = ListSpot.spotId
+      ${WHERE}
+      GROUP BY
+        Spot.id
+      ${ORDER_BY}
+      LIMIT ${TAKE}
+      OFFSET ${skip};
+    `,
+  })
 
-  const count = await db.spot.count({ where: type ? { type: type as SpotType } : undefined })
-  return json(
-    { spots, count },
-    { headers: { "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour", maxAge: "1hour" }) } },
-  )
+  // get spot images and join to original spot payload
+  const images = await db.$queryRaw<LatestSpotImages>(spotImagesRawQuery(spots.map((s) => s.id)))
+  joinSpotImages(spots, images)
+
+  return json({ spots }, { headers: { "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour", maxAge: "1hour" }) } })
 }
 
 export default function Latest() {
-  const { spots: initialSpots, count } = useLoaderData<typeof loader>()
+  const { spots: initialSpots } = useLoaderData<typeof loader>()
   const [searchParams, setSearchParams] = useSearchParams()
   const type = searchParams.get("type") || ""
   const sort = searchParams.get("sort") || "latest"
@@ -150,7 +155,7 @@ export default function Latest() {
         </div>
       </div>
       <div className="space-y-10">
-        {count === 0 ? (
+        {spots.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-4 p-10">
             <p className="text-xl">No spots yet</p>
             {type && (
@@ -171,8 +176,8 @@ export default function Latest() {
             ))}
           </div>
         )}
-        {count > spots.length && (
-          <div className="flex items-center justify-center">
+        {spots.length % TAKE === 0 && (
+          <div className="center">
             <Button size="lg" isLoading={spotFetcher.state === "loading"} variant="outline" onClick={onNext}>
               Load more
             </Button>

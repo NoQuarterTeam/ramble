@@ -7,6 +7,7 @@ import colors from "@ramble/tailwind-config/src/colors"
 
 import { OptimizedImage } from "../../components/ui/OptimisedImage"
 import { useMe } from "../../lib/hooks/useMe"
+import { useBackgroundColor } from "../../lib/tailwind"
 import { AccountLayout } from "./account/_layout"
 import { ListsLayout } from "./lists/_layout"
 import { MapLayout } from "./map/_layout"
@@ -18,13 +19,13 @@ export function AppLayout() {
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
   const { me } = useMe()
-
+  const backgroundColor = useBackgroundColor()
   return (
     <Tab.Navigator
       initialRouteName="MapLayout"
-      sceneContainerStyle={{ backgroundColor: isDark ? "black" : "white" }}
+      sceneContainerStyle={{ backgroundColor: backgroundColor }}
       screenOptions={{
-        tabBarStyle: { backgroundColor: isDark ? "black" : "white" },
+        tabBarStyle: { backgroundColor: backgroundColor },
         headerShown: false,
         tabBarShowLabel: false,
       }}
@@ -33,21 +34,21 @@ export function AppLayout() {
         name="MapLayout"
         component={MapLayout}
         options={{
-          tabBarIcon: (props) => <Map size={24} color={props.focused ? colors.green[600] : isDark ? "white" : "black"} />,
+          tabBarIcon: (props) => <Map size={24} color={props.focused ? colors.primary[600] : isDark ? "white" : "black"} />,
         }}
       />
       <Tab.Screen
         name="SpotsLayout"
         component={SpotsLayout}
         options={{
-          tabBarIcon: (props) => <List size={24} color={props.focused ? colors.green[600] : isDark ? "white" : "black"} />,
+          tabBarIcon: (props) => <List size={24} color={props.focused ? colors.primary[600] : isDark ? "white" : "black"} />,
         }}
       />
       <Tab.Screen
         name="ListsLayout"
         component={ListsLayout}
         options={{
-          tabBarIcon: (props) => <Heart size={24} color={props.focused ? colors.green[600] : isDark ? "white" : "black"} />,
+          tabBarIcon: (props) => <Heart size={24} color={props.focused ? colors.primary[600] : isDark ? "white" : "black"} />,
         }}
       />
       <Tab.Screen
@@ -64,11 +65,11 @@ export function AppLayout() {
                 source={{ uri: createImageUrl(me.avatar) }}
                 className={join(
                   "rounded-full border-2 border-transparent bg-gray-100 object-cover",
-                  props.focused && "border-green-500",
+                  props.focused && "border-primary-500",
                 )}
               />
             ) : (
-              <User size={24} color={props.focused ? colors.green[600] : isDark ? "white" : "black"} />
+              <User size={24} color={props.focused ? colors.primary[600] : isDark ? "white" : "black"} />
             ),
         }}
       />

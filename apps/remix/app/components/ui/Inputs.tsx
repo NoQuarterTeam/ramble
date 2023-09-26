@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { merge } from "@ramble/shared"
 
 export const inputStyles = cva(
-  "focus:border-primary-500 focus:ring-primary-500 block w-full rounded-md border text-base text-black placeholder-gray-500 ring-0 transition-colors placeholder:font-thin focus:bg-transparent focus:ring-2 focus:ring-transparent read-only:focus:ring-transparent dark:text-white",
+  "focus:border-primary-500 focus:ring-primary-500 rounded-xs block w-full border text-base text-black placeholder-gray-500 ring-0 transition-colors placeholder:font-thin focus:bg-transparent focus:ring-2 focus:ring-transparent read-only:focus:ring-transparent dark:text-white",
   {
     variants: {
       variant: {
@@ -93,30 +93,40 @@ export function Select({ variant, size, ...props }: SelectProps) {
 export const checkboxSizeStyles = cva("", {
   variants: {
     size: {
-      sm: "sq-5",
-      md: "sq-7",
-      lg: "sq-9",
+      sm: "sq-4",
+      md: "sq-5",
+      lg: "sq-7",
     },
   },
   defaultVariants: {
-    size: "sm",
+    size: "md",
   },
 })
 export type CheckboxSizeStyleProps = VariantProps<typeof checkboxSizeStyles>
 
 export function Checkbox({
-  size = "sm",
+  size = "md",
+  isInderterminate,
   ...props
 }: Omit<React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "size"> &
-  CheckboxSizeStyleProps) {
+  CheckboxSizeStyleProps & { isInderterminate?: boolean }) {
+  const ref = React.useRef<HTMLInputElement>(null)
+  React.useEffect(() => {
+    if (!ref.current) return
+    if (isInderterminate) {
+      ref.current.indeterminate = !props.checked && isInderterminate
+    }
+  }, [isInderterminate, props.checked])
+
   return (
     <input
+      ref={ref}
       type="checkbox"
       {...props}
       className={merge(
-        inputStyles({ variant: "outline", size: "xs" }),
+        inputStyles({ variant: "outline" }),
         checkboxSizeStyles({ size }),
-        "text-primary-500 checked:bg-primary-500 hover:text-primary-600 focus:ring-primary-300 dark:checked:bg-primary-500 dark:hover:checked:bg-primary-600 dark:focus:ring-primary-300  cursor-pointer transition-all ",
+        "text-primary-500 checked:bg-primary-500 hover:text-primary-600 focus:ring-primary-300 dark:checked:bg-primary-500 dark:hover:checked:bg-primary-600 dark:focus:ring-primary-300 flex-shrink-0 cursor-pointer p-0 transition-all",
         props.className,
       )}
     />

@@ -24,7 +24,7 @@
     "@turf/helpers": "^6.5.0",
     "bcryptjs": "^2.4.3",
     "blurhash": "^2.0.5",
-    "dayjs": "1.11.9",
+    "dayjs": "1.11.10",
     "jsonwebtoken": "9.0.2",
     "nodemailer": "6.9.5",
     "resend": "^1.0.0",
@@ -35,11 +35,11 @@
   "devDependencies": {
     "@ramble/eslint-config": "workspace:*",
     "@types/bcryptjs": "^2.4.2",
-    "@types/jsonwebtoken": "9.0.2",
+    "@types/jsonwebtoken": "9.0.3",
     "@types/node": "^18.15.3",
     "@types/supercluster": "^7.1.0",
     "dotenv-cli": "^7.1.0",
-    "eslint": "8.49.0",
+    "eslint": "8.50.0",
     "prettier": "^3.0.0",
     "typescript": "5.2.2"
   }

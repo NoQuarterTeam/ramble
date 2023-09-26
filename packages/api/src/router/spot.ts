@@ -3,11 +3,19 @@ import Supercluster from "supercluster"
 import { z } from "zod"
 
 import { Prisma, SpotType } from "@ramble/database/types"
-import { SpotItemWithStats, spotAmenitiesSchema, spotSchemaWithoutType } from "@ramble/shared"
+import { SpotItemWithStatsAndImage, spotAmenitiesSchema, spotSchemaWithoutType } from "@ramble/shared"
 
 import { generateBlurHash } from "../services/generateBlurHash.server"
 import { geocodeCoords } from "../services/geocode.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
+import {
+  LatestSpotImages,
+  joinSpotImages,
+  publicSpotWhereClause,
+  publicSpotWhereClauseRaw,
+  spotImagesRawQuery,
+} from "../shared/spot.server"
+import dayjs from "dayjs"
 
 export const spotRouter = createTRPCRouter({
   clusters: publicProcedure
@@ -28,7 +36,7 @@ export const spotRouter = createTRPCRouter({
       const spots = await ctx.prisma.spot.findMany({
         select: { id: true, latitude: true, longitude: true, type: true },
         where: {
-          deletedAt: { equals: null },
+          ...publicSpotWhereClause(ctx.user?.id),
           verifiedAt: isVerified ? { not: { equals: null } } : undefined,
           isPetFriendly: isPetFriendly ? { equals: true } : undefined,
           latitude: { gt: coords.minLat, lt: coords.maxLat },
@@ -42,6 +50,7 @@ export const spotRouter = createTRPCRouter({
             : undefined,
         },
         orderBy: { createdAt: "desc" },
+        take: 2000,
       })
       if (spots.length === 0) return []
       const supercluster = new Supercluster()
@@ -79,33 +88,39 @@ export const spotRouter = createTRPCRouter({
             ? Prisma.sql`Spot.createdAt DESC, Spot.id`
             : sort === "saved"
             ? Prisma.sql`savedCount DESC, Spot.id`
-            : Prisma.sql`AVG(Review.rating) DESC, Spot.id`
+            : Prisma.sql`rating DESC, Spot.id`
         }
       `
-      return ctx.prisma.$queryRaw<Array<SpotItemWithStats>>`
-        SELECT
-          Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
-          (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image,
-          (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash,
-          (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
-        FROM
-          Spot
-        LEFT JOIN
-          Review ON Spot.id = Review.spotId
-        LEFT JOIN
-          ListSpot ON Spot.id = ListSpot.spotId
-        WHERE
-          Spot.deletedAt IS NULL
-        GROUP BY
-          Spot.id
-        ${ORDER_BY}
-        LIMIT 20
-        OFFSET ${input.skip || 0}
-      `
+      try {
+        const spots = await ctx.prisma.$queryRaw<Array<SpotItemWithStatsAndImage>>`
+          SELECT
+            Spot.id, Spot.name, Spot.type, Spot.address,  null as image, null as blurHash,
+            (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
+            (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
+          FROM
+            Spot
+          LEFT JOIN
+            ListSpot ON Spot.id = ListSpot.spotId
+          WHERE
+            ${publicSpotWhereClauseRaw(ctx.user?.id)}
+          GROUP BY
+            Spot.id
+          ${ORDER_BY}
+          LIMIT 20
+          OFFSET ${input.skip || 0}
+        `
+        const images = await ctx.prisma.$queryRaw<LatestSpotImages>(spotImagesRawQuery(spots.map((s) => s.id)))
+        joinSpotImages(spots, images)
+
+        return spots
+      } catch (error) {
+        console.log(error)
+        return []
+      }
     }),
   mapPreview: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
     const spot = await ctx.prisma.spot.findUnique({
-      where: { id: input.id, deletedAt: { equals: null } },
+      where: { id: input.id, ...publicSpotWhereClause(ctx.user?.id) },
       include: { verifier: true, _count: { select: { listSpots: true, reviews: true } }, images: true },
     })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
@@ -114,9 +129,10 @@ export const spotRouter = createTRPCRouter({
   }),
   detail: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
     const spot = await ctx.prisma.spot.findUnique({
-      where: { id: input.id, deletedAt: { equals: null } },
+      where: { id: input.id, ...publicSpotWhereClause(ctx.user?.id) },
       include: {
         verifier: true,
+        creator: true,
         _count: { select: { reviews: true, listSpots: true } },
         reviews: { take: 5, include: { user: true }, orderBy: { createdAt: "desc" } },
         images: true,
@@ -129,24 +145,28 @@ export const spotRouter = createTRPCRouter({
     return { ...spot, rating }
   }),
   byUser: publicProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {
-    const res: Array<SpotItemWithStats> = await ctx.prisma.$queryRaw`
+    const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })
+    if (!user) throw new TRPCError({ code: "NOT_FOUND" })
+    const spots = await ctx.prisma.$queryRaw<SpotItemWithStatsAndImage[]>`
       SELECT
-        Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
-        (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image, 
-        (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash
+        Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
+        (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
+        (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
       FROM
         Spot
       LEFT JOIN
-        Review ON Spot.id = Review.spotId
+        ListSpot ON Spot.id = ListSpot.spotId
       WHERE
-        Spot.creatorId = (SELECT id FROM User WHERE username = ${input.username}) AND Spot.deletedAt IS NULL
+        Spot.creatorId = ${user.id} AND ${publicSpotWhereClauseRaw(user.id)}
       GROUP BY
         Spot.id
       ORDER BY
         Spot.createdAt DESC, Spot.id
       LIMIT 20
     `
-    return res
+    const images = await ctx.prisma.$queryRaw<LatestSpotImages>(spotImagesRawQuery(spots.map((s) => s.id)))
+    joinSpotImages(spots, images)
+    return spots
   }),
   create: protectedProcedure
     .input(
@@ -154,9 +174,11 @@ export const spotRouter = createTRPCRouter({
         type: z.nativeEnum(SpotType),
         images: z.array(z.object({ path: z.string() })),
         amenities: spotAmenitiesSchema.optional(),
+        shouldPublishLater: z.boolean().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const { shouldPublishLater } = input
       const amenities = input.amenities
       const address = await geocodeCoords({ latitude: input.latitude, longitude: input.longitude })
       const imageData = await Promise.all(
@@ -168,6 +190,7 @@ export const spotRouter = createTRPCRouter({
       const spot = await ctx.prisma.spot.create({
         data: {
           ...input,
+          publishedAt: shouldPublishLater ? dayjs().add(2, "weeks").toDate() : undefined,
           address: address || "Unknown address",
           creator: { connect: { id: ctx.user.id } },
           verifiedAt: ctx.user.role === "GUIDE" ? new Date() : null,

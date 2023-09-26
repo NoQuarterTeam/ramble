@@ -49,7 +49,7 @@ export function ImageCarousel({
           </TouchableOpacity>
         )}
       />
-      <View className="absolute bottom-2 right-2 rounded bg-gray-800/70 p-1">
+      <View className="rounded-xs absolute bottom-2 right-2 bg-gray-800/70 p-1">
         <Text className="text-xs text-white">{`${imageIndex + 1}/${images.length}`}</Text>
       </View>
     </View>

@@ -21,7 +21,7 @@ export function NewListScreen() {
   const handleSubmit = (data: RouterInputs["list"]["create"]) => mutate(data)
 
   return (
-    <ModalView title="New list">
+    <ModalView title="new list">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
         <ListForm onCreate={handleSubmit} isLoading={isLoading} error={error} />
       </ScrollView>

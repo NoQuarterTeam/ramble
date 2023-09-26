@@ -1,13 +1,13 @@
 import * as React from "react"
-import { useFetcher } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs, SerializeFrom } from "@vercel/remix"
 import { Heart, Plus } from "lucide-react"
+import { useAuthenticityToken } from "remix-utils"
 import { z } from "zod"
 import { zx } from "zodix"
 
 import { useDisclosure } from "@ramble/shared"
 
-import { FormButton, FormError, FormField } from "~/components/Form"
+import { FormButton, FormError, FormField, useFetcher } from "~/components/Form"
 import {
   Button,
   Checkbox,
@@ -22,7 +22,7 @@ import {
 } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import type { ActionDataErrorResponse } from "~/lib/form"
-import { FORM_ACTION, formError, validateFormData } from "~/lib/form"
+import { FORM_ACTION, FormActionInput, formError, getFormAction, validateFormData } from "~/lib/form"
 import { badRequest, json } from "~/lib/remix.server"
 import { requireUser } from "~/services/auth/auth.server"
 
@@ -45,14 +45,12 @@ const createListSchema = z.object({ name: z.string().min(1), description: z.stri
 
 export const action = async ({ request }: ActionArgs) => {
   const userId = await requireUser(request)
-  const formData = await request.formData()
-  const action = formData.get("_action") as Actions
-
-  switch (action) {
+  const formAction = await getFormAction<Actions>(request)
+  switch (formAction) {
     case Actions.Save:
       try {
         const schema = z.object({ shouldSave: zx.BoolAsString, listId: z.string(), spotId: z.string() })
-        const result = await validateFormData(formData, schema)
+        const result = await validateFormData(request, schema)
         if (!result.success) return badRequest("Error saving to list", request, { flash: { title: "Error saving to list" } })
         const { shouldSave, listId, spotId } = result.data
         await db.list.findFirstOrThrow({ select: { id: true }, where: { id: listId, creator: { id: userId } } })
@@ -72,7 +70,7 @@ export const action = async ({ request }: ActionArgs) => {
       }
     case Actions.CreateAndSaveToList:
       try {
-        const result = await validateFormData(formData, createListSchema)
+        const result = await validateFormData(request, createListSchema)
         if (!result.success) return formError(result)
         const { name, description, spotId } = result.data
         await db.list.create({ data: { name, description, creatorId: userId, listSpots: { create: { spotId } } } })
@@ -143,7 +141,7 @@ export function SaveToList(props: Props) {
             </Tooltip>
           </div>
           {listsFetcher.state === "loading" && !lists ? (
-            <div className="flex items-center justify-center p-4">
+            <div className="center p-4">
               <Spinner />
             </div>
           ) : !lists ? null : lists.length === 0 ? (
@@ -164,7 +162,7 @@ export function SaveToList(props: Props) {
             ))
           )}
           <Modal title="Create new list" {...newListModalProps}>
-            <listCreateFetcher.Form method="post" replace className="space-y-2" action={SAVE_TO_LIST_URL}>
+            <listCreateFetcher.Form className="space-y-2" action={SAVE_TO_LIST_URL}>
               <input type="hidden" name="spotId" value={props.spotId} />
               <FormField
                 required
@@ -174,13 +172,8 @@ export function SaveToList(props: Props) {
               />
               <FormField name="description" label="Description" />
               <FormError error={!listCreateFetcher.data?.success ? listCreateFetcher.data?.formError : undefined} />
-              <FormButton
-                isLoading={listCreateFetcher.state === "submitting"}
-                name={FORM_ACTION}
-                value={Actions.CreateAndSaveToList}
-              >
-                Create
-              </FormButton>
+              <FormActionInput value={Actions.CreateAndSaveToList} />
+              <FormButton isLoading={listCreateFetcher.state === "submitting"}>Create</FormButton>
             </listCreateFetcher.Form>
           </Modal>
         </div>
@@ -191,14 +184,14 @@ export function SaveToList(props: Props) {
 
 function ListItem({ list, isSaved, spotId }: { spotId: string; list: SerializeFrom<typeof loader>[number]; isSaved: boolean }) {
   const listFetcher = useFetcher<typeof action>()
-
+  const csrf = useAuthenticityToken()
   return (
     <Button
       disabled={listFetcher.state === "submitting"}
       className="w-full px-2"
       onClick={() =>
         listFetcher.submit(
-          { [FORM_ACTION]: Actions.Save, shouldSave: String(!isSaved), listId: list.id, spotId },
+          { [FORM_ACTION]: Actions.Save, shouldSave: String(!isSaved), listId: list.id, spotId, csrf },
           { method: "post", replace: true, action: SAVE_TO_LIST_URL },
         )
       }

@@ -35,13 +35,13 @@ export function EditSpotImagesScreen() {
 
   const router = useRouter()
   return (
-    <EditSpotModalView title="Upload images">
+    <EditSpotModalView title="upload images">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View className="flex flex-row flex-wrap">
           {images.map((image) => (
             <TouchableOpacity key={image} onPress={() => setImages((im) => im.filter((i) => i !== image))} className="w-1/3 p-1">
               <Image
-                className="h-[100px] w-full rounded-md bg-gray-50 object-cover dark:bg-gray-700"
+                className="rounded-xs h-[100px] w-full bg-gray-50 object-cover dark:bg-gray-700"
                 source={{ uri: image.startsWith("file://") ? image : createImageUrl(image) }}
               />
               <View className="absolute -right-1 -top-1 rounded-full bg-gray-100 p-1 dark:bg-gray-900">

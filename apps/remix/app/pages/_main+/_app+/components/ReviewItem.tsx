@@ -1,4 +1,4 @@
-import { Link, useFetcher } from "@remix-run/react"
+import { Link } from "@remix-run/react"
 import type { SerializeFrom } from "@vercel/remix"
 import dayjs from "dayjs"
 import { Star } from "lucide-react"
@@ -6,6 +6,7 @@ import { Star } from "lucide-react"
 import type { Prisma } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
+import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import {
   AlertDialogCancel,
@@ -18,7 +19,7 @@ import {
   Avatar,
   Button,
 } from "~/components/ui"
-import { FormAction } from "~/lib/form"
+import { FormActionInput } from "~/lib/form"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 
 import { Actions } from "../spots.$id_.reviews.$reviewId"
@@ -48,7 +49,7 @@ export function ReviewItem({ review }: Props) {
   const user = useMaybeUser()
   const deleteFetcher = useFetcher()
   return (
-    <div className="stack space-y-2 rounded-md border border-gray-100 px-4 py-3 dark:border-gray-700">
+    <div className="rounded-xs space-y-2 border px-4 py-3">
       <div className="flex justify-between">
         <div className="hstack">
           <Avatar size={40} className="sq-10 rounded-full" src={createImageUrl(review.user.avatar)} />
@@ -82,8 +83,8 @@ export function ReviewItem({ review }: Props) {
                   <Button variant="ghost">Cancel</Button>
                 </AlertDialogCancel>
 
-                <deleteFetcher.Form method="post" action={`/spots/${review.spotId}/reviews/${review.id}`} replace>
-                  <FormAction value={Actions.Delete} />
+                <deleteFetcher.Form action={`/spots/${review.spotId}/reviews/${review.id}`}>
+                  <FormActionInput value={Actions.Delete} />
                   <Button type="submit">Confirm</Button>
                 </deleteFetcher.Form>
               </AlertDialogFooter>

@@ -7,7 +7,7 @@ import { join, merge } from "@ramble/shared"
 import { Spinner } from "./Spinner"
 import { Text } from "./Text"
 
-export const buttonStyles = cva("flex flex-row items-center justify-center rounded-md border", {
+export const buttonStyles = cva("rounded-xs flex flex-row items-center justify-center border", {
   variants: {
     size: {
       xs: "h-8 px-2",

@@ -27,8 +27,6 @@ export const action = async ({ request }: ActionArgs) => {
     isPrivate: FormCheckbox,
   })
   const result = await validateFormData(request, schema)
-  console.log(result)
-
   if (!result.success) return formError(result)
 
   await db.list.create({ data: { ...result.data, creator: { connect: { id: user.id } } } })

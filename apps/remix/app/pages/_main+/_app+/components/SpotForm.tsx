@@ -1,11 +1,11 @@
 import * as React from "react"
 import type { ViewStateChangeEvent } from "react-map-gl"
-import Map, { NavigationControl } from "react-map-gl"
+import Map, { GeolocateControl, NavigationControl } from "react-map-gl"
 import { useFetcher, useNavigate, useSearchParams } from "@remix-run/react"
 import turfCenter from "@turf/center"
 import * as turf from "@turf/helpers"
 import type { SerializeFrom } from "@vercel/remix"
-import { CircleDot, Plus } from "lucide-react"
+import { CircleDot, Lock, Plus } from "lucide-react"
 import queryString from "query-string"
 import { z } from "zod"
 import { zx } from "zodix"
@@ -23,7 +23,7 @@ import {
 import { Form, FormButton, FormError, FormField, FormFieldError, FormFieldLabel, ImageField } from "~/components/Form"
 import { ImageUploader } from "~/components/ImageUploader"
 import type { RambleIcon } from "~/components/ui"
-import { Button, CloseButton, IconButton, Spinner, Textarea } from "~/components/ui"
+import { Button, Checkbox, CloseButton, IconButton, Spinner, Textarea, Tooltip } from "~/components/ui"
 import { FormNumber, NullableFormString, useFormErrors } from "~/lib/form"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { AMENITIES_ICONS } from "~/lib/static/amenities"
@@ -156,7 +156,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
                 {geocodeFetcher.state === "loading" && <Spinner size="xs" className="absolute -left-5 top-2" />}
               </div>
             </div>
-            <FormField name="customAddress" defaultValue={spot?.address} label="Or write a custom address" />
+            <FormField name="customAddress" defaultValue={spot?.address || ""} label="Or write a custom address" />
           </div>
 
           <div className="space-y-0.5">
@@ -219,7 +219,16 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
 
           <FormError />
         </div>
-        <div className="bg-background fixed bottom-0 left-0 z-10 flex w-full justify-end border-t border-gray-100 px-10 py-4 dark:border-gray-600 md:w-1/2">
+        <div className="bg-background fixed bottom-0 left-0 z-10 flex w-full justify-end space-x-4 border-t px-10 py-4 md:w-1/2">
+          {!spot && (
+            <Tooltip label="The spot will be made public in 2 weeks">
+              <label htmlFor="shouldPublishLater" className="hstack">
+                <Lock size={16} />
+                <p>Publish later</p>
+                <Checkbox id="shouldPublishLater" name="shouldPublishLater" />
+              </label>
+            </Tooltip>
+          )}
           <FormButton disabled={!address} size="lg">
             Save
           </FormButton>
@@ -242,6 +251,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
               : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
           }
         >
+          <GeolocateControl position="bottom-right" />
           <NavigationControl position="bottom-right" />
         </Map>
 

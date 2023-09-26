@@ -7,20 +7,20 @@ import queryString from "query-string"
 
 import { join } from "@ramble/shared"
 
-import { IconButton, Tile } from "./ui"
+import { DEFAULT_TAKE } from "~/lib/table"
+
+import { IconButton, Select, Tile } from "./ui"
 
 export function Table<T>({
   data,
   columns,
   count,
-  take,
   ExpandComponent,
 }: {
   data: T[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   columns: ColumnDef<T, any>[]
   count: number
-  take: number
   ExpandComponent?: React.ComponentType<{ row: Row<T> }>
 }) {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -37,10 +37,9 @@ export function Table<T>({
     getRowCanExpand: () => !!ExpandComponent,
     getExpandedRowModel: ExpandComponent ? getExpandedRowModel() : undefined,
   })
-  const noOfPages = Math.ceil(count / take)
   return (
     <Tile className="space-y-1 p-2">
-      <table className="w-full text-sm">
+      <table className="w-full table-fixed text-sm">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
@@ -48,6 +47,7 @@ export function Table<T>({
                 <th
                   key={header.id}
                   colSpan={header.colSpan}
+                  style={{ width: header.getSize() }}
                   onClick={
                     header.column.getCanSort()
                       ? () => {
@@ -69,7 +69,8 @@ export function Table<T>({
                   <div
                     className={join(
                       "mb-1 flex items-center justify-between whitespace-nowrap px-2 py-1 text-left font-medium",
-                      header.column.getCanSort() && "cursor-pointer select-none rounded hover:bg-gray-100",
+                      header.column.getCanSort() &&
+                        "rounded-xs cursor-pointer select-none hover:bg-gray-100 dark:hover:bg-gray-700",
                     )}
                   >
                     {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
@@ -94,19 +95,15 @@ export function Table<T>({
           ) : (
             table.getRowModel().rows.map((row, i) => (
               <React.Fragment key={row.id}>
-                <tr className={join(i % 2 === 0 ? "bg-gray-100 dark:bg-gray-700" : "white dark:bg-black")}>
+                <tr className={join(i % 2 === 0 ? "bg-gray-100 dark:bg-gray-700" : "bg-background")}>
                   {row.getVisibleCells().map((cell) => (
-                    <td
-                      key={cell.id}
-                      className="truncate px-2 py-1"
-                      style={{ width: cell.column.getSize(), maxWidth: cell.column.getSize() }}
-                    >
+                    <td key={cell.id} className="truncate px-2 py-1" style={{ width: cell.column.getSize() }}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}
                 </tr>
                 {ExpandComponent && row.getIsExpanded() && (
-                  <tr className={join(i % 2 === 0 ? "bg-gray-100 dark:bg-gray-700" : "white dark:bg-black")}>
+                  <tr className={join(i % 2 === 0 ? "bg-gray-100 dark:bg-gray-700" : "bg-background")}>
                     <td style={{ maxWidth: table.getTotalSize() }} colSpan={row.getVisibleCells().length}>
                       {ExpandComponent && <ExpandComponent row={row} />}
                     </td>
@@ -118,18 +115,19 @@ export function Table<T>({
         </tbody>
       </table>
 
-      <Pagination count={count} noOfPages={noOfPages} />
+      <Pagination count={count} />
     </Tile>
   )
 }
-function Pagination({ noOfPages, count }: { noOfPages: number; count: number }) {
+function Pagination({ count }: { count: number }) {
   const [searchParams, setSearchParams] = useSearchParams()
-  const currentPage = Number(searchParams.get("page")) || 1
+  const take = Number(searchParams.get("take") || `${DEFAULT_TAKE}`)
+  const noOfPages = Math.ceil(count / take)
+  const currentPage = Number(searchParams.get("page") || "1")
   const existingParams = queryString.parse(searchParams.toString())
   return (
     <div className="flex items-center justify-between px-2">
       <p className="text-sm">{count} items</p>
-
       <div className="flex items-center gap-2 text-sm">
         <span className="flex items-center gap-1">
           <div>Page</div>
@@ -137,38 +135,57 @@ function Pagination({ noOfPages, count }: { noOfPages: number; count: number }) 
           of
           <strong>{noOfPages}</strong>
         </span>
-        <IconButton
+        <div>
+          <IconButton
+            size="sm"
+            aria-label="first page"
+            icon={<ChevronsLeft size={16} />}
+            variant="outline"
+            onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: 1 }))}
+            disabled={currentPage === 1}
+          />
+        </div>
+        <div>
+          <IconButton
+            size="sm"
+            aria-label="previous page"
+            icon={<ChevronLeft size={16} />}
+            variant="outline"
+            onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: currentPage - 1 }))}
+            disabled={currentPage === 1}
+          />
+        </div>
+        <div>
+          <IconButton
+            size="sm"
+            aria-label="back"
+            icon={<ChevronRight size={16} />}
+            variant="outline"
+            onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: currentPage + 1 }))}
+            disabled={currentPage === noOfPages}
+          />
+        </div>
+        <div>
+          <IconButton
+            size="sm"
+            icon={<ChevronsRight size={16} />}
+            aria-label="back"
+            variant="outline"
+            onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: noOfPages }))}
+            disabled={currentPage === noOfPages}
+          />
+        </div>
+        <Select
+          className="w-[130px]"
           size="sm"
-          aria-label="first page"
-          icon={<ChevronsLeft size={16} />}
-          variant="outline"
-          onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: 1 }))}
-          disabled={currentPage === 1}
-        />
-        <IconButton
-          size="sm"
-          aria-label="previous page"
-          icon={<ChevronLeft size={16} />}
-          variant="outline"
-          onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: currentPage - 1 }))}
-          disabled={currentPage === 1}
-        />
-        <IconButton
-          size="sm"
-          aria-label="back"
-          icon={<ChevronRight size={16} />}
-          variant="outline"
-          onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: currentPage + 1 }))}
-          disabled={currentPage === noOfPages}
-        />
-        <IconButton
-          size="sm"
-          icon={<ChevronsRight size={16} />}
-          aria-label="back"
-          variant="outline"
-          onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: noOfPages }))}
-          disabled={currentPage === noOfPages}
-        />
+          name="take"
+          value={take}
+          onChange={(e) => setSearchParams(queryString.stringify({ ...existingParams, take: e.target.value }))}
+        >
+          <option value="15">15 per page</option>
+          <option value="30">30 per page</option>
+          <option value="50">50 per page</option>
+        </Select>
       </div>
     </div>
   )

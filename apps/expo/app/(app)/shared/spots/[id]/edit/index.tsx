@@ -40,7 +40,7 @@ export function EditSpotLocationScreen() {
   return (
     <EditSpotModalView shouldRenderToast title="Edit spot" canGoBack={false}>
       <Mapbox.MapView
-        className="mb-10 mt-4 flex-1 overflow-hidden rounded-lg"
+        className="rounded-xs mb-10 mt-4 flex-1 overflow-hidden"
         logoEnabled={false}
         compassEnabled
         onMapIdle={onMapMove}
@@ -65,7 +65,7 @@ export function EditSpotLocationScreen() {
         <View className="w-12" />
 
         <Button
-          className="rounded-full bg-white"
+          className="bg-background rounded-full"
           textClassName="text-black"
           onPress={() => {
             if (!me) return
@@ -80,7 +80,7 @@ export function EditSpotLocationScreen() {
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={handleSetUserLocation}
-          className="sq-12 flex flex-row items-center justify-center rounded-full bg-white"
+          className="sq-12 bg-background flex flex-row items-center justify-center rounded-full"
         >
           <Navigation size={20} className="text-black" />
         </TouchableOpacity>

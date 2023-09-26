@@ -22,22 +22,17 @@ export function getOrderBy(orderBy: string, order: string) {
 
 export type DefaultOrder = { orderBy: string; order: Prisma.SortOrder }
 
-export function getOrderByParams(request: Request, defaultOrder?: DefaultOrder) {
+export function getOrderByParams(request: Request, defaultOrder: DefaultOrder) {
   const url = new URL(request.url)
-  const orderBy = url.searchParams.get("orderBy") || undefined
-  const order = url.searchParams.get("order") || undefined
-  if (!orderBy && !order && defaultOrder) {
-    return getOrderBy(defaultOrder.orderBy, defaultOrder.order)
-  }
-  if (!orderBy || !order) return undefined
+  const orderBy = url.searchParams.get("orderBy") || defaultOrder?.orderBy
+  const order = url.searchParams.get("order") || defaultOrder.order
   return getOrderBy(orderBy, order)
 }
 
-export const DEFAULT_TAKE = 10
-export function getPaginationParams(request: Request, defaultTake?: number) {
+export function getPaginationParams(request: Request, defaultTake: number) {
   const url = new URL(request.url)
-  const page = parseInt(url.searchParams.get("page") || "1") || 1
-  const take = defaultTake || DEFAULT_TAKE
+  const page = parseInt(url.searchParams.get("page") || "1")
+  const take = parseInt(url.searchParams.get("take") || "0") || defaultTake
   const skip = (page - 1) * take
   return { skip, take }
 }
@@ -54,9 +49,11 @@ export type TableParams = {
   orderBy?: { [key: string]: Prisma.SortOrder }
 }
 
-export function getTableParams(request: Request, defaultTake?: number, defaultOrder?: DefaultOrder) {
-  const pagination = getPaginationParams(request, defaultTake)
-  const orderBy = getOrderByParams(request, defaultOrder)
+export const DEFAULT_TAKE = 15
+
+export function getTableParams(request: Request, options?: { defaultTake?: number; defaultOrder?: DefaultOrder }) {
+  const pagination = getPaginationParams(request, options?.defaultTake || DEFAULT_TAKE)
+  const orderBy = getOrderByParams(request, options?.defaultOrder || { order: "desc", orderBy: "createdAt" })
   const search = getSearchParams(request)
   return { ...pagination, search, orderBy }
 }

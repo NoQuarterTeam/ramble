@@ -4,7 +4,7 @@ import { json } from "@vercel/remix"
 import { z } from "zod"
 
 import { db } from "~/lib/db.server"
-import { formError, FormNumber, validateFormData } from "~/lib/form"
+import { formError, FormNumber, getFormAction, validateFormData } from "~/lib/form"
 import { badRequest, notFound, redirect } from "~/lib/remix.server"
 import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
 
@@ -36,14 +36,12 @@ export enum Actions {
 
 export const action = async ({ request, params }: ActionArgs) => {
   const user = await getCurrentUser(request)
-  const formData = await request.formData()
-  const action = formData.get("_action") as Actions | undefined
-
-  switch (action) {
+  const formAction = await getFormAction<Actions>(request)
+  switch (formAction) {
     case Actions.Edit:
       try {
         const schema = z.object({ description: z.string().min(10), rating: FormNumber.min(1).max(5) })
-        const result = await validateFormData(formData, schema)
+        const result = await validateFormData(request, schema)
         if (!result.success) return formError(result)
         const spot = await db.spot.findUnique({ where: { id: params.id } })
         if (!spot) throw notFound()

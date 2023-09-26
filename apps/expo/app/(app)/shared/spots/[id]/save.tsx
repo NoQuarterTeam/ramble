@@ -17,12 +17,12 @@ export function SaveSpotScreen() {
   const { data: lists, isLoading } = api.list.allByUserWithSavedSpots.useQuery({ spotId: id }, { enabled: !!me })
   if (!me)
     return (
-      <ModalView title="Save to list">
+      <ModalView title="save to list">
         <LoginPlaceholder text="Log in to start saving spots" />
       </ModalView>
     )
   return (
-    <ModalView title="Save to list">
+    <ModalView title="save to list">
       {isLoading ? null : (
         <FlashList
           showsVerticalScrollIndicator={false}
@@ -62,7 +62,7 @@ function SaveableListItem({ list, spotId }: Props) {
     <TouchableOpacity
       onPress={handleToggle}
       activeOpacity={0.8}
-      className="flex flex-row items-center justify-between rounded-lg border border-gray-100 p-4 dark:border-gray-700"
+      className="rounded-xs flex flex-row items-center justify-between border border-gray-100 p-4 dark:border-gray-700"
     >
       <View>
         <View className="flex flex-row items-center space-x-2">

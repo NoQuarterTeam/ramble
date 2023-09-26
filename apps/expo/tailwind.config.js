@@ -3,6 +3,10 @@ module.exports = {
   presets: [require("@ramble/tailwind-config")],
   content: ["./app/**/*.tsx", "./components/**/*.tsx", "./lib/**/*.tsx"],
   theme: {
+    colors: {
+      background: "#fffefe",
+      "background-dark": "#241c17",
+    },
     fontFamily: {
       300: ["poppins300"],
       400: ["poppins400"],
@@ -12,6 +16,7 @@ module.exports = {
       700: ["poppins700"],
       800: ["poppins800"],
       900: ["poppins900"],
+      urbanist: ["urbanist700Italic"],
     },
   },
 }

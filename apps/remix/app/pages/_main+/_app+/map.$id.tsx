@@ -5,6 +5,7 @@ import { defer } from "@vercel/remix"
 import { Frown, Heart, Star } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
+import { publicSpotWhereClause } from "@ramble/api"
 import { createImageUrl, displayRating, merge } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
@@ -14,13 +15,16 @@ import { db } from "~/lib/db.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
 import { SaveToList } from "~/pages/api+/save-to-list"
+import { getUserSession } from "~/services/session/session.server"
 
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 
-export const loader = async ({ params }: LoaderArgs) => {
+export const loader = async ({ params, request }: LoaderArgs) => {
+  const { userId } = await getUserSession(request)
+
   const spot = db.spot
     .findUnique({
-      where: { id: params.id, deletedAt: { equals: null } },
+      where: { id: params.id, ...publicSpotWhereClause(userId) },
       select: {
         id: true,
         name: true,
@@ -56,13 +60,16 @@ export default function SpotPreview() {
   return (
     <SpotContainer>
       <React.Suspense fallback={<SpotFallback />}>
-        <Await resolve={promise.spot}>
+        <Await
+          // @ts-expect-error vercel remix issues
+          resolve={promise.spot}
+        >
           {(spot) =>
             !spot ? (
               <div className="flex items-center p-2">
-                <div className="stack w-full space-y-6">
+                <div className="w-full space-y-6">
                   <Frown className="sq-10" />
-                  <h1 className="text-2xl">Oops, error loading spot!</h1>
+                  <h1 className="text-2xl">Oops, spot not found!</h1>
                 </div>
               </div>
             ) : (
@@ -81,7 +88,12 @@ export default function SpotPreview() {
                       <div className="flex items-center space-x-1 text-sm">
                         <Star className="sq-4" />
                         <React.Suspense fallback={<Spinner size="sm" />}>
-                          <Await resolve={promise.rating}>{(rating) => <p>{displayRating(rating._avg.rating)}</p>}</Await>
+                          <Await
+                            // @ts-expect-error vercel remix issues
+                            resolve={promise.rating}
+                          >
+                            {(rating) => <p>{displayRating(rating._avg.rating)}</p>}
+                          </Await>
                         </React.Suspense>
                       </div>
                       <div className="flex items-center space-x-1 text-sm">
@@ -93,19 +105,22 @@ export default function SpotPreview() {
                     {user && <SaveToList spotId={spot.id} />}
                   </div>
                 </div>
-                <div className="w-full overflow-x-scroll rounded-md">
+                <div className="rounded-xs w-full overflow-x-scroll">
                   <div className="relative flex h-[225px] w-max space-x-2">
-                    {spot.images?.map((image) => (
-                      <OptimizedImage
-                        alt="spot"
-                        width={350}
-                        placeholder={image.blurHash}
-                        height={225}
-                        className="h-[225px] max-w-[350px] rounded-md object-cover"
-                        key={image.id}
-                        src={createImageUrl(image.path)}
-                      />
-                    ))}
+                    {spot.images?.map(
+                      // @ts-expect-error vercel remix issues
+                      (image) => (
+                        <OptimizedImage
+                          alt="spot"
+                          width={350}
+                          placeholder={image.blurHash}
+                          height={225}
+                          className="rounded-xs h-[225px] max-w-[350px] object-cover"
+                          key={image.id}
+                          src={createImageUrl(image.path)}
+                        />
+                      ),
+                    )}
                   </div>
                 </div>
                 <VerifiedCard spot={spot} />
@@ -128,7 +143,12 @@ export default function SpotPreview() {
                       <div className="flex items-center space-x-1">
                         <Star className="sq-5" />
                         <React.Suspense fallback={<Spinner size="sm" />}>
-                          <Await resolve={promise.rating}>{(rating) => <p>{displayRating(rating._avg.rating)}</p>}</Await>
+                          <Await
+                            // @ts-expect-error vercel remix issues
+                            resolve={promise.rating}
+                          >
+                            {(rating) => <p>{displayRating(rating._avg.rating)}</p>}
+                          </Await>
                         </React.Suspense>
                       </div>
                     </div>
@@ -138,7 +158,12 @@ export default function SpotPreview() {
                       </LinkButton>
                     )}
                   </div>
-                  <div className="space-y-6">{spot.reviews?.map((review) => <ReviewItem key={review.id} review={review} />)}</div>
+                  <div className="space-y-6">
+                    {spot.reviews?.map(
+                      // @ts-expect-error vercel remix issues
+                      (review) => <ReviewItem key={review.id} review={review} />,
+                    )}
+                  </div>
                 </div>
               </div>
             )
@@ -155,9 +180,9 @@ function SpotFallback() {
       <Skeleton className="h-12 w-11/12" />
       <Skeleton className="h-6 w-10" />
       <Skeleton className="h-5 w-40" />
-      <div className="flex h-[225px] w-full space-x-2 overflow-hidden rounded-md">
-        <Skeleton className="h-[225px] min-w-[350px] rounded-md" />
-        <Skeleton className="h-[225px] min-w-[75px] rounded-md" />
+      <div className="rounded-xs flex h-[225px] w-full space-x-2 overflow-hidden">
+        <Skeleton className="rounded-xs h-[225px] min-w-[350px]" />
+        <Skeleton className="rounded-xs h-[225px] min-w-[75px]" />
       </div>
       <Skeleton className="h-32 w-full" />
       <div className="flex justify-end">
@@ -175,13 +200,13 @@ function SpotFallback() {
   )
 }
 export function Skeleton(props: React.HTMLAttributes<HTMLDivElement>) {
-  return <div {...props} className={merge("animate-pulse rounded-md bg-gray-100 dark:bg-gray-700", props.className)} />
+  return <div {...props} className={merge("rounded-xs animate-pulse bg-gray-100 dark:bg-gray-700", props.className)} />
 }
 
 function SpotContainer(props: { children: React.ReactNode }) {
   const navigate = useNavigate()
   return (
-    <div className="bg-background absolute bottom-0 left-0 top-0 z-10 w-full max-w-lg overflow-scroll border-r border-gray-100 p-4 pb-20 dark:border-gray-700 md:px-8">
+    <div className="bg-background absolute bottom-0 left-0 top-0 z-10 w-full max-w-lg overflow-scroll border-r p-4 pb-20 md:px-8">
       <CloseButton className="absolute right-2 top-2 z-10" onClick={() => navigate(`..${window.location.search}`)} />
       {props.children}
     </div>
@@ -192,7 +217,7 @@ export function ErrorBoundary() {
   return (
     <SpotContainer>
       <div className="flex items-center p-2">
-        <div className="stack w-full space-y-6">
+        <div className="w-full space-y-6">
           <Frown className="sq-10" />
           <h1 className="text-2xl">Oops, error loading spot!</h1>
         </div>

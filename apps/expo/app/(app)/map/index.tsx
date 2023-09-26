@@ -2,6 +2,7 @@ import * as React from "react"
 import { Modal, Switch, TouchableOpacity, useColorScheme, View } from "react-native"
 import BottomSheet, { useBottomSheetDynamicSnapPoints, useBottomSheetSpringConfigs } from "@gorhom/bottom-sheet"
 import Mapbox, { Camera, type MapView as MapType, MarkerView, RasterLayer, RasterSource } from "@rnmapbox/maps"
+import { useQuery } from "@tanstack/react-query"
 import * as Location from "expo-location"
 import { BadgeX, CloudRain, Heart, Layers, Navigation, PlusCircle, Settings2, Star, Verified, X } from "lucide-react-native"
 
@@ -21,7 +22,6 @@ import { useAsyncStorage } from "../../../lib/hooks/useAsyncStorage"
 import { usePreferences } from "../../../lib/hooks/usePreferences"
 import { useRouter } from "../../router"
 import { type Filters, initialFilters, MapFilters } from "./MapFilters"
-import { useQuery } from "@tanstack/react-query"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
@@ -193,7 +193,7 @@ export function SpotsMapScreen() {
       </Mapbox.MapView>
 
       {isFetching && !!!clusters && (
-        <View className="absolute left-4 top-10 flex items-center justify-center rounded-lg bg-white p-2 dark:bg-gray-800">
+        <View className="rounded-xs absolute left-4 top-10 flex items-center justify-center bg-white p-2 dark:bg-gray-800">
           <Spinner />
         </View>
       )}
@@ -202,20 +202,20 @@ export function SpotsMapScreen() {
         activeOpacity={0.8}
         onPress={() => push("NewSpotLayout")}
         style={{ transform: [{ translateX: -26 }] }}
-        className="absolute bottom-3 left-1/2 rounded-full bg-gray-800 p-4 dark:bg-white"
+        className="bg-primary absolute bottom-3 left-1/2 rounded-full p-4 "
       >
-        <PlusCircle size={20} className="text-white dark:text-black" />
+        <PlusCircle size={20} className="text-white" />
       </TouchableOpacity>
 
       <View className="absolute bottom-3 left-3 flex space-y-2">
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={mapLayerModalProps.onOpen}
-          className="sq-12 flex flex-row items-center justify-center rounded-full bg-white"
+          className="sq-12 bg-background flex flex-row items-center justify-center rounded-full"
         >
           <Layers size={20} className="text-black" />
           {preferences.mapLayerRain && (
-            <View className="sq-5 absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 bg-white dark:border-gray-700">
+            <View className="sq-5 bg-background absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-700">
               <Text className="text-xs text-black">{1}</Text>
             </View>
           )}
@@ -223,11 +223,11 @@ export function SpotsMapScreen() {
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={filterModalProps.onOpen}
-          className="sq-12 flex flex-row items-center justify-center rounded-full bg-white"
+          className="sq-12 bg-background flex flex-row items-center justify-center rounded-full"
         >
           <Settings2 size={20} className="text-black" />
           {filterCount > 0 && (
-            <View className="sq-5 absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 bg-white dark:border-gray-700">
+            <View className="sq-5 bg-background absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-700">
               <Text className="text-xs text-black">{filterCount}</Text>
             </View>
           )}
@@ -236,7 +236,7 @@ export function SpotsMapScreen() {
 
       <TouchableOpacity
         onPress={handleSetUserLocation}
-        className="sq-12 absolute bottom-3 right-3 flex flex-row items-center justify-center rounded-full bg-white"
+        className="sq-12 bg-background absolute bottom-3 right-3 flex flex-row items-center justify-center rounded-full"
       >
         <Navigation size={20} className="text-black" />
       </TouchableOpacity>
@@ -249,7 +249,7 @@ export function SpotsMapScreen() {
         onRequestClose={filterModalProps.onClose}
         onDismiss={filterModalProps.onClose}
       >
-        <ModalView title="Filters" onBack={filterModalProps.onClose}>
+        <ModalView title="filters" onBack={filterModalProps.onClose}>
           <MapFilters {...filterModalProps} initialFilters={filters} onSave={onFiltersChange} />
         </ModalView>
       </Modal>
@@ -260,7 +260,7 @@ export function SpotsMapScreen() {
         onRequestClose={mapLayerModalProps.onClose}
         onDismiss={mapLayerModalProps.onClose}
       >
-        <ModalView title="Map layers" onBack={mapLayerModalProps.onClose}>
+        <ModalView title="map layers" onBack={mapLayerModalProps.onClose}>
           <View className="flex flex-row items-center justify-between space-x-2">
             <View className="flex flex-row items-center space-x-4">
               <CloudRain size={30} className="text-black dark:text-white" />
@@ -309,7 +309,7 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
   return (
     <>
       {isLoading && !!id && (
-        <View className="absolute left-4 top-10 flex items-center justify-center rounded-lg bg-white p-2 dark:bg-gray-800">
+        <View className="rounded-xs bg-background absolute left-4 top-10 flex items-center justify-center p-2 dark:bg-gray-800">
           <Spinner />
         </View>
       )}
@@ -327,7 +327,7 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
         contentHeight={animatedContentHeight}
       >
         {isLoading ? null : (
-          <View onLayout={handleContentLayout} className="rounded-xl bg-white p-4 dark:bg-gray-900">
+          <View onLayout={handleContentLayout} className="bg-background rounded-xl p-4 dark:bg-gray-900">
             {!spot ? (
               <Text>Spot not found</Text>
             ) : (
@@ -365,7 +365,7 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
                     </View>
                   </View>
                 </View>
-                <View className="overflow-hidden rounded-lg">
+                <View className="rounded-xs overflow-hidden">
                   <ImageCarousel
                     onPress={() => push("SpotDetailScreen", { id: spot.id })}
                     key={spot.id}

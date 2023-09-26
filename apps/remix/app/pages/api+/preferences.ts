@@ -20,17 +20,14 @@ export const defaultPreferences = {
 } satisfies Preferences
 
 export async function action({ request }: ActionArgs) {
-  const formData = await request.formData()
-
-  const result = await validateFormData(formData, preferencesSchema)
+  const result = await validateFormData(request, preferencesSchema)
   if (!result.success) return formError(result)
-
   const cookieHeader = request.headers.get("Cookie")
   let cookie = (await preferencesCookies.parse(cookieHeader)) || defaultPreferences
 
   cookie = { ...cookie, ...result.data }
 
-  return json({ succuess: true }, request, {
+  return json({ success: true }, request, {
     headers: { "Set-Cookie": await preferencesCookies.serialize(cookie) },
   })
 }

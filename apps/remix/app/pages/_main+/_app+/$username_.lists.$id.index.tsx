@@ -1,7 +1,7 @@
 import * as React from "react"
 import type { LngLatLike } from "react-map-gl"
 import Map, { Marker, NavigationControl } from "react-map-gl"
-import { Link, useFetcher, useLoaderData, useNavigate } from "@remix-run/react"
+import { Link, useLoaderData, useNavigate } from "@remix-run/react"
 import bbox from "@turf/bbox"
 import * as turf from "@turf/helpers"
 import type { ActionArgs, LoaderArgs } from "@vercel/remix"
@@ -9,14 +9,15 @@ import { json } from "@vercel/remix"
 import { ChevronLeft, Copy } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
-import { type SpotItemWithStats } from "@ramble/shared"
-import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
+import { LatestSpotImages, joinSpotImages, publicSpotWhereClauseRaw, spotImagesRawQuery } from "@ramble/api"
+import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE, type SpotItemWithStatsAndImage } from "@ramble/shared"
 
+import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { PageContainer } from "~/components/PageContainer"
 import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
-import { FORM_ACTION } from "~/lib/form"
+import { FormActionInput, getFormAction } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { badRequest, notFound, redirect } from "~/lib/remix.server"
@@ -25,14 +26,16 @@ import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
 
 import { SpotItem } from "./components/SpotItem"
 import { SpotMarker } from "./components/SpotMarker"
+import { promiseHash } from "remix-utils"
 
 export const headers = useLoaderHeaders
 
-type SpotItemWithStatsAndCoords = SpotItemWithStats & { longitude: number; latitude: number }
+type SpotItemWithStatsAndCoords = SpotItemWithStatsAndImage & { longitude: number; latitude: number }
+
 export const loader = async ({ params, request }: LoaderArgs) => {
   const user = await getMaybeUser(request)
-  const [list, spots] = await Promise.all([
-    db.list.findFirst({
+  const { list, spots } = await promiseHash({
+    list: db.list.findFirst({
       where: { id: params.id, isPrivate: !user || user.username !== params.username ? false : undefined },
       select: {
         id: true,
@@ -42,28 +45,28 @@ export const loader = async ({ params, request }: LoaderArgs) => {
         description: true,
       },
     }),
-    db.$queryRaw<SpotItemWithStatsAndCoords[]>`
+    spots: db.$queryRaw<SpotItemWithStatsAndCoords[]>`
       SELECT 
-        Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
+        Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
         Spot.latitude, Spot.longitude,
-        (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image,
-        (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash,
+        (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
         (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
       FROM
         Spot
       LEFT JOIN
-        Review ON Spot.id = Review.spotId
-      LEFT JOIN
         ListSpot ON Spot.id = ListSpot.spotId
       WHERE
-        ListSpot.listId = ${params.id} AND Spot.deletedAt IS NULL
+        ListSpot.listId = ${params.id} AND ${publicSpotWhereClauseRaw(user?.id)}
       GROUP BY
         Spot.id
       ORDER BY
         Spot.id
     `,
-  ])
+  })
   if (!list) throw notFound()
+
+  const images = await db.$queryRaw<LatestSpotImages>(spotImagesRawQuery(spots.map((s) => s.id)))
+  joinSpotImages(spots, images)
 
   const coords = spots.length > 1 ? spots.map((spot) => [spot.longitude, spot.latitude]) : null
 
@@ -86,10 +89,8 @@ enum Actions {
 
 export const action = async ({ request, params }: ActionArgs) => {
   const user = await getCurrentUser(request)
-  const formData = await request.formData()
-  const action = formData.get(FORM_ACTION) as Actions
-
-  switch (action) {
+  const formAction = await getFormAction<Actions>(request)
+  switch (formAction) {
     case Actions.Delete:
       await db.list.delete({ where: { id: params.id } })
       return redirect(`/${user.username}/lists`, request, { flash: { title: "List deleted" } })
@@ -162,12 +163,11 @@ export default function ListDetail() {
         {!!currentUser && (
           <div className="flex space-x-1">
             {currentUser.id !== list.creatorId && (
-              <copyFetcher.Form method="post" replace>
+              <copyFetcher.Form>
+                <FormActionInput value={Actions.Copy} />
                 <Button
                   leftIcon={<Copy className="sq-4" />}
                   isLoading={copyFetcher.state === "submitting"}
-                  name={FORM_ACTION}
-                  value={Actions.Copy}
                   type="submit"
                   variant="outline"
                 >
@@ -181,14 +181,9 @@ export default function ListDetail() {
                 <LinkButton to="edit" variant="outline">
                   Edit
                 </LinkButton>
-                <deleteFetcher.Form method="post" replace>
-                  <Button
-                    type="submit"
-                    isLoading={deleteFetcher.state === "submitting"}
-                    name={FORM_ACTION}
-                    value={Actions.Delete}
-                    variant="destructive"
-                  >
+                <deleteFetcher.Form>
+                  <FormActionInput value={Actions.Delete} />
+                  <Button type="submit" isLoading={deleteFetcher.state === "submitting"} variant="destructive">
                     Delete
                   </Button>
                 </deleteFetcher.Form>
@@ -200,14 +195,14 @@ export default function ListDetail() {
       <div className="grid grid-cols-12 gap-4">
         <div className="scrollbar-hide col-span-12 space-y-4 overflow-y-scroll md:col-span-4 md:h-[80vh] md:pb-20">
           {spots.length === 0 ? (
-            <div className="flex items-center justify-center py-10">
+            <div className="center py-10">
               <p>Nothing added yet</p>
             </div>
           ) : (
             spots.map((spot) => <SpotItem key={spot.id} spot={spot} />)
           )}
         </div>
-        <div className="col-span-12 h-[80vh] w-full overflow-hidden rounded-md pb-4 md:col-span-8 md:pb-0">
+        <div className="rounded-xs col-span-12 h-[80vh] w-full overflow-hidden pb-4 md:col-span-8 md:pb-0">
           <ClientOnly>
             <Map
               doubleClickZoom={true}

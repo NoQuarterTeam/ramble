@@ -1,4 +1,5 @@
 import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import dayjs from "dayjs"
 import type { z } from "zod"
 
 import { generateBlurHash } from "@ramble/api"
@@ -20,14 +21,13 @@ export const loader = async ({ request }: LoaderArgs) => {
 export const action = async ({ request }: ActionArgs) => {
   const { id, role, isVerified } = await getCurrentUser(request)
   if (!isVerified) return redirect("/account", request, { flash: { title: "Account not verified" } })
-  const formData = await request.formData()
 
-  const result = await validateFormData(formData, spotSchema)
-
-  const images = (formData.getAll("image") as string[]).filter(Boolean)
-
+  const result = await validateFormData(request, spotSchema)
   if (!result.success) return formError(result)
 
+  const formData = await request.formData()
+  const images = (formData.getAll("image") as string[]).filter(Boolean)
+  const shouldPublishLater = formData.get("shouldPublishLater") === "on"
   const { customAddress, ...data } = result.data
   const imageData = await Promise.all(
     images.map(async (image) => {
@@ -38,7 +38,7 @@ export const action = async ({ request }: ActionArgs) => {
 
   let amenities: undefined | z.infer<typeof amenitiesSchema>
   if (doesSpotTypeRequireAmenities(result.data.type)) {
-    const amenitiesResult = await validateFormData(formData, amenitiesSchema)
+    const amenitiesResult = await validateFormData(request, amenitiesSchema)
     if (!amenitiesResult.success) return formError(amenitiesResult)
     amenities = amenitiesResult.data
   }
@@ -46,6 +46,7 @@ export const action = async ({ request }: ActionArgs) => {
   const spot = await db.spot.create({
     data: {
       ...data,
+      publishedAt: shouldPublishLater ? dayjs().add(2, "weeks").toDate() : undefined,
       address: customAddress || result.data.address,
       creator: { connect: { id } },
       verifiedAt: role === "GUIDE" ? new Date() : undefined,

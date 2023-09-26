@@ -1,6 +1,5 @@
 import { Link, useParams } from "@remix-run/react"
 import type { ActionArgs } from "@vercel/remix"
-import { redirect } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
@@ -8,8 +7,8 @@ import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { decryptToken } from "~/lib/jwt.server"
+import { redirect } from "~/lib/remix.server"
 import { hashPassword } from "~/services/auth/password.server"
-import { FlashType, getFlashSession } from "~/services/session/flash.server"
 
 // export const config = {
 //   runtime: "edge",
@@ -33,9 +32,9 @@ export const action = async ({ request }: ActionArgs) => {
   const payload = await decryptToken<{ id: string }>(data.token)
   const hashedPassword = await hashPassword(data.password)
   await db.user.update({ where: { id: payload.id }, data: { password: hashedPassword } })
-  const { createFlash } = await getFlashSession(request)
-  return redirect("/login", {
-    headers: { "Set-Cookie": await createFlash(FlashType.Info, "Password changed") },
+
+  return redirect("/login", request, {
+    flash: { title: "Password changed", description: "You can now login with your new password" },
   })
 }
 
@@ -44,7 +43,7 @@ export default function ResetPassword() {
 
   return (
     <Form>
-      <div className="stack">
+      <div className="space-y-2">
         <div>
           <h1 className="text-4xl">Reset password</h1>
           <p>Enter a new password below.</p>

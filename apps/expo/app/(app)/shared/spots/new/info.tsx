@@ -21,7 +21,7 @@ export function NewSpotOptionsScreen() {
   const [isPetFriendly, setIsPetFriendly] = React.useState(false)
   const router = useRouter()
   return (
-    <NewSpotModalView title="Some info">
+    <NewSpotModalView title="some info">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <FormInputLabel label="Name" />
         <Input value={name} onChangeText={setName} />

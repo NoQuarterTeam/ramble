@@ -1,12 +1,12 @@
 import { TouchableOpacity, View } from "react-native"
+import { Lock, User2 } from "lucide-react-native"
 
-import { User, type List } from "@ramble/database/types"
+import { type List, type User } from "@ramble/database/types"
+import { createImageUrl } from "@ramble/shared"
 
 import { useRouter } from "../app/router"
-import { Text } from "./ui/Text"
-import { Lock, User2 } from "lucide-react-native"
 import { OptimizedImage } from "./ui/OptimisedImage"
-import { createImageUrl } from "@ramble/shared"
+import { Text } from "./ui/Text"
 
 interface Props {
   list: Pick<List, "id" | "name" | "description" | "isPrivate"> & {
@@ -20,7 +20,7 @@ export function ListItem({ list }: Props) {
     <TouchableOpacity
       onPress={() => push("ListDetailScreen", { id: list.id, name: list.name })}
       activeOpacity={0.8}
-      className="rounded-lg border border-gray-100 p-4 dark:border-gray-700"
+      className="rounded-xs border border-gray-100 p-4 dark:border-gray-700"
     >
       <View className="flex flex-row items-center space-x-2">
         {list.isPrivate && <Lock className="text-black dark:text-white" size={20} />}

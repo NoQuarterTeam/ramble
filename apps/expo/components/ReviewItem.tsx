@@ -30,7 +30,7 @@ export function ReviewItem({
     },
   })
   return (
-    <View className="space-y-2 rounded-lg border border-gray-200 p-4 dark:border-gray-700">
+    <View className="rounded-xs space-y-2 border border-gray-200 p-4 dark:border-gray-700">
       <View className="flex flex-row justify-between">
         <TouchableOpacity
           onPress={() => push("UserScreen", { username: review.user.username })}

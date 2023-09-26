@@ -6,9 +6,11 @@ import Supercluster from "supercluster"
 import { z } from "zod"
 import { CheckboxAsString, NumAsString } from "zodix"
 
+import { publicSpotWhereClause } from "@ramble/api"
 import type { SpotType } from "@ramble/database/types"
 
 import { db } from "~/lib/db.server"
+import { getUserSession } from "~/services/session/session.server"
 
 export const config = {
   runtime: "edge",
@@ -16,6 +18,7 @@ export const config = {
 }
 
 async function getMapClusters(request: Request) {
+  const { userId } = await getUserSession(request)
   const schema = z.object({
     zoom: NumAsString,
     minLat: NumAsString,
@@ -33,6 +36,7 @@ async function getMapClusters(request: Request) {
   const spots = await db.spot.findMany({
     select: { id: true, latitude: true, longitude: true, type: true },
     where: {
+      ...publicSpotWhereClause(userId),
       verifiedAt: isVerified ? { not: { equals: null } } : undefined,
       isPetFriendly: isPetFriendly ? { equals: true } : undefined,
       latitude: { gt: coords.minLat, lt: coords.maxLat },
@@ -46,18 +50,20 @@ async function getMapClusters(request: Request) {
         : undefined,
     },
     orderBy: { createdAt: "desc" },
+    take: 2000,
   })
   if (spots.length === 0) return []
 
-  const supercluster = new Supercluster()
+  const supercluster = new Supercluster<{ id: string; type: SpotType; cluster: false }, { cluster: true }>()
 
   const clusters = supercluster.load(
     spots.map((spot) => ({
       type: "Feature",
       geometry: { type: "Point", coordinates: [spot.longitude, spot.latitude] },
-      properties: { id: spot.id, type: spot.type },
+      properties: { id: spot.id, type: spot.type, cluster: false },
     })),
   )
+
   return clusters.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], zoom || 5)
 }
 

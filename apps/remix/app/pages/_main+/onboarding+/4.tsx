@@ -34,12 +34,12 @@ const schema = z.object({
 })
 
 export const action = async ({ request }: ActionArgs) => {
-  const formData = await request.formData()
-  const result = await validateFormData(formData, schema)
+  const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
   const user = await getCurrentUser(request, { id: true, van: { select: { id: true } } })
-  const images = (formData.getAll("image") as string[]).filter(Boolean)
 
+  const formData = await request.formData()
+  const images = (formData.getAll("image") as string[]).filter(Boolean)
   const data = result.data
   if (user.van) {
     const van = await db.van.findUniqueOrThrow({ where: { id: user.van.id }, include: { images: true } })

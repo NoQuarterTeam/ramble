@@ -2,9 +2,9 @@ import * as React from "react"
 import { View } from "react-native"
 import * as Updates from "expo-updates"
 
+import { BrandHeading } from "./ui/BrandHeading"
 import { Button } from "./ui/Button"
 import { Heading } from "./ui/Heading"
-import { Icons } from "./ui/Icons"
 import { Text } from "./ui/Text"
 
 export function NewUpdate() {
@@ -22,8 +22,8 @@ export function NewUpdate() {
     }
   }
   return (
-    <View className="h-screen w-full items-center space-y-4 bg-white px-4 pt-32 dark:bg-black">
-      <Icons.Van size={24} className="text-black dark:text-white" />
+    <View className="bg-background dark:bg-background-dark h-screen w-full items-center space-y-4 px-4 pt-32">
+      <BrandHeading className="text-center text-4xl">ramble</BrandHeading>
       <Heading className="text-center text-2xl dark:text-white">New update is available</Heading>
       <Text className="text-center">Don&apos;t miss out on new features, bug fixes and many other improvements!</Text>
       <View className="w-full space-y-2 px-10">

@@ -2,7 +2,7 @@ import { useLoaderData } from "@remix-run/react"
 import { createColumnHelper } from "@tanstack/react-table"
 import { type LoaderArgs, type SerializeFrom } from "@vercel/remix"
 import dayjs from "dayjs"
-import { cacheHeader } from "pretty-cache-header"
+import { promiseHash } from "remix-utils"
 
 import { type Prisma } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
@@ -11,31 +11,22 @@ import { Search } from "~/components/Search"
 import { Table } from "~/components/Table"
 import { Avatar } from "~/components/ui"
 import { db } from "~/lib/db.server"
-import { useLoaderHeaders } from "~/lib/headers.server"
 import { json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"
 
-export const headers = useLoaderHeaders
-
-const TAKE = 10
-
 export const loader = async ({ request }: LoaderArgs) => {
-  const { orderBy, search, skip, take } = getTableParams(request, TAKE, { orderBy: "createdAt", order: "desc" })
+  const { orderBy, search, skip, take } = getTableParams(request)
   const where = {
     OR: search
       ? [{ email: { contains: search } }, { firstName: { contains: search } }, { lastName: { contains: search } }]
       : undefined,
   } satisfies Prisma.UserWhereInput
-  const users = await db.user.findMany({
-    orderBy,
-    skip,
-    take,
-    where,
+
+  const data = await promiseHash({
+    users: db.user.findMany({ orderBy, skip, take, where }),
+    count: db.user.count({ where }),
   })
-  const count = await db.user.count({ where })
-  return json({ users, count }, request, {
-    headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "10mins", sMaxage: "10mins" }) },
-  })
+  return json(data)
 }
 
 type User = SerializeFrom<typeof loader>["users"][number]
@@ -76,14 +67,14 @@ const columns = [
 export default function Users() {
   const { users, count } = useLoaderData<typeof loader>()
   return (
-    <div className="stack">
+    <div className="space-y-2">
       <h1 className="text-4xl">Users</h1>
       <div className="flex gap-2">
         <div>
           <Search className="max-w-[400px]" />
         </div>
       </div>
-      <Table data={users} count={count} take={TAKE} columns={columns} />
+      <Table data={users} count={count} columns={columns} />
     </div>
   )
 }

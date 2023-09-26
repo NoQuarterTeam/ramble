@@ -1,17 +1,15 @@
 import { generateInviteCodes, sendAccountVerificationEmail } from "@ramble/api"
 import { Link, useSearchParams } from "@remix-run/react"
 import type { ActionArgs, V2_MetaFunction } from "@vercel/remix"
-import { redirect } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { db } from "~/lib/db.server"
-import { FORM_ACTION, formError, validateFormData } from "~/lib/form"
+import { FormActionInput, formError, getFormAction, validateFormData } from "~/lib/form"
 import { createToken } from "~/lib/jwt.server"
-import { badRequest } from "~/lib/remix.server"
+import { badRequest, redirect } from "~/lib/remix.server"
 import { hashPassword } from "~/services/auth/password.server"
-import { FlashType, getFlashSession } from "~/services/session/flash.server"
 import { getUserSession } from "~/services/session/session.server"
 
 export const meta: V2_MetaFunction = () => {
@@ -28,12 +26,12 @@ enum Actions {
 }
 
 export const action = async ({ request }: ActionArgs) => {
-  const formData = await request.formData()
-  const action = formData.get(FORM_ACTION) as Actions | undefined
+  const formAction = await getFormAction(request)
 
-  switch (action) {
+  switch (formAction) {
     case Actions.Register:
       try {
+        const formData = await request.formData()
         if (formData.get("passwordConfirmation")) return redirect("/") // honey pot
         const registerSchema = z.object({
           email: z.string().min(3).email("Invalid email"),
@@ -46,7 +44,7 @@ export const action = async ({ request }: ActionArgs) => {
           lastName: z.string().min(2, "Must be at least 2 characters"),
           code: z.string().min(4, "Must be at least 2 characters"),
         })
-        const result = await validateFormData(formData, registerSchema)
+        const result = await validateFormData(request, registerSchema)
         if (!result.success) return formError(result)
         const { code, ...data } = result.data
         const email = data.email.toLowerCase().trim()
@@ -74,16 +72,14 @@ export const action = async ({ request }: ActionArgs) => {
         await db.inviteCode.createMany({ data: codes.map((c) => ({ code: c, ownerId: user.id })) })
         await db.inviteCode.update({ where: { id: inviteCode.id }, data: { acceptedAt: new Date() } })
         const { setUser } = await getUserSession(request)
-        const { createFlash } = await getFlashSession(request)
         const token = await createToken({ id: user.id })
         await sendAccountVerificationEmail(user, token)
-        const headers = new Headers([
-          ["Set-Cookie", await setUser(user.id)],
-          ["Set-Cookie", await createFlash(FlashType.Info, `Welcome to Ramble, ${data.firstName}!`, "Let's get you setup.")],
-        ])
-        return redirect("/onboarding", { headers })
-      } catch (e) {
-        console.log(e)
+        const headers = new Headers([["Set-Cookie", await setUser(user.id)]])
+        return redirect("/onboarding", request, {
+          headers,
+          flash: { title: `Welcome to Ramble, ${data.firstName}!`, description: "Let's get you setup." },
+        })
+      } catch {
         return badRequest("Error registering your account")
       }
 
@@ -104,14 +100,12 @@ export default function Register() {
       <FormField autoCapitalize="none" required label="Email address" name="email" placeholder="sally@yahoo.com" />
       <FormField required label="Password" name="password" type="password" placeholder="********" />
       <input name="passwordConfirmation" className="hidden" />
-      <FormField autoCapitalize="none" required label="Choose a username" name="username" placeholder="Sally93" />
-      <FormField required label="First name" name="firstName" placeholder="Sally" />
-      <FormField required label="Last name" name="lastName" placeholder="Jones" />
-
+      <FormField autoCapitalize="none" required label="Choose a username" name="username" placeholder="Jim93" />
+      <FormField required label="First name" name="firstName" placeholder="Jim" />
+      <FormField required label="Last name" name="lastName" placeholder="Bob" />
+      <FormActionInput value={Actions.Register} />
       <div>
-        <FormButton name={FORM_ACTION} value={Actions.Register} className="w-full">
-          Register
-        </FormButton>
+        <FormButton className="w-full">Register</FormButton>
         <FormError />
       </div>
 

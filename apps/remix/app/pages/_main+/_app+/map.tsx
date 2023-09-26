@@ -11,6 +11,7 @@ import Map, {
   Source,
   type ViewStateChangeEvent,
 } from "react-map-gl"
+import { type MarkerEvent, type MarkerInstance } from "react-map-gl/dist/esm/types"
 import { cssBundleHref } from "@remix-run/css-bundle"
 import {
   isRouteErrorResponse,
@@ -201,7 +202,7 @@ export default function MapView() {
 }
 
 interface MarkerProps {
-  onClick: (e: mapboxgl.MapboxEvent<MouseEvent>) => void
+  onClick: (e: MarkerEvent<MarkerInstance, MouseEvent>) => void
   point: Cluster
 }
 function ClusterMarker(props: MarkerProps) {
@@ -209,8 +210,8 @@ function ClusterMarker(props: MarkerProps) {
     <Marker
       onClick={props.onClick}
       anchor="bottom"
-      longitude={props.point.geometry.coordinates[0]}
-      latitude={props.point.geometry.coordinates[1]}
+      longitude={props.point.geometry.coordinates[0]!}
+      latitude={props.point.geometry.coordinates[1]!}
     >
       {props.point.properties.cluster ? (
         <div className="sq-10 flex cursor-pointer items-center justify-center rounded-full border border-green-100 bg-green-800 text-white shadow transition-transform hover:scale-110 dark:border-green-700 dark:bg-green-900">
@@ -235,7 +236,7 @@ export function ErrorBoundary() {
         </p>
       </div>
       {isCatchError ? null : error instanceof Error ? (
-        <div className="max-w-4xl space-y-4 rounded-md bg-gray-200 p-4 dark:bg-gray-700 ">
+        <div className="rounded-xs max-w-4xl space-y-4 bg-gray-200 p-4 dark:bg-gray-700 ">
           <p>{error.message}</p>
           <pre className="overflow-scroll text-sm">{error.stack}</pre>
         </div>
@@ -276,6 +277,24 @@ function MapLayers() {
             //   `,
             // }}
           />
+          <div className="bg-background rounded-xs absolute right-20 top-4 flex items-center space-x-4 px-2 py-1 text-xs shadow">
+            <p>Temperature, °C</p>
+            <div>
+              <div className="flex w-full justify-between">
+                <p>-40</p>
+                <p>-20</p>
+                <p>0</p>
+                <p>20</p>
+                <p>40</p>
+              </div>
+              <div
+                className="rounded-xs h-[4px] w-[260px]"
+                style={{
+                  backgroundImage: `linear-gradient(to right, rgb(159, 85, 181) 0%, rgb(44, 106, 187) 8.75%, rgb(82, 139, 213) 12.5%, rgb(103, 163, 222) 18.75%, rgb(142, 202, 240) 25%, rgb(155, 213, 244) 31.25%, rgb(172, 225, 253) 37.5%, rgb(194, 234, 255) 43.75%, rgb(255, 255, 208) 50%, rgb(254, 248, 174) 56.25%, rgb(254, 232, 146) 62.5%, rgb(254, 226, 112) 68.75%, rgb(253, 212, 97) 75%, rgb(244, 168, 94) 82.5%, rgb(244, 129, 89) 87.5%, rgb(244, 104, 89) 93.75%, rgb(244, 76, 73) 100%)`,
+                }}
+              ></div>
+            </div>
+          </div>
         </>
       )}
       {preferences.mapLayerRain && (

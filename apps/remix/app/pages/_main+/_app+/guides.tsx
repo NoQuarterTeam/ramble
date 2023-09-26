@@ -3,6 +3,7 @@ import { Link, useFetcher, useLoaderData } from "@remix-run/react"
 import type { LoaderArgs, SerializeFrom } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
+import { promiseHash } from "remix-utils"
 
 import { createImageUrl } from "@ramble/shared"
 
@@ -22,28 +23,27 @@ export const loader = async ({ request }: LoaderArgs) => {
   const searchParams = new URL(request.url).searchParams
   const skip = parseInt((searchParams.get("skip") as string) || "0")
 
-  const guides = await db.user.findMany({
-    where: { role: "GUIDE" },
-    take: 12,
-    skip,
-    orderBy: { createdAt: "desc" },
-    select: {
-      id: true,
-      firstName: true,
-      lastName: true,
-      username: true,
-      avatar: true,
-      avatarBlurHash: true,
-      _count: { select: { createdSpots: true } },
-    },
+  const data = await promiseHash({
+    guides: db.user.findMany({
+      where: { role: "GUIDE" },
+      take: 12,
+      skip,
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        username: true,
+        avatar: true,
+        avatarBlurHash: true,
+        _count: { select: { createdSpots: { where: { deletedAt: null } } } },
+      },
+    }),
+
+    count: db.user.count({ where: { role: "GUIDE" } }),
   })
 
-  const count = await db.user.count({ where: { role: "GUIDE" } })
-
-  return json(
-    { guides, count },
-    { headers: { "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour", maxAge: "1hour" }) } },
-  )
+  return json(data, { headers: { "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour", maxAge: "1hour" }) } })
 }
 
 type LoaderData = typeof loader
@@ -71,7 +71,7 @@ export default function Guides() {
         ))}
       </div>
       {count > guides.length && (
-        <div className="flex items-center justify-center">
+        <div className="center">
           <Button size="lg" isLoading={guideFetcher.state === "loading"} variant="outline" onClick={onNext}>
             Load more
           </Button>
@@ -85,7 +85,7 @@ function GuideItem(props: { guide: SerializeFrom<typeof loader>["guides"][number
   return (
     <Link
       to={`/${props.guide.username}`}
-      className="flex items-center justify-between space-x-4 rounded-md border border-gray-200 p-4 transition-colors hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600"
+      className="border-hover rounded-xs flex items-center justify-between space-x-4 border p-4 transition-colors"
     >
       <div className="flex items-center space-x-2">
         <Avatar className="sq-20" size={100} placeholder={props.guide.avatarBlurHash} src={createImageUrl(props.guide.avatar)} />
@@ -97,7 +97,7 @@ function GuideItem(props: { guide: SerializeFrom<typeof loader>["guides"][number
         </div>
       </div>
       <div className="text-center text-sm">
-        <p className="font-medium leading-tight">{props.guide._count?.createdSpots}</p>
+        <p className="font-medium leading-tight">{props.guide._count?.createdSpots.toLocaleString()}</p>
         <p>spots</p>
       </div>
     </Link>

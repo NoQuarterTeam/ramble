@@ -43,7 +43,7 @@ export function UserVan() {
           key={image.id}
           width={500}
           placeholder={image.blurHash}
-          className="min-h-[300px] w-full rounded-md object-contain"
+          className="rounded-xs min-h-[300px] w-full object-contain"
           source={{ uri: createImageUrl(image.path) }}
         />
       ))}

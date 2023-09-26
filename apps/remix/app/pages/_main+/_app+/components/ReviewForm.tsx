@@ -10,7 +10,7 @@ import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { PageContainer } from "~/components/PageContainer"
 import { IconButton, Textarea } from "~/components/ui"
-import { FormAction } from "~/lib/form"
+import { FormActionInput } from "~/lib/form"
 
 import { Actions } from "../spots.$id_.reviews.$reviewId"
 
@@ -29,12 +29,12 @@ export function ReviewForm({ spot, review }: Props) {
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <Form className="space-y-2">
-          {review && <FormAction value={Actions.Edit} />}
+          {review && <FormActionInput value={Actions.Edit} />}
           <FormField
             defaultValue={review?.description || ""}
             placeholder="How was your stay? what did you like?"
             name="description"
-            input={<Textarea rows={8} />}
+            input={<Textarea rows={5} />}
           />
           <div className="flex space-x-1">
             {Array.from({ length: 5 }).map((_, i) => (
@@ -64,7 +64,7 @@ export function ReviewForm({ spot, review }: Props) {
         <div className="grid grid-cols-4 gap-2">
           {spot.images[0] && (
             <OptimizedImage
-              className="col-span-4 h-[300px] w-full rounded-md"
+              className="rounded-xs col-span-4 h-[300px] w-full"
               height={300}
               width={600}
               placeholder={spot.images[0].blurHash}
@@ -75,7 +75,7 @@ export function ReviewForm({ spot, review }: Props) {
           {spot.images[1] && (
             <OptimizedImage
               placeholder={spot.images[1].blurHash}
-              className="col-span-2 h-[200px] w-full rounded-md"
+              className="rounded-xs col-span-2 h-[200px] w-full"
               height={200}
               width={400}
               alt="spot 2"
@@ -85,7 +85,7 @@ export function ReviewForm({ spot, review }: Props) {
           {spot.images[2] && (
             <OptimizedImage
               placeholder={spot.images[2].blurHash}
-              className="col-span-2 h-[200px] w-full rounded-md"
+              className="rounded-xs col-span-2 h-[200px] w-full"
               height={200}
               width={400}
               alt="spot 3"

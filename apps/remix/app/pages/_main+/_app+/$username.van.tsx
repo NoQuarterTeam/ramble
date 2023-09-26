@@ -32,7 +32,7 @@ export default function ProfileVan() {
             </p>
             <p>{user.van.description}</p>
           </div>
-          <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3">
             {user.van.images.map((image) => (
               <OptimizedImage
                 key={image.id}
@@ -41,7 +41,7 @@ export default function ProfileVan() {
                 src={createImageUrl(image.path)}
                 width={500}
                 height={350}
-                className="rounded-md object-cover"
+                className="rounded-xs object-cover"
               />
             ))}
           </div>

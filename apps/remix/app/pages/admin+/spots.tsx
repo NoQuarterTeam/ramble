@@ -4,37 +4,31 @@ import { createColumnHelper } from "@tanstack/react-table"
 import type { ActionArgs, LoaderArgs, SerializeFrom } from "@vercel/remix"
 import dayjs from "dayjs"
 import { Check, Eye, EyeOff, Trash } from "lucide-react"
-import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
+import { promiseHash } from "remix-utils"
 import { z } from "zod"
 
 import type { Prisma, SpotType } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
+import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { Search } from "~/components/Search"
 import { Table } from "~/components/Table"
 import { Avatar, Button, IconButton, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
-import { FORM_ACTION, formError, validateFormData } from "~/lib/form"
-import { useLoaderHeaders } from "~/lib/headers.server"
-import { useFetcherSubmit } from "~/lib/hooks/useFetcherSubmit"
+import { FormActionInput, formError, getFormAction, validateFormData } from "~/lib/form"
 import { badRequest, json } from "~/lib/remix.server"
 import { SPOT_TYPE_OPTIONS, SPOTS } from "~/lib/static/spots"
 import { getTableParams } from "~/lib/table"
 import { useTheme } from "~/lib/theme"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
 
-const TAKE = 15
-const DEFAULT_ORDER_BY = "createdAt"
-
 const schema = z.object({ type: z.string().optional(), unverified: z.string().optional() })
 
-export const headers = useLoaderHeaders
-
 export const loader = async ({ request }: LoaderArgs) => {
-  const { orderBy, search, skip, take } = getTableParams(request, TAKE, { orderBy: DEFAULT_ORDER_BY, order: "desc" })
+  const { orderBy, search, skip, take } = getTableParams(request)
 
   const result = schema.safeParse(queryString.parse(new URL(request.url).search, { arrayFormat: "bracket" }))
   if (!result.success) throw badRequest(result.error.message)
@@ -45,8 +39,8 @@ export const loader = async ({ request }: LoaderArgs) => {
     verifiedAt: result.data.unverified === "true" ? { equals: null } : undefined,
   } satisfies Prisma.SpotWhereInput
 
-  const [spots, count, unverifiedSpotsCount] = await Promise.all([
-    db.spot.findMany({
+  const data = await promiseHash({
+    spots: db.spot.findMany({
       orderBy,
       skip,
       take,
@@ -65,15 +59,10 @@ export const loader = async ({ request }: LoaderArgs) => {
         images: true,
       },
     }),
-    db.spot.count({ where, take: undefined, skip: undefined }),
-    db.spot.count({ where: { ...where, verifiedAt: null }, take: undefined, skip: undefined }),
-  ])
-
-  return json({ spots, count, unverifiedSpotsCount }, request, {
-    headers: {
-      "Cache-Control": cacheHeader({ public: true, maxAge: "10mins", sMaxage: "10mins" }),
-    },
+    count: db.spot.count({ where, take: undefined, skip: undefined }),
+    unverifiedSpotsCount: db.spot.count({ where: { ...where, verifiedAt: null }, take: undefined, skip: undefined }),
   })
+  return json(data)
 }
 
 enum Actions {
@@ -83,13 +72,12 @@ enum Actions {
 
 export const action = async ({ request }: ActionArgs) => {
   const user = await getCurrentAdmin(request)
-  const formData = await request.formData()
-  const action = formData.get(FORM_ACTION) as Actions | undefined
-  switch (action) {
+  const formAction = await getFormAction<Actions>(request)
+  switch (formAction) {
     case Actions.Delete:
       try {
         const deleteSchema = z.object({ id: z.string() })
-        const result = await validateFormData(formData, deleteSchema)
+        const result = await validateFormData(request, deleteSchema)
         if (!result.success) return formError(result)
         const data = result.data
         await db.spot.update({ where: { id: data.id }, data: { deletedAt: new Date() } })
@@ -100,7 +88,7 @@ export const action = async ({ request }: ActionArgs) => {
     case Actions.Verify:
       try {
         const verifySchema = z.object({ id: z.string() })
-        const result = await validateFormData(formData, verifySchema)
+        const result = await validateFormData(request, verifySchema)
         if (!result.success) return formError(result)
         const data = result.data
         await db.spot.update({ where: { id: data.id }, data: { verifiedAt: new Date(), verifier: { connect: { id: user.id } } } })
@@ -140,9 +128,8 @@ const columns = [
     header: () => "Description",
   }),
   columnHelper.accessor((row) => row.creator, {
-    id: "creator",
+    id: "creator.firstName",
     size: 120,
-    enableSorting: false,
     cell: (info) => (
       <div className="flex items-center space-x-2">
         <Avatar
@@ -156,10 +143,9 @@ const columns = [
     ),
     header: () => "Creator",
   }),
-  columnHelper.display({
-    id: "verifier",
+  columnHelper.accessor((row) => row.verifier, {
+    id: "verifier.firstName",
     size: 120,
-    enableSorting: false,
     header: () => "Verifier",
     cell: ({ row }) =>
       row.original.verifiedAt && row.original.verifier ? (
@@ -207,7 +193,7 @@ export default function Spots() {
   const { spots, count, unverifiedSpotsCount } = useLoaderData<typeof loader>()
 
   return (
-    <div className="stack">
+    <div className="space-y-2">
       <h1 className="text-4xl">Spots</h1>
       <div className="flex items-end gap-2">
         <div>
@@ -251,7 +237,7 @@ export default function Spots() {
           <Search className="max-w-[400px]" />
         </div>
       </div>
-      <Table data={spots} count={count} columns={columns} take={TAKE} ExpandComponent={RenderSubComponent} />
+      <Table data={spots} count={count} columns={columns} ExpandComponent={RenderSubComponent} />
     </div>
   )
 }
@@ -290,33 +276,27 @@ function RenderSubComponent({ row }: { row: Row<Spot> }) {
 }
 
 function SpotVerifyAction({ spot }: { spot: Spot }) {
-  const verifyFetcher = useFetcherSubmit()
+  const verifyFetcher = useFetcher()
   return (
-    <verifyFetcher.Form method="post" replace>
+    <verifyFetcher.Form>
+      <FormActionInput value={Actions.Verify} />
       <input type="hidden" name="id" value={spot.id} />
-      <Button
-        type="submit"
-        isLoading={verifyFetcher.state !== "idle"}
-        name={FORM_ACTION}
-        value={Actions.Verify}
-        size="sm"
-        leftIcon={<Check size={16} />}
-      >
+      <Button type="submit" isLoading={verifyFetcher.state !== "idle"} size="sm" leftIcon={<Check size={16} />}>
         Verify
       </Button>
     </verifyFetcher.Form>
   )
 }
 function SpotDeleteAction({ spot }: { spot: Spot }) {
-  const deleteFetcher = useFetcherSubmit()
+  const deleteFetcher = useFetcher()
 
   return (
-    <deleteFetcher.Form method="post" replace>
+    <deleteFetcher.Form>
       <input type="hidden" name="id" value={spot.id} />
+
+      <FormActionInput value={Actions.Delete} />
       <IconButton
         type="submit"
-        name={FORM_ACTION}
-        value={Actions.Delete}
         isLoading={deleteFetcher.state !== "idle"}
         aria-label="delete"
         size="sm"
@@ -338,7 +318,7 @@ export function ErrorBoundary() {
           <LinkButton to="/admin/spots" variant="outline">
             Back to list
           </LinkButton>
-          <pre className="rounded bg-gray-100 p-1 text-sm dark:bg-gray-950">{error.message}</pre>
+          <pre className="rounded-xs bg-gray-100 p-1 text-sm dark:bg-gray-950">{error.message}</pre>
         </div>
       ) : (
         <p>Unknown error</p>

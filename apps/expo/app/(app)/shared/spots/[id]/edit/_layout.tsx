@@ -1,6 +1,6 @@
-import { useColorScheme } from "react-native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
+import { useBackgroundColor } from "../../../../../../lib/tailwind"
 import { type ScreenParamsList, useParams } from "../../../../../router"
 import { EditSpotLocationScreen } from "."
 import { EditSpotAmenitiesScreen } from "./amenities"
@@ -13,13 +13,12 @@ const EditSpotStack = createNativeStackNavigator<ScreenParamsList>()
 
 export function EditSpotLayout() {
   const { params } = useParams<"EditSpotLayout">()
-  const colorScheme = useColorScheme()
-  const isDark = colorScheme === "dark"
+  const backgroundColor = useBackgroundColor()
 
   return (
     <EditSpotStack.Navigator
       initialRouteName="EditSpotLocationScreen"
-      screenOptions={{ contentStyle: { backgroundColor: isDark ? "black" : "white" }, headerShown: false }}
+      screenOptions={{ contentStyle: { backgroundColor }, headerShown: false }}
     >
       <EditSpotStack.Screen name="EditSpotLocationScreen" initialParams={params} component={EditSpotLocationScreen} />
       <EditSpotStack.Screen name="EditSpotTypeScreen" component={EditSpotTypeScreen} />

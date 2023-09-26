@@ -1,5 +1,8 @@
+import "@fontsource/urbanist/300.css"
+import "@fontsource/urbanist/400.css"
+import "@fontsource/urbanist/500.css"
 import "@fontsource/urbanist/600.css"
-
+import "@fontsource/urbanist/700.css"
 import "@fontsource/poppins/300.css"
 import "@fontsource/poppins/400.css"
 import "@fontsource/poppins/500.css"
@@ -32,6 +35,7 @@ import type { LinksFunction, LoaderArgs, SerializeFrom, V2_MetaFunction } from "
 import { json } from "@vercel/remix"
 import { Frown } from "lucide-react"
 import NProgress from "nprogress"
+import { AuthenticityTokenProvider, promiseHash } from "remix-utils"
 
 import { join } from "@ramble/shared"
 
@@ -43,6 +47,7 @@ import { type Theme } from "./lib/theme"
 import type { Preferences } from "./pages/api+/preferences"
 import { defaultPreferences, preferencesCookies } from "./pages/api+/preferences"
 import { getMaybeUser } from "./services/auth/auth.server"
+import { getCsrfSession } from "./services/session/csrf.server.ts"
 import { getFlashSession } from "./services/session/flash.server"
 import { getThemeSession } from "./services/session/theme.server"
 
@@ -55,18 +60,29 @@ export const links: LinksFunction = () => {
 }
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const { flash, commit } = await getFlashSession(request)
-  const { theme, commit: commitTheme } = await getThemeSession(request)
   const cookieHeader = request.headers.get("Cookie")
-  const preferences: Preferences = (await preferencesCookies.parse(cookieHeader)) || defaultPreferences
 
-  const user = await getMaybeUser(request)
+  const { flashSession, themeSession, csrfSession, user, preferences } = await promiseHash({
+    flashSession: getFlashSession(request),
+    themeSession: getThemeSession(request),
+    csrfSession: getCsrfSession(request),
+    user: getMaybeUser(request),
+    preferences: preferencesCookies.parse(cookieHeader) as Promise<Preferences>,
+  })
   return json(
-    { user, flash, preferences, theme, config: { WEB_URL: FULL_WEB_URL } },
+    {
+      user,
+      csrf: csrfSession.token,
+      flash: flashSession.message,
+      preferences: preferences || defaultPreferences,
+      theme: themeSession.theme,
+      config: { WEB_URL: FULL_WEB_URL },
+    },
     {
       headers: [
-        ["Set-Cookie", await commit()],
-        ["Set-Cookie", await commitTheme()],
+        ["Set-Cookie", await csrfSession.commit()],
+        ["Set-Cookie", await flashSession.commit()],
+        ["Set-Cookie", await themeSession.commit()],
       ],
     },
   )
@@ -79,8 +95,7 @@ export const shouldRevalidate: ShouldRevalidateFunction = (args) => {
 export type RootLoader = SerializeFrom<typeof loader>
 
 export default function App() {
-  const { flash, theme } = useLoaderData<typeof loader>()
-
+  const { csrf, flash, theme } = useLoaderData<typeof loader>()
   const transition = useNavigation()
   const fetchers = useFetchers()
   const state = React.useMemo<"idle" | "loading">(() => {
@@ -95,12 +110,14 @@ export default function App() {
   }, [transition.state, state])
 
   return (
-    <Document theme={theme}>
-      <Tooltip.Provider>
-        <Outlet />
-      </Tooltip.Provider>
-      <Toaster flash={flash} />
-    </Document>
+    <AuthenticityTokenProvider token={csrf}>
+      <Document theme={theme}>
+        <Tooltip.Provider>
+          <Outlet />
+        </Tooltip.Provider>
+        <Toaster flash={flash} />
+      </Document>
+    </AuthenticityTokenProvider>
   )
 }
 
@@ -112,8 +129,8 @@ export function ErrorBoundary() {
     <Document theme="dark">
       <div className="flex items-center overflow-scroll p-20 pt-40">
         {isCatchError ? (
-          <div className="stack space-y-6">
-            <div className="stack">
+          <div className="space-y-6">
+            <div className="space-y-2">
               <h1 className="text-9xl">{error.status}</h1>
               <p className="text-lg">
                 {error.status === 404
@@ -124,14 +141,14 @@ export function ErrorBoundary() {
             {error.status === 404 && <LinkButton to="/">Take me home</LinkButton>}
           </div>
         ) : error instanceof Error ? (
-          <div className="stack max-w-4xl space-y-6">
+          <div className="max-w-4xl space-y-6">
             <Frown className="sq-20" />
             <h1 className="text-3xl">Oops, there was an error.</h1>
             <p>{error.message}</p>
             {error.stack && (
               <>
                 <hr />
-                <div className="rounded-md bg-gray-200 p-4 dark:bg-gray-700 ">
+                <div className="rounded-xs bg-gray-200 p-4 dark:bg-gray-700 ">
                   <pre className="overflow-scroll text-sm">{error.stack}</pre>
                 </div>
               </>
@@ -180,7 +197,7 @@ function Document({ theme, children }: DocumentProps) {
         <Meta />
         <Links />
       </head>
-      <body className="bg-background">
+      <body>
         {children}
         <ScrollRestoration />
         {!shouldDisableScripts && <Scripts />}

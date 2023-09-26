@@ -123,13 +123,14 @@ enum SpotType {
 }
 
 model Spot {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   name        String
   type        SpotType
-  description String?  @db.LongText
-  address     String
+  description String?   @db.LongText
+  address     String?
   latitude    Float
   longitude   Float
+  publishedAt DateTime?
 
   // Options 
   isPetFriendly Boolean @default(true)
@@ -160,13 +161,20 @@ model Spot {
   // park4night
   park4nightId Int? @unique
 
+  // komoot
+  komootId String? @unique
+
   @@index([createdAt])
+  @@index([type])
+  @@index([type, longitude])
   @@index([latitude])
   @@index([longitude])
   @@index([ownerId])
   @@index([verifierId])
   @@index([creatorId])
   @@index([campspaceId])
+  @@index([park4nightId])
+  @@index([komootId])
 }
 
 model SpotAmenities {
@@ -249,4 +257,12 @@ model Review {
 
   @@index([spotId])
   @@index([userId])
+}
+
+model AccessRequest {
+  id    String @id @default(uuid())
+  email String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }

@@ -1,9 +1,10 @@
 import * as React from "react"
-import { ScrollView, View } from "react-native"
+import { ScrollView, Switch, View } from "react-native"
 import { Image } from "expo-image"
-import { Check } from "lucide-react-native"
+import { Check, Lock } from "lucide-react-native"
 
 import { AMENITIES } from "@ramble/shared"
+import colors from "@ramble/tailwind-config/src/colors"
 
 import { Button } from "../../../../../components/ui/Button"
 import { Text } from "../../../../../components/ui/Text"
@@ -18,7 +19,7 @@ export function NewSpotConfirmScreen() {
   const { params } = useParams<"NewSpotConfirmScreen">()
   const router = useRouter()
   const Icon = SPOTS[params.type].Icon
-
+  const [shouldPublishLater, setShouldPublishLater] = React.useState(false)
   const utils = api.useContext()
   const {
     mutate,
@@ -56,7 +57,7 @@ export function NewSpotConfirmScreen() {
   }
 
   return (
-    <NewSpotModalView title="Confirm">
+    <NewSpotModalView title="confirm">
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}>
         <View className="space-y-2">
           <Icon className="text-black dark:text-white" />
@@ -68,9 +69,20 @@ export function NewSpotConfirmScreen() {
           <View className="flex flex-row flex-wrap">
             {params.images.map((image, i) => (
               <View key={i} className="w-1/3 p-1">
-                <Image className="h-[100px] w-full rounded-md bg-gray-50 object-cover dark:bg-gray-700" source={{ uri: image }} />
+                <Image className="rounded-xs h-[100px] w-full bg-gray-50 object-cover dark:bg-gray-700" source={{ uri: image }} />
               </View>
             ))}
+          </View>
+          <View className="flex w-full flex-row items-center justify-between px-4 py-2">
+            <View className="flex flex-row items-center space-x-2">
+              <Lock size={20} className="text-black dark:text-white" />
+              <Text className="text-lg">Publish later</Text>
+            </View>
+            <Switch
+              trackColor={{ true: colors.primary[600] }}
+              value={shouldPublishLater}
+              onValueChange={() => setShouldPublishLater((p) => !p)}
+            />
           </View>
         </View>
       </ScrollView>

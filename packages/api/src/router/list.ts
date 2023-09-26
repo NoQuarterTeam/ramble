@@ -4,7 +4,8 @@ import { z } from "zod"
 import { listSchema } from "@ramble/shared"
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
-import { type SpotItemWithStats } from "@ramble/shared"
+import { type SpotItemWithStatsAndImage } from "@ramble/shared"
+import { LatestSpotImages, joinSpotImages, publicSpotWhereClauseRaw, spotImagesRawQuery } from "../shared/spot.server"
 
 export const listRouter = createTRPCRouter({
   allByUser: publicProcedure
@@ -42,30 +43,28 @@ export const listRouter = createTRPCRouter({
           description: true,
         },
       }),
-      ctx.prisma.$queryRaw<Array<SpotItemWithStats>>`
-      SELECT 
-        Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
-        Spot.latitude, Spot.longitude,
-        (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image,
-        (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash,
-        (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
-      FROM
-        Spot
-      LEFT JOIN
-        Review ON Spot.id = Review.spotId
-      LEFT JOIN
-        ListSpot ON Spot.id = ListSpot.spotId
-      WHERE
-        ListSpot.listId = ${input.id} AND Spot.deletedAt IS NULL
-      GROUP BY
-        Spot.id
-      ORDER BY
-        Spot.id
+      ctx.prisma.$queryRaw<Array<SpotItemWithStatsAndImage>>`
+        SELECT 
+          Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
+          Spot.latitude, Spot.longitude,
+          (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
+          (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
+        FROM
+          Spot
+        LEFT JOIN
+          ListSpot ON Spot.id = ListSpot.spotId
+        WHERE
+          ListSpot.listId = ${input.id} AND ${publicSpotWhereClauseRaw(ctx.user?.id)}
+        GROUP BY
+          Spot.id
+        ORDER BY
+          Spot.id
       `,
     ])
     if (!list || (list.isPrivate && (!currentUser || currentUser !== list.creator.username)))
       throw new TRPCError({ code: "NOT_FOUND" })
-
+    const images = await ctx.prisma.$queryRaw<LatestSpotImages>(spotImagesRawQuery(spots.map((s) => s.id)))
+    joinSpotImages(spots, images)
     return { list, spots }
   }),
   allByUserWithSavedSpots: protectedProcedure.input(z.object({ spotId: z.string() })).query(async ({ ctx, input }) => {

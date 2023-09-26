@@ -5,7 +5,7 @@ import * as crypto from "crypto"
 import { cacheHeader } from "pretty-cache-header"
 import sharp from "sharp"
 
-import { getHead, uploadStream } from "@ramble/api"
+import { deleteObject, getHead, uploadStream } from "@ramble/api"
 import { s3Url, srcWhitelist } from "@ramble/shared"
 
 const badImageBase64 = "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
@@ -15,7 +15,7 @@ function badImageResponse() {
   return new Response(buffer, {
     status: 500,
     headers: {
-      "Cache-Control": "max-age=0",
+      "Cache-Control": cacheHeader({ public: true, maxAge: "0d" }),
       "Content-Type": "image/gif;base64",
       "Content-Length": buffer.length.toFixed(0),
     },
@@ -27,14 +27,11 @@ function getIntOrNull(value: string | null) {
   return Number.parseInt(value)
 }
 export async function generateImage({ request }: LoaderArgs) {
+  const url = new URL(request.url)
+  const src = url.searchParams.get("src")
+  if (!src) return badImageResponse()
+  if (!srcWhitelist.some((s) => src.startsWith(s))) return badImageResponse()
   try {
-    const url = new URL(request.url)
-
-    const src = url.searchParams.get("src")
-    if (!src) return badImageResponse()
-
-    if (!srcWhitelist.some((s) => src.startsWith(s))) return badImageResponse()
-
     const width = getIntOrNull(url.searchParams.get("width"))
     const height = getIntOrNull(url.searchParams.get("height"))
     const quality = getIntOrNull(url.searchParams.get("quality")) || 90
@@ -50,6 +47,8 @@ export async function generateImage({ request }: LoaderArgs) {
       .update(quality?.toString() || "90")
       .update(fit)
 
+    const shouldPurge = url.searchParams.get("purge") === "true"
+
     const key = "transforms/" + hash.digest("hex")
 
     const isInCache = await getHead(key)
@@ -58,10 +57,17 @@ export async function generateImage({ request }: LoaderArgs) {
         if (!(e instanceof NotFound)) throw badImageResponse()
         return false
       })
+
     const cacheSrc = s3Url + key
 
     // if in cache, return cached image
-    if (isInCache) return getCachedImage(cacheSrc)
+    if (isInCache) {
+      if (shouldPurge) {
+        await deleteObject(key)
+      } else {
+        return getCachedImage(cacheSrc)
+      }
+    }
 
     // fetch from original source
     const res = await axios.get(src, { responseType: "stream" })
@@ -83,7 +89,11 @@ export async function generateImage({ request }: LoaderArgs) {
     return getCachedImage(cacheSrc)
   } catch (e) {
     console.log(e)
-    return badImageResponse()
+    const res = await axios.get(src, { responseType: "stream" })
+    return new Response(res.data, {
+      status: 200,
+      headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "0d" }) },
+    })
   }
 }
 

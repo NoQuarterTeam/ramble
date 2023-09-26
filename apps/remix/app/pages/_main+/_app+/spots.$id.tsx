@@ -1,9 +1,11 @@
 import Map, { Marker } from "react-map-gl"
-import { useLoaderData } from "@remix-run/react"
+import { Link, useLoaderData } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@vercel/remix"
+import dayjs from "dayjs"
 import { Check, Edit2, Heart, Star, Trash } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
+import { publicSpotWhereClause } from "@ramble/api"
 import type { SpotType } from "@ramble/database/types"
 import { AMENITIES, canManageSpot, createImageUrl, displayRating } from "@ramble/shared"
 
@@ -22,7 +24,7 @@ import {
   Button,
 } from "~/components/ui"
 import { db } from "~/lib/db.server"
-import { FORM_ACTION } from "~/lib/form"
+import { FormActionInput, getFormAction } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { badRequest, json, notFound, redirect } from "~/lib/remix.server"
@@ -32,6 +34,7 @@ import { useTheme } from "~/lib/theme"
 import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
 import type { loader as rootLoader } from "~/root"
 import { getCurrentUser } from "~/services/auth/auth.server"
+import { getUserSession } from "~/services/session/session.server"
 
 import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
@@ -45,8 +48,9 @@ export const config = {
 export const headers = useLoaderHeaders
 
 export const loader = async ({ params, request }: LoaderArgs) => {
+  const { userId } = await getUserSession(request)
   const spot = await db.spot.findUnique({
-    where: { id: params.id, deletedAt: { equals: null } },
+    where: { id: params.id, ...publicSpotWhereClause(userId) },
     select: {
       id: true,
       name: true,
@@ -59,6 +63,8 @@ export const loader = async ({ params, request }: LoaderArgs) => {
       latitude: true,
       longitude: true,
       ownerId: true,
+      createdAt: true,
+      creator: { select: { firstName: true, username: true, lastName: true } },
       verifier: { select: { firstName: true, username: true, lastName: true, avatar: true, avatarBlurHash: true } },
       images: { orderBy: { createdAt: "desc" }, select: { id: true, path: true, blurHash: true } },
       _count: { select: { reviews: true, listSpots: true } },
@@ -96,10 +102,9 @@ enum Actions {
 
 export const action = async ({ request, params }: ActionArgs) => {
   const user = await getCurrentUser(request, { id: true, role: true, isVerified: true, isAdmin: true })
-  const formData = await request.formData()
-  const action = formData.get(FORM_ACTION) as Actions | undefined
+  const formAction = await getFormAction<Actions>(request)
 
-  switch (action) {
+  switch (formAction) {
     case Actions.Delete:
       try {
         if (!user.isAdmin) return redirect("/spots")
@@ -142,7 +147,7 @@ export default function SpotDetail() {
               key={image.id}
               placeholder={image.blurHash}
               src={createImageUrl(image.path)}
-              className="h-[300px] max-w-[400px] rounded-md"
+              className="rounded-xs h-[300px] max-w-[400px]"
               height={300}
               width={400}
             />
@@ -154,10 +159,10 @@ export default function SpotDetail() {
           <div className="space-y-2">
             <div className="flex flex-col items-start justify-between space-y-1 md:flex-row">
               <div className="flex items-center space-x-2">
-                <div className="sq-8 md:sq-12 flex items-center justify-center rounded-full border border-gray-200 dark:border-gray-700">
-                  <Icon className="sq-4 md:sq-5" />
+                <div className="sq-8 md:sq-16 flex flex-shrink-0 items-center justify-center rounded-full border border-gray-200 dark:border-gray-600">
+                  <Icon className="sq-4 md:sq-6" />
                 </div>
-                <h1 className="text-lg md:text-2xl lg:text-4xl">{spot.name}</h1>
+                <h1 className="text-lg md:text-2xl lg:text-3xl">{spot.name}</h1>
               </div>
               <div className="flex items-center space-x-1">{user && <SaveToList spotId={spot.id} />}</div>
             </div>
@@ -186,7 +191,7 @@ export default function SpotDetail() {
                     if (!spot.amenities?.[key as keyof typeof AMENITIES]) return null
                     const Icon = AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]
                     return (
-                      <div key={key} className="flex space-x-1 rounded-md border border-gray-200 p-2 dark:border-gray-700">
+                      <div key={key} className="rounded-xs flex space-x-1 border border-gray-200 p-2 dark:border-gray-700">
                         {Icon && <Icon size={20} />}
                         <p className="text-sm">{value}</p>
                       </div>
@@ -194,14 +199,20 @@ export default function SpotDetail() {
                   })}
                 </div>
               )}
+              <p className="text-sm">
+                Added by{" "}
+                <Link to={`/${spot.creator.username}`} className="hover:underline">
+                  {spot.creator.firstName} {spot.creator.lastName}
+                </Link>{" "}
+                on the {dayjs(spot.createdAt).format("DD/MM/YYYY")}
+              </p>
               <div className="flex space-x-2">
                 {canManageSpot(spot, user) && (
                   <>
                     {!spot.verifiedAt && (
                       <Form>
-                        <FormButton name={FORM_ACTION} value={Actions.Verify} leftIcon={<Check className="sq-3" />}>
-                          Verify
-                        </FormButton>
+                        <FormActionInput value={Actions.Verify} />
+                        <FormButton leftIcon={<Check className="sq-3" />}>Verify</FormButton>
                       </Form>
                     )}
                     <LinkButton to="edit" variant="outline" leftIcon={<Edit2 className="sq-3" />}>
@@ -224,9 +235,8 @@ export default function SpotDetail() {
                           <Button variant="ghost">Cancel</Button>
                         </AlertDialogCancel>
                         <Form>
-                          <FormButton name={FORM_ACTION} value={Actions.Delete}>
-                            Confirm
-                          </FormButton>
+                          <FormActionInput value={Actions.Delete} />
+                          <FormButton>Confirm</FormButton>
                         </Form>
                       </AlertDialogFooter>
                     </AlertDialogContent>
@@ -235,7 +245,7 @@ export default function SpotDetail() {
               </div>
             </div>
 
-            <div className="z-10 h-[400px] w-full overflow-hidden rounded-md">
+            <div className="rounded-xs z-10 h-[400px] w-full overflow-hidden">
               <Map
                 mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
                 style={{ height: "100%", width: "100%" }}

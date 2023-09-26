@@ -42,13 +42,13 @@ const ModalContent = React.forwardRef<
     <ModalPrimitive.Content
       ref={ref}
       className={merge(
-        "animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 sm:zoom-in-90 data-[state=open]:sm:slide-in-from-bottom-0 bg-background fixed z-50 grid w-full gap-4 rounded-lg p-6",
+        "animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 sm:zoom-in-90 data-[state=open]:sm:slide-in-from-bottom-0 bg-background rounded-xs fixed z-50 grid w-full gap-4 p-6",
         className,
       )}
       {...props}
     >
       {children}
-      <ModalPrimitive.Close className="absolute right-4 top-4 rounded-md opacity-70 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none">
+      <ModalPrimitive.Close className="rounded-xs absolute right-4 top-4 opacity-70 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none">
         <X className="sq-4" />
         <span className="sr-only">Close</span>
       </ModalPrimitive.Close>

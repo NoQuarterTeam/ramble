@@ -29,11 +29,11 @@ export function Nav() {
   const theme = useTheme()
   const isDark = theme === "dark"
   return (
-    <div className="h-nav bg-background fixed left-0 top-0 z-10 flex w-full items-center justify-between border-b border-solid border-gray-50 px-4 align-middle dark:border-gray-700 xl:px-12">
+    <div className="h-nav bg-background fixed left-0 top-0 z-10 flex w-full items-center justify-between border-b px-4 align-middle xl:px-12">
       <div className="flex items-center space-x-4">
-        <ClientOnly fallback={<Logo to="/map" />}>
-          <Logo to={`/map${typeof window !== "undefined" ? window.location.search : ""}`} />
-        </ClientOnly>
+        <Link to="/map" className="brand-header font flex w-[100px] items-center space-x-1 text-2xl">
+          ramble
+        </Link>
 
         <div className="hidden items-center space-x-1 md:flex">
           <ClientOnly fallback={<NavbarLink to={`/map`}>Map</NavbarLink>}>
@@ -43,6 +43,7 @@ export function Nav() {
             Latest spots
           </NavbarLink>
           <NavbarLink to="/guides">Guides</NavbarLink>
+          <NavbarLink to="/vans">Vans</NavbarLink>
         </div>
       </div>
       <div className="hstack space-x-3">
@@ -119,7 +120,7 @@ export function Nav() {
                     </LinkButton>
                   </DropdownMenuItem>
                 )}
-                <themeFetcher.Form action="/api/theme" method="post" replace className="w-full">
+                <themeFetcher.Form action="/api/theme" className="w-full">
                   <input type="hidden" name="theme" value={isDark ? "light" : "dark"} />
                   <DropdownMenuItem onSelect={(event: Event) => event.preventDefault()} asChild>
                     <Button
@@ -158,14 +159,6 @@ export function Nav() {
         </DropdownMenu>
       </div>
     </div>
-  )
-}
-
-function Logo({ to }: { to: string }) {
-  return (
-    <Link to={to} className="text-primary font-urbanist font flex w-[100px] items-center space-x-1 text-2xl italic">
-      ramble
-    </Link>
   )
 }
 

@@ -2,19 +2,19 @@ import { CloudRain, Layers, Thermometer } from "lucide-react"
 
 import { useDisclosure } from "@ramble/shared"
 
+import { useFetcher } from "~/components/Form"
 import { Button, IconButton, Modal, Switch, Tooltip } from "~/components/ui"
-import { useFetcherSubmit } from "~/lib/hooks/useFetcherSubmit"
 import { usePreferences } from "~/lib/hooks/usePreferences"
 import { preferencesUrl } from "~/pages/api+/preferences"
 
 export function MapLayerControls() {
   const modalProps = useDisclosure()
-  const savePreferencesFetcher = useFetcherSubmit({ onSuccess: modalProps.onClose })
+  const savePreferencesFetcher = useFetcher({ onSuccess: modalProps.onClose })
   const preferences = usePreferences()
 
   return (
     <>
-      <div className="absolute right-4 top-4 rounded-md bg-white shadow dark:bg-gray-800">
+      <div className="rounded-xs absolute right-4 top-4 bg-white shadow dark:bg-gray-800">
         <Tooltip label="Map layers" side="bottom">
           <IconButton
             onClick={modalProps.onOpen}
@@ -33,7 +33,7 @@ export function MapLayerControls() {
       </div>
 
       <Modal {...modalProps} size="xl" title="Map layers">
-        <savePreferencesFetcher.Form method="post" replace className="space-y-6" action={preferencesUrl}>
+        <savePreferencesFetcher.Form className="space-y-6" action={preferencesUrl}>
           <div className="space-y-4">
             <label htmlFor="mapLayerRain" className="flex items-center justify-between space-x-4">
               <div className="flex items-center space-x-4">
