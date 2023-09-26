@@ -17,7 +17,7 @@ export function ListForm(props: Props) {
         defaultValue={props.list?.description || ""}
         label="Description"
         name="description"
-        input={<Textarea rows={3} />}
+        input={<Textarea minRows={3} />}
       />
       <FormField
         defaultChecked={props.list?.isPrivate || false}

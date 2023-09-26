@@ -19,6 +19,7 @@ export function Toaster({ flash }: Props) {
 function ShowToast({ flash }: Props) {
   React.useEffect(() => {
     if (!flash) return
+    // timeout used to prevent reacts double render causing two flashes in dev
     const timeout = setTimeout(() => {
       toast[flash.type](flash.title, { description: flash.description })
     }, 0)

@@ -1,6 +1,6 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
-
+import TextareaAutosize, { TextareaAutosizeProps } from "react-textarea-autosize"
 import { merge } from "@ramble/shared"
 
 export const inputStyles = cva(
@@ -62,14 +62,18 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(function _In
   )
 })
 
-export interface TextareaProps
-  extends React.DetailedHTMLProps<React.TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>,
-    InputStyleProps {
+export interface TextareaProps extends TextareaAutosizeProps, InputStyleProps {
   name?: string
 }
 
 export function Textarea({ variant, size, ...props }: TextareaProps) {
-  return <textarea id={props.name} {...props} className={merge(inputStyles({ variant, size }), "resize-none", props.className)} />
+  return (
+    <TextareaAutosize
+      id={props.name}
+      {...props}
+      className={merge(inputStyles({ variant, size }), "resize-none", props.className)}
+    />
+  )
 }
 
 export interface SelectProps

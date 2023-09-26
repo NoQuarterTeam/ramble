@@ -139,7 +139,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
             name="description"
             label="Description"
             defaultValue={spot?.description || ""}
-            input={<Textarea rows={3} />}
+            input={<Textarea minRows={3} />}
           />
 
           <div className="grid grid-cols-1 gap-2 md:grid-cols-2">

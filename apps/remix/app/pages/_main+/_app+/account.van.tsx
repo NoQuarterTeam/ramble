@@ -93,7 +93,7 @@ export default function VanAccount() {
             name="description"
             defaultValue={user.van?.description || ""}
             label="Anything else you wana mention?"
-            input={<Textarea rows={4} />}
+            input={<Textarea minRows={4} />}
           />
           <FormError />
         </div>
