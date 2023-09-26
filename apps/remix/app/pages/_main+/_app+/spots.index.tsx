@@ -5,13 +5,7 @@ import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 
-import {
-  LatestSpotImages,
-  joinSpotImages,
-  publicSpotWhereClause,
-  publicSpotWhereClauseRaw,
-  spotImagesRawQuery,
-} from "@ramble/api"
+import { LatestSpotImages, joinSpotImages, publicSpotWhereClauseRaw, spotImagesRawQuery } from "@ramble/api"
 import { Prisma, SpotType } from "@ramble/database/types"
 import { type SpotItemWithStatsAndImage } from "@ramble/shared"
 
@@ -39,6 +33,7 @@ const SORT_OPTIONS = [
   { value: "saved", label: "Most saved" },
 ] as const
 
+const TAKE = 12
 export const loader = async ({ request }: LoaderArgs) => {
   const { userId } = await getUserSession(request)
   const searchParams = new URL(request.url).searchParams
@@ -63,7 +58,7 @@ export const loader = async ({ request }: LoaderArgs) => {
         : Prisma.sql`rating DESC, Spot.id`
     }`
 
-  const { spots, count } = await promiseHash({
+  const { spots } = await promiseHash({
     spots: db.$queryRaw<Array<SpotItemWithStatsAndImage>>`
       SELECT 
         Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
@@ -77,26 +72,20 @@ export const loader = async ({ request }: LoaderArgs) => {
       GROUP BY
         Spot.id
       ${ORDER_BY}
-      LIMIT 12
+      LIMIT ${TAKE}
       OFFSET ${skip};
     `,
-    count: db.spot.count({
-      where: type ? { type: type as SpotType, ...publicSpotWhereClause(userId) } : publicSpotWhereClause(userId),
-    }),
   })
 
   // get spot images and join to original spot payload
   const images = await db.$queryRaw<LatestSpotImages>(spotImagesRawQuery(spots.map((s) => s.id)))
   joinSpotImages(spots, images)
 
-  return json(
-    { spots, count },
-    { headers: { "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour", maxAge: "1hour" }) } },
-  )
+  return json({ spots }, { headers: { "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour", maxAge: "1hour" }) } })
 }
 
 export default function Latest() {
-  const { spots: initialSpots, count } = useLoaderData<typeof loader>()
+  const { spots: initialSpots } = useLoaderData<typeof loader>()
   const [searchParams, setSearchParams] = useSearchParams()
   const type = searchParams.get("type") || ""
   const sort = searchParams.get("sort") || "latest"
@@ -166,7 +155,7 @@ export default function Latest() {
         </div>
       </div>
       <div className="space-y-10">
-        {count === 0 ? (
+        {spots.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-4 p-10">
             <p className="text-xl">No spots yet</p>
             {type && (
@@ -187,7 +176,7 @@ export default function Latest() {
             ))}
           </div>
         )}
-        {count > spots.length && (
+        {spots.length % TAKE === 0 && (
           <div className="center">
             <Button size="lg" isLoading={spotFetcher.state === "loading"} variant="outline" onClick={onNext}>
               Load more

@@ -4,13 +4,7 @@ import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
-import {
-  LatestSpotImages,
-  joinSpotImages,
-  publicSpotWhereClause,
-  publicSpotWhereClauseRaw,
-  spotImagesRawQuery,
-} from "@ramble/api"
+import { LatestSpotImages, joinSpotImages, publicSpotWhereClauseRaw, spotImagesRawQuery } from "@ramble/api"
 import { type SpotItemWithStatsAndImage } from "@ramble/shared"
 
 import { Button } from "~/components/ui"
@@ -31,7 +25,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
   const searchParams = new URL(request.url).searchParams
   const skip = parseInt((searchParams.get("skip") as string) || "0")
   const { userId } = await getUserSession(request)
-  const { spots, count } = await promiseHash({
+  const { spots } = await promiseHash({
     spots: db.$queryRaw<SpotItemWithStatsAndImage[]>`
       SELECT
         Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
@@ -50,20 +44,16 @@ export const loader = async ({ request, params }: LoaderArgs) => {
       LIMIT ${TAKE}
       OFFSET ${skip};
     `,
-    count: db.spot.count({ where: { creatorId: user.id, ...publicSpotWhereClause(userId) } }),
   })
 
   const images = await db.$queryRaw<LatestSpotImages>(spotImagesRawQuery(spots.map((s) => s.id)))
   joinSpotImages(spots, images)
 
-  return json(
-    { spots, count },
-    { headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }) } },
-  )
+  return json({ spots }, { headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }) } })
 }
 
 export default function ProfileSpots() {
-  const { spots: initialSpots, count } = useLoaderData<typeof loader>()
+  const { spots: initialSpots } = useLoaderData<typeof loader>()
   const { username } = useParams()
   const spotFetcher = useFetcher<typeof loader>()
   const [spots, setSpots] = React.useState(initialSpots)
@@ -79,9 +69,9 @@ export default function ProfileSpots() {
   return (
     <div className="space-y-10">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {count === 0 ? <></> : spots.map((spot) => <SpotItem key={spot.id} spot={spot} />)}
+        {spots.length === 0 ? <></> : spots.map((spot) => <SpotItem key={spot.id} spot={spot} />)}
       </div>
-      {count > spots.length && (
+      {spots.length % TAKE === 0 && (
         <div className="center">
           <Button size="lg" isLoading={spotFetcher.state === "loading"} variant="outline" onClick={onNext}>
             Load more
