@@ -1,12 +1,12 @@
-import { Link, useFetcher } from "@remix-run/react"
+import { Link } from "@remix-run/react"
 import type { SerializeFrom } from "@vercel/remix"
 import dayjs from "dayjs"
 import { Star } from "lucide-react"
-import { AuthenticityTokenInput } from "remix-utils"
 
 import type { Prisma } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
+import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import {
   AlertDialogCancel,
@@ -83,8 +83,7 @@ export function ReviewItem({ review }: Props) {
                   <Button variant="ghost">Cancel</Button>
                 </AlertDialogCancel>
 
-                <deleteFetcher.Form method="post" action={`/spots/${review.spotId}/reviews/${review.id}`} replace>
-                  <AuthenticityTokenInput />
+                <deleteFetcher.Form action={`/spots/${review.spotId}/reviews/${review.id}`}>
                   <FormActionInput value={Actions.Delete} />
                   <Button type="submit">Confirm</Button>
                 </deleteFetcher.Form>

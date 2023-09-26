@@ -1,14 +1,13 @@
 import * as React from "react"
-import { useFetcher } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs, SerializeFrom } from "@vercel/remix"
 import { Heart, Plus } from "lucide-react"
-import { AuthenticityTokenInput, useAuthenticityToken } from "remix-utils"
+import { useAuthenticityToken } from "remix-utils"
 import { z } from "zod"
 import { zx } from "zodix"
 
 import { useDisclosure } from "@ramble/shared"
 
-import { FormButton, FormError, FormField } from "~/components/Form"
+import { FormButton, FormError, FormField, useFetcher } from "~/components/Form"
 import {
   Button,
   Checkbox,
@@ -163,8 +162,7 @@ export function SaveToList(props: Props) {
             ))
           )}
           <Modal title="Create new list" {...newListModalProps}>
-            <listCreateFetcher.Form method="post" replace className="space-y-2" action={SAVE_TO_LIST_URL}>
-              <AuthenticityTokenInput />
+            <listCreateFetcher.Form className="space-y-2" action={SAVE_TO_LIST_URL}>
               <input type="hidden" name="spotId" value={props.spotId} />
               <FormField
                 required

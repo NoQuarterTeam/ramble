@@ -1,10 +1,10 @@
 import type { NavLinkProps } from "@remix-run/react"
-import { Link, NavLink, useFetcher, useNavigate, useSubmit } from "@remix-run/react"
+import { Link, NavLink, useNavigate, useSubmit } from "@remix-run/react"
 import { Heart, LogOut, Menu, Moon, Plus, Settings, Sun, User } from "lucide-react"
-import { AuthenticityTokenInput } from "remix-utils"
 
 import { ClientOnly, createImageUrl, merge } from "@ramble/shared"
 
+import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import {
   Avatar,
@@ -114,8 +114,7 @@ export function Nav() {
                     Account
                   </LinkButton>
                 </DropdownMenuItem>
-                <themeFetcher.Form action="/api/theme" method="post" replace className="w-full">
-                  <AuthenticityTokenInput />
+                <themeFetcher.Form action="/api/theme" className="w-full">
                   <input type="hidden" name="theme" value={isDark ? "light" : "dark"} />
                   <DropdownMenuItem onSelect={(event: Event) => event.preventDefault()} asChild>
                     <Button

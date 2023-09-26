@@ -5,12 +5,13 @@ import type { ActionArgs, LoaderArgs, SerializeFrom } from "@vercel/remix"
 import dayjs from "dayjs"
 import { Check, Eye, EyeOff, Trash } from "lucide-react"
 import queryString from "query-string"
-import { AuthenticityTokenInput, promiseHash } from "remix-utils"
+import { promiseHash } from "remix-utils"
 import { z } from "zod"
 
 import type { Prisma, SpotType } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
+import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { Search } from "~/components/Search"
@@ -18,7 +19,6 @@ import { Table } from "~/components/Table"
 import { Avatar, Button, IconButton, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { FormActionInput, formError, getFormAction, validateFormData } from "~/lib/form"
-import { useFetcherSubmit } from "~/lib/hooks/useFetcherSubmit"
 import { badRequest, json } from "~/lib/remix.server"
 import { SPOT_TYPE_OPTIONS, SPOTS } from "~/lib/static/spots"
 import { getTableParams } from "~/lib/table"
@@ -276,10 +276,9 @@ function RenderSubComponent({ row }: { row: Row<Spot> }) {
 }
 
 function SpotVerifyAction({ spot }: { spot: Spot }) {
-  const verifyFetcher = useFetcherSubmit()
+  const verifyFetcher = useFetcher()
   return (
-    <verifyFetcher.Form method="post" replace>
-      <AuthenticityTokenInput />
+    <verifyFetcher.Form>
       <FormActionInput value={Actions.Verify} />
       <input type="hidden" name="id" value={spot.id} />
       <Button type="submit" isLoading={verifyFetcher.state !== "idle"} size="sm" leftIcon={<Check size={16} />}>
@@ -289,12 +288,12 @@ function SpotVerifyAction({ spot }: { spot: Spot }) {
   )
 }
 function SpotDeleteAction({ spot }: { spot: Spot }) {
-  const deleteFetcher = useFetcherSubmit()
+  const deleteFetcher = useFetcher()
 
   return (
-    <deleteFetcher.Form method="post" replace>
+    <deleteFetcher.Form>
       <input type="hidden" name="id" value={spot.id} />
-      <AuthenticityTokenInput />
+
       <FormActionInput value={Actions.Delete} />
       <IconButton
         type="submit"

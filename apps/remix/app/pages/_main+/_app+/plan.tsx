@@ -1,6 +1,7 @@
 import * as React from "react"
 import type { LngLatLike, MapRef } from "react-map-gl"
 import { Layer, Map, Marker, Source } from "react-map-gl"
+import { type MarkerEvent, type MarkerInstance } from "react-map-gl/dist/esm/types"
 import { useFetcher } from "@remix-run/react"
 import bbox from "@turf/bbox"
 import * as turf from "@turf/helpers"
@@ -241,7 +242,7 @@ export default function PlanTrip() {
 }
 
 interface MarkerProps {
-  onClick: (e: mapboxgl.MapboxEvent<MouseEvent>) => void
+  onClick: (e: MarkerEvent<MarkerInstance, unknown>) => void
   spot: SerializeFrom<typeof directionsLoader>["foundSpots"][number]
 }
 function SpotMarker(props: MarkerProps) {

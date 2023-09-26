@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react"
-import type { FormProps as RemixFormProps } from "@remix-run/react"
-import { Form as RemixForm, useNavigation } from "@remix-run/react"
+import { type SerializeFrom } from "@remix-run/node"
+import type { FetcherWithComponents, FormProps as RemixFormProps } from "@remix-run/react"
+import { Form as RemixForm, useFetcher as useRemixFetcher, useNavigation } from "@remix-run/react"
 import { X } from "lucide-react"
 import { AuthenticityTokenInput } from "remix-utils"
 
@@ -29,6 +30,33 @@ export const Form = React.forwardRef(function _Form(props: RemixFormProps, ref: 
     </RemixForm>
   )
 })
+
+interface UseFetcherProps<T> {
+  onSuccess?: (data: T) => void
+}
+
+export function useFetcher<T>(props?: UseFetcherProps<T>): FetcherWithComponents<SerializeFrom<T>> {
+  const fetcher = useRemixFetcher()
+
+  function Form({ children, ...rest }: RemixFormProps) {
+    return (
+      <fetcher.Form method="POST" replace {...rest}>
+        <AuthenticityTokenInput />
+        {children}
+      </fetcher.Form>
+    )
+  }
+
+  React.useEffect(() => {
+    if (!fetcher.data || !props) return
+    if (fetcher.state === "loading" && fetcher.data !== null) {
+      props.onSuccess?.(fetcher.data)
+    }
+  }, [fetcher.state, props, fetcher.data])
+
+  // @ts-expect-error - this is fine
+  return { ...fetcher, Form }
+}
 
 export function FormFieldLabel(
   props: React.DetailedHTMLProps<React.LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement> & {

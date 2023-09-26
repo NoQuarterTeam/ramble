@@ -2,13 +2,12 @@
 import * as React from "react"
 import { toast, Toaster as SToaster } from "sonner"
 
-import type { FlashMessage } from "~/services/session/flash.server"
+import { type RootLoader } from "~/root"
 
-type Flash = {
-  flashError: FlashMessage
-  flashInfo: FlashMessage
+interface Props {
+  flash: RootLoader["flash"]
 }
-export function Toaster({ flash }: { flash: Flash }) {
+export function Toaster({ flash }: Props) {
   return (
     <>
       <SToaster closeButton />
@@ -17,14 +16,11 @@ export function Toaster({ flash }: { flash: Flash }) {
   )
 }
 
-function ShowToast({ flash }: { flash: Flash }) {
+function ShowToast({ flash }: Props) {
   React.useEffect(() => {
-    const { flashError, flashInfo } = flash
-    const type = flashError ? "error" : "success"
-    const message = flashError || flashInfo
-    if (!message) return
+    if (!flash) return
     const timeout = setTimeout(() => {
-      toast[type](message.title, { description: message.description })
+      toast[flash.type](flash.title, { description: flash.description })
     }, 0)
     return () => {
       clearTimeout(timeout)

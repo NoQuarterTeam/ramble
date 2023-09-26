@@ -1,6 +1,5 @@
 import { Link } from "@remix-run/react"
 import type { ActionArgs, V2_MetaFunction } from "@vercel/remix"
-import { redirect } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
@@ -10,9 +9,8 @@ import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { db } from "~/lib/db.server"
 import { FormActionInput, formError, getFormAction, validateFormData } from "~/lib/form"
 import { createToken } from "~/lib/jwt.server"
-import { badRequest } from "~/lib/remix.server"
+import { badRequest, redirect } from "~/lib/remix.server"
 import { hashPassword } from "~/services/auth/password.server"
-import { FlashType, getFlashSession } from "~/services/session/flash.server"
 import { getUserSession } from "~/services/session/session.server"
 
 export const meta: V2_MetaFunction = () => {
@@ -60,14 +58,13 @@ export const action = async ({ request }: ActionArgs) => {
           data: { ...data, email, password, lists: { create: { name: "Favourites", description: "All my favourite spots" } } },
         })
         const { setUser } = await getUserSession(request)
-        const { createFlash } = await getFlashSession(request)
         const token = await createToken({ id: user.id })
         await sendAccountVerificationEmail(user, token)
-        const headers = new Headers([
-          ["Set-Cookie", await setUser(user.id)],
-          ["Set-Cookie", await createFlash(FlashType.Info, `Welcome to Ramble, ${data.firstName}!`, "Let's get you setup.")],
-        ])
-        return redirect("/onboarding", { headers })
+        const headers = new Headers([["Set-Cookie", await setUser(user.id)]])
+        return redirect("/onboarding", request, {
+          headers,
+          flash: { title: `Welcome to Ramble, ${data.firstName}!`, description: "Let's get you setup." },
+        })
       } catch {
         return badRequest("Error registering your account")
       }

@@ -73,7 +73,7 @@ export const loader = async ({ request }: LoaderArgs) => {
     {
       user,
       csrf: csrfSession.token,
-      flash: flashSession.flash,
+      flash: flashSession.message,
       preferences: preferences || defaultPreferences,
       theme: themeSession.theme,
       config: { WEB_URL: FULL_WEB_URL },

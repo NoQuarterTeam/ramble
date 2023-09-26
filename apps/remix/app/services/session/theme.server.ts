@@ -1,11 +1,13 @@
 import { createCookieSessionStorage } from "@vercel/remix"
+import { createTypedSessionStorage } from "remix-utils"
+import { z } from "zod"
 
 import { IS_PRODUCTION, THEME_SESSION_SECRET } from "~/lib/config.server"
 import { isTheme, type Theme } from "~/lib/theme"
 
 export const THEME_COOKIE_KEY = IS_PRODUCTION ? "ramble_session_theme" : "ramble_session_dev_theme"
 
-const themeStorage = createCookieSessionStorage({
+const storage = createCookieSessionStorage({
   cookie: {
     name: THEME_COOKIE_KEY,
     secrets: [THEME_SESSION_SECRET],
@@ -15,6 +17,11 @@ const themeStorage = createCookieSessionStorage({
     maxAge: 60 * 60 * 24 * 30,
     httpOnly: true,
   },
+})
+
+const themeStorage = createTypedSessionStorage({
+  sessionStorage: storage,
+  schema: z.object({ theme: z.enum(["light", "dark"]).optional() }),
 })
 
 export async function getThemeSession(request: Request) {

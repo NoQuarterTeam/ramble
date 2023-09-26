@@ -8,7 +8,6 @@ import { type Prisma } from "@ramble/database/types"
 
 import { Search } from "~/components/Search"
 import { Table } from "~/components/Table"
-
 import { db } from "~/lib/db.server"
 import { json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"

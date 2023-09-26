@@ -3,6 +3,7 @@ import { Link, useFetcher, useLoaderData } from "@remix-run/react"
 import type { LoaderArgs, SerializeFrom } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
+import { promiseHash } from "remix-utils"
 
 import { createImageUrl } from "@ramble/shared"
 
@@ -10,7 +11,6 @@ import { PageContainer } from "~/components/PageContainer"
 import { Avatar, Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
-import { promiseHash } from "remix-utils"
 
 export const config = {
   runtime: "edge",

@@ -1,19 +1,18 @@
 import * as React from "react"
 import type { LngLatLike } from "react-map-gl"
 import Map, { Marker, NavigationControl } from "react-map-gl"
-import { Link, useFetcher, useLoaderData, useNavigate } from "@remix-run/react"
+import { Link, useLoaderData, useNavigate } from "@remix-run/react"
 import bbox from "@turf/bbox"
 import * as turf from "@turf/helpers"
 import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { ChevronLeft, Copy } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
-import { AuthenticityTokenInput } from "remix-utils"
 
 import { publicSpotWhereClauseRaw } from "@ramble/api"
-import { type SpotItemWithStats } from "@ramble/shared"
-import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
+import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE, type SpotItemWithStats } from "@ramble/shared"
 
+import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { PageContainer } from "~/components/PageContainer"
 import { Button } from "~/components/ui"
@@ -161,8 +160,7 @@ export default function ListDetail() {
         {!!currentUser && (
           <div className="flex space-x-1">
             {currentUser.id !== list.creatorId && (
-              <copyFetcher.Form method="post" replace>
-                <AuthenticityTokenInput />
+              <copyFetcher.Form>
                 <FormActionInput value={Actions.Copy} />
                 <Button
                   leftIcon={<Copy className="sq-4" />}
@@ -180,8 +178,7 @@ export default function ListDetail() {
                 <LinkButton to="edit" variant="outline">
                   Edit
                 </LinkButton>
-                <deleteFetcher.Form method="post" replace>
-                  <AuthenticityTokenInput />
+                <deleteFetcher.Form>
                   <FormActionInput value={Actions.Delete} />
                   <Button type="submit" isLoading={deleteFetcher.state === "submitting"} variant="destructive">
                     Delete

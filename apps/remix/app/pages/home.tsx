@@ -1,11 +1,10 @@
-import { useFetcher } from "@remix-run/react"
 import { type LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
-import { AuthenticityTokenInput } from "remix-utils"
 import { z } from "zod"
 
 import { join, merge } from "@ramble/shared"
 
+import { useFetcher } from "~/components/Form"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
@@ -137,7 +136,8 @@ export default function Home() {
 }
 
 function RequestAccessForm({ mode }: { mode?: "light" | "dark" }) {
-  const accessFetcher = useFetcher()
+  // eslint-disable-next-line
+  const accessFetcher = useFetcher<any>()
 
   if (accessFetcher.data?.success)
     return (
@@ -147,8 +147,7 @@ function RequestAccessForm({ mode }: { mode?: "light" | "dark" }) {
     )
 
   return (
-    <accessFetcher.Form action="/home" method="POST" replace className="flex flex-col gap-2 sm:flex-row">
-      <AuthenticityTokenInput />
+    <accessFetcher.Form action="/home" className="flex flex-col gap-2 sm:flex-row">
       <div>
         <input
           required
