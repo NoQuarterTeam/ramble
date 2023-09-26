@@ -108,7 +108,7 @@ export default function Latest() {
     <PageContainer className="pt-0">
       <div className="top-nav bg-background sticky z-[1] py-4">
         <div className="flex w-full items-center gap-2">
-          <div className="relative w-[calc(100%-120px)]">
+          <div className="relative w-[calc(100%-140px)]">
             <div className="scrollbar-hide flex gap-1 overflow-x-scroll pr-10">
               <Button
                 onClick={() => {
@@ -137,7 +137,7 @@ export default function Latest() {
             </div>
             <div className="pointer-events-none absolute right-0 top-0 h-full w-20 bg-gradient-to-r from-transparent to-white dark:to-gray-800" />
           </div>
-          <div className="w-[120px]">
+          <div className="w-[140px]">
             <Select
               defaultValue={sort}
               onChange={(e) => {
