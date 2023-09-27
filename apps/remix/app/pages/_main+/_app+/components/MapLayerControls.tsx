@@ -14,11 +14,10 @@ export function MapLayerControls() {
 
   return (
     <>
-      <div className="rounded-xs absolute right-4 top-4 bg-white shadow dark:bg-gray-800">
-        <Tooltip label="Map layers" side="bottom">
+      <div className="rounded-xs bg-background absolute right-2 top-2 shadow md:right-4 md:top-4">
+        <Tooltip label="Map layers" side="left">
           <IconButton
             onClick={modalProps.onOpen}
-            size="lg"
             className="border-none"
             variant="ghost"
             icon={<Layers className="sq-5" />}

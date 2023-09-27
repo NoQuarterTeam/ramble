@@ -4,7 +4,7 @@ import queryString from "query-string"
 
 import { useDisclosure } from "@ramble/shared"
 
-import { Button, Modal, Switch } from "~/components/ui"
+import { Button, IconButton, Modal, Switch, Tooltip } from "~/components/ui"
 import { SPOT_TYPE_OPTIONS } from "~/lib/static/spots"
 
 export function MapFilters({ onChange }: { onChange: (params: string) => void }) {
@@ -45,7 +45,7 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
 
   return (
     <>
-      <div className="bg-background rounded-xs absolute left-1/2 top-4 -translate-x-1/2">
+      <div className="bg-background rounded-xs absolute left-1/2 top-4 hidden -translate-x-1/2 md:block">
         <Button
           onClick={modalProps.onOpen}
           className="border-none"
@@ -54,6 +54,17 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
         >
           Filters
         </Button>
+      </div>
+      <div className="bg-background rounded-xs absolute right-2 top-12 block md:hidden">
+        <Tooltip label="Filters" side="left">
+          <IconButton
+            variant="ghost"
+            onClick={modalProps.onOpen}
+            className="border-none"
+            icon={<Settings2 className="sq-4" />}
+            aria-label="filters"
+          />
+        </Tooltip>
       </div>
 
       <Modal {...modalProps} size="3xl" title="Filters">

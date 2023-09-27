@@ -21,12 +21,12 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
 
   return (
     <>
-      <div ref={ref} className="absolute left-4 top-4 space-y-2">
-        <div className="bg-background w-[250px] shadow-lg">
+      <div ref={ref} className="absolute left-2 top-2 space-y-2 md:left-4 md:top-4">
+        <div className="bg-background w-[220px] shadow-lg md:w-[250px]">
           <Input placeholder="Search location" value={search} onChange={onStartPointQuery} />
         </div>
         {search && (
-          <div className="bg-background rounded-xs w-full max-w-xl space-y-2 border p-2 shadow-lg">
+          <div className="bg-background rounded-xs w-[calc(100vw-theme(spacing.4))] space-y-2 border p-2 shadow-lg md:w-full md:max-w-xl">
             {locationFetcher.state === "loading" && !locationFetcher.data ? (
               <Spinner />
             ) : !locationFetcher.data || locationFetcher.data.length === 0 ? (
