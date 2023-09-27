@@ -192,8 +192,8 @@ function Document({ theme, children }: DocumentProps) {
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
-        <meta name="msapplication-TileColor" content={theme === "dark" ? "#F46132" : "#F46132"} />
-        <meta name="theme-color" content={theme === "dark" ? "#F46132" : "#F46132"} />
+        <meta name="msapplication-TileColor" content={theme === "dark" ? "#241c17" : "#fffefe"} />
+        <meta name="theme-color" content={theme === "dark" ? "#241c17" : "#fffefe"} />
         <Meta />
         <Links />
       </head>
