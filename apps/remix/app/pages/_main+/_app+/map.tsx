@@ -196,7 +196,7 @@ export default function MapView() {
         <MapFilters onChange={onParamsChange} />
       </ClientOnly>
       <MapLayerControls />
-      <MapSearch mapRef={mapRef} />
+      <MapSearch onSearch={(center) => mapRef.current?.flyTo({ center })} />
       <Outlet />
     </div>
   )

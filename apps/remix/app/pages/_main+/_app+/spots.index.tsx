@@ -7,9 +7,9 @@ import queryString from "query-string"
 
 import { LatestSpotImages, joinSpotImages, publicSpotWhereClauseRaw, spotImagesRawQuery } from "@ramble/api"
 import { Prisma, SpotType } from "@ramble/database/types"
-import { type SpotItemWithStatsAndImage } from "@ramble/shared"
+import { useDisclosure, type SpotItemWithStatsAndImage } from "@ramble/shared"
 
-import { Button, Select } from "~/components/ui"
+import { Button, Modal, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { SPOT_TYPE_OPTIONS } from "~/lib/static/spots"
@@ -19,6 +19,7 @@ import { PageContainer } from "../../../components/PageContainer"
 import { SpotItem } from "./components/SpotItem"
 import { promiseHash } from "remix-utils"
 import { useFetcher } from "~/components/Form"
+import { Settings2 } from "lucide-react"
 
 export const config = {
   runtime: "edge",
@@ -104,11 +105,12 @@ export default function Latest() {
     if (data) setSpots((prev) => [...prev, ...data])
   }, [spotFetcher.data, spotFetcher.state])
 
+  const modalProps = useDisclosure()
   return (
     <PageContainer className="pt-0">
       <div className="top-nav bg-background sticky z-[1] py-4">
-        <div className="flex w-full items-center gap-2">
-          <div className="relative w-[calc(100%-140px)]">
+        <div className="flex w-full items-center justify-between gap-2">
+          <div className="relative hidden w-[calc(100%-140px)] md:block">
             <div className="scrollbar-hide flex gap-1 overflow-x-scroll pr-10">
               <Button
                 onClick={() => {
@@ -136,6 +138,42 @@ export default function Latest() {
               ))}
             </div>
             <div className="pointer-events-none absolute right-0 top-0 h-full w-20 bg-gradient-to-r from-transparent to-white dark:to-gray-800" />
+          </div>
+          <div className="flex items-center gap-2 md:hidden">
+            <Button onClick={modalProps.onOpen} variant="outline" leftIcon={<Settings2 size={18} />}>
+              Filters
+            </Button>
+            {type && (
+              <Button
+                variant="link"
+                onClick={() => {
+                  const existingParams = queryString.parse(searchParams.toString())
+                  setSearchParams(queryString.stringify({ ...existingParams, type: undefined }))
+                }}
+              >
+                Clear
+              </Button>
+            )}
+            <Modal title="Filters" {...modalProps}>
+              <div className="flex flex-wrap gap-2">
+                {SPOT_TYPE_OPTIONS.map(({ value, Icon, label }) => (
+                  <Button
+                    key={value}
+                    onClick={() => {
+                      const existingParams = queryString.parse(searchParams.toString())
+                      setSearchParams(
+                        queryString.stringify({ ...existingParams, type: type && type === value ? undefined : value }),
+                      )
+                      modalProps.onClose()
+                    }}
+                    variant={type === value ? "primary" : "outline"}
+                    leftIcon={<Icon size={16} />}
+                  >
+                    {label}
+                  </Button>
+                ))}
+              </div>
+            </Modal>
           </div>
           <div className="w-[140px]">
             <Select

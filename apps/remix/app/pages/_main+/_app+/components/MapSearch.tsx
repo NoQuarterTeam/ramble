@@ -5,9 +5,8 @@ import { useFetcher } from "~/components/Form"
 import { Button, Input, Spinner } from "~/components/ui"
 import { locationSearchLoader } from "~/pages/api+/mapbox+/location-search"
 import useOnClickOutside from "use-onclickoutside"
-import { MapRef } from "react-map-gl"
 
-export function MapSearch({ mapRef }: { mapRef: React.RefObject<MapRef> }) {
+export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) => void }) {
   const [search, setSearch] = React.useState("")
   const locationFetcher = useFetcher<typeof locationSearchLoader>()
   const ref = React.useRef<HTMLDivElement>(null)
@@ -37,7 +36,7 @@ export function MapSearch({ mapRef }: { mapRef: React.RefObject<MapRef> }) {
                 {locationFetcher.data.map((location, i) => (
                   <Button
                     onClick={() => {
-                      mapRef.current?.flyTo({ center: location.center })
+                      onSearch(location.center)
                       setSearch("")
                     }}
                     key={i}
