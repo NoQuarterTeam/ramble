@@ -14,7 +14,7 @@ export function NewSpotTypeScreen() {
   const [type, setType] = React.useState<SpotType>()
   const router = useRouter()
   return (
-    <NewSpotModalView title="What type?">
+    <NewSpotModalView title="what type?">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View className="flex flex-row flex-wrap gap-2 pt-4">
           {SPOT_OPTIONS.map((spotType) => (

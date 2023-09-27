@@ -3,8 +3,8 @@ import { ChevronLeft, Heart, Instagram, User2 } from "lucide-react-native"
 
 import { createImageUrl } from "@ramble/shared"
 
+import { BrandHeading } from "../../../../components/ui/BrandHeading"
 import { Button } from "../../../../components/ui/Button"
-import { Heading } from "../../../../components/ui/Heading"
 import { OptimizedImage } from "../../../../components/ui/OptimisedImage"
 import { Spinner } from "../../../../components/ui/Spinner"
 import { Text } from "../../../../components/ui/Text"
@@ -40,19 +40,19 @@ export function UserScreen() {
   return (
     <View className="pt-16">
       <View className="flex flex-row items-center justify-between px-4 pb-2">
-        <View className="flex flex-row items-center space-x-1">
+        <View className="flex flex-row items-center">
           {router.canGoBack() && (
             <TouchableOpacity className="sq-8 flex items-center justify-center" onPress={router.goBack} activeOpacity={0.8}>
-              <ChevronLeft className="text-black dark:text-white" />
+              <ChevronLeft className="text-primary mt-2" />
             </TouchableOpacity>
           )}
-          <Heading className="font-700 text-2xl">{params.username}</Heading>
+          <BrandHeading className="pl-1 text-3xl">{params.username}</BrandHeading>
         </View>
         {user && me && me.username !== params.username && (
           <TouchableOpacity
             onPress={onToggleFollow}
             activeOpacity={0.8}
-            className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-gray-800"
+            className="sq-8 bg-background flex items-center justify-center rounded-full dark:bg-gray-800"
           >
             <Heart
               size={20}
@@ -132,7 +132,7 @@ export function UserScreen() {
             <Text>{user.bio}</Text>
           </View>
 
-          <View className="flex flex-row items-center justify-center space-x-2 border-b border-gray-100 bg-white py-2 dark:border-gray-800 dark:bg-black">
+          <View className="bg-background dark:bg-background-dark flex flex-row items-center justify-center space-x-2 border-b border-gray-100 py-2 dark:border-gray-800">
             <View>
               <Button
                 onPress={() => router.navigate("UserScreen", { tab: "spots", username: params.username })}

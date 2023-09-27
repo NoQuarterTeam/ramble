@@ -34,7 +34,7 @@ export function AccountScreen() {
   }
   if (!me)
     return (
-      <TabView title="Account">
+      <TabView title="account">
         <LoginPlaceholder text="Log in to start saving spots">
           <View className="space-y-4">
             <TouchableOpacity onPress={() => push("AuthLayout", { screen: "RegisterScreen" })}>
@@ -52,7 +52,7 @@ export function AccountScreen() {
       </TabView>
     )
   return (
-    <TabView title="Account">
+    <TabView title="account">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false} className="space-y-4 pt-2">
         {!me.isVerified && (
           <View className="rounded-xs flex flex-col space-y-3 border border-gray-200 p-2 pl-4 dark:border-gray-700">

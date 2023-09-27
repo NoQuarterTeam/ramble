@@ -15,7 +15,7 @@ function badImageResponse() {
   return new Response(buffer, {
     status: 500,
     headers: {
-      "Cache-Control": "max-age=0",
+      "Cache-Control": cacheHeader({ public: true, maxAge: "0d" }),
       "Content-Type": "image/gif;base64",
       "Content-Length": buffer.length.toFixed(0),
     },
@@ -27,13 +27,11 @@ function getIntOrNull(value: string | null) {
   return Number.parseInt(value)
 }
 export async function generateImage({ request }: LoaderArgs) {
+  const url = new URL(request.url)
+  const src = url.searchParams.get("src")
+  if (!src) return badImageResponse()
+  if (!srcWhitelist.some((s) => src.startsWith(s))) return badImageResponse()
   try {
-    const url = new URL(request.url)
-
-    const src = url.searchParams.get("src")
-    if (!src) return badImageResponse()
-    if (!srcWhitelist.some((s) => src.startsWith(s))) return badImageResponse()
-
     const width = getIntOrNull(url.searchParams.get("width"))
     const height = getIntOrNull(url.searchParams.get("height"))
     const quality = getIntOrNull(url.searchParams.get("quality")) || 90
@@ -91,7 +89,11 @@ export async function generateImage({ request }: LoaderArgs) {
     return getCachedImage(cacheSrc)
   } catch (e) {
     console.log(e)
-    return badImageResponse()
+    const res = await axios.get(src, { responseType: "stream" })
+    return new Response(res.data, {
+      status: 200,
+      headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "0d" }) },
+    })
   }
 }
 

@@ -25,7 +25,7 @@ export function DeleteSpotScreen() {
   })
 
   return (
-    <ModalView title="Delete spot">
+    <ModalView title="delete spot">
       <View className="space-y-4">
         <Text className="text-lg">Are you sure? This can't be undone</Text>
         <View className="space-y-2">

@@ -6,7 +6,7 @@ import { ChevronDown, PlusCircle } from "lucide-react-native"
 import { join, useDisclosure } from "@ramble/shared"
 
 import { SpotItem } from "../../../components/SpotItem"
-import { Heading } from "../../../components/ui/Heading"
+import { BrandHeading } from "../../../components/ui/BrandHeading"
 import { Spinner } from "../../../components/ui/Spinner"
 import { TabView } from "../../../components/ui/TabView"
 import { Text } from "../../../components/ui/Text"
@@ -14,7 +14,7 @@ import { api } from "../../../lib/api"
 import { height, width } from "../../../lib/device"
 import { useRouter } from "../../router"
 
-const SORT_OPTIONS = { latest: "Latest", rated: "Top rated", saved: "Most saved" } as const
+const SORT_OPTIONS = { latest: "latest", rated: "top rated", saved: "most saved" } as const
 
 export function SpotsScreen() {
   const sortProps = useDisclosure()
@@ -39,8 +39,8 @@ export function SpotsScreen() {
     <TabView
       title={
         <TouchableOpacity onPress={sortProps.onOpen} className="flex flex-row items-center">
-          <Heading className="py-2 text-3xl">{SORT_OPTIONS[sort]}</Heading>
-          <ChevronDown size={20} className="text-black dark:text-white" />
+          <BrandHeading className="py-2 text-4xl">{SORT_OPTIONS[sort]}</BrandHeading>
+          <ChevronDown size={20} className="text-primary" />
         </TouchableOpacity>
       }
       rightElement={
@@ -56,7 +56,7 @@ export function SpotsScreen() {
           className="absolute inset-0 z-10 px-4 pt-[100px]"
           style={{ width, height }}
         >
-          <View className="rounded-xs w-[200px] bg-white px-4 py-2 shadow-md dark:bg-black">
+          <View className="rounded-xs w-[200px] bg-white px-4 py-2 shadow-md dark:bg-gray-950">
             {Object.entries(SORT_OPTIONS).map(([key, label]) => (
               <TouchableOpacity
                 key={key}

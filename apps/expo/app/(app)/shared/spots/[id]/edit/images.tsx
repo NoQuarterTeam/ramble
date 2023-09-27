@@ -35,7 +35,7 @@ export function EditSpotImagesScreen() {
 
   const router = useRouter()
   return (
-    <EditSpotModalView title="Upload images">
+    <EditSpotModalView title="upload images">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View className="flex flex-row flex-wrap">
           {images.map((image) => (

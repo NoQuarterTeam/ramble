@@ -14,7 +14,7 @@ export function EditSpotTypeScreen() {
   const [type, setType] = React.useState<SpotType>(params.type)
   const router = useRouter()
   return (
-    <EditSpotModalView title="What type?">
+    <EditSpotModalView title="what type?">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View className="flex flex-row flex-wrap gap-2 pt-4">
           {SPOT_OPTIONS.map((spotType) => (

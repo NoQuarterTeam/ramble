@@ -60,7 +60,10 @@ export default function SpotPreview() {
   return (
     <SpotContainer>
       <React.Suspense fallback={<SpotFallback />}>
-        <Await resolve={promise.spot}>
+        <Await
+          // @ts-expect-error vercel remix issues
+          resolve={promise.spot}
+        >
           {(spot) =>
             !spot ? (
               <div className="flex items-center p-2">
@@ -85,7 +88,12 @@ export default function SpotPreview() {
                       <div className="flex items-center space-x-1 text-sm">
                         <Star className="sq-4" />
                         <React.Suspense fallback={<Spinner size="sm" />}>
-                          <Await resolve={promise.rating}>{(rating) => <p>{displayRating(rating._avg.rating)}</p>}</Await>
+                          <Await
+                            // @ts-expect-error vercel remix issues
+                            resolve={promise.rating}
+                          >
+                            {(rating) => <p>{displayRating(rating._avg.rating)}</p>}
+                          </Await>
                         </React.Suspense>
                       </div>
                       <div className="flex items-center space-x-1 text-sm">
@@ -99,17 +107,20 @@ export default function SpotPreview() {
                 </div>
                 <div className="rounded-xs w-full overflow-x-scroll">
                   <div className="relative flex h-[225px] w-max space-x-2">
-                    {spot.images?.map((image) => (
-                      <OptimizedImage
-                        alt="spot"
-                        width={350}
-                        placeholder={image.blurHash}
-                        height={225}
-                        className="rounded-xs h-[225px] object-cover"
-                        key={image.id}
-                        src={createImageUrl(image.path)}
-                      />
-                    ))}
+                    {spot.images?.map(
+                      // @ts-expect-error vercel remix issues
+                      (image) => (
+                        <OptimizedImage
+                          alt="spot"
+                          width={350}
+                          placeholder={image.blurHash}
+                          height={225}
+                          className="rounded-xs h-[225px] max-w-[350px] object-cover"
+                          key={image.id}
+                          src={createImageUrl(image.path)}
+                        />
+                      ),
+                    )}
                   </div>
                 </div>
                 <VerifiedCard spot={spot} />
@@ -132,7 +143,12 @@ export default function SpotPreview() {
                       <div className="flex items-center space-x-1">
                         <Star className="sq-5" />
                         <React.Suspense fallback={<Spinner size="sm" />}>
-                          <Await resolve={promise.rating}>{(rating) => <p>{displayRating(rating._avg.rating)}</p>}</Await>
+                          <Await
+                            // @ts-expect-error vercel remix issues
+                            resolve={promise.rating}
+                          >
+                            {(rating) => <p>{displayRating(rating._avg.rating)}</p>}
+                          </Await>
                         </React.Suspense>
                       </div>
                     </div>
@@ -142,7 +158,12 @@ export default function SpotPreview() {
                       </LinkButton>
                     )}
                   </div>
-                  <div className="space-y-6">{spot.reviews?.map((review) => <ReviewItem key={review.id} review={review} />)}</div>
+                  <div className="space-y-6">
+                    {spot.reviews?.map(
+                      // @ts-expect-error vercel remix issues
+                      (review) => <ReviewItem key={review.id} review={review} />,
+                    )}
+                  </div>
                 </div>
               </div>
             )

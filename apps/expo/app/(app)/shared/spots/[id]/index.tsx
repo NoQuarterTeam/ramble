@@ -8,6 +8,7 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated"
+import dayjs from "dayjs"
 import * as Location from "expo-location"
 import { StatusBar } from "expo-status-bar"
 import { Check, ChevronDown, ChevronLeft, Compass, Edit2, Heart, Star, Trash } from "lucide-react-native"
@@ -26,7 +27,6 @@ import { width } from "../../../../../lib/device"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { AMENITIES_ICONS } from "../../../../../lib/static/amenities"
 import { useParams, useRouter } from "../../../../router"
-import dayjs from "dayjs"
 
 export function SpotDetailScreen() {
   const [location, setLocation] = React.useState<Location.LocationObjectCoords | null>(null)
@@ -244,7 +244,7 @@ export function SpotDetailScreen() {
       </Animated.ScrollView>
 
       <Animated.View
-        className="absolute left-0 right-0 top-0 h-[100px] border border-b border-gray-200 bg-white dark:border-gray-800 dark:bg-black"
+        className="bg-background dark:bg-background-dark absolute left-0 right-0 top-0 h-[100px] border border-b border-gray-200 dark:border-gray-800"
         style={topBarStyle}
       />
 
@@ -253,7 +253,7 @@ export function SpotDetailScreen() {
           <TouchableOpacity
             onPress={router.canGoBack() ? router.goBack : () => router.navigate("AppLayout")}
             activeOpacity={0.8}
-            className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-black"
+            className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
           >
             {router.canGoBack() ? (
               <ChevronLeft className="pr-1 text-black dark:text-white" />
@@ -271,14 +271,14 @@ export function SpotDetailScreen() {
           {/* <TouchableOpacity
             // onPress={handleGetDirections}
             activeOpacity={0.8}
-            className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-black"
+            className="sq-8 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
           >
             <Share size={20} className="text-black dark:text-white" />
           </TouchableOpacity> */}
           <TouchableOpacity
             onPress={handleGetDirections}
             activeOpacity={0.8}
-            className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-black"
+            className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
           >
             <Compass size={20} className="text-black dark:text-white" />
           </TouchableOpacity>
@@ -286,7 +286,7 @@ export function SpotDetailScreen() {
           <TouchableOpacity
             onPress={() => router.navigate("SaveSpotScreen", { id: spot.id })}
             activeOpacity={0.8}
-            className="sq-8 flex items-center justify-center rounded-full bg-white dark:bg-black"
+            className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
           >
             <Heart
               size={20}

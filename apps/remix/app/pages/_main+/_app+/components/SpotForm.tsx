@@ -156,7 +156,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
                 {geocodeFetcher.state === "loading" && <Spinner size="xs" className="absolute -left-5 top-2" />}
               </div>
             </div>
-            <FormField name="customAddress" defaultValue={spot?.address} label="Or write a custom address" />
+            <FormField name="customAddress" defaultValue={spot?.address || ""} label="Or write a custom address" />
           </div>
 
           <div className="space-y-0.5">

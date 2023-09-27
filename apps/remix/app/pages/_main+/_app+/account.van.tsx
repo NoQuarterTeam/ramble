@@ -19,6 +19,7 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 export const loader = async ({ request }: LoaderArgs) => {
   const user = await getCurrentUser(request, {
     van: {
+      orderBy: { createdAt: "desc" },
       select: { id: true, model: true, description: true, year: true, name: true, images: { select: { path: true, id: true } } },
     },
   })

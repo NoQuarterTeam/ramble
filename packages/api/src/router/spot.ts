@@ -3,12 +3,18 @@ import Supercluster from "supercluster"
 import { z } from "zod"
 
 import { Prisma, SpotType } from "@ramble/database/types"
-import { SpotItemWithStats, spotAmenitiesSchema, spotSchemaWithoutType } from "@ramble/shared"
+import { SpotItemWithStatsAndImage, spotAmenitiesSchema, spotSchemaWithoutType } from "@ramble/shared"
 
 import { generateBlurHash } from "../services/generateBlurHash.server"
 import { geocodeCoords } from "../services/geocode.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
-import { publicSpotWhereClause, publicSpotWhereClauseRaw } from "../shared/spot.server"
+import {
+  LatestSpotImages,
+  joinSpotImages,
+  publicSpotWhereClause,
+  publicSpotWhereClauseRaw,
+  spotImagesRawQuery,
+} from "../shared/spot.server"
 import dayjs from "dayjs"
 
 export const spotRouter = createTRPCRouter({
@@ -44,6 +50,7 @@ export const spotRouter = createTRPCRouter({
             : undefined,
         },
         orderBy: { createdAt: "desc" },
+        take: 2000,
       })
       if (spots.length === 0) return []
       const supercluster = new Supercluster()
@@ -81,29 +88,35 @@ export const spotRouter = createTRPCRouter({
             ? Prisma.sql`Spot.createdAt DESC, Spot.id`
             : sort === "saved"
             ? Prisma.sql`savedCount DESC, Spot.id`
-            : Prisma.sql`AVG(Review.rating) DESC, Spot.id`
+            : Prisma.sql`rating DESC, Spot.id`
         }
       `
-      return ctx.prisma.$queryRaw<Array<SpotItemWithStats>>`
-        SELECT
-          Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
-          (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image,
-          (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash,
-          (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
-        FROM
-          Spot
-        LEFT JOIN
-          Review ON Spot.id = Review.spotId
-        LEFT JOIN
-          ListSpot ON Spot.id = ListSpot.spotId
-        WHERE
-        ${publicSpotWhereClauseRaw(ctx.user?.id)}
-        GROUP BY
-          Spot.id
-        ${ORDER_BY}
-        LIMIT 20
-        OFFSET ${input.skip || 0}
-      `
+      try {
+        const spots = await ctx.prisma.$queryRaw<Array<SpotItemWithStatsAndImage>>`
+          SELECT
+            Spot.id, Spot.name, Spot.type, Spot.address,  null as image, null as blurHash,
+            (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
+            (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
+          FROM
+            Spot
+          LEFT JOIN
+            ListSpot ON Spot.id = ListSpot.spotId
+          WHERE
+            ${publicSpotWhereClauseRaw(ctx.user?.id)}
+          GROUP BY
+            Spot.id
+          ${ORDER_BY}
+          LIMIT 20
+          OFFSET ${input.skip || 0}
+        `
+        const images = await ctx.prisma.$queryRaw<LatestSpotImages>(spotImagesRawQuery(spots.map((s) => s.id)))
+        joinSpotImages(spots, images)
+
+        return spots
+      } catch (error) {
+        console.log(error)
+        return []
+      }
     }),
   mapPreview: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
     const spot = await ctx.prisma.spot.findUnique({
@@ -134,15 +147,15 @@ export const spotRouter = createTRPCRouter({
   byUser: publicProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {
     const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })
     if (!user) throw new TRPCError({ code: "NOT_FOUND" })
-    const res: Array<SpotItemWithStats> = await ctx.prisma.$queryRaw`
+    const spots = await ctx.prisma.$queryRaw<SpotItemWithStatsAndImage[]>`
       SELECT
-        Spot.id, Spot.name, Spot.type, Spot.address, AVG(Review.rating) as rating,
-        (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS image, 
-        (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY createdAt DESC LIMIT 1) AS blurHash
+        Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
+        (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
+        (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
       FROM
         Spot
       LEFT JOIN
-        Review ON Spot.id = Review.spotId
+        ListSpot ON Spot.id = ListSpot.spotId
       WHERE
         Spot.creatorId = ${user.id} AND ${publicSpotWhereClauseRaw(user.id)}
       GROUP BY
@@ -151,7 +164,9 @@ export const spotRouter = createTRPCRouter({
         Spot.createdAt DESC, Spot.id
       LIMIT 20
     `
-    return res
+    const images = await ctx.prisma.$queryRaw<LatestSpotImages>(spotImagesRawQuery(spots.map((s) => s.id)))
+    joinSpotImages(spots, images)
+    return spots
   }),
   create: protectedProcedure
     .input(

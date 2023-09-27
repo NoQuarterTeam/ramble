@@ -55,13 +55,13 @@ export function NewSpotLocationScreen() {
 
   if (!me)
     return (
-      <NewSpotModalView title="New spot" canGoBack={false}>
+      <NewSpotModalView title="new spot" canGoBack={false}>
         <LoginPlaceholder text="Log in to start creating spots" />
       </NewSpotModalView>
     )
 
   return (
-    <NewSpotModalView shouldRenderToast title="New spot" canGoBack={false}>
+    <NewSpotModalView shouldRenderToast title="new spot" canGoBack={false}>
       {!isLoadingLocation && (
         <>
           <Mapbox.MapView
@@ -97,7 +97,7 @@ export function NewSpotLocationScreen() {
             <View className="w-12" />
             {coords && (
               <Button
-                className="rounded-full bg-white"
+                className="bg-background rounded-full"
                 textClassName="text-black"
                 onPress={() => {
                   if (!me) return
@@ -113,7 +113,7 @@ export function NewSpotLocationScreen() {
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={handleSetUserLocation}
-              className="sq-12 flex flex-row items-center justify-center rounded-full bg-white"
+              className="sq-12 bg-background flex flex-row items-center justify-center rounded-full"
             >
               <Navigation size={20} className="text-black" />
             </TouchableOpacity>

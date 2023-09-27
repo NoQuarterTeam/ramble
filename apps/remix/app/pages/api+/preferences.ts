@@ -27,7 +27,7 @@ export async function action({ request }: ActionArgs) {
 
   cookie = { ...cookie, ...result.data }
 
-  return json({ succuess: true }, request, {
+  return json({ success: true }, request, {
     headers: { "Set-Cookie": await preferencesCookies.serialize(cookie) },
   })
 }

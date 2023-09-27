@@ -1,6 +1,6 @@
-import { useColorScheme } from "react-native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
+import { useBackgroundColor } from "../../../../../lib/tailwind"
 import { type ScreenParamsList } from "../../../../router"
 import { NewSpotLocationScreen } from "."
 import { NewSpotAmenitiesScreen } from "./amenities"
@@ -12,13 +12,12 @@ import { NewSpotTypeScreen } from "./type"
 const NewSpotStack = createNativeStackNavigator<ScreenParamsList>()
 
 export function NewSpotLayout() {
-  const colorScheme = useColorScheme()
-  const isDark = colorScheme === "dark"
+  const backgroundColor = useBackgroundColor()
 
   return (
     <NewSpotStack.Navigator
       initialRouteName="NewSpotLocationScreen"
-      screenOptions={{ contentStyle: { backgroundColor: isDark ? "black" : "white" }, headerShown: false }}
+      screenOptions={{ contentStyle: { backgroundColor }, headerShown: false }}
     >
       <NewSpotStack.Screen name="NewSpotLocationScreen" component={NewSpotLocationScreen} />
       <NewSpotStack.Screen name="NewSpotTypeScreen" component={NewSpotTypeScreen} />

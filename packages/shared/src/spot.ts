@@ -1,10 +1,10 @@
 import type { Spot, SpotImage, SpotType, User } from "@ramble/database/types"
 
-export type SpotItemWithStats = Pick<Spot, "id" | "name" | "address" | "type"> & {
+export type SpotItemWithStatsAndImage = Pick<Spot, "id" | "name" | "address" | "type"> & {
   rating: string
   savedCount: string
-  image: SpotImage["path"] | null
-  blurHash: SpotImage["blurHash"] | null
+  image?: SpotImage["path"] | null
+  blurHash?: SpotImage["blurHash"] | null
 }
 
 export const canManageSpot = (

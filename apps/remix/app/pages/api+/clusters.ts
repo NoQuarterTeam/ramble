@@ -50,18 +50,20 @@ async function getMapClusters(request: Request) {
         : undefined,
     },
     orderBy: { createdAt: "desc" },
+    take: 2000,
   })
   if (spots.length === 0) return []
 
-  const supercluster = new Supercluster()
+  const supercluster = new Supercluster<{ id: string; type: SpotType; cluster: false }, { cluster: true }>()
 
   const clusters = supercluster.load(
     spots.map((spot) => ({
       type: "Feature",
       geometry: { type: "Point", coordinates: [spot.longitude, spot.latitude] },
-      properties: { id: spot.id, type: spot.type },
+      properties: { id: spot.id, type: spot.type, cluster: false },
     })),
   )
+
   return clusters.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], zoom || 5)
 }
 

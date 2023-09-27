@@ -4,6 +4,7 @@ import { Image } from "expo-image"
 import { Check, Lock } from "lucide-react-native"
 
 import { AMENITIES } from "@ramble/shared"
+import colors from "@ramble/tailwind-config/src/colors"
 
 import { Button } from "../../../../../components/ui/Button"
 import { Text } from "../../../../../components/ui/Text"
@@ -13,7 +14,6 @@ import { useS3Upload } from "../../../../../lib/hooks/useS3"
 import { SPOTS } from "../../../../../lib/static/spots"
 import { useParams, useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
-import colors from "@ramble/tailwind-config/src/colors"
 
 export function NewSpotConfirmScreen() {
   const { params } = useParams<"NewSpotConfirmScreen">()
@@ -57,7 +57,7 @@ export function NewSpotConfirmScreen() {
   }
 
   return (
-    <NewSpotModalView title="Confirm">
+    <NewSpotModalView title="confirm">
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}>
         <View className="space-y-2">
           <Icon className="text-black dark:text-white" />

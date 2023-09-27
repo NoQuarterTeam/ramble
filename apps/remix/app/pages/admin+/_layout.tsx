@@ -1,11 +1,11 @@
 import type { NavLinkProps } from "@remix-run/react"
-import { Link, NavLink, Outlet, useFetcher } from "@remix-run/react"
+import { Link, NavLink, Outlet } from "@remix-run/react"
 import { json, type LoaderArgs, redirect } from "@vercel/remix"
 import { GaugeCircle, HelpingHand, MapPin, Moon, Sun, User } from "lucide-react"
-import { AuthenticityTokenInput } from "remix-utils"
 
 import { merge } from "@ramble/shared"
 
+import { useFetcher } from "~/components/Form"
 import { type RambleIcon } from "~/components/ui"
 import { Button, buttonSizeStyles, buttonStyles } from "~/components/ui/Button"
 import { useTheme } from "~/lib/theme"
@@ -43,8 +43,7 @@ export default function AdminLayout() {
             Access requests
           </AdminLink>
         </div>
-        <themeFetcher.Form action="/api/theme" method="post" replace className="w-full">
-          <AuthenticityTokenInput />
+        <themeFetcher.Form action="/api/theme" className="w-full">
           <input type="hidden" name="theme" value={isDark ? "light" : "dark"} />
           <Button
             variant="ghost"

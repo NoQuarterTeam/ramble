@@ -5,7 +5,7 @@ import { IS_PRODUCTION, SESSION_SECRET } from "~/lib/config.server"
 
 export const CSRF_COOKIE_KEY = IS_PRODUCTION ? "ramble_session_csrf" : "ramble_session_dev_csrf"
 
-const csrfStorage = createCookieSessionStorage({
+const storage = createCookieSessionStorage({
   cookie: {
     name: CSRF_COOKIE_KEY,
     secrets: [SESSION_SECRET],
@@ -18,13 +18,13 @@ const csrfStorage = createCookieSessionStorage({
 })
 
 export async function getCsrfSession(request: Request) {
-  const session = await csrfStorage.getSession(request.headers.get("Cookie"))
+  const session = await storage.getSession(request.headers.get("Cookie"))
 
   const token = createAuthenticityToken(session)
   return {
     token,
     session,
-    commit: () => csrfStorage.commitSession(session),
+    commit: () => storage.commitSession(session),
     verify: () => verifyAuthenticityToken(request, session),
   }
 }

@@ -64,7 +64,7 @@ export function EditSpotConfirmScreen() {
   }
 
   return (
-    <EditSpotModalView title="Confirm">
+    <EditSpotModalView title="confirm">
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}>
         <View className="space-y-2">
           <Icon className="text-black dark:text-white" />

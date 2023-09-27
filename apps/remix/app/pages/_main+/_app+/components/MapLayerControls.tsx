@@ -1,25 +1,23 @@
 import { CloudRain, Layers, Thermometer } from "lucide-react"
-import { AuthenticityTokenInput } from "remix-utils"
 
 import { useDisclosure } from "@ramble/shared"
 
+import { useFetcher } from "~/components/Form"
 import { Button, IconButton, Modal, Switch, Tooltip } from "~/components/ui"
-import { useFetcherSubmit } from "~/lib/hooks/useFetcherSubmit"
 import { usePreferences } from "~/lib/hooks/usePreferences"
 import { preferencesUrl } from "~/pages/api+/preferences"
 
 export function MapLayerControls() {
   const modalProps = useDisclosure()
-  const savePreferencesFetcher = useFetcherSubmit({ onSuccess: modalProps.onClose })
+  const savePreferencesFetcher = useFetcher({ onSuccess: modalProps.onClose })
   const preferences = usePreferences()
 
   return (
     <>
-      <div className="rounded-xs absolute right-4 top-4 bg-white shadow dark:bg-gray-800">
-        <Tooltip label="Map layers" side="bottom">
+      <div className="rounded-xs bg-background absolute right-2 top-2 shadow md:right-4 md:top-4">
+        <Tooltip label="Map layers" side="left">
           <IconButton
             onClick={modalProps.onOpen}
-            size="lg"
             className="border-none"
             variant="ghost"
             icon={<Layers className="sq-5" />}
@@ -34,8 +32,7 @@ export function MapLayerControls() {
       </div>
 
       <Modal {...modalProps} size="xl" title="Map layers">
-        <savePreferencesFetcher.Form method="post" replace className="space-y-6" action={preferencesUrl}>
-          <AuthenticityTokenInput />
+        <savePreferencesFetcher.Form className="space-y-6" action={preferencesUrl}>
           <div className="space-y-4">
             <label htmlFor="mapLayerRain" className="flex items-center justify-between space-x-4">
               <div className="flex items-center space-x-4">

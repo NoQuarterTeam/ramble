@@ -21,7 +21,7 @@ export function EditSpotOptionsScreen() {
   const [isPetFriendly, setIsPetFriendly] = React.useState(params.isPetFriendly)
   const router = useRouter()
   return (
-    <EditSpotModalView title="Some info">
+    <EditSpotModalView title="some info">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <FormInputLabel label="Name" />
         <Input value={name} onChangeText={setName} />
