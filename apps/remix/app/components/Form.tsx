@@ -4,6 +4,7 @@ import type { FetcherWithComponents, FormProps as RemixFormProps } from "@remix-
 import { Form as RemixForm, useFetcher as useRemixFetcher, useNavigation } from "@remix-run/react"
 import { X } from "lucide-react"
 import { AuthenticityTokenInput } from "remix-utils"
+import { type z } from "zod"
 
 import { createImageUrl, merge } from "@ramble/shared"
 
@@ -12,7 +13,6 @@ import { Button, IconButton, Input, inputStyles } from "~/components/ui"
 import { useFormErrors } from "~/lib/form"
 
 import { ImageUploader } from "./ImageUploader"
-import { z } from "zod"
 
 export const Form = React.forwardRef(function _Form(props: RemixFormProps, ref: React.ForwardedRef<HTMLFormElement> | null) {
   const form = useFormErrors()

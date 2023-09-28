@@ -1,10 +1,9 @@
 import * as React from "react"
+import useOnClickOutside from "use-onclickoutside"
 
 import { useFetcher } from "~/components/Form"
-
 import { Button, Input, Spinner } from "~/components/ui"
-import { locationSearchLoader } from "~/pages/api+/mapbox+/location-search"
-import useOnClickOutside from "use-onclickoutside"
+import { type locationSearchLoader } from "~/pages/api+/mapbox+/location-search"
 
 export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) => void }) {
   const [search, setSearch] = React.useState("")

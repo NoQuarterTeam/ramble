@@ -12,8 +12,8 @@ import type { RambleIcon } from "~/components/ui"
 import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
-import { redirect } from "~/lib/remix.server"
 import { interestOptions } from "~/lib/models/interests"
+import { redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderArgs) => {

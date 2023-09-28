@@ -2,24 +2,24 @@ import * as React from "react"
 import { useLoaderData, useSearchParams } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
+import { Settings2 } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
+import { promiseHash } from "remix-utils"
 
 import { publicSpotWhereClauseRaw } from "@ramble/api"
 import { Prisma, SpotType } from "@ramble/database/types"
-import { useDisclosure, type SpotItemWithStatsAndImage } from "@ramble/shared"
+import { type SpotItemWithStatsAndImage, useDisclosure } from "@ramble/shared"
 
+import { useFetcher } from "~/components/Form"
 import { Button, Modal, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
-import { SPOT_TYPE_OPTIONS, fetchAndJoinSpotImages } from "~/lib/models/spots"
+import { fetchAndJoinSpotImages, SPOT_TYPE_OPTIONS } from "~/lib/models/spots"
 import { getUserSession } from "~/services/session/session.server"
 
 import { PageContainer } from "../../../components/PageContainer"
 import { SpotItem } from "./components/SpotItem"
-import { promiseHash } from "remix-utils"
-import { useFetcher } from "~/components/Form"
-import { Settings2 } from "lucide-react"
 
 export const config = {
   // runtime: "edge",

@@ -12,6 +12,7 @@ import { Form, FormButton } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage, transformImageSrc } from "~/components/OptimisedImage"
 import { PageContainer } from "~/components/PageContainer"
+import { SpotIcon } from "~/components/SpotIcon"
 import {
   AlertDialogCancel,
   AlertDialogContent,
@@ -26,8 +27,8 @@ import { db } from "~/lib/db.server"
 import { FormActionInput, getFormAction } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
-import { badRequest, json, notFound, redirect } from "~/lib/remix.server"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
+import { badRequest, json, notFound, redirect } from "~/lib/remix.server"
 import { useTheme } from "~/lib/theme"
 import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
 import type { loader as rootLoader } from "~/root"
@@ -37,7 +38,6 @@ import { getUserSession } from "~/services/session/session.server"
 import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { SpotMarker } from "./components/SpotMarker"
-import { SpotIcon } from "~/components/SpotIcon"
 
 export const config = {
   // runtime: "edge",

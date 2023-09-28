@@ -40,8 +40,8 @@ import { MapFilters } from "~/pages/_main+/_app+/components/MapFilters"
 
 import type { Cluster, clustersLoader } from "../../api+/clusters"
 import { MapLayerControls } from "./components/MapLayerControls"
-import { SpotMarker } from "./components/SpotMarker"
 import { MapSearch } from "./components/MapSearch"
+import { SpotMarker } from "./components/SpotMarker"
 
 export const config = {
   // runtime: "edge",

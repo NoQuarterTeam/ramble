@@ -1,9 +1,9 @@
 "use client"
 import * as React from "react"
+import { useAuthenticityToken } from "remix-utils"
 import { v4 } from "uuid"
 
 import { assetPrefix } from "@ramble/shared"
-import { useAuthenticityToken } from "remix-utils"
 
 export type UploadFile = {
   fileUrl: string
