@@ -8,13 +8,7 @@ import { SpotItemWithStatsAndImage, spotAmenitiesSchema, spotSchemaWithoutType }
 import { generateBlurHash } from "../services/generateBlurHash.server"
 import { geocodeCoords } from "../services/geocode.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
-import {
-  LatestSpotImages,
-  joinSpotImages,
-  publicSpotWhereClause,
-  publicSpotWhereClauseRaw,
-  spotImagesRawQuery,
-} from "../shared/spot.server"
+import { publicSpotWhereClause, publicSpotWhereClauseRaw } from "../shared/spot.server"
 import dayjs from "dayjs"
 import { fetchAndJoinSpotImages } from "../lib/models/spot"
 
@@ -164,8 +158,7 @@ export const spotRouter = createTRPCRouter({
         Spot.createdAt DESC, Spot.id
       LIMIT 20
     `
-    const images = await ctx.prisma.$queryRaw<LatestSpotImages>(spotImagesRawQuery(spots.map((s) => s.id)))
-    joinSpotImages(spots, images)
+    await fetchAndJoinSpotImages(ctx.prisma, spots)
     return spots
   }),
   create: protectedProcedure
