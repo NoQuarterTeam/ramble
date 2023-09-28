@@ -30,6 +30,7 @@ import { useAuthenticityToken } from "remix-utils"
 import { json, notFound } from "~/lib/remix.server"
 import { z } from "zod"
 import { formError, validateFormData } from "~/lib/form"
+import { NEW_REVIEW_REDIRECTS } from "./spots.$id_.reviews.new"
 
 export const loader = async ({ params, request }: LoaderArgs) => {
   const { userId } = await getUserSession(request)
@@ -211,7 +212,7 @@ export default function SpotPreview() {
                       </div>
                     </div>
                     {user && (
-                      <LinkButton variant="secondary" to={`/spots/${spot.id}/reviews/new`}>
+                      <LinkButton variant="secondary" to={`/spots/${spot.id}/reviews/new?redirect=${NEW_REVIEW_REDIRECTS.Map}`}>
                         Add review
                       </LinkButton>
                     )}
