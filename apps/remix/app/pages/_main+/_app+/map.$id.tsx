@@ -1,17 +1,17 @@
 import * as React from "react"
 import { Await, Link, useLoaderData, useNavigate } from "@remix-run/react"
-// import type { LoaderArgs } from "@vercel/remix"
-// import { defer } from "@vercel/remix"
-import { defer, LoaderArgs, SerializeFrom } from "@remix-run/node"
-import { Frown, Heart, Plus, Star } from "lucide-react"
+import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import { defer } from "@vercel/remix"
+import { SerializeFrom } from "@remix-run/node"
+import { Frown, Heart, Image, Star } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
-import { publicSpotWhereClause } from "@ramble/api"
+import { generateBlurHash, publicSpotWhereClause } from "@ramble/api"
 import { createImageUrl, displayRating, isPartnerSpot, merge } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
-import { CloseButton, Spinner } from "~/components/ui"
+import { Button, CloseButton, Spinner } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
@@ -23,6 +23,13 @@ import { SpotType } from "@ramble/database/types"
 
 import { SpotIcon } from "~/components/SpotIcon"
 import { PartnerLink } from "~/components/PartnerLink"
+import { ImageUploader } from "~/components/ImageUploader"
+import { useFetcher } from "~/components/Form"
+import { getCurrentUser } from "~/services/auth/auth.server"
+import { useAuthenticityToken } from "remix-utils"
+import { json, notFound } from "~/lib/remix.server"
+import { z } from "zod"
+import { formError, validateFormData } from "~/lib/form"
 
 export const loader = async ({ params, request }: LoaderArgs) => {
   const { userId } = await getUserSession(request)
@@ -64,12 +71,34 @@ export const loader = async ({ params, request }: LoaderArgs) => {
   )
 }
 
+export const action = async ({ request, params }: ActionArgs) => {
+  const user = await getCurrentUser(request)
+  const schema = z.object({ images: z.string() })
+  const result = await validateFormData(request, schema)
+  if (!result.success) return formError(result)
+  const images = result.data.images.split(",")
+  const spot = await db.spot.findUnique({ where: { id: params.id } })
+  if (!spot) throw notFound()
+  const imageData = await Promise.all(
+    images.map(async (image) => {
+      const blurHash = await generateBlurHash(image)
+      return { path: image, blurHash, creator: { connect: { id: user.id } } }
+    }),
+  )
+  await db.spot.update({ where: { id: spot.id }, data: { images: { create: imageData } } })
+  return json({ success: true })
+}
+
 type Res = SerializeFrom<typeof loader>
 
 export default function SpotPreview() {
   const user = useMaybeUser()
   // @ts-expect-error vercel remix issues
   const promise: Res = useLoaderData()
+
+  const imageFetcher = useFetcher()
+
+  const csrf = useAuthenticityToken()
 
   return (
     <SpotContainer>
@@ -122,24 +151,36 @@ export default function SpotPreview() {
                 </div>
                 <div className="rounded-xs w-full overflow-x-scroll">
                   <div className="relative flex h-[225px] w-max space-x-2">
-                    {!spot.images || spot.images.length === 0 ? (
-                      <div className="center h-full w-[350px] flex-col gap-2 bg-gray-50 dark:bg-gray-800">
-                        <Plus />
-                        <p>Be the first to add some images</p>
-                      </div>
-                    ) : (
-                      spot.images.map((image) => (
-                        <OptimizedImage
-                          alt="spot"
-                          width={350}
-                          placeholder={image.blurHash}
-                          height={225}
-                          className="rounded-xs h-[225px] max-w-[350px] object-cover"
-                          key={image.id}
-                          src={createImageUrl(image.path)}
-                        />
-                      ))
-                    )}
+                    {spot.images.map((image) => (
+                      <OptimizedImage
+                        alt="spot"
+                        width={350}
+                        placeholder={image.blurHash}
+                        height={225}
+                        className="rounded-xs h-[225px] max-w-[350px] object-cover"
+                        key={image.id}
+                        src={createImageUrl(image.path)}
+                      />
+                    ))}
+                    <div className="center rounded-xs h-full w-[350px] flex-col gap-2 border bg-gray-50 dark:bg-gray-800">
+                      <Image size={40} strokeWidth={1} />
+                      {user && (
+                        <>
+                          {spot.images.length === 0 && <p className="text-sm">Be the first to add an image</p>}
+                          <ImageUploader
+                            isMulti
+                            onMultiSubmit={(keys) =>
+                              imageFetcher.submit(
+                                { images: keys, csrf },
+                                { method: "POST", replace: true, action: `/map/${spot.id}` },
+                              )
+                            }
+                          >
+                            <Button variant="outline">Upload</Button>
+                          </ImageUploader>
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
                 {isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}

@@ -18,7 +18,7 @@ export const Form = React.forwardRef(function _Form(props: RemixFormProps, ref: 
   const form = useFormErrors()
   return (
     <RemixForm
-      method="post"
+      method="POST"
       replace
       aria-describedby="form-error"
       aria-invalid={form?.formError ? true : undefined}
