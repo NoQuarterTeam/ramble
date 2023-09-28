@@ -16,6 +16,7 @@ import {
   spotImagesRawQuery,
 } from "../shared/spot.server"
 import dayjs from "dayjs"
+import { fetchAndJoinSpotImages } from "../lib/models/spot"
 
 export const spotRouter = createTRPCRouter({
   clusters: publicProcedure
@@ -109,8 +110,7 @@ export const spotRouter = createTRPCRouter({
           LIMIT 20
           OFFSET ${input.skip || 0}
         `
-        const images = await ctx.prisma.$queryRaw<LatestSpotImages>(spotImagesRawQuery(spots.map((s) => s.id)))
-        joinSpotImages(spots, images)
+        await fetchAndJoinSpotImages(ctx.prisma, spots)
 
         return spots
       } catch (error) {

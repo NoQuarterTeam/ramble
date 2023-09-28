@@ -18,6 +18,9 @@ import type { SpotType } from "@ramble/database/types"
 
 import type { RambleIcon } from "~/components/ui"
 import { Icons } from "~/components/ui"
+import { LatestSpotImages, joinSpotImages, spotImagesRawQuery } from "@ramble/api"
+import { db } from "../db.server"
+import { SpotItemWithStatsAndImage } from "@ramble/shared"
 
 export const SPOTS: { [key in SpotType]: { label: string; Icon: RambleIcon } } = {
   CAMPING: { label: "Camping", Icon: Tent },
@@ -42,3 +45,9 @@ export const SPOT_TYPE_OPTIONS = Object.entries(SPOTS).map(([value, { label, Ico
   value: SpotType
   Icon: LucideIcon
 }[]
+
+export const fetchAndJoinSpotImages = async (spots: SpotItemWithStatsAndImage[]) => {
+  // get spot images and join to original spot payload
+  const images = spots.length > 0 && (await db.$queryRaw<LatestSpotImages>(spotImagesRawQuery(spots.map((s) => s.id))))
+  images && joinSpotImages(spots, images)
+}

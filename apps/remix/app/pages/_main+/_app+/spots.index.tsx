@@ -5,14 +5,14 @@ import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 
-import { LatestSpotImages, joinSpotImages, publicSpotWhereClauseRaw, spotImagesRawQuery } from "@ramble/api"
+import { publicSpotWhereClauseRaw } from "@ramble/api"
 import { Prisma, SpotType } from "@ramble/database/types"
 import { useDisclosure, type SpotItemWithStatsAndImage } from "@ramble/shared"
 
 import { Button, Modal, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
-import { SPOT_TYPE_OPTIONS } from "~/lib/static/spots"
+import { SPOT_TYPE_OPTIONS, fetchAndJoinSpotImages } from "~/lib/models/spots"
 import { getUserSession } from "~/services/session/session.server"
 
 import { PageContainer } from "../../../components/PageContainer"
@@ -78,9 +78,7 @@ export const loader = async ({ request }: LoaderArgs) => {
     `,
   })
 
-  // get spot images and join to original spot payload
-  const images = await db.$queryRaw<LatestSpotImages>(spotImagesRawQuery(spots.map((s) => s.id)))
-  joinSpotImages(spots, images)
+  await fetchAndJoinSpotImages(spots)
 
   return json({ spots }, { headers: { "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour", maxAge: "1hour" }) } })
 }

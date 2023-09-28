@@ -1,5 +1,5 @@
 import { SpotType } from "@ramble/database/types"
-import { SPOTS } from "~/lib/static/spots"
+import { SPOTS } from "~/lib/models/spots"
 
 import { LucideProps } from "lucide-react"
 
