@@ -13,12 +13,12 @@ import { INITIAL_LATITUDE, INITIAL_LONGITUDE, useDisclosure } from "@ramble/shar
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { Button, Input, Spinner } from "~/components/ui"
-import { SPOTS } from "~/lib/static/spots"
 import { useTheme } from "~/lib/theme"
 
 import { PageContainer } from "../../../components/PageContainer"
 import type { directionsLoader } from "../../api+/mapbox+/directions"
 import type { locationSearchLoader } from "../../api+/mapbox+/location-search"
+import { SpotIcon } from "~/components/SpotIcon"
 
 export default function PlanTrip() {
   const theme = useTheme()
@@ -246,12 +246,11 @@ interface MarkerProps {
   spot: SerializeFrom<typeof directionsLoader>["foundSpots"][number]
 }
 function SpotMarker(props: MarkerProps) {
-  const Icon = SPOTS[props.spot.type].Icon
   return (
     <Marker onClick={props.onClick} anchor="bottom" longitude={props.spot.longitude} latitude={props.spot.latitude}>
       <div className="relative">
         <div className="sq-8 bg-primary-600 dark:bg-primary-700 border-primary-100 dark:border-primary-600 flex cursor-pointer items-center justify-center rounded-full border shadow-md transition-transform hover:scale-110">
-          {Icon && <Icon className="sq-4 text-white" />}
+          <SpotIcon type={props.spot.type} className="sq-4 text-white" />
         </div>
         <div className="sq-3 bg-primary-600 dark:bg-primary-700 absolute -bottom-[3px] left-1/2 -z-[1] -translate-x-1/2 rotate-45 shadow" />
       </div>

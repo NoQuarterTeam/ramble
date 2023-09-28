@@ -1,16 +1,17 @@
 import * as React from "react"
 import { Await, Link, useLoaderData, useNavigate } from "@remix-run/react"
-import type { LoaderArgs } from "@vercel/remix"
+import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 import { defer } from "@vercel/remix"
-import { Frown, Heart, Star } from "lucide-react"
+import { SerializeFrom } from "@remix-run/node"
+import { Frown, Heart, Image, Star } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
-import { publicSpotWhereClause } from "@ramble/api"
+import { generateBlurHash, publicSpotWhereClause } from "@ramble/api"
 import { createImageUrl, displayRating, merge } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
-import { CloseButton, Spinner } from "~/components/ui"
+import { Button, CloseButton, Spinner } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
@@ -18,6 +19,17 @@ import { SaveToList } from "~/pages/api+/save-to-list"
 import { getUserSession } from "~/services/session/session.server"
 
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
+import { SpotType } from "@ramble/database/types"
+
+import { SpotIcon } from "~/components/SpotIcon"
+import { PartnerLink, isPartnerSpot } from "~/components/PartnerLink"
+import { ImageUploader } from "~/components/ImageUploader"
+import { useFetcher } from "~/components/Form"
+import { getCurrentUser } from "~/services/auth/auth.server"
+import { useAuthenticityToken } from "remix-utils"
+import { json, notFound } from "~/lib/remix.server"
+import { z } from "zod"
+import { formError, validateFormData } from "~/lib/form"
 
 export const loader = async ({ params, request }: LoaderArgs) => {
   const { userId } = await getUserSession(request)
@@ -29,6 +41,12 @@ export const loader = async ({ params, request }: LoaderArgs) => {
         id: true,
         name: true,
         address: true,
+        type: true,
+        komootId: true,
+        campspaceUrl: true,
+        campspaceId: true,
+        surflineId: true,
+        park4nightId: true,
         _count: { select: { reviews: true, listSpots: true } },
         description: true,
         verifier: { select: { firstName: true, username: true, lastName: true, avatar: true, avatarBlurHash: true } },
@@ -53,17 +71,39 @@ export const loader = async ({ params, request }: LoaderArgs) => {
   )
 }
 
+export const action = async ({ request, params }: ActionArgs) => {
+  const user = await getCurrentUser(request)
+  const schema = z.object({ images: z.string() })
+  const result = await validateFormData(request, schema)
+  if (!result.success) return formError(result)
+  const images = result.data.images.split(",")
+  const spot = await db.spot.findUnique({ where: { id: params.id } })
+  if (!spot) throw notFound()
+  const imageData = await Promise.all(
+    images.map(async (image) => {
+      const blurHash = await generateBlurHash(image)
+      return { path: image, blurHash, creator: { connect: { id: user.id } } }
+    }),
+  )
+  await db.spot.update({ where: { id: spot.id }, data: { images: { create: imageData } } })
+  return json({ success: true })
+}
+
+type Res = SerializeFrom<typeof loader>
+
 export default function SpotPreview() {
   const user = useMaybeUser()
-  const promise = useLoaderData<typeof loader>()
+  // @ts-expect-error vercel remix issues
+  const promise: Res = useLoaderData()
+
+  const imageFetcher = useFetcher()
+
+  const csrf = useAuthenticityToken()
 
   return (
     <SpotContainer>
       <React.Suspense fallback={<SpotFallback />}>
-        <Await
-          // @ts-expect-error vercel remix issues
-          resolve={promise.spot}
-        >
+        <Await resolve={promise.spot}>
           {(spot) =>
             !spot ? (
               <div className="flex items-center p-2">
@@ -75,25 +115,29 @@ export default function SpotPreview() {
             ) : (
               <div className="space-y-4">
                 <div className="space-y-1">
-                  <Link
-                    target="_blank"
-                    rel="noopener norefer"
-                    to={`/spots/${spot.id}`}
-                    className="line-clamp-2 text-xl leading-6 hover:underline"
-                  >
-                    {spot.name}
-                  </Link>
+                  <div className="flex items-center space-x-2">
+                    <div className="sq-8 flex flex-shrink-0 items-center justify-center rounded-full border border-gray-200 dark:border-gray-600">
+                      <SpotIcon type={spot.type} className="sq-4" />
+                    </div>
+                    {!(["SURFING", "HIKING", "MOUNTAIN_BIKING"] as SpotType[]).includes(spot.type) ? (
+                      <Link
+                        target="_blank"
+                        rel="noopener norefer"
+                        to={`/spots/${spot.id}`}
+                        className="line-clamp-2 text-xl leading-6 hover:underline"
+                      >
+                        {spot.name}
+                      </Link>
+                    ) : (
+                      <p className="line-clamp-2 text-xl leading-6">{spot.name}</p>
+                    )}
+                  </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <div className="flex items-center space-x-1 text-sm">
                         <Star className="sq-4" />
                         <React.Suspense fallback={<Spinner size="sm" />}>
-                          <Await
-                            // @ts-expect-error vercel remix issues
-                            resolve={promise.rating}
-                          >
-                            {(rating) => <p>{displayRating(rating._avg.rating)}</p>}
-                          </Await>
+                          <Await resolve={promise.rating}>{(rating) => <p>{displayRating(rating._avg.rating)}</p>}</Await>
                         </React.Suspense>
                       </div>
                       <div className="flex items-center space-x-1 text-sm">
@@ -107,30 +151,49 @@ export default function SpotPreview() {
                 </div>
                 <div className="rounded-xs w-full overflow-x-scroll">
                   <div className="relative flex h-[225px] w-max space-x-2">
-                    {spot.images?.map(
-                      // @ts-expect-error vercel remix issues
-                      (image) => (
-                        <OptimizedImage
-                          alt="spot"
-                          width={350}
-                          placeholder={image.blurHash}
-                          height={225}
-                          className="rounded-xs h-[225px] max-w-[350px] object-cover"
-                          key={image.id}
-                          src={createImageUrl(image.path)}
-                        />
-                      ),
-                    )}
+                    {spot.images.map((image) => (
+                      <OptimizedImage
+                        alt="spot"
+                        width={350}
+                        placeholder={image.blurHash}
+                        height={225}
+                        className="rounded-xs h-[225px] max-w-[350px] object-cover"
+                        key={image.id}
+                        src={createImageUrl(image.path)}
+                      />
+                    ))}
+                    <div className="center rounded-xs h-full w-[350px] flex-col gap-2 border bg-gray-50 dark:bg-gray-800">
+                      <Image size={40} strokeWidth={1} />
+                      {user && (
+                        <>
+                          {spot.images.length === 0 && <p className="text-sm">Be the first to add an image</p>}
+                          <ImageUploader
+                            isMulti
+                            onMultiSubmit={(keys) =>
+                              imageFetcher.submit(
+                                { images: keys, csrf },
+                                { method: "POST", replace: true, action: `/map/${spot.id}` },
+                              )
+                            }
+                          >
+                            <Button variant="outline">Upload</Button>
+                          </ImageUploader>
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
-                <VerifiedCard spot={spot} />
+                {isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}
+
                 <p className="line-clamp-6 whitespace-pre-wrap text-sm">{spot.description}</p>
                 <p className="text-sm italic">{spot.address}</p>
-                <div className="flex justify-end">
-                  <LinkButton variant="link" to={`/spots/${spot.id}`}>
-                    Read more
-                  </LinkButton>
-                </div>
+                {!(["SURFING", "HIKING", "MOUNTAIN_BIKING"] as SpotType[]).includes(spot.type) && (
+                  <div className="flex justify-end">
+                    <LinkButton variant="link" to={`/spots/${spot.id}`}>
+                      Read more
+                    </LinkButton>
+                  </div>
+                )}
 
                 <hr />
                 <div className="space-y-4">
@@ -143,12 +206,7 @@ export default function SpotPreview() {
                       <div className="flex items-center space-x-1">
                         <Star className="sq-5" />
                         <React.Suspense fallback={<Spinner size="sm" />}>
-                          <Await
-                            // @ts-expect-error vercel remix issues
-                            resolve={promise.rating}
-                          >
-                            {(rating) => <p>{displayRating(rating._avg.rating)}</p>}
-                          </Await>
+                          <Await resolve={promise.rating}>{(rating) => <p>{displayRating(rating._avg.rating)}</p>}</Await>
                         </React.Suspense>
                       </div>
                     </div>
@@ -158,12 +216,7 @@ export default function SpotPreview() {
                       </LinkButton>
                     )}
                   </div>
-                  <div className="space-y-6">
-                    {spot.reviews?.map(
-                      // @ts-expect-error vercel remix issues
-                      (review) => <ReviewItem key={review.id} review={review} />,
-                    )}
-                  </div>
+                  <div className="space-y-6">{spot.reviews?.map((review) => <ReviewItem key={review.id} review={review} />)}</div>
                 </div>
               </div>
             )

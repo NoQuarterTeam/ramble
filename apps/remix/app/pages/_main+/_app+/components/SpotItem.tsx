@@ -7,15 +7,14 @@ import { createImageUrl, displayRating } from "@ramble/shared"
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { IconButton } from "~/components/ui"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
-import { SPOTS } from "~/lib/static/spots"
 import { SaveToList } from "~/pages/api+/save-to-list"
+import { SpotIcon } from "~/components/SpotIcon"
 
 interface Props {
   spot: SpotItemWithStatsAndImage
 }
 
 export function SpotItem({ spot }: Props) {
-  const Icon = SPOTS[spot.type].Icon
   const currentUser = useMaybeUser()
 
   return (
@@ -34,13 +33,13 @@ export function SpotItem({ spot }: Props) {
           ) : (
             <div className="rounded-xs flex h-full w-full items-center justify-center bg-gray-50 dark:bg-gray-800">
               <div className="bg-background rounded-full p-4">
-                <Icon size={40} />
+                <SpotIcon type={spot.type} size={40} />
               </div>
             </div>
           )}
           {spot.image && (
             <div className="sq-10 bg-background absolute left-2 top-2 flex items-center justify-center rounded-full shadow">
-              <Icon size={20} />
+              <SpotIcon type={spot.type} size={20} />
             </div>
           )}
         </div>
