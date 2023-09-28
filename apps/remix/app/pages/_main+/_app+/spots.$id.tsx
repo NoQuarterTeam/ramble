@@ -27,7 +27,7 @@ import { FormActionInput, getFormAction } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { badRequest, json, notFound, redirect } from "~/lib/remix.server"
-import { AMENITIES_ICONS } from "~/lib/static/amenities"
+import { AMENITIES_ICONS } from "~/lib/models/amenities"
 import { useTheme } from "~/lib/theme"
 import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
 import type { loader as rootLoader } from "~/root"
@@ -40,8 +40,8 @@ import { SpotMarker } from "./components/SpotMarker"
 import { SpotIcon } from "~/components/SpotIcon"
 
 export const config = {
-  runtime: "edge",
-  regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
+  // runtime: "edge",
+  // regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
 }
 
 export const headers = useLoaderHeaders

@@ -11,7 +11,7 @@ import { useLoaderHeaders } from "~/lib/headers.server"
 import { Link } from "@remix-run/react"
 
 export const config = {
-  runtime: "edge",
+  // runtime: "edge",
 }
 
 export const headers = useLoaderHeaders

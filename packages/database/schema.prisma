@@ -151,6 +151,8 @@ model Spot {
   createdAt  DateTime       @default(now())
   updatedAt  DateTime       @default(now()) @updatedAt
 
+  sourceUrl String? @db.VarChar(500)
+
   // Campspace
   campspaceId  Int?    @unique
   campspaceUrl String? @db.VarChar(500)
@@ -164,8 +166,14 @@ model Spot {
   // komoot
   komootId String? @unique
 
-  // surfline
+  // surfline    
   surflineId String? @unique
+
+  // natuurKampeerterreinen
+  natuurKampeerterreinenId String? @unique
+
+  // cucortu
+  cucortuId String? @unique
 
   @@index([createdAt])
   @@index([type])
@@ -182,18 +190,18 @@ model Spot {
 }
 
 model SpotAmenities {
-  id          String  @id @default(uuid())
-  hotWater    Boolean
-  wifi        Boolean
-  shower      Boolean
-  toilet      Boolean
-  kitchen     Boolean
-  electricity Boolean
-  water       Boolean
-  firePit     Boolean
-  sauna       Boolean
-  pool        Boolean
-  bbq         Boolean
+  id          String   @id @default(uuid())
+  hotWater    Boolean?
+  wifi        Boolean?
+  shower      Boolean?
+  toilet      Boolean?
+  kitchen     Boolean?
+  electricity Boolean?
+  water       Boolean?
+  firePit     Boolean?
+  sauna       Boolean?
+  pool        Boolean?
+  bbq         Boolean?
 
   spot   Spot   @relation(fields: [spotId], references: [id], onDelete: Cascade)
   spotId String @unique

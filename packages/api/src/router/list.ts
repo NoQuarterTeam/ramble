@@ -5,7 +5,8 @@ import { listSchema } from "@ramble/shared"
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 import { type SpotItemWithStatsAndImage } from "@ramble/shared"
-import { LatestSpotImages, joinSpotImages, publicSpotWhereClauseRaw, spotImagesRawQuery } from "../shared/spot.server"
+import { publicSpotWhereClauseRaw } from "../shared/spot.server"
+import { fetchAndJoinSpotImages } from "../lib/models/spot"
 
 export const listRouter = createTRPCRouter({
   allByUser: publicProcedure
@@ -63,8 +64,7 @@ export const listRouter = createTRPCRouter({
     ])
     if (!list || (list.isPrivate && (!currentUser || currentUser !== list.creator.username)))
       throw new TRPCError({ code: "NOT_FOUND" })
-    const images = await ctx.prisma.$queryRaw<LatestSpotImages>(spotImagesRawQuery(spots.map((s) => s.id)))
-    joinSpotImages(spots, images)
+    await fetchAndJoinSpotImages(ctx.prisma, spots)
     return { list, spots }
   }),
   allByUserWithSavedSpots: protectedProcedure.input(z.object({ spotId: z.string() })).query(async ({ ctx, input }) => {

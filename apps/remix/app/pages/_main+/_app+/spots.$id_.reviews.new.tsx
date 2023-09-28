@@ -11,8 +11,8 @@ import { requireUser } from "~/services/auth/auth.server"
 import { ReviewForm } from "./components/ReviewForm"
 
 export const config = {
-  runtime: "edge",
-  regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
+  // runtime: "edge",
+  // regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
 }
 
 export const loader = async ({ request, params }: LoaderArgs) => {

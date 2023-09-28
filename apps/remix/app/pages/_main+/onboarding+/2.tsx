@@ -13,14 +13,14 @@ import type { RambleIcon } from "~/components/ui"
 import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
-import { interestOptions } from "~/lib/static/interests"
+import { interestOptions } from "~/lib/models/interests"
 import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
 
 import { Footer } from "./components/Footer"
 
 export const config = {
-  runtime: "edge",
-  regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
+  // runtime: "edge",
+  // regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
 }
 
 export const loader = async ({ request }: LoaderArgs) => {

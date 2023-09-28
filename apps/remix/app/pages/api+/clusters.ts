@@ -13,8 +13,8 @@ import { db } from "~/lib/db.server"
 import { getUserSession } from "~/services/session/session.server"
 
 export const config = {
-  runtime: "edge",
-  regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
+  // runtime: "edge",
+  // regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
 }
 
 async function getMapClusters(request: Request) {

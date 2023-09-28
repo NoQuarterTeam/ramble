@@ -6,7 +6,7 @@ import { getMaybeUser } from "~/services/auth/auth.server"
 import Home from "./home"
 
 export const config = {
-  runtime: "edge",
+  // runtime: "edge",
 }
 
 export const loader = async ({ request }: LoaderArgs) => {

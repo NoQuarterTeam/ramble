@@ -5,7 +5,7 @@ import queryString from "query-string"
 import { useDisclosure } from "@ramble/shared"
 
 import { Button, IconButton, Modal, Switch, Tooltip } from "~/components/ui"
-import { SPOT_TYPE_OPTIONS } from "~/lib/static/spots"
+import { SPOT_TYPE_OPTIONS } from "~/lib/models/spots"
 
 export function MapFilters({ onChange }: { onChange: (params: string) => void }) {
   const onSubmit = (e: React.SyntheticEvent) => {
