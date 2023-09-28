@@ -6,7 +6,6 @@ import { Check, Edit2, Heart, Star, Trash } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
 import { publicSpotWhereClause } from "@ramble/api"
-import type { SpotType } from "@ramble/database/types"
 import { AMENITIES, canManageSpot, createImageUrl, displayRating } from "@ramble/shared"
 
 import { Form, FormButton } from "~/components/Form"
@@ -29,7 +28,6 @@ import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { badRequest, json, notFound, redirect } from "~/lib/remix.server"
 import { AMENITIES_ICONS } from "~/lib/static/amenities"
-import { SPOTS } from "~/lib/static/spots"
 import { useTheme } from "~/lib/theme"
 import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
 import type { loader as rootLoader } from "~/root"
@@ -39,6 +37,7 @@ import { getUserSession } from "~/services/session/session.server"
 import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { SpotMarker } from "./components/SpotMarker"
+import { SpotIcon } from "~/components/SpotIcon"
 
 export const config = {
   runtime: "edge",
@@ -136,7 +135,6 @@ export default function SpotDetail() {
   const user = useMaybeUser()
   const theme = useTheme()
 
-  const Icon = SPOTS[spot.type as SpotType].Icon
   return (
     <div className="relative">
       <div className="w-screen overflow-x-scroll">
@@ -160,7 +158,7 @@ export default function SpotDetail() {
             <div className="flex flex-col items-start justify-between space-y-1 md:flex-row">
               <div className="flex items-center space-x-2">
                 <div className="sq-8 md:sq-16 flex flex-shrink-0 items-center justify-center rounded-full border border-gray-200 dark:border-gray-600">
-                  <Icon className="sq-4 md:sq-6" />
+                  <SpotIcon type={spot.type} className="sq-4 md:sq-6" />
                 </div>
                 <h1 className="text-lg md:text-2xl lg:text-3xl">{spot.name}</h1>
               </div>

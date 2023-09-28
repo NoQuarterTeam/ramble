@@ -1,8 +1,9 @@
 import * as React from "react"
 import { Await, Link, useLoaderData, useNavigate } from "@remix-run/react"
-import type { LoaderArgs } from "@vercel/remix"
-import { defer } from "@vercel/remix"
-import { Frown, Heart, Star } from "lucide-react"
+// import type { LoaderArgs } from "@vercel/remix"
+// import { defer } from "@vercel/remix"
+import { defer, LoaderArgs, SerializeFrom } from "@remix-run/node"
+import { Frown, Heart, Plus, Star } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
 import { publicSpotWhereClause } from "@ramble/api"
@@ -18,6 +19,10 @@ import { SaveToList } from "~/pages/api+/save-to-list"
 import { getUserSession } from "~/services/session/session.server"
 
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
+import { SpotType } from "@ramble/database/types"
+
+import { SpotIcon } from "~/components/SpotIcon"
+import { PartnerLink } from "~/components/PartnerLink"
 
 export const loader = async ({ params, request }: LoaderArgs) => {
   const { userId } = await getUserSession(request)
@@ -29,6 +34,10 @@ export const loader = async ({ params, request }: LoaderArgs) => {
         id: true,
         name: true,
         address: true,
+        type: true,
+        komootId: true,
+        campspaceUrl: true,
+        park4nightId: true,
         _count: { select: { reviews: true, listSpots: true } },
         description: true,
         verifier: { select: { firstName: true, username: true, lastName: true, avatar: true, avatarBlurHash: true } },
@@ -53,17 +62,17 @@ export const loader = async ({ params, request }: LoaderArgs) => {
   )
 }
 
+type Res = SerializeFrom<typeof loader>
+
 export default function SpotPreview() {
   const user = useMaybeUser()
-  const promise = useLoaderData<typeof loader>()
+  // @ts-expect-error vercel remix issues
+  const promise: Res = useLoaderData()
 
   return (
     <SpotContainer>
       <React.Suspense fallback={<SpotFallback />}>
-        <Await
-          // @ts-expect-error vercel remix issues
-          resolve={promise.spot}
-        >
+        <Await resolve={promise.spot}>
           {(spot) =>
             !spot ? (
               <div className="flex items-center p-2">
@@ -75,25 +84,29 @@ export default function SpotPreview() {
             ) : (
               <div className="space-y-4">
                 <div className="space-y-1">
-                  <Link
-                    target="_blank"
-                    rel="noopener norefer"
-                    to={`/spots/${spot.id}`}
-                    className="line-clamp-2 text-xl leading-6 hover:underline"
-                  >
-                    {spot.name}
-                  </Link>
+                  <div className="flex items-center space-x-2">
+                    <div className="sq-8 flex flex-shrink-0 items-center justify-center rounded-full border border-gray-200 dark:border-gray-600">
+                      <SpotIcon type={spot.type} className="sq-4" />
+                    </div>
+                    {!(["SURFING", "HIKING", "MOUNTAIN_BIKING"] as SpotType[]).includes(spot.type) ? (
+                      <Link
+                        target="_blank"
+                        rel="noopener norefer"
+                        to={`/spots/${spot.id}`}
+                        className="line-clamp-2 text-xl leading-6 hover:underline"
+                      >
+                        {spot.name}
+                      </Link>
+                    ) : (
+                      <p className="line-clamp-2 text-xl leading-6">{spot.name}</p>
+                    )}
+                  </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <div className="flex items-center space-x-1 text-sm">
                         <Star className="sq-4" />
                         <React.Suspense fallback={<Spinner size="sm" />}>
-                          <Await
-                            // @ts-expect-error vercel remix issues
-                            resolve={promise.rating}
-                          >
-                            {(rating) => <p>{displayRating(rating._avg.rating)}</p>}
-                          </Await>
+                          <Await resolve={promise.rating}>{(rating) => <p>{displayRating(rating._avg.rating)}</p>}</Await>
                         </React.Suspense>
                       </div>
                       <div className="flex items-center space-x-1 text-sm">
@@ -107,9 +120,13 @@ export default function SpotPreview() {
                 </div>
                 <div className="rounded-xs w-full overflow-x-scroll">
                   <div className="relative flex h-[225px] w-max space-x-2">
-                    {spot.images?.map(
-                      // @ts-expect-error vercel remix issues
-                      (image) => (
+                    {!spot.images || spot.images.length === 0 ? (
+                      <div className="center h-full w-[350px] flex-col gap-2 bg-gray-50 dark:bg-gray-800">
+                        <Plus />
+                        <p>Be the first to add some images</p>
+                      </div>
+                    ) : (
+                      spot.images.map((image) => (
                         <OptimizedImage
                           alt="spot"
                           width={350}
@@ -119,18 +136,24 @@ export default function SpotPreview() {
                           key={image.id}
                           src={createImageUrl(image.path)}
                         />
-                      ),
+                      ))
                     )}
                   </div>
                 </div>
-                <VerifiedCard spot={spot} />
+                {spot.campspaceUrl || spot.komootId || spot.park4nightId ? (
+                  <PartnerLink spot={spot} />
+                ) : (
+                  <VerifiedCard spot={spot} />
+                )}
                 <p className="line-clamp-6 whitespace-pre-wrap text-sm">{spot.description}</p>
                 <p className="text-sm italic">{spot.address}</p>
-                <div className="flex justify-end">
-                  <LinkButton variant="link" to={`/spots/${spot.id}`}>
-                    Read more
-                  </LinkButton>
-                </div>
+                {!(["SURFING", "HIKING", "MOUNTAIN_BIKING"] as SpotType[]).includes(spot.type) && (
+                  <div className="flex justify-end">
+                    <LinkButton variant="link" to={`/spots/${spot.id}`}>
+                      Read more
+                    </LinkButton>
+                  </div>
+                )}
 
                 <hr />
                 <div className="space-y-4">
@@ -143,12 +166,7 @@ export default function SpotPreview() {
                       <div className="flex items-center space-x-1">
                         <Star className="sq-5" />
                         <React.Suspense fallback={<Spinner size="sm" />}>
-                          <Await
-                            // @ts-expect-error vercel remix issues
-                            resolve={promise.rating}
-                          >
-                            {(rating) => <p>{displayRating(rating._avg.rating)}</p>}
-                          </Await>
+                          <Await resolve={promise.rating}>{(rating) => <p>{displayRating(rating._avg.rating)}</p>}</Await>
                         </React.Suspense>
                       </div>
                     </div>
@@ -158,12 +176,7 @@ export default function SpotPreview() {
                       </LinkButton>
                     )}
                   </div>
-                  <div className="space-y-6">
-                    {spot.reviews?.map(
-                      // @ts-expect-error vercel remix issues
-                      (review) => <ReviewItem key={review.id} review={review} />,
-                    )}
-                  </div>
+                  <div className="space-y-6">{spot.reviews?.map((review) => <ReviewItem key={review.id} review={review} />)}</div>
                 </div>
               </div>
             )
