@@ -212,7 +212,7 @@ export default function Latest() {
             ))}
           </div>
         )}
-        {spots.length % TAKE === 0 && (
+        {spots.length !== 0 && spots.length % TAKE === 0 && (
           <div className="center">
             <Button size="lg" isLoading={spotFetcher.state === "loading"} variant="outline" onClick={onNext}>
               Load more
