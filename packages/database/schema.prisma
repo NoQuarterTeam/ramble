@@ -153,6 +153,9 @@ model Spot {
   // natuurKampeerterreinen
   natuurKampeerterreinenId String? @unique
 
+  // cucortu
+  cucortuId String? @unique
+
   @@index([createdAt])
   @@index([type])
   @@index([type, longitude])
