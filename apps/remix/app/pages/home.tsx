@@ -44,7 +44,7 @@ export default function Home() {
             <p className="text-lg font-semibold text-black">VAN TRAVEL APP</p>
           </div>
           <div>
-            <h1 className="text-3xl text-black">Everything you need for remote working & van life in Europe.</h1>
+            <h1 className="text-3xl text-black">Everything you need for remote working van life in Europe.</h1>
             <h2 className="text-xl text-black">For the outdoor enthusiasts who seek adventure, authenticity and community.</h2>
           </div>
 
@@ -73,7 +73,7 @@ export default function Home() {
             Build a community around a shared love of nature and authenticity.
             <br />
             <br />
-            Support the growing community of eco-concsious van living remote workers.
+            Support the growing community of eco-conscious van living remote workers and digital nomads.
             <br />
             <br />
             Provide all the necessary digital tools and features for effortless authentic van travel.

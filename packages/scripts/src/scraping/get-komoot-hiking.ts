@@ -1,10 +1,8 @@
 import * as cheerio from "cheerio"
 
-// mtb
-const url = `https://www.komoot.com/api/v007/discover_tours/?srid=4326&format=simple&fields=timeline&timeline_highlights_fields=images,start_point&limit=100&max_distance=500000&sport=mtb&surface=prefer_unpaved&hl=en`
 
 // hiking
-// const url = `https://www.komoot.com/api/v007/discover_tours/?srid=4326&format=simple&fields=timeline&timeline_highlights_fields=images,start_point&limit=100&max_distance=500000&sport=hike&surface=prefer_unpaved&hl=en`
+const url = `https://www.komoot.com/api/v007/discover_tours/?srid=4326&format=simple&fields=timeline&timeline_highlights_fields=images,start_point&limit=100&max_distance=500000&sport=hike&surface=prefer_unpaved&hl=en`
 
 import exampleData from "./komoot.json"
 
@@ -18,7 +16,7 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
   console.log("Total Pages: " + totalPages)
 
   for (let page = 0; page < totalPages; page++) {
-    console.log("Page: " + page)
+    console.log("Page: " + (page + 1) + "/" + totalPages)
 
     const res = await fetch(url + `&lat=${lat}&lng=${lng}&page=${page}`)
     const newData = await res.json()
@@ -26,14 +24,16 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
     console.log("Spots found: " + newSpots.length)
     const dbSpots = await prisma.spot.findMany({
       select: { komootId: true },
-      where: { type: "MOUNTAIN_BIKING", komootId: { in: newSpots?.map((s) => s.id) } },
+      where: { type: "HIKING", komootId: { in: newSpots?.map((s) => s.id) } },
     })
 
     // number of new spots
 
     for (let index = 0; index < newSpots.length; index++) {
       const spot = newSpots[index]
-      console.log("Addind spot: " + index + " out of " + newSpots.length)
+      console.log(
+        "Adding spot: " + index + " out of " + newSpots.length + " - " + (page + 1) + "/" + totalPages + " - " + lat + "," + lng,
+      )
       try {
         // if in db, continue
         const exists = dbSpots.find((s) => s.komootId === spot.id)
@@ -41,8 +41,7 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
 
         if (exists) continue
         const data = {
-          type: SpotType.MOUNTAIN_BIKING,
-          // type: SpotType.HIKING,
+          type: SpotType.HIKING,
           komootId: spot.id,
           name: spot.name,
           createdAt: new Date(spot.date),
@@ -82,9 +81,10 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
 
 async function main() {
   try {
-    for (let lat = 40; lat < 75; lat = lat + 10) {
+    // Start at 40, -5 for whole scan of europe
+    for (let lat = 55; lat < 75; lat = lat + 7.5) {
       console.log("Lat: " + lat)
-      for (let lng = 5; lng < 30; lng = lng + 10) {
+      for (let lng = -5; lng < 30; lng = lng + 7.5) {
         console.log("Lng: " + lng)
         await getCards({ lat, lng })
       }
