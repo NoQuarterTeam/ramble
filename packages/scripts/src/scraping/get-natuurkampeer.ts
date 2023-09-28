@@ -1,11 +1,11 @@
 import * as cheerio from "cheerio"
 
-const url = `https://terreinzoeker.natuurkampeerterreinen.nl/?terrain=&open_at=&property_id%5B%5D=103&property_id%5B%5D=5&action=terrain_results_loop&maptype=mapbox`
+const url = `https://terreinzoeker.natuurkampeerterreinen.nl/?terrain&open_at&property_id%5B0%5D=103&property_id%5B1%5D=5&action=terrain_results_loop&maptype=mapbox`
 
 import { prisma } from "@ramble/database"
 
-export type CampspaceSpot = {
-  id: number
+export type NatuurSpot = {
+  id: string
   latitude: number
   longitude: number
   name: string
@@ -15,101 +15,75 @@ export type CampspaceSpot = {
   description?: string
 }
 
-async function getPageCards(currentPage: number) {
-  const res = await fetch(url + currentPage)
+async function getCards() {
+  const res = await fetch(url)
   const html = await res.text()
-
   const $ = cheerio.load(html)
 
-  const spots: CampspaceSpot[] = []
+  const newSpots = $(".terrain")
 
-  $("#terrain-results-loop").each((_, card) => {
-    const id = $(card).attr("data-id")
-    const latitude = $(card).attr("data-lat")
-    const longitude = $(card).attr("data-lng")
-    const link = $(card).find(".card-header-a").attr("href")
-    const name = $(card).find(".card-header-a").text()
-
-    if (!id || !latitude || !longitude || !link || !name) return
-    spots.push({ id: parseInt(id), latitude: parseFloat(latitude), longitude: parseFloat(longitude), name, link })
-  })
-
-  const currentData = await prisma.spot.findMany({
-    where: { campspaceId: { in: spots.map((s) => s.id) } },
-  })
-
-  for (let index = 0; index < spots.length; index++) {
-    const spot = spots[index]
-
+  for (let index = 0; index < newSpots.length; index++) {
+    const spot = newSpots[index]
+    console.log("Adding spot: " + index + " out of " + newSpots.length)
     try {
-      // if in db, continue
-      const exists = currentData.find((s) => s.campspaceId === spot.id)
-      if (exists) continue
-
-      const spotDetail = await fetch(spot.link)
-
-      const spotDetailHtml = await spotDetail.text()
+      const id = spot.attribs["data-item"]
+      const link = spot.attribs.href
+      const detailPage = await fetch(link)
+      const spotDetailHtml = await detailPage.text()
       const $ = cheerio.load(spotDetailHtml)
+      const name = $(".c-terrain__title").text().trim()
+      const description = $(".c-terrain__content").find("p").first().text().trim()
+      const address = $("#contact").next().find("span").html()?.replaceAll("<br>", ", ").trim()
+      const coords = $(".c-terrain__list").find("li").last().text().trim()
+      const latitude = parseFloat(coords.split(" ")[1])
+      const longitude = parseFloat(coords.split(" ")[2])
+      const isPetFriendly = $(".c-terrain__list").find(".icon-pets-welcome").length > 0
+
+      const kitchen = $(".c-terrain__list").find(".icon-pets-welcome").length > 0
+      const electricity = $(".c-terrain__list").find(".icon-electricity-per-day").length > 0
+      const hotWater = true
+      const water = true
+      const shower = true
+      const toilet = true
+      const wifi = $(".c-terrain__list").find(".icon-wifi-available").length > 0
+      const firePit = $(".c-terrain__list").find(".icon-campfire-allowed").length > 0
 
       let images: string[] = []
-      $(".space-images .space-images--img").each((_, img) => {
-        const src = $(img).attr("src")
-        if (src) images.push(src.replace("teaser", "medium"))
-      })
-      const description = $(".about-popup .popup-body").html()?.trim() || ""
-
-      const address =
-        $(".space-header--part-location")
-          .text()
-          .replace(/(\r\n|\n|\r)/gm, "")
-          .replace(/ /g, "")
-          .trim()
-          .split(",")
-          .join(", ") || ""
-
-      const isPetFriendly = $("p").filter((_, p) => $(p).text().includes("Pets allowed")).length > 0
-
-      const bbq = $("p").filter((_, p) => $(p).text().includes("BBQ")).length > 0
-      const kitchen = $("p").filter((_, p) => $(p).text().includes("Kitchen")).length > 0
-      const electricity = $("p").filter((_, p) => $(p).text().includes("Electricity")).length > 0
-      const hotWater = $("p").filter((_, p) => $(p).text().includes("Hot water")).length > 0
-      const water = $("p").filter((_, p) => $(p).text().includes("Water")).length > 0
-      const shower = $("p").filter((_, p) => $(p).text().includes("shower")).length > 0
-      const toilet = $("p").filter((_, p) => $(p).text().includes("Toilet")).length > 0
-      const pool = $("p").filter((_, p) => $(p).text().includes("Pool")).length > 0
-      const wifi = $("p").filter((_, p) => $(p).text().includes("WiFi")).length > 0
-      const firePit = $("p").filter((_, p) => $(p).text().includes("Fire")).length > 0
-      const sauna = $("p").filter((_, p) => $(p).text().includes("Sauna")).length > 0
+      $(".c-terrain__media")
+        .find("img")
+        .map((_, image) => {
+          const src = image.attribs.src
+          if (src) images.push(src)
+        })
 
       await prisma.spot.create({
         data: {
-          name: spot.name,
+          natuurKampeerterreinenId: id,
+          name: name,
           address,
-          latitude: spot.latitude,
-          longitude: spot.longitude,
+          latitude: latitude,
+          longitude: longitude,
           description,
-          images: { create: images.map((image) => ({ path: image, creator: { connect: { email: "jack@noquarter.co" } } })) },
-          campspaceId: spot.id,
           type: "CAMPING",
+          sourceUrl: link,
           isPetFriendly,
-          campspaceUrl: spot.link,
-          creator: { connect: { email: "jack@noquarter.co" } },
-          verifier: { connect: { email: "jack@noquarter.co" } },
+          creator: { connect: { email: "george@noquarter.co" } },
+          verifier: { connect: { email: "george@noquarter.co" } },
+          images: { create: images.map((image) => ({ path: image, creator: { connect: { email: "george@noquarter.co" } } })) },
           amenities: {
-            create: { bbq, shower, kitchen, sauna, firePit, wifi, toilet, water, electricity, hotWater, pool },
+            create: { shower, kitchen, firePit, wifi, toilet, water, electricity, hotWater },
           },
         },
       })
-    } catch {}
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 
 async function main() {
   try {
-    // loop over each page
-    for (let currentPage = 1; currentPage < pageCount + 1; currentPage++) {
-      await getPageCards(currentPage)
-    }
+    await getCards()
   } catch (error) {
     console.log(error)
     process.exit(1)
