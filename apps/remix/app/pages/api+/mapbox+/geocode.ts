@@ -3,7 +3,7 @@ import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
 // export const config = {
-// runtime: "edge",
+// // runtime: "edge",
 // }
 
 export const loader = async ({ request }: LoaderArgs) => {

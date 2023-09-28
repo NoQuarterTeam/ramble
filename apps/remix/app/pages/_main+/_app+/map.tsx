@@ -44,7 +44,7 @@ import { SpotMarker } from "./components/SpotMarker"
 import { MapSearch } from "./components/MapSearch"
 
 export const config = {
-  runtime: "edge",
+  // runtime: "edge",
 }
 
 export const links: LinksFunction = () => {

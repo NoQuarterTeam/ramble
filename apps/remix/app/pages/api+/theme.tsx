@@ -4,7 +4,7 @@ import { isTheme } from "~/lib/theme"
 import { getThemeSession } from "~/services/session/theme.server"
 
 export const config = {
-  runtime: "edge",
+  // runtime: "edge",
 }
 
 export const action = async ({ request }: ActionArgs) => {

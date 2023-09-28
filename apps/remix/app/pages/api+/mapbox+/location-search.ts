@@ -5,7 +5,7 @@ import { cacheHeader } from "pretty-cache-header"
 // import { requireUser } from "~/services/auth/auth.server"
 
 // export const config = {
-// runtime: "edge",
+// // runtime: "edge",
 // }
 
 export const loader = async ({ request }: LoaderArgs) => {

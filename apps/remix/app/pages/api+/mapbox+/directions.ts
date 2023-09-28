@@ -9,7 +9,7 @@ import { db } from "~/lib/db.server"
 import { badRequest } from "~/lib/remix.server"
 
 // export const config = {
-// runtime: "edge",
+// // runtime: "edge",
 // }
 
 export const loader = async ({ request }: LoaderArgs) => {
