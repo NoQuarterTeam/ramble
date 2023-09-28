@@ -20,10 +20,11 @@ import { Avatar, Button, IconButton, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { FormActionInput, formError, getFormAction, validateFormData } from "~/lib/form"
 import { badRequest, json } from "~/lib/remix.server"
-import { SPOT_TYPE_OPTIONS, SPOTS } from "~/lib/static/spots"
+import { SPOT_TYPE_OPTIONS } from "~/lib/static/spots"
 import { getTableParams } from "~/lib/table"
 import { useTheme } from "~/lib/theme"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
+import { SpotIcon } from "~/components/SpotIcon"
 
 const schema = z.object({ type: z.string().optional(), unverified: z.string().optional() })
 
@@ -111,10 +112,9 @@ const columns = [
     size: 300,
     header: () => "Name",
     cell: (info) => {
-      const Icon = SPOTS[info.row.original.type].Icon
       return (
         <div className="flex items-center space-x-2">
-          <Icon size={16} className="flex-shrink-0" />
+          <SpotIcon type={info.row.original.type} size={16} className="flex-shrink-0" />
           <p className="truncate">{info.getValue()}</p>
         </div>
       )

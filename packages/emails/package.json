@@ -23,7 +23,7 @@
     "@react-email/img": "0.0.5",
     "@react-email/link": "0.0.5",
     "@react-email/render": "0.0.7",
-    "@react-email/tailwind": "0.0.8",
+    "@react-email/tailwind": "0.0.9",
     "@react-email/text": "0.0.5"
   },
   "devDependencies": {

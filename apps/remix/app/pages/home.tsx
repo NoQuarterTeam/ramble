@@ -8,6 +8,7 @@ import { useFetcher } from "~/components/Form"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
+import { Link } from "@remix-run/react"
 
 export const config = {
   runtime: "edge",
@@ -28,6 +29,14 @@ export const action = async ({ request }: LoaderArgs) => {
 export default function Home() {
   return (
     <div className="bg-background dark pb-20 font-serif text-white">
+      <div className="absolute right-6 top-16 md:top-6">
+        <Link
+          to="/login"
+          className="border-xs rounded-xs whitespace-nowrap bg-black px-4 py-2 text-center text-white hover:opacity-80 disabled:opacity-70"
+        >
+          Login
+        </Link>
+      </div>
       <div className="h-[90vh] w-screen space-y-20 bg-[url('/landing/landing1.png')] px-4 pt-10 md:pt-28">
         <div className="mx-auto flex max-w-6xl flex-col items-start space-y-12">
           <div className="flex flex-col items-center">
@@ -35,7 +44,7 @@ export default function Home() {
             <p className="text-lg font-semibold text-black">VAN TRAVEL APP</p>
           </div>
           <div>
-            <h1 className="text-3xl text-black">Everything you need for remote working & van life in Europe.</h1>
+            <h1 className="text-3xl text-black">Everything you need for remote working van life in Europe.</h1>
             <h2 className="text-xl text-black">For the outdoor enthusiasts who seek adventure, authenticity and community.</h2>
           </div>
 
@@ -64,7 +73,7 @@ export default function Home() {
             Build a community around a shared love of nature and authenticity.
             <br />
             <br />
-            Support the growing community of eco-concsious van living remote workers.
+            Support the growing community of eco-conscious van living remote workers and digital nomads.
             <br />
             <br />
             Provide all the necessary digital tools and features for effortless authentic van travel.

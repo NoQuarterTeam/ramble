@@ -2,19 +2,17 @@ import { cva } from "class-variance-authority"
 
 import type { SpotType } from "@ramble/database/types"
 
-import { SPOTS } from "~/lib/static/spots"
+import { SpotIcon } from "~/components/SpotIcon"
 
 interface MarkerProps {
   spot: { type: SpotType }
 }
 
 export function SpotMarker(props: MarkerProps) {
-  const Icon = SPOTS[props.spot.type].Icon
-
   return (
     <div className="relative">
       <div className={spotMarkerColors({ type: props.spot.type })}>
-        {Icon && <Icon className={spotMarkerIconColors({ type: props.spot.type })} />}
+        <SpotIcon type={props.spot.type} className={spotMarkerIconColors({ type: props.spot.type })} />
       </div>
       <div className={spotTriangleColors({ type: props.spot.type })} />
     </div>

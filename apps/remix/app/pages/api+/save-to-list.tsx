@@ -192,7 +192,7 @@ function ListItem({ list, isSaved, spotId }: { spotId: string; list: SerializeFr
       onClick={() =>
         listFetcher.submit(
           { [FORM_ACTION]: Actions.Save, shouldSave: String(!isSaved), listId: list.id, spotId, csrf },
-          { method: "post", replace: true, action: SAVE_TO_LIST_URL },
+          { method: "POST", replace: true, action: SAVE_TO_LIST_URL },
         )
       }
       size="md"

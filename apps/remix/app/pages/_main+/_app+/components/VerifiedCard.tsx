@@ -24,7 +24,7 @@ export function VerifiedCard({ spot }: Props) {
             <div>
               <div className="flex items-center space-x-1">
                 <Verified className="sq-5" />
-                <p className="@lg:text-lg text-base">
+                <p className="@lg:text-lg @md:text-base text-sm">
                   Verified by{" "}
                   <span className="font-medium">
                     {spot.verifier.firstName} {spot.verifier.lastName}

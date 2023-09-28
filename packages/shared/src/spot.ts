@@ -36,3 +36,6 @@ export function doesSpotTypeRequireDescription(type?: SpotType | null | undefine
   if (!type) return false
   return type === "CAMPING" || type === "FREE_CAMPING"
 }
+
+export const isPartnerSpot = (spot: Pick<Spot, "campspaceId" | "surflineId" | "komootId" | "park4nightId">) =>
+  spot.campspaceId || spot.surflineId || spot.komootId || spot.park4nightId

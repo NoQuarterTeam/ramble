@@ -138,7 +138,7 @@ export function Nav() {
             {user ? (
               <DropdownMenuItem asChild>
                 <Button
-                  onClick={() => logoutSubmit(null, { method: "post", action: "/logout" })}
+                  onClick={() => logoutSubmit(null, { method: "POST", action: "/logout" })}
                   variant="ghost"
                   leftIcon={<LogOut className="sq-4" />}
                 >

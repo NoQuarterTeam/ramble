@@ -164,6 +164,9 @@ model Spot {
   // komoot
   komootId String? @unique
 
+  // surfline
+  surflineId String? @unique
+
   @@index([createdAt])
   @@index([type])
   @@index([type, longitude])
@@ -175,6 +178,7 @@ model Spot {
   @@index([campspaceId])
   @@index([park4nightId])
   @@index([komootId])
+  @@index([surflineId])
 }
 
 model SpotAmenities {
