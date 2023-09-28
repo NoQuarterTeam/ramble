@@ -1,4 +1,5 @@
-import { Spot } from "@ramble/database/types"
+import { type Spot } from "@ramble/database/types"
+
 import { useTheme } from "~/lib/theme"
 
 interface Props {

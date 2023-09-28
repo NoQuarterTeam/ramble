@@ -3,6 +3,7 @@ import { useFetcher, useLoaderData, useParams } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
+import { promiseHash } from "remix-utils"
 
 import { publicSpotWhereClauseRaw } from "@ramble/api"
 import { type SpotItemWithStatsAndImage } from "@ramble/shared"
@@ -10,12 +11,11 @@ import { type SpotItemWithStatsAndImage } from "@ramble/shared"
 import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
+import { fetchAndJoinSpotImages } from "~/lib/models/spots"
 import { notFound } from "~/lib/remix.server"
 import { getUserSession } from "~/services/session/session.server"
 
 import { SpotItem } from "./components/SpotItem"
-import { promiseHash } from "remix-utils"
-import { fetchAndJoinSpotImages } from "~/lib/models/spots"
 
 export const headers = useLoaderHeaders
 

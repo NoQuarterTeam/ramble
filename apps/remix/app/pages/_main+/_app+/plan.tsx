@@ -12,13 +12,13 @@ import useOnClickOutside from "use-onclickoutside"
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, useDisclosure } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
+import { SpotIcon } from "~/components/SpotIcon"
 import { Button, Input, Spinner } from "~/components/ui"
 import { useTheme } from "~/lib/theme"
 
 import { PageContainer } from "../../../components/PageContainer"
 import type { directionsLoader } from "../../api+/mapbox+/directions"
 import type { locationSearchLoader } from "../../api+/mapbox+/location-search"
-import { SpotIcon } from "~/components/SpotIcon"
 
 export default function PlanTrip() {
   const theme = useTheme()

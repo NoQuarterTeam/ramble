@@ -15,16 +15,16 @@ import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { Search } from "~/components/Search"
+import { SpotIcon } from "~/components/SpotIcon"
 import { Table } from "~/components/Table"
 import { Avatar, Button, IconButton, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { FormActionInput, formError, getFormAction, validateFormData } from "~/lib/form"
-import { badRequest, json } from "~/lib/remix.server"
 import { SPOT_TYPE_OPTIONS } from "~/lib/models/spots"
+import { badRequest, json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"
 import { useTheme } from "~/lib/theme"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
-import { SpotIcon } from "~/components/SpotIcon"
 
 const schema = z.object({ type: z.string().optional(), unverified: z.string().optional() })
 

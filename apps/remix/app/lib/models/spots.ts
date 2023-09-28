@@ -14,13 +14,14 @@ import {
   Utensils,
 } from "lucide-react"
 
+import { joinSpotImages, type LatestSpotImages, spotImagesRawQuery } from "@ramble/api"
 import type { SpotType } from "@ramble/database/types"
+import { type SpotItemWithStatsAndImage } from "@ramble/shared"
 
 import type { RambleIcon } from "~/components/ui"
 import { Icons } from "~/components/ui"
-import { LatestSpotImages, joinSpotImages, spotImagesRawQuery } from "@ramble/api"
+
 import { db } from "../db.server"
-import { SpotItemWithStatsAndImage } from "@ramble/shared"
 
 export const SPOTS: { [key in SpotType]: { label: string; Icon: RambleIcon } } = {
   CAMPING: { label: "Camping", Icon: Tent },
