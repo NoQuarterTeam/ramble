@@ -7,7 +7,7 @@ import { Frown, Heart, Image, Star } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
 import { generateBlurHash, publicSpotWhereClause } from "@ramble/api"
-import { createImageUrl, displayRating, isPartnerSpot, merge } from "@ramble/shared"
+import { createImageUrl, displayRating, merge } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
@@ -22,7 +22,7 @@ import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { SpotType } from "@ramble/database/types"
 
 import { SpotIcon } from "~/components/SpotIcon"
-import { PartnerLink } from "~/components/PartnerLink"
+import { PartnerLink, isPartnerSpot } from "~/components/PartnerLink"
 import { ImageUploader } from "~/components/ImageUploader"
 import { useFetcher } from "~/components/Form"
 import { getCurrentUser } from "~/services/auth/auth.server"

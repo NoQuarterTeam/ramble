@@ -1,10 +1,12 @@
 import { Spot } from "@ramble/database/types"
-import { isPartnerSpot } from "@ramble/shared"
 import { useTheme } from "~/lib/theme"
 
 interface Props {
   spot: Pick<Spot, "campspaceId" | "campspaceUrl" | "komootId" | "park4nightId" | "surflineId">
 }
+
+export const isPartnerSpot = (spot: Pick<Spot, "campspaceId" | "surflineId" | "komootId" | "park4nightId">) =>
+  spot.campspaceId || spot.surflineId || spot.komootId || spot.park4nightId
 
 const partners = {
   campspace: { name: "Campspace", logo: { light: "/partners/campspace.svg", dark: "/partners/campspace-dark.svg" } },
