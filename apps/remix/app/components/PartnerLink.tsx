@@ -1,28 +1,39 @@
 import { Spot } from "@ramble/database/types"
+import { isPartnerSpot } from "@ramble/shared"
+import { useTheme } from "~/lib/theme"
 
 interface Props {
-  spot: Pick<Spot, "campspaceUrl" | "komootId" | "park4nightId">
+  spot: Pick<Spot, "campspaceId" | "campspaceUrl" | "komootId" | "park4nightId" | "surflineId">
 }
 
-const partner = {
-  campspace: { name: "Campspace" },
-  komoot: { name: "Komoot" },
-  park4night: { name: "Park4Night" },
-  surfline: { name: "Surfline" },
+const partners = {
+  campspace: { name: "Campspace", logo: { light: "/partners/campspace.svg", dark: "/partners/campspace-dark.svg" } },
+  komoot: { name: "Komoot", logo: { light: "/partners/komoot.svg", dark: "/partners/komoot-dark.svg" } },
+  park4night: { name: "Park4Night", logo: { light: "/partners/park4night.svg", dark: "/partners/park4night-dark.svg" } },
+  surfline: { name: "Surfline", logo: { light: "/partners/surfline.svg", dark: "/partners/surfline-dark.svg" } },
 } as const
 
 export function PartnerLink(props: Props) {
-  if (!props.spot.campspaceUrl || !props.spot.komootId || !props.spot.park4nightId) return null
+  const theme = useTheme()
+  if (!isPartnerSpot(props.spot)) return null
 
-  const partnerName = props.spot.campspaceUrl
-    ? partner.campspace.name
+  const partner = props.spot.campspaceUrl
+    ? partners.campspace
     : props.spot.komootId
-    ? partner.komoot.name
-    : partner.park4night.name
+    ? partners.komoot
+    : props.spot.park4nightId
+    ? partners.park4night
+    : partners.surfline
 
   return (
-    <div>
-      <p>Powered by {partnerName}</p>
-    </div>
+    <a
+      href="#"
+      target="_blank"
+      rel="noopener noreferer"
+      className="border-hover rounded-xs flex flex-row items-center justify-between gap-6 border px-6 py-2"
+    >
+      <p className="text-lg">Powered by</p>
+      <img className="h-[40px] w-[150px] object-contain" src={partner.logo[theme]} />
+    </a>
   )
 }

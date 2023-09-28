@@ -7,7 +7,7 @@ import { Frown, Heart, Plus, Star } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
 import { publicSpotWhereClause } from "@ramble/api"
-import { createImageUrl, displayRating, merge } from "@ramble/shared"
+import { createImageUrl, displayRating, isPartnerSpot, merge } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
@@ -37,6 +37,8 @@ export const loader = async ({ params, request }: LoaderArgs) => {
         type: true,
         komootId: true,
         campspaceUrl: true,
+        campspaceId: true,
+        surflineId: true,
         park4nightId: true,
         _count: { select: { reviews: true, listSpots: true } },
         description: true,
@@ -140,11 +142,8 @@ export default function SpotPreview() {
                     )}
                   </div>
                 </div>
-                {spot.campspaceUrl || spot.komootId || spot.park4nightId ? (
-                  <PartnerLink spot={spot} />
-                ) : (
-                  <VerifiedCard spot={spot} />
-                )}
+                {isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}
+
                 <p className="line-clamp-6 whitespace-pre-wrap text-sm">{spot.description}</p>
                 <p className="text-sm italic">{spot.address}</p>
                 {!(["SURFING", "HIKING", "MOUNTAIN_BIKING"] as SpotType[]).includes(spot.type) && (
