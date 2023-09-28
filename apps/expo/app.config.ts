@@ -13,7 +13,7 @@ const splash: ExpoConfig["splash"] = {
 
 const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   name: "Ramble",
-  description: "Ramble: Travel Guide",
+  description: "Ramble: Van Life Travel App",
   slug: "ramble",
   scheme: "ramble",
   owner: "noquarter",
