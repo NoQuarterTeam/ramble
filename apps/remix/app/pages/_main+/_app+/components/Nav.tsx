@@ -1,6 +1,6 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Link, NavLink, useNavigate, useSubmit } from "@remix-run/react"
-import { Heart, LogOut, Menu, Moon, Plus, Settings, Sun, User } from "lucide-react"
+import { Heart, LogOut, Menu, Moon, Plus, Settings, Sun, User, UserCog } from "lucide-react"
 
 import { ClientOnly, createImageUrl, merge } from "@ramble/shared"
 
@@ -114,6 +114,13 @@ export function Nav() {
                     Account
                   </LinkButton>
                 </DropdownMenuItem>
+                {user.isAdmin && (
+                  <DropdownMenuItem asChild>
+                    <LinkButton variant="ghost" to="/admin" leftIcon={<UserCog className="sq-4" />}>
+                      Admin
+                    </LinkButton>
+                  </DropdownMenuItem>
+                )}
                 <themeFetcher.Form action="/api/theme" className="w-full">
                   <input type="hidden" name="theme" value={isDark ? "light" : "dark"} />
                   <DropdownMenuItem onSelect={(event: Event) => event.preventDefault()} asChild>
