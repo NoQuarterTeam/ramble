@@ -1,8 +1,8 @@
 import { useLoaderData } from "@remix-run/react"
 import { createColumnHelper } from "@tanstack/react-table"
-import { type LoaderArgs, type SerializeFrom } from "@vercel/remix"
+import { type LoaderFunctionArgs, type SerializeFrom } from "@vercel/remix"
 import dayjs from "dayjs"
-import { promiseHash } from "remix-utils"
+import { promiseHash } from "remix-utils/promise"
 
 import { type Prisma } from "@ramble/database/types"
 
@@ -12,7 +12,7 @@ import { db } from "~/lib/db.server"
 import { json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { orderBy, search, skip, take } = getTableParams(request)
   const where = {
     OR: search

@@ -1,5 +1,5 @@
 import { Link } from "@remix-run/react"
-import { type LoaderArgs } from "@vercel/remix"
+import { type LoaderFunctionArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { z } from "zod"
 
@@ -16,7 +16,7 @@ export const config = {
 
 export const headers = useLoaderHeaders
 
-export const action = async ({ request }: LoaderArgs) => {
+export const action = async ({ request }: LoaderFunctionArgs) => {
   const schema = z.object({ email: z.string().email() })
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)

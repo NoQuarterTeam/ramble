@@ -1,6 +1,6 @@
 import * as React from "react"
 import { useLoaderData } from "@remix-run/react"
-import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
 import { json, redirect } from "@vercel/remix"
 import { Plus } from "lucide-react"
 import { z } from "zod"
@@ -18,7 +18,7 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { Footer } from "./components/Footer"
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, {
     id: true,
     van: { select: { name: true, description: true, model: true, year: true, images: { select: { path: true } } } },
@@ -33,7 +33,7 @@ const schema = z.object({
   description: NullableFormString,
 })
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
   const user = await getCurrentUser(request, { id: true, van: { select: { id: true } } })

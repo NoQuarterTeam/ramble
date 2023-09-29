@@ -1,6 +1,6 @@
 import React from "react"
 import { useLoaderData } from "@remix-run/react"
-import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { z } from "zod"
 import { zx } from "zodix"
@@ -16,12 +16,12 @@ import { interestOptions } from "~/lib/models/interests"
 import { redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, userInterestFields)
   return json(user)
 }
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request, { id: true, van: { select: { id: true } } })
   const schema = z.object({
     isSurfer: zx.BoolAsString,

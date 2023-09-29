@@ -6,15 +6,16 @@
     "esModuleInterop": true,
     "jsx": "react-jsx",
     "noUncheckedIndexedAccess": true,
-    "module": "CommonJS",
+    "module": "ES2022",
     "outDir": "build",
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "target": "ES2019",
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./app/*"]
+      "~/*": ["./app/*"],
+      "sonner": ["node_modules/sonner/dist/index.js"]
     },
     "skipLibCheck": true,
     "noEmit": true,

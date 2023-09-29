@@ -1,5 +1,5 @@
 import { useLoaderData } from "@remix-run/react"
-import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { z } from "zod"
 
@@ -20,7 +20,7 @@ export enum NEW_REVIEW_REDIRECTS {
   Detail = "detail",
 }
 
-export const loader = async ({ request, params }: LoaderArgs) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   await requireUser(request)
 
   const spot = await db.spot.findUnique({
@@ -31,7 +31,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
   return json(spot)
 }
 
-export const action = async ({ request, params }: ActionArgs) => {
+export const action = async ({ request, params }: ActionFunctionArgs) => {
   const userId = await requireUser(request)
   const schema = z.object({
     description: z.string().min(10),

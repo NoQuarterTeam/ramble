@@ -1,6 +1,6 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Link, NavLink, Outlet } from "@remix-run/react"
-import { json, type LoaderArgs, redirect } from "@vercel/remix"
+import { json, type LoaderFunctionArgs, redirect } from "@vercel/remix"
 import { GaugeCircle, HelpingHand, MapPin, Moon, Sun, User } from "lucide-react"
 
 import { merge } from "@ramble/shared"
@@ -13,7 +13,7 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 
 export const shouldRevalidate = () => false
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request)
   if (!user.isAdmin) return redirect("/")
   return json(null)

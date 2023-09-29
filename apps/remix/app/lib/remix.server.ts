@@ -13,7 +13,7 @@ export async function badRequest(
   const flash = init.flash
   if (flash) {
     const { createFlash } = await getFlashSession(request)
-    headers.append("Set-Cookie", await createFlash(flash))
+    headers.append("set-cookie", await createFlash(flash))
   }
 
   return remixJson(data, { status: 400, ...init, headers })
@@ -25,7 +25,7 @@ export async function json<T>(data: T, request?: Request, init?: ResponseInit & 
   const flash = init.flash
   if (flash) {
     const { createFlash } = await getFlashSession(request)
-    headers.append("Set-Cookie", await createFlash(flash))
+    headers.append("set-cookie", await createFlash(flash))
   }
 
   return remixJson(data, { status: 200, ...init, headers })
@@ -43,7 +43,7 @@ export async function redirect(
   const flash = init.flash
   if (flash) {
     const { createFlash } = await getFlashSession(request)
-    headers.append("Set-Cookie", await createFlash(flash))
+    headers.append("set-cookie", await createFlash(flash))
   }
 
   return remixRedirect(url, { ...init, headers })

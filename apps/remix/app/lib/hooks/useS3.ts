@@ -1,6 +1,6 @@
 "use client"
 import * as React from "react"
-import { useAuthenticityToken } from "remix-utils"
+import { useAuthenticityToken } from "remix-utils/authenticity-token"
 import { v4 } from "uuid"
 
 import { assetPrefix } from "@ramble/shared"

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useActionData } from "@remix-run/react"
-import { badRequest } from "remix-utils"
+import { json } from "@vercel/remix"
 import { z } from "zod"
 
-import { verifyCsrf } from "~/services/session/csrf.server.ts"
+import { csrf } from "~/services/session/csrf.server.ts"
 
 export type FieldErrors<T> = {
   [Property in keyof T]: string[]
@@ -23,7 +23,7 @@ export async function validateFormData<Schema extends z.ZodTypeAny>(
   request: Request,
   schema: Schema,
 ): Promise<ValidForm<Schema> | InvalidForm<Schema>> {
-  await verifyCsrf(request)
+  await csrf.validate(request)
   const clonedRequest = request.clone()
   const formData = await clonedRequest.formData()
   const data = Object.fromEntries(formData)
@@ -34,7 +34,7 @@ export async function validateFormData<Schema extends z.ZodTypeAny>(
 }
 
 export function formError<Schema extends z.ZodTypeAny>(args: Omit<ActionDataErrorResponse<Schema>, "success">) {
-  return badRequest({ ...args, success: false })
+  return json({ ...args, success: false }, { status: 400 })
 }
 
 export type FormError<T> = { formError?: string; fieldErrors?: FieldErrors<T>; data?: Record<string, unknown> }

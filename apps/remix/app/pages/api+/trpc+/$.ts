@@ -1,11 +1,11 @@
 import * as trpcFetch from "@trpc/server/adapters/fetch"
-import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
 
 import { appRouter, createContext } from "@ramble/api"
 
 import { IS_DEV } from "~/lib/config.server"
 
-function handleRequest(args: LoaderArgs | ActionArgs) {
+function handleRequest(args: LoaderFunctionArgs | ActionFunctionArgs) {
   return trpcFetch.fetchRequestHandler({
     endpoint: "/api/trpc",
     req: args.request,

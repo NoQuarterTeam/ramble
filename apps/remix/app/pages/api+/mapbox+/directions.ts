@@ -1,7 +1,7 @@
 import booleanWithin from "@turf/boolean-point-in-polygon"
 import buffer from "@turf/buffer"
 import * as turf from "@turf/helpers"
-import type { LoaderArgs } from "@vercel/remix"
+import type { LoaderFunctionArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
@@ -12,7 +12,7 @@ import { badRequest } from "~/lib/remix.server"
 // // runtime: "edge",
 // }
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url)
   const startLng = url.searchParams.get("startLng")
   const startLat = url.searchParams.get("startLat")

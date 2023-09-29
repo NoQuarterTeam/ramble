@@ -1,6 +1,6 @@
 import * as React from "react"
 import { useLoaderData } from "@remix-run/react"
-import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
 import { json, redirect } from "@vercel/remix"
 import { z } from "zod"
 import { zx } from "zodix"
@@ -23,7 +23,7 @@ export const config = {
   // regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
 }
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, userInterestFields)
   return json(user)
 }
@@ -36,7 +36,7 @@ const schema = z.object({
   isHiker: zx.BoolAsString,
 })
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
   const id = await requireUser(request)

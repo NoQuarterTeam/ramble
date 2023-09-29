@@ -1,5 +1,5 @@
 import { Link } from "@remix-run/react"
-import { type ActionArgs } from "@vercel/remix"
+import { type ActionFunctionArgs } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
@@ -17,7 +17,7 @@ export const headers = () => {
   }
 }
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const resetSchema = z.object({ email: z.string().email("Invalid email") })
   const result = await validateFormData(request, resetSchema)
   if (!result.success) return formError(result)

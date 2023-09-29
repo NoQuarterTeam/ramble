@@ -1,14 +1,10 @@
 import { Outlet } from "@remix-run/react"
-import type { LoaderArgs } from "@vercel/remix"
+import type { LoaderFunctionArgs } from "@vercel/remix"
 import { redirect } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
 import { db } from "~/lib/db.server"
 import { getUserSession } from "~/services/session/session.server"
-
-export const handle = {
-  disableScripts: false,
-}
 
 export const headers = () => {
   return {
@@ -16,7 +12,7 @@ export const headers = () => {
   }
 }
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { userId } = await getUserSession(request)
   if (!userId) return null
   const user = await db.user.findUnique({ where: { id: userId }, select: { id: true } })

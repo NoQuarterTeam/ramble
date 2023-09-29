@@ -1,4 +1,4 @@
-import { type LoaderArgs } from "@vercel/remix"
+import { type LoaderFunctionArgs } from "@vercel/remix"
 
 import { db } from "~/lib/db.server"
 import { decryptToken } from "~/lib/jwt.server"
@@ -9,7 +9,7 @@ export const config = {
   // regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
 }
 
-export const loader = async ({ params }: LoaderArgs) => {
+export const loader = async ({ params }: LoaderFunctionArgs) => {
   const token = params.token
   if (!token) return redirect("/")
   const { id } = await decryptToken<{ id: string }>(token)

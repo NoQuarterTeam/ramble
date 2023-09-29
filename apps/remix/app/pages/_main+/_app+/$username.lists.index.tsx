@@ -1,5 +1,5 @@
 import { Link, useLoaderData, useParams } from "@remix-run/react"
-import type { LoaderArgs } from "@vercel/remix"
+import type { LoaderFunctionArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { Lock } from "lucide-react"
 
@@ -11,7 +11,7 @@ import { getMaybeUser } from "~/services/auth/auth.server"
 
 export const headers = useLoaderHeaders
 
-export const loader = async ({ params, request }: LoaderArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const user = await getMaybeUser(request)
   const lists = await db.list.findMany({
     orderBy: { createdAt: "desc" },
