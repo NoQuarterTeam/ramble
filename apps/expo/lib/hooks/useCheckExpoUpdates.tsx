@@ -14,8 +14,9 @@ export function useCheckExpoUpdates() {
       if (IS_DEV) return setIsDoneChecking(true)
       const { isAvailable } = await Updates.checkForUpdateAsync()
       if (isAvailable) setIsNewUpdateAvailable(true)
-      setIsDoneChecking(true)
     } catch {
+      // do nothing
+    } finally {
       return setIsDoneChecking(true)
     }
   }
