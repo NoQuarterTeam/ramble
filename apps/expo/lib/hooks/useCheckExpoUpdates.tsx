@@ -13,8 +13,8 @@ export function useCheckExpoUpdates() {
     try {
       if (IS_DEV) return setIsDoneChecking(true)
       const { isAvailable } = await Updates.checkForUpdateAsync()
-      if (!isAvailable) return setIsDoneChecking(true)
-      setIsNewUpdateAvailable(true)
+      if (isAvailable) setIsNewUpdateAvailable(true)
+      setIsDoneChecking(true)
     } catch {
       return setIsDoneChecking(true)
     }
@@ -31,11 +31,9 @@ export function useCheckExpoUpdates() {
   }, [])
 
   React.useEffect(() => {
-    const timeout = setTimeout(() => setIsDoneChecking(true), 10000)
     checkForExpoUpdates()
     const subscription = AppState.addEventListener("change", handleAppStateChange)
     return () => {
-      clearTimeout(timeout)
       subscription.remove()
     }
   }, [handleAppStateChange])
