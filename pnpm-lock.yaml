@@ -400,8 +400,8 @@ importers:
         specifier: ^7.1.5
         version: 7.1.5(mapbox-gl@2.15.0)(react-dom@18.2.0)(react@18.2.0)
       remix-utils:
-        specifier: 7.0.0
-        version: 7.0.0(@remix-run/react@2.0.1)(@remix-run/router@1.9.0)(@remix-run/server-runtime@1.19.3)(react@18.2.0)(typescript@5.2.2)(zod@3.22.2)
+        specifier: 7.0.0-pre.3
+        version: 7.0.0-pre.3(@remix-run/react@2.0.1)(@remix-run/router@1.9.0)(@remix-run/server-runtime@1.19.3)(react@18.2.0)(typescript@5.2.2)(zod@3.22.2)
       sharp:
         specifier: ^0.32.0
         version: 0.32.0
@@ -16122,8 +16122,8 @@ packages:
       minimatch: 5.1.6
     dev: true
 
-  /remix-utils@7.0.0(@remix-run/react@2.0.1)(@remix-run/router@1.9.0)(@remix-run/server-runtime@1.19.3)(react@18.2.0)(typescript@5.2.2)(zod@3.22.2):
-    resolution: {integrity: sha512-6cSGMd1mlycKRaaMGIvwqPbzW477lEE1BkD/4xntFb0STQdKodmIJWoU/mjvrV09lKgbgBeyPdQQm+pHjys6Fg==}
+  /remix-utils@7.0.0-pre.3(@remix-run/react@2.0.1)(@remix-run/router@1.9.0)(@remix-run/server-runtime@1.19.3)(react@18.2.0)(typescript@5.2.2)(zod@3.22.2):
+    resolution: {integrity: sha512-jFtNjicKmlX2HCvDuKSzkpj204Yxy9dvZ+bnHXb7ohaScKzv4bbEi60EHbT+2M7DC8CYip+ZVPktOLwwLVTzvA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       '@remix-run/react': ^1.19.1
