@@ -14,7 +14,7 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 export const shouldRevalidate = () => false
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const user = await getCurrentUser(request)
+  const user = await getCurrentUser(request, { isAdmin: true })
   if (!user.isAdmin) return redirect("/")
   return json(null)
 }
