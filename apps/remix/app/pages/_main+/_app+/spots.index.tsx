@@ -80,7 +80,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   await fetchAndJoinSpotImages(spots)
 
-  return json({ spots }, { headers: { "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour", maxAge: "1hour" }) } })
+  return json(
+    { spots },
+    {
+      headers: {
+        "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour", staleWhileRevalidate: "1min", maxAge: "1hour" }),
+      },
+    },
+  )
 }
 
 export default function Latest() {

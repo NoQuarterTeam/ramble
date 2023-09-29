@@ -47,7 +47,11 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
   return json(
     { ...user, isFollowed: user.followers && user.followers.length > 0 },
-    { headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }) } },
+    {
+      headers: {
+        "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour", staleWhileRevalidate: "1min" }),
+      },
+    },
   )
 }
 

@@ -17,7 +17,7 @@ import { hashPassword } from "~/services/auth/password.server"
 
 export const headers = () => {
   return {
-    "Cache-Control": cacheHeader({ maxAge: "1hour", sMaxage: "1hour", public: true }),
+    "Cache-Control": cacheHeader({ maxAge: "1hour", sMaxage: "1hour", staleWhileRevalidate: "1min", public: true }),
   }
 }
 

@@ -1,9 +1,10 @@
 import type { NavLinkProps } from "@remix-run/react"
-import { Link, NavLink, useFetcher, useNavigate, useSubmit } from "@remix-run/react"
+import { Link, NavLink, useNavigate, useSubmit } from "@remix-run/react"
 import { Heart, LogOut, Menu, Moon, Plus, Settings, Sun, User, UserCog } from "lucide-react"
 
 import { ClientOnly, createImageUrl, merge } from "@ramble/shared"
 
+import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import {
   Avatar,

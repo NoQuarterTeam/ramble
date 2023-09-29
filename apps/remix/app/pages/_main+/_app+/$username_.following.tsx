@@ -18,7 +18,9 @@ export const headers = useLoaderHeaders
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const user = await db.user.findUnique({ where: { username: params.username }, include: { following: true } })
   if (!user) throw notFound()
-  return json(user, { headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }) } })
+  return json(user, {
+    headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour", staleWhileRevalidate: "1min" }) },
+  })
 }
 
 export default function ProfileFollowers() {

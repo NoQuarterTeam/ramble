@@ -75,7 +75,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const rating = await db.review.aggregate({ where: { spotId: params.id }, _avg: { rating: true } })
 
   return json({ ...spot, rating }, request, {
-    headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1day", sMaxage: "1day" }) },
+    headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1day", sMaxage: "1day", staleWhileRevalidate: "30min" }) },
   })
 }
 
@@ -243,7 +243,7 @@ export default function SpotDetail() {
               </div>
             </div>
 
-            <div className="rounded-xs z-10 h-[400px] w-full overflow-hidden">
+            <div className="rounded-xs h-[400px] w-full overflow-hidden">
               <Map
                 mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
                 style={{ height: "100%", width: "100%" }}

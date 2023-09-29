@@ -49,7 +49,14 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
   await fetchAndJoinSpotImages(spots)
 
-  return json({ spots }, { headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }) } })
+  return json(
+    { spots },
+    {
+      headers: {
+        "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour", staleWhileRevalidate: "1min" }),
+      },
+    },
+  )
 }
 
 export default function ProfileSpots() {

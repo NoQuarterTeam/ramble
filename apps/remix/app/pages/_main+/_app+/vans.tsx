@@ -39,7 +39,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const count = await db.van.count()
 
-  return json({ vans, count }, { headers: { "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour", maxAge: "1hour" }) } })
+  return json(
+    { vans, count },
+    {
+      headers: {
+        "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour", staleWhileRevalidate: "1min", maxAge: "1hour" }),
+      },
+    },
+  )
 }
 
 type LoaderData = typeof loader

@@ -43,7 +43,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     count: db.user.count({ where: { role: "GUIDE" } }),
   })
 
-  return json(data, { headers: { "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour", maxAge: "1hour" }) } })
+  return json(data, {
+    headers: { "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour", staleWhileRevalidate: "1min", maxAge: "1hour" }) },
+  })
 }
 
 type LoaderData = typeof loader

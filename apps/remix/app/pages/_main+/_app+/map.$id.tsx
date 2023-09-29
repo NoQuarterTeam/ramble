@@ -66,7 +66,9 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   return defer(
     { spot, rating },
     {
-      headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }) },
+      headers: {
+        "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour", staleWhileRevalidate: "1min" }),
+      },
     },
   )
 }
