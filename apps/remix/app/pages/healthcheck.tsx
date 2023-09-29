@@ -3,7 +3,7 @@ import type { LoaderArgs } from "@vercel/remix"
 import { db } from "~/lib/db.server"
 
 export const config = {
-  runtime: "edge",
+  // runtime: "edge",
 }
 
 export const loader = async ({ request }: LoaderArgs) => {

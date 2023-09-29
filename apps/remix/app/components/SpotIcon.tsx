@@ -1,7 +1,8 @@
-import { SpotType } from "@ramble/database/types"
-import { SPOTS } from "~/lib/static/spots"
+import { type LucideProps } from "lucide-react"
 
-import { LucideProps } from "lucide-react"
+import { type SpotType } from "@ramble/database/types"
+
+import { SPOTS } from "~/lib/models/spots"
 
 interface Props extends LucideProps {
   type: SpotType

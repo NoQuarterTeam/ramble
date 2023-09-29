@@ -16,8 +16,8 @@ import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
+import { interestOptions } from "~/lib/models/interests"
 import { notFound } from "~/lib/remix.server"
-import { interestOptions } from "~/lib/static/interests"
 import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
 
 export const headers = useLoaderHeaders

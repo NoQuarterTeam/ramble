@@ -11,8 +11,13 @@ import { requireUser } from "~/services/auth/auth.server"
 import { ReviewForm } from "./components/ReviewForm"
 
 export const config = {
-  runtime: "edge",
-  regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
+  // runtime: "edge",
+  // regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
+}
+
+export enum NEW_REVIEW_REDIRECTS {
+  Map = "map",
+  Detail = "detail",
 }
 
 export const loader = async ({ request, params }: LoaderArgs) => {
@@ -32,6 +37,10 @@ export const action = async ({ request, params }: ActionArgs) => {
     description: z.string().min(10),
     rating: FormNumber.min(1).max(5),
   })
+  const url = new URL(request.url)
+  const redirectVal = url.searchParams.get("redirect") as NEW_REVIEW_REDIRECTS
+  const redirectLocation = redirectVal === NEW_REVIEW_REDIRECTS.Map ? "/map/" + params.id : "/spots/" + params.id
+
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
   const spot = await db.spot.findUnique({ where: { id: params.id } })
@@ -50,7 +59,8 @@ export const action = async ({ request, params }: ActionArgs) => {
   await db.review.create({
     data: { description: result.data.description, rating: result.data.rating, spotId: spot.id, userId },
   })
-  return redirect("/spots/" + spot.id, request, { flash: { title: "Review created!", description: "Thank you!" } })
+
+  return redirect(redirectLocation, request, { flash: { title: "Review created!", description: "Thank you!" } })
 }
 
 export default function NewReview() {

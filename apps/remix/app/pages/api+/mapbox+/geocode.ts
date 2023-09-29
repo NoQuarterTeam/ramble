@@ -2,9 +2,9 @@ import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
-export const config = {
-  // runtime: "edge",
-}
+// export const config = {
+// // runtime: "edge",
+// }
 
 export const loader = async ({ request }: LoaderArgs) => {
   const url = new URL(request.url)

@@ -8,8 +8,9 @@ import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { ChevronLeft, Copy } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
+import { promiseHash } from "remix-utils"
 
-import { LatestSpotImages, joinSpotImages, publicSpotWhereClauseRaw, spotImagesRawQuery } from "@ramble/api"
+import { publicSpotWhereClauseRaw } from "@ramble/api"
 import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE, type SpotItemWithStatsAndImage } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
@@ -20,13 +21,13 @@ import { db } from "~/lib/db.server"
 import { FormActionInput, getFormAction } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
+import { fetchAndJoinSpotImages } from "~/lib/models/spots"
 import { badRequest, notFound, redirect } from "~/lib/remix.server"
 import { useTheme } from "~/lib/theme"
 import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
 
 import { SpotItem } from "./components/SpotItem"
 import { SpotMarker } from "./components/SpotMarker"
-import { promiseHash } from "remix-utils"
 
 export const headers = useLoaderHeaders
 
@@ -65,8 +66,7 @@ export const loader = async ({ params, request }: LoaderArgs) => {
   })
   if (!list) throw notFound()
 
-  const images = await db.$queryRaw<LatestSpotImages>(spotImagesRawQuery(spots.map((s) => s.id)))
-  joinSpotImages(spots, images)
+  await fetchAndJoinSpotImages(spots)
 
   const coords = spots.length > 1 ? spots.map((spot) => [spot.longitude, spot.latitude]) : null
 

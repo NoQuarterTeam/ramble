@@ -3,18 +3,19 @@ import { useFetcher, useLoaderData, useParams } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
+import { promiseHash } from "remix-utils"
 
-import { LatestSpotImages, joinSpotImages, publicSpotWhereClauseRaw, spotImagesRawQuery } from "@ramble/api"
+import { publicSpotWhereClauseRaw } from "@ramble/api"
 import { type SpotItemWithStatsAndImage } from "@ramble/shared"
 
 import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
+import { fetchAndJoinSpotImages } from "~/lib/models/spots"
 import { notFound } from "~/lib/remix.server"
 import { getUserSession } from "~/services/session/session.server"
 
 import { SpotItem } from "./components/SpotItem"
-import { promiseHash } from "remix-utils"
 
 export const headers = useLoaderHeaders
 
@@ -46,8 +47,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
     `,
   })
 
-  const images = await db.$queryRaw<LatestSpotImages>(spotImagesRawQuery(spots.map((s) => s.id)))
-  joinSpotImages(spots, images)
+  await fetchAndJoinSpotImages(spots)
 
   return json({ spots }, { headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }) } })
 }
@@ -71,7 +71,7 @@ export default function ProfileSpots() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         {spots.length === 0 ? <></> : spots.map((spot) => <SpotItem key={spot.id} spot={spot} />)}
       </div>
-      {spots.length % TAKE === 0 && (
+      {spots.length !== 0 && spots.length % TAKE === 0 && (
         <div className="center">
           <Button size="lg" isLoading={spotFetcher.state === "loading"} variant="outline" onClick={onNext}>
             Load more

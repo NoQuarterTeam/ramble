@@ -8,9 +8,9 @@ import { cacheHeader } from "pretty-cache-header"
 import { db } from "~/lib/db.server"
 import { badRequest } from "~/lib/remix.server"
 
-export const config = {
-  // runtime: "edge",
-}
+// export const config = {
+// // runtime: "edge",
+// }
 
 export const loader = async ({ request }: LoaderArgs) => {
   const url = new URL(request.url)

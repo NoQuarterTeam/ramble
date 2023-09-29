@@ -2,28 +2,28 @@ import * as React from "react"
 import { useLoaderData, useSearchParams } from "@remix-run/react"
 import type { LoaderArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
+import { Settings2 } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
+import { promiseHash } from "remix-utils"
 
-import { LatestSpotImages, joinSpotImages, publicSpotWhereClauseRaw, spotImagesRawQuery } from "@ramble/api"
+import { publicSpotWhereClauseRaw } from "@ramble/api"
 import { Prisma, SpotType } from "@ramble/database/types"
-import { useDisclosure, type SpotItemWithStatsAndImage } from "@ramble/shared"
+import { type SpotItemWithStatsAndImage, useDisclosure } from "@ramble/shared"
 
+import { useFetcher } from "~/components/Form"
 import { Button, Modal, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
-import { SPOT_TYPE_OPTIONS } from "~/lib/static/spots"
+import { fetchAndJoinSpotImages, SPOT_TYPE_OPTIONS } from "~/lib/models/spots"
 import { getUserSession } from "~/services/session/session.server"
 
 import { PageContainer } from "../../../components/PageContainer"
 import { SpotItem } from "./components/SpotItem"
-import { promiseHash } from "remix-utils"
-import { useFetcher } from "~/components/Form"
-import { Settings2 } from "lucide-react"
 
 export const config = {
-  runtime: "edge",
-  regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
+  // runtime: "edge",
+  // regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
 }
 
 export const headers = useLoaderHeaders
@@ -78,9 +78,7 @@ export const loader = async ({ request }: LoaderArgs) => {
     `,
   })
 
-  // get spot images and join to original spot payload
-  const images = await db.$queryRaw<LatestSpotImages>(spotImagesRawQuery(spots.map((s) => s.id)))
-  joinSpotImages(spots, images)
+  await fetchAndJoinSpotImages(spots)
 
   return json({ spots }, { headers: { "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour", maxAge: "1hour" }) } })
 }
@@ -214,7 +212,7 @@ export default function Latest() {
             ))}
           </div>
         )}
-        {spots.length % TAKE === 0 && (
+        {spots.length !== 0 && spots.length % TAKE === 0 && (
           <div className="center">
             <Button size="lg" isLoading={spotFetcher.state === "loading"} variant="outline" onClick={onNext}>
               Load more

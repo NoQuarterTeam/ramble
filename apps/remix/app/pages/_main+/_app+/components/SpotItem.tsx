@@ -1,14 +1,14 @@
 import { Link } from "@remix-run/react"
 import { Heart, Star } from "lucide-react"
 
-import { SpotItemWithStatsAndImage } from "@ramble/shared"
+import { type SpotItemWithStatsAndImage } from "@ramble/shared"
 import { createImageUrl, displayRating } from "@ramble/shared"
 
 import { OptimizedImage } from "~/components/OptimisedImage"
+import { SpotIcon } from "~/components/SpotIcon"
 import { IconButton } from "~/components/ui"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { SaveToList } from "~/pages/api+/save-to-list"
-import { SpotIcon } from "~/components/SpotIcon"
 
 interface Props {
   spot: SpotItemWithStatsAndImage

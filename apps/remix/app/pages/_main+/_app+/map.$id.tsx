@@ -1,35 +1,35 @@
 import * as React from "react"
+import { type SerializeFrom } from "@remix-run/node"
 import { Await, Link, useLoaderData, useNavigate } from "@remix-run/react"
 import type { ActionArgs, LoaderArgs } from "@vercel/remix"
 import { defer } from "@vercel/remix"
-import { SerializeFrom } from "@remix-run/node"
 import { Frown, Heart, Image, Star } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
+import { useAuthenticityToken } from "remix-utils"
+import { z } from "zod"
 
 import { generateBlurHash, publicSpotWhereClause } from "@ramble/api"
+import { type SpotType } from "@ramble/database/types"
 import { createImageUrl, displayRating, merge } from "@ramble/shared"
 
+import { useFetcher } from "~/components/Form"
+import { ImageUploader } from "~/components/ImageUploader"
 import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
+import { isPartnerSpot, PartnerLink } from "~/components/PartnerLink"
+import { SpotIcon } from "~/components/SpotIcon"
 import { Button, CloseButton, Spinner } from "~/components/ui"
 import { db } from "~/lib/db.server"
+import { formError, validateFormData } from "~/lib/form"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
+import { json, notFound } from "~/lib/remix.server"
 import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
 import { SaveToList } from "~/pages/api+/save-to-list"
+import { getCurrentUser } from "~/services/auth/auth.server"
 import { getUserSession } from "~/services/session/session.server"
 
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
-import { SpotType } from "@ramble/database/types"
-
-import { SpotIcon } from "~/components/SpotIcon"
-import { PartnerLink, isPartnerSpot } from "~/components/PartnerLink"
-import { ImageUploader } from "~/components/ImageUploader"
-import { useFetcher } from "~/components/Form"
-import { getCurrentUser } from "~/services/auth/auth.server"
-import { useAuthenticityToken } from "remix-utils"
-import { json, notFound } from "~/lib/remix.server"
-import { z } from "zod"
-import { formError, validateFormData } from "~/lib/form"
+import { NEW_REVIEW_REDIRECTS } from "./spots.$id_.reviews.new"
 
 export const loader = async ({ params, request }: LoaderArgs) => {
   const { userId } = await getUserSession(request)
@@ -211,7 +211,7 @@ export default function SpotPreview() {
                       </div>
                     </div>
                     {user && (
-                      <LinkButton variant="secondary" to={`/spots/${spot.id}/reviews/new`}>
+                      <LinkButton variant="secondary" to={`/spots/${spot.id}/reviews/new?redirect=${NEW_REVIEW_REDIRECTS.Map}`}>
                         Add review
                       </LinkButton>
                     )}

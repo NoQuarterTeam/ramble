@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react"
 import { type SerializeFrom } from "@remix-run/node"
 import type { FetcherWithComponents, FormProps as RemixFormProps } from "@remix-run/react"
 import { Form as RemixForm, useFetcher as useRemixFetcher, useNavigation } from "@remix-run/react"
 import { X } from "lucide-react"
 import { AuthenticityTokenInput } from "remix-utils"
+import { type z } from "zod"
 
 import { createImageUrl, merge } from "@ramble/shared"
 
@@ -101,7 +101,7 @@ export const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(func
   { label, errors, input, ...props },
   ref,
 ) {
-  const form = useFormErrors<any>()
+  const form = useFormErrors<z.AnyZodObject>()
   const fieldErrors = errors || form?.fieldErrors?.[props.name]
   const className = merge(props.className, fieldErrors && "border-red-500 focus:border-red-500")
   const sharedProps = {
@@ -136,7 +136,7 @@ export const InlineFormField = React.forwardRef<HTMLInputElement, FormFieldProps
   { label, errors, input, shouldPassProps = true, ...props },
   ref,
 ) {
-  const form = useFormErrors<any>()
+  const form = useFormErrors<z.AnyZodObject>()
   const fieldErrors = errors || form?.fieldErrors?.[props.name]
   const className = merge(props.className, fieldErrors && "border-red-500 focus:border-red-500")
   const sharedProps = shouldPassProps
@@ -187,7 +187,7 @@ interface ImageFieldProps {
 }
 
 export function ImageField(props: ImageFieldProps) {
-  const form = useFormErrors<any>()
+  const form = useFormErrors<z.AnyZodObject>()
   const [image, setImage] = React.useState(props.defaultValue)
   const fieldErrors = props.errors || form?.fieldErrors?.[props.name]
   const hasChildren = React.Children.count(props.children) > 0
@@ -244,7 +244,7 @@ export function ImageField(props: ImageFieldProps) {
 }
 
 export function FormError({ error }: { error?: string }) {
-  const form = useFormErrors<any>()
+  const form = useFormErrors<z.AnyZodObject>()
   if (!form?.formError && !error) return null
   return <FormFieldError id="form-error">{form?.formError || error}</FormFieldError>
 }
