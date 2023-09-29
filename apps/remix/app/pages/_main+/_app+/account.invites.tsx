@@ -1,15 +1,16 @@
-import { generateInviteCodes } from "@ramble/api"
-import { createImageUrl } from "@ramble/shared"
 import type { ActionArgs, LoaderArgs } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { Link, useLoaderData } from "@remix-run/react"
 import { Copy } from "lucide-react"
+
+import { generateInviteCodes } from "@ramble/api"
+import { createImageUrl } from "@ramble/shared"
+
 import { Form, FormButton } from "~/components/Form"
 import { Avatar, Badge, Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useClipboard } from "~/lib/hooks/useClipboard"
 import { useConfig } from "~/lib/hooks/useConfig"
-
 import { redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 

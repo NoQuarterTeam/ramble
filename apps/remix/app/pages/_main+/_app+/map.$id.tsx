@@ -1,11 +1,11 @@
 import * as React from "react"
 import { type SerializeFrom } from "@remix-run/node"
 import { Await, Link, useLoaderData, useNavigate } from "@remix-run/react"
-import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
 import { defer } from "@vercel/remix"
 import { Frown, Heart, Image, Star } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
-import { useAuthenticityToken } from "remix-utils"
+import { useAuthenticityToken } from "remix-utils/authenticity-token"
 import { z } from "zod"
 
 import { generateBlurHash, publicSpotWhereClause } from "@ramble/api"
@@ -31,7 +31,7 @@ import { getUserSession } from "~/services/session/session.server"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { NEW_REVIEW_REDIRECTS } from "./spots.$id_.reviews.new"
 
-export const loader = async ({ params, request }: LoaderArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const { userId } = await getUserSession(request)
 
   const spot = db.spot
@@ -71,7 +71,7 @@ export const loader = async ({ params, request }: LoaderArgs) => {
   )
 }
 
-export const action = async ({ request, params }: ActionArgs) => {
+export const action = async ({ request, params }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request)
   const schema = z.object({ images: z.string() })
   const result = await validateFormData(request, schema)
@@ -170,10 +170,7 @@ export default function SpotPreview() {
                           <ImageUploader
                             isMulti
                             onMultiSubmit={(keys) =>
-                              imageFetcher.submit(
-                                { images: keys, csrf },
-                                { method: "POST", replace: true, action: `/map/${spot.id}` },
-                              )
+                              imageFetcher.submit({ images: keys, csrf }, { method: "POST", action: `/map/${spot.id}` })
                             }
                           >
                             <Button variant="outline">Upload</Button>

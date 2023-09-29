@@ -8,12 +8,6 @@ module.exports = {
   ignoredRouteFiles: ["**/*"],
   serverModuleFormat: "cjs",
   future: {
-    v2_dev: true,
-    v2_meta: true,
-    v2_routeConvention: true,
-    v2_errorBoundary: true,
-    v2_headers: true,
-    v2_normalizeFormMethod: true,
     cssSideEffectImports: true,
   },
   tailwind: true,
@@ -32,6 +26,7 @@ module.exports = {
     "query-string",
     "split-on-first",
     "supercluster",
+    /remix-utils/,
   ],
   watchPaths: ["../../packages/**/*", "./tailwind.config.js"],
   routes: (defineRoutes) => {

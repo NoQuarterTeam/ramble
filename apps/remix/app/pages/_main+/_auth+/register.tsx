@@ -1,8 +1,9 @@
-import { generateInviteCodes, sendAccountVerificationEmail } from "@ramble/api"
 import { Link, useSearchParams } from "@remix-run/react"
-import type { ActionArgs, V2_MetaFunction } from "@vercel/remix"
+import type { ActionFunctionArgs, MetaFunction } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
+
+import { generateInviteCodes, sendAccountVerificationEmail } from "@ramble/api"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { db } from "~/lib/db.server"
@@ -12,7 +13,7 @@ import { badRequest, redirect } from "~/lib/remix.server"
 import { hashPassword } from "~/services/auth/password.server"
 import { getUserSession } from "~/services/session/session.server"
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
   return [{ title: "Register" }, { name: "description", content: "Sign up to the ramble" }]
 }
 export const headers = () => {
@@ -25,7 +26,7 @@ enum Actions {
   Register = "Register",
 }
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const formAction = await getFormAction(request)
 
   switch (formAction) {
@@ -74,7 +75,7 @@ export const action = async ({ request }: ActionArgs) => {
         const { setUser } = await getUserSession(request)
         const token = await createToken({ id: user.id })
         await sendAccountVerificationEmail(user, token)
-        const headers = new Headers([["Set-Cookie", await setUser(user.id)]])
+        const headers = new Headers([["set-cookie", await setUser(user.id)]])
         return redirect("/onboarding", request, {
           headers,
           flash: { title: `Welcome to Ramble, ${data.firstName}!`, description: "Let's get you setup." },

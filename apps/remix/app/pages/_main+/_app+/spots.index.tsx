@@ -1,11 +1,11 @@
 import * as React from "react"
 import { useLoaderData, useSearchParams } from "@remix-run/react"
-import type { LoaderArgs } from "@vercel/remix"
+import type { LoaderFunctionArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { Settings2 } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
-import { promiseHash } from "remix-utils"
+import { promiseHash } from "remix-utils/promise"
 
 import { publicSpotWhereClauseRaw } from "@ramble/api"
 import { Prisma, SpotType } from "@ramble/database/types"
@@ -35,7 +35,7 @@ const SORT_OPTIONS = [
 ] as const
 
 const TAKE = 12
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { userId } = await getUserSession(request)
   const searchParams = new URL(request.url).searchParams
   const skip = parseInt((searchParams.get("skip") as string) || "0")

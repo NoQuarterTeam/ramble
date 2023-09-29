@@ -1,5 +1,5 @@
 import { Outlet } from "@remix-run/react"
-import type { LoaderArgs } from "@vercel/remix"
+import type { LoaderFunctionArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { ArrowRight } from "lucide-react"
 
@@ -8,7 +8,7 @@ import { requireUser } from "~/services/auth/auth.server"
 
 import { PageContainer } from "../../../components/PageContainer"
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   await requireUser(request)
   return json(null)
 }

@@ -22,12 +22,24 @@ async function getCards() {
 
   const newSpots = $(".camping-wrapper")
 
-  for (let index = 0; index < 1; index++) {
+  const dbSpots = await prisma.spot.findMany({
+    select: { cucortuId: true },
+    where: { type: "CAMPING", cucortuId: { in: newSpots.toArray().map((s) => s.attribs["data-id"]) } },
+  })
+
+  for (let index = 0; index < newSpots.length; index++) {
     const spot = newSpots[index]
+    const id = spot.attribs["data-id"]
+
+    const exists = dbSpots.find((s) => s.cucortuId === id)
+
+    console.log(exists && "Spot exists: " + id)
+    if (exists) continue
+
     console.log("Adding spot: " + index + " out of " + newSpots.length)
+
     const linkElement = spot.children[1] as cheerio.Element
     try {
-      const id = spot.attribs["data-id"]
       const link = linkElement.attribs.href
 
       const detailPage = await fetch(link)

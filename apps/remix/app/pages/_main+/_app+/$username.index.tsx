@@ -1,9 +1,9 @@
 import * as React from "react"
 import { useFetcher, useLoaderData, useParams } from "@remix-run/react"
-import type { LoaderArgs } from "@vercel/remix"
+import type { LoaderFunctionArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
-import { promiseHash } from "remix-utils"
+import { promiseHash } from "remix-utils/promise"
 
 import { publicSpotWhereClauseRaw } from "@ramble/api"
 import { type SpotItemWithStatsAndImage } from "@ramble/shared"
@@ -20,7 +20,7 @@ import { SpotItem } from "./components/SpotItem"
 export const headers = useLoaderHeaders
 
 const TAKE = 12
-export const loader = async ({ request, params }: LoaderArgs) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const user = await db.user.findUnique({ where: { username: params.username } })
   if (!user) throw notFound()
   const searchParams = new URL(request.url).searchParams

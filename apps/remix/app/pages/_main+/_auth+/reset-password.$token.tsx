@@ -1,5 +1,5 @@
 import { Link, useParams } from "@remix-run/react"
-import type { ActionArgs } from "@vercel/remix"
+import type { ActionFunctionArgs } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
@@ -21,7 +21,7 @@ export const headers = () => {
   }
 }
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const resetPasswordSchema = z.object({
     token: z.string(),
     password: z.string().min(8, "Must be at least 8 characters"),

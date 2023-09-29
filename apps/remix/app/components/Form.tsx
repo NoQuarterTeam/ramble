@@ -3,7 +3,7 @@ import { type SerializeFrom } from "@remix-run/node"
 import type { FetcherWithComponents, FormProps as RemixFormProps } from "@remix-run/react"
 import { Form as RemixForm, useFetcher as useRemixFetcher, useNavigation } from "@remix-run/react"
 import { X } from "lucide-react"
-import { AuthenticityTokenInput } from "remix-utils"
+import { AuthenticityTokenInput } from "remix-utils/authenticity-token"
 import { type z } from "zod"
 
 import { createImageUrl, merge } from "@ramble/shared"

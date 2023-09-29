@@ -1,4 +1,4 @@
-import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { z } from "zod"
 
@@ -12,14 +12,14 @@ import { ListForm } from "./components/ListForm"
 
 export const headers = useLoaderHeaders
 
-export const loader = async ({ request, params }: LoaderArgs) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request)
   if (!user) throw notFound()
   if (user.username !== params.username) throw notFound()
   return json(user)
 }
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request)
   const schema = z.object({
     name: z.string().min(1, "List name must be at least 1 character"),

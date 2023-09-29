@@ -1,4 +1,4 @@
-import type { LoaderArgs } from "@vercel/remix"
+import type { LoaderFunctionArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
@@ -6,7 +6,7 @@ import { cacheHeader } from "pretty-cache-header"
 // // runtime: "edge",
 // }
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url)
   const latitude = url.searchParams.get("latitude")
   const longitude = url.searchParams.get("longitude")

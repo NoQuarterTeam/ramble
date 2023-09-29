@@ -1,5 +1,5 @@
 import { useLoaderData } from "@remix-run/react"
-import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { z } from "zod"
 
@@ -14,7 +14,7 @@ import { ListForm } from "./components/ListForm"
 
 export const headers = useLoaderHeaders
 
-export const loader = async ({ params, request }: LoaderArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const userId = await requireUser(request)
   const list = await db.list.findFirst({
     where: { id: params.id, creatorId: userId },
@@ -24,7 +24,7 @@ export const loader = async ({ params, request }: LoaderArgs) => {
   return json(list)
 }
 
-export const action = async ({ request, params }: ActionArgs) => {
+export const action = async ({ request, params }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request)
   const list = await db.list.findFirst({
     where: { id: params.id, creatorId: user.id },

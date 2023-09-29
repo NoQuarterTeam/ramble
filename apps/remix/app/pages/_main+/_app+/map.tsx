@@ -26,7 +26,7 @@ import turfCenter from "@turf/center"
 import * as turf from "@turf/helpers"
 import type { Geo } from "@vercel/edge"
 import { geolocation } from "@vercel/edge"
-import type { LinksFunction, LoaderArgs, SerializeFrom } from "@vercel/remix"
+import type { LinksFunction, LoaderFunctionArgs, SerializeFrom } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
@@ -51,7 +51,7 @@ export const links: LinksFunction = () => {
   return cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []
 }
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const geo = geolocation(request) as Geo | undefined
   if (!geo) return json({ latitude: null, longitude: null, city: null, country: null })
   return json(

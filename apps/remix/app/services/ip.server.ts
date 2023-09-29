@@ -1,4 +1,4 @@
-import { getClientIPAddress } from "remix-utils"
+import { getClientIPAddress } from "remix-utils/get-client-ip-address"
 
 import { IPAPI_KEY } from "~/lib/config.server"
 

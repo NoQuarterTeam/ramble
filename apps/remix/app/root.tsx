@@ -26,16 +26,16 @@ import {
   ScrollRestoration,
   useFetchers,
   useLoaderData,
-  useMatches,
   useNavigation,
   useRouteError,
 } from "@remix-run/react"
 import { Analytics } from "@vercel/analytics/react"
-import type { LinksFunction, LoaderArgs, SerializeFrom, V2_MetaFunction } from "@vercel/remix"
+import type { LinksFunction, LoaderFunctionArgs, MetaFunction, SerializeFrom } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { Frown } from "lucide-react"
 import NProgress from "nprogress"
-import { AuthenticityTokenProvider, promiseHash } from "remix-utils"
+import { AuthenticityTokenProvider } from "remix-utils/authenticity-token"
+import { promiseHash } from "remix-utils/promise"
 
 import { join } from "@ramble/shared"
 
@@ -47,11 +47,11 @@ import { type Theme } from "./lib/theme"
 import type { Preferences } from "./pages/api+/preferences"
 import { defaultPreferences, preferencesCookies } from "./pages/api+/preferences"
 import { getMaybeUser } from "./services/auth/auth.server"
-import { getCsrfSession } from "./services/session/csrf.server.ts"
+import { csrf } from "./services/session/csrf.server.ts"
 import { getFlashSession } from "./services/session/flash.server"
 import { getThemeSession } from "./services/session/theme.server"
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
   return [{ title: "Ramble" }, { name: "description", content: "Created by No Quarter" }]
 }
 
@@ -59,20 +59,21 @@ export const links: LinksFunction = () => {
   return cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []
 }
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const cookieHeader = request.headers.get("Cookie")
 
-  const { flashSession, themeSession, csrfSession, user, preferences } = await promiseHash({
+  const { flashSession, themeSession, user, preferences } = await promiseHash({
     flashSession: getFlashSession(request),
     themeSession: getThemeSession(request),
-    csrfSession: getCsrfSession(request),
     user: getMaybeUser(request),
     preferences: preferencesCookies.parse(cookieHeader) as Promise<Preferences>,
   })
+  const [csrfToken, csrfCookieHeader] = await csrf.commitToken()
+
   return json(
     {
       user,
-      csrf: csrfSession.token,
+      csrf: csrfToken,
       flash: flashSession.message,
       preferences: preferences || defaultPreferences,
       theme: themeSession.theme,
@@ -80,9 +81,9 @@ export const loader = async ({ request }: LoaderArgs) => {
     },
     {
       headers: [
-        ["Set-Cookie", await csrfSession.commit()],
-        ["Set-Cookie", await flashSession.commit()],
-        ["Set-Cookie", await themeSession.commit()],
+        ["set-cookie", csrfCookieHeader],
+        ["set-cookie", await flashSession.commit()],
+        ["set-cookie", await themeSession.commit()],
       ],
     },
   )
@@ -170,8 +171,6 @@ interface DocumentProps {
 }
 
 function Document({ theme, children }: DocumentProps) {
-  const matches = useMatches()
-  const shouldDisableScripts = matches.some((match) => match.handle?.disableScripts)
   return (
     <html lang="en" className={join(theme)}>
       <head>
@@ -200,7 +199,7 @@ function Document({ theme, children }: DocumentProps) {
       <body>
         {children}
         <ScrollRestoration />
-        {!shouldDisableScripts && <Scripts />}
+        <Scripts />
         <LiveReload />
         <Analytics />
       </body>

@@ -1,5 +1,5 @@
 import { useLoaderData } from "@remix-run/react"
-import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
 import { json, redirect } from "@vercel/remix"
 import { z } from "zod"
 
@@ -14,7 +14,7 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { Footer } from "./components/Footer"
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, { id: true, bio: true, avatar: true })
   return json(user)
 }
@@ -24,7 +24,7 @@ const schema = z.object({
   avatar: NullableFormString,
 })
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
   const user = await getCurrentUser(request, { id: true, avatar: true, avatarBlurHash: true })

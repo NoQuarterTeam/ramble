@@ -1,4 +1,4 @@
-import type { LoaderArgs } from "@vercel/remix"
+import type { LoaderFunctionArgs } from "@vercel/remix"
 
 import { db } from "~/lib/db.server"
 
@@ -6,7 +6,7 @@ export const config = {
   // runtime: "edge",
 }
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const host = request.headers.get("X-Forwarded-Host") ?? request.headers.get("host")
 
   try {

@@ -1,11 +1,11 @@
-import type { ActionArgs } from "@vercel/remix"
+import type { ActionFunctionArgs } from "@vercel/remix"
 
 import { redirect } from "~/lib/remix.server"
 import { getUserSession } from "~/services/session/session.server"
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const { destroy } = await getUserSession(request)
-  const headers = new Headers([["Set-Cookie", await destroy()]])
+  const headers = new Headers([["set-cookie", await destroy()]])
   return redirect("/map", request, { headers, flash: { title: "Logged out!", description: "See you soon!" } })
 }
 

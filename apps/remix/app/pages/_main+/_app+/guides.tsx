@@ -1,9 +1,9 @@
 import * as React from "react"
 import { Link, useFetcher, useLoaderData } from "@remix-run/react"
-import type { LoaderArgs, SerializeFrom } from "@vercel/remix"
+import type { LoaderFunctionArgs, SerializeFrom } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
-import { promiseHash } from "remix-utils"
+import { promiseHash } from "remix-utils/promise"
 
 import { createImageUrl } from "@ramble/shared"
 
@@ -19,7 +19,7 @@ export const config = {
 
 export const headers = useLoaderHeaders
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const searchParams = new URL(request.url).searchParams
   const skip = parseInt((searchParams.get("skip") as string) || "0")
 

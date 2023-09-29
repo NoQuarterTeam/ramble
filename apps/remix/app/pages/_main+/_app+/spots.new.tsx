@@ -1,4 +1,4 @@
-import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
 import dayjs from "dayjs"
 import type { z } from "zod"
 
@@ -12,13 +12,13 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { amenitiesSchema, SpotForm, spotSchema } from "./components/SpotForm"
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, { isVerified: true })
   if (!user.isVerified) return redirect("/account", request, { flash: { title: "Account not verified" } })
   return json(null)
 }
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const { id, role, isVerified } = await getCurrentUser(request)
   if (!isVerified) return redirect("/account", request, { flash: { title: "Account not verified" } })
 

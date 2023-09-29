@@ -1,0 +1,21 @@
+diff --git a/package.json b/package.json
+index a94824e70578eee4f33adf84f9298d6ed3f7f98c..97cb6bf2bc79f992d77a72d65782f82fe469c97d 100644
+--- a/package.json
++++ b/package.json
+@@ -3,8 +3,14 @@
+   "version": "1.0.0",
+   "description": "An opinionated toast component for React.",
+   "exports": {
+-    "import": "./dist/index.mjs",
+-    "require": "./dist/index.js"
++    "import": {
++      "default": "./dist/index.mjs",
++      "types": "./dist/index.d.ts"
++    },
++    "require": {
++      "default":  "./dist/index.js",
++      "types": "./dist/index.d.ts"
++    }
+   },
+   "types": "./dist/index.d.ts",
+   "files": [

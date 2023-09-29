@@ -1,5 +1,5 @@
 import { useLoaderData } from "@remix-run/react"
-import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { z } from "zod"
 
@@ -15,7 +15,7 @@ export const config = {
   // regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
 }
 
-export const loader = async ({ request, params }: LoaderArgs) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const userId = await requireUser(request)
 
   const spot = await db.spot.findUnique({
@@ -34,7 +34,7 @@ export enum Actions {
   Delete = "Delete",
 }
 
-export const action = async ({ request, params }: ActionArgs) => {
+export const action = async ({ request, params }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request)
   const formAction = await getFormAction<Actions>(request)
   switch (formAction) {

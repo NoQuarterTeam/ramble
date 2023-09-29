@@ -4,11 +4,11 @@ import Map, { Marker, NavigationControl } from "react-map-gl"
 import { Link, useLoaderData, useNavigate } from "@remix-run/react"
 import bbox from "@turf/bbox"
 import * as turf from "@turf/helpers"
-import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { ChevronLeft, Copy } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
-import { promiseHash } from "remix-utils"
+import { promiseHash } from "remix-utils/promise"
 
 import { publicSpotWhereClauseRaw } from "@ramble/api"
 import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE, type SpotItemWithStatsAndImage } from "@ramble/shared"
@@ -33,7 +33,7 @@ export const headers = useLoaderHeaders
 
 type SpotItemWithStatsAndCoords = SpotItemWithStatsAndImage & { longitude: number; latitude: number }
 
-export const loader = async ({ params, request }: LoaderArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const user = await getMaybeUser(request)
   const { list, spots } = await promiseHash({
     list: db.list.findFirst({
@@ -87,7 +87,7 @@ enum Actions {
   Copy = "Copy",
 }
 
-export const action = async ({ request, params }: ActionArgs) => {
+export const action = async ({ request, params }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request)
   const formAction = await getFormAction<Actions>(request)
   switch (formAction) {

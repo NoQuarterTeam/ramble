@@ -1,6 +1,6 @@
 import Map, { Marker } from "react-map-gl"
 import { Link, useLoaderData } from "@remix-run/react"
-import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "@vercel/remix"
 import dayjs from "dayjs"
 import { Check, Edit2, Heart, Star, Trash } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
@@ -46,7 +46,7 @@ export const config = {
 
 export const headers = useLoaderHeaders
 
-export const loader = async ({ params, request }: LoaderArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const { userId } = await getUserSession(request)
   const spot = await db.spot.findUnique({
     where: { id: params.id, ...publicSpotWhereClause(userId) },
@@ -79,7 +79,7 @@ export const loader = async ({ params, request }: LoaderArgs) => {
   })
 }
 
-export const meta: V2_MetaFunction<typeof loader, { root: typeof rootLoader }> = ({ data, matches }) => {
+export const meta: MetaFunction<typeof loader, { root: typeof rootLoader }> = ({ data, matches }) => {
   const WEB_URL = matches.find((r) => r.id === "root")?.data.config.WEB_URL || "localhost:3000"
   const image = data?.images[0]?.path
   return [
@@ -99,7 +99,7 @@ enum Actions {
   Verify = "verify",
 }
 
-export const action = async ({ request, params }: ActionArgs) => {
+export const action = async ({ request, params }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request, { id: true, role: true, isVerified: true, isAdmin: true })
   const formAction = await getFormAction<Actions>(request)
 

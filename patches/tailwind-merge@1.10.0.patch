@@ -1,0 +1,25 @@
+diff --git a/dist/index.d.ts b/dist/index.d.ts
+index dc0d2a3bd7fa998445eed81b49c371f0db2be4e1..abff2f403c4737544863795662b512b196086388 100644
+--- a/dist/index.d.ts
++++ b/dist/index.d.ts
+@@ -1,6 +1,6 @@
+ import { twJoin } from './lib/tw-join';
+ export { twMerge } from './lib/tw-merge';
+-export { twJoin } from './lib/tw-join';
++export { twJoin, ClassNameValue } from './lib/tw-join';
+ export { getDefaultConfig } from './lib/default-config';
+ export { extendTailwindMerge } from './lib/extend-tailwind-merge';
+ export { createTailwindMerge } from './lib/create-tailwind-merge';
+diff --git a/package.json b/package.json
+index d3fc02a21a8c2cc6e01bb63186dd0fc4a0e0d7f3..16f2395310ba57a3c699898f31d40eafce0be976 100644
+--- a/package.json
++++ b/package.json
+@@ -27,7 +27,7 @@
+     "exports": {
+         "types": "./dist/index.d.ts",
+         "require": "./dist/index.js",
+-        "import": "./dist/tailwind-merge.mjs",
++        "import": { "default": "./dist/tailwind-merge.mjs", "types": "./dist/index.d.ts" },
+         "default": "./dist/tailwind-merge.mjs"
+     },
+     "module": "dist/tailwind-merge.mjs",

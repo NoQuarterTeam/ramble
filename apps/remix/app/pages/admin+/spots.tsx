@@ -1,11 +1,11 @@
 import { useLoaderData, useRouteError, useSearchParams } from "@remix-run/react"
 import type { Row } from "@tanstack/react-table"
 import { createColumnHelper } from "@tanstack/react-table"
-import type { ActionArgs, LoaderArgs, SerializeFrom } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs, SerializeFrom } from "@vercel/remix"
 import dayjs from "dayjs"
 import { Check, Eye, EyeOff, Trash } from "lucide-react"
 import queryString from "query-string"
-import { promiseHash } from "remix-utils"
+import { promiseHash } from "remix-utils/promise"
 import { z } from "zod"
 
 import type { Prisma, SpotType } from "@ramble/database/types"
@@ -28,7 +28,7 @@ import { getCurrentAdmin } from "~/services/auth/auth.server"
 
 const schema = z.object({ type: z.string().optional(), unverified: z.string().optional() })
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { orderBy, search, skip, take } = getTableParams(request)
 
   const result = schema.safeParse(queryString.parse(new URL(request.url).search, { arrayFormat: "bracket" }))
@@ -71,7 +71,7 @@ enum Actions {
   Verify = "Verify",
 }
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await getCurrentAdmin(request)
   const formAction = await getFormAction<Actions>(request)
   switch (formAction) {
