@@ -156,6 +156,9 @@ model Spot {
   // cucortu
   cucortuId String? @unique
 
+  // loodusegakoos
+  loodusegakoosId String? @unique
+
   @@index([createdAt])
   @@index([type])
   @@index([type, longitude])

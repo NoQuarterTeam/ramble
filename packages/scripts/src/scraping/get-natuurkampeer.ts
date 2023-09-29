@@ -22,11 +22,22 @@ async function getCards() {
 
   const newSpots = $(".terrain")
 
+  const dbSpots = await prisma.spot.findMany({
+    select: { natuurKampeerterreinenId: true },
+    where: { type: "CAMPING", natuurKampeerterreinenId: { in: newSpots.toArray().map((s) => s.attribs["data-item"]) } },
+  })
+
   for (let index = 0; index < newSpots.length; index++) {
     const spot = newSpots[index]
+    const id = spot.attribs["data-item"]
+
+    const exists = dbSpots.find((s) => s.natuurKampeerterreinenId === id)
+    console.log(exists && "Spot exists: " + id)
+    if (exists) continue
+
     console.log("Adding spot: " + index + " out of " + newSpots.length)
+
     try {
-      const id = spot.attribs["data-item"]
       const link = spot.attribs.href
       const detailPage = await fetch(link)
       const spotDetailHtml = await detailPage.text()
