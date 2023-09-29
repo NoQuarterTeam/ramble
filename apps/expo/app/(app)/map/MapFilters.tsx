@@ -94,7 +94,7 @@ export function MapFilters(props: Props) {
           </View>
         </View>
       </ScrollView>
-      <View className="flex flex-row justify-between">
+      <View className="flex flex-row justify-between pt-4">
         <Button variant="link" onPress={() => props.onSave(initialFilters)}>
           Clear all
         </Button>
