@@ -8,7 +8,7 @@ import { getUserSession } from "~/services/session/session.server"
 
 export const headers = () => {
   return {
-    "Cache-Control": cacheHeader({ maxAge: "1hour", sMaxage: "1hour", public: true }),
+    "Cache-Control": cacheHeader({ maxAge: "1hour", sMaxage: "1hour", staleWhileRevalidate: "1min", public: true }),
   }
 }
 

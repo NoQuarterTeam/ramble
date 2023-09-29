@@ -78,7 +78,11 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
   return json(
     { list, spots, bounds },
-    { headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }) } },
+    {
+      headers: {
+        "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour", staleWhileRevalidate: "1min" }),
+      },
+    },
   )
 }
 
