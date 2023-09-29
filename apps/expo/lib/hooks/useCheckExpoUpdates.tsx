@@ -31,9 +31,11 @@ export function useCheckExpoUpdates() {
   }, [])
 
   React.useEffect(() => {
+    const timeout = setTimeout(() => setIsDoneChecking(true), 10000)
     checkForExpoUpdates()
     const subscription = AppState.addEventListener("change", handleAppStateChange)
     return () => {
+      clearTimeout(timeout)
       subscription.remove()
     }
   }, [handleAppStateChange])
