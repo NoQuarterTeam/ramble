@@ -103,7 +103,9 @@ export const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(func
 ) {
   const form = useFormErrors<z.AnyZodObject>()
   const fieldErrors = errors || form?.fieldErrors?.[props.name]
-  const className = merge(props.className, fieldErrors && "border-red-500 focus:border-red-500")
+  const inputClassName = input?.props.className
+  const className = merge(props.className, inputClassName, fieldErrors && "border-red-500 focus:border-red-500")
+
   const sharedProps = {
     "aria-invalid": fieldErrors || fieldErrors?.length ? true : undefined,
     "aria-errormessage": props.name + "-error",

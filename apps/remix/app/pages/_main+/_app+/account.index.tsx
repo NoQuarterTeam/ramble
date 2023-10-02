@@ -7,11 +7,12 @@ import { generateBlurHash } from "@ramble/api"
 import { join } from "@ramble/shared"
 
 import { Form, FormButton, FormField, ImageField } from "~/components/Form"
-import { inputStyles, Textarea } from "~/components/ui"
+import { Input, inputStyles, Textarea } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { formError, NullableFormString, validateFormData } from "~/lib/form"
 import { redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
+import { AtSign } from "lucide-react"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, {
@@ -65,7 +66,12 @@ export default function Account() {
           <FormField defaultValue={user.lastName} name="lastName" label="Last name" />
           <FormField autoCapitalize="none" defaultValue={user.email} name="email" label="Email" />
           <FormField defaultValue={user.bio || ""} name="bio" label="Bio" input={<Textarea rows={5} />} />
-          <FormField defaultValue={user.instagram || ""} name="instagram" label="Instragram handle" />
+          <FormField
+            defaultValue={user.instagram || ""}
+            name="instagram"
+            label="Instragram handle"
+            input={<Input leftElement={<AtSign size={18} />} />}
+          />
         </div>
         <div className="space-y-2">
           <FormField autoCapitalize="none" defaultValue={user.username || ""} name="username" label="Username" />
