@@ -39,6 +39,7 @@ import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { SpotMarker } from "./components/SpotMarker"
 import { SpotType } from "@ramble/database/types"
+import { promiseHash } from "remix-utils/promise"
 
 export const config = {
   // runtime: "edge",
@@ -49,37 +50,42 @@ export const headers = useLoaderHeaders
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const { userId } = await getUserSession(request)
-  const spot = await db.spot.findUnique({
-    where: { id: params.id, ...publicSpotWhereClause(userId) },
-    select: {
-      id: true,
-      name: true,
-      type: true,
-      verifiedAt: true,
-      amenities: true,
-      address: true,
-      description: true,
-      latitude: true,
-      longitude: true,
-      ownerId: true,
-      createdAt: true,
-      creator: { select: { firstName: true, username: true, lastName: true } },
-      verifier: { select: { firstName: true, username: true, lastName: true, avatar: true, avatarBlurHash: true } },
-      images: { orderBy: { createdAt: "desc" }, select: { id: true, path: true, blurHash: true } },
-      _count: { select: { reviews: true, listSpots: true } },
-      reviews: { take: 5, orderBy: { createdAt: "desc" }, select: reviewItemSelectFields },
-    },
+
+  const { spot, rating } = await promiseHash({
+    spot: db.spot.findUnique({
+      where: { id: params.id, ...publicSpotWhereClause(userId) },
+      select: {
+        id: true,
+        name: true,
+        type: true,
+        verifiedAt: true,
+        amenities: true,
+        address: true,
+        description: true,
+        latitude: true,
+        longitude: true,
+        ownerId: true,
+        createdAt: true,
+        creator: { select: { firstName: true, username: true, lastName: true } },
+        verifier: { select: { firstName: true, username: true, lastName: true, avatar: true, avatarBlurHash: true } },
+        images: { orderBy: { createdAt: "desc" }, select: { id: true, path: true, blurHash: true } },
+        _count: { select: { reviews: true, listSpots: true } },
+        reviews: { take: 5, orderBy: { createdAt: "desc" }, select: reviewItemSelectFields },
+      },
+    }),
+    rating: db.review.aggregate({ where: { spotId: params.id }, _avg: { rating: true } }),
   })
   if (!spot) throw notFound()
-  const rating = await db.review.aggregate({ where: { spotId: params.id }, _avg: { rating: true } })
 
   const activitySpots = await db.spot.findMany({
     where: {
       ...publicSpotWhereClause(userId),
       type: { in: [SpotType.CLIMBING, SpotType.HIKING, SpotType.MOUNTAIN_BIKING, SpotType.PADDLE_BOARDING, SpotType.SURFING] },
-      latitude: { gt: spot.latitude - 0.5, lt: spot.latitude + 0.5 },
-      longitude: { gt: spot.longitude - 0.5, lt: spot.longitude + 0.5 },
+      latitude: { gt: spot.latitude - 0.3, lt: spot.latitude + 0.3 },
+      longitude: { gt: spot.longitude - 0.3, lt: spot.longitude + 0.3 },
     },
+    orderBy: { createdAt: "desc" },
+    take: 30,
   })
 
   return json({ spot: { ...spot, rating }, activitySpots }, request, {
