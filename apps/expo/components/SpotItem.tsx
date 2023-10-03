@@ -29,7 +29,7 @@ export function SpotItem({ spot }: Props) {
           />
         ) : (
           <View className="rounded-xs flex h-full w-full items-center justify-center bg-gray-50 dark:bg-gray-800">
-            <View className="bg-background dark:bg-background-dark rounded-full p-4">
+            <View className="rounded-full p-4">
               <Icon size={40} className="text-black dark:text-white" />
             </View>
           </View>
