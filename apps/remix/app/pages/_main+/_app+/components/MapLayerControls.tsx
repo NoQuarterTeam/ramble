@@ -9,7 +9,7 @@ import { preferencesUrl } from "~/pages/api+/preferences"
 
 export function MapLayerControls() {
   const modalProps = useDisclosure()
-  const savePreferencesFetcher = useFetcher({ onSuccess: modalProps.onClose })
+  const savePreferencesFetcher = useFetcher({ onFinish: modalProps.onClose })
   const preferences = usePreferences()
 
   return (
