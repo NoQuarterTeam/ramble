@@ -84,7 +84,7 @@ export default function Vans() {
   )
 }
 
-function VanItem(props: { van: SerializeFrom<typeof loader>["vans"][number] }) {
+function VanItem(props: { van: SerializeFrom<LoaderData>["vans"][number] }) {
   return (
     <Link
       to={`/${props.van.user.username}/van`}
