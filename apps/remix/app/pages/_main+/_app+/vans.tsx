@@ -8,7 +8,7 @@ import { createImageUrl } from "@ramble/shared"
 
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { PageContainer } from "~/components/PageContainer"
-import { Avatar, Button } from "~/components/ui"
+import { Avatar, Button, Icons } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 
@@ -84,20 +84,26 @@ export default function Vans() {
   )
 }
 
-function VanItem(props: { van: SerializeFrom<typeof loader>["vans"][number] }) {
+function VanItem(props: { van: SerializeFrom<LoaderData>["vans"][number] }) {
   return (
     <Link
       to={`/${props.van.user.username}/van`}
       className="rounded-xs space-y-2 overflow-hidden border transition-colors hover:opacity-75"
     >
-      <OptimizedImage
-        alt="van"
-        width={400}
-        height={300}
-        src={createImageUrl(props.van.images[0]?.path)}
-        placeholder={props.van.images[0]?.blurHash}
-      />
-      <div className="space-y-4 p-2">
+      {props.van.images[0] ? (
+        <OptimizedImage
+          alt="van"
+          width={400}
+          height={300}
+          src={createImageUrl(props.van.images[0].path)}
+          placeholder={props.van.images[0].blurHash}
+        />
+      ) : (
+        <div className="center h-[300px] bg-gray-50 dark:bg-gray-900">
+          <Icons.Van size={80} className="opacity-70" />
+        </div>
+      )}
+      <div className="space-y-2 p-2">
         <div>
           <p className="text-2xl leading-5">{props.van.name}</p>
           <p className="text-sm">

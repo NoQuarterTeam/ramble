@@ -32,7 +32,7 @@ export function SpotItem({ spot }: Props) {
             />
           ) : (
             <div className="rounded-xs flex h-full w-full items-center justify-center bg-gray-50 dark:bg-gray-800">
-              <div className="bg-background rounded-full p-4">
+              <div className="rounded-full p-4">
                 <SpotIcon type={spot.type} size={40} />
               </div>
             </div>

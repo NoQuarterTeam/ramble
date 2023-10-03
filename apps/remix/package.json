@@ -82,7 +82,7 @@
     "uuid": "^3.4.0",
     "zod": "3.22.2",
     "zodix": "^0.4.0",
-    "zustand": "4.4.1"
+    "zustand": "4.4.2"
   },
   "devDependencies": {
     "@ramble/eslint-config": "workspace:*",
@@ -94,13 +94,13 @@
     "@types/jsonwebtoken": "9.0.3",
     "@types/nodemailer": "6.4.11",
     "@types/nprogress": "^0.2.0",
-    "@types/react": "18.2.23",
+    "@types/react": "18.2.24",
     "@types/react-dom": "18.2.8",
     "@types/sharp": "^0.31.1",
     "@types/supercluster": "^7.1.0",
     "@types/uuid": "^9.0.1",
-    "@typescript-eslint/eslint-plugin": "6.7.3",
-    "@typescript-eslint/parser": "6.7.3",
+    "@typescript-eslint/eslint-plugin": "6.7.4",
+    "@typescript-eslint/parser": "6.7.4",
     "autoprefixer": "10.4.16",
     "cssnano": "^6.0.0",
     "dotenv-cli": "^7.1.0",
