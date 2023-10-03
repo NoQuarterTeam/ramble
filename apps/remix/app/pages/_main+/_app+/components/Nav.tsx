@@ -20,6 +20,7 @@ import {
 } from "~/components/ui"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { useTheme } from "~/lib/theme"
+import { Feedback } from "~/pages/api+/feedback"
 
 export function Nav() {
   const user = useMaybeUser()
@@ -49,14 +50,17 @@ export function Nav() {
       </div>
       <div className="hstack space-x-3">
         {user ? (
-          <Tooltip label="Add a spot">
-            <IconButton
-              onClick={() => navigate(`/spots/new${window.location.search}`)}
-              icon={<Plus className="sq-4" />}
-              aria-label="add spot"
-              variant="outline"
-            />
-          </Tooltip>
+          <>
+            <Feedback />
+            <Tooltip label="Add a spot">
+              <IconButton
+                onClick={() => navigate(`/spots/new${window.location.search}`)}
+                icon={<Plus className="sq-4" />}
+                aria-label="add spot"
+                variant="outline"
+              />
+            </Tooltip>
+          </>
         ) : (
           <div className="hstack hidden md:flex">
             <LinkButton variant="ghost" to="/login">

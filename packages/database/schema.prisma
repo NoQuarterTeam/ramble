@@ -50,6 +50,7 @@ model User {
   van           Van?
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @default(now()) @updatedAt
+  feedback      Feedback[]
 
   @@index([username])
 }
@@ -261,4 +262,23 @@ model AccessRequest {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum FeedbackType {
+  ISSUE
+  IDEA
+  OTHER
+}
+
+model Feedback {
+  id      String       @id @default(uuid())
+  type    FeedbackType
+  message String       @db.LongText
+  user    User         @relation(fields: [userId], references: [id])
+  userId  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([userId])
 }
