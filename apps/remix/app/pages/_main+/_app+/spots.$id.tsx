@@ -81,8 +81,8 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     where: {
       ...publicSpotWhereClause(userId),
       type: { in: [SpotType.CLIMBING, SpotType.HIKING, SpotType.MOUNTAIN_BIKING, SpotType.PADDLE_BOARDING, SpotType.SURFING] },
-      latitude: { gt: spot.latitude - 0.3, lt: spot.latitude + 0.3 },
-      longitude: { gt: spot.longitude - 0.3, lt: spot.longitude + 0.3 },
+      latitude: { gt: spot.latitude - 0.5, lt: spot.latitude + 0.5 },
+      longitude: { gt: spot.longitude - 0.5, lt: spot.longitude + 0.5 },
     },
     orderBy: { createdAt: "desc" },
     take: 30,
@@ -126,7 +126,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       } catch (error) {
         return badRequest("Error deleting spot your account", request, { flash: { title: "Error deleting spot" } })
       }
-
     case Actions.Verify:
       try {
         const spot = await db.spot.findUniqueOrThrow({ where: { id: params.id }, select: { ownerId: true, deletedAt: true } })
@@ -270,7 +269,7 @@ export default function SpotDetail() {
                 }
               >
                 <Marker anchor="bottom" longitude={spot.longitude} latitude={spot.latitude}>
-                  <SpotMarker spot={spot} />
+                  <SpotMarker spot={spot} isInteractable={false} />
                 </Marker>
                 {activitySpots.map((activitySpot) => (
                   <Marker
@@ -279,7 +278,9 @@ export default function SpotDetail() {
                     longitude={activitySpot.longitude}
                     latitude={activitySpot.latitude}
                   >
-                    <SpotMarker spot={activitySpot} />
+                    <a href={`/spots/${activitySpot.id}`} target="_blank" rel="noopener noreferrer">
+                      <SpotMarker spot={activitySpot} />
+                    </a>
                   </Marker>
                 ))}
               </Map>
