@@ -57,7 +57,6 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
       verifiedAt: true,
       amenities: true,
       address: true,
-      deletedAt: true,
       description: true,
       latitude: true,
       longitude: true,
