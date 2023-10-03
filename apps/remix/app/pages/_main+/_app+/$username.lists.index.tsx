@@ -26,22 +26,29 @@ export default function ProfileLists() {
   const currentUser = useMaybeUser()
   return (
     <div className="space-y-2">
-      {currentUser?.username === params.username && (
+      {lists.length > 0 && currentUser?.username === params.username && (
         <LinkButton to="new" variant="secondary">
           New list
         </LinkButton>
       )}
-      <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-        {lists.map((list) => (
-          <Link to={list.id} key={list.id} className="border-hover rounded-xs border p-4">
-            <div className="flex items-center space-x-2">
-              {list.isPrivate && <Lock size={20} />}
-              <p className="text-2xl">{list.name}</p>
-            </div>
-            <p className="text-sm">{list.description}</p>
-          </Link>
-        ))}
-      </div>
+      {lists.length === 0 ? (
+        <div className="vstack">
+          <p className="text-lg">No lists created yet</p>
+          <LinkButton to="new">Create one</LinkButton>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+          {lists.map((list) => (
+            <Link to={list.id} key={list.id} className="border-hover rounded-xs border p-4">
+              <div className="flex items-center space-x-2">
+                {list.isPrivate && <Lock size={20} />}
+                <p className="text-2xl">{list.name}</p>
+              </div>
+              <p className="text-sm">{list.description}</p>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
