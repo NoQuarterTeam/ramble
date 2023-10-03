@@ -38,6 +38,7 @@ import { getUserSession } from "~/services/session/session.server"
 import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { SpotMarker } from "./components/SpotMarker"
+import { SpotType } from "@ramble/database/types"
 
 export const config = {
   // runtime: "edge",
@@ -70,22 +71,30 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     },
   })
   if (!spot) throw notFound()
-
   const rating = await db.review.aggregate({ where: { spotId: params.id }, _avg: { rating: true } })
 
-  return json({ ...spot, rating }, request, {
+  const activitySpots = await db.spot.findMany({
+    where: {
+      ...publicSpotWhereClause(userId),
+      type: { in: [SpotType.CLIMBING, SpotType.HIKING, SpotType.MOUNTAIN_BIKING, SpotType.PADDLE_BOARDING, SpotType.SURFING] },
+      latitude: { gt: spot.latitude - 0.5, lt: spot.latitude + 0.5 },
+      longitude: { gt: spot.longitude - 0.5, lt: spot.longitude + 0.5 },
+    },
+  })
+
+  return json({ spot: { ...spot, rating }, activitySpots }, request, {
     headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1day", sMaxage: "1day", staleWhileRevalidate: "30min" }) },
   })
 }
 
 export const meta: MetaFunction<typeof loader, { root: typeof rootLoader }> = ({ data, matches }) => {
   const WEB_URL = matches.find((r) => r.id === "root")?.data.config.WEB_URL || "localhost:3000"
-  const image = data?.images[0]?.path
+  const image = data?.spot.images[0]?.path
   return [
-    { title: data?.name },
-    { name: "description", content: data?.description },
-    { name: "og:title", content: data?.name },
-    { name: "og:description", content: data?.description },
+    { title: data?.spot.name },
+    { name: "description", content: data?.spot.description },
+    { name: "og:title", content: data?.spot.name },
+    { name: "og:description", content: data?.spot.description },
     {
       name: "og:image",
       content: image ? WEB_URL + transformImageSrc(createImageUrl(image), { width: 600, height: 400 }) : null,
@@ -130,7 +139,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 }
 
 export default function SpotDetail() {
-  const spot = useLoaderData<typeof loader>()
+  const { spot, activitySpots } = useLoaderData<typeof loader>()
   const user = useMaybeUser()
   const theme = useTheme()
 
@@ -257,6 +266,16 @@ export default function SpotDetail() {
                 <Marker anchor="bottom" longitude={spot.longitude} latitude={spot.latitude}>
                   <SpotMarker spot={spot} />
                 </Marker>
+                {activitySpots.map((activitySpot) => (
+                  <Marker
+                    key={activitySpot.id}
+                    anchor="bottom"
+                    longitude={activitySpot.longitude}
+                    latitude={activitySpot.latitude}
+                  >
+                    <SpotMarker spot={activitySpot} />
+                  </Marker>
+                ))}
               </Map>
             </div>
           </div>
