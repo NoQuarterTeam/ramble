@@ -28,6 +28,7 @@ export const spotRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       const { zoom, types, isVerified, isPetFriendly, ...coords } = input
+      const defaultTypes = [SpotType.CAMPING, SpotType.FREE_CAMPING]
       const spots = await ctx.prisma.spot.findMany({
         select: { id: true, latitude: true, longitude: true, type: true },
         where: {
@@ -41,8 +42,8 @@ export const spotRouter = createTRPCRouter({
               ? { equals: types as SpotType }
               : types.length > 0
               ? { in: types as SpotType[] }
-              : undefined
-            : undefined,
+              : { in: defaultTypes }
+            : { in: defaultTypes },
         },
         orderBy: { createdAt: "desc" },
         take: 2000,

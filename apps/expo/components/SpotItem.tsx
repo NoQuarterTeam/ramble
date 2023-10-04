@@ -5,7 +5,7 @@ import { type SpotItemWithStatsAndImage } from "@ramble/shared"
 import { createImageUrl, displayRating } from "@ramble/shared"
 
 import { useRouter } from "../app/router"
-import { SPOTS } from "../lib/static/spots"
+import { SPOT_TYPES } from "../lib/static/spots"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
 
@@ -15,7 +15,7 @@ interface Props {
 
 export function SpotItem({ spot }: Props) {
   const { push } = useRouter()
-  const Icon = SPOTS[spot.type].Icon
+  const Icon = SPOT_TYPES[spot.type].Icon
   return (
     <TouchableOpacity onPress={() => push("SpotDetailScreen", { id: spot.id })} activeOpacity={0.8}>
       <View className="relative h-[250px] w-full">
