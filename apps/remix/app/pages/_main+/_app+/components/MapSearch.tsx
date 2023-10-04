@@ -21,7 +21,7 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
   return (
     <>
       <div ref={ref} className="absolute left-2 top-2 space-y-2 md:left-4 md:top-4">
-        <div className="bg-background w-[220px] shadow-lg md:w-[250px]">
+        <div className="bg-background rounded-xs w-[220px] overflow-hidden shadow-lg md:w-[250px]">
           <Input placeholder="Search location" value={search} onChange={onStartPointQuery} />
         </div>
         {search && (

@@ -9,9 +9,9 @@ const ModalRoot = ModalPrimitive.Root
 
 const ModalTrigger = ModalPrimitive.Trigger
 
-function ModalPortal({ className, children, ...props }: ModalPrimitive.DialogPortalProps) {
+function ModalPortal({ children, ...props }: ModalPrimitive.DialogPortalProps) {
   return (
-    <ModalPrimitive.Portal className={merge(className)} {...props}>
+    <ModalPrimitive.Portal {...props}>
       <div className="fixed inset-0 z-50 flex items-start justify-center pt-4 sm:items-center sm:pt-0">{children}</div>
     </ModalPrimitive.Portal>
   )

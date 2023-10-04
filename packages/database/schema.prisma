@@ -38,9 +38,6 @@ model User {
   isPaddleBoarder Boolean @default(false)
   isSurfer        Boolean @default(false)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-
   // Relations
   followers        User[]       @relation("UserFollows")
   following        User[]       @relation("UserFollows")
@@ -55,6 +52,11 @@ model User {
   usedInviteCode   InviteCode?  @relation(fields: [usedInviteCodeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   usedInviteCodeId String?      @unique
 
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @default(now()) @updatedAt
+  feedback  Feedback[]
+
+  @@index([usedInviteCodeId])
   @@index([username])
 }
 
@@ -193,18 +195,18 @@ model Spot {
 }
 
 model SpotAmenities {
-  id          String   @id @default(uuid())
-  hotWater    Boolean?
-  wifi        Boolean?
-  shower      Boolean?
-  toilet      Boolean?
-  kitchen     Boolean?
-  electricity Boolean?
-  water       Boolean?
-  firePit     Boolean?
-  sauna       Boolean?
-  pool        Boolean?
-  bbq         Boolean?
+  id          String  @id @default(uuid())
+  hotWater    Boolean
+  wifi        Boolean
+  shower      Boolean
+  toilet      Boolean
+  kitchen     Boolean
+  electricity Boolean
+  water       Boolean
+  firePit     Boolean
+  sauna       Boolean
+  pool        Boolean
+  bbq         Boolean
 
   spot   Spot   @relation(fields: [spotId], references: [id], onDelete: Cascade)
   spotId String @unique
@@ -280,4 +282,23 @@ model AccessRequest {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum FeedbackType {
+  ISSUE
+  IDEA
+  OTHER
+}
+
+model Feedback {
+  id      String       @id @default(uuid())
+  type    FeedbackType
+  message String       @db.LongText
+  user    User         @relation(fields: [userId], references: [id])
+  userId  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([userId])
 }

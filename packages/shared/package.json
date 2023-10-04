@@ -15,14 +15,14 @@
   "sideEffects": false,
   "dependencies": {
     "@ramble/database": "workspace:*",
-    "tailwind-merge": "^1.10.0",
-    "zod": "3.22.2"
+    "tailwind-merge": "^1.14.0",
+    "zod": "3.22.3"
   },
   "devDependencies": {
     "@ramble/eslint-config": "workspace:*",
-    "@types/node": "^18.15.3",
+    "@types/node": "^18.18.3",
     "eslint": "8.50.0",
-    "prettier": "^3.0.0",
+    "prettier": "3.0.3",
     "typescript": "5.2.2"
   }
 }

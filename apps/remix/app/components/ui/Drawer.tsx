@@ -5,7 +5,7 @@ import * as DrawerPrimitive from "@radix-ui/react-dialog"
 import { cva, type VariantProps } from "class-variance-authority"
 import { X } from "lucide-react"
 
-import { join, merge, type UseDisclosure } from "@ramble/shared"
+import { merge, type UseDisclosure } from "@ramble/shared"
 
 const DrawerRoot = DrawerPrimitive.Root
 
@@ -25,9 +25,9 @@ const portalVariants = cva("fixed inset-0 z-50 flex", {
 
 interface DrawerPortalProps extends DrawerPrimitive.DialogPortalProps, VariantProps<typeof portalVariants> {}
 
-function DrawerPortal({ position, className, children, ...props }: DrawerPortalProps) {
+function DrawerPortal({ position, children, ...props }: DrawerPortalProps) {
   return (
-    <DrawerPrimitive.Portal className={join(className)} {...props}>
+    <DrawerPrimitive.Portal {...props}>
       <div className={portalVariants({ position })}>{children}</div>
     </DrawerPrimitive.Portal>
   )

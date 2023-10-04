@@ -5,7 +5,7 @@
     "turbo": "^1.10.12"
   },
   "devDependencies": {
-    "prettier": "^3.0.0",
+    "prettier": "3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.0",
     "typescript": "5.2.2"
   },
@@ -36,8 +36,7 @@
       "@turf/buffer@6.5.0": "patches/@turf__buffer@6.5.0.patch",
       "@turf/boolean-point-in-polygon@6.5.0": "patches/@turf__boolean-point-in-polygon@6.5.0.patch",
       "@turf/center@6.5.0": "patches/@turf__center@6.5.0.patch",
-      "@turf/bbox@6.5.0": "patches/@turf__bbox@6.5.0.patch",
-      "tailwind-merge@1.10.0": "patches/tailwind-merge@1.10.0.patch"
+      "@turf/bbox@6.5.0": "patches/@turf__bbox@6.5.0.patch"
     }
   }
 }
