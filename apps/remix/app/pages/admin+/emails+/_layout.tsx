@@ -4,6 +4,7 @@ import { merge } from "@ramble/shared"
 import { NavLink, NavLinkProps, Outlet, useLoaderData } from "@remix-run/react"
 import { LoaderFunctionArgs } from "@vercel/remix"
 import { MoveRight } from "lucide-react"
+
 import { buttonStyles, buttonSizeStyles } from "~/components/ui"
 import { json } from "~/lib/remix.server"
 
@@ -19,7 +20,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function Layout() {
   const templates = useLoaderData<typeof loader>()
   return (
-    <div className="flex gap-2">
+    <div className="flex">
       <div className="h-screen w-[220px] space-y-2 border-r p-4">
         {templates.map((template) => (
           <AdminLink key={template} to={template}>
@@ -28,7 +29,9 @@ export default function Layout() {
         ))}
       </div>
       <div className="w-full">
-        <Outlet />
+        <div className="py-4">
+          <Outlet />
+        </div>
       </div>
     </div>
   )

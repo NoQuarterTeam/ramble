@@ -24,10 +24,11 @@ export default function AdminLayout() {
   const isDark = useTheme() === "dark"
   return (
     <div className="flex">
-      <div className="fixed left-0 top-0 flex h-screen w-[200px] flex-col justify-between border-r px-4 pb-10">
+      <div className="fixed left-0 top-0 flex h-screen w-[50px] flex-col justify-between border-r px-0 pb-10 md:w-[200px] md:px-4">
         <div className="flex flex-col space-y-2 py-8">
-          <Link to="/" className="brand-header pl-3 text-lg">
-            ramble
+          <Link to="/" className="brand-header w-full pl-0 text-center text-lg md:pl-3 md:text-left">
+            <span className="hidden md:block">ramble</span>
+            <span className="block md:hidden">r</span>
           </Link>
           <AdminLink Icon={GaugeCircle} end to="/admin">
             Dashboard
@@ -51,18 +52,14 @@ export default function AdminLayout() {
           </AdminLink>
           <themeFetcher.Form action="/api/theme" className="w-full">
             <input type="hidden" name="theme" value={isDark ? "light" : "dark"} />
-            <Button
-              variant="ghost"
-              type="submit"
-              className="w-full justify-start space-x-1"
-              leftIcon={isDark ? <Sun className="sq-4" /> : <Moon className="sq-4" />}
-            >
-              <span>{isDark ? "Light" : "Dark"} mode</span>
+            <Button variant="ghost" type="submit" className="w-full justify-center space-x-2 md:justify-start">
+              {isDark ? <Sun className="sq-4" /> : <Moon className="sq-4" />}
+              <span className="hidden md:block">{isDark ? "Light" : "Dark"} mode</span>
             </Button>
           </themeFetcher.Form>
         </div>
       </div>
-      <div className="ml-[200px] w-full">
+      <div className="ml-[50px] w-full md:ml-[200px]">
         <Outlet />
       </div>
     </div>
@@ -75,11 +72,15 @@ function AdminLink({ to, children, Icon, ...props }: NavLinkProps & { children: 
       {...props}
       to={to}
       className={({ isActive }) =>
-        merge(buttonStyles({ variant: isActive ? "secondary" : "ghost" }), buttonSizeStyles(), "w-full justify-start space-x-2")
+        merge(
+          buttonStyles({ variant: isActive ? "secondary" : "ghost" }),
+          buttonSizeStyles(),
+          "w-full justify-center space-x-2 md:justify-start",
+        )
       }
     >
       <Icon size={16} />
-      <p>{children}</p>
+      <p className="hidden md:block">{children}</p>
     </NavLink>
   )
 }
