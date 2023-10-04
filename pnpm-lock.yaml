@@ -23,9 +23,6 @@ patchedDependencies:
   sonner@1.0.0:
     hash: ue6qbxhnueqof22rpfg44vofe4
     path: patches/sonner@1.0.0.patch
-  tailwind-merge@1.10.0:
-    hash: 3uy3zhgl5hvhhklfs5bva655di
-    path: patches/tailwind-merge@1.10.0.patch
 
 importers:
 
@@ -411,9 +408,6 @@ importers:
       supercluster:
         specifier: ^8.0.0
         version: 8.0.0
-      tailwind-merge:
-        specifier: ^1.10.0
-        version: 1.10.0(patch_hash=3uy3zhgl5hvhhklfs5bva655di)
       tailwind-scrollbar-hide:
         specifier: ^1.1.7
         version: 1.1.7
@@ -795,8 +789,8 @@ importers:
         specifier: workspace:*
         version: link:../database
       tailwind-merge:
-        specifier: ^1.10.0
-        version: 1.10.0(patch_hash=3uy3zhgl5hvhhklfs5bva655di)
+        specifier: ^1.14.0
+        version: 1.14.0
       zod:
         specifier: 3.22.3
         version: 3.22.3
@@ -17159,10 +17153,9 @@ packages:
       tslib: 2.5.2
     dev: true
 
-  /tailwind-merge@1.10.0(patch_hash=3uy3zhgl5hvhhklfs5bva655di):
-    resolution: {integrity: sha512-WFnDXSS4kFTZwjKg5/oZSGzBRU/l+qcbv5NVTzLUQvJ9yovDAP05h0F2+ZFW0Lw9EcgRoc2AfURUdZvnEFrXKg==}
+  /tailwind-merge@1.14.0:
+    resolution: {integrity: sha512-3mFKyCo/MBcgyOTlrY8T7odzZFx+w+qKSMAmdFzRvqBfLlSigU6TZnlFHK0lkMwj9Bj8OYU+9yW9lmGuS0QEnQ==}
     dev: false
-    patched: true
 
   /tailwind-scrollbar-hide@1.1.7:
     resolution: {integrity: sha512-X324n9OtpTmOMqEgDUEA/RgLrNfBF/jwJdctaPZDzB3mppxJk7TLIDmOreEDm1Bq4R9LSPu4Epf8VSdovNU+iA==}

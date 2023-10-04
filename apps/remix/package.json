@@ -73,7 +73,6 @@
     "sharp": "^0.32.0",
     "sonner": "^1.0.0",
     "supercluster": "^8.0.0",
-    "tailwind-merge": "^1.10.0",
     "tailwind-scrollbar-hide": "^1.1.7",
     "tailwindcss-radix": "^2.8.0",
     "turbo": "^1.9.9",

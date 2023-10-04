@@ -14,8 +14,7 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./app/*"],
-      "sonner": ["node_modules/sonner/dist/index.js"]
+      "~/*": ["./app/*"]
     },
     "skipLibCheck": true,
     "noEmit": true,
