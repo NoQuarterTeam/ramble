@@ -5,7 +5,8 @@ import queryString from "query-string"
 import { useDisclosure } from "@ramble/shared"
 
 import { Button, IconButton, Modal, Switch, Tooltip } from "~/components/ui"
-import { SPOT_TYPE_OPTIONS } from "~/lib/models/spots"
+import { SPOT_TYPES, SpotTypeInfo } from "~/lib/models/spots"
+import { SpotType } from "@ramble/database/types"
 
 export function MapFilters({ onChange }: { onChange: (params: string) => void }) {
   const onSubmit = (e: React.SyntheticEvent) => {
@@ -70,22 +71,30 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
       <Modal {...modalProps} size="3xl" title="Filters">
         <form className="space-y-6" onSubmit={onSubmit}>
           <div className="space-y-4">
-            <p className="text-xl">Spot type</p>
-            <div className="flex flex-wrap gap-2">
-              {SPOT_TYPE_OPTIONS.map((type) => (
-                <SpotTypeSelector
-                  key={type.value}
-                  type={type}
-                  defaultValue={Boolean(
-                    queryString.parse(window.location.search, { arrayFormat: "bracket" }).type?.includes(type.value),
-                  )}
-                />
-              ))}
-            </div>
+            <SpotTypeSection title="Stays" types={[SpotType.CAMPING, SpotType.FREE_CAMPING, SpotType.PARKING]} />
+            <SpotTypeSection
+              title="Activities"
+              types={[
+                SpotType.CLIMBING,
+                SpotType.SURFING,
+                SpotType.PADDLE_KAYAK,
+                SpotType.HIKING_TRAIL,
+                SpotType.MOUNTAIN_BIKING,
+              ]}
+            />
+            <SpotTypeSection
+              title="Services"
+              types={[SpotType.GAS_STATION, SpotType.ELECTRIC_CHARGE_POINT, SpotType.MECHANIC_PARTS, SpotType.VET]}
+            />
+            <SpotTypeSection title="Hospitality" types={[SpotType.CAFE, SpotType.RESTAURANT, SpotType.SHOP, SpotType.BAR]} />
+            <SpotTypeSection
+              title="Other"
+              types={[SpotType.NATURE_EDUCATION, SpotType.ART_FILM_PHOTOGRAPHY, SpotType.VOLUNTEERING]}
+            />
           </div>
           <hr />
           <div className="space-y-4">
-            <p className="text-xl">Options</p>
+            <p className="text-lg">Options</p>
 
             <label htmlFor="isVerified" className="flex items-center justify-between space-x-4">
               <div className="flex items-center space-x-4">
@@ -133,20 +142,45 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
   )
 }
 
-function SpotTypeSelector({ type, defaultValue }: { type: (typeof SPOT_TYPE_OPTIONS)[number]; defaultValue: boolean }) {
+function SpotTypeSection({ title, types }: { title: string; types: SpotType[] }) {
+  return (
+    <div>
+      <p className="text-lg">{title}</p>
+      <div className="flex flex-wrap gap-2">
+        {types.map((type) => (
+          <SpotTypeSelector
+            key={type}
+            type={SPOT_TYPES[type]}
+            defaultValue={Boolean(queryString.parse(window.location.search, { arrayFormat: "bracket" }).type?.includes(type))}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function SpotTypeSelector({ type, defaultValue }: { type: SpotTypeInfo; defaultValue: boolean }) {
   const [isSelected, setIsSelected] = React.useState(defaultValue)
   return (
     <>
-      <Button
-        variant={isSelected ? "primary" : "outline"}
-        type="button"
-        size="lg"
-        leftIcon={<type.Icon className="sq-4" />}
-        onClick={() => setIsSelected((s) => !s)}
-      >
-        {type.label}
-      </Button>
-      {isSelected && <input type="hidden" name="type[]" value={type.value} />}
+      <div className="relative">
+        <Button
+          disabled={type.isComingSoon}
+          variant={isSelected ? "primary" : "outline"}
+          type="button"
+          className="min-w-[100px]"
+          leftIcon={<type.Icon className="sq-4" />}
+          onClick={() => setIsSelected((s) => !s)}
+        >
+          {type.label}
+        </Button>
+        {type.isComingSoon && (
+          <p className="bg-background text-xxs absolute -right-1 -top-1 flex items-center justify-center rounded-full border px-1 shadow">
+            Coming soon
+          </p>
+        )}
+      </div>
+      {isSelected && !type.isComingSoon && <input type="hidden" name="type[]" value={type.value} />}
     </>
   )
 }
