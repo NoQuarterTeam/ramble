@@ -48,9 +48,10 @@ model User {
   lists         List[]
   reviews       Review[]
   van           Van?
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @default(now()) @updatedAt
   feedback      Feedback[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@index([username])
 }
@@ -61,12 +62,13 @@ model Van {
   model       String
   year        Int
   description String? @db.LongText
-  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String  @unique
 
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @default(now()) @updatedAt
-  images    VanImage[]
+  user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String     @unique
+  images VanImage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@index([userId])
 }
@@ -113,6 +115,7 @@ model Spot {
   latitude    Float
   longitude   Float
   publishedAt DateTime?
+  verifiedAt  DateTime?
 
   // Options 
   isPetFriendly Boolean @default(true)
@@ -120,7 +123,6 @@ model Spot {
   // Relations
   amenities  SpotAmenities?
   images     SpotImage[]
-  verifiedAt DateTime?
   verifierId String?
   verifier   User?          @relation(name: "Verifier", fields: [verifierId], references: [id])
   creatorId  String
@@ -129,9 +131,6 @@ model Spot {
   ownerId    String?
   owner      User?          @relation(name: "Owner", fields: [ownerId], references: [id])
   reviews    Review[]
-  deletedAt  DateTime?
-  createdAt  DateTime       @default(now())
-  updatedAt  DateTime       @default(now()) @updatedAt
 
   sourceUrl String? @db.VarChar(500)
 
@@ -159,6 +158,10 @@ model Spot {
 
   // loodusegakoos
   loodusegakoosId String? @unique
+
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
 
   @@index([createdAt])
   @@index([type])
@@ -196,13 +199,15 @@ model SpotAmenities {
 }
 
 model SpotImage {
-  id        String   @id @default(uuid())
-  path      String
-  blurHash  String?
+  id       String  @id @default(uuid())
+  path     String
+  blurHash String?
+
   spotId    String
-  spot      Spot     @relation(fields: [spotId], references: [id], onDelete: Cascade)
+  spot      Spot   @relation(fields: [spotId], references: [id], onDelete: Cascade)
   creatorId String
-  creator   User     @relation(fields: [creatorId], references: [id])
+  creator   User   @relation(fields: [creatorId], references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
@@ -212,13 +217,14 @@ model SpotImage {
 }
 
 model List {
-  id          String     @id @default(uuid())
+  id          String  @id @default(uuid())
   name        String
-  description String?    @db.LongText
-  listSpots   ListSpot[]
-  creatorId   String
-  creator     User       @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-  isPrivate   Boolean    @default(false)
+  description String? @db.LongText
+  isPrivate   Boolean @default(false)
+
+  listSpots ListSpot[]
+  creatorId String
+  creator   User       @relation(fields: [creatorId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -242,12 +248,13 @@ model ListSpot {
 
 model Review {
   id          String @id @default(uuid())
-  spotId      String
-  spot        Spot   @relation(fields: [spotId], references: [id], onDelete: Cascade)
-  userId      String
-  user        User   @relation(fields: [userId], references: [id])
   rating      Int
   description String @db.LongText
+
+  spotId String
+  spot   Spot   @relation(fields: [spotId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -274,8 +281,9 @@ model Feedback {
   id      String       @id @default(uuid())
   type    FeedbackType
   message String       @db.LongText
-  user    User         @relation(fields: [userId], references: [id])
-  userId  String
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
