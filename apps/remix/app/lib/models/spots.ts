@@ -62,10 +62,10 @@ export const SPOT_TYPES: { [key in SpotType]: SpotTypeInfo } = {
   [SpotType.MECHANIC_PARTS]: { value: SpotType.MECHANIC_PARTS, label: "Mechanic / Parts", Icon: Wrench, isComingSoon: true },
   [SpotType.VET]: { value: SpotType.VET, label: "Vet", Icon: Dog, isComingSoon: true },
   // Hospitality
-  [SpotType.CAFE]: { value: SpotType.CAFE, label: "Cafe", Icon: Coffee, isComingSoon: false },
-  [SpotType.RESTAURANT]: { value: SpotType.RESTAURANT, label: "Restaurant", Icon: Utensils, isComingSoon: false },
-  [SpotType.BAR]: { value: SpotType.BAR, label: "Bar", Icon: Beer, isComingSoon: false },
-  [SpotType.SHOP]: { value: SpotType.SHOP, label: "Shop", Icon: ShoppingCart, isComingSoon: false },
+  [SpotType.CAFE]: { value: SpotType.CAFE, label: "Cafe", Icon: Coffee, isComingSoon: true },
+  [SpotType.RESTAURANT]: { value: SpotType.RESTAURANT, label: "Restaurant", Icon: Utensils, isComingSoon: true },
+  [SpotType.BAR]: { value: SpotType.BAR, label: "Bar", Icon: Beer, isComingSoon: true },
+  [SpotType.SHOP]: { value: SpotType.SHOP, label: "Shop", Icon: ShoppingCart, isComingSoon: true },
   // Other
   [SpotType.NATURE_EDUCATION]: { value: SpotType.NATURE_EDUCATION, label: "Nature Education", Icon: Leaf, isComingSoon: true },
   [SpotType.FESTIVAL]: { value: SpotType.FESTIVAL, label: "Festival", Icon: PartyPopper, isComingSoon: true },
