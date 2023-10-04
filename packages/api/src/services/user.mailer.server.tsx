@@ -1,5 +1,5 @@
 import type { User } from "@ramble/database/types"
-import { ResetPasswordEmail, VerifyEmail } from "@ramble/emails"
+import { ResetPasswordEmail, VerifyAccountEmail } from "@ramble/emails"
 
 import { FULL_WEB_URL } from "../lib/config"
 import { mailer } from "../lib/mailer.server"
@@ -25,7 +25,7 @@ export async function sendAccountVerificationEmail(user: Pick<User, "email">, to
     if (!user.email) return
 
     await mailer.send({
-      react: <VerifyEmail link={link} />,
+      react: <VerifyAccountEmail link={link} />,
       to: user.email,
       text: `Verify email: ${link}`,
       subject: "Verify email",
