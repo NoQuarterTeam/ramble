@@ -1,7 +1,7 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Link, NavLink, Outlet } from "@remix-run/react"
 import { json, type LoaderFunctionArgs, redirect } from "@vercel/remix"
-import { GaugeCircle, HelpingHand, MapPin, MessageCircle, Moon, Sun, User } from "lucide-react"
+import { GaugeCircle, HelpingHand, Mail, MapPin, MessageCircle, Moon, Sun, User } from "lucide-react"
 
 import { merge } from "@ramble/shared"
 
@@ -29,7 +29,6 @@ export default function AdminLayout() {
           <Link to="/" className="brand-header pl-3 text-lg">
             ramble
           </Link>
-
           <AdminLink Icon={GaugeCircle} end to="/admin">
             Dashboard
           </AdminLink>
@@ -46,19 +45,24 @@ export default function AdminLayout() {
             Feedback
           </AdminLink>
         </div>
-        <themeFetcher.Form action="/api/theme" className="w-full">
-          <input type="hidden" name="theme" value={isDark ? "light" : "dark"} />
-          <Button
-            variant="ghost"
-            className="w-full"
-            type="submit"
-            leftIcon={isDark ? <Sun className="sq-4" /> : <Moon className="sq-4" />}
-          >
-            <span>{isDark ? "Light" : "Dark"} mode</span>
-          </Button>
-        </themeFetcher.Form>
+        <div className="space-y-2">
+          <AdminLink Icon={Mail} to="emails">
+            Emails
+          </AdminLink>
+          <themeFetcher.Form action="/api/theme" className="w-full">
+            <input type="hidden" name="theme" value={isDark ? "light" : "dark"} />
+            <Button
+              variant="ghost"
+              type="submit"
+              className="w-full justify-start space-x-1"
+              leftIcon={isDark ? <Sun className="sq-4" /> : <Moon className="sq-4" />}
+            >
+              <span>{isDark ? "Light" : "Dark"} mode</span>
+            </Button>
+          </themeFetcher.Form>
+        </div>
       </div>
-      <div className="ml-[200px] w-full px-4 py-8">
+      <div className="ml-[200px] w-full">
         <Outlet />
       </div>
     </div>
