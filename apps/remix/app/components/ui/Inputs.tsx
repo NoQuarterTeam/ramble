@@ -49,16 +49,34 @@ export interface InputProps
     InputStyleProps,
     InputSizeStyleProps {
   name?: string
+  leftElement?: React.ReactNode
+  rightElement?: React.ReactNode
 }
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(function _Input({ size, variant, ...props }, ref) {
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(function _Input(
+  { size, variant, leftElement, rightElement, ...props },
+  ref,
+) {
   return (
-    <input
-      type="text"
-      ref={ref}
-      id={props.name}
-      {...props}
-      className={merge(inputStyles({ variant, size }), inputSizeStyles({ size }), props.className)}
-    />
+    <div className="flex flex-row">
+      {leftElement && (
+        <div className={merge(inputSizeStyles({ size }), "center rounded-l-xs border bg-gray-50 px-2 dark:bg-gray-900")}>
+          {leftElement}
+        </div>
+      )}
+      <input
+        type="text"
+        ref={ref}
+        id={props.name}
+        {...props}
+        className={merge(
+          inputStyles({ variant, size, className: props.className }),
+          inputSizeStyles({ size }),
+          leftElement && "rounded-l-none",
+          rightElement && "rounded-r-none",
+        )}
+      />
+      {rightElement && <div className="h-full border bg-gray-50 px-2 dark:bg-gray-900">{rightElement}</div>}
+    </div>
   )
 })
 

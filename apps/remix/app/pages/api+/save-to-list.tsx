@@ -1,7 +1,7 @@
 import * as React from "react"
-import type { ActionArgs, LoaderArgs, SerializeFrom } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs, SerializeFrom } from "@vercel/remix"
 import { Heart, Plus } from "lucide-react"
-import { useAuthenticityToken } from "remix-utils"
+import { useAuthenticityToken } from "remix-utils/authenticity-token"
 import { z } from "zod"
 import { zx } from "zodix"
 
@@ -26,7 +26,7 @@ import { FORM_ACTION, FormActionInput, formError, getFormAction, validateFormDat
 import { badRequest, json } from "~/lib/remix.server"
 import { requireUser } from "~/services/auth/auth.server"
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await requireUser(request)
   const lists = await db.list.findMany({
     where: { creatorId: userId },
@@ -43,7 +43,7 @@ enum Actions {
 
 const createListSchema = z.object({ name: z.string().min(1), description: z.string().optional(), spotId: z.string() })
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const userId = await requireUser(request)
   const formAction = await getFormAction<Actions>(request)
   switch (formAction) {
@@ -192,7 +192,7 @@ function ListItem({ list, isSaved, spotId }: { spotId: string; list: SerializeFr
       onClick={() =>
         listFetcher.submit(
           { [FORM_ACTION]: Actions.Save, shouldSave: String(!isSaved), listId: list.id, spotId, csrf },
-          { method: "POST", replace: true, action: SAVE_TO_LIST_URL },
+          { method: "POST", action: SAVE_TO_LIST_URL },
         )
       }
       size="md"

@@ -1,4 +1,4 @@
-import type { LoaderArgs } from "@vercel/remix"
+import type { LoaderFunctionArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
@@ -69,11 +69,11 @@ async function getMapClusters(request: Request) {
 
 export type Cluster = Awaited<ReturnType<typeof getMapClusters>>[number]
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const spots = await getMapClusters(request)
   return json(spots, {
     headers: {
-      "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }),
+      "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour", staleWhileRevalidate: "1min" }),
     },
   })
 }

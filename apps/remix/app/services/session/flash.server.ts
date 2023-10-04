@@ -1,5 +1,5 @@
 import { createCookieSessionStorage } from "@vercel/remix"
-import { createTypedSessionStorage } from "remix-utils"
+import { createTypedSessionStorage } from "remix-utils/typed-session"
 import { z } from "zod"
 
 import { FLASH_SESSION_SECRET, IS_PRODUCTION } from "~/lib/config.server"

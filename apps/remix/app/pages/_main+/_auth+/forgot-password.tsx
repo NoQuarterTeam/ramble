@@ -1,5 +1,5 @@
 import { Link } from "@remix-run/react"
-import { type ActionArgs } from "@vercel/remix"
+import { type ActionFunctionArgs } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
@@ -13,11 +13,11 @@ import { redirect } from "~/lib/remix.server"
 
 export const headers = () => {
   return {
-    "Cache-Control": cacheHeader({ maxAge: "1hour", sMaxage: "1hour", public: true }),
+    "Cache-Control": cacheHeader({ maxAge: "1hour", sMaxage: "1hour", staleWhileRevalidate: "1min", public: true }),
   }
 }
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const resetSchema = z.object({ email: z.string().email("Invalid email") })
   const result = await validateFormData(request, resetSchema)
   if (!result.success) return formError(result)

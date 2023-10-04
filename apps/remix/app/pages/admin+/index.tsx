@@ -1,13 +1,13 @@
-import { type LoaderArgs } from "@remix-run/node"
+import { type LoaderFunctionArgs } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 import { cacheHeader } from "pretty-cache-header"
-import { promiseHash } from "remix-utils"
+import { promiseHash } from "remix-utils/promise"
 
 import { Tile, TileBody, TileHeader } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { json } from "~/lib/remix.server"
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const data = await promiseHash({
     spotCount: db.spot.count({ where: { deletedAt: null } }),
     verifiedSpotCount: db.spot.count({ where: { deletedAt: null, verifiedAt: { not: null } } }),

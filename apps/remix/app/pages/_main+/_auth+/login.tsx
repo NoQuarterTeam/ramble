@@ -1,5 +1,5 @@
 import { Link, useSearchParams } from "@remix-run/react"
-import type { ActionArgs, V2_MetaFunction } from "@vercel/remix"
+import type { ActionFunctionArgs, MetaFunction } from "@vercel/remix"
 import { redirect } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
@@ -15,17 +15,17 @@ import { getUserSession } from "~/services/session/session.server"
 //   // regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
 // }
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
   return [{ title: "Login" }, { name: "description", content: "Login to the ramble" }]
 }
 
 export const headers = () => {
   return {
-    "Cache-Control": cacheHeader({ maxAge: "1hour", sMaxage: "1hour", public: true }),
+    "Cache-Control": cacheHeader({ maxAge: "1hour", sMaxage: "1hour", staleWhileRevalidate: "1min", public: true }),
   }
 }
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const loginSchema = z.object({
     email: z.string().min(3).email("Invalid email"),
     password: z.string().min(8, "Must be at least 8 characters"),
@@ -41,7 +41,7 @@ export const action = async ({ request }: ActionArgs) => {
   if (!isCorrectPassword) return formError({ formError: "Incorrect email or password" })
 
   const { setUser } = await getUserSession(request)
-  const headers = new Headers([["Set-Cookie", await setUser(user.id)]])
+  const headers = new Headers([["set-cookie", await setUser(user.id)]])
   return redirect(redirectTo || "/map", { headers })
 }
 

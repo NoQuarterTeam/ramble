@@ -1,7 +1,7 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Link, NavLink, Outlet } from "@remix-run/react"
-import { json, type LoaderArgs, redirect } from "@vercel/remix"
-import { GaugeCircle, HelpingHand, MapPin, Moon, Sun, User } from "lucide-react"
+import { json, type LoaderFunctionArgs, redirect } from "@vercel/remix"
+import { GaugeCircle, HelpingHand, MapPin, MessageCircle, Moon, Sun, User } from "lucide-react"
 
 import { merge } from "@ramble/shared"
 
@@ -13,8 +13,8 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 
 export const shouldRevalidate = () => false
 
-export const loader = async ({ request }: LoaderArgs) => {
-  const user = await getCurrentUser(request)
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const user = await getCurrentUser(request, { isAdmin: true })
   if (!user.isAdmin) return redirect("/")
   return json(null)
 }
@@ -41,6 +41,9 @@ export default function AdminLayout() {
           </AdminLink>
           <AdminLink Icon={HelpingHand} to="access-requests">
             Access requests
+          </AdminLink>
+          <AdminLink Icon={MessageCircle} to="feedback">
+            Feedback
           </AdminLink>
         </div>
         <themeFetcher.Form action="/api/theme" className="w-full">

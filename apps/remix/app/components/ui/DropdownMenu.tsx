@@ -83,7 +83,7 @@ const DropdownMenuItem = React.forwardRef<
       buttonStyles({ variant: "ghost", size: "md" }),
       buttonSizeStyles({ size: "md" }),
       className,
-      "flex w-full items-center justify-start",
+      "flex w-full cursor-pointer items-center justify-start",
     )}
     {...props}
   />

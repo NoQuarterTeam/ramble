@@ -1,4 +1,4 @@
-import type { ActionArgs } from "@vercel/remix"
+import type { ActionFunctionArgs } from "@vercel/remix"
 import { createCookie } from "@vercel/remix"
 import { z } from "zod"
 
@@ -19,7 +19,7 @@ export const defaultPreferences = {
   mapLayerTemp: false,
 } satisfies Preferences
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const result = await validateFormData(request, preferencesSchema)
   if (!result.success) return formError(result)
   const cookieHeader = request.headers.get("Cookie")
@@ -28,7 +28,7 @@ export async function action({ request }: ActionArgs) {
   cookie = { ...cookie, ...result.data }
 
   return json({ success: true }, request, {
-    headers: { "Set-Cookie": await preferencesCookies.serialize(cookie) },
+    headers: { "set-cookie": await preferencesCookies.serialize(cookie) },
   })
 }
 

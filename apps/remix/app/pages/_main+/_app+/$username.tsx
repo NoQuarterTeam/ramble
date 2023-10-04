@@ -1,6 +1,6 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react"
-import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { Instagram, type LucideIcon } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
@@ -22,7 +22,7 @@ import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
 
 export const headers = useLoaderHeaders
 
-export const loader = async ({ params, request }: LoaderArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const currentUser = await getMaybeUser(request)
   const user = await db.user.findUnique({
     where: { username: params.username },
@@ -47,11 +47,15 @@ export const loader = async ({ params, request }: LoaderArgs) => {
 
   return json(
     { ...user, isFollowed: user.followers && user.followers.length > 0 },
-    { headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }) } },
+    {
+      headers: {
+        "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour", staleWhileRevalidate: "1min" }),
+      },
+    },
   )
 }
 
-export const action = async ({ request, params }: ActionArgs) => {
+export const action = async ({ request, params }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request)
   const schema = z.object({ shouldFollow: zx.BoolAsString })
   const result = await validateFormData(request, schema)

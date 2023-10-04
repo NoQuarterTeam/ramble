@@ -1,6 +1,6 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Link, NavLink, useNavigate, useSubmit } from "@remix-run/react"
-import { Heart, LogOut, Menu, Moon, Plus, Settings, Sun, User } from "lucide-react"
+import { Heart, LogOut, Menu, Moon, Plus, Settings, Sun, User, UserCog } from "lucide-react"
 
 import { ClientOnly, createImageUrl, merge } from "@ramble/shared"
 
@@ -20,6 +20,7 @@ import {
 } from "~/components/ui"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { useTheme } from "~/lib/theme"
+import { Feedback } from "~/pages/api+/feedback"
 
 export function Nav() {
   const user = useMaybeUser()
@@ -49,14 +50,17 @@ export function Nav() {
       </div>
       <div className="hstack space-x-3">
         {user ? (
-          <Tooltip label="Add a spot">
-            <IconButton
-              onClick={() => navigate(`/spots/new${window.location.search}`)}
-              icon={<Plus className="sq-4" />}
-              aria-label="add spot"
-              variant="outline"
-            />
-          </Tooltip>
+          <>
+            <Feedback />
+            <Tooltip label="Add a spot">
+              <IconButton
+                onClick={() => navigate(`/spots/new${window.location.search}`)}
+                icon={<Plus className="sq-4" />}
+                aria-label="add spot"
+                variant="outline"
+              />
+            </Tooltip>
+          </>
         ) : (
           <div className="hstack hidden md:flex">
             <LinkButton variant="ghost" to="/login">
@@ -114,6 +118,13 @@ export function Nav() {
                     Account
                   </LinkButton>
                 </DropdownMenuItem>
+                {user.isAdmin && (
+                  <DropdownMenuItem asChild>
+                    <LinkButton variant="ghost" to="/admin" leftIcon={<UserCog className="sq-4" />}>
+                      Admin
+                    </LinkButton>
+                  </DropdownMenuItem>
+                )}
                 <themeFetcher.Form action="/api/theme" className="w-full">
                   <input type="hidden" name="theme" value={isDark ? "light" : "dark"} />
                   <DropdownMenuItem onSelect={(event: Event) => event.preventDefault()} asChild>

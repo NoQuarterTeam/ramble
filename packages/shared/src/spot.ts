@@ -8,12 +8,11 @@ export type SpotItemWithStatsAndImage = Pick<Spot, "id" | "name" | "address" | "
 }
 
 export const canManageSpot = (
-  spot: (Pick<Spot, "ownerId"> & { deletedAt: string | Date | null }) | null,
+  spot: Pick<Spot, "ownerId"> | null,
   user: Pick<User, "id" | "isAdmin" | "role" | "isVerified"> | null | undefined,
 ) => {
   if (!user) return false
   if (!spot) return false
-  if (spot.deletedAt) return false
   if (user.isAdmin) return true
   if (!user.isVerified) return false
   if (user.role === "GUIDE") return true

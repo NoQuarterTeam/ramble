@@ -6,12 +6,13 @@ import { SpotIcon } from "~/components/SpotIcon"
 
 interface MarkerProps {
   spot: { type: SpotType }
+  isInteractable?: boolean
 }
 
-export function SpotMarker(props: MarkerProps) {
+export function SpotMarker({ isInteractable = true, ...props }: MarkerProps) {
   return (
     <div className="relative">
-      <div className={spotMarkerColors({ type: props.spot.type })}>
+      <div className={spotMarker({ type: props.spot.type, isInteractable })}>
         <SpotIcon type={props.spot.type} className={spotMarkerIconColors({ type: props.spot.type })} />
       </div>
       <div className={spotTriangleColors({ type: props.spot.type })} />
@@ -19,30 +20,30 @@ export function SpotMarker(props: MarkerProps) {
   )
 }
 
-const spotMarkerColors = cva(
-  "sq-8 flex cursor-pointer items-center justify-center rounded-full border shadow-md transition-transform hover:scale-110",
-  {
-    variants: {
-      type: {
-        CAMPING: "border-green-100 bg-green-700",
-        FREE_CAMPING: "border-cyan-100 bg-cyan-800",
-        SURFING: "border-blue-100 bg-blue-500",
-        CLIMBING: "border-blue-100 bg-blue-500",
-        MOUNTAIN_BIKING: "border-blue-100 bg-blue-500",
-        PADDLE_BOARDING: "border-blue-100 bg-blue-500",
-        HIKING: "border-blue-100 bg-blue-500",
-        CAFE: "border-gray-500 bg-gray-50",
-        GAS_STATION: "border-gray-500 bg-gray-50",
-        BAR: "border-gray-500 bg-gray-50",
-        RESTAURANT: "border-gray-500 bg-gray-50",
-        PARKING: "border-gray-500 bg-gray-50",
-        TIP: "border-gray-500 bg-gray-50",
-        SHOP: "border-gray-500 bg-gray-50",
-        OTHER: "border-gray-500 bg-gray-50",
-      },
+const spotMarker = cva("sq-8 flex items-center justify-center rounded-full border shadow-md", {
+  variants: {
+    type: {
+      CAMPING: "border-green-100 bg-green-700",
+      FREE_CAMPING: "border-cyan-100 bg-cyan-800",
+      SURFING: "border-blue-100 bg-blue-500",
+      CLIMBING: "border-blue-100 bg-blue-500",
+      MOUNTAIN_BIKING: "border-blue-100 bg-blue-500",
+      PADDLE_BOARDING: "border-blue-100 bg-blue-500",
+      HIKING: "border-blue-100 bg-blue-500",
+      CAFE: "border-gray-500 bg-gray-50",
+      GAS_STATION: "border-gray-500 bg-gray-50",
+      BAR: "border-gray-500 bg-gray-50",
+      RESTAURANT: "border-gray-500 bg-gray-50",
+      PARKING: "border-gray-500 bg-gray-50",
+      TIP: "border-gray-500 bg-gray-50",
+      SHOP: "border-gray-500 bg-gray-50",
+      OTHER: "border-gray-500 bg-gray-50",
+    },
+    isInteractable: {
+      true: "cursor-pointer transition-transform hover:scale-110",
     },
   },
-)
+})
 const spotMarkerIconColors = cva("sq-4", {
   variants: {
     type: {

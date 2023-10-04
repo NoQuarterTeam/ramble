@@ -1,4 +1,4 @@
-import type { LoaderArgs } from "@vercel/remix"
+import type { LoaderFunctionArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
@@ -8,7 +8,7 @@ import { cacheHeader } from "pretty-cache-header"
 // // runtime: "edge",
 // }
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url)
   const search = url.searchParams.get("search")
 
@@ -25,7 +25,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   }))
   return json(places || "Unknown address", {
     headers: {
-      "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour" }),
+      "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour", staleWhileRevalidate: "1min" }),
     },
   })
 }

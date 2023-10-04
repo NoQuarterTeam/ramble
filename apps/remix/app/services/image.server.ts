@@ -1,5 +1,5 @@
 import { NotFound } from "@aws-sdk/client-s3"
-import type { LoaderArgs } from "@vercel/remix"
+import type { LoaderFunctionArgs } from "@vercel/remix"
 import axios from "axios"
 import * as crypto from "crypto"
 import { cacheHeader } from "pretty-cache-header"
@@ -26,7 +26,7 @@ function getIntOrNull(value: string | null) {
   if (!value) return null
   return Number.parseInt(value)
 }
-export async function generateImage({ request }: LoaderArgs) {
+export async function generateImage({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url)
   const src = url.searchParams.get("src")
   if (!src) return badImageResponse()

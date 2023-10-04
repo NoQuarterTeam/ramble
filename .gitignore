@@ -11,6 +11,8 @@ tsconfig.tsbuildinfo
 .env
 fly.wireguard.conf
 
+pc-api-8703296620103690660-58-0d0aff733697.json
+
 /.vscode/**/*
 
 tailwind.css

@@ -41,6 +41,7 @@
     "react-native-web",
     "react-native",
     "uuid",
-    "tailwindcss"
+    "tailwindcss",
+    "remix-utils"
   ]
 }

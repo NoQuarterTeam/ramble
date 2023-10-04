@@ -3,7 +3,7 @@ import { type SerializeFrom } from "@remix-run/node"
 import type { FetcherWithComponents, FormProps as RemixFormProps } from "@remix-run/react"
 import { Form as RemixForm, useFetcher as useRemixFetcher, useNavigation } from "@remix-run/react"
 import { X } from "lucide-react"
-import { AuthenticityTokenInput } from "remix-utils"
+import { AuthenticityTokenInput } from "remix-utils/authenticity-token"
 import { type z } from "zod"
 
 import { createImageUrl, merge } from "@ramble/shared"
@@ -32,7 +32,7 @@ export const Form = React.forwardRef(function _Form(props: RemixFormProps, ref: 
 })
 
 interface UseFetcherProps<T> {
-  onSuccess?: (data: T) => void
+  onFinish?: (data: T) => void
 }
 
 export function useFetcher<T>(props?: UseFetcherProps<T>): FetcherWithComponents<SerializeFrom<T>> {
@@ -49,8 +49,8 @@ export function useFetcher<T>(props?: UseFetcherProps<T>): FetcherWithComponents
 
   React.useEffect(() => {
     if (!fetcher.data || !props) return
-    if (fetcher.state === "loading" && fetcher.data !== null) {
-      props.onSuccess?.(fetcher.data)
+    if (fetcher.state === "loading" && fetcher.data) {
+      props.onFinish?.(fetcher.data)
     }
   }, [fetcher.state, props, fetcher.data])
 
@@ -92,8 +92,7 @@ interface FormFieldProps extends InputProps {
   name: string
   label?: string
   input?: React.ReactElement
-  defaultValue?: string
-  errors?: string | string[] | null
+  errors?: string | string[] | null | false
   shouldPassProps?: boolean
 }
 
@@ -103,7 +102,9 @@ export const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(func
 ) {
   const form = useFormErrors<z.AnyZodObject>()
   const fieldErrors = errors || form?.fieldErrors?.[props.name]
-  const className = merge(props.className, fieldErrors && "border-red-500 focus:border-red-500")
+  const inputClassName = input?.props.className
+  const className = merge(props.className, inputClassName, fieldErrors && "border-red-500 focus:border-red-500")
+
   const sharedProps = {
     "aria-invalid": fieldErrors || fieldErrors?.length ? true : undefined,
     "aria-errormessage": props.name + "-error",
@@ -243,7 +244,7 @@ export function ImageField(props: ImageFieldProps) {
   )
 }
 
-export function FormError({ error }: { error?: string }) {
+export function FormError({ error }: { error?: string | null | false }) {
   const form = useFormErrors<z.AnyZodObject>()
   if (!form?.formError && !error) return null
   return <FormFieldError id="form-error">{form?.formError || error}</FormFieldError>

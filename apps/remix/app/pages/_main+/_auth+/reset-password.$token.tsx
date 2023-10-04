@@ -1,5 +1,5 @@
 import { Link, useParams } from "@remix-run/react"
-import type { ActionArgs } from "@vercel/remix"
+import type { ActionFunctionArgs } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
@@ -17,11 +17,11 @@ import { hashPassword } from "~/services/auth/password.server"
 
 export const headers = () => {
   return {
-    "Cache-Control": cacheHeader({ maxAge: "1hour", sMaxage: "1hour", public: true }),
+    "Cache-Control": cacheHeader({ maxAge: "1hour", sMaxage: "1hour", staleWhileRevalidate: "1min", public: true }),
   }
 }
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const resetPasswordSchema = z.object({
     token: z.string(),
     password: z.string().min(8, "Must be at least 8 characters"),

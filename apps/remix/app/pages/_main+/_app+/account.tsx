@@ -1,6 +1,6 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Outlet, useActionData, useLoaderData } from "@remix-run/react"
-import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
 import { AlertCircle, Settings, ToggleRight, User } from "lucide-react"
 
 import { sendAccountVerificationEmail } from "@ramble/api"
@@ -17,7 +17,7 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { PageContainer } from "../../../components/PageContainer"
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, {
     firstName: true,
     username: true,
@@ -30,7 +30,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   return json(user)
 }
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request, { email: true, id: true })
   const token = await createToken({ id: user.id })
   await sendAccountVerificationEmail(user, token)

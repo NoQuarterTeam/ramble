@@ -1,6 +1,6 @@
 import Map, { Marker } from "react-map-gl"
 import { Link, useLoaderData } from "@remix-run/react"
-import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "@vercel/remix"
 import dayjs from "dayjs"
 import { Check, Edit2, Heart, Star, Trash } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
@@ -38,6 +38,8 @@ import { getUserSession } from "~/services/session/session.server"
 import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { SpotMarker } from "./components/SpotMarker"
+import { SpotType } from "@ramble/database/types"
+import { promiseHash } from "remix-utils/promise"
 
 export const config = {
   // runtime: "edge",
@@ -46,47 +48,59 @@ export const config = {
 
 export const headers = useLoaderHeaders
 
-export const loader = async ({ params, request }: LoaderArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const { userId } = await getUserSession(request)
-  const spot = await db.spot.findUnique({
-    where: { id: params.id, ...publicSpotWhereClause(userId) },
-    select: {
-      id: true,
-      name: true,
-      type: true,
-      verifiedAt: true,
-      amenities: true,
-      address: true,
-      deletedAt: true,
-      description: true,
-      latitude: true,
-      longitude: true,
-      ownerId: true,
-      createdAt: true,
-      creator: { select: { firstName: true, username: true, lastName: true } },
-      verifier: { select: { firstName: true, username: true, lastName: true, avatar: true, avatarBlurHash: true } },
-      images: { orderBy: { createdAt: "desc" }, select: { id: true, path: true, blurHash: true } },
-      _count: { select: { reviews: true, listSpots: true } },
-      reviews: { take: 5, orderBy: { createdAt: "desc" }, select: reviewItemSelectFields },
-    },
+
+  const { spot, rating } = await promiseHash({
+    spot: db.spot.findUnique({
+      where: { id: params.id, ...publicSpotWhereClause(userId) },
+      select: {
+        id: true,
+        name: true,
+        type: true,
+        verifiedAt: true,
+        amenities: true,
+        address: true,
+        description: true,
+        latitude: true,
+        longitude: true,
+        ownerId: true,
+        createdAt: true,
+        creator: { select: { firstName: true, username: true, lastName: true } },
+        verifier: { select: { firstName: true, username: true, lastName: true, avatar: true, avatarBlurHash: true } },
+        images: { orderBy: { createdAt: "desc" }, select: { id: true, path: true, blurHash: true } },
+        _count: { select: { reviews: true, listSpots: true } },
+        reviews: { take: 5, orderBy: { createdAt: "desc" }, select: reviewItemSelectFields },
+      },
+    }),
+    rating: db.review.aggregate({ where: { spotId: params.id }, _avg: { rating: true } }),
   })
   if (!spot) throw notFound()
 
-  const rating = await db.review.aggregate({ where: { spotId: params.id }, _avg: { rating: true } })
+  const activitySpots = await db.spot.findMany({
+    where: {
+      ...publicSpotWhereClause(userId),
+      type: { in: [SpotType.CLIMBING, SpotType.HIKING, SpotType.MOUNTAIN_BIKING, SpotType.PADDLE_BOARDING, SpotType.SURFING] },
+      latitude: { gt: spot.latitude - 0.5, lt: spot.latitude + 0.5 },
+      longitude: { gt: spot.longitude - 0.5, lt: spot.longitude + 0.5 },
+    },
+    orderBy: { createdAt: "desc" },
+    take: 30,
+  })
 
-  return json({ ...spot, rating }, request, {
-    headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1day", sMaxage: "1day" }) },
+  return json({ spot: { ...spot, rating }, activitySpots }, request, {
+    headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1day", sMaxage: "1day", staleWhileRevalidate: "30min" }) },
   })
 }
 
-export const meta: V2_MetaFunction<typeof loader, { root: typeof rootLoader }> = ({ data, matches }) => {
+export const meta: MetaFunction<typeof loader, { root: typeof rootLoader }> = ({ data, matches }) => {
   const WEB_URL = matches.find((r) => r.id === "root")?.data.config.WEB_URL || "localhost:3000"
-  const image = data?.images[0]?.path
+  const image = data?.spot.images[0]?.path
   return [
-    { title: data?.name },
-    { name: "description", content: data?.description },
-    { name: "og:title", content: data?.name },
-    { name: "og:description", content: data?.description },
+    { title: data?.spot.name },
+    { name: "description", content: data?.spot.description },
+    { name: "og:title", content: data?.spot.name },
+    { name: "og:description", content: data?.spot.description },
     {
       name: "og:image",
       content: image ? WEB_URL + transformImageSrc(createImageUrl(image), { width: 600, height: 400 }) : null,
@@ -99,7 +113,7 @@ enum Actions {
   Verify = "verify",
 }
 
-export const action = async ({ request, params }: ActionArgs) => {
+export const action = async ({ request, params }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request, { id: true, role: true, isVerified: true, isAdmin: true })
   const formAction = await getFormAction<Actions>(request)
 
@@ -112,7 +126,6 @@ export const action = async ({ request, params }: ActionArgs) => {
       } catch (error) {
         return badRequest("Error deleting spot your account", request, { flash: { title: "Error deleting spot" } })
       }
-
     case Actions.Verify:
       try {
         const spot = await db.spot.findUniqueOrThrow({ where: { id: params.id }, select: { ownerId: true, deletedAt: true } })
@@ -131,7 +144,7 @@ export const action = async ({ request, params }: ActionArgs) => {
 }
 
 export default function SpotDetail() {
-  const spot = useLoaderData<typeof loader>()
+  const { spot, activitySpots } = useLoaderData<typeof loader>()
   const user = useMaybeUser()
   const theme = useTheme()
 
@@ -243,7 +256,7 @@ export default function SpotDetail() {
               </div>
             </div>
 
-            <div className="rounded-xs z-10 h-[400px] w-full overflow-hidden">
+            <div className="rounded-xs h-[400px] w-full overflow-hidden">
               <Map
                 mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
                 style={{ height: "100%", width: "100%" }}
@@ -256,8 +269,20 @@ export default function SpotDetail() {
                 }
               >
                 <Marker anchor="bottom" longitude={spot.longitude} latitude={spot.latitude}>
-                  <SpotMarker spot={spot} />
+                  <SpotMarker spot={spot} isInteractable={false} />
                 </Marker>
+                {activitySpots.map((activitySpot) => (
+                  <Marker
+                    key={activitySpot.id}
+                    anchor="bottom"
+                    longitude={activitySpot.longitude}
+                    latitude={activitySpot.latitude}
+                  >
+                    <a href={`/spots/${activitySpot.id}`} target="_blank" rel="noopener noreferrer">
+                      <SpotMarker spot={activitySpot} />
+                    </a>
+                  </Marker>
+                ))}
               </Map>
             </div>
           </div>

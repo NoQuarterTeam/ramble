@@ -1,5 +1,5 @@
 import { useLoaderData } from "@remix-run/react"
-import type { ActionArgs, LoaderArgs } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
 import { json, redirect } from "@vercel/remix"
 import type { z } from "zod"
 
@@ -13,7 +13,7 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { amenitiesSchema, SpotForm, spotSchema } from "./components/SpotForm"
 
-export const loader = async ({ request, params }: LoaderArgs) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, { role: true, id: true, isAdmin: true, isVerified: true })
   const spot = await db.spot.findUniqueOrThrow({
     where: { id: params.id, ...publicSpotWhereClause(user.id) },
@@ -23,7 +23,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
   return json(spot)
 }
 
-export const action = async ({ request, params }: ActionArgs) => {
+export const action = async ({ request, params }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request, { id: true, role: true, isAdmin: true, isVerified: true })
 
   const result = await validateFormData(request, spotSchema)
