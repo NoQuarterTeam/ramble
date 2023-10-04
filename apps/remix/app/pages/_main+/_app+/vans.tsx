@@ -99,7 +99,7 @@ function VanItem(props: { van: SerializeFrom<LoaderData>["vans"][number] }) {
           placeholder={props.van.images[0].blurHash}
         />
       ) : (
-        <div className="center h-[300px] bg-gray-50 dark:bg-gray-900">
+        <div className="center h-[300px] bg-gray-50 dark:bg-gray-800">
           <Icons.Van size={80} className="opacity-70" />
         </div>
       )}
