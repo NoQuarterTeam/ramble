@@ -1,9 +1,11 @@
 import { Outlet } from "@remix-run/react"
-import { redirect } from "@vercel/remix"
+import { LoaderFunctionArgs } from "@vercel/remix"
 
-import { IS_PRODUCTION } from "~/lib/config.server"
+import { getCurrentAdmin } from "~/services/auth/auth.server"
 
-export const loader = () => (IS_PRODUCTION ? redirect("/") : null)
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  await getCurrentAdmin(request)
+}
 
 export default function Layout() {
   return <Outlet />
