@@ -48,7 +48,7 @@ export default function Home() {
           </Link>
         )}
       </div>
-      <div className="h-[96vh] w-screen space-y-20 bg-[url('/landing/landing1.png')] bg-center px-2 pt-10">
+      <div className="h-[94vh] w-screen space-y-20 bg-[url('/landing/landing1.png')] bg-center px-2 pt-10">
         <div className="mx-auto flex max-w-7xl flex-col items-start space-y-12">
           <div className="flex flex-col items-center">
             <p className="brand-header text-5xl">ramble</p>
@@ -65,6 +65,11 @@ export default function Home() {
 
           <RequestAccessForm />
         </div>
+      </div>
+      <div className="flex flex-row-reverse px-6">
+        <a href="https://unsplash.com/@danieljschwarz" target="_blank" rel="noreferrer">
+          Photos by: Daniel J. Schwarz
+        </a>
       </div>
 
       <div className="mx-auto flex max-w-7xl flex-col justify-between gap-20 px-4 py-20 md:flex-row">
