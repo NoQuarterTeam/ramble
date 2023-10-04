@@ -3,12 +3,14 @@
 @tailwind utilities;
 
 :root {
-  --background: #fffefe;
+  --background-light: #fffefe;
+  --background-dark: #241c17;
+  --background: var(--background-light);
   --border: theme(colors.gray.100);
 }
 
 .dark {
-  --background: #241c17;
+  --background: var(--background-dark);
   --border: theme(colors.gray.700);
 }
 
