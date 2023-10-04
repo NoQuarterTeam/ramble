@@ -217,7 +217,7 @@ function ClusterMarker(props: MarkerProps) {
       {props.point.properties.cluster ? (
         <div
           className={join(
-            "border-primary-100 bg-primary-800 dark:border-primary-700 dark:bg-primary-900 center cursor-pointer rounded-full border text-white shadow transition-transform hover:scale-110",
+            "border-primary-100 bg-primary-700 center cursor-pointer rounded-full border text-white shadow transition-transform hover:scale-110",
             props.point.properties.point_count > 10
               ? "sq-12"
               : props.point.properties.point_count > 100

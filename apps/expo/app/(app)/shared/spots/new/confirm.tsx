@@ -11,14 +11,14 @@ import { Text } from "../../../../../components/ui/Text"
 import { toast } from "../../../../../components/ui/Toast"
 import { api } from "../../../../../lib/api"
 import { useS3Upload } from "../../../../../lib/hooks/useS3"
-import { SPOTS } from "../../../../../lib/static/spots"
+import { SPOT_TYPES } from "../../../../../lib/static/spots"
 import { useParams, useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
 
 export function NewSpotConfirmScreen() {
   const { params } = useParams<"NewSpotConfirmScreen">()
   const router = useRouter()
-  const Icon = SPOTS[params.type].Icon
+  const Icon = SPOT_TYPES[params.type].Icon
   const [shouldPublishLater, setShouldPublishLater] = React.useState(false)
   const utils = api.useContext()
   const {

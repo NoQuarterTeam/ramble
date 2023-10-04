@@ -71,7 +71,8 @@ export const Button = React.forwardRef(function _Button(
       activeOpacity={0.7}
       className={merge(
         buttonStyles({ variant, size }),
-        (props.disabled || isLoading) && "opacity-70",
+        isLoading && "opacity-70",
+        props.disabled && "opacity-60",
         size === "sm" || size === "xs" ? "space-x-1" : "space-x-2",
         props.className,
       )}

@@ -23,7 +23,7 @@ export function ModalView(props: Props) {
   return (
     <View className={join("bg-background dark:bg-background-dark h-full flex-grow px-4 pt-6", isAndroid ? "pt-10" : "pt-6")}>
       <View className="flex flex-row justify-between pb-2">
-        {props.title ? <BrandHeading className="w-11/12 text-4xl">{props.title}</BrandHeading> : <Text />}
+        {props.title ? <BrandHeading className="w-11/12 text-3xl">{props.title}</BrandHeading> : <Text />}
         <TouchableOpacity onPress={props.onBack || navigation.goBack} className="p-1">
           <X size={24} className="text-black dark:text-white" />
         </TouchableOpacity>

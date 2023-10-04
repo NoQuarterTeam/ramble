@@ -3,14 +3,14 @@ import { cva } from "class-variance-authority"
 
 import type { SpotType } from "@ramble/database/types"
 
-import { SPOTS } from "../lib/static/spots"
+import { SPOT_TYPES } from "../lib/static/spots"
 
 interface MarkerProps {
   spot: { type: SpotType }
 }
 
 export function SpotMarker(props: MarkerProps) {
-  const Icon = SPOTS[props.spot.type].Icon
+  const Icon = SPOT_TYPES[props.spot.type].Icon
 
   return (
     <View className="relative">
