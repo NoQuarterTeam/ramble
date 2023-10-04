@@ -660,6 +660,9 @@ importers:
       '@prisma/client':
         specifier: 5.3.1
         version: 5.3.1(prisma@5.3.1)
+      '@prisma/extension-accelerate':
+        specifier: ^0.6.2
+        version: 0.6.2(@prisma/client@5.3.1)
       prisma:
         specifier: 5.3.1
         version: 5.3.1
@@ -4496,6 +4499,15 @@ packages:
   /@prisma/engines@5.3.1:
     resolution: {integrity: sha512-6QkILNyfeeN67BNEPEtkgh3Xo2tm6D7V+UhrkBbRHqKw9CTaz/vvTP/ROwYSP/3JT2MtIutZm/EnhxUiuOPVDA==}
     requiresBuild: true
+    dev: false
+
+  /@prisma/extension-accelerate@0.6.2(@prisma/client@5.3.1):
+    resolution: {integrity: sha512-KIBVPeWt8qaSg7wQ+TXmCVeUDoW75whtXcdS9dbHxRoO2OWFH5I9+qbkHBhx5Wj/h1wQpS8usuxGnsZqiBjUpQ==}
+    engines: {node: '>=16'}
+    peerDependencies:
+      '@prisma/client': '>=4.16.1'
+    dependencies:
+      '@prisma/client': 5.3.1(prisma@5.3.1)
     dev: false
 
   /@puppeteer/browsers@1.7.1:

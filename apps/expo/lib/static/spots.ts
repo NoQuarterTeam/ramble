@@ -57,10 +57,10 @@ export const SPOT_TYPES: { [key in SpotType]: { value: SpotType; label: string; 
   MECHANIC_PARTS: { value: "MECHANIC_PARTS", label: "Mechanic / Parts", Icon: Wrench, isComingSoon: true },
   VET: { value: "VET", label: "Vet", Icon: Dog, isComingSoon: true },
   // Hospitality
-  CAFE: { value: "CAFE", label: "Cafe", Icon: Coffee, isComingSoon: false },
-  RESTAURANT: { value: "RESTAURANT", label: "Restaurant", Icon: Utensils, isComingSoon: false },
-  BAR: { value: "BAR", label: "Bar", Icon: Beer, isComingSoon: false },
-  SHOP: { value: "SHOP", label: "Shop", Icon: ShoppingCart, isComingSoon: false },
+  CAFE: { value: "CAFE", label: "Cafe", Icon: Coffee, isComingSoon: true },
+  RESTAURANT: { value: "RESTAURANT", label: "Restaurant", Icon: Utensils, isComingSoon: true },
+  BAR: { value: "BAR", label: "Bar", Icon: Beer, isComingSoon: true },
+  SHOP: { value: "SHOP", label: "Shop", Icon: ShoppingCart, isComingSoon: true },
   // Other
   NATURE_EDUCATION: { value: "NATURE_EDUCATION", label: "Nature Education", Icon: Leaf, isComingSoon: true },
   FESTIVAL: { value: "FESTIVAL", label: "Festival", Icon: PartyPopper, isComingSoon: true },
