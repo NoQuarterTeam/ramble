@@ -162,25 +162,23 @@ function SpotTypeSection({ title, types }: { title: string; types: SpotType[] })
 function SpotTypeSelector({ type, defaultValue }: { type: SpotTypeInfo; defaultValue: boolean }) {
   const [isSelected, setIsSelected] = React.useState(defaultValue)
   return (
-    <>
-      <div className="relative">
-        <Button
-          disabled={type.isComingSoon}
-          variant={isSelected ? "primary" : "outline"}
-          type="button"
-          className="min-w-[100px]"
-          leftIcon={<type.Icon className="sq-4" />}
-          onClick={() => setIsSelected((s) => !s)}
-        >
-          {type.label}
-        </Button>
-        {type.isComingSoon && (
-          <p className="bg-background text-xxs absolute -right-1 -top-1 flex items-center justify-center rounded-full border px-1 shadow">
-            Coming soon
-          </p>
-        )}
-      </div>
+    <div className="relative">
+      <Button
+        disabled={type.isComingSoon}
+        variant={isSelected ? "primary" : "outline"}
+        type="button"
+        className="min-w-[100px]"
+        leftIcon={<type.Icon className="sq-4" />}
+        onClick={() => setIsSelected((s) => !s)}
+      >
+        {type.label}
+      </Button>
+      {type.isComingSoon && (
+        <p className="bg-background text-xxs absolute -right-1 -top-1 flex items-center justify-center rounded-full border px-1 shadow">
+          Coming soon
+        </p>
+      )}
       {isSelected && !type.isComingSoon && <input type="hidden" name="type[]" value={type.value} />}
-    </>
+    </div>
   )
 }
