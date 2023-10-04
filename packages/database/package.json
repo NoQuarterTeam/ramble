@@ -16,6 +16,7 @@
   "sideEffects": false,
   "dependencies": {
     "@prisma/client": "5.3.1",
+    "@prisma/extension-accelerate": "^0.6.2",
     "prisma": "5.3.1"
   },
   "devDependencies": {
