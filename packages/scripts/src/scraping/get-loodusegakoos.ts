@@ -22,7 +22,7 @@ async function getCards() {
 
   const newSpots = $(".result-row")
 
-  for (let index = 0; index < 10; index++) {
+  for (let index = 70; index < newSpots.length; index++) {
     const spot = $(newSpots[index])
     const link = "https://www.loodusegakoos.ee" + spot.find("a").attr("href")
 
@@ -51,7 +51,7 @@ async function getCards() {
       const exists = dbSpots.find((s) => s.loodusegakoosId === id)
       console.log(exists && "Spot exists: " + id)
 
-      // if (exists) continue
+      if (exists) continue
 
       console.log("Adding spot: " + index + " out of " + newSpots.length)
 
@@ -72,7 +72,8 @@ async function getCards() {
           if (src) images.push(src)
         })
 
-      console.log(images)
+      const uniqueImages = [...new Set(images)]
+
       await prisma.spot.create({
         data: {
           loodusegakoosId: id,
@@ -85,7 +86,9 @@ async function getCards() {
           isPetFriendly: true,
           creator: { connect: { email: "george@noquarter.co" } },
           verifier: { connect: { email: "george@noquarter.co" } },
-          images: { create: images.map((image) => ({ path: image, creator: { connect: { email: "george@noquarter.co" } } })) },
+          images: {
+            create: uniqueImages.map((image) => ({ path: image, creator: { connect: { email: "george@noquarter.co" } } })),
+          },
           amenities: {
             create: {
               shower: false,

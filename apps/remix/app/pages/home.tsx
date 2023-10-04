@@ -48,66 +48,71 @@ export default function Home() {
           </Link>
         )}
       </div>
-      <div className="h-[90vh] w-screen space-y-20 bg-[url('/landing/landing1.png')] px-4 pt-10 md:pt-28">
-        <div className="mx-auto flex max-w-6xl flex-col items-start space-y-12">
+      <div className="h-[96vh] w-screen space-y-20 bg-[url('/landing/landing1.png')] bg-center px-2 pt-10">
+        <div className="mx-auto flex max-w-7xl flex-col items-start space-y-12">
           <div className="flex flex-col items-center">
             <p className="brand-header text-5xl">ramble</p>
             <p className="text-lg font-semibold text-black">VAN TRAVEL APP</p>
           </div>
-          <div>
-            <h1 className="text-3xl text-black">Everything you need for remote working van life in Europe.</h1>
-            <h2 className="text-xl text-black">For the outdoor enthusiasts who seek adventure, authenticity and community.</h2>
+          <div className="space-y-2">
+            <h1 className="text-2xl font-bold text-black md:text-3xl">
+              Everything you need for remote working van life in Europe.
+            </h1>
+            <h2 className="text-lg font-light text-black md:text-xl">
+              For the outdoor enthusiasts who seek adventure, authenticity and community.
+            </h2>
           </div>
 
           <RequestAccessForm />
         </div>
       </div>
 
-      <div className="mx-auto max-w-3xl px-4 py-20 md:py-32">
-        <p className="text-xl">
-          Built for a new generation of{" "}
-          <span className="text-primary font-semibold">remote working, digitally connected travelers</span> looking for{" "}
-          <span className="text-primary font-semibold">authentic</span> nature, genuine connection and a more sustainable way to
-          travel.
-          <br />
-          <br />
-          Inspired by the great outdoors and the spirit of the environmental movement of the 60s and 70s.
-        </p>
-      </div>
-      <div className="mx-auto flex max-w-6xl flex-col justify-between gap-20 px-4 py-20 md:flex-row">
-        <div className="space-y-6">
-          <h3 className="brand-header text-4xl">our mission</h3>
-          <p className="text-lg">
-            To support and encourage sustainable slow travel.
+      <div className="mx-auto flex max-w-7xl flex-col justify-between gap-20 px-4 py-20 md:flex-row">
+        <div className="space-y-12">
+          <p className="md:pb-auto pb-6 text-xl">
+            Built for a new generation of{" "}
+            <span className="text-primary font-semibold">remote working, digitally connected travelers</span> looking for{" "}
+            <span className="text-primary font-semibold">authentic</span> nature, genuine connection and a more sustainable way to
+            travel.
             <br />
             <br />
-            Build a community around a shared love of nature and authenticity.
-            <br />
-            <br />
-            Support the growing community of eco-conscious van living remote workers and digital nomads.
-            <br />
-            <br />
-            Provide all the necessary digital tools and features for effortless authentic van travel.
-            <br />
-            <br />
-            Facilitate environmentalism with opportunities for voluntary work and ecological education.
-            <br />
-            <br />
-            Promote and support nature photography, film and art.
+            Inspired by the great outdoors and the spirit of the environmental movement of the 60s and 70s.
           </p>
+
+          <div className="space-y-6">
+            <h3 className="brand-header text-4xl">our mission</h3>
+            <p className="text-lg">
+              To support and encourage sustainable slow travel.
+              <br />
+              <br />
+              Build a community around a shared love of nature and authenticity.
+              <br />
+              <br />
+              Support the growing community of eco-conscious van living remote workers and digital nomads.
+              <br />
+              <br />
+              Provide all the necessary digital tools and features for effortless authentic van travel.
+              <br />
+              <br />
+              Facilitate environmentalism with opportunities for voluntary work and ecological education.
+              <br />
+              <br />
+              Promote and support nature photography, film and art.
+            </p>
+          </div>
         </div>
-        <img src="/landing/landing2.png" className="rounded-xs w-full max-w-[400px] object-cover" />
+        <img src="/landing/landing2.png" className="rounded-xs min-w-full object-cover md:min-w-[50%]" />
       </div>
-      <div className="px-4 py-20 md:py-32">
-        <div className="mx-auto max-w-6xl space-y-4">
+      {/* <div className="px-4 py-20 md:py-32">
+        <div className="mx-auto max-w-7xl space-y-4">
           <div>
             <h3 className="brand-header text-4xl">request access now</h3>
             <p className="text-lg">To maintain an authentic and trustworthy community, members can only join via invite.</p>
           </div>
           <RequestAccessForm mode="dark" />
         </div>
-      </div>
-      <div className="mx-auto flex max-w-6xl flex-col justify-between gap-20 px-4 py-20 md:flex-row">
+      </div> */}
+      <div className="mx-auto flex max-w-7xl flex-col justify-between gap-20 px-4 py-20 md:flex-row">
         <div className="space-y-6">
           <h3 className="brand-header text-4xl">features</h3>
           <p className="text-lg">
@@ -130,21 +135,21 @@ export default function Home() {
             Add your own spots and keep them organized in custom lists,
           </p>
         </div>
-        <img src="/landing/landing3.png" className="rounded-xs w-full max-w-[400px] object-cover" />
+        <img src="/landing/landing3.png" className="rounded-xs min-w-full object-cover md:min-w-[50%]" />
       </div>
 
-      <div className="flex flex-col items-center space-y-4 px-4 py-24">
+      <div className="flex flex-col items-center space-y-6 px-4 py-24">
         <p className="max-w-md text-center text-lg">
           “Finally a van life app that is purpose built for authentic, nature lovers from the digital age.”
         </p>
-        <div className="flex flex-col items-center">
-          <img src="/landing/landing4.png" className="sq-20 rounded object-cover" />
-          <i className="text-xl font-bold">Beth Johnstone</i>
-          <i>@sheisthelostgirl</i>
-        </div>
+        <a href="https://www.instagram.com/gkborg/" target="_blank" rel="noreferrer" className="flex flex-col items-center">
+          <img src="/landing/landing4.png" className="sq-24 rounded object-cover" />
+          <i className="pt-4 text-xl font-bold">George Borg</i>
+          <i>@gkborg</i>
+        </a>
       </div>
 
-      <div className="mx-auto flex max-w-6xl flex-col items-center space-y-8 px-4 py-20 text-center md:py-32">
+      <div className="mx-auto flex max-w-7xl flex-col items-center space-y-8 px-4 py-20 text-center md:py-32">
         <div>
           <h3 className="brand-header text-4xl">get access now</h3>
           <p className="text-lg">To maintain an authentic and trustworthy community, members can only join via invite.</p>
