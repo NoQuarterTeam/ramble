@@ -175,18 +175,18 @@ model Spot {
 }
 
 model SpotAmenities {
-  id          String   @id @default(uuid())
-  hotWater    Boolean?
-  wifi        Boolean?
-  shower      Boolean?
-  toilet      Boolean?
-  kitchen     Boolean?
-  electricity Boolean?
-  water       Boolean?
-  firePit     Boolean?
-  sauna       Boolean?
-  pool        Boolean?
-  bbq         Boolean?
+  id          String  @id @default(uuid())
+  hotWater    Boolean
+  wifi        Boolean
+  shower      Boolean
+  toilet      Boolean
+  kitchen     Boolean
+  electricity Boolean
+  water       Boolean
+  firePit     Boolean
+  sauna       Boolean
+  pool        Boolean
+  bbq         Boolean
 
   spot   Spot   @relation(fields: [spotId], references: [id], onDelete: Cascade)
   spotId String @unique
