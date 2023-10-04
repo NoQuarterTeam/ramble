@@ -1,5 +1,7 @@
+import path from "path"
+import fs from "fs"
 import { merge } from "@ramble/shared"
-import { NavLink, NavLinkProps, Outlet } from "@remix-run/react"
+import { NavLink, NavLinkProps, Outlet, useLoaderData } from "@remix-run/react"
 import { LoaderFunctionArgs } from "@vercel/remix"
 import { MoveRight } from "lucide-react"
 import { buttonStyles, buttonSizeStyles } from "~/components/ui"
@@ -9,15 +11,21 @@ import { getCurrentAdmin } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   await getCurrentAdmin(request)
-  return json(null)
+  const filePath = path.join(process.cwd(), "../../packages/emails/src/templates")
+  const templates = (await fs.promises.readdir(filePath)).map((file) => file.split(".tsx")[0] || file)
+  return json(templates)
 }
 
 export default function Layout() {
+  const templates = useLoaderData<typeof loader>()
   return (
     <div className="flex gap-2">
       <div className="h-screen w-[220px] space-y-2 border-r p-4">
-        <AdminLink to="reset-password">Reset password</AdminLink>
-        <AdminLink to="verify-account">Verify account</AdminLink>
+        {templates.map((template) => (
+          <AdminLink key={template} to={template}>
+            {template}
+          </AdminLink>
+        ))}
       </div>
       <div className="w-full">
         <Outlet />
