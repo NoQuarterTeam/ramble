@@ -12,6 +12,7 @@ import { Avatar, Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { json } from "~/lib/remix.server"
+import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 
 export const config = {
   // runtime: "edge",
@@ -55,6 +56,7 @@ type LoaderData = typeof loader
 export default function Guides() {
   const { guides: initialGuides, count } = useLoaderData<LoaderData>()
 
+  const user = useMaybeUser()
   const guideFetcher = useFetcher<LoaderData>()
   const [guides, setGuides] = React.useState(initialGuides)
 
@@ -73,7 +75,7 @@ export default function Guides() {
           <h1 className="text-3xl">Guides</h1>
           <p>Fellow van life travellers that have been handpicked to guarantee beautiful and authentic spots</p>
         </div>
-        <Button>Become a guide</Button>
+        {user && user.role === "MEMBER" && !user.isPendingGuideApproval && <Button>Become a guide</Button>}
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {guides.map((guide) => (

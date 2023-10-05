@@ -16,19 +16,20 @@ enum Role {
 }
 
 model User {
-  id             String  @id @default(uuid())
-  email          String  @unique
-  password       String
-  firstName      String
-  lastName       String
-  username       String  @unique
-  role           Role    @default(MEMBER)
-  avatar         String?
-  avatarBlurHash String?
-  bio            String? @db.LongText
-  instagram      String?
-  isVerified     Boolean @default(false)
-  isAdmin        Boolean @default(false)
+  id                     String  @id @default(uuid())
+  email                  String  @unique
+  password               String
+  firstName              String
+  lastName               String
+  username               String  @unique
+  role                   Role    @default(MEMBER)
+  avatar                 String?
+  avatarBlurHash         String?
+  bio                    String? @db.LongText
+  instagram              String?
+  isVerified             Boolean @default(false)
+  isAdmin                Boolean @default(false)
+  isPendingGuideApproval Boolean @default(false)
 
   // Preferences
   isPetOwner      Boolean @default(false)
@@ -171,6 +172,9 @@ model Spot {
   // loodusegakoos
   loodusegakoosId String? @unique
 
+  // roadsurfer
+  roadsurferId String? @unique
+
   deletedAt DateTime?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
@@ -187,6 +191,9 @@ model Spot {
   @@index([park4nightId])
   @@index([komootId])
   @@index([surflineId])
+  @@index([loodusegakoosId])
+  @@index([cucortuId])
+  @@index([roadsurferId])
 }
 
 model SpotAmenities {

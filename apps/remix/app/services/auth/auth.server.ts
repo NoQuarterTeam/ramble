@@ -22,6 +22,7 @@ const userSelectFields = {
   lastName: true,
   avatar: true,
   isAdmin: true,
+  isPendingGuideApproval: true,
   avatarBlurHash: true,
   username: true,
   role: true,
