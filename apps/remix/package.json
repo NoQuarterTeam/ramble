@@ -6,7 +6,7 @@
   "license": "",
   "scripts": {
     "build": "remix build",
-    "dev": "pnpm with-env remix dev",
+    "dev": "pnpm with-env remix dev --manual",
     "routes": "remix routes",
     "lint:fix": "eslint --config .eslintrc.commit.js --fix --cache --ext .ts,.tsx app",
     "lint": "eslint --config .eslintrc.js --ext .ts,.tsx app",
