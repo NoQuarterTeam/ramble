@@ -1,6 +1,5 @@
 import * as cheerio from "cheerio"
 
-
 // hiking
 const url = `https://www.komoot.com/api/v007/discover_tours/?srid=4326&format=simple&fields=timeline&timeline_highlights_fields=images,start_point&limit=100&max_distance=500000&sport=hike&surface=prefer_unpaved&hl=en`
 
@@ -82,7 +81,7 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
 async function main() {
   try {
     // Start at 40, -5 for whole scan of europe
-    for (let lat = 55; lat < 75; lat = lat + 7.5) {
+    for (let lat = 40; lat < 75; lat = lat + 7.5) {
       console.log("Lat: " + lat)
       for (let lng = -5; lng < 30; lng = lng + 7.5) {
         console.log("Lng: " + lng)
