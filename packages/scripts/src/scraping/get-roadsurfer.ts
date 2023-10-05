@@ -7,20 +7,28 @@ import exampleData from "./komoot.json"
 
 import { prisma } from "@ramble/database"
 import { SpotType } from "@ramble/database/types"
+import { log } from "console"
+
+export type RoadsurferSpot = {
+  id: string
+  latitude?: number
+  longitude?: number
+  name: string
+  link: string
+  images?: string[]
+  address?: string
+  description?: string
+}
 
 async function getCards({ lat, lng }: { lat: number; lng: number }) {
   const urlWithParams = url + "&lat=" + lat + "&lng=" + lng
 
-  // Open the installed Chromium. We use headless: false
-  // to be able to inspect the browser window.
   const browser = await puppeteer.launch({
     headless: false,
   })
 
-  // Open a new page / tab in the browser.
   const page = await browser.newPage()
 
-  // Tell the tab to navigate to the JavaScript topic page.
   await page.goto(urlWithParams)
   await page.waitForNetworkIdle()
 
@@ -30,7 +38,9 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
 
   const $ = cheerio.load(pageData.html)
 
-  let spots
+  browser.close()
+
+  const spots: RoadsurferSpot[] = []
 
   // +11 on mozilla classname
 
@@ -41,7 +51,7 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
 
     if (!id || !link || !name) return
 
-    spots.push({ id: parseInt(id), name, link })
+    spots.push({ id, name, link })
   })
 
   const currentData = await prisma.spot.findMany({
@@ -56,57 +66,64 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
       const exists = currentData.find((s) => s.roadsurferId === spot.id)
       if (exists) continue
 
-      const spotDetail = await fetch(spot.link)
+      const browser = await puppeteer.launch({
+        headless: false,
+      })
 
-      const spotDetailHtml = await spotDetail.text()
-      const $ = cheerio.load(spotDetailHtml)
+      const page = await browser.newPage()
+
+      await page.goto(spot.link)
+      await page.waitForNetworkIdle()
+
+      const pageData = await page.evaluate(() => {
+        return { html: document.documentElement.innerHTML }
+      })
+
+      const $ = cheerio.load(pageData.html)
+
+      const latitude = $("#productMap").attr("data-latitude")
+      const longitude = $("#productMap").attr("data-longitude")
+
+      if (!latitude || !longitude) return
 
       let images: string[] = []
-      $(".space-images .space-images--img").each((_, img) => {
+      $(".product-images__slider-big picture img").each((_, img) => {
         const src = $(img).attr("src")
-        if (src) images.push(src.replace("teaser", "medium"))
+        if (src) images.push("https://spots.roadsurfer.com" + src)
       })
-      const description = $(".about-popup .popup-body").html()?.trim() || ""
 
-      const address =
-        $(".space-header--part-location")
-          .text()
-          .replace(/(\r\n|\n|\r)/gm, "")
-          .replace(/ /g, "")
-          .trim()
-          .split(",")
-          .join(", ") || ""
+      const description = $(".product-info__description").html()?.trim() || ""
 
-      const isPetFriendly = $("p").filter((_, p) => $(p).text().includes("Pets allowed")).length > 0
+      const isPetFriendly =
+        $(".product-facility__icons-icon__label").filter((_, p) => $(p).text().includes("Pets allowed")).length > 0
 
-      const bbq = $("p").filter((_, p) => $(p).text().includes("BBQ")).length > 0
-      const kitchen = $("p").filter((_, p) => $(p).text().includes("Kitchen")).length > 0
-      const electricity = $("p").filter((_, p) => $(p).text().includes("Electricity")).length > 0
-      const hotWater = $("p").filter((_, p) => $(p).text().includes("Hot water")).length > 0
-      const water = $("p").filter((_, p) => $(p).text().includes("Water")).length > 0
-      const shower = $("p").filter((_, p) => $(p).text().includes("shower")).length > 0
-      const toilet = $("p").filter((_, p) => $(p).text().includes("Toilet")).length > 0
-      const pool = $("p").filter((_, p) => $(p).text().includes("Pool")).length > 0
-      const wifi = $("p").filter((_, p) => $(p).text().includes("WiFi")).length > 0
-      const firePit = $("p").filter((_, p) => $(p).text().includes("Fire")).length > 0
-      const sauna = $("p").filter((_, p) => $(p).text().includes("Sauna")).length > 0
+      const bbq = $(".product-facility__icons-icon__label").filter((_, p) => $(p).text().includes("BBQ area")).length > 0
+      const kitchen = $(".product-facility__icons-icon__label").filter((_, p) => $(p).text().includes("Kitchen")).length > 0
+      const electricity =
+        $(".product-facility__icons-icon__label").filter((_, p) => $(p).text().includes("Electricity")).length > 0
+
+      const water = $(".product-facility__icons-icon__label").filter((_, p) => $(p).text().includes("Drinking Water")).length > 0
+      const shower = $(".product-facility__icons-icon__label").filter((_, p) => $(p).text().includes("Shower")).length > 0
+      const toilet = $(".product-facility__icons-icon__label").filter((_, p) => $(p).text().includes("Toilet")).length > 0
+      const pool = $(".product-facility__icons-icon__label").filter((_, p) => $(p).text().includes("Swimming Pool")).length > 0
+      const wifi = $(".product-facility__icons-icon__label").filter((_, p) => $(p).text().includes("Wi-Fi")).length > 0
+      const firePit = $(".product-facility__icons-icon__label").filter((_, p) => $(p).text().includes("Campfire")).length > 0
 
       await prisma.spot.create({
         data: {
           name: spot.name,
-          address,
-          latitude: spot.latitude,
-          longitude: spot.longitude,
+          latitude: parseInt(latitude),
+          longitude: parseInt(longitude),
           description,
-          images: { create: images.map((image) => ({ path: image, creator: { connect: { email: "jack@noquarter.co" } } })) },
+          images: { create: images.map((image) => ({ path: image, creator: { connect: { email: "george@noquarter.co" } } })) },
           roadsurferId: spot.id,
           type: "CAMPING",
           isPetFriendly,
-          roadsurferUrl: spot.link,
-          creator: { connect: { email: "jack@noquarter.co" } },
-          verifier: { connect: { email: "jack@noquarter.co" } },
+          sourceUrl: spot.link,
+          creator: { connect: { email: "george@noquarter.co" } },
+          verifier: { connect: { email: "george@noquarter.co" } },
           amenities: {
-            create: { bbq, shower, kitchen, sauna, firePit, wifi, toilet, water, electricity, hotWater, pool },
+            create: { bbq, shower, kitchen, sauna: false, firePit, wifi, toilet, water, electricity, hotWater: false, pool },
           },
         },
       })
@@ -117,13 +134,13 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
 async function main() {
   try {
     // Start at 40, -5 for whole scan of europe
-    // for (let lat = 40; lat < 75; lat = lat + 7.5) {
-    //   console.log("Lat: " + lat)
-    //   for (let lng = -5; lng < 30; lng = lng + 7.5) {
-    //     console.log("Lng: " + lng)
-    await getCards({ lat: 40, lng: -5 })
-    //   }
-    // }
+    for (let lat = 40; lat < 75; lat = lat + 7.5) {
+      console.log("Lat: " + lat)
+      for (let lng = -5; lng < 30; lng = lng + 7.5) {
+        console.log("Lng: " + lng)
+        await getCards({ lat: 40, lng: -5 })
+      }
+    }
   } catch (error) {
     console.log(error)
     process.exit(1)
