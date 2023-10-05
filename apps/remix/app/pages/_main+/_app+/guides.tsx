@@ -65,8 +65,14 @@ export default function Guides() {
   }, [guideFetcher.data, guideFetcher.state])
 
   return (
-    <PageContainer className="space-y-2">
-      <h1 className="text-3xl">Latest guides</h1>
+    <PageContainer className="space-y-4">
+      <div className="flex justify-between">
+        <div>
+          <h1 className="text-3xl">Guides</h1>
+          <p>Fellow van life travellers that have been handpicked to guarantee beautiful and authentic spots</p>
+        </div>
+        <Button>Become a guide</Button>
+      </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {guides.map((guide) => (
           <GuideItem key={guide.id} guide={guide} />
