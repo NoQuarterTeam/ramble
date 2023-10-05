@@ -220,9 +220,9 @@ function ClusterMarker(props: MarkerProps) {
             "border-primary-100 bg-primary-700 center cursor-pointer rounded-full border text-white shadow transition-transform hover:scale-110",
             props.point.properties.point_count > 10
               ? "sq-12"
-              : props.point.properties.point_count > 100
+              : props.point.properties.point_count > 75
               ? "sq-16"
-              : props.point.properties.point_count > 250
+              : props.point.properties.point_count > 150
               ? "sq-20"
               : "sq-8",
           )}

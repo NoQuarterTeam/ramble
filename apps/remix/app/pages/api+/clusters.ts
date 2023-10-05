@@ -51,7 +51,7 @@ async function getMapClusters(request: Request) {
         : { in: defaultTypes },
     },
     orderBy: { createdAt: "desc" },
-    take: 2000,
+    take: 8000,
   })
   if (spots.length === 0) return []
 
