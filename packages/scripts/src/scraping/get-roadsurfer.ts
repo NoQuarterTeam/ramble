@@ -7,7 +7,7 @@ import exampleData from "./komoot.json"
 
 import { prisma } from "@ramble/database"
 import { SpotType } from "@ramble/database/types"
-import { log } from "console"
+import { convert } from "html-to-text"
 
 export type RoadsurferSpot = {
   id: string
@@ -22,9 +22,8 @@ export type RoadsurferSpot = {
 
 async function getCards({ lat, lng }: { lat: number; lng: number }) {
   const urlWithParams = url + "&lat=" + lat + "&lng=" + lng
-
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: "new",
   })
 
   const page = await browser.newPage()
@@ -40,7 +39,7 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
 
   browser.close()
 
-  const spots: RoadsurferSpot[] = []
+  const newSpots: RoadsurferSpot[] = []
 
   // +11 on mozilla classname
 
@@ -50,24 +49,26 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
     const link = $(card).find("a").attr("href")
 
     if (!id || !link || !name) return
-
-    spots.push({ id, name, link })
+    newSpots.push({ id, name, link })
   })
 
   const currentData = await prisma.spot.findMany({
-    where: { roadsurferId: { in: spots.map((s) => s.id) } },
+    where: { roadsurferId: { in: newSpots.map((s) => s.id) } },
   })
 
-  for (let index = 0; index < spots.length; index++) {
-    const spot = spots[index]
+  for (let index = 0; index < newSpots.length; index++) {
+    const spot = newSpots[index]
 
     try {
       // if in db, continue
       const exists = currentData.find((s) => s.roadsurferId === spot.id)
+      console.log(exists && "Spot exists: " + spot.id)
       if (exists) continue
 
+      console.log("Adding spot: " + index + " out of " + newSpots.length + " - " + lat + "," + lng)
+
       const browser = await puppeteer.launch({
-        headless: false,
+        headless: "new",
       })
 
       const page = await browser.newPage()
@@ -78,6 +79,7 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
       const pageData = await page.evaluate(() => {
         return { html: document.documentElement.innerHTML }
       })
+      browser.close()
 
       const $ = cheerio.load(pageData.html)
 
@@ -112,16 +114,16 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
       await prisma.spot.create({
         data: {
           name: spot.name,
-          latitude: parseInt(latitude),
-          longitude: parseInt(longitude),
-          description,
+          latitude: parseFloat(latitude),
+          longitude: parseFloat(longitude),
+          description: convert(description, { wordwrap: false, preserveNewlines: true }),
           images: { create: images.map((image) => ({ path: image, creator: { connect: { email: "george@noquarter.co" } } })) },
           roadsurferId: spot.id,
           type: "CAMPING",
           isPetFriendly,
           sourceUrl: spot.link,
           creator: { connect: { email: "george@noquarter.co" } },
-          verifier: { connect: { email: "george@noquarter.co" } },
+          // verifier: { connect: { email: "george@noquarter.co" } },
           amenities: {
             create: { bbq, shower, kitchen, sauna: false, firePit, wifi, toilet, water, electricity, hotWater: false, pool },
           },
@@ -134,11 +136,11 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
 async function main() {
   try {
     // Start at 40, -5 for whole scan of europe
-    for (let lat = 40; lat < 75; lat = lat + 7.5) {
+    for (let lat = 47.5; lat < 75; lat = lat + 7.5) {
       console.log("Lat: " + lat)
-      for (let lng = -5; lng < 30; lng = lng + 7.5) {
+      for (let lng = 17.5; lng < 30; lng = lng + 7.5) {
         console.log("Lng: " + lng)
-        await getCards({ lat: 40, lng: -5 })
+        await getCards({ lat, lng })
       }
     }
   } catch (error) {
