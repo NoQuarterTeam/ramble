@@ -1,8 +1,10 @@
+import { sendFeedbackSentToAdminsEmail } from "@ramble/api"
 import { FeedbackType } from "@ramble/database/types"
 import { useDisclosure } from "@ramble/shared"
 import { ActionFunctionArgs } from "@vercel/remix"
 import { Bug, Lightbulb, MessageCircle } from "lucide-react"
 import * as React from "react"
+import { promiseHash } from "remix-utils/promise"
 import { z } from "zod"
 import { FormButton, FormError, FormField, useFetcher } from "~/components/Form"
 import { Button, Modal, Textarea } from "~/components/ui"
@@ -27,8 +29,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       try {
         const result = await validateFormData(request, schema)
         if (!result.success) return formError(result)
-        await db.feedback.create({ data: { ...result.data, userId: user.id } })
-
+        const { feedback, admins } = await promiseHash({
+          feedback: db.feedback.create({ data: { ...result.data, userId: user.id }, include: { user: true } }),
+          admins: db.user.findMany({ where: { isAdmin: true }, select: { email: true } }),
+        })
+        await sendFeedbackSentToAdminsEmail(
+          admins.map((a) => a.email),
+          feedback,
+        )
         return json({ success: true }, request, {
           flash: { type: "success", title: "Feedback sent", description: "We'll take a look as soon as possible" },
         })

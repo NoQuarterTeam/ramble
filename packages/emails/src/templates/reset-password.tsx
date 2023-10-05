@@ -3,20 +3,19 @@ import { EmailDocument } from "../components/EmailDocument"
 import { EmailWrapper } from "../components/EmailWrapper"
 
 interface Props {
-  link?: string
+  link: string
 }
 
 export function ResetPasswordContent(props: Props) {
-  const link = props.link || "localhost:3000"
   return (
     <EmailWrapper preview="Ramble reset your password">
       <h1 className="mb-4 text-2xl font-bold">Reset Password</h1>
       <p className="mb-4">
         Someone recently requested a password change for your Ramble account. If this was you, you can set a new password here:
       </p>
-      <Button href={link}>Reset password</Button>
-      <a href={link} className="mb-4 block underline">
-        {link}
+      <Button href={props.link}>Reset password</Button>
+      <a href={props.link} className="mb-4 block underline">
+        {props.link}
       </a>
       <p>If you don't want to change your password or didn't request this, just ignore and delete this message.</p>
     </EmailWrapper>
