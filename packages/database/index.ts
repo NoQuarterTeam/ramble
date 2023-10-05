@@ -1,8 +1,14 @@
-import { PrismaClient } from "@prisma/client/edge"
-import { withAccelerate } from "@prisma/extension-accelerate"
+import { connect } from "@planetscale/database"
+import { PrismaPlanetScale } from "@prisma/adapter-planetscale"
+import { PrismaClient } from "@prisma/client"
+
+// import { withAccelerate } from "@prisma/extension-accelerate"
+
+const connection = connect({ url: process.env.DATABASE_URL })
+const adapter = new PrismaPlanetScale(connection)
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }
 
-export const prisma = globalForPrisma.prisma || new PrismaClient({ log: ["query"] }).$extends(withAccelerate())
+export const prisma = globalForPrisma.prisma || new PrismaClient({ adapter, log: ["query"] })
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma
