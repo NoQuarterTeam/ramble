@@ -191,6 +191,9 @@ model Spot {
   @@index([park4nightId])
   @@index([komootId])
   @@index([surflineId])
+  @@index([loodusegakoosId])
+  @@index([cucortuId])
+  @@index([roadsurferId])
 }
 
 model SpotAmenities {
