@@ -204,8 +204,8 @@ importers:
         specifier: ^3.4.0
         version: 3.4.0
       zod:
-        specifier: 3.22.3
-        version: 3.22.3
+        specifier: 3.22.4
+        version: 3.22.4
     devDependencies:
       '@babel/core':
         specifier: ^7.23.0
@@ -395,7 +395,7 @@ importers:
         version: 7.1.6(mapbox-gl@2.15.0)(react-dom@18.2.0)(react@18.2.0)
       remix-utils:
         specifier: 7.0.0-pre.3
-        version: 7.0.0-pre.3(@remix-run/react@2.0.1)(@remix-run/router@1.9.0)(@remix-run/server-runtime@1.19.3)(react@18.2.0)(typescript@5.2.2)(zod@3.22.3)
+        version: 7.0.0-pre.3(@remix-run/react@2.0.1)(@remix-run/router@1.9.0)(@remix-run/server-runtime@1.19.3)(react@18.2.0)(typescript@5.2.2)(zod@3.22.4)
       sharp:
         specifier: ^0.32.6
         version: 0.32.6
@@ -421,11 +421,11 @@ importers:
         specifier: ^3.4.0
         version: 3.4.0
       zod:
-        specifier: 3.22.3
-        version: 3.22.3
+        specifier: 3.22.4
+        version: 3.22.4
       zodix:
         specifier: ^0.4.3
-        version: 0.4.3(@remix-run/server-runtime@1.19.3)(zod@3.22.3)
+        version: 0.4.3(@remix-run/server-runtime@1.19.3)(zod@3.22.4)
     devDependencies:
       '@ramble/eslint-config':
         specifier: workspace:*
@@ -566,8 +566,8 @@ importers:
         specifier: ^1.13.3
         version: 1.13.3
       zod:
-        specifier: 3.22.3
-        version: 3.22.3
+        specifier: 3.22.4
+        version: 3.22.4
     devDependencies:
       '@ramble/eslint-config':
         specifier: workspace:*
@@ -757,8 +757,8 @@ importers:
         specifier: ^1.14.0
         version: 1.14.0
       zod:
-        specifier: 3.22.3
-        version: 3.22.3
+        specifier: 3.22.4
+        version: 3.22.4
     devDependencies:
       '@ramble/eslint-config':
         specifier: workspace:*
@@ -16210,7 +16210,7 @@ packages:
       minimatch: 5.1.6
     dev: true
 
-  /remix-utils@7.0.0-pre.3(@remix-run/react@2.0.1)(@remix-run/router@1.9.0)(@remix-run/server-runtime@1.19.3)(react@18.2.0)(typescript@5.2.2)(zod@3.22.3):
+  /remix-utils@7.0.0-pre.3(@remix-run/react@2.0.1)(@remix-run/router@1.9.0)(@remix-run/server-runtime@1.19.3)(react@18.2.0)(typescript@5.2.2)(zod@3.22.4):
     resolution: {integrity: sha512-jFtNjicKmlX2HCvDuKSzkpj204Yxy9dvZ+bnHXb7ohaScKzv4bbEi60EHbT+2M7DC8CYip+ZVPktOLwwLVTzvA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
@@ -16230,7 +16230,7 @@ packages:
       schema-dts: 1.1.2(typescript@5.2.2)
       type-fest: 2.19.0
       uuid: 8.3.2
-      zod: 3.22.3
+      zod: 3.22.4
     transitivePeerDependencies:
       - typescript
     dev: false
@@ -18821,18 +18821,18 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
-  /zod@3.22.3:
-    resolution: {integrity: sha512-EjIevzuJRiRPbVH4mGc8nApb/lVLKVpmUhAaR5R5doKGfAnGJ6Gr3CViAVjP+4FWSxCsybeWQdcgCtbX+7oZug==}
+  /zod@3.22.4:
+    resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
     dev: false
 
-  /zodix@0.4.3(@remix-run/server-runtime@1.19.3)(zod@3.22.3):
+  /zodix@0.4.3(@remix-run/server-runtime@1.19.3)(zod@3.22.4):
     resolution: {integrity: sha512-XkZQ/XaNJkK3FxSNBr7QQRtwu0m/SW0oHGxgZp184TkSaiwymKU+sd2pzZ30IcovADpQg9Kgs5fV9AkFEfn3CQ==}
     peerDependencies:
       '@remix-run/server-runtime': 1.x
       zod: 3.x
     dependencies:
       '@remix-run/server-runtime': 1.19.3
-      zod: 3.22.3
+      zod: 3.22.4
     dev: false
 
   /zwitch@2.0.4:
