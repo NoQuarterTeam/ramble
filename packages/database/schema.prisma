@@ -16,19 +16,20 @@ enum Role {
 }
 
 model User {
-  id             String  @id @default(uuid())
-  email          String  @unique
-  password       String
-  firstName      String
-  lastName       String
-  username       String  @unique
-  role           Role    @default(MEMBER)
-  avatar         String?
-  avatarBlurHash String?
-  bio            String? @db.LongText
-  instagram      String?
-  isVerified     Boolean @default(false)
-  isAdmin        Boolean @default(false)
+  id                     String  @id @default(uuid())
+  email                  String  @unique
+  password               String
+  firstName              String
+  lastName               String
+  username               String  @unique
+  role                   Role    @default(MEMBER)
+  avatar                 String?
+  avatarBlurHash         String?
+  bio                    String? @db.LongText
+  instagram              String?
+  isVerified             Boolean @default(false)
+  isAdmin                Boolean @default(false)
+  isPendingGuideApproval Boolean @default(false)
 
   // Preferences
   isPetOwner      Boolean @default(false)
