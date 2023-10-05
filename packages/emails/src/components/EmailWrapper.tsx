@@ -32,7 +32,7 @@ export function EmailWrapper({ children, preview }: { children: React.ReactNode;
   return (
     <Tailwind config={{ theme }}>
       {preview && <Preview>{preview}</Preview>}
-      <div className="bg-background h-screen">
+      <div className="bg-background">
         <Container className="font-sans text-white">
           <div className="rounded-xs my-2 border border-gray-700 p-10">
             {children}

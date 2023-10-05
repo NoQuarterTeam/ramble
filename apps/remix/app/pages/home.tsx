@@ -4,21 +4,20 @@ import { json } from "@vercel/remix"
 import { z } from "zod"
 
 import { join, merge } from "@ramble/shared"
+import { ClientOnly } from "remix-utils/client-only"
 
 import { useFetcher } from "~/components/Form"
 import { db } from "~/lib/db.server"
-import { formError, validateFormData } from "~/lib/form"
-import { useLoaderHeaders } from "~/lib/headers.server"
+import { ActionDataErrorResponse, formError, validateFormData } from "~/lib/form"
+
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 
 export const config = {
   // runtime: "edge",
 }
 
-export const headers = useLoaderHeaders
-
+const schema = z.object({ email: z.string().email() })
 export const action = async ({ request }: LoaderFunctionArgs) => {
-  const schema = z.object({ email: z.string().email() })
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
   const accessRequest = await db.accessRequest.findFirst({ where: { email: result.data.email } })
@@ -29,6 +28,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
 export default function Home() {
   const me = useMaybeUser()
+  const randomPerson = PEOPLE[Math.floor(Math.random() * PEOPLE.length)]
   return (
     <div className="bg-background dark pb-20 font-serif text-white">
       <div className="absolute right-6 top-16 md:top-6">
@@ -143,16 +143,23 @@ export default function Home() {
         <img src="/landing/landing3.png" className="rounded-xs min-w-full object-cover md:min-w-[50%]" />
       </div>
 
-      <div className="flex flex-col items-center space-y-6 px-4 py-24">
-        <p className="max-w-md text-center text-lg">
-          “Finally a van life app that is purpose built for authentic, nature lovers from the digital age.”
-        </p>
-        <a href="https://www.instagram.com/gkborg/" target="_blank" rel="noreferrer" className="flex flex-col items-center">
-          <img src="/landing/landing4.png" className="sq-24 rounded object-cover" />
-          <i className="pt-4 text-xl font-bold">George Borg</i>
-          <i>@gkborg</i>
-        </a>
-      </div>
+      <ClientOnly>
+        {() => (
+          <div className="flex flex-col items-center space-y-6 px-4 py-24">
+            <p className="max-w-md text-center text-lg">“{randomPerson?.message}”</p>
+            <a
+              href={`https://www.instagram.com/${randomPerson?.handle}/`}
+              target="_blank"
+              rel="noreferrer"
+              className="flex flex-col items-center"
+            >
+              <img src={randomPerson?.image} className="sq-24 rounded-full object-cover" />
+              <i className="pt-4 text-xl font-bold">{randomPerson?.name}</i>
+              <i>@{randomPerson?.handle}</i>
+            </a>
+          </div>
+        )}
+      </ClientOnly>
 
       <div className="mx-auto flex max-w-7xl flex-col items-center space-y-8 px-4 py-20 text-center md:py-32">
         <div>
@@ -166,8 +173,7 @@ export default function Home() {
 }
 
 function RequestAccessForm({ mode }: { mode?: "light" | "dark" }) {
-  // eslint-disable-next-line
-  const accessFetcher = useFetcher<any>()
+  const accessFetcher = useFetcher<ActionDataErrorResponse<typeof schema>>()
 
   if (accessFetcher.data?.success)
     return (
@@ -208,3 +214,18 @@ function RequestAccessForm({ mode }: { mode?: "light" | "dark" }) {
     </accessFetcher.Form>
   )
 }
+
+const PEOPLE = [
+  {
+    name: "George Borg",
+    handle: "gkborg",
+    image: "/landing/people/george.png",
+    message: "Finally a van life app that is purpose built for authentic, nature lovers from the digital age.",
+  },
+  {
+    name: "Jack Clackett",
+    handle: "jack__jsy",
+    image: "/landing/people/jack.png",
+    message: "The only app you need for van life in Europe. Trustworthy spots from a community of like-minded travellers.",
+  },
+]

@@ -12,7 +12,7 @@ export function VerifyAccountContent(props: Props) {
     <EmailWrapper>
       <h1 className="mb-4 text-2xl font-bold">Verify account</h1>
       <p className="mb-4">To keep access to your account, please verify your email address.</p>
-      <Button href={link}>Verify</Button>
+      <Button href={link}>Verify account</Button>
       <a href={link} className="mb-4 block underline">
         {link}
       </a>

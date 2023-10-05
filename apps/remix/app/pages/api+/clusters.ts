@@ -7,7 +7,7 @@ import { z } from "zod"
 import { CheckboxAsString, NumAsString } from "zodix"
 
 import { publicSpotWhereClause } from "@ramble/api"
-import type { SpotType } from "@ramble/database/types"
+import { SpotType } from "@ramble/database/types"
 
 import { db } from "~/lib/db.server"
 import { getUserSession } from "~/services/session/session.server"
@@ -33,6 +33,7 @@ async function getMapClusters(request: Request) {
   if (!result.success) return []
   const { zoom, type, isVerified, isPetFriendly, ...coords } = result.data
 
+  const defaultTypes = [SpotType.CAMPING, SpotType.FREE_CAMPING]
   const spots = await db.spot.findMany({
     select: { id: true, latitude: true, longitude: true, type: true },
     where: {
@@ -46,8 +47,8 @@ async function getMapClusters(request: Request) {
           ? { equals: type as SpotType }
           : type.length > 0
           ? { in: type as SpotType[] }
-          : undefined
-        : undefined,
+          : { in: defaultTypes }
+        : { in: defaultTypes },
     },
     orderBy: { createdAt: "desc" },
     take: 2000,

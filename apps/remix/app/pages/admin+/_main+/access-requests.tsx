@@ -42,11 +42,11 @@ const columns = [
     cell: (info) => dayjs(info.getValue()).format("DD/MM/YYYY"),
   }),
 ]
-export default function InviteRequests() {
+export default function AccessRequests() {
   const { accessRequests, count } = useLoaderData<typeof loader>()
   return (
     <div className="space-y-2">
-      <h1 className="text-4xl">Invite Requests</h1>
+      <h1 className="text-4xl">Access Requests</h1>
       <div className="flex gap-2">
         <div>
           <Search className="max-w-[400px]" />
