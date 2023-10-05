@@ -6,7 +6,7 @@
   "license": "",
   "scripts": {
     "build": "remix build",
-    "dev": "pnpm with-env remix dev",
+    "dev": "pnpm with-env remix dev --manual",
     "routes": "remix routes",
     "lint:fix": "eslint --config .eslintrc.commit.js --fix --cache --ext .ts,.tsx app",
     "lint": "eslint --config .eslintrc.js --ext .ts,.tsx app",
@@ -78,7 +78,7 @@
     "turbo": "^1.10.14",
     "use-onclickoutside": "^0.4.1",
     "uuid": "^3.4.0",
-    "zod": "3.22.3",
+    "zod": "3.22.4",
     "zodix": "^0.4.3"
   },
   "devDependencies": {
@@ -91,8 +91,8 @@
     "@types/jsonwebtoken": "9.0.3",
     "@types/nodemailer": "6.4.11",
     "@types/nprogress": "^0.2.1",
-    "@types/react": "18.2.24",
-    "@types/react-dom": "18.2.8",
+    "@types/react": "18.2.25",
+    "@types/react-dom": "18.2.10",
     "@types/sharp": "^0.31.1",
     "@types/supercluster": "^7.1.1",
     "@types/uuid": "^9.0.4",

@@ -89,21 +89,33 @@ model VanImage {
 }
 
 enum SpotType {
-  CAFE
+  // Stays
   CAMPING
   FREE_CAMPING
-  RESTAURANT
   PARKING
-  BAR
-  TIP
-  SHOP
+  // Activities
   CLIMBING
   SURFING
   MOUNTAIN_BIKING
-  HIKING
-  PADDLE_BOARDING
+  HIKING // deprecated
+  HIKING_TRAIL
+  PADDLE_BOARDING // deprecated
+  PADDLE_KAYAK
+  // Services
   GAS_STATION
-  OTHER
+  ELECTRIC_CHARGE_POINT
+  MECHANIC_PARTS
+  VET
+  // Hospitality
+  CAFE
+  RESTAURANT
+  BAR
+  SHOP
+  // Other
+  VOLUNTEERING
+  ART_FILM_PHOTOGRAPHY
+  NATURE_EDUCATION
+  FESTIVAL
 }
 
 model Spot {

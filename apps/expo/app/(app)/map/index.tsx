@@ -130,7 +130,7 @@ export function SpotsMapScreen() {
               <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={onPress}
-                className="sq-10 flex items-center justify-center rounded-full border border-green-100 bg-green-800 dark:border-green-700 dark:bg-green-900"
+                className="sq-10 border-primary-100 bg-primary-700 flex items-center justify-center rounded-full border"
               >
                 <Text className="text-center text-sm text-white">{point.properties.point_count_abbreviated}</Text>
               </TouchableOpacity>
@@ -273,7 +273,7 @@ export function SpotsMapScreen() {
             </View>
 
             <Switch
-              trackColor={{ true: colors.green[600] }}
+              trackColor={{ true: colors.primary[600] }}
               value={preferences.mapLayerRain}
               onValueChange={() => setPreferences({ ...preferences, mapLayerRain: !preferences.mapLayerRain })}
             />

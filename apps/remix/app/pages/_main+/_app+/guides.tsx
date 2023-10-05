@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Link, useFetcher, useLoaderData } from "@remix-run/react"
 import type { LoaderFunctionArgs, SerializeFrom } from "@vercel/remix"
-import { json } from "@vercel/remix"
+
 import { cacheHeader } from "pretty-cache-header"
 import { promiseHash } from "remix-utils/promise"
 
@@ -11,6 +11,7 @@ import { PageContainer } from "~/components/PageContainer"
 import { Avatar, Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
+import { json } from "~/lib/remix.server"
 
 export const config = {
   // runtime: "edge",
@@ -36,14 +37,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         username: true,
         avatar: true,
         avatarBlurHash: true,
-        _count: { select: { createdSpots: { where: { deletedAt: null } } } },
+        _count: {
+          select: { followers: true, lists: { where: { isPrivate: false } }, createdSpots: { where: { deletedAt: null } } },
+        },
       },
     }),
-
     count: db.user.count({ where: { role: "GUIDE" } }),
   })
 
-  return json(data, {
+  return json(data, request, {
     headers: { "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour", staleWhileRevalidate: "1min", maxAge: "1hour" }) },
   })
 }
@@ -65,8 +67,14 @@ export default function Guides() {
   }, [guideFetcher.data, guideFetcher.state])
 
   return (
-    <PageContainer className="space-y-2">
-      <h1 className="text-3xl">Latest guides</h1>
+    <PageContainer className="space-y-4">
+      <div className="flex justify-between">
+        <div>
+          <h1 className="text-3xl">Guides</h1>
+          <p>Fellow van life travellers that have been handpicked to guarantee beautiful and authentic spots</p>
+        </div>
+        <Button>Become a guide</Button>
+      </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {guides.map((guide) => (
           <GuideItem key={guide.id} guide={guide} />
@@ -85,10 +93,7 @@ export default function Guides() {
 
 function GuideItem(props: { guide: SerializeFrom<typeof loader>["guides"][number] }) {
   return (
-    <Link
-      to={`/${props.guide.username}`}
-      className="border-hover rounded-xs flex items-center justify-between space-x-4 border p-4 transition-colors"
-    >
+    <Link to={`/${props.guide.username}`} className="border-hover rounded-xs flex flex-col gap-6 border p-4 transition-colors">
       <div className="flex items-center space-x-2">
         <Avatar
           className="sq-20 flex-shrink-0"
@@ -103,9 +108,19 @@ function GuideItem(props: { guide: SerializeFrom<typeof loader>["guides"][number
           <p className="text-sm">{props.guide.username}</p>
         </div>
       </div>
-      <div className="text-center text-sm">
-        <p className="font-medium leading-tight">{props.guide._count?.createdSpots.toLocaleString()}</p>
-        <p>spots</p>
+      <div className="grid grid-cols-3 gap-4">
+        <div className="text-center text-sm">
+          <p className="text-lg font-medium leading-tight">{props.guide._count?.createdSpots.toLocaleString()}</p>
+          <p>spots</p>
+        </div>
+        <div className="text-center text-sm">
+          <p className="text-lg font-medium leading-tight">{props.guide._count?.followers.toLocaleString()}</p>
+          <p>followers</p>
+        </div>
+        <div className="text-center text-sm">
+          <p className="text-lg font-medium leading-tight">{props.guide._count?.lists.toLocaleString()}</p>
+          <p>lists</p>
+        </div>
       </div>
     </Link>
   )
