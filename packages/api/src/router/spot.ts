@@ -46,7 +46,7 @@ export const spotRouter = createTRPCRouter({
             : { in: defaultTypes },
         },
         orderBy: { createdAt: "desc" },
-        take: 2000,
+        take: 8000,
       })
       if (spots.length === 0) return []
       const supercluster = new Supercluster()
