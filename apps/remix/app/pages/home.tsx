@@ -4,21 +4,20 @@ import { json } from "@vercel/remix"
 import { z } from "zod"
 
 import { join, merge } from "@ramble/shared"
+import { ClientOnly } from "remix-utils/client-only"
 
 import { useFetcher } from "~/components/Form"
 import { db } from "~/lib/db.server"
-import { formError, validateFormData } from "~/lib/form"
-import { useLoaderHeaders } from "~/lib/headers.server"
+import { ActionDataErrorResponse, formError, validateFormData } from "~/lib/form"
+
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 
 export const config = {
   // runtime: "edge",
 }
 
-export const headers = useLoaderHeaders
-
+const schema = z.object({ email: z.string().email() })
 export const action = async ({ request }: LoaderFunctionArgs) => {
-  const schema = z.object({ email: z.string().email() })
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
   const accessRequest = await db.accessRequest.findFirst({ where: { email: result.data.email } })
@@ -29,6 +28,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 
 export default function Home() {
   const me = useMaybeUser()
+  const randomPerson = PEOPLE[Math.floor(Math.random() * PEOPLE.length)]
   return (
     <div className="bg-background dark pb-20 font-serif text-white">
       <div className="absolute right-6 top-16 md:top-6">
@@ -48,66 +48,76 @@ export default function Home() {
           </Link>
         )}
       </div>
-      <div className="h-[90vh] w-screen space-y-20 bg-[url('/landing/landing1.png')] px-4 pt-10 md:pt-28">
-        <div className="mx-auto flex max-w-6xl flex-col items-start space-y-12">
+      <div className="h-[94vh] w-screen space-y-20 bg-[url('/landing/landing1.png')] bg-center px-2 pt-10">
+        <div className="mx-auto flex max-w-7xl flex-col items-start space-y-12">
           <div className="flex flex-col items-center">
             <p className="brand-header text-5xl">ramble</p>
             <p className="text-lg font-semibold text-black">VAN TRAVEL APP</p>
           </div>
-          <div>
-            <h1 className="text-3xl text-black">Everything you need for remote working van life in Europe.</h1>
-            <h2 className="text-xl text-black">For the outdoor enthusiasts who seek adventure, authenticity and community.</h2>
+          <div className="space-y-2">
+            <h1 className="text-2xl font-bold text-black md:text-3xl">
+              Everything you need for remote working van life in Europe.
+            </h1>
+            <h2 className="text-lg font-light text-black md:text-xl">
+              For the outdoor enthusiasts who seek adventure, authenticity and community.
+            </h2>
           </div>
 
           <RequestAccessForm />
         </div>
       </div>
+      <div className="flex flex-row-reverse px-6">
+        <a href="https://unsplash.com/@danieljschwarz" target="_blank" rel="noreferrer">
+          Photos by: Daniel J. Schwarz
+        </a>
+      </div>
 
-      <div className="mx-auto max-w-3xl px-4 py-20 md:py-32">
-        <p className="text-xl">
-          Built for a new generation of{" "}
-          <span className="text-primary font-semibold">remote working, digitally connected travelers</span> looking for{" "}
-          <span className="text-primary font-semibold">authentic</span> nature, genuine connection and a more sustainable way to
-          travel.
-          <br />
-          <br />
-          Inspired by the great outdoors and the spirit of the environmental movement of the 60s and 70s.
-        </p>
-      </div>
-      <div className="mx-auto flex max-w-6xl flex-col justify-between gap-20 px-4 py-20 md:flex-row">
-        <div className="space-y-6">
-          <h3 className="brand-header text-4xl">our mission</h3>
-          <p className="text-lg">
-            To support and encourage sustainable slow travel.
+      <div className="mx-auto flex max-w-7xl flex-col justify-between gap-20 px-4 py-20 md:flex-row">
+        <div className="space-y-12">
+          <p className="md:pb-auto pb-6 text-xl">
+            Built for a new generation of{" "}
+            <span className="text-primary font-semibold">remote working, digitally connected travelers</span> looking for{" "}
+            <span className="text-primary font-semibold">authentic</span> nature, genuine connection and a more sustainable way to
+            travel.
             <br />
             <br />
-            Build a community around a shared love of nature and authenticity.
-            <br />
-            <br />
-            Support the growing community of eco-conscious van living remote workers and digital nomads.
-            <br />
-            <br />
-            Provide all the necessary digital tools and features for effortless authentic van travel.
-            <br />
-            <br />
-            Facilitate environmentalism with opportunities for voluntary work and ecological education.
-            <br />
-            <br />
-            Promote and support nature photography, film and art.
+            Inspired by the great outdoors and the spirit of the environmental movement of the 60s and 70s.
           </p>
+
+          <div className="space-y-6">
+            <h3 className="brand-header text-4xl">our mission</h3>
+            <p className="text-lg">
+              To support and encourage sustainable slow travel.
+              <br />
+              <br />
+              Build a community around a shared love of nature and authenticity.
+              <br />
+              <br />
+              Support the growing community of eco-conscious van living remote workers and digital nomads.
+              <br />
+              <br />
+              Provide all the necessary digital tools and features for effortless authentic van travel.
+              <br />
+              <br />
+              Facilitate environmentalism with opportunities for voluntary work and ecological education.
+              <br />
+              <br />
+              Promote and support nature photography, film and art.
+            </p>
+          </div>
         </div>
-        <img src="/landing/landing2.png" className="rounded-xs w-full max-w-[400px] object-cover" />
+        <img src="/landing/landing2.png" className="rounded-xs min-w-full object-cover md:min-w-[50%]" />
       </div>
-      <div className="px-4 py-20 md:py-32">
-        <div className="mx-auto max-w-6xl space-y-4">
+      {/* <div className="px-4 py-20 md:py-32">
+        <div className="mx-auto max-w-7xl space-y-4">
           <div>
             <h3 className="brand-header text-4xl">request access now</h3>
             <p className="text-lg">To maintain an authentic and trustworthy community, members can only join via invite.</p>
           </div>
           <RequestAccessForm mode="dark" />
         </div>
-      </div>
-      <div className="mx-auto flex max-w-6xl flex-col justify-between gap-20 px-4 py-20 md:flex-row">
+      </div> */}
+      <div className="mx-auto flex max-w-7xl flex-col justify-between gap-20 px-4 py-20 md:flex-row">
         <div className="space-y-6">
           <h3 className="brand-header text-4xl">features</h3>
           <p className="text-lg">
@@ -130,21 +140,28 @@ export default function Home() {
             Add your own spots and keep them organized in custom lists,
           </p>
         </div>
-        <img src="/landing/landing3.png" className="rounded-xs w-full max-w-[400px] object-cover" />
+        <img src="/landing/landing3.png" className="rounded-xs min-w-full object-cover md:min-w-[50%]" />
       </div>
 
-      <div className="flex flex-col items-center space-y-4 px-4 py-24">
-        <p className="max-w-md text-center text-lg">
-          “Finally a van life app that is purpose built for authentic, nature lovers from the digital age.”
-        </p>
-        <div className="flex flex-col items-center">
-          <img src="/landing/landing4.png" className="sq-20 rounded object-cover" />
-          <i className="text-xl font-bold">Beth Johnstone</i>
-          <i>@sheisthelostgirl</i>
-        </div>
-      </div>
+      <ClientOnly>
+        {() => (
+          <div className="flex flex-col items-center space-y-6 px-4 py-24">
+            <p className="max-w-md text-center text-lg">“{randomPerson?.message}”</p>
+            <a
+              href={`https://www.instagram.com/${randomPerson?.handle}/`}
+              target="_blank"
+              rel="noreferrer"
+              className="flex flex-col items-center"
+            >
+              <img src={randomPerson?.image} className="sq-24 rounded-full object-cover" />
+              <i className="pt-4 text-xl font-bold">{randomPerson?.name}</i>
+              <i>@{randomPerson?.handle}</i>
+            </a>
+          </div>
+        )}
+      </ClientOnly>
 
-      <div className="mx-auto flex max-w-6xl flex-col items-center space-y-8 px-4 py-20 text-center md:py-32">
+      <div className="mx-auto flex max-w-7xl flex-col items-center space-y-8 px-4 py-20 text-center md:py-32">
         <div>
           <h3 className="brand-header text-4xl">get access now</h3>
           <p className="text-lg">To maintain an authentic and trustworthy community, members can only join via invite.</p>
@@ -156,8 +173,7 @@ export default function Home() {
 }
 
 function RequestAccessForm({ mode }: { mode?: "light" | "dark" }) {
-  // eslint-disable-next-line
-  const accessFetcher = useFetcher<any>()
+  const accessFetcher = useFetcher<ActionDataErrorResponse<typeof schema>>()
 
   if (accessFetcher.data?.success)
     return (
@@ -198,3 +214,18 @@ function RequestAccessForm({ mode }: { mode?: "light" | "dark" }) {
     </accessFetcher.Form>
   )
 }
+
+const PEOPLE = [
+  {
+    name: "George Borg",
+    handle: "gkborg",
+    image: "/landing/people/george.png",
+    message: "Finally a van life app that is purpose built for authentic, nature lovers from the digital age.",
+  },
+  {
+    name: "Jack Clackett",
+    handle: "jack__jsy",
+    image: "/landing/people/jack.png",
+    message: "The only app you need for van life in Europe. Trustworthy spots from a community of like-minded travellers.",
+  },
+]

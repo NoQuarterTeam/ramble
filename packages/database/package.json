@@ -11,12 +11,13 @@
     "db:push": "pnpm with-env prisma db push && pnpm generate",
     "generate": "pnpm with-env prisma generate --no-engine",
     "with-env": "dotenv -e ../../.env --",
-    "postinstall": "prisma generate --no-engine"
+    "postinstall": "pnpm generate"
   },
   "sideEffects": false,
   "dependencies": {
-    "@prisma/client": "5.3.1",
-    "prisma": "5.3.1"
+    "@prisma/client": "5.4.1",
+    "@prisma/extension-accelerate": "^0.6.2",
+    "prisma": "5.4.1"
   },
   "devDependencies": {
     "@types/node": "^18.18.3",

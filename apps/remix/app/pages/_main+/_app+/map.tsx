@@ -32,7 +32,7 @@ import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 
 import type { SpotType } from "@ramble/database/types"
-import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
+import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE, join } from "@ramble/shared"
 
 import { usePreferences } from "~/lib/hooks/usePreferences"
 import { useTheme } from "~/lib/theme"
@@ -215,7 +215,18 @@ function ClusterMarker(props: MarkerProps) {
       latitude={props.point.geometry.coordinates[1]!}
     >
       {props.point.properties.cluster ? (
-        <div className="sq-10 flex cursor-pointer items-center justify-center rounded-full border border-green-100 bg-green-800 text-white shadow transition-transform hover:scale-110 dark:border-green-700 dark:bg-green-900">
+        <div
+          className={join(
+            "border-primary-100 bg-primary-700 center cursor-pointer rounded-full border text-white shadow transition-transform hover:scale-110",
+            props.point.properties.point_count > 10
+              ? "sq-12"
+              : props.point.properties.point_count > 100
+              ? "sq-16"
+              : props.point.properties.point_count > 250
+              ? "sq-20"
+              : "sq-8",
+          )}
+        >
           <p className="text-center text-sm">{props.point.properties.point_count_abbreviated}</p>
         </div>
       ) : (

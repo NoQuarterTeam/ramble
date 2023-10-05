@@ -1,3 +1,2 @@
-export * from "./EmailWrapper"
-export * from "./reset-password"
-export * from "./verify-email"
+export * from "./templates/reset-password"
+export * from "./templates/verify-account"
