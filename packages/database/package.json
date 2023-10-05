@@ -11,7 +11,7 @@
     "db:push": "pnpm with-env prisma db push && pnpm generate",
     "generate": "pnpm with-env prisma generate --no-engine",
     "with-env": "dotenv -e ../../.env --",
-    "postinstall": "prisma generate --no-engine"
+    "postinstall": "pnpm generate"
   },
   "sideEffects": false,
   "dependencies": {
