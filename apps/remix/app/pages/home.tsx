@@ -4,6 +4,7 @@ import { json } from "@vercel/remix"
 import { z } from "zod"
 
 import { join, merge } from "@ramble/shared"
+import { ClientOnly } from "remix-utils/client-only"
 
 import { useFetcher } from "~/components/Form"
 import { db } from "~/lib/db.server"
@@ -142,21 +143,23 @@ export default function Home() {
         <img src="/landing/landing3.png" className="rounded-xs min-w-full object-cover md:min-w-[50%]" />
       </div>
 
-      <div className="flex flex-col items-center space-y-6 px-4 py-24">
-        {/* random person */}
-
-        <p className="max-w-md text-center text-lg">“{randomPerson?.message}”</p>
-        <a
-          href={`https://www.instagram.com/${randomPerson?.handle}/`}
-          target="_blank"
-          rel="noreferrer"
-          className="flex flex-col items-center"
-        >
-          <img src={randomPerson?.image} className="sq-24 rounded-full object-cover" />
-          <i className="pt-4 text-xl font-bold">{randomPerson?.name}</i>
-          <i>@{randomPerson?.handle}</i>
-        </a>
-      </div>
+      <ClientOnly>
+        {() => (
+          <div className="flex flex-col items-center space-y-6 px-4 py-24">
+            <p className="max-w-md text-center text-lg">“{randomPerson?.message}”</p>
+            <a
+              href={`https://www.instagram.com/${randomPerson?.handle}/`}
+              target="_blank"
+              rel="noreferrer"
+              className="flex flex-col items-center"
+            >
+              <img src={randomPerson?.image} className="sq-24 rounded-full object-cover" />
+              <i className="pt-4 text-xl font-bold">{randomPerson?.name}</i>
+              <i>@{randomPerson?.handle}</i>
+            </a>
+          </div>
+        )}
+      </ClientOnly>
 
       <div className="mx-auto flex max-w-7xl flex-col items-center space-y-8 px-4 py-20 text-center md:py-32">
         <div>
