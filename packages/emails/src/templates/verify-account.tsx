@@ -3,18 +3,17 @@ import { EmailDocument } from "../components/EmailDocument"
 import { Button } from "../components/Button"
 
 interface Props {
-  link?: string
+  link: string
 }
 
 export function VerifyAccountContent(props: Props) {
-  const link = props.link || "localhost:3000"
   return (
     <EmailWrapper>
       <h1 className="mb-4 text-2xl font-bold">Verify account</h1>
       <p className="mb-4">To keep access to your account, please verify your email address.</p>
-      <Button href={link}>Verify account</Button>
-      <a href={link} className="mb-4 block underline">
-        {link}
+      <Button href={props.link}>Verify account</Button>
+      <a href={props.link} className="mb-4 block underline">
+        {props.link}
       </a>
     </EmailWrapper>
   )

@@ -14,7 +14,7 @@ export async function badRequest(
   const flash = init.flash
   if (flash) {
     const { createFlash } = await getFlashSession(request)
-    headers.append("set-cookie", await createFlash(flash))
+    headers.append("set-cookie", await createFlash({ ...flash, type: "error" }))
   }
 
   return remixJson(data, { status: 400, ...init, headers })
