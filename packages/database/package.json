@@ -15,9 +15,9 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "@prisma/client": "5.4.0",
+    "@prisma/client": "5.4.1",
     "@prisma/extension-accelerate": "^0.6.2",
-    "prisma": "5.4.0"
+    "prisma": "5.4.1"
   },
   "devDependencies": {
     "@types/node": "^18.18.3",
