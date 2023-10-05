@@ -13,6 +13,7 @@ import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { json } from "~/lib/remix.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
+import { GuideRequestForm } from "~/pages/api+/guide-request"
 
 export const config = {
   // runtime: "edge",
@@ -75,7 +76,7 @@ export default function Guides() {
           <h1 className="text-3xl">Guides</h1>
           <p>Fellow van life travellers that have been handpicked to guarantee beautiful and authentic spots</p>
         </div>
-        {user && user.role === "MEMBER" && !user.isPendingGuideApproval && <Button>Become a guide</Button>}
+        {user && user.role === "MEMBER" && !user.isPendingGuideApproval && <GuideRequestForm />}
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {guides.map((guide) => (

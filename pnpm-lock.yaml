@@ -679,6 +679,12 @@ importers:
 
   packages/emails:
     dependencies:
+      '@ramble/database':
+        specifier: workspace:*
+        version: link:../database
+      '@ramble/shared':
+        specifier: workspace:*
+        version: link:../shared
       '@ramble/tailwind-config':
         specifier: workspace:*
         version: link:../config/tailwind
