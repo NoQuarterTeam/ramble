@@ -43,7 +43,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
         address: true,
         type: true,
         komootId: true,
-        campspaceUrl: true,
+        sourceUrl: true,
         campspaceId: true,
         surflineId: true,
         park4nightId: true,

@@ -3,7 +3,7 @@ import { type Spot } from "@ramble/database/types"
 import { useTheme } from "~/lib/theme"
 
 interface Props {
-  spot: Pick<Spot, "campspaceId" | "campspaceUrl" | "komootId" | "park4nightId" | "surflineId" | "sourceUrl">
+  spot: Pick<Spot, "campspaceId" | "komootId" | "park4nightId" | "surflineId" | "sourceUrl">
 }
 
 export const isPartnerSpot = (spot: Pick<Spot, "campspaceId" | "surflineId" | "komootId" | "park4nightId">) =>
@@ -20,7 +20,7 @@ export function PartnerLink(props: Props) {
   const theme = useTheme()
   if (!isPartnerSpot(props.spot)) return null
 
-  const partner = props.spot.campspaceUrl
+  const partner = props.spot.campspaceId
     ? partners.campspace
     : props.spot.komootId
     ? partners.komoot

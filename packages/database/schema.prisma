@@ -148,8 +148,7 @@ model Spot {
   sourceUrl String? @db.VarChar(500)
 
   // Campspace
-  campspaceId  Int?    @unique
-  campspaceUrl String? @db.VarChar(500)
+  campspaceId Int? @unique
 
   // Neste
   nesteId String? @unique
