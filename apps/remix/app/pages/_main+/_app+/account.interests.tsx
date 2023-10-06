@@ -12,7 +12,7 @@ import type { RambleIcon } from "~/components/ui"
 import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
-import { interestOptions } from "~/lib/models/interests"
+import { interestOptions } from "~/lib/models/user"
 import { redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 

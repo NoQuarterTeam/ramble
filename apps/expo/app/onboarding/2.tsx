@@ -10,7 +10,7 @@ import { type IconProps } from "../../components/ui/Icons"
 import { Text } from "../../components/ui/Text"
 import { api } from "../../lib/api"
 import { useMe } from "../../lib/hooks/useMe"
-import { interestOptions } from "../../lib/static/interests"
+import { interestOptions } from "../../lib/models/user"
 import { useRouter } from "../router"
 
 export default function OnboardingStep2Screen() {

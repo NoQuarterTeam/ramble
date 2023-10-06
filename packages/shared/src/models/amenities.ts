@@ -1,3 +1,5 @@
+import { type SpotAmenities } from "@ramble/database/types"
+
 export const AMENITIES = {
   bbq: "BBQ",
   electricity: "Electricity",
@@ -10,4 +12,4 @@ export const AMENITIES = {
   hotWater: "Hot water",
   firePit: "Fire pit",
   sauna: "Sauna",
-}
+} as { [key in keyof Omit<SpotAmenities, "id" | "createdAt" | "updatedAt" | "spotId">]: string }

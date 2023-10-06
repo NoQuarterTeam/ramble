@@ -15,7 +15,7 @@ import { useFetcher } from "~/components/Form"
 import { Button, Modal, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
-import { fetchAndJoinSpotImages, SPOT_TYPE_OPTIONS } from "~/lib/models/spots"
+import { fetchAndJoinSpotImages, SPOT_TYPE_OPTIONS } from "~/lib/models/spot"
 import { getUserSession } from "~/services/session/session.server"
 
 import { PageContainer } from "../../../components/PageContainer"

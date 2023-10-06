@@ -5,7 +5,7 @@ import queryString from "query-string"
 import { useDisclosure } from "@ramble/shared"
 
 import { Button, IconButton, Modal, Switch, Tooltip } from "~/components/ui"
-import { SPOT_TYPES, SpotTypeInfo } from "~/lib/models/spots"
+import { SPOT_TYPES, SpotTypeInfo } from "~/lib/models/spot"
 import { SpotType } from "@ramble/database/types"
 
 export function MapFilters({ onChange }: { onChange: (params: string) => void }) {
