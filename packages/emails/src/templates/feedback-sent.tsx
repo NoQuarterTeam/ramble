@@ -4,6 +4,7 @@ import { Button } from "../components/Button"
 import { EmailDocument } from "../components/EmailDocument"
 import { EmailWrapper } from "../components/EmailWrapper"
 import { Container, Img } from "@react-email/components"
+import { Heading } from "../components/Heading"
 
 export interface FeedbackSentProps {
   feedback: Pick<Feedback, "message" | "type"> & { user: Pick<User, "avatar" | "firstName" | "lastName"> }
@@ -13,7 +14,7 @@ export interface FeedbackSentProps {
 export function FeedbackSentContent(props: FeedbackSentProps) {
   return (
     <EmailWrapper>
-      <h1 className="mb-4 text-2xl font-bold">Feedback</h1>
+      <Heading className="mb-4">new feedback</Heading>
       <p className="mb-8">Someone submitted some feedback to Ramble:</p>
       <Container className="rounded-xs mb-8 flex flex-col items-center border border-solid border-gray-700 bg-gray-800 p-10 text-center">
         <p className="mb-4">

@@ -1,6 +1,7 @@
 import { EmailWrapper } from "../components/EmailWrapper"
 import { EmailDocument } from "../components/EmailDocument"
 import { Button } from "../components/Button"
+import { Heading } from "../components/Heading"
 
 interface Props {
   link: string
@@ -9,7 +10,7 @@ interface Props {
 export function VerifyAccountContent(props: Props) {
   return (
     <EmailWrapper>
-      <h1 className="mb-4 text-2xl font-bold">Verify account</h1>
+      <Heading className="mb-4">verify account</Heading>
       <p className="mb-4">To keep access to your account, please verify your email address.</p>
       <Button href={props.link}>Verify account</Button>
     </EmailWrapper>
