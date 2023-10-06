@@ -4,7 +4,6 @@ import { Button } from "../components/Button"
 import { EmailDocument } from "../components/EmailDocument"
 import { EmailWrapper } from "../components/EmailWrapper"
 import { Container, Img } from "@react-email/components"
-import { Link } from "../components/Link"
 
 export interface GuideRequestProps {
   user: Pick<User, "avatar" | "firstName" | "lastName" | "username">
@@ -22,9 +21,7 @@ export function GuideRequestContent(props: GuideRequestProps) {
           {props.user.firstName} {props.user.lastName}
         </p>
       </Container>
-
       <Button href={props.link}>Go to profile</Button>
-      <Link href={props.link}>{props.link}</Link>
     </EmailWrapper>
   )
 }

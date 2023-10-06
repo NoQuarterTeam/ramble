@@ -9,7 +9,7 @@ interface Props {
 
 export function Link(props: Props) {
   return (
-    <RLink href={props.href} className={merge("block text-orange-700 underline", props.className)}>
+    <RLink href={props.href} className={merge("block text-orange-500 underline", props.className)}>
       {props.children}
     </RLink>
   )
