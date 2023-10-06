@@ -13,7 +13,7 @@ export function Button(props: Props) {
       href={props.href}
       className={merge("rounded-xs border border-solid border-gray-700 bg-black px-3 py-3 text-white", props.className)}
     >
-      {props.children}
+      <span className="text-white">{props.children}</span>
     </RButton>
   )
 }
