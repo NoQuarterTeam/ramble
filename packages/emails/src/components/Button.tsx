@@ -12,6 +12,7 @@ export function Button(props: Props) {
     <RButton
       href={props.href}
       className={merge("rounded-xs border border-solid border-gray-700 bg-black px-3 py-3 text-white", props.className)}
+      color="#fff"
     >
       <span className="text-white">{props.children}</span>
     </RButton>

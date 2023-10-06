@@ -10,13 +10,13 @@ import { z } from "zod"
 
 import { generateBlurHash, publicSpotWhereClause } from "@ramble/api"
 import { type SpotType } from "@ramble/database/types"
-import { createImageUrl, displayRating, merge } from "@ramble/shared"
+import { createImageUrl, displayRating, isPartnerSpot, merge, spotPartnerFields } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
 import { ImageUploader } from "~/components/ImageUploader"
 import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
-import { isPartnerSpot, PartnerLink } from "~/components/PartnerLink"
+import { PartnerLink } from "~/components/PartnerLink"
 import { SpotIcon } from "~/components/SpotIcon"
 import { Button, CloseButton, Spinner } from "~/components/ui"
 import { db } from "~/lib/db.server"
@@ -42,11 +42,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
         name: true,
         address: true,
         type: true,
-        komootId: true,
-        sourceUrl: true,
-        campspaceId: true,
-        surflineId: true,
-        park4nightId: true,
+        ...spotPartnerFields,
         _count: { select: { reviews: true, listSpots: true } },
         description: true,
         verifier: { select: { firstName: true, username: true, lastName: true, avatar: true, avatarBlurHash: true } },

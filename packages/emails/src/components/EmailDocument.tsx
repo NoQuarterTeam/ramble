@@ -27,7 +27,7 @@ export function EmailDocument({ children, preview }: { children: React.ReactNode
         />
       </Head>
       {preview && <Preview>{preview}</Preview>}
-      <Body style={{ fontFamily: "Poppins", fontWeight: 400 }}>{children}</Body>
+      <Body style={{ fontFamily: "Poppins, Verdana", fontWeight: 400 }}>{children}</Body>
     </Html>
   )
 }

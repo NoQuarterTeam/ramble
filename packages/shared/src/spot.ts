@@ -1,4 +1,28 @@
-import type { Spot, SpotImage, SpotType, User } from "@ramble/database/types"
+import type { Prisma, Spot, SpotImage, SpotType, User } from "@ramble/database/types"
+
+export const spotPartnerFields = {
+  campspaceId: true,
+  cucortuId: true,
+  komootId: true,
+  park4nightId: true,
+  loodusegakoosId: true,
+  natuurKampeerterreinenId: true,
+  roadsurferId: true,
+  surflineId: true,
+  sourceUrl: true,
+} satisfies Prisma.SpotSelect
+
+export type SpotPartnerFields = Pick<Spot, keyof typeof spotPartnerFields>
+
+export const isPartnerSpot = (spot: SpotPartnerFields) =>
+  spot.campspaceId ||
+  spot.surflineId ||
+  spot.komootId ||
+  spot.park4nightId ||
+  spot.roadsurferId ||
+  spot.cucortuId ||
+  spot.loodusegakoosId ||
+  spot.natuurKampeerterreinenId
 
 export type SpotItemWithStatsAndImage = Pick<Spot, "id" | "name" | "address" | "type"> & {
   rating: string
