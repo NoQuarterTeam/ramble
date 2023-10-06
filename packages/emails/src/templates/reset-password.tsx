@@ -1,6 +1,7 @@
 import { Button } from "../components/Button"
 import { EmailDocument } from "../components/EmailDocument"
 import { EmailWrapper } from "../components/EmailWrapper"
+import { Link } from "../components/Link"
 
 interface Props {
   link: string
@@ -14,9 +15,9 @@ export function ResetPasswordContent(props: Props) {
         Someone recently requested a password change for your Ramble account. If this was you, you can set a new password here:
       </p>
       <Button href={props.link}>Reset password</Button>
-      <a href={props.link} className="mb-4 block underline">
+      <Link href={props.link} className="mb-4">
         {props.link}
-      </a>
+      </Link>
       <p>If you don't want to change your password or didn't request this, just ignore and delete this message.</p>
     </EmailWrapper>
   )

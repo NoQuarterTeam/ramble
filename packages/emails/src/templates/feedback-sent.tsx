@@ -4,6 +4,7 @@ import { Button } from "../components/Button"
 import { EmailDocument } from "../components/EmailDocument"
 import { EmailWrapper } from "../components/EmailWrapper"
 import { Container, Img } from "@react-email/components"
+import { Link } from "../components/Link"
 
 export interface FeedbackSentProps {
   feedback: Pick<Feedback, "message" | "type"> & { user: Pick<User, "avatar" | "firstName" | "lastName"> }
@@ -12,7 +13,7 @@ export interface FeedbackSentProps {
 
 export function FeedbackSentContent(props: FeedbackSentProps) {
   return (
-    <EmailWrapper preview="Feedback sent for Ramble">
+    <EmailWrapper preview={`${props.feedback.user.firstName} submitted some feedback to Ramble`}>
       <h1 className="mb-4 text-2xl font-bold">Feedback</h1>
       <p className="mb-8">Someone submitted some feedback to Ramble:</p>
       <Container className="rounded-xs mb-8 flex flex-col items-center border bg-gray-800 p-10 text-center">
@@ -29,9 +30,7 @@ export function FeedbackSentContent(props: FeedbackSentProps) {
       </Container>
 
       <Button href={props.link}>Show all feedback</Button>
-      <a href={props.link} className="mb-4 block underline">
-        {props.link}
-      </a>
+      <Link href={props.link}>{props.link}</Link>
     </EmailWrapper>
   )
 }
