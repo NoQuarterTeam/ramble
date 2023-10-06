@@ -93,7 +93,7 @@ export const spotMarkerColorTypes = {
 export const spotMarkerTextColorTypes = {
   // stays
   CAMPING: "text-white",
-  FREE_CAMPING: "text-black",
+  FREE_CAMPING: "text-white",
   PARKING: "text-black",
   // activities
   SURFING: "text-white",
@@ -123,11 +123,11 @@ export const spotMarkerTriangleColorTypes = {
   FREE_CAMPING: "bg-cyan-700",
   PARKING: "bg-gray-100",
   // activities
-  SURFING: "bg-blue-700",
-  CLIMBING: "bg-blue-700",
-  MOUNTAIN_BIKING: "bg-blue-700",
-  HIKING_TRAIL: "bg-blue-700",
-  PADDLE_KAYAK: "bg-blue-700",
+  SURFING: "bg-blue-600",
+  CLIMBING: "bg-blue-600",
+  MOUNTAIN_BIKING: "bg-blue-600",
+  HIKING_TRAIL: "bg-blue-600",
+  PADDLE_KAYAK: "bg-blue-600",
   // services
   GAS_STATION: "bg-gray-100",
   ELECTRIC_CHARGE_POINT: "bg-gray-100",

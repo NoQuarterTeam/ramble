@@ -4,7 +4,7 @@ const plugin = require("tailwindcss/plugin")
 module.exports = {
   darkMode: "class",
   presets: [require("@ramble/tailwind-config")],
-  content: ["./app/**/*.{js,ts,jsx,tsx}"],
+  content: ["./app/**/*.{ts,tsx}", "../../packages/shared/**/*.{ts,tsx}"],
   theme: {
     extend: {
       spacing: {
