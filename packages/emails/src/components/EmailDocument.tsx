@@ -3,7 +3,7 @@ import { Body, Font, Head, Html, Preview } from "@react-email/components"
 
 export function EmailDocument({ children, preview }: { children: React.ReactNode; preview?: string }) {
   return (
-    <Html lang="en" dir="ltr">
+    <Html lang="en" dir="ltr" style={{ backgroundColor: "white" }}>
       <Head>
         <Font
           fontFamily="Urbanist"
