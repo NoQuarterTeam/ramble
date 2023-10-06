@@ -7,7 +7,7 @@ export const theme = {
       full: "100%",
     },
     borderRadius: {
-      xs: "2px",
+      xs: "3px",
     },
     fontSize: {
       xxxs: "0.4rem",

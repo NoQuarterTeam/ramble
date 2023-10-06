@@ -16,7 +16,7 @@ export function FeedbackSentContent(props: FeedbackSentProps) {
     <EmailWrapper>
       <Heading className="mb-4">new feedback</Heading>
       <p className="mb-8">Someone submitted some feedback to Ramble:</p>
-      <Container className="rounded-xs mb-8 flex flex-col items-center border border-solid border-gray-700 bg-gray-800 p-10 text-center">
+      <Container className="rounded-xs border-gray-[rgba(120,120,120,0.9)] mb-8 flex flex-col items-center border border-solid px-2 py-10 text-center">
         <p className="mb-4">
           {props.feedback.type} - "{props.feedback.message}"
         </p>

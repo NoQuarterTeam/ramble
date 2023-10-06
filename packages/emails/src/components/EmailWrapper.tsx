@@ -5,8 +5,8 @@ import { theme } from "../tailwind"
 export function EmailWrapper({ children }: { children: React.ReactNode }) {
   return (
     <Tailwind config={{ theme }}>
-      <Container className="bg-background font-sans text-white">
-        <Container className="rounded-xs my-2 border border-solid border-gray-700">
+      <Container>
+        <Container className="rounded-xs border-gray-[rgba(120,120,120,0.9)] my-2 border border-solid">
           <div className="p-10">
             {children}
             <div className="mt-6">

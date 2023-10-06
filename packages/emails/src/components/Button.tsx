@@ -9,7 +9,10 @@ interface Props {
 
 export function Button(props: Props) {
   return (
-    <RButton href={props.href} className={merge("rounded-xs bg-white px-3 py-3 text-black", props.className)}>
+    <RButton
+      href={props.href}
+      className={merge("rounded-xs border border-solid border-gray-700 bg-black px-3 py-3 text-white", props.className)}
+    >
       {props.children}
     </RButton>
   )

@@ -9,7 +9,11 @@ interface Props {
 
 export function Heading(props: Props) {
   return (
-    <RHeading as="h1" className={merge("text-primary text-2xl font-bold italic", props.className)}>
+    <RHeading
+      style={{ fontFamily: "Urbanist" }}
+      as="h1"
+      className={merge("text-primary text-2xl font-bold italic", props.className)}
+    >
       {props.children}
     </RHeading>
   )
