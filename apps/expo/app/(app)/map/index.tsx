@@ -336,7 +336,7 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
         contentHeight={animatedContentHeight}
       >
         {isLoading ? null : (
-          <View onLayout={handleContentLayout} className="bg-background rounded-xl p-4 dark:bg-gray-900">
+          <View onLayout={handleContentLayout} className="bg-background rounded-xs p-4 dark:bg-gray-900">
             {!spot ? (
               <Text>Spot not found</Text>
             ) : (
