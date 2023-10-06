@@ -13,6 +13,8 @@ const partners = {
   surfline: { name: "Surfline", logo: { light: "/partners/surfline.svg", dark: "/partners/surfline-dark.svg" } },
   natuur: { name: "Natuurkampeerterrein", logo: { light: "/partners/natuur.svg", dark: "/partners/natuur.svg" } },
   roadsurfer: { name: "Roadsurfer", logo: { light: "/partners/roadsurfer.svg", dark: "/partners/roadsurfer-dark.svg" } },
+  loodusegakoos: { name: "Loodusega koos ", logo: { light: "/partners/loodusegakoos.svg", dark: "/partners/loodusegakoos.svg" } },
+  cucortu: { name: "Cucortu'", logo: { light: "/partners/cucortu.png", dark: "/partners/cucortu-dark.png" } },
 } as const
 
 export function PartnerLink(props: Props) {
@@ -27,9 +29,13 @@ export function PartnerLink(props: Props) {
     ? partners.natuur
     : props.spot.park4nightId
     ? partners.park4night
-    : partners.surfline
+    : props.spot.surflineId
     ? partners.surfline
-    : partners.roadsurfer
+    : props.spot.roadsurferId
+    ? partners.roadsurfer
+    : props.spot.cucortuId
+    ? partners.cucortu
+    : partners.loodusegakoos
 
   if (!props.spot.sourceUrl) return null
   return (
@@ -40,7 +46,7 @@ export function PartnerLink(props: Props) {
       className="border-hover rounded-xs flex flex-row items-center justify-between gap-6 border px-6 py-2"
     >
       <p className="text-lg">Provided by</p>
-      <img className="h-[40px] w-[150px] object-contain" src={partner.logo[theme]} />
+      <img className="h-[40px] w-[150px] bg-right object-contain" src={partner.logo[theme]} />
     </a>
   )
 }
