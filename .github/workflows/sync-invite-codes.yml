@@ -1,0 +1,26 @@
+name: ⏩ Sync develop with invite codes
+on:
+  push:
+    branches:
+      - develop
+jobs:
+  sync:
+    name: ⏩ Sync branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛎 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: "0"
+      - name: 🪪 Set git name+email
+        run: |
+          git config user.name "Jack (GitHub Actions)"
+          git config user.email "jack@noquarter.co"
+      - name: 🛣 Merge
+        run: |
+          current_branch="develop"
+          next_branch="feat/invite-codes"
+          echo "🪜 Merging ${current_branch} -> ${next_branch}"
+          git checkout "${next_branch}"
+          git merge "${current_branch}"
+          git push

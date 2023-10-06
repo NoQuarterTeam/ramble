@@ -1,8 +1,8 @@
-name: ⏩ Sync develop with invite codes
+name: ⏩ Sync main with develop
 on:
   push:
     branches:
-      - "develop"
+      - main
 jobs:
   sync:
     name: ⏩ Sync branch
@@ -18,8 +18,8 @@ jobs:
           git config user.email "jack@noquarter.co"
       - name: 🛣 Merge
         run: |
-          current_branch="develop"
-          next_branch="feat/invite-codes"
+          current_branch="main"
+          next_branch="develop"
           echo "🪜 Merging ${current_branch} -> ${next_branch}"
           git checkout "${next_branch}"
           git merge "${current_branch}"
