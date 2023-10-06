@@ -111,14 +111,14 @@ export default function App() {
   }, [transition.state, state])
 
   return (
-    <AuthenticityTokenProvider token={csrf}>
-      <Document theme={theme}>
+    <Document theme={theme}>
+      <AuthenticityTokenProvider token={csrf}>
         <Tooltip.Provider>
           <Outlet />
+          <Toaster flash={flash} />
         </Tooltip.Provider>
-        <Toaster flash={flash} />
-      </Document>
-    </AuthenticityTokenProvider>
+      </AuthenticityTokenProvider>
+    </Document>
   )
 }
 

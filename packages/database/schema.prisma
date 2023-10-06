@@ -117,9 +117,7 @@ enum SpotType {
   CLIMBING
   SURFING
   MOUNTAIN_BIKING
-  HIKING // deprecated
   HIKING_TRAIL
-  PADDLE_BOARDING // deprecated
   PADDLE_KAYAK
   // Services
   GAS_STATION
@@ -216,17 +214,17 @@ model Spot {
 
 model SpotAmenities {
   id          String  @id @default(uuid())
-  hotWater    Boolean
-  wifi        Boolean
-  shower      Boolean
-  toilet      Boolean
-  kitchen     Boolean
-  electricity Boolean
-  water       Boolean
-  firePit     Boolean
-  sauna       Boolean
-  pool        Boolean
-  bbq         Boolean
+  hotWater    Boolean @default(false)
+  wifi        Boolean @default(false)
+  shower      Boolean @default(false)
+  toilet      Boolean @default(false)
+  kitchen     Boolean @default(false)
+  electricity Boolean @default(false)
+  water       Boolean @default(false)
+  firePit     Boolean @default(false)
+  sauna       Boolean @default(false)
+  pool        Boolean @default(false)
+  bbq         Boolean @default(false)
 
   spot   Spot   @relation(fields: [spotId], references: [id], onDelete: Cascade)
   spotId String @unique

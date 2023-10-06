@@ -1,6 +1,6 @@
 import { Outlet } from "@remix-run/react"
 
-import { Nav } from "./_app+/components/Nav"
+import { Nav } from "./components/Nav"
 
 export default function MainLayout() {
   return (

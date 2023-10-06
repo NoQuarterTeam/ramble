@@ -16,7 +16,7 @@ import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
-import { interestOptions } from "~/lib/models/interests"
+import { interestOptions } from "~/lib/models/user"
 import { notFound } from "~/lib/remix.server"
 import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
 

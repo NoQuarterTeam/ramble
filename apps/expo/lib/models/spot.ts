@@ -37,9 +37,7 @@ export const SPOT_TYPES: { [key in SpotType]: { value: SpotType; label: string; 
   SURFING: { value: "SURFING", label: "Surfing", Icon: Icons.Surf, isComingSoon: false },
   CLIMBING: { value: "CLIMBING", label: "Climbing", Icon: Mountain, isComingSoon: false },
   MOUNTAIN_BIKING: { value: "MOUNTAIN_BIKING", label: "MTBing", Icon: Bike, isComingSoon: false },
-  PADDLE_BOARDING: { value: "PADDLE_BOARDING", label: "Paddle Boarding", Icon: Icons.Sup, isComingSoon: false },
   PADDLE_KAYAK: { value: "PADDLE_KAYAK", label: "SUPing / Kayaking", Icon: Icons.Sup, isComingSoon: false },
-  HIKING: { value: "HIKING", label: "Hiking", Icon: Footprints, isComingSoon: false },
   HIKING_TRAIL: {
     value: "HIKING_TRAIL",
     label: "Hiking / Trail running",

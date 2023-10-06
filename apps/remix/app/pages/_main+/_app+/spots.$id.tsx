@@ -6,7 +6,7 @@ import { Check, Edit2, Heart, Star, Trash } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
 import { publicSpotWhereClause } from "@ramble/api"
-import { AMENITIES, canManageSpot, createImageUrl, displayRating } from "@ramble/shared"
+import { AMENITIES, activitySpotTypes, canManageSpot, createImageUrl, displayRating } from "@ramble/shared"
 
 import { Form, FormButton } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -38,7 +38,6 @@ import { getUserSession } from "~/services/session/session.server"
 import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { SpotMarker } from "./components/SpotMarker"
-import { SpotType } from "@ramble/database/types"
 import { promiseHash } from "remix-utils/promise"
 
 export const config = {
@@ -80,7 +79,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const activitySpots = await db.spot.findMany({
     where: {
       ...publicSpotWhereClause(userId),
-      type: { in: [SpotType.CLIMBING, SpotType.HIKING, SpotType.MOUNTAIN_BIKING, SpotType.PADDLE_BOARDING, SpotType.SURFING] },
+      type: { in: activitySpotTypes },
       latitude: { gt: spot.latitude - 0.5, lt: spot.latitude + 0.5 },
       longitude: { gt: spot.longitude - 0.5, lt: spot.longitude + 0.5 },
     },

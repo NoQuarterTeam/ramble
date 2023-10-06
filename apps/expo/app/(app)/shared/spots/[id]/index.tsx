@@ -25,7 +25,7 @@ import { VerifiedCard } from "../../../../../components/VerifiedCard"
 import { api } from "../../../../../lib/api"
 import { width } from "../../../../../lib/device"
 import { useMe } from "../../../../../lib/hooks/useMe"
-import { AMENITIES_ICONS } from "../../../../../lib/static/amenities"
+import { AMENITIES_ICONS } from "../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../router"
 
 export function SpotDetailScreen() {

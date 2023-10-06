@@ -5,7 +5,7 @@ import { type SpotItemWithStatsAndImage } from "@ramble/shared"
 import { createImageUrl, displayRating } from "@ramble/shared"
 
 import { useRouter } from "../app/router"
-import { SPOT_TYPES } from "../lib/static/spots"
+import { SPOT_TYPES } from "../lib/models/spot"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
 
