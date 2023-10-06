@@ -42,6 +42,7 @@
     "react-native",
     "uuid",
     "tailwindcss",
-    "remix-utils"
+    "remix-utils",
+    "@prisma/adapter-planetscale"
   ]
 }

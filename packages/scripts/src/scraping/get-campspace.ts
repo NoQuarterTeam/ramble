@@ -94,7 +94,7 @@ async function getPageCards(currentPage: number) {
           campspaceId: spot.id,
           type: "CAMPING",
           isPetFriendly,
-          campspaceUrl: spot.link,
+          sourceUrl: spot.link,
           creator: { connect: { email: "jack@noquarter.co" } },
           verifier: { connect: { email: "jack@noquarter.co" } },
           amenities: {

@@ -11,6 +11,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@ramble/database": "workspace:*",
+    "@ramble/shared": "workspace:*",
     "@ramble/tailwind-config": "workspace:*",
     "@react-email/components": "^0.0.7"
   },

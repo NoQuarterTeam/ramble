@@ -7,7 +7,7 @@ import * as Location from "expo-location"
 import { BadgeX, CloudRain, Heart, Layers, Navigation, PlusCircle, Settings2, Star, Verified, X } from "lucide-react-native"
 
 import { type SpotType } from "@ramble/database/types"
-import { displayRating, INITIAL_LATITUDE, INITIAL_LONGITUDE, useDisclosure } from "@ramble/shared"
+import { displayRating, INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { SpotMarker } from "../../../components/SpotMarker"
@@ -130,7 +130,16 @@ export function SpotsMapScreen() {
               <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={onPress}
-                className="sq-10 border-primary-100 bg-primary-700 flex items-center justify-center rounded-full border"
+                className={join(
+                  "border-primary-100 bg-primary-700 flex items-center justify-center rounded-full border",
+                  point.properties.point_count > 150
+                    ? "sq-20"
+                    : point.properties.point_count > 75
+                    ? "sq-16"
+                    : point.properties.point_count > 10
+                    ? "sq-12"
+                    : "sq-8",
+                )}
               >
                 <Text className="text-center text-sm text-white">{point.properties.point_count_abbreviated}</Text>
               </TouchableOpacity>

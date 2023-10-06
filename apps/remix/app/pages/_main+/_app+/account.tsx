@@ -60,11 +60,10 @@ export default function AccountLayout() {
       <div className="flex flex-wrap items-center justify-between">
         <div className="flex items-center space-x-2 py-2">
           <Avatar size={100} className="sq-20" placeholder={user.avatarBlurHash} src={createImageUrl(user.avatar)} />
-          <div className="space-y-1">
-            <p className="text-xl">
+          <div>
+            <p className="text-2xl">
               {user.firstName} {user.lastName}
             </p>
-
             <Badge colorScheme={user.role === "GUIDE" ? "green" : user.role === "OWNER" ? "orange" : "gray"}>{user.role}</Badge>
           </div>
         </div>
