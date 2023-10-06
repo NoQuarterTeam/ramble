@@ -43,7 +43,7 @@ export function PartnerLink(props: Props) {
       href={props.spot.sourceUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="border-hover rounded-xs flex flex-row items-center justify-between gap-6 border px-6 py-2"
+      className="border-hover rounded-xs flex cursor-pointer flex-row items-center justify-between gap-6 border px-6 py-2"
     >
       <p className="text-lg">Provided by</p>
       <img className="h-[40px] w-[150px] bg-right object-contain" src={partner.logo[theme]} />
