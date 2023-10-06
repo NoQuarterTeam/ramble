@@ -94,10 +94,21 @@ async function getCards() {
           sourceUrl: link,
           isPetFriendly,
           creator: { connect: { email: "george@noquarter.co" } },
-          verifier: { connect: { email: "george@noquarter.co" } },
           images: { create: images.map((image) => ({ path: image, creator: { connect: { email: "george@noquarter.co" } } })) },
           amenities: {
-            create: { shower, kitchen, toilet, water, electricity, hotWater },
+            create: {
+              shower,
+              kitchen,
+              toilet,
+              water,
+              electricity,
+              hotWater,
+              bbq: false,
+              pool: false,
+              sauna: false,
+              firePit: false,
+              wifi: false,
+            },
           },
         },
       })

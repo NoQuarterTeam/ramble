@@ -121,7 +121,6 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
           isPetFriendly,
           sourceUrl: spot.link,
           creator: { connect: { email: "george@noquarter.co" } },
-          verifier: { connect: { email: "george@noquarter.co" } },
           amenities: {
             create: { bbq, shower, kitchen, sauna: false, firePit, wifi, toilet, water, electricity, hotWater: false, pool },
           },
