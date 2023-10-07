@@ -17,7 +17,7 @@ jobs:
           git config user.email "jack@noquarter.co"
       - name: 🛣 Merge
         run: |
-          current_branch="develop"
+          current_branch="origin/develop"
           next_branch="feat/invite-codes"
           echo "🪜 Merging ${current_branch} -> ${next_branch}"
           git checkout "${next_branch}"
