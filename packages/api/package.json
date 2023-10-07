@@ -39,7 +39,7 @@
     "@types/node": "^18.18.3",
     "@types/supercluster": "^7.1.1",
     "dotenv-cli": "^7.3.0",
-    "eslint": "8.50.0",
+    "eslint": "8.51.0",
     "prettier": "3.0.3",
     "typescript": "5.2.2"
   }
