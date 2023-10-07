@@ -1,5 +1,4 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node"
-import { json } from "@remix-run/node"
+import { LoaderFunctionArgs, ActionFunctionArgs, json } from "@vercel/remix"
 import { Link, useLoaderData } from "@remix-run/react"
 import { Copy } from "lucide-react"
 
@@ -14,7 +13,7 @@ import { useConfig } from "~/lib/hooks/useConfig"
 import { redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, {
     role: true,
     isAdmin: true,
@@ -23,15 +22,15 @@ export const loader = async ({ request }: LoaderArgs) => {
   return json(user)
 }
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request)
-  if (!user.isAdmin) return redirect("/account/invite", request, { flash: { title: "You are not an admin" } })
+  if (!user.isAdmin) return redirect("/account/invites", request, { flash: { title: "You are not an admin" } })
 
   const codes = generateInviteCodes(user.id)
 
   await db.inviteCode.createMany({ data: codes.map((code) => ({ code, ownerId: user.id })) })
 
-  return redirect("/account/invite", request, { flash: { title: "Generated new codes" } })
+  return redirect("/account/invites", request, { flash: { title: "Generated new codes" } })
 }
 
 export default function AccountInvite() {
