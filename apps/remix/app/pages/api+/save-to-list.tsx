@@ -1,7 +1,7 @@
 import * as React from "react"
 import type { ActionFunctionArgs, LoaderFunctionArgs, SerializeFrom } from "@vercel/remix"
 import { Heart, Plus } from "lucide-react"
-import { useAuthenticityToken } from "remix-utils/authenticity-token"
+import { useAuthenticityToken } from "remix-utils/csrf/react"
 import { z } from "zod"
 import { zx } from "zodix"
 

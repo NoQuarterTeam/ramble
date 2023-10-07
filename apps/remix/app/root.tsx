@@ -30,11 +30,11 @@ import {
   useRouteError,
 } from "@remix-run/react"
 import { Analytics } from "@vercel/analytics/react"
-import type { LinksFunction, LoaderFunctionArgs, MetaFunction, SerializeFrom } from "@vercel/remix"
-import { json } from "@vercel/remix"
+import { json, type LinksFunction, type LoaderFunctionArgs, type MetaFunction, type SerializeFrom } from "@vercel/remix"
+
 import { Frown } from "lucide-react"
 import NProgress from "nprogress"
-import { AuthenticityTokenProvider } from "remix-utils/authenticity-token"
+import { AuthenticityTokenProvider } from "remix-utils/csrf/react"
 import { promiseHash } from "remix-utils/promise"
 
 import { join } from "@ramble/shared"
@@ -81,7 +81,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     },
     {
       headers: [
-        ["set-cookie", csrfCookieHeader],
+        ["set-cookie", csrfCookieHeader || ""],
         ["set-cookie", await flashSession.commit()],
         ["set-cookie", await themeSession.commit()],
       ],
