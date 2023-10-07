@@ -1,8 +1,7 @@
 name: ⏩ Sync main with develop
 on:
-  push:
-    branches:
-      - main
+  schedule:
+    - cron: "0 * * * *"
 jobs:
   sync:
     name: ⏩ Sync branch
@@ -23,4 +22,8 @@ jobs:
           echo "🪜 Merging ${current_branch} -> ${next_branch}"
           git checkout "${next_branch}"
           git merge "${current_branch}"
-          git push
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
