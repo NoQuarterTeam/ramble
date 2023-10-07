@@ -1,8 +1,7 @@
 name: ⏩ Sync develop with invite codes
 on:
-  push:
-    branches:
-      - develop
+  schedule:
+    - cron: "0 * * * *"
 jobs:
   sync:
     name: ⏩ Sync branch

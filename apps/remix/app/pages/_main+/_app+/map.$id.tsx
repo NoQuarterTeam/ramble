@@ -5,7 +5,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
 import { defer } from "@vercel/remix"
 import { Frown, Heart, Image, Star } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
-import { useAuthenticityToken } from "remix-utils/authenticity-token"
+
 import { z } from "zod"
 
 import { generateBlurHash, publicSpotWhereClause } from "@ramble/api"
@@ -30,6 +30,7 @@ import { getUserSession } from "~/services/session/session.server"
 
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { NEW_REVIEW_REDIRECTS } from "./spots.$id_.reviews.new"
+import { useAuthenticityToken } from "remix-utils/csrf/react"
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const { userId } = await getUserSession(request)
