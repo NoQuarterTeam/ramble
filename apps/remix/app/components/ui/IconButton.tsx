@@ -11,9 +11,9 @@ export const iconbuttonStyles = cva("px-0", {
   variants: {
     size: {
       xs: "sq-7",
-      sm: "sq-8",
-      md: "sq-9",
-      lg: "sq-11",
+      sm: "sq-9",
+      md: "sq-11",
+      lg: "sq-12",
     },
   },
   defaultVariants: {
