@@ -31,7 +31,7 @@ import { getUserSession } from "~/services/session/session.server"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { NEW_REVIEW_REDIRECTS } from "./spots.$id_.reviews.new"
 import { useAuthenticityToken } from "remix-utils/csrf/react"
-import { track } from "@vercel/analytics/server"
+import { track } from "~/lib/analytics.server"
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const { userId } = await getUserSession(request)

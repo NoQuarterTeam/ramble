@@ -15,7 +15,7 @@ import { db } from "~/lib/db.server"
 import { formError, FormNumber, NullableFormString, validateFormData } from "~/lib/form"
 import { redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
-import { track } from "@vercel/analytics/server"
+import { track } from "~/lib/analytics.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, {

@@ -10,7 +10,7 @@ import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { createToken } from "~/lib/jwt.server"
 import { redirect } from "~/lib/remix.server"
-import { track } from "@vercel/analytics/server"
+import { track } from "~/lib/analytics.server"
 
 export const headers = () => {
   return {

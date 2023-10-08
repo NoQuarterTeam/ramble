@@ -11,7 +11,7 @@ import { json, redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { amenitiesSchema, SpotForm, spotSchema } from "./components/SpotForm"
-import { track } from "@vercel/analytics/server"
+import { track } from "~/lib/analytics.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, { isVerified: true })

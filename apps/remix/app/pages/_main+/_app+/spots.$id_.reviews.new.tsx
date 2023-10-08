@@ -9,7 +9,7 @@ import { notFound, redirect } from "~/lib/remix.server"
 import { requireUser } from "~/services/auth/auth.server"
 
 import { ReviewForm } from "./components/ReviewForm"
-import { track } from "@vercel/analytics/server"
+import { track } from "~/lib/analytics.server"
 
 export const config = {
   // runtime: "edge",

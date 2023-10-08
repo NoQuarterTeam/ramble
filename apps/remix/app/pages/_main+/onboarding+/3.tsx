@@ -14,7 +14,7 @@ import { formError, useFormErrors, validateFormData } from "~/lib/form"
 import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
 
 import { Footer } from "./components/Footer"
-import { track } from "@vercel/analytics/server"
+import { track } from "~/lib/analytics.server"
 
 export const config = {
   // runtime: "edge",

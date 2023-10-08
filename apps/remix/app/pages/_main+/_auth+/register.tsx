@@ -12,7 +12,7 @@ import { createToken } from "~/lib/jwt.server"
 import { badRequest, redirect } from "~/lib/remix.server"
 import { hashPassword } from "~/services/auth/password.server"
 import { getUserSession } from "~/services/session/session.server"
-import { track } from "@vercel/analytics/server"
+import { track } from "~/lib/analytics.server"
 
 export const meta: MetaFunction = () => {
   return [{ title: "Register" }, { name: "description", content: "Sign up to the ramble" }]

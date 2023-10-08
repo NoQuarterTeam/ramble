@@ -1,7 +1,7 @@
 import { sendFeedbackSentToAdminsEmail } from "@ramble/api"
 import { FeedbackType } from "@ramble/database/types"
 import { useDisclosure } from "@ramble/shared"
-import { track } from "@vercel/analytics/server"
+import { track } from "~/lib/analytics.server"
 import { ActionFunctionArgs } from "@vercel/remix"
 import { Bug, Lightbulb, MessageCircle } from "lucide-react"
 import * as React from "react"

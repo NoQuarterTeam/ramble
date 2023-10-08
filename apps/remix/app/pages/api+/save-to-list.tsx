@@ -25,7 +25,7 @@ import type { ActionDataErrorResponse } from "~/lib/form"
 import { FORM_ACTION, FormActionInput, formError, getFormAction, validateFormData } from "~/lib/form"
 import { badRequest, json } from "~/lib/remix.server"
 import { requireUser } from "~/services/auth/auth.server"
-import { track } from "@vercel/analytics/server"
+import { track } from "~/lib/analytics.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await requireUser(request)

@@ -17,7 +17,7 @@ import { interestOptions } from "~/lib/models/user"
 import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
 
 import { Footer } from "./components/Footer"
-import { track } from "@vercel/analytics/server"
+import { track } from "~/lib/analytics.server"
 
 export const config = {
   // runtime: "edge",

@@ -9,7 +9,7 @@ import { notFound, redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { ListForm } from "./components/ListForm"
-import { track } from "@vercel/analytics/server"
+import { track } from "~/lib/analytics.server"
 
 export const headers = useLoaderHeaders
 

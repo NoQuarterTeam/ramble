@@ -39,7 +39,7 @@ import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { SpotMarker } from "./components/SpotMarker"
 import { promiseHash } from "remix-utils/promise"
-import { track } from "@vercel/analytics/server"
+import { track } from "~/lib/analytics.server"
 
 export const config = {
   // runtime: "edge",

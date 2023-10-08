@@ -19,7 +19,7 @@ import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { interestOptions } from "~/lib/models/user"
 import { notFound } from "~/lib/remix.server"
 import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
-import { track } from "@vercel/analytics/server"
+import { track } from "~/lib/analytics.server"
 
 export const headers = useLoaderHeaders
 

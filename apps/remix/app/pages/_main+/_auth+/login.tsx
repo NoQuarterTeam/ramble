@@ -1,5 +1,5 @@
 import { Link, useSearchParams } from "@remix-run/react"
-import { track } from "@vercel/analytics/server"
+import { track } from "~/lib/analytics.server"
 import type { ActionFunctionArgs, MetaFunction } from "@vercel/remix"
 import { redirect } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"

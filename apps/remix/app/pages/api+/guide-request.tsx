@@ -1,5 +1,5 @@
 import { sendGuideRequestSentToAdminsEmail } from "@ramble/api"
-import { track } from "@vercel/analytics/server"
+import { track } from "~/lib/analytics.server"
 import { ActionFunctionArgs } from "@vercel/remix"
 import { FormButton, useFetcher } from "~/components/Form"
 import { db } from "~/lib/db.server"

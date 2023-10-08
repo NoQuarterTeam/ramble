@@ -1,4 +1,4 @@
-import { track } from "@vercel/analytics/server"
+import { track } from "~/lib/analytics.server"
 import { type ActionFunctionArgs, json, redirect } from "@vercel/remix"
 
 import { isTheme } from "~/lib/theme"
