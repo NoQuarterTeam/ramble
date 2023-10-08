@@ -28,6 +28,7 @@ import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
 
 import { SpotItem } from "./components/SpotItem"
 import { SpotMarker } from "./components/SpotMarker"
+import { track } from "~/lib/analytics.server"
 
 export const headers = useLoaderHeaders
 
@@ -97,6 +98,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   switch (formAction) {
     case Actions.Delete:
       await db.list.delete({ where: { id: params.id } })
+      track("List deleted", { listId: params.id || null, userId: user.id })
       return redirect(`/${user.username}/lists`, request, { flash: { title: "List deleted" } })
     case Actions.Copy:
       const list = await db.list.findFirst({ where: { id: params.id }, include: { listSpots: true } })

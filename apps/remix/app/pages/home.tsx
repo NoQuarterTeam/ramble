@@ -2,6 +2,7 @@ import { Link } from "@remix-run/react"
 import { type LoaderFunctionArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { z } from "zod"
+import { track } from "~/lib/analytics.server"
 
 import { join, merge } from "@ramble/shared"
 import { ClientOnly } from "remix-utils/client-only"
@@ -23,6 +24,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
   const accessRequest = await db.accessRequest.findFirst({ where: { email: result.data.email } })
   if (accessRequest) return formError({ formError: "Email already requested access" })
   await db.accessRequest.create({ data: { email: result.data.email } })
+  track("Access requested", { email: result.data.email })
   return json({ success: true })
 }
 

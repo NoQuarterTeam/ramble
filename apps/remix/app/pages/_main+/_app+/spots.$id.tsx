@@ -39,6 +39,7 @@ import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { SpotMarker } from "./components/SpotMarker"
 import { promiseHash } from "remix-utils/promise"
+import { track } from "~/lib/analytics.server"
 
 export const config = {
   // runtime: "edge",
@@ -121,18 +122,23 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       try {
         if (!user.isAdmin) return redirect("/spots")
         await db.spot.delete({ where: { id: params.id } })
+        track("Spot deleted", { spotId: params.id || "", userId: user.id })
         return redirect("/spots", request, { flash: { title: "Spot deleted!" } })
       } catch (error) {
         return badRequest("Error deleting spot your account", request, { flash: { title: "Error deleting spot" } })
       }
     case Actions.Verify:
       try {
-        const spot = await db.spot.findUniqueOrThrow({ where: { id: params.id }, select: { ownerId: true, deletedAt: true } })
+        const spot = await db.spot.findUniqueOrThrow({
+          where: { id: params.id },
+          select: { id: true, ownerId: true, deletedAt: true },
+        })
         if (!canManageSpot(spot, user)) return redirect("/spots")
         await db.spot.update({
           where: { id: params.id },
           data: { verifiedAt: new Date(), verifier: { connect: { id: user.id } } },
         })
+        track("Spot verified", { spotId: spot.id, userId: user.id })
         return json({ success: true }, request, { flash: { title: "Spot verified!" } })
       } catch (error) {
         return badRequest("Error verifying spot", request, { flash: { title: "Error verifying spot" } })

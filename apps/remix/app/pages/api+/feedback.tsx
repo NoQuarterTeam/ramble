@@ -1,6 +1,7 @@
 import { sendFeedbackSentToAdminsEmail } from "@ramble/api"
 import { FeedbackType } from "@ramble/database/types"
 import { useDisclosure } from "@ramble/shared"
+import { track } from "~/lib/analytics.server"
 import { ActionFunctionArgs } from "@vercel/remix"
 import { Bug, Lightbulb, MessageCircle } from "lucide-react"
 import * as React from "react"
@@ -37,6 +38,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           admins.map((a) => a.email),
           feedback,
         )
+        track("Feedback created", { feedbackId: feedback.id, userId: user.id })
         return json({ success: true }, request, {
           flash: { type: "success", title: "Feedback sent", description: "We'll take a look as soon as possible" },
         })

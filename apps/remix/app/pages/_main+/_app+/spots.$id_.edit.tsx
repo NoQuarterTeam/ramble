@@ -12,6 +12,7 @@ import { notFound } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { amenitiesSchema, SpotForm, spotSchema } from "./components/SpotForm"
+import { track } from "~/lib/analytics.server"
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, { role: true, id: true, isAdmin: true, isVerified: true })
@@ -65,6 +66,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       images: { delete: imagesToDelete, create: imageData },
     },
   })
+
+  track("Spot updated", { spotId: spot.id, userId: user.id })
 
   return redirect(`/spots/${spot.id}`)
 }

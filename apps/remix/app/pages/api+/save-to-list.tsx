@@ -25,6 +25,7 @@ import type { ActionDataErrorResponse } from "~/lib/form"
 import { FORM_ACTION, FormActionInput, formError, getFormAction, validateFormData } from "~/lib/form"
 import { badRequest, json } from "~/lib/remix.server"
 import { requireUser } from "~/services/auth/auth.server"
+import { track } from "~/lib/analytics.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await requireUser(request)
@@ -37,7 +38,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 enum Actions {
-  Save = "save",
+  ToggleSave = "toggle-save",
   CreateAndSaveToList = "create-and-save-to-list",
 }
 
@@ -47,7 +48,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const userId = await requireUser(request)
   const formAction = await getFormAction<Actions>(request)
   switch (formAction) {
-    case Actions.Save:
+    case Actions.ToggleSave:
       try {
         const schema = z.object({ shouldSave: zx.BoolAsString, listId: z.string(), spotId: z.string() })
         const result = await validateFormData(request, schema)
@@ -59,10 +60,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         if (shouldSave) {
           if (listSpot) return badRequest("Already saved to list", request, { flash: { title: "Already saved to list" } })
           await db.listSpot.create({ data: { listId, spotId } })
+          track("Saved to list", { listId, spotId })
           return json({ success: true }, request, { flash: { title: "Saved to list" } })
         } else {
           if (!listSpot) return badRequest("Not saved to list", request, { flash: { title: "Not saved to list" } })
           await db.listSpot.delete({ where: { id: listSpot.id } })
+          track("Removed from list", { listId, spotId })
           return json({ success: true }, request, { flash: { title: "Removed from list" } })
         }
       } catch {
@@ -73,7 +76,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         const result = await validateFormData(request, createListSchema)
         if (!result.success) return formError(result)
         const { name, description, spotId } = result.data
-        await db.list.create({ data: { name, description, creatorId: userId, listSpots: { create: { spotId } } } })
+        const list = await db.list.create({ data: { name, description, creatorId: userId, listSpots: { create: { spotId } } } })
+        track("Saved to new list", { listId: list.id, spotId })
         return json({ success: true }, request, { flash: { title: "List created", description: "Spot saved to new list" } })
       } catch {
         return formError({ formError: "Failed to create list" })
@@ -191,7 +195,7 @@ function ListItem({ list, isSaved, spotId }: { spotId: string; list: SerializeFr
       className="w-full px-2"
       onClick={() =>
         listFetcher.submit(
-          { [FORM_ACTION]: Actions.Save, shouldSave: String(!isSaved), listId: list.id, spotId, csrf },
+          { [FORM_ACTION]: Actions.ToggleSave, shouldSave: String(!isSaved), listId: list.id, spotId, csrf },
           { method: "POST", action: SAVE_TO_LIST_URL },
         )
       }

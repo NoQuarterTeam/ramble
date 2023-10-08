@@ -13,6 +13,7 @@ import { formError, NullableFormString, validateFormData } from "~/lib/form"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { Footer } from "./components/Footer"
+import { track } from "~/lib/analytics.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, { id: true, bio: true, avatar: true })
@@ -33,6 +34,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     avatarBlurHash = await generateBlurHash(result.data.avatar)
   }
   await db.user.update({ where: { id: user.id }, data: { ...result.data, avatarBlurHash } })
+  track("Onboarding 1 submitted", { userId: user.id })
   return redirect("/onboarding/2")
 }
 

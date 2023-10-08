@@ -9,6 +9,7 @@ import { notFound, redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { ListForm } from "./components/ListForm"
+import { track } from "~/lib/analytics.server"
 
 export const headers = useLoaderHeaders
 
@@ -29,7 +30,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
 
-  await db.list.create({ data: { ...result.data, creator: { connect: { id: user.id } } } })
+  const list = await db.list.create({ data: { ...result.data, creator: { connect: { id: user.id } } } })
+  track("List created", { listId: list.id, userId: user.id })
   return redirect(`/${user.username}/lists`, request, {
     flash: { title: "List created", description: "Start adding some spots!" },
   })

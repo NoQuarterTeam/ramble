@@ -13,6 +13,7 @@ import { formError, NullableFormString, validateFormData } from "~/lib/form"
 import { redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 import { AtSign } from "lucide-react"
+import { track } from "~/lib/analytics.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, {
@@ -51,6 +52,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     avatarBlurHash = await generateBlurHash(result.data.avatar)
   }
   await db.user.update({ where: { id: user.id }, data: { ...result.data, avatarBlurHash } })
+  track("Account updated", { userId: user.id })
   return redirect("/account", request, { flash: { title: "Account updated" } })
 }
 

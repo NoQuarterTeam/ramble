@@ -31,6 +31,7 @@ import { getUserSession } from "~/services/session/session.server"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { NEW_REVIEW_REDIRECTS } from "./spots.$id_.reviews.new"
 import { useAuthenticityToken } from "remix-utils/csrf/react"
+import { track } from "~/lib/analytics.server"
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const { userId } = await getUserSession(request)
@@ -85,6 +86,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     }),
   )
   await db.spot.update({ where: { id: spot.id }, data: { images: { create: imageData } } })
+  track("Images added to spot preview", { spotId: spot.id, userId: user.id })
   return json({ success: true })
 }
 

@@ -19,6 +19,7 @@ import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { interestOptions } from "~/lib/models/user"
 import { notFound } from "~/lib/remix.server"
 import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
+import { track } from "~/lib/analytics.server"
 
 export const headers = useLoaderHeaders
 
@@ -66,6 +67,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     where: { username: params.username },
     data: { followers: shouldFollow ? { connect: { id: user.id } } : { disconnect: { id: user.id } } },
   })
+  track(shouldFollow ? "User followed" : "User unfollowed", { username: params.username || "", userId: user.id })
   return json({ success: true })
 }
 
