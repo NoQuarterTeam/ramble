@@ -125,6 +125,32 @@ function Pagination({ count }: { count: number }) {
   const noOfPages = Math.ceil(count / take)
   const currentPage = Number(searchParams.get("page") || "1")
   const existingParams = queryString.parse(searchParams.toString())
+  const maxPages = 5
+  const halfMaxPages = Math.floor(maxPages / 2)
+  const pageNumbers = [] as Array<number>
+  if (noOfPages <= maxPages) {
+    for (let i = 1; i <= noOfPages; i++) {
+      pageNumbers.push(i)
+    }
+  } else {
+    let startPage = currentPage - halfMaxPages
+    let endPage = currentPage + halfMaxPages
+
+    if (startPage < 1) {
+      endPage += Math.abs(startPage) + 1
+      startPage = 1
+    }
+
+    if (endPage > noOfPages) {
+      startPage -= endPage - noOfPages
+      endPage = noOfPages
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i)
+    }
+  }
+
   return (
     <div className="flex items-center justify-between px-2">
       <p className="text-sm">{count} items</p>
@@ -153,10 +179,26 @@ function Pagination({ count }: { count: number }) {
           onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: currentPage - 1 }))}
           disabled={currentPage === 1}
         />
+        {pageNumbers.map((pageNumber) => {
+          const isCurrentPage = pageNumber === currentPage
+          const isValidPage = pageNumber >= 0 && pageNumber <= count
+
+          return (
+            <IconButton
+              variant={isCurrentPage ? "secondary" : "outline"}
+              size="sm"
+              key={`${pageNumber}-active`}
+              aria-label={`Page ${pageNumber}`}
+              disabled={!isValidPage}
+              onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: pageNumber }))}
+              icon={<div>{pageNumber}</div>}
+            />
+          )
+        })}
 
         <IconButton
           size="sm"
-          aria-label="back"
+          aria-label="next page"
           icon={<ChevronRight size={16} />}
           variant="outline"
           onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: currentPage + 1 }))}
@@ -166,7 +208,7 @@ function Pagination({ count }: { count: number }) {
         <IconButton
           size="sm"
           icon={<ChevronsRight size={16} />}
-          aria-label="back"
+          aria-label="last page"
           variant="outline"
           onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: noOfPages }))}
           disabled={currentPage === noOfPages}
