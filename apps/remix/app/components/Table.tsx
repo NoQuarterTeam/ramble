@@ -95,7 +95,7 @@ export function Table<T>({
           ) : (
             table.getRowModel().rows.map((row, i) => (
               <React.Fragment key={row.id}>
-                <tr className={join(i % 2 === 0 ? "bg-gray-100 dark:bg-gray-700" : "bg-background")}>
+                <tr className={join(i % 2 === 0 ? "bg-gray-100 dark:bg-gray-700/70" : "bg-background")}>
                   {row.getVisibleCells().map((cell) => (
                     <td key={cell.id} className="truncate px-2 py-1" style={{ width: cell.column.getSize() }}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -135,46 +135,43 @@ function Pagination({ count }: { count: number }) {
           of
           <strong>{noOfPages}</strong>
         </span>
-        <div>
-          <IconButton
-            size="sm"
-            aria-label="first page"
-            icon={<ChevronsLeft size={16} />}
-            variant="outline"
-            onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: 1 }))}
-            disabled={currentPage === 1}
-          />
-        </div>
-        <div>
-          <IconButton
-            size="sm"
-            aria-label="previous page"
-            icon={<ChevronLeft size={16} />}
-            variant="outline"
-            onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: currentPage - 1 }))}
-            disabled={currentPage === 1}
-          />
-        </div>
-        <div>
-          <IconButton
-            size="sm"
-            aria-label="back"
-            icon={<ChevronRight size={16} />}
-            variant="outline"
-            onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: currentPage + 1 }))}
-            disabled={currentPage === noOfPages}
-          />
-        </div>
-        <div>
-          <IconButton
-            size="sm"
-            icon={<ChevronsRight size={16} />}
-            aria-label="back"
-            variant="outline"
-            onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: noOfPages }))}
-            disabled={currentPage === noOfPages}
-          />
-        </div>
+
+        <IconButton
+          size="sm"
+          aria-label="first page"
+          icon={<ChevronsLeft size={16} />}
+          variant="outline"
+          onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: 1 }))}
+          disabled={currentPage === 1}
+        />
+
+        <IconButton
+          size="sm"
+          aria-label="previous page"
+          icon={<ChevronLeft size={16} />}
+          variant="outline"
+          onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: currentPage - 1 }))}
+          disabled={currentPage === 1}
+        />
+
+        <IconButton
+          size="sm"
+          aria-label="back"
+          icon={<ChevronRight size={16} />}
+          variant="outline"
+          onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: currentPage + 1 }))}
+          disabled={currentPage === noOfPages}
+        />
+
+        <IconButton
+          size="sm"
+          icon={<ChevronsRight size={16} />}
+          aria-label="back"
+          variant="outline"
+          onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: noOfPages }))}
+          disabled={currentPage === noOfPages}
+        />
+
         <Select
           className="w-[130px]"
           size="sm"
