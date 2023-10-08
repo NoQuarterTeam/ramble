@@ -1,4 +1,5 @@
 import { Link, useSearchParams } from "@remix-run/react"
+import { track } from "@vercel/analytics/server"
 import type { ActionFunctionArgs, MetaFunction } from "@vercel/remix"
 import { redirect } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
@@ -42,6 +43,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const { setUser } = await getUserSession(request)
   const headers = new Headers([["set-cookie", await setUser(user.id)]])
+  track("Logged in", { userId: user.id })
   return redirect(redirectTo || "/map", { headers })
 }
 

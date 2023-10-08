@@ -12,6 +12,7 @@ import { createToken } from "~/lib/jwt.server"
 import { badRequest, redirect } from "~/lib/remix.server"
 import { hashPassword } from "~/services/auth/password.server"
 import { getUserSession } from "~/services/session/session.server"
+import { track } from "@vercel/analytics/server"
 
 export const meta: MetaFunction = () => {
   return [{ title: "Register" }, { name: "description", content: "Sign up to the ramble" }]
@@ -61,6 +62,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         const token = await createToken({ id: user.id })
         await sendAccountVerificationEmail(user, token)
         const headers = new Headers([["set-cookie", await setUser(user.id)]])
+        track("Registered", { userId: user.id })
         return redirect("/onboarding", request, {
           headers,
           flash: { title: `Welcome to Ramble, ${data.firstName}!`, description: "Let's get you setup." },

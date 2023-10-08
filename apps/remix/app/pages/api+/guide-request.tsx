@@ -1,4 +1,5 @@
 import { sendGuideRequestSentToAdminsEmail } from "@ramble/api"
+import { track } from "@vercel/analytics/server"
 import { ActionFunctionArgs } from "@vercel/remix"
 import { FormButton, useFetcher } from "~/components/Form"
 import { db } from "~/lib/db.server"
@@ -18,6 +19,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       admins.map((a) => a.email),
       user,
     )
+    track("Guide approval requested", { userId: user.id })
     return json(null, request, {
       flash: { title: "Request sent!", description: "We will review your request and get back to you soon." },
     })

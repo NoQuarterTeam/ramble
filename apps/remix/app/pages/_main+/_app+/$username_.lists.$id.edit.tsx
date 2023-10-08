@@ -11,6 +11,7 @@ import { notFound, redirect } from "~/lib/remix.server"
 import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
 
 import { ListForm } from "./components/ListForm"
+import { track } from "@vercel/analytics/server"
 
 export const headers = useLoaderHeaders
 
@@ -42,6 +43,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     where: { id: list.id },
     data: { name, description },
   })
+  track("List updated", { listId: list.id, userId: user.id })
   return redirect(`/${user.username}/lists/${list.id}`, request, {
     flash: { title: "List updated" },
   })

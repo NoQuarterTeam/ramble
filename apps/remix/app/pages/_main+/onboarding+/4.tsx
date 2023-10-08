@@ -17,6 +17,7 @@ import { formError, FormNumber, NullableFormString, validateFormData } from "~/l
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { Footer } from "./components/Footer"
+import { track } from "@vercel/analytics/server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, {
@@ -64,6 +65,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     )
     await db.van.create({ data: { userId: user.id, ...data, images: { create: imageData } } })
   }
+  track("Onboarding 4 submitted", { userId: user.id })
   return redirect("/map/welcome")
 }
 

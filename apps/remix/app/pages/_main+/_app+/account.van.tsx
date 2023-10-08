@@ -15,6 +15,7 @@ import { db } from "~/lib/db.server"
 import { formError, FormNumber, NullableFormString, validateFormData } from "~/lib/form"
 import { redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
+import { track } from "@vercel/analytics/server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, {
@@ -52,6 +53,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       where: { id: user.van.id },
       data: { userId: user.id, ...data, images: { delete: imagesToDelete, create: imageData } },
     })
+    track("Van updated", { userId: user.id })
   } else {
     const imageData = await Promise.all(
       images.map(async (image) => {
@@ -60,6 +62,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       }),
     )
     await db.van.create({ data: { userId: user.id, ...data, images: { create: imageData } } })
+    track("Van created", { userId: user.id })
   }
 
   return redirect("/account/van", request, { flash: { title: user.van ? "Van updated" : "Van created" } })

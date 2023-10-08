@@ -328,8 +328,8 @@ importers:
         specifier: ^6.5.0
         version: 6.5.0(patch_hash=s37llybtaw4egw46iemlnuvpdu)
       '@vercel/analytics':
-        specifier: ^1.0.2
-        version: 1.0.2
+        specifier: ^1.1.0
+        version: 1.1.0
       '@vercel/edge':
         specifier: ^1.1.0
         version: 1.1.0
@@ -4107,7 +4107,7 @@ packages:
       getenv: 1.0.0
       glob: 7.1.6
       resolve-from: 5.0.0
-      semver: 7.5.3
+      semver: 7.5.4
       slash: 3.0.0
       xcode: 3.0.1
       xml2js: 0.6.0
@@ -7982,8 +7982,10 @@ packages:
     resolution: {integrity: sha512-17kVyLq3ePTKOkveHxXuIJZtGYs+cSoev7BlP+Lf4916qfDhk/HBjvlYDe8egrea7LNPHKwSZJK/bzZC+Q6AwQ==}
     dev: true
 
-  /@vercel/analytics@1.0.2:
-    resolution: {integrity: sha512-BZFxVrv24VbNNl5xMxqUojQIegEeXMI6rX3rg1uVLYUEXsuKNBSAEQf4BWEcjQDp/8aYJOj6m8V4PUA3x/cxgg==}
+  /@vercel/analytics@1.1.0:
+    resolution: {integrity: sha512-k5ePYZPxitxxD1eJenPUUuH3qK+EtaA9OVD3oO0BRbyT/LarmZF0qdkptRSidip1arQxsTEIWvHbTuj1oksl+Q==}
+    dependencies:
+      server-only: 0.0.1
     dev: false
 
   /@vercel/edge@1.1.0:
@@ -17212,6 +17214,10 @@ packages:
       send: 0.18.0
     transitivePeerDependencies:
       - supports-color
+
+  /server-only@0.0.1:
+    resolution: {integrity: sha512-qepMx2JxAa5jjfzxG79yPPq+8BuFToHd1hm7kI+Z4zAq1ftQiP7HcxMhDDItrbtwVeLg/cY2JnKnrcFkmiswNA==}
+    dev: false
 
   /set-blocking@2.0.0:
     resolution: {integrity: sha512-KiKBS8AnWGEyLzofFfmvKwpdPzqiy16LvQfK3yv/fVH7Bj13/wl3JSR1J+rfgRE9q7xUJK4qvgS8raSOeLUehw==}

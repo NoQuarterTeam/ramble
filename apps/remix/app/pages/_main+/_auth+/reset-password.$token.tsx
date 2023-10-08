@@ -1,4 +1,5 @@
 import { Link, useParams } from "@remix-run/react"
+import { track } from "@vercel/analytics/server"
 import type { ActionFunctionArgs } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
@@ -31,8 +32,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const data = result.data
   const payload = await decryptToken<{ id: string }>(data.token)
   const hashedPassword = await hashPassword(data.password)
-  await db.user.update({ where: { id: payload.id }, data: { password: hashedPassword } })
-
+  const user = await db.user.update({ where: { id: payload.id }, data: { password: hashedPassword } })
+  track("Password updated", { userId: user.id })
   return redirect("/login", request, {
     flash: { title: "Password changed", description: "You can now login with your new password" },
   })
