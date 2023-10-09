@@ -14,8 +14,8 @@ export const theme = {
       xxs: "0.625rem",
     },
     fontFamily: {
-      sans: ["Roboto", "sans-serif"],
-      serif: ["Roboto", "sans-serif"],
+      sans: ["Urbanist", "sans-serif"],
+      serif: ["Urbanist", "sans-serif"],
     },
     colors: {
       primary: colors.primary,
