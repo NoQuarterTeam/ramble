@@ -12,12 +12,12 @@ import { Form, FormButton, FormError, FormField, FormFieldLabel, ImageField } fr
 import { ImageUploader } from "~/components/ImageUploader"
 import { LinkButton } from "~/components/LinkButton"
 import { IconButton, Textarea } from "~/components/ui"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { formError, FormNumber, NullableFormString, validateFormData } from "~/lib/form"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { Footer } from "./components/Footer"
-import { track } from "~/lib/analytics.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, {

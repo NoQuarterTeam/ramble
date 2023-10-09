@@ -11,11 +11,11 @@ import { type VanImage } from "@ramble/database/types"
 import { Form, FormButton, FormError, FormField, FormFieldLabel, ImageField } from "~/components/Form"
 import { ImageUploader } from "~/components/ImageUploader"
 import { IconButton, Textarea } from "~/components/ui"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { formError, FormNumber, NullableFormString, validateFormData } from "~/lib/form"
 import { redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
-import { track } from "~/lib/analytics.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, {

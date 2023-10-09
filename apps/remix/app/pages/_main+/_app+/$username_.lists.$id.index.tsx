@@ -17,6 +17,7 @@ import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { PageContainer } from "~/components/PageContainer"
 import { Button } from "~/components/ui"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { FormActionInput, getFormAction } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
@@ -28,7 +29,6 @@ import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
 
 import { SpotItem } from "./components/SpotItem"
 import { SpotMarker } from "./components/SpotMarker"
-import { track } from "~/lib/analytics.server"
 
 export const headers = useLoaderHeaders
 

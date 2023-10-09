@@ -1,8 +1,8 @@
 import type { ActionFunctionArgs } from "@vercel/remix"
 import { createCookie } from "@vercel/remix"
 import { z } from "zod"
-import { track } from "~/lib/analytics.server"
 
+import { track } from "~/lib/analytics.server"
 import { FormCheckbox, formError, validateFormData } from "~/lib/form"
 import { json } from "~/lib/remix.server"
 

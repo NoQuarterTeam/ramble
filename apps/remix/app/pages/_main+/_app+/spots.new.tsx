@@ -5,13 +5,13 @@ import type { z } from "zod"
 import { generateBlurHash } from "@ramble/api"
 import { doesSpotTypeRequireAmenities } from "@ramble/shared"
 
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { json, redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { amenitiesSchema, SpotForm, spotSchema } from "./components/SpotForm"
-import { track } from "~/lib/analytics.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, { isVerified: true })
