@@ -17,11 +17,12 @@ import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { PageContainer } from "~/components/PageContainer"
 import { Button } from "~/components/ui"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { FormActionInput, getFormAction } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
-import { fetchAndJoinSpotImages } from "~/lib/models/spots"
+import { fetchAndJoinSpotImages } from "~/lib/models/spot"
 import { badRequest, notFound, redirect } from "~/lib/remix.server"
 import { useTheme } from "~/lib/theme"
 import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
@@ -97,6 +98,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   switch (formAction) {
     case Actions.Delete:
       await db.list.delete({ where: { id: params.id } })
+      track("List deleted", { listId: params.id || null, userId: user.id })
       return redirect(`/${user.username}/lists`, request, { flash: { title: "List deleted" } })
     case Actions.Copy:
       const list = await db.list.findFirst({ where: { id: params.id }, include: { listSpots: true } })

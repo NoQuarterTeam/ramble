@@ -9,18 +9,20 @@
   "scripts": {
     "dev": "pnpm with-env prisma studio",
     "db:push": "pnpm with-env prisma db push && pnpm generate",
-    "generate": "pnpm with-env prisma generate --no-engine",
+    "generate": "pnpm with-env prisma generate",
     "with-env": "dotenv -e ../../.env --",
     "postinstall": "pnpm generate"
   },
   "sideEffects": false,
   "dependencies": {
+    "@planetscale/database": "^1.11.0",
+    "@prisma/adapter-planetscale": "5.4.1-pre",
     "@prisma/client": "5.4.1",
     "@prisma/extension-accelerate": "^0.6.2",
     "prisma": "5.4.1"
   },
   "devDependencies": {
-    "@types/node": "^18.18.3",
+    "@types/node": "^18.18.4",
     "dotenv-cli": "^7.3.0",
     "typescript": "5.2.2"
   },

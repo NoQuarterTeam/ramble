@@ -11,9 +11,10 @@ import { Form, FormButton, FormError } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import type { RambleIcon } from "~/components/ui"
 import { Button } from "~/components/ui"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
-import { interestOptions } from "~/lib/models/interests"
+import { interestOptions } from "~/lib/models/user"
 import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
 
 import { Footer } from "./components/Footer"
@@ -40,7 +41,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
   const id = await requireUser(request)
-  await db.user.update({ where: { id }, data: result.data })
+  const user = await db.user.update({ where: { id }, data: result.data })
+  track("Onboarding 2 submitted", { userId: user.id })
   return redirect("/onboarding/3")
 }
 

@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   presets: [require("@ramble/tailwind-config")],
-  content: ["./app/**/*.tsx", "./components/**/*.tsx", "./lib/**/*.tsx"],
+  content: ["./app/**/*.tsx", "./components/**/*.tsx", "./lib/**/*.tsx", "../../packages/shared/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {

@@ -3,6 +3,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { z } from "zod"
 
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { formError, FormNumber, getFormAction, validateFormData } from "~/lib/form"
 import { badRequest, notFound, redirect } from "~/lib/remix.server"
@@ -53,6 +54,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
           where: { id: review.id },
           data: { description: result.data.description, rating: result.data.rating },
         })
+        track("Review updated", { reviewId: review.id, userId: user.id })
         return redirect("/spots/" + spot.id, request, { flash: { title: "Review updated!", description: "Thank you!" } })
       } catch {
         return badRequest(null, request, { flash: { title: "Error editing review" } })

@@ -7,7 +7,7 @@ import colors from "@ramble/tailwind-config/src/colors"
 import { Button } from "../../../../../../components/ui/Button"
 import { type RambleIcon } from "../../../../../../components/ui/Icons"
 import { Text } from "../../../../../../components/ui/Text"
-import { AMENITIES_ICONS } from "../../../../../../lib/static/amenities"
+import { AMENITIES_ICONS } from "../../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../../router"
 import { EditSpotModalView } from "./EditSpotModalView"
 

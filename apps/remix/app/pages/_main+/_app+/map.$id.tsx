@@ -5,20 +5,20 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
 import { defer } from "@vercel/remix"
 import { Frown, Heart, Image, Star } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
-import { useAuthenticityToken } from "remix-utils/authenticity-token"
+import { useAuthenticityToken } from "remix-utils/csrf/react"
 import { z } from "zod"
 
 import { generateBlurHash, publicSpotWhereClause } from "@ramble/api"
 import { type SpotType } from "@ramble/database/types"
-import { createImageUrl, displayRating, merge } from "@ramble/shared"
+import { createImageUrl, displayRating, isPartnerSpot, merge, spotPartnerFields } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
 import { ImageUploader } from "~/components/ImageUploader"
 import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
-import { isPartnerSpot, PartnerLink } from "~/components/PartnerLink"
 import { SpotIcon } from "~/components/SpotIcon"
 import { Button, CloseButton, Spinner } from "~/components/ui"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
@@ -28,6 +28,7 @@ import { SaveToList } from "~/pages/api+/save-to-list"
 import { getCurrentUser } from "~/services/auth/auth.server"
 import { getUserSession } from "~/services/session/session.server"
 
+import { PartnerLink } from "./components/PartnerLink"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { NEW_REVIEW_REDIRECTS } from "./spots.$id_.reviews.new"
 
@@ -42,11 +43,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
         name: true,
         address: true,
         type: true,
-        komootId: true,
-        sourceUrl: true,
-        campspaceId: true,
-        surflineId: true,
-        park4nightId: true,
+        ...spotPartnerFields,
         _count: { select: { reviews: true, listSpots: true } },
         description: true,
         verifier: { select: { firstName: true, username: true, lastName: true, avatar: true, avatarBlurHash: true } },
@@ -88,6 +85,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     }),
   )
   await db.spot.update({ where: { id: spot.id }, data: { images: { create: imageData } } })
+  track("Images added to spot preview", { spotId: spot.id, userId: user.id })
   return json({ success: true })
 }
 

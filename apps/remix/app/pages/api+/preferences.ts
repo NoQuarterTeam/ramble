@@ -2,6 +2,7 @@ import type { ActionFunctionArgs } from "@vercel/remix"
 import { createCookie } from "@vercel/remix"
 import { z } from "zod"
 
+import { track } from "~/lib/analytics.server"
 import { FormCheckbox, formError, validateFormData } from "~/lib/form"
 import { json } from "~/lib/remix.server"
 
@@ -19,7 +20,7 @@ export const defaultPreferences = {
   mapLayerTemp: false,
 } satisfies Preferences
 
-export async function action({ request }: ActionFunctionArgs) {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const result = await validateFormData(request, preferencesSchema)
   if (!result.success) return formError(result)
   const cookieHeader = request.headers.get("Cookie")
@@ -27,6 +28,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   cookie = { ...cookie, ...result.data }
 
+  track("Map preferences updated", result.data)
   return json({ success: true }, request, {
     headers: { "set-cookie": await preferencesCookies.serialize(cookie) },
   })

@@ -1,14 +1,13 @@
 import puppeteer from "puppeteer"
 import * as cheerio from "cheerio"
 
-const makeUrl = (lat: string, lng: string) =>
-  `https://spots.roadsurfer.com/en-gb/roadsurfer-spots?allowWithoutLocation&categoryIds&country&endDate&lat=${lat}&lng=${lng}&locationSearchString=Selected%20area&maxPrice&onlyFreeSpots&searchRadius=300&searchType=modified&sort=distance&startDate&terrainFor[]=camperVan`
+const url = `https://spots.roadsurfer.com/en-gb/roadsurfer-spots?allowWithoutLocation&categoryIds&country&endDate&locationSearchString=Selected%20area&maxPrice&onlyFreeSpots&searchRadius=565&searchType=modified&sort=distance&startDate&terrainFor[]=camperVan`
 
 import exampleData from "./komoot.json"
 
 import { prisma } from "@ramble/database"
 import { SpotType } from "@ramble/database/types"
-import { convert } from "html-to-text"
+import { log } from "console"
 
 export type RoadsurferSpot = {
   id: string
@@ -21,23 +20,17 @@ export type RoadsurferSpot = {
   description?: string
 }
 
-async function getCards({ lat, lng }: { lat: string; lng: string }) {
-  console.log(lat, lng)
-  const urlWithParams = makeUrl(lat, lng)
-  console.log(urlWithParams)
+async function getCards({ lat, lng }: { lat: number; lng: number }) {
+  const urlWithParams = url + "&lat=" + lat + "&lng=" + lng
+
   const browser = await puppeteer.launch({
-    headless: "new",
+    headless: false,
   })
 
   const page = await browser.newPage()
 
-  await page.goto(urlWithParams, {
-    waitUntil: "domcontentloaded",
-  })
-  // await page.waitForNetworkIdle({ idleTime: 1000 })
-  // await page.waitForTimeout(4000)
-  await new Promise((r) => setTimeout(r, 5000))
-  // await page.waitForSelector(".jss180")
+  await page.goto(urlWithParams)
+  await page.waitForNetworkIdle()
 
   const pageData = await page.evaluate(() => {
     return { html: document.documentElement.innerHTML }
@@ -47,73 +40,51 @@ async function getCards({ lat, lng }: { lat: string; lng: string }) {
 
   browser.close()
 
-  const newSpots: RoadsurferSpot[] = []
-  const newSpotCount = $('div[id^="spot-result-item-"]').length
-
-  console.log(newSpotCount + " spots found")
+  const spots: RoadsurferSpot[] = []
 
   // +11 on mozilla classname
-  $('div[id^="spot-result-item-"]').each((_, card) => {
-    // $(".jss127").each((_, card) => {
+
+  $(".jss127").each((_, card) => {
     const id = $(card).attr("id")?.split("-")[3]
-    const name = $(card).find("a").eq(1).next().text().trim()
+    const name = $(card).find(".jss135").text().trim()
     const link = $(card).find("a").attr("href")
 
-    if (!id) {
-      console.log("No id found")
-      return
-    }
-    if (!name) {
-      console.log("No name found")
-      return
-    }
-    if (!link) {
-      console.log("No link found")
-      return
-    }
-    newSpots.push({ id, name, link })
+    if (!id || !link || !name) return
+
+    spots.push({ id, name, link })
   })
 
   const currentData = await prisma.spot.findMany({
-    where: { roadsurferId: { in: newSpots.map((s) => s.id) } },
+    where: { roadsurferId: { in: spots.map((s) => s.id) } },
   })
 
-  for (let index = 0; index < newSpots.length; index++) {
-    const spot = newSpots[index]
+  for (let index = 0; index < spots.length; index++) {
+    const spot = spots[index]
 
     try {
       // if in db, continue
       const exists = currentData.find((s) => s.roadsurferId === spot.id)
-      console.log(exists && "Spot exists: " + spot.id)
       if (exists) continue
 
-      console.log("Adding spot: " + index + " out of " + newSpots.length + " - " + lat + "," + lng)
-
       const browser = await puppeteer.launch({
-        headless: "new",
+        headless: false,
       })
 
-      const detailPage = await browser.newPage()
+      const page = await browser.newPage()
 
-      await detailPage.goto(spot.link, {
-        waitUntil: "domcontentloaded",
-      })
-      await detailPage.waitForNetworkIdle({ idleTime: 250 })
+      await page.goto(spot.link)
+      await page.waitForNetworkIdle()
 
-      const pageData = await detailPage.evaluate(() => {
+      const pageData = await page.evaluate(() => {
         return { html: document.documentElement.innerHTML }
       })
-      browser.close()
 
       const $ = cheerio.load(pageData.html)
 
       const latitude = $("#productMap").attr("data-latitude")
       const longitude = $("#productMap").attr("data-longitude")
 
-      if (!latitude || !longitude) {
-        console.log("no lat or lng")
-        continue
-      }
+      if (!latitude || !longitude) return
 
       let images: string[] = []
       $(".product-images__slider-big picture img").each((_, img) => {
@@ -122,6 +93,7 @@ async function getCards({ lat, lng }: { lat: string; lng: string }) {
       })
 
       const description = $(".product-info__description").html()?.trim() || ""
+
       const isPetFriendly =
         $(".product-facility__icons-icon__label").filter((_, p) => $(p).text().includes("Pets allowed")).length > 0
 
@@ -140,38 +112,32 @@ async function getCards({ lat, lng }: { lat: string; lng: string }) {
       await prisma.spot.create({
         data: {
           name: spot.name,
-          latitude: parseFloat(latitude),
-          longitude: parseFloat(longitude),
-          description: convert(description, { wordwrap: false, preserveNewlines: true }),
+          latitude: parseInt(latitude),
+          longitude: parseInt(longitude),
+          description,
           images: { create: images.map((image) => ({ path: image, creator: { connect: { email: "george@noquarter.co" } } })) },
           roadsurferId: spot.id,
           type: "CAMPING",
           isPetFriendly,
           sourceUrl: spot.link,
           creator: { connect: { email: "george@noquarter.co" } },
-          // verifier: { connect: { email: "george@noquarter.co" } },
           amenities: {
             create: { bbq, shower, kitchen, sauna: false, firePit, wifi, toilet, water, electricity, hotWater: false, pool },
           },
         },
       })
-    } catch (error) {
-      console.log(spot.id + error)
-    }
+    } catch {}
   }
 }
 
 async function main() {
   try {
     // Start at 40, -5 for whole scan of europe
-    for (let lat = 40.01; lat < 75; lat = lat + 2.5) {
+    for (let lat = 40; lat < 75; lat = lat + 7.5) {
       console.log("Lat: " + lat)
-      for (let lng = 10.01; lng < 30; lng = lng + 2.5) {
+      for (let lng = -5; lng < 30; lng = lng + 7.5) {
         console.log("Lng: " + lng)
-        await getCards({
-          lat: Number(Math.round(parseFloat(lat + "e" + 2)) + "e-" + 2).toFixed(2),
-          lng: Number(Math.round(parseFloat(lng + "e" + 2)) + "e-" + 2).toFixed(2),
-        })
+        await getCards({ lat: 40, lng: -5 })
       }
     }
   } catch (error) {

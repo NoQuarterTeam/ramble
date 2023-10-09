@@ -5,6 +5,7 @@ import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { formError, NullableFormString, validateFormData } from "~/lib/form"
 import { comparePasswords } from "~/services/auth/password.server"
@@ -42,6 +43,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const { setUser } = await getUserSession(request)
   const headers = new Headers([["set-cookie", await setUser(user.id)]])
+  track("Logged in", { userId: user.id })
   return redirect(redirectTo || "/map", { headers })
 }
 

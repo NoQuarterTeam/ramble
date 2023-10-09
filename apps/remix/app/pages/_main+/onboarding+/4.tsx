@@ -12,6 +12,7 @@ import { Form, FormButton, FormError, FormField, FormFieldLabel, ImageField } fr
 import { ImageUploader } from "~/components/ImageUploader"
 import { LinkButton } from "~/components/LinkButton"
 import { IconButton, Textarea } from "~/components/ui"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { formError, FormNumber, NullableFormString, validateFormData } from "~/lib/form"
 import { getCurrentUser } from "~/services/auth/auth.server"
@@ -64,6 +65,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     )
     await db.van.create({ data: { userId: user.id, ...data, images: { create: imageData } } })
   }
+  track("Onboarding 4 submitted", { userId: user.id })
   return redirect("/map/welcome")
 }
 

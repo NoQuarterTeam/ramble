@@ -1,15 +1,18 @@
+import * as React from "react"
+import { type ActionFunctionArgs } from "@vercel/remix"
+import { Bug, Lightbulb, MessageCircle } from "lucide-react"
+import { promiseHash } from "remix-utils/promise"
+import { z } from "zod"
+
 import { sendFeedbackSentToAdminsEmail } from "@ramble/api"
 import { FeedbackType } from "@ramble/database/types"
 import { useDisclosure } from "@ramble/shared"
-import { ActionFunctionArgs } from "@vercel/remix"
-import { Bug, Lightbulb, MessageCircle } from "lucide-react"
-import * as React from "react"
-import { promiseHash } from "remix-utils/promise"
-import { z } from "zod"
+
 import { FormButton, FormError, FormField, useFetcher } from "~/components/Form"
 import { Button, Modal, Textarea } from "~/components/ui"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { ActionDataErrorResponse, FormActionInput, formError, getFormAction, validateFormData } from "~/lib/form"
+import { type ActionDataErrorResponse, FormActionInput, formError, getFormAction, validateFormData } from "~/lib/form"
 import { badRequest, json } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
@@ -37,6 +40,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           admins.map((a) => a.email),
           feedback,
         )
+        track("Feedback created", { feedbackId: feedback.id, userId: user.id })
         return json({ success: true }, request, {
           flash: { type: "success", title: "Feedback sent", description: "We'll take a look as soon as possible" },
         })

@@ -20,7 +20,7 @@ Make sure you have created a .env file with the right values, you can use .env.e
 
 ### Mailers
 
-- Create a Resend account and set a RESEND_API_KEY environment variable in .env
+- We use Resend for the smtp server
 
 ### Deployment
 

@@ -4,9 +4,10 @@ import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "@verc
 import dayjs from "dayjs"
 import { Check, Edit2, Heart, Star, Trash } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
+import { promiseHash } from "remix-utils/promise"
 
 import { publicSpotWhereClause } from "@ramble/api"
-import { AMENITIES, canManageSpot, createImageUrl, displayRating } from "@ramble/shared"
+import { activitySpotTypes, AMENITIES, canManageSpot, createImageUrl, displayRating } from "@ramble/shared"
 
 import { Form, FormButton } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -23,6 +24,7 @@ import {
   AlertDialogTrigger,
   Button,
 } from "~/components/ui"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { FormActionInput, getFormAction } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
@@ -38,8 +40,6 @@ import { getUserSession } from "~/services/session/session.server"
 import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { SpotMarker } from "./components/SpotMarker"
-import { SpotType } from "@ramble/database/types"
-import { promiseHash } from "remix-utils/promise"
 
 export const config = {
   // runtime: "edge",
@@ -80,7 +80,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const activitySpots = await db.spot.findMany({
     where: {
       ...publicSpotWhereClause(userId),
-      type: { in: [SpotType.CLIMBING, SpotType.HIKING, SpotType.MOUNTAIN_BIKING, SpotType.PADDLE_BOARDING, SpotType.SURFING] },
+      type: { in: activitySpotTypes },
       latitude: { gt: spot.latitude - 0.5, lt: spot.latitude + 0.5 },
       longitude: { gt: spot.longitude - 0.5, lt: spot.longitude + 0.5 },
     },
@@ -122,18 +122,23 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       try {
         if (!user.isAdmin) return redirect("/spots")
         await db.spot.delete({ where: { id: params.id } })
+        track("Spot deleted", { spotId: params.id || "", userId: user.id })
         return redirect("/spots", request, { flash: { title: "Spot deleted!" } })
       } catch (error) {
         return badRequest("Error deleting spot your account", request, { flash: { title: "Error deleting spot" } })
       }
     case Actions.Verify:
       try {
-        const spot = await db.spot.findUniqueOrThrow({ where: { id: params.id }, select: { ownerId: true, deletedAt: true } })
+        const spot = await db.spot.findUniqueOrThrow({
+          where: { id: params.id },
+          select: { id: true, ownerId: true, deletedAt: true },
+        })
         if (!canManageSpot(spot, user)) return redirect("/spots")
         await db.spot.update({
           where: { id: params.id },
           data: { verifiedAt: new Date(), verifier: { connect: { id: user.id } } },
         })
+        track("Spot verified", { spotId: spot.id, userId: user.id })
         return json({ success: true }, request, { flash: { title: "Spot verified!" } })
       } catch (error) {
         return badRequest("Error verifying spot", request, { flash: { title: "Error verifying spot" } })

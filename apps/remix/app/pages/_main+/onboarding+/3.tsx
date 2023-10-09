@@ -9,6 +9,7 @@ import { zx } from "zodix"
 import { Form, FormButton, FormError } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { Button } from "~/components/ui"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { formError, useFormErrors, validateFormData } from "~/lib/form"
 import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
@@ -33,7 +34,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
   const id = await requireUser(request)
-  await db.user.update({ where: { id }, data: { isPetOwner: result.data.isPetOwner } })
+  const user = await db.user.update({ where: { id }, data: { isPetOwner: result.data.isPetOwner } })
+  track("Onboarding 3 submitted", { userId: user.id })
   return redirect("/onboarding/4")
 }
 

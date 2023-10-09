@@ -2,6 +2,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
 import { z } from "zod"
 
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { FormCheckbox, formError, NullableFormString, validateFormData } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
@@ -29,7 +30,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
 
-  await db.list.create({ data: { ...result.data, creator: { connect: { id: user.id } } } })
+  const list = await db.list.create({ data: { ...result.data, creator: { connect: { id: user.id } } } })
+  track("List created", { listId: list.id, userId: user.id })
   return redirect(`/${user.username}/lists`, request, {
     flash: { title: "List created", description: "Start adding some spots!" },
   })

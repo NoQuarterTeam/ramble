@@ -1,5 +1,5 @@
 import { createCookie } from "@vercel/remix"
-import { CSRF } from "remix-utils/csrf"
+import { CSRF } from "remix-utils/csrf/server"
 
 import { IS_PRODUCTION, SESSION_SECRET } from "~/lib/config.server"
 

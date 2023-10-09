@@ -11,7 +11,7 @@ import { type SpotItemWithStatsAndImage } from "@ramble/shared"
 import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
-import { fetchAndJoinSpotImages } from "~/lib/models/spots"
+import { fetchAndJoinSpotImages } from "~/lib/models/spot"
 import { notFound } from "~/lib/remix.server"
 import { getUserSession } from "~/services/session/session.server"
 

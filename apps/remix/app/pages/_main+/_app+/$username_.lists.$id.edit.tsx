@@ -4,6 +4,7 @@ import { json } from "@vercel/remix"
 import { z } from "zod"
 
 import { PageContainer } from "~/components/PageContainer"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { FormCheckbox, formError, NullableFormString, validateFormData } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
@@ -42,6 +43,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     where: { id: list.id },
     data: { name, description },
   })
+  track("List updated", { listId: list.id, userId: user.id })
   return redirect(`/${user.username}/lists/${list.id}`, request, {
     flash: { title: "List updated" },
   })

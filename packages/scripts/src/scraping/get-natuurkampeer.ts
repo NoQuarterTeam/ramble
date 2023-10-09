@@ -23,7 +23,7 @@ async function getCards() {
   const newSpots = $(".terrain")
 
   const dbSpots = await prisma.spot.findMany({
-    select: { natuurKampeerterreinenId: true },
+    select: { natuurKampeerterreinenId: true, deletedAt: true },
     where: { type: "CAMPING", natuurKampeerterreinenId: { in: newSpots.toArray().map((s) => s.attribs["data-item"]) } },
   })
 
@@ -79,10 +79,21 @@ async function getCards() {
           sourceUrl: link,
           isPetFriendly,
           creator: { connect: { email: "george@noquarter.co" } },
-          verifier: { connect: { email: "george@noquarter.co" } },
           images: { create: images.map((image) => ({ path: image, creator: { connect: { email: "george@noquarter.co" } } })) },
           amenities: {
-            create: { shower, kitchen, firePit, wifi, toilet, water, electricity, hotWater },
+            create: {
+              shower,
+              kitchen,
+              firePit,
+              wifi,
+              toilet,
+              water,
+              electricity,
+              hotWater,
+              bbq: false,
+              pool: false,
+              sauna: false,
+            },
           },
         },
       })

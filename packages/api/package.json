@@ -13,12 +13,13 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.423.0",
-    "@aws-sdk/s3-request-presigner": "^3.423.0",
+    "@aws-sdk/client-s3": "^3.427.0",
+    "@aws-sdk/lib-storage": "^3.427.0",
+    "@aws-sdk/s3-request-presigner": "^3.427.0",
     "@ramble/database": "workspace:*",
     "@ramble/emails": "workspace:*",
     "@ramble/shared": "workspace:*",
-    "@trpc/server": "^10.38.5",
+    "@trpc/server": "^10.40.0",
     "@turf/bbox": "^6.5.0",
     "@turf/center": "^6.5.0",
     "@turf/helpers": "^6.5.0",
@@ -26,7 +27,7 @@
     "blurhash": "^2.0.5",
     "dayjs": "1.11.10",
     "jsonwebtoken": "9.0.2",
-    "nodemailer": "6.9.5",
+    "nodemailer": "6.9.6",
     "resend": "^1.1.0",
     "supercluster": "^8.0.1",
     "superjson": "^1.13.3",
@@ -36,10 +37,10 @@
     "@ramble/eslint-config": "workspace:*",
     "@types/bcryptjs": "^2.4.4",
     "@types/jsonwebtoken": "9.0.3",
-    "@types/node": "^18.18.3",
+    "@types/node": "^18.18.4",
     "@types/supercluster": "^7.1.1",
     "dotenv-cli": "^7.3.0",
-    "eslint": "8.50.0",
+    "eslint": "8.51.0",
     "prettier": "3.0.3",
     "typescript": "5.2.2"
   }

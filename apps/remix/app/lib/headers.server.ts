@@ -1,4 +1,5 @@
 import type { HeadersFunction } from "@vercel/remix"
+
 import { IS_DEV } from "./config.server"
 
 export const useLoaderHeaders: HeadersFunction = ({ loaderHeaders }) => {

@@ -27,7 +27,7 @@ import { Button, Checkbox, CloseButton, IconButton, Spinner, Textarea, Tooltip }
 import { FormNumber, NullableFormString, useFormErrors } from "~/lib/form"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
-import { SPOT_TYPE_OPTIONS } from "~/lib/models/spots"
+import { SPOT_TYPE_OPTIONS } from "~/lib/models/spot"
 import { useTheme } from "~/lib/theme"
 import type { geocodeLoader } from "~/pages/api+/mapbox+/geocode"
 

@@ -19,6 +19,7 @@ module.exports = {
     "@ramble/emails",
     "@ramble/shared",
     "@ramble/tailwind-config",
+    /@vercel\/analytics/,
     "axios",
     "decode-uri-component",
     "filter-obj",

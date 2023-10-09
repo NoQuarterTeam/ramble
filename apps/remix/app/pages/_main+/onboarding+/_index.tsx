@@ -8,6 +8,7 @@ import { generateBlurHash } from "@ramble/api"
 import { Form, FormButton, FormError, FormField, FormFieldLabel, ImageField } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { Textarea } from "~/components/ui"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { formError, NullableFormString, validateFormData } from "~/lib/form"
 import { getCurrentUser } from "~/services/auth/auth.server"
@@ -33,6 +34,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     avatarBlurHash = await generateBlurHash(result.data.avatar)
   }
   await db.user.update({ where: { id: user.id }, data: { ...result.data, avatarBlurHash } })
+  track("Onboarding 1 submitted", { userId: user.id })
   return redirect("/onboarding/2")
 }
 

@@ -11,6 +11,7 @@ import { LinkButton } from "~/components/LinkButton"
 import { NavLink } from "~/components/NavLink"
 import type { RambleIcon } from "~/components/ui"
 import { Avatar, Badge, buttonSizeStyles, buttonStyles, Icons } from "~/components/ui"
+import { track } from "~/lib/analytics.server"
 import { createToken } from "~/lib/jwt.server"
 import { json } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
@@ -34,6 +35,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request, { email: true, id: true })
   const token = await createToken({ id: user.id })
   await sendAccountVerificationEmail(user, token)
+  track("Account verification requested", { userId: user.id })
   return json({ success: true }, request, {
     flash: { title: "Verification email sent", description: "Please check yout emails to verify your account" },
   })

@@ -30,7 +30,7 @@ export const buttonStyles = cva(
         link: "underline",
       },
       disabled: {
-        true: "pointer-events-none relative cursor-not-allowed opacity-70",
+        true: "relative cursor-not-allowed opacity-70",
       },
     },
     compoundVariants: [

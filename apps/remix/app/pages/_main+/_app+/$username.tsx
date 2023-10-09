@@ -12,11 +12,12 @@ import { createImageUrl, merge, userInterestFields } from "@ramble/shared"
 import { Form, FormButton } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { Avatar, Badge, buttonSizeStyles, buttonStyles, Tooltip } from "~/components/ui"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
-import { interestOptions } from "~/lib/models/interests"
+import { interestOptions } from "~/lib/models/user"
 import { notFound } from "~/lib/remix.server"
 import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
 
@@ -66,6 +67,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     where: { username: params.username },
     data: { followers: shouldFollow ? { connect: { id: user.id } } : { disconnect: { id: user.id } } },
   })
+  track(shouldFollow ? "User followed" : "User unfollowed", { username: params.username || "", userId: user.id })
   return json({ success: true })
 }
 

@@ -1,34 +1,37 @@
-import { type LoaderFunctionArgs } from "@remix-run/node"
-import { useLoaderData } from "@remix-run/react"
+import * as React from "react"
+import { type SerializeFrom } from "@remix-run/node"
+import { Await, useLoaderData } from "@remix-run/react"
+import { defer } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
-import { promiseHash } from "remix-utils/promise"
 
-import { Tile, TileBody, TileHeader } from "~/components/ui"
+import { Spinner, Tile, TileBody, TileHeader } from "~/components/ui"
 import { db } from "~/lib/db.server"
-import { json } from "~/lib/remix.server"
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const data = await promiseHash({
-    spotCount: db.spot.count({ where: { deletedAt: null } }),
-    verifiedSpotCount: db.spot.count({ where: { deletedAt: null, verifiedAt: { not: null } } }),
-    unverifiedSpotsCount: db.spot.count({ where: { deletedAt: null, verifiedAt: null } }),
-    userCount: db.user.count(),
-    guideCount: db.user.count({ where: { role: "GUIDE" } }),
-    memberCount: db.user.count({ where: { role: "MEMBER" } }),
-    listCount: db.list.count(),
-    privateListCount: db.list.count({ where: { isPrivate: true } }),
-    publicListCount: db.list.count({ where: { isPrivate: false } }),
-  })
-
-  return json(data, request, {
-    headers: {
-      "Cache-Control": cacheHeader({ public: true, maxAge: "1h", sMaxage: "1h" }),
+export const loader = async () => {
+  return defer(
+    {
+      spotCount: db.spot.count({ where: { deletedAt: null } }).then((r) => r),
+      verifiedSpotCount: db.spot.count({ where: { deletedAt: null, verifiedAt: { not: null } } }).then((r) => r),
+      unverifiedSpotsCount: db.spot.count({ where: { deletedAt: null, verifiedAt: null } }).then((r) => r),
+      userCount: db.user.count().then((r) => r),
+      guideCount: db.user.count({ where: { role: "GUIDE" } }).then((r) => r),
+      memberCount: db.user.count({ where: { role: "MEMBER" } }).then((r) => r),
+      listCount: db.list.count().then((r) => r),
+      privateListCount: db.list.count({ where: { isPrivate: true } }).then((r) => r),
+      publicListCount: db.list.count({ where: { isPrivate: false } }).then((r) => r),
     },
-  })
+    {
+      headers: {
+        "Cache-Control": cacheHeader({ public: true, maxAge: "1h", sMaxage: "1h" }),
+      },
+    },
+  )
 }
+type Res = SerializeFrom<typeof loader>
 
 export default function AdminHome() {
-  const data = useLoaderData<typeof loader>()
+  // @ts-expect-error vercel remix issues
+  const promise: Res = useLoaderData()
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
       <Tile>
@@ -37,15 +40,27 @@ export default function AdminHome() {
         </TileHeader>
         <TileBody>
           <div className="space-y-4">
-            <p className="text-3xl">{data.spotCount.toLocaleString()}</p>
+            <React.Suspense fallback={<Spinner />}>
+              <p className="text-3xl">
+                <Await resolve={promise.spotCount}>{(data) => data.toLocaleString()}</Await>
+              </p>
+            </React.Suspense>
             <div className="flex gap-4">
               <div>
                 <p className="text-sm">Verified</p>
-                <p>{data.verifiedSpotCount}</p>
+                <React.Suspense fallback={<Spinner />}>
+                  <p>
+                    <Await resolve={promise.verifiedSpotCount}>{(data) => data}</Await>
+                  </p>
+                </React.Suspense>
               </div>
               <div>
                 <p className="text-sm">Unverified</p>
-                <p>{data.unverifiedSpotsCount}</p>
+                <React.Suspense fallback={<Spinner />}>
+                  <p>
+                    <Await resolve={promise.unverifiedSpotsCount}>{(data) => data}</Await>
+                  </p>
+                </React.Suspense>
               </div>
             </div>
           </div>
@@ -57,15 +72,27 @@ export default function AdminHome() {
         </TileHeader>
         <TileBody>
           <div className="space-y-4">
-            <p className="text-3xl">{data.userCount.toLocaleString()}</p>
+            <React.Suspense fallback={<Spinner />}>
+              <p className="text-3xl">
+                <Await resolve={promise.userCount}>{(data) => data.toLocaleString()}</Await>
+              </p>
+            </React.Suspense>
             <div className="flex gap-4">
               <div>
                 <p className="text-sm">Guides</p>
-                <p>{data.guideCount}</p>
+                <React.Suspense fallback={<Spinner />}>
+                  <p>
+                    <Await resolve={promise.guideCount}>{(data) => data}</Await>
+                  </p>
+                </React.Suspense>
               </div>
               <div>
                 <p className="text-sm">Members</p>
-                <p>{data.memberCount}</p>
+                <React.Suspense fallback={<Spinner />}>
+                  <p>
+                    <Await resolve={promise.memberCount}>{(data) => data}</Await>
+                  </p>
+                </React.Suspense>
               </div>
             </div>
           </div>
@@ -77,15 +104,27 @@ export default function AdminHome() {
         </TileHeader>
         <TileBody>
           <div className="space-y-4">
-            <p className="text-3xl">{data.listCount.toLocaleString()}</p>
+            <React.Suspense fallback={<Spinner />}>
+              <p className="text-3xl">
+                <Await resolve={promise.listCount}>{(data) => data.toLocaleString()}</Await>
+              </p>
+            </React.Suspense>
             <div className="flex gap-4">
               <div>
                 <p className="text-sm">Public</p>
-                <p>{data.publicListCount}</p>
+                <React.Suspense fallback={<Spinner />}>
+                  <p>
+                    <Await resolve={promise.publicListCount}>{(data) => data}</Await>
+                  </p>
+                </React.Suspense>
               </div>
               <div>
                 <p className="text-sm">Private</p>
-                <p>{data.privateListCount}</p>
+                <React.Suspense fallback={<Spinner />}>
+                  <p>
+                    <Await resolve={promise.privateListCount}>{(data) => data}</Await>
+                  </p>
+                </React.Suspense>
               </div>
             </div>
           </div>

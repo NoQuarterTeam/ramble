@@ -6,6 +6,7 @@ import type { z } from "zod"
 import { generateBlurHash, publicSpotWhereClause } from "@ramble/api"
 import { canManageSpot, doesSpotTypeRequireAmenities } from "@ramble/shared"
 
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { notFound } from "~/lib/remix.server"
@@ -65,6 +66,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       images: { delete: imagesToDelete, create: imageData },
     },
   })
+
+  track("Spot updated", { spotId: spot.id, userId: user.id })
 
   return redirect(`/spots/${spot.id}`)
 }

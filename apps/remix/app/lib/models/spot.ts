@@ -42,9 +42,7 @@ export const SPOT_TYPES: { [key in SpotType]: SpotTypeInfo } = {
   [SpotType.SURFING]: { value: SpotType.SURFING, label: "Surfing", Icon: Icons.Surf, isComingSoon: false },
   [SpotType.CLIMBING]: { value: SpotType.CLIMBING, label: "Climbing", Icon: Mountain, isComingSoon: false },
   [SpotType.MOUNTAIN_BIKING]: { value: SpotType.MOUNTAIN_BIKING, label: "MTBing", Icon: Bike, isComingSoon: false },
-  [SpotType.PADDLE_BOARDING]: { value: SpotType.PADDLE_BOARDING, label: "Paddle Boarding", Icon: Icons.Sup, isComingSoon: false },
   [SpotType.PADDLE_KAYAK]: { value: SpotType.PADDLE_KAYAK, label: "SUPing / Kayaking", Icon: Icons.Sup, isComingSoon: false },
-  [SpotType.HIKING]: { value: SpotType.HIKING, label: "Hiking", Icon: Footprints, isComingSoon: false },
   [SpotType.HIKING_TRAIL]: {
     value: SpotType.HIKING_TRAIL,
     label: "Hiking / Trail running",

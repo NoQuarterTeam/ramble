@@ -6,6 +6,7 @@ import { z } from "zod"
 import { sendAccountVerificationEmail } from "@ramble/api"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { FormActionInput, formError, getFormAction, validateFormData } from "~/lib/form"
 import { createToken } from "~/lib/jwt.server"
@@ -61,6 +62,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         const token = await createToken({ id: user.id })
         await sendAccountVerificationEmail(user, token)
         const headers = new Headers([["set-cookie", await setUser(user.id)]])
+        track("Registered", { userId: user.id })
         return redirect("/onboarding", request, {
           headers,
           flash: { title: `Welcome to Ramble, ${data.firstName}!`, description: "Let's get you setup." },

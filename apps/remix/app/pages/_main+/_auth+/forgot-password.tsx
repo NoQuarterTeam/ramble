@@ -6,6 +6,7 @@ import { z } from "zod"
 import { sendResetPasswordEmail } from "@ramble/api"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { createToken } from "~/lib/jwt.server"
@@ -26,6 +27,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (user) {
     const token = await createToken({ id: user.id })
     await sendResetPasswordEmail(user, token)
+    track("Reset password requested", { userId: user.id })
   }
 
   return redirect("/login", request, { flash: { title: "Reset link sent to your email" } })

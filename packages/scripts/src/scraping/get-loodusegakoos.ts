@@ -85,7 +85,6 @@ async function getCards() {
           sourceUrl: link,
           isPetFriendly: true,
           creator: { connect: { email: "george@noquarter.co" } },
-          verifier: { connect: { email: "george@noquarter.co" } },
           images: {
             create: uniqueImages.map((image) => ({ path: image, creator: { connect: { email: "george@noquarter.co" } } })),
           },
@@ -99,6 +98,9 @@ async function getCards() {
               hotWater: false,
               firePit,
               wifi: false,
+              bbq: false,
+              sauna: false,
+              pool: false,
             },
           },
         },

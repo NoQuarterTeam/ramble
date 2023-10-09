@@ -1,15 +1,15 @@
 import { Link } from "@remix-run/react"
 import { type LoaderFunctionArgs } from "@vercel/remix"
 import { json } from "@vercel/remix"
+import { ClientOnly } from "remix-utils/client-only"
 import { z } from "zod"
 
 import { join, merge } from "@ramble/shared"
-import { ClientOnly } from "remix-utils/client-only"
 
 import { useFetcher } from "~/components/Form"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { ActionDataErrorResponse, formError, validateFormData } from "~/lib/form"
-
+import { type ActionDataErrorResponse, formError, validateFormData } from "~/lib/form"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 
 export const config = {
@@ -23,6 +23,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
   const accessRequest = await db.accessRequest.findFirst({ where: { email: result.data.email } })
   if (accessRequest) return formError({ formError: "Email already requested access" })
   await db.accessRequest.create({ data: { email: result.data.email } })
+  track("Access requested", { email: result.data.email })
   return json({ success: true })
 }
 

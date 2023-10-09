@@ -1,14 +1,20 @@
+import { merge } from "@ramble/shared"
 import { Button as RButton } from "@react-email/components"
 
 interface Props {
   href: string
   children: string
+  className?: string
 }
 
 export function Button(props: Props) {
   return (
-    <RButton href={props.href} className="rounded-xs bg-white px-3 py-3 text-black">
-      {props.children}
+    <RButton
+      href={props.href}
+      className={merge("rounded-xs border border-solid border-gray-700 bg-black px-3 py-3 text-white", props.className)}
+      color="#fff"
+    >
+      <span className="text-white">{props.children}</span>
     </RButton>
   )
 }

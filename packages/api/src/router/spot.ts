@@ -46,7 +46,7 @@ export const spotRouter = createTRPCRouter({
             : { in: defaultTypes },
         },
         orderBy: { createdAt: "desc" },
-        take: 2000,
+        take: 8000,
       })
       if (spots.length === 0) return []
       const supercluster = new Supercluster()
@@ -167,7 +167,7 @@ export const spotRouter = createTRPCRouter({
       spotSchemaWithoutType.extend({
         type: z.nativeEnum(SpotType),
         images: z.array(z.object({ path: z.string() })),
-        amenities: spotAmenitiesSchema.optional(),
+        amenities: spotAmenitiesSchema.partial().optional(),
         shouldPublishLater: z.boolean().optional(),
       }),
     )
@@ -201,7 +201,7 @@ export const spotRouter = createTRPCRouter({
         id: z.string(),
         type: z.nativeEnum(SpotType),
         images: z.array(z.object({ path: z.string() })),
-        amenities: spotAmenitiesSchema.optional(),
+        amenities: spotAmenitiesSchema.partial().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
