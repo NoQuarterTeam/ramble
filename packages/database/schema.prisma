@@ -217,7 +217,7 @@ model SpotAmenities {
 
 model SpotImage {
   id       String  @id @default(uuid())
-  path     String
+  path     String  @db.VarChar(500)
   blurHash String?
 
   spotId    String
