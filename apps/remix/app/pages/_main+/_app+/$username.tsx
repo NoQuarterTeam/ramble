@@ -134,7 +134,7 @@ export default function ProfileLists() {
                       </Tooltip>
                     ))}
                 </div>
-                <p className="text-sm">{user.bio}</p>
+                <p>{user.bio}</p>
               </div>
               {currentUser?.id === user.id && (
                 <LinkButton size="sm" to="/account" variant="outline">

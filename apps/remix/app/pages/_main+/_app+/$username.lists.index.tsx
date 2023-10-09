@@ -44,7 +44,7 @@ export default function ProfileLists() {
                 {list.isPrivate && <Lock size={20} />}
                 <p className="text-2xl">{list.name}</p>
               </div>
-              <p className="text-sm">{list.description}</p>
+              <p>{list.description}</p>
             </Link>
           ))}
         </div>

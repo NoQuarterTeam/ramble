@@ -173,11 +173,7 @@ function NavbarLink(props: NavLinkProps) {
       {...props}
       to={props.to}
       className={({ isActive }) =>
-        merge(
-          buttonStyles({ size: "md", variant: isActive ? "secondary" : "ghost" }),
-          buttonSizeStyles({ size: "md" }),
-          "text-sm",
-        )
+        merge(buttonStyles({ size: "md", variant: isActive ? "secondary" : "ghost" }), buttonSizeStyles({ size: "md" }))
       }
     >
       {props.children}

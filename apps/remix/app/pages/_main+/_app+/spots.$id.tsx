@@ -215,7 +215,7 @@ export default function SpotDetail() {
                   })}
                 </div>
               )}
-              <p className="text-sm">
+              <p>
                 Added by{" "}
                 <Link to={`/${spot.creator.username}`} className="hover:underline">
                   {spot.creator.firstName} {spot.creator.lastName}

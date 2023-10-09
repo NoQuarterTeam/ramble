@@ -183,7 +183,7 @@ export default function SpotPreview() {
                 </div>
                 {isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}
 
-                <p className="line-clamp-6 whitespace-pre-wrap text-sm">{spot.description}</p>
+                <p className="line-clamp-6 whitespace-pre-wrap">{spot.description}</p>
                 <p className="text-sm italic">{spot.address}</p>
                 {!(["SURFING", "HIKING", "MOUNTAIN_BIKING"] as SpotType[]).includes(spot.type) && (
                   <div className="flex justify-end">

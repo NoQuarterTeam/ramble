@@ -39,7 +39,7 @@ export function Table<T>({
   })
   return (
     <Tile className="space-y-1 p-2">
-      <table className="w-full table-fixed text-sm">
+      <table className="w-full table-fixed">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
@@ -75,7 +75,7 @@ export function Table<T>({
                   >
                     {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                     {orderBy && order && header.column.getCanSort() && header.column.id === orderBy ? (
-                      <span className="w-4 text-sm">{order === "asc" ? <MoveUp size={16} /> : <MoveDown size={16} />}</span>
+                      <span className="w-4">{order === "asc" ? <MoveUp size={16} /> : <MoveDown size={16} />}</span>
                     ) : (
                       <span className="w-4" />
                     )}
@@ -153,8 +153,8 @@ function Pagination({ count }: { count: number }) {
 
   return (
     <div className="flex items-center justify-between px-2">
-      <p className="text-sm">{count} items</p>
-      <div className="flex items-center gap-2 text-sm">
+      <p>{count} items</p>
+      <div className="flex items-center gap-2">
         <span className="flex items-center gap-1">
           <div>Page</div>
           <strong>{currentPage}</strong>
