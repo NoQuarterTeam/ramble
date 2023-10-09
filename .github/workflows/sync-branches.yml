@@ -18,8 +18,16 @@ jobs:
       - name: 🛣 Merge
         run: |
           current_branch="origin/develop"
-          next_branch="feat/invite-codes"
-          echo "🪜 Merging ${current_branch} -> ${next_branch}"
-          git checkout "${next_branch}"
+          invite_branch="feat/invite-codes"
+          urbanist_branch="urbanist"
+          nextjs_branch="nextjs"
+          echo "🪜 Merging ${current_branch} -> ${invite_branch}"
+          git checkout "${invite_branch}"
+          git merge "${current_branch}"
+          git push
+          git checkout "${urbanist_branch}"
+          git merge "${current_branch}"
+          git push
+          git checkout "${nextjs_branch}"
           git merge "${current_branch}"
           git push
