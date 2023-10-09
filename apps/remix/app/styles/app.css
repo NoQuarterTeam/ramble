@@ -16,7 +16,7 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border text-base;
   }
   html {
     @apply font-sans;

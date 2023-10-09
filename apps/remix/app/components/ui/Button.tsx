@@ -19,12 +19,12 @@ export const buttonStyles = cva(
       },
       variant: {
         primary:
-          "border-transparent bg-gray-900 text-white active:bg-gray-500 enabled:hover:bg-gray-600 dark:bg-white dark:text-black dark:active:bg-white/80 dark:enabled:hover:bg-white/90",
+          "border-transparent bg-gray-900 text-white hover:bg-gray-600 active:bg-gray-500 dark:bg-white dark:text-black dark:hover:bg-white/90 dark:active:bg-white/80",
         secondary:
-          "border-transparent bg-gray-100 text-black active:bg-gray-300 enabled:hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:active:bg-gray-500 dark:enabled:hover:bg-gray-600",
-        destructive: "border-transparent bg-red-500 text-white active:bg-red-700 enabled:hover:bg-red-600",
+          "border-transparent bg-gray-100 text-black hover:bg-gray-200 active:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 dark:active:bg-gray-500",
+        destructive: "border-transparent bg-red-500 text-white hover:bg-red-600 active:bg-red-700",
         "destructive-secondary":
-          "border-red-500 bg-transparent text-red-600 active:border-red-700 enabled:hover:border-red-600 enabled:hover:bg-red-500/10",
+          "border-red-500 bg-transparent text-red-600 hover:border-red-600 hover:bg-red-500/10 active:border-red-700",
         outline: "border-black/10 dark:border-white/10",
         ghost: "",
         link: "underline",
@@ -37,7 +37,7 @@ export const buttonStyles = cva(
       {
         variant: ["ghost", "outline", "link"],
         className:
-          "bg-transparent text-black active:bg-black/20 enabled:hover:bg-black/5 dark:text-white dark:active:bg-white/20 dark:enabled:hover:bg-white/10",
+          "bg-transparent text-black hover:bg-black/5 active:bg-black/20 dark:text-white dark:hover:bg-white/10 dark:active:bg-white/20",
       },
     ],
     defaultVariants: {

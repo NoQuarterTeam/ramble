@@ -14,6 +14,14 @@ module.exports = {
       fontSize: {
         xxxs: "0.4rem",
         xxs: "0.625rem",
+        xs: "0.725rem",
+        sm: "0.9rem",
+        base: "1rem",
+        // xl: "1.4rem",
+        // "2xl": "1.563rem",
+        // "3xl": "1.953rem",
+        // "4xl": "2.441rem",
+        // "5xl": "3.052rem",
       },
       colors: {
         background: "var(--background)",
@@ -23,7 +31,7 @@ module.exports = {
       },
       fontFamily: {
         serif: ["Urbanist", "sans-serif"],
-        sans: ["Poppins", "sans-serif"],
+        sans: ["Urbanist", "sans-serif"],
       },
     },
   },

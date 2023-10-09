@@ -30,9 +30,9 @@ export const inputSizeStyles = cva("", {
   variants: {
     size: {
       xs: "h-7",
-      sm: "h-9",
-      md: "h-11",
-      lg: "h-12",
+      sm: "h-8",
+      md: "h-9",
+      lg: "h-11",
     },
   },
   defaultVariants: {
