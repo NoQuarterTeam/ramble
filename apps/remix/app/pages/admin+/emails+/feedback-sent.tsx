@@ -1,11 +1,15 @@
+import { type ActionFunctionArgs } from "@vercel/remix"
+
 import { sendFeedbackSentToAdminsEmail } from "@ramble/api"
 import { type FeedbackType } from "@ramble/database/types"
 import { FeedbackSentContent } from "@ramble/emails"
-import { ActionFunctionArgs } from "@vercel/remix"
+
 import { useConfig } from "~/lib/hooks/useConfig"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { json } from "~/lib/remix.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
+
+import { type TemplateHandle } from "./_layout"
 
 const testFeedback = {
   message: "Wow this is really quite cool, needs more cowbell",
@@ -18,7 +22,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   return json(true, request, { flash: { title: "Email sent!", description: "Check the email linked to your account" } })
 }
 
-export const handle = {
+export const handle: TemplateHandle = {
   url: "/admin/emails/feedback-sent",
 }
 

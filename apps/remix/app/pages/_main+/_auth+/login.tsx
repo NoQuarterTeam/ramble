@@ -1,11 +1,11 @@
 import { Link, useSearchParams } from "@remix-run/react"
-import { track } from "~/lib/analytics.server"
 import type { ActionFunctionArgs, MetaFunction } from "@vercel/remix"
 import { redirect } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { formError, NullableFormString, validateFormData } from "~/lib/form"
 import { comparePasswords } from "~/services/auth/password.server"

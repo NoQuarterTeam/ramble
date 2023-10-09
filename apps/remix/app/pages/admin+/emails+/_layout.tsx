@@ -1,14 +1,14 @@
-import { merge } from "@ramble/shared"
-import { NavLink, NavLinkProps, Outlet, useMatches } from "@remix-run/react"
-
+import { NavLink, type NavLinkProps, Outlet, useMatches } from "@remix-run/react"
 import { MoveRight } from "lucide-react"
-import { Form, FormButton } from "~/components/Form"
 
-import { buttonStyles, buttonSizeStyles } from "~/components/ui"
+import { merge } from "@ramble/shared"
+
+import { Form, FormButton } from "~/components/Form"
+import { buttonSizeStyles, buttonStyles } from "~/components/ui"
 
 const templates = ["reset-password", "verify-account", "feedback-sent", "guide-request"]
 
-type TemplateHandle = { url: string } | undefined
+export type TemplateHandle = { url: string } | undefined
 
 export default function Layout() {
   const matches = useMatches()

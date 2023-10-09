@@ -20,12 +20,12 @@ import {
   Spinner,
   Tooltip,
 } from "~/components/ui"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import type { ActionDataErrorResponse } from "~/lib/form"
 import { FORM_ACTION, FormActionInput, formError, getFormAction, validateFormData } from "~/lib/form"
 import { badRequest, json } from "~/lib/remix.server"
 import { requireUser } from "~/services/auth/auth.server"
-import { track } from "~/lib/analytics.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await requireUser(request)

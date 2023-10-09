@@ -1,7 +1,7 @@
 import * as React from "react"
-import { SerializeFrom } from "@remix-run/node"
-import { defer } from "@vercel/remix"
+import { type SerializeFrom } from "@remix-run/node"
 import { Await, useLoaderData } from "@remix-run/react"
+import { defer } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
 import { Spinner, Tile, TileBody, TileHeader } from "~/components/ui"

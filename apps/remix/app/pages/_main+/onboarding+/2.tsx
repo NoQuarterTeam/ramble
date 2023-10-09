@@ -11,13 +11,13 @@ import { Form, FormButton, FormError } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import type { RambleIcon } from "~/components/ui"
 import { Button } from "~/components/ui"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { interestOptions } from "~/lib/models/user"
 import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
 
 import { Footer } from "./components/Footer"
-import { track } from "~/lib/analytics.server"
 
 export const config = {
   // runtime: "edge",
