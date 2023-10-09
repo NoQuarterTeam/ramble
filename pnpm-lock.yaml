@@ -667,14 +667,14 @@ importers:
         specifier: 5.4.1-pre
         version: 5.4.1-pre(@planetscale/database@1.11.0)
       '@prisma/client':
-        specifier: 5.4.1
-        version: 5.4.1(prisma@5.4.1)
+        specifier: 5.4.2
+        version: 5.4.2(prisma@5.4.2)
       '@prisma/extension-accelerate':
         specifier: ^0.6.2
-        version: 0.6.2(@prisma/client@5.4.1)
+        version: 0.6.2(@prisma/client@5.4.2)
       prisma:
-        specifier: 5.4.1
-        version: 5.4.1
+        specifier: 5.4.2
+        version: 5.4.2
     devDependencies:
       '@types/node':
         specifier: ^18.18.4
@@ -4972,8 +4972,8 @@ packages:
       - supports-color
     dev: false
 
-  /@prisma/client@5.4.1(prisma@5.4.1):
-    resolution: {integrity: sha512-xyD0DJ3gRNfLbPsC+YfMBBuLJtZKQfy1OD2qU/PZg+HKrr7SO+09174LMeTlWP0YF2wca9LxtVd4HnAiB5ketQ==}
+  /@prisma/client@5.4.2(prisma@5.4.2):
+    resolution: {integrity: sha512-2xsPaz4EaMKj1WS9iW6MlPhmbqtBsXAOeVttSePp8vTFTtvzh2hZbDgswwBdSCgPzmmwF+tLB259QzggvCmJqA==}
     engines: {node: '>=16.13'}
     requiresBuild: true
     peerDependencies:
@@ -4982,8 +4982,8 @@ packages:
       prisma:
         optional: true
     dependencies:
-      '@prisma/engines-version': 5.4.1-1.2f302df92bd8945e20ad4595a73def5b96afa54f
-      prisma: 5.4.1
+      '@prisma/engines-version': 5.4.1-2.ac9d7041ed77bcc8a8dbd2ab6616b39013829574
+      prisma: 5.4.2
     dev: false
 
   /@prisma/driver-adapter-utils@5.4.0:
@@ -4994,22 +4994,22 @@ packages:
       - supports-color
     dev: false
 
-  /@prisma/engines-version@5.4.1-1.2f302df92bd8945e20ad4595a73def5b96afa54f:
-    resolution: {integrity: sha512-+nUQM/y8C+1GG5Ioeqcu6itFslCfxvQSAUVSMC9XM2G2Fcq0F4Afnp6m0pXF6X6iUBWen7jZBPmM9Qlq4Nr3/A==}
+  /@prisma/engines-version@5.4.1-2.ac9d7041ed77bcc8a8dbd2ab6616b39013829574:
+    resolution: {integrity: sha512-wvupDL4AA1vf4TQNANg7kR7y98ITqPsk6aacfBxZKtrJKRIsWjURHkZCGcQliHdqCiW/hGreO6d6ZuSv9MhdAA==}
     dev: false
 
-  /@prisma/engines@5.4.1:
-    resolution: {integrity: sha512-vJTdY4la/5V3N7SFvWRmSMUh4mIQnyb/MNoDjzVbh9iLmEC+uEykj/1GPviVsorvfz7DbYSQC4RiwmlEpTEvGA==}
+  /@prisma/engines@5.4.2:
+    resolution: {integrity: sha512-fqeucJ3LH0e1eyFdT0zRx+oETLancu5+n4lhiYECyEz6H2RDskPJHJYHkVc0LhkU4Uv7fuEnppKU3nVKNzMh8g==}
     requiresBuild: true
     dev: false
 
-  /@prisma/extension-accelerate@0.6.2(@prisma/client@5.4.1):
+  /@prisma/extension-accelerate@0.6.2(@prisma/client@5.4.2):
     resolution: {integrity: sha512-KIBVPeWt8qaSg7wQ+TXmCVeUDoW75whtXcdS9dbHxRoO2OWFH5I9+qbkHBhx5Wj/h1wQpS8usuxGnsZqiBjUpQ==}
     engines: {node: '>=16'}
     peerDependencies:
       '@prisma/client': '>=4.16.1'
     dependencies:
-      '@prisma/client': 5.4.1(prisma@5.4.1)
+      '@prisma/client': 5.4.2(prisma@5.4.2)
     dev: false
 
   /@puppeteer/browsers@1.7.1:
@@ -15963,13 +15963,13 @@ packages:
       js-beautify: 1.14.8
     dev: false
 
-  /prisma@5.4.1:
-    resolution: {integrity: sha512-op9PmU8Bcw5dNAas82wBYTG0yHnpq9/O3bhxbDBrNzwZTwBqsVCxxYRLf6wHNh9HVaDGhgjjHlu1+BcW8qdnBg==}
+  /prisma@5.4.2:
+    resolution: {integrity: sha512-GDMZwZy7mysB2oXU+angQqJ90iaPFdD0rHaZNkn+dio5NRkGLmMqmXs31//tg/qXT3iB0cTQwnGGQNuirhSTZg==}
     engines: {node: '>=16.13'}
     hasBin: true
     requiresBuild: true
     dependencies:
-      '@prisma/engines': 5.4.1
+      '@prisma/engines': 5.4.2
     dev: false
 
   /proc-log@3.0.0:
