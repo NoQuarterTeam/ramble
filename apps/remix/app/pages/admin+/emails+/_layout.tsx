@@ -22,12 +22,14 @@ export default function Layout() {
           </AdminLink>
         ))}
       </div>
-      <div className="w-full ">
-        <div className="bg-background flex justify-end border-b p-4">
-          <Form action={sendTemplateUrl?.url}>
-            <FormButton>Send test email</FormButton>
-          </Form>
-        </div>
+      <div className="w-full">
+        {sendTemplateUrl && (
+          <div className="bg-background flex justify-end border-b p-4">
+            <Form action={sendTemplateUrl?.url}>
+              <FormButton>Send test email</FormButton>
+            </Form>
+          </div>
+        )}
         <div className="px-2 py-4">
           <Outlet />
         </div>
