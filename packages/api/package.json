@@ -27,7 +27,7 @@
     "blurhash": "^2.0.5",
     "dayjs": "1.11.10",
     "jsonwebtoken": "9.0.2",
-    "nodemailer": "6.9.5",
+    "nodemailer": "6.9.6",
     "resend": "^1.1.0",
     "supercluster": "^8.0.1",
     "superjson": "^1.13.3",
