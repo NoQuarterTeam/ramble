@@ -6,13 +6,13 @@ import { z } from "zod"
 import { sendAccountVerificationEmail } from "@ramble/api"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { FormActionInput, formError, getFormAction, validateFormData } from "~/lib/form"
 import { createToken } from "~/lib/jwt.server"
 import { badRequest, redirect } from "~/lib/remix.server"
 import { hashPassword } from "~/services/auth/password.server"
 import { getUserSession } from "~/services/session/session.server"
-import { track } from "~/lib/analytics.server"
 
 export const meta: MetaFunction = () => {
   return [{ title: "Register" }, { name: "description", content: "Sign up to the ramble" }]

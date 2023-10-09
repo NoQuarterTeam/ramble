@@ -33,7 +33,6 @@ import {
 } from "@remix-run/react"
 import { Analytics } from "@vercel/analytics/react"
 import { json, type LinksFunction, type LoaderFunctionArgs, type MetaFunction, type SerializeFrom } from "@vercel/remix"
-
 import { Frown } from "lucide-react"
 import NProgress from "nprogress"
 import { AuthenticityTokenProvider } from "remix-utils/csrf/react"

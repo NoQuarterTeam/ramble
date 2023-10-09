@@ -8,12 +8,12 @@ import { generateBlurHash } from "@ramble/api"
 import { Form, FormButton, FormError, FormField, FormFieldLabel, ImageField } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { Textarea } from "~/components/ui"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { formError, NullableFormString, validateFormData } from "~/lib/form"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { Footer } from "./components/Footer"
-import { track } from "~/lib/analytics.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, { id: true, bio: true, avatar: true })

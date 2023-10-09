@@ -11,12 +11,12 @@ import { LinkButton } from "~/components/LinkButton"
 import { NavLink } from "~/components/NavLink"
 import type { RambleIcon } from "~/components/ui"
 import { Avatar, Badge, buttonSizeStyles, buttonStyles, Icons } from "~/components/ui"
+import { track } from "~/lib/analytics.server"
 import { createToken } from "~/lib/jwt.server"
 import { json } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { PageContainer } from "../../../components/PageContainer"
-import { track } from "~/lib/analytics.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, {

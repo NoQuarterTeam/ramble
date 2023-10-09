@@ -10,12 +10,12 @@ import { userInterestFields } from "@ramble/shared"
 import { Form, FormButton, FormError } from "~/components/Form"
 import type { RambleIcon } from "~/components/ui"
 import { Button } from "~/components/ui"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form"
 import { interestOptions } from "~/lib/models/user"
 import { redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
-import { track } from "~/lib/analytics.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, userInterestFields)

@@ -1,10 +1,10 @@
 import { cva } from "class-variance-authority"
+import { type ClassValue } from "class-variance-authority/types"
 
 import type { SpotType } from "@ramble/database/types"
+import { spotMarkerColorTypes, spotMarkerTextColorTypes, spotMarkerTriangleColorTypes } from "@ramble/shared"
 
 import { SpotIcon } from "~/components/SpotIcon"
-import { ClassValue } from "class-variance-authority/types"
-import { spotMarkerColorTypes, spotMarkerTextColorTypes, spotMarkerTriangleColorTypes } from "@ramble/shared"
 
 interface MarkerProps {
   spot: { type: SpotType }

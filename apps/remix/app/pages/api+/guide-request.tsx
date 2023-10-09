@@ -1,7 +1,9 @@
+import { type ActionFunctionArgs } from "@vercel/remix"
+
 import { sendGuideRequestSentToAdminsEmail } from "@ramble/api"
-import { track } from "~/lib/analytics.server"
-import { ActionFunctionArgs } from "@vercel/remix"
+
 import { FormButton, useFetcher } from "~/components/Form"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { badRequest, json } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
