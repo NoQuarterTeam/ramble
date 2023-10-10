@@ -1,0 +1,24 @@
+diff --git a/dist/server/index.cjs b/dist/server/index.cjs
+index 3dd9fdb6d0c56f4709a2f168f00264c3b0019518..01715438f3336772dd7baa4e5c4ca975ad8d73a6 100644
+--- a/dist/server/index.cjs
++++ b/dist/server/index.cjs
+@@ -23,7 +23,7 @@ __export(server_exports, {
+   track: () => track
+ });
+ module.exports = __toCommonJS(server_exports);
+-var import_server_only = require("server-only");
++// var import_server_only = require("server-only");
+ 
+ // src/utils.ts
+ function isBrowser() {
+diff --git a/dist/server/index.js b/dist/server/index.js
+index 9fed2b1b428b3608e881eb99cd1975f42f6a7f16..320d50eddd9acb866594cab6b25d08321675e6c2 100644
+--- a/dist/server/index.js
++++ b/dist/server/index.js
+@@ -1,5 +1,5 @@
+ // src/server/index.ts
+-import "server-only";
++// import "server-only";
+ 
+ // src/utils.ts
+ function isBrowser() {
