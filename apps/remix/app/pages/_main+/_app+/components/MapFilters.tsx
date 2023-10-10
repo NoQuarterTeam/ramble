@@ -69,7 +69,7 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
       </div>
 
       <Modal {...modalProps} size="3xl" title="Filters">
-        <form className="space-y-6" onSubmit={onSubmit}>
+        <form className="max-h-[85vh] space-y-6" onSubmit={onSubmit}>
           <div className="space-y-4">
             <SpotTypeSection title="Stays" types={[SpotType.CAMPING, SpotType.FREE_CAMPING, SpotType.PARKING]} />
             <SpotTypeSection
