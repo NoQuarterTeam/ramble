@@ -15,7 +15,7 @@ import { useFetcher } from "~/components/Form"
 import { Button, Modal, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
-import { fetchAndJoinSpotImages, SPOT_TYPE_OPTIONS } from "~/lib/models/spot"
+import { fetchAndJoinSpotImages, SPOT_TYPE_OPTIONS, STAY_SPOT_TYPE_OPTIONS } from "~/lib/models/spot"
 import { getUserSession } from "~/services/session/session.server"
 
 import { PageContainer } from "../../../components/PageContainer"
@@ -47,7 +47,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const WHERE = type
     ? Prisma.sql`WHERE Spot.type = ${type} AND ${publicSpotWhereClauseRaw(userId)}`
-    : Prisma.sql`WHERE ${publicSpotWhereClauseRaw(userId)}`
+    : Prisma.sql`WHERE ${publicSpotWhereClauseRaw(userId)} AND Spot.type IN (${Prisma.join([
+        SpotType.CAMPING,
+        SpotType.FREE_CAMPING,
+      ])})`
 
   const ORDER_BY = Prisma.sql // prepared orderBy
   `ORDER BY
@@ -126,7 +129,7 @@ export default function Latest() {
               >
                 All
               </Button>
-              {SPOT_TYPE_OPTIONS.map(({ value, Icon, label }) => (
+              {STAY_SPOT_TYPE_OPTIONS.map(({ value, Icon, label }) => (
                 <Button
                   key={value}
                   onClick={() => {
