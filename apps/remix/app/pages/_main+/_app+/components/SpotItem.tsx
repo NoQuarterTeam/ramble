@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react"
+import { Link, useLocation, useNavigate } from "@remix-run/react"
 import { Heart, Star } from "lucide-react"
 
 import { type SpotItemWithStatsAndImage } from "@ramble/shared"
@@ -16,7 +16,8 @@ interface Props {
 
 export function SpotItem({ spot }: Props) {
   const currentUser = useMaybeUser()
-
+  const navigate = useNavigate()
+  const pathname = useLocation().pathname
   return (
     <div className="relative">
       <Link to={`/spots/${spot.id}`} className="space-y-2 hover:opacity-80">
@@ -59,8 +60,8 @@ export function SpotItem({ spot }: Props) {
           </div>
         </div>
       </Link>
-      {currentUser && (
-        <div className="absolute right-2 top-2">
+      <div className="absolute right-2 top-2">
+        {currentUser ? (
           <SaveToList
             spotId={spot.id}
             trigger={
@@ -71,8 +72,15 @@ export function SpotItem({ spot }: Props) {
               />
             }
           />
-        </div>
-      )}
+        ) : (
+          <IconButton
+            className="bg-background hover:bg-background rounded-full hover:opacity-90 dark:hover:opacity-80"
+            aria-label="save to list"
+            onClick={() => navigate("/login?redirectTo=" + pathname)}
+            icon={<Heart size={16} />}
+          />
+        )}
+      </div>
     </div>
   )
 }
