@@ -46,6 +46,7 @@ export function Nav() {
           </NavbarLink>
           <NavbarLink to="/guides">Guides</NavbarLink>
           <NavbarLink to="/vans">Vans</NavbarLink>
+          <NavbarLink to="/">About</NavbarLink>
         </div>
       </div>
       <div className="hstack space-x-3">
@@ -97,6 +98,9 @@ export function Nav() {
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link to="/guides">Guides</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/">About</Link>
               </DropdownMenuItem>
               <hr />
             </div>
