@@ -21,7 +21,7 @@ export const inputStyles = cva(
     },
     defaultVariants: {
       variant: "outline",
-      size: "sm",
+      size: "md",
     },
   },
 )
@@ -36,7 +36,7 @@ export const inputSizeStyles = cva("", {
     },
   },
   defaultVariants: {
-    size: "sm",
+    size: "md",
   },
 })
 
