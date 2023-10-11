@@ -23,17 +23,17 @@ export const spotRouter = createTRPCRouter({
         maxLng: z.number(),
         types: z.array(z.string()).or(z.string()).optional(),
         isPetFriendly: z.boolean().nullish(),
-        isVerified: z.boolean().nullish(),
+        isUnverified: z.boolean().nullish(),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const { zoom, types, isVerified, isPetFriendly, ...coords } = input
+      const { zoom, types, isUnverified, isPetFriendly, ...coords } = input
       const defaultTypes = [SpotType.CAMPING, SpotType.FREE_CAMPING]
       const spots = await ctx.prisma.spot.findMany({
         select: { id: true, latitude: true, longitude: true, type: true },
         where: {
           ...publicSpotWhereClause(ctx.user?.id),
-          verifiedAt: isVerified ? { not: { equals: null } } : undefined,
+          verifiedAt: isUnverified ? undefined : { not: { equals: null } },
           isPetFriendly: isPetFriendly ? { equals: true } : undefined,
           latitude: { gt: coords.minLat, lt: coords.maxLat },
           longitude: { gt: coords.minLng, lt: coords.maxLng },
