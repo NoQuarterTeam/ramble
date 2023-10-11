@@ -1,15 +1,15 @@
-import { useLoaderData, useRouteError, useSearchParams } from "@remix-run/react"
+import { Link, useLoaderData, useRouteError, useSearchParams } from "@remix-run/react"
 import type { Row } from "@tanstack/react-table"
 import { createColumnHelper } from "@tanstack/react-table"
 import type { ActionFunctionArgs, LoaderFunctionArgs, SerializeFrom } from "@vercel/remix"
 import dayjs from "dayjs"
-import { Check, Eye, EyeOff, Trash } from "lucide-react"
+import { Check, ExternalLink, Eye, EyeOff, Trash } from "lucide-react"
 import queryString from "query-string"
 import { promiseHash } from "remix-utils/promise"
 import { z } from "zod"
 
 import type { Prisma, SpotType } from "@ramble/database/types"
-import { createImageUrl } from "@ramble/shared"
+import { createImageUrl, merge } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -17,7 +17,7 @@ import { OptimizedImage } from "~/components/OptimisedImage"
 import { Search } from "~/components/Search"
 import { SpotIcon } from "~/components/SpotIcon"
 import { Table } from "~/components/Table"
-import { Avatar, Button, IconButton, Select } from "~/components/ui"
+import { Avatar, Button, IconButton, Select, buttonStyles, iconbuttonStyles } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { FormActionInput, formError, getFormAction, validateFormData } from "~/lib/form"
 import { SPOT_TYPE_OPTIONS } from "~/lib/models/spot"
@@ -50,6 +50,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         id: true,
         name: true,
         description: true,
+        sourceUrl: true,
         createdAt: true,
         verifiedAt: true,
         latitude: true,
@@ -170,15 +171,25 @@ const columns = [
   }),
   columnHelper.display({
     id: "actions",
-    size: 90,
+    size: 110,
     enableSorting: false,
     header: () => null,
     cell: ({ row }) => (
-      <div className="flex space-x-1">
+      <div className="flex items-center space-x-1">
+        {row.original.sourceUrl && (
+          <Link
+            to={row.original.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={merge(buttonStyles({ size: "sm", disabled: false, variant: "ghost" }), iconbuttonStyles({ size: "sm" }))}
+          >
+            <ExternalLink size={16} />
+          </Link>
+        )}
         <IconButton
           variant="ghost"
           size="sm"
-          aria-label="epand"
+          aria-label="expand"
           onClick={row.getToggleExpandedHandler()}
           icon={row.getIsExpanded() ? <EyeOff size={16} /> : <Eye size={16} />}
         />
