@@ -7,7 +7,15 @@ import { cacheHeader } from "pretty-cache-header"
 import { promiseHash } from "remix-utils/promise"
 
 import { publicSpotWhereClause } from "@ramble/api"
-import { activitySpotTypes, AMENITIES, canManageSpot, createImageUrl, displayRating } from "@ramble/shared"
+import {
+  activitySpotTypes,
+  AMENITIES,
+  canManageSpot,
+  createImageUrl,
+  displayRating,
+  isPartnerSpot,
+  spotPartnerFields,
+} from "@ramble/shared"
 
 import { Form, FormButton } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -40,6 +48,7 @@ import { getUserSession } from "~/services/session/session.server"
 import { SaveToList } from "../../api+/save-to-list"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { SpotMarker } from "./components/SpotMarker"
+import { PartnerLink } from "./components/PartnerLink"
 
 export const config = {
   // runtime: "edge",
@@ -65,6 +74,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
         latitude: true,
         longitude: true,
         ownerId: true,
+        ...spotPartnerFields,
         createdAt: true,
         creator: { select: { firstName: true, username: true, lastName: true } },
         verifier: { select: { firstName: true, username: true, lastName: true, avatar: true, avatarBlurHash: true } },
@@ -197,7 +207,7 @@ export default function SpotDetail() {
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <div className="space-y-3">
-              <VerifiedCard spot={spot} />
+              {isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}
               <h3 className="text-lg font-medium">Description</h3>
               <p className="whitespace-pre-wrap">{spot.description}</p>
               <p className="text-sm italic">{spot.address}</p>

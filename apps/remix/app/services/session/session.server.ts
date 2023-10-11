@@ -24,10 +24,9 @@ export async function getUserSession(request: Request) {
   const session = await userStorage.getSession(request.headers.get("Cookie"))
   const commit = () => userStorage.commitSession(session)
   const destroy = () => userStorage.destroySession(session)
-  const userId: string | null = session.get("userId") || null
   const setUser = (id: string) => {
     session.set("userId", id)
     return commit()
   }
-  return { commit, destroy, session, setUser, userId }
+  return { commit, destroy, session, setUser, userId: session.data.userId }
 }

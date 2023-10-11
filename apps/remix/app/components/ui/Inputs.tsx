@@ -15,13 +15,13 @@ export const inputStyles = cva(
       size: {
         xs: "px-2 py-1 text-xs",
         sm: "px-3 py-1.5 text-sm",
-        md: "text-md px-4 py-2",
+        md: "px-4 py-2 text-base",
         lg: "px-5 py-3 text-lg",
       },
     },
     defaultVariants: {
       variant: "outline",
-      size: "sm",
+      size: "md",
     },
   },
 )
@@ -30,13 +30,13 @@ export const inputSizeStyles = cva("", {
   variants: {
     size: {
       xs: "h-7",
-      sm: "h-9",
-      md: "h-11",
-      lg: "h-12",
+      sm: "h-8",
+      md: "h-9",
+      lg: "h-11",
     },
   },
   defaultVariants: {
-    size: "sm",
+    size: "md",
   },
 })
 

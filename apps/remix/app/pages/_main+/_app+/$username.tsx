@@ -115,7 +115,9 @@ export default function ProfileLists() {
                     <span className="font-semibold">{user._count?.followers}</span> followers
                   </Link>
                 </div>
-                {!currentUser || currentUser.username === user.username ? null : (
+                {!currentUser ? (
+                  <LinkButton to={`/login?redirectTo=/${user.username}`}>Follow</LinkButton>
+                ) : currentUser.username === user.username ? null : (
                   <Form>
                     <input type="hidden" name="shouldFollow" value={String(!user.isFollowed)} />
                     <FormButton variant={user.isFollowed ? "outline" : "primary"} size="sm">
