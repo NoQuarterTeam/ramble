@@ -13,10 +13,10 @@ export const inputStyles = cva(
         ghost: "border-transparent bg-transparent hover:border-black/10 dark:hover:border-white/10",
       },
       size: {
-        xs: "px-2 py-1 text-xs",
-        sm: "px-3 py-1.5 text-sm",
-        md: "px-4 py-2 text-base",
-        lg: "px-5 py-3 text-lg",
+        xs: "text-xxs px-2 py-1",
+        sm: "px-3 py-1 text-xs",
+        md: "px-4 py-1 text-sm",
+        lg: "text-md px-5 py-3",
       },
     },
     defaultVariants: {
