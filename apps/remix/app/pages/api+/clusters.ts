@@ -27,18 +27,18 @@ async function getMapClusters(request: Request) {
     maxLng: NumAsString,
     type: z.array(z.string()).or(z.string()).optional(),
     isPetFriendly: CheckboxAsString.optional(),
-    isVerified: CheckboxAsString.optional(),
+    isUnverified: CheckboxAsString.optional(),
   })
   const result = schema.safeParse(queryString.parse(new URL(request.url).search, { arrayFormat: "bracket" }))
   if (!result.success) return []
-  const { zoom, type, isVerified, isPetFriendly, ...coords } = result.data
+  const { zoom, type, isUnverified, isPetFriendly, ...coords } = result.data
 
   const defaultTypes = [SpotType.CAMPING, SpotType.FREE_CAMPING]
   const spots = await db.spot.findMany({
     select: { id: true, latitude: true, longitude: true, type: true },
     where: {
       ...publicSpotWhereClause(userId),
-      verifiedAt: isVerified ? { not: { equals: null } } : undefined,
+      verifiedAt: isUnverified ? undefined : { not: { equals: null } },
       isPetFriendly: isPetFriendly ? { equals: true } : undefined,
       latitude: { gt: coords.minLat, lt: coords.maxLat },
       longitude: { gt: coords.minLng, lt: coords.maxLng },

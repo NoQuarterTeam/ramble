@@ -169,7 +169,7 @@ export function SpotsMapScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [clusters],
   )
-  const filterCount = (filters.isPetFriendly ? 1 : 0) + (filters.isVerified ? 1 : 0) + (filters.types.length > 0 ? 1 : 0)
+  const filterCount = (filters.isPetFriendly ? 1 : 0) + (filters.isUnverified ? 1 : 0) + (filters.types.length > 0 ? 1 : 0)
 
   const [preferences, setPreferences, isReady] = usePreferences()
   return (

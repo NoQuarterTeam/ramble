@@ -2,7 +2,7 @@ import puppeteer from "puppeteer"
 import * as cheerio from "cheerio"
 
 const makeUrl = (lat: string, lng: string) =>
-  `https://spots.roadsurfer.com/en-gb/roadsurfer-spots?allowWithoutLocation&categoryIds&country&endDate&lat=${lat}&lng=${lng}&locationSearchString=Selected%20area&maxPrice&onlyFreeSpots&searchRadius=300&searchType=modified&sort=distance&startDate&terrainFor[]=camperVan`
+  `https://spots.roadsurfer.com/en-gb/roadsurfer-spots?allowWithoutLocation&categoryIds&country&endDate&lat=${lat}&lng=${lng}&locationSearchString=Selected%20area&maxPrice&onlyFreeSpots&searchRadius=250&searchType=modified&sort=distance&startDate&terrainFor[]=camperVan`
 
 import exampleData from "./komoot.json"
 
@@ -121,6 +121,8 @@ async function getCards({ lat, lng }: { lat: string; lng: string }) {
         if (src) images.push("https://spots.roadsurfer.com" + src)
       })
 
+      images = [...new Set(images)]
+
       const description = $(".product-info__description").html()?.trim() || ""
       const isPetFriendly =
         $(".product-facility__icons-icon__label").filter((_, p) => $(p).text().includes("Pets allowed")).length > 0
@@ -163,10 +165,10 @@ async function getCards({ lat, lng }: { lat: string; lng: string }) {
 
 async function main() {
   try {
-    // Start at 40, -5 for whole scan of europe
-    for (let lat = 40.01; lat < 75; lat = lat + 2.5) {
+    // Start at 37.51, -5.01 for whole scan of europe
+    for (let lat = 37.51; lat < 76; lat = lat + 1) {
       console.log("Lat: " + lat)
-      for (let lng = 10.01; lng < 30; lng = lng + 2.5) {
+      for (let lng = -5.01; lng < 22; lng = lng + 1) {
         console.log("Lng: " + lng)
         await getCards({
           lat: Number(Math.round(parseFloat(lat + "e" + 2)) + "e-" + 2).toFixed(2),
