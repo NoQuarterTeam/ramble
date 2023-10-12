@@ -145,7 +145,7 @@ async function getPageCards(currentPage: number) {
 async function main() {
   try {
     // loop over each page
-    for (let currentPage = 2; currentPage < pageCount + 1; currentPage++) {
+    for (let currentPage = 3; currentPage < pageCount + 1; currentPage++) {
       console.log({ currentPage })
 
       await getPageCards(currentPage)

@@ -112,15 +112,15 @@ function GuideItem(props: { guide: SerializeFrom<typeof loader>["guides"][number
       </div>
       <div className="grid grid-cols-3 gap-4">
         <div className="text-center text-sm">
-          <p className="text-xl font-bold leading-tight">{props.guide._count?.verifiedSpots.toLocaleString()}</p>
+          <p className="text-xl font-semibold leading-tight">{props.guide._count?.verifiedSpots.toLocaleString()}</p>
           <p>spots</p>
         </div>
         <div className="text-center text-sm">
-          <p className="text-xl font-bold leading-tight">{props.guide._count?.followers.toLocaleString()}</p>
+          <p className="text-xl font-semibold leading-tight">{props.guide._count?.followers.toLocaleString()}</p>
           <p>followers</p>
         </div>
         <div className="text-center text-sm">
-          <p className="text-xl font-bold leading-tight">{props.guide._count?.lists.toLocaleString()}</p>
+          <p className="text-xl font-semibold leading-tight">{props.guide._count?.lists.toLocaleString()}</p>
           <p>lists</p>
         </div>
       </div>
