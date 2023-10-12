@@ -18,7 +18,7 @@ import { AMENITIES, canManageSpot, displayRating, merge } from "@ramble/shared"
 import { ReviewItem } from "../../../../../components/ReviewItem"
 import { Button } from "../../../../../components/ui/Button"
 import { Heading } from "../../../../../components/ui/Heading"
-import { ImageCarousel } from "../../../../../components/ui/ImageCarousel"
+import { SpotImageCarousel } from "../../../../../components/ui/SpotImageCarousel"
 import { Text } from "../../../../../components/ui/Text"
 import { toast } from "../../../../../components/ui/Toast"
 import { VerifiedCard } from "../../../../../components/VerifiedCard"
@@ -118,7 +118,7 @@ export function SpotDetailScreen() {
         onScroll={scrollHandler}
       >
         <Animated.View style={imageStyle}>
-          <ImageCarousel width={width} height={300} images={spot.images} />
+          <SpotImageCarousel width={width} height={300} images={spot.images} spotId={spot.id} />
         </Animated.View>
         <View className="space-y-3 p-4">
           <View className="space-y-2">
