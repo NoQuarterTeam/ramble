@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Dog, Settings2, BadgeX } from "lucide-react"
+import { BadgeX, Dog, Settings2 } from "lucide-react"
 import queryString from "query-string"
 
 import { SpotType } from "@ramble/database/types"

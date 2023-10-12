@@ -35,11 +35,11 @@ import { EditSpotLayout } from "./(app)/shared/spots/[id]/edit/_layout"
 import { ReviewDetailScreen } from "./(app)/shared/spots/[id]/reviews/[id]"
 import { NewReviewScreen } from "./(app)/shared/spots/[id]/reviews/new"
 import { SaveSpotScreen } from "./(app)/shared/spots/[id]/save"
+import { SaveSpotImagesScreen } from "./(app)/shared/spots/[id]/save-spot-images"
 import { NewSpotLayout } from "./(app)/shared/spots/new/_layout"
 import { AuthLayout } from "./(auth)/_layout"
 import { OnboardingLayout } from "./onboarding/_layout"
 import { type ScreenParamsList } from "./router"
-import { SaveSpotImagesScreen } from "./(app)/shared/spots/[id]/save-spot-images"
 
 SplashScreen.preventAutoHideAsync()
 enableScreens()

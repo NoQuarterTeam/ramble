@@ -1,5 +1,5 @@
 import * as React from "react"
-import { ScrollView, Switch, View, useColorScheme } from "react-native"
+import { ScrollView, Switch, useColorScheme, View } from "react-native"
 import { BadgeX, Dog } from "lucide-react-native"
 
 import { type SpotType } from "@ramble/database/types"
@@ -9,7 +9,7 @@ import colors from "@ramble/tailwind-config/src/colors"
 import { Button } from "../../../components/ui/Button"
 import { Heading } from "../../../components/ui/Heading"
 import { Text } from "../../../components/ui/Text"
-import { SPOT_TYPES, SpotTypeInfo } from "../../../lib/models/spot"
+import { SPOT_TYPES, type SpotTypeInfo } from "../../../lib/models/spot"
 
 export type Filters = {
   isPetFriendly: boolean

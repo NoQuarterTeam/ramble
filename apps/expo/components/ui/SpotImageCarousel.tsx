@@ -2,17 +2,17 @@ import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import * as ImagePicker from "expo-image-picker"
+import { Image } from "lucide-react-native"
+
+import { type SpotImage } from "@ramble/database/types"
 import { createImageUrl, merge } from "@ramble/shared"
 
-import { OptimizedImage } from "./OptimisedImage"
-import { Text } from "./Text"
-import { Image } from "lucide-react-native"
+import { useRouter } from "../../app/router"
 import { useMe } from "../../lib/hooks/useMe"
 import { Button } from "./Button"
-
-import { useRouter } from "../../app/router"
+import { OptimizedImage } from "./OptimisedImage"
+import { Text } from "./Text"
 import { toast } from "./Toast"
-import { type SpotImage } from "@ramble/database/types"
 
 type SpotImageType = Pick<SpotImage, "id" | "path" | "blurHash">
 export function SpotImageCarousel({

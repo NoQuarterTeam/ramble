@@ -1,11 +1,10 @@
 import { View } from "react-native"
 import { cva } from "class-variance-authority"
+import { type ClassValue } from "class-variance-authority/dist/types"
 
 import type { SpotType } from "@ramble/database/types"
-
-import { SPOT_TYPES } from "../lib/models/spot"
 import { spotMarkerColorTypes, spotMarkerTextColorTypes, spotMarkerTriangleColorTypes } from "@ramble/shared"
-import { ClassValue } from "class-variance-authority/dist/types"
+
 import { SpotIcon } from "./SpotIcon"
 
 interface MarkerProps {

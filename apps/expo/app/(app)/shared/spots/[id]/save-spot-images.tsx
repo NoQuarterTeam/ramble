@@ -1,16 +1,15 @@
 import * as React from "react"
+import { ScrollView, TouchableOpacity, View } from "react-native"
 import { Image } from "expo-image"
 import * as ImagePicker from "expo-image-picker"
-import { ModalView } from "../../../../../components/ui/ModalView"
-import { useMe } from "../../../../../lib/hooks/useMe"
-import { useParams, useRouter } from "../../../../router"
-import { Text } from "../../../../../components/ui/Text"
-import { ScrollView, TouchableOpacity, View } from "react-native"
-import { Button } from "../../../../../components/ui/Button"
 import { Plus, X } from "lucide-react-native"
+
+import { Button } from "../../../../../components/ui/Button"
+import { ModalView } from "../../../../../components/ui/ModalView"
+import { toast } from "../../../../../components/ui/Toast"
 import { api } from "../../../../../lib/api"
 import { useS3Upload } from "../../../../../lib/hooks/useS3"
-import { toast } from "../../../../../components/ui/Toast"
+import { useParams, useRouter } from "../../../../router"
 
 export function SaveSpotImagesScreen() {
   const { goBack } = useRouter()
