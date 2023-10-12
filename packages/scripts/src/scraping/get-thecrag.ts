@@ -120,6 +120,8 @@ async function getPageCards(currentPage: number) {
         isPetFriendly: true,
         sourceUrl: spot.link,
         creator: { connect: { email: "jack@noquarter.co" } },
+        verifier: { connect: { email: "jack@noquarter.co" } },
+        verifiedAt: new Date(),
         images: { create: images.map((url) => ({ path: url, creator: { connect: { email: "jack@noquarter.co" } } })) },
       } satisfies Prisma.SpotCreateArgs["data"]
 
