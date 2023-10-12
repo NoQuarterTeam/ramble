@@ -133,9 +133,8 @@ export default function MapView() {
             if (!point.properties.cluster && point.properties.id) {
               navigate(`/map/${point.properties.id}${window.location.search}`)
             }
+            const zoom = point.properties.cluster ? point.properties.zoomLevel : mapRef.current?.getZoom()
             const center = point.geometry.coordinates as LngLatLike
-            const currentZoom = mapRef.current?.getZoom()
-            const zoom = point.properties.cluster ? Math.min((currentZoom || 5) + 2, 14) : currentZoom
             mapRef.current?.flyTo({
               center,
               duration: 1000,

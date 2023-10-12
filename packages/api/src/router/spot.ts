@@ -49,15 +49,21 @@ export const spotRouter = createTRPCRouter({
         take: 8000,
       })
       if (spots.length === 0) return []
-      const supercluster = new Supercluster()
-      const clusters = supercluster.load(
+      const supercluster = new Supercluster<{ id: string; type: SpotType; cluster: false }, { cluster: true }>()
+      const clustersData = supercluster.load(
         spots.map((spot) => ({
           type: "Feature",
           geometry: { type: "Point", coordinates: [spot.longitude, spot.latitude] },
-          properties: { id: spot.id, type: spot.type },
+          properties: { id: spot.id, type: spot.type, cluster: false },
         })),
       )
-      return clusters.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], zoom || 5)
+      const clusters = clustersData.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], zoom || 5)
+      return clusters.map((c) => ({
+        ...c,
+        properties: c.properties.cluster
+          ? { ...c.properties, zoomLevel: supercluster.getClusterExpansionZoom(c.properties.cluster_id) }
+          : c.properties,
+      }))
     }),
   verify: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
     const spot = await ctx.prisma.spot.findUnique({ where: { id: input.id } })

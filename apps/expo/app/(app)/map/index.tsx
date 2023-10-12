@@ -116,9 +116,8 @@ export function SpotsMapScreen() {
       clusters?.map((point, i) => {
         if (point.properties.cluster) {
           const onPress = async () => {
-            const currentZoom = await mapRef.current?.getZoom()
             camera.current?.setCamera({
-              zoomLevel: Math.min((currentZoom || 5) + 2, 14),
+              zoomLevel: (point.properties.cluster && point.properties.zoomLevel) || undefined,
               animationMode: "linearTo",
               animationDuration: 300,
               centerCoordinate: point.geometry.coordinates,

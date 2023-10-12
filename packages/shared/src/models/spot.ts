@@ -9,6 +9,7 @@ export const spotPartnerFields = {
   natuurKampeerterreinenId: true,
   roadsurferId: true,
   surflineId: true,
+  theCragId: true,
   sourceUrl: true,
 } satisfies Prisma.SpotSelect
 
@@ -21,6 +22,7 @@ export const isPartnerSpot = (spot: SpotPartnerFields) =>
   spot.park4nightId ||
   spot.roadsurferId ||
   spot.cucortuId ||
+  spot.theCragId ||
   spot.loodusegakoosId ||
   spot.natuurKampeerterreinenId
 
