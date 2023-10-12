@@ -329,7 +329,7 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
       handleComponent={null}
       index={id ? 0 : -1}
       onClose={onClose}
-      enablePanDownToClose
+      // enablePanDownToClose
       snapPoints={[390]}
     >
       <View style={{ backgroundColor }} className="rounded-t-xs h-full p-4">
