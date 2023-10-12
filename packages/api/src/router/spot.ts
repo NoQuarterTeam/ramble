@@ -107,7 +107,10 @@ export const spotRouter = createTRPCRouter({
           LEFT JOIN
             ListSpot ON Spot.id = ListSpot.spotId
           WHERE
-            ${publicSpotWhereClauseRaw(ctx.user?.id)}
+            Spot.verifiedAt IS NOT NULL AND ${publicSpotWhereClauseRaw(ctx.user?.id)} AND Spot.type IN (${Prisma.join([
+              SpotType.CAMPING,
+              SpotType.FREE_CAMPING,
+            ])})
           GROUP BY
             Spot.id
           ${ORDER_BY}
@@ -125,7 +128,17 @@ export const spotRouter = createTRPCRouter({
   mapPreview: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
     const spot = await ctx.prisma.spot.findUnique({
       where: { id: input.id, ...publicSpotWhereClause(ctx.user?.id) },
-      include: { verifier: true, _count: { select: { listSpots: true, reviews: true } }, images: true },
+      select: {
+        id: true,
+        name: true,
+        type: true,
+        verifier: true,
+        verifiedAt: true,
+        description: true,
+        _count: { select: { listSpots: true, reviews: true } },
+        listSpots: ctx.user ? { where: { list: { creatorId: ctx.user.id } } } : undefined,
+        images: true,
+      },
     })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
     const rating = await ctx.prisma.review.aggregate({ where: { spotId: input.id }, _avg: { rating: true } })
