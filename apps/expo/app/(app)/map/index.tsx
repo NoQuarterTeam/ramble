@@ -25,6 +25,7 @@ import { useAsyncStorage } from "../../../lib/hooks/useAsyncStorage"
 import { usePreferences } from "../../../lib/hooks/usePreferences"
 import { useRouter } from "../../router"
 import { type Filters, initialFilters, MapFilters } from "./MapFilters"
+import { useBackgroundColor } from "../../../lib/tailwind"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
@@ -320,6 +321,7 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
 
   const isDark = colorScheme === "dark"
 
+  const backgroundColor = useBackgroundColor()
   return (
     <BottomSheet
       animationConfigs={animationConfigs}
@@ -330,7 +332,7 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
       enablePanDownToClose
       snapPoints={[390]}
     >
-      <View className="bg-background rounded-xs p-4 dark:bg-gray-900">
+      <View style={{ backgroundColor }} className="rounded-t-xs h-full p-4">
         {isLoading || (isFetching && id !== spot?.id) ? (
           <View className="flex items-center justify-center p-10">
             <Spinner />
