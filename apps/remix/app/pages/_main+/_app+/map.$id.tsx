@@ -31,6 +31,7 @@ import { getUserSession } from "~/services/session/session.server"
 import { PartnerLink } from "./components/PartnerLink"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { NEW_REVIEW_REDIRECTS } from "./spots.$id_.reviews.new"
+import { ClientOnly } from "remix-utils/client-only"
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const { userId } = await getUserSession(request)
@@ -142,7 +143,7 @@ export default function SpotPreview() {
                 </div>
                 <React.Suspense fallback={null}>
                   <Await resolve={promise.sameLocationSpots}>
-                    {(sameSpots) => sameSpots && <SameSpotNavigation spots={sameSpots} />}
+                    {(sameSpots) => sameSpots && <ClientOnly>{() => <SameSpotNavigation spots={sameSpots} />}</ClientOnly>}
                   </Await>
                 </React.Suspense>
                 <div className="flex items-center justify-between">
