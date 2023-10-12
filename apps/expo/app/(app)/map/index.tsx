@@ -1,10 +1,10 @@
 import * as React from "react"
 import { Modal, Switch, TouchableOpacity, useColorScheme, View } from "react-native"
-import BottomSheet, { useBottomSheetDynamicSnapPoints, useBottomSheetSpringConfigs } from "@gorhom/bottom-sheet"
+import BottomSheet, { BottomSheetScrollView, useBottomSheetSpringConfigs } from "@gorhom/bottom-sheet"
 import Mapbox, { Camera, type MapView as MapType, MarkerView, RasterLayer, RasterSource } from "@rnmapbox/maps"
 import { useQuery } from "@tanstack/react-query"
 import * as Location from "expo-location"
-import { BadgeX, CloudRain, Heart, Layers, Navigation, PlusCircle, Settings2, Star, Verified, X } from "lucide-react-native"
+import { CloudRain, Heart, Layers, Navigation, PlusCircle, Settings2, Star, Verified, X } from "lucide-react-native"
 
 import { type SpotType } from "@ramble/database/types"
 import { displayRating, INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
@@ -22,6 +22,10 @@ import { useAsyncStorage } from "../../../lib/hooks/useAsyncStorage"
 import { usePreferences } from "../../../lib/hooks/usePreferences"
 import { useRouter } from "../../router"
 import { type Filters, initialFilters, MapFilters } from "./MapFilters"
+import { VerifiedCard } from "../../../components/VerifiedCard"
+import { ReviewItem } from "../../../components/ReviewItem"
+import { SpotIcon } from "../../../components/SpotIcon"
+import { Button } from "../../../components/ui/Button"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
@@ -116,6 +120,8 @@ export function SpotsMapScreen() {
       clusters?.map((point, i) => {
         if (point.properties.cluster) {
           const onPress = async () => {
+            console.log(point.properties)
+
             camera.current?.setCamera({
               zoomLevel: (point.properties.cluster && point.properties.zoomLevel) || undefined,
               animationMode: "linearTo",
@@ -293,16 +299,15 @@ export function SpotsMapScreen() {
 }
 
 const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: string | null; onClose: () => void }) {
-  const { data: spot, isLoading } = api.spot.mapPreview.useQuery({ id: id || "" }, { enabled: !!id, keepPreviousData: true })
-  const { push } = useRouter()
+  const {
+    data: spot,
+    isLoading,
+    isFetching,
+  } = api.spot.mapPreview.useQuery({ id: id || "" }, { enabled: !!id, keepPreviousData: true })
+  const { push, navigate } = useRouter()
   const colorScheme = useColorScheme()
 
   const bottomSheetRef = React.useRef<BottomSheet>(null)
-
-  const initialSnapPoints = React.useMemo(() => ["CONTENT_HEIGHT"], [])
-
-  const { animatedHandleHeight, animatedSnapPoints, animatedContentHeight, handleContentLayout } =
-    useBottomSheetDynamicSnapPoints(initialSnapPoints)
 
   const handleSheetClose = React.useCallback(() => {
     bottomSheetRef.current?.close()
@@ -314,83 +319,93 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
     stiffness: 500,
   })
 
-  return (
-    <>
-      {isLoading && !!id && (
-        <View className="rounded-xs bg-background absolute left-4 top-10 flex items-center justify-center p-2 dark:bg-gray-800">
-          <Spinner />
-        </View>
-      )}
-      <BottomSheet
-        detached
-        animationConfigs={animationConfigs}
-        style={{ marginHorizontal: 10 }}
-        ref={bottomSheetRef}
-        bottomInset={10}
-        handleComponent={null}
-        index={id ? 0 : -1}
-        // enablePanDownToClose
-        snapPoints={animatedSnapPoints}
-        handleHeight={animatedHandleHeight}
-        contentHeight={animatedContentHeight}
-      >
-        {isLoading ? null : (
-          <View onLayout={handleContentLayout} className="bg-background rounded-xs p-4 dark:bg-gray-900">
-            {!spot ? (
-              <Text>Spot not found</Text>
-            ) : (
-              <View className="space-y-4">
-                <View className="space-y-1">
-                  {spot.verifiedAt && spot.verifier ? (
-                    <View className="flex flex-row items-center space-x-1 text-sm">
-                      <Verified size={16} className="text-black dark:text-white" />
-                      <Text>Verified by</Text>
-                      <TouchableOpacity onPress={() => push("UserScreen", { username: spot.verifier?.username || "" })}>
-                        <Text className="flex flex-row">{`${spot.verifier.firstName} ${spot.verifier.lastName}`}</Text>
-                      </TouchableOpacity>
-                    </View>
-                  ) : (
-                    <View className="flex flex-row items-center space-x-1 text-sm">
-                      <BadgeX size={16} className="text-black dark:text-white" />
-                      <Text>Unverified</Text>
-                    </View>
-                  )}
+  const isDark = colorScheme === "dark"
 
-                  <TouchableOpacity onPress={() => push("SpotDetailScreen", { id: spot.id })} activeOpacity={0.7}>
-                    <Text numberOfLines={2} className="text-lg leading-6 text-black hover:underline dark:text-white">
+  return (
+    <BottomSheet
+      animationConfigs={animationConfigs}
+      ref={bottomSheetRef}
+      handleComponent={null}
+      index={id ? 0 : -1}
+      onClose={onClose}
+      enablePanDownToClose
+      snapPoints={[380, "90%"]}
+    >
+      <BottomSheetScrollView>
+        <View className="bg-background rounded-xs p-4 dark:bg-gray-900">
+          {isLoading || (isFetching && id !== spot?.id) ? (
+            <View className="flex items-center justify-center p-10">
+              <Spinner />
+            </View>
+          ) : !spot ? (
+            <Text>Spot not found</Text>
+          ) : (
+            <View className="space-y-3">
+              <View className="space-y-3">
+                <View className="space-y-1">
+                  <TouchableOpacity
+                    onPress={() => push("SpotDetailScreen", { id: spot.id })}
+                    activeOpacity={0.7}
+                    className="flex flex-row items-center space-x-2"
+                  >
+                    <View className="sq-10 flex items-center justify-center rounded-full border border-gray-200 dark:border-gray-700">
+                      <SpotIcon size={20} type={spot.type} className="text-black dark:text-white" />
+                    </View>
+                    <Text numberOfLines={2} className="pr-14 text-base leading-6 text-black hover:underline dark:text-white">
                       {spot.name}
                     </Text>
                   </TouchableOpacity>
+                  <View className="flex flex-row items-center justify-between">
+                    <View className="flex flex-row items-center space-x-2">
+                      <View className="flex flex-row items-center space-x-1">
+                        <Star size={16} className="text-black dark:text-white" />
+                        <Text className="text-sm">{displayRating(spot.rating._avg.rating)}</Text>
+                      </View>
+                      <View className="flex flex-row flex-wrap items-center space-x-1">
+                        <Heart size={16} className="text-black dark:text-white" />
+                        <Text className="text-sm">{spot._count.listSpots || 0}</Text>
+                      </View>
+                    </View>
 
-                  <View className="flex flex-row items-center space-x-2">
-                    <View className="flex flex-row items-center space-x-1">
-                      <Star size={16} className="text-black dark:text-white" />
-                      <Text className="text-sm">{displayRating(spot.rating._avg.rating)}</Text>
-                    </View>
-                    <View className="flex flex-row flex-wrap items-center space-x-1">
-                      <Heart size={16} className="text-black dark:text-white" />
-                      <Text className="text-sm">{spot._count.listSpots || 0}</Text>
-                    </View>
+                    <Button
+                      size="xs"
+                      variant="outline"
+                      onPress={() => navigate("SaveSpotScreen", { id: spot.id })}
+                      leftIcon={
+                        <Heart
+                          size={14}
+                          className="text-black dark:text-white"
+                          fill={spot.listSpots && spot.listSpots.length > 0 ? (isDark ? "white" : "black") : undefined}
+                        />
+                      }
+                    >
+                      Save
+                    </Button>
                   </View>
                 </View>
                 <View className="rounded-xs overflow-hidden">
                   <ImageCarousel
                     onPress={() => push("SpotDetailScreen", { id: spot.id })}
                     key={spot.id}
-                    width={width - 52}
+                    width={width - 32}
                     height={200}
                     images={spot.images}
                   />
                 </View>
+                <View>
+                  <VerifiedCard spot={spot} />
+                </View>
               </View>
-            )}
-            <TouchableOpacity onPress={handleSheetClose} className="absolute right-2 top-2 flex items-center justify-center p-2">
-              <X size={24} color={colorScheme === "dark" ? "white" : "black"} />
-            </TouchableOpacity>
-          </View>
-        )}
-      </BottomSheet>
-    </>
+              <Text>{spot.description}</Text>
+            </View>
+          )}
+
+          <TouchableOpacity onPress={handleSheetClose} className="absolute right-2 top-2 flex items-center justify-center p-2">
+            <X size={24} color={colorScheme === "dark" ? "white" : "black"} />
+          </TouchableOpacity>
+        </View>
+      </BottomSheetScrollView>
+    </BottomSheet>
   )
 })
 

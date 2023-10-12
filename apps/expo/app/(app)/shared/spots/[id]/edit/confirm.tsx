@@ -1,23 +1,22 @@
-import * as React from "react"
-import { ScrollView, View } from "react-native"
 import { Image } from "expo-image"
 import { Check } from "lucide-react-native"
+import * as React from "react"
+import { ScrollView, View } from "react-native"
 
 import { AMENITIES, createImageUrl } from "@ramble/shared"
 
+import { SpotIcon } from "../../../../../../components/SpotIcon"
 import { Button } from "../../../../../../components/ui/Button"
 import { Text } from "../../../../../../components/ui/Text"
 import { toast } from "../../../../../../components/ui/Toast"
 import { api } from "../../../../../../lib/api"
 import { useS3Upload } from "../../../../../../lib/hooks/useS3"
-import { SPOT_TYPES } from "../../../../../../lib/models/spot"
 import { useParams, useRouter } from "../../../../../router"
 import { EditSpotModalView } from "./EditSpotModalView"
 
 export function EditSpotConfirmScreen() {
   const { params } = useParams<"EditSpotConfirmScreen">()
   const router = useRouter()
-  const Icon = SPOT_TYPES[params.type].Icon
 
   const utils = api.useContext()
   const {
@@ -67,7 +66,7 @@ export function EditSpotConfirmScreen() {
     <EditSpotModalView title="confirm">
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}>
         <View className="space-y-2">
-          <Icon className="text-black dark:text-white" />
+          <SpotIcon type={params.type} className="text-black dark:text-white" />
           <Text>{params.name}</Text>
           <Text>{params.description}</Text>
           {params.isPetFriendly && <Text>Pet friendly</Text>}

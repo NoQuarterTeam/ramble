@@ -22,7 +22,6 @@ export function ImageCarousel({
 }) {
   const [imageIndex, setImageIndex] = React.useState(0)
 
-  if (images.length === 0) return <View style={{ width, height }} className="bg-gray-100 dark:bg-gray-700" />
   return (
     <View style={{ width, height }} className="bg-gray-600">
       <FlashList
@@ -36,6 +35,11 @@ export function ImageCarousel({
         estimatedItemSize={width}
         showsHorizontalScrollIndicator={false}
         data={images}
+        // ListFooterComponent={
+        //   <View style={{ width, height }} className="flex items-center justify-center">
+        //     <Text>No images yet</Text>
+        //   </View>
+        // }
         renderItem={({ item: image }) => (
           <TouchableOpacity onPress={onPress} activeOpacity={1}>
             <OptimizedImage

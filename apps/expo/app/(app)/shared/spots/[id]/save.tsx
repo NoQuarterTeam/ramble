@@ -1,3 +1,4 @@
+import * as React from "react"
 import { TouchableOpacity, useColorScheme, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import { Heart, Lock } from "lucide-react-native"
@@ -44,19 +45,29 @@ interface Props {
 }
 
 function SaveableListItem({ list, spotId }: Props) {
+  const foundSavedItem = list.listSpots.some((s) => s.spotId === spotId)
+
+  const [isSaved, setIsSaved] = React.useState(foundSavedItem)
   const utils = api.useContext()
+
+  React.useEffect(() => {
+    setIsSaved(foundSavedItem)
+  }, [foundSavedItem])
+
   const { mutate } = api.list.saveToList.useMutation({
     onSuccess: () => {
       utils.list.allByUserWithSavedSpots.refetch()
       utils.spot.detail.refetch({ id: spotId })
+      utils.spot.mapPreview.refetch({ id: spotId })
     },
   })
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
 
-  const isSaved = list.listSpots.some((s) => s.spotId === spotId)
-
-  const handleToggle = () => mutate({ listId: list.id, spotId })
+  const handleToggle = () => {
+    setIsSaved((s) => !s)
+    mutate({ listId: list.id, spotId })
+  }
 
   return (
     <TouchableOpacity
