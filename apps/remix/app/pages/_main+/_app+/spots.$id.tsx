@@ -46,9 +46,9 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 import { getUserSession } from "~/services/session/session.server"
 
 import { SaveToList } from "../../api+/save-to-list"
+import { PartnerLink } from "./components/PartnerLink"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { SpotMarker } from "./components/SpotMarker"
-import { PartnerLink } from "./components/PartnerLink"
 
 export const config = {
   // runtime: "edge",

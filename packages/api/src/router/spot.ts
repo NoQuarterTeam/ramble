@@ -134,7 +134,6 @@ export const spotRouter = createTRPCRouter({
         type: true,
         verifier: true,
         verifiedAt: true,
-        description: true,
         _count: { select: { listSpots: true, reviews: true } },
         listSpots: ctx.user ? { where: { list: { creatorId: ctx.user.id } } } : undefined,
         images: true,
@@ -253,5 +252,20 @@ export const spotRouter = createTRPCRouter({
             : { delete: spot.amenities ? true : undefined },
         },
       })
+    }),
+  addImages: protectedProcedure
+    .input(z.object({ id: z.string(), images: z.array(z.object({ path: z.string() })) }))
+    .mutation(async ({ ctx, input }) => {
+      const { id, images } = input
+      const spot = await ctx.prisma.spot.findUnique({ where: { id }, include: { images: true } })
+      if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
+
+      const imageData = await Promise.all(
+        images.map(async ({ path }) => {
+          const blurHash = await generateBlurHash(path)
+          return { path, blurHash, creator: { connect: { id: ctx.user.id } } }
+        }),
+      )
+      return ctx.prisma.spot.update({ where: { id }, data: { images: { create: imageData } } })
     }),
 })

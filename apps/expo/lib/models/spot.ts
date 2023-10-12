@@ -1,26 +1,26 @@
 import {
   Beer,
   Bike,
+  Camera,
   Coffee,
+  Dog,
   Footprints,
   Fuel,
+  HeartHandshake,
+  Leaf,
   type LucideIcon,
   Mountain,
   ParkingCircle,
-  ShoppingCart,
-  Utensils,
-  Dog,
   PartyPopper,
   PlugZap,
+  ShoppingCart,
+  Utensils,
   Wrench,
-  Camera,
-  HeartHandshake,
-  Leaf,
 } from "lucide-react-native"
 
 import { type SpotType } from "@ramble/database/types"
 
-import { Icons, RambleIcon } from "../../components/ui/Icons"
+import { Icons, type RambleIcon } from "../../components/ui/Icons"
 
 export type SpotTypeInfo = {
   value: SpotType
