@@ -329,82 +329,77 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
       index={id ? 0 : -1}
       onClose={onClose}
       enablePanDownToClose
-      snapPoints={[380, "90%"]}
+      snapPoints={[390]}
     >
-      <BottomSheetScrollView>
-        <View className="bg-background rounded-xs p-4 dark:bg-gray-900">
-          {isLoading || (isFetching && id !== spot?.id) ? (
-            <View className="flex items-center justify-center p-10">
-              <Spinner />
-            </View>
-          ) : !spot ? (
-            <Text>Spot not found</Text>
-          ) : (
-            <View className="space-y-3">
-              <View className="space-y-3">
-                <View className="space-y-1">
-                  <TouchableOpacity
-                    onPress={() => push("SpotDetailScreen", { id: spot.id })}
-                    activeOpacity={0.7}
-                    className="flex flex-row items-center space-x-2"
-                  >
-                    <View className="sq-10 flex items-center justify-center rounded-full border border-gray-200 dark:border-gray-700">
-                      <SpotIcon size={20} type={spot.type} className="text-black dark:text-white" />
-                    </View>
-                    <Text numberOfLines={2} className="pr-14 text-base leading-6 text-black hover:underline dark:text-white">
-                      {spot.name}
-                    </Text>
-                  </TouchableOpacity>
-                  <View className="flex flex-row items-center justify-between">
-                    <View className="flex flex-row items-center space-x-2">
-                      <View className="flex flex-row items-center space-x-1">
-                        <Star size={16} className="text-black dark:text-white" />
-                        <Text className="text-sm">{displayRating(spot.rating._avg.rating)}</Text>
-                      </View>
-                      <View className="flex flex-row flex-wrap items-center space-x-1">
-                        <Heart size={16} className="text-black dark:text-white" />
-                        <Text className="text-sm">{spot._count.listSpots || 0}</Text>
-                      </View>
-                    </View>
-
-                    <Button
-                      size="xs"
-                      variant="outline"
-                      onPress={() => navigate("SaveSpotScreen", { id: spot.id })}
-                      leftIcon={
-                        <Heart
-                          size={14}
-                          className="text-black dark:text-white"
-                          fill={spot.listSpots && spot.listSpots.length > 0 ? (isDark ? "white" : "black") : undefined}
-                        />
-                      }
-                    >
-                      Save
-                    </Button>
+      <View className="bg-background rounded-xs p-4 dark:bg-gray-900">
+        {isLoading || (isFetching && id !== spot?.id) ? (
+          <View className="flex items-center justify-center p-10">
+            <Spinner />
+          </View>
+        ) : !spot ? (
+          <Text>Spot not found</Text>
+        ) : (
+          <View className="space-y-3">
+            <View className="space-y-1">
+              <TouchableOpacity
+                onPress={() => push("SpotDetailScreen", { id: spot.id })}
+                activeOpacity={0.7}
+                className="flex h-[50px] flex-row items-center space-x-2"
+              >
+                <View className="sq-12 flex items-center justify-center rounded-full border border-gray-200 dark:border-gray-700">
+                  <SpotIcon size={20} type={spot.type} className="text-black dark:text-white" />
+                </View>
+                <Text numberOfLines={2} className="pr-14 text-base leading-6 text-black hover:underline dark:text-white">
+                  {spot.name}
+                </Text>
+              </TouchableOpacity>
+              <View className="flex flex-row items-center justify-between">
+                <View className="flex flex-row items-center space-x-2">
+                  <View className="flex flex-row items-center space-x-1">
+                    <Star size={16} className="text-black dark:text-white" />
+                    <Text className="text-sm">{displayRating(spot.rating._avg.rating)}</Text>
+                  </View>
+                  <View className="flex flex-row flex-wrap items-center space-x-1">
+                    <Heart size={16} className="text-black dark:text-white" />
+                    <Text className="text-sm">{spot._count.listSpots || 0}</Text>
                   </View>
                 </View>
-                <View className="rounded-xs overflow-hidden">
-                  <ImageCarousel
-                    onPress={() => push("SpotDetailScreen", { id: spot.id })}
-                    key={spot.id}
-                    width={width - 32}
-                    height={200}
-                    images={spot.images}
-                  />
-                </View>
-                <View>
-                  <VerifiedCard spot={spot} />
-                </View>
-              </View>
-              <Text>{spot.description}</Text>
-            </View>
-          )}
 
-          <TouchableOpacity onPress={handleSheetClose} className="absolute right-2 top-2 flex items-center justify-center p-2">
-            <X size={24} color={colorScheme === "dark" ? "white" : "black"} />
-          </TouchableOpacity>
-        </View>
-      </BottomSheetScrollView>
+                <Button
+                  size="xs"
+                  variant="outline"
+                  onPress={() => navigate("SaveSpotScreen", { id: spot.id })}
+                  leftIcon={
+                    <Heart
+                      size={14}
+                      className="text-black dark:text-white"
+                      fill={spot.listSpots && spot.listSpots.length > 0 ? (isDark ? "white" : "black") : undefined}
+                    />
+                  }
+                >
+                  Save
+                </Button>
+              </View>
+            </View>
+            <View className="rounded-xs overflow-hidden">
+              <ImageCarousel
+                onPress={() => push("SpotDetailScreen", { id: spot.id })}
+                key={spot.id}
+                width={width - 32}
+                height={200}
+                images={spot.images}
+              />
+            </View>
+            <View>
+              <VerifiedCard spot={spot} />
+            </View>
+          </View>
+        )}
+
+        <TouchableOpacity onPress={handleSheetClose} className="absolute right-2 top-2 flex items-center justify-center p-2">
+          <X size={24} color={colorScheme === "dark" ? "white" : "black"} />
+        </TouchableOpacity>
+      </View>
     </BottomSheet>
   )
 })
