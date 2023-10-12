@@ -39,6 +39,7 @@ import { NewSpotLayout } from "./(app)/shared/spots/new/_layout"
 import { AuthLayout } from "./(auth)/_layout"
 import { OnboardingLayout } from "./onboarding/_layout"
 import { type ScreenParamsList } from "./router"
+import { SaveSpotImagesScreen } from "./(app)/shared/spots/[id]/save-spot-images"
 
 SplashScreen.preventAutoHideAsync()
 enableScreens()
@@ -120,6 +121,7 @@ export default function RootLayout() {
                     <Container.Screen name="NewReviewScreen" component={NewReviewScreen} />
                     <Container.Screen name="ReviewDetailScreen" component={ReviewDetailScreen} />
                     <Container.Screen name="SaveSpotScreen" component={SaveSpotScreen} />
+                    <Container.Screen name="SaveSpotImagesScreen" component={SaveSpotImagesScreen} />
                     <Container.Screen name="DeleteSpotScreen" component={DeleteSpotScreen} />
                   </Container.Group>
                 </Container.Navigator>

@@ -11,7 +11,7 @@ import { displayRating, INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { SpotMarker } from "../../../components/SpotMarker"
-import { ImageCarousel } from "../../../components/ui/ImageCarousel"
+import { SpotImageCarousel } from "../../../components/ui/SpotImageCarousel"
 import { ModalView } from "../../../components/ui/ModalView"
 import { Spinner } from "../../../components/ui/Spinner"
 import { Text } from "../../../components/ui/Text"
@@ -382,9 +382,10 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
               </View>
             </View>
             <View className="rounded-xs overflow-hidden">
-              <ImageCarousel
+              <SpotImageCarousel
                 onPress={() => push("SpotDetailScreen", { id: spot.id })}
-                key={spot.id}
+                key={spot.id} // so images reload
+                spotId={spot.id}
                 width={width - 32}
                 height={200}
                 images={spot.images}

@@ -58,6 +58,7 @@ export type ScreenParamsList = {
   // SHARED
   SpotDetailScreen: { id: string }
   SaveSpotScreen: { id: string }
+  SaveSpotImagesScreen: { id: string; images: string[] }
   DeleteSpotScreen: { id: string }
   NewReviewScreen: { spotId: string }
   ReviewDetailScreen: { id: string }
