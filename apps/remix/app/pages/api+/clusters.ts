@@ -55,9 +55,12 @@ async function getMapClusters(request: Request) {
   })
   if (spots.length === 0) return []
 
-  const supercluster = new Supercluster<{ id: string; type: SpotType; cluster: false }, { cluster: true }>()
+  const supercluster = new Supercluster<{ id: string; type: SpotType; cluster: false }, { cluster: true }>({
+    maxZoom: 15,
+    radius: !type || typeof type === "string" ? 40 : type.length > 4 ? 60 : 50,
+  })
 
-  const clusters = supercluster.load(
+  const clusterData = supercluster.load(
     spots.map((spot) => ({
       type: "Feature",
       geometry: { type: "Point", coordinates: [spot.longitude, spot.latitude] },
@@ -65,7 +68,14 @@ async function getMapClusters(request: Request) {
     })),
   )
 
-  return clusters.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], zoom || 5)
+  const clusters = clusterData.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], zoom || 5)
+
+  return clusters.map((c) => ({
+    ...c,
+    properties: c.properties.cluster
+      ? { ...c.properties, zoomLevel: supercluster.getClusterExpansionZoom(c.properties.cluster_id) }
+      : c.properties,
+  }))
 }
 
 export type Cluster = Awaited<ReturnType<typeof getMapClusters>>[number]
