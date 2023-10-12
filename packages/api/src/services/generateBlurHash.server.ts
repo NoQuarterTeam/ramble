@@ -8,7 +8,7 @@ export async function generateBlurHash(path: string) {
     const url = createImageUrl(path)
     if (!url) return null
     const res = await fetch(url)
-    return encodeImageToBlurhash(await res.arrayBuffer()) as Promise<string>
+    return (await encodeImageToBlurhash(await res.arrayBuffer())) as Promise<string>
   } catch (error) {
     console.log(error)
     console.log("Oops - generating blurhash failed")

@@ -27,6 +27,7 @@ module.exports = {
     "query-string",
     "split-on-first",
     "supercluster",
+    "superjson",
     /remix-utils/,
   ],
   watchPaths: ["../../packages/**/*", "./tailwind.config.js"],
