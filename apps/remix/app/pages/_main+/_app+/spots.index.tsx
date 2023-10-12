@@ -46,8 +46,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   if (!SORT_OPTIONS.find((o) => o.value === sort)) sort = "latest"
 
   const WHERE = type
-    ? Prisma.sql`WHERE Spot.verifiedAt NOT IS NULL AND Spot.type = ${type} AND ${publicSpotWhereClauseRaw(userId)}`
-    : Prisma.sql`WHERE Spot.verifiedAt NOT IS NULL AND ${publicSpotWhereClauseRaw(userId)} AND Spot.type IN (${Prisma.join([
+    ? Prisma.sql`WHERE Spot.verifiedAt IS NOT NULL AND Spot.type = ${type} AND ${publicSpotWhereClauseRaw(userId)}`
+    : Prisma.sql`WHERE Spot.verifiedAt IS NOT NULL AND ${publicSpotWhereClauseRaw(userId)} AND Spot.type IN (${Prisma.join([
         SpotType.CAMPING,
         SpotType.FREE_CAMPING,
       ])})`
