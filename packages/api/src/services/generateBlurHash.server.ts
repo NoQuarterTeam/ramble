@@ -4,14 +4,14 @@ import sharp from "sharp"
 import { createImageUrl } from "@ramble/shared"
 
 export async function generateBlurHash(path: string) {
+  const url = createImageUrl(path)
   try {
-    const url = createImageUrl(path)
     if (!url) return null
     const res = await fetch(url)
     return (await encodeImageToBlurhash(await res.arrayBuffer())) as Promise<string>
   } catch (error) {
     console.log(error)
-    console.log("Oops - generating blurhash failed")
+    console.log("Oops - generating blurhash failed: ", url)
     return null
   }
 }
@@ -22,8 +22,9 @@ const encodeImageToBlurhash = (buffer: ArrayBuffer) =>
       .raw()
       .ensureAlpha()
       .resize(32, 32, { fit: "inside" })
-      .toBuffer((err, buffer, { width, height }) => {
+      .toBuffer((err, buffer, val) => {
         if (err) return reject(err)
-        resolve(encode(new Uint8ClampedArray(buffer), width, height, 4, 4))
+        if (!val) return reject("No value")
+        resolve(encode(new Uint8ClampedArray(buffer), val.width, val.height, 4, 4))
       })
   })
