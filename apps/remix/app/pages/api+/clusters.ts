@@ -56,7 +56,7 @@ async function getMapClusters(request: Request) {
   if (spots.length === 0) return []
 
   const supercluster = new Supercluster<{ id: string; type: SpotType; cluster: false }, { cluster: true }>({
-    maxZoom: 15,
+    maxZoom: 16,
     radius: !type || typeof type === "string" ? 40 : type.length > 4 ? 60 : 50,
   })
 

@@ -120,6 +120,8 @@ async function getPageCards(currentPage: number) {
         isPetFriendly: true,
         sourceUrl: spot.link,
         creator: { connect: { email: "jack@noquarter.co" } },
+        verifier: { connect: { email: "jack@noquarter.co" } },
+        verifiedAt: new Date(),
         images: { create: images.map((url) => ({ path: url, creator: { connect: { email: "jack@noquarter.co" } } })) },
       } satisfies Prisma.SpotCreateArgs["data"]
 
@@ -143,7 +145,7 @@ async function getPageCards(currentPage: number) {
 async function main() {
   try {
     // loop over each page
-    for (let currentPage = 2; currentPage < pageCount + 1; currentPage++) {
+    for (let currentPage = 3; currentPage < pageCount + 1; currentPage++) {
       console.log({ currentPage })
 
       await getPageCards(currentPage)

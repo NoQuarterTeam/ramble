@@ -49,7 +49,10 @@ export const spotRouter = createTRPCRouter({
         take: 8000,
       })
       if (spots.length === 0) return []
-      const supercluster = new Supercluster<{ id: string; type: SpotType; cluster: false }, { cluster: true }>()
+      const supercluster = new Supercluster<{ id: string; type: SpotType; cluster: false }, { cluster: true }>({
+        maxZoom: 16,
+        radius: !types || typeof types === "string" ? 40 : types.length > 4 ? 60 : 50,
+      })
       const clustersData = supercluster.load(
         spots.map((spot) => ({
           type: "Feature",
