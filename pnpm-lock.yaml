@@ -198,8 +198,8 @@ importers:
         specifier: ~0.18.12
         version: 0.18.12(react-dom@18.2.0)(react@18.2.0)
       react-native-webview:
-        specifier: 11.26.1
-        version: 11.26.1(react-native@0.71.8)(react@18.2.0)
+        specifier: 13.6.2
+        version: 13.6.2(react-native@0.71.8)(react@18.2.0)
       superjson:
         specifier: 1.13.3
         version: 1.13.3
@@ -16464,8 +16464,8 @@ packages:
       - encoding
     dev: false
 
-  /react-native-webview@11.26.1(react-native@0.71.8)(react@18.2.0):
-    resolution: {integrity: sha512-hC7BkxOpf+z0UKhxFSFTPAM4shQzYmZHoELa6/8a/MspcjEP7ukYKpuSUTLDywQditT8yI9idfcKvfZDKQExGw==}
+  /react-native-webview@13.6.2(react-native@0.71.8)(react@18.2.0):
+    resolution: {integrity: sha512-QzhQ5JCU+Nf2W285DtvCZOVQy/MkJXMwNDYPZvOWQbAOgxJMSSO+BtqXTMA1UPugDsko6PxJ0TxSlUwIwJijDg==}
     peerDependencies:
       react: '*'
       react-native: '*'
