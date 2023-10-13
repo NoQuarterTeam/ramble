@@ -1,10 +1,10 @@
-import { isPartnerSpot, useDisclosure, type SpotPartnerFields } from "@ramble/shared"
-import { Modal, TouchableOpacity, useColorScheme } from "react-native"
-import { Text } from "./ui/Text"
+import { isPartnerSpot, type SpotPartnerFields } from "@ramble/shared"
 import { Image } from "expo-image"
+import * as WebBrowser from "expo-web-browser"
+import { TouchableOpacity, useColorScheme } from "react-native"
 import { WEB_URL } from "../lib/config"
-import { ModalView } from "./ui/ModalView"
-import WebView from "react-native-webview"
+import { Text } from "./ui/Text"
+import { toast } from "./ui/Toast"
 
 interface Props {
   spot: SpotPartnerFields
@@ -23,7 +23,6 @@ const partners = {
 } as const
 
 export function PartnerLink(props: Props) {
-  const modalProps = useDisclosure()
   const theme = useColorScheme() || "light"
   if (!isPartnerSpot(props.spot)) return null
 
@@ -45,32 +44,29 @@ export function PartnerLink(props: Props) {
     ? partners.cucortu
     : partners.loodusegakoos
 
+  const handleOpen = async () => {
+    try {
+      await WebBrowser.openBrowserAsync(props.spot.sourceUrl || "", {
+        presentationStyle: WebBrowser.WebBrowserPresentationStyle.PAGE_SHEET,
+      })
+    } catch (error) {
+      console.log(error)
+      toast({ type: "error", title: "Error opening link" })
+    }
+  }
+
   if (!props.spot.sourceUrl) return null
   return (
-    <>
-      <TouchableOpacity
-        onPress={modalProps.onOpen}
-        className="rounded-xs flex flex-row items-center justify-between border border-gray-200 p-1.5 px-2.5 dark:border-gray-700/70"
-      >
-        <Text className="text-base">Provided by</Text>
-        <Image
-          contentFit="contain"
-          className="h-[40px] w-[120px] bg-right object-contain"
-          source={{ uri: WEB_URL + partner.logo[theme] }}
-        />
-      </TouchableOpacity>
-
-      <Modal
-        animationType="slide"
-        presentationStyle="formSheet"
-        visible={modalProps.isOpen}
-        onRequestClose={modalProps.onClose}
-        onDismiss={modalProps.onClose}
-      >
-        <ModalView onBack={modalProps.onClose}>
-          <WebView source={{ uri: props.spot.sourceUrl }} containerStyle={{ height: "100%" }} />
-        </ModalView>
-      </Modal>
-    </>
+    <TouchableOpacity
+      onPress={handleOpen}
+      className="rounded-xs flex flex-row items-center justify-between border border-gray-200 p-1.5 px-2.5 dark:border-gray-700/70"
+    >
+      <Text className="text-base">Provided by</Text>
+      <Image
+        contentFit="contain"
+        className="h-[40px] w-[120px] bg-right object-contain"
+        source={{ uri: WEB_URL + partner.logo[theme] }}
+      />
+    </TouchableOpacity>
   )
 }
