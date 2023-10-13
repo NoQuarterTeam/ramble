@@ -3,7 +3,13 @@ import Supercluster from "supercluster"
 import { z } from "zod"
 
 import { Prisma, SpotType } from "@ramble/database/types"
-import { SpotItemWithStatsAndImage, spotAmenitiesSchema, spotPartnerFields, spotSchemaWithoutType } from "@ramble/shared"
+import {
+  SpotItemWithStatsAndImage,
+  amenitiesFields,
+  spotAmenitiesSchema,
+  spotPartnerFields,
+  spotSchemaWithoutType,
+} from "@ramble/shared"
 
 import { generateBlurHash } from "../services/generateBlurHash.server"
 import { geocodeCoords } from "../services/geocode.server"
@@ -165,7 +171,7 @@ export const spotRouter = createTRPCRouter({
         _count: { select: { reviews: true, listSpots: true } },
         reviews: { take: 5, include: { user: true }, orderBy: { createdAt: "desc" } },
         images: true,
-        amenities: true,
+        amenities: { select: amenitiesFields },
         listSpots: ctx.user ? { where: { list: { creatorId: ctx.user.id } } } : undefined,
       },
     })
