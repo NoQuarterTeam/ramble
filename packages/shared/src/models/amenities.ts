@@ -1,4 +1,4 @@
-import { type SpotAmenities } from "@ramble/database/types"
+import { type Prisma, type SpotAmenities } from "@ramble/database/types"
 
 export const AMENITIES = {
   bbq: "BBQ",
@@ -13,3 +13,17 @@ export const AMENITIES = {
   firePit: "Fire pit",
   sauna: "Sauna",
 } as { [key in keyof Omit<SpotAmenities, "id" | "createdAt" | "updatedAt" | "spotId">]: string }
+
+export const amenitiesFields = {
+  bbq: true,
+  electricity: true,
+  water: true,
+  toilet: true,
+  shower: true,
+  wifi: true,
+  kitchen: true,
+  pool: true,
+  hotWater: true,
+  firePit: true,
+  sauna: true,
+} satisfies Prisma.SpotAmenitiesSelect
