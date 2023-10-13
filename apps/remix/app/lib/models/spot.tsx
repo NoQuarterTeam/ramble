@@ -90,10 +90,11 @@ export const SPOT_TYPE_OPTIONS = Object.entries(SPOT_TYPES).map(([_, { label, Ic
 export const STAY_SPOT_TYPE_OPTIONS = Object.entries({
   [SpotType.CAMPING]: SPOT_TYPES.CAMPING,
   [SpotType.FREE_CAMPING]: SPOT_TYPES.FREE_CAMPING,
-}).map(([_, { label, Icon, value }]) => ({ label, value, Icon })) as {
+}).map(([_, { label, Icon, value, isComingSoon }]) => ({ label, value, Icon, isComingSoon })) as {
   label: string
   value: SpotType
   Icon: LucideIcon
+  isComingSoon: boolean
 }[]
 
 export const fetchAndJoinSpotImages = async (spots: SpotItemWithStatsAndImage[]) => {
