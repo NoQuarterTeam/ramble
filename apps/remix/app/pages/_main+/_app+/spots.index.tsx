@@ -145,7 +145,7 @@ export default function Latest() {
                 </Button>
               ))}
             </div>
-            <div className="pointer-events-none absolute right-0 top-0 h-full w-20 bg-gradient-to-r from-transparent to-white dark:to-gray-800" />
+            {/* <div className="pointer-events-none absolute right-0 top-0 h-full w-20 bg-gradient-to-r from-transparent to-white dark:to-gray-800" /> */}
           </div>
           <div className="flex items-center gap-2 md:hidden">
             <Button onClick={modalProps.onOpen} variant="outline" leftIcon={<Settings2 size={18} />}>
