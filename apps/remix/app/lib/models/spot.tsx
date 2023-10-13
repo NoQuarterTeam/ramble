@@ -14,13 +14,14 @@ import {
   PartyPopper,
   PlugZap,
   ShoppingCart,
+  Timer,
   Utensils,
   Wrench,
 } from "lucide-react"
 
 import { joinSpotImages, type LatestSpotImages, spotImagesRawQuery } from "@ramble/api"
 import { SpotType } from "@ramble/database/types"
-import { type SpotItemWithStatsAndImage } from "@ramble/shared"
+import { merge, type SpotItemWithStatsAndImage } from "@ramble/shared"
 
 import type { RambleIcon } from "~/components/ui"
 import { Icons } from "~/components/ui"
@@ -36,7 +37,12 @@ export type SpotTypeInfo = {
 export const SPOT_TYPES: { [key in SpotType]: SpotTypeInfo } = {
   // Stays
   [SpotType.CAMPING]: { value: SpotType.CAMPING, label: "Long stay", Icon: Icons.Van, isComingSoon: false },
-  [SpotType.FREE_CAMPING]: { value: SpotType.FREE_CAMPING, label: "Overnight stop-off", Icon: Icons.Van, isComingSoon: false },
+  [SpotType.FREE_CAMPING]: {
+    value: SpotType.FREE_CAMPING,
+    label: "Overnight stop-off",
+    Icon: (props) => <Timer {...props} className={merge("mb-0.5", props.className)} />,
+    isComingSoon: false,
+  },
   [SpotType.PARKING]: { value: SpotType.PARKING, label: "Safe parking", Icon: ParkingCircle, isComingSoon: true },
   // Activities
   [SpotType.SURFING]: { value: SpotType.SURFING, label: "Surfing", Icon: Icons.Surf, isComingSoon: false },
