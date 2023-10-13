@@ -7,7 +7,7 @@ import * as Location from "expo-location"
 import { CloudRain, Heart, Layers, Navigation, PlusCircle, Settings2, Star, X } from "lucide-react-native"
 
 import { type SpotType } from "@ramble/database/types"
-import { displayRating, INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
+import { displayRating, INITIAL_LATITUDE, INITIAL_LONGITUDE, isPartnerSpot, join, useDisclosure } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { SpotIcon } from "../../../components/SpotIcon"
@@ -26,6 +26,7 @@ import { usePreferences } from "../../../lib/hooks/usePreferences"
 import { useRouter } from "../../router"
 import { type Filters, initialFilters, MapFilters } from "./MapFilters"
 import { useBackgroundColor } from "../../../lib/tailwind"
+import { PartnerLink } from "../../../components/PartnerLink"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
@@ -392,9 +393,7 @@ const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: stri
                 images={spot.images}
               />
             </View>
-            <View>
-              <VerifiedCard spot={spot} />
-            </View>
+            <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}</View>
           </View>
         )}
 

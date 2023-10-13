@@ -13,7 +13,7 @@ import * as Location from "expo-location"
 import { StatusBar } from "expo-status-bar"
 import { Check, ChevronDown, ChevronLeft, Compass, Edit2, Heart, Star, Trash } from "lucide-react-native"
 
-import { AMENITIES, canManageSpot, displayRating, merge } from "@ramble/shared"
+import { AMENITIES, canManageSpot, displayRating, isPartnerSpot, merge } from "@ramble/shared"
 
 import { ReviewItem } from "../../../../../components/ReviewItem"
 import { Button } from "../../../../../components/ui/Button"
@@ -27,6 +27,7 @@ import { width } from "../../../../../lib/device"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { AMENITIES_ICONS } from "../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../router"
+import { PartnerLink } from "../../../../../components/PartnerLink"
 
 export function SpotDetailScreen() {
   const [location, setLocation] = React.useState<Location.LocationObjectCoords | null>(null)
@@ -135,9 +136,7 @@ export function SpotDetailScreen() {
             </View>
           </View>
           <View className="space-y-1">
-            <View>
-              <VerifiedCard spot={spot} />
-            </View>
+            <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}</View>
             <Text>{spot.description}</Text>
             <Text className="font-400-italic text-sm">{spot.address}</Text>
             {spot.amenities && (

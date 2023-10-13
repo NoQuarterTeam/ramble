@@ -3,7 +3,7 @@ import Supercluster from "supercluster"
 import { z } from "zod"
 
 import { Prisma, SpotType } from "@ramble/database/types"
-import { SpotItemWithStatsAndImage, spotAmenitiesSchema, spotSchemaWithoutType } from "@ramble/shared"
+import { SpotItemWithStatsAndImage, spotAmenitiesSchema, spotPartnerFields, spotSchemaWithoutType } from "@ramble/shared"
 
 import { generateBlurHash } from "../services/generateBlurHash.server"
 import { geocodeCoords } from "../services/geocode.server"
@@ -134,6 +134,7 @@ export const spotRouter = createTRPCRouter({
         type: true,
         verifier: true,
         verifiedAt: true,
+        ...spotPartnerFields,
         _count: { select: { listSpots: true, reviews: true } },
         listSpots: ctx.user ? { where: { list: { creatorId: ctx.user.id } } } : undefined,
         images: true,
@@ -146,9 +147,21 @@ export const spotRouter = createTRPCRouter({
   detail: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
     const spot = await ctx.prisma.spot.findUnique({
       where: { id: input.id, ...publicSpotWhereClause(ctx.user?.id) },
-      include: {
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        latitude: true,
+        longitude: true,
+        createdAt: true,
+        verifiedAt: true,
+        type: true,
+        isPetFriendly: true,
+        ownerId: true,
+        address: true,
         verifier: true,
         creator: true,
+        ...spotPartnerFields,
         _count: { select: { reviews: true, listSpots: true } },
         reviews: { take: 5, include: { user: true }, orderBy: { createdAt: "desc" } },
         images: true,
