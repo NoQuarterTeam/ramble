@@ -46,10 +46,10 @@ export function Nav() {
           </NavbarLink>
           <NavbarLink to="/guides">Guides</NavbarLink>
           <NavbarLink to="/vans">Vans</NavbarLink>
-          <NavbarLink to="/home">About</NavbarLink>
         </div>
       </div>
       <div className="hstack space-x-3">
+        <NavbarLink to="/home">About</NavbarLink>
         {user ? (
           <>
             <Feedback />

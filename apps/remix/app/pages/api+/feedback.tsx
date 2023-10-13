@@ -77,8 +77,7 @@ export function Feedback() {
   return (
     <>
       <Button onClick={feedbackModalProps.onOpen} variant="outline">
-        <span className="hidden md:block">Give feedback</span>
-        <span className="block md:hidden">Feedback</span>
+        Feedback
       </Button>
 
       <Modal {...feedbackModalProps} title={title}>
