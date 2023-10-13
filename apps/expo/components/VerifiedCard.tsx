@@ -21,7 +21,7 @@ export function VerifiedCard({ spot }: Props) {
       {spot.verifiedAt && spot.verifier ? (
         <TouchableOpacity
           onPress={() => router.push("UserScreen", { username: spot.verifier?.username || "" })}
-          className="rounded-xs flex flex-row items-center justify-between border border-gray-200 p-1.5 px-2.5 dark:border-gray-700"
+          className="rounded-xs flex flex-row items-center justify-between border border-gray-200 p-1.5 px-2.5 dark:border-gray-700/70"
         >
           <View>
             <View className="flex flex-row items-center space-x-1">
