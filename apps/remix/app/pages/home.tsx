@@ -11,6 +11,7 @@ import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { type ActionDataErrorResponse, formError, validateFormData } from "~/lib/form"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
+import { PageContainer } from "~/components/PageContainer"
 
 export const config = {
   // runtime: "edge",
@@ -31,7 +32,7 @@ export default function Home() {
   const me = useMaybeUser()
   const randomPerson = PEOPLE[Math.floor(Math.random() * PEOPLE.length)]
   return (
-    <div className="bg-background dark pb-20 font-serif text-white">
+    <div className="bg-background dark font-serif text-white">
       <div className="absolute right-6 top-16 md:top-6">
         {me ? (
           <Link
@@ -168,6 +169,15 @@ export default function Home() {
           <p className="text-lg">To maintain an authentic and trustworthy community, members can only join via invite.</p>
         </div>
         <RequestAccessForm mode="dark" />
+      </div>
+      <div className="border-t">
+        <PageContainer className="flex items-center justify-between space-y-0 px-4 py-6">
+          <p className="brand-header">ramble</p>
+
+          <Link to="/privacy" className="text-sm hover:opacity-70">
+            Privacy
+          </Link>
+        </PageContainer>
       </div>
     </div>
   )
