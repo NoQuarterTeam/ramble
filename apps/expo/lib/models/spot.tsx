@@ -22,7 +22,6 @@ import {
 import { type SpotType } from "@ramble/database/types"
 
 import { Icons, type RambleIcon } from "../../components/ui/Icons"
-import { merge } from "@ramble/shared"
 
 export type SpotTypeInfo = {
   value: SpotType
@@ -36,7 +35,7 @@ export const SPOT_TYPES: { [key in SpotType]: { value: SpotType; label: string; 
   FREE_CAMPING: {
     value: "FREE_CAMPING",
     label: "Overnight stop-off",
-    Icon: (props) => <Timer {...props} className={merge("mb-0.5", props.className)} />,
+    Icon: Timer,
     isComingSoon: false,
   },
   PARKING: { value: "PARKING", label: "Safe parking", Icon: ParkingCircle, isComingSoon: true },
@@ -78,8 +77,14 @@ export const SPOT_TYPES: { [key in SpotType]: { value: SpotType; label: string; 
   VOLUNTEERING: { value: "VOLUNTEERING", label: "Volunteering", Icon: HeartHandshake, isComingSoon: true },
 } as const
 
-export const SPOT_OPTIONS = Object.entries(SPOT_TYPES).map(([value, { label, Icon }]) => ({ label, value, Icon })) as {
+export const SPOT_OPTIONS = Object.entries(SPOT_TYPES).map(([value, { label, Icon, isComingSoon }]) => ({
+  label,
+  value,
+  Icon,
+  isComingSoon,
+})) as {
   label: string
   value: SpotType
   Icon: LucideIcon
+  isComingSoon: boolean
 }[]

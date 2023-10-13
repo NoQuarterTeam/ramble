@@ -10,6 +10,7 @@ import { publicSpotWhereClause } from "@ramble/api"
 import {
   activitySpotTypes,
   AMENITIES,
+  amenitiesFields,
   canManageSpot,
   createImageUrl,
   displayRating,
@@ -68,7 +69,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
         name: true,
         type: true,
         verifiedAt: true,
-        amenities: true,
+        amenities: { select: amenitiesFields },
         address: true,
         description: true,
         latitude: true,

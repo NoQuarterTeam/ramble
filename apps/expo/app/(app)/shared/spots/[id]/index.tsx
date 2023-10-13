@@ -119,7 +119,7 @@ export function SpotDetailScreen() {
         onScroll={scrollHandler}
       >
         <Animated.View style={imageStyle}>
-          <SpotImageCarousel width={width} height={300} images={spot.images} spotId={spot.id} />
+          <SpotImageCarousel canAddMore width={width} height={300} images={spot.images} spotId={spot.id} />
         </Animated.View>
         <View className="space-y-3 p-4">
           <View className="space-y-2">
