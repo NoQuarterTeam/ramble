@@ -52,13 +52,11 @@ export function NewSpotImagesScreen() {
         </View>
       </ScrollView>
 
-      {images.length > 0 && (
-        <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
-          <Button className="rounded-full" onPress={() => router.push("NewSpotConfirmScreen", { ...params, images })}>
-            Next
-          </Button>
-        </View>
-      )}
+      <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
+        <Button className="rounded-full" onPress={() => router.push("NewSpotConfirmScreen", { ...params, images })}>
+          Next
+        </Button>
+      </View>
     </NewSpotModalView>
   )
 }

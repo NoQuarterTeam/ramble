@@ -15,9 +15,9 @@ export function EditSpotTypeScreen() {
   const router = useRouter()
   return (
     <EditSpotModalView title="what type?">
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
         <View className="flex flex-row flex-wrap gap-2 pt-4">
-          {SPOT_OPTIONS.map((spotType) => (
+          {SPOT_OPTIONS.filter((s) => !s.isComingSoon).map((spotType) => (
             <Button
               variant={type === spotType.value ? "primary" : "outline"}
               leftIcon={

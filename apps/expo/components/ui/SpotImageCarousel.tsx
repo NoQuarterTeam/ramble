@@ -14,26 +14,40 @@ import { OptimizedImage } from "./OptimisedImage"
 import { Text } from "./Text"
 import { toast } from "./Toast"
 
-type SpotImageType = Pick<SpotImage, "id" | "path" | "blurHash">
+type SpotImageType = Pick<SpotImage, "path" | "blurHash">
+
+type AddMoreProps = {
+  canAddMore: true
+  spotId: string
+}
+
+type NoAddMoreProps = {
+  canAddMore?: false
+  spotId?: undefined
+}
+
+interface Props {
+  width: number
+  height: number
+  images: SpotImageType[]
+  imageClassName?: string
+  onPress?: () => void
+}
+
 export function SpotImageCarousel({
   images,
   width,
   height,
   spotId,
   imageClassName,
+  canAddMore,
   onPress,
-}: {
-  width: number
-  spotId: string
-  height: number
-  images: SpotImageType[]
-  imageClassName?: string
-  onPress?: () => void
-}) {
+}: Props & (AddMoreProps | NoAddMoreProps)) {
   const { me } = useMe()
   const [imageIndex, setImageIndex] = React.useState(0)
   const { navigate } = useRouter()
   const onPickImage = async () => {
+    if (!canAddMore) return
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -70,17 +84,19 @@ export function SpotImageCarousel({
         showsHorizontalScrollIndicator={false}
         data={images}
         ListFooterComponent={
-          <View style={{ width, height }} className="rounded-xs flex items-center justify-center bg-gray-50 dark:bg-gray-800">
-            <Image size={40} strokeWidth={1} className="mb-2 text-black dark:text-white" />
-            {me && (
-              <>
-                {images.length === 0 && <Text className="my-2 text-sm">Be the first to add an image</Text>}
-                <Button size="sm" variant="outline" onPress={onPickImage}>
-                  Upload
-                </Button>
-              </>
-            )}
-          </View>
+          canAddMore ? (
+            <View style={{ width, height }} className="rounded-xs flex items-center justify-center bg-gray-50 dark:bg-gray-800">
+              <Image size={40} strokeWidth={1} className="mb-2 text-black dark:text-white" />
+              {me && (
+                <>
+                  {images.length === 0 && <Text className="my-2 text-sm">Be the first to add an image</Text>}
+                  <Button size="sm" variant="outline" onPress={onPickImage}>
+                    Upload
+                  </Button>
+                </>
+              )}
+            </View>
+          ) : undefined
         }
         renderItem={({ item: image }) => (
           <TouchableOpacity onPress={onPress} activeOpacity={1}>
@@ -97,7 +113,7 @@ export function SpotImageCarousel({
       />
       {images.length > 0 && (
         <View className="rounded-xs absolute bottom-2 right-2 bg-gray-800/70 p-1">
-          <Text className="text-xs text-white">{`${imageIndex + 1}/${images.length + 1}`}</Text>
+          <Text className="text-xs text-white">{`${imageIndex + 1}/${images.length + (canAddMore ? 1 : 0)}`}</Text>
         </View>
       )}
     </View>

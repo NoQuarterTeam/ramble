@@ -22,7 +22,7 @@ export function NewSpotOptionsScreen() {
   const router = useRouter()
   return (
     <NewSpotModalView title="some info">
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
         <FormInputLabel label="Name" />
         <Input value={name} onChangeText={setName} />
         <View className="flex w-full flex-row items-center justify-between py-4">

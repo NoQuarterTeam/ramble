@@ -36,7 +36,7 @@ export function EditSpotImagesScreen() {
   const router = useRouter()
   return (
     <EditSpotModalView title="upload images">
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
         <View className="flex flex-row flex-wrap">
           {images.map((image) => (
             <TouchableOpacity key={image} onPress={() => setImages((im) => im.filter((i) => i !== image))} className="w-1/3 p-1">
