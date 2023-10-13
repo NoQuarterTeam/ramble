@@ -114,8 +114,6 @@ export function SpotsMapScreen() {
       clusters?.map((point, i) => {
         if (point.properties.cluster) {
           const onPress = async () => {
-            console.log(point.properties)
-
             camera.current?.setCamera({
               zoomLevel: (point.properties.cluster && point.properties.zoomLevel) || undefined,
               animationMode: "linearTo",
