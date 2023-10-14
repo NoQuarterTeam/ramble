@@ -123,7 +123,7 @@ export const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(func
           {label}
         </FormFieldLabel>
       )}
-      {clonedInput || <Input size="sm" {...sharedProps} />}
+      {clonedInput || <Input {...sharedProps} />}
 
       {typeof fieldErrors === "string" ? (
         <FormFieldError>{fieldErrors}</FormFieldError>
@@ -163,7 +163,7 @@ export const InlineFormField = React.forwardRef<HTMLInputElement, FormFieldProps
             </FormFieldLabel>
           </div>
         )}
-        {clonedInput || <Input size="sm" {...sharedProps} />}
+        {clonedInput || <Input {...sharedProps} />}
       </div>
       {typeof fieldErrors === "string" ? (
         <FormFieldError>{fieldErrors}</FormFieldError>
