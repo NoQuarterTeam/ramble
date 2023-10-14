@@ -49,10 +49,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         const result = await validateFormData(request, deleteSchema)
         if (!result.success) return formError(result)
         const data = result.data
-        await db.feedback.delete({ where: { id: data.id } })
+        await db.accessRequest.delete({ where: { id: data.id } })
         return json({ success: true })
       } catch {
-        return badRequest("Error deleting feedback")
+        return badRequest("Error deleting request", request, {
+          flash: { title: "Error deleting request", description: "Please try again" },
+        })
       }
     default:
       break
