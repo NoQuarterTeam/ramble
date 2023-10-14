@@ -1,4 +1,4 @@
-name: ⏩ Sync develop with invite codes
+name: ⏩ Sync develop with branches
 on:
   schedule:
     - cron: "0 * * * *"
