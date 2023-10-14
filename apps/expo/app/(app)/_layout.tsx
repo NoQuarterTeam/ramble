@@ -25,7 +25,7 @@ export function AppLayout() {
       initialRouteName="MapLayout"
       sceneContainerStyle={{ backgroundColor }}
       screenOptions={{
-        tabBarStyle: { backgroundColor, borderTopColor: colors.gray[isDark ? 700 : 50] },
+        tabBarStyle: { backgroundColor, borderTopColor: colors.gray[isDark ? 700 : 200] },
         headerShown: false,
         tabBarShowLabel: false,
       }}
