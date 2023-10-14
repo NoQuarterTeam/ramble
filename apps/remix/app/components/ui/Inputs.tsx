@@ -75,7 +75,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(function _In
           rightElement && "rounded-r-none",
         )}
       />
-      {rightElement && <div className="h-full border bg-gray-50 px-2 dark:bg-gray-900">{rightElement}</div>}
+      {rightElement && (
+        <div className={merge(inputSizeStyles({ size }), "center rounded-r-xs border bg-gray-50 px-2 dark:bg-gray-900")}>
+          {rightElement}
+        </div>
+      )}
     </div>
   )
 })
