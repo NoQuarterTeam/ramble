@@ -85,7 +85,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         await db.spot.update({ where: { id: data.id }, data: { deletedAt: new Date() } })
         return json({ success: true })
       } catch {
-        return badRequest("Error deleting spot")
+        return badRequest("Error deleting spot", request, {
+          flash: { title: "Error deleting spot", description: "Please try again" },
+        })
       }
     case Actions.Verify:
       try {
@@ -96,7 +98,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         await db.spot.update({ where: { id: data.id }, data: { verifiedAt: new Date(), verifier: { connect: { id: user.id } } } })
         return json({ success: true })
       } catch {
-        return badRequest("Error deleting spot")
+        return badRequest("Error verifying spot", request, {
+          flash: { title: "Error verifying spot", description: "Please try again" },
+        })
       }
 
     default:
