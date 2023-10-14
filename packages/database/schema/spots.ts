@@ -5,12 +5,12 @@ import {
   mysqlEnum,
   longtext,
   double,
-  tinyint,
   datetime,
   int,
   index,
   primaryKey,
   unique,
+  boolean,
 } from "drizzle-orm/mysql-core"
 import { users } from "./users"
 
@@ -47,7 +47,7 @@ export const spots = mysqlTable(
     address: varchar("address", { length: 191 }),
     latitude: double("latitude").notNull(),
     longitude: double("longitude").notNull(),
-    isPetFriendly: tinyint("isPetFriendly").default(1).notNull(),
+    isPetFriendly: boolean("isPetFriendly").default(true).notNull(),
     verifiedAt: datetime("verifiedAt", { mode: "string", fsp: 3 }),
     verifierId: varchar("verifierId", { length: 191 }).references(() => users.id),
     creatorId: varchar("creatorId", { length: 191 })
@@ -58,7 +58,7 @@ export const spots = mysqlTable(
       .default(sql`CURRENT_TIMESTAMP(3)`)
       .notNull(),
     updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 })
-      .default(sql`CURRENT_TIMESTAMP(3)`)
+      .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`)
       .notNull(),
     campspaceId: int("campspaceId"),
     nesteId: varchar("nesteId", { length: 191 }),
@@ -107,16 +107,16 @@ export const spots = mysqlTable(
 )
 
 export const spotsRelations = relations(spots, ({ one }) => ({
-  // verifier: one(users, {
-  //   fields: [spots.verifierId],
-  //   references: [users.id],
-  // }),
+  verifier: one(users, {
+    fields: [spots.verifierId],
+    references: [users.id],
+  }),
   creator: one(users, {
     fields: [spots.creatorId],
     references: [users.id],
   }),
-  // owner: one(users, {
-  //   fields: [spots.ownerId],
-  //   references: [users.id],
-  // }),
+  owner: one(users, {
+    fields: [spots.ownerId],
+    references: [users.id],
+  }),
 }))

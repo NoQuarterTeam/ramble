@@ -2,6 +2,7 @@ import { drizzle } from "drizzle-orm/planetscale-serverless"
 import { connect } from "@planetscale/database"
 import * as schema from "./schema"
 import { z } from "zod"
+import { eq } from "drizzle-orm"
 
 // Only use on the server
 const envSchema = z.object({ DATABASE_URL: z.string() })
@@ -14,10 +15,12 @@ const connection = connect({ url: DATABASE_URL })
 export const db = drizzle(connection, { schema })
 
 async function main() {
-  const users = await db.query.users.findMany({ columns: { id: true, email: true }, with: { createdSpots: { limit: 10 } } })
-  db.insert(schema.users)
+  const found = await db.query.users.findFirst({
+    columns: { id: true, email: true },
+    where: eq(schema.users.email, "jack@noquarter.co"),
+  })
 
-  console.log(users)
+  console.log(found)
 }
 
 main().catch((e) => {

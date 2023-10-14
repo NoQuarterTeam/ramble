@@ -11,7 +11,7 @@ export const lists = mysqlTable(
       .default(sql`CURRENT_TIMESTAMP(3)`)
       .notNull(),
     updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 })
-      .default(sql`CURRENT_TIMESTAMP(3)`)
+      .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`)
       .notNull(),
     description: longtext("description"),
     isPrivate: tinyint("isPrivate").default(0).notNull(),

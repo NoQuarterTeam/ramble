@@ -12,7 +12,7 @@ export const spotImages = mysqlTable(
       .default(sql`CURRENT_TIMESTAMP(3)`)
       .notNull(),
     updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 })
-      .default(sql`CURRENT_TIMESTAMP(3)`)
+      .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`)
       .notNull(),
     blurHash: varchar("blurHash", { length: 191 }),
   },

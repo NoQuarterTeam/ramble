@@ -1,16 +1,5 @@
 import { relations, sql } from "drizzle-orm"
-import {
-  mysqlTable,
-  varchar,
-  mysqlEnum,
-  tinyint,
-  longtext,
-  datetime,
-  index,
-  primaryKey,
-  unique,
-  boolean,
-} from "drizzle-orm/mysql-core"
+import { mysqlTable, varchar, mysqlEnum, longtext, datetime, index, primaryKey, unique, boolean } from "drizzle-orm/mysql-core"
 import { spots } from "./spots"
 
 export const users = mysqlTable(
@@ -33,7 +22,7 @@ export const users = mysqlTable(
       .default(sql`CURRENT_TIMESTAMP(3)`)
       .notNull(),
     updatedAt: datetime("updatedAt", { mode: "string", fsp: 3 })
-      .default(sql`CURRENT_TIMESTAMP(3)`)
+      .default(sql`CURRENT_TIMESTAMP(3) on update CURRENT_TIMESTAMP(3)`)
       .notNull(),
     username: varchar("username", { length: 191 }).notNull(),
     isSurfer: boolean("isSurfer").default(false).notNull(),
@@ -69,8 +58,8 @@ export const userFollows = mysqlTable(
 
 export const usersRelations = relations(users, ({ many }) => ({
   createdSpots: many(spots, { relationName: "createdSpots" }),
-  // ownedSpots: many(spots, { relationName: "ownedSpots" }),
-  // verifiedSpots: many(spots, { relationName: "verifiedSpots" }),
+  ownedSpots: many(spots, { relationName: "ownedSpots" }),
+  verifiedSpots: many(spots, { relationName: "verifiedSpots" }),
   userFollows: many(userFollows),
 }))
 
