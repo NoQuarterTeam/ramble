@@ -56,7 +56,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         await db.feedback.delete({ where: { id: data.id } })
         return json({ success: true })
       } catch {
-        return badRequest("Error deleting feedback")
+        return badRequest("Error deleting feedback", request, {
+          flash: { title: "Error deleting feedback", description: "Please try again" },
+        })
       }
     default:
       break
