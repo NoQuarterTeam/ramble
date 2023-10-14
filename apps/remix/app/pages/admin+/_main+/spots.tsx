@@ -160,7 +160,7 @@ const columns = [
           <p>{row.original.verifier.firstName}</p>
         </div>
       ) : (
-        <SpotVerifyAction spot={row.original} />
+        <VerifyAction item={row.original} />
       ),
   }),
   columnHelper.accessor((row) => row.createdAt, {
@@ -193,7 +193,7 @@ const columns = [
           onClick={row.getToggleExpandedHandler()}
           icon={row.getIsExpanded() ? <EyeOff size={16} /> : <Eye size={16} />}
         />
-        <SpotDeleteAction spot={row.original} />
+        <DeleteAction item={row.original} />
       </div>
     ),
   }),
@@ -286,24 +286,24 @@ function RenderSubComponent({ row }: { row: Row<Spot> }) {
   )
 }
 
-function SpotVerifyAction({ spot }: { spot: Spot }) {
+function VerifyAction({ item }: { item: Spot }) {
   const verifyFetcher = useFetcher()
   return (
     <verifyFetcher.Form>
       <FormActionInput value={Actions.Verify} />
-      <input type="hidden" name="id" value={spot.id} />
+      <input type="hidden" name="id" value={item.id} />
       <Button type="submit" isLoading={verifyFetcher.state !== "idle"} size="sm" leftIcon={<Check size={16} />}>
         Verify
       </Button>
     </verifyFetcher.Form>
   )
 }
-function SpotDeleteAction({ spot }: { spot: Spot }) {
+function DeleteAction({ item }: { item: Spot }) {
   const deleteFetcher = useFetcher()
 
   return (
     <deleteFetcher.Form>
-      <input type="hidden" name="id" value={spot.id} />
+      <input type="hidden" name="id" value={item.id} />
 
       <FormActionInput value={Actions.Delete} />
       <IconButton
