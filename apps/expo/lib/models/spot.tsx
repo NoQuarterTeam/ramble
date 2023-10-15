@@ -16,7 +16,6 @@ import {
   ShoppingCart,
   Utensils,
   Wrench,
-  Timer,
 } from "lucide-react-native"
 
 import { type SpotType } from "@ramble/database/types"
@@ -32,12 +31,7 @@ export type SpotTypeInfo = {
 export const SPOT_TYPES: { [key in SpotType]: { value: SpotType; label: string; Icon: RambleIcon; isComingSoon: boolean } } = {
   // Stays
   CAMPING: { value: "CAMPING", label: "Long stay", Icon: Icons.Van, isComingSoon: false },
-  FREE_CAMPING: {
-    value: "FREE_CAMPING",
-    label: "Overnight stop-off",
-    Icon: Timer,
-    isComingSoon: false,
-  },
+  FREE_CAMPING: { value: "FREE_CAMPING", label: "Overnight stop-off", Icon: Icons.Timer, isComingSoon: false },
   PARKING: { value: "PARKING", label: "Safe parking", Icon: ParkingCircle, isComingSoon: true },
   // Activities
   SURFING: { value: "SURFING", label: "Surfing", Icon: Icons.Surf, isComingSoon: false },
