@@ -8,7 +8,7 @@ import { sendAccountVerificationEmail } from "@ramble/api"
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { FormActionInput, formError, getFormAction, validateFormData } from "~/lib/form"
+import { formError, getFormAction, validateFormData } from "~/lib/form"
 import { createToken } from "~/lib/jwt.server"
 import { badRequest, redirect } from "~/lib/remix.server"
 import { hashPassword } from "~/services/auth/password.server"
@@ -86,9 +86,11 @@ export default function Register() {
       <FormField autoCapitalize="none" required label="Choose a username" name="username" placeholder="Jim93" />
       <FormField required label="First name" name="firstName" placeholder="Jim" />
       <FormField required label="Last name" name="lastName" placeholder="Bob" />
-      <FormActionInput value={Actions.Register} />
+
       <div>
-        <FormButton className="w-full">Register</FormButton>
+        <FormButton value={Actions.Register} className="w-full">
+          Register
+        </FormButton>
         <FormError />
       </div>
 
