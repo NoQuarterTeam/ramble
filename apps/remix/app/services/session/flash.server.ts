@@ -40,9 +40,11 @@ export async function getFlashSession(request: Request) {
   const session = await flashStorage.getSession(request.headers.get("Cookie"))
   const commit = () => flashStorage.commitSession(session)
 
+  const flash = session.get("message")
+
   const createFlash = (flash: z.infer<typeof createFlashSchema>) => {
     session.flash("message", { ...flash, type: flash.type || "success" })
     return commit()
   }
-  return { message: session.data.message, createFlash, commit, session }
+  return { message: flash, createFlash, commit, session }
 }
