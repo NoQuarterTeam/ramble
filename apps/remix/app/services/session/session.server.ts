@@ -28,5 +28,6 @@ export async function getUserSession(request: Request) {
     session.set("userId", id)
     return commit()
   }
-  return { commit, destroy, session, setUser, userId: session.data.userId }
+  const userId = session.get("userId")
+  return { commit, destroy, session, setUser, userId }
 }
