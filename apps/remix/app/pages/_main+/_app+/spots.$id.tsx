@@ -35,7 +35,7 @@ import {
 } from "~/components/ui"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { FormActionInput, getFormAction } from "~/lib/form"
+import { getFormAction } from "~/lib/form"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
@@ -238,8 +238,9 @@ export default function SpotDetail() {
                   <>
                     {!spot.verifiedAt && (
                       <Form>
-                        <FormActionInput value={Actions.Verify} />
-                        <FormButton leftIcon={<Check className="sq-3" />}>Verify</FormButton>
+                        <FormButton value={Actions.Verify} leftIcon={<Check className="sq-3" />}>
+                          Verify
+                        </FormButton>
                       </Form>
                     )}
                     <LinkButton to="edit" variant="outline" leftIcon={<Edit2 className="sq-3" />}>
@@ -262,8 +263,7 @@ export default function SpotDetail() {
                           <Button variant="ghost">Cancel</Button>
                         </AlertDialogCancel>
                         <Form>
-                          <FormActionInput value={Actions.Delete} />
-                          <FormButton>Confirm</FormButton>
+                          <FormButton value={Actions.Delete}>Confirm</FormButton>
                         </Form>
                       </AlertDialogFooter>
                     </AlertDialogContent>
