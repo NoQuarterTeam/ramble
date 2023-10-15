@@ -11,7 +11,7 @@ import { z } from "zod"
 import type { Prisma, SpotType } from "@ramble/database/types"
 import { createImageUrl, merge } from "@ramble/shared"
 
-import { useFetcher } from "~/components/Form"
+import { FormButton, useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { Search } from "~/components/Search"
@@ -296,9 +296,9 @@ function VerifyAction({ item }: { item: Spot }) {
     <verifyFetcher.Form>
       <FormActionInput value={Actions.Verify} />
       <input type="hidden" name="id" value={item.id} />
-      <Button type="submit" isLoading={verifyFetcher.state !== "idle"} size="sm" leftIcon={<Check size={16} />}>
+      <FormButton size="sm" leftIcon={<Check size={16} />}>
         Verify
-      </Button>
+      </FormButton>
     </verifyFetcher.Form>
   )
 }
