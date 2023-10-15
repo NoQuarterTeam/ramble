@@ -26,7 +26,7 @@ const themeStorage = createTypedSessionStorage({
 
 export async function getThemeSession(request: Request) {
   const session = await themeStorage.getSession(request.headers.get("Cookie"))
-  const themeValue = session.data.theme
+  const themeValue = session.get("theme")
   const theme = isTheme(themeValue) ? themeValue : "light"
   return {
     theme,

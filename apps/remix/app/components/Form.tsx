@@ -10,7 +10,7 @@ import { createImageUrl, merge } from "@ramble/shared"
 
 import { type ButtonProps, type InputProps, type InputStyleProps } from "~/components/ui"
 import { Button, IconButton, Input, inputStyles } from "~/components/ui"
-import { useFormErrors } from "~/lib/form"
+import { FORM_ACTION, useFormErrors } from "~/lib/form"
 
 import { ImageUploader } from "./ImageUploader"
 
@@ -251,5 +251,19 @@ export function FormError({ error }: { error?: string | null | false }) {
 }
 export const FormButton = React.forwardRef<HTMLButtonElement, ButtonProps>(function _FormButton(props, ref) {
   const navigation = useNavigation()
-  return <Button type="submit" isLoading={navigation.state !== "idle" && !!navigation.formAction} {...props} ref={ref} />
+  const isFormActionLoading =
+    navigation.state !== "idle" &&
+    !!navigation.formData?.get(FORM_ACTION) &&
+    !!props.value &&
+    navigation.formData.get(FORM_ACTION) === props.value
+
+  return (
+    <Button
+      type="submit"
+      name={props.value ? FORM_ACTION : undefined}
+      isLoading={props.value ? isFormActionLoading : navigation.state !== "idle" && !!navigation.formAction}
+      {...props}
+      ref={ref}
+    />
+  )
 })
