@@ -8,11 +8,11 @@ import { sendFeedbackSentToAdminsEmail } from "@ramble/api"
 import { FeedbackType } from "@ramble/database/types"
 import { useDisclosure } from "@ramble/shared"
 
-import { FormButton, FormError, FormField, useFetcher } from "~/components/Form"
+import { FormError, FormField, useFetcher } from "~/components/Form"
 import { Button, Modal, Textarea } from "~/components/ui"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { type ActionDataErrorResponse, FormActionInput, formError, getFormAction, validateFormData } from "~/lib/form"
+import { type ActionDataErrorResponse, formError, getFormAction, validateFormData } from "~/lib/form.server"
 import { badRequest, json } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
@@ -93,13 +93,13 @@ export function Feedback() {
                 errors={!feedbackFetcher.data?.success && feedbackFetcher.data?.fieldErrors?.message}
               />
               <input type="hidden" name="type" value={type} />
-              <FormActionInput value={FeedbackMethods.CreateFeedback} />
+
               <FormError error={!feedbackFetcher.data?.success && feedbackFetcher.data?.formError} />
               <div className="flex justify-between">
                 <Button variant="ghost" onClick={() => setType(null)}>
                   Change type
                 </Button>
-                <FormButton isLoading={feedbackFetcher.state !== "idle"}>Send</FormButton>
+                <feedbackFetcher.FormButton value={FeedbackMethods.CreateFeedback}>Send</feedbackFetcher.FormButton>
               </div>
             </div>
           </feedbackFetcher.Form>

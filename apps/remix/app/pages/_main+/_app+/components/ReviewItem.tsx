@@ -19,7 +19,6 @@ import {
   Avatar,
   Button,
 } from "~/components/ui"
-import { FormActionInput } from "~/lib/form"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 
 import { Actions } from "../spots.$id_.reviews.$reviewId"
@@ -84,8 +83,7 @@ export function ReviewItem({ review }: Props) {
                 </AlertDialogCancel>
 
                 <deleteFetcher.Form action={`/spots/${review.spotId}/reviews/${review.id}`}>
-                  <FormActionInput value={Actions.Delete} />
-                  <Button type="submit">Confirm</Button>
+                  <deleteFetcher.FormButton value={Actions.Delete}>Confirm</deleteFetcher.FormButton>
                 </deleteFetcher.Form>
               </AlertDialogFooter>
             </AlertDialogContent>

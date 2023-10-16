@@ -28,6 +28,6 @@ export async function getUserSession(request: Request) {
     session.set("userId", id)
     return commit()
   }
-  const userId = session.get("userId")
+  const userId = session.get("userId") || null
   return { commit, destroy, session, setUser, userId }
 }

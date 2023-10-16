@@ -16,10 +16,9 @@ import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE, type SpotItemWithStats
 import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { PageContainer } from "~/components/PageContainer"
-import { Button } from "~/components/ui"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { FormActionInput, getFormAction } from "~/lib/form"
+import { getFormAction } from "~/lib/form.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { fetchAndJoinSpotImages } from "~/lib/models/spot"
@@ -170,15 +169,9 @@ export default function ListDetail() {
           <div className="flex space-x-1">
             {currentUser.id !== list.creatorId && (
               <copyFetcher.Form>
-                <FormActionInput value={Actions.Copy} />
-                <Button
-                  leftIcon={<Copy className="sq-4" />}
-                  isLoading={copyFetcher.state === "submitting"}
-                  type="submit"
-                  variant="outline"
-                >
+                <copyFetcher.FormButton value={Actions.Copy} leftIcon={<Copy className="sq-4" />} variant="outline">
                   Copy
-                </Button>
+                </copyFetcher.FormButton>
               </copyFetcher.Form>
             )}
 
@@ -188,10 +181,9 @@ export default function ListDetail() {
                   Edit
                 </LinkButton>
                 <deleteFetcher.Form>
-                  <FormActionInput value={Actions.Delete} />
-                  <Button type="submit" isLoading={deleteFetcher.state === "submitting"} variant="destructive">
+                  <deleteFetcher.FormButton value={Actions.Delete} variant="destructive">
                     Delete
-                  </Button>
+                  </deleteFetcher.FormButton>
                 </deleteFetcher.Form>
               </>
             )}

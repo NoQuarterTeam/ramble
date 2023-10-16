@@ -13,7 +13,7 @@ import type { RambleIcon } from "~/components/ui"
 import { Button } from "~/components/ui"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { formError, validateFormData } from "~/lib/form"
+import { formError, validateFormData } from "~/lib/form.server"
 import { interestOptions } from "~/lib/models/user"
 import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
 
