@@ -59,7 +59,7 @@
     "geojson": "^0.5.0",
     "isbot": "latest",
     "jose": "^4.15.1",
-    "lucide-react": "^0.284.0",
+    "lucide-react": "^0.287.0",
     "mapbox-gl": "^2.15.0",
     "nprogress": "^0.2.0",
     "pretty-cache-header": "^1.0.0",

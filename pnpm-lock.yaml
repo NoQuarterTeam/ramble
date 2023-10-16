@@ -153,8 +153,8 @@ importers:
         specifier: ~12.1.1
         version: 12.1.1(expo@48.0.20)
       lucide-react-native:
-        specifier: ^0.284.0
-        version: 0.284.0(prop-types@15.8.1)(react-native-svg@13.4.0)(react-native@0.71.8)(react@18.2.0)
+        specifier: ^0.287.0
+        version: 0.287.0(prop-types@15.8.1)(react-native-svg@13.4.0)(react-native@0.71.8)(react@18.2.0)
       nativewind:
         specifier: ^2.0.11
         version: 2.0.11(react@18.2.0)(tailwindcss@3.3.2)
@@ -367,8 +367,8 @@ importers:
         specifier: ^4.15.1
         version: 4.15.1
       lucide-react:
-        specifier: ^0.284.0
-        version: 0.284.0(react@18.2.0)
+        specifier: ^0.287.0
+        version: 0.287.0(react@18.2.0)
       mapbox-gl:
         specifier: ^2.15.0
         version: 2.15.0
@@ -13362,8 +13362,8 @@ packages:
     resolution: {integrity: sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==}
     engines: {node: '>=12'}
 
-  /lucide-react-native@0.284.0(prop-types@15.8.1)(react-native-svg@13.4.0)(react-native@0.71.8)(react@18.2.0):
-    resolution: {integrity: sha512-0ghu6lLmQ2UKaDN2Xai6E5NDi8kW7JNrUzywIFZTVn8SzE3huhKD32tGKF9BsOqG0RNJIwIcyShgEZcktsd3Fg==}
+  /lucide-react-native@0.287.0(prop-types@15.8.1)(react-native-svg@13.4.0)(react-native@0.71.8)(react@18.2.0):
+    resolution: {integrity: sha512-PdW5kRRwpeli6nb06MIY1m3s/I9iAkFdLQI/GBHS87vuIrQ8ZmL8ZdNoTcu7o+lAQmzuUKcvtHiUz7n9njO0+Q==}
     peerDependencies:
       prop-types: ^15.7.2
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
@@ -13376,8 +13376,8 @@ packages:
       react-native-svg: 13.4.0(react-native@0.71.8)(react@18.2.0)
     dev: false
 
-  /lucide-react@0.284.0(react@18.2.0):
-    resolution: {integrity: sha512-dVSMHYAya/TeY3+vsk+VQJEKNQN2AhIo0+Dp09B2qpzvcBuu93H98YZykFcjIAfmanFiDd8nqfXFR38L757cyQ==}
+  /lucide-react@0.287.0(react@18.2.0):
+    resolution: {integrity: sha512-auxP2bTGiMoELzX+6ItTeNzLmhGd/O+PHBsrXV2YwPXYCxarIFJhiMOSzFT9a1GWeYPSZtnWdLr79IVXr/5JqQ==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
