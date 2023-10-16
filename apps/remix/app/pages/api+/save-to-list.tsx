@@ -7,7 +7,7 @@ import { zx } from "zodix"
 
 import { useDisclosure } from "@ramble/shared"
 
-import { FormButton, FormError, FormField, useFetcher } from "~/components/Form"
+import { FormError, FormField, useFetcher } from "~/components/Form"
 import {
   Button,
   Checkbox,
@@ -22,8 +22,9 @@ import {
 } from "~/components/ui"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import type { ActionDataErrorResponse } from "~/lib/form"
-import { FORM_ACTION, FormActionInput, formError, getFormAction, validateFormData } from "~/lib/form"
+import { FORM_ACTION } from "~/lib/form"
+import type { ActionDataErrorResponse } from "~/lib/form.server"
+import { formError, getFormAction, validateFormData } from "~/lib/form.server"
 import { badRequest, json } from "~/lib/remix.server"
 import { requireUser } from "~/services/auth/auth.server"
 
@@ -176,8 +177,7 @@ export function SaveToList(props: Props) {
               />
               <FormField name="description" label="Description" />
               <FormError error={!listCreateFetcher.data?.success ? listCreateFetcher.data?.formError : undefined} />
-              <FormActionInput value={Actions.CreateAndSaveToList} />
-              <FormButton isLoading={listCreateFetcher.state === "submitting"}>Create</FormButton>
+              <listCreateFetcher.FormButton value={Actions.CreateAndSaveToList}>Create</listCreateFetcher.FormButton>
             </listCreateFetcher.Form>
           </Modal>
         </div>
