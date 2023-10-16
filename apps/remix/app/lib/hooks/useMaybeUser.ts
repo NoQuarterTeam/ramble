@@ -1,5 +1,5 @@
 import { useRouteLoaderData } from "@remix-run/react"
-import { type SerializeFrom } from "@vercel/remix"
+import { type SerializeFrom } from "~/lib/vendor/vercel.server"
 
 import { type loader } from "~/root"
 

@@ -1,10 +1,10 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react"
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 import { Instagram, type LucideIcon } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
-import { z } from "zod"
+import { z } from "~/lib/vendor/zod.server"
 import { zx } from "zodix"
 
 import { createImageUrl, merge, userInterestFields } from "@ramble/shared"

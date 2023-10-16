@@ -1,9 +1,9 @@
-import type { LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
+import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 import Supercluster from "supercluster"
-import { z } from "zod"
+import { z } from "~/lib/vendor/zod.server"
 import { CheckboxAsString, NumAsString } from "zodix"
 
 import { publicSpotWhereClause } from "@ramble/api"

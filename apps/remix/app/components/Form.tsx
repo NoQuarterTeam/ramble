@@ -4,7 +4,7 @@ import type { FetcherWithComponents, FormProps as RemixFormProps } from "@remix-
 import { Form as RemixForm, useFetcher as useRemixFetcher, useNavigation } from "@remix-run/react"
 import { X } from "lucide-react"
 import { AuthenticityTokenInput } from "remix-utils/csrf/react"
-import { type z } from "zod"
+import { type z } from "~/lib/vendor/zod.server"
 
 import { createImageUrl, merge } from "@ramble/shared"
 

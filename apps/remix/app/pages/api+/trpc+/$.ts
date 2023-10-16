@@ -1,5 +1,5 @@
 import * as trpcFetch from "@trpc/server/adapters/fetch"
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 
 import { appRouter, createContext } from "@ramble/api"
 

@@ -1,7 +1,7 @@
 import { useLoaderData } from "@remix-run/react"
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
-import { z } from "zod"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
+import { z } from "~/lib/vendor/zod.server"
 
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"

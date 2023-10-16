@@ -1,6 +1,6 @@
 import Map, { Marker } from "react-map-gl"
 import { Link, useLoaderData } from "@remix-run/react"
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "~/lib/vendor/vercel.server"
 import dayjs from "dayjs"
 import { Check, Edit2, Heart, Star, Trash } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"

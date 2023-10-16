@@ -3,9 +3,8 @@ import type { LngLatLike, MapRef } from "react-map-gl"
 import { Layer, Map, Marker, Source } from "react-map-gl"
 import { type MarkerEvent, type MarkerInstance } from "react-map-gl/dist/esm/types"
 import { useFetcher } from "@remix-run/react"
-import bbox from "@turf/bbox"
-import * as turf from "@turf/helpers"
-import { type SerializeFrom } from "@vercel/remix"
+
+import { type SerializeFrom } from "~/lib/vendor/vercel.server"
 import { CircleDot, MapPin } from "lucide-react"
 import useOnClickOutside from "use-onclickoutside"
 
@@ -19,6 +18,8 @@ import { useTheme } from "~/lib/theme"
 import { PageContainer } from "../../../components/PageContainer"
 import type { directionsLoader } from "../../api+/mapbox+/directions"
 import type { locationSearchLoader } from "../../api+/mapbox+/location-search"
+import { lineString } from "@turf/helpers"
+import bbox from "@turf/bbox"
 
 export default function PlanTrip() {
   const theme = useTheme()
@@ -61,7 +62,7 @@ export default function PlanTrip() {
     } else if (endCoords && !startCoords) {
       mapRef.current?.flyTo({ center: endCoords, duration: 1000, padding: 50 })
     } else if (startCoords && endCoords) {
-      const line = turf.lineString([startCoords, endCoords])
+      const line = lineString([startCoords, endCoords])
       const bounds = bbox(line) as unknown as LngLatLike
       mapRef.current?.fitBounds(bounds, { padding: 100 })
       directionsFetcher.load(

@@ -1,4 +1,4 @@
-import { type LoaderFunctionArgs } from "@vercel/remix"
+import { type LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 
 import { db } from "~/lib/db.server"
 import { decryptToken } from "~/lib/jwt.server"

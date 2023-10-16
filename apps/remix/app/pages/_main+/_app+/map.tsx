@@ -22,12 +22,11 @@ import {
   useRouteError,
   useSearchParams,
 } from "@remix-run/react"
-import turfCenter from "@turf/center"
-import * as turf from "@turf/helpers"
+
 import type { Geo } from "@vercel/edge"
 import { geolocation } from "@vercel/edge"
-import type { LinksFunction, LoaderFunctionArgs, SerializeFrom } from "@vercel/remix"
-import { json } from "@vercel/remix"
+import type { LinksFunction, LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 
@@ -42,6 +41,8 @@ import type { Cluster, clustersLoader } from "../../api+/clusters"
 import { MapLayerControls } from "./components/MapLayerControls"
 import { MapSearch } from "./components/MapSearch"
 import { SpotMarker } from "./components/SpotMarker"
+import { points } from "@turf/helpers"
+import center from "@turf/center"
 
 export const config = {
   // runtime: "edge",
@@ -84,8 +85,8 @@ export default function MapView() {
     const maxLng = searchParams.get("maxLng")
     let centerFromParams
     if (minLat && maxLat && minLng && maxLng) {
-      centerFromParams = turfCenter(
-        turf.points([
+      centerFromParams = center(
+        points([
           [parseFloat(minLng), parseFloat(minLat)],
           [parseFloat(maxLng), parseFloat(maxLat)],
         ]),

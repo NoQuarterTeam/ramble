@@ -1,6 +1,6 @@
-import type { ActionFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
-import { z } from "zod"
+import type { ActionFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
+import { z } from "~/lib/vendor/zod.server"
 
 import { createSignedUrl } from "@ramble/api"
 

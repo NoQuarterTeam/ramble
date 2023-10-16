@@ -1,8 +1,8 @@
 import { Link, useSearchParams } from "@remix-run/react"
-import type { ActionFunctionArgs, MetaFunction } from "@vercel/remix"
-import { redirect } from "@vercel/remix"
+import type { ActionFunctionArgs, MetaFunction } from "~/lib/vendor/vercel.server"
+import { redirect } from "~/lib/vendor/vercel.server"
 import { cacheHeader } from "pretty-cache-header"
-import { z } from "zod"
+import { z } from "~/lib/vendor/zod.server"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { track } from "~/lib/analytics.server"

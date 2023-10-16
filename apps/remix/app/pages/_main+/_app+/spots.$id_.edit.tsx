@@ -1,7 +1,7 @@
 import { useLoaderData } from "@remix-run/react"
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
-import { json, redirect } from "@vercel/remix"
-import type { z } from "zod"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json, redirect } from "~/lib/vendor/vercel.server"
+import { type z } from "~/lib/vendor/zod.server"
 
 import { generateBlurHash, publicSpotWhereClause } from "@ramble/api"
 import { canManageSpot, doesSpotTypeRequireAmenities } from "@ramble/shared"

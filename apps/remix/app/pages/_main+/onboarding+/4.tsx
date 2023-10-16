@@ -1,9 +1,9 @@
 import * as React from "react"
 import { useLoaderData } from "@remix-run/react"
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
-import { json, redirect } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json, redirect } from "~/lib/vendor/vercel.server"
 import { Plus } from "lucide-react"
-import { z } from "zod"
+import { z } from "~/lib/vendor/zod.server"
 
 import { generateBlurHash } from "@ramble/api"
 import { type VanImage } from "@ramble/database/types"

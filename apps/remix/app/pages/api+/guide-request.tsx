@@ -1,4 +1,4 @@
-import { type ActionFunctionArgs } from "@vercel/remix"
+import { type ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 
 import { sendGuideRequestSentToAdminsEmail } from "@ramble/api"
 
