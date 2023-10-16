@@ -35,7 +35,9 @@ interface UseFetcherProps<T> {
   onFinish?: (data: T) => void
 }
 
-export function useFetcher<T>(props?: UseFetcherProps<T>): FetcherWithComponents<SerializeFrom<T>> {
+export function useFetcher<T>(props?: UseFetcherProps<T>): FetcherWithComponents<SerializeFrom<T>> & {
+  FormButton: React.ForwardRefExoticComponent<ButtonProps & React.RefAttributes<HTMLButtonElement>>
+} {
   const fetcher = useRemixFetcher()
 
   function Form({ children, ...rest }: RemixFormProps) {
@@ -47,6 +49,18 @@ export function useFetcher<T>(props?: UseFetcherProps<T>): FetcherWithComponents
     )
   }
 
+  const FormButton = React.forwardRef<HTMLButtonElement, ButtonProps>(function _FormButton(rest, ref) {
+    return (
+      <Button
+        type="submit"
+        name={rest.value ? FORM_ACTION : undefined}
+        isLoading={fetcher.state !== "idle"}
+        {...rest}
+        ref={ref}
+      />
+    )
+  })
+
   React.useEffect(() => {
     if (!fetcher.data || !props) return
     if (fetcher.state === "loading" && fetcher.data) {
@@ -55,7 +69,7 @@ export function useFetcher<T>(props?: UseFetcherProps<T>): FetcherWithComponents
   }, [fetcher.state, props, fetcher.data])
 
   // @ts-expect-error - this is fine
-  return { ...fetcher, Form }
+  return { ...fetcher, Form, FormButton }
 }
 
 export function FormFieldLabel(

@@ -3,7 +3,7 @@ import { createCookie } from "@vercel/remix"
 import { z } from "zod"
 
 import { track } from "~/lib/analytics.server"
-import { FormCheckbox, formError, validateFormData } from "~/lib/form"
+import { FormCheckbox, formError, validateFormData } from "~/lib/form.server"
 import { json } from "~/lib/remix.server"
 
 export const preferencesCookies = createCookie("ramble_preferences", { maxAge: 60 * 60 * 24 * 365 })
