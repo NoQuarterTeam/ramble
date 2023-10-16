@@ -1,5 +1,5 @@
 import { NotFound } from "@aws-sdk/client-s3"
-import type { LoaderFunctionArgs } from "@vercel/remix"
+import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import axios from "axios"
 import * as crypto from "crypto"
 import { cacheHeader } from "pretty-cache-header"

@@ -1,10 +1,10 @@
 import { useLoaderData } from "@remix-run/react"
 import { createColumnHelper } from "@tanstack/react-table"
-import { type ActionFunctionArgs, type LoaderFunctionArgs, type SerializeFrom } from "@vercel/remix"
+import { type ActionFunctionArgs, type LoaderFunctionArgs, type SerializeFrom } from "~/lib/vendor/vercel.server"
 import dayjs from "dayjs"
 import { Trash } from "lucide-react"
 import { promiseHash } from "remix-utils/promise"
-import { z } from "zod"
+import { z } from "~/lib/vendor/zod.server"
 
 import { type Prisma } from "@ramble/database/types"
 

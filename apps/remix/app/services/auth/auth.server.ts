@@ -1,4 +1,4 @@
-import { redirect } from "@vercel/remix"
+import { redirect } from "~/lib/vendor/vercel.server"
 
 import { type Prisma } from "@ramble/database/types"
 

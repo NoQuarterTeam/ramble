@@ -1,63 +1,26 @@
-import * as React from "react"
-import { type ActionFunctionArgs } from "@vercel/remix"
 import { Bug, Lightbulb, MessageCircle } from "lucide-react"
-import { promiseHash } from "remix-utils/promise"
-import { z } from "zod"
+import * as React from "react"
 
-import { sendFeedbackSentToAdminsEmail } from "@ramble/api"
 import { FeedbackType } from "@ramble/database/types"
 import { useDisclosure } from "@ramble/shared"
 
 import { FormError, FormField, useFetcher } from "~/components/Form"
 import { Button, Modal, Textarea } from "~/components/ui"
-import { track } from "~/lib/analytics.server"
-import { db } from "~/lib/db.server"
-import { type ActionDataErrorResponse, formError, getFormAction, validateFormData } from "~/lib/form.server"
-import { badRequest, json } from "~/lib/remix.server"
-import { getCurrentUser } from "~/services/auth/auth.server"
+import { type ActionDataErrorResponse } from "~/lib/form.server"
+import { type CreateSchema, feedbackActions } from "~/services/api/feedback.server"
 
-export const actionUrl = "/api/feedback"
+const actionUrl = "/api/feedback"
 
-export enum FeedbackMethods {
-  CreateFeedback = "createFeedback",
+export enum Actions {
+  Create = "create",
 }
-const schema = z.object({ message: z.string().min(1), type: z.nativeEnum(FeedbackType) })
 
-export const action = async ({ request }: ActionFunctionArgs) => {
-  const user = await getCurrentUser(request)
-  const formAction = await getFormAction(request)
-
-  switch (formAction) {
-    case FeedbackMethods.CreateFeedback:
-      try {
-        const result = await validateFormData(request, schema)
-        if (!result.success) return formError(result)
-        const { feedback, admins } = await promiseHash({
-          feedback: db.feedback.create({ data: { ...result.data, userId: user.id }, include: { user: true } }),
-          admins: db.user.findMany({ where: { isAdmin: true }, select: { email: true } }),
-        })
-        await sendFeedbackSentToAdminsEmail(
-          admins.map((a) => a.email),
-          feedback,
-        )
-        track("Feedback created", { feedbackId: feedback.id, userId: user.id })
-        return json({ success: true }, request, {
-          flash: { type: "success", title: "Feedback sent", description: "We'll take a look as soon as possible" },
-        })
-      } catch (e: unknown) {
-        return badRequest(e instanceof Error ? e.message : "Error", request, {
-          flash: { type: "error", title: "Error creating feedback" },
-        })
-      }
-    default:
-      return badRequest("Invalid action", request, { flash: { type: "error", title: "Error creating feedback" } })
-  }
-}
+export const action = feedbackActions
 
 export function Feedback() {
   const [type, setType] = React.useState<FeedbackType | null>()
   const feedbackModalProps = useDisclosure()
-  const feedbackFetcher = useFetcher<ActionDataErrorResponse<typeof schema> | { success: true }>({
+  const feedbackFetcher = useFetcher<ActionDataErrorResponse<CreateSchema> | { success: true }>({
     onFinish: (data) => {
       if (data?.success) {
         feedbackModalProps.onClose()
@@ -99,7 +62,7 @@ export function Feedback() {
                 <Button variant="ghost" onClick={() => setType(null)}>
                   Change type
                 </Button>
-                <feedbackFetcher.FormButton value={FeedbackMethods.CreateFeedback}>Send</feedbackFetcher.FormButton>
+                <feedbackFetcher.FormButton value={Actions.Create}>Send</feedbackFetcher.FormButton>
               </div>
             </div>
           </feedbackFetcher.Form>

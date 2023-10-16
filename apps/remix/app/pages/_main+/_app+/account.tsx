@@ -1,6 +1,6 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Outlet, useActionData, useLoaderData } from "@remix-run/react"
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { AlertCircle, Settings, ToggleRight, User } from "lucide-react"
 
 import { sendAccountVerificationEmail } from "@ramble/api"

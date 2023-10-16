@@ -1,6 +1,6 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import dayjs from "dayjs"
-import type { z } from "zod"
+import { type z } from "~/lib/vendor/zod.server"
 
 import { generateBlurHash } from "@ramble/api"
 import { doesSpotTypeRequireAmenities } from "@ramble/shared"

@@ -1,5 +1,5 @@
-import { json } from "@vercel/remix"
-import { z } from "zod"
+import { json } from "~/lib/vendor/vercel.server"
+import { z } from "~/lib/vendor/zod.server"
 
 import { csrf } from "~/services/session/csrf.server.ts"
 
@@ -66,34 +66,41 @@ export async function validateFormData<Schema extends z.ZodTypeAny>(
 export function formError<Schema extends z.ZodTypeAny>(args: Omit<ActionDataErrorResponse<Schema>, "success">) {
   return json({ ...args, success: false }, { status: 400 })
 }
-async function createActionsCore<
-  TKey extends string,
-  TInput extends z.ZodObject<{ [key: string]: z.ZodString | typeof NullableFormNumber | typeof FormNumber }>,
-  Actions extends Record<TKey, { input: TInput; handler: (data: z.infer<Actions[TKey]["input"]>) => unknown }>,
->(request: Request, actions: Actions) {
-  const formAction = await getFormAction<TKey>(request)
-  const action = actions[formAction]
-  if (!action) return badRequest("Invalid action", request)
-  const result = await validateFormData(request, action.input)
-  if (!result.success) return formError(result)
-  const data = result.data
-  try {
-    return await action.handler(data)
-  } catch (error) {
-    console.log(error)
-    return badRequest("Request failed", request, { flash: { title: "Request failed", description: "We have been notified!" } })
+
+type HandlerResult = Promise<unknown> | unknown
+
+export function createAction<Schema extends z.AnyZodObject>(request: Request) {
+  return {
+    input: <T extends Schema>(schema: T) => {
+      return {
+        handler: async (fn: (data: z.infer<T>) => HandlerResult) => {
+          const result = await validateFormData(request, schema)
+          if (!result.success) return formError(result)
+          try {
+            return await fn(result.data)
+          } catch (error) {
+            console.log(error)
+            return badRequest("Request failed", request, {
+              flash: { title: "Request failed", description: "We have been notified!" },
+            })
+          }
+        },
+      }
+    },
+    handler: async (fn: () => HandlerResult) => {
+      try {
+        return await fn()
+      } catch (error) {
+        console.log(error)
+        return badRequest("Request failed", request, {
+          flash: { title: "Request failed", description: "We have been notified!" },
+        })
+      }
+    },
   }
 }
-
-export function createActions<T extends string>(
-  request: Request,
-  actions: Record<
-    T,
-    {
-      input: z.ZodObject<{ [key: string]: z.ZodString | typeof NullableFormNumber | typeof FormNumber }>
-      handler: (data: z.infer<z.AnyZodObject>) => unknown
-    }
-  >,
-) {
-  return createActionsCore(request, actions)
+export async function createActions<Action extends string>(request: Request, actions: Record<Action, HandlerResult>) {
+  const formAction = await getFormAction<Action>(request)
+  if (!formAction) return badRequest("Invalid action", request)
+  return actions[formAction]
 }

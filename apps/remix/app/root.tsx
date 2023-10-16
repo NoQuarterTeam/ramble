@@ -30,7 +30,7 @@ import {
   useRouteError,
 } from "@remix-run/react"
 import { Analytics } from "@vercel/analytics/react"
-import { json, type LinksFunction, type LoaderFunctionArgs, type MetaFunction, type SerializeFrom } from "@vercel/remix"
+
 import { Frown } from "lucide-react"
 import NProgress from "nprogress"
 import { AuthenticityTokenProvider } from "remix-utils/csrf/react"
@@ -43,12 +43,13 @@ import { Toaster } from "~/components/ui"
 import { LinkButton } from "./components/LinkButton"
 import { FULL_WEB_URL } from "./lib/config.server"
 import { type Theme } from "./lib/theme"
-import type { Preferences } from "./pages/api+/preferences"
-import { defaultPreferences, preferencesCookies } from "./pages/api+/preferences"
+
 import { getMaybeUser } from "./services/auth/auth.server"
 import { csrf } from "./services/session/csrf.server.ts"
 import { getFlashSession } from "./services/session/flash.server"
 import { getThemeSession } from "./services/session/theme.server"
+import { defaultPreferences, Preferences, preferencesCookies } from "./services/session/preferences.server"
+import { json, LinksFunction, LoaderFunctionArgs, MetaFunction, SerializeFrom } from "~/lib/vendor/vercel.server"
 
 export const meta: MetaFunction = () => {
   return [{ title: "Ramble" }, { name: "description", content: "Created by No Quarter" }]

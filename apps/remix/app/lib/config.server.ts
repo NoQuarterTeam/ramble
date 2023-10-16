@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "~/lib/vendor/zod.server"
 
 // Only use on the server
 const envSchema = z.object({

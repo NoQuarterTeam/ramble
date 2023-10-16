@@ -1,5 +1,5 @@
-import type { LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
+import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 import { cacheHeader } from "pretty-cache-header"
 
 // export const config = {

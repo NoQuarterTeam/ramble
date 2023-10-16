@@ -2,10 +2,9 @@ import * as React from "react"
 import type { LngLatLike } from "react-map-gl"
 import Map, { Marker, NavigationControl } from "react-map-gl"
 import { Link, useLoaderData, useNavigate } from "@remix-run/react"
-import bbox from "@turf/bbox"
-import * as turf from "@turf/helpers"
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
+
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 import { ChevronLeft, Copy } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 import { promiseHash } from "remix-utils/promise"
@@ -28,6 +27,7 @@ import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
 
 import { SpotItem } from "./components/SpotItem"
 import { SpotMarker } from "./components/SpotMarker"
+import { bbox, lineString } from "~/lib/vendor/turf.server"
 
 export const headers = useLoaderHeaders
 
@@ -72,7 +72,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
   let bounds: LngLatLike | undefined = undefined
   if (coords) {
-    const line = turf.lineString(coords)
+    const line = lineString(coords)
     bounds = bbox(line) as unknown as LngLatLike
   }
 

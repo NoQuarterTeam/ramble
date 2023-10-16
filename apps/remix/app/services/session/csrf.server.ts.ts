@@ -1,4 +1,4 @@
-import { createCookie } from "@vercel/remix"
+import { createCookie } from "~/lib/vendor/vercel.server"
 import { CSRF } from "remix-utils/csrf/server"
 
 import { IS_PRODUCTION, SESSION_SECRET } from "~/lib/config.server"

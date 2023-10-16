@@ -1,7 +1,7 @@
 import { Link } from "@remix-run/react"
-import type { ActionFunctionArgs, MetaFunction } from "@vercel/remix"
+import type { ActionFunctionArgs, MetaFunction } from "~/lib/vendor/vercel.server"
 import { cacheHeader } from "pretty-cache-header"
-import { z } from "zod"
+import { z } from "~/lib/vendor/zod.server"
 
 import { sendAccountVerificationEmail } from "@ramble/api"
 

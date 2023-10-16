@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Link, useFetcher, useLoaderData } from "@remix-run/react"
-import type { LoaderFunctionArgs, SerializeFrom } from "@vercel/remix"
+import type { LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { cacheHeader } from "pretty-cache-header"
 import { promiseHash } from "remix-utils/promise"
 

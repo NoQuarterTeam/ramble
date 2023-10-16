@@ -5,7 +5,8 @@ import { useDisclosure } from "@ramble/shared"
 import { useFetcher } from "~/components/Form"
 import { Button, IconButton, Modal, Switch, Tooltip } from "~/components/ui"
 import { usePreferences } from "~/lib/hooks/usePreferences"
-import { preferencesUrl } from "~/pages/api+/preferences"
+
+export const preferencesUrl = "/api/preferences"
 
 export function MapLayerControls() {
   const modalProps = useDisclosure()

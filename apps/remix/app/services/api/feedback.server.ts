@@ -1,0 +1,41 @@
+import { FeedbackType } from "@ramble/database/types"
+import { promiseHash } from "remix-utils/promise"
+import { db } from "~/lib/db.server"
+import { createAction, createActions } from "~/lib/form.server"
+import { z } from "~/lib/vendor/zod.server"
+import { getCurrentUser } from "../auth/auth.server"
+import { sendFeedbackSentToAdminsEmail } from "@ramble/api"
+import { track } from "~/lib/analytics.server"
+import { badRequest, json } from "~/lib/remix.server"
+import { Actions } from "~/pages/api+/feedback"
+
+const createSchema = z.object({ message: z.string().min(1), type: z.nativeEnum(FeedbackType) })
+
+export type CreateSchema = typeof createSchema
+
+export const feedbackActions = (request: Request) =>
+  createActions<Actions>(request, {
+    create: createAction(request)
+      .input(createSchema)
+      .handler(async (data) => {
+        try {
+          const user = await getCurrentUser(request)
+          const { feedback, admins } = await promiseHash({
+            feedback: db.feedback.create({ data: { ...data, userId: user.id }, include: { user: true } }),
+            admins: db.user.findMany({ where: { isAdmin: true }, select: { email: true } }),
+          })
+          await sendFeedbackSentToAdminsEmail(
+            admins.map((a) => a.email),
+            feedback,
+          )
+          track("Feedback created", { feedbackId: feedback.id, userId: user.id })
+          return json({ success: true }, request, {
+            flash: { type: "success", title: "Feedback sent", description: "We'll take a look as soon as possible" },
+          })
+        } catch (e: unknown) {
+          return badRequest(e instanceof Error ? e.message : "Error", request, {
+            flash: { type: "error", title: "Error creating feedback" },
+          })
+        }
+      }),
+  })

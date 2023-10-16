@@ -1,5 +1,5 @@
 import * as React from "react"
-import type { SerializeFrom } from "@vercel/remix"
+import type { SerializeFrom } from "~/lib/vendor/vercel.server"
 import { Star } from "lucide-react"
 
 import type { Review, Spot, SpotImage } from "@ramble/database/types"

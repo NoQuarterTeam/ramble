@@ -1,8 +1,8 @@
 import React from "react"
 import { useLoaderData } from "@remix-run/react"
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
-import { z } from "zod"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
+import { z } from "~/lib/vendor/zod.server"
 import { zx } from "zodix"
 
 import { userInterestFields } from "@ramble/shared"

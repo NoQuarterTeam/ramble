@@ -1,6 +1,6 @@
 import { Link, useLoaderData, useParams } from "@remix-run/react"
-import type { LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
+import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 import { Lock } from "lucide-react"
 
 import { LinkButton } from "~/components/LinkButton"

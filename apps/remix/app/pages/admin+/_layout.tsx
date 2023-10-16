@@ -1,6 +1,6 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Link, NavLink, Outlet } from "@remix-run/react"
-import { json, type LoaderFunctionArgs, redirect } from "@vercel/remix"
+import { json, type LoaderFunctionArgs, redirect } from "~/lib/vendor/vercel.server"
 import { GaugeCircle, HelpingHand, Mail, MapPin, MessageCircle, Moon, Sun, User } from "lucide-react"
 
 import { merge } from "@ramble/shared"

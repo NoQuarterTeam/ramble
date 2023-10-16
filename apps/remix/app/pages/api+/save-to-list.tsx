@@ -1,8 +1,8 @@
 import * as React from "react"
-import type { ActionFunctionArgs, LoaderFunctionArgs, SerializeFrom } from "@vercel/remix"
+import type { ActionFunctionArgs, LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { Heart, Plus } from "lucide-react"
 import { useAuthenticityToken } from "remix-utils/csrf/react"
-import { z } from "zod"
+import { z } from "~/lib/vendor/zod.server"
 import { zx } from "zodix"
 
 import { useDisclosure } from "@ramble/shared"
