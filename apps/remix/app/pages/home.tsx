@@ -18,8 +18,8 @@ export const config = {
   // runtime: "edge",
 }
 
-const schema = z.object({ email: z.string().email() })
 export const action = async ({ request }: LoaderFunctionArgs) => {
+  const schema = z.object({ email: z.string().email() })
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
   const accessRequest = await db.accessRequest.findFirst({ where: { email: result.data.email } })
@@ -185,7 +185,9 @@ export default function Home() {
 }
 
 function RequestAccessForm({ mode }: { mode?: "light" | "dark" }) {
-  const accessFetcher = useFetcher<ActionDataErrorResponse<typeof schema>>()
+  // how to include zod here?
+  // eslint-disable-next-line
+  const accessFetcher = useFetcher<ActionDataErrorResponse<any>>()
 
   if (accessFetcher.data?.success)
     return (

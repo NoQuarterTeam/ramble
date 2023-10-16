@@ -139,9 +139,12 @@ export function SaveToList(props: Props) {
 function ListItem({ list, isSaved, spotId }: { spotId: string; list: SerializeFrom<typeof loader>[number]; isSaved: boolean }) {
   const listFetcher = useFetcher<typeof action>()
   const csrf = useAuthenticityToken()
+
+  const shouldBeChecked = listFetcher.state !== "idle" ? listFetcher.formData?.get("shouldSave") === "true" : isSaved
+
   return (
     <Button
-      disabled={listFetcher.state === "submitting"}
+      disabled={listFetcher.state !== "idle"}
       className="w-full px-2"
       onClick={() =>
         listFetcher.submit(
@@ -154,7 +157,7 @@ function ListItem({ list, isSaved, spotId }: { spotId: string; list: SerializeFr
     >
       <div className="flex w-full items-center justify-between">
         <span>{list.name}</span>
-        <Checkbox readOnly checked={isSaved} />
+        <Checkbox readOnly checked={shouldBeChecked} />
       </div>
     </Button>
   )
