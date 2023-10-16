@@ -7,7 +7,7 @@ import { doesSpotTypeRequireAmenities } from "@ramble/shared"
 
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { formError, validateFormData } from "~/lib/form"
+import { formError, validateFormData } from "~/lib/form.server"
 import { json, redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
