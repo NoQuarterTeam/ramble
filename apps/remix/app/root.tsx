@@ -102,7 +102,7 @@ export const shouldRevalidate: ShouldRevalidateFunction = (args) => {
 export type RootLoader = SerializeFrom<typeof loader>
 
 export default function App() {
-  const { csrf, flash, config, theme, gdpr } = useLoaderData<typeof loader>()
+  const { csrf, flash, user, config, theme, gdpr } = useLoaderData<typeof loader>()
   const transition = useNavigation()
   const fetchers = useFetchers()
   const state = React.useMemo<"idle" | "loading">(() => {
@@ -125,7 +125,10 @@ export default function App() {
       api_host: "https://eu.posthog.com",
       loaded: () => setIsHogLoaded(true),
     })
-  }, [gdpr, config])
+    if (user) {
+      posthog.identify(user.id, { email: user.email })
+    }
+  }, [gdpr, user, config])
 
   React.useEffect(() => {
     if (!isHogLoaded || !location.pathname) return
