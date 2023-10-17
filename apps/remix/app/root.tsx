@@ -126,7 +126,7 @@ export default function App() {
       loaded: () => setIsHogLoaded(true),
     })
     if (user) {
-      posthog.identify(user.id, { email: user.email })
+      posthog.identify(user.id, { email: user.email, firstName: user.firstName, lastName: user.lastName })
     }
   }, [gdpr, user, config])
 
