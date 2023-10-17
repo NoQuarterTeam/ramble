@@ -1,6 +1,6 @@
 import { getClientIPAddress } from "remix-utils/get-client-ip-address"
 
-import { IPAPI_KEY } from "~/lib/config.server"
+import { IPAPI_KEY } from "~/lib/env.server"
 
 export async function getIpInfo(request: Request) {
   const ip = getClientIPAddress(request)
