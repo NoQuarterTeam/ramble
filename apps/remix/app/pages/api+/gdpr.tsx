@@ -64,7 +64,7 @@ export function GDPR() {
             </div>
             <Switch name="isAnalyticsEnabled" defaultChecked />
           </div>
-          <div>
+          <div className="flex justify-end">
             <modalFetcher.FormButton value={Actions.save}>Save</modalFetcher.FormButton>
           </div>
         </modalFetcher.Form>
