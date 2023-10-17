@@ -1,6 +1,6 @@
 import { jwtVerify, SignJWT } from "jose"
 
-import { APP_SECRET } from "./config.server"
+import { APP_SECRET } from "./env.server"
 
 type Payload = Record<string, unknown>
 

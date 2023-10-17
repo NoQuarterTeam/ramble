@@ -43,15 +43,17 @@ import { join } from "@ramble/shared"
 import { Toaster } from "~/components/ui"
 
 import { LinkButton } from "./components/LinkButton"
-import { FULL_WEB_URL } from "./lib/config.server"
+import { ENV, FULL_WEB_URL } from "./lib/config.server"
 import { type Theme } from "./lib/theme"
 
 import { getMaybeUser } from "./services/auth/auth.server"
-import { csrf } from "./services/session/csrf.server.ts"
+import { csrf } from "./services/session/csrf.server"
 import { getFlashSession } from "./services/session/flash.server"
 import { getThemeSession } from "./services/session/theme.server"
 import { defaultPreferences, Preferences, preferencesCookies } from "./services/session/preferences.server"
 import { json, LinksFunction, LoaderFunctionArgs, MetaFunction, SerializeFrom } from "~/lib/vendor/vercel.server"
+import { getGdprSession } from "./services/session/gdpr.server"
+import { GDPR } from "./pages/api+/gdpr"
 
 export const meta: MetaFunction = () => {
   return [{ title: "Ramble" }, { name: "description", content: "Created by No Quarter" }]
@@ -64,9 +66,10 @@ export const links: LinksFunction = () => {
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const cookieHeader = request.headers.get("Cookie")
 
-  const { flashSession, themeSession, user, preferences } = await promiseHash({
+  const { flashSession, gdprSession, themeSession, user, preferences } = await promiseHash({
     flashSession: getFlashSession(request),
     themeSession: getThemeSession(request),
+    gdprSession: getGdprSession(request),
     user: getMaybeUser(request),
     preferences: preferencesCookies.parse(cookieHeader) as Promise<Preferences>,
   })
@@ -75,11 +78,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return json(
     {
       user,
+      gdpr: gdprSession.gdpr,
       csrf: csrfToken,
       flash: flashSession.message,
       preferences: preferences || defaultPreferences,
       theme: themeSession.theme,
-      config: { WEB_URL: FULL_WEB_URL },
+      config: { WEB_URL: FULL_WEB_URL, ENV },
     },
     {
       headers: [
@@ -98,7 +102,7 @@ export const shouldRevalidate: ShouldRevalidateFunction = (args) => {
 export type RootLoader = SerializeFrom<typeof loader>
 
 export default function App() {
-  const { csrf, flash, theme } = useLoaderData<typeof loader>()
+  const { csrf, flash, config, theme, gdpr } = useLoaderData<typeof loader>()
   const transition = useNavigation()
   const fetchers = useFetchers()
   const state = React.useMemo<"idle" | "loading">(() => {
@@ -116,11 +120,12 @@ export default function App() {
   const [isHogLoaded, setIsHogLoaded] = React.useState(false)
 
   React.useEffect(() => {
+    if ((gdpr && !gdpr.isAnalyticsEnabled) || config.ENV !== "production") return
     posthog.init("phc_3HuNiIa6zCcsNHFmXst4X0HJjOLq32yRyRPVZQhsD31", {
       api_host: "https://eu.posthog.com",
       loaded: () => setIsHogLoaded(true),
     })
-  }, [])
+  }, [gdpr, config])
 
   React.useEffect(() => {
     if (!isHogLoaded || !location.pathname) return
@@ -133,6 +138,7 @@ export default function App() {
         <Tooltip.Provider>
           <Outlet />
           <Toaster flash={flash} />
+          <GDPR />
         </Tooltip.Provider>
       </AuthenticityTokenProvider>
     </Document>
