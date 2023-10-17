@@ -3,8 +3,8 @@ import type { LngLatLike, MapRef } from "react-map-gl"
 import { Layer, Map, Marker, Source } from "react-map-gl"
 import { type MarkerEvent, type MarkerInstance } from "react-map-gl/dist/esm/types"
 import { useFetcher } from "@remix-run/react"
-
-import { type SerializeFrom } from "~/lib/vendor/vercel.server"
+import bbox from "@turf/bbox"
+import { lineString } from "@turf/helpers"
 import { CircleDot, MapPin } from "lucide-react"
 import useOnClickOutside from "use-onclickoutside"
 
@@ -14,12 +14,11 @@ import colors from "@ramble/tailwind-config/src/colors"
 import { SpotIcon } from "~/components/SpotIcon"
 import { Button, Input, Spinner } from "~/components/ui"
 import { useTheme } from "~/lib/theme"
+import { type SerializeFrom } from "~/lib/vendor/vercel.server"
 
 import { PageContainer } from "../../../components/PageContainer"
 import type { directionsLoader } from "../../api+/mapbox+/directions"
 import type { locationSearchLoader } from "../../api+/mapbox+/location-search"
-import { lineString } from "@turf/helpers"
-import bbox from "@turf/bbox"
 
 export default function PlanTrip() {
   const theme = useTheme()

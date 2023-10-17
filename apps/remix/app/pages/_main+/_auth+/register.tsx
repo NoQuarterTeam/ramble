@@ -1,7 +1,5 @@
 import { Link } from "@remix-run/react"
-import type { ActionFunctionArgs, MetaFunction } from "~/lib/vendor/vercel.server"
 import { cacheHeader } from "pretty-cache-header"
-import { z } from "~/lib/vendor/zod.server"
 
 import { sendAccountVerificationEmail } from "@ramble/api"
 
@@ -11,6 +9,8 @@ import { db } from "~/lib/db.server"
 import { createAction, createActions, formError } from "~/lib/form.server"
 import { createToken } from "~/lib/jwt.server"
 import { redirect } from "~/lib/remix.server"
+import type { ActionFunctionArgs, MetaFunction } from "~/lib/vendor/vercel.server"
+import { z } from "~/lib/vendor/zod.server"
 import { hashPassword } from "~/services/auth/password.server"
 import { getUserSession } from "~/services/session/session.server"
 

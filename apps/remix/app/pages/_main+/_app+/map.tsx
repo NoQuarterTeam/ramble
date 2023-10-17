@@ -22,11 +22,10 @@ import {
   useRouteError,
   useSearchParams,
 } from "@remix-run/react"
-
+import center from "@turf/center"
+import { points } from "@turf/helpers"
 import type { Geo } from "@vercel/edge"
 import { geolocation } from "@vercel/edge"
-import type { LinksFunction, LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
-import { json } from "~/lib/vendor/vercel.server"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 
@@ -35,14 +34,14 @@ import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE, join } from "@ramble/s
 
 import { usePreferences } from "~/lib/hooks/usePreferences"
 import { useTheme } from "~/lib/theme"
+import type { LinksFunction, LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 import { MapFilters } from "~/pages/_main+/_app+/components/MapFilters"
 
 import type { Cluster, clustersLoader } from "../../api+/clusters"
 import { MapLayerControls } from "./components/MapLayerControls"
 import { MapSearch } from "./components/MapSearch"
 import { SpotMarker } from "./components/SpotMarker"
-import { points } from "@turf/helpers"
-import center from "@turf/center"
 
 export const config = {
   // runtime: "edge",

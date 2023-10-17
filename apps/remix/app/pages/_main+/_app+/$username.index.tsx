@@ -1,7 +1,5 @@
 import * as React from "react"
 import { useFetcher, useLoaderData, useParams } from "@remix-run/react"
-import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
-import { json } from "~/lib/vendor/vercel.server"
 import { cacheHeader } from "pretty-cache-header"
 import { promiseHash } from "remix-utils/promise"
 
@@ -13,6 +11,8 @@ import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { fetchAndJoinSpotImages } from "~/lib/models/spot"
 import { notFound } from "~/lib/remix.server"
+import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 import { getUserSession } from "~/services/session/session.server"
 
 import { SpotItem } from "./components/SpotItem"

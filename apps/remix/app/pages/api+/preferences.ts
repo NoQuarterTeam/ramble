@@ -1,8 +1,7 @@
-import type { ActionFunctionArgs } from "~/lib/vendor/vercel.server"
-
 import { track } from "~/lib/analytics.server"
 import { formError, validateFormData } from "~/lib/form.server"
 import { json } from "~/lib/remix.server"
+import type { ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 import { defaultPreferences, preferencesCookies, preferencesSchema } from "~/services/session/preferences.server"
 
 export const action = async ({ request }: ActionFunctionArgs) => {

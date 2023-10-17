@@ -1,9 +1,8 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
-import { json } from "~/lib/vendor/vercel.server"
-
 import { Form, FormButton, FormField } from "~/components/Form"
 import { Switch } from "~/components/ui"
 import { redirect } from "~/lib/remix.server"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

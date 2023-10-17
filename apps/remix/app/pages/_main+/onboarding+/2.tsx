@@ -1,8 +1,5 @@
 import * as React from "react"
 import { useLoaderData } from "@remix-run/react"
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
-import { json, redirect } from "~/lib/vendor/vercel.server"
-import { z } from "~/lib/vendor/zod.server"
 import { zx } from "zodix"
 
 import { userInterestFields } from "@ramble/shared"
@@ -15,6 +12,9 @@ import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form.server"
 import { interestOptions } from "~/lib/models/user"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json, redirect } from "~/lib/vendor/vercel.server"
+import { z } from "~/lib/vendor/zod.server"
 import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
 
 import { Footer } from "./components/Footer"

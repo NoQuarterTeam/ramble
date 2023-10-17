@@ -1,12 +1,10 @@
 import { Link, useLoaderData, useRouteError, useSearchParams } from "@remix-run/react"
 import type { Row } from "@tanstack/react-table"
 import { createColumnHelper } from "@tanstack/react-table"
-import type { ActionFunctionArgs, LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import dayjs from "dayjs"
 import { Check, ExternalLink, Eye, EyeOff, Trash } from "lucide-react"
 import queryString from "query-string"
 import { promiseHash } from "remix-utils/promise"
-import { z } from "~/lib/vendor/zod.server"
 
 import type { Prisma, SpotType } from "@ramble/database/types"
 import { createImageUrl, merge } from "@ramble/shared"
@@ -25,11 +23,12 @@ import { SPOT_TYPE_OPTIONS } from "~/lib/models/spot"
 import { badRequest, json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"
 import { useTheme } from "~/lib/theme"
+import type { ActionFunctionArgs, LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
+import { z } from "~/lib/vendor/zod.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
 
-const schema = z.object({ type: z.string().optional(), unverified: z.string().optional() })
-
 export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const schema = z.object({ type: z.string().optional(), unverified: z.string().optional() })
   const { orderBy, search, skip, take } = getTableParams(request)
 
   const result = schema.safeParse(queryString.parse(new URL(request.url).search, { arrayFormat: "bracket" }))

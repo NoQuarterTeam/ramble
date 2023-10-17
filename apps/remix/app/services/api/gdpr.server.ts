@@ -1,11 +1,12 @@
 import { track } from "~/lib/analytics.server"
-import { FormCheckbox, createAction, createActions } from "~/lib/form.server"
+import { createAction, createActions, FormCheckbox } from "~/lib/form.server"
 import { json } from "~/lib/remix.server"
-import { Actions } from "~/pages/api+/gdpr"
-import { getGdprSession } from "../session/gdpr.server"
-import { ActionFunctionArgs } from "~/lib/vendor/vercel.server"
-import { getUserSession } from "../session/session.server"
+import { type ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 import { z } from "~/lib/vendor/zod.server"
+import { type Actions } from "~/pages/api+/gdpr"
+
+import { getGdprSession } from "../session/gdpr.server"
+import { getUserSession } from "../session/session.server"
 
 export const gdprActions = ({ request }: ActionFunctionArgs) =>
   createActions<Actions>(request, {

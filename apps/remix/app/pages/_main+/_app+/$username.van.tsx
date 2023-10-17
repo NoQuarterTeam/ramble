@@ -1,6 +1,4 @@
 import { useLoaderData } from "@remix-run/react"
-import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
-import { json } from "~/lib/vendor/vercel.server"
 import { cacheHeader } from "pretty-cache-header"
 
 import { createImageUrl } from "@ramble/shared"
@@ -9,6 +7,8 @@ import { OptimizedImage } from "~/components/OptimisedImage"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { notFound } from "~/lib/remix.server"
+import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 
 export const headers = useLoaderHeaders
 

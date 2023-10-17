@@ -31,29 +31,33 @@ import {
   useRouteError,
 } from "@remix-run/react"
 import { Analytics } from "@vercel/analytics/react"
-import posthog from "posthog-js"
-
 import { Frown } from "lucide-react"
 import NProgress from "nprogress"
+import posthog from "posthog-js"
 import { AuthenticityTokenProvider } from "remix-utils/csrf/react"
 import { promiseHash } from "remix-utils/promise"
 
 import { join } from "@ramble/shared"
 
 import { Toaster } from "~/components/ui"
+import {
+  json,
+  type LinksFunction,
+  type LoaderFunctionArgs,
+  type MetaFunction,
+  type SerializeFrom,
+} from "~/lib/vendor/vercel.server"
 
 import { LinkButton } from "./components/LinkButton"
 import { ENV, FULL_WEB_URL } from "./lib/config.server"
 import { type Theme } from "./lib/theme"
-
+import { GDPR } from "./pages/api+/gdpr"
 import { getMaybeUser } from "./services/auth/auth.server"
 import { csrf } from "./services/session/csrf.server"
 import { getFlashSession } from "./services/session/flash.server"
-import { getThemeSession } from "./services/session/theme.server"
-import { defaultPreferences, Preferences, preferencesCookies } from "./services/session/preferences.server"
-import { json, LinksFunction, LoaderFunctionArgs, MetaFunction, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { getGdprSession } from "./services/session/gdpr.server"
-import { GDPR } from "./pages/api+/gdpr"
+import { defaultPreferences, type Preferences, preferencesCookies } from "./services/session/preferences.server"
+import { getThemeSession } from "./services/session/theme.server"
 
 export const meta: MetaFunction = () => {
   return [{ title: "Ramble" }, { name: "description", content: "Created by No Quarter" }]
