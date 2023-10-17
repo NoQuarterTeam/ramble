@@ -1,9 +1,9 @@
 import { Outlet } from "@remix-run/react"
-import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
-import { redirect } from "~/lib/vendor/vercel.server"
 import { cacheHeader } from "pretty-cache-header"
 
 import { db } from "~/lib/db.server"
+import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { redirect } from "~/lib/vendor/vercel.server"
 import { getUserSession } from "~/services/session/session.server"
 
 export const headers = () => {

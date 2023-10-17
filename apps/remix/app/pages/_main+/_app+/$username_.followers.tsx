@@ -1,6 +1,4 @@
 import { Link, useLoaderData } from "@remix-run/react"
-import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
-import { json } from "~/lib/vendor/vercel.server"
 import { ChevronLeft } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
@@ -12,6 +10,8 @@ import { Avatar } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { notFound } from "~/lib/remix.server"
+import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 
 export const headers = useLoaderHeaders
 

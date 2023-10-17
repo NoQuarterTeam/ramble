@@ -1,5 +1,4 @@
 import * as React from "react"
-import type { SerializeFrom } from "~/lib/vendor/vercel.server"
 import { Star } from "lucide-react"
 
 import type { Review, Spot, SpotImage } from "@ramble/database/types"
@@ -10,6 +9,7 @@ import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { PageContainer } from "~/components/PageContainer"
 import { IconButton, Textarea } from "~/components/ui"
+import type { SerializeFrom } from "~/lib/vendor/vercel.server"
 
 import { Actions } from "../spots.$id_.reviews.$reviewId"
 

@@ -1,9 +1,12 @@
-import { gdprActions } from "~/services/api/gdpr.server"
-import { useFetcher } from "../../components/Form"
 import { useRouteLoaderData } from "@remix-run/react"
-import { RootLoader } from "~/root"
-import { Button, Modal, Switch } from "~/components/ui"
+
 import { useDisclosure } from "@ramble/shared"
+
+import { Button, Modal, Switch } from "~/components/ui"
+import { type RootLoader } from "~/root"
+import { gdprActions } from "~/services/api/gdpr.server"
+
+import { useFetcher } from "../../components/Form"
 
 export const action = gdprActions
 

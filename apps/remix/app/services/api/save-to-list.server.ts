@@ -1,11 +1,13 @@
 import { track } from "@vercel/analytics/server"
 import { z } from "zod"
 import { zx } from "zodix"
+
 import { db } from "~/lib/db.server"
 import { createAction, createActions } from "~/lib/form.server"
 import { badRequest, json } from "~/lib/remix.server"
-import { ActionFunctionArgs } from "~/lib/vendor/vercel.server"
-import { Actions } from "~/pages/api+/save-to-list"
+import { type ActionFunctionArgs } from "~/lib/vendor/vercel.server"
+import { type Actions } from "~/pages/api+/save-to-list"
+
 import { requireUser } from "../auth/auth.server"
 
 const createListSchema = z.object({ name: z.string().min(1), description: z.string().optional(), spotId: z.string() })
