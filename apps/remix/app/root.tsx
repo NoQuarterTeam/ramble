@@ -26,10 +26,12 @@ import {
   ScrollRestoration,
   useFetchers,
   useLoaderData,
+  useLocation,
   useNavigation,
   useRouteError,
 } from "@remix-run/react"
 import { Analytics } from "@vercel/analytics/react"
+import posthog from "posthog-js"
 
 import { Frown } from "lucide-react"
 import NProgress from "nprogress"
@@ -109,6 +111,21 @@ export default function App() {
     if (state === "loading") NProgress.start()
     if (state === "idle") NProgress.done()
   }, [transition.state, state])
+
+  const location = useLocation()
+  const [isHogLoaded, setIsHogLoaded] = React.useState(false)
+
+  React.useEffect(() => {
+    posthog.init("phc_3HuNiIa6zCcsNHFmXst4X0HJjOLq32yRyRPVZQhsD31", {
+      api_host: "https://eu.posthog.com",
+      loaded: () => setIsHogLoaded(true),
+    })
+  }, [])
+
+  React.useEffect(() => {
+    if (!isHogLoaded || !location.pathname) return
+    posthog.capture("$pageview")
+  }, [location.pathname, isHogLoaded])
 
   return (
     <Document theme={theme}>
