@@ -8,12 +8,13 @@ import { sendFeedbackSentToAdminsEmail } from "@ramble/api"
 import { track } from "~/lib/analytics.server"
 import { badRequest, json } from "~/lib/remix.server"
 import { Actions } from "~/pages/api+/feedback"
+import { ActionFunctionArgs } from "@remix-run/node"
 
 const createSchema = z.object({ message: z.string().min(1), type: z.nativeEnum(FeedbackType) })
 
 export type CreateSchema = typeof createSchema
 
-export const feedbackActions = (request: Request) =>
+export const feedbackActions = ({ request }: ActionFunctionArgs) =>
   createActions<Actions>(request, {
     create: createAction(request)
       .input(createSchema)

@@ -1,9 +1,10 @@
 import { createCookie } from "~/lib/vendor/vercel.server"
 import { CSRF } from "remix-utils/csrf/server"
 
-import { IS_PRODUCTION, SESSION_SECRET } from "~/lib/config.server"
+import { IS_PRODUCTION } from "~/lib/config.server"
+import { SESSION_SECRET } from "~/lib/env.server"
 
-export const CSRF_COOKIE_KEY = IS_PRODUCTION ? "ramble_session_csrf" : "ramble_session_dev_csrf"
+const CSRF_COOKIE_KEY = IS_PRODUCTION ? "ramble_session_csrf" : "ramble_session_dev_csrf"
 
 export const cookie = createCookie(CSRF_COOKIE_KEY, {
   path: "/",

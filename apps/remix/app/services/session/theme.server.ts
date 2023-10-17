@@ -6,7 +6,7 @@ import { IS_PRODUCTION } from "~/lib/config.server"
 import { isTheme, type Theme } from "~/lib/theme"
 import { THEME_SESSION_SECRET } from "~/lib/env.server"
 
-export const THEME_COOKIE_KEY = IS_PRODUCTION ? "ramble_session_theme" : "ramble_session_dev_theme"
+const THEME_COOKIE_KEY = IS_PRODUCTION ? "ramble_session_theme" : "ramble_session_dev_theme"
 
 const storage = createCookieSessionStorage({
   cookie: {

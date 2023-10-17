@@ -12,7 +12,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  return redirect("/account", request, { flash: { title: "Not possible yet" } })
+  return redirect("/account", request, {
+    flash: { title: "Not possible yet", description: "Please contact info@noquarter.co to delete your account" },
+  })
 }
 
 export default function AccountSettings() {
