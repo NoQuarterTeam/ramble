@@ -134,7 +134,7 @@ async function getPageCards(currentPage: number) {
       })
       console.log("Spot created: ", spot.link)
 
-      await new Promise((res) => setTimeout(res, 10000))
+      await new Promise((res) => setTimeout(res, 1000))
     } catch (e) {
       console.log(e)
       throw new Error()

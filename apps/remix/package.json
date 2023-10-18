@@ -17,7 +17,7 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.423.0",
+    "@aws-sdk/client-s3": "3.430.0",
     "@fontsource/poppins": "5.0.8",
     "@fontsource/red-rose": "5.0.15",
     "@fontsource/urbanist": "5.0.15",
@@ -80,7 +80,7 @@
     "use-onclickoutside": "0.4.1",
     "uuid": "3.4.0",
     "zod": "3.22.4",
-    "zodix": "0.4.3"
+    "zodix": "0.4.4"
   },
   "devDependencies": {
     "@ramble/eslint-config": "workspace:*",
