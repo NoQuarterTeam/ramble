@@ -2,10 +2,6 @@ import * as React from "react"
 import type { LngLatLike } from "react-map-gl"
 import Map, { Marker, NavigationControl } from "react-map-gl"
 import { Link, useLoaderData, useNavigate } from "@remix-run/react"
-import bbox from "@turf/bbox"
-import * as turf from "@turf/helpers"
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
 import { ChevronLeft, Copy } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 import { promiseHash } from "remix-utils/promise"
@@ -16,15 +12,17 @@ import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE, type SpotItemWithStats
 import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { PageContainer } from "~/components/PageContainer"
-import { Button } from "~/components/ui"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { FormActionInput, getFormAction } from "~/lib/form"
+import { getFormAction } from "~/lib/form.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { fetchAndJoinSpotImages } from "~/lib/models/spot"
 import { badRequest, notFound, redirect } from "~/lib/remix.server"
 import { useTheme } from "~/lib/theme"
+import { bbox, lineString } from "~/lib/vendor/turf.server"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
 
 import { SpotItem } from "./components/SpotItem"
@@ -73,7 +71,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
   let bounds: LngLatLike | undefined = undefined
   if (coords) {
-    const line = turf.lineString(coords)
+    const line = lineString(coords)
     bounds = bbox(line) as unknown as LngLatLike
   }
 
@@ -170,15 +168,9 @@ export default function ListDetail() {
           <div className="flex space-x-1">
             {currentUser.id !== list.creatorId && (
               <copyFetcher.Form>
-                <FormActionInput value={Actions.Copy} />
-                <Button
-                  leftIcon={<Copy className="sq-4" />}
-                  isLoading={copyFetcher.state === "submitting"}
-                  type="submit"
-                  variant="outline"
-                >
+                <copyFetcher.FormButton value={Actions.Copy} leftIcon={<Copy className="sq-4" />} variant="outline">
                   Copy
-                </Button>
+                </copyFetcher.FormButton>
               </copyFetcher.Form>
             )}
 
@@ -188,10 +180,9 @@ export default function ListDetail() {
                   Edit
                 </LinkButton>
                 <deleteFetcher.Form>
-                  <FormActionInput value={Actions.Delete} />
-                  <Button type="submit" isLoading={deleteFetcher.state === "submitting"} variant="destructive">
+                  <deleteFetcher.FormButton value={Actions.Delete} variant="destructive">
                     Delete
-                  </Button>
+                  </deleteFetcher.FormButton>
                 </deleteFetcher.Form>
               </>
             )}

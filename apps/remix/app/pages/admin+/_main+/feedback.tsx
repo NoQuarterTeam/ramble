@@ -1,20 +1,26 @@
 import { useLoaderData, useSearchParams } from "@remix-run/react"
 import { createColumnHelper } from "@tanstack/react-table"
-import { type LoaderFunctionArgs, type SerializeFrom } from "@vercel/remix"
 import dayjs from "dayjs"
+import { Trash } from "lucide-react"
 import queryString from "query-string"
 import { promiseHash } from "remix-utils/promise"
+import { z } from "zod"
 
 import { type FeedbackType, type Prisma } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
+import { useFetcher } from "~/components/Form"
 import { Search } from "~/components/Search"
 import { Table } from "~/components/Table"
-import { Avatar, Select } from "~/components/ui"
+import { Avatar, IconButton, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
+import { FormActionInput } from "~/lib/form"
+import { formError, getFormAction, validateFormData } from "~/lib/form.server"
 import { FeedbackIcon, FEEDBACKS } from "~/lib/models/feedback"
-import { json } from "~/lib/remix.server"
+import { badRequest, json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"
+import { type ActionFunctionArgs, type LoaderFunctionArgs, type SerializeFrom } from "~/lib/vendor/vercel.server"
+import { getCurrentAdmin } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { orderBy, search, skip, take } = getTableParams(request)
@@ -33,6 +39,32 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 type Feedback = SerializeFrom<typeof loader>["feedbacks"][number]
+
+enum Actions {
+  Delete = "Delete",
+}
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  await getCurrentAdmin(request)
+  const formAction = await getFormAction<Actions>(request)
+  switch (formAction) {
+    case Actions.Delete:
+      try {
+        const deleteSchema = z.object({ id: z.string() })
+        const result = await validateFormData(request, deleteSchema)
+        if (!result.success) return formError(result)
+        const data = result.data
+        await db.feedback.delete({ where: { id: data.id } })
+        return json({ success: true })
+      } catch {
+        return badRequest("Error deleting feedback", request, {
+          flash: { title: "Error deleting feedback", description: "Please try again" },
+        })
+      }
+    default:
+      break
+  }
+}
 
 const columnHelper = createColumnHelper<Feedback>()
 const columns = [
@@ -74,6 +106,13 @@ const columns = [
     header: () => "Created",
     cell: (info) => dayjs(info.getValue()).format("DD/MM/YYYY"),
   }),
+  columnHelper.display({
+    id: "actions",
+    size: 110,
+    enableSorting: false,
+    header: () => null,
+    cell: ({ row }) => <DeleteAction item={row.original} />,
+  }),
 ]
 export default function Feedbacks() {
   const { feedbacks, count } = useLoaderData<typeof loader>()
@@ -105,5 +144,25 @@ export default function Feedbacks() {
       </div>
       <Table data={feedbacks} count={count} columns={columns} />
     </div>
+  )
+}
+
+function DeleteAction({ item }: { item: Feedback }) {
+  const deleteFetcher = useFetcher()
+
+  return (
+    <deleteFetcher.Form>
+      <input type="hidden" name="id" value={item.id} />
+
+      <FormActionInput value={Actions.Delete} />
+      <IconButton
+        type="submit"
+        isLoading={deleteFetcher.state !== "idle"}
+        aria-label="delete"
+        size="sm"
+        variant="ghost"
+        icon={<Trash className="text-red-500" size={16} />}
+      />
+    </deleteFetcher.Form>
   )
 }

@@ -1,24 +1,24 @@
 import { Link } from "@remix-run/react"
-import { type LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
 import { ClientOnly } from "remix-utils/client-only"
 import { z } from "zod"
 
 import { join, merge } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
+import { PageContainer } from "~/components/PageContainer"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { type ActionDataErrorResponse, formError, validateFormData } from "~/lib/form"
+import { type ActionDataErrorResponse, formError, validateFormData } from "~/lib/form.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
-import { PageContainer } from "~/components/PageContainer"
+import { json } from "~/lib/remix.server"
+import { type LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 
 export const config = {
   // runtime: "edge",
 }
 
-const schema = z.object({ email: z.string().email() })
 export const action = async ({ request }: LoaderFunctionArgs) => {
+  const schema = z.object({ email: z.string().email() })
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
   const accessRequest = await db.accessRequest.findFirst({ where: { email: result.data.email } })
@@ -184,7 +184,9 @@ export default function Home() {
 }
 
 function RequestAccessForm({ mode }: { mode?: "light" | "dark" }) {
-  const accessFetcher = useFetcher<ActionDataErrorResponse<typeof schema>>()
+  // how to include zod here?
+  // eslint-disable-next-line
+  const accessFetcher = useFetcher<ActionDataErrorResponse<any>>()
 
   if (accessFetcher.data?.success)
     return (

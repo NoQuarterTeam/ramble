@@ -1,6 +1,5 @@
-import type { LoaderFunctionArgs } from "@vercel/remix"
-
 import { db } from "~/lib/db.server"
+import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 
 export const config = {
   // runtime: "edge",

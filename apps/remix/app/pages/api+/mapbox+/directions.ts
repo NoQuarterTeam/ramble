@@ -1,12 +1,10 @@
-import booleanWithin from "@turf/boolean-point-in-polygon"
-import buffer from "@turf/buffer"
-import * as turf from "@turf/helpers"
-import type { LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
 import { db } from "~/lib/db.server"
 import { badRequest } from "~/lib/remix.server"
+import { booleanWithin, buffer, lineString, point } from "~/lib/vendor/turf.server"
+import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 
 // export const config = {
 // // runtime: "edge",
@@ -25,13 +23,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const jsonResponse = (await res.json()) as Directions
   if (!jsonResponse.routes[0]) throw badRequest("Unknown address")
-  const linestring = turf.lineString(jsonResponse.routes[0].geometry.coordinates)
+  const linestring = lineString(jsonResponse.routes[0].geometry.coordinates)
   const buffered = buffer(linestring, 35, { units: "kilometers" })
   const spots = await db.spot.findMany({ select: { id: true, latitude: true, longitude: true } })
 
   const spotsWithinBuffer = spots.filter((spot) => {
-    const point = turf.point([spot.longitude, spot.latitude])
-    return booleanWithin(point, buffered)
+    const pointFrom = point([spot.longitude, spot.latitude])
+    return booleanWithin(pointFrom, buffered)
   })
 
   const foundSpots = await db.spot.findMany({ where: { id: { in: spotsWithinBuffer.map((spot) => spot.id) } } })

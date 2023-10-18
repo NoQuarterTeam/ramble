@@ -1,7 +1,6 @@
-import { type ActionFunctionArgs, json, redirect } from "@vercel/remix"
-
 import { track } from "~/lib/analytics.server"
 import { isTheme } from "~/lib/theme"
+import { type ActionFunctionArgs, json, redirect } from "~/lib/vendor/vercel.server"
 import { getUserSession } from "~/services/session/session.server"
 import { getThemeSession } from "~/services/session/theme.server"
 

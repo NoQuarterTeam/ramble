@@ -18,16 +18,15 @@ import {
   Outlet,
   useFetcher,
   useLoaderData,
+  useLocation,
   useNavigate,
   useRouteError,
   useSearchParams,
 } from "@remix-run/react"
-import turfCenter from "@turf/center"
-import * as turf from "@turf/helpers"
+import center from "@turf/center"
+import { points } from "@turf/helpers"
 import type { Geo } from "@vercel/edge"
 import { geolocation } from "@vercel/edge"
-import type { LinksFunction, LoaderFunctionArgs, SerializeFrom } from "@vercel/remix"
-import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 
@@ -36,6 +35,8 @@ import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE, join } from "@ramble/s
 
 import { usePreferences } from "~/lib/hooks/usePreferences"
 import { useTheme } from "~/lib/theme"
+import type { LinksFunction, LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 import { MapFilters } from "~/pages/_main+/_app+/components/MapFilters"
 
 import type { Cluster, clustersLoader } from "../../api+/clusters"
@@ -84,8 +85,8 @@ export default function MapView() {
     const maxLng = searchParams.get("maxLng")
     let centerFromParams
     if (minLat && maxLat && minLng && maxLng) {
-      centerFromParams = turfCenter(
-        turf.points([
+      centerFromParams = center(
+        points([
           [parseFloat(minLng), parseFloat(minLat)],
           [parseFloat(maxLng), parseFloat(maxLat)],
         ]),
@@ -122,6 +123,7 @@ export default function MapView() {
   }
   const navigate = useNavigate()
 
+  const location = useLocation()
   const markers = React.useMemo(
     () =>
       clusters?.map((point, i) => (
@@ -131,7 +133,7 @@ export default function MapView() {
           onClick={(e) => {
             e.originalEvent.stopPropagation()
             if (!point.properties.cluster && point.properties.id) {
-              navigate(`/map/${point.properties.id}${window.location.search}`)
+              navigate(`/map/${point.properties.id}${location.search}`)
             }
             const zoom = point.properties.cluster ? Math.min(point.properties.zoomLevel, 20) : mapRef.current?.getZoom()
             const center = point.geometry.coordinates as LngLatLike

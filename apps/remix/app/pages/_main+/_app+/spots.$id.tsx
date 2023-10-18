@@ -1,6 +1,5 @@
 import Map, { Marker } from "react-map-gl"
 import { Link, useLoaderData } from "@remix-run/react"
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "@vercel/remix"
 import dayjs from "dayjs"
 import { Check, Edit2, Heart, Star, Trash } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
@@ -35,12 +34,13 @@ import {
 } from "~/components/ui"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { FormActionInput, getFormAction } from "~/lib/form"
+import { getFormAction } from "~/lib/form.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 import { badRequest, json, notFound, redirect } from "~/lib/remix.server"
 import { useTheme } from "~/lib/theme"
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "~/lib/vendor/vercel.server"
 import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
 import type { loader as rootLoader } from "~/root"
 import { getCurrentUser } from "~/services/auth/auth.server"
@@ -238,8 +238,9 @@ export default function SpotDetail() {
                   <>
                     {!spot.verifiedAt && (
                       <Form>
-                        <FormActionInput value={Actions.Verify} />
-                        <FormButton leftIcon={<Check className="sq-3" />}>Verify</FormButton>
+                        <FormButton value={Actions.Verify} leftIcon={<Check className="sq-3" />}>
+                          Verify
+                        </FormButton>
                       </Form>
                     )}
                     <LinkButton to="edit" variant="outline" leftIcon={<Edit2 className="sq-3" />}>
@@ -262,8 +263,7 @@ export default function SpotDetail() {
                           <Button variant="ghost">Cancel</Button>
                         </AlertDialogCancel>
                         <Form>
-                          <FormActionInput value={Actions.Delete} />
-                          <FormButton>Confirm</FormButton>
+                          <FormButton value={Actions.Delete}>Confirm</FormButton>
                         </Form>
                       </AlertDialogFooter>
                     </AlertDialogContent>

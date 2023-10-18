@@ -1,5 +1,3 @@
-import type { LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 import Supercluster from "supercluster"
@@ -10,6 +8,8 @@ import { publicSpotWhereClause } from "@ramble/api"
 import { SpotType } from "@ramble/database/types"
 
 import { db } from "~/lib/db.server"
+import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 import { getUserSession } from "~/services/session/session.server"
 
 export const config = {

@@ -1,5 +1,4 @@
 import { Link } from "@remix-run/react"
-import { type ActionFunctionArgs } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
@@ -8,9 +7,10 @@ import { sendResetPasswordEmail } from "@ramble/api"
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { formError, validateFormData } from "~/lib/form"
+import { formError, validateFormData } from "~/lib/form.server"
 import { createToken } from "~/lib/jwt.server"
 import { redirect } from "~/lib/remix.server"
+import { type ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 
 export const headers = () => {
   return {
