@@ -71,7 +71,6 @@ export const links: LinksFunction = () => {
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const cookieHeader = request.headers.get("Cookie")
-
   const { flashSession, gdprSession, themeSession, user, preferences } = await promiseHash({
     flashSession: getFlashSession(request),
     themeSession: getThemeSession(request),
