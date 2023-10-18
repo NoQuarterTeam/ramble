@@ -461,8 +461,8 @@ importers:
         specifier: 0.31.1
         version: 0.31.1
       '@types/supercluster':
-        specifier: 7.1.1
-        version: 7.1.1
+        specifier: 7.1.2
+        version: 7.1.2
       '@types/uuid':
         specifier: 9.0.5
         version: 9.0.5
@@ -7835,6 +7835,12 @@ packages:
 
   /@types/supercluster@7.1.1:
     resolution: {integrity: sha512-dNK02GO1UApgo+1KpY4jOfm3uWb2eBCMB/VMM2y8cMoF49FiqVVcOawEg19wxYcaX7SvEs370incOuFtFGrVLg==}
+    dependencies:
+      '@types/geojson': 7946.0.10
+    dev: true
+
+  /@types/supercluster@7.1.2:
+    resolution: {integrity: sha512-qMhofL945Z4njQUuntadexAgPtpiBC014WvVqU70Prj42LC77Xgmz04us7hSMmwjs7KbgAwGBmje+FSOvDbP0Q==}
     dependencies:
       '@types/geojson': 7946.0.10
     dev: true
