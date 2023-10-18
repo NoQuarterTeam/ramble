@@ -5,6 +5,7 @@ import dayjs from "dayjs"
 import { Check, ExternalLink, Eye, EyeOff, Trash } from "lucide-react"
 import queryString from "query-string"
 import { promiseHash } from "remix-utils/promise"
+import { z } from "zod"
 
 import type { Prisma, SpotType } from "@ramble/database/types"
 import { createImageUrl, merge } from "@ramble/shared"
@@ -24,7 +25,6 @@ import { badRequest, json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"
 import { useTheme } from "~/lib/theme"
 import type { ActionFunctionArgs, LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
-import { z } from "~/lib/vendor/zod.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

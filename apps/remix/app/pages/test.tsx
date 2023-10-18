@@ -1,8 +1,9 @@
+import { z } from "zod"
+
 import { Form, FormButton, FormField } from "~/components/Form"
 import { createAction, createActions, FormNumber } from "~/lib/form.server"
 import { json } from "~/lib/remix.server"
 import { type ActionFunctionArgs } from "~/lib/vendor/vercel.server"
-import { z } from "~/lib/vendor/zod.server"
 
 enum Actions {
   first = "first",

@@ -1,4 +1,5 @@
 import dayjs from "dayjs"
+import { type z } from "zod"
 
 import { generateBlurHash } from "@ramble/api"
 import { doesSpotTypeRequireAmenities } from "@ramble/shared"
@@ -8,7 +9,6 @@ import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form.server"
 import { json, redirect } from "~/lib/remix.server"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
-import { type z } from "~/lib/vendor/zod.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { amenitiesSchema, SpotForm, spotSchema } from "./components/SpotForm"

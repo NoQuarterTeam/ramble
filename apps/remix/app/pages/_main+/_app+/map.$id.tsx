@@ -1,10 +1,10 @@
 import * as React from "react"
 import { type SerializeFrom } from "@remix-run/node"
-import { Await, Link, useLoaderData, useNavigate, useParams } from "@remix-run/react"
+import { Await, Link, useLoaderData, useLocation, useNavigate, useParams } from "@remix-run/react"
 import { ArrowLeft, ArrowRight, Frown, Heart, Image, Star } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
-import { ClientOnly } from "remix-utils/client-only"
 import { useAuthenticityToken } from "remix-utils/csrf/react"
+import { z } from "zod"
 
 import { generateBlurHash, publicSpotWhereClause } from "@ramble/api"
 import { type SpotType } from "@ramble/database/types"
@@ -23,7 +23,6 @@ import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { json, notFound } from "~/lib/remix.server"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { defer } from "~/lib/vendor/vercel.server"
-import { z } from "~/lib/vendor/zod.server"
 import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
 import { SaveToList } from "~/pages/api+/save-to-list"
 import { getCurrentUser } from "~/services/auth/auth.server"
@@ -143,7 +142,7 @@ export default function SpotPreview() {
                 </div>
                 <React.Suspense fallback={null}>
                   <Await resolve={promise.sameLocationSpots}>
-                    {(sameSpots) => sameSpots && <ClientOnly>{() => <SameSpotNavigation spots={sameSpots} />}</ClientOnly>}
+                    {(sameSpots) => sameSpots && <SameSpotNavigation spots={sameSpots} />}
                   </Await>
                 </React.Suspense>
                 <div className="flex items-center justify-between">
@@ -268,9 +267,10 @@ export function Skeleton(props: React.HTMLAttributes<HTMLDivElement>) {
 
 function SpotContainer(props: { children: React.ReactNode }) {
   const navigate = useNavigate()
+  const location = useLocation()
   return (
     <div className="bg-background absolute bottom-0 left-0 top-0 z-10 w-full max-w-lg overflow-scroll border-r p-4 pb-20 md:px-8">
-      <CloseButton className="absolute right-2 top-2 z-10" onClick={() => navigate(`..${window.location.search}`)} />
+      <CloseButton className="absolute right-2 top-2 z-10" onClick={() => navigate(`..${location.search}`)} />
       {props.children}
     </div>
   )
@@ -278,6 +278,7 @@ function SpotContainer(props: { children: React.ReactNode }) {
 
 function SameSpotNavigation({ spots }: { spots: Awaited<SerializeFrom<typeof loader>["sameLocationSpots"]> }) {
   const params = useParams()
+  const location = useLocation()
   if (spots.length === 1) return null
   const currentIndex = spots.findIndex((s) => s.id === params.id)
   const isLast = currentIndex === spots.length - 1
@@ -288,7 +289,7 @@ function SameSpotNavigation({ spots }: { spots: Awaited<SerializeFrom<typeof loa
         leftIcon={<ArrowLeft size={14} />}
         size="sm"
         variant="outline"
-        to={`/map/${isFirst ? spots[spots.length - 1]?.id : spots[currentIndex - 1]?.id}${window.location.search}`}
+        to={`/map/${isFirst ? spots[spots.length - 1]?.id : spots[currentIndex - 1]?.id}${location.search}`}
       >
         Prev
       </LinkButton>
@@ -299,7 +300,7 @@ function SameSpotNavigation({ spots }: { spots: Awaited<SerializeFrom<typeof loa
         rightIcon={<ArrowRight size={14} />}
         size="sm"
         variant="outline"
-        to={`/map/${isLast ? spots[0]?.id : spots[currentIndex + 1]?.id}${window.location.search}`}
+        to={`/map/${isLast ? spots[0]?.id : spots[currentIndex + 1]?.id}${location.search}`}
       >
         Next
       </LinkButton>

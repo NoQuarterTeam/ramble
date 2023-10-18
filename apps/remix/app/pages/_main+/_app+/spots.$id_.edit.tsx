@@ -1,4 +1,5 @@
 import { useLoaderData } from "@remix-run/react"
+import { type z } from "zod"
 
 import { generateBlurHash, publicSpotWhereClause } from "@ramble/api"
 import { canManageSpot, doesSpotTypeRequireAmenities } from "@ramble/shared"
@@ -9,7 +10,6 @@ import { formError, validateFormData } from "~/lib/form.server"
 import { notFound } from "~/lib/remix.server"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { json, redirect } from "~/lib/vendor/vercel.server"
-import { type z } from "~/lib/vendor/zod.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { amenitiesSchema, SpotForm, spotSchema } from "./components/SpotForm"
