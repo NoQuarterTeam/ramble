@@ -43,8 +43,8 @@ export const action = ({ request }: ActionFunctionArgs) =>
           passwordConfirmation: z.string().optional(),
         }),
       )
-      .handler(async (data) => {
-        if (data.passwordConfirmation) return redirect("/") // honey pot
+      .handler(async ({ passwordConfirmation, ...data }) => {
+        if (passwordConfirmation) return redirect("/") // honey pot
         const email = data.email.toLowerCase().trim()
         const existingEmail = await db.user.findFirst({ where: { email } })
         if (existingEmail) return formError({ data, formError: "User with this email already exists" })
