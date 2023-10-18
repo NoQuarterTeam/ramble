@@ -77,11 +77,11 @@ export function ListsScreen() {
         <FlashList
           showsVerticalScrollIndicator={false}
           estimatedItemSize={86}
-          numColumns={isTablet ? 2 : 1}
+          numColumns={isTablet ? 2 : undefined}
           contentContainerStyle={{ paddingVertical: 10 }}
           ListEmptyComponent={<Text className="text-center">No lists yet</Text>}
           data={lists}
-          ItemSeparatorComponent={() => <View className="h-1" />}
+          ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
           renderItem={({ item }) => (
             <View style={{ width: "100%", paddingHorizontal: isTablet ? 10 : 0 }}>
               <ListItem list={item} />

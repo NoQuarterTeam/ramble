@@ -80,7 +80,7 @@ export function SpotsScreen() {
           showsVerticalScrollIndicator={false}
           estimatedItemSize={322}
           onEndReachedThreshold={0.8}
-          numColumns={isTablet ? 2 : 1}
+          numColumns={isTablet ? 2 : undefined}
           contentContainerStyle={{ paddingVertical: 20 }}
           ListEmptyComponent={<Text>No spots yet</Text>}
           onEndReached={handleLoadMore}
