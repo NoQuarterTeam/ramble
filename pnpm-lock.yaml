@@ -244,11 +244,11 @@ importers:
         specifier: 5.0.8
         version: 5.0.8
       '@fontsource/red-rose':
-        specifier: 5.0.14
-        version: 5.0.14
+        specifier: 5.0.15
+        version: 5.0.15
       '@fontsource/urbanist':
-        specifier: 5.0.14
-        version: 5.0.14
+        specifier: 5.0.15
+        version: 5.0.15
       '@radix-ui/react-alert-dialog':
         specifier: 1.0.5
         version: 1.0.5(@types/react-dom@18.2.13)(@types/react@18.2.29)(react-dom@18.2.0)(react@18.2.0)
@@ -4426,12 +4426,12 @@ packages:
     resolution: {integrity: sha512-P8owfYWluoUY5Nyzk4gT/L6LmLmseP6ezFWhj6VBUa5pRIdnCvNJpoQ6i/vhekjtJOfqX6nKlB+LCttoUl2GQQ==}
     dev: false
 
-  /@fontsource/red-rose@5.0.14:
-    resolution: {integrity: sha512-67WE/ss1a5aTYASEjQ/bP63xfkvZOHR9B2MJT+OPlQ586NPYv+g3/1GhHjqNPUopQ/g5EDBlKryfE5x51J5TFg==}
+  /@fontsource/red-rose@5.0.15:
+    resolution: {integrity: sha512-5QbW5PfU8tWV7rQRXidkIihSg4Utw+snd1vFjFJlV/ZibF0LbJXSwd7M6U/Sl+HVigRILKyPnNIbVnCoJaVLvQ==}
     dev: false
 
-  /@fontsource/urbanist@5.0.14:
-    resolution: {integrity: sha512-sSNfvfC9pvDedCTjEzjMFtj9UDAXmKzx91jxjHiCeeO8Kok4nrt4S8KWgUY8+Azyyo03o9VvYXqAsSQiy6H6Lg==}
+  /@fontsource/urbanist@5.0.15:
+    resolution: {integrity: sha512-JHmpczEIRf3pL1qNsAyyDXbjw0Jgdabc8ExYCh34Qrt/Sl4tUO7f+lypNZVM71QqfBAUy4LLkPb+jxuAw8XC+A==}
     dev: false
 
   /@gar/promisify@1.1.3:
