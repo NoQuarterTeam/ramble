@@ -9,7 +9,7 @@ import { PageContainer } from "~/components/PageContainer"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { type ActionDataErrorResponse, formError, validateFormData } from "~/lib/form.server"
-import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
+// import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { json } from "~/lib/remix.server"
 import { type LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 
@@ -29,11 +29,11 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Home() {
-  const me = useMaybeUser()
+  // const me = useMaybeUser()
   const randomPerson = PEOPLE[Math.floor(Math.random() * PEOPLE.length)]
   return (
     <div className="bg-background dark font-serif text-white">
-      <div className="absolute right-6 top-16 md:top-6">
+      {/* <div className="absolute right-6 top-16 md:top-6">
         {me ? (
           <Link
             to="/map"
@@ -49,7 +49,7 @@ export default function Home() {
             Login
           </Link>
         )}
-      </div>
+      </div> */}
       <div className="h-[94vh] w-screen space-y-20 bg-[url('/landing/landing1.png')] bg-center px-2 pt-10">
         <div className="mx-auto flex max-w-7xl flex-col items-start space-y-12">
           <div className="flex flex-col items-center">
