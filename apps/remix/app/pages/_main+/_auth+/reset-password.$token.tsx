@@ -1,5 +1,4 @@
 import { Link, useParams } from "@remix-run/react"
-import type { ActionFunctionArgs } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
@@ -9,6 +8,7 @@ import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form.server"
 import { decryptToken } from "~/lib/jwt.server"
 import { redirect } from "~/lib/remix.server"
+import type { ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 import { hashPassword } from "~/services/auth/password.server"
 
 // export const config = {

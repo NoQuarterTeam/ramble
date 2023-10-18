@@ -1,9 +1,6 @@
 import * as React from "react"
-import type { ActionFunctionArgs, LoaderFunctionArgs, SerializeFrom } from "@vercel/remix"
 import { Heart, Plus } from "lucide-react"
 import { useAuthenticityToken } from "remix-utils/csrf/react"
-import { z } from "zod"
-import { zx } from "zodix"
 
 import { useDisclosure } from "@ramble/shared"
 
@@ -20,12 +17,13 @@ import {
   Spinner,
   Tooltip,
 } from "~/components/ui"
-import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { FORM_ACTION } from "~/lib/form"
 import type { ActionDataErrorResponse } from "~/lib/form.server"
-import { formError, getFormAction, validateFormData } from "~/lib/form.server"
-import { badRequest, json } from "~/lib/remix.server"
+import { useFetcherQuery } from "~/lib/hooks/useFetcherQuery"
+import { json } from "~/lib/remix.server"
+import type { LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
+import { actions, type CreateListSchema } from "~/services/api/save-to-list.server"
 import { requireUser } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -38,55 +36,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return json(lists)
 }
 
-enum Actions {
+export enum Actions {
   ToggleSave = "toggle-save",
   CreateAndSaveToList = "create-and-save-to-list",
 }
 
-const createListSchema = z.object({ name: z.string().min(1), description: z.string().optional(), spotId: z.string() })
+export const action = actions
 
-export const action = async ({ request }: ActionFunctionArgs) => {
-  const userId = await requireUser(request)
-  const formAction = await getFormAction<Actions>(request)
-  switch (formAction) {
-    case Actions.ToggleSave:
-      try {
-        const schema = z.object({ shouldSave: zx.BoolAsString, listId: z.string(), spotId: z.string() })
-        const result = await validateFormData(request, schema)
-        if (!result.success) return badRequest("Error saving to list", request, { flash: { title: "Error saving to list" } })
-        const { shouldSave, listId, spotId } = result.data
-        await db.list.findFirstOrThrow({ select: { id: true }, where: { id: listId, creator: { id: userId } } })
-        const listSpot = await db.listSpot.findFirst({ where: { listId, spotId, list: { creator: { id: userId } } } })
-
-        if (shouldSave) {
-          if (listSpot) return badRequest("Already saved to list", request, { flash: { title: "Already saved to list" } })
-          await db.listSpot.create({ data: { listId, spotId } })
-          track("Saved to list", { listId, spotId })
-          return json({ success: true }, request, { flash: { title: "Saved to list" } })
-        } else {
-          if (!listSpot) return badRequest("Not saved to list", request, { flash: { title: "Not saved to list" } })
-          await db.listSpot.delete({ where: { id: listSpot.id } })
-          track("Removed from list", { listId, spotId })
-          return json({ success: true }, request, { flash: { title: "Removed from list" } })
-        }
-      } catch {
-        return badRequest("Request failed", request, { flash: { title: "Failed to save" } })
-      }
-    case Actions.CreateAndSaveToList:
-      try {
-        const result = await validateFormData(request, createListSchema)
-        if (!result.success) return formError(result)
-        const { name, description, spotId } = result.data
-        const list = await db.list.create({ data: { name, description, creatorId: userId, listSpots: { create: { spotId } } } })
-        track("Saved to new list", { listId: list.id, spotId })
-        return json({ success: true }, request, { flash: { title: "List created", description: "Spot saved to new list" } })
-      } catch {
-        return formError({ formError: "Failed to create list" })
-      }
-    default:
-      return badRequest("Invalid action", request, { flash: { title: "Invalid action" } })
-  }
-}
 const SAVE_TO_LIST_URL = "/api/save-to-list"
 
 interface Props {
@@ -95,25 +51,19 @@ interface Props {
 }
 
 export function SaveToList(props: Props) {
-  const listsFetcher = useFetcher<typeof loader>()
   const popoverProps = useDisclosure()
+  const listsFetcher = useFetcherQuery<typeof loader>(SAVE_TO_LIST_URL, { isEnabled: popoverProps.isOpen })
   const newListModalProps = useDisclosure()
   const lists = listsFetcher.data
 
-  React.useEffect(() => {
-    if (!popoverProps.isOpen) return
-    listsFetcher.load(SAVE_TO_LIST_URL)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [popoverProps.isOpen])
+  const listCreateFetcher = useFetcher<ActionDataErrorResponse<CreateListSchema> | { success: true }>({
+    onFinish: (data) => {
+      if (data?.success) {
+        newListModalProps.onClose()
+      }
+    },
+  })
 
-  const listCreateFetcher = useFetcher<ActionDataErrorResponse<typeof createListSchema> | { success: true }>()
-
-  React.useEffect(() => {
-    if (listCreateFetcher.data?.success) {
-      newListModalProps.onClose()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listCreateFetcher.data])
   const trigger = props.trigger && React.cloneElement(props.trigger, { onClick: popoverProps.onOpen })
   return (
     <Popover {...popoverProps}>
@@ -146,7 +96,7 @@ export function SaveToList(props: Props) {
             </Tooltip>
           </div>
           {listsFetcher.state === "loading" && !lists ? (
-            <div className="center p-4">
+            <div className="center px-4 pb-2">
               <Spinner />
             </div>
           ) : !lists ? null : lists.length === 0 ? (
@@ -189,9 +139,12 @@ export function SaveToList(props: Props) {
 function ListItem({ list, isSaved, spotId }: { spotId: string; list: SerializeFrom<typeof loader>[number]; isSaved: boolean }) {
   const listFetcher = useFetcher<typeof action>()
   const csrf = useAuthenticityToken()
+
+  const shouldBeChecked = listFetcher.state !== "idle" ? listFetcher.formData?.get("shouldSave") === "true" : isSaved
+
   return (
     <Button
-      disabled={listFetcher.state === "submitting"}
+      disabled={listFetcher.state !== "idle"}
       className="w-full px-2"
       onClick={() =>
         listFetcher.submit(
@@ -204,7 +157,7 @@ function ListItem({ list, isSaved, spotId }: { spotId: string; list: SerializeFr
     >
       <div className="flex w-full items-center justify-between">
         <span>{list.name}</span>
-        <Checkbox readOnly checked={isSaved} />
+        <Checkbox readOnly checked={shouldBeChecked} />
       </div>
     </Button>
   )

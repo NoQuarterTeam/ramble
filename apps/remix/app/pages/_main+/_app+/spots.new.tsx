@@ -1,6 +1,5 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
 import dayjs from "dayjs"
-import type { z } from "zod"
+import { type z } from "zod"
 
 import { generateBlurHash } from "@ramble/api"
 import { doesSpotTypeRequireAmenities } from "@ramble/shared"
@@ -9,6 +8,7 @@ import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form.server"
 import { json, redirect } from "~/lib/remix.server"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { amenitiesSchema, SpotForm, spotSchema } from "./components/SpotForm"

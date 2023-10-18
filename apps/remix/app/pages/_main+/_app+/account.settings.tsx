@@ -1,9 +1,8 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
-
 import { Form, FormButton, FormField } from "~/components/Form"
 import { Switch } from "~/components/ui"
 import { redirect } from "~/lib/remix.server"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -12,7 +11,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  return redirect("/account", request, { flash: { title: "Not possible yet" } })
+  return redirect("/account", request, {
+    flash: { title: "Not possible yet", description: "Please contact info@noquarter.co to delete your account" },
+  })
 }
 
 export default function AccountSettings() {

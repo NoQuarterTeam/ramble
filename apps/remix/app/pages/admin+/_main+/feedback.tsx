@@ -1,6 +1,5 @@
 import { useLoaderData, useSearchParams } from "@remix-run/react"
 import { createColumnHelper } from "@tanstack/react-table"
-import { type ActionFunctionArgs, type LoaderFunctionArgs, type SerializeFrom } from "@vercel/remix"
 import dayjs from "dayjs"
 import { Trash } from "lucide-react"
 import queryString from "query-string"
@@ -20,6 +19,7 @@ import { formError, getFormAction, validateFormData } from "~/lib/form.server"
 import { FeedbackIcon, FEEDBACKS } from "~/lib/models/feedback"
 import { badRequest, json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"
+import { type ActionFunctionArgs, type LoaderFunctionArgs, type SerializeFrom } from "~/lib/vendor/vercel.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

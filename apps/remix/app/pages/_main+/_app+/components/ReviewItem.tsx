@@ -1,5 +1,4 @@
 import { Link } from "@remix-run/react"
-import type { SerializeFrom } from "@vercel/remix"
 import dayjs from "dayjs"
 import { Star } from "lucide-react"
 
@@ -20,6 +19,7 @@ import {
   Button,
 } from "~/components/ui"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
+import type { SerializeFrom } from "~/lib/vendor/vercel.server"
 
 import { Actions } from "../spots.$id_.reviews.$reviewId"
 

@@ -1,4 +1,4 @@
-import type { HeadersFunction } from "@vercel/remix"
+import type { HeadersFunction } from "~/lib/vendor/vercel.server"
 
 import { IS_DEV } from "./config.server"
 

@@ -54,7 +54,7 @@ export function useFetcher<T>(props?: UseFetcherProps<T>): FetcherWithComponents
       <Button
         type="submit"
         name={rest.value ? FORM_ACTION : undefined}
-        isLoading={fetcher.state !== "idle"}
+        isLoading={fetcher.state !== "idle" && fetcher.formData?.get(FORM_ACTION) === rest.value}
         {...rest}
         ref={ref}
       />

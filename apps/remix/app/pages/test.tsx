@@ -1,40 +1,39 @@
-import { type ActionFunctionArgs } from "@vercel/remix"
 import { z } from "zod"
 
-import { Form, FormButton } from "~/components/Form"
-import { createActions, FormNumber } from "~/lib/form.server"
+import { Form, FormButton, FormField } from "~/components/Form"
+import { createAction, createActions, FormNumber } from "~/lib/form.server"
 import { json } from "~/lib/remix.server"
+import { type ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 
 enum Actions {
   first = "first",
   second = "second",
 }
 
-export const action = async ({ request }: ActionFunctionArgs) => {
+export const action = ({ request }: ActionFunctionArgs) => {
   return createActions<Actions>(request, {
-    first: {
-      input: z.object({ first: FormNumber }),
-      handler: (data) => {
-        console.log(data)
+    first: createAction(request)
+      .input(z.object({ first: FormNumber.min(20) }))
+      .handler(async (data) => {
+        console.log(data.first)
         return json(data, request, { flash: { title: "First worked!" } })
-      },
-    },
-    second: {
-      input: z.object({ second: z.string() }),
-      handler: (data) => {
-        console.log(data)
+      }),
+    second: createAction(request)
+      .input(z.object({ second: z.string() }))
+      .handler((data) => {
+        console.log(data.second)
         return json(data, request, { flash: { title: "Second worked!" } })
-      },
-    },
+      }),
   })
 }
+
 export default function Test() {
   return (
     <div className="mx-auto max-w-5xl p-10">
       <h1 className="brand-header text-4xl">test</h1>
       <div className="grid grid-cols-2 gap-10">
         <Form className="rounded-xs border p-10">
-          <input type="hidden" name="first" value="1" />
+          <FormField name="first" label="A number greater than 20" />
           <FormButton value={Actions.first}>First</FormButton>
         </Form>
         <Form className="rounded-xs border p-10">

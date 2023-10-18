@@ -1,7 +1,6 @@
-import type { ActionFunctionArgs } from "@vercel/remix"
-
 import { track } from "~/lib/analytics.server"
 import { redirect } from "~/lib/remix.server"
+import type { ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 import { getUserSession } from "~/services/session/session.server"
 
 export const action = async ({ request }: ActionFunctionArgs) => {

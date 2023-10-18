@@ -1,11 +1,10 @@
-import { type ActionFunctionArgs } from "@vercel/remix"
-
 import { sendGuideRequestSentToAdminsEmail } from "@ramble/api"
 import { GuideRequestContent } from "@ramble/emails"
 
 import { useConfig } from "~/lib/hooks/useConfig"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { json } from "~/lib/remix.server"
+import { type ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
 
 import { type TemplateHandle } from "./_layout"

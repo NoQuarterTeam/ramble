@@ -4,8 +4,7 @@ import { Layer, Map, Marker, Source } from "react-map-gl"
 import { type MarkerEvent, type MarkerInstance } from "react-map-gl/dist/esm/types"
 import { useFetcher } from "@remix-run/react"
 import bbox from "@turf/bbox"
-import * as turf from "@turf/helpers"
-import { type SerializeFrom } from "@vercel/remix"
+import { lineString } from "@turf/helpers"
 import { CircleDot, MapPin } from "lucide-react"
 import useOnClickOutside from "use-onclickoutside"
 
@@ -15,6 +14,7 @@ import colors from "@ramble/tailwind-config/src/colors"
 import { SpotIcon } from "~/components/SpotIcon"
 import { Button, Input, Spinner } from "~/components/ui"
 import { useTheme } from "~/lib/theme"
+import { type SerializeFrom } from "~/lib/vendor/vercel.server"
 
 import { PageContainer } from "../../../components/PageContainer"
 import type { directionsLoader } from "../../api+/mapbox+/directions"
@@ -61,7 +61,7 @@ export default function PlanTrip() {
     } else if (endCoords && !startCoords) {
       mapRef.current?.flyTo({ center: endCoords, duration: 1000, padding: 50 })
     } else if (startCoords && endCoords) {
-      const line = turf.lineString([startCoords, endCoords])
+      const line = lineString([startCoords, endCoords])
       const bounds = bbox(line) as unknown as LngLatLike
       mapRef.current?.fitBounds(bounds, { padding: 100 })
       directionsFetcher.load(
