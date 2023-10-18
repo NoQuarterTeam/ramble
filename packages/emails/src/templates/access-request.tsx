@@ -17,7 +17,7 @@ export function AccessRequestContent(props: AccessRequestProps) {
       <Container className="rounded-xs border-gray-[rgba(120,120,120,0.9)] mb-8 flex flex-col items-center border border-solid p-10 text-center">
         <p>{props.email}</p>
       </Container>
-      <Button href={props.link}>Go to profile</Button>
+      <Button href={props.link}>Go to requests</Button>
     </EmailWrapper>
   )
 }
