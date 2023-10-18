@@ -172,7 +172,7 @@ export function Nav() {
   )
 }
 
-function NavbarLink(props: NavLinkProps) {
+function NavbarLink(props: NavLinkProps & { className?: string }) {
   return (
     <NavLink
       {...props}
@@ -182,7 +182,7 @@ function NavbarLink(props: NavLinkProps) {
           buttonStyles({ size: "md", variant: isActive ? "secondary" : "ghost" }),
           buttonSizeStyles({ size: "md" }),
           "text-sm",
-          props.className
+          props.className,
         )
       }
     >
