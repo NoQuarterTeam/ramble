@@ -113,7 +113,7 @@ export default function Home() {
       {/* <div className="px-4 py-20 md:py-32">
         <div className="mx-auto max-w-7xl space-y-4">
           <div>
-            <h3 className="brand-header text-4xl">request access now</h3>
+            <h3 className="brand-header text-4xl">Join beta now</h3>
             <p className="text-lg">To maintain an authentic and trustworthy community, members can only join via invite.</p>
           </div>
           <RequestAccessForm mode="dark" />
@@ -221,7 +221,7 @@ function RequestAccessForm({ mode }: { mode?: "light" | "dark" }) {
             mode === "dark" && "bg-white text-black",
           )}
         >
-          Request access
+          Join beta
         </button>
       </div>
     </accessFetcher.Form>
