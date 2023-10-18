@@ -182,6 +182,7 @@ function NavbarLink(props: NavLinkProps) {
           buttonStyles({ size: "md", variant: isActive ? "secondary" : "ghost" }),
           buttonSizeStyles({ size: "md" }),
           "text-sm",
+          props.className
         )
       }
     >
