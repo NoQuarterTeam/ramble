@@ -21,7 +21,7 @@ export function GDPR() {
   const modalProps = useDisclosure()
   if (!!gdpr) return null
   return (
-    <div className="bg-background z-100 fixed bottom-0 left-0 right-0 flex items-center justify-between border-t px-10 py-6">
+    <div className="bg-background z-100 fixed bottom-0 left-0 right-0 flex flex-col items-center justify-between gap-2 border-t px-10 py-6 md:flex-row">
       <p className="max-w-4xl text-sm font-light opacity-70">
         We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. By clicking
         "Accept All", you consent to our use of cookies.
