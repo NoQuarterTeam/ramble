@@ -7,6 +7,7 @@ import { Spinner } from "../../../../components/ui/Spinner"
 import { Text } from "../../../../components/ui/Text"
 import { api } from "../../../../lib/api"
 import { useParams } from "../../../router"
+import { isTablet } from "../../../../lib/device"
 
 export function UserVan() {
   const { params } = useParams<"UserScreen">()
@@ -38,15 +39,18 @@ export function UserVan() {
         </View>
       </View>
       <Text>{van.description}</Text>
-      {van.images.map((image) => (
-        <OptimizedImage
-          key={image.id}
-          width={500}
-          placeholder={image.blurHash}
-          className="rounded-xs min-h-[300px] w-full object-contain"
-          source={{ uri: createImageUrl(image.path) }}
-        />
-      ))}
+      <View className="flex flex-row flex-wrap">
+        {van.images.map((image) => (
+          <OptimizedImage
+            key={image.id}
+            width={500}
+            placeholder={image.blurHash}
+            style={{ width: isTablet ? "48%" : "100%", marginHorizontal: isTablet ? 10 : 0, marginBottom: 10 }}
+            className="rounded-xs min-h-[300px] object-contain"
+            source={{ uri: createImageUrl(image.path) }}
+          />
+        ))}
+      </View>
     </View>
   )
 }

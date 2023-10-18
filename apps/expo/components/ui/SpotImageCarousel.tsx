@@ -29,6 +29,7 @@ type NoAddMoreProps = {
 interface Props {
   width: number
   height: number
+  noOfColumns?: number
   images: SpotImageType[]
   imageClassName?: string
   onPress?: () => void
@@ -38,6 +39,7 @@ export function SpotImageCarousel({
   images,
   width,
   height,
+  noOfColumns,
   spotId,
   imageClassName,
   canAddMore,
@@ -67,7 +69,7 @@ export function SpotImageCarousel({
   }
 
   const ref = React.useRef<FlashList<SpotImageType>>(null)
-
+  const itemWidth = width / (noOfColumns || 1) - (noOfColumns && noOfColumns > 1 ? 10 : 0)
   return (
     <View style={{ width, height }} className="bg-background dark:bg-background-dark">
       <FlashList
@@ -101,19 +103,21 @@ export function SpotImageCarousel({
         renderItem={({ item: image }) => (
           <TouchableOpacity onPress={onPress} activeOpacity={1}>
             <OptimizedImage
-              width={width}
+              width={itemWidth}
               height={height}
               placeholder={image.blurHash}
               source={{ uri: createImageUrl(image.path) }}
-              style={{ width, height }}
-              className={merge("object-cover", imageClassName)}
+              style={{ width: itemWidth, height, marginHorizontal: noOfColumns && noOfColumns > 1 ? 5 : 0 }}
+              className={merge("rounded-xs object-cover", imageClassName)}
             />
           </TouchableOpacity>
         )}
       />
       {images.length > 0 && (
         <View className="rounded-xs absolute bottom-2 right-2 bg-gray-800/70 p-1">
-          <Text className="text-xs text-white">{`${imageIndex + 1}/${images.length + (canAddMore ? 1 : 0)}`}</Text>
+          <Text className="text-xs text-white">{`${imageIndex + 1}/${
+            images.length / (noOfColumns || 1) + (canAddMore ? 1 : 0)
+          }`}</Text>
         </View>
       )}
     </View>

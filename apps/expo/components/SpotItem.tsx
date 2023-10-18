@@ -17,7 +17,7 @@ export function SpotItem({ spot }: Props) {
   const { push } = useRouter()
   const Icon = SPOT_TYPES[spot.type].Icon
   return (
-    <TouchableOpacity onPress={() => push("SpotDetailScreen", { id: spot.id })} activeOpacity={0.8}>
+    <TouchableOpacity className="w-full" onPress={() => push("SpotDetailScreen", { id: spot.id })} activeOpacity={0.8}>
       <View className="relative h-[250px] w-full">
         {spot.image ? (
           <OptimizedImage
