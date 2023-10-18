@@ -20,7 +20,7 @@ export function ListItem({ list }: Props) {
     <TouchableOpacity
       onPress={() => push("ListDetailScreen", { id: list.id, name: list.name })}
       activeOpacity={0.8}
-      className="rounded-xs border border-gray-100 p-4 dark:border-gray-700"
+      className="rounded-xs h-full border border-gray-100 p-4 dark:border-gray-700"
     >
       <View className="flex flex-row items-center space-x-2">
         {list.isPrivate && <Lock className="text-black dark:text-white" size={20} />}

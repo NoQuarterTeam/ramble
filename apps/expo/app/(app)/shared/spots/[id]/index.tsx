@@ -23,7 +23,7 @@ import { Text } from "../../../../../components/ui/Text"
 import { toast } from "../../../../../components/ui/Toast"
 import { VerifiedCard } from "../../../../../components/VerifiedCard"
 import { api } from "../../../../../lib/api"
-import { width } from "../../../../../lib/device"
+import { height, width } from "../../../../../lib/device"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { AMENITIES_ICONS } from "../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../router"
@@ -119,7 +119,7 @@ export function SpotDetailScreen() {
         onScroll={scrollHandler}
       >
         <Animated.View style={imageStyle}>
-          <SpotImageCarousel canAddMore width={width} height={300} images={spot.images} spotId={spot.id} />
+          <SpotImageCarousel canAddMore width={width} height={height * 0.37} images={spot.images} spotId={spot.id} />
         </Animated.View>
         <View className="space-y-3 p-4">
           <View className="space-y-2">
