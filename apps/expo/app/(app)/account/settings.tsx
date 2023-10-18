@@ -1,12 +1,13 @@
 import { Modal, ScrollView, View } from "react-native"
 
+import { useDisclosure } from "@ramble/shared"
+
 import { Button } from "../../../components/ui/Button"
+import { ModalView } from "../../../components/ui/ModalView"
 import { ScreenView } from "../../../components/ui/ScreenView"
+import { Text } from "../../../components/ui/Text"
 import { toast } from "../../../components/ui/Toast"
 import { api } from "../../../lib/api"
-import { ModalView } from "../../../components/ui/ModalView"
-import { useDisclosure } from "@ramble/shared"
-import { Text } from "../../../components/ui/Text"
 import { useRouter } from "../../router"
 
 export function AccountSettingsScreen() {

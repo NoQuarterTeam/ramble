@@ -6,8 +6,8 @@ import { OptimizedImage } from "../../../../components/ui/OptimisedImage"
 import { Spinner } from "../../../../components/ui/Spinner"
 import { Text } from "../../../../components/ui/Text"
 import { api } from "../../../../lib/api"
-import { useParams } from "../../../router"
 import { isTablet } from "../../../../lib/device"
+import { useParams } from "../../../router"
 
 export function UserVan() {
   const { params } = useParams<"UserScreen">()

@@ -1,6 +1,7 @@
-import { PrismaClient } from "@ramble/database/types"
-import { SpotItemWithStatsAndImage } from "@ramble/shared"
-import { LatestSpotImages, joinSpotImages, spotImagesRawQuery } from "../../shared/spot.server"
+import { type PrismaClient } from "@ramble/database/types"
+import { type SpotItemWithStatsAndImage } from "@ramble/shared"
+
+import { joinSpotImages, type LatestSpotImages, spotImagesRawQuery } from "../../shared/spot.server"
 
 export const fetchAndJoinSpotImages = async (prisma: PrismaClient, spots: SpotItemWithStatsAndImage[]) => {
   // get spot images and join to original spot payload

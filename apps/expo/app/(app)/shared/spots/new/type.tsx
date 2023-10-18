@@ -5,10 +5,10 @@ import { type SpotType } from "@ramble/database/types"
 import { join } from "@ramble/shared"
 
 import { Button } from "../../../../../components/ui/Button"
+import { Text } from "../../../../../components/ui/Text"
 import { SPOT_OPTIONS } from "../../../../../lib/models/spot"
 import { useParams, useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
-import { Text } from "../../../../../components/ui/Text"
 
 export function NewSpotTypeScreen() {
   const { params } = useParams<"NewSpotTypeScreen">()

@@ -1,7 +1,8 @@
+import { Container } from "@react-email/components"
+
 import { Button } from "../components/Button"
 import { EmailDocument } from "../components/EmailDocument"
 import { EmailWrapper } from "../components/EmailWrapper"
-import { Container } from "@react-email/components"
 import { Heading } from "../components/Heading"
 
 export interface AccessRequestProps {
