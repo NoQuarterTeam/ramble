@@ -1,5 +1,6 @@
 import { Link } from "@remix-run/react"
 import { ClientOnly } from "remix-utils/client-only"
+import { z } from "zod"
 
 import { join, merge } from "@ramble/shared"
 
@@ -11,7 +12,6 @@ import { type ActionDataErrorResponse, formError, validateFormData } from "~/lib
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { json } from "~/lib/remix.server"
 import { type LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
-import { z } from "~/lib/vendor/zod.server"
 
 export const config = {
   // runtime: "edge",

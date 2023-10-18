@@ -1,11 +1,12 @@
 import * as React from "react"
 import type { ViewStateChangeEvent } from "react-map-gl"
 import Map, { GeolocateControl, NavigationControl } from "react-map-gl"
-import { useFetcher, useNavigate, useSearchParams } from "@remix-run/react"
+import { useFetcher, useLocation, useNavigate, useSearchParams } from "@remix-run/react"
 import turfCenter from "@turf/center"
 import * as turf from "@turf/helpers"
 import { CircleDot, Lock, Plus } from "lucide-react"
 import queryString from "query-string"
+import { z } from "zod"
 import { zx } from "zodix"
 
 import type { Spot, SpotAmenities, SpotImage } from "@ramble/database/types"
@@ -29,7 +30,6 @@ import { AMENITIES_ICONS } from "~/lib/models/amenities"
 import { SPOT_TYPE_OPTIONS } from "~/lib/models/spot"
 import { useTheme } from "~/lib/theme"
 import type { SerializeFrom } from "~/lib/vendor/vercel.server"
-import { z } from "~/lib/vendor/zod.server"
 import type { geocodeLoader } from "~/pages/api+/mapbox+/geocode"
 
 export const amenitiesSchema = z.object({
@@ -98,6 +98,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
   const [longitude, setLongitude] = React.useState<number | null>(spot?.longitude || initialViewState.longitude)
   const [type, setType] = React.useState<SpotType | null>(spot?.type || null)
 
+  const location = useLocation()
   const geocodeFetcher = useFetcher<typeof geocodeLoader>()
 
   const onMove = (e: mapboxgl.MapboxEvent<undefined> | ViewStateChangeEvent) => {
@@ -110,7 +111,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
       { minLat: bounds.getSouth(), maxLat: bounds.getNorth(), minLng: bounds.getWest(), maxLng: bounds.getEast(), zoom },
       { arrayFormat: "bracket" },
     )
-    window.history.replaceState(null, "", `${window.location.pathname}?${params}`)
+    window.history.replaceState(null, "", `${location.pathname}?${params}`)
     geocodeFetcher.load(`/api/mapbox/geocode?${queryString.stringify({ latitude: center.lat, longitude: center.lng })}`)
   }
 

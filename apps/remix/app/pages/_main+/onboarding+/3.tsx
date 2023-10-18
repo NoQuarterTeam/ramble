@@ -1,6 +1,7 @@
 import * as React from "react"
 import { useLoaderData } from "@remix-run/react"
 import { Dog, FishOff } from "lucide-react"
+import { z } from "zod"
 import { zx } from "zodix"
 
 import { Form, FormButton, FormError } from "~/components/Form"
@@ -12,7 +13,6 @@ import { useFormErrors } from "~/lib/form"
 import { formError, validateFormData } from "~/lib/form.server"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { json, redirect } from "~/lib/vendor/vercel.server"
-import { z } from "~/lib/vendor/zod.server"
 import { getCurrentUser, requireUser } from "~/services/auth/auth.server"
 
 import { Footer } from "./components/Footer"

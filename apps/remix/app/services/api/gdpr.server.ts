@@ -1,8 +1,9 @@
+import { z } from "zod"
+
 import { track } from "~/lib/analytics.server"
 import { createAction, createActions, FormCheckbox } from "~/lib/form.server"
 import { json } from "~/lib/remix.server"
 import { type ActionFunctionArgs } from "~/lib/vendor/vercel.server"
-import { z } from "~/lib/vendor/zod.server"
 import { type Actions } from "~/pages/api+/gdpr"
 
 import { getGdprSession } from "../session/gdpr.server"

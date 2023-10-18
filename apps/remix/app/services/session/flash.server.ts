@@ -1,9 +1,9 @@
 import { createTypedSessionStorage } from "remix-utils/typed-session"
+import { z } from "zod"
 
 import { IS_PRODUCTION } from "~/lib/config.server"
 import { FLASH_SESSION_SECRET } from "~/lib/env.server"
 import { createCookieSessionStorage } from "~/lib/vendor/vercel.server"
-import { z } from "~/lib/vendor/zod.server"
 
 const FLASH_COOKIE_KEY = IS_PRODUCTION ? "ramble_session_flash" : "ramble_session_dev_flash"
 

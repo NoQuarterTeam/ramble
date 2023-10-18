@@ -1,4 +1,4 @@
-import { z } from "./vendor/zod.server"
+import { z } from "zod"
 
 // Only use on the server
 const envSchema = z.object({
@@ -23,6 +23,5 @@ export const {
   FLASH_SESSION_SECRET,
   THEME_SESSION_SECRET,
   VERCEL_GIT_COMMIT_REF,
-
   VERCEL_URL,
 } = envSchema.parse(process.env)

@@ -1,6 +1,7 @@
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 import Supercluster from "supercluster"
+import { z } from "zod"
 import { CheckboxAsString, NumAsString } from "zodix"
 
 import { publicSpotWhereClause } from "@ramble/api"
@@ -9,7 +10,6 @@ import { SpotType } from "@ramble/database/types"
 import { db } from "~/lib/db.server"
 import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
-import { z } from "~/lib/vendor/zod.server"
 import { getUserSession } from "~/services/session/session.server"
 
 export const config = {

@@ -2,6 +2,7 @@ import type { NavLinkProps } from "@remix-run/react"
 import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react"
 import { Instagram, type LucideIcon } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
+import { z } from "zod"
 import { zx } from "zodix"
 
 import { createImageUrl, merge, userInterestFields } from "@ramble/shared"
@@ -18,7 +19,6 @@ import { interestOptions } from "~/lib/models/user"
 import { notFound } from "~/lib/remix.server"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
-import { z } from "~/lib/vendor/zod.server"
 import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
 
 export const headers = useLoaderHeaders

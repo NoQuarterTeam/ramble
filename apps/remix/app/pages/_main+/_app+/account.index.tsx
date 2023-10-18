@@ -1,5 +1,6 @@
 import { useLoaderData } from "@remix-run/react"
 import { AtSign } from "lucide-react"
+import { z } from "zod"
 
 import { generateBlurHash } from "@ramble/api"
 import { join } from "@ramble/shared"
@@ -12,7 +13,6 @@ import { formError, NullableFormString, validateFormData } from "~/lib/form.serv
 import { redirect } from "~/lib/remix.server"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
-import { z } from "~/lib/vendor/zod.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

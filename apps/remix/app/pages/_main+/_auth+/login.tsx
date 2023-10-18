@@ -1,5 +1,6 @@
 import { Link, useSearchParams } from "@remix-run/react"
 import { cacheHeader } from "pretty-cache-header"
+import { z } from "zod"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { track } from "~/lib/analytics.server"
@@ -7,7 +8,6 @@ import { db } from "~/lib/db.server"
 import { createAction, createActions, formError, NullableFormString } from "~/lib/form.server"
 import type { ActionFunctionArgs, MetaFunction } from "~/lib/vendor/vercel.server"
 import { redirect } from "~/lib/vendor/vercel.server"
-import { z } from "~/lib/vendor/zod.server"
 import { comparePasswords } from "~/services/auth/password.server"
 import { getUserSession } from "~/services/session/session.server"
 

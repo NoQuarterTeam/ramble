@@ -1,5 +1,6 @@
+import { type z } from "zod"
+
 import { json as remixJson, redirect as remixRedirect } from "~/lib/vendor/vercel.server"
-import { type z } from "~/lib/vendor/zod.server"
 import { type createFlashSchema, getFlashSession } from "~/services/session/flash.server"
 
 import { IS_DEV } from "./config.server"
