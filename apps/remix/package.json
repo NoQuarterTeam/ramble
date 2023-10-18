@@ -17,7 +17,7 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.430.0",
+    "@aws-sdk/client-s3": "3.431.0",
     "@fontsource/poppins": "5.0.8",
     "@fontsource/red-rose": "5.0.15",
     "@fontsource/urbanist": "5.0.15",
