@@ -22,8 +22,9 @@ export type ScreenParamsList = {
   AccountLayout: undefined
   AccountScreen: undefined
   AccountInfoScreen: undefined
-  VanScreen: undefined
-  InterestsScreen: undefined
+  AccountVanScreen: undefined
+  AccountInterestsScreen: undefined
+  AccountSettingsScreen: undefined
 
   MapLayout: undefined
   SpotsMapScreen: undefined

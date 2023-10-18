@@ -1,6 +1,6 @@
 import { ScrollView, TouchableOpacity, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { AlertCircle, ChevronRight, type LucideIcon, ToggleRight, User, User2 } from "lucide-react-native"
+import { AlertCircle, ChevronRight, type LucideIcon, ToggleRight, User, User2, Cog } from "lucide-react-native"
 
 import { createImageUrl } from "@ramble/shared"
 
@@ -101,11 +101,14 @@ export function AccountScreen() {
               <ProfileLink to="AccountInfoScreen" Icon={User}>
                 Info
               </ProfileLink>
-              <ProfileLink to="InterestsScreen" Icon={ToggleRight}>
+              <ProfileLink to="AccountInterestsScreen" Icon={ToggleRight}>
                 Interests
               </ProfileLink>
-              <ProfileLink to="VanScreen" Icon={Icons.Van}>
+              <ProfileLink to="AccountVanScreen" Icon={Icons.Van}>
                 Van
+              </ProfileLink>
+              <ProfileLink to="AccountSettingsScreen" Icon={Cog}>
+                Settings
               </ProfileLink>
             </View>
           </View>

@@ -41,7 +41,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     infoPlist: {
       LSApplicationQueriesSchemes: ["comgooglemaps"],
     },
-    buildNumber: "2",
+    buildNumber: "3",
   },
   android: {
     adaptiveIcon: {
@@ -51,7 +51,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     softwareKeyboardLayoutMode: "resize",
     package: "co.noquarter.ramble",
     splash,
-    versionCode: 2,
+    versionCode: 3,
   },
   runtimeVersion: {
     policy: "sdkVersion",
@@ -67,7 +67,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     [
       "expo-location",
       {
-        locationWhenInUsePermission: "Show current location on map.",
+        locationWhenInUsePermission: "The app uses your location to show spots that are near to you on the map.",
       },
     ],
     [
