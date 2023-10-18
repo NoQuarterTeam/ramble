@@ -1,12 +1,12 @@
 import { Link, useLoaderData, useParams } from "@remix-run/react"
-import type { LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
 import { Lock } from "lucide-react"
 
 import { LinkButton } from "~/components/LinkButton"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
+import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 import { getMaybeUser } from "~/services/auth/auth.server"
 
 export const headers = useLoaderHeaders

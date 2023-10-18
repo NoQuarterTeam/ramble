@@ -1,6 +1,5 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Outlet, useActionData, useLoaderData } from "@remix-run/react"
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
 import { AlertCircle, Settings, ToggleRight, User } from "lucide-react"
 
 import { sendAccountVerificationEmail } from "@ramble/api"
@@ -14,6 +13,7 @@ import { Avatar, Badge, buttonSizeStyles, buttonStyles, Icons } from "~/componen
 import { track } from "~/lib/analytics.server"
 import { createToken } from "~/lib/jwt.server"
 import { json } from "~/lib/remix.server"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { PageContainer } from "../../../components/PageContainer"

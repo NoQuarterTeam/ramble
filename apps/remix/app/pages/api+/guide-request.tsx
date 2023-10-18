@@ -1,11 +1,10 @@
-import { type ActionFunctionArgs } from "@vercel/remix"
-
 import { sendGuideRequestSentToAdminsEmail } from "@ramble/api"
 
 import { FormButton, useFetcher } from "~/components/Form"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { badRequest, json } from "~/lib/remix.server"
+import { type ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 export const action = async ({ request }: ActionFunctionArgs) => {

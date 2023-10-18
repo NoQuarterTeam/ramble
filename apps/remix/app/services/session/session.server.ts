@@ -1,10 +1,11 @@
-import { createCookieSessionStorage } from "@vercel/remix"
 import { createTypedSessionStorage } from "remix-utils/typed-session"
 import { z } from "zod"
 
-import { IS_PRODUCTION, SESSION_SECRET } from "~/lib/config.server"
+import { IS_PRODUCTION } from "~/lib/config.server"
+import { SESSION_SECRET } from "~/lib/env.server"
+import { createCookieSessionStorage } from "~/lib/vendor/vercel.server"
 
-export const COOKIE_KEY = IS_PRODUCTION ? "ramble" : "ramble_session_dev"
+const COOKIE_KEY = IS_PRODUCTION ? "ramble" : "ramble_session_dev"
 
 const storage = createCookieSessionStorage({
   cookie: {
@@ -28,5 +29,6 @@ export async function getUserSession(request: Request) {
     session.set("userId", id)
     return commit()
   }
-  return { commit, destroy, session, setUser, userId: session.data.userId }
+  const userId = session.get("userId") || null
+  return { commit, destroy, session, setUser, userId }
 }

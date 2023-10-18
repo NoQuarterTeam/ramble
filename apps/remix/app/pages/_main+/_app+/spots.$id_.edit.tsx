@@ -1,15 +1,15 @@
 import { useLoaderData } from "@remix-run/react"
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
-import { json, redirect } from "@vercel/remix"
-import type { z } from "zod"
+import { type z } from "zod"
 
 import { generateBlurHash, publicSpotWhereClause } from "@ramble/api"
 import { canManageSpot, doesSpotTypeRequireAmenities } from "@ramble/shared"
 
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { formError, validateFormData } from "~/lib/form"
+import { formError, validateFormData } from "~/lib/form.server"
 import { notFound } from "~/lib/remix.server"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json, redirect } from "~/lib/vendor/vercel.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { amenitiesSchema, SpotForm, spotSchema } from "./components/SpotForm"

@@ -1,11 +1,11 @@
 import * as React from "react"
 import { type SerializeFrom } from "@remix-run/node"
 import { Await, useLoaderData } from "@remix-run/react"
-import { defer } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
 import { Spinner, Tile, TileBody, TileHeader } from "~/components/ui"
 import { db } from "~/lib/db.server"
+import { defer } from "~/lib/vendor/vercel.server"
 
 export const loader = async () => {
   return defer(

@@ -1,9 +1,9 @@
 import { Outlet } from "@remix-run/react"
-import type { LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
 import { ArrowRight } from "lucide-react"
 
 import { LinkButton } from "~/components/LinkButton"
+import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 import { requireUser } from "~/services/auth/auth.server"
 
 import { PageContainer } from "../../../components/PageContainer"

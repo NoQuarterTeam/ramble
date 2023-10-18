@@ -36,7 +36,7 @@
   "devDependencies": {
     "@ramble/eslint-config": "workspace:*",
     "@types/bcryptjs": "^2.4.4",
-    "@types/jsonwebtoken": "9.0.3",
+    "@types/jsonwebtoken": "9.0.4",
     "@types/node": "^18.18.4",
     "@types/supercluster": "^7.1.1",
     "dotenv-cli": "^7.3.0",

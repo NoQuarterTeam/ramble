@@ -1,6 +1,5 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Link, NavLink, Outlet } from "@remix-run/react"
-import { json, type LoaderFunctionArgs, redirect } from "@vercel/remix"
 import { GaugeCircle, HelpingHand, Mail, MapPin, MessageCircle, Moon, Sun, User } from "lucide-react"
 
 import { merge } from "@ramble/shared"
@@ -9,6 +8,7 @@ import { useFetcher } from "~/components/Form"
 import { type RambleIcon } from "~/components/ui"
 import { Button, buttonSizeStyles, buttonStyles } from "~/components/ui/Button"
 import { useTheme } from "~/lib/theme"
+import { json, type LoaderFunctionArgs, redirect } from "~/lib/vendor/vercel.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 export const shouldRevalidate = () => false

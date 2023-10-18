@@ -1,7 +1,6 @@
 import { Link, useLoaderData, useRouteError, useSearchParams } from "@remix-run/react"
 import type { Row } from "@tanstack/react-table"
 import { createColumnHelper } from "@tanstack/react-table"
-import type { ActionFunctionArgs, LoaderFunctionArgs, SerializeFrom } from "@vercel/remix"
 import dayjs from "dayjs"
 import { Check, ExternalLink, Eye, EyeOff, Trash } from "lucide-react"
 import queryString from "query-string"
@@ -11,7 +10,7 @@ import { z } from "zod"
 import type { Prisma, SpotType } from "@ramble/database/types"
 import { createImageUrl, merge } from "@ramble/shared"
 
-import { useFetcher } from "~/components/Form"
+import { FormButton, useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { Search } from "~/components/Search"
@@ -19,16 +18,17 @@ import { SpotIcon } from "~/components/SpotIcon"
 import { Table } from "~/components/Table"
 import { Avatar, Button, buttonStyles, IconButton, iconbuttonStyles, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
-import { FormActionInput, formError, getFormAction, validateFormData } from "~/lib/form"
+import { FormActionInput } from "~/lib/form"
+import { formError, getFormAction, validateFormData } from "~/lib/form.server"
 import { SPOT_TYPE_OPTIONS } from "~/lib/models/spot"
 import { badRequest, json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"
 import { useTheme } from "~/lib/theme"
+import type { ActionFunctionArgs, LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
 
-const schema = z.object({ type: z.string().optional(), unverified: z.string().optional() })
-
 export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const schema = z.object({ type: z.string().optional(), unverified: z.string().optional() })
   const { orderBy, search, skip, take } = getTableParams(request)
 
   const result = schema.safeParse(queryString.parse(new URL(request.url).search, { arrayFormat: "bracket" }))
@@ -85,7 +85,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         await db.spot.update({ where: { id: data.id }, data: { deletedAt: new Date() } })
         return json({ success: true })
       } catch {
-        return badRequest("Error deleting spot")
+        return badRequest("Error deleting spot", request, {
+          flash: { title: "Error deleting spot", description: "Please try again" },
+        })
       }
     case Actions.Verify:
       try {
@@ -96,7 +98,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         await db.spot.update({ where: { id: data.id }, data: { verifiedAt: new Date(), verifier: { connect: { id: user.id } } } })
         return json({ success: true })
       } catch {
-        return badRequest("Error deleting spot")
+        return badRequest("Error verifying spot", request, {
+          flash: { title: "Error verifying spot", description: "Please try again" },
+        })
       }
 
     default:
@@ -160,7 +164,7 @@ const columns = [
           <p>{row.original.verifier.firstName}</p>
         </div>
       ) : (
-        <SpotVerifyAction spot={row.original} />
+        <VerifyAction item={row.original} />
       ),
   }),
   columnHelper.accessor((row) => row.createdAt, {
@@ -193,7 +197,7 @@ const columns = [
           onClick={row.getToggleExpandedHandler()}
           icon={row.getIsExpanded() ? <EyeOff size={16} /> : <Eye size={16} />}
         />
-        <SpotDeleteAction spot={row.original} />
+        <DeleteAction item={row.original} />
       </div>
     ),
   }),
@@ -286,24 +290,24 @@ function RenderSubComponent({ row }: { row: Row<Spot> }) {
   )
 }
 
-function SpotVerifyAction({ spot }: { spot: Spot }) {
+function VerifyAction({ item }: { item: Spot }) {
   const verifyFetcher = useFetcher()
   return (
     <verifyFetcher.Form>
       <FormActionInput value={Actions.Verify} />
-      <input type="hidden" name="id" value={spot.id} />
-      <Button type="submit" isLoading={verifyFetcher.state !== "idle"} size="sm" leftIcon={<Check size={16} />}>
+      <input type="hidden" name="id" value={item.id} />
+      <FormButton size="sm" leftIcon={<Check size={16} />}>
         Verify
-      </Button>
+      </FormButton>
     </verifyFetcher.Form>
   )
 }
-function SpotDeleteAction({ spot }: { spot: Spot }) {
+function DeleteAction({ item }: { item: Spot }) {
   const deleteFetcher = useFetcher()
 
   return (
     <deleteFetcher.Form>
-      <input type="hidden" name="id" value={spot.id} />
+      <input type="hidden" name="id" value={item.id} />
 
       <FormActionInput value={Actions.Delete} />
       <IconButton

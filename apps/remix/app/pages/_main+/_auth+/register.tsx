@@ -1,5 +1,4 @@
 import { Link } from "@remix-run/react"
-import type { ActionFunctionArgs, MetaFunction } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
@@ -8,9 +7,10 @@ import { sendAccountVerificationEmail } from "@ramble/api"
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { FormActionInput, formError, getFormAction, validateFormData } from "~/lib/form"
+import { createAction, createActions, formError } from "~/lib/form.server"
 import { createToken } from "~/lib/jwt.server"
-import { badRequest, redirect } from "~/lib/remix.server"
+import { redirect } from "~/lib/remix.server"
+import type { ActionFunctionArgs, MetaFunction } from "~/lib/vendor/vercel.server"
 import { hashPassword } from "~/services/auth/password.server"
 import { getUserSession } from "~/services/session/session.server"
 
@@ -24,18 +24,14 @@ export const headers = () => {
 }
 
 enum Actions {
-  Register = "Register",
+  register = "register",
 }
 
-export const action = async ({ request }: ActionFunctionArgs) => {
-  const formAction = await getFormAction(request)
-
-  switch (formAction) {
-    case Actions.Register:
-      try {
-        const formData = await request.formData()
-        if (formData.get("passwordConfirmation")) return redirect("/") // honey pot
-        const registerSchema = z.object({
+export const action = ({ request }: ActionFunctionArgs) =>
+  createActions<Actions>(request, {
+    register: createAction(request)
+      .input(
+        z.object({
           email: z.string().min(3).email("Invalid email"),
           username: z
             .string()
@@ -44,10 +40,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           password: z.string().min(8, "Must be at least 8 characters"),
           firstName: z.string().min(2, "Must be at least 2 characters"),
           lastName: z.string().min(2, "Must be at least 2 characters"),
-        })
-        const result = await validateFormData(request, registerSchema)
-        if (!result.success) return formError(result)
-        const data = result.data
+          passwordConfirmation: z.string().optional(),
+        }),
+      )
+      .handler(async (data) => {
+        if (data.passwordConfirmation) return redirect("/") // honey pot
         const email = data.email.toLowerCase().trim()
         const existingEmail = await db.user.findFirst({ where: { email } })
         if (existingEmail) return formError({ data, formError: "User with this email already exists" })
@@ -67,14 +64,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           headers,
           flash: { title: `Welcome to Ramble, ${data.firstName}!`, description: "Let's get you setup." },
         })
-      } catch {
-        return badRequest("Error registering your account")
-      }
-
-    default:
-      break
-  }
-}
+      }),
+  })
 
 export default function Register() {
   return (
@@ -86,9 +77,11 @@ export default function Register() {
       <FormField autoCapitalize="none" required label="Choose a username" name="username" placeholder="Jim93" />
       <FormField required label="First name" name="firstName" placeholder="Jim" />
       <FormField required label="Last name" name="lastName" placeholder="Bob" />
-      <FormActionInput value={Actions.Register} />
+
       <div>
-        <FormButton className="w-full">Register</FormButton>
+        <FormButton value={Actions.register} className="w-full">
+          Register
+        </FormButton>
         <FormError />
       </div>
 

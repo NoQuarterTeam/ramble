@@ -1,6 +1,4 @@
 import { useLoaderData } from "@remix-run/react"
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
-import { json, redirect } from "@vercel/remix"
 import { z } from "zod"
 
 import { generateBlurHash } from "@ramble/api"
@@ -10,7 +8,9 @@ import { LinkButton } from "~/components/LinkButton"
 import { Textarea } from "~/components/ui"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { formError, NullableFormString, validateFormData } from "~/lib/form"
+import { formError, NullableFormString, validateFormData } from "~/lib/form.server"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json, redirect } from "~/lib/vendor/vercel.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { Footer } from "./components/Footer"
