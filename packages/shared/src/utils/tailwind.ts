@@ -1,4 +1,4 @@
-import { twJoin, type ClassNameValue, extendTailwindMerge, getDefaultConfig, mergeConfigs } from "tailwind-merge"
+import { type ClassNameValue, extendTailwindMerge, getDefaultConfig, mergeConfigs, twJoin } from "tailwind-merge"
 
 const customTwMerge = extendTailwindMerge(() => {
   const config = getDefaultConfig()

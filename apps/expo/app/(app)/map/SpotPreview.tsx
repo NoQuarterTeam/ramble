@@ -1,19 +1,21 @@
 import * as React from "react"
+import { TouchableOpacity, useColorScheme, View } from "react-native"
 import BottomSheet, { useBottomSheetSpringConfigs } from "@gorhom/bottom-sheet"
+import { Heart, Star, X } from "lucide-react-native"
+
 import { displayRating, isPartnerSpot } from "@ramble/shared"
-import { Star, Heart, X } from "lucide-react-native"
-import { useColorScheme, View, TouchableOpacity } from "react-native"
+
 import { PartnerLink } from "../../../components/PartnerLink"
 import { SpotIcon } from "../../../components/SpotIcon"
-import { VerifiedCard } from "../../../components/VerifiedCard"
+import { Button } from "../../../components/ui/Button"
 import { Spinner } from "../../../components/ui/Spinner"
 import { SpotImageCarousel } from "../../../components/ui/SpotImageCarousel"
+import { Text } from "../../../components/ui/Text"
+import { VerifiedCard } from "../../../components/VerifiedCard"
 import { api } from "../../../lib/api"
 import { height, isTablet, width } from "../../../lib/device"
 import { useBackgroundColor } from "../../../lib/tailwind"
 import { useRouter } from "../../router"
-import { Text } from "../../../components/ui/Text"
-import { Button } from "../../../components/ui/Button"
 // import * as Device from 'expo-device';
 
 export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: string | null; onClose: () => void }) {

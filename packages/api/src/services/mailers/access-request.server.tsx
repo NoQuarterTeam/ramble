@@ -1,6 +1,7 @@
 import { AccessRequestEmail } from "@ramble/emails"
-import { mailer } from "../../lib/mailer.server"
+
 import { FULL_WEB_URL } from "../../lib/config"
+import { mailer } from "../../lib/mailer.server"
 
 export async function sendAccessRequestSentToAdminsEmail(adminEmails: string[], email: string) {
   try {

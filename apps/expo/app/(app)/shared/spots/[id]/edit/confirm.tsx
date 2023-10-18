@@ -1,21 +1,20 @@
 import * as React from "react"
 import { ScrollView, View } from "react-native"
-
 import { Check, Dog } from "lucide-react-native"
 
 import { AMENITIES } from "@ramble/shared"
 
 import { SpotIcon } from "../../../../../../components/SpotIcon"
 import { Button } from "../../../../../../components/ui/Button"
+import { SpotImageCarousel } from "../../../../../../components/ui/SpotImageCarousel"
 import { Text } from "../../../../../../components/ui/Text"
 import { toast } from "../../../../../../components/ui/Toast"
 import { api } from "../../../../../../lib/api"
+import { width } from "../../../../../../lib/device"
 import { useS3Upload } from "../../../../../../lib/hooks/useS3"
+import { AMENITIES_ICONS } from "../../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../../router"
 import { EditSpotModalView } from "./EditSpotModalView"
-import { SpotImageCarousel } from "../../../../../../components/ui/SpotImageCarousel"
-import { width } from "../../../../../../lib/device"
-import { AMENITIES_ICONS } from "../../../../../../lib/models/amenities"
 
 export function EditSpotConfirmScreen() {
   const { params } = useParams<"EditSpotConfirmScreen">()
