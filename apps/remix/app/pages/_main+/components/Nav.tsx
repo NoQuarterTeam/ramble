@@ -48,7 +48,9 @@ export function Nav() {
         </div>
       </div>
       <div className="hstack space-x-3">
-        <NavbarLink to="/home">About</NavbarLink>
+        <NavbarLink className="hidden md:block" to="/home">
+          About
+        </NavbarLink>
         {user ? (
           <>
             <Feedback />
