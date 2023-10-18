@@ -1,6 +1,6 @@
 import { GuideRequestEmail, GuideRequestProps } from "@ramble/emails"
-import { mailer } from "../lib/mailer.server"
-import { FULL_WEB_URL } from "../lib/config"
+import { mailer } from "../../lib/mailer.server"
+import { FULL_WEB_URL } from "../../lib/config"
 
 export async function sendGuideRequestSentToAdminsEmail(adminEmails: string[], user: GuideRequestProps["user"]) {
   try {

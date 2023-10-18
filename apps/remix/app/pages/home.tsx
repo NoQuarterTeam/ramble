@@ -4,6 +4,7 @@ import { z } from "zod"
 
 import { join, merge } from "@ramble/shared"
 
+import { sendAccessRequestSentToAdminsEmail } from "@ramble/api"
 import { useFetcher } from "~/components/Form"
 import { PageContainer } from "~/components/PageContainer"
 import { track } from "~/lib/analytics.server"
@@ -24,6 +25,11 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
   const accessRequest = await db.accessRequest.findFirst({ where: { email: result.data.email } })
   if (accessRequest) return formError({ formError: "Email already requested access" })
   await db.accessRequest.create({ data: { email: result.data.email } })
+  const admins = await db.user.findMany({ where: { isAdmin: true }, select: { email: true } })
+  await sendAccessRequestSentToAdminsEmail(
+    admins.map((a) => a.email),
+    result.data.email,
+  )
   track("Access requested", { email: result.data.email })
   return json({ success: true })
 }

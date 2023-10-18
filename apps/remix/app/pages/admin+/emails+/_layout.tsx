@@ -6,7 +6,7 @@ import { merge } from "@ramble/shared"
 import { Form, FormButton } from "~/components/Form"
 import { buttonSizeStyles, buttonStyles } from "~/components/ui"
 
-const templates = ["reset-password", "verify-account", "feedback-sent", "guide-request"]
+const templates = ["reset-password", "verify-account", "feedback-sent", "guide-request", "access-request"]
 
 export type TemplateHandle = { url: string } | undefined
 
