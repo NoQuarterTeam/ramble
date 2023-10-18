@@ -67,7 +67,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     [
       "expo-location",
       {
-        locationWhenInUsePermission: "Show current location on map.",
+        locationWhenInUsePermission: "The app uses your location to show spots that are near to you on the map.",
       },
     ],
     [
