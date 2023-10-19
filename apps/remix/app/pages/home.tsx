@@ -19,7 +19,7 @@ export const config = {
 }
 
 export const action = async ({ request }: LoaderFunctionArgs) => {
-  const schema = z.object({ email: z.string().email() })
+  const schema = z.object({ email: z.string().email().toLowerCase() })
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
   const accessRequest = await db.accessRequest.findFirst({ where: { email: result.data.email } })

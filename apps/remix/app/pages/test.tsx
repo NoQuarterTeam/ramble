@@ -12,18 +12,20 @@ enum Actions {
 
 export const action = ({ request }: ActionFunctionArgs) => {
   return createActions<Actions>(request, {
-    first: createAction(request)
-      .input(z.object({ first: FormNumber.min(20) }))
-      .handler(async (data) => {
-        console.log(data.first)
-        return json(data, request, { flash: { title: "First worked!" } })
-      }),
-    second: createAction(request)
-      .input(z.object({ second: z.string() }))
-      .handler((data) => {
-        console.log(data.second)
-        return json(data, request, { flash: { title: "Second worked!" } })
-      }),
+    first: () =>
+      createAction(request)
+        .input(z.object({ first: FormNumber.min(20) }))
+        .handler(async (data) => {
+          console.log("first", data.first)
+          return json(data, request, { flash: { title: "First worked!" } })
+        }),
+    second: () =>
+      createAction(request)
+        .input(z.object({ second: z.string() }))
+        .handler((data) => {
+          console.log("second", data.second)
+          return json(data, request, { flash: { title: "Second worked!" } })
+        }),
   })
 }
 

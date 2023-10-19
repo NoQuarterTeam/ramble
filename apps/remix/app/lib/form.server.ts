@@ -67,13 +67,13 @@ export function formError<Schema extends z.ZodTypeAny>(args: Omit<ActionDataErro
   return json({ ...args, success: false }, { status: 400 })
 }
 
-type HandlerResult = Promise<unknown> | unknown
+type HandlerResult = () => Promise<unknown> | unknown
 
 export function createAction<Schema extends z.AnyZodObject>(request: Request) {
   return {
     input: <T extends Schema>(schema: T) => {
       return {
-        handler: async (fn: (data: z.infer<T>) => HandlerResult) => {
+        handler: async (fn: (data: z.infer<T>) => Promise<unknown> | unknown) => {
           const result = await validateFormData(request, schema)
           if (!result.success) return formError(result)
           try {
@@ -87,7 +87,7 @@ export function createAction<Schema extends z.AnyZodObject>(request: Request) {
         },
       }
     },
-    handler: async (fn: () => HandlerResult) => {
+    handler: async (fn: () => Promise<unknown> | unknown) => {
       try {
         return await fn()
       } catch (error) {
@@ -102,5 +102,6 @@ export function createAction<Schema extends z.AnyZodObject>(request: Request) {
 export async function createActions<Action extends string>(request: Request, actions: Record<Action, HandlerResult>) {
   const formAction = await getFormAction<Action>(request)
   if (!formAction) return badRequest("Invalid action", request)
-  return actions[formAction]
+
+  return actions[formAction]()
 }

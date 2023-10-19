@@ -1,6 +1,6 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Link, NavLink, useLocation, useNavigate, useSubmit } from "@remix-run/react"
-import { Heart, LogOut, Menu, Moon, Plus, Settings, Sun, User, UserCog } from "lucide-react"
+import { Heart, LogOut, Moon, Plus, Settings, Sun, User, UserCog } from "lucide-react"
 
 import { createImageUrl, merge } from "@ramble/shared"
 
@@ -48,46 +48,48 @@ export function Nav() {
         </div>
       </div>
       <div className="hstack space-x-3">
-        <NavbarLink className="hidden md:block" to="/home">
+        <NavbarLink className="hidden md:flex" to="/home">
           About
         </NavbarLink>
-        {user ? (
-          <>
-            <Feedback />
-            <Tooltip label="Add a spot">
-              <IconButton
-                onClick={() => navigate(`/spots/new${location.search}`)}
-                icon={<Plus className="sq-4" />}
-                aria-label="add spot"
-                variant="outline"
-              />
-            </Tooltip>
-          </>
-        ) : (
-          <div className="hstack hidden md:flex">
-            <LinkButton variant="ghost" to="/login">
-              Login
-            </LinkButton>
-            <LinkButton to="/register">Register</LinkButton>
-          </div>
-        )}
+        {
+          user ? (
+            <>
+              <Feedback />
+              <Tooltip label="Add a spot">
+                <IconButton
+                  onClick={() => navigate(`/spots/new${location.search}`)}
+                  icon={<Plus className="sq-4" />}
+                  aria-label="add spot"
+                  variant="outline"
+                />
+              </Tooltip>
+            </>
+          ) : null
+          // <div className="hstack hidden md:flex">
+          //   <LinkButton variant="ghost" to="/login">
+          //     Login
+          //   </LinkButton>
+          //   {/* <LinkButton to="/register">Register</LinkButton> */}
+          // </div>
+        }
         <DropdownMenu>
           <DropdownMenuTrigger asChild={!user}>
-            {user ? (
-              <Avatar
-                size={60}
-                placeholder={user.avatarBlurHash}
-                className="sq-10 hover:opacity-70"
-                src={createImageUrl(user.avatar)}
-              />
-            ) : (
-              <IconButton
-                className="inline-block md:hidden"
-                aria-label={`Toggle open menu`}
-                icon={<Menu className="sq-5" />}
-                variant="ghost"
-              />
-            )}
+            {
+              user ? (
+                <Avatar
+                  size={60}
+                  placeholder={user.avatarBlurHash}
+                  className="sq-10 hover:opacity-70"
+                  src={createImageUrl(user.avatar)}
+                />
+              ) : null
+              // <IconButton
+              //   className="inline-block md:hidden"
+              //   aria-label={`Toggle open menu`}
+              //   icon={<Menu className="sq-5" />}
+              //   variant="ghost"
+              // />
+            }
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[200px] p-1 py-1.5">
             <div className="block md:hidden">
@@ -160,9 +162,9 @@ export function Nav() {
                 <DropdownMenuItem asChild>
                   <Link to="/login">Login</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
+                {/* <DropdownMenuItem asChild>
                   <Link to="/register">Register</Link>
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
               </>
             )}
           </DropdownMenuContent>
