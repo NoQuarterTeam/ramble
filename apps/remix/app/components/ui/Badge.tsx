@@ -14,10 +14,10 @@ export const badgeProps = cva("rounded-xs w-min whitespace-nowrap border font-me
         "border-green-800/20 bg-green-300/40 text-green-900 dark:border-green-300/40 dark:bg-green-300/20 dark:text-green-200",
     },
     size: {
-      xs: "text-xxs px-1 py-px",
-      sm: "px-1 py-0.5 text-xs",
-      md: "px-2 py-1 text-sm",
-      lg: "text-md px-2.5 py-1",
+      xs: "px-1 py-px text-xs",
+      sm: "px-1 py-0.5 text-sm",
+      md: "px-2 py-1 text-base",
+      lg: "px-2.5 py-1 text-lg",
     },
   },
   defaultVariants: {

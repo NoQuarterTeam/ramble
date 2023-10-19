@@ -43,7 +43,8 @@ export const action = ({ request, params }: ActionFunctionArgs) =>
         .handler(async (data) => {
           const accessRequest = await db.accessRequest.findFirst({ where: { id: params.id } })
           if (!accessRequest) return formError({ data, formError: "Invalid invitation" })
-          const existingEmail = await db.user.findFirst({ where: { email: data.email } })
+          const email = data.email.toLowerCase().trim()
+          const existingEmail = await db.user.findFirst({ where: { email } })
           if (existingEmail) return formError({ data, formError: "User with this email already exists" })
           const username = data.username.toLowerCase().trim()
           const existingUsername = await db.user.findFirst({ where: { username } })
@@ -52,6 +53,8 @@ export const action = ({ request, params }: ActionFunctionArgs) =>
           const user = await db.user.create({
             data: {
               ...data,
+              email,
+              username,
               isVerified: true,
               password,
               lists: { create: { name: "Favourites", description: "All my favourite spots" } },
@@ -85,7 +88,7 @@ export default function Register() {
             placeholder="sally.van.life@gmail.com"
           />
           <FormField required label="Password" name="password" type="password" placeholder="********" />
-          <FormField autoCapitalize="none" required label="Choose a username" name="username" placeholder="sally_van" />
+          <FormField autoCapitalize="none" required label="Choose a username" name="username" placeholder="sally" />
           <FormField required label="First name" name="firstName" placeholder="Sally" />
           <FormField required label="Last name" name="lastName" placeholder="Smith" />
 

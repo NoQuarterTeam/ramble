@@ -46,16 +46,16 @@ export function SpotItem({ spot }: Props) {
         </div>
 
         <div className="space-y-0.5">
-          <p className="line-clamp-2 text-base leading-tight">{spot.name}</p>
+          <p className="line-clamp-2 text-lg leading-tight">{spot.name}</p>
           <p className="line-clamp-1 text-sm font-thin opacity-70">{spot.address}</p>
           <div className="flex items-center space-x-2">
-            <div className="flex items-center space-x-1 text-sm">
+            <div className="flex items-center space-x-1">
               <Star className="sq-4" />
-              <p>{displayRating(spot.rating)}</p>
+              <p className="text-sm">{displayRating(spot.rating)}</p>
             </div>
-            <div className="flex items-center space-x-1 text-sm">
+            <div className="flex items-center space-x-1">
               <Heart className="sq-4" />
-              <p>{spot.savedCount}</p>
+              <p className="text-sm">{spot.savedCount}</p>
             </div>
           </div>
         </div>

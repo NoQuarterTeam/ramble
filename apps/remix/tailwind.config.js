@@ -23,7 +23,7 @@ module.exports = {
       },
       fontFamily: {
         serif: ["Urbanist", "sans-serif"],
-        sans: ["Poppins", "sans-serif"],
+        sans: ["Urbanist", "sans-serif"],
       },
     },
   },

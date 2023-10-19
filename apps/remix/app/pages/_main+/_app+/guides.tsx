@@ -39,7 +39,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         avatar: true,
         avatarBlurHash: true,
         _count: {
-          select: { followers: true, lists: { where: { isPrivate: false } }, verifiedSpots: { where: { deletedAt: null } } },
+          select: {
+            followers: true,
+            lists: { where: { isPrivate: false } },
+            verifiedSpots: { where: { sourceUrl: { equals: null }, deletedAt: null } },
+          },
         },
       },
     }),
@@ -107,7 +111,7 @@ function GuideItem(props: { guide: SerializeFrom<typeof loader>["guides"][number
           <p className="text-lg leading-3 md:text-xl lg:text-2xl">
             {props.guide.firstName} {props.guide.lastName}
           </p>
-          <p className="text-sm">{props.guide.username}</p>
+          <p>{props.guide.username}</p>
         </div>
       </div>
       <div className="grid grid-cols-3 gap-4">

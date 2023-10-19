@@ -15,7 +15,10 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const user = await getMaybeUser(request)
   const lists = await db.list.findMany({
     orderBy: { createdAt: "desc" },
-    where: { creator: { username: params.username }, isPrivate: !user || user.username !== params.username ? false : undefined },
+    where: {
+      creator: { username: params.username?.toLowerCase().trim() },
+      isPrivate: !user || user.username !== params.username ? false : undefined,
+    },
   })
   return json(lists)
 }
@@ -44,7 +47,7 @@ export default function ProfileLists() {
                 {list.isPrivate && <Lock size={20} />}
                 <p className="text-2xl">{list.name}</p>
               </div>
-              <p className="text-sm">{list.description}</p>
+              <p>{list.description}</p>
             </Link>
           ))}
         </div>

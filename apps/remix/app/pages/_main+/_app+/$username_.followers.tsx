@@ -16,7 +16,10 @@ import { json } from "~/lib/vendor/vercel.server"
 export const headers = useLoaderHeaders
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
-  const user = await db.user.findUnique({ where: { username: params.username }, include: { followers: true } })
+  const user = await db.user.findUnique({
+    where: { username: params.username?.toLowerCase().trim() },
+    include: { followers: true },
+  })
   if (!user) throw notFound()
   return json(user, {
     headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour", staleWhileRevalidate: "1min" }) },

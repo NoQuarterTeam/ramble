@@ -83,7 +83,7 @@ export function FormFieldLabel(
     <label
       htmlFor={props.name}
       {...props}
-      className={merge("flex text-sm font-normal text-gray-700 dark:text-gray-100", props.className)}
+      className={merge("flex font-normal text-gray-700 dark:text-gray-100", props.className)}
     >
       {props.children}
       {props.required && <span className="pl-0.5 text-red-500">*</span>}
@@ -96,7 +96,7 @@ export function FormFieldError(
   },
 ) {
   return (
-    <p {...props} className={merge("text-sm text-red-400", props.className)}>
+    <p {...props} className={merge("text-red-400", props.className)}>
       {props.children}
     </p>
   )
@@ -137,7 +137,7 @@ export const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(func
           {label}
         </FormFieldLabel>
       )}
-      {clonedInput || <Input size="sm" {...sharedProps} />}
+      {clonedInput || <Input {...sharedProps} />}
 
       {typeof fieldErrors === "string" ? (
         <FormFieldError>{fieldErrors}</FormFieldError>
@@ -177,7 +177,7 @@ export const InlineFormField = React.forwardRef<HTMLInputElement, FormFieldProps
             </FormFieldLabel>
           </div>
         )}
-        {clonedInput || <Input size="sm" {...sharedProps} />}
+        {clonedInput || <Input {...sharedProps} />}
       </div>
       {typeof fieldErrors === "string" ? (
         <FormFieldError>{fieldErrors}</FormFieldError>

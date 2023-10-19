@@ -18,7 +18,6 @@ import {
   Outlet,
   useFetcher,
   useLoaderData,
-  useLocation,
   useNavigate,
   useRouteError,
   useSearchParams,
@@ -123,7 +122,6 @@ export default function MapView() {
   }
   const navigate = useNavigate()
 
-  const location = useLocation()
   const markers = React.useMemo(
     () =>
       clusters?.map((point, i) => (
@@ -133,7 +131,7 @@ export default function MapView() {
           onClick={(e) => {
             e.originalEvent.stopPropagation()
             if (!point.properties.cluster && point.properties.id) {
-              navigate(`/map/${point.properties.id}${location.search}`)
+              navigate(`/map/${point.properties.id}${window.location.search}`)
             }
             const zoom = point.properties.cluster ? Math.min(point.properties.zoomLevel, 20) : mapRef.current?.getZoom()
             const center = point.geometry.coordinates as LngLatLike

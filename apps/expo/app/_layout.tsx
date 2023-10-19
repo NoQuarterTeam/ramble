@@ -4,17 +4,22 @@ import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { enableScreens } from "react-native-screens"
 import {
-  Poppins_300Light,
-  Poppins_400Regular,
-  Poppins_400Regular_Italic,
-  Poppins_500Medium,
-  Poppins_600SemiBold,
-  Poppins_700Bold,
-  Poppins_800ExtraBold,
-  Poppins_900Black,
+  Urbanist_300Light,
+  Urbanist_300Light_Italic,
+  Urbanist_400Regular,
+  Urbanist_400Regular_Italic,
+  Urbanist_500Medium,
+  Urbanist_500Medium_Italic,
+  Urbanist_600SemiBold,
+  Urbanist_600SemiBold_Italic,
+  Urbanist_700Bold,
+  Urbanist_700Bold_Italic,
+  Urbanist_800ExtraBold,
+  Urbanist_800ExtraBold_Italic,
+  Urbanist_900Black,
+  Urbanist_900Black_Italic,
   useFonts,
-} from "@expo-google-fonts/poppins"
-import { Urbanist_700Bold_Italic } from "@expo-google-fonts/urbanist"
+} from "@expo-google-fonts/urbanist"
 import { type LinkingOptions, NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import * as Linking from "expo-linking"
@@ -73,15 +78,20 @@ const Container = createNativeStackNavigator<ScreenParamsList>()
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
-    poppins300: Poppins_300Light,
-    poppins400: Poppins_400Regular,
-    poppins400Italic: Poppins_400Regular_Italic,
-    poppins500: Poppins_500Medium,
-    poppins600: Poppins_600SemiBold,
-    poppins700: Poppins_700Bold,
-    poppins800: Poppins_800ExtraBold,
-    poppins900: Poppins_900Black,
+    urbanist300: Urbanist_300Light,
+    urbanist400: Urbanist_400Regular,
+    urbanist400Italic: Urbanist_400Regular_Italic,
+    urbanist500: Urbanist_500Medium,
+    urbanist600: Urbanist_600SemiBold,
+    urbanist700: Urbanist_700Bold,
+    urbanist800: Urbanist_800ExtraBold,
+    urbanist900: Urbanist_900Black,
     urbanist700Italic: Urbanist_700Bold_Italic,
+    urbanist200Italic: Urbanist_300Light_Italic,
+    urbanist300Italic: Urbanist_500Medium_Italic,
+    urbanist500Italic: Urbanist_600SemiBold_Italic,
+    urbanist800Italic: Urbanist_800ExtraBold_Italic,
+    urbanist900Italic: Urbanist_900Black_Italic,
   })
 
   const backgroundColor = useBackgroundColor()
