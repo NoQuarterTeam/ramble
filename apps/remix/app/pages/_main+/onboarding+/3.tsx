@@ -42,7 +42,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function Onboarding3() {
   const user = useLoaderData<typeof loader>()
-  const [isPetOwner, setIsPetOwner] = React.useState<boolean | null>(user.isPetOwner || null)
+  const [isPetOwner, setIsPetOwner] = React.useState<boolean>(user.isPetOwner)
   const actionData = useFormErrors<typeof schema>()
   return (
     <Form className="space-y-10">
