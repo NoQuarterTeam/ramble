@@ -1,4 +1,4 @@
-import { useLoaderData } from "@remix-run/react"
+import { useLoaderData, useRouteError, useSearchParams } from "@remix-run/react"
 import { createColumnHelper } from "@tanstack/react-table"
 import dayjs from "dayjs"
 import { Check, Trash } from "lucide-react"
@@ -10,20 +10,29 @@ import { type Prisma } from "@ramble/database/types"
 import { useFetcher } from "~/components/Form"
 import { Search } from "~/components/Search"
 import { Table } from "~/components/Table"
-import { IconButton, Tooltip } from "~/components/ui"
+import { Button, IconButton, Tooltip } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { FormActionInput } from "~/lib/form"
 import { createAction, createActions } from "~/lib/form.server"
-import { json } from "~/lib/remix.server"
+import { badRequest, json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"
 import { type ActionFunctionArgs, type LoaderFunctionArgs, type SerializeFrom } from "~/lib/vendor/vercel.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
 import { sendBetaInvitationEmail } from "@ramble/api"
+import queryString from "query-string"
+import { zx } from "zodix"
+import { LinkButton } from "~/components/LinkButton"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { orderBy, search, skip, take } = getTableParams(request)
+
+  const schema = z.object({ unaccepted: zx.BoolAsString.optional() })
+  const result = schema.safeParse(queryString.parse(new URL(request.url).search))
+  if (!result.success) throw badRequest(result.error.message)
+
   const where = {
     OR: search ? [{ email: { contains: search } }] : undefined,
+    acceptedAt: result.data.unaccepted ? { equals: null } : undefined,
   } satisfies Prisma.AccessRequestWhereInput
 
   const data = await promiseHash({
@@ -96,7 +105,7 @@ const columns = [
     header: () => null,
     cell: ({ row }) => (
       <div className="hstack justify-end">
-        <AcceptAction item={row.original} />
+        {!row.original.user && <AcceptAction item={row.original} />}
         {!row.original.acceptedAt && <DeleteAction item={row.original} />}
       </div>
     ),
@@ -104,10 +113,28 @@ const columns = [
 ]
 export default function AccessRequests() {
   const { accessRequests, count } = useLoaderData<typeof loader>()
+  const [searchParams, setSearchParams] = useSearchParams()
   return (
     <div className="space-y-2">
       <h1 className="text-4xl">Access Requests</h1>
       <div className="flex gap-2">
+        <div>
+          <Button
+            variant={searchParams.get("unaccepted") === "true" ? "primary" : "outline"}
+            onClick={() => {
+              const existingParams = queryString.parse(searchParams.toString())
+              setSearchParams(
+                queryString.stringify({
+                  ...existingParams,
+                  unaccepted: searchParams.get("unaccepted") === "true" ? undefined : true,
+                }),
+              )
+            }}
+          >
+            Show unaccepted
+          </Button>
+        </div>
+
         <div>
           <Search className="max-w-[400px]" />
         </div>
@@ -149,5 +176,25 @@ function DeleteAction({ item }: { item: AccessRequest }) {
         icon={<Trash className="text-red-500" size={16} />}
       />
     </fetcher.Form>
+  )
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError()
+  const isError = error instanceof Error
+  return (
+    <div className="space-y-4">
+      <h1 className="text-4xl">Spots</h1>
+      {isError ? (
+        <div className="space-y-4">
+          <LinkButton to="/admin/access-requesets" variant="outline">
+            Back to list
+          </LinkButton>
+          <pre className="rounded-xs bg-gray-100 p-1 text-sm dark:bg-gray-950">{error.message}</pre>
+        </div>
+      ) : (
+        <p>Unknown error</p>
+      )}
+    </div>
   )
 }
