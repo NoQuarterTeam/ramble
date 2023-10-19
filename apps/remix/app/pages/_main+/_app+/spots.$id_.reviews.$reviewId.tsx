@@ -38,30 +38,32 @@ export enum Actions {
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request)
   return createActions<Actions>(request, {
-    edit: createAction(request)
-      .input(z.object({ description: z.string().min(10), rating: FormNumber.min(1).max(5) }))
-      .handler(async (data) => {
-        try {
-          const spot = await db.spot.findUnique({ where: { id: params.id } })
-          if (!spot) throw notFound()
-          const review = await db.review.findUnique({ where: { id: params.reviewId } })
-          if (!review || review.userId !== user.id) throw notFound()
-          await db.review.update({
-            where: { id: review.id },
-            data: { description: data.description, rating: data.rating },
-          })
-          track("Review updated", { reviewId: review.id, userId: user.id })
-          return redirect("/spots/" + spot.id, request, { flash: { title: "Review updated!", description: "Thank you!" } })
-        } catch {
-          return badRequest(null, request, { flash: { title: "Error editing review" } })
-        }
+    edit: () =>
+      createAction(request)
+        .input(z.object({ description: z.string().min(10), rating: FormNumber.min(1).max(5) }))
+        .handler(async (data) => {
+          try {
+            const spot = await db.spot.findUnique({ where: { id: params.id } })
+            if (!spot) throw notFound()
+            const review = await db.review.findUnique({ where: { id: params.reviewId } })
+            if (!review || review.userId !== user.id) throw notFound()
+            await db.review.update({
+              where: { id: review.id },
+              data: { description: data.description, rating: data.rating },
+            })
+            track("Review updated", { reviewId: review.id, userId: user.id })
+            return redirect("/spots/" + spot.id, request, { flash: { title: "Review updated!", description: "Thank you!" } })
+          } catch {
+            return badRequest(null, request, { flash: { title: "Error editing review" } })
+          }
+        }),
+    delete: () =>
+      createAction(request).handler(async () => {
+        const review = await db.review.findUnique({ where: { id: params.reviewId } })
+        if (!review || review.userId !== user.id) throw notFound()
+        await db.review.delete({ where: { id: review.id } })
+        return redirect("/spots/" + params.id, request, { flash: { title: "Review deleted" } })
       }),
-    delete: createAction(request).handler(async () => {
-      const review = await db.review.findUnique({ where: { id: params.reviewId } })
-      if (!review || review.userId !== user.id) throw notFound()
-      await db.review.delete({ where: { id: review.id } })
-      return redirect("/spots/" + params.id, request, { flash: { title: "Review deleted" } })
-    }),
   })
 }
 

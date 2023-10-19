@@ -1,22 +1,22 @@
 import { TRPCError } from "@trpc/server"
+import dayjs from "dayjs"
 import Supercluster from "supercluster"
 import { z } from "zod"
 
 import { Prisma, SpotType } from "@ramble/database/types"
 import {
-  SpotItemWithStatsAndImage,
   amenitiesFields,
   spotAmenitiesSchema,
+  type SpotItemWithStatsAndImage,
   spotPartnerFields,
   spotSchemaWithoutType,
 } from "@ramble/shared"
 
+import { fetchAndJoinSpotImages } from "../lib/models/spot"
 import { generateBlurHash } from "../services/generateBlurHash.server"
 import { geocodeCoords } from "../services/geocode.server"
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 import { publicSpotWhereClause, publicSpotWhereClauseRaw } from "../shared/spot.server"
-import dayjs from "dayjs"
-import { fetchAndJoinSpotImages } from "../lib/models/spot"
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const spotRouter = createTRPCRouter({
   clusters: publicProcedure

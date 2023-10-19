@@ -1,7 +1,9 @@
-import { isPartnerSpot, type SpotPartnerFields } from "@ramble/shared"
+import { TouchableOpacity, useColorScheme } from "react-native"
 import { Image } from "expo-image"
 import * as WebBrowser from "expo-web-browser"
-import { TouchableOpacity, useColorScheme } from "react-native"
+
+import { isPartnerSpot, type SpotPartnerFields } from "@ramble/shared"
+
 import { WEB_URL } from "../lib/config"
 import { Text } from "./ui/Text"
 import { toast } from "./ui/Toast"

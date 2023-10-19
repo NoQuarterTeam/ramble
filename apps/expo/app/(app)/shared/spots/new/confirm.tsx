@@ -1,23 +1,21 @@
 import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
-
 import { Check, Dog, Lock } from "lucide-react-native"
 
 import { AMENITIES } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
+import { SpotIcon } from "../../../../../components/SpotIcon"
 import { Button } from "../../../../../components/ui/Button"
+import { SpotImageCarousel } from "../../../../../components/ui/SpotImageCarousel"
 import { Text } from "../../../../../components/ui/Text"
 import { toast } from "../../../../../components/ui/Toast"
 import { api } from "../../../../../lib/api"
+import { width } from "../../../../../lib/device"
 import { useS3Upload } from "../../../../../lib/hooks/useS3"
-
+import { AMENITIES_ICONS } from "../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
-import { SpotIcon } from "../../../../../components/SpotIcon"
-import { width } from "../../../../../lib/device"
-import { SpotImageCarousel } from "../../../../../components/ui/SpotImageCarousel"
-import { AMENITIES_ICONS } from "../../../../../lib/models/amenities"
 
 export function NewSpotConfirmScreen() {
   const { params } = useParams<"NewSpotConfirmScreen">()

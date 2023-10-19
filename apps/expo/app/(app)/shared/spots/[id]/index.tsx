@@ -15,6 +15,7 @@ import { Check, ChevronDown, ChevronLeft, Compass, Edit2, Heart, Star, Trash } f
 
 import { AMENITIES, canManageSpot, displayRating, isPartnerSpot, merge } from "@ramble/shared"
 
+import { PartnerLink } from "../../../../../components/PartnerLink"
 import { ReviewItem } from "../../../../../components/ReviewItem"
 import { Button } from "../../../../../components/ui/Button"
 import { Heading } from "../../../../../components/ui/Heading"
@@ -23,11 +24,10 @@ import { Text } from "../../../../../components/ui/Text"
 import { toast } from "../../../../../components/ui/Toast"
 import { VerifiedCard } from "../../../../../components/VerifiedCard"
 import { api } from "../../../../../lib/api"
-import { width } from "../../../../../lib/device"
+import { height, width } from "../../../../../lib/device"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { AMENITIES_ICONS } from "../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../router"
-import { PartnerLink } from "../../../../../components/PartnerLink"
 
 export function SpotDetailScreen() {
   const [location, setLocation] = React.useState<Location.LocationObjectCoords | null>(null)
@@ -119,7 +119,7 @@ export function SpotDetailScreen() {
         onScroll={scrollHandler}
       >
         <Animated.View style={imageStyle}>
-          <SpotImageCarousel canAddMore width={width} height={300} images={spot.images} spotId={spot.id} />
+          <SpotImageCarousel canAddMore width={width} height={height * 0.37} images={spot.images} spotId={spot.id} />
         </Animated.View>
         <View className="space-y-3 p-4">
           <View className="space-y-2">

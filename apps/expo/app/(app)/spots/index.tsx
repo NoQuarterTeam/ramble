@@ -11,7 +11,7 @@ import { Spinner } from "../../../components/ui/Spinner"
 import { TabView } from "../../../components/ui/TabView"
 import { Text } from "../../../components/ui/Text"
 import { api } from "../../../lib/api"
-import { height, width } from "../../../lib/device"
+import { height, isTablet, width } from "../../../lib/device"
 import { useRouter } from "../../router"
 
 const SORT_OPTIONS = { latest: "latest", rated: "top rated", saved: "most saved" } as const
@@ -80,12 +80,17 @@ export function SpotsScreen() {
           showsVerticalScrollIndicator={false}
           estimatedItemSize={322}
           onEndReachedThreshold={0.8}
+          numColumns={isTablet ? 2 : undefined}
           contentContainerStyle={{ paddingVertical: 20 }}
           ListEmptyComponent={<Text>No spots yet</Text>}
           onEndReached={handleLoadMore}
           data={spots}
           ItemSeparatorComponent={() => <View className="h-6" />}
-          renderItem={({ item }) => <SpotItem spot={item} />}
+          renderItem={({ item }) => (
+            <View style={{ width: "100%", paddingHorizontal: isTablet ? 10 : 0 }}>
+              <SpotItem spot={item} />
+            </View>
+          )}
         />
       )}
     </TabView>

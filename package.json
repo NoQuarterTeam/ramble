@@ -18,6 +18,7 @@
     "prettier": "turbo run prettier",
     "prettier:fix": "turbo run prettier:fix",
     "lint:fix": "turbo run lint:fix",
+    "format": "turbo run lint:fix && turbo run prettier:fix",
     "typecheck": "turbo run typecheck",
     "db:generate": "turbo run db:generate"
   },
@@ -31,7 +32,6 @@
   },
   "pnpm": {
     "patchedDependencies": {
-      "sonner@1.0.0": "patches/sonner@1.0.0.patch",
       "@turf/helpers@6.5.0": "patches/@turf__helpers@6.5.0.patch",
       "@turf/buffer@6.5.0": "patches/@turf__buffer@6.5.0.patch",
       "@turf/boolean-point-in-polygon@6.5.0": "patches/@turf__boolean-point-in-polygon@6.5.0.patch",

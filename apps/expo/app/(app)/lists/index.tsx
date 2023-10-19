@@ -12,7 +12,7 @@ import { Spinner } from "../../../components/ui/Spinner"
 import { TabView } from "../../../components/ui/TabView"
 import { Text } from "../../../components/ui/Text"
 import { api } from "../../../lib/api"
-import { height, width } from "../../../lib/device"
+import { height, isTablet, width } from "../../../lib/device"
 import { useMe } from "../../../lib/hooks/useMe"
 import { useRouter } from "../../router"
 
@@ -77,11 +77,16 @@ export function ListsScreen() {
         <FlashList
           showsVerticalScrollIndicator={false}
           estimatedItemSize={86}
+          numColumns={isTablet ? 2 : undefined}
           contentContainerStyle={{ paddingVertical: 10 }}
           ListEmptyComponent={<Text className="text-center">No lists yet</Text>}
           data={lists}
-          ItemSeparatorComponent={() => <View className="h-1" />}
-          renderItem={({ item }) => <ListItem list={item} />}
+          ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
+          renderItem={({ item }) => (
+            <View style={{ width: "100%", paddingHorizontal: isTablet ? 10 : 0 }}>
+              <ListItem list={item} />
+            </View>
+          )}
         />
       )}
     </TabView>
