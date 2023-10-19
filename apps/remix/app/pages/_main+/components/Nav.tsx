@@ -1,5 +1,5 @@
 import type { NavLinkProps } from "@remix-run/react"
-import { Link, NavLink, useLocation, useNavigate, useSubmit } from "@remix-run/react"
+import { Link, NavLink, useNavigate, useSubmit } from "@remix-run/react"
 import { Heart, LogOut, Moon, Plus, Settings, Sun, User, UserCog } from "lucide-react"
 
 import { createImageUrl, merge } from "@ramble/shared"
@@ -27,7 +27,6 @@ export function Nav() {
   const logoutSubmit = useSubmit()
   const themeFetcher = useFetcher()
 
-  const location = useLocation()
   const navigate = useNavigate()
   const theme = useTheme()
   const isDark = theme === "dark"
@@ -39,7 +38,7 @@ export function Nav() {
         </Link>
 
         <div className="hidden items-center space-x-1 md:flex">
-          <NavbarLink to={`/map${location.search}`}>Map</NavbarLink>
+          <NavbarLink to={`/map`}>Map</NavbarLink>
           <NavbarLink to="/spots" end>
             Latest spots
           </NavbarLink>
@@ -57,7 +56,7 @@ export function Nav() {
               <Feedback />
               <Tooltip label="Add a spot">
                 <IconButton
-                  onClick={() => navigate(`/spots/new${location.search}`)}
+                  onClick={() => navigate(`/spots/new${window.location.search}`)}
                   icon={<Plus className="sq-4" />}
                   aria-label="add spot"
                   variant="outline"

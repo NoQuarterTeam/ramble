@@ -1,6 +1,6 @@
 import * as React from "react"
 import { type SerializeFrom } from "@remix-run/node"
-import { Await, Link, useLoaderData, useLocation, useNavigate, useParams } from "@remix-run/react"
+import { Await, Link, useLoaderData, useNavigate, useParams } from "@remix-run/react"
 import { ArrowLeft, ArrowRight, Frown, Heart, Image, Star } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 import { useAuthenticityToken } from "remix-utils/csrf/react"
@@ -267,10 +267,9 @@ export function Skeleton(props: React.HTMLAttributes<HTMLDivElement>) {
 
 function SpotContainer(props: { children: React.ReactNode }) {
   const navigate = useNavigate()
-  const location = useLocation()
   return (
     <div className="bg-background absolute bottom-0 left-0 top-0 z-10 w-full max-w-lg overflow-scroll border-r p-4 pb-20 md:px-8">
-      <CloseButton className="absolute right-2 top-2 z-10" onClick={() => navigate(`..${location.search}`)} />
+      <CloseButton className="absolute right-2 top-2 z-10" onClick={() => navigate(`..${window.location.search}`)} />
       {props.children}
     </div>
   )
@@ -278,7 +277,6 @@ function SpotContainer(props: { children: React.ReactNode }) {
 
 function SameSpotNavigation({ spots }: { spots: Awaited<SerializeFrom<typeof loader>["sameLocationSpots"]> }) {
   const params = useParams()
-  const location = useLocation()
   if (spots.length === 1) return null
   const currentIndex = spots.findIndex((s) => s.id === params.id)
   const isLast = currentIndex === spots.length - 1
@@ -289,7 +287,7 @@ function SameSpotNavigation({ spots }: { spots: Awaited<SerializeFrom<typeof loa
         leftIcon={<ArrowLeft size={14} />}
         size="sm"
         variant="outline"
-        to={`/map/${isFirst ? spots[spots.length - 1]?.id : spots[currentIndex - 1]?.id}${location.search}`}
+        to={`/map/${isFirst ? spots[spots.length - 1]?.id : spots[currentIndex - 1]?.id}${window.location.search}`}
       >
         Prev
       </LinkButton>
@@ -300,7 +298,7 @@ function SameSpotNavigation({ spots }: { spots: Awaited<SerializeFrom<typeof loa
         rightIcon={<ArrowRight size={14} />}
         size="sm"
         variant="outline"
-        to={`/map/${isLast ? spots[0]?.id : spots[currentIndex + 1]?.id}${location.search}`}
+        to={`/map/${isLast ? spots[0]?.id : spots[currentIndex + 1]?.id}${window.location.search}`}
       >
         Next
       </LinkButton>
