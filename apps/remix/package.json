@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.431.0",
-    "@fontsource/urbanist": "5.0.15",
+    "@fontsource/urbanist": "5.0.16",
     "@radix-ui/react-alert-dialog": "1.0.5",
     "@radix-ui/react-avatar": "1.0.4",
     "@radix-ui/react-checkbox": "1.0.4",
@@ -90,7 +90,7 @@
     "@types/jsonwebtoken": "9.0.4",
     "@types/nodemailer": "6.4.13",
     "@types/nprogress": "0.2.2",
-    "@types/react": "18.2.29",
+    "@types/react": "18.2.30",
     "@types/react-dom": "18.2.14",
     "@types/sharp": "0.31.1",
     "@types/supercluster": "7.1.2",
