@@ -1,4 +1,4 @@
-import { sendGuideRequestSentToAdminsEmail } from "@ramble/api"
+import { sendBetaInvitationEmail } from "@ramble/api"
 import { BetaInvitationContent } from "@ramble/emails"
 
 import { useConfig } from "~/lib/hooks/useConfig"
@@ -11,7 +11,7 @@ import { type TemplateHandle } from "./_layout"
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await getCurrentAdmin(request)
-  await sendGuideRequestSentToAdminsEmail([user.email], user)
+  await sendBetaInvitationEmail(user.email, "test")
   return json(true, request, { flash: { title: "Email sent!", description: "Check the email linked to your account" } })
 }
 
