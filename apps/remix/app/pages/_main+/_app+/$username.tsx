@@ -1,7 +1,6 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react"
 import { Instagram, type LucideIcon } from "lucide-react"
-import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 import { zx } from "zodix"
 
@@ -46,14 +45,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   })
   if (!user) throw notFound()
 
-  return json(
-    { ...user, isFollowed: user.followers && user.followers.length > 0 },
-    {
-      headers: {
-        "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour", staleWhileRevalidate: "1min" }),
-      },
-    },
-  )
+  return json({ ...user, isFollowed: user.followers && user.followers.length > 0 })
 }
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
