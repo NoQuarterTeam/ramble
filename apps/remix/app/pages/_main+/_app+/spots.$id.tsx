@@ -132,7 +132,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     case Actions.Delete:
       try {
         if (!user.isAdmin) return redirect("/spots")
-        await db.spot.delete({ where: { id: params.id } })
+        await db.spot.update({ where: { id: params.id }, data: { deletedAt: new Date() } })
         track("Spot deleted", { spotId: params.id || "", userId: user.id })
         return redirect("/spots", request, { flash: { title: "Spot deleted!" } })
       } catch (error) {
