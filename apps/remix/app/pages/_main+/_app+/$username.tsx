@@ -26,7 +26,7 @@ export const headers = useLoaderHeaders
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const currentUser = await getMaybeUser(request)
   const user = await db.user.findUnique({
-    where: { username: params.username },
+    where: { username: params.username?.toLowerCase().trim() },
     select: {
       id: true,
       avatar: true,
@@ -64,10 +64,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   if (user.username === params.username) return json({ success: false, message: "You can't follow yourself" })
   const shouldFollow = result.data.shouldFollow
   await db.user.update({
-    where: { username: params.username },
+    where: { username: params.username?.toLowerCase().trim() },
     data: { followers: shouldFollow ? { connect: { id: user.id } } : { disconnect: { id: user.id } } },
   })
-  track(shouldFollow ? "User followed" : "User unfollowed", { username: params.username || "", userId: user.id })
+  track(shouldFollow ? "User followed" : "User unfollowed", {
+    username: params.username?.toLowerCase().trim() || "",
+    userId: user.id,
+  })
   return json({ success: true })
 }
 

@@ -10,7 +10,7 @@ import { UserItem } from "./UserItem"
 
 export function UserFollowing() {
   const { params } = useParams<"UserFollowing">()
-  const { data, isLoading } = api.user.following.useQuery({ username: params.username })
+  const { data, isLoading } = api.user.following.useQuery({ username: params.username?.toLowerCase().trim() })
 
   return (
     <ScreenView title="Following">

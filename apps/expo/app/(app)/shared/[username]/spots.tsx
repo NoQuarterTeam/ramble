@@ -9,7 +9,7 @@ import { useParams } from "../../../router"
 
 export function UserSpots() {
   const { params } = useParams<"UserScreen">()
-  const { data: spots, isLoading } = api.spot.byUser.useQuery({ username: params.username })
+  const { data: spots, isLoading } = api.spot.byUser.useQuery({ username: params.username?.toLowerCase().trim() })
   if (isLoading)
     return (
       <View className="flex items-center justify-center py-4">

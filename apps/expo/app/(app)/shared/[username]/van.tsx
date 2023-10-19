@@ -12,7 +12,10 @@ import { useParams } from "../../../router"
 export function UserVan() {
   const { params } = useParams<"UserScreen">()
 
-  const { data: van, isLoading } = api.van.byUser.useQuery({ username: params.username || "" }, { enabled: !!params.username })
+  const { data: van, isLoading } = api.van.byUser.useQuery(
+    { username: params.username?.toLowerCase().trim() || "" },
+    { enabled: !!params.username },
+  )
 
   if (isLoading)
     return (
