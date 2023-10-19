@@ -21,7 +21,7 @@ export const headers = useLoaderHeaders
 
 const TAKE = 12
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-  const user = await db.user.findUnique({ where: { username: params.username } })
+  const user = await db.user.findUnique({ where: { username: params.username?.toLowerCase().trim() } })
   if (!user) throw notFound()
   const searchParams = new URL(request.url).searchParams
   const skip = parseInt((searchParams.get("skip") as string) || "0")

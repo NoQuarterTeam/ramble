@@ -15,19 +15,9 @@ export function EmailDocument({ children, preview }: { children: React.ReactNode
             format: "woff2",
           }}
         />
-        <Font
-          fontFamily="Poppins"
-          fallbackFontFamily="Verdana"
-          fontStyle="normal"
-          fontWeight={400}
-          webFont={{
-            url: "https://fonts.gstatic.com/s/poppins/v20/pxiEyp8kv8JHgFVrJJnecnFHGPezSQ.woff2",
-            format: "woff2",
-          }}
-        />
       </Head>
       {preview && <Preview>{preview}</Preview>}
-      <Body style={{ fontFamily: "Poppins, Verdana", fontWeight: 400 }}>{children}</Body>
+      <Body style={{ fontFamily: "Urbanist, Verdana, sans-serif", fontWeight: 400 }}>{children}</Body>
     </Html>
   )
 }

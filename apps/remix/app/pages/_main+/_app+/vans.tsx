@@ -106,7 +106,7 @@ function VanItem(props: { van: SerializeFrom<LoaderData>["vans"][number] }) {
       <div className="space-y-2 p-2">
         <div>
           <p className="text-2xl leading-5">{props.van.name}</p>
-          <p className="text-sm">
+          <p>
             {props.van.model} · {props.van.year}
           </p>
         </div>

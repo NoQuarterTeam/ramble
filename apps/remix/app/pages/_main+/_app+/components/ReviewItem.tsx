@@ -64,7 +64,7 @@ export function ReviewItem({ review }: Props) {
           <p>{review.rating}</p>
         </div>
       </div>
-      <p className="text-sm">{review.description}</p>
+      <p>{review.description}</p>
       {user?.id === review.user.id && (
         <div className="flex space-x-2">
           <LinkButton variant="outline" to={`reviews/${review.id}`}>

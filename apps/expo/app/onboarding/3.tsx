@@ -54,7 +54,7 @@ export default function OnboardingStep3Screen() {
           <FormInput error={error} name="name" label="What's it's name?" placeholder="Patrick" />
           <FormInput error={error} name="model" label="What type of van is it?" placeholder="Citroën Jumper" />
           <FormInput error={error} name="year" label="What year was it born?" placeholder="2013" />
-          <FormInput error={error} multiline name="description" label="Anything else you wana mention?" />
+          <FormInput error={error} multiline name="description" label="Anything else you wanna mention?" />
         </View>
         <FormError error={error} />
       </ScrollView>
