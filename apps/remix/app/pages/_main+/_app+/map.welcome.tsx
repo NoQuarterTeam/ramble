@@ -2,7 +2,7 @@ import { useLoaderData, useLocation, useNavigate } from "@remix-run/react"
 
 import { LinkButton } from "~/components/LinkButton"
 import { Modal } from "~/components/ui"
-import { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { type LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
