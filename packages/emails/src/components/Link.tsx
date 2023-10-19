@@ -1,5 +1,6 @@
-import { merge } from "@ramble/shared"
 import { Link as RLink } from "@react-email/components"
+
+import { merge } from "@ramble/shared"
 
 interface Props {
   href: string

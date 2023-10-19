@@ -1,6 +1,7 @@
-import { merge } from "@ramble/shared"
+import type * as React from "react"
 import { Heading as RHeading } from "@react-email/components"
-import * as React from "react"
+
+import { merge } from "@ramble/shared"
 
 interface Props {
   children: React.ReactNode

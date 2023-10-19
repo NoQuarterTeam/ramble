@@ -5,7 +5,7 @@ import { updateSchema, userInterestFields } from "@ramble/shared"
 
 import { createAuthToken } from "../lib/jwt"
 import { generateBlurHash } from "../services/generateBlurHash.server"
-import { sendAccountVerificationEmail } from "../services/user.mailer.server"
+import { sendAccountVerificationEmail } from "../services/mailers/user.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const userRouter = createTRPCRouter({

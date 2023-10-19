@@ -1,9 +1,9 @@
-import Mapbox, { Camera, MarkerView, RasterLayer, RasterSource, type MapView as MapType } from "@rnmapbox/maps"
+import * as React from "react"
+import { Modal, Switch, TouchableOpacity, useColorScheme, View } from "react-native"
+import Mapbox, { Camera, type MapView as MapType, MarkerView, RasterLayer, RasterSource } from "@rnmapbox/maps"
 import { useQuery } from "@tanstack/react-query"
 import * as Location from "expo-location"
 import { CloudRain, Layers, Navigation, PlusCircle, Settings2 } from "lucide-react-native"
-import * as React from "react"
-import { Modal, Switch, TouchableOpacity, useColorScheme, View } from "react-native"
 
 import { type SpotType } from "@ramble/database/types"
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
@@ -18,7 +18,7 @@ import { api, type RouterOutputs } from "../../../lib/api"
 import { useAsyncStorage } from "../../../lib/hooks/useAsyncStorage"
 import { usePreferences } from "../../../lib/hooks/usePreferences"
 import { useRouter } from "../../router"
-import { initialFilters, MapFilters, type Filters } from "./MapFilters"
+import { type Filters, initialFilters, MapFilters } from "./MapFilters"
 import { SpotPreview } from "./SpotPreview"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
