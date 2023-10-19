@@ -37,7 +37,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       LEFT JOIN
         ListSpot ON Spot.id = ListSpot.spotId
       WHERE
-        Spot.creatorId = ${user.id} AND ${publicSpotWhereClauseRaw(userId)}
+        Spot.creatorId = ${user.id} AND ${publicSpotWhereClauseRaw(userId)} AND Spot.sourceUrl IS NULL
       GROUP BY
         Spot.id
       ORDER BY

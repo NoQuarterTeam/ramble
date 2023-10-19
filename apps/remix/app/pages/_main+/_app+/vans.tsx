@@ -95,6 +95,7 @@ function VanItem(props: { van: SerializeFrom<LoaderData>["vans"][number] }) {
           alt="van"
           width={400}
           height={300}
+          className="h-[300px] object-contain"
           src={createImageUrl(props.van.images[0].path)}
           placeholder={props.van.images[0].blurHash}
         />

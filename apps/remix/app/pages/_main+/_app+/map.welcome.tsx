@@ -1,4 +1,4 @@
-import { useLoaderData, useLocation, useNavigate } from "@remix-run/react"
+import { useLoaderData, useNavigate } from "@remix-run/react"
 
 import { LinkButton } from "~/components/LinkButton"
 import { Modal } from "~/components/ui"
@@ -14,10 +14,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function Welcome() {
   const wasInvited = useLoaderData<typeof loader>()
   const navigate = useNavigate()
-  const location = useLocation()
 
   return (
-    <Modal isOpen title="Welcome to Ramble!" onClose={() => navigate(`/map${location.search}`)}>
+    <Modal isOpen title="Welcome to Ramble!" onClose={() => navigate(`/map${window.location.search}`)}>
       <div className="space-y-4">
         {!wasInvited && (
           <>
@@ -26,7 +25,7 @@ export default function Welcome() {
           </>
         )}
         <p>Jump in and start finding your new favourite spots</p>
-        <LinkButton to={`/map${location.search}`}>Let's go</LinkButton>
+        <LinkButton to={`/map${window.location.search}`}>Let's go</LinkButton>
       </div>
     </Modal>
   )

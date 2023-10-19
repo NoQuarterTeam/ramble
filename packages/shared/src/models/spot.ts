@@ -8,6 +8,7 @@ export const spotPartnerFields = {
   loodusegakoosId: true,
   natuurKampeerterreinenId: true,
   roadsurferId: true,
+  nesteId: true,
   surflineId: true,
   theCragId: true,
   sourceUrl: true,
@@ -19,6 +20,7 @@ export const isPartnerSpot = (spot: SpotPartnerFields) =>
   spot.campspaceId ||
   spot.surflineId ||
   spot.komootId ||
+  spot.nesteId ||
   spot.park4nightId ||
   spot.roadsurferId ||
   spot.cucortuId ||

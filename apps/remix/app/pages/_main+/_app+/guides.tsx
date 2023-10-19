@@ -39,7 +39,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         avatar: true,
         avatarBlurHash: true,
         _count: {
-          select: { followers: true, lists: { where: { isPrivate: false } }, verifiedSpots: { where: { deletedAt: null } } },
+          select: {
+            followers: true,
+            lists: { where: { isPrivate: false } },
+            verifiedSpots: { where: { sourceUrl: { equals: null }, deletedAt: null } },
+          },
         },
       },
     }),

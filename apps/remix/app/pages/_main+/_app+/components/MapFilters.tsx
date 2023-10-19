@@ -1,5 +1,4 @@
 import * as React from "react"
-import { useLocation } from "@remix-run/react"
 import { BadgeX, Dog, Settings2 } from "lucide-react"
 import queryString from "query-string"
 
@@ -10,13 +9,12 @@ import { Button, IconButton, Modal, Switch, Tooltip } from "~/components/ui"
 import { SPOT_TYPES, type SpotTypeInfo } from "~/lib/models/spot"
 
 export function MapFilters({ onChange }: { onChange: (params: string) => void }) {
-  const location = useLocation()
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault()
     const formData = new FormData(e.target as HTMLFormElement)
     const type = formData.getAll("type[]")
     const values = Object.fromEntries(formData)
-    const existingParams = queryString.parse(location.search, { arrayFormat: "bracket" })
+    const existingParams = queryString.parse(window.location.search, { arrayFormat: "bracket" })
     const newParams = queryString.stringify(
       {
         ...existingParams,
@@ -31,7 +29,7 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
   }
 
   const onClear = () => {
-    const existingParams = queryString.parse(location.search, { arrayFormat: "bracket" })
+    const existingParams = queryString.parse(window.location.search, { arrayFormat: "bracket" })
     const newParams = queryString.stringify(
       {
         ...existingParams,
@@ -109,7 +107,7 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
               <Switch
                 name="isUnverified"
                 id="isUnverified"
-                defaultChecked={Boolean(queryString.parse(location.search).isUnverified)}
+                defaultChecked={Boolean(queryString.parse(window.location.search).isUnverified)}
                 className="mt-1"
               />
             </label>
@@ -124,7 +122,7 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
               <Switch
                 name="isPetFriendly"
                 id="isPetFriendly"
-                defaultChecked={Boolean(queryString.parse(location.search).isPetFriendly)}
+                defaultChecked={Boolean(queryString.parse(window.location.search).isPetFriendly)}
                 className="mt-1"
               />
             </label>
@@ -153,7 +151,7 @@ function SpotTypeSection({ title, types }: { title: string; types: SpotType[] })
           <SpotTypeSelector
             key={type}
             type={SPOT_TYPES[type]}
-            defaultValue={Boolean(queryString.parse(location.search, { arrayFormat: "bracket" }).type?.includes(type))}
+            defaultValue={Boolean(queryString.parse(window.location.search, { arrayFormat: "bracket" }).type?.includes(type))}
           />
         ))}
       </div>
