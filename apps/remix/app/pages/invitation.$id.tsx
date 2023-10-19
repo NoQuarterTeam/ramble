@@ -5,7 +5,6 @@ import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { createAction, createActions, formError } from "~/lib/form.server"
-
 import { json, redirect } from "~/lib/remix.server"
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "~/lib/vendor/vercel.server"
 import { hashPassword } from "~/services/auth/password.server"
