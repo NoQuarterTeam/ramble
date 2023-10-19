@@ -1,5 +1,5 @@
-import { Prisma, SpotImage } from "@ramble/database/types"
-import { SpotItemWithStatsAndImage } from "@ramble/shared"
+import { Prisma, type SpotImage } from "@ramble/database/types"
+import { type SpotItemWithStatsAndImage } from "@ramble/shared"
 
 export const publicSpotWhereClause = (userId?: string | null) => {
   return {

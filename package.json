@@ -18,6 +18,7 @@
     "prettier": "turbo run prettier",
     "prettier:fix": "turbo run prettier:fix",
     "lint:fix": "turbo run lint:fix",
+    "format": "turbo run lint:fix && turbo run prettier:fix",
     "typecheck": "turbo run typecheck",
     "db:generate": "turbo run db:generate"
   },

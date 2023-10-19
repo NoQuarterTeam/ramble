@@ -10,6 +10,7 @@
     "lint": "eslint --config .eslintrc.js --ext .ts,.tsx src",
     "prettier": "prettier --check src",
     "prettier:fix": "prettier --write src",
+    "format": "pnpm run lint:fix && pnpm run prettier:fix",
     "typecheck": "tsc --noEmit"
   },
   "sideEffects": false,

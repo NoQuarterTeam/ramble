@@ -1,6 +1,7 @@
 import { Outlet } from "@remix-run/react"
+
 import { redirect } from "~/lib/remix.server"
-import { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { type LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { getUserSession } from "~/services/session/session.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

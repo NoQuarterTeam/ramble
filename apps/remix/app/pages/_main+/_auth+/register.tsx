@@ -23,63 +23,66 @@ export const headers = () => {
   }
 }
 
+export const loader = () => redirect("/")
+
 enum Actions {
   register = "register",
 }
 
 export const action = ({ request }: ActionFunctionArgs) =>
   createActions<Actions>(request, {
-    register: createAction(request)
-      .input(
-        z.object({
-          email: z.string().min(3).email("Invalid email"),
-          username: z
-            .string()
-            .min(2)
-            .refine((username) => !username.trim().includes(" "), "Username can not contain empty spaces"),
-          password: z.string().min(8, "Must be at least 8 characters"),
-          firstName: z.string().min(2, "Must be at least 2 characters"),
-          lastName: z.string().min(2, "Must be at least 2 characters"),
-          passwordConfirmation: z.string().optional(),
-          code: z.string().min(4, "Must be at least 2 characters"),
+    register: () =>
+      createAction(request)
+        .input(
+          z.object({
+            email: z.string().min(3).email("Invalid email"),
+            username: z
+              .string()
+              .min(2)
+              .refine((username) => !username.trim().includes(" "), "Username can not contain empty spaces"),
+            password: z.string().min(8, "Must be at least 8 characters"),
+            firstName: z.string().min(2, "Must be at least 2 characters"),
+            lastName: z.string().min(2, "Must be at least 2 characters"),
+            passwordConfirmation: z.string().optional(),
+            code: z.string().min(4, "Must be at least 2 characters"),
+          }),
+        )
+        .handler(async ({ passwordConfirmation, ...data }) => {
+          if (passwordConfirmation) return redirect("/") // honey pot
+          const email = data.email.toLowerCase().trim()
+          const existingEmail = await db.user.findFirst({ where: { email } })
+          if (existingEmail) return formError({ data, formError: "User with this email already exists" })
+          const username = data.username.toLowerCase().trim()
+          const existingUsername = await db.user.findFirst({ where: { username } })
+          if (existingUsername) return formError({ data, formError: "User with this username already exists" })
+
+          const trimmedCode = data.code.toUpperCase().trim()
+          const inviteCode = await db.inviteCode.findFirst({ where: { code: trimmedCode, acceptedAt: null } })
+          if (!inviteCode) return formError({ data, formError: "Invalid invite code" })
+
+          const password = await hashPassword(data.password)
+          const user = await db.user.create({
+            data: {
+              ...data,
+              usedInviteCode: { connect: { id: inviteCode.id } },
+              email,
+              password,
+              lists: { create: { name: "Favourites", description: "All my favourite spots" } },
+            },
+          })
+          const codes = generateInviteCodes(user.id)
+          await db.inviteCode.createMany({ data: codes.map((c) => ({ code: c, ownerId: user.id })) })
+          await db.inviteCode.update({ where: { id: inviteCode.id }, data: { acceptedAt: new Date() } })
+          const { setUser } = await getUserSession(request)
+          const token = await createToken({ id: user.id })
+          await sendAccountVerificationEmail(user, token)
+          const headers = new Headers([["set-cookie", await setUser(user.id)]])
+          track("Registered", { userId: user.id })
+          return redirect("/onboarding", request, {
+            headers,
+            flash: { title: `Welcome to Ramble, ${data.firstName}!`, description: "Let's get you setup." },
+          })
         }),
-      )
-      .handler(async ({ passwordConfirmation, ...data }) => {
-        if (passwordConfirmation) return redirect("/") // honey pot
-        const email = data.email.toLowerCase().trim()
-        const existingEmail = await db.user.findFirst({ where: { email } })
-        if (existingEmail) return formError({ data, formError: "User with this email already exists" })
-        const username = data.username.toLowerCase().trim()
-        const existingUsername = await db.user.findFirst({ where: { username } })
-        if (existingUsername) return formError({ data, formError: "User with this username already exists" })
-
-        const trimmedCode = data.code.toUpperCase().trim()
-        const inviteCode = await db.inviteCode.findFirst({ where: { code: trimmedCode, acceptedAt: null } })
-        if (!inviteCode) return formError({ data, formError: "Invalid invite code" })
-
-        const password = await hashPassword(data.password)
-        const user = await db.user.create({
-          data: {
-            ...data,
-            usedInviteCode: { connect: { id: inviteCode.id } },
-            email,
-            password,
-            lists: { create: { name: "Favourites", description: "All my favourite spots" } },
-          },
-        })
-        const codes = generateInviteCodes(user.id)
-        await db.inviteCode.createMany({ data: codes.map((c) => ({ code: c, ownerId: user.id })) })
-        await db.inviteCode.update({ where: { id: inviteCode.id }, data: { acceptedAt: new Date() } })
-        const { setUser } = await getUserSession(request)
-        const token = await createToken({ id: user.id })
-        await sendAccountVerificationEmail(user, token)
-        const headers = new Headers([["set-cookie", await setUser(user.id)]])
-        track("Registered", { userId: user.id })
-        return redirect("/onboarding", request, {
-          headers,
-          flash: { title: `Welcome to Ramble, ${data.firstName}!`, description: "Let's get you setup." },
-        })
-      }),
   })
 
 export default function Register() {

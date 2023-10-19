@@ -6,8 +6,8 @@ import { getSharedScreens } from "../shared/getSharedScreens"
 import { AccountScreen } from "."
 import { AccountInfoScreen } from "./info"
 import { InterestsScreen } from "./interests"
-import { VanScreen } from "./van"
 import { AccountSettingsScreen } from "./settings"
+import { VanScreen } from "./van"
 
 const AccountStack = createNativeStackNavigator<ScreenParamsList>()
 
