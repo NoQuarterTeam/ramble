@@ -30,43 +30,44 @@ enum Actions {
 
 export const action = ({ request }: ActionFunctionArgs) =>
   createActions<Actions>(request, {
-    register: createAction(request)
-      .input(
-        z.object({
-          email: z.string().min(3).email("Invalid email"),
-          username: z
-            .string()
-            .min(2)
-            .refine((username) => !username.trim().includes(" "), "Username can not contain empty spaces"),
-          password: z.string().min(8, "Must be at least 8 characters"),
-          firstName: z.string().min(2, "Must be at least 2 characters"),
-          lastName: z.string().min(2, "Must be at least 2 characters"),
-          passwordConfirmation: z.string().optional(),
+    register: () =>
+      createAction(request)
+        .input(
+          z.object({
+            email: z.string().min(3).email("Invalid email"),
+            username: z
+              .string()
+              .min(2)
+              .refine((username) => !username.trim().includes(" "), "Username can not contain empty spaces"),
+            password: z.string().min(8, "Must be at least 8 characters"),
+            firstName: z.string().min(2, "Must be at least 2 characters"),
+            lastName: z.string().min(2, "Must be at least 2 characters"),
+            passwordConfirmation: z.string().optional(),
+          }),
+        )
+        .handler(async ({ passwordConfirmation, ...data }) => {
+          if (passwordConfirmation) return redirect("/") // honey pot
+          return redirect("/")
+          // const email = data.email.toLowerCase().trim()
+          // const existingEmail = await db.user.findFirst({ where: { email } })
+          // if (existingEmail) return formError({ data, formError: "User with this email already exists" })
+          // const username = data.username.toLowerCase().trim()
+          // const existingUsername = await db.user.findFirst({ where: { username } })
+          // if (existingUsername) return formError({ data, formError: "User with this username already exists" })
+          // const password = await hashPassword(data.password)
+          // const user = await db.user.create({
+          //   data: { ...data, email, password, lists: { create: { name: "Favourites", description: "All my favourite spots" } } },
+          // })
+          // const { setUser } = await getUserSession(request)
+          // const token = await createToken({ id: user.id })
+          // await sendAccountVerificationEmail(user, token)
+          // const headers = new Headers([["set-cookie", await setUser(user.id)]])
+          // track("Registered", { userId: user.id })
+          // return redirect("/onboarding", request, {
+          //   headers,
+          //   flash: { title: `Welcome to Ramble, ${data.firstName}!`, description: "Let's get you setup." },
+          // })
         }),
-      )
-      .handler(async ({ passwordConfirmation, ...data }) => {
-        if (passwordConfirmation) return redirect("/") // honey pot
-        return redirect("/")
-        // const email = data.email.toLowerCase().trim()
-        // const existingEmail = await db.user.findFirst({ where: { email } })
-        // if (existingEmail) return formError({ data, formError: "User with this email already exists" })
-        // const username = data.username.toLowerCase().trim()
-        // const existingUsername = await db.user.findFirst({ where: { username } })
-        // if (existingUsername) return formError({ data, formError: "User with this username already exists" })
-        // const password = await hashPassword(data.password)
-        // const user = await db.user.create({
-        //   data: { ...data, email, password, lists: { create: { name: "Favourites", description: "All my favourite spots" } } },
-        // })
-        // const { setUser } = await getUserSession(request)
-        // const token = await createToken({ id: user.id })
-        // await sendAccountVerificationEmail(user, token)
-        // const headers = new Headers([["set-cookie", await setUser(user.id)]])
-        // track("Registered", { userId: user.id })
-        // return redirect("/onboarding", request, {
-        //   headers,
-        //   flash: { title: `Welcome to Ramble, ${data.firstName}!`, description: "Let's get you setup." },
-        // })
-      }),
   })
 
 export default function Register() {

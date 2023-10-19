@@ -1,5 +1,4 @@
 import { Link, useSearchParams } from "@remix-run/react"
-import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
@@ -17,13 +16,7 @@ import { getUserSession } from "~/services/session/session.server"
 // }
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Login" }, { name: "description", content: "Login to the ramble" }]
-}
-
-export const headers = () => {
-  return {
-    "Cache-Control": cacheHeader({ maxAge: "1hour", sMaxage: "1hour", staleWhileRevalidate: "1min", public: true }),
-  }
+  return [{ title: "Login" }, { name: "description", content: "Login to the Ramble" }]
 }
 
 enum Actions {
@@ -32,26 +25,27 @@ enum Actions {
 
 export const action = async ({ request }: ActionFunctionArgs) =>
   createActions<Actions>(request, {
-    login: createAction(request)
-      .input(
-        z.object({
-          email: z.string().min(3).email("Invalid email"),
-          password: z.string().min(8, "Must be at least 8 characters"),
-          redirectTo: NullableFormString,
-        }),
-      )
-      .handler(async (data) => {
-        const user = await db.user.findUnique({ where: { email: data.email } })
-        if (!user) return formError({ formError: "Incorrect email or password" })
-        const isCorrectPassword = await comparePasswords(data.password, user.password)
-        const redirectTo = data.redirectTo
-        if (!isCorrectPassword) return formError({ formError: "Incorrect email or password" })
+    login: () =>
+      createAction(request)
+        .input(
+          z.object({
+            email: z.string().min(3).email("Invalid email"),
+            password: z.string().min(8, "Must be at least 8 characters"),
+            redirectTo: NullableFormString,
+          }),
+        )
+        .handler(async (data) => {
+          const user = await db.user.findUnique({ where: { email: data.email } })
+          if (!user) return formError({ formError: "Incorrect email or password" })
+          const isCorrectPassword = await comparePasswords(data.password, user.password)
+          const redirectTo = data.redirectTo
+          if (!isCorrectPassword) return formError({ formError: "Incorrect email or password" })
 
-        const { setUser } = await getUserSession(request)
-        const headers = new Headers([["set-cookie", await setUser(user.id)]])
-        track("Logged in", { userId: user.id })
-        return redirect(redirectTo || "/map", { headers })
-      }),
+          const { setUser } = await getUserSession(request)
+          const headers = new Headers([["set-cookie", await setUser(user.id)]])
+          track("Logged in", { userId: user.id })
+          return redirect(redirectTo || "/map", { headers })
+        }),
   })
 
 export default function Login() {
@@ -70,9 +64,9 @@ export default function Login() {
       </div>
 
       <div className="flex justify-between">
-        <Link to="/register" className="hover:opacity-70">
+        {/* <Link to="/register" className="hover:opacity-70">
           Register
-        </Link>
+        </Link> */}
         <Link to="/forgot-password" className="hover:opacity-70">
           Forgot password?
         </Link>

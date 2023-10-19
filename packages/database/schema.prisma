@@ -52,8 +52,9 @@ model User {
   van           Van?
   feedback      Feedback[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now()) @updatedAt
+  accessRequest AccessRequest?
 
   @@index([username])
 }
@@ -284,11 +285,17 @@ model Review {
 }
 
 model AccessRequest {
-  id    String @id @default(uuid())
-  email String
+  id         String    @id @default(uuid())
+  email      String
+  acceptedAt DateTime?
+
+  userId String? @unique
+  user   User?   @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([userId])
 }
 
 enum FeedbackType {
