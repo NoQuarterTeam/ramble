@@ -23,6 +23,6 @@ export default function Template() {
   const config = useConfig()
   const user = useMaybeUser()
   if (!user) return null
-  const link = `${config.WEB_URL}/admin/emails/access-request`
+  const link = `${config.WEB_URL}/admin/access-requests`
   return <AccessRequestContent link={link} email={user.email} />
 }

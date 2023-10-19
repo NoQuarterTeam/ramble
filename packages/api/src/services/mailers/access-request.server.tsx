@@ -5,7 +5,7 @@ import { mailer } from "../../lib/mailer.server"
 
 export async function sendAccessRequestSentToAdminsEmail(adminEmails: string[], email: string) {
   try {
-    const link = `${FULL_WEB_URL}/admin/emails/access-request`
+    const link = `${FULL_WEB_URL}/admin/access-requests`
     await mailer.send({
       react: <AccessRequestEmail link={link} email={email} />,
       to: adminEmails,
