@@ -94,7 +94,7 @@ export default function VanAccount() {
           <FormField
             name="description"
             defaultValue={user.van?.description || ""}
-            label="Anything else you wana mention?"
+            label="Anything else you wanna mention?"
             input={<Textarea rows={4} />}
           />
           <FormError />
