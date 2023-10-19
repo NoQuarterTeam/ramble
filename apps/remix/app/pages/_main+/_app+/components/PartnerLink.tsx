@@ -16,6 +16,7 @@ const partners = {
   loodusegakoos: { name: "Loodusega koos ", logo: { light: "/partners/loodusegakoos.svg", dark: "/partners/loodusegakoos.svg" } },
   cucortu: { name: "Cucortu'", logo: { light: "/partners/cucortu.png", dark: "/partners/cucortu-dark.png" } },
   theCrag: { name: "The Crag", logo: { light: "/partners/the-crag.svg", dark: "/partners/the-crag-dark.svg" } },
+  neste: { name: "Neste", logo: { light: "/partners/neste.png", dark: "/partners/neste.png" } },
 } as const
 
 export function PartnerLink(props: Props) {
@@ -32,6 +33,8 @@ export function PartnerLink(props: Props) {
     ? partners.natuur
     : props.spot.park4nightId
     ? partners.park4night
+    : props.spot.nesteId
+    ? partners.neste
     : props.spot.surflineId
     ? partners.surfline
     : props.spot.roadsurferId
