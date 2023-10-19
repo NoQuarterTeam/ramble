@@ -56,7 +56,7 @@ export default function Home() {
           </Link>
         )}
       </div> */}
-      <div className="h-[94vh] w-screen space-y-20 bg-[url('/landing/landing1.png')] bg-center px-2 pt-10">
+      <div className="h-[94vh] w-screen space-y-20 bg-[url('/landing/landing1.png')] bg-cover bg-center px-2 pt-10">
         <div className="mx-auto flex max-w-7xl flex-col items-start space-y-12">
           <div className="flex flex-col items-center">
             <p className="brand-header text-5xl">ramble</p>
