@@ -192,7 +192,7 @@ export const spotRouter = createTRPCRouter({
       LEFT JOIN
         ListSpot ON Spot.id = ListSpot.spotId
       WHERE
-        Spot.creatorId = ${user.id} AND ${publicSpotWhereClauseRaw(user.id)}
+        Spot.creatorId = ${user.id} AND ${publicSpotWhereClauseRaw(user.id)} AND Spot.sourceUrl IS NULL
       GROUP BY
         Spot.id
       ORDER BY
