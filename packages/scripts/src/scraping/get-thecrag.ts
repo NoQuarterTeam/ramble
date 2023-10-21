@@ -95,6 +95,11 @@ async function getPageCards(currentPage: number) {
       const strLatitude = $("meta[property=place:location:latitude]").attr("content")
 
       let images: string[] = []
+      $(".phototopo img").each((_, img) => {
+        const url = $(img).attr("data-big")
+        if (!url) return
+        images.push(url)
+      })
       $(".photo-list img").each((_, img) => {
         const url = $(img).attr("data-src")
         if (!url) return
@@ -145,7 +150,7 @@ async function getPageCards(currentPage: number) {
 async function main() {
   try {
     // loop over each page
-    for (let currentPage = 3; currentPage < pageCount + 1; currentPage++) {
+    for (let currentPage = 4; currentPage < pageCount + 1; currentPage++) {
       console.log({ currentPage })
 
       await getPageCards(currentPage)
