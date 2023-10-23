@@ -1,8 +1,8 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Link, NavLink, useNavigate, useSubmit } from "@remix-run/react"
-import { Heart, LogOut, Menu, Moon, Plus, Settings, Sun, User, UserCog } from "lucide-react"
+import { Heart, LogOut, Moon, Plus, Settings, Sun, User, UserCog } from "lucide-react"
 
-import { ClientOnly, createImageUrl, merge } from "@ramble/shared"
+import { createImageUrl, merge } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -38,9 +38,7 @@ export function Nav() {
         </Link>
 
         <div className="hidden items-center space-x-1 md:flex">
-          <ClientOnly fallback={<NavbarLink to={`/map`}>Map</NavbarLink>}>
-            <NavbarLink to={`/map${typeof window !== "undefined" ? window.location.search : ""}`}>Map</NavbarLink>
-          </ClientOnly>
+          <NavbarLink to={`/map`}>Map</NavbarLink>
           <NavbarLink to="/spots" end>
             Latest spots
           </NavbarLink>
@@ -49,43 +47,48 @@ export function Nav() {
         </div>
       </div>
       <div className="hstack space-x-3">
-        {user ? (
-          <>
-            <Feedback />
-            <Tooltip label="Add a spot">
-              <IconButton
-                onClick={() => navigate(`/spots/new${window.location.search}`)}
-                icon={<Plus className="sq-4" />}
-                aria-label="add spot"
-                variant="outline"
-              />
-            </Tooltip>
-          </>
-        ) : (
-          <div className="hstack hidden md:flex">
-            <LinkButton variant="ghost" to="/login">
-              Login
-            </LinkButton>
-            <LinkButton to="/register">Register</LinkButton>
-          </div>
-        )}
+        <NavbarLink className="hidden md:flex" to="/home">
+          About
+        </NavbarLink>
+        {
+          user ? (
+            <>
+              <Feedback />
+              <Tooltip label="Add a spot">
+                <IconButton
+                  onClick={() => navigate(`/spots/new${window.location.search}`)}
+                  icon={<Plus className="sq-4" />}
+                  aria-label="add spot"
+                  variant="outline"
+                />
+              </Tooltip>
+            </>
+          ) : null
+          // <div className="hstack hidden md:flex">
+          //   <LinkButton variant="ghost" to="/login">
+          //     Login
+          //   </LinkButton>
+          //   {/* <LinkButton to="/register">Register</LinkButton> */}
+          // </div>
+        }
         <DropdownMenu>
           <DropdownMenuTrigger asChild={!user}>
-            {user ? (
-              <Avatar
-                size={60}
-                placeholder={user.avatarBlurHash}
-                className="sq-10 hover:opacity-70"
-                src={createImageUrl(user.avatar)}
-              />
-            ) : (
-              <IconButton
-                className="inline-block md:hidden"
-                aria-label={`Toggle open menu`}
-                icon={<Menu className="sq-5" />}
-                variant="ghost"
-              />
-            )}
+            {
+              user ? (
+                <Avatar
+                  size={60}
+                  placeholder={user.avatarBlurHash}
+                  className="sq-10 hover:opacity-70"
+                  src={createImageUrl(user.avatar)}
+                />
+              ) : null
+              // <IconButton
+              //   className="inline-block md:hidden"
+              //   aria-label={`Toggle open menu`}
+              //   icon={<Menu className="sq-5" />}
+              //   variant="ghost"
+              // />
+            }
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[200px] p-1 py-1.5">
             <div className="block md:hidden">
@@ -97,6 +100,9 @@ export function Nav() {
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link to="/guides">Guides</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/home">About</Link>
               </DropdownMenuItem>
               <hr />
             </div>
@@ -155,9 +161,9 @@ export function Nav() {
                 <DropdownMenuItem asChild>
                   <Link to="/login">Login</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
+                {/* <DropdownMenuItem asChild>
                   <Link to="/register">Register</Link>
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
               </>
             )}
           </DropdownMenuContent>
@@ -167,7 +173,7 @@ export function Nav() {
   )
 }
 
-function NavbarLink(props: NavLinkProps) {
+function NavbarLink(props: NavLinkProps & { className?: string }) {
   return (
     <NavLink
       {...props}
@@ -176,7 +182,7 @@ function NavbarLink(props: NavLinkProps) {
         merge(
           buttonStyles({ size: "md", variant: isActive ? "secondary" : "ghost" }),
           buttonSizeStyles({ size: "md" }),
-          "text-sm",
+          props.className,
         )
       }
     >

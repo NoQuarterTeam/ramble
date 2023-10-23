@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   presets: [require("@ramble/tailwind-config")],
-  content: ["./app/**/*.tsx", "./components/**/*.tsx", "./lib/**/*.tsx"],
+  content: ["./app/**/*.tsx", "./components/**/*.tsx", "./lib/**/*.tsx", "../../packages/shared/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
@@ -13,14 +13,19 @@ module.exports = {
         xxs: "10px",
       },
       fontFamily: {
-        300: ["poppins300"],
-        400: ["poppins400"],
-        "400-italic": ["poppins400Italic"],
-        500: ["poppins500"],
-        600: ["poppins600"],
-        700: ["poppins700"],
-        800: ["poppins800"],
-        900: ["poppins900"],
+        300: ["urbanist300"],
+        "300-italic": ["urbanist300Italic"],
+        400: ["urbanist400"],
+        "400-italic": ["urbanist400Italic"],
+        500: ["urbanist500"],
+        "500-italic": ["urbanist500Italic"],
+        600: ["urbanist600"],
+        "600-italic": ["urbanist600Italic"],
+        700: ["urbanist700"],
+        "700-italic": ["urbanist700Italic"],
+        800: ["urbanist800"],
+        "800-italic": ["urbanist800Italic"],
+        900: ["urbanist900"],
         urbanist: ["urbanist700Italic"],
       },
     },

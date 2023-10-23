@@ -12,10 +12,10 @@ export const buttonStyles = cva(
   {
     variants: {
       size: {
-        xs: "text-xxs px-2",
-        sm: "px-2 text-xs",
-        md: "px-3 text-sm",
-        lg: "text-md px-5",
+        xs: "px-2 text-xs",
+        sm: "px-2 text-sm",
+        md: "px-3 text-base",
+        lg: "px-5 text-lg",
       },
       variant: {
         primary:
@@ -30,7 +30,7 @@ export const buttonStyles = cva(
         link: "underline",
       },
       disabled: {
-        true: "pointer-events-none relative cursor-not-allowed opacity-70",
+        true: "relative cursor-not-allowed opacity-70",
       },
     },
     compoundVariants: [

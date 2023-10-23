@@ -1,10 +1,11 @@
-import { createCookieSessionStorage } from "@vercel/remix"
 import { createTypedSessionStorage } from "remix-utils/typed-session"
 import { z } from "zod"
 
-import { FLASH_SESSION_SECRET, IS_PRODUCTION } from "~/lib/config.server"
+import { IS_PRODUCTION } from "~/lib/config.server"
+import { FLASH_SESSION_SECRET } from "~/lib/env.server"
+import { createCookieSessionStorage } from "~/lib/vendor/vercel.server"
 
-export const FLASH_COOKIE_KEY = IS_PRODUCTION ? "ramble_session_flash" : "ramble_session_dev_flash"
+const FLASH_COOKIE_KEY = IS_PRODUCTION ? "ramble_session_flash" : "ramble_session_dev_flash"
 
 export enum FlashType {
   Error = "flashError",
@@ -18,7 +19,6 @@ const storage = createCookieSessionStorage({
     secure: IS_PRODUCTION,
     sameSite: "lax",
     path: "/",
-    maxAge: 60 * 60 * 24 * 30,
     httpOnly: true,
   },
 })
@@ -38,13 +38,13 @@ const flashStorage = createTypedSessionStorage({ sessionStorage: storage, schema
 
 export async function getFlashSession(request: Request) {
   const session = await flashStorage.getSession(request.headers.get("Cookie"))
-  const message = session.get("message")
-
   const commit = () => flashStorage.commitSession(session)
+
+  const flash = session.get("message")
 
   const createFlash = (flash: z.infer<typeof createFlashSchema>) => {
     session.flash("message", { ...flash, type: flash.type || "success" })
     return commit()
   }
-  return { message, createFlash, commit, session }
+  return { message: flash, createFlash, commit, session }
 }

@@ -1,6 +1,4 @@
 import { useLoaderData } from "@remix-run/react"
-import type { LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
 import { createImageUrl } from "@ramble/shared"
@@ -9,11 +7,16 @@ import { OptimizedImage } from "~/components/OptimisedImage"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { notFound } from "~/lib/remix.server"
+import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 
 export const headers = useLoaderHeaders
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
-  const user = await db.user.findUnique({ where: { username: params.username }, include: { van: { include: { images: true } } } })
+  const user = await db.user.findUnique({
+    where: { username: params.username?.toLowerCase().trim() },
+    include: { van: { include: { images: true } } },
+  })
   if (!user) throw notFound()
   return json(user, {
     headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour", staleWhileRevalidate: "1min" }) },

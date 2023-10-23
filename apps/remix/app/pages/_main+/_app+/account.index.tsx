@@ -1,6 +1,5 @@
 import { useLoaderData } from "@remix-run/react"
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
+import { AtSign } from "lucide-react"
 import { z } from "zod"
 
 import { generateBlurHash } from "@ramble/api"
@@ -8,11 +7,13 @@ import { join } from "@ramble/shared"
 
 import { Form, FormButton, FormField, ImageField } from "~/components/Form"
 import { Input, inputStyles, Textarea } from "~/components/ui"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { formError, NullableFormString, validateFormData } from "~/lib/form"
+import { formError, NullableFormString, validateFormData } from "~/lib/form.server"
 import { redirect } from "~/lib/remix.server"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
-import { AtSign } from "lucide-react"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, {
@@ -51,6 +52,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     avatarBlurHash = await generateBlurHash(result.data.avatar)
   }
   await db.user.update({ where: { id: user.id }, data: { ...result.data, avatarBlurHash } })
+  track("Account updated", { userId: user.id })
   return redirect("/account", request, { flash: { title: "Account updated" } })
 }
 

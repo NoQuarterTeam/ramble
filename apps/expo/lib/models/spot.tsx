@@ -1,26 +1,26 @@
 import {
   Beer,
   Bike,
+  Camera,
   Coffee,
+  Dog,
   Footprints,
   Fuel,
+  HeartHandshake,
+  Leaf,
   type LucideIcon,
   Mountain,
   ParkingCircle,
-  ShoppingCart,
-  Utensils,
-  Dog,
   PartyPopper,
   PlugZap,
+  ShoppingCart,
+  Utensils,
   Wrench,
-  Camera,
-  HeartHandshake,
-  Leaf,
 } from "lucide-react-native"
 
 import { type SpotType } from "@ramble/database/types"
 
-import { Icons, RambleIcon } from "../../components/ui/Icons"
+import { Icons, type RambleIcon } from "../../components/ui/Icons"
 
 export type SpotTypeInfo = {
   value: SpotType
@@ -31,15 +31,13 @@ export type SpotTypeInfo = {
 export const SPOT_TYPES: { [key in SpotType]: { value: SpotType; label: string; Icon: RambleIcon; isComingSoon: boolean } } = {
   // Stays
   CAMPING: { value: "CAMPING", label: "Long stay", Icon: Icons.Van, isComingSoon: false },
-  FREE_CAMPING: { value: "FREE_CAMPING", label: "Overnight stop-off", Icon: Icons.Van, isComingSoon: false },
+  FREE_CAMPING: { value: "FREE_CAMPING", label: "Overnight stop-off", Icon: Icons.Timer, isComingSoon: false },
   PARKING: { value: "PARKING", label: "Safe parking", Icon: ParkingCircle, isComingSoon: true },
   // Activities
   SURFING: { value: "SURFING", label: "Surfing", Icon: Icons.Surf, isComingSoon: false },
   CLIMBING: { value: "CLIMBING", label: "Climbing", Icon: Mountain, isComingSoon: false },
   MOUNTAIN_BIKING: { value: "MOUNTAIN_BIKING", label: "MTBing", Icon: Bike, isComingSoon: false },
-  PADDLE_BOARDING: { value: "PADDLE_BOARDING", label: "Paddle Boarding", Icon: Icons.Sup, isComingSoon: false },
   PADDLE_KAYAK: { value: "PADDLE_KAYAK", label: "SUPing / Kayaking", Icon: Icons.Sup, isComingSoon: false },
-  HIKING: { value: "HIKING", label: "Hiking", Icon: Footprints, isComingSoon: false },
   HIKING_TRAIL: {
     value: "HIKING_TRAIL",
     label: "Hiking / Trail running",
@@ -73,8 +71,14 @@ export const SPOT_TYPES: { [key in SpotType]: { value: SpotType; label: string; 
   VOLUNTEERING: { value: "VOLUNTEERING", label: "Volunteering", Icon: HeartHandshake, isComingSoon: true },
 } as const
 
-export const SPOT_OPTIONS = Object.entries(SPOT_TYPES).map(([value, { label, Icon }]) => ({ label, value, Icon })) as {
+export const SPOT_OPTIONS = Object.entries(SPOT_TYPES).map(([value, { label, Icon, isComingSoon }]) => ({
+  label,
+  value,
+  Icon,
+  isComingSoon,
+})) as {
   label: string
   value: SpotType
   Icon: LucideIcon
+  isComingSoon: boolean
 }[]

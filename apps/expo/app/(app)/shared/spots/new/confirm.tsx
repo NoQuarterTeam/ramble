@@ -1,24 +1,25 @@
 import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
-import { Image } from "expo-image"
-import { Check, Lock } from "lucide-react-native"
+import { Check, Dog, Lock } from "lucide-react-native"
 
 import { AMENITIES } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
+import { SpotIcon } from "../../../../../components/SpotIcon"
 import { Button } from "../../../../../components/ui/Button"
+import { SpotImageCarousel } from "../../../../../components/ui/SpotImageCarousel"
 import { Text } from "../../../../../components/ui/Text"
 import { toast } from "../../../../../components/ui/Toast"
 import { api } from "../../../../../lib/api"
+import { width } from "../../../../../lib/device"
 import { useS3Upload } from "../../../../../lib/hooks/useS3"
-import { SPOT_TYPES } from "../../../../../lib/static/spots"
+import { AMENITIES_ICONS } from "../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
 
 export function NewSpotConfirmScreen() {
   const { params } = useParams<"NewSpotConfirmScreen">()
   const router = useRouter()
-  const Icon = SPOT_TYPES[params.type].Icon
   const [shouldPublishLater, setShouldPublishLater] = React.useState(false)
   const utils = api.useContext()
   const {
@@ -58,25 +59,54 @@ export function NewSpotConfirmScreen() {
 
   return (
     <NewSpotModalView title="confirm">
-      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}>
-        <View className="space-y-2">
-          <Icon className="text-black dark:text-white" />
-          <Text>{params.name}</Text>
-          <Text>{params.description}</Text>
-          {params.isPetFriendly && <Text>Pet friendly</Text>}
-          {params.amenities &&
-            Object.keys(params.amenities).map((key) => <Text key={key}>{AMENITIES[key as keyof typeof AMENITIES]}</Text>)}
-          <View className="flex flex-row flex-wrap">
-            {params.images.map((image, i) => (
-              <View key={i} className="w-1/3 p-1">
-                <Image className="rounded-xs h-[100px] w-full bg-gray-50 object-cover dark:bg-gray-700" source={{ uri: image }} />
-              </View>
-            ))}
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }} showsVerticalScrollIndicator={false}>
+        <View className="space-y-3">
+          <View className="flex h-[50px] flex-row items-center space-x-2">
+            <View className="sq-12 flex items-center justify-center rounded-full border border-gray-200 dark:border-gray-700">
+              <SpotIcon size={20} type={params.type} className="text-black dark:text-white" />
+            </View>
+            <Text numberOfLines={2} className="text-lg leading-6">
+              {params.name}
+            </Text>
           </View>
+          {params.images.length > 0 && (
+            <View className="rounded-xs overflow-hidden">
+              <SpotImageCarousel
+                width={width - 32}
+                height={200}
+                images={params.images.map((path) => ({ path, blurHash: null }))}
+              />
+            </View>
+          )}
+
+          <Text>{params.description}</Text>
+          {params.isPetFriendly && (
+            <View className="flex flex-row items-center space-x-2">
+              <Dog size={20} className="text-black dark:text-white" />
+              <Text>Pet friendly</Text>
+            </View>
+          )}
+          {params.amenities && (
+            <View className="flex flex-row flex-wrap gap-2">
+              {Object.entries(AMENITIES).map(([key, value]) => {
+                if (!params.amenities?.[key as keyof typeof AMENITIES]) return null
+                const Icon = AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]
+                return (
+                  <View key={key} className="rounded-xs flex flex-row space-x-1 border border-gray-200 p-2 dark:border-gray-700">
+                    {Icon && <Icon size={20} className="text-black dark:text-white" />}
+                    <Text className="text-sm">{value}</Text>
+                  </View>
+                )
+              })}
+            </View>
+          )}
           <View className="flex w-full flex-row items-center justify-between px-4 py-2">
             <View className="flex flex-row items-center space-x-2">
-              <Lock size={20} className="text-black dark:text-white" />
-              <Text className="text-lg">Publish later</Text>
+              <Lock size={24} className="text-black dark:text-white" />
+              <View>
+                <Text className="text-lg">Publish later</Text>
+                <Text className="text-xs">Will be public in 2 weeks</Text>
+              </View>
             </View>
             <Switch
               trackColor={{ true: colors.primary[600] }}

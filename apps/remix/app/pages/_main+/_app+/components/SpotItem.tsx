@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react"
+import { Link, useLocation, useNavigate } from "@remix-run/react"
 import { Heart, Star } from "lucide-react"
 
 import { type SpotItemWithStatsAndImage } from "@ramble/shared"
@@ -16,7 +16,8 @@ interface Props {
 
 export function SpotItem({ spot }: Props) {
   const currentUser = useMaybeUser()
-
+  const navigate = useNavigate()
+  const pathname = useLocation().pathname
   return (
     <div className="relative">
       <Link to={`/spots/${spot.id}`} className="space-y-2 hover:opacity-80">
@@ -45,22 +46,22 @@ export function SpotItem({ spot }: Props) {
         </div>
 
         <div className="space-y-0.5">
-          <p className="line-clamp-2 text-base leading-tight">{spot.name}</p>
+          <p className="line-clamp-2 text-lg leading-tight">{spot.name}</p>
           <p className="line-clamp-1 text-sm font-thin opacity-70">{spot.address}</p>
           <div className="flex items-center space-x-2">
-            <div className="flex items-center space-x-1 text-sm">
+            <div className="flex items-center space-x-1">
               <Star className="sq-4" />
-              <p>{displayRating(spot.rating)}</p>
+              <p className="text-sm">{displayRating(spot.rating)}</p>
             </div>
-            <div className="flex items-center space-x-1 text-sm">
+            <div className="flex items-center space-x-1">
               <Heart className="sq-4" />
-              <p>{spot.savedCount}</p>
+              <p className="text-sm">{spot.savedCount}</p>
             </div>
           </div>
         </div>
       </Link>
-      {currentUser && (
-        <div className="absolute right-2 top-2">
+      <div className="absolute right-2 top-2">
+        {currentUser ? (
           <SaveToList
             spotId={spot.id}
             trigger={
@@ -71,8 +72,15 @@ export function SpotItem({ spot }: Props) {
               />
             }
           />
-        </div>
-      )}
+        ) : (
+          <IconButton
+            className="bg-background hover:bg-background rounded-full hover:opacity-90 dark:hover:opacity-80"
+            aria-label="save to list"
+            onClick={() => navigate("/login?redirectTo=" + pathname)}
+            icon={<Heart size={16} />}
+          />
+        )}
+      </div>
     </div>
   )
 }

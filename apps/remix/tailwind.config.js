@@ -4,7 +4,7 @@ const plugin = require("tailwindcss/plugin")
 module.exports = {
   darkMode: "class",
   presets: [require("@ramble/tailwind-config")],
-  content: ["./app/**/*.{js,ts,jsx,tsx}"],
+  content: ["./app/**/*.{ts,tsx}", "../../packages/shared/**/*.{ts,tsx}"],
   theme: {
     extend: {
       spacing: {
@@ -15,6 +15,9 @@ module.exports = {
         xxxs: "0.4rem",
         xxs: "0.625rem",
       },
+      animation: {
+        "pulse-fast": "pulse 0.5s linear infinite",
+      },
       colors: {
         background: "var(--background)",
         "background-light": "var(--background-light)",
@@ -23,7 +26,7 @@ module.exports = {
       },
       fontFamily: {
         serif: ["Urbanist", "sans-serif"],
-        sans: ["Poppins", "sans-serif"],
+        sans: ["Urbanist", "sans-serif"],
       },
     },
   },

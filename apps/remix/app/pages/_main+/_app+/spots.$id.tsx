@@ -1,12 +1,21 @@
 import Map, { Marker } from "react-map-gl"
 import { Link, useLoaderData } from "@remix-run/react"
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "@vercel/remix"
 import dayjs from "dayjs"
 import { Check, Edit2, Heart, Star, Trash } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
+import { promiseHash } from "remix-utils/promise"
 
-import { publicSpotWhereClause } from "@ramble/api"
-import { AMENITIES, canManageSpot, createImageUrl, displayRating } from "@ramble/shared"
+import { getSpotFlickrImages, publicSpotWhereClause } from "@ramble/api"
+import {
+  activitySpotTypes,
+  AMENITIES,
+  amenitiesFields,
+  canManageSpot,
+  createImageUrl,
+  displayRating,
+  isPartnerSpot,
+  spotPartnerFields,
+} from "@ramble/shared"
 
 import { Form, FormButton } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -23,23 +32,24 @@ import {
   AlertDialogTrigger,
   Button,
 } from "~/components/ui"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { FormActionInput, getFormAction } from "~/lib/form"
+import { createAction, createActions } from "~/lib/form.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 import { badRequest, json, notFound, redirect } from "~/lib/remix.server"
 import { useTheme } from "~/lib/theme"
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "~/lib/vendor/vercel.server"
 import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
 import type { loader as rootLoader } from "~/root"
 import { getCurrentUser } from "~/services/auth/auth.server"
 import { getUserSession } from "~/services/session/session.server"
 
 import { SaveToList } from "../../api+/save-to-list"
+import { PartnerLink } from "./components/PartnerLink"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { SpotMarker } from "./components/SpotMarker"
-import { SpotType } from "@ramble/database/types"
-import { promiseHash } from "remix-utils/promise"
 
 export const config = {
   // runtime: "edge",
@@ -59,12 +69,13 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
         name: true,
         type: true,
         verifiedAt: true,
-        amenities: true,
+        amenities: { select: amenitiesFields },
         address: true,
         description: true,
         latitude: true,
         longitude: true,
         ownerId: true,
+        ...spotPartnerFields,
         createdAt: true,
         creator: { select: { firstName: true, username: true, lastName: true } },
         verifier: { select: { firstName: true, username: true, lastName: true, avatar: true, avatarBlurHash: true } },
@@ -77,18 +88,21 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   })
   if (!spot) throw notFound()
 
-  const activitySpots = await db.spot.findMany({
-    where: {
-      ...publicSpotWhereClause(userId),
-      type: { in: [SpotType.CLIMBING, SpotType.HIKING, SpotType.MOUNTAIN_BIKING, SpotType.PADDLE_BOARDING, SpotType.SURFING] },
-      latitude: { gt: spot.latitude - 0.5, lt: spot.latitude + 0.5 },
-      longitude: { gt: spot.longitude - 0.5, lt: spot.longitude + 0.5 },
-    },
-    orderBy: { createdAt: "desc" },
-    take: 30,
+  const { activitySpots, flickrImages } = await promiseHash({
+    activitySpots: db.spot.findMany({
+      where: {
+        ...publicSpotWhereClause(userId),
+        type: { in: activitySpotTypes },
+        latitude: { gt: spot.latitude - 0.5, lt: spot.latitude + 0.5 },
+        longitude: { gt: spot.longitude - 0.5, lt: spot.longitude + 0.5 },
+      },
+      orderBy: { createdAt: "desc" },
+      take: 30,
+    }),
+    flickrImages: getSpotFlickrImages(spot),
   })
 
-  return json({ spot: { ...spot, rating }, activitySpots }, request, {
+  return json({ spot: { ...spot, rating }, activitySpots, flickrImages }, request, {
     headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1day", sMaxage: "1day", staleWhileRevalidate: "30min" }) },
   })
 }
@@ -115,36 +129,41 @@ enum Actions {
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request, { id: true, role: true, isVerified: true, isAdmin: true })
-  const formAction = await getFormAction<Actions>(request)
-
-  switch (formAction) {
-    case Actions.Delete:
-      try {
-        if (!user.isAdmin) return redirect("/spots")
-        await db.spot.delete({ where: { id: params.id } })
-        return redirect("/spots", request, { flash: { title: "Spot deleted!" } })
-      } catch (error) {
-        return badRequest("Error deleting spot your account", request, { flash: { title: "Error deleting spot" } })
-      }
-    case Actions.Verify:
-      try {
-        const spot = await db.spot.findUniqueOrThrow({ where: { id: params.id }, select: { ownerId: true, deletedAt: true } })
-        if (!canManageSpot(spot, user)) return redirect("/spots")
-        await db.spot.update({
-          where: { id: params.id },
-          data: { verifiedAt: new Date(), verifier: { connect: { id: user.id } } },
-        })
-        return json({ success: true }, request, { flash: { title: "Spot verified!" } })
-      } catch (error) {
-        return badRequest("Error verifying spot", request, { flash: { title: "Error verifying spot" } })
-      }
-    default:
-      return badRequest("Invalid action")
-  }
+  return createActions<Actions>(request, {
+    verify: () =>
+      createAction(request).handler(async () => {
+        try {
+          const spot = await db.spot.findUniqueOrThrow({
+            where: { id: params.id },
+            select: { id: true, ownerId: true, deletedAt: true },
+          })
+          if (!canManageSpot(spot, user)) return redirect("/spots")
+          await db.spot.update({
+            where: { id: params.id },
+            data: { verifiedAt: new Date(), verifier: { connect: { id: user.id } } },
+          })
+          track("Spot verified", { spotId: spot.id, userId: user.id })
+          return json({ success: true }, request, { flash: { title: "Spot verified!" } })
+        } catch (error) {
+          return badRequest("Error verifying spot", request, { flash: { title: "Error verifying spot" } })
+        }
+      }),
+    delete: () =>
+      createAction(request).handler(async () => {
+        try {
+          if (!user.isAdmin) return redirect("/spots")
+          await db.spot.update({ where: { id: params.id }, data: { deletedAt: new Date() } })
+          track("Spot deleted", { spotId: params.id || "", userId: user.id })
+          return redirect("/spots", request, { flash: { title: "Spot deleted!" } })
+        } catch (error) {
+          return badRequest("Error deleting spot your account", request, { flash: { title: "Error deleting spot" } })
+        }
+      }),
+  })
 }
 
 export default function SpotDetail() {
-  const { spot, activitySpots } = useLoaderData<typeof loader>()
+  const { spot, activitySpots, flickrImages } = useLoaderData<typeof loader>()
   const user = useMaybeUser()
   const theme = useTheme()
 
@@ -152,17 +171,30 @@ export default function SpotDetail() {
     <div className="relative">
       <div className="w-screen overflow-x-scroll">
         <div className="flex w-max gap-2 p-2">
-          {spot.images.map((image) => (
-            <OptimizedImage
-              alt="spot"
-              key={image.id}
-              placeholder={image.blurHash}
-              src={createImageUrl(image.path)}
-              className="rounded-xs h-[300px] max-w-[400px]"
-              height={300}
-              width={400}
-            />
-          ))}
+          {flickrImages
+            ? flickrImages.map((photo) => (
+                <a
+                  key={photo.id}
+                  href={photo.link}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="relative hover:opacity-80"
+                >
+                  <img src={photo.src} width={400} height={300} className="rounded-xs h-[300px] max-w-[400px] object-cover" />
+                  <img src="/flickr.svg" className="absolute bottom-1 left-1 object-contain" width={100} />
+                </a>
+              ))
+            : spot.images.map((image) => (
+                <OptimizedImage
+                  alt="spot"
+                  key={image.id}
+                  placeholder={image.blurHash}
+                  src={createImageUrl(image.path)}
+                  className="rounded-xs h-[300px] max-w-[400px]"
+                  height={300}
+                  width={400}
+                />
+              ))}
         </div>
       </div>
       <PageContainer className="space-y-10 pb-40 pt-4 lg:pt-8">
@@ -192,7 +224,7 @@ export default function SpotDetail() {
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <div className="space-y-3">
-              <VerifiedCard spot={spot} />
+              {isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}
               <h3 className="text-lg font-medium">Description</h3>
               <p className="whitespace-pre-wrap">{spot.description}</p>
               <p className="text-sm italic">{spot.address}</p>
@@ -210,7 +242,7 @@ export default function SpotDetail() {
                   })}
                 </div>
               )}
-              <p className="text-sm">
+              <p>
                 Added by{" "}
                 <Link to={`/${spot.creator.username}`} className="hover:underline">
                   {spot.creator.firstName} {spot.creator.lastName}
@@ -222,8 +254,9 @@ export default function SpotDetail() {
                   <>
                     {!spot.verifiedAt && (
                       <Form>
-                        <FormActionInput value={Actions.Verify} />
-                        <FormButton leftIcon={<Check className="sq-3" />}>Verify</FormButton>
+                        <FormButton value={Actions.Verify} leftIcon={<Check className="sq-3" />}>
+                          Verify
+                        </FormButton>
                       </Form>
                     )}
                     <LinkButton to="edit" variant="outline" leftIcon={<Edit2 className="sq-3" />}>
@@ -246,8 +279,7 @@ export default function SpotDetail() {
                           <Button variant="ghost">Cancel</Button>
                         </AlertDialogCancel>
                         <Form>
-                          <FormActionInput value={Actions.Delete} />
-                          <FormButton>Confirm</FormButton>
+                          <FormButton value={Actions.Delete}>Confirm</FormButton>
                         </Form>
                       </AlertDialogFooter>
                     </AlertDialogContent>

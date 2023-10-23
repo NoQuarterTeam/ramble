@@ -3,14 +3,14 @@ import { type SerializeFrom } from "@remix-run/node"
 import type { FetcherWithComponents, FormProps as RemixFormProps } from "@remix-run/react"
 import { Form as RemixForm, useFetcher as useRemixFetcher, useNavigation } from "@remix-run/react"
 import { X } from "lucide-react"
-import { AuthenticityTokenInput } from "remix-utils/authenticity-token"
+import { AuthenticityTokenInput } from "remix-utils/csrf/react"
 import { type z } from "zod"
 
 import { createImageUrl, merge } from "@ramble/shared"
 
 import { type ButtonProps, type InputProps, type InputStyleProps } from "~/components/ui"
 import { Button, IconButton, Input, inputStyles } from "~/components/ui"
-import { useFormErrors } from "~/lib/form"
+import { FORM_ACTION, useFormErrors } from "~/lib/form"
 
 import { ImageUploader } from "./ImageUploader"
 
@@ -35,7 +35,9 @@ interface UseFetcherProps<T> {
   onFinish?: (data: T) => void
 }
 
-export function useFetcher<T>(props?: UseFetcherProps<T>): FetcherWithComponents<SerializeFrom<T>> {
+export function useFetcher<T>(props?: UseFetcherProps<T>): FetcherWithComponents<SerializeFrom<T>> & {
+  FormButton: React.ForwardRefExoticComponent<ButtonProps & React.RefAttributes<HTMLButtonElement>>
+} {
   const fetcher = useRemixFetcher()
 
   function Form({ children, ...rest }: RemixFormProps) {
@@ -47,6 +49,18 @@ export function useFetcher<T>(props?: UseFetcherProps<T>): FetcherWithComponents
     )
   }
 
+  const FormButton = React.forwardRef<HTMLButtonElement, ButtonProps>(function _FormButton(rest, ref) {
+    return (
+      <Button
+        type="submit"
+        name={rest.value ? FORM_ACTION : undefined}
+        isLoading={fetcher.state !== "idle" && fetcher.formData?.get(FORM_ACTION) === rest.value}
+        {...rest}
+        ref={ref}
+      />
+    )
+  })
+
   React.useEffect(() => {
     if (!fetcher.data || !props) return
     if (fetcher.state === "loading" && fetcher.data) {
@@ -55,7 +69,7 @@ export function useFetcher<T>(props?: UseFetcherProps<T>): FetcherWithComponents
   }, [fetcher.state, props, fetcher.data])
 
   // @ts-expect-error - this is fine
-  return { ...fetcher, Form }
+  return { ...fetcher, Form, FormButton }
 }
 
 export function FormFieldLabel(
@@ -69,7 +83,7 @@ export function FormFieldLabel(
     <label
       htmlFor={props.name}
       {...props}
-      className={merge("flex text-sm font-normal text-gray-700 dark:text-gray-100", props.className)}
+      className={merge("flex font-normal text-gray-700 dark:text-gray-100", props.className)}
     >
       {props.children}
       {props.required && <span className="pl-0.5 text-red-500">*</span>}
@@ -82,7 +96,7 @@ export function FormFieldError(
   },
 ) {
   return (
-    <p {...props} className={merge("text-sm text-red-400", props.className)}>
+    <p {...props} className={merge("text-red-400", props.className)}>
       {props.children}
     </p>
   )
@@ -123,7 +137,7 @@ export const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(func
           {label}
         </FormFieldLabel>
       )}
-      {clonedInput || <Input size="sm" {...sharedProps} />}
+      {clonedInput || <Input {...sharedProps} />}
 
       {typeof fieldErrors === "string" ? (
         <FormFieldError>{fieldErrors}</FormFieldError>
@@ -163,7 +177,7 @@ export const InlineFormField = React.forwardRef<HTMLInputElement, FormFieldProps
             </FormFieldLabel>
           </div>
         )}
-        {clonedInput || <Input size="sm" {...sharedProps} />}
+        {clonedInput || <Input {...sharedProps} />}
       </div>
       {typeof fieldErrors === "string" ? (
         <FormFieldError>{fieldErrors}</FormFieldError>
@@ -251,5 +265,19 @@ export function FormError({ error }: { error?: string | null | false }) {
 }
 export const FormButton = React.forwardRef<HTMLButtonElement, ButtonProps>(function _FormButton(props, ref) {
   const navigation = useNavigation()
-  return <Button type="submit" isLoading={navigation.state !== "idle" && !!navigation.formAction} {...props} ref={ref} />
+  const isFormActionLoading =
+    navigation.state !== "idle" &&
+    !!navigation.formData?.get(FORM_ACTION) &&
+    !!props.value &&
+    navigation.formData.get(FORM_ACTION) === props.value
+
+  return (
+    <Button
+      type="submit"
+      name={props.value ? FORM_ACTION : undefined}
+      isLoading={props.value ? isFormActionLoading : navigation.state !== "idle" && !!navigation.formAction}
+      {...props}
+      ref={ref}
+    />
+  )
 })

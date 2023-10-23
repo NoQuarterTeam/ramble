@@ -10,7 +10,7 @@ export default function UserLists() {
   const { params } = useParams<"UserScreen">()
 
   const { data: lists, isLoading } = api.list.allByUser.useQuery(
-    { username: params.username || "" },
+    { username: params.username?.toLowerCase().trim() || "" },
     { enabled: !!params.username },
   )
 

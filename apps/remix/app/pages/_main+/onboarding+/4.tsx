@@ -1,7 +1,5 @@
 import * as React from "react"
 import { useLoaderData } from "@remix-run/react"
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
-import { json, redirect } from "@vercel/remix"
 import { Plus } from "lucide-react"
 import { z } from "zod"
 
@@ -12,8 +10,11 @@ import { Form, FormButton, FormError, FormField, FormFieldLabel, ImageField } fr
 import { ImageUploader } from "~/components/ImageUploader"
 import { LinkButton } from "~/components/LinkButton"
 import { IconButton, Textarea } from "~/components/ui"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { formError, FormNumber, NullableFormString, validateFormData } from "~/lib/form"
+import { formError, FormNumber, NullableFormString, validateFormData } from "~/lib/form.server"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json, redirect } from "~/lib/vendor/vercel.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { Footer } from "./components/Footer"
@@ -26,14 +27,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return json(user)
 }
 
-const schema = z.object({
-  name: z.string().min(1),
-  model: z.string().min(1),
-  year: FormNumber.min(1950).max(new Date().getFullYear() + 2),
-  description: NullableFormString,
-})
-
 export const action = async ({ request }: ActionFunctionArgs) => {
+  const schema = z.object({
+    name: z.string().min(1),
+    model: z.string().min(1),
+    year: FormNumber.min(1950).max(new Date().getFullYear() + 2),
+    description: NullableFormString,
+  })
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
   const user = await getCurrentUser(request, { id: true, van: { select: { id: true } } })
@@ -64,6 +64,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     )
     await db.van.create({ data: { userId: user.id, ...data, images: { create: imageData } } })
   }
+  track("Onboarding 4 submitted", { userId: user.id })
   return redirect("/map/welcome")
 }
 
@@ -96,7 +97,7 @@ export default function Onboarding4() {
           <FormField
             name="description"
             defaultValue={user.van?.description || ""}
-            label="Anything else you wana mention?"
+            label="Anything else you wanna mention?"
             input={<Textarea rows={4} />}
           />
           <FormError />

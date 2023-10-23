@@ -5,7 +5,8 @@ import { type SpotType } from "@ramble/database/types"
 import { join } from "@ramble/shared"
 
 import { Button } from "../../../../../components/ui/Button"
-import { SPOT_OPTIONS } from "../../../../../lib/static/spots"
+import { Text } from "../../../../../components/ui/Text"
+import { SPOT_OPTIONS } from "../../../../../lib/models/spot"
 import { useParams, useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
 
@@ -15,10 +16,11 @@ export function NewSpotTypeScreen() {
   const router = useRouter()
   return (
     <NewSpotModalView title="what type?">
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <View className="flex flex-row flex-wrap gap-2 pt-4">
-          {SPOT_OPTIONS.map((spotType) => (
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+        <View className="flex flex-row flex-wrap gap-2 py-4">
+          {SPOT_OPTIONS.filter((s) => !s.isComingSoon).map((spotType) => (
             <Button
+              size="sm"
               variant={type === spotType.value ? "primary" : "outline"}
               leftIcon={
                 <spotType.Icon
@@ -33,6 +35,7 @@ export function NewSpotTypeScreen() {
             </Button>
           ))}
         </View>
+        <Text className="text-center text-sm opacity-80">More options coming soon</Text>
       </ScrollView>
       {type && (
         <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">

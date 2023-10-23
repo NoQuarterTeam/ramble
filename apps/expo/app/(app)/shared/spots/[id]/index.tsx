@@ -13,19 +13,20 @@ import * as Location from "expo-location"
 import { StatusBar } from "expo-status-bar"
 import { Check, ChevronDown, ChevronLeft, Compass, Edit2, Heart, Star, Trash } from "lucide-react-native"
 
-import { AMENITIES, canManageSpot, displayRating, merge } from "@ramble/shared"
+import { AMENITIES, canManageSpot, displayRating, isPartnerSpot, merge } from "@ramble/shared"
 
+import { PartnerLink } from "../../../../../components/PartnerLink"
 import { ReviewItem } from "../../../../../components/ReviewItem"
 import { Button } from "../../../../../components/ui/Button"
 import { Heading } from "../../../../../components/ui/Heading"
-import { ImageCarousel } from "../../../../../components/ui/ImageCarousel"
+import { SpotImageCarousel } from "../../../../../components/ui/SpotImageCarousel"
 import { Text } from "../../../../../components/ui/Text"
 import { toast } from "../../../../../components/ui/Toast"
 import { VerifiedCard } from "../../../../../components/VerifiedCard"
 import { api } from "../../../../../lib/api"
-import { width } from "../../../../../lib/device"
+import { height, width } from "../../../../../lib/device"
 import { useMe } from "../../../../../lib/hooks/useMe"
-import { AMENITIES_ICONS } from "../../../../../lib/static/amenities"
+import { AMENITIES_ICONS } from "../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../router"
 
 export function SpotDetailScreen() {
@@ -118,7 +119,7 @@ export function SpotDetailScreen() {
         onScroll={scrollHandler}
       >
         <Animated.View style={imageStyle}>
-          <ImageCarousel width={width} height={300} images={spot.images} />
+          <SpotImageCarousel canAddMore width={width} height={height * 0.37} images={spot.images} spotId={spot.id} />
         </Animated.View>
         <View className="space-y-3 p-4">
           <View className="space-y-2">
@@ -135,9 +136,7 @@ export function SpotDetailScreen() {
             </View>
           </View>
           <View className="space-y-1">
-            <View>
-              <VerifiedCard spot={spot} />
-            </View>
+            <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}</View>
             <Text>{spot.description}</Text>
             <Text className="font-400-italic text-sm">{spot.address}</Text>
             {spot.amenities && (

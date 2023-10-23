@@ -39,7 +39,7 @@ async function getCards() {
     })
   })
   const existingSpots = await prisma.spot.findMany({ where: { nesteId: { in: spots.map((s) => s.id) } } })
-
+  console.log(spots.length + " stations found")
   for (let index = 0; index < spots.length; index++) {
     const spot = spots[index]
 
@@ -49,19 +49,26 @@ async function getCards() {
       if (exists) continue
 
       // geocode to get lat and lng based on address with mapbox
+      // const res = await fetch(
+      //   `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+      //     spot.address,
+      //   )}.json?access_token=pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw`,
+      // )
+
       const res = await fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+        `http://api.positionstack.com/v1/forward?access_key=b455825338d7d352fcdc6ba1a99a196a&query=${encodeURIComponent(
           spot.address,
-        )}.json?access_token=pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw`,
+        )}`,
       )
+
       const json = await res.json()
 
       await prisma.spot.create({
         data: {
           name: spot.name,
           address: spot.address,
-          latitude: json.features[0].center[1],
-          longitude: json.features[0].center[0],
+          latitude: json.data[0].latitude,
+          longitude: json.data[0].longitude,
           creator: { connect: { email: "george@noquarter.co" } },
           verifier: { connect: { email: "george@noquarter.co" } },
           nesteId: spot.name,
@@ -69,7 +76,9 @@ async function getCards() {
           images: { create: [{ path: spot.imageUrl, creator: { connect: { email: "george@noquarter.co" } } }] },
         },
       })
-    } catch {}
+    } catch (error) {
+      console.log(error)
+    }
   }
 }
 

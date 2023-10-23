@@ -1,27 +1,25 @@
 import * as React from "react"
 import { Modal, Switch, TouchableOpacity, useColorScheme, View } from "react-native"
-import BottomSheet, { useBottomSheetDynamicSnapPoints, useBottomSheetSpringConfigs } from "@gorhom/bottom-sheet"
 import Mapbox, { Camera, type MapView as MapType, MarkerView, RasterLayer, RasterSource } from "@rnmapbox/maps"
 import { useQuery } from "@tanstack/react-query"
 import * as Location from "expo-location"
-import { BadgeX, CloudRain, Heart, Layers, Navigation, PlusCircle, Settings2, Star, Verified, X } from "lucide-react-native"
+import { CloudRain, Layers, Navigation, PlusCircle, Settings2 } from "lucide-react-native"
 
 import { type SpotType } from "@ramble/database/types"
-import { displayRating, INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { SpotMarker } from "../../../components/SpotMarker"
-import { ImageCarousel } from "../../../components/ui/ImageCarousel"
 import { ModalView } from "../../../components/ui/ModalView"
 import { Spinner } from "../../../components/ui/Spinner"
 import { Text } from "../../../components/ui/Text"
 import { toast } from "../../../components/ui/Toast"
 import { api, type RouterOutputs } from "../../../lib/api"
-import { width } from "../../../lib/device"
 import { useAsyncStorage } from "../../../lib/hooks/useAsyncStorage"
 import { usePreferences } from "../../../lib/hooks/usePreferences"
 import { useRouter } from "../../router"
 import { type Filters, initialFilters, MapFilters } from "./MapFilters"
+import { SpotPreview } from "./SpotPreview"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
@@ -116,9 +114,8 @@ export function SpotsMapScreen() {
       clusters?.map((point, i) => {
         if (point.properties.cluster) {
           const onPress = async () => {
-            const currentZoom = await mapRef.current?.getZoom()
             camera.current?.setCamera({
-              zoomLevel: Math.min((currentZoom || 5) + 2, 14),
+              zoomLevel: (point.properties.cluster && point.properties.zoomLevel) || undefined,
               animationMode: "linearTo",
               animationDuration: 300,
               centerCoordinate: point.geometry.coordinates,
@@ -169,7 +166,7 @@ export function SpotsMapScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [clusters],
   )
-  const filterCount = (filters.isPetFriendly ? 1 : 0) + (filters.isVerified ? 1 : 0) + (filters.types.length > 0 ? 1 : 0)
+  const filterCount = (filters.isPetFriendly ? 1 : 0) + (filters.isUnverified ? 1 : 0) + (filters.types.length > 0 ? 1 : 0)
 
   const [preferences, setPreferences, isReady] = usePreferences()
   return (
@@ -292,108 +289,6 @@ export function SpotsMapScreen() {
     </View>
   )
 }
-
-const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: string | null; onClose: () => void }) {
-  const { data: spot, isLoading } = api.spot.mapPreview.useQuery({ id: id || "" }, { enabled: !!id, keepPreviousData: true })
-  const { push } = useRouter()
-  const colorScheme = useColorScheme()
-
-  const bottomSheetRef = React.useRef<BottomSheet>(null)
-
-  const initialSnapPoints = React.useMemo(() => ["CONTENT_HEIGHT"], [])
-
-  const { animatedHandleHeight, animatedSnapPoints, animatedContentHeight, handleContentLayout } =
-    useBottomSheetDynamicSnapPoints(initialSnapPoints)
-
-  const handleSheetClose = React.useCallback(() => {
-    bottomSheetRef.current?.close()
-    onClose()
-  }, [onClose])
-  const animationConfigs = useBottomSheetSpringConfigs({
-    damping: 40,
-    overshootClamping: true,
-    stiffness: 500,
-  })
-
-  return (
-    <>
-      {isLoading && !!id && (
-        <View className="rounded-xs bg-background absolute left-4 top-10 flex items-center justify-center p-2 dark:bg-gray-800">
-          <Spinner />
-        </View>
-      )}
-      <BottomSheet
-        detached
-        animationConfigs={animationConfigs}
-        style={{ marginHorizontal: 10 }}
-        ref={bottomSheetRef}
-        bottomInset={10}
-        handleComponent={null}
-        index={id ? 0 : -1}
-        // enablePanDownToClose
-        snapPoints={animatedSnapPoints}
-        handleHeight={animatedHandleHeight}
-        contentHeight={animatedContentHeight}
-      >
-        {isLoading ? null : (
-          <View onLayout={handleContentLayout} className="bg-background rounded-xl p-4 dark:bg-gray-900">
-            {!spot ? (
-              <Text>Spot not found</Text>
-            ) : (
-              <View className="space-y-4">
-                <View className="space-y-1">
-                  {spot.verifiedAt && spot.verifier ? (
-                    <View className="flex flex-row items-center space-x-1 text-sm">
-                      <Verified size={16} className="text-black dark:text-white" />
-                      <Text>Verified by</Text>
-                      <TouchableOpacity onPress={() => push("UserScreen", { username: spot.verifier?.username || "" })}>
-                        <Text className="flex flex-row">{`${spot.verifier.firstName} ${spot.verifier.lastName}`}</Text>
-                      </TouchableOpacity>
-                    </View>
-                  ) : (
-                    <View className="flex flex-row items-center space-x-1 text-sm">
-                      <BadgeX size={16} className="text-black dark:text-white" />
-                      <Text>Unverified</Text>
-                    </View>
-                  )}
-
-                  <TouchableOpacity onPress={() => push("SpotDetailScreen", { id: spot.id })} activeOpacity={0.7}>
-                    <Text numberOfLines={2} className="text-lg leading-6 text-black hover:underline dark:text-white">
-                      {spot.name}
-                    </Text>
-                  </TouchableOpacity>
-
-                  <View className="flex flex-row items-center space-x-2">
-                    <View className="flex flex-row items-center space-x-1">
-                      <Star size={16} className="text-black dark:text-white" />
-                      <Text className="text-sm">{displayRating(spot.rating._avg.rating)}</Text>
-                    </View>
-                    <View className="flex flex-row flex-wrap items-center space-x-1">
-                      <Heart size={16} className="text-black dark:text-white" />
-                      <Text className="text-sm">{spot._count.listSpots || 0}</Text>
-                    </View>
-                  </View>
-                </View>
-                <View className="rounded-xs overflow-hidden">
-                  <ImageCarousel
-                    onPress={() => push("SpotDetailScreen", { id: spot.id })}
-                    key={spot.id}
-                    width={width - 52}
-                    height={200}
-                    images={spot.images}
-                  />
-                </View>
-              </View>
-            )}
-            <TouchableOpacity onPress={handleSheetClose} className="absolute right-2 top-2 flex items-center justify-center p-2">
-              <X size={24} color={colorScheme === "dark" ? "white" : "black"} />
-            </TouchableOpacity>
-          </View>
-        )}
-      </BottomSheet>
-    </>
-  )
-})
 
 function RainRadar({ shouldRender }: { shouldRender: boolean }) {
   const { data, isLoading } = useQuery({

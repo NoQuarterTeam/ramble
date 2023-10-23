@@ -1,6 +1,6 @@
-import { EmailWrapper } from "../components/EmailWrapper"
-import { EmailDocument } from "../components/EmailDocument"
 import { Button } from "../components/Button"
+import { EmailDocument } from "../components/EmailDocument"
+import { EmailWrapper } from "../components/EmailWrapper"
 import { Heading } from "../components/Heading"
 
 interface Props {

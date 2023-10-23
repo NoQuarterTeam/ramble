@@ -1,9 +1,9 @@
 import { Outlet } from "@remix-run/react"
-import type { LoaderFunctionArgs } from "@vercel/remix"
-import { redirect } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
 import { db } from "~/lib/db.server"
+import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { redirect } from "~/lib/vendor/vercel.server"
 import { getUserSession } from "~/services/session/session.server"
 
 export const headers = () => {
@@ -23,12 +23,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function AuthLayout() {
   return (
     <div className="center flex-col pt-10">
-      <div className="vstack w-full">
-        <div className="vstack bg-background w-full max-w-md space-y-8 p-4">
-          <div className="w-full">
-            <Outlet />
-          </div>
-        </div>
+      <div className="bg-background w-full max-w-md space-y-8 p-4">
+        <Outlet />
       </div>
     </div>
   )

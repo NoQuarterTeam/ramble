@@ -1,7 +1,5 @@
 import * as React from "react"
 import { Link, useFetcher, useLoaderData } from "@remix-run/react"
-import type { LoaderFunctionArgs, SerializeFrom } from "@vercel/remix"
-import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
 import { createImageUrl } from "@ramble/shared"
@@ -11,6 +9,8 @@ import { PageContainer } from "~/components/PageContainer"
 import { Avatar, Button, Icons } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
+import type { LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 
 export const config = {
   // runtime: "edge",
@@ -95,6 +95,7 @@ function VanItem(props: { van: SerializeFrom<LoaderData>["vans"][number] }) {
           alt="van"
           width={400}
           height={300}
+          className="h-[300px] object-contain"
           src={createImageUrl(props.van.images[0].path)}
           placeholder={props.van.images[0].blurHash}
         />
@@ -106,7 +107,7 @@ function VanItem(props: { van: SerializeFrom<LoaderData>["vans"][number] }) {
       <div className="space-y-2 p-2">
         <div>
           <p className="text-2xl leading-5">{props.van.name}</p>
-          <p className="text-sm">
+          <p>
             {props.van.model} · {props.van.year}
           </p>
         </div>

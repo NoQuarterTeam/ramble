@@ -5,7 +5,7 @@ import { updateSchema, userInterestFields } from "@ramble/shared"
 
 import { createAuthToken } from "../lib/jwt"
 import { generateBlurHash } from "../services/generateBlurHash.server"
-import { sendAccountVerificationEmail } from "../services/user.mailer.server"
+import { sendAccountVerificationEmail } from "../services/mailers/user.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const userRouter = createTRPCRouter({
@@ -76,6 +76,10 @@ export const userRouter = createTRPCRouter({
     } else {
       await ctx.prisma.user.update({ where: { username: input.username }, data: { followers: { connect: { id: ctx.user.id } } } })
     }
+    return true
+  }),
+  deleteAccount: protectedProcedure.mutation(async ({ ctx }) => {
+    await ctx.prisma.user.delete({ where: { id: ctx.user.id } })
     return true
   }),
 })

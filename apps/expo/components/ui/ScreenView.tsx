@@ -20,10 +20,10 @@ export function ScreenView(props: Props) {
     <View className="min-h-full px-4 pt-16">
       <View className="flex flex-row items-center justify-between pb-2">
         <View className={join("flex flex-row items-center space-x-0.5")}>
-          <TouchableOpacity onPress={props.onBack || goBack} className="sq-8 flex items-center justify-center">
+          <TouchableOpacity onPress={props.onBack || goBack} className="sq-8 flex items-center justify-center pt-0.5">
             <ChevronLeft className="text-primary" />
           </TouchableOpacity>
-          <BrandHeading>{props.title.toLowerCase()}</BrandHeading>
+          <BrandHeading className="text-xl">{props.title.toLowerCase()}</BrandHeading>
         </View>
         {props.rightElement}
       </View>

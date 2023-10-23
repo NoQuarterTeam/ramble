@@ -1,13 +1,14 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
 import dayjs from "dayjs"
-import type { z } from "zod"
+import { type z } from "zod"
 
 import { generateBlurHash } from "@ramble/api"
 import { doesSpotTypeRequireAmenities } from "@ramble/shared"
 
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { formError, validateFormData } from "~/lib/form"
+import { formError, validateFormData } from "~/lib/form.server"
 import { json, redirect } from "~/lib/remix.server"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { amenitiesSchema, SpotForm, spotSchema } from "./components/SpotForm"
@@ -19,8 +20,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const { id, role, isVerified } = await getCurrentUser(request)
-  if (!isVerified) return redirect("/account", request, { flash: { title: "Account not verified" } })
+  const user = await getCurrentUser(request)
+  if (!user.isVerified) return redirect("/account", request, { flash: { title: "Account not verified" } })
 
   const result = await validateFormData(request, spotSchema)
   if (!result.success) return formError(result)
@@ -32,7 +33,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const imageData = await Promise.all(
     images.map(async (image) => {
       const blurHash = await generateBlurHash(image)
-      return { path: image, blurHash, creator: { connect: { id } } }
+      return { path: image, blurHash, creator: { connect: { id: user.id } } }
     }),
   )
 
@@ -48,13 +49,15 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       ...data,
       publishedAt: shouldPublishLater ? dayjs().add(2, "weeks").toDate() : undefined,
       address: customAddress || result.data.address,
-      creator: { connect: { id } },
-      verifiedAt: role === "GUIDE" ? new Date() : undefined,
-      verifier: role === "GUIDE" ? { connect: { id } } : undefined,
+      creator: { connect: { id: user.id } },
+      verifiedAt: user.role === "GUIDE" ? new Date() : undefined,
+      verifier: user.role === "GUIDE" ? { connect: { id: user.id } } : undefined,
       amenities: amenities ? { create: amenities } : undefined,
       images: { create: imageData },
     },
   })
+
+  track("Spot created", { spotId: spot.id, userId: user.id })
 
   return redirect(`/spots/${spot.id}`)
 }

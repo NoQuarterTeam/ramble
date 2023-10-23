@@ -1,12 +1,12 @@
 import { Link, useLoaderData, useParams } from "@remix-run/react"
-import type { LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
 import { Lock } from "lucide-react"
 
 import { LinkButton } from "~/components/LinkButton"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
+import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 import { getMaybeUser } from "~/services/auth/auth.server"
 
 export const headers = useLoaderHeaders
@@ -15,7 +15,10 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const user = await getMaybeUser(request)
   const lists = await db.list.findMany({
     orderBy: { createdAt: "desc" },
-    where: { creator: { username: params.username }, isPrivate: !user || user.username !== params.username ? false : undefined },
+    where: {
+      creator: { username: params.username?.toLowerCase().trim() },
+      isPrivate: !user || user.username !== params.username ? false : undefined,
+    },
   })
   return json(lists)
 }
@@ -44,7 +47,7 @@ export default function ProfileLists() {
                 {list.isPrivate && <Lock size={20} />}
                 <p className="text-2xl">{list.name}</p>
               </div>
-              <p className="text-sm">{list.description}</p>
+              <p>{list.description}</p>
             </Link>
           ))}
         </div>

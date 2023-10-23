@@ -1,9 +1,6 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react"
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
 import { Instagram, type LucideIcon } from "lucide-react"
-import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 import { zx } from "zodix"
 
@@ -12,12 +9,15 @@ import { createImageUrl, merge, userInterestFields } from "@ramble/shared"
 import { Form, FormButton } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { Avatar, Badge, buttonSizeStyles, buttonStyles, Tooltip } from "~/components/ui"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { formError, validateFormData } from "~/lib/form"
+import { formError, validateFormData } from "~/lib/form.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
-import { interestOptions } from "~/lib/models/interests"
+import { interestOptions } from "~/lib/models/user"
 import { notFound } from "~/lib/remix.server"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
 
 export const headers = useLoaderHeaders
@@ -25,7 +25,7 @@ export const headers = useLoaderHeaders
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const currentUser = await getMaybeUser(request)
   const user = await db.user.findUnique({
-    where: { username: params.username },
+    where: { username: params.username?.toLowerCase().trim() },
     select: {
       id: true,
       avatar: true,
@@ -45,14 +45,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   })
   if (!user) throw notFound()
 
-  return json(
-    { ...user, isFollowed: user.followers && user.followers.length > 0 },
-    {
-      headers: {
-        "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour", staleWhileRevalidate: "1min" }),
-      },
-    },
-  )
+  return json({ ...user, isFollowed: user.followers && user.followers.length > 0 })
 }
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -63,8 +56,12 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   if (user.username === params.username) return json({ success: false, message: "You can't follow yourself" })
   const shouldFollow = result.data.shouldFollow
   await db.user.update({
-    where: { username: params.username },
+    where: { username: params.username?.toLowerCase().trim() },
     data: { followers: shouldFollow ? { connect: { id: user.id } } : { disconnect: { id: user.id } } },
+  })
+  track(shouldFollow ? "User followed" : "User unfollowed", {
+    username: params.username?.toLowerCase().trim() || "",
+    userId: user.id,
   })
   return json({ success: true })
 }
@@ -113,7 +110,9 @@ export default function ProfileLists() {
                     <span className="font-semibold">{user._count?.followers}</span> followers
                   </Link>
                 </div>
-                {!currentUser || currentUser.username === user.username ? null : (
+                {!currentUser ? (
+                  <LinkButton to={`/login?redirectTo=/${user.username}`}>Follow</LinkButton>
+                ) : currentUser.username === user.username ? null : (
                   <Form>
                     <input type="hidden" name="shouldFollow" value={String(!user.isFollowed)} />
                     <FormButton variant={user.isFollowed ? "outline" : "primary"} size="sm">
@@ -132,7 +131,7 @@ export default function ProfileLists() {
                       </Tooltip>
                     ))}
                 </div>
-                <p className="text-sm">{user.bio}</p>
+                <p>{user.bio}</p>
               </div>
               {currentUser?.id === user.id && (
                 <LinkButton size="sm" to="/account" variant="outline">

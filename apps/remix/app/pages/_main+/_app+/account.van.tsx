@@ -1,7 +1,5 @@
 import * as React from "react"
 import { useLoaderData } from "@remix-run/react"
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
 import { Plus } from "lucide-react"
 import { z } from "zod"
 
@@ -11,9 +9,12 @@ import { type VanImage } from "@ramble/database/types"
 import { Form, FormButton, FormError, FormField, FormFieldLabel, ImageField } from "~/components/Form"
 import { ImageUploader } from "~/components/ImageUploader"
 import { IconButton, Textarea } from "~/components/ui"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { formError, FormNumber, NullableFormString, validateFormData } from "~/lib/form"
+import { formError, FormNumber, NullableFormString, validateFormData } from "~/lib/form.server"
 import { redirect } from "~/lib/remix.server"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -52,6 +53,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       where: { id: user.van.id },
       data: { userId: user.id, ...data, images: { delete: imagesToDelete, create: imageData } },
     })
+    track("Van updated", { userId: user.id })
   } else {
     const imageData = await Promise.all(
       images.map(async (image) => {
@@ -60,6 +62,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       }),
     )
     await db.van.create({ data: { userId: user.id, ...data, images: { create: imageData } } })
+    track("Van created", { userId: user.id })
   }
 
   return redirect("/account/van", request, { flash: { title: user.van ? "Van updated" : "Van created" } })
@@ -91,7 +94,7 @@ export default function VanAccount() {
           <FormField
             name="description"
             defaultValue={user.van?.description || ""}
-            label="Anything else you wana mention?"
+            label="Anything else you wanna mention?"
             input={<Textarea rows={4} />}
           />
           <FormError />

@@ -1,12 +1,12 @@
 import * as React from "react"
-import { Dog, Settings2, Verified } from "lucide-react"
+import { BadgeX, Dog, Settings2 } from "lucide-react"
 import queryString from "query-string"
 
+import { SpotType } from "@ramble/database/types"
 import { useDisclosure } from "@ramble/shared"
 
 import { Button, IconButton, Modal, Switch, Tooltip } from "~/components/ui"
-import { SPOT_TYPES, SpotTypeInfo } from "~/lib/models/spots"
-import { SpotType } from "@ramble/database/types"
+import { SPOT_TYPES, type SpotTypeInfo } from "~/lib/models/spot"
 
 export function MapFilters({ onChange }: { onChange: (params: string) => void }) {
   const onSubmit = (e: React.SyntheticEvent) => {
@@ -19,7 +19,7 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
       {
         ...existingParams,
         type: type || undefined,
-        isVerified: values.isVerified || undefined,
+        isUnverified: values.isUnverified || undefined,
         isPetFriendly: values.isPetFriendly || undefined,
       },
       { arrayFormat: "bracket" },
@@ -33,7 +33,7 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
     const newParams = queryString.stringify(
       {
         ...existingParams,
-        isVerified: undefined,
+        isUnverified: undefined,
         type: undefined,
         isPetFriendly: undefined,
       },
@@ -69,7 +69,7 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
       </div>
 
       <Modal {...modalProps} size="3xl" title="Filters">
-        <form className="space-y-6" onSubmit={onSubmit}>
+        <form className="max-h-[85svh] space-y-6 px-1" onSubmit={onSubmit}>
           <div className="space-y-4">
             <SpotTypeSection title="Stays" types={[SpotType.CAMPING, SpotType.FREE_CAMPING, SpotType.PARKING]} />
             <SpotTypeSection
@@ -96,18 +96,18 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
           <div className="space-y-4">
             <p className="text-lg">Options</p>
 
-            <label htmlFor="isVerified" className="flex items-center justify-between space-x-4">
+            <label htmlFor="isUnverified" className="flex items-center justify-between space-x-4">
               <div className="flex items-center space-x-4">
-                <Verified className="sq-6" />
+                <BadgeX className="sq-6" />
                 <div>
-                  <p>Verified spots</p>
-                  <p className="text-sm opacity-70">Spots that have been verified by an Guide</p>
+                  <p>Unverified spots</p>
+                  <p className="text-sm opacity-70">Spots that have not been verified by a Guide</p>
                 </div>
               </div>
               <Switch
-                name="isVerified"
-                id="isVerified"
-                defaultChecked={Boolean(queryString.parse(window.location.search).isVerified)}
+                name="isUnverified"
+                id="isUnverified"
+                defaultChecked={Boolean(queryString.parse(window.location.search).isUnverified)}
                 className="mt-1"
               />
             </label>

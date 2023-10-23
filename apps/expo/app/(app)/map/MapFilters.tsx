@@ -1,6 +1,6 @@
 import * as React from "react"
-import { ScrollView, Switch, View, useColorScheme } from "react-native"
-import { BadgeCheck, Dog } from "lucide-react-native"
+import { ScrollView, Switch, useColorScheme, View } from "react-native"
+import { BadgeX, Dog } from "lucide-react-native"
 
 import { type SpotType } from "@ramble/database/types"
 import { join } from "@ramble/shared"
@@ -9,17 +9,17 @@ import colors from "@ramble/tailwind-config/src/colors"
 import { Button } from "../../../components/ui/Button"
 import { Heading } from "../../../components/ui/Heading"
 import { Text } from "../../../components/ui/Text"
-import { SPOT_TYPES, SpotTypeInfo } from "../../../lib/static/spots"
+import { SPOT_TYPES, type SpotTypeInfo } from "../../../lib/models/spot"
 
 export type Filters = {
   isPetFriendly: boolean
-  isVerified: boolean
+  isUnverified: boolean
   types: SpotType[]
 }
 
 export const initialFilters = {
   isPetFriendly: false,
-  isVerified: false,
+  isUnverified: false,
   types: [],
 } satisfies Filters
 
@@ -67,16 +67,16 @@ export function MapFilters(props: Props) {
           <Heading className="font-400 text-2xl">Options</Heading>
           <View className="flex flex-row items-center justify-between space-x-4">
             <View className="flex flex-row items-center space-x-4">
-              <BadgeCheck size={30} className="text-black dark:text-white" />
+              <BadgeX size={30} className="text-black dark:text-white" />
               <View>
-                <Text className="text-lg">Verified spots</Text>
-                <Text className="text-sm opacity-75">Spots verified by an Guide</Text>
+                <Text className="text-lg">Unverified spots</Text>
+                <Text className="text-sm opacity-75">Spots not yet verified by a Guide</Text>
               </View>
             </View>
             <Switch
               trackColor={{ true: colors.primary[600] }}
-              value={filters.isVerified}
-              onValueChange={() => setFilters((f) => ({ ...f, isVerified: !f.isVerified }))}
+              value={filters.isUnverified}
+              onValueChange={() => setFilters((f) => ({ ...f, isUnverified: !f.isUnverified }))}
             />
           </View>
           <View className="flex flex-row items-center justify-between space-x-4">

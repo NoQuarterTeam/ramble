@@ -6,12 +6,16 @@ import { OptimizedImage } from "../../../../components/ui/OptimisedImage"
 import { Spinner } from "../../../../components/ui/Spinner"
 import { Text } from "../../../../components/ui/Text"
 import { api } from "../../../../lib/api"
+import { isTablet } from "../../../../lib/device"
 import { useParams } from "../../../router"
 
 export function UserVan() {
   const { params } = useParams<"UserScreen">()
 
-  const { data: van, isLoading } = api.van.byUser.useQuery({ username: params.username || "" }, { enabled: !!params.username })
+  const { data: van, isLoading } = api.van.byUser.useQuery(
+    { username: params.username?.toLowerCase().trim() || "" },
+    { enabled: !!params.username },
+  )
 
   if (isLoading)
     return (
@@ -38,15 +42,18 @@ export function UserVan() {
         </View>
       </View>
       <Text>{van.description}</Text>
-      {van.images.map((image) => (
-        <OptimizedImage
-          key={image.id}
-          width={500}
-          placeholder={image.blurHash}
-          className="rounded-xs min-h-[300px] w-full object-contain"
-          source={{ uri: createImageUrl(image.path) }}
-        />
-      ))}
+      <View className="flex flex-row flex-wrap">
+        {van.images.map((image) => (
+          <OptimizedImage
+            key={image.id}
+            width={500}
+            placeholder={image.blurHash}
+            style={{ width: isTablet ? "48%" : "100%", marginHorizontal: isTablet ? 10 : 0, marginBottom: 10 }}
+            className="rounded-xs min-h-[300px] object-contain"
+            source={{ uri: createImageUrl(image.path) }}
+          />
+        ))}
+      </View>
     </View>
   )
 }

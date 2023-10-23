@@ -52,8 +52,9 @@ model User {
   van           Van?
   feedback      Feedback[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now()) @updatedAt
+  accessRequest AccessRequest?
 
   @@index([username])
 }
@@ -99,9 +100,7 @@ enum SpotType {
   CLIMBING
   SURFING
   MOUNTAIN_BIKING
-  HIKING // deprecated
   HIKING_TRAIL
-  PADDLE_BOARDING // deprecated
   PADDLE_KAYAK
   // Services
   GAS_STATION
@@ -178,6 +177,9 @@ model Spot {
   // hipcamp
   hipcampId String? @unique
 
+  // the crag
+  theCragId String? @unique
+
   deletedAt DateTime?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
@@ -201,17 +203,17 @@ model Spot {
 
 model SpotAmenities {
   id          String  @id @default(uuid())
-  hotWater    Boolean
-  wifi        Boolean
-  shower      Boolean
-  toilet      Boolean
-  kitchen     Boolean
-  electricity Boolean
-  water       Boolean
-  firePit     Boolean
-  sauna       Boolean
-  pool        Boolean
-  bbq         Boolean
+  hotWater    Boolean @default(false)
+  wifi        Boolean @default(false)
+  shower      Boolean @default(false)
+  toilet      Boolean @default(false)
+  kitchen     Boolean @default(false)
+  electricity Boolean @default(false)
+  water       Boolean @default(false)
+  firePit     Boolean @default(false)
+  sauna       Boolean @default(false)
+  pool        Boolean @default(false)
+  bbq         Boolean @default(false)
 
   spot   Spot   @relation(fields: [spotId], references: [id], onDelete: Cascade)
   spotId String @unique
@@ -222,7 +224,7 @@ model SpotAmenities {
 
 model SpotImage {
   id       String  @id @default(uuid())
-  path     String
+  path     String  @db.VarChar(500)
   blurHash String?
 
   spotId    String
@@ -286,11 +288,17 @@ model Review {
 }
 
 model AccessRequest {
-  id    String @id @default(uuid())
-  email String
+  id         String    @id @default(uuid())
+  email      String
+  acceptedAt DateTime?
+
+  userId String? @unique
+  user   User?   @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([userId])
 }
 
 enum FeedbackType {

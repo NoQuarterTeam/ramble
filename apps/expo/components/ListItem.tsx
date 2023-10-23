@@ -26,7 +26,7 @@ export function ListItem({ list }: Props) {
         {list.isPrivate && <Lock className="text-black dark:text-white" size={20} />}
         <Text className="text-xl">{list.name}</Text>
       </View>
-      <Text className="text-base">{list.description}</Text>
+      {list.description && <Text className="text-base">{list.description}</Text>}
 
       {list.creator && (
         <View className="flex flex-row justify-end">

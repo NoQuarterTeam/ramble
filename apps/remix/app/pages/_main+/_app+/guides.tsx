@@ -1,7 +1,5 @@
 import * as React from "react"
 import { Link, useFetcher, useLoaderData } from "@remix-run/react"
-import type { LoaderFunctionArgs, SerializeFrom } from "@vercel/remix"
-
 import { cacheHeader } from "pretty-cache-header"
 import { promiseHash } from "remix-utils/promise"
 
@@ -11,8 +9,9 @@ import { PageContainer } from "~/components/PageContainer"
 import { Avatar, Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
-import { json } from "~/lib/remix.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
+import { json } from "~/lib/remix.server"
+import type { LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { GuideRequestForm } from "~/pages/api+/guide-request"
 
 export const config = {
@@ -40,7 +39,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         avatar: true,
         avatarBlurHash: true,
         _count: {
-          select: { followers: true, lists: { where: { isPrivate: false } }, verifiedSpots: { where: { deletedAt: null } } },
+          select: {
+            followers: true,
+            lists: { where: { isPrivate: false } },
+            verifiedSpots: { where: { sourceUrl: { equals: null }, deletedAt: null } },
+          },
         },
       },
     }),
@@ -78,7 +81,7 @@ export default function Guides() {
         </div>
         {user && user.role === "MEMBER" && !user.isPendingGuideApproval && <GuideRequestForm />}
       </div>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {guides.map((guide) => (
           <GuideItem key={guide.id} guide={guide} />
         ))}
@@ -108,20 +111,20 @@ function GuideItem(props: { guide: SerializeFrom<typeof loader>["guides"][number
           <p className="text-lg leading-3 md:text-xl lg:text-2xl">
             {props.guide.firstName} {props.guide.lastName}
           </p>
-          <p className="text-sm">{props.guide.username}</p>
+          <p>{props.guide.username}</p>
         </div>
       </div>
       <div className="grid grid-cols-3 gap-4">
         <div className="text-center text-sm">
-          <p className="text-lg font-medium leading-tight">{props.guide._count?.verifiedSpots.toLocaleString()}</p>
+          <p className="text-xl font-semibold leading-tight">{props.guide._count?.verifiedSpots.toLocaleString()}</p>
           <p>spots</p>
         </div>
         <div className="text-center text-sm">
-          <p className="text-lg font-medium leading-tight">{props.guide._count?.followers.toLocaleString()}</p>
+          <p className="text-xl font-semibold leading-tight">{props.guide._count?.followers.toLocaleString()}</p>
           <p>followers</p>
         </div>
         <div className="text-center text-sm">
-          <p className="text-lg font-medium leading-tight">{props.guide._count?.lists.toLocaleString()}</p>
+          <p className="text-xl font-semibold leading-tight">{props.guide._count?.lists.toLocaleString()}</p>
           <p>lists</p>
         </div>
       </div>

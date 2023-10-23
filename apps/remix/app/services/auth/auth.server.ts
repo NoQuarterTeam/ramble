@@ -1,9 +1,8 @@
-import { redirect } from "@vercel/remix"
-
 import { type Prisma } from "@ramble/database/types"
 
 import { db } from "~/lib/db.server"
 import type { Await } from "~/lib/helpers/types"
+import { redirect } from "~/lib/vendor/vercel.server"
 
 import { getUserSession } from "../session/session.server"
 

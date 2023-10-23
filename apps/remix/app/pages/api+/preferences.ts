@@ -1,25 +1,10 @@
-import type { ActionFunctionArgs } from "@vercel/remix"
-import { createCookie } from "@vercel/remix"
-import { z } from "zod"
-
-import { FormCheckbox, formError, validateFormData } from "~/lib/form"
+import { track } from "~/lib/analytics.server"
+import { formError, validateFormData } from "~/lib/form.server"
 import { json } from "~/lib/remix.server"
+import type { ActionFunctionArgs } from "~/lib/vendor/vercel.server"
+import { defaultPreferences, preferencesCookies, preferencesSchema } from "~/services/session/preferences.server"
 
-export const preferencesCookies = createCookie("ramble_preferences", { maxAge: 60 * 60 * 24 * 365 })
-
-export const preferencesSchema = z.object({
-  mapLayerRain: FormCheckbox,
-  mapLayerTemp: FormCheckbox,
-})
-
-export type Preferences = z.infer<typeof preferencesSchema>
-
-export const defaultPreferences = {
-  mapLayerRain: false,
-  mapLayerTemp: false,
-} satisfies Preferences
-
-export async function action({ request }: ActionFunctionArgs) {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const result = await validateFormData(request, preferencesSchema)
   if (!result.success) return formError(result)
   const cookieHeader = request.headers.get("Cookie")
@@ -27,9 +12,8 @@ export async function action({ request }: ActionFunctionArgs) {
 
   cookie = { ...cookie, ...result.data }
 
+  track("Map preferences updated", result.data)
   return json({ success: true }, request, {
     headers: { "set-cookie": await preferencesCookies.serialize(cookie) },
   })
 }
-
-export const preferencesUrl = "/api/preferences"

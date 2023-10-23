@@ -22,8 +22,9 @@ export type ScreenParamsList = {
   AccountLayout: undefined
   AccountScreen: undefined
   AccountInfoScreen: undefined
-  VanScreen: undefined
-  InterestsScreen: undefined
+  AccountVanScreen: undefined
+  AccountInterestsScreen: undefined
+  AccountSettingsScreen: undefined
 
   MapLayout: undefined
   SpotsMapScreen: undefined
@@ -58,6 +59,7 @@ export type ScreenParamsList = {
   // SHARED
   SpotDetailScreen: { id: string }
   SaveSpotScreen: { id: string }
+  SaveSpotImagesScreen: { id: string; images: string[] }
   DeleteSpotScreen: { id: string }
   NewReviewScreen: { spotId: string }
   ReviewDetailScreen: { id: string }

@@ -15,6 +15,8 @@ const partners = {
   roadsurfer: { name: "Roadsurfer", logo: { light: "/partners/roadsurfer.svg", dark: "/partners/roadsurfer-dark.svg" } },
   loodusegakoos: { name: "Loodusega koos ", logo: { light: "/partners/loodusegakoos.svg", dark: "/partners/loodusegakoos.svg" } },
   cucortu: { name: "Cucortu'", logo: { light: "/partners/cucortu.png", dark: "/partners/cucortu-dark.png" } },
+  theCrag: { name: "The Crag", logo: { light: "/partners/the-crag.svg", dark: "/partners/the-crag-dark.svg" } },
+  neste: { name: "Neste", logo: { light: "/partners/neste.png", dark: "/partners/neste.png" } },
 } as const
 
 export function PartnerLink(props: Props) {
@@ -23,12 +25,16 @@ export function PartnerLink(props: Props) {
 
   const partner = props.spot.campspaceId
     ? partners.campspace
+    : props.spot.theCragId
+    ? partners.theCrag
     : props.spot.komootId
     ? partners.komoot
     : props.spot.natuurKampeerterreinenId
     ? partners.natuur
     : props.spot.park4nightId
     ? partners.park4night
+    : props.spot.nesteId
+    ? partners.neste
     : props.spot.surflineId
     ? partners.surfline
     : props.spot.roadsurferId

@@ -1,6 +1,4 @@
 import { Link, useLoaderData } from "@remix-run/react"
-import type { LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
 import { ChevronLeft } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
@@ -12,11 +10,16 @@ import { Avatar } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { notFound } from "~/lib/remix.server"
+import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 
 export const headers = useLoaderHeaders
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
-  const user = await db.user.findUnique({ where: { username: params.username }, include: { followers: true } })
+  const user = await db.user.findUnique({
+    where: { username: params.username?.toLowerCase().trim() },
+    include: { followers: true },
+  })
   if (!user) throw notFound()
   return json(user, {
     headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour", staleWhileRevalidate: "1min" }) },

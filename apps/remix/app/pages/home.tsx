@@ -1,37 +1,45 @@
 import { Link } from "@remix-run/react"
-import { type LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
+import { ClientOnly } from "remix-utils/client-only"
 import { z } from "zod"
 
+import { sendAccessRequestSentToAdminsEmail } from "@ramble/api"
 import { join, merge } from "@ramble/shared"
-import { ClientOnly } from "remix-utils/client-only"
 
 import { useFetcher } from "~/components/Form"
+import { PageContainer } from "~/components/PageContainer"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { ActionDataErrorResponse, formError, validateFormData } from "~/lib/form"
-
-import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
+import { type ActionDataErrorResponse, formError, validateFormData } from "~/lib/form.server"
+// import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
+import { json } from "~/lib/remix.server"
+import { type LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 
 export const config = {
   // runtime: "edge",
 }
 
-const schema = z.object({ email: z.string().email() })
 export const action = async ({ request }: LoaderFunctionArgs) => {
+  const schema = z.object({ email: z.string().email().toLowerCase() })
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
   const accessRequest = await db.accessRequest.findFirst({ where: { email: result.data.email } })
   if (accessRequest) return formError({ formError: "Email already requested access" })
   await db.accessRequest.create({ data: { email: result.data.email } })
+  const admins = await db.user.findMany({ where: { isAdmin: true }, select: { email: true } })
+  await sendAccessRequestSentToAdminsEmail(
+    admins.map((a) => a.email),
+    result.data.email,
+  )
+  track("Access requested", { email: result.data.email })
   return json({ success: true })
 }
 
 export default function Home() {
-  const me = useMaybeUser()
+  // const me = useMaybeUser()
   const randomPerson = PEOPLE[Math.floor(Math.random() * PEOPLE.length)]
   return (
-    <div className="bg-background dark pb-20 font-serif text-white">
-      <div className="absolute right-6 top-16 md:top-6">
+    <div className="bg-background dark font-serif text-white">
+      {/* <div className="absolute right-6 top-16 md:top-6">
         {me ? (
           <Link
             to="/map"
@@ -47,8 +55,8 @@ export default function Home() {
             Login
           </Link>
         )}
-      </div>
-      <div className="h-[94vh] w-screen space-y-20 bg-[url('/landing/landing1.png')] bg-center px-2 pt-10">
+      </div> */}
+      <div className="h-[94vh] w-screen space-y-20 bg-[url('/landing/landing1.png')] bg-cover bg-center px-2 pt-10">
         <div className="mx-auto flex max-w-7xl flex-col items-start space-y-12">
           <div className="flex flex-col items-center">
             <p className="brand-header text-5xl">ramble</p>
@@ -111,7 +119,7 @@ export default function Home() {
       {/* <div className="px-4 py-20 md:py-32">
         <div className="mx-auto max-w-7xl space-y-4">
           <div>
-            <h3 className="brand-header text-4xl">request access now</h3>
+            <h3 className="brand-header text-4xl">Join beta now</h3>
             <p className="text-lg">To maintain an authentic and trustworthy community, members can only join via invite.</p>
           </div>
           <RequestAccessForm mode="dark" />
@@ -168,12 +176,23 @@ export default function Home() {
         </div>
         <RequestAccessForm mode="dark" />
       </div>
+      <div className="border-t">
+        <PageContainer className="flex items-center justify-between space-y-0 px-4 py-6">
+          <p className="brand-header">ramble</p>
+
+          <Link to="/privacy" className="text-sm hover:opacity-70">
+            Privacy
+          </Link>
+        </PageContainer>
+      </div>
     </div>
   )
 }
 
 function RequestAccessForm({ mode }: { mode?: "light" | "dark" }) {
-  const accessFetcher = useFetcher<ActionDataErrorResponse<typeof schema>>()
+  // how to include zod here?
+  // eslint-disable-next-line
+  const accessFetcher = useFetcher<ActionDataErrorResponse<any>>()
 
   if (accessFetcher.data?.success)
     return (
@@ -208,7 +227,7 @@ function RequestAccessForm({ mode }: { mode?: "light" | "dark" }) {
             mode === "dark" && "bg-white text-black",
           )}
         >
-          Request access
+          Join beta
         </button>
       </div>
     </accessFetcher.Form>

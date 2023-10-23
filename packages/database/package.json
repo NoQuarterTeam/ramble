@@ -17,12 +17,12 @@
   "dependencies": {
     "@planetscale/database": "^1.11.0",
     "@prisma/adapter-planetscale": "5.4.1-pre",
-    "@prisma/client": "5.4.1",
+    "@prisma/client": "5.4.2",
     "@prisma/extension-accelerate": "^0.6.2",
-    "prisma": "5.4.1"
+    "prisma": "5.4.2"
   },
   "devDependencies": {
-    "@types/node": "^18.18.3",
+    "@types/node": "^18.18.4",
     "dotenv-cli": "^7.3.0",
     "typescript": "5.2.2"
   },

@@ -1,13 +1,14 @@
 import { Link, useParams } from "@remix-run/react"
-import type { ActionFunctionArgs } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { formError, validateFormData } from "~/lib/form"
+import { formError, validateFormData } from "~/lib/form.server"
 import { decryptToken } from "~/lib/jwt.server"
 import { redirect } from "~/lib/remix.server"
+import type { ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 import { hashPassword } from "~/services/auth/password.server"
 
 // export const config = {
@@ -31,8 +32,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const data = result.data
   const payload = await decryptToken<{ id: string }>(data.token)
   const hashedPassword = await hashPassword(data.password)
-  await db.user.update({ where: { id: payload.id }, data: { password: hashedPassword } })
-
+  const user = await db.user.update({ where: { id: payload.id }, data: { password: hashedPassword } })
+  track("Password updated", { userId: user.id })
   return redirect("/login", request, {
     flash: { title: "Password changed", description: "You can now login with your new password" },
   })

@@ -1,5 +1,3 @@
-import type { LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 import Supercluster from "supercluster"
@@ -10,6 +8,8 @@ import { publicSpotWhereClause } from "@ramble/api"
 import { SpotType } from "@ramble/database/types"
 
 import { db } from "~/lib/db.server"
+import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 import { getUserSession } from "~/services/session/session.server"
 
 export const config = {
@@ -27,18 +27,18 @@ async function getMapClusters(request: Request) {
     maxLng: NumAsString,
     type: z.array(z.string()).or(z.string()).optional(),
     isPetFriendly: CheckboxAsString.optional(),
-    isVerified: CheckboxAsString.optional(),
+    isUnverified: CheckboxAsString.optional(),
   })
   const result = schema.safeParse(queryString.parse(new URL(request.url).search, { arrayFormat: "bracket" }))
   if (!result.success) return []
-  const { zoom, type, isVerified, isPetFriendly, ...coords } = result.data
+  const { zoom, type, isUnverified, isPetFriendly, ...coords } = result.data
 
   const defaultTypes = [SpotType.CAMPING, SpotType.FREE_CAMPING]
   const spots = await db.spot.findMany({
     select: { id: true, latitude: true, longitude: true, type: true },
     where: {
       ...publicSpotWhereClause(userId),
-      verifiedAt: isVerified ? { not: { equals: null } } : undefined,
+      verifiedAt: isUnverified ? undefined : { not: { equals: null } },
       isPetFriendly: isPetFriendly ? { equals: true } : undefined,
       latitude: { gt: coords.minLat, lt: coords.maxLat },
       longitude: { gt: coords.minLng, lt: coords.maxLng },
@@ -55,9 +55,12 @@ async function getMapClusters(request: Request) {
   })
   if (spots.length === 0) return []
 
-  const supercluster = new Supercluster<{ id: string; type: SpotType; cluster: false }, { cluster: true }>()
+  const supercluster = new Supercluster<{ id: string; type: SpotType; cluster: false }, { cluster: true }>({
+    maxZoom: 16,
+    radius: !type || typeof type === "string" ? 40 : type.length > 4 ? 60 : 50,
+  })
 
-  const clusters = supercluster.load(
+  const clusterData = supercluster.load(
     spots.map((spot) => ({
       type: "Feature",
       geometry: { type: "Point", coordinates: [spot.longitude, spot.latitude] },
@@ -65,7 +68,14 @@ async function getMapClusters(request: Request) {
     })),
   )
 
-  return clusters.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], zoom || 5)
+  const clusters = clusterData.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], zoom || 5)
+
+  return clusters.map((c) => ({
+    ...c,
+    properties: c.properties.cluster
+      ? { ...c.properties, zoomLevel: supercluster.getClusterExpansionZoom(c.properties.cluster_id) }
+      : c.properties,
+  }))
 }
 
 export type Cluster = Awaited<ReturnType<typeof getMapClusters>>[number]

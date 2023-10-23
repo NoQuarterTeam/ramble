@@ -36,15 +36,13 @@ export type SpotTypeInfo = {
 export const SPOT_TYPES: { [key in SpotType]: SpotTypeInfo } = {
   // Stays
   [SpotType.CAMPING]: { value: SpotType.CAMPING, label: "Long stay", Icon: Icons.Van, isComingSoon: false },
-  [SpotType.FREE_CAMPING]: { value: SpotType.FREE_CAMPING, label: "Overnight stop-off", Icon: Icons.Van, isComingSoon: false },
+  [SpotType.FREE_CAMPING]: { value: SpotType.FREE_CAMPING, label: "Overnight stop-off", Icon: Icons.Timer, isComingSoon: false },
   [SpotType.PARKING]: { value: SpotType.PARKING, label: "Safe parking", Icon: ParkingCircle, isComingSoon: true },
   // Activities
   [SpotType.SURFING]: { value: SpotType.SURFING, label: "Surfing", Icon: Icons.Surf, isComingSoon: false },
   [SpotType.CLIMBING]: { value: SpotType.CLIMBING, label: "Climbing", Icon: Mountain, isComingSoon: false },
   [SpotType.MOUNTAIN_BIKING]: { value: SpotType.MOUNTAIN_BIKING, label: "MTBing", Icon: Bike, isComingSoon: false },
-  [SpotType.PADDLE_BOARDING]: { value: SpotType.PADDLE_BOARDING, label: "Paddle Boarding", Icon: Icons.Sup, isComingSoon: false },
   [SpotType.PADDLE_KAYAK]: { value: SpotType.PADDLE_KAYAK, label: "SUPing / Kayaking", Icon: Icons.Sup, isComingSoon: false },
-  [SpotType.HIKING]: { value: SpotType.HIKING, label: "Hiking", Icon: Footprints, isComingSoon: false },
   [SpotType.HIKING_TRAIL]: {
     value: SpotType.HIKING_TRAIL,
     label: "Hiking / Trail running",
@@ -82,6 +80,15 @@ export const SPOT_TYPE_OPTIONS = Object.entries(SPOT_TYPES).map(([_, { label, Ic
   label: string
   value: SpotType
   Icon: LucideIcon
+}[]
+export const STAY_SPOT_TYPE_OPTIONS = Object.entries({
+  [SpotType.CAMPING]: SPOT_TYPES.CAMPING,
+  [SpotType.FREE_CAMPING]: SPOT_TYPES.FREE_CAMPING,
+}).map(([_, { label, Icon, value, isComingSoon }]) => ({ label, value, Icon, isComingSoon })) as {
+  label: string
+  value: SpotType
+  Icon: LucideIcon
+  isComingSoon: boolean
 }[]
 
 export const fetchAndJoinSpotImages = async (spots: SpotItemWithStatsAndImage[]) => {

@@ -1,6 +1,5 @@
-import { useLoaderData } from "@remix-run/react"
+import { Link, useLoaderData } from "@remix-run/react"
 import { createColumnHelper } from "@tanstack/react-table"
-import { type LoaderFunctionArgs, type SerializeFrom } from "@vercel/remix"
 import dayjs from "dayjs"
 import { promiseHash } from "remix-utils/promise"
 
@@ -13,6 +12,7 @@ import { Avatar } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"
+import { type LoaderFunctionArgs, type SerializeFrom } from "~/lib/vendor/vercel.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { orderBy, search, skip, take } = getTableParams(request)
@@ -37,7 +37,7 @@ const columns = [
     id: "firstName",
     header: () => "First name",
     cell: (info) => (
-      <div className="flex items-center space-x-2">
+      <Link to={`/${info.row.original.username}`} className="flex items-center space-x-2">
         <Avatar
           className="sq-10"
           src={createImageUrl(info.row.original.avatar)}
@@ -45,23 +45,23 @@ const columns = [
           size={60}
         />
         <p>{info.getValue()}</p>
-      </div>
+      </Link>
     ),
   }),
   columnHelper.accessor("lastName", {
     id: "lastName",
     header: () => "Last name",
-    cell: (info) => info.getValue(),
+    cell: (info) => <Link to={`/${info.row.original.username}`}>{info.getValue()}</Link>,
   }),
   columnHelper.accessor("email", {
     id: "email",
     header: () => "Email",
-    cell: (info) => info.getValue(),
+    cell: (info) => <Link to={`/${info.row.original.username}`}>{info.getValue()}</Link>,
   }),
   columnHelper.accessor("createdAt", {
     id: "createdAt",
     header: () => "Created",
-    cell: (info) => dayjs(info.getValue()).format("DD/MM/YYYY"),
+    cell: (info) => <Link to={`/${info.row.original.username}`}>{dayjs(info.getValue()).format("DD/MM/YYYY")}</Link>,
   }),
 ]
 export default function Users() {

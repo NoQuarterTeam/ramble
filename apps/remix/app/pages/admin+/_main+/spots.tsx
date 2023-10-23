@@ -1,34 +1,35 @@
-import { useLoaderData, useRouteError, useSearchParams } from "@remix-run/react"
+import { Link, useLoaderData, useRouteError, useSearchParams } from "@remix-run/react"
 import type { Row } from "@tanstack/react-table"
 import { createColumnHelper } from "@tanstack/react-table"
-import type { ActionFunctionArgs, LoaderFunctionArgs, SerializeFrom } from "@vercel/remix"
 import dayjs from "dayjs"
-import { Check, Eye, EyeOff, Trash } from "lucide-react"
+import { Check, ExternalLink, Eye, EyeOff, Trash } from "lucide-react"
 import queryString from "query-string"
 import { promiseHash } from "remix-utils/promise"
 import { z } from "zod"
+import { zx } from "zodix"
 
 import type { Prisma, SpotType } from "@ramble/database/types"
-import { createImageUrl } from "@ramble/shared"
+import { createImageUrl, merge } from "@ramble/shared"
 
-import { useFetcher } from "~/components/Form"
+import { FormButton, useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { Search } from "~/components/Search"
 import { SpotIcon } from "~/components/SpotIcon"
 import { Table } from "~/components/Table"
-import { Avatar, Button, IconButton, Select } from "~/components/ui"
+import { Avatar, Button, buttonStyles, IconButton, iconbuttonStyles, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
-import { FormActionInput, formError, getFormAction, validateFormData } from "~/lib/form"
-import { SPOT_TYPE_OPTIONS } from "~/lib/models/spots"
+import { FormActionInput } from "~/lib/form"
+import { createAction, createActions } from "~/lib/form.server"
+import { SPOT_TYPE_OPTIONS } from "~/lib/models/spot"
 import { badRequest, json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"
 import { useTheme } from "~/lib/theme"
+import type { ActionFunctionArgs, LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
 
-const schema = z.object({ type: z.string().optional(), unverified: z.string().optional() })
-
 export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const schema = z.object({ type: z.string().optional(), unverified: zx.BoolAsString.optional() })
   const { orderBy, search, skip, take } = getTableParams(request)
 
   const result = schema.safeParse(queryString.parse(new URL(request.url).search, { arrayFormat: "bracket" }))
@@ -37,7 +38,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     deletedAt: null,
     OR: search ? [{ name: { contains: search } }, { description: { contains: search } }] : undefined,
     type: result.data.type ? { equals: result.data.type as SpotType } : undefined,
-    verifiedAt: result.data.unverified === "true" ? { equals: null } : undefined,
+    verifiedAt: result.data.unverified ? { equals: null } : undefined,
   } satisfies Prisma.SpotWhereInput
 
   const data = await promiseHash({
@@ -50,6 +51,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         id: true,
         name: true,
         description: true,
+        sourceUrl: true,
         createdAt: true,
         verifiedAt: true,
         latitude: true,
@@ -67,40 +69,31 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 enum Actions {
-  Delete = "Delete",
-  Verify = "Verify",
+  delete = "delete",
+  verify = "verify",
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await getCurrentAdmin(request)
-  const formAction = await getFormAction<Actions>(request)
-  switch (formAction) {
-    case Actions.Delete:
-      try {
-        const deleteSchema = z.object({ id: z.string() })
-        const result = await validateFormData(request, deleteSchema)
-        if (!result.success) return formError(result)
-        const data = result.data
-        await db.spot.update({ where: { id: data.id }, data: { deletedAt: new Date() } })
-        return json({ success: true })
-      } catch {
-        return badRequest("Error deleting spot")
-      }
-    case Actions.Verify:
-      try {
-        const verifySchema = z.object({ id: z.string() })
-        const result = await validateFormData(request, verifySchema)
-        if (!result.success) return formError(result)
-        const data = result.data
-        await db.spot.update({ where: { id: data.id }, data: { verifiedAt: new Date(), verifier: { connect: { id: user.id } } } })
-        return json({ success: true })
-      } catch {
-        return badRequest("Error deleting spot")
-      }
-
-    default:
-      break
-  }
+  return createActions<Actions>(request, {
+    delete: () =>
+      createAction(request)
+        .input(z.object({ id: z.string() }))
+        .handler(async (data) => {
+          await db.spot.update({ where: { id: data.id }, data: { deletedAt: new Date() } })
+          return json({ success: true })
+        }),
+    verify: () =>
+      createAction(request)
+        .input(z.object({ id: z.string() }))
+        .handler(async (data) => {
+          await db.spot.update({
+            where: { id: data.id },
+            data: { verifiedAt: new Date(), verifier: { connect: { id: user.id } } },
+          })
+          return json({ success: true })
+        }),
+  })
 }
 
 type Spot = SerializeFrom<typeof loader>["spots"][number]
@@ -159,7 +152,7 @@ const columns = [
           <p>{row.original.verifier.firstName}</p>
         </div>
       ) : (
-        <SpotVerifyAction spot={row.original} />
+        <VerifyAction item={row.original} />
       ),
   }),
   columnHelper.accessor((row) => row.createdAt, {
@@ -170,19 +163,29 @@ const columns = [
   }),
   columnHelper.display({
     id: "actions",
-    size: 90,
+    size: 110,
     enableSorting: false,
     header: () => null,
     cell: ({ row }) => (
-      <div className="flex space-x-1">
+      <div className="flex items-center space-x-1">
+        {row.original.sourceUrl && (
+          <Link
+            to={row.original.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={merge(buttonStyles({ size: "sm", disabled: false, variant: "ghost" }), iconbuttonStyles({ size: "sm" }))}
+          >
+            <ExternalLink size={16} />
+          </Link>
+        )}
         <IconButton
           variant="ghost"
           size="sm"
-          aria-label="epand"
+          aria-label="expand"
           onClick={row.getToggleExpandedHandler()}
           icon={row.getIsExpanded() ? <EyeOff size={16} /> : <Eye size={16} />}
         />
-        <SpotDeleteAction spot={row.original} />
+        <DeleteAction item={row.original} />
       </div>
     ),
   }),
@@ -275,26 +278,26 @@ function RenderSubComponent({ row }: { row: Row<Spot> }) {
   )
 }
 
-function SpotVerifyAction({ spot }: { spot: Spot }) {
+function VerifyAction({ item }: { item: Spot }) {
   const verifyFetcher = useFetcher()
   return (
     <verifyFetcher.Form>
-      <FormActionInput value={Actions.Verify} />
-      <input type="hidden" name="id" value={spot.id} />
-      <Button type="submit" isLoading={verifyFetcher.state !== "idle"} size="sm" leftIcon={<Check size={16} />}>
-        Verify
-      </Button>
+      <FormActionInput value={Actions.verify} />
+      <input type="hidden" name="id" value={item.id} />
+      <FormButton size="sm" leftIcon={<Check size={16} />}>
+        verify
+      </FormButton>
     </verifyFetcher.Form>
   )
 }
-function SpotDeleteAction({ spot }: { spot: Spot }) {
+function DeleteAction({ item }: { item: Spot }) {
   const deleteFetcher = useFetcher()
 
   return (
     <deleteFetcher.Form>
-      <input type="hidden" name="id" value={spot.id} />
+      <input type="hidden" name="id" value={item.id} />
 
-      <FormActionInput value={Actions.Delete} />
+      <FormActionInput value={Actions.delete} />
       <IconButton
         type="submit"
         isLoading={deleteFetcher.state !== "idle"}

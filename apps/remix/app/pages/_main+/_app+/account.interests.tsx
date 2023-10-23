@@ -1,7 +1,5 @@
 import React from "react"
 import { useLoaderData } from "@remix-run/react"
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
 import { z } from "zod"
 import { zx } from "zodix"
 
@@ -10,10 +8,13 @@ import { userInterestFields } from "@ramble/shared"
 import { Form, FormButton, FormError } from "~/components/Form"
 import type { RambleIcon } from "~/components/ui"
 import { Button } from "~/components/ui"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { formError, validateFormData } from "~/lib/form"
-import { interestOptions } from "~/lib/models/interests"
+import { formError, validateFormData } from "~/lib/form.server"
+import { interestOptions } from "~/lib/models/user"
 import { redirect } from "~/lib/remix.server"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -35,6 +36,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (!result.success) return formError(result)
 
   await db.user.update({ where: { id: user.id }, data: result.data })
+  track("Interests updated", { userId: user.id })
   return redirect("/account/interests", request, { flash: { title: "Account updated" } })
 }
 

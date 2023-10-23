@@ -120,7 +120,7 @@ export function Modal({ size = "md", description, trigger, children, title, ...d
           {title && <ModalTitle>{title}</ModalTitle>}
           {description && <ModalDescription>{description}</ModalDescription>}
         </ModalHeader>
-        {children}
+        <div className="overflow-y-scroll">{children}</div>
       </ModalContent>
     </ModalRoot>
   )

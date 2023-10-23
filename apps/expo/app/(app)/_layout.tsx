@@ -23,9 +23,9 @@ export function AppLayout() {
   return (
     <Tab.Navigator
       initialRouteName="MapLayout"
-      sceneContainerStyle={{ backgroundColor: backgroundColor }}
+      sceneContainerStyle={{ backgroundColor }}
       screenOptions={{
-        tabBarStyle: { backgroundColor: backgroundColor },
+        tabBarStyle: { backgroundColor, borderTopColor: colors.gray[isDark ? 700 : 200] },
         headerShown: false,
         tabBarShowLabel: false,
       }}

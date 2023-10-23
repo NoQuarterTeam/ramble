@@ -1,5 +1,4 @@
 import { Link } from "@remix-run/react"
-import type { SerializeFrom } from "@vercel/remix"
 import dayjs from "dayjs"
 import { Star } from "lucide-react"
 
@@ -19,8 +18,8 @@ import {
   Avatar,
   Button,
 } from "~/components/ui"
-import { FormActionInput } from "~/lib/form"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
+import type { SerializeFrom } from "~/lib/vendor/vercel.server"
 
 import { Actions } from "../spots.$id_.reviews.$reviewId"
 
@@ -65,7 +64,7 @@ export function ReviewItem({ review }: Props) {
           <p>{review.rating}</p>
         </div>
       </div>
-      <p className="text-sm">{review.description}</p>
+      <p>{review.description}</p>
       {user?.id === review.user.id && (
         <div className="flex space-x-2">
           <LinkButton variant="outline" to={`reviews/${review.id}`}>
@@ -84,8 +83,7 @@ export function ReviewItem({ review }: Props) {
                 </AlertDialogCancel>
 
                 <deleteFetcher.Form action={`/spots/${review.spotId}/reviews/${review.id}`}>
-                  <FormActionInput value={Actions.Delete} />
-                  <Button type="submit">Confirm</Button>
+                  <deleteFetcher.FormButton value={Actions.Delete}>Confirm</deleteFetcher.FormButton>
                 </deleteFetcher.Form>
               </AlertDialogFooter>
             </AlertDialogContent>

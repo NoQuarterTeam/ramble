@@ -1,11 +1,12 @@
 import { useLoaderData } from "@remix-run/react"
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
 import { z } from "zod"
 
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { formError, FormNumber, validateFormData } from "~/lib/form"
+import { formError, FormNumber, validateFormData } from "~/lib/form.server"
 import { notFound, redirect } from "~/lib/remix.server"
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 import { requireUser } from "~/services/auth/auth.server"
 
 import { ReviewForm } from "./components/ReviewForm"
@@ -56,9 +57,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
   if (existingReviewsWithin1Month > 0) return formError({ formError: "You can only review a spot once per month." })
 
-  await db.review.create({
+  const review = await db.review.create({
     data: { description: result.data.description, rating: result.data.rating, spotId: spot.id, userId },
   })
+  track("Review created", { reviewId: review.id, userId })
 
   return redirect(redirectLocation, request, { flash: { title: "Review created!", description: "Thank you!" } })
 }

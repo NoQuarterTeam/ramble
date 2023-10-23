@@ -1,10 +1,10 @@
-import type { ActionFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
 import { z } from "zod"
 
 import { createSignedUrl } from "@ramble/api"
 
-import { formError, validateFormData } from "~/lib/form"
+import { formError, validateFormData } from "~/lib/form.server"
+import type { ActionFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const creatSignedUrlSchema = z.object({ key: z.string().min(1) })

@@ -1,6 +1,5 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Link, NavLink, Outlet } from "@remix-run/react"
-import { json, type LoaderFunctionArgs, redirect } from "@vercel/remix"
 import { GaugeCircle, HelpingHand, Mail, MapPin, MessageCircle, Moon, Sun, User } from "lucide-react"
 
 import { merge } from "@ramble/shared"
@@ -9,6 +8,7 @@ import { useFetcher } from "~/components/Form"
 import { type RambleIcon } from "~/components/ui"
 import { Button, buttonSizeStyles, buttonStyles } from "~/components/ui/Button"
 import { useTheme } from "~/lib/theme"
+import { json, type LoaderFunctionArgs, redirect } from "~/lib/vendor/vercel.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 export const shouldRevalidate = () => false
@@ -24,7 +24,7 @@ export default function AdminLayout() {
   const isDark = useTheme() === "dark"
   return (
     <div className="flex">
-      <div className="fixed left-0 top-0 flex h-screen w-[50px] flex-col justify-between border-r px-0 pb-10 md:w-[200px] md:px-4">
+      <div className="bg-background fixed left-0 top-0 flex h-screen w-[50px] flex-col justify-between border-r px-0 pb-10 md:w-[200px] md:px-4">
         <div className="flex flex-col space-y-2 py-8">
           <Link to="/" className="brand-header w-full pl-0 text-center text-lg md:pl-3 md:text-left">
             <span className="hidden md:block">ramble</span>

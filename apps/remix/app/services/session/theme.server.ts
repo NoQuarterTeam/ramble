@@ -1,11 +1,12 @@
-import { createCookieSessionStorage } from "@vercel/remix"
 import { createTypedSessionStorage } from "remix-utils/typed-session"
 import { z } from "zod"
 
-import { IS_PRODUCTION, THEME_SESSION_SECRET } from "~/lib/config.server"
+import { IS_PRODUCTION } from "~/lib/config.server"
+import { THEME_SESSION_SECRET } from "~/lib/env.server"
 import { isTheme, type Theme } from "~/lib/theme"
+import { createCookieSessionStorage } from "~/lib/vendor/vercel.server"
 
-export const THEME_COOKIE_KEY = IS_PRODUCTION ? "ramble_session_theme" : "ramble_session_dev_theme"
+const THEME_COOKIE_KEY = IS_PRODUCTION ? "ramble_session_theme" : "ramble_session_dev_theme"
 
 const storage = createCookieSessionStorage({
   cookie: {

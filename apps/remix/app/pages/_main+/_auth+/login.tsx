@@ -1,12 +1,12 @@
 import { Link, useSearchParams } from "@remix-run/react"
-import type { ActionFunctionArgs, MetaFunction } from "@vercel/remix"
-import { redirect } from "@vercel/remix"
-import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { formError, NullableFormString, validateFormData } from "~/lib/form"
+import { createAction, createActions, formError, NullableFormString } from "~/lib/form.server"
+import type { ActionFunctionArgs, MetaFunction } from "~/lib/vendor/vercel.server"
+import { redirect } from "~/lib/vendor/vercel.server"
 import { comparePasswords } from "~/services/auth/password.server"
 import { getUserSession } from "~/services/session/session.server"
 
@@ -16,34 +16,37 @@ import { getUserSession } from "~/services/session/session.server"
 // }
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Login" }, { name: "description", content: "Login to the ramble" }]
+  return [{ title: "Login" }, { name: "description", content: "Login to the Ramble" }]
 }
 
-export const headers = () => {
-  return {
-    "Cache-Control": cacheHeader({ maxAge: "1hour", sMaxage: "1hour", staleWhileRevalidate: "1min", public: true }),
-  }
+enum Actions {
+  login = "login",
 }
 
-export const action = async ({ request }: ActionFunctionArgs) => {
-  const loginSchema = z.object({
-    email: z.string().min(3).email("Invalid email"),
-    password: z.string().min(8, "Must be at least 8 characters"),
-    redirectTo: NullableFormString,
+export const action = async ({ request }: ActionFunctionArgs) =>
+  createActions<Actions>(request, {
+    login: () =>
+      createAction(request)
+        .input(
+          z.object({
+            email: z.string().min(3).email("Invalid email"),
+            password: z.string().min(8, "Must be at least 8 characters"),
+            redirectTo: NullableFormString,
+          }),
+        )
+        .handler(async (data) => {
+          const user = await db.user.findUnique({ where: { email: data.email } })
+          if (!user) return formError({ formError: "Incorrect email or password" })
+          const isCorrectPassword = await comparePasswords(data.password, user.password)
+          const redirectTo = data.redirectTo
+          if (!isCorrectPassword) return formError({ formError: "Incorrect email or password" })
+
+          const { setUser } = await getUserSession(request)
+          const headers = new Headers([["set-cookie", await setUser(user.id)]])
+          track("Logged in", { userId: user.id })
+          return redirect(redirectTo || "/map", { headers })
+        }),
   })
-  const result = await validateFormData(request, loginSchema)
-  if (!result.success) return formError(result)
-  const data = result.data
-  const user = await db.user.findUnique({ where: { email: data.email } })
-  if (!user) return formError({ formError: "Incorrect email or password" })
-  const isCorrectPassword = await comparePasswords(data.password, user.password)
-  const redirectTo = data.redirectTo
-  if (!isCorrectPassword) return formError({ formError: "Incorrect email or password" })
-
-  const { setUser } = await getUserSession(request)
-  const headers = new Headers([["set-cookie", await setUser(user.id)]])
-  return redirect(redirectTo || "/map", { headers })
-}
 
 export default function Login() {
   const [params] = useSearchParams()
@@ -54,14 +57,16 @@ export default function Login() {
       <FormField required label="Email address" name="email" placeholder="jim@gmail.com" />
       <FormField required label="Password" name="password" type="password" placeholder="********" />
       <div>
-        <FormButton className="w-full">Login</FormButton>
+        <FormButton value={Actions.login} className="w-full">
+          Login
+        </FormButton>
         <FormError />
       </div>
 
       <div className="flex justify-between">
-        <Link to="/register" className="hover:opacity-70">
+        {/* <Link to="/register" className="hover:opacity-70">
           Register
-        </Link>
+        </Link> */}
         <Link to="/forgot-password" className="hover:opacity-70">
           Forgot password?
         </Link>

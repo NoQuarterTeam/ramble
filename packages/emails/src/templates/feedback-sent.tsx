@@ -1,9 +1,11 @@
+import { Container, Img } from "@react-email/components"
+
 import { type Feedback, type User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
+
 import { Button } from "../components/Button"
 import { EmailDocument } from "../components/EmailDocument"
 import { EmailWrapper } from "../components/EmailWrapper"
-import { Container, Img } from "@react-email/components"
 import { Heading } from "../components/Heading"
 
 export interface FeedbackSentProps {

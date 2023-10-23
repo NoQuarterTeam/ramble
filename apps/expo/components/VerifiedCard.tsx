@@ -21,7 +21,7 @@ export function VerifiedCard({ spot }: Props) {
       {spot.verifiedAt && spot.verifier ? (
         <TouchableOpacity
           onPress={() => router.push("UserScreen", { username: spot.verifier?.username || "" })}
-          className="rounded-xs flex flex-row items-center justify-between border border-gray-200 p-2 px-3 dark:border-gray-700"
+          className="rounded-xs flex flex-row items-center justify-between border border-gray-200 p-1.5 px-2.5 dark:border-gray-700/70"
         >
           <View>
             <View className="flex flex-row items-center space-x-1">
@@ -38,11 +38,11 @@ export function VerifiedCard({ spot }: Props) {
           <View>
             {spot.verifier.avatar ? (
               <OptimizedImage
-                height={40}
-                width={40}
+                height={36}
+                width={36}
                 placeholder={spot.verifier.avatarBlurHash}
                 source={{ uri: createImageUrl(spot.verifier.avatar) }}
-                className="sq-10 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
+                className="sq-9 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
               />
             ) : (
               <View className="sq-10 flex flex-row items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">

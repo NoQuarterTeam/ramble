@@ -26,6 +26,8 @@ module.exports = {
     "query-string",
     "split-on-first",
     "supercluster",
+    "superjson",
+    /@vercel\/analytics/,
     /remix-utils/,
   ],
   watchPaths: ["../../packages/**/*", "./tailwind.config.js"],

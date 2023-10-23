@@ -1,7 +1,5 @@
 import * as React from "react"
 import { useFetcher, useLoaderData, useParams } from "@remix-run/react"
-import type { LoaderFunctionArgs } from "@vercel/remix"
-import { json } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import { promiseHash } from "remix-utils/promise"
 
@@ -11,8 +9,10 @@ import { type SpotItemWithStatsAndImage } from "@ramble/shared"
 import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
-import { fetchAndJoinSpotImages } from "~/lib/models/spots"
+import { fetchAndJoinSpotImages } from "~/lib/models/spot"
 import { notFound } from "~/lib/remix.server"
+import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { json } from "~/lib/vendor/vercel.server"
 import { getUserSession } from "~/services/session/session.server"
 
 import { SpotItem } from "./components/SpotItem"
@@ -21,7 +21,7 @@ export const headers = useLoaderHeaders
 
 const TAKE = 12
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-  const user = await db.user.findUnique({ where: { username: params.username } })
+  const user = await db.user.findUnique({ where: { username: params.username?.toLowerCase().trim() } })
   if (!user) throw notFound()
   const searchParams = new URL(request.url).searchParams
   const skip = parseInt((searchParams.get("skip") as string) || "0")
@@ -37,7 +37,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       LEFT JOIN
         ListSpot ON Spot.id = ListSpot.spotId
       WHERE
-        Spot.creatorId = ${user.id} AND ${publicSpotWhereClauseRaw(userId)}
+        Spot.creatorId = ${user.id} AND ${publicSpotWhereClauseRaw(userId)} AND Spot.sourceUrl IS NULL
       GROUP BY
         Spot.id
       ORDER BY

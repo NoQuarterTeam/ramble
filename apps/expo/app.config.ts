@@ -32,12 +32,16 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   ios: {
     supportsTablet: true,
     icon: "./assets/icon.png",
+    config: {
+      usesNonExemptEncryption: false,
+    },
     bundleIdentifier: "co.noquarter.ramble",
     associatedDomains: ["applinks:ramble.guide", "applinks:dev.ramble.guide"],
     splash,
     infoPlist: {
       LSApplicationQueriesSchemes: ["comgooglemaps"],
     },
+    buildNumber: "3",
   },
   android: {
     adaptiveIcon: {
@@ -47,6 +51,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     softwareKeyboardLayoutMode: "resize",
     package: "co.noquarter.ramble",
     splash,
+    versionCode: 3,
   },
   runtimeVersion: {
     policy: "sdkVersion",
@@ -62,7 +67,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     [
       "expo-location",
       {
-        locationWhenInUsePermission: "Show current location on map.",
+        locationWhenInUsePermission: "The app uses your location to show spots that are near to you on the map.",
       },
     ],
     [

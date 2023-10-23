@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { merge } from "@ramble/shared"
 
 export const inputStyles = cva(
-  "focus:border-primary-500 focus:ring-primary-500 rounded-xs block w-full border text-base text-black placeholder-gray-500 ring-0 transition-colors placeholder:font-thin focus:bg-transparent focus:ring-2 focus:ring-transparent read-only:focus:ring-transparent dark:text-white",
+  "focus:border-primary-500 dark:focus:border-primary-500 focus:ring-primary-500 rounded-xs block w-full border text-base text-black placeholder-gray-500 ring-0 transition-colors placeholder:font-thin focus:bg-transparent focus:ring-2 focus:ring-transparent read-only:focus:ring-transparent dark:text-white",
   {
     variants: {
       variant: {
@@ -14,14 +14,14 @@ export const inputStyles = cva(
       },
       size: {
         xs: "px-2 py-1 text-xs",
-        sm: "px-3 py-1.5 text-sm",
-        md: "text-md px-4 py-2",
+        sm: "px-3 py-1 text-sm",
+        md: "px-4 py-1 text-base",
         lg: "px-5 py-3 text-lg",
       },
     },
     defaultVariants: {
       variant: "outline",
-      size: "sm",
+      size: "md",
     },
   },
 )
@@ -30,13 +30,13 @@ export const inputSizeStyles = cva("", {
   variants: {
     size: {
       xs: "h-7",
-      sm: "h-9",
-      md: "h-11",
-      lg: "h-12",
+      sm: "h-8",
+      md: "h-9",
+      lg: "h-11",
     },
   },
   defaultVariants: {
-    size: "sm",
+    size: "md",
   },
 })
 
@@ -75,7 +75,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(function _In
           rightElement && "rounded-r-none",
         )}
       />
-      {rightElement && <div className="h-full border bg-gray-50 px-2 dark:bg-gray-900">{rightElement}</div>}
+      {rightElement && (
+        <div className={merge(inputSizeStyles({ size }), "center rounded-r-xs border bg-gray-50 px-2 dark:bg-gray-900")}>
+          {rightElement}
+        </div>
+      )}
     </div>
   )
 })

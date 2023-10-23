@@ -10,7 +10,7 @@ import { Spinner } from "../../../../components/ui/Spinner"
 import { Text } from "../../../../components/ui/Text"
 import { api } from "../../../../lib/api"
 import { useMe } from "../../../../lib/hooks/useMe"
-import { interestOptions } from "../../../../lib/static/interests"
+import { interestOptions } from "../../../../lib/models/user"
 import { useParams, useRouter } from "../../../router"
 import UserLists from "./lists"
 import { UserSpots } from "./spots"
@@ -21,21 +21,21 @@ export function UserScreen() {
   const isDark = colorScheme === "dark"
   const { me } = useMe()
   const { params } = useParams<"UserScreen">()
-  const { data: user, isLoading } = api.user.profile.useQuery({ username: params.username })
+  const { data: user, isLoading } = api.user.profile.useQuery({ username: params.username?.toLowerCase().trim() })
   const tab = params.tab || "spots"
   const router = useRouter()
   const utils = api.useContext()
   const { mutate } = api.user.toggleFollow.useMutation({
     onSuccess: () => {
       if (!me) return
-      void utils.user.followers.refetch({ username: params.username })
-      void utils.user.profile.refetch({ username: params.username })
+      void utils.user.followers.refetch({ username: params.username?.toLowerCase().trim() })
+      void utils.user.profile.refetch({ username: params.username?.toLowerCase().trim() })
 
       void utils.user.following.refetch({ username: me.username })
       void utils.user.profile.refetch({ username: me.username })
     },
   })
-  const onToggleFollow = () => mutate({ username: params.username })
+  const onToggleFollow = () => mutate({ username: params.username?.toLowerCase().trim() })
 
   return (
     <View className="pt-16">
@@ -95,14 +95,14 @@ export function UserScreen() {
                 <View className="flex flex-row items-center space-x-4">
                   <TouchableOpacity
                     className="flex flex-row space-x-1 pb-1"
-                    onPress={() => router.push("UserFollowing", { username: params.username })}
+                    onPress={() => router.push("UserFollowing", { username: params.username?.toLowerCase().trim() })}
                   >
                     <Text className="font-600">{user._count.following}</Text>
                     <Text className="opacity-70">following</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     className="flex flex-row space-x-1 pb-1"
-                    onPress={() => router.push("UserFollowers", { username: params.username })}
+                    onPress={() => router.push("UserFollowers", { username: params.username?.toLowerCase().trim() })}
                   >
                     <Text className="font-600">{user._count.followers}</Text>
                     <Text className="opacity-70">followers</Text>
@@ -135,7 +135,7 @@ export function UserScreen() {
           <View className="bg-background dark:bg-background-dark flex flex-row items-center justify-center space-x-2 border-b border-gray-100 py-2 dark:border-gray-800">
             <View>
               <Button
-                onPress={() => router.navigate("UserScreen", { tab: "spots", username: params.username })}
+                onPress={() => router.navigate("UserScreen", { tab: "spots", username: params.username?.toLowerCase().trim() })}
                 variant={tab === "spots" ? "secondary" : "ghost"}
                 size="sm"
               >
@@ -145,7 +145,7 @@ export function UserScreen() {
             <View>
               <Button
                 variant={tab === "van" ? "secondary" : "ghost"}
-                onPress={() => router.navigate("UserScreen", { tab: "van", username: params.username })}
+                onPress={() => router.navigate("UserScreen", { tab: "van", username: params.username?.toLowerCase().trim() })}
                 size="sm"
               >
                 Van
@@ -154,7 +154,7 @@ export function UserScreen() {
             <View>
               <Button
                 variant={tab === "lists" ? "secondary" : "ghost"}
-                onPress={() => router.navigate("UserScreen", { tab: "lists", username: params.username })}
+                onPress={() => router.navigate("UserScreen", { tab: "lists", username: params.username?.toLowerCase().trim() })}
                 size="sm"
               >
                 Lists
