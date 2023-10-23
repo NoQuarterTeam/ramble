@@ -69,11 +69,11 @@ export function formError<Schema extends z.ZodTypeAny>(args: Omit<ActionDataErro
 
 export function createAction<Schema extends z.AnyZodObject>(request: Request) {
   return {
-    input: async <T extends Schema>(schema: T) => {
-      const result = await validateFormData(request, schema)
-      if (!result.success) return formError(result)
+    input: <T extends Schema>(schema: T) => {
       return {
         handler: async (fn: (data: z.infer<T>) => Promise<unknown> | unknown) => {
+          const result = await validateFormData(request, schema)
+          if (!result.success) return formError(result)
           try {
             return await fn(result.data)
           } catch (error) {
