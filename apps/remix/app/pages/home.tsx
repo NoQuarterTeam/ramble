@@ -13,6 +13,7 @@ import { type ActionDataErrorResponse, formError, validateFormData } from "~/lib
 // import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { json } from "~/lib/remix.server"
 import { type LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { Instagram } from "lucide-react"
 
 export const config = {
   // runtime: "edge",
@@ -63,10 +64,10 @@ export default function Home() {
             <p className="text-lg font-semibold text-black">VAN TRAVEL APP</p>
           </div>
           <div className="space-y-2">
-            <h1 className="text-2xl font-bold text-black md:text-3xl">
+            <h1 className="max-w-4xl text-2xl font-bold text-black md:text-5xl">
               Everything you need for remote working van life in Europe.
             </h1>
-            <h2 className="text-lg font-light text-black md:text-xl">
+            <h2 className="text-lg text-black md:text-xl">
               For the outdoor enthusiasts who seek adventure, authenticity and community.
             </h2>
           </div>
@@ -74,24 +75,24 @@ export default function Home() {
           <RequestAccessForm />
         </div>
       </div>
-      <div className="flex flex-row-reverse px-6">
-        <a href="https://unsplash.com/@danieljschwarz" target="_blank" rel="noreferrer">
+      <div className="flex justify-end px-6">
+        <a href="https://unsplash.com/@danieljschwarz" target="_blank" rel="noreferrer noopener" className="hover:opacity-80">
           Photos by: Daniel J. Schwarz
         </a>
       </div>
-
+      <div className="mx-auto max-w-5xl px-6 py-20 text-center">
+        <p className="text-2xl">
+          Built for a new generation of{" "}
+          <span className="text-primary font-semibold">remote working, digitally connected travelers</span> looking for{" "}
+          <span className="text-primary font-semibold">authentic</span> nature, genuine connection and a more sustainable way to
+          travel.
+          <br />
+          <br />
+          Inspired by the great outdoors and the spirit of the environmental movement of the 60s and 70s.
+        </p>
+      </div>
       <div className="mx-auto flex max-w-7xl flex-col justify-between gap-20 px-4 py-20 md:flex-row">
         <div className="space-y-12">
-          <p className="md:pb-auto pb-6 text-xl">
-            Built for a new generation of{" "}
-            <span className="text-primary font-semibold">remote working, digitally connected travelers</span> looking for{" "}
-            <span className="text-primary font-semibold">authentic</span> nature, genuine connection and a more sustainable way to
-            travel.
-            <br />
-            <br />
-            Inspired by the great outdoors and the spirit of the environmental movement of the 60s and 70s.
-          </p>
-
           <div className="space-y-6">
             <h3 className="brand-header text-4xl">our mission</h3>
             <p className="text-lg">
@@ -114,17 +115,19 @@ export default function Home() {
             </p>
           </div>
         </div>
-        <img src="/landing/landing2.png" className="rounded-xs min-w-full object-cover md:min-w-[50%]" />
+        <img src="/landing/landing3.png" className="rounded-xs min-w-full object-cover md:min-w-[50%]" />
       </div>
-      {/* <div className="px-4 py-20 md:py-32">
+      <div className="bg-primary/5 px-4 py-20 md:py-32">
         <div className="mx-auto max-w-7xl space-y-4">
           <div>
-            <h3 className="brand-header text-4xl">Join beta now</h3>
-            <p className="text-lg">To maintain an authentic and trustworthy community, members can only join via invite.</p>
+            <h3 className="brand-header text-4xl">join the beta now</h3>
+            <p className="text-lg">
+              To maintain an authentic and trustworthy community, members can currently only join via invite.
+            </p>
           </div>
           <RequestAccessForm mode="dark" />
         </div>
-      </div> */}
+      </div>
       <div className="mx-auto flex max-w-7xl flex-col justify-between gap-20 px-4 py-20 md:flex-row">
         <div className="space-y-6">
           <h3 className="brand-header text-4xl">features</h3>
@@ -148,7 +151,7 @@ export default function Home() {
             Add your own spots and keep them organized in custom lists,
           </p>
         </div>
-        <img src="/landing/landing3.png" className="rounded-xs min-w-full object-cover md:min-w-[50%]" />
+        <img src="/landing/landing2.png" className="rounded-xs min-w-full object-cover md:min-w-[50%]" />
       </div>
 
       <ClientOnly>
@@ -178,7 +181,12 @@ export default function Home() {
       </div>
       <div className="border-t">
         <PageContainer className="flex items-center justify-between space-y-0 px-4 py-6">
-          <p className="brand-header">ramble</p>
+          <div className="space-y-4">
+            <p className="brand-header text-2xl">ramble</p>
+          </div>
+          <a href="https://instagram.com/ramble.guide" target="_blank" rel="noreferrer noopener" className="hover:opacity-70">
+            <Instagram />
+          </a>
 
           <Link to="/privacy" className="text-sm hover:opacity-70">
             Privacy
