@@ -54,7 +54,6 @@
     "class-variance-authority": "0.7.0",
     "crypto-js": "4.1.1",
     "dayjs": "1.11.10",
-    "flickr-sdk": "7.0.0-beta.2",
     "geojson": "0.5.0",
     "isbot": "latest",
     "jose": "4.15.4",
