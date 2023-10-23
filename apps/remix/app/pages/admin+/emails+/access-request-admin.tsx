@@ -1,6 +1,8 @@
-import { sendAccessRequestConfirmationEmail } from "@ramble/api"
-import { AccessRequestContent } from "@ramble/emails"
+import { sendAccessRequestConfirmationToAdminsEmail } from "@ramble/api"
+import { AccessRequestAdminContent } from "@ramble/emails"
 
+import { useConfig } from "~/lib/hooks/useConfig"
+import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { json } from "~/lib/remix.server"
 import { type ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
@@ -9,7 +11,7 @@ import { type TemplateHandle } from "./_layout"
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await getCurrentAdmin(request)
-  await sendAccessRequestConfirmationEmail(user.email)
+  await sendAccessRequestConfirmationToAdminsEmail([user.email], user.email)
   return json(true, request, { flash: { title: "Email sent!", description: "Check the email linked to your account" } })
 }
 
@@ -18,5 +20,9 @@ export const handle: TemplateHandle = {
 }
 
 export default function Template() {
-  return <AccessRequestContent />
+  const config = useConfig()
+  const user = useMaybeUser()
+  if (!user) return null
+  const link = `${config.WEB_URL}/admin/access-requests`
+  return <AccessRequestAdminContent link={link} email={user.email} />
 }
