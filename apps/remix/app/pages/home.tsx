@@ -70,7 +70,7 @@ export default function Home() {
               in Europe.
             </h1>
             <h2 className="text-lg text-black md:text-xl">
-              For the outdoor enthusiasts and digital nomad who seek adventure, authenticity and community.
+              For a new generation of remote working, digitally connected and eco-conscious travellers.
             </h2>
           </div>
 
