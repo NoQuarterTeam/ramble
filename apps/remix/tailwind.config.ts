@@ -1,7 +1,7 @@
-const plugin = require("tailwindcss/plugin")
+import type { Config } from "tailwindcss"
+import plugin from "tailwindcss/plugin"
 
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+const config = {
   darkMode: "class",
   presets: [require("@ramble/tailwind-config")],
   content: ["./app/**/*.{ts,tsx}", "../../packages/shared/**/*.{ts,tsx}"],
@@ -55,4 +55,6 @@ module.exports = {
     require("tailwind-scrollbar-hide"),
     require("@tailwindcss/container-queries"),
   ],
-}
+} satisfies Config
+
+export default config
