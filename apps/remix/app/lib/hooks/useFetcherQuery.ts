@@ -5,10 +5,8 @@ export function useFetcherQuery<T>(url: string, opts?: { isEnabled?: boolean }) 
   const fetcher = useFetcher<T>()
 
   React.useEffect(() => {
-    if (opts?.isEnabled) {
-      fetcher.load(url)
-    }
-
+    if (opts && !opts.isEnabled) return
+    fetcher.load(url)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url, opts?.isEnabled])
 
