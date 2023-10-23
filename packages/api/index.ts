@@ -3,7 +3,7 @@ export { createContext } from "./src/trpc"
 
 export * from "./src/services/generateBlurHash.server"
 export * from "./src/services/geocode.server"
-export * from "./src/services/geocode.server"
+export * from "./src/services/flickr.server"
 
 export * from "./src/services/mailers/access-request.server"
 export * from "./src/services/mailers/beta-invitation.server"

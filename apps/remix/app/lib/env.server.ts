@@ -12,8 +12,6 @@ const envSchema = z.object({
   SESSION_SECRET: z.string(),
   FLASH_SESSION_SECRET: z.string(),
   THEME_SESSION_SECRET: z.string(),
-  FLICKR_ACCESS_KEY: z.string(),
-  FLICKR_SECRET_KEY: z.string(),
 })
 
 export const {
@@ -26,6 +24,4 @@ export const {
   THEME_SESSION_SECRET,
   VERCEL_GIT_COMMIT_REF,
   VERCEL_URL,
-  FLICKR_ACCESS_KEY,
-  FLICKR_SECRET_KEY,
 } = envSchema.parse(process.env)

@@ -348,9 +348,6 @@ importers:
       dayjs:
         specifier: 1.11.10
         version: 1.11.10
-      flickr-sdk:
-        specifier: 7.0.0-beta.2
-        version: 7.0.0-beta.2(patch_hash=eyj7mgan2walnw7lvotajj6wjy)
       geojson:
         specifier: 0.5.0
         version: 0.5.0
@@ -550,6 +547,9 @@ importers:
       dayjs:
         specifier: 1.11.10
         version: 1.11.10
+      flickr-sdk:
+        specifier: 7.0.0-beta.2
+        version: 7.0.0-beta.2(patch_hash=eyj7mgan2walnw7lvotajj6wjy)
       jsonwebtoken:
         specifier: 9.0.2
         version: 9.0.2
