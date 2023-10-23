@@ -113,7 +113,7 @@ export default function SpotPreview() {
             {user && <SaveToList spotId={spot.id} />}
           </div>
         </div>
-        <div className="rounded-xs w-full overflow-x-scroll">
+        <div key={spot.id} className="rounded-xs w-full overflow-x-scroll">
           <div className="relative flex h-[225px] w-max space-x-2">
             {data.flickrImages
               ? data.flickrImages.map((photo) => (
@@ -146,8 +146,8 @@ export default function SpotPreview() {
                   {spot.images.length === 0 && <p className="text-sm">Be the first to add an image</p>}
                   <ImageUploader
                     isMulti
-                    onMultiSubmit={(keys) =>
-                      imageFetcher.submit({ images: keys, csrf }, { method: "POST", action: `/map/${spot.id}` })
+                    onMultiSubmit={(images) =>
+                      imageFetcher.submit({ images, csrf }, { method: "POST", action: `/map/${spot.id}` })
                     }
                   >
                     <Button variant="outline">Upload</Button>
