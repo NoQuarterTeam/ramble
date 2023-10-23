@@ -5,12 +5,29 @@ import { EmailDocument } from "../components/EmailDocument"
 import { EmailWrapper } from "../components/EmailWrapper"
 import { Heading } from "../components/Heading"
 
-export interface AccessRequestProps {
+export function AccessRequestContent() {
+  return (
+    <EmailWrapper>
+      <Heading className="mb-4">request received</Heading>
+      <p className="mb-8">Thanks you for requesting to join the beta!</p>
+      <p className="mb-8">We will be in touch very soon.</p>
+    </EmailWrapper>
+  )
+}
+
+export function AccessRequestEmail() {
+  return (
+    <EmailDocument preview="Access request">
+      <AccessRequestContent />
+    </EmailDocument>
+  )
+}
+export interface AccessRequestAdminProps {
   email: string
   link: string
 }
 
-export function AccessRequestContent(props: AccessRequestProps) {
+export function AccessRequestAdminContent(props: AccessRequestAdminProps) {
   return (
     <EmailWrapper>
       <Heading className="mb-4">new access request</Heading>
@@ -23,10 +40,10 @@ export function AccessRequestContent(props: AccessRequestProps) {
   )
 }
 
-export function AccessRequestEmail(props: AccessRequestProps) {
+export function AccessRequestAdminEmail(props: AccessRequestAdminProps) {
   return (
     <EmailDocument preview="Access request">
-      <AccessRequestContent {...props} />
+      <AccessRequestAdminContent {...props} />
     </EmailDocument>
   )
 }

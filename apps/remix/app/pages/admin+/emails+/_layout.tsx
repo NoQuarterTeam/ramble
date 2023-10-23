@@ -6,7 +6,15 @@ import { merge } from "@ramble/shared"
 import { Form, FormButton } from "~/components/Form"
 import { buttonSizeStyles, buttonStyles } from "~/components/ui"
 
-const templates = ["reset-password", "verify-account", "feedback-sent", "guide-request", "access-request", "beta-invitation"]
+const templates = [
+  "reset-password",
+  "verify-account",
+  "feedback-sent",
+  "guide-request",
+  "access-request",
+  "access-request-admin",
+  "beta-invitation",
+]
 
 export type TemplateHandle = { url: string } | undefined
 
@@ -15,7 +23,7 @@ export default function Layout() {
   const sendTemplateUrl = matches.filter((match) => !!(match.handle as TemplateHandle)?.url)[0]?.handle as TemplateHandle
   return (
     <div className="flex">
-      <div className="h-screen w-[220px] space-y-2 border-r p-4">
+      <div className="h-screen w-[240px] space-y-2 border-r p-4">
         {templates.map((template) => (
           <AdminLink key={template} to={template}>
             {template}
@@ -44,7 +52,7 @@ function AdminLink({ to, children, ...props }: NavLinkProps & { children: React.
       {...props}
       to={to}
       className={({ isActive }) =>
-        merge(buttonStyles({ variant: isActive ? "secondary" : "ghost" }), buttonSizeStyles(), "w-full justify-start space-x-2")
+        merge(buttonStyles({ variant: isActive ? "secondary" : "ghost" }), buttonSizeStyles(), "w-full justify-between space-x-2")
       }
     >
       <span>{children}</span>
