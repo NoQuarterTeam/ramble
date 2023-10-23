@@ -221,9 +221,6 @@ function RequestAccessForm({ mode }: { mode?: "light" | "dark" }) {
           placeholder="Email"
           className="rounded-xs h-10 border px-4 text-black focus:bg-white"
         />
-        <p className={join("text-xs text-black", mode === "dark" && "text-white")}>
-          We won't add your email to any mailing list!
-        </p>
         {!accessFetcher.data?.success && accessFetcher.data?.fieldErrors?.email && (
           <p className={join("text-black", mode === "dark" && "text-white")}>{accessFetcher.data.fieldErrors.email}</p>
         )}
