@@ -28,7 +28,7 @@
     "blurhash": "^2.0.5",
     "dayjs": "1.11.10",
     "jsonwebtoken": "9.0.2",
-    "nodemailer": "6.9.6",
+    "nodemailer": "6.9.7",
     "resend": "^1.1.0",
     "supercluster": "^8.0.1",
     "superjson": "1.13.3",
@@ -41,7 +41,7 @@
     "@types/node": "^18.18.4",
     "@types/supercluster": "^7.1.1",
     "dotenv-cli": "^7.3.0",
-    "eslint": "8.51.0",
+    "eslint": "8.52.0",
     "prettier": "3.0.3",
     "typescript": "5.2.2"
   }
