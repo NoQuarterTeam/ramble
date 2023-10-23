@@ -15,6 +15,9 @@ module.exports = {
         xxxs: "0.4rem",
         xxs: "0.625rem",
       },
+      animation: {
+        "pulse-fast": "pulse 0.5s linear infinite",
+      },
       colors: {
         background: "var(--background)",
         "background-light": "var(--background-light)",
