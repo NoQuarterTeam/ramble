@@ -192,6 +192,9 @@ model Spot {
   // roadsurfer
   roadsurferId String? @unique
 
+  // hipcamp
+  hipcampId String? @unique
+
   // the crag
   theCragId String? @unique
 
