@@ -46,7 +46,7 @@ export default function ResetPassword() {
     <Form>
       <div className="space-y-2">
         <div>
-          <h1 className="text-4xl font-bold">Reset password</h1>
+          <h1 className="text-4xl">Reset password</h1>
           <p>Enter a new password below.</p>
         </div>
         <input name="token" type="hidden" value={token} />

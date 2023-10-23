@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { merge } from "@ramble/shared"
 
-export const badgeProps = cva("rounded-xs w-min whitespace-nowrap border font-medium uppercase", {
+export const badgeProps = cva("rounded-xs inline-block whitespace-nowrap border font-medium uppercase", {
   variants: {
     colorScheme: {
       orange:
