@@ -3,11 +3,7 @@ import * as cheerio from "cheerio"
 
 const url = `https://www.hipcamp.com/en-GB/search/2-rv-motorhomes,vehicles?sw_lat=23.060344589348873&sw_lng=-14.343890427363135&ne_lat=61.871481248538316&ne_lng=38.37358381454612`
 
-import exampleData from "./komoot.json"
-
 import { prisma } from "@ramble/database"
-import { SpotType } from "@ramble/database/types"
-import { log } from "console"
 
 type MapBoxPlace = {
   features: {
@@ -18,19 +14,13 @@ type MapBoxPlace = {
 
 export type HipcampSpot = {
   id: string
-  // latitude?: number
-  // longitude?: number
   name: string
   link: string
   images?: string[]
-  // address?: string
   description?: string
 }
 
-// async function getCards({ lat, lng }: { lat: number; lng: number }) {
 async function getCards() {
-  // const urlWithParams = url + "&lat=" + lat + "&lng=" + lng
-
   const browser = await puppeteer.launch({
     headless: false,
   })
@@ -50,22 +40,20 @@ async function getCards() {
 
   const spots: HipcampSpot[] = []
 
-  // +11 on mozilla classname
-
-  // $(".Boexw").each((_, card) => {
-  //   const name = $(card).find(".kCchms").text().trim()
-  //   const link = $(card).find("a").attr("href")
-  //   const id = link?.split("?")[0].split("-").pop()
-  //   if (!id || !link || !name) return
-  //   spots.push({ id, name, link: "https://www.hipcamp.com" + link })
-  // })
+  $(".Boexw").each((_, card) => {
+    const name = $(card).find(".kCchms").text().trim()
+    const link = $(card).find("a").attr("href")
+    const id = link?.split("?")[0].split("-").pop()
+    if (!id || !link || !name) return
+    spots.push({ id, name, link: "https://www.hipcamp.com" + link })
+  })
 
   // TESTING
-  const name = "Camping Merry-sur-Yonne"
-  const link =
-    "https://www.hipcamp.com/en-GB/land/bourgogne-franche-comte-camping-merry-sur-yonne-r57h7zj9?filters=rv-sites&adults=1&children=0"
-  const id = "r57h7zj9"
-  spots.push({ id, name, link })
+  // const name = "Camping Merry-sur-Yonne"
+  // const link =
+  //   "https://www.hipcamp.com/en-GB/land/bourgogne-franche-comte-camping-merry-sur-yonne-r57h7zj9?filters=rv-sites&adults=1&children=0"
+  // const id = "r57h7zj9"
+  // spots.push({ id, name, link })
 
   const currentData = await prisma.spot.findMany({
     where: { hipcampId: { in: spots.map((s) => s.id) } },
@@ -101,7 +89,7 @@ async function getCards() {
         )}.json?access_token=pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw`,
       )
       const json: MapBoxPlace = await res.json()
-      console.dir(json, { depth: null })
+      // console.dir(json, { depth: null })
 
       let coords: number[] = []
 
@@ -161,6 +149,7 @@ async function getCards() {
           latitude: coords[0],
           longitude: coords[1],
           description,
+          address,
           images: { create: images.map((image) => ({ path: image, creator: { connect: { email: "dan@noquarter.co" } } })) },
           hipcampId: spot.id,
           type: "CAMPING",
