@@ -2,7 +2,7 @@ import { Link } from "@remix-run/react"
 import { ClientOnly } from "remix-utils/client-only"
 import { z } from "zod"
 
-import { sendAccessRequestSentToAdminsEmail } from "@ramble/api"
+import { sendAccessRequestConfirmationEmail, sendAccessRequestConfirmationToAdminsEmail } from "@ramble/api"
 import { join, merge } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
@@ -27,10 +27,11 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
   if (accessRequest) return formError({ formError: "Email already requested access" })
   await db.accessRequest.create({ data: { email: result.data.email } })
   const admins = await db.user.findMany({ where: { isAdmin: true }, select: { email: true } })
-  await sendAccessRequestSentToAdminsEmail(
+  void sendAccessRequestConfirmationToAdminsEmail(
     admins.map((a) => a.email),
     result.data.email,
   )
+  void sendAccessRequestConfirmationEmail(result.data.email)
   track("Access requested", { email: result.data.email })
   return json({ success: true })
 }
@@ -58,17 +59,18 @@ export default function Home() {
         )}
       </div> */}
       <div className="h-[94vh] w-screen space-y-20 bg-[url('/landing/landing1.png')] bg-cover bg-center px-2 pt-10">
-        <div className="mx-auto flex max-w-7xl flex-col items-start space-y-12">
+        <div className="mx-auto flex max-w-7xl flex-col items-start space-y-8">
           <div className="flex flex-col items-center">
             <p className="brand-header text-5xl">ramble</p>
             <p className="text-lg font-semibold text-black">VAN TRAVEL APP</p>
           </div>
-          <div className="space-y-2">
+          <div className="max-w-3xl space-y-2">
             <h1 className="max-w-4xl text-2xl font-bold text-black md:text-5xl">
-              Everything you need for remote working van life in Europe.
+              Everything you need for van life <br />
+              in Europe.
             </h1>
             <h2 className="text-lg text-black md:text-xl">
-              For the outdoor enthusiasts who seek adventure, authenticity and community.
+              For a new generation of remote working, digitally connected and eco-conscious travellers.
             </h2>
           </div>
 
@@ -219,6 +221,9 @@ function RequestAccessForm({ mode }: { mode?: "light" | "dark" }) {
           placeholder="Email"
           className="rounded-xs h-10 border px-4 text-black focus:bg-white"
         />
+        <p className={join("text-xs text-black", mode === "dark" && "text-white")}>
+          We won't add your email to any mailing list!
+        </p>
         {!accessFetcher.data?.success && accessFetcher.data?.fieldErrors?.email && (
           <p className={join("text-black", mode === "dark" && "text-white")}>{accessFetcher.data.fieldErrors.email}</p>
         )}
