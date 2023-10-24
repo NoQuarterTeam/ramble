@@ -23,7 +23,7 @@ import type { ActionDataErrorResponse } from "~/lib/form.server"
 import { useFetcherQuery } from "~/lib/hooks/useFetcherQuery"
 import { json } from "~/lib/remix.server"
 import type { LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
-import { actions, type CreateListSchema } from "~/services/api/save-to-list.server"
+import { saveToListActions, type CreateListSchema } from "~/services/api/save-to-list.server"
 import { requireUser } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -41,7 +41,7 @@ export enum Actions {
   CreateAndSaveToList = "create-and-save-to-list",
 }
 
-export const action = actions
+export const action = saveToListActions
 
 const SAVE_TO_LIST_URL = "/api/save-to-list"
 
@@ -119,14 +119,9 @@ export function SaveToList(props: Props) {
           <Modal title="Create new list" {...newListModalProps}>
             <listCreateFetcher.Form className="space-y-2" action={SAVE_TO_LIST_URL}>
               <input type="hidden" name="spotId" value={props.spotId} />
-              <FormField
-                required
-                errors={!listCreateFetcher.data?.success ? listCreateFetcher.data?.fieldErrors?.name : undefined}
-                name="name"
-                label="Name"
-              />
+              <FormField required name="name" label="Name" />
               <FormField name="description" label="Description" />
-              <FormError error={!listCreateFetcher.data?.success ? listCreateFetcher.data?.formError : undefined} />
+              <FormError />
               <listCreateFetcher.FormButton value={Actions.CreateAndSaveToList}>Create</listCreateFetcher.FormButton>
             </listCreateFetcher.Form>
           </Modal>
