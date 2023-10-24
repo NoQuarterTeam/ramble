@@ -346,8 +346,8 @@ importers:
         specifier: 0.7.0
         version: 0.7.0
       crypto-js:
-        specifier: 4.1.1
-        version: 4.1.1
+        specifier: 4.2.0
+        version: 4.2.0
       dayjs:
         specifier: 1.11.10
         version: 1.11.10
@@ -392,7 +392,7 @@ importers:
         version: 7.1.6(mapbox-gl@2.15.0)(react-dom@18.2.0)(react@18.2.0)
       remix-utils:
         specifier: 7.0.2
-        version: 7.0.2(@remix-run/node@2.1.0)(@remix-run/react@2.1.0)(crypto-js@4.1.1)(react@18.2.0)(zod@3.22.4)
+        version: 7.0.2(@remix-run/node@2.1.0)(@remix-run/react@2.1.0)(crypto-js@4.2.0)(react@18.2.0)(zod@3.22.4)
       sharp:
         specifier: 0.32.6
         version: 0.32.6
@@ -8597,8 +8597,8 @@ packages:
     resolution: {integrity: sha512-mCxBlsHFYh9C+HVpiEacem8FEBnMXgU9gy4zmNC+SXAZNB/1idgp/aulFJ4FgCi7GPEVbfyng092GqL2k2rmow==}
     dev: false
 
-  /crypto-js@4.1.1:
-    resolution: {integrity: sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==}
+  /crypto-js@4.2.0:
+    resolution: {integrity: sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==}
     dev: false
 
   /crypto-random-string@1.0.0:
@@ -15810,7 +15810,7 @@ packages:
       minimatch: 5.1.6
     dev: true
 
-  /remix-utils@7.0.2(@remix-run/node@2.1.0)(@remix-run/react@2.1.0)(crypto-js@4.1.1)(react@18.2.0)(zod@3.22.4):
+  /remix-utils@7.0.2(@remix-run/node@2.1.0)(@remix-run/react@2.1.0)(crypto-js@4.2.0)(react@18.2.0)(zod@3.22.4):
     resolution: {integrity: sha512-BsGmOgUzbT+Ui0hlWe5XR37N/MAbOSRyKBkxs8yckU+VOCzIuSRiOPk6qK+Hch4F18QSMRm/5IlrsROtrM1l2A==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
@@ -15848,7 +15848,7 @@ packages:
     dependencies:
       '@remix-run/node': 2.1.0(typescript@5.2.2)
       '@remix-run/react': 2.1.0(react-dom@18.2.0)(react@18.2.0)(typescript@5.2.2)
-      crypto-js: 4.1.1
+      crypto-js: 4.2.0
       react: 18.2.0
       type-fest: 4.4.0
       zod: 3.22.4
