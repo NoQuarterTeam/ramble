@@ -53,11 +53,9 @@ export function Feedback() {
                 defaultValue={(feedbackFetcher.formData?.get("message") as string) || ""}
                 name="message"
                 input={<Textarea rows={5} />}
-                errors={!feedbackFetcher.data?.success && feedbackFetcher.data?.fieldErrors?.message}
               />
               <input type="hidden" name="type" value={type} />
-
-              <FormError error={!feedbackFetcher.data?.success && feedbackFetcher.data?.formError} />
+              <FormError />
               <div className="flex justify-between">
                 <Button variant="ghost" onClick={() => setType(null)}>
                   Change type
