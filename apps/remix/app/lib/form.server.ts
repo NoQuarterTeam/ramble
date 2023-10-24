@@ -83,7 +83,7 @@ export function createAction<Schema extends z.AnyZodObject>(request: Request) {
           } catch (error) {
             console.log(error)
             return badRequest("Request failed", request, {
-              flash: { title: "Request failed", description: "We have been notified!" },
+              flash: { type: "error", title: "Request failed", description: "We have been notified!" },
             })
           }
         },
@@ -95,7 +95,7 @@ export function createAction<Schema extends z.AnyZodObject>(request: Request) {
       } catch (error) {
         console.log(error)
         return badRequest("Request failed", request, {
-          flash: { title: "Request failed", description: "We have been notified!" },
+          flash: { type: "error", title: "Request failed", description: "We have been notified!" },
         })
       }
     },
