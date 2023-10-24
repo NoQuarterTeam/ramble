@@ -307,8 +307,8 @@ importers:
         specifier: 8.10.7
         version: 8.10.7(react-dom@18.2.0)(react@18.2.0)
       '@trpc/server':
-        specifier: 10.41.0
-        version: 10.41.0
+        specifier: 10.42.0
+        version: 10.42.0
       '@turf/bbox':
         specifier: 6.5.0
         version: 6.5.0(patch_hash=llmcs46qko6dssxqwpy2iedvzi)
@@ -373,8 +373,8 @@ importers:
         specifier: 0.2.0
         version: 0.2.0
       posthog-js:
-        specifier: 1.85.0
-        version: 1.85.0
+        specifier: 1.85.1
+        version: 1.85.1
       pretty-cache-header:
         specifier: 1.0.0
         version: 1.0.0
@@ -6288,6 +6288,10 @@ packages:
 
   /@trpc/server@10.41.0:
     resolution: {integrity: sha512-uC0xLelzOuoFwxbBQ3GzX4DaWNucO9lW2vlGPdKu8ycXu2ObSa739oQ/lNF6qWDNUKXS0tQvGnDCAxEd178EzQ==}
+    dev: false
+
+  /@trpc/server@10.42.0:
+    resolution: {integrity: sha512-s0QuK72orW+pYce60sd4I36N3xJKzypS2k+8GJ7phH4KqO4XjBXezOFmGMcXTznsVqEiX5zs5ujLfQdJ9X3Y2g==}
     dev: false
 
   /@trysound/sax@0.2.0:
@@ -14571,8 +14575,8 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.0.2
 
-  /posthog-js@1.85.0:
-    resolution: {integrity: sha512-B9uwj3lwy+oxNMbQPwxvk8tW+ENTUvpl7SZqfrPNs+mDZiRbt2LQEJ3w1tyqMXvlG9DExi0lEqZF7doa+ipebA==}
+  /posthog-js@1.85.1:
+    resolution: {integrity: sha512-mK1MEcXWhkYT5gWZqeTzI88Qu/PZtSHjqm1aGD8NfqLAu6GpZQOYT46tsqlBupNRxc47451KNF52sW+I75A7tQ==}
     dependencies:
       fflate: 0.4.8
     dev: false
