@@ -34,6 +34,10 @@ export type ActionDataErrorResponse<Schema extends z.ZodTypeAny> = {
   data?: z.infer<Schema>
 }
 
+export type ActionDataSuccessResponse = {
+  success: true
+}
+
 export type FieldErrors<T> = {
   [Property in keyof T]: string[]
 }

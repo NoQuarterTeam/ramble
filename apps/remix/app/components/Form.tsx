@@ -1,6 +1,6 @@
 import * as React from "react"
 import { type SerializeFrom } from "@remix-run/node"
-import type { FetcherWithComponents, FormProps as RemixFormProps } from "@remix-run/react"
+import type { Fetcher, FetcherWithComponents, FormProps as RemixFormProps } from "@remix-run/react"
 import { Form as RemixForm, useFetcher as useRemixFetcher, useNavigation } from "@remix-run/react"
 import { X } from "lucide-react"
 import { AuthenticityTokenInput } from "remix-utils/csrf/react"
@@ -13,6 +13,7 @@ import { Button, IconButton, Input, inputStyles } from "~/components/ui"
 import { FORM_ACTION, useFormErrors } from "~/lib/form"
 
 import { ImageUploader } from "./ImageUploader"
+import { ActionDataErrorResponse } from "~/lib/form.server"
 
 export const Form = React.forwardRef(function _Form(props: RemixFormProps, ref: React.ForwardedRef<HTMLFormElement> | null) {
   const form = useFormErrors()
@@ -31,6 +32,11 @@ export const Form = React.forwardRef(function _Form(props: RemixFormProps, ref: 
   )
 })
 
+const fetcherContext = React.createContext<Pick<
+  Fetcher<ActionDataErrorResponse<z.AnyZodObject>>,
+  "data" | "state" | "formData"
+> | null>(null)
+
 interface UseFetcherProps<T> {
   onFinish?: (data: T) => void
 }
@@ -42,10 +48,12 @@ export function useFetcher<T>(props?: UseFetcherProps<T>): FetcherWithComponents
 
   function Form({ children, ...rest }: RemixFormProps) {
     return (
-      <fetcher.Form method="POST" replace {...rest}>
-        <AuthenticityTokenInput />
-        {children}
-      </fetcher.Form>
+      <fetcherContext.Provider value={{ state: fetcher.state, data: fetcher.data, formData: fetcher.formData }}>
+        <fetcher.Form method="POST" replace {...rest}>
+          <AuthenticityTokenInput />
+          {children}
+        </fetcher.Form>
+      </fetcherContext.Provider>
     )
   }
 
@@ -115,7 +123,8 @@ export const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(func
   ref,
 ) {
   const form = useFormErrors<z.AnyZodObject>()
-  const fieldErrors = errors || form?.fieldErrors?.[props.name]
+  const fetcher = React.useContext(fetcherContext)
+  const fieldErrors = errors || fetcher?.data?.fieldErrors?.[props.name] || form?.fieldErrors?.[props.name]
   const inputClassName = input?.props.className
   const className = merge(props.className, inputClassName, fieldErrors && "border-red-500 focus:border-red-500")
 
@@ -260,8 +269,10 @@ export function ImageField(props: ImageFieldProps) {
 
 export function FormError({ error }: { error?: string | null | false }) {
   const form = useFormErrors<z.AnyZodObject>()
-  if (!form?.formError && !error) return null
-  return <FormFieldError id="form-error">{form?.formError || error}</FormFieldError>
+  const fetcher = React.useContext(fetcherContext)
+  const formError = error || fetcher?.data?.formError || form?.formError
+  if (!formError) return null
+  return <FormFieldError id="form-error">{formError}</FormFieldError>
 }
 export const FormButton = React.forwardRef<HTMLButtonElement, ButtonProps>(function _FormButton(props, ref) {
   const navigation = useNavigation()

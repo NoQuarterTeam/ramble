@@ -14,7 +14,7 @@ const createListSchema = z.object({ name: z.string().min(1), description: z.stri
 
 export type CreateListSchema = typeof createListSchema
 
-export const actions = async ({ request }: ActionFunctionArgs) => {
+export const saveToListActions = async ({ request }: ActionFunctionArgs) => {
   const userId = await requireUser(request)
   return createActions<Actions>(request, {
     "toggle-save": () =>
