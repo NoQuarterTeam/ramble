@@ -17,7 +17,7 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.433.0",
+    "@aws-sdk/client-s3": "3.435.0",
     "@fontsource/urbanist": "5.0.17",
     "@radix-ui/react-alert-dialog": "1.0.5",
     "@radix-ui/react-avatar": "1.0.4",
@@ -61,7 +61,7 @@
     "lucide-react": "0.288.0",
     "mapbox-gl": "2.15.0",
     "nprogress": "0.2.0",
-    "posthog-js": "1.85.0",
+    "posthog-js": "1.85.2",
     "pretty-cache-header": "1.0.0",
     "query-string": "8.1.0",
     "react": "18.2.0",
