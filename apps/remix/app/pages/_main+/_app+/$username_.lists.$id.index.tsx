@@ -14,11 +14,11 @@ import { LinkButton } from "~/components/LinkButton"
 import { PageContainer } from "~/components/PageContainer"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { getFormAction } from "~/lib/form.server"
+import { createAction, createActions } from "~/lib/form.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { fetchAndJoinSpotImages } from "~/lib/models/spot"
-import { badRequest, notFound, redirect } from "~/lib/remix.server"
+import { notFound, redirect } from "~/lib/remix.server"
 import { useTheme } from "~/lib/theme"
 import { bbox, lineString } from "~/lib/vendor/turf.server"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
@@ -86,33 +86,34 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 }
 
 enum Actions {
-  Delete = "Delete",
-  Copy = "Copy",
+  Delete = "delete",
+  Copy = "copy",
 }
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request)
-  const formAction = await getFormAction<Actions>(request)
-  switch (formAction) {
-    case Actions.Delete:
-      await db.list.delete({ where: { id: params.id } })
-      track("List deleted", { listId: params.id || null, userId: user.id })
-      return redirect(`/${user.username}/lists`, request, { flash: { title: "List deleted" } })
-    case Actions.Copy:
-      const list = await db.list.findFirst({ where: { id: params.id }, include: { listSpots: true } })
-      if (!list) throw notFound()
-      const newList = await db.list.create({
-        data: {
-          name: list.name,
-          description: list.description,
-          creator: { connect: { id: user.id } },
-          listSpots: { createMany: { data: list.listSpots.map(({ spotId }) => ({ spotId })) } },
-        },
-      })
-      return redirect(`/${user.username}/lists/${newList.id}`, request, { flash: { title: "List copied" } })
-    default:
-      throw badRequest("Invald action")
-  }
+  return createActions<Actions>(request, {
+    copy: () =>
+      createAction(request).handler(async () => {
+        const list = await db.list.findFirst({ where: { id: params.id }, include: { listSpots: true } })
+        if (!list) throw notFound()
+        const newList = await db.list.create({
+          data: {
+            name: list.name,
+            description: list.description,
+            creator: { connect: { id: user.id } },
+            listSpots: { createMany: { data: list.listSpots.map(({ spotId }) => ({ spotId })) } },
+          },
+        })
+        return redirect(`/${user.username}/lists/${newList.id}`, request, { flash: { title: "List copied" } })
+      }),
+    delete: () =>
+      createAction(request).handler(async () => {
+        await db.list.delete({ where: { id: params.id } })
+        track("List deleted", { listId: params.id || null, userId: user.id })
+        return redirect(`/${user.username}/lists`, request, { flash: { title: "List deleted" } })
+      }),
+  })
 }
 
 export default function ListDetail() {
