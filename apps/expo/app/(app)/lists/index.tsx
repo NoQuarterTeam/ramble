@@ -15,6 +15,7 @@ import { api } from "../../../lib/api"
 import { height, isTablet, width } from "../../../lib/device"
 import { useMe } from "../../../lib/hooks/useMe"
 import { useRouter } from "../../router"
+import { Icon } from "../../../components/Icon"
 
 const SORT_OPTIONS = { mine: "my lists", following: "following" } as const
 
@@ -38,12 +39,12 @@ export function ListsScreen() {
       title={
         <TouchableOpacity onPress={sortProps.onOpen} className="flex flex-row items-center">
           <BrandHeading className="py-2 text-4xl">{SORT_OPTIONS[sort]}</BrandHeading>
-          <ChevronDown size={20} className="text-primary" />
+          <Icon icon={ChevronDown} size={20} color="primary" />
         </TouchableOpacity>
       }
       rightElement={
         <TouchableOpacity onPress={() => push("NewListScreen")}>
-          <PlusCircle className="text-black dark:text-white" />
+          <Icon icon={PlusCircle} />
         </TouchableOpacity>
       }
     >

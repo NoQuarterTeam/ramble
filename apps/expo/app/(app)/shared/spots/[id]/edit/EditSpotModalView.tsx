@@ -9,6 +9,7 @@ import { BrandHeading } from "../../../../../../components/ui/BrandHeading"
 import { Toast } from "../../../../../../components/ui/Toast"
 import { isAndroid } from "../../../../../../lib/device"
 import { useRouter } from "../../../../../router"
+import { Icon } from "../../../../../../components/Icon"
 
 interface Props {
   title?: string
@@ -26,14 +27,14 @@ export function EditSpotModalView({ canGoBack = true, ...props }: Props) {
         <View className={join("flex flex-row items-center space-x-0.5")}>
           {canGoBack && (
             <TouchableOpacity onPress={navigation.goBack} className="mt-1 p-1">
-              <ChevronLeft size={24} className="text-primary" />
+              <Icon icon={ChevronLeft} size={24} color="primary" />
             </TouchableOpacity>
           )}
 
           {props.title ? <BrandHeading className="text-3xl">{props.title}</BrandHeading> : <Text />}
         </View>
         <TouchableOpacity onPress={() => navigation.navigate("AppLayout")} className="p-1">
-          <X size={24} className="text-black dark:text-white" />
+          <Icon icon={X} size={24} />
         </TouchableOpacity>
       </View>
 

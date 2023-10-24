@@ -13,6 +13,7 @@ import { Text } from "../../../components/ui/Text"
 import { api } from "../../../lib/api"
 import { height, isTablet, width } from "../../../lib/device"
 import { useRouter } from "../../router"
+import { Icon } from "../../../components/Icon"
 
 const SORT_OPTIONS = { latest: "latest", rated: "top rated", saved: "most saved" } as const
 
@@ -28,7 +29,7 @@ export function SpotsScreen() {
     setSpots(initialSpots)
   }, [initialSpots])
 
-  const utils = api.useContext()
+  const utils = api.useUtils()
 
   const handleLoadMore = React.useCallback(async () => {
     const newSpots = await utils.spot.list.fetch({ skip: spots?.length || 0, sort: "latest" })
@@ -40,12 +41,12 @@ export function SpotsScreen() {
       title={
         <TouchableOpacity onPress={sortProps.onOpen} className="flex flex-row items-center">
           <BrandHeading className="py-2 text-4xl">{SORT_OPTIONS[sort]}</BrandHeading>
-          <ChevronDown size={20} className="text-primary" />
+          <Icon icon={ChevronDown} size={20} color="primary" />
         </TouchableOpacity>
       }
       rightElement={
         <TouchableOpacity onPress={() => push("NewSpotLayout")}>
-          <PlusCircle className="text-black dark:text-white" />
+          <Icon icon={PlusCircle} />
         </TouchableOpacity>
       }
     >

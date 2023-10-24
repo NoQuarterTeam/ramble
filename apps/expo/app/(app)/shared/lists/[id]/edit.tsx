@@ -16,7 +16,7 @@ export function EditListScreen() {
   const list = data?.list
   const { goBack, navigate } = useRouter()
   const { me } = useMe()
-  const utils = api.useContext()
+  const utils = api.useUtils()
   const { mutate, error, isLoading } = api.list.update.useMutation({
     onSuccess: () => {
       if (!me) return

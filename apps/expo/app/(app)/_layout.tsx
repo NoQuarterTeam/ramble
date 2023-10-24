@@ -12,6 +12,7 @@ import { AccountLayout } from "./account/_layout"
 import { ListsLayout } from "./lists/_layout"
 import { MapLayout } from "./map/_layout"
 import { SpotsLayout } from "./spots/_layout"
+import { Icon } from "../../components/Icon"
 
 const Tab = createBottomTabNavigator()
 
@@ -34,21 +35,21 @@ export function AppLayout() {
         name="MapLayout"
         component={MapLayout}
         options={{
-          tabBarIcon: (props) => <Map size={24} color={props.focused ? colors.primary[600] : isDark ? "white" : "black"} />,
+          tabBarIcon: (props) => <Icon icon={Map} size={24} color={!!props.focused && "primary"} />,
         }}
       />
       <Tab.Screen
         name="SpotsLayout"
         component={SpotsLayout}
         options={{
-          tabBarIcon: (props) => <List size={24} color={props.focused ? colors.primary[600] : isDark ? "white" : "black"} />,
+          tabBarIcon: (props) => <Icon icon={List} size={24} color={!!props.focused && "primary"} />,
         }}
       />
       <Tab.Screen
         name="ListsLayout"
         component={ListsLayout}
         options={{
-          tabBarIcon: (props) => <Heart size={24} color={props.focused ? colors.primary[600] : isDark ? "white" : "black"} />,
+          tabBarIcon: (props) => <Icon icon={Heart} size={24} color={!!props.focused && "primary"} />,
         }}
       />
       <Tab.Screen
@@ -69,7 +70,7 @@ export function AppLayout() {
                 )}
               />
             ) : (
-              <User size={24} color={props.focused ? colors.primary[600] : isDark ? "white" : "black"} />
+              <Icon icon={User} size={24} color={props.focused ? "primary" : isDark ? "white" : "black"} />
             ),
         }}
       />

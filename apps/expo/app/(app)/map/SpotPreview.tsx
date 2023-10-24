@@ -16,6 +16,7 @@ import { api } from "../../../lib/api"
 import { height, isTablet, width } from "../../../lib/device"
 import { useBackgroundColor } from "../../../lib/tailwind"
 import { useRouter } from "../../router"
+import { Icon } from "../../../components/Icon"
 // import * as Device from 'expo-device';
 
 export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: string | null; onClose: () => void }) {
@@ -68,7 +69,7 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
                 className="flex h-[50px] flex-row items-center space-x-2"
               >
                 <View className="sq-12 flex items-center justify-center rounded-full border border-gray-200 dark:border-gray-700">
-                  <SpotIcon size={20} type={spot.type} className="text-black dark:text-white" />
+                  <SpotIcon size={20} type={spot.type} />
                 </View>
                 <Text numberOfLines={2} className="pr-14 text-base leading-6 text-black hover:underline dark:text-white">
                   {spot.name}
@@ -77,11 +78,11 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
               <View className="flex flex-row items-center justify-between">
                 <View className="flex flex-row items-center space-x-2">
                   <View className="flex flex-row items-center space-x-1">
-                    <Star size={16} className="text-black dark:text-white" />
+                    <Icon icon={Star} size={16} />
                     <Text className="text-sm">{displayRating(spot.rating._avg.rating)}</Text>
                   </View>
                   <View className="flex flex-row flex-wrap items-center space-x-1">
-                    <Heart size={16} className="text-black dark:text-white" />
+                    <Icon icon={Heart} size={16} />
                     <Text className="text-sm">{spot._count.listSpots || 0}</Text>
                   </View>
                 </View>
@@ -91,9 +92,9 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
                   variant="outline"
                   onPress={() => navigate("SaveSpotScreen", { id: spot.id })}
                   leftIcon={
-                    <Heart
+                    <Icon
+                      icon={Heart}
                       size={14}
-                      className="text-black dark:text-white"
                       fill={spot.listSpots && spot.listSpots.length > 0 ? (isDark ? "white" : "black") : undefined}
                     />
                   }

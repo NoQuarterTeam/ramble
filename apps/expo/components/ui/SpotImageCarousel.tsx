@@ -13,6 +13,7 @@ import { Button } from "./Button"
 import { OptimizedImage } from "./OptimisedImage"
 import { Text } from "./Text"
 import { toast } from "./Toast"
+import { Icon } from "../Icon"
 
 type SpotImageType = Pick<SpotImage, "path" | "blurHash">
 
@@ -88,7 +89,7 @@ export function SpotImageCarousel({
         ListFooterComponent={
           canAddMore ? (
             <View style={{ width, height }} className="rounded-xs flex items-center justify-center bg-gray-50 dark:bg-gray-800">
-              <Image size={40} strokeWidth={1} className="mb-2 text-black dark:text-white" />
+              <Icon icon={Image} size={40} strokeWidth={1} className="mb-2" />
               {me && (
                 <>
                   {images.length === 0 && <Text className="my-2 text-sm">Be the first to add an image</Text>}

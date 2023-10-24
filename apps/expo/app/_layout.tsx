@@ -148,7 +148,7 @@ export default function RootLayout() {
 
 function PrefetchTabs(props: { children: React.ReactNode }) {
   const { me, isLoading } = useMe()
-  const utils = api.useContext()
+  const utils = api.useUtils()
   React.useEffect(() => {
     utils.spot.list.prefetch({ skip: 0, sort: "latest" })
     if (isLoading || !me) return

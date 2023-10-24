@@ -23,7 +23,7 @@ export default function OnboardingStep1Screen() {
   })
   const router = useRouter()
 
-  const utils = api.useContext()
+  const utils = api.useUtils()
   const { mutate, isLoading, error } = api.user.update.useMutation({
     onSuccess: async () => {
       await utils.user.me.refetch()

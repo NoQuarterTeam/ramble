@@ -13,7 +13,7 @@ import { useRouter } from "../../router"
 export function AccountSettingsScreen() {
   const modalProps = useDisclosure()
   const router = useRouter()
-  const utils = api.useContext()
+  const utils = api.useUtils()
 
   const { mutate: deleteAccount, isLoading } = api.user.deleteAccount.useMutation({
     onSuccess: async () => {

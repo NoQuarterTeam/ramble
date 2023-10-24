@@ -6,6 +6,7 @@ import { join } from "@ramble/shared"
 
 import { useRouter } from "../../app/router"
 import { BrandHeading } from "./BrandHeading"
+import { Icon } from "../Icon"
 
 interface Props {
   title: string
@@ -21,7 +22,7 @@ export function ScreenView(props: Props) {
       <View className="flex flex-row items-center justify-between pb-2">
         <View className={join("flex flex-row items-center space-x-0.5")}>
           <TouchableOpacity onPress={props.onBack || goBack} className="sq-8 flex items-center justify-center pt-0.5">
-            <ChevronLeft className="text-primary" />
+            <Icon icon={ChevronLeft} color="primary" />
           </TouchableOpacity>
           <BrandHeading className="text-xl">{props.title.toLowerCase()}</BrandHeading>
         </View>

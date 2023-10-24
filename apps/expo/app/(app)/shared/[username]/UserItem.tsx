@@ -7,6 +7,7 @@ import { createImageUrl } from "@ramble/shared"
 import { OptimizedImage } from "../../../../components/ui/OptimisedImage"
 import { Text } from "../../../../components/ui/Text"
 import { useRouter } from "../../../router"
+import { Icon } from "../../../../components/Icon"
 
 interface Props {
   user: Pick<User, "avatar" | "username" | "firstName" | "lastName" | "avatarBlurHash">
@@ -30,7 +31,7 @@ export function UserItem(props: Props) {
         />
       ) : (
         <View className="sq-14 flex items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
-          <User2 className="text-black dark:text-white" />
+          <Icon icon={User2} />
         </View>
       )}
       <View>

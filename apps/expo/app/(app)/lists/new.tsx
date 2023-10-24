@@ -9,7 +9,7 @@ import { ListForm } from "../shared/lists/[id]/ListForm"
 export function NewListScreen() {
   const { goBack } = useRouter()
   const { me } = useMe()
-  const utils = api.useContext()
+  const utils = api.useUtils()
   const { mutate, error, isLoading } = api.list.create.useMutation({
     onSuccess: () => {
       if (!me) return

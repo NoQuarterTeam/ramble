@@ -28,6 +28,7 @@ import { height, width } from "../../../../../lib/device"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { AMENITIES_ICONS } from "../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../router"
+import { Icon } from "../../../../../components/Icon"
 
 export function SpotDetailScreen() {
   const [location, setLocation] = React.useState<Location.LocationObjectCoords | null>(null)
@@ -87,7 +88,7 @@ export function SpotDetailScreen() {
       directionsMode: "car",
     })
   }
-  const utils = api.useContext()
+  const utils = api.useUtils()
   const { mutate: verifySpot, isLoading: isVerifyingLoading } = api.spot.verify.useMutation({
     onSuccess: async () => {
       if (!spot) return
@@ -126,11 +127,11 @@ export function SpotDetailScreen() {
             <Heading className="text-2xl leading-7">{spot.name}</Heading>
             <View className="flex flex-row items-center space-x-2">
               <View className="flex flex-row items-center space-x-1">
-                <Star size={16} className="text-black dark:text-white" />
+                <Icon icon={Star} size={16} />
                 <Text className="text-sm">{displayRating(spot.rating._avg.rating)}</Text>
               </View>
               <View className="flex flex-row flex-wrap items-center space-x-1">
-                <Heart size={16} className="text-black dark:text-white" />
+                <Icon icon={Heart} size={16} />
                 <Text className="text-sm">{spot._count.listSpots || 0}</Text>
               </View>
             </View>
@@ -143,13 +144,13 @@ export function SpotDetailScreen() {
               <View className="flex flex-row flex-wrap gap-2">
                 {Object.entries(AMENITIES).map(([key, value]) => {
                   if (!spot.amenities?.[key as keyof typeof AMENITIES]) return null
-                  const Icon = AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]
+                  const icon = AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]
                   return (
                     <View
                       key={key}
                       className="rounded-xs flex flex-row space-x-1 border border-gray-200 p-2 dark:border-gray-700"
                     >
-                      {Icon && <Icon size={20} className="text-black dark:text-white" />}
+                      {icon && <Icon icon={icon} size={20} />}
                       <Text className="text-sm">{value}</Text>
                     </View>
                   )
@@ -174,7 +175,7 @@ export function SpotDetailScreen() {
                   size="sm"
                   onPress={() => verifySpot({ id: spot.id })}
                   isLoading={isVerifyingLoading}
-                  leftIcon={<Check size={18} className="text-white dark:text-black" />}
+                  leftIcon={<Icon icon={Check} size={18} />}
                 >
                   Verify
                 </Button>
@@ -196,7 +197,7 @@ export function SpotDetailScreen() {
                     })
                   }
                   variant="outline"
-                  leftIcon={<Edit2 size={18} className="text-black dark:text-white" />}
+                  leftIcon={<Icon icon={Edit2} size={18} />}
                 >
                   Edit
                 </Button>
@@ -223,7 +224,7 @@ export function SpotDetailScreen() {
                 </Text>
                 <Text>·</Text>
                 <View className="flex flex-row items-center space-x-1">
-                  <Star size={20} className="text-black dark:text-white" />
+                  <Icon icon={Star} size={20} />
                   <Text className="pt-1">{displayRating(spot.rating._avg.rating)}</Text>
                 </View>
               </View>
@@ -254,11 +255,7 @@ export function SpotDetailScreen() {
             activeOpacity={0.8}
             className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
           >
-            {router.canGoBack() ? (
-              <ChevronLeft className="pr-1 text-black dark:text-white" />
-            ) : (
-              <ChevronDown className="pr-1 text-black dark:text-white" />
-            )}
+            {router.canGoBack() ? <Icon icon={ChevronLeft} className="pr-1" /> : <Icon icon={ChevronDown} className="pr-1" />}
           </TouchableOpacity>
           <Animated.View style={[{ width: width - 148 }, nameStyle]}>
             <Text className="text-lg text-black dark:text-white" numberOfLines={1}>
@@ -272,14 +269,14 @@ export function SpotDetailScreen() {
             activeOpacity={0.8}
             className="sq-8 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
           >
-            <Share size={20} className="text-black dark:text-white" />
+            <Icon icon={Share} size={20}  />
           </TouchableOpacity> */}
           <TouchableOpacity
             onPress={handleGetDirections}
             activeOpacity={0.8}
             className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
           >
-            <Compass size={20} className="text-black dark:text-white" />
+            <Icon icon={Compass} size={20} />
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -287,9 +284,9 @@ export function SpotDetailScreen() {
             activeOpacity={0.8}
             className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
           >
-            <Heart
+            <Icon
+              icon={Heart}
               size={20}
-              className="text-black dark:text-white"
               fill={data.listSpots && data.listSpots.length > 0 ? (isDark ? "white" : "black") : undefined}
             />
           </TouchableOpacity>

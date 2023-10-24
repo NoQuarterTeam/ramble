@@ -33,7 +33,7 @@ export default function OnboardingStep3Screen() {
   }, [data, form, isLoading])
   const router = useRouter()
 
-  const utils = api.useContext()
+  const utils = api.useUtils()
   const {
     mutate,
     isLoading: updateLoading,

@@ -8,6 +8,7 @@ import { Spinner } from "../../../../../components/ui/Spinner"
 import { Text } from "../../../../../components/ui/Text"
 import { api } from "../../../../../lib/api"
 import { useParams, useRouter } from "../../../../router"
+import { Icon } from "../../../../../components/Icon"
 
 export function ListDetailMapScreen() {
   const { params } = useParams<"ListDetailMapScreen">()
@@ -35,7 +36,7 @@ export function ListDetailMapScreen() {
         <View className="flex flex-row items-center space-x-2">
           {navigation.canGoBack() && (
             <TouchableOpacity onPress={navigation.goBack} activeOpacity={0.8}>
-              <ChevronLeft className="text-black dark:text-white" />
+              <Icon icon={ChevronLeft} />
             </TouchableOpacity>
           )}
 

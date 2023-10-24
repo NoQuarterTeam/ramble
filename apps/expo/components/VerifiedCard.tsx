@@ -7,6 +7,7 @@ import { createImageUrl } from "@ramble/shared"
 import { useRouter } from "../app/router"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
+import { Icon } from "./Icon"
 
 interface Props {
   spot: Pick<Spot, "verifiedAt"> & {
@@ -25,7 +26,7 @@ export function VerifiedCard({ spot }: Props) {
         >
           <View>
             <View className="flex flex-row items-center space-x-1">
-              <Verified className="text-black dark:text-white" />
+              <Icon icon={Verified} />
               <Text>
                 Verified by{" "}
                 <Text className="font-500 ">
@@ -46,14 +47,14 @@ export function VerifiedCard({ spot }: Props) {
               />
             ) : (
               <View className="sq-10 flex flex-row items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
-                <User2 className="text-black dark:text-white" />
+                <Icon icon={User2} />
               </View>
             )}
           </View>
         </TouchableOpacity>
       ) : (
         <View className="flex flex-row items-center space-x-1">
-          <BadgeX size={18} className="text-black dark:text-white" />
+          <Icon icon={BadgeX} size={18} />
           <Text className="text-sm">Unverified</Text>
         </View>
       )}

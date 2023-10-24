@@ -16,12 +16,13 @@ import { useS3Upload } from "../../../../../lib/hooks/useS3"
 import { AMENITIES_ICONS } from "../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
+import { Icon } from "../../../../../components/Icon"
 
 export function NewSpotConfirmScreen() {
   const { params } = useParams<"NewSpotConfirmScreen">()
   const router = useRouter()
   const [shouldPublishLater, setShouldPublishLater] = React.useState(false)
-  const utils = api.useContext()
+  const utils = api.useUtils()
   const {
     mutate,
     isLoading: createLoading,
@@ -63,7 +64,7 @@ export function NewSpotConfirmScreen() {
         <View className="space-y-3">
           <View className="flex h-[50px] flex-row items-center space-x-2">
             <View className="sq-12 flex items-center justify-center rounded-full border border-gray-200 dark:border-gray-700">
-              <SpotIcon size={20} type={params.type} className="text-black dark:text-white" />
+              <SpotIcon size={20} type={params.type} />
             </View>
             <Text numberOfLines={2} className="text-lg leading-6">
               {params.name}
@@ -82,7 +83,7 @@ export function NewSpotConfirmScreen() {
           <Text>{params.description}</Text>
           {params.isPetFriendly && (
             <View className="flex flex-row items-center space-x-2">
-              <Dog size={20} className="text-black dark:text-white" />
+              <Icon icon={Dog} size={20} />
               <Text>Pet friendly</Text>
             </View>
           )}
@@ -90,10 +91,10 @@ export function NewSpotConfirmScreen() {
             <View className="flex flex-row flex-wrap gap-2">
               {Object.entries(AMENITIES).map(([key, value]) => {
                 if (!params.amenities?.[key as keyof typeof AMENITIES]) return null
-                const Icon = AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]
+                const icon = AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]
                 return (
                   <View key={key} className="rounded-xs flex flex-row space-x-1 border border-gray-200 p-2 dark:border-gray-700">
-                    {Icon && <Icon size={20} className="text-black dark:text-white" />}
+                    {icon && <Icon icon={icon} size={20} />}
                     <Text className="text-sm">{value}</Text>
                   </View>
                 )
@@ -102,7 +103,7 @@ export function NewSpotConfirmScreen() {
           )}
           <View className="flex w-full flex-row items-center justify-between px-4 py-2">
             <View className="flex flex-row items-center space-x-2">
-              <Lock size={24} className="text-black dark:text-white" />
+              <Icon icon={Lock} size={24} />
               <View>
                 <Text className="text-lg">Publish later</Text>
                 <Text className="text-xs">Will be public in 2 weeks</Text>
@@ -121,7 +122,7 @@ export function NewSpotConfirmScreen() {
         {error && <Text className="text-red-500">{error.message}</Text>}
         <Button
           isLoading={createLoading || isLoading}
-          leftIcon={<Check size={20} className="text-white dark:text-black" />}
+          leftIcon={<Icon icon={Check} size={20} color={{ light: "white", dark: "black" }} />}
           className="rounded-full"
           onPress={handleCreateSpot}
         >

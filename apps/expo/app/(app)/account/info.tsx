@@ -17,6 +17,7 @@ import { useForm } from "../../../lib/hooks/useForm"
 import { useKeyboardController } from "../../../lib/hooks/useKeyboardController"
 import { useMe } from "../../../lib/hooks/useMe"
 import { useS3Upload } from "../../../lib/hooks/useS3"
+import { Icon } from "../../../components/Icon"
 
 export function AccountInfoScreen() {
   useKeyboardController()
@@ -33,7 +34,7 @@ export function AccountInfoScreen() {
     },
   })
 
-  const utils = api.useContext()
+  const utils = api.useUtils()
   const { mutate, isLoading, error } = api.user.update.useMutation({
     onSuccess: (data) => {
       utils.user.me.setData(undefined, data)
@@ -105,11 +106,11 @@ export function AccountInfoScreen() {
                 />
               ) : (
                 <View className="sq-20 flex items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
-                  <User2 className="text-black dark:text-white" />
+                  <Icon icon={User2} />
                 </View>
               )}
               <View className="sq-8 absolute -right-1 -top-1 flex items-center justify-center rounded-full bg-gray-50 dark:bg-gray-700">
-                <Edit2 size={12} className="text-black dark:text-white" />
+                <Icon icon={Edit2} size={12} />
               </View>
             </TouchableOpacity>
           </View>

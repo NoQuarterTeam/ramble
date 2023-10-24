@@ -15,7 +15,7 @@ export function ReviewDetailScreen() {
   } = useParams<"ReviewDetailScreen">()
 
   const { goBack } = useRouter()
-  const utils = api.useContext()
+  const utils = api.useUtils()
   const { data: review, isLoading: reviewLoading } = api.review.detail.useQuery({ id })
 
   const { mutate, isLoading, error } = api.review.update.useMutation({

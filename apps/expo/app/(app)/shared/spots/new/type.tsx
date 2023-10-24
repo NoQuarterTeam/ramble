@@ -2,13 +2,13 @@ import * as React from "react"
 import { ScrollView, View } from "react-native"
 
 import { type SpotType } from "@ramble/database/types"
-import { join } from "@ramble/shared"
 
 import { Button } from "../../../../../components/ui/Button"
 import { Text } from "../../../../../components/ui/Text"
 import { SPOT_OPTIONS } from "../../../../../lib/models/spot"
 import { useParams, useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
+import { Icon } from "../../../../../components/Icon"
 
 export function NewSpotTypeScreen() {
   const { params } = useParams<"NewSpotTypeScreen">()
@@ -23,9 +23,13 @@ export function NewSpotTypeScreen() {
               size="sm"
               variant={type === spotType.value ? "primary" : "outline"}
               leftIcon={
-                <spotType.Icon
+                <Icon
+                  icon={spotType.Icon}
                   size={20}
-                  className={join(type === spotType.value ? "text-white dark:text-black" : "text-black dark:text-white")}
+                  color={{
+                    light: type === spotType.value ? "white" : "black",
+                    dark: type === spotType.value ? "black" : "white",
+                  }}
                 />
               }
               key={spotType.value}
@@ -39,11 +43,7 @@ export function NewSpotTypeScreen() {
       </ScrollView>
       {type && (
         <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
-          <Button
-            // leftIcon={<X size={20} className="text-black dark:text-white" />}
-            className="rounded-full"
-            onPress={() => router.push("NewSpotOptionsScreen", { ...params, type })}
-          >
+          <Button className="rounded-full" onPress={() => router.push("NewSpotOptionsScreen", { ...params, type })}>
             Next
           </Button>
         </View>

@@ -10,6 +10,7 @@ import { Button } from "../../../../../../components/ui/Button"
 import { toast } from "../../../../../../components/ui/Toast"
 import { useParams, useRouter } from "../../../../../router"
 import { EditSpotModalView } from "./EditSpotModalView"
+import { Icon } from "../../../../../../components/Icon"
 
 export function EditSpotImagesScreen() {
   const { params } = useParams<"EditSpotImagesScreen">()
@@ -45,13 +46,13 @@ export function EditSpotImagesScreen() {
                 source={{ uri: image.startsWith("file://") ? image : createImageUrl(image) }}
               />
               <View className="absolute -right-1 -top-1 rounded-full bg-gray-100 p-1 dark:bg-gray-900">
-                <X className="text-gray-800 dark:text-white" size={16} />
+                <Icon icon={X} size={16} />
               </View>
             </TouchableOpacity>
           ))}
           <View className="w-1/3 p-1">
             <Button className="h-[100px]" variant="secondary" onPress={onPickImage}>
-              <Plus className="text-black dark:text-white" />
+              <Icon icon={Plus} />
             </Button>
           </View>
         </View>

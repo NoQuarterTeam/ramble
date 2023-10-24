@@ -16,11 +16,12 @@ import { api, AUTH_TOKEN } from "../../../lib/api"
 import { UPDATE_ID, VERSION } from "../../../lib/config"
 import { useMe } from "../../../lib/hooks/useMe"
 import { type ScreenParamsList, useRouter } from "../../router"
+import { Icon } from "../../../components/Icon"
 
 export function AccountScreen() {
   const { me } = useMe()
   const { push } = useRouter()
-  const utils = api.useContext()
+  const utils = api.useUtils()
 
   const { mutate, data } = api.user.sendVerificationEmail.useMutation({
     onSuccess: () => {
@@ -57,7 +58,7 @@ export function AccountScreen() {
         {!me.isVerified && (
           <View className="rounded-xs flex flex-col space-y-3 border border-gray-200 p-2 pl-4 dark:border-gray-700">
             <View className="flex flex-row items-center space-x-2">
-              <AlertCircle size={20} className="text-black dark:text-white" />
+              <Icon icon={AlertCircle} size={20} />
               <Text className="text-lg">Your account is not yet verified</Text>
             </View>
             <Button onPress={() => mutate()} disabled={!!data} size="sm">
@@ -82,7 +83,7 @@ export function AccountScreen() {
                   />
                 ) : (
                   <View className="sq-16 flex items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
-                    <User2 className="text-black dark:text-white" />
+                    <Icon icon={User2} />
                   </View>
                 )}
                 <View>
@@ -93,21 +94,21 @@ export function AccountScreen() {
                 </View>
               </View>
               <View>
-                <ChevronRight className="text-gray-700 dark:text-white" />
+                <Icon icon={ChevronRight} />
               </View>
             </TouchableOpacity>
 
             <View>
-              <ProfileLink to="AccountInfoScreen" Icon={User}>
+              <ProfileLink to="AccountInfoScreen" icon={User}>
                 Info
               </ProfileLink>
-              <ProfileLink to="AccountInterestsScreen" Icon={ToggleRight}>
+              <ProfileLink to="AccountInterestsScreen" icon={ToggleRight}>
                 Interests
               </ProfileLink>
-              <ProfileLink to="AccountVanScreen" Icon={Icons.Van}>
+              <ProfileLink to="AccountVanScreen" icon={Icons.Van}>
                 Van
               </ProfileLink>
-              <ProfileLink to="AccountSettingsScreen" Icon={Cog}>
+              <ProfileLink to="AccountSettingsScreen" icon={Cog}>
                 Settings
               </ProfileLink>
             </View>
@@ -125,7 +126,7 @@ export function AccountScreen() {
   )
 }
 
-function ProfileLink({ children, to, Icon }: { to: keyof ScreenParamsList; children: string; Icon: LucideIcon }) {
+function ProfileLink({ children, to, icon }: { to: keyof ScreenParamsList; children: string; icon: LucideIcon }) {
   const { push } = useRouter()
   return (
     <TouchableOpacity
@@ -134,10 +135,10 @@ function ProfileLink({ children, to, Icon }: { to: keyof ScreenParamsList; child
       onPress={() => push(to)}
     >
       <View className="flex flex-row items-center space-x-2">
-        <Icon size={16} className="text-black dark:text-white" />
+        <Icon icon={icon} size={16} />
         <Text>{children}</Text>
       </View>
-      <ChevronRight className="text-gray-700 dark:text-white" />
+      <Icon icon={ChevronRight} color={{ light: "gray", dark: "white" }} />
     </TouchableOpacity>
   )
 }

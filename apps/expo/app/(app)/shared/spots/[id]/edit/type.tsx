@@ -2,12 +2,12 @@ import * as React from "react"
 import { ScrollView, View } from "react-native"
 
 import { type SpotType } from "@ramble/database/types"
-import { join } from "@ramble/shared"
 
 import { Button } from "../../../../../../components/ui/Button"
 import { SPOT_OPTIONS } from "../../../../../../lib/models/spot"
 import { useParams, useRouter } from "../../../../../router"
 import { EditSpotModalView } from "./EditSpotModalView"
+import { Icon } from "../../../../../../components/Icon"
 
 export function EditSpotTypeScreen() {
   const { params } = useParams<"EditSpotTypeScreen">()
@@ -21,9 +21,13 @@ export function EditSpotTypeScreen() {
             <Button
               variant={type === spotType.value ? "primary" : "outline"}
               leftIcon={
-                <spotType.Icon
+                <Icon
+                  icon={spotType.Icon}
                   size={20}
-                  className={join(type === spotType.value ? "text-white dark:text-black" : "text-black dark:text-white")}
+                  color={{
+                    light: type === spotType.value ? "white" : "black",
+                    dark: type === spotType.value ? "black" : "white",
+                  }}
                 />
               }
               key={spotType.value}
