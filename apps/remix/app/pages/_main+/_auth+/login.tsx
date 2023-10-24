@@ -54,8 +54,8 @@ export default function Login() {
     <Form className="space-y-2">
       <h1 className="text-4xl">Login</h1>
       <input type="hidden" name="redirectTo" value={params.get("redirectTo") || ""} />
-      <FormField required label="Email address" name="email" placeholder="jim@gmail.com" />
-      <FormField required label="Password" name="password" type="password" placeholder="********" />
+      <FormField required minLength={3} label="Email address" name="email" placeholder="jim@gmail.com" />
+      <FormField required minLength={8} label="Password" name="password" type="password" placeholder="********" />
       <div>
         <FormButton value={Actions.login} className="w-full">
           Login
