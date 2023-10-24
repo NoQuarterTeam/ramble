@@ -11,6 +11,7 @@ import { useMe } from "../lib/hooks/useMe"
 import { Button } from "./ui/Button"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
+import { Icon } from "./Icon"
 
 export function ReviewItem({
   review,
@@ -21,7 +22,7 @@ export function ReviewItem({
 }) {
   const { me } = useMe()
   const { push } = useRouter()
-  const utils = api.useContext()
+  const utils = api.useUtils()
   const { mutate: deleteReview, isLoading: deleteLoading } = api.review.delete.useMutation({
     onSuccess: () => {
       if (!review) return
@@ -47,7 +48,7 @@ export function ReviewItem({
             />
           ) : (
             <View className="sq-10 flex items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
-              <User2 className="text-black dark:text-white" />
+              <Icon icon={User2} />
             </View>
           )}
 
@@ -60,7 +61,7 @@ export function ReviewItem({
         </TouchableOpacity>
 
         <View className="flex flex-row items-center space-x-1">
-          <Star size={20} className="text-black dark:text-white" />
+          <Icon icon={Star} size={20} />
           <Text className="text-sm">{review.rating}</Text>
         </View>
       </View>

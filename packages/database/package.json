@@ -17,10 +17,9 @@
   "dependencies": {
     "@planetscale/database": "^1.11.0",
     "@prisma/adapter-planetscale": "5.4.1-pre",
-    "@prisma/client": "5.4.2",
+    "@prisma/client": "5.5.0",
     "@prisma/extension-accelerate": "^0.6.2",
-    "prisma": "5.4.2",
-    "zod": "3.22.4"
+    "prisma": "5.5.0"
   },
   "devDependencies": {
     "@types/node": "^18.18.4",

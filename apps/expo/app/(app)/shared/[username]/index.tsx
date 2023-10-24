@@ -15,6 +15,7 @@ import { useParams, useRouter } from "../../../router"
 import UserLists from "./lists"
 import { UserSpots } from "./spots"
 import { UserVan } from "./van"
+import { Icon } from "../../../../components/Icon"
 
 export function UserScreen() {
   const colorScheme = useColorScheme()
@@ -24,7 +25,7 @@ export function UserScreen() {
   const { data: user, isLoading } = api.user.profile.useQuery({ username: params.username?.toLowerCase().trim() })
   const tab = params.tab || "spots"
   const router = useRouter()
-  const utils = api.useContext()
+  const utils = api.useUtils()
   const { mutate } = api.user.toggleFollow.useMutation({
     onSuccess: () => {
       if (!me) return
@@ -54,9 +55,9 @@ export function UserScreen() {
             activeOpacity={0.8}
             className="sq-8 bg-background flex items-center justify-center rounded-full dark:bg-gray-800"
           >
-            <Heart
+            <Icon
+              icon={Heart}
               size={20}
-              className="text-black dark:text-white"
               fill={user.followers && user.followers.length > 0 ? (isDark ? "white" : "black") : undefined}
             />
           </TouchableOpacity>
@@ -84,7 +85,7 @@ export function UserScreen() {
                 />
               ) : (
                 <View className="sq-24 flex items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
-                  <User2 className="text-black dark:text-white" />
+                  <Icon icon={User2} />
                 </View>
               )}
               <View className="space-y-px">
@@ -113,7 +114,7 @@ export function UserScreen() {
                     .filter((i) => user[i.value as keyof typeof user])
                     .map((interest) => (
                       <View key={interest.value} className="rounded-xs border border-gray-100 p-2 dark:border-gray-700">
-                        <interest.Icon size={18} className="text-black dark:text-white" />
+                        <Icon icon={interest.Icon} size={18} />
                       </View>
                     ))}
                 </View>
@@ -125,7 +126,7 @@ export function UserScreen() {
                 className="flex flex-row items-center space-x-1"
                 onPress={() => Linking.openURL(`https://www.instagram.com/${user.instagram}`)}
               >
-                <Instagram className="text-black dark:text-white" />
+                <Icon icon={Instagram} />
                 <Text>{user.instagram}</Text>
               </TouchableOpacity>
             )}

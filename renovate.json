@@ -32,17 +32,33 @@
     }
   ],
   "ignoreDeps": [
+    "@expo/config-plugins",
+    "@prisma/adapter-planetscale",
     "@react-native-async-storage/async-storage",
+    "@shopify/flash-list",
+    "expo-application",
+    "expo-constants",
+    "expo-dev-client",
+    "expo-font",
+    "expo-image-picker",
+    "expo-image",
+    "expo-linking",
+    "expo-location",
+    "expo-splash-screen",
+    "expo-status-bar",
+    "expo-system-ui",
+    "expo-updates",
+    "expo-web-browser",
+    "react-native-gesture-handler",
     "react-native-progress",
     "react-native-reanimated",
     "react-native-safe-area-context",
-    "react-native-svg",
     "react-native-screens",
+    "react-native-svg",
     "react-native-web",
     "react-native",
-    "uuid",
-    "tailwindcss",
     "remix-utils",
-    "@prisma/adapter-planetscale"
+    "tailwindcss",
+    "uuid"
   ]
 }

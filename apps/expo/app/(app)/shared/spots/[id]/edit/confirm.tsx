@@ -15,12 +15,13 @@ import { useS3Upload } from "../../../../../../lib/hooks/useS3"
 import { AMENITIES_ICONS } from "../../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../../router"
 import { EditSpotModalView } from "./EditSpotModalView"
+import { Icon } from "../../../../../../components/Icon"
 
 export function EditSpotConfirmScreen() {
   const { params } = useParams<"EditSpotConfirmScreen">()
   const router = useRouter()
 
-  const utils = api.useContext()
+  const utils = api.useUtils()
   const {
     mutate,
     isLoading: updateLoading,
@@ -70,7 +71,7 @@ export function EditSpotConfirmScreen() {
         <View className="space-y-3">
           <View className="flex h-[50px] flex-row items-center space-x-2">
             <View className="sq-12 flex items-center justify-center rounded-full border border-gray-200 dark:border-gray-700">
-              <SpotIcon size={20} type={params.type} className="text-black dark:text-white" />
+              <SpotIcon size={20} type={params.type} />
             </View>
             <Text numberOfLines={2} className="text-lg leading-6">
               {params.name}
@@ -89,7 +90,7 @@ export function EditSpotConfirmScreen() {
           <Text>{params.description}</Text>
           {params.isPetFriendly && (
             <View className="flex flex-row items-center space-x-2">
-              <Dog size={20} className="text-black dark:text-white" />
+              <Icon icon={Dog} size={20} />
               <Text>Pet friendly</Text>
             </View>
           )}
@@ -97,10 +98,10 @@ export function EditSpotConfirmScreen() {
             <View className="flex flex-row flex-wrap gap-2">
               {Object.entries(AMENITIES).map(([key, value]) => {
                 if (!params.amenities?.[key as keyof typeof AMENITIES]) return null
-                const Icon = AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]
+                const icon = AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]
                 return (
                   <View key={key} className="rounded-xs flex flex-row space-x-1 border border-gray-200 p-2 dark:border-gray-700">
-                    {Icon && <Icon size={20} className="text-black dark:text-white" />}
+                    {icon && <Icon size={20} icon={icon} />}
                     <Text className="text-sm">{value}</Text>
                   </View>
                 )
@@ -114,7 +115,7 @@ export function EditSpotConfirmScreen() {
         {error && <Text className="text-red-500">{error.message}</Text>}
         <Button
           isLoading={updateLoading || isLoading}
-          leftIcon={<Check size={20} className="text-white dark:text-black" />}
+          leftIcon={<Icon icon={Check} size={20} color={{ light: "white", dark: "black" }} />}
           className="rounded-full"
           onPress={handleCreateSpot}
         >

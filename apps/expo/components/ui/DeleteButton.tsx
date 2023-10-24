@@ -4,6 +4,7 @@ import { Trash2 } from "lucide-react-native"
 import { merge } from "@ramble/shared"
 
 import { Spinner } from "./Spinner"
+import { Icon } from "../Icon"
 
 interface Props extends TouchableOpacityProps {
   isLoading?: boolean
@@ -18,7 +19,7 @@ export function DeleteButton(props: Props) {
         props.className,
       )}
     >
-      {props.isLoading ? <Spinner /> : <Trash2 className="text-red-600 dark:text-red-500" />}
+      {props.isLoading ? <Spinner /> : <Icon icon={Trash2} color="red" />}
     </TouchableOpacity>
   )
 }

@@ -12,6 +12,7 @@ import { toast } from "../../../../../components/ui/Toast"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
+import { Icon } from "../../../../../components/Icon"
 
 export function NewSpotLocationScreen() {
   const [coords, setCoords] = React.useState<number[] | null>(null)
@@ -89,7 +90,7 @@ export function NewSpotLocationScreen() {
               style={{ transform: [{ translateX: -15 }, { translateY: -15 }] }}
               className="absolute left-1/2 top-1/2 flex items-center justify-center"
             >
-              <CircleDot size={30} className="text-white" />
+              <Icon icon={CircleDot} size={30} color="white" />
             </View>
           </Mapbox.MapView>
 

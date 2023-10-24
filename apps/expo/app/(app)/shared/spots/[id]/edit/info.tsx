@@ -12,6 +12,7 @@ import { Text } from "../../../../../../components/ui/Text"
 import { useKeyboardController } from "../../../../../../lib/hooks/useKeyboardController"
 import { useParams, useRouter } from "../../../../../router"
 import { EditSpotModalView } from "./EditSpotModalView"
+import { Icon } from "../../../../../../components/Icon"
 
 export function EditSpotOptionsScreen() {
   useKeyboardController()
@@ -27,7 +28,7 @@ export function EditSpotOptionsScreen() {
         <Input value={name} onChangeText={setName} />
         <View className="flex w-full flex-row items-center justify-between py-4">
           <View className="flex flex-row items-center space-x-2">
-            <Dog size={20} className="text-black dark:text-white" />
+            <Icon icon={Dog} size={20} />
             <Text className="text-xl">Pet friendly</Text>
           </View>
           <Switch

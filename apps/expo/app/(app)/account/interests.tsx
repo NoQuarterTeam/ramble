@@ -11,6 +11,7 @@ import { toast } from "../../../components/ui/Toast"
 import { api } from "../../../lib/api"
 import { useMe } from "../../../lib/hooks/useMe"
 import { interestOptions } from "../../../lib/models/user"
+import { Icon } from "../../../components/Icon"
 
 export function InterestsScreen() {
   const { me } = useMe()
@@ -22,7 +23,7 @@ export function InterestsScreen() {
     isHiker: !!me?.isHiker,
     isPetOwner: !!me?.isPetOwner,
   })
-  const utils = api.useContext()
+  const utils = api.useUtils()
   const { mutate, error } = api.user.update.useMutation({
     onSuccess: (data) => {
       utils.user.me.setData(undefined, data)
@@ -42,7 +43,7 @@ export function InterestsScreen() {
           <InterestSelector
             key={interest.value}
             onToggle={() => onToggle(interest.value as keyof typeof interests)}
-            Icon={interest.Icon}
+            icon={interest.Icon}
             label={interest.label}
             isSelected={interests[interest.value as keyof typeof interests]}
           />
@@ -57,17 +58,17 @@ function InterestSelector({
   label,
   isSelected,
   onToggle,
-  Icon,
+  icon,
 }: {
   isSelected: boolean
   onToggle: () => void
   label: string
-  Icon: (props: IconProps) => JSX.Element
+  icon: (props: IconProps) => JSX.Element
 }) {
   return (
     <View className="flex w-full flex-row items-center justify-between px-4 py-2">
       <View className="flex flex-row items-center space-x-2">
-        <Icon size={20} className="text-black dark:text-white" />
+        <Icon icon={icon} size={20} />
         <Text className="text-lg">{label}</Text>
       </View>
       <Switch trackColor={{ true: colors.primary[600] }} value={isSelected} onValueChange={onToggle} />

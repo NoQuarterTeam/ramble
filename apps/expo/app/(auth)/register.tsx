@@ -14,7 +14,7 @@ import { useRouter } from "../router"
 
 export function RegisterScreen() {
   useKeyboardController()
-  const queryClient = api.useContext()
+  const queryClient = api.useUtils()
   const navigation = useRouter()
   const { mutate, error, isLoading } = api.auth.register.useMutation({
     onSuccess: async (data) => {

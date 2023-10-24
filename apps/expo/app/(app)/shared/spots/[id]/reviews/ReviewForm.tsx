@@ -9,6 +9,8 @@ import { FormError } from "../../../../../../components/ui/FormError"
 import { FormInput, FormInputError } from "../../../../../../components/ui/FormInput"
 import { type RouterInputs } from "../../../../../../lib/api"
 import { type ApiError } from "../../../../../../lib/hooks/useForm"
+import { Icon } from "../../../../../../components/Icon"
+import { backgroundDark, backgroundLight } from "../../../../../../lib/tailwind"
 
 type UpdateSubmit = {
   review: Pick<Review, "rating" | "description">
@@ -47,11 +49,11 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
       <View className="mb-4 flex flex-row items-center justify-center space-x-2">
         {Array.from({ length: 5 }).map((_, i) => (
           <TouchableOpacity key={i} onPress={() => form.setValue("rating", i + 1)}>
-            <Star
-              strokeWidth={1.5}
+            <Icon
+              icon={Star}
+              strokeWidth={1}
               size={50}
-              className="text-black dark:text-white"
-              fill={rating > i ? (isDark ? "white" : "black") : undefined}
+              fill={rating > i ? (isDark ? backgroundLight : backgroundDark) : "transparent"}
             />
           </TouchableOpacity>
         ))}

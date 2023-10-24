@@ -9,6 +9,7 @@ import { Text } from "../../../../../components/ui/Text"
 import { api, type RouterOutputs } from "../../../../../lib/api"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { useParams } from "../../../../router"
+import { Icon } from "../../../../../components/Icon"
 
 export function SaveSpotScreen() {
   const {
@@ -48,7 +49,7 @@ function SaveableListItem({ list, spotId }: Props) {
   const foundSavedItem = list.listSpots.some((s) => s.spotId === spotId)
 
   const [isSaved, setIsSaved] = React.useState(foundSavedItem)
-  const utils = api.useContext()
+  const utils = api.useUtils()
 
   React.useEffect(() => {
     setIsSaved(foundSavedItem)
@@ -77,12 +78,12 @@ function SaveableListItem({ list, spotId }: Props) {
     >
       <View>
         <View className="flex flex-row items-center space-x-2">
-          {list.isPrivate && <Lock className="text-black dark:text-white" size={20} />}
+          {list.isPrivate && <Icon icon={Lock} size={20} />}
           <Text className="text-xl">{list.name}</Text>
         </View>
         <Text className="text-base">{list.description}</Text>
       </View>
-      <Heart size={20} className="text-black dark:text-white" fill={isSaved ? (isDark ? "white" : "black") : undefined} />
+      <Icon icon={Heart} size={20} fill={isSaved ? (isDark ? "white" : "black") : undefined} />
     </TouchableOpacity>
   )
 }

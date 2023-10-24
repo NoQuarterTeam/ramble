@@ -5,9 +5,11 @@ import { type SpotItemWithStatsAndImage } from "@ramble/shared"
 import { createImageUrl, displayRating } from "@ramble/shared"
 
 import { useRouter } from "../app/router"
-import { SPOT_TYPES } from "../lib/models/spot"
+
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
+import { SpotIcon } from "./SpotIcon"
+import { Icon } from "./Icon"
 
 interface Props {
   spot: SpotItemWithStatsAndImage
@@ -15,7 +17,6 @@ interface Props {
 
 export function SpotItem({ spot }: Props) {
   const { push } = useRouter()
-  const Icon = SPOT_TYPES[spot.type].Icon
   return (
     <TouchableOpacity className="w-full" onPress={() => push("SpotDetailScreen", { id: spot.id })} activeOpacity={0.8}>
       <View className="relative h-[250px] w-full">
@@ -30,13 +31,13 @@ export function SpotItem({ spot }: Props) {
         ) : (
           <View className="rounded-xs flex h-full w-full items-center justify-center bg-gray-50 dark:bg-gray-800">
             <View className="rounded-full p-4">
-              <Icon size={40} className="text-black dark:text-white" />
+              <SpotIcon type={spot.type} size={40} />
             </View>
           </View>
         )}
         {spot.image && (
           <View className="sq-10 bg-background dark:bg-background-dark absolute left-2 top-2 flex items-center justify-center rounded-full">
-            <Icon size={20} className="text-black dark:text-white" />
+            <SpotIcon type={spot.type} size={20} />
           </View>
         )}
       </View>
@@ -50,11 +51,11 @@ export function SpotItem({ spot }: Props) {
         </Text>
         <View className="flex flex-row items-center space-x-2">
           <View className="flex flex-row items-center space-x-1">
-            <Star size={16} className="text-black dark:text-white" />
+            <Icon icon={Star} size={16} />
             <Text className="text-sm">{displayRating(spot.rating)}</Text>
           </View>
           <View className="flex flex-row flex-wrap items-center space-x-1">
-            <Heart size={16} className="text-black dark:text-white" />
+            <Icon icon={Heart} size={16} />
             <Text className="text-sm">{spot.savedCount}</Text>
           </View>
         </View>

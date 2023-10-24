@@ -16,6 +16,7 @@ import { api } from "../../../lib/api"
 import { useForm } from "../../../lib/hooks/useForm"
 import { useKeyboardController } from "../../../lib/hooks/useKeyboardController"
 import { useS3Upload } from "../../../lib/hooks/useS3"
+import { Icon } from "../../../components/Icon"
 
 export function VanScreen() {
   useKeyboardController()
@@ -41,7 +42,7 @@ export function VanScreen() {
     })
   }, [data, form, isLoading])
 
-  const utils = api.useContext()
+  const utils = api.useUtils()
   const {
     mutate,
     isLoading: updateLoading,
@@ -119,7 +120,7 @@ export function VanScreen() {
                       source={{ uri: createImageUrl(image.path) }}
                     />
                     <View className="absolute -right-1 -top-1 rounded-full bg-gray-100 p-1 dark:bg-gray-900">
-                      <X className="text-gray-800 dark:text-white" size={16} />
+                      <Icon icon={X} size={16} />
                     </View>
                   </TouchableOpacity>
                 ))}
@@ -130,7 +131,7 @@ export function VanScreen() {
                     variant="secondary"
                     onPress={onPickImage}
                   >
-                    <Plus className="text-black dark:text-white" />
+                    <Icon icon={Plus} />
                   </Button>
                 </View>
               </View>

@@ -14,7 +14,7 @@ import { useRouter } from "../router"
 
 export function LoginScreen() {
   useKeyboardController()
-  const queryClient = api.useContext()
+  const queryClient = api.useUtils()
   const navigation = useRouter()
 
   const form = useForm({ defaultValues: { email: "", password: "" } })

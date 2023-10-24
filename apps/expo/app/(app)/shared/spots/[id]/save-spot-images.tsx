@@ -10,6 +10,7 @@ import { toast } from "../../../../../components/ui/Toast"
 import { api } from "../../../../../lib/api"
 import { useS3Upload } from "../../../../../lib/hooks/useS3"
 import { useParams, useRouter } from "../../../../router"
+import { Icon } from "../../../../../components/Icon"
 
 export function SaveSpotImagesScreen() {
   const { goBack } = useRouter()
@@ -17,7 +18,7 @@ export function SaveSpotImagesScreen() {
   const [isLoading, setIsLoading] = React.useState(false)
   const [images, setImages] = React.useState(params.images)
   const [upload] = useS3Upload()
-  const utils = api.useContext()
+  const utils = api.useUtils()
   const { mutate, isLoading: mutationLoading } = api.spot.addImages.useMutation({
     onSuccess: async () => {
       await Promise.all([utils.spot.mapPreview.refetch({ id: params.id }), utils.spot.detail.refetch({ id: params.id })])
@@ -61,13 +62,13 @@ export function SaveSpotImagesScreen() {
             <TouchableOpacity key={image} onPress={() => setImages((im) => im.filter((i) => i !== image))} className="w-1/3 p-1">
               <Image className="rounded-xs h-[100px] w-full bg-gray-50 object-cover dark:bg-gray-700" source={{ uri: image }} />
               <View className="absolute -right-1 -top-1 rounded-full bg-gray-100 p-1 dark:bg-gray-900">
-                <X className="text-gray-800 dark:text-white" size={16} />
+                <Icon icon={X} size={16} />
               </View>
             </TouchableOpacity>
           ))}
           <View className="w-1/3 p-1">
             <Button className="h-[100px]" variant="secondary" onPress={onPickImage}>
-              <Plus className="text-black dark:text-white" />
+              <Icon icon={Plus} />
             </Button>
           </View>
         </View>

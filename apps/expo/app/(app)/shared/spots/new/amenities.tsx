@@ -10,6 +10,7 @@ import { Text } from "../../../../../components/ui/Text"
 import { AMENITIES_ICONS } from "../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
+import { Icon } from "../../../../../components/Icon"
 
 export function NewSpotAmenitiesScreen() {
   const { params } = useParams<"NewSpotAmenitiesScreen">()
@@ -25,7 +26,7 @@ export function NewSpotAmenitiesScreen() {
           <AmenitySelector
             key={key}
             label={label}
-            Icon={AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]}
+            icon={AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]}
             isSelected={!!amenities[key as keyof typeof AMENITIES]}
             onToggle={() => setAmenities((a) => ({ ...a, [key]: !a[key as keyof typeof AMENITIES] }))}
           />
@@ -45,17 +46,17 @@ function AmenitySelector({
   label,
   isSelected,
   onToggle,
-  Icon,
+  icon,
 }: {
   label: string
   isSelected: boolean
   onToggle: () => void
-  Icon: RambleIcon | null
+  icon: RambleIcon | null
 }) {
   return (
     <View className="flex w-full flex-row items-center justify-between py-1">
       <View className="flex flex-row items-center space-x-1">
-        {Icon && <Icon size={20} className="text-black dark:text-white" />}
+        {icon && <Icon icon={icon} size={20} />}
         <Text className="text-xl">{label}</Text>
       </View>
       <Switch trackColor={{ true: colors.primary[600] }} value={isSelected} onValueChange={onToggle} />

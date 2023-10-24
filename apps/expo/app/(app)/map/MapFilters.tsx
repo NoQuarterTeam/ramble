@@ -10,6 +10,7 @@ import { Button } from "../../../components/ui/Button"
 import { Heading } from "../../../components/ui/Heading"
 import { Text } from "../../../components/ui/Text"
 import { SPOT_TYPES, type SpotTypeInfo } from "../../../lib/models/spot"
+import { Icon } from "../../../components/Icon"
 
 export type Filters = {
   isPetFriendly: boolean
@@ -67,7 +68,7 @@ export function MapFilters(props: Props) {
           <Heading className="font-400 text-2xl">Options</Heading>
           <View className="flex flex-row items-center justify-between space-x-4">
             <View className="flex flex-row items-center space-x-4">
-              <BadgeX size={30} className="text-black dark:text-white" />
+              <Icon icon={BadgeX} size={30} />
               <View>
                 <Text className="text-lg">Unverified spots</Text>
                 <Text className="text-sm opacity-75">Spots not yet verified by a Guide</Text>
@@ -81,7 +82,7 @@ export function MapFilters(props: Props) {
           </View>
           <View className="flex flex-row items-center justify-between space-x-4">
             <View className="flex flex-row items-center space-x-4">
-              <Dog size={30} className="text-black dark:text-white" />
+              <Icon icon={Dog} size={30} />
               <View>
                 <Text className="text-lg">Pet friendly</Text>
                 <Text className="text-sm opacity-75">Furry friends allowed</Text>
@@ -153,7 +154,11 @@ function SpotTypeSelector({ type, onPress, isSelected }: { type: SpotTypeInfo; i
         size="sm"
         variant={isSelected ? "primary" : "outline"}
         leftIcon={
-          <type.Icon size={20} className={join(isSelected ? "text-white dark:text-black" : "text-black dark:text-white")} />
+          <Icon
+            icon={type.Icon}
+            size={20}
+            color={{ light: isSelected ? "white" : "black", dark: isSelected ? "black" : "white" }}
+          />
         }
         className="min-w-[100px]"
         disabled={type.isComingSoon}

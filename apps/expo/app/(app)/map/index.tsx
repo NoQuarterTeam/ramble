@@ -20,6 +20,7 @@ import { usePreferences } from "../../../lib/hooks/usePreferences"
 import { useRouter } from "../../router"
 import { type Filters, initialFilters, MapFilters } from "./MapFilters"
 import { SpotPreview } from "./SpotPreview"
+import { Icon } from "../../../components/Icon"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
@@ -37,7 +38,7 @@ export function SpotsMapScreen() {
   const theme = useColorScheme()
   const isDark = theme === "dark"
   const [isFetching, setIsFetching] = React.useState(false)
-  const queryClient = api.useContext()
+  const queryClient = api.useUtils()
 
   React.useEffect(() => {
     ;(async () => {
@@ -210,7 +211,7 @@ export function SpotsMapScreen() {
         style={{ transform: [{ translateX: -26 }] }}
         className="bg-primary absolute bottom-3 left-1/2 rounded-full p-4 "
       >
-        <PlusCircle size={20} className="text-white" />
+        <Icon icon={PlusCircle} size={20} color="white" />
       </TouchableOpacity>
 
       <View className="absolute bottom-3 left-3 flex space-y-2">
@@ -219,7 +220,7 @@ export function SpotsMapScreen() {
           onPress={mapLayerModalProps.onOpen}
           className="sq-12 bg-background flex flex-row items-center justify-center rounded-full"
         >
-          <Layers size={20} className="text-black" />
+          <Icon icon={Layers} size={20} color="black" />
           {preferences.mapLayerRain && (
             <View className="sq-5 bg-background absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-700">
               <Text className="text-xs text-black">{1}</Text>
@@ -231,7 +232,7 @@ export function SpotsMapScreen() {
           onPress={filterModalProps.onOpen}
           className="sq-12 bg-background flex flex-row items-center justify-center rounded-full"
         >
-          <Settings2 size={20} className="text-black" />
+          <Icon icon={Settings2} size={20} color="black" />
           {filterCount > 0 && (
             <View className="sq-5 bg-background absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-700">
               <Text className="text-xs text-black">{filterCount}</Text>
@@ -244,7 +245,7 @@ export function SpotsMapScreen() {
         onPress={handleSetUserLocation}
         className="sq-12 bg-background absolute bottom-3 right-3 flex flex-row items-center justify-center rounded-full"
       >
-        <Navigation size={20} className="text-black" />
+        <Icon icon={Navigation} size={20} color="black" />
       </TouchableOpacity>
 
       <SpotPreview id={activeSpotId} onClose={() => setActiveSpotId(null)} />
@@ -269,7 +270,7 @@ export function SpotsMapScreen() {
         <ModalView title="map layers" onBack={mapLayerModalProps.onClose}>
           <View className="flex flex-row items-center justify-between space-x-2">
             <View className="flex flex-row items-center space-x-4">
-              <CloudRain size={30} className="text-black dark:text-white" />
+              <Icon icon={CloudRain} size={30} />
               <View>
                 <Text className="text-lg">Rain</Text>
                 <Text numberOfLines={2} className="max-w-[200px] text-sm opacity-75">

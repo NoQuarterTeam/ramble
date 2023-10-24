@@ -14,7 +14,7 @@ export function NewReviewScreen() {
   } = useParams<"NewReviewScreen">()
 
   const { goBack } = useRouter()
-  const utils = api.useContext()
+  const utils = api.useUtils()
   const { mutate, isLoading, error } = api.review.create.useMutation({
     onSuccess: () => {
       utils.spot.detail.refetch({ id: spotId })
