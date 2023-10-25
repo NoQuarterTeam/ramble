@@ -355,8 +355,8 @@ importers:
         specifier: latest
         version: 3.7.0
       jose:
-        specifier: 4.15.4
-        version: 4.15.4
+        specifier: 5.0.1
+        version: 5.0.1
       lucide-react:
         specifier: 0.288.0
         version: 0.288.0(react@18.2.0)
@@ -11926,8 +11926,8 @@ packages:
     resolution: {integrity: sha512-bF7vcQxbODoGK1imE2P9GS9aw4zD0Sd+Hni68IMZLj7zRnquH7dXUmMw9hDI5S/Jzt7q+IyTXN0rSg2GI0IKhQ==}
     dev: false
 
-  /jose@4.15.4:
-    resolution: {integrity: sha512-W+oqK4H+r5sITxfxpSU+MMdr/YSWGvgZMQDIsNoBDGGy4i7GBPTtvFKibQzW06n3U3TqHjhvBJsirShsEJ6eeQ==}
+  /jose@5.0.1:
+    resolution: {integrity: sha512-gRVzy7s3RRdGbXmcTdlOswJOjhwPLx1ijIgAqLY6ktzFpOJxxYn4l0fC2vHaHHi4YBX/5FOL3aY+6W0cvQgpug==}
     dev: false
 
   /js-beautify@1.14.8:
