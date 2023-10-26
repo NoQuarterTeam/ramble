@@ -5,7 +5,7 @@ import { type ClassValue } from "class-variance-authority/dist/types"
 import type { SpotType } from "@ramble/database/types"
 import { spotMarkerColorTypes, spotMarkerTextColorTypes, spotMarkerTriangleColorTypes } from "@ramble/shared"
 
-import { SpotIcon } from "./SpotIcon"
+import { SpotIconMap } from "./SpotIcon"
 
 interface MarkerProps {
   spot: { type: SpotType }
@@ -15,7 +15,7 @@ export function SpotMarker(props: MarkerProps) {
   return (
     <View className="relative">
       <View className={spotMarkerColors({ type: props.spot.type })}>
-        <SpotIcon type={props.spot.type} size={18} className={spotMarkerIconColors({ type: props.spot.type })} />
+        <SpotIconMap type={props.spot.type} size={18} className={spotMarkerIconColors({ type: props.spot.type })} />
       </View>
       <View className={spotTriangleColors({ type: props.spot.type })} />
     </View>

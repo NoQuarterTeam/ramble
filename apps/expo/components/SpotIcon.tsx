@@ -14,3 +14,8 @@ export function SpotIcon({ type, ...props }: Props) {
   const Comp = SPOT_TYPES[type].Icon
   return <Icon icon={Comp} {...props} />
 }
+
+export function SpotIconMap({ type, ...props }: Props) {
+  const Comp = SPOT_TYPES[type].Icon
+  return <Comp {...props} />
+}

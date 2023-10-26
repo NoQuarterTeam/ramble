@@ -1,0 +1,23 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "C5XTRW3VUY.co.noquarter.ramble",
+        "paths": [
+          "*"
+        ]
+      }
+    ]
+  },
+  "activitycontinuation": {
+    "apps": [
+      "C5XTRW3VUY.co.noquarter.ramble"
+    ]
+  },
+  "webcredentials": {
+    "apps": [
+      "C5XTRW3VUY.co.noquarter.ramble"
+    ]
+  }
+}
