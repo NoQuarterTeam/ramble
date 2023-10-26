@@ -145,60 +145,46 @@ model Spot {
   owner      User?          @relation(name: "Owner", fields: [ownerId], references: [id])
   reviews    Review[]
 
-  sourceUrl String? @db.VarChar(500)
-
-  // Campspace
-  campspaceId Int? @unique
-
-  // Neste
-  nesteId String? @unique
-
-  // park4night
-  park4nightId Int? @unique
-
-  // komoot
-  komootId String? @unique
-
-  // surfline    
-  surflineId String? @unique
-
-  // natuurKampeerterreinen
-  natuurKampeerterreinenId String? @unique
-
-  // cucortu
-  cucortuId String? @unique
-
-  // loodusegakoos
-  loodusegakoosId String? @unique
-
-  // roadsurfer
-  roadsurferId String? @unique
-
-  // hipcamp
-  hipcampId String? @unique
-
-  // the crag
-  theCragId String? @unique
-
   deletedAt DateTime?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
 
+  sourceUrl                String? @db.VarChar(500)
+  // Campspace
+  campspaceId              Int?    @unique
+  // Neste
+  nesteId                  String? @unique
+  // park4night
+  park4nightId             Int?    @unique
+  // komoot
+  komootId                 String? @unique
+  // surfline    
+  surflineId               String? @unique
+  // natuurKampeerterreinen
+  natuurKampeerterreinenId String? @unique
+  // cucortu
+  cucortuId                String? @unique
+  // loodusegakoos
+  loodusegakoosId          String? @unique
+  // roadsurfer
+  roadsurferId             String? @unique
+  // hipcamp
+  hipcampId                String? @unique
+  // the crag
+  theCragId                String? @unique
+
   @@index([createdAt])
+  @@index([verifiedAt])
+  @@index([publishedAt])
+  @@index([deletedAt])
   @@index([type])
   @@index([type, longitude])
+  @@index([type, latitude])
   @@index([latitude])
   @@index([longitude])
   @@index([ownerId])
   @@index([verifierId])
   @@index([creatorId])
-  @@index([campspaceId])
-  @@index([park4nightId])
-  @@index([komootId])
-  @@index([surflineId])
-  @@index([loodusegakoosId])
-  @@index([cucortuId])
-  @@index([roadsurferId])
 }
 
 model SpotAmenities {
@@ -283,6 +269,7 @@ model Review {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
+  @@index([rating, spotId])
   @@index([spotId])
   @@index([userId])
 }
