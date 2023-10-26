@@ -6,14 +6,16 @@ import { IS_DEV } from "../config"
 
 export function useCheckExpoUpdates() {
   const [isDoneChecking, setIsDoneChecking] = React.useState(false)
-  const [isNewUpdateAvailable, setIsNewUpdateAvailable] = React.useState(false)
   const appState = React.useRef(AppState.currentState)
 
   const checkForExpoUpdates = async () => {
     try {
       if (IS_DEV) return setIsDoneChecking(true)
       const { isAvailable } = await Updates.checkForUpdateAsync()
-      if (isAvailable) setIsNewUpdateAvailable(true)
+      if (isAvailable) {
+        await Updates.fetchUpdateAsync()
+        await Updates.reloadAsync()
+      }
     } catch {
       // do nothing
     } finally {
@@ -39,5 +41,5 @@ export function useCheckExpoUpdates() {
     }
   }, [handleAppStateChange])
 
-  return { isDoneChecking, isNewUpdateAvailable }
+  return { isDoneChecking }
 }

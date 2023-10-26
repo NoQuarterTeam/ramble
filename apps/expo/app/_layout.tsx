@@ -26,7 +26,6 @@ import * as Linking from "expo-linking"
 import * as SplashScreen from "expo-splash-screen"
 import { StatusBar } from "expo-status-bar"
 
-import { NewUpdate } from "../components/NewUpdate"
 import { Toast } from "../components/ui/Toast"
 import { api, TRPCProvider } from "../lib/api"
 import { useCheckExpoUpdates } from "../lib/hooks/useCheckExpoUpdates"
@@ -96,7 +95,7 @@ export default function RootLayout() {
 
   const backgroundColor = useBackgroundColor()
 
-  const { isDoneChecking, isNewUpdateAvailable } = useCheckExpoUpdates()
+  const { isDoneChecking } = useCheckExpoUpdates()
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
 
@@ -110,33 +109,29 @@ export default function RootLayout() {
       <PrefetchTabs>
         <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
           <SafeAreaProvider>
-            {isNewUpdateAvailable ? (
-              <NewUpdate />
-            ) : (
-              <NavigationContainer linking={linking}>
-                <Container.Navigator
-                  initialRouteName="AppLayout"
-                  screenOptions={{ headerShown: false, contentStyle: { backgroundColor } }}
-                >
-                  <Container.Group>
-                    <Container.Screen name="AppLayout" component={AppLayout} />
-                    <Container.Screen name="OnboardingLayout" component={OnboardingLayout} />
-                  </Container.Group>
-                  <Container.Group screenOptions={{ presentation: "modal", contentStyle: { backgroundColor } }}>
-                    <Container.Screen name="AuthLayout" component={AuthLayout} />
-                    <Container.Screen name="NewSpotLayout" component={NewSpotLayout} />
-                    <Container.Screen name="EditSpotLayout" component={EditSpotLayout} />
-                    <Container.Screen name="NewListScreen" component={NewListScreen} />
-                    <Container.Screen name="EditListScreen" component={EditListScreen} />
-                    <Container.Screen name="NewReviewScreen" component={NewReviewScreen} />
-                    <Container.Screen name="ReviewDetailScreen" component={ReviewDetailScreen} />
-                    <Container.Screen name="SaveSpotScreen" component={SaveSpotScreen} />
-                    <Container.Screen name="SaveSpotImagesScreen" component={SaveSpotImagesScreen} />
-                    <Container.Screen name="DeleteSpotScreen" component={DeleteSpotScreen} />
-                  </Container.Group>
-                </Container.Navigator>
-              </NavigationContainer>
-            )}
+            <NavigationContainer linking={linking}>
+              <Container.Navigator
+                initialRouteName="AppLayout"
+                screenOptions={{ headerShown: false, contentStyle: { backgroundColor } }}
+              >
+                <Container.Group>
+                  <Container.Screen name="AppLayout" component={AppLayout} />
+                  <Container.Screen name="OnboardingLayout" component={OnboardingLayout} />
+                </Container.Group>
+                <Container.Group screenOptions={{ presentation: "modal", contentStyle: { backgroundColor } }}>
+                  <Container.Screen name="AuthLayout" component={AuthLayout} />
+                  <Container.Screen name="NewSpotLayout" component={NewSpotLayout} />
+                  <Container.Screen name="EditSpotLayout" component={EditSpotLayout} />
+                  <Container.Screen name="NewListScreen" component={NewListScreen} />
+                  <Container.Screen name="EditListScreen" component={EditListScreen} />
+                  <Container.Screen name="NewReviewScreen" component={NewReviewScreen} />
+                  <Container.Screen name="ReviewDetailScreen" component={ReviewDetailScreen} />
+                  <Container.Screen name="SaveSpotScreen" component={SaveSpotScreen} />
+                  <Container.Screen name="SaveSpotImagesScreen" component={SaveSpotImagesScreen} />
+                  <Container.Screen name="DeleteSpotScreen" component={DeleteSpotScreen} />
+                </Container.Group>
+              </Container.Navigator>
+            </NavigationContainer>
             <Toast />
             <StatusBar style={isDark ? "light" : "dark"} />
           </SafeAreaProvider>
