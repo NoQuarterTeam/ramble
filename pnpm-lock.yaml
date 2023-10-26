@@ -304,8 +304,8 @@ importers:
         specifier: 8.10.7
         version: 8.10.7(react-dom@18.2.0)(react@18.2.0)
       '@trpc/server':
-        specifier: 10.42.0
-        version: 10.42.0
+        specifier: 10.43.0
+        version: 10.43.0
       '@turf/bbox':
         specifier: 6.5.0
         version: 6.5.0(patch_hash=llmcs46qko6dssxqwpy2iedvzi)
@@ -6517,8 +6517,8 @@ packages:
     resolution: {integrity: sha512-uC0xLelzOuoFwxbBQ3GzX4DaWNucO9lW2vlGPdKu8ycXu2ObSa739oQ/lNF6qWDNUKXS0tQvGnDCAxEd178EzQ==}
     dev: false
 
-  /@trpc/server@10.42.0:
-    resolution: {integrity: sha512-s0QuK72orW+pYce60sd4I36N3xJKzypS2k+8GJ7phH4KqO4XjBXezOFmGMcXTznsVqEiX5zs5ujLfQdJ9X3Y2g==}
+  /@trpc/server@10.43.0:
+    resolution: {integrity: sha512-1/h9KCPkTNNmpN5VKfKO4kPcl/W4Y9VQla4YGg4pydSh/+4b//0IPfvk3Oz4tz/tvWyAUlBKkBVhD3GfDLcAQA==}
     dev: false
 
   /@trysound/sax@0.2.0:
