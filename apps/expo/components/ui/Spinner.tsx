@@ -1,21 +1,8 @@
-import { useColorScheme } from "react-native"
-import * as Progress from "react-native-progress"
+import { ActivityIndicatorProps } from "react-native"
+import { ActivityIndicator, useColorScheme } from "react-native"
 
-interface Props extends Progress.CirclePropTypes {
-  size?: number
-  color?: string
-}
-
-export function Spinner({ size = 20, color, ...props }: Props) {
+export function Spinner({ color, ...props }: ActivityIndicatorProps) {
   const colorScheme = useColorScheme()
 
-  return (
-    <Progress.Circle
-      indeterminate
-      borderWidth={2}
-      {...props}
-      size={size}
-      color={!!color ? color : colorScheme === "dark" ? "white" : "black"}
-    />
-  )
+  return <ActivityIndicator {...props} color={color || (colorScheme === "dark" ? "white" : "black")} />
 }
