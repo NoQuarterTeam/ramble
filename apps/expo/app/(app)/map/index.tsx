@@ -200,7 +200,7 @@ export function SpotsMapScreen() {
       </Mapbox.MapView>
 
       {isFetching && !!!clusters && (
-        <View className="rounded-xs absolute left-4 top-10 flex items-center justify-center bg-white p-2 dark:bg-gray-800">
+        <View className="absolute left-4 top-10 flex flex-col items-center justify-center rounded-full bg-white p-2 dark:bg-gray-800">
           <Spinner />
         </View>
       )}

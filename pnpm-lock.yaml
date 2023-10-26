@@ -176,9 +176,6 @@ importers:
       react-native-map-link:
         specifier: ^2.11.2
         version: 2.11.2(react-native@0.72.6)(react@18.2.0)
-      react-native-progress:
-        specifier: ^5.0.0
-        version: 5.0.0(react-native-svg@13.9.0)
       react-native-reanimated:
         specifier: 3.3.0
         version: 3.3.0(@babel/core@7.23.0)(@babel/plugin-proposal-nullish-coalescing-operator@7.18.6)(@babel/plugin-proposal-optional-chaining@7.21.0)(@babel/plugin-transform-arrow-functions@7.22.5)(@babel/plugin-transform-shorthand-properties@7.22.5)(@babel/plugin-transform-template-literals@7.22.5)(react-native@0.72.6)(react@18.2.0)
@@ -15372,15 +15369,6 @@ packages:
       react: 18.2.0
       react-native: 0.72.6(@babel/core@7.23.0)(@babel/preset-env@7.22.20)(react@18.2.0)
       react-native-animatable: 1.3.3
-    dev: false
-
-  /react-native-progress@5.0.0(react-native-svg@13.9.0):
-    resolution: {integrity: sha512-KjnGIt3r9i5Kn2biOD9fXLJocf0bwxPRxOyAgXEnZTJQU2O+HyzgGFRCbM5h3izm9kKIkSc1txh8aGmMafCD9A==}
-    peerDependencies:
-      react-native-svg: '*'
-    dependencies:
-      prop-types: 15.8.1
-      react-native-svg: 13.9.0(react-native@0.72.6)(react@18.2.0)
     dev: false
 
   /react-native-reanimated@3.3.0(@babel/core@7.23.0)(@babel/plugin-proposal-nullish-coalescing-operator@7.18.6)(@babel/plugin-proposal-optional-chaining@7.21.0)(@babel/plugin-transform-arrow-functions@7.22.5)(@babel/plugin-transform-shorthand-properties@7.22.5)(@babel/plugin-transform-template-literals@7.22.5)(react-native@0.72.6)(react@18.2.0):
