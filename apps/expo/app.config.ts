@@ -91,7 +91,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
         file: "sentry-expo/upload-sourcemaps",
         config: {
           organization: "noquater",
-          project: "ramble",
+          project: "ramble-app",
         },
       },
     ],
