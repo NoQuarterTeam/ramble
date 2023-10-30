@@ -117,9 +117,9 @@ export default function Home() {
             </p>
           </div>
         </div>
-        <img src="/landing/landing3.png" className="rounded-xs min-w-full object-cover md:min-w-[50%]" />
+        <img alt="landing 3" src="/landing/landing3.png" className="rounded-xs min-w-full object-cover md:min-w-[50%]" />
       </div>
-      <div className="bg-primary/5 px-4 py-20 md:py-32">
+      <div className="bg-primary-200/5 px-4 py-20 md:py-32">
         <div className="mx-auto max-w-7xl space-y-4">
           <div>
             <h3 className="brand-header text-4xl">join the beta now</h3>
@@ -153,7 +153,7 @@ export default function Home() {
             Add your own spots and keep them organized in custom lists,
           </p>
         </div>
-        <img src="/landing/landing2.png" className="rounded-xs min-w-full object-cover md:min-w-[50%]" />
+        <img alt="landing 2" src="/landing/landing2.png" className="rounded-xs min-w-full object-cover md:min-w-[50%]" />
       </div>
 
       <ClientOnly>
@@ -166,7 +166,7 @@ export default function Home() {
               rel="noreferrer"
               className="flex flex-col items-center"
             >
-              <img src={randomPerson?.image} className="sq-24 rounded-full object-cover" />
+              <img alt="testimony user" src={randomPerson?.image} className="sq-24 rounded-full object-cover" />
               <i className="pt-4 text-xl font-bold">{randomPerson?.name}</i>
               <i>@{randomPerson?.handle}</i>
             </a>
@@ -186,7 +186,13 @@ export default function Home() {
           <div className="space-y-4">
             <p className="brand-header text-2xl">ramble</p>
           </div>
-          <a href="https://instagram.com/ramble.guide" target="_blank" rel="noreferrer noopener" className="hover:opacity-70">
+          <a
+            aria-label="go to instagram"
+            href="https://instagram.com/ramble.guide"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="hover:opacity-70"
+          >
             <Instagram />
           </a>
 
@@ -255,6 +261,12 @@ const PEOPLE = [
     name: "Jack Clackett",
     handle: "jack__jsy",
     image: "/landing/people/jack.png",
+    message: "The only app you need for van life in Europe. Trustworthy spots from a community of like-minded travellers.",
+  },
+  {
+    name: "Rosa Bertram",
+    handle: "rosieontheroad_",
+    image: "/landing/people/rosa.png",
     message: "The only app you need for van life in Europe. Trustworthy spots from a community of like-minded travellers.",
   },
 ]
