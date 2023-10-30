@@ -58,7 +58,7 @@ export default function Home() {
           </Link>
         )}
       </div> */}
-      <div className="h-[94vh] w-screen space-y-20 bg-[url('/landing/landing1.png')] bg-cover bg-center px-2 pt-10">
+      <div className="h-[94vh] w-screen space-y-20 bg-[url('/landing/landing1.avif')] bg-cover bg-center px-2 pt-10">
         <div className="mx-auto flex max-w-7xl flex-col items-start space-y-8">
           <div className="flex flex-col items-center">
             <p className="brand-header text-5xl">ramble</p>
@@ -117,7 +117,13 @@ export default function Home() {
             </p>
           </div>
         </div>
-        <img alt="landing 3" src="/landing/landing3.png" className="rounded-xs min-w-full object-cover md:min-w-[50%]" />
+        <img
+          width={500}
+          height={800}
+          alt="landing 3"
+          src="/landing/landing3.avif"
+          className="rounded-xs min-w-full object-cover md:min-w-[50%]"
+        />
       </div>
       <div className="bg-primary-200/5 px-4 py-20 md:py-32">
         <div className="mx-auto max-w-7xl space-y-4">
@@ -153,7 +159,13 @@ export default function Home() {
             Add your own spots and keep them organized in custom lists,
           </p>
         </div>
-        <img alt="landing 2" src="/landing/landing2.png" className="rounded-xs min-w-full object-cover md:min-w-[50%]" />
+        <img
+          width={500}
+          height={800}
+          alt="landing 2"
+          src="/landing/landing2.avif"
+          className="rounded-xs min-w-full object-cover md:min-w-[50%]"
+        />
       </div>
 
       <ClientOnly>
@@ -166,7 +178,13 @@ export default function Home() {
               rel="noreferrer"
               className="flex flex-col items-center"
             >
-              <img alt="testimony user" src={randomPerson?.image} className="sq-24 rounded-full object-cover" />
+              <img
+                width={100}
+                height={100}
+                alt="testimony user"
+                src={randomPerson?.image}
+                className="sq-24 rounded-full object-cover"
+              />
               <i className="pt-4 text-xl font-bold">{randomPerson?.name}</i>
               <i>@{randomPerson?.handle}</i>
             </a>
@@ -254,19 +272,19 @@ const PEOPLE = [
   {
     name: "George Borg",
     handle: "gkborg",
-    image: "/landing/people/george.png",
+    image: "/landing/people/george.avif",
     message: "Finally a van life app that is purpose built for authentic, nature lovers from the digital age.",
   },
   {
     name: "Jack Clackett",
     handle: "jack__jsy",
-    image: "/landing/people/jack.png",
+    image: "/landing/people/jack.avif",
     message: "The only app you need for van life in Europe. Trustworthy spots from a community of like-minded travellers.",
   },
   {
     name: "Rosa Bertram",
     handle: "rosieontheroad_",
-    image: "/landing/people/rosa.png",
+    image: "/landing/people/rosa.avif",
     message: "The only app you need for van life in Europe. Trustworthy spots from a community of like-minded travellers.",
   },
 ]
