@@ -13,10 +13,8 @@ function handleRequest(args: LoaderFunctionArgs | ActionFunctionArgs) {
     createContext,
     onError: ({ error, path }) => {
       if (!IS_DEV) {
-        console.error("--- ERROR ---")
-        console.error("Path: " + path)
-        console.error("Message: " + error.message)
-        // TODO: send to sentry
+        console.error(path + " : " + error.message)
+        // TODO: send to sentry or something
       }
     },
   })
