@@ -17,7 +17,7 @@
   "dependencies": {
     "@expo-google-fonts/urbanist": "0.2.3",
     "@gorhom/bottom-sheet": "4.5.1",
-    "@hookform/resolvers": "3.3.1",
+    "@hookform/resolvers": "3.3.2",
     "@ramble/api": "workspace:*",
     "@ramble/database": "workspace:*",
     "@ramble/shared": "workspace:*",
