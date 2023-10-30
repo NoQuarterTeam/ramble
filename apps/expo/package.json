@@ -17,7 +17,7 @@
   "dependencies": {
     "@expo-google-fonts/urbanist": "0.2.3",
     "@gorhom/bottom-sheet": "4.5.1",
-    "@hookform/resolvers": "3.3.1",
+    "@hookform/resolvers": "3.3.2",
     "@ramble/api": "workspace:*",
     "@ramble/database": "workspace:*",
     "@ramble/shared": "workspace:*",
@@ -70,9 +70,9 @@
     "zod": "3.22.4"
   },
   "devDependencies": {
-    "@babel/core": "7.23.0",
-    "@babel/preset-env": "7.22.20",
-    "@babel/runtime": "7.23.1",
+    "@babel/core": "7.23.2",
+    "@babel/preset-env": "7.23.2",
+    "@babel/runtime": "7.23.2",
     "@expo/config-plugins": "7.2.5",
     "@ramble/eslint-config": "workspace:*",
     "@ramble/tailwind-config": "workspace:*",
