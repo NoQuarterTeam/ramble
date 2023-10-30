@@ -58,7 +58,7 @@ export default function Home() {
           </Link>
         )}
       </div> */}
-      <div className="h-[94vh] w-screen space-y-20 bg-[url('/landing/landing1.avif')] bg-cover bg-center px-2 pt-10">
+      <div className="h-[94vh] w-screen space-y-20 bg-[url('/landing/hero.avif')] bg-cover bg-center px-2 pt-10">
         <div className="mx-auto flex max-w-7xl flex-col items-start space-y-8">
           <div className="flex flex-col items-center">
             <p className="brand-header text-5xl">ramble</p>
@@ -93,7 +93,7 @@ export default function Home() {
           Inspired by the great outdoors and the spirit of the environmental movement of the 60s and 70s.
         </p>
       </div>
-      <div className="mx-auto flex max-w-7xl flex-col justify-between gap-20 px-4 py-20 md:flex-row">
+      <div className="mx-auto flex max-w-6xl flex-col justify-between gap-20 px-4 py-20 md:flex-row">
         <div className="space-y-12">
           <div className="space-y-6">
             <h3 className="brand-header text-4xl">our mission</h3>
@@ -120,13 +120,13 @@ export default function Home() {
         <img
           width={500}
           height={800}
-          alt="landing 3"
-          src="/landing/landing3.avif"
-          className="rounded-xs min-w-full object-cover md:min-w-[50%]"
+          alt="mission"
+          src="/landing/mission.avif"
+          className="rounded-xs min-w-full object-cover md:min-w-[40%]"
         />
       </div>
-      <div className="bg-primary-200/5 px-4 py-20 md:py-32">
-        <div className="mx-auto max-w-7xl space-y-4">
+      <div className="bg-primary-50/5 px-4 py-20 md:py-32">
+        <div className="mx-auto max-w-6xl space-y-4">
           <div>
             <h3 className="brand-header text-4xl">join the beta now</h3>
             <p className="text-lg">
@@ -136,36 +136,29 @@ export default function Home() {
           <RequestAccessForm mode="dark" />
         </div>
       </div>
-      <div className="mx-auto flex max-w-7xl flex-col justify-between gap-20 px-4 py-20 md:flex-row">
-        <div className="space-y-6">
+      <div className="mx-auto max-w-6xl space-y-20 px-4 py-20">
+        <div>
           <h3 className="brand-header text-4xl">features</h3>
-          <p className="text-lg">
-            A curated list of camper spots, verified by experienced van travelers. Reviewed and rated.
-            <br />
-            <br />
-            Outdoor activity spots for surfing, hiking, mountain biking, climbing and more.
-            <br />
-            <br />
-            Community of creative and nature loving van folk. Share and follow travelers profiles including info on their beloved
-            van build.
-            <br />
-            <br />
-            Renewable diesel fill-up stations, trustworthy mechanics and essential part suppliers.
-            <br />
-            <br />
-            Useful and informative map layers for weather, bio-diversity, cellular signal, light pollution and more.
-            <br />
-            <br />
-            Add your own spots and keep them organized in custom lists,
-          </p>
+          <p className="text-lg">Here are some of the things you can expect to see.</p>
         </div>
-        <img
-          width={500}
-          height={800}
-          alt="landing 2"
-          src="/landing/landing2.avif"
-          className="rounded-xs min-w-full object-cover md:min-w-[50%]"
-        />
+        {FEATURES.map((feature, i) => (
+          <div
+            key={i}
+            className={join(
+              "flex flex-col items-center justify-between gap-10 md:flex-row md:gap-40",
+              i % 2 && "md:flex-row-reverse",
+            )}
+          >
+            <p className="text-2xl">{feature}</p>
+            <img
+              src={`/landing/features${i + 1}.png`}
+              alt={`features ${i + 1}`}
+              width={300}
+              height={300}
+              className="object-cover"
+            />
+          </div>
+        ))}
       </div>
 
       <ClientOnly>
@@ -287,4 +280,13 @@ const PEOPLE = [
     image: "/landing/people/rosa.avif",
     message: "The only app you need for van life in Europe. Trustworthy spots from a community of like-minded travellers.",
   },
+]
+
+const FEATURES = [
+  "A curated list of camper spots, verified by experienced van travellers. Reviewed and rated by the community to ensure the best possible locations.",
+  "Find nearby outdoor activity spots for surfing, hiking, mountain biking, climbing and more, ",
+  "A community of creative and nature loving van folk. Share and follow traveller’s profiles including info on their beloved van build.",
+  "Useful and informative map layers for weather, bio-diversity, cellular signal, light pollution and more.",
+  "Add your own spots and keep them organized in custom lists. Follow and copy other members’ lists for inspiration for you next trip.",
+  "Renewable diesel fill-up stations, electric charging points, trustworthy mechanics and essential part suppliers.",
 ]
