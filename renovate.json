@@ -59,6 +59,7 @@
     "react-native",
     "remix-utils",
     "tailwindcss",
-    "uuid"
+    "uuid",
+    "@react-email/components"
   ]
 }
