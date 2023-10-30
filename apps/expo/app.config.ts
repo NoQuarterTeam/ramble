@@ -13,11 +13,11 @@ const splash: ExpoConfig["splash"] = {
 
 const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   name: "Ramble",
-  description: "Ramble: Van Life Travel App",
+  description: "Ramble: Van Travel App",
   slug: "ramble",
   scheme: "ramble",
   owner: "noquarter",
-  version: "1.0.1",
+  version: "1.0.2",
   jsEngine: "hermes",
   orientation: "portrait",
   icon: "./assets/icon.png",
@@ -41,7 +41,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     infoPlist: {
       LSApplicationQueriesSchemes: ["comgooglemaps"],
     },
-    buildNumber: "4",
+    buildNumber: "5",
   },
   android: {
     adaptiveIcon: {
@@ -51,7 +51,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     softwareKeyboardLayoutMode: "resize",
     package: "co.noquarter.ramble",
     splash,
-    versionCode: 4,
+    versionCode: 5,
   },
   runtimeVersion: {
     policy: "sdkVersion",
@@ -62,6 +62,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     },
   },
   plugins: [
+    "sentry-expo",
     "./expo-plugins/with-modify-gradle.js",
     "./expo-plugins/android-manifest.plugin.js",
     [

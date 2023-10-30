@@ -54,8 +54,7 @@ export function PartnerLink(props: Props) {
       await WebBrowser.openBrowserAsync(props.spot.sourceUrl || "", {
         presentationStyle: WebBrowser.WebBrowserPresentationStyle.PAGE_SHEET,
       })
-    } catch (error) {
-      console.log(error)
+    } catch {
       toast({ type: "error", title: "Error opening link" })
     }
   }
