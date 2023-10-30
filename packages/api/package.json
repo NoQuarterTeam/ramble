@@ -20,7 +20,7 @@
     "@ramble/database": "workspace:*",
     "@ramble/emails": "workspace:*",
     "@ramble/shared": "workspace:*",
-    "@trpc/server": "^10.41.0",
+    "@trpc/server": "10.43.0",
     "@turf/bbox": "^6.5.0",
     "@turf/center": "^6.5.0",
     "@turf/helpers": "^6.5.0",
