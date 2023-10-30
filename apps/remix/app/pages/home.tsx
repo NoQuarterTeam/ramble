@@ -117,7 +117,13 @@ export default function Home() {
             </p>
           </div>
         </div>
-        <img alt="landing 3" src="/landing/landing3.avif" className="rounded-xs min-w-full object-cover md:min-w-[50%]" />
+        <img
+          width={500}
+          height={800}
+          alt="landing 3"
+          src="/landing/landing3.avif"
+          className="rounded-xs min-w-full object-cover md:min-w-[50%]"
+        />
       </div>
       <div className="bg-primary-200/5 px-4 py-20 md:py-32">
         <div className="mx-auto max-w-7xl space-y-4">
@@ -153,7 +159,13 @@ export default function Home() {
             Add your own spots and keep them organized in custom lists,
           </p>
         </div>
-        <img alt="landing 2" src="/landing/landing2.avif" className="rounded-xs min-w-full object-cover md:min-w-[50%]" />
+        <img
+          width={500}
+          height={800}
+          alt="landing 2"
+          src="/landing/landing2.avif"
+          className="rounded-xs min-w-full object-cover md:min-w-[50%]"
+        />
       </div>
 
       <ClientOnly>
@@ -166,7 +178,13 @@ export default function Home() {
               rel="noreferrer"
               className="flex flex-col items-center"
             >
-              <img alt="testimony user" src={randomPerson?.image} className="sq-24 rounded-full object-cover" />
+              <img
+                width={100}
+                height={100}
+                alt="testimony user"
+                src={randomPerson?.image}
+                className="sq-24 rounded-full object-cover"
+              />
               <i className="pt-4 text-xl font-bold">{randomPerson?.name}</i>
               <i>@{randomPerson?.handle}</i>
             </a>
