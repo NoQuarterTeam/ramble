@@ -85,6 +85,17 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
       },
     ],
   ],
+  hooks: {
+    postPublish: [
+      {
+        file: "sentry-expo/upload-sourcemaps",
+        config: {
+          organization: "noquater",
+          project: "ramble",
+        },
+      },
+    ],
+  },
 })
 
 export default defineConfig
