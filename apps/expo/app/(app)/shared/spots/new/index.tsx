@@ -31,7 +31,7 @@ export function NewSpotLocationScreen() {
         if (!loc) return
         setLocation(loc.coords)
       } catch {
-        console.log("oops -  getting location")
+        console.log("oops - getting location")
       } finally {
         setIsLoadingLocation(false)
       }
