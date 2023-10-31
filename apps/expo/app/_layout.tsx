@@ -44,6 +44,13 @@ import { NewSpotLayout } from "./(app)/shared/spots/new/_layout"
 import { AuthLayout } from "./(auth)/_layout"
 import { OnboardingLayout } from "./onboarding/_layout"
 import { type ScreenParamsList } from "./router"
+import * as Sentry from "sentry-expo"
+
+Sentry.init({
+  dsn: "https://db8195777a2bb905e405557687f085b9@o204549.ingest.sentry.io/4506140516024320",
+  enableInExpoDevelopment: false,
+  debug: true,
+})
 
 SplashScreen.preventAutoHideAsync()
 enableScreens()
