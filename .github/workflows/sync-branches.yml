@@ -24,8 +24,8 @@ jobs:
           dev_branch="origin/develop"
           invite_branch="feat/invite-codes"
           nextjs_branch="nextjs"
-          echo "🪜 Merging ${main_branch} -> ${dev_branch}"
-          git checkout "${dev_branch}"
+          echo "🪜 Merging ${main_branch} -> develop"
+          git checkout "develop"
           git merge "${main_branch}"
           git push
           echo "🪜 Merging ${dev_branch} -> ${invite_branch}"
