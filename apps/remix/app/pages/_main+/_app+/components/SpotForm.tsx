@@ -165,7 +165,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
             <FormFieldLabel required>Type</FormFieldLabel>
             <input type="hidden" name="type" value={type || ""} />
             <div className="flex flex-wrap gap-1">
-              {SPOT_TYPE_OPTIONS.map((spotType) => (
+              {SPOT_TYPE_OPTIONS.filter((s) => !s.isComingSoon).map((spotType) => (
                 <Button
                   key={spotType.value}
                   variant={type === spotType.value ? "primary" : "outline"}
@@ -183,6 +183,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
                 </ul>
               )}
             </div>
+            <p className="py-2 text-sm opacity-80">More options coming soon!</p>
           </div>
           {doesSpotTypeRequireAmenities(type) && (
             <div className="space-y-0.5">

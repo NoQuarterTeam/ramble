@@ -76,11 +76,8 @@ export const SPOT_TYPES: { [key in SpotType]: SpotTypeInfo } = {
   [SpotType.VOLUNTEERING]: { value: SpotType.VOLUNTEERING, label: "Volunteering", Icon: HeartHandshake, isComingSoon: true },
 } as const
 
-export const SPOT_TYPE_OPTIONS = Object.entries(SPOT_TYPES).map(([_, { label, Icon, value }]) => ({ label, value, Icon })) as {
-  label: string
-  value: SpotType
-  Icon: LucideIcon
-}[]
+export const SPOT_TYPE_OPTIONS = Object.entries(SPOT_TYPES).map(([_, val]) => val)
+
 export const STAY_SPOT_TYPE_OPTIONS = Object.entries({
   [SpotType.CAMPING]: SPOT_TYPES.CAMPING,
   [SpotType.FREE_CAMPING]: SPOT_TYPES.FREE_CAMPING,
