@@ -19,18 +19,17 @@ jobs:
           git config user.email "jack@noquarter.co"
       - name: 🛣 Merge
         run: |
-          main_branch="origin/main"
-          dev_branch="origin/develop"
-
-          echo "🪜 Merging ${main_branch} -> develop"
+          echo "🪜 Merging origin/main -> develop"
           git checkout develop
-          git merge "${main_branch}"
+          git merge "origin/main"
           git push
+
           echo "🪜 Merging ${dev_branch} -> feat/invite-codes"
           git checkout feat/invite-codes
-          git merge "${dev_branch}"
+          git merge origin/develop
           git push
+
           echo "🪜 Merging ${dev_branch} -> nextjs"
           git checkout nextjs
-          git merge "${dev_branch}"
+          git merge origin/develop
           git push
