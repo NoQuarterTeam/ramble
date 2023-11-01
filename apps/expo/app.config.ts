@@ -41,7 +41,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     infoPlist: {
       LSApplicationQueriesSchemes: ["comgooglemaps"],
     },
-    buildNumber: "6",
+    buildNumber: "7",
   },
   android: {
     adaptiveIcon: {
@@ -51,7 +51,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     softwareKeyboardLayoutMode: "resize",
     package: "co.noquarter.ramble",
     splash,
-    versionCode: 6,
+    versionCode: 7,
   },
   runtimeVersion: {
     policy: "sdkVersion",
