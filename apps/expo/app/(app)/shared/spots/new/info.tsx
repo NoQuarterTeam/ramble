@@ -24,8 +24,8 @@ export function NewSpotOptionsScreen() {
   return (
     <NewSpotModalView title="some info">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
-        <FormInputLabel label="Name" />
-        <Input value={name} onChangeText={setName} />
+        <FormInputLabel label="Name" name="name" />
+        <Input nativeID="name" value={name} onChangeText={setName} />
         <View className="flex w-full flex-row items-center justify-between py-4">
           <View className="flex flex-row items-center space-x-2">
             <Icon icon={Dog} size={20} />
@@ -37,8 +37,8 @@ export function NewSpotOptionsScreen() {
             onValueChange={() => setIsPetFriendly((p) => !p)}
           />
         </View>
-        <FormInputLabel label="Describe the spot" />
-        <Input value={description} onChangeText={setDescription} multiline numberOfLines={4} />
+        <FormInputLabel label="Describe the spot" name="description" />
+        <Input nativeID="description" value={description} onChangeText={setDescription} multiline numberOfLines={4} />
       </ScrollView>
       {description && name && (
         <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
