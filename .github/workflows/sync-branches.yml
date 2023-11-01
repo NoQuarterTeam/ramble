@@ -22,17 +22,16 @@ jobs:
         run: |
           main_branch="origin/main"
           dev_branch="origin/develop"
-          invite_branch="feat/invite-codes"
-          nextjs_branch="nextjs"
+
           echo "🪜 Merging ${main_branch} -> develop"
-          git checkout "develop"
+          git checkout develop
           git merge "${main_branch}"
           git push
-          echo "🪜 Merging ${dev_branch} -> ${invite_branch}"
-          git checkout "${invite_branch}"
+          echo "🪜 Merging ${dev_branch} -> feat/invite-codes"
+          git checkout feat/invite-codes
           git merge "${dev_branch}"
           git push
-          echo "🪜 Merging ${dev_branch} -> ${nextjs_branch}"
-          git checkout "${nextjs_branch}"
+          echo "🪜 Merging ${dev_branch} -> nextjs"
+          git checkout nextjs
           git merge "${dev_branch}"
           git push
