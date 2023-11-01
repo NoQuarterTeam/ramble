@@ -3,8 +3,7 @@ on:
   push:
     branches:
       - main
-  schedule:
-    - cron: "0 * * * *"
+      - develop
 jobs:
   sync:
     name: ⏩ Sync branches
