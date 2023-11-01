@@ -34,7 +34,7 @@ export const feedbackActions = ({ request }: ActionFunctionArgs) =>
               admins.map((a) => a.email),
               feedback,
             )
-            sendSlackMessage(`🙏 New feedback submitted (${data.type}): ` + data.message)
+            sendSlackMessage(`🙏 New feedback submitted (${data.type}) by @${user.username}: ` + data.message)
             track("Feedback created", { feedbackId: feedback.id, userId: user.id })
             return json({ success: true }, request, {
               flash: { type: "success", title: "Feedback sent", description: "We'll take a look as soon as possible" },
