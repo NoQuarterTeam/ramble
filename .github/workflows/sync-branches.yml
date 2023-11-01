@@ -1,10 +1,13 @@
-name: ⏩ Sync develop with branches
+name: ⏩ Sync branches
 on:
+  push:
+    branches:
+      - main
   schedule:
     - cron: "0 * * * *"
 jobs:
   sync:
-    name: ⏩ Sync branch
+    name: ⏩ Sync branches
     runs-on: ubuntu-latest
     steps:
       - name: 🛎 Checkout
@@ -17,17 +20,19 @@ jobs:
           git config user.email "jack@noquarter.co"
       - name: 🛣 Merge
         run: |
-          current_branch="origin/develop"
+          main_branch="origin/main"
+          dev_branch="origin/develop"
           invite_branch="feat/invite-codes"
-          drizzle_branch="drizzle"
           nextjs_branch="nextjs"
-          echo "🪜 Merging ${current_branch} -> ${invite_branch}"
+          echo "🪜 Merging ${main_branch} -> develop"
+          git checkout "develop"
+          git merge "${main_branch}"
+          git push
+          echo "🪜 Merging ${dev_branch} -> ${invite_branch}"
           git checkout "${invite_branch}"
-          git merge "${current_branch}"
+          git merge "${dev_branch}"
           git push
-          git checkout "${drizzle_branch}"
-          git merge "${current_branch}"
-          git push
+          echo "🪜 Merging ${dev_branch} -> ${nextjs_branch}"
           git checkout "${nextjs_branch}"
-          git merge "${current_branch}"
+          git merge "${dev_branch}"
           git push
