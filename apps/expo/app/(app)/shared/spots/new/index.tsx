@@ -86,13 +86,13 @@ export function NewSpotLocationScreen() {
                 zoomLevel: 14,
               }}
             />
-            <View
-              style={{ transform: [{ translateX: -15 }, { translateY: -15 }] }}
-              className="absolute left-1/2 top-1/2 flex items-center justify-center"
-            >
-              <Icon icon={CircleDot} size={30} color="white" />
-            </View>
           </Mapbox.MapView>
+          <View
+            style={{ transform: [{ translateX: -15 }, { translateY: -15 }] }}
+            className="absolute left-1/2 top-1/2 flex items-center justify-center"
+          >
+            <Icon icon={CircleDot} size={30} color="white" />
+          </View>
 
           <View className="absolute bottom-12 left-5 right-5 flex flex-row items-center justify-between space-y-2">
             <View className="w-12" />
