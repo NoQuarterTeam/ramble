@@ -11,7 +11,7 @@ class Mailer {
     try {
       const from = args.from || "hello@ramble.guide"
       if (IS_PRODUCTION) {
-        await resend.sendEmail({ ...args, from, text: args.text || "" })
+        await resend.emails.send({ ...args, from, text: args.text || "" })
       } else {
         await this.sendDev({ ...args, from })
       }
