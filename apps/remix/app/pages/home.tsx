@@ -266,7 +266,7 @@ const PEOPLE = [
     name: "George Borg",
     handle: "gkborg",
     image: "/landing/people/george.avif",
-    message: "Finally a van life app that is purpose built for authentic, nature lovers from the digital age.",
+    message: "Finally a van life app that is purpose built for nature lovers from the digital age.",
   },
   {
     name: "Jack Clackett",
