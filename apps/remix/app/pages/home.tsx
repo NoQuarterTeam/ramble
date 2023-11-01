@@ -14,6 +14,7 @@ import { type ActionDataErrorResponse, formError, validateFormData } from "~/lib
 import { json } from "~/lib/remix.server"
 import { type LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { Instagram } from "lucide-react"
+import { sendSlackMessage } from "~/lib/slack.server"
 
 export const config = {
   // runtime: "edge",
@@ -27,6 +28,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
   if (accessRequest) return formError({ formError: "Email already requested access" })
   await db.accessRequest.create({ data: { email: result.data.email } })
   const admins = await db.user.findMany({ where: { isAdmin: true }, select: { email: true } })
+  sendSlackMessage("🚀 New access request from " + result.data.email)
   void sendAccessRequestConfirmationToAdminsEmail(
     admins.map((a) => a.email),
     result.data.email,
