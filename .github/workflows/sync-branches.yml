@@ -19,15 +19,12 @@ jobs:
         run: |
           current_branch="origin/develop"
           invite_branch="feat/invite-codes"
-          drizzle_branch="drizzle"
           nextjs_branch="nextjs"
           echo "🪜 Merging ${current_branch} -> ${invite_branch}"
           git checkout "${invite_branch}"
           git merge "${current_branch}"
           git push
-          git checkout "${drizzle_branch}"
-          git merge "${current_branch}"
-          git push
+          echo "🪜 Merging ${current_branch} -> ${nextjs_branch}"
           git checkout "${nextjs_branch}"
           git merge "${current_branch}"
           git push
