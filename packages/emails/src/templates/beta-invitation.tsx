@@ -10,7 +10,7 @@ interface Props {
 export function BetaInvitationContent(props: Props) {
   return (
     <EmailWrapper>
-      <Heading className="mb-4">You now have access to the Ramble beta</Heading>
+      <Heading className="mb-4">you now have access to the ramble beta!</Heading>
       <p className="mb-4">
         Thank you for signing up! We look forward to working together with you to build the ultimate van life travel app.
       </p>
