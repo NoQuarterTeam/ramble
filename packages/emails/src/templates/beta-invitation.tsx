@@ -15,8 +15,8 @@ export function BetaInvitationContent(props: Props) {
         Thank you for signing up! We look forward to working together with you to build the ultimate van life travel app.
       </p>
       <p className="mb-4">
-        You are one of the very first members of a growing intimate community built around a shared love of nature, supporting
-        local communities whilst traveling.
+        You are one of the very first members of a growing intimate community built around a shared love and respect for nature
+        whilst supporting local communities when traveling.
       </p>
       <Button href={props.link}>Sign in</Button>
     </EmailWrapper>
