@@ -10,9 +10,15 @@ interface Props {
 export function BetaInvitationContent(props: Props) {
   return (
     <EmailWrapper>
-      <Heading className="mb-4">invite to ramble beta</Heading>
-      <p className="mb-4">Your request has been accepted! We look forward to your feedback.</p>
-      <Button href={props.link}>Join beta here</Button>
+      <Heading className="mb-4">You now have access to the Ramble beta</Heading>
+      <p className="mb-4">
+        Thank you for signing up! We look forward to working together with you to build the ultimate van life travel app.
+      </p>
+      <p className="mb-4">
+        You are one of the very first members of a growing intimate community built around a shared love of nature, supporting
+        local communities whilst traveling.
+      </p>
+      <Button href={props.link}>Sign in</Button>
     </EmailWrapper>
   )
 }
