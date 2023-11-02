@@ -188,8 +188,8 @@ export default function SpotDetail() {
                   placeholder={image.blurHash}
                   src={createImageUrl(image.path)}
                   className="rounded-xs h-[300px] max-w-[400px]"
-                  height={300}
-                  width={400}
+                  height={400}
+                  width={600}
                 />
               ))}
         </div>
