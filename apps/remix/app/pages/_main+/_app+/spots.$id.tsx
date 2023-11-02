@@ -2,7 +2,6 @@ import Map, { Marker } from "react-map-gl"
 import { Link, useLoaderData } from "@remix-run/react"
 import dayjs from "dayjs"
 import { Check, Edit2, Heart, Star, Trash } from "lucide-react"
-import { cacheHeader } from "pretty-cache-header"
 import { promiseHash } from "remix-utils/promise"
 
 import { getSpotFlickrImages, publicSpotWhereClause } from "@ramble/api"
@@ -35,7 +34,7 @@ import {
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { createAction, createActions } from "~/lib/form.server"
-import { useLoaderHeaders } from "~/lib/headers.server"
+
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 import { badRequest, json, notFound, redirect } from "~/lib/remix.server"
@@ -56,7 +55,7 @@ export const config = {
   // regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
 }
 
-export const headers = useLoaderHeaders
+// export const headers = useLoaderHeaders
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const { userId } = await getUserSession(request)
@@ -102,9 +101,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     flickrImages: getSpotFlickrImages(spot),
   })
 
-  return json({ spot: { ...spot, rating }, activitySpots, flickrImages }, request, {
-    headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1day", sMaxage: "1day", staleWhileRevalidate: "30min" }) },
-  })
+  return json({ spot: { ...spot, rating }, activitySpots, flickrImages })
 }
 
 export const meta: MetaFunction<typeof loader, { root: typeof rootLoader }> = ({ data, matches }) => {
