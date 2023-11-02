@@ -20,7 +20,7 @@ export function FormInput({ label, name, error, rightElement, ...props }: Props)
 
   return (
     <View className="mb-2 space-y-0.5">
-      {label && <FormInputLabel label={label} />}
+      {label && <FormInputLabel label={label} name={name} />}
       <Controller
         name={name}
         control={control}
@@ -28,6 +28,8 @@ export function FormInput({ label, name, error, rightElement, ...props }: Props)
           <View className="flex flex-row items-center space-x-2">
             <Input
               {...props}
+              accessibilityLabel="input"
+              accessibilityLabelledBy={name}
               onChangeText={onChange}
               value={value}
               textAlignVertical="top"
@@ -49,7 +51,7 @@ export function FormSwitchInput({ label, name, error }: Props) {
 
   return (
     <View className="mb-2 space-y-0.5">
-      {label && <FormInputLabel label={label} />}
+      {label && <FormInputLabel label={label} name={name} />}
       <Controller
         name={name}
         control={control}
@@ -64,8 +66,12 @@ export function FormSwitchInput({ label, name, error }: Props) {
   )
 }
 
-export function FormInputLabel({ label }: { label: string }) {
-  return <Text className="font-400">{label}</Text>
+export function FormInputLabel({ label, name }: { label: string; name?: string }) {
+  return (
+    <Text nativeID={name} className="font-400">
+      {label}
+    </Text>
+  )
 }
 
 export function FormInputError({ error }: { error: string }) {

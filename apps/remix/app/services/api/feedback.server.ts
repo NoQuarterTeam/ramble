@@ -12,6 +12,7 @@ import { badRequest, json } from "~/lib/remix.server"
 import { type Actions } from "~/pages/api+/feedback"
 
 import { getCurrentUser } from "../auth/auth.server"
+import { sendSlackMessage } from "~/lib/slack.server"
 
 const createSchema = z.object({ message: z.string().min(1), type: z.nativeEnum(FeedbackType) })
 
@@ -33,6 +34,7 @@ export const feedbackActions = ({ request }: ActionFunctionArgs) =>
               admins.map((a) => a.email),
               feedback,
             )
+            sendSlackMessage(`🙏 New feedback submitted (${data.type}) by @${user.username}: ` + data.message)
             track("Feedback created", { feedbackId: feedback.id, userId: user.id })
             return json({ success: true }, request, {
               flash: { type: "success", title: "Feedback sent", description: "We'll take a look as soon as possible" },
