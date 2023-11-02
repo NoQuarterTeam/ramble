@@ -268,22 +268,24 @@ export function SpotsMapScreen() {
         onDismiss={mapLayerModalProps.onClose}
       >
         <ModalView title="map layers" onBack={mapLayerModalProps.onClose}>
-          <View className="flex flex-row items-center justify-between space-x-2">
-            <View className="flex flex-row items-center space-x-4">
-              <Icon icon={CloudRain} size={30} />
-              <View>
-                <Text className="text-lg">Rain</Text>
-                <Text numberOfLines={2} className="max-w-[200px] text-sm opacity-75">
-                  Shows the current rain radar over europe
-                </Text>
+          <View className="space-y-2">
+            <View className="flex flex-row items-center justify-between space-x-2">
+              <View className="flex flex-row items-center space-x-4">
+                <Icon icon={CloudRain} size={30} />
+                <View>
+                  <Text className="text-lg">Rain</Text>
+                  <Text numberOfLines={2} className="max-w-[200px] text-sm opacity-75">
+                    Shows the current rain radar over europe
+                  </Text>
+                </View>
               </View>
+              <Switch
+                trackColor={{ true: colors.primary[600] }}
+                value={preferences.mapLayerRain}
+                onValueChange={() => setPreferences({ ...preferences, mapLayerRain: !preferences.mapLayerRain })}
+              />
             </View>
-
-            <Switch
-              trackColor={{ true: colors.primary[600] }}
-              value={preferences.mapLayerRain}
-              onValueChange={() => setPreferences({ ...preferences, mapLayerRain: !preferences.mapLayerRain })}
-            />
+            <Text>More coming soon!</Text>
           </View>
         </ModalView>
       </Modal>
