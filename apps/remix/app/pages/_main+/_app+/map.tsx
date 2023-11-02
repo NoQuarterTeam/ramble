@@ -259,6 +259,24 @@ export function ErrorBoundary() {
 
 function MapLayers() {
   const preferences = usePreferences()
+  const [rainData, setRainData] = React.useState<number | undefined>(undefined)
+  React.useEffect(() => {
+    if (preferences.mapLayerRain) {
+      async function getData() {
+        try {
+          const res = await fetch(
+            "https://api.weather.com/v3/TileServer/series/productSet/PPAcore?apiKey=d7adbfe03bf54ea0adbfe03bf5fea065",
+          )
+          const jsonData = await res.json()
+          const data = jsonData.seriesInfo.radarEurope.series[0]?.ts as number | undefined
+          setRainData(data)
+        } catch (error) {
+          console.log(error)
+        }
+      }
+      getData()
+    }
+  }, [preferences.mapLayerRain])
 
   return (
     <>
@@ -309,23 +327,17 @@ function MapLayers() {
           </div>
         </>
       )}
-      {preferences.mapLayerRain && (
+      {preferences.mapLayerRain && rainData && (
         <>
           <Source
             id="rain"
             type="raster"
             tileSize={256}
             tiles={[
-              `https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63`,
+              `https://api.weather.com/v3/TileServer/tile/radarEurope?ts=${rainData}&xyz={x}:{y}:{z}&apiKey=d7adbfe03bf54ea0adbfe03bf5fea065`,
             ]}
           />
           <Layer type="raster" source="rain" id="rainLayer" />
-          {/* <Source
-              id="rain"
-              type="raster"
-              tileSize={256}
-              tiles={[`http://maps.openweathermap.org/maps/2.0/weather/TA2/{z}/{x}/{y}?appid=0937eef5e79a9078196f43c47db32b63`]}
-            /> */}
         </>
       )}
     </>
