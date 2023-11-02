@@ -18,7 +18,7 @@ export function BetaInvitationContent(props: Props) {
         You are one of the very first members of a growing intimate community built around a shared love and respect for nature
         whilst supporting local communities when traveling.
       </p>
-      <Button href={props.link}>Sign in</Button>
+      <Button href={props.link}>Join now</Button>
     </EmailWrapper>
   )
 }
