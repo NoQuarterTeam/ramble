@@ -63,7 +63,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         .input(z.object({ id: z.string() }))
         .handler(async (data) => {
           const request = await db.accessRequest.update({ where: { id: data.id }, data: { acceptedAt: new Date() } })
-          await sendBetaInvitationEmail(request.email, request.id)
+          await sendBetaInvitationEmail(request.email, request.code || "")
           return json({ success: true })
         }),
     delete: () =>

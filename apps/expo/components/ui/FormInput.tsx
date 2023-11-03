@@ -13,9 +13,10 @@ interface Props extends InputProps {
   name: string
   error?: ApiError
   rightElement?: React.ReactNode
+  updater?: (value: string) => string
 }
 
-export function FormInput({ label, name, error, rightElement, ...props }: Props) {
+export function FormInput({ label, name, error, updater, rightElement, ...props }: Props) {
   const { control } = useFormContext()
 
   return (
@@ -30,7 +31,7 @@ export function FormInput({ label, name, error, rightElement, ...props }: Props)
               {...props}
               accessibilityLabel="input"
               accessibilityLabelledBy={name}
-              onChangeText={onChange}
+              onChangeText={(text) => (updater ? onChange(updater(text)) : onChange(text))}
               value={value}
               textAlignVertical="top"
               onBlur={onBlur}
