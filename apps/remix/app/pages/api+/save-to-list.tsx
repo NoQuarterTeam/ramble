@@ -4,7 +4,7 @@ import { useAuthenticityToken } from "remix-utils/csrf/react"
 
 import { useDisclosure } from "@ramble/shared"
 
-import { FormError, FormField, useFetcher } from "~/components/Form"
+import { Form, FormError, FormField, useFetcher } from "~/components/Form"
 import {
   Button,
   Checkbox,
@@ -50,6 +50,7 @@ interface Props {
   trigger?: React.ReactElement
 }
 
+const key = "save-to-list"
 export function SaveToList(props: Props) {
   const popoverProps = useDisclosure()
   const listsFetcher = useFetcherQuery<typeof loader>(SAVE_TO_LIST_URL, { isEnabled: popoverProps.isOpen })
@@ -57,6 +58,7 @@ export function SaveToList(props: Props) {
   const lists = listsFetcher.data
 
   const listCreateFetcher = useFetcher<ActionDataErrorResponse<CreateListSchema> | { success: true }>({
+    key,
     onFinish: (data) => {
       if (data?.success) {
         newListModalProps.onClose()
@@ -117,13 +119,13 @@ export function SaveToList(props: Props) {
             ))
           )}
           <Modal title="Create new list" {...newListModalProps}>
-            <listCreateFetcher.Form className="space-y-2" action={SAVE_TO_LIST_URL}>
+            <Form fetcherKey={key} className="space-y-2" action={SAVE_TO_LIST_URL}>
               <input type="hidden" name="spotId" value={props.spotId} />
-              <FormField required name="name" label="Name" />
-              <FormField name="description" label="Description" />
-              <FormError />
+              <FormField fetcherKey={key} required name="name" label="Name" />
+              <FormField fetcherKey={key} name="description" label="Description" />
+              <FormError fetcherKey={key} />
               <listCreateFetcher.FormButton value={Actions.CreateAndSaveToList}>Create</listCreateFetcher.FormButton>
-            </listCreateFetcher.Form>
+            </Form>
           </Modal>
         </div>
       </PopoverContent>

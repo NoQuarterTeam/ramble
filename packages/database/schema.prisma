@@ -296,6 +296,7 @@ model AccessRequest {
   id         String    @id @default(uuid())
   email      String
   acceptedAt DateTime?
+  code       String?   @unique
 
   userId String? @unique
   user   User?   @relation(fields: [userId], references: [id])
@@ -304,6 +305,7 @@ model AccessRequest {
   updatedAt DateTime @default(now()) @updatedAt
 
   @@index([userId])
+  @@index([code])
 }
 
 enum FeedbackType {

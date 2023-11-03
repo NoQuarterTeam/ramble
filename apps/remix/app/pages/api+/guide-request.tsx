@@ -1,6 +1,6 @@
 import { sendGuideRequestSentToAdminsEmail } from "@ramble/api"
 
-import { FormButton, useFetcher } from "~/components/Form"
+import { useFetcher } from "~/components/Form"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { badRequest, json } from "~/lib/remix.server"
@@ -35,7 +35,7 @@ export function GuideRequestForm() {
   const fetcher = useFetcher()
   return (
     <fetcher.Form action={actionUrl}>
-      <FormButton isLoading={fetcher.state !== "idle"}>Become a guide</FormButton>
+      <fetcher.FormButton>Become a guide</fetcher.FormButton>
     </fetcher.Form>
   )
 }

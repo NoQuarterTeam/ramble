@@ -14,7 +14,7 @@ import { type Actions } from "~/pages/api+/feedback"
 import { getCurrentUser } from "../auth/auth.server"
 import { sendSlackMessage } from "~/lib/slack.server"
 
-const createSchema = z.object({ message: z.string().min(1), type: z.nativeEnum(FeedbackType) })
+const createSchema = z.object({ message: z.string().min(10), type: z.nativeEnum(FeedbackType) })
 
 export type CreateSchema = typeof createSchema
 

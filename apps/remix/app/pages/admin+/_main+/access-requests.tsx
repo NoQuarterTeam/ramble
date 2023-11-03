@@ -41,7 +41,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       skip,
       take,
       where,
-      select: { id: true, email: true, createdAt: true, acceptedAt: true, user: { select: { createdAt: true } } },
+      select: { id: true, code: true, email: true, createdAt: true, acceptedAt: true, user: { select: { createdAt: true } } },
     }),
     count: db.accessRequest.count({ where }),
   })
@@ -63,7 +63,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         .input(z.object({ id: z.string() }))
         .handler(async (data) => {
           const request = await db.accessRequest.update({ where: { id: data.id }, data: { acceptedAt: new Date() } })
-          await sendBetaInvitationEmail(request.email, request.id)
+          await sendBetaInvitationEmail(request.email, request.code || "")
           return json({ success: true })
         }),
     delete: () =>
@@ -81,6 +81,11 @@ const columns = [
   columnHelper.accessor("email", {
     id: "email",
     header: () => "Email",
+    cell: (info) => info.getValue(),
+  }),
+  columnHelper.accessor("code", {
+    id: "code",
+    header: () => "Code",
     cell: (info) => info.getValue(),
   }),
   columnHelper.accessor("createdAt", {

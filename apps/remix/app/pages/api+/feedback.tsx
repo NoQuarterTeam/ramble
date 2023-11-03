@@ -4,7 +4,7 @@ import { Bug, Lightbulb, MessageCircle } from "lucide-react"
 import { type FeedbackType } from "@ramble/database/types"
 import { useDisclosure } from "@ramble/shared"
 
-import { FormError, FormField, useFetcher } from "~/components/Form"
+import { Form, FormError, FormField, useFetcher } from "~/components/Form"
 import { Button, Modal, Textarea } from "~/components/ui"
 import { type ActionDataErrorResponse } from "~/lib/form.server"
 import { type CreateSchema, feedbackActions } from "~/services/api/feedback.server"
@@ -33,9 +33,17 @@ export function Feedback() {
   )
 }
 
+const feedbackTypes = [
+  { label: "Issue", value: "ISSUE", icon: Bug },
+  { label: "Idea", value: "IDEA", icon: Lightbulb },
+  { label: "Other", value: "OTHER", icon: MessageCircle },
+]
+
 function FeedbackForm({ onClose }: { onClose: () => void }) {
+  const key = "feedback"
   const [type, setType] = React.useState<FeedbackType | null>()
   const feedbackFetcher = useFetcher<ActionDataErrorResponse<CreateSchema> | { success: true }>({
+    key,
     onFinish: (data) => {
       if (data?.success) {
         onClose()
@@ -52,51 +60,35 @@ function FeedbackForm({ onClose }: { onClose: () => void }) {
     : "What kind of feedback do you have?"
 
   return (
-    <div>
+    <Form fetcherKey={key} action={actionUrl}>
       <h3 className="text-xl">{title}</h3>
-      {type ? (
-        <feedbackFetcher.Form action={actionUrl}>
-          <div className="space-y-2 p-4">
-            <FormField
-              required
-              autoFocus
-              placeholder="Your feedback"
-              defaultValue={(feedbackFetcher.formData?.get("message") as string) || ""}
-              name="message"
-              input={<Textarea rows={5} />}
-            />
-            <input type="hidden" name="type" value={type} />
-            <FormError />
-            <div className="flex justify-between">
-              <Button variant="ghost" onClick={() => setType(null)}>
-                Change type
-              </Button>
-              <feedbackFetcher.FormButton value={Actions.Create}>Send</feedbackFetcher.FormButton>
-            </div>
-          </div>
-        </feedbackFetcher.Form>
-      ) : (
-        <div className="flex items-center justify-center space-x-4 px-4 py-8">
-          <Button variant="secondary" className="sq-24" onClick={() => setType("ISSUE")}>
-            <div className="vstack">
-              <Bug className="sq-4" />
-              <p>Issue</p>
-            </div>
-          </Button>
-          <Button variant="secondary" className="sq-24" onClick={() => setType("IDEA")}>
-            <div className="vstack">
-              <Lightbulb className="sq-4" />
-              <p>Idea</p>
-            </div>
-          </Button>
-          <Button variant="secondary" className="sq-24" onClick={() => setType("OTHER")}>
-            <div className="vstack">
-              <MessageCircle className="sq-4" />
-              <p>Other</p>
-            </div>
-          </Button>
+      <div className="space-y-2 p-4">
+        <div className="flex items-center justify-center space-x-1">
+          {feedbackTypes.map((type) => (
+            <label
+              key={type.value}
+              htmlFor={type.value}
+              className="rounded-xs flex w-full cursor-pointer items-center space-x-3 border p-2 hover:opacity-70"
+            >
+              <input
+                required
+                className="text-primary bg-transparent"
+                id={type.value}
+                name="type"
+                type="radio"
+                value={type.value}
+              />
+              <span>{type.label}</span>
+              <type.icon className="sq-5 opacity-70" />
+            </label>
+          ))}
         </div>
-      )}
-    </div>
+        <FormField fetcherKey={key} required placeholder="Your feedback" name="message" input={<Textarea rows={5} />} />
+        <FormError fetcherKey={key} />
+        <div className="flex justify-between">
+          <feedbackFetcher.FormButton value={Actions.Create}>Send</feedbackFetcher.FormButton>
+        </div>
+      </div>
+    </Form>
   )
 }
