@@ -20,9 +20,9 @@ patchedDependencies:
   '@turf/helpers@6.5.0':
     hash: s37llybtaw4egw46iemlnuvpdu
     path: patches/@turf__helpers@6.5.0.patch
-  flickr-sdk@7.0.0-beta.2:
-    hash: eyj7mgan2walnw7lvotajj6wjy
-    path: patches/flickr-sdk@7.0.0-beta.2.patch
+  flickr-sdk@7.0.0-beta.4:
+    hash: l4pbj5lonxjxbuft4sbfurgehi
+    path: patches/flickr-sdk@7.0.0-beta.4.patch
 
 importers:
 
@@ -563,8 +563,8 @@ importers:
         specifier: 1.11.10
         version: 1.11.10
       flickr-sdk:
-        specifier: 7.0.0-beta.2
-        version: 7.0.0-beta.2(patch_hash=eyj7mgan2walnw7lvotajj6wjy)
+        specifier: 7.0.0-beta.4
+        version: 7.0.0-beta.4(patch_hash=l4pbj5lonxjxbuft4sbfurgehi)
       jsonwebtoken:
         specifier: 9.0.2
         version: 9.0.2
@@ -11115,8 +11115,8 @@ packages:
     resolution: {integrity: sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==}
     dev: true
 
-  /flickr-sdk@7.0.0-beta.2(patch_hash=eyj7mgan2walnw7lvotajj6wjy):
-    resolution: {integrity: sha512-HodxFGfLhnMXQiqw3qMctvGEX22huPukErV8bIWbHPyvOYu3qe9dvbjps/lkf+Z3IjFVWC+l6mWG4usZIHQG5Q==}
+  /flickr-sdk@7.0.0-beta.4(patch_hash=l4pbj5lonxjxbuft4sbfurgehi):
+    resolution: {integrity: sha512-7OxHzwqWSZMj1D8edOR37B9dmRnEbgNUCMYZ/Z5oTQG0s1vqi4hd7RO3HPbOZqBGHFy/7J4VeSxfJ0Ez5ti2JA==}
     engines: {node: '>= 16'}
     dependencies:
       '@rgrove/parse-xml': 4.1.0
