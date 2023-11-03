@@ -3,7 +3,7 @@ import { CloudRain, Layers, Thermometer } from "lucide-react"
 import { useDisclosure } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
-import { Button, IconButton, Modal, Switch, Tooltip } from "~/components/ui"
+import { IconButton, Modal, Switch, Tooltip } from "~/components/ui"
 import { usePreferences } from "~/lib/hooks/usePreferences"
 
 export const preferencesUrl = "/api/preferences"
@@ -33,7 +33,7 @@ export function MapLayerControls() {
       </div>
 
       <Modal {...modalProps} size="xl" title="Map layers">
-        <savePreferencesFetcher.Form className="space-y-6" action={preferencesUrl}>
+        <savePreferencesFetcher.Form className="space-y-6 px-1" action={preferencesUrl}>
           <div className="space-y-4">
             <label htmlFor="mapLayerRain" className="flex items-center justify-between space-x-4">
               <div className="flex items-center space-x-4">
@@ -58,9 +58,7 @@ export function MapLayerControls() {
           </div>
 
           <div className="flex w-full justify-between">
-            <Button size="lg" type="submit" isLoading={savePreferencesFetcher.state !== "idle"}>
-              Save
-            </Button>
+            <savePreferencesFetcher.FormButton size="lg">Save</savePreferencesFetcher.FormButton>
           </div>
         </savePreferencesFetcher.Form>
       </Modal>

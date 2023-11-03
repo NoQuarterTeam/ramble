@@ -134,13 +134,12 @@ export function Nav() {
                 <themeFetcher.Form action="/api/theme" className="w-full">
                   <input type="hidden" name="theme" value={isDark ? "light" : "dark"} />
                   <DropdownMenuItem onSelect={(event: Event) => event.preventDefault()} asChild>
-                    <Button
+                    <themeFetcher.FormButton
                       variant="ghost"
-                      type="submit"
                       leftIcon={isDark ? <Sun className="sq-4" /> : <Moon className="sq-4" />}
                     >
                       <span>{isDark ? "Light" : "Dark"} mode</span>
-                    </Button>
+                    </themeFetcher.FormButton>
                   </DropdownMenuItem>
                 </themeFetcher.Form>
               </>

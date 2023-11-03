@@ -6,7 +6,7 @@ import { merge } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
 import { type RambleIcon } from "~/components/ui"
-import { Button, buttonSizeStyles, buttonStyles } from "~/components/ui/Button"
+import { buttonSizeStyles, buttonStyles } from "~/components/ui/Button"
 import { useTheme } from "~/lib/theme"
 import { json, type LoaderFunctionArgs, redirect } from "~/lib/vendor/vercel.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
@@ -52,10 +52,10 @@ export default function AdminLayout() {
           </AdminLink>
           <themeFetcher.Form action="/api/theme" className="w-full">
             <input type="hidden" name="theme" value={isDark ? "light" : "dark"} />
-            <Button variant="ghost" type="submit" className="w-full justify-center space-x-2 md:justify-start">
+            <themeFetcher.FormButton variant="ghost" className="w-full justify-center space-x-2 md:justify-start">
               {isDark ? <Sun className="sq-4" /> : <Moon className="sq-4" />}
               <span className="hidden md:block">{isDark ? "Light" : "Dark"} mode</span>
-            </Button>
+            </themeFetcher.FormButton>
           </themeFetcher.Form>
         </div>
       </div>
