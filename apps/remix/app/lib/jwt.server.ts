@@ -21,10 +21,10 @@ export const createToken = async (payload: Payload) => {
   }
 }
 
-export async function decryptToken<T>(token: string): Promise<T> {
+export async function decryptToken<T>(token: string) {
   try {
-    const { payload } = await jwtVerify(token, secret, { algorithms: [alg] })
-    return payload as T
+    const { payload } = await jwtVerify<T>(token, secret, { algorithms: [alg] })
+    return payload
   } catch (error) {
     // Oops
     throw error
