@@ -20,9 +20,6 @@ patchedDependencies:
   '@turf/helpers@6.5.0':
     hash: s37llybtaw4egw46iemlnuvpdu
     path: patches/@turf__helpers@6.5.0.patch
-  flickr-sdk@7.0.0-beta.4:
-    hash: l4pbj5lonxjxbuft4sbfurgehi
-    path: patches/flickr-sdk@7.0.0-beta.4.patch
 
 importers:
 
@@ -370,8 +367,8 @@ importers:
         specifier: latest
         version: 3.7.0
       jose:
-        specifier: 5.0.2
-        version: 5.0.2
+        specifier: 5.1.0
+        version: 5.1.0
       lucide-react:
         specifier: 0.290.0
         version: 0.290.0(react@18.2.0)
@@ -563,8 +560,8 @@ importers:
         specifier: 1.11.10
         version: 1.11.10
       flickr-sdk:
-        specifier: 7.0.0-beta.4
-        version: 7.0.0-beta.4(patch_hash=l4pbj5lonxjxbuft4sbfurgehi)
+        specifier: 7.0.0-beta.6
+        version: 7.0.0-beta.6
       jsonwebtoken:
         specifier: 9.0.2
         version: 9.0.2
@@ -11115,13 +11112,12 @@ packages:
     resolution: {integrity: sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==}
     dev: true
 
-  /flickr-sdk@7.0.0-beta.4(patch_hash=l4pbj5lonxjxbuft4sbfurgehi):
-    resolution: {integrity: sha512-7OxHzwqWSZMj1D8edOR37B9dmRnEbgNUCMYZ/Z5oTQG0s1vqi4hd7RO3HPbOZqBGHFy/7J4VeSxfJ0Ez5ti2JA==}
-    engines: {node: '>= 16'}
+  /flickr-sdk@7.0.0-beta.6:
+    resolution: {integrity: sha512-D2Cj4iaO5RVyqf91unHsb0Hb3dikD4RHIzQ3pZhj7ql/nLECW7KvO+6yt4OVypuNcMsWKb4m0lszrvG626b9iA==}
+    engines: {node: '>= 18'}
     dependencies:
       '@rgrove/parse-xml': 4.1.0
     dev: false
-    patched: true
 
   /flow-enums-runtime@0.0.5:
     resolution: {integrity: sha512-PSZF9ZuaZD03sT9YaIs0FrGJ7lSUw7rHZIex+73UYVXg46eL/wxN5PaVcPJFudE2cJu5f0fezitV5aBkLHPUOQ==}
@@ -12439,8 +12435,8 @@ packages:
     resolution: {integrity: sha512-bF7vcQxbODoGK1imE2P9GS9aw4zD0Sd+Hni68IMZLj7zRnquH7dXUmMw9hDI5S/Jzt7q+IyTXN0rSg2GI0IKhQ==}
     dev: false
 
-  /jose@5.0.2:
-    resolution: {integrity: sha512-YfXZO3UOHOGmDGEjYh4e6Pf1H+iiiShTH5y/DUcDquy90S8q8/yI0aBNUXokGczm9k+YuXvSO0k+nAmo77Eb1w==}
+  /jose@5.1.0:
+    resolution: {integrity: sha512-H+RVqxA6apaJ0rcQYupKYhos7uosAiF42gUcWZiwhICWMphDULFj/CRr1R0tV/JCv9DEeJaSyYYpc9luHHNT4g==}
     dev: false
 
   /js-beautify@1.14.8:
