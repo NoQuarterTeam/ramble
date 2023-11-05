@@ -286,6 +286,6 @@ const FEATURES = [
   "Find nearby outdoor activity spots for surfing, hiking, mountain biking, climbing and more, ",
   "A community of creative and nature loving van folk. Share and follow traveller’s profiles including info on their beloved van build.",
   "Useful and informative map layers for weather, bio-diversity, cellular signal, light pollution and more.",
-  "Add your own spots and keep them organized in custom lists. Follow and copy other members’ lists for inspiration for you next trip.",
+  "Add your own spots and keep them organized in custom lists. Follow and copy other members’ lists for inspiration for your next trip.",
   "Renewable diesel fill-up stations, electric charging points, trustworthy mechanics and essential part suppliers.",
 ]
