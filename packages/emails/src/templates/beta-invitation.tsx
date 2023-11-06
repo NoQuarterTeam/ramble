@@ -26,7 +26,7 @@ export function BetaInvitationContent(props: Props) {
         </div>
       </Container>
       <div className="flex items-center justify-center space-x-4">
-        <Link href="https://apps.apple.com/us/app/rumble/id1518427877?itsct=apps_box_badge&amp;itscg=30200">
+        <Link href="https://apps.apple.com/us/app/ramble-van-travel-app/id6468265289?itsct=apps_box_badge&amp;itscg=30200">
           <Img
             src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1595289600"
             alt="Download on the App Store"
@@ -34,7 +34,7 @@ export function BetaInvitationContent(props: Props) {
             height={80}
           />
         </Link>
-        <Link href="http://play.google.com/store/?pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1">
+        <Link href="https://play.google.com/store/apps/details?id=co.noquarter.ramble&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1">
           <Img
             width={250}
             height={100}
