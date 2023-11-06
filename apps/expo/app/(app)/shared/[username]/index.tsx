@@ -1,3 +1,4 @@
+import * as React from "react"
 import { Linking, ScrollView, TouchableOpacity, useColorScheme, View } from "react-native"
 import { ChevronLeft, Heart, Instagram, User2 } from "lucide-react-native"
 
@@ -22,21 +23,32 @@ export function UserScreen() {
   const isDark = colorScheme === "dark"
   const { me } = useMe()
   const { params } = useParams<"UserScreen">()
-  const { data: user, isLoading } = api.user.profile.useQuery({ username: params.username?.toLowerCase().trim() })
+  const username = params.username.toLowerCase().trim()
+  const { data: user, isLoading } = api.user.profile.useQuery({ username })
   const tab = params.tab || "spots"
   const router = useRouter()
   const utils = api.useUtils()
   const { mutate } = api.user.toggleFollow.useMutation({
     onSuccess: () => {
       if (!me) return
-      void utils.user.followers.refetch({ username: params.username?.toLowerCase().trim() })
-      void utils.user.profile.refetch({ username: params.username?.toLowerCase().trim() })
-
+      void utils.user.followers.refetch({ username })
+      void utils.user.profile.refetch({ username })
       void utils.user.following.refetch({ username: me.username })
       void utils.user.profile.refetch({ username: me.username })
     },
   })
-  const onToggleFollow = () => mutate({ username: params.username?.toLowerCase().trim() })
+
+  const [isFollowedByMe, setIsFollowedByMe] = React.useState(!!user?.isFollowedByMe)
+
+  React.useEffect(() => {
+    if (!user) return
+    setIsFollowedByMe(user?.isFollowedByMe)
+  }, [user?.isFollowedByMe])
+
+  const onToggleFollow = () => {
+    setIsFollowedByMe(!isFollowedByMe)
+    mutate({ username })
+  }
 
   return (
     <View className="pt-16">
@@ -47,19 +59,15 @@ export function UserScreen() {
               <ChevronLeft className="text-primary mt-2" />
             </TouchableOpacity>
           )}
-          <BrandHeading className="pl-1 text-3xl">{params.username}</BrandHeading>
+          <BrandHeading className="pl-1 text-3xl">{username}</BrandHeading>
         </View>
-        {user && me && me.username !== params.username && (
+        {user && me && me.username !== username && (
           <TouchableOpacity
             onPress={onToggleFollow}
             activeOpacity={0.8}
             className="sq-8 bg-background flex items-center justify-center rounded-full dark:bg-gray-800"
           >
-            <Icon
-              icon={Heart}
-              size={20}
-              fill={user.followers && user.followers.length > 0 ? (isDark ? "white" : "black") : undefined}
-            />
+            <Icon icon={Heart} size={20} fill={isFollowedByMe ? (isDark ? "white" : "black") : "transparent"} />
           </TouchableOpacity>
         )}
       </View>
@@ -84,7 +92,7 @@ export function UserScreen() {
                   className="sq-24 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
                 />
               ) : (
-                <View className="sq-24 flex items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
+                <View className="sq-24 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
                   <Icon icon={User2} />
                 </View>
               )}
@@ -96,14 +104,14 @@ export function UserScreen() {
                 <View className="flex flex-row items-center space-x-4">
                   <TouchableOpacity
                     className="flex flex-row space-x-1 pb-1"
-                    onPress={() => router.push("UserFollowing", { username: params.username?.toLowerCase().trim() })}
+                    onPress={() => router.push("UserFollowing", { username })}
                   >
                     <Text className="font-600">{user._count.following}</Text>
                     <Text className="opacity-70">following</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     className="flex flex-row space-x-1 pb-1"
-                    onPress={() => router.push("UserFollowers", { username: params.username?.toLowerCase().trim() })}
+                    onPress={() => router.push("UserFollowers", { username })}
                   >
                     <Text className="font-600">{user._count.followers}</Text>
                     <Text className="opacity-70">followers</Text>
@@ -136,7 +144,7 @@ export function UserScreen() {
           <View className="bg-background dark:bg-background-dark flex flex-row items-center justify-center space-x-2 border-b border-gray-100 py-2 dark:border-gray-800">
             <View>
               <Button
-                onPress={() => router.navigate("UserScreen", { tab: "spots", username: params.username?.toLowerCase().trim() })}
+                onPress={() => router.navigate("UserScreen", { tab: "spots", username })}
                 variant={tab === "spots" ? "secondary" : "ghost"}
                 size="sm"
               >
@@ -146,7 +154,7 @@ export function UserScreen() {
             <View>
               <Button
                 variant={tab === "van" ? "secondary" : "ghost"}
-                onPress={() => router.navigate("UserScreen", { tab: "van", username: params.username?.toLowerCase().trim() })}
+                onPress={() => router.navigate("UserScreen", { tab: "van", username })}
                 size="sm"
               >
                 Van
@@ -155,7 +163,7 @@ export function UserScreen() {
             <View>
               <Button
                 variant={tab === "lists" ? "secondary" : "ghost"}
-                onPress={() => router.navigate("UserScreen", { tab: "lists", username: params.username?.toLowerCase().trim() })}
+                onPress={() => router.navigate("UserScreen", { tab: "lists", username })}
                 size="sm"
               >
                 Lists
