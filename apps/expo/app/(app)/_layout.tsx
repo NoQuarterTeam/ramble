@@ -35,21 +35,21 @@ export function AppLayout() {
         name="MapLayout"
         component={MapLayout}
         options={{
-          tabBarIcon: (props) => <Icon icon={Map} size={24} color={!!props.focused && "primary"} />,
+          tabBarIcon: (props) => <Icon icon={Map} size={22} color={!!props.focused && "primary"} />,
         }}
       />
       <Tab.Screen
         name="SpotsLayout"
         component={SpotsLayout}
         options={{
-          tabBarIcon: (props) => <Icon icon={List} size={24} color={!!props.focused && "primary"} />,
+          tabBarIcon: (props) => <Icon icon={List} size={22} color={!!props.focused && "primary"} />,
         }}
       />
       <Tab.Screen
         name="ListsLayout"
         component={ListsLayout}
         options={{
-          tabBarIcon: (props) => <Icon icon={Heart} size={24} color={!!props.focused && "primary"} />,
+          tabBarIcon: (props) => <Icon icon={Heart} size={22} color={!!props.focused && "primary"} />,
         }}
       />
       <Tab.Screen
@@ -70,7 +70,7 @@ export function AppLayout() {
                 )}
               />
             ) : (
-              <Icon icon={User} size={24} color={props.focused ? "primary" : isDark ? "white" : "black"} />
+              <Icon icon={User} size={22} color={props.focused ? "primary" : isDark ? "white" : "black"} />
             ),
         }}
       />

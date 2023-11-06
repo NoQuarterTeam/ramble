@@ -74,7 +74,14 @@ export default function Register() {
   return (
     <Form className="space-y-2">
       <h1 className="text-4xl font-bold">Register</h1>
-      <FormField autoCapitalize="none" required label="Access code" name="accessCode" placeholder="1F54AF3G" />
+      <FormField
+        autoCapitalize="none"
+        className="uppercase"
+        required
+        label="Access code"
+        name="accessCode"
+        placeholder="1F54AF3G"
+      />
       <FormField autoCapitalize="none" required label="Email address" name="email" placeholder="jim@gmail.com" />
       <FormField required label="Password" name="password" type="password" placeholder="********" />
       <input name="passwordConfirmation" className="hidden" />
