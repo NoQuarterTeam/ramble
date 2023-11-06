@@ -1,5 +1,6 @@
 import { authRouter } from "./router/auth"
 import { feedbackRouter } from "./router/feedback"
+import { inviteCodeRouter } from "./router/inviteCode"
 import { listRouter } from "./router/list"
 import { reviewRouter } from "./router/review"
 import { s3Router } from "./router/s3"
@@ -10,13 +11,14 @@ import { createTRPCRouter } from "./trpc"
 
 export const appRouter = createTRPCRouter({
   auth: authRouter,
-  user: userRouter,
   feedback: feedbackRouter,
-  spot: spotRouter,
+  inviteCode: inviteCodeRouter,
   list: listRouter,
   review: reviewRouter,
-  van: vanRouter,
   s3: s3Router,
+  spot: spotRouter,
+  user: userRouter,
+  van: vanRouter,
 })
 
 // export type definition of API
