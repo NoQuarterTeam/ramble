@@ -22,11 +22,12 @@ export const authRouter = createTRPCRouter({
     const token = createAuthToken({ id: user.id })
     return { user, token }
   }),
-  register: publicProcedure.input(registerSchema).mutation(async ({ ctx, input: { accessCode, ...input } }) => {
+  register: publicProcedure.input(registerSchema).mutation(async ({ ctx, input: { code, ...input } }) => {
     const user = await ctx.prisma.user.findUnique({ where: { email: input.email } })
     if (user) throw new TRPCError({ code: "BAD_REQUEST", message: "Email already in use" })
-    const accessRequest = await ctx.prisma.accessRequest.findUnique({ where: { code: accessCode } })
-    if (!accessRequest) throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid access code" })
+    const trimmedCode = code.toUpperCase().trim()
+    const accessRequest = await ctx.prisma.accessRequest.findUnique({ where: { code: trimmedCode } })
+    if (!accessRequest) throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid invite code" })
     const username = input.username.toLowerCase().trim()
     const existingUsername = await ctx.prisma.user.findUnique({ where: { username } })
     if (existingUsername) throw new TRPCError({ code: "BAD_REQUEST", message: "User with this username already exists" })
