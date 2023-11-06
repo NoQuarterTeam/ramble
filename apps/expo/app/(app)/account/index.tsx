@@ -61,6 +61,7 @@ export function AccountScreen() {
               <Icon icon={AlertCircle} size={20} />
               <Text className="text-lg">Your account is not yet verified</Text>
             </View>
+            <Text>Didn't receive an email?</Text>
             <Button onPress={() => mutate()} disabled={!!data} size="sm">
               Send verification email
             </Button>

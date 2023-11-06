@@ -161,7 +161,11 @@ export function SpotDetailScreen() {
               <Text className="text-sm">Added by </Text>
               <TouchableOpacity
                 activeOpacity={0.8}
-                onPress={() => router.push("UserScreen", { username: spot.creator.username })}
+                onPress={
+                  me
+                    ? () => router.push("UserScreen", { username: spot.creator.username })
+                    : () => router.push("AuthLayout", { screen: "LoginScreen" })
+                }
               >
                 <Text className="text-sm">
                   {spot.creator.firstName} {spot.creator.lastName}

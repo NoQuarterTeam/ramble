@@ -17,6 +17,7 @@ import { height, isTablet, width } from "../../../lib/device"
 import { useBackgroundColor } from "../../../lib/tailwind"
 import { useRouter } from "../../router"
 import { Icon } from "../../../components/Icon"
+import { useMe } from "../../../lib/hooks/useMe"
 // import * as Device from 'expo-device';
 
 export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: string | null; onClose: () => void }) {
@@ -27,7 +28,7 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
   } = api.spot.mapPreview.useQuery({ id: id || "" }, { enabled: !!id, keepPreviousData: true })
   const { push, navigate } = useRouter()
   const colorScheme = useColorScheme()
-
+  const { me } = useMe()
   const bottomSheetRef = React.useRef<BottomSheet>(null)
 
   const handleSheetClose = React.useCallback(() => {
@@ -90,7 +91,9 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
                 <Button
                   size="xs"
                   variant="outline"
-                  onPress={() => navigate("SaveSpotScreen", { id: spot.id })}
+                  onPress={
+                    me ? () => navigate("SaveSpotScreen", { id: spot.id }) : () => push("AuthLayout", { screen: "LoginScreen" })
+                  }
                   leftIcon={
                     <Icon
                       icon={Heart}
