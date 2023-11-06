@@ -24,7 +24,7 @@ export function RegisterScreen() {
     },
   })
   const form = useForm({
-    defaultValues: { accessCode: "", email: "", password: "", username: "", firstName: "", lastName: "" },
+    defaultValues: { code: "", email: "", password: "", username: "", firstName: "", lastName: "" },
   })
 
   const onSubmit = form.handleSubmit(async (data) => {
@@ -41,7 +41,7 @@ export function RegisterScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View>
-            <FormInput name="accessCode" label="Access code" autoCapitalize="characters" error={error} />
+            <FormInput name="code" label="Access code" autoCapitalize="characters" error={error} />
             <FormInput autoCapitalize="none" name="email" label="Email" error={error} />
             <FormInput autoCapitalize="none" name="password" secureTextEntry label="Password" error={error} />
             <FormInput autoCapitalize="none" name="username" label="Username" error={error} />

@@ -41,16 +41,17 @@ export const action = ({ request }: ActionFunctionArgs) =>
             firstName: z.string().min(2, "Must be at least 2 characters"),
             lastName: z.string().min(2, "Must be at least 2 characters"),
             passwordConfirmation: z.string().optional(),
-            accessCode: z.string(),
+            code: z.string(),
           }),
         )
-        .handler(async ({ passwordConfirmation, accessCode, ...data }) => {
+        .handler(async ({ passwordConfirmation, code, ...data }) => {
           if (passwordConfirmation) return redirect("/") // honey pot
           const email = data.email.toLowerCase().trim()
           const existingEmail = await db.user.findFirst({ where: { email } })
           if (existingEmail) return formError({ data, formError: "User with this email already exists" })
-          const accessRequest = await db.accessRequest.findUnique({ where: { code: accessCode } })
-          if (!accessRequest) return formError({ formError: "Invalid access code" })
+          const trimmedCode = code.toUpperCase().trim()
+          const accessRequest = await db.accessRequest.findUnique({ where: { code: trimmedCode } })
+          if (!accessRequest) return formError({ formError: "Invalid invite code" })
           const username = data.username.toLowerCase().trim()
           const existingUsername = await db.user.findFirst({ where: { username } })
           if (existingUsername) return formError({ data, formError: "User with this username already exists" })
@@ -74,14 +75,7 @@ export default function Register() {
   return (
     <Form className="space-y-2">
       <h1 className="text-4xl font-bold">Register</h1>
-      <FormField
-        autoCapitalize="none"
-        className="uppercase"
-        required
-        label="Access code"
-        name="accessCode"
-        placeholder="1F54AF3G"
-      />
+      <FormField autoCapitalize="none" className="uppercase" required label="Invite code" name="code" placeholder="1F54AF3G" />
       <FormField autoCapitalize="none" required label="Email address" name="email" placeholder="jim@gmail.com" />
       <FormField required label="Password" name="password" type="password" placeholder="********" />
       <input name="passwordConfirmation" className="hidden" />
