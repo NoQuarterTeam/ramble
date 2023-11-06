@@ -535,6 +535,9 @@ importers:
       '@ramble/shared':
         specifier: workspace:*
         version: link:../shared
+      '@slack/web-api':
+        specifier: ^6.9.1
+        version: 6.9.1
       '@trpc/server':
         specifier: 10.43.1
         version: 10.43.1

@@ -1,4 +1,5 @@
 import { authRouter } from "./router/auth"
+import { feedbackRouter } from "./router/feedback"
 import { listRouter } from "./router/list"
 import { reviewRouter } from "./router/review"
 import { s3Router } from "./router/s3"
@@ -10,6 +11,7 @@ import { createTRPCRouter } from "./trpc"
 export const appRouter = createTRPCRouter({
   auth: authRouter,
   user: userRouter,
+  feedback: feedbackRouter,
   spot: spotRouter,
   list: listRouter,
   review: reviewRouter,
