@@ -303,9 +303,6 @@ importers:
       '@remix-run/serve':
         specifier: 2.2.0
         version: 2.2.0(typescript@5.2.2)
-      '@slack/web-api':
-        specifier: ^6.9.1
-        version: 6.9.1
       '@tailwindcss/container-queries':
         specifier: 0.1.1
         version: 0.1.1(tailwindcss@3.3.2)
