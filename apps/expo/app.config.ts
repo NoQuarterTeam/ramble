@@ -17,7 +17,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   slug: "ramble",
   scheme: "ramble",
   owner: "noquarter",
-  version: "1.0.3",
+  version: "1.0.4",
   jsEngine: "hermes",
   orientation: "portrait",
   icon: "./assets/icon.png",
@@ -41,7 +41,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     infoPlist: {
       LSApplicationQueriesSchemes: ["comgooglemaps"],
     },
-    buildNumber: "7",
+    buildNumber: "8",
   },
   android: {
     adaptiveIcon: {
@@ -51,7 +51,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     softwareKeyboardLayoutMode: "resize",
     package: "co.noquarter.ramble",
     splash,
-    versionCode: 7,
+    versionCode: 8,
   },
   runtimeVersion: {
     policy: "sdkVersion",
