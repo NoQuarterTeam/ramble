@@ -1,16 +1,16 @@
-import { LoaderFunctionArgs, ActionFunctionArgs, json } from "@vercel/remix"
+import { LoaderFunctionArgs, json } from "@vercel/remix"
 import { Link, useLoaderData } from "@remix-run/react"
 import { Copy } from "lucide-react"
 
-import { generateInviteCodes } from "@ramble/api"
+// import { generateInviteCodes } from "@ramble/api"
 import { createImageUrl } from "@ramble/shared"
 
-import { Form, FormButton } from "~/components/Form"
+// import { Form, FormButton } from "~/components/Form"
 import { Avatar, Badge, Button } from "~/components/ui"
-import { db } from "~/lib/db.server"
+// import { db } from "~/lib/db.server"
 import { useClipboard } from "~/lib/hooks/useClipboard"
 import { useConfig } from "~/lib/hooks/useConfig"
-import { redirect } from "~/lib/remix.server"
+// import { redirect } from "~/lib/remix.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -22,16 +22,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return json(user)
 }
 
-export const action = async ({ request }: ActionFunctionArgs) => {
-  const user = await getCurrentUser(request)
-  if (!user.isAdmin) return redirect("/account/invites", request, { flash: { title: "You are not an admin" } })
+// export const action = async ({ request }: ActionFunctionArgs) => {
+//   const user = await getCurrentUser(request)
+//   if (!user.isAdmin) return redirect("/account/invites", request, { flash: { title: "You are not an admin" } })
 
-  const codes = generateInviteCodes(user.id)
+//   const codes = generateInviteCodes(user.id)
 
-  await db.inviteCode.createMany({ data: codes.map((code) => ({ code, ownerId: user.id })) })
+//   await db.inviteCode.createMany({ data: codes.map((code) => ({ code, ownerId: user.id })) })
 
-  return redirect("/account/invites", request, { flash: { title: "Generated new codes" } })
-}
+//   return redirect("/account/invites", request, { flash: { title: "Generated new codes" } })
+// }
 
 export default function AccountInvite() {
   const user = useLoaderData<typeof loader>()
@@ -60,12 +60,12 @@ export default function AccountInvite() {
           )}
         </div>
       ))}
-      {user.isAdmin && (
+      {/* {user.isAdmin && (
         <Form className="flex items-center gap-2 rounded py-4">
           <FormButton>Generate new codes</FormButton>
           <p>Only admins see this</p>
         </Form>
-      )}
+      )} */}
     </div>
   )
 }
