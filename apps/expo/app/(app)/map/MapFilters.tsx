@@ -6,11 +6,11 @@ import { type SpotType } from "@ramble/database/types"
 import { join } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
+import { Icon } from "../../../components/Icon"
 import { Button } from "../../../components/ui/Button"
 import { Heading } from "../../../components/ui/Heading"
 import { Text } from "../../../components/ui/Text"
 import { SPOT_TYPES, type SpotTypeInfo } from "../../../lib/models/spot"
-import { Icon } from "../../../components/Icon"
 
 export type Filters = {
   isPetFriendly: boolean

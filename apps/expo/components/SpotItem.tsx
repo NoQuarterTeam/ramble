@@ -5,11 +5,10 @@ import { type SpotItemWithStatsAndImage } from "@ramble/shared"
 import { createImageUrl, displayRating } from "@ramble/shared"
 
 import { useRouter } from "../app/router"
-
+import { Icon } from "./Icon"
+import { SpotIcon } from "./SpotIcon"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
-import { SpotIcon } from "./SpotIcon"
-import { Icon } from "./Icon"
 
 interface Props {
   spot: SpotItemWithStatsAndImage

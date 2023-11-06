@@ -3,6 +3,7 @@ import { ChevronLeft, Heart, Instagram, User2 } from "lucide-react-native"
 
 import { createImageUrl } from "@ramble/shared"
 
+import { Icon } from "../../../../components/Icon"
 import { BrandHeading } from "../../../../components/ui/BrandHeading"
 import { Button } from "../../../../components/ui/Button"
 import { OptimizedImage } from "../../../../components/ui/OptimisedImage"
@@ -15,7 +16,6 @@ import { useParams, useRouter } from "../../../router"
 import UserLists from "./lists"
 import { UserSpots } from "./spots"
 import { UserVan } from "./van"
-import { Icon } from "../../../../components/Icon"
 
 export function UserScreen() {
   const colorScheme = useColorScheme()

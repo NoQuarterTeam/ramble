@@ -3,8 +3,8 @@ import { Trash2 } from "lucide-react-native"
 
 import { merge } from "@ramble/shared"
 
-import { Spinner } from "./Spinner"
 import { Icon } from "../Icon"
+import { Spinner } from "./Spinner"
 
 interface Props extends TouchableOpacityProps {
   isLoading?: boolean

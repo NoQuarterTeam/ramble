@@ -1,8 +1,11 @@
-import { type FeedbackType } from "@ramble/database/types"
-import { Bug, Lightbulb, MessageCircle } from "lucide-react-native"
 import * as React from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { ScrollView, TouchableOpacity, View } from "react-native"
+import { Bug, Lightbulb, MessageCircle } from "lucide-react-native"
+
+import { type FeedbackType } from "@ramble/database/types"
+import { join } from "@ramble/shared"
+
 import { Icon } from "../../../components/Icon"
 import { Button } from "../../../components/ui/Button"
 import { FormError } from "../../../components/ui/FormError"
@@ -13,7 +16,6 @@ import { toast } from "../../../components/ui/Toast"
 import { api } from "../../../lib/api"
 import { useKeyboardController } from "../../../lib/hooks/useKeyboardController"
 import { useRouter } from "../../router"
-import { join } from "@ramble/shared"
 
 const feedbackTypes = [
   { label: "Issue", value: "ISSUE", icon: Bug },

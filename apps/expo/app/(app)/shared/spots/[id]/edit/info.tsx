@@ -5,6 +5,7 @@ import { Dog } from "lucide-react-native"
 import { doesSpotTypeRequireAmenities } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
+import { Icon } from "../../../../../../components/Icon"
 import { Button } from "../../../../../../components/ui/Button"
 import { FormInputLabel } from "../../../../../../components/ui/FormInput"
 import { Input } from "../../../../../../components/ui/Input"
@@ -12,7 +13,6 @@ import { Text } from "../../../../../../components/ui/Text"
 import { useKeyboardController } from "../../../../../../lib/hooks/useKeyboardController"
 import { useParams, useRouter } from "../../../../../router"
 import { EditSpotModalView } from "./EditSpotModalView"
-import { Icon } from "../../../../../../components/Icon"
 
 export function EditSpotOptionsScreen() {
   useKeyboardController()

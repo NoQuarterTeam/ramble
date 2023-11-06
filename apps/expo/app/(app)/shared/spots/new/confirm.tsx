@@ -5,6 +5,7 @@ import { Check, Dog, Lock } from "lucide-react-native"
 import { AMENITIES } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
+import { Icon } from "../../../../../components/Icon"
 import { SpotIcon } from "../../../../../components/SpotIcon"
 import { Button } from "../../../../../components/ui/Button"
 import { SpotImageCarousel } from "../../../../../components/ui/SpotImageCarousel"
@@ -16,7 +17,6 @@ import { useS3Upload } from "../../../../../lib/hooks/useS3"
 import { AMENITIES_ICONS } from "../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
-import { Icon } from "../../../../../components/Icon"
 
 export function NewSpotConfirmScreen() {
   const { params } = useParams<"NewSpotConfirmScreen">()

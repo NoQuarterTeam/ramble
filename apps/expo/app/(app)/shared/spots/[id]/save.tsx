@@ -3,13 +3,13 @@ import { TouchableOpacity, useColorScheme, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import { Heart, Lock } from "lucide-react-native"
 
+import { Icon } from "../../../../../components/Icon"
 import { LoginPlaceholder } from "../../../../../components/LoginPlaceholder"
 import { ModalView } from "../../../../../components/ui/ModalView"
 import { Text } from "../../../../../components/ui/Text"
 import { api, type RouterOutputs } from "../../../../../lib/api"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { useParams } from "../../../../router"
-import { Icon } from "../../../../../components/Icon"
 
 export function SaveSpotScreen() {
   const {

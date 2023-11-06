@@ -5,9 +5,9 @@ import { type List, type User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
 import { useRouter } from "../app/router"
+import { Icon } from "./Icon"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
-import { Icon } from "./Icon"
 
 interface Props {
   list: Pick<List, "id" | "name" | "description" | "isPrivate"> & {

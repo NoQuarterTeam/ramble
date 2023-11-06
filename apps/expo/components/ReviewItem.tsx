@@ -8,10 +8,10 @@ import { createImageUrl } from "@ramble/shared"
 import { useRouter } from "../app/router"
 import { api } from "../lib/api"
 import { useMe } from "../lib/hooks/useMe"
+import { Icon } from "./Icon"
 import { Button } from "./ui/Button"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
-import { Icon } from "./Icon"
 
 export function ReviewItem({
   review,

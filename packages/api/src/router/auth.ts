@@ -1,17 +1,17 @@
 import { TRPCError } from "@trpc/server"
 import bcrypt from "bcryptjs"
+import { z } from "zod"
 
 import { loginSchema, registerSchema } from "@ramble/shared"
 
 import { createAuthToken } from "../lib/jwt"
-import { createTRPCRouter, publicProcedure } from "../trpc"
-import { z } from "zod"
 import { createAccessRequest } from "../services/access-request.server"
 import {
   sendAccessRequestConfirmationEmail,
   sendAccessRequestConfirmationToAdminsEmail,
 } from "../services/mailers/access-request.server"
 import { sendSlackMessage } from "../services/slack.server"
+import { createTRPCRouter, publicProcedure } from "../trpc"
 
 export const authRouter = createTRPCRouter({
   login: publicProcedure.input(loginSchema).mutation(async ({ ctx, input }) => {
