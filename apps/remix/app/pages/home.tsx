@@ -2,7 +2,12 @@ import { Link } from "@remix-run/react"
 import { ClientOnly } from "remix-utils/client-only"
 import { z } from "zod"
 
-import { sendAccessRequestConfirmationEmail, sendAccessRequestConfirmationToAdminsEmail } from "@ramble/api"
+import {
+  createAccessRequest,
+  sendAccessRequestConfirmationEmail,
+  sendAccessRequestConfirmationToAdminsEmail,
+  sendSlackMessage,
+} from "@ramble/api"
 import { join, merge } from "@ramble/shared"
 import { Form, useFetcher } from "~/components/Form"
 import { PageContainer } from "~/components/PageContainer"
@@ -13,9 +18,8 @@ import { type ActionDataErrorResponse, formError, validateFormData } from "~/lib
 import { json } from "~/lib/remix.server"
 import { type LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { Instagram } from "lucide-react"
-import { sendSlackMessage } from "~/lib/slack.server"
+
 import { Spinner } from "~/components/ui"
-import { createAccessRequest } from "~/services/access-request.server"
 
 export const config = {
   // runtime: "edge",

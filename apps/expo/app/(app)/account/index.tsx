@@ -1,6 +1,6 @@
 import { ScrollView, TouchableOpacity, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { AlertCircle, ChevronRight, Cog, type LucideIcon, ToggleRight, User, User2 } from "lucide-react-native"
+import { AlertCircle, ChevronRight, Cog, type LucideIcon, ToggleRight, User, User2, MessageCircle } from "lucide-react-native"
 
 import { createImageUrl } from "@ramble/shared"
 
@@ -61,6 +61,7 @@ export function AccountScreen() {
               <Icon icon={AlertCircle} size={20} />
               <Text className="text-lg">Your account is not yet verified</Text>
             </View>
+            <Text>Didn't receive an email?</Text>
             <Button onPress={() => mutate()} disabled={!!data} size="sm">
               Send verification email
             </Button>
@@ -110,6 +111,9 @@ export function AccountScreen() {
               </ProfileLink>
               <ProfileLink to="AccountSettingsScreen" icon={Cog}>
                 Settings
+              </ProfileLink>
+              <ProfileLink to="AccountFeedbackScreen" icon={MessageCircle}>
+                Feedback
               </ProfileLink>
             </View>
           </View>

@@ -55,7 +55,7 @@ import { defaultPreferences, type Preferences, preferencesCookies } from "./serv
 import { getThemeSession } from "./services/session/theme.server"
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Ramble" }, { name: "description", content: "Created by No Quarter" }]
+  return [{ title: "Ramble: Van Travel App" }, { name: "description", content: "Everything you need for van life in Europe." }]
 }
 
 export const links: LinksFunction = () => {

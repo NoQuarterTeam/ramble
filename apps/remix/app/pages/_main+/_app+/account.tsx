@@ -54,6 +54,7 @@ export default function AccountLayout() {
             <p>Your account is not yet verified</p>
           </div>
           <Form>
+            <p>Didn't receive an email?</p>
             <FormButton disabled={!!data?.success} size="sm">
               Send verification email
             </FormButton>

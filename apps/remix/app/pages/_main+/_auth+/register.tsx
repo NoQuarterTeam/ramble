@@ -23,8 +23,6 @@ export const headers = () => {
   }
 }
 
-export const loader = () => redirect("/")
-
 enum Actions {
   register = "register",
 }
@@ -44,10 +42,10 @@ export const action = ({ request }: ActionFunctionArgs) =>
             firstName: z.string().min(2, "Must be at least 2 characters"),
             lastName: z.string().min(2, "Must be at least 2 characters"),
             passwordConfirmation: z.string().optional(),
-            code: z.string().min(4, "Must be at least 2 characters"),
+            code: z.string().min(4, "Must be at least 4 characters"),
           }),
         )
-        .handler(async ({ passwordConfirmation, ...data }) => {
+        .handler(async ({ passwordConfirmation, code, ...data }) => {
           if (passwordConfirmation) return redirect("/") // honey pot
           const email = data.email.toLowerCase().trim()
           const existingEmail = await db.user.findFirst({ where: { email } })
@@ -56,23 +54,27 @@ export const action = ({ request }: ActionFunctionArgs) =>
           const existingUsername = await db.user.findFirst({ where: { username } })
           if (existingUsername) return formError({ data, formError: "User with this username already exists" })
 
-          const trimmedCode = data.code.toUpperCase().trim()
+          const trimmedCode = code.toUpperCase().trim()
           const inviteCode = await db.inviteCode.findFirst({ where: { code: trimmedCode, acceptedAt: null } })
-          if (!inviteCode) return formError({ data, formError: "Invalid invite code" })
+          const accessRequest = await db.accessRequest.findUnique({ where: { code: trimmedCode } })
+
+          if (!accessRequest && !inviteCode) return formError({ formError: "Invalid code" })
 
           const password = await hashPassword(data.password)
           const user = await db.user.create({
             data: {
               ...data,
-              usedInviteCode: { connect: { id: inviteCode.id } },
+              usedInviteCode: inviteCode ? { connect: { id: inviteCode.id } } : undefined,
               email,
               password,
               lists: { create: { name: "Favourites", description: "All my favourite spots" } },
             },
           })
+          if (accessRequest) await db.accessRequest.update({ where: { id: accessRequest.id }, data: { acceptedAt: new Date() } })
+          if (inviteCode) await db.inviteCode.update({ where: { id: inviteCode.id }, data: { acceptedAt: new Date() } })
+
           const codes = generateInviteCodes(user.id)
           await db.inviteCode.createMany({ data: codes.map((c) => ({ code: c, ownerId: user.id })) })
-          await db.inviteCode.update({ where: { id: inviteCode.id }, data: { acceptedAt: new Date() } })
           const { setUser } = await getUserSession(request)
           const token = await createToken({ id: user.id })
           await sendAccountVerificationEmail(user, token)
@@ -90,16 +92,25 @@ export default function Register() {
 
   return (
     <Form className="space-y-2">
-      <h1 className="text-4xl">Register</h1>
+      <h1 className="text-4xl font-bold">Register</h1>
       <p>For now we are invite only!</p>
-      <FormField required label="Invite code" placeholder="1234ABCD" name="code" defaultValue={searchParams.get("code") || ""} />
-      <hr />
-      <FormField autoCapitalize="none" required label="Email address" name="email" placeholder="sally@yahoo.com" />
+      <FormField
+        autoCapitalize="none"
+        className="uppercase"
+        required
+        defaultValue={searchParams.get("code") || ""}
+        label="Invite code"
+        name="code"
+        placeholder="1F54AF3G"
+      />
+      <FormField autoCapitalize="none" required label="Email address" name="email" placeholder="jim@gmail.com" />
       <FormField required label="Password" name="password" type="password" placeholder="********" />
       <input name="passwordConfirmation" className="hidden" />
       <FormField autoCapitalize="none" required label="Choose a username" name="username" placeholder="Jim93" />
-      <FormField required label="First name" name="firstName" placeholder="Jim" />
-      <FormField required label="Last name" name="lastName" placeholder="Bob" />
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+        <FormField required label="First name" name="firstName" placeholder="Jim" />
+        <FormField required label="Last name" name="lastName" placeholder="Bob" />
+      </div>
 
       <div>
         <FormButton value={Actions.register} className="w-full">

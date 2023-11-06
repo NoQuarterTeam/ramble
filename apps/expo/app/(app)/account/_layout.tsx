@@ -8,6 +8,7 @@ import { AccountInfoScreen } from "./info"
 import { InterestsScreen } from "./interests"
 import { AccountSettingsScreen } from "./settings"
 import { VanScreen } from "./van"
+import { AccountFeedbackScreen } from "./feedback"
 
 const AccountStack = createNativeStackNavigator<ScreenParamsList>()
 
@@ -25,6 +26,7 @@ export function AccountLayout() {
       <AccountStack.Screen name="AccountVanScreen" component={VanScreen} />
       <AccountStack.Screen name="AccountInterestsScreen" component={InterestsScreen} />
       <AccountStack.Screen name="AccountSettingsScreen" component={AccountSettingsScreen} />
+      <AccountStack.Screen name="AccountFeedbackScreen" component={AccountFeedbackScreen} />
       {sharedScreens}
     </AccountStack.Navigator>
   )
