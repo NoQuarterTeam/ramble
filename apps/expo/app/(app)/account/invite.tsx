@@ -1,6 +1,7 @@
 import { Copy, User2 } from "lucide-react-native"
 import * as React from "react"
 import { ScrollView, TouchableOpacity, View } from "react-native"
+import Clipboard from "@react-native-clipboard/clipboard"
 
 import { Icon } from "../../../components/Icon"
 import { ScreenView } from "../../../components/ui/ScreenView"
@@ -10,11 +11,15 @@ import { api } from "../../../lib/api"
 import { createImageUrl, join } from "@ramble/shared"
 import { OptimizedImage } from "../../../components/ui/OptimisedImage"
 import { useRouter } from "../../router"
+import { toast } from "../../../components/ui/Toast"
 
 export function AccountInviteScreen() {
   const router = useRouter()
   const { data, isLoading } = api.inviteCode.myCodes.useQuery()
-  const handleCopy = (code: string) => {}
+  const handleCopy = (code: string) => {
+    Clipboard.setString(code)
+    toast({ title: "Copied to clipboard!" })
+  }
 
   return (
     <ScreenView title="invite codes">
