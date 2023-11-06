@@ -79,8 +79,10 @@ export default function Register() {
       <FormField required label="Password" name="password" type="password" placeholder="********" />
       <input name="passwordConfirmation" className="hidden" />
       <FormField autoCapitalize="none" required label="Choose a username" name="username" placeholder="Jim93" />
-      <FormField required label="First name" name="firstName" placeholder="Jim" />
-      <FormField required label="Last name" name="lastName" placeholder="Bob" />
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+        <FormField required label="First name" name="firstName" placeholder="Jim" />
+        <FormField required label="Last name" name="lastName" placeholder="Bob" />
+      </div>
 
       <div>
         <FormButton value={Actions.register} className="w-full">
