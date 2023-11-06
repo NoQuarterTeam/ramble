@@ -1,6 +1,7 @@
 import { WebClient } from "@slack/web-api"
-import { SLACK_TOKEN } from "../lib/env"
+
 import { IS_PRODUCTION } from "../lib/config"
+import { SLACK_TOKEN } from "../lib/env"
 
 export const slack = new WebClient(SLACK_TOKEN)
 

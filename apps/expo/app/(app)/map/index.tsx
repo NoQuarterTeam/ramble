@@ -9,6 +9,7 @@ import { type SpotType } from "@ramble/database/types"
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
+import { Icon } from "../../../components/Icon"
 import { SpotMarker } from "../../../components/SpotMarker"
 import { ModalView } from "../../../components/ui/ModalView"
 import { Spinner } from "../../../components/ui/Spinner"
@@ -20,7 +21,6 @@ import { usePreferences } from "../../../lib/hooks/usePreferences"
 import { useRouter } from "../../router"
 import { type Filters, initialFilters, MapFilters } from "./MapFilters"
 import { SpotPreview } from "./SpotPreview"
-import { Icon } from "../../../components/Icon"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 

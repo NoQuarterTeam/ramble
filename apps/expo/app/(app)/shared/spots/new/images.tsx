@@ -4,11 +4,11 @@ import { Image } from "expo-image"
 import * as ImagePicker from "expo-image-picker"
 import { Plus, X } from "lucide-react-native"
 
+import { Icon } from "../../../../../components/Icon"
 import { Button } from "../../../../../components/ui/Button"
 import { toast } from "../../../../../components/ui/Toast"
 import { useParams, useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
-import { Icon } from "../../../../../components/Icon"
 
 export function NewSpotImagesScreen() {
   const { params } = useParams<"NewSpotImagesScreen">()

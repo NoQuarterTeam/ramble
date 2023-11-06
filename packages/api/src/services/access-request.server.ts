@@ -1,7 +1,7 @@
 import crypto from "crypto"
 
-import { Prisma } from "@ramble/database/types"
 import { prisma } from "@ramble/database"
+import { Prisma } from "@ramble/database/types"
 
 let count = 0
 export async function createAccessRequest(email: string) {

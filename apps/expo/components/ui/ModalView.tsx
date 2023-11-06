@@ -7,9 +7,9 @@ import { join } from "@ramble/shared"
 
 import { useRouter } from "../../app/router"
 import { isAndroid } from "../../lib/device"
+import { Icon } from "../Icon"
 import { BrandHeading } from "./BrandHeading"
 import { Toast } from "./Toast"
-import { Icon } from "../Icon"
 
 interface Props {
   title?: string

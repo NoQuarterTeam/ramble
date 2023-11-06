@@ -1,8 +1,10 @@
-import { getSpotFlickrImages, publicSpotWhereClause } from "@ramble/api"
-import { spotPartnerFields } from "@ramble/shared"
-import { LoaderFunctionArgs, SerializeFrom } from "@vercel/remix"
+import { type LoaderFunctionArgs, type SerializeFrom } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import { promiseHash } from "remix-utils/promise"
+
+import { getSpotFlickrImages, publicSpotWhereClause } from "@ramble/api"
+import { spotPartnerFields } from "@ramble/shared"
+
 import { db } from "~/lib/db.server"
 import { json, notFound } from "~/lib/remix.server"
 import { reviewItemSelectFields } from "~/pages/_main+/_app+/components/ReviewItem"

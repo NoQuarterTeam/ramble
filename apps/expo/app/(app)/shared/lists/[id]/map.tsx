@@ -2,13 +2,13 @@ import { TouchableOpacity, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import { ChevronLeft } from "lucide-react-native"
 
+import { Icon } from "../../../../../components/Icon"
 import { SpotItem } from "../../../../../components/SpotItem"
 import { Heading } from "../../../../../components/ui/Heading"
 import { Spinner } from "../../../../../components/ui/Spinner"
 import { Text } from "../../../../../components/ui/Text"
 import { api } from "../../../../../lib/api"
 import { useParams, useRouter } from "../../../../router"
-import { Icon } from "../../../../../components/Icon"
 
 export function ListDetailMapScreen() {
   const { params } = useParams<"ListDetailMapScreen">()

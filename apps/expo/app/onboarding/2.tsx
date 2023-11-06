@@ -3,6 +3,7 @@ import { ScrollView, Switch, View } from "react-native"
 
 import colors from "@ramble/tailwind-config/src/colors"
 
+import { Icon } from "../../components/Icon"
 import { Button } from "../../components/ui/Button"
 import { FormError } from "../../components/ui/FormError"
 import { Heading } from "../../components/ui/Heading"
@@ -12,7 +13,6 @@ import { api } from "../../lib/api"
 import { useMe } from "../../lib/hooks/useMe"
 import { interestOptions } from "../../lib/models/user"
 import { useRouter } from "../router"
-import { Icon } from "../../components/Icon"
 
 export default function OnboardingStep2Screen() {
   const { me } = useMe()

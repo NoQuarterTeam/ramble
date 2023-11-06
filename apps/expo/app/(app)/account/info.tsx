@@ -5,6 +5,7 @@ import { Edit2, User2 } from "lucide-react-native"
 
 import { createImageUrl } from "@ramble/shared"
 
+import { Icon } from "../../../components/Icon"
 import { Button } from "../../../components/ui/Button"
 import { FormError } from "../../../components/ui/FormError"
 import { FormInput } from "../../../components/ui/FormInput"
@@ -17,7 +18,6 @@ import { useForm } from "../../../lib/hooks/useForm"
 import { useKeyboardController } from "../../../lib/hooks/useKeyboardController"
 import { useMe } from "../../../lib/hooks/useMe"
 import { useS3Upload } from "../../../lib/hooks/useS3"
-import { Icon } from "../../../components/Icon"
 
 export function AccountInfoScreen() {
   useKeyboardController()
