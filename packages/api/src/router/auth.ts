@@ -32,7 +32,14 @@ export const authRouter = createTRPCRouter({
     const existingUsername = await ctx.prisma.user.findUnique({ where: { username } })
     if (existingUsername) throw new TRPCError({ code: "BAD_REQUEST", message: "User with this username already exists" })
     const hashedPassword = bcrypt.hashSync(input.password, 10)
-    const newUser = await ctx.prisma.user.create({ data: { ...input, password: hashedPassword } })
+    const newUser = await ctx.prisma.user.create({
+      data: {
+        ...input,
+        isVerified: true,
+        lists: { create: { name: "Favourites", description: "All my favourite spots" } },
+        password: hashedPassword,
+      },
+    })
     await ctx.prisma.accessRequest.update({ where: { id: accessRequest.id }, data: { acceptedAt: new Date() } })
     const token = createAuthToken({ id: newUser.id })
     return { user: newUser, token }

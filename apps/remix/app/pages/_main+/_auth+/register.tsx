@@ -2,7 +2,7 @@ import { Link } from "@remix-run/react"
 import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
-import { sendAccountVerificationEmail } from "@ramble/api"
+import { sendAccountVerificationEmail, sendSlackMessage } from "@ramble/api"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { track } from "~/lib/analytics.server"
@@ -58,13 +58,20 @@ export const action = ({ request }: ActionFunctionArgs) =>
           if (existingUsername) return formError({ data, formError: "User with this username already exists" })
           const password = await hashPassword(data.password)
           const user = await db.user.create({
-            data: { ...data, email, password, lists: { create: { name: "Favourites", description: "All my favourite spots" } } },
+            data: {
+              ...data,
+              email,
+              isVerified: true,
+              password,
+              lists: { create: { name: "Favourites", description: "All my favourite spots" } },
+            },
           })
           const { setUser } = await getUserSession(request)
           const token = await createToken({ id: user.id })
           await sendAccountVerificationEmail(user, token)
           const headers = new Headers([["set-cookie", await setUser(user.id)]])
           track("Registered", { userId: user.id })
+          sendSlackMessage("User signed up")
           return redirect("/onboarding", request, {
             headers,
             flash: { title: `Welcome to Ramble, ${data.firstName}!`, description: "Let's get you setup." },
