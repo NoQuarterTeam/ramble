@@ -11,8 +11,10 @@ const splash: ExpoConfig["splash"] = {
   },
 }
 
+const IS_DEV = process.env.APP_VARIANT === "development"
+
 const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
-  name: "Ramble",
+  name: IS_DEV ? "Ramble (dev)" : "Ramble",
   description: "Ramble: Van Travel App",
   slug: "ramble",
   scheme: "ramble",
@@ -35,7 +37,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     config: {
       usesNonExemptEncryption: false,
     },
-    bundleIdentifier: "co.noquarter.ramble",
+    bundleIdentifier: IS_DEV ? "co.noquarter.ramble.dev" : "co.noquarter.ramble",
     associatedDomains: ["applinks:ramble.guide", "applinks:dev.ramble.guide"],
     splash,
     infoPlist: {
@@ -49,7 +51,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
       backgroundColor: "#fffefe",
     },
     softwareKeyboardLayoutMode: "resize",
-    package: "co.noquarter.ramble",
+    package: IS_DEV ? "co.noquarter.ramble.dev" : "co.noquarter.ramble",
     splash,
     versionCode: 8,
   },

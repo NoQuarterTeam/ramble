@@ -5,12 +5,18 @@
       "developmentClient": true,
       "distribution": "internal",
       "channel": "development",
-      "pnpm": "8.9.2"
+      "pnpm": "8.9.2",
+      "env": {
+        "APP_VARIANT": "development"
+      }
     },
     "preview": {
       "channel": "preview",
       "distribution": "internal",
-      "pnpm": "8.9.2"
+      "pnpm": "8.9.2",
+      "env": {
+        "APP_VARIANT": "development"
+      }
     },
     "production": {
       "channel": "production",
