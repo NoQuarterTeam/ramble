@@ -80,8 +80,8 @@ export const action = ({ request }: ActionFunctionArgs) =>
           const token = await createToken({ id: user.id })
           await sendAccountVerificationEmail(user, token)
           const headers = new Headers([["set-cookie", await setUser(user.id)]])
-          track("Registered", { userId: user.id })
-          sendSlackMessage("User signed up")
+          track("Registered", { userId: user.id, code })
+          sendSlackMessage(`🔥 User signed up with code`)
           return redirect("/onboarding", request, {
             headers,
             flash: { title: `Welcome to Ramble, ${data.firstName}!`, description: "Let's get you setup." },

@@ -52,6 +52,7 @@ export const authRouter = createTRPCRouter({
     const codes = generateInviteCodes(user.id)
     await ctx.prisma.inviteCode.createMany({ data: codes.map((c) => ({ code: c, ownerId: user.id })) })
     const token = createAuthToken({ id: user.id })
+    sendSlackMessage(`🔥 User signed up with code`)
     return { user: user, token }
   }),
   requestAccess: publicProcedure.input(z.object({ email: z.string().email() })).mutation(async ({ ctx, input }) => {
