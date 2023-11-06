@@ -2,6 +2,7 @@ name: production
 on:
   push:
     paths:
+      - "pnpm-lock.yaml"
       - "apps/expo/**"
       - "packages/shared/**"
       - "packages/database/**"
