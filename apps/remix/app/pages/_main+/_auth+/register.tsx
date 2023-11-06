@@ -56,7 +56,7 @@ export const action = ({ request }: ActionFunctionArgs) =>
 
           const trimmedCode = code.toUpperCase().trim()
           const inviteCode = await db.inviteCode.findFirst({ where: { code: trimmedCode, acceptedAt: null } })
-          const accessRequest = await db.accessRequest.findUnique({ where: { code: trimmedCode } })
+          const accessRequest = await db.accessRequest.findUnique({ where: { code: trimmedCode, acceptedAt: null } })
 
           if (!accessRequest && !inviteCode) return formError({ formError: "Invalid code" })
 
@@ -81,7 +81,7 @@ export const action = ({ request }: ActionFunctionArgs) =>
           await sendAccountVerificationEmail(user, token)
           const headers = new Headers([["set-cookie", await setUser(user.id)]])
           track("Registered", { userId: user.id, code })
-          sendSlackMessage(`🔥 User signed up with code`)
+          sendSlackMessage(`🔥 @${user.username} signed up!`)
           return redirect("/onboarding", request, {
             headers,
             flash: { title: `Welcome to Ramble, ${data.firstName}!`, description: "Let's get you setup." },
