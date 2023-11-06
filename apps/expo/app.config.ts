@@ -19,7 +19,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   slug: "ramble",
   scheme: "ramble",
   owner: "noquarter",
-  version: "1.0.4",
+  version: "1.0.5",
   jsEngine: "hermes",
   orientation: "portrait",
   icon: "./assets/icon.png",
@@ -31,6 +31,9 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     checkAutomatically: "ON_LOAD",
   },
   assetBundlePatterns: ["**/*"],
+  runtimeVersion: {
+    policy: "nativeVersion",
+  },
   ios: {
     supportsTablet: true,
     icon: "./assets/icon.png",
@@ -43,7 +46,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     infoPlist: {
       LSApplicationQueriesSchemes: ["comgooglemaps"],
     },
-    buildNumber: "8",
+    buildNumber: "9",
   },
   android: {
     adaptiveIcon: {
@@ -53,10 +56,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     softwareKeyboardLayoutMode: "resize",
     package: IS_DEV ? "co.noquarter.ramble.dev" : "co.noquarter.ramble",
     splash,
-    versionCode: 8,
-  },
-  runtimeVersion: {
-    policy: "sdkVersion",
+    versionCode: 9,
   },
   extra: {
     eas: {
