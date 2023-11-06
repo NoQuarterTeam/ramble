@@ -4,12 +4,12 @@ import Mapbox, { Camera, type MapView as MapType } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { CircleDot, Navigation } from "lucide-react-native"
 
+import { Icon } from "../../../../../../components/Icon"
 import { Button } from "../../../../../../components/ui/Button"
 import { toast } from "../../../../../../components/ui/Toast"
 import { useMe } from "../../../../../../lib/hooks/useMe"
 import { useParams, useRouter } from "../../../../../router"
 import { EditSpotModalView } from "./EditSpotModalView"
-import { Icon } from "../../../../../../components/Icon"
 
 export function EditSpotLocationScreen() {
   const { params } = useParams<"EditSpotLocationScreen">()

@@ -5,6 +5,7 @@ import { Heart, Star, X } from "lucide-react-native"
 
 import { displayRating, isPartnerSpot } from "@ramble/shared"
 
+import { Icon } from "../../../components/Icon"
 import { PartnerLink } from "../../../components/PartnerLink"
 import { SpotIcon } from "../../../components/SpotIcon"
 import { Button } from "../../../components/ui/Button"
@@ -14,10 +15,9 @@ import { Text } from "../../../components/ui/Text"
 import { VerifiedCard } from "../../../components/VerifiedCard"
 import { api } from "../../../lib/api"
 import { height, isTablet, width } from "../../../lib/device"
+import { useMe } from "../../../lib/hooks/useMe"
 import { useBackgroundColor } from "../../../lib/tailwind"
 import { useRouter } from "../../router"
-import { Icon } from "../../../components/Icon"
-import { useMe } from "../../../lib/hooks/useMe"
 // import * as Device from 'expo-device';
 
 export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: string | null; onClose: () => void }) {

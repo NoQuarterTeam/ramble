@@ -5,11 +5,11 @@ import { ChevronLeft, X } from "lucide-react-native"
 
 import { join } from "@ramble/shared"
 
+import { Icon } from "../../../../../components/Icon"
 import { BrandHeading } from "../../../../../components/ui/BrandHeading"
 import { Toast } from "../../../../../components/ui/Toast"
 import { isAndroid } from "../../../../../lib/device"
 import { useRouter } from "../../../../router"
-import { Icon } from "../../../../../components/Icon"
 
 interface Props {
   title?: string

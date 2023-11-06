@@ -23,7 +23,7 @@ import type { ActionDataErrorResponse } from "~/lib/form.server"
 import { useFetcherQuery } from "~/lib/hooks/useFetcherQuery"
 import { json } from "~/lib/remix.server"
 import type { LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
-import { saveToListActions, type CreateListSchema } from "~/services/api/save-to-list.server"
+import { type CreateListSchema, saveToListActions } from "~/services/api/save-to-list.server"
 import { requireUser } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

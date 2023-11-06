@@ -1,5 +1,6 @@
-import { Spot, SpotImage } from "@ramble/database/types"
-import { FlickrResponse, flickr } from "../lib/flickr.server"
+import { type Spot, type SpotImage } from "@ramble/database/types"
+
+import { flickr, type FlickrResponse } from "../lib/flickr.server"
 
 export async function getSpotFlickrImages(
   spot: Pick<Spot, "type" | "latitude" | "longitude"> & { images: Pick<SpotImage, "id">[] },

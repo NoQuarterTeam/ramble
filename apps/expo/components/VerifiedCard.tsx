@@ -5,10 +5,10 @@ import { type Spot, type User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
 import { useRouter } from "../app/router"
+import { useMe } from "../lib/hooks/useMe"
+import { Icon } from "./Icon"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
-import { Icon } from "./Icon"
-import { useMe } from "../lib/hooks/useMe"
 
 interface Props {
   spot: Pick<Spot, "verifiedAt"> & {

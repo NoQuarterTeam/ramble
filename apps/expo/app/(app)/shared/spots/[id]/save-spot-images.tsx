@@ -4,13 +4,13 @@ import { Image } from "expo-image"
 import * as ImagePicker from "expo-image-picker"
 import { Plus, X } from "lucide-react-native"
 
+import { Icon } from "../../../../../components/Icon"
 import { Button } from "../../../../../components/ui/Button"
 import { ModalView } from "../../../../../components/ui/ModalView"
 import { toast } from "../../../../../components/ui/Toast"
 import { api } from "../../../../../lib/api"
 import { useS3Upload } from "../../../../../lib/hooks/useS3"
 import { useParams, useRouter } from "../../../../router"
-import { Icon } from "../../../../../components/Icon"
 
 export function SaveSpotImagesScreen() {
   const { goBack } = useRouter()

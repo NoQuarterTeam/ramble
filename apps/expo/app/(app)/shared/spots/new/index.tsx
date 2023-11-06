@@ -6,13 +6,13 @@ import { CircleDot, Navigation } from "lucide-react-native"
 
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
 
+import { Icon } from "../../../../../components/Icon"
 import { LoginPlaceholder } from "../../../../../components/LoginPlaceholder"
 import { Button } from "../../../../../components/ui/Button"
 import { toast } from "../../../../../components/ui/Toast"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
-import { Icon } from "../../../../../components/Icon"
 
 export function NewSpotLocationScreen() {
   const [coords, setCoords] = React.useState<number[] | null>(null)

@@ -3,6 +3,7 @@ import { ScrollView, Switch, View } from "react-native"
 
 import colors from "@ramble/tailwind-config/src/colors"
 
+import { Icon } from "../../../components/Icon"
 import { FormError } from "../../../components/ui/FormError"
 import { type IconProps } from "../../../components/ui/Icons"
 import { ScreenView } from "../../../components/ui/ScreenView"
@@ -11,7 +12,6 @@ import { toast } from "../../../components/ui/Toast"
 import { api } from "../../../lib/api"
 import { useMe } from "../../../lib/hooks/useMe"
 import { interestOptions } from "../../../lib/models/user"
-import { Icon } from "../../../components/Icon"
 
 export function InterestsScreen() {
   const { me } = useMe()

@@ -2,11 +2,9 @@ import type * as React from "react"
 import { TouchableOpacity, View } from "react-native"
 import { ChevronLeft } from "lucide-react-native"
 
-import { join } from "@ramble/shared"
-
 import { useRouter } from "../../app/router"
-import { BrandHeading } from "./BrandHeading"
 import { Icon } from "../Icon"
+import { BrandHeading } from "./BrandHeading"
 
 interface Props {
   title: string

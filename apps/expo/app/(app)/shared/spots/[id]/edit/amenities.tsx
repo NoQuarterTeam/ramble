@@ -4,13 +4,13 @@ import { ScrollView, Switch, View } from "react-native"
 import { AMENITIES } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
+import { Icon } from "../../../../../../components/Icon"
 import { Button } from "../../../../../../components/ui/Button"
 import { type RambleIcon } from "../../../../../../components/ui/Icons"
 import { Text } from "../../../../../../components/ui/Text"
 import { AMENITIES_ICONS } from "../../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../../router"
 import { EditSpotModalView } from "./EditSpotModalView"
-import { Icon } from "../../../../../../components/Icon"
 
 type AmenityObject = { [key in keyof typeof AMENITIES]: boolean }
 
