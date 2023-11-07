@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "clean": "rm -rf .expo .turbo node_modules",
-    "dev": "expo start --ios --dev-client",
+    "dev": "APP_VARIANT=development expo start --ios --dev-client",
     "dev:android": "expo start --android",
     "dev:ios": "expo start --ios",
     "lint:fix": "eslint --config .eslintrc.commit.js --fix --cache --ext .ts,.tsx .",
@@ -23,6 +23,7 @@
     "@ramble/shared": "workspace:*",
     "@ramble/tailwind-config": "workspace:*",
     "@react-native-async-storage/async-storage": "1.18.2",
+    "@react-native-clipboard/clipboard": "^1.12.1",
     "@react-navigation/bottom-tabs": "6.5.11",
     "@react-navigation/core": "6.4.10",
     "@react-navigation/native": "6.1.9",
@@ -79,7 +80,7 @@
     "@expo/config-plugins": "7.2.5",
     "@ramble/eslint-config": "workspace:*",
     "@ramble/tailwind-config": "workspace:*",
-    "@types/react": "18.2.35",
+    "@types/react": "18.2.36",
     "eslint": "8.53.0",
     "tailwindcss": "3.3.2",
     "typescript": "5.2.2"

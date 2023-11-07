@@ -41,22 +41,40 @@ model User {
   isSurfer        Boolean @default(false)
 
   // Relations
-  followers     User[]      @relation("UserFollows")
-  following     User[]      @relation("UserFollows")
-  createdSpots  Spot[]      @relation(name: "Creator")
-  ownedSpots    Spot[]      @relation(name: "Owner")
-  verifiedSpots Spot[]      @relation(name: "Verifier")
-  spotImages    SpotImage[]
-  lists         List[]
-  reviews       Review[]
-  van           Van?
-  feedback      Feedback[]
+  followers        User[]       @relation("UserFollows")
+  following        User[]       @relation("UserFollows")
+  createdSpots     Spot[]       @relation(name: "Creator")
+  ownedSpots       Spot[]       @relation(name: "Owner")
+  verifiedSpots    Spot[]       @relation(name: "Verifier")
+  spotImages       SpotImage[]
+  lists            List[]
+  reviews          Review[]
+  van              Van?
+  feedback         Feedback[]
+  myInviteCodes    InviteCode[] @relation(name: "MyInviteCodes")
+  usedInviteCode   InviteCode?  @relation(fields: [usedInviteCodeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  usedInviteCodeId String?      @unique
 
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @default(now()) @updatedAt
   accessRequest AccessRequest?
 
   @@index([username])
+}
+
+model InviteCode {
+  id         String    @id @default(uuid())
+  code       String    @unique
+  acceptedAt DateTime?
+  owner      User      @relation(name: "MyInviteCodes", fields: [ownerId], references: [id])
+  ownerId    String
+  user       User?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([code])
+  @@index([ownerId])
 }
 
 model Van {

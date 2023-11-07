@@ -26,6 +26,7 @@ export type ScreenParamsList = {
   AccountVanScreen: undefined
   AccountInterestsScreen: undefined
   AccountSettingsScreen: undefined
+  AccountInviteScreen: undefined
   AccountFeedbackScreen: undefined
 
   MapLayout: undefined

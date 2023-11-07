@@ -11,6 +11,7 @@ import {
   sendAccessRequestConfirmationToAdminsEmail,
 } from "../services/mailers/access-request.server"
 import { sendSlackMessage } from "../services/slack.server"
+import { generateInviteCodes } from "../services/inviteCodes.server"
 import { createTRPCRouter, publicProcedure } from "../trpc"
 
 export const authRouter = createTRPCRouter({
@@ -23,19 +24,36 @@ export const authRouter = createTRPCRouter({
     return { user, token }
   }),
   register: publicProcedure.input(registerSchema).mutation(async ({ ctx, input: { code, ...input } }) => {
-    const user = await ctx.prisma.user.findUnique({ where: { email: input.email } })
-    if (user) throw new TRPCError({ code: "BAD_REQUEST", message: "Email already in use" })
+    const existingEmail = await ctx.prisma.user.findUnique({ where: { email: input.email } })
+    if (existingEmail) throw new TRPCError({ code: "BAD_REQUEST", message: "Email already in use" })
     const trimmedCode = code.toUpperCase().trim()
-    const accessRequest = await ctx.prisma.accessRequest.findUnique({ where: { code: trimmedCode } })
-    if (!accessRequest) throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid invite code" })
+    const accessRequest = await ctx.prisma.accessRequest.findFirst({ where: { code: trimmedCode, user: null } })
+    const inviteCode = await ctx.prisma.inviteCode.findFirst({ where: { code: trimmedCode, acceptedAt: null } })
+    if (!accessRequest && !inviteCode) throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid code" })
     const username = input.username.toLowerCase().trim()
     const existingUsername = await ctx.prisma.user.findUnique({ where: { username } })
     if (existingUsername) throw new TRPCError({ code: "BAD_REQUEST", message: "User with this username already exists" })
     const hashedPassword = bcrypt.hashSync(input.password, 10)
-    const newUser = await ctx.prisma.user.create({ data: { ...input, password: hashedPassword } })
-    await ctx.prisma.accessRequest.update({ where: { id: accessRequest.id }, data: { acceptedAt: new Date() } })
-    const token = createAuthToken({ id: newUser.id })
-    return { user: newUser, token }
+    const user = await ctx.prisma.user.create({
+      data: {
+        ...input,
+        isVerified: true,
+        lists: { create: { name: "Favourites", description: "All my favourite spots" } },
+        password: hashedPassword,
+        usedInviteCode: inviteCode ? { connect: { id: inviteCode.id } } : undefined,
+      },
+    })
+    if (accessRequest) {
+      await ctx.prisma.accessRequest.update({ where: { id: accessRequest.id }, data: { acceptedAt: new Date() } })
+    }
+    if (inviteCode) {
+      await ctx.prisma.inviteCode.update({ where: { id: inviteCode.id }, data: { acceptedAt: new Date() } })
+    }
+    const codes = generateInviteCodes(user.id)
+    await ctx.prisma.inviteCode.createMany({ data: codes.map((c) => ({ code: c, ownerId: user.id })) })
+    const token = createAuthToken({ id: user.id })
+    sendSlackMessage(`🔥 @${user.username} signed up!`)
+    return { user: user, token }
   }),
   requestAccess: publicProcedure.input(z.object({ email: z.string().email() })).mutation(async ({ ctx, input }) => {
     const accessRequest = await ctx.prisma.accessRequest.findFirst({ where: { email: input.email } })

@@ -154,6 +154,7 @@ function PrefetchTabs(props: { children: React.ReactNode }) {
   React.useEffect(() => {
     utils.spot.list.prefetch({ skip: 0, sort: "latest" })
     if (isLoading || !me) return
+    Sentry.React.setUser({ id: me.id, username: me.username })
     utils.user.profile.prefetch({ username: me.username })
     utils.list.allByUser.prefetch({ username: me.username })
   }, [me, isLoading, utils.spot.list, utils.user.profile, utils.list.allByUser])

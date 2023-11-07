@@ -12,15 +12,7 @@ import { useRouter } from "../router"
 
 export default function OnboardingStep1Screen() {
   const { me } = useMe()
-  const form = useForm({
-    defaultValues: {
-      bio: me?.bio || "",
-      firstName: me?.firstName || "",
-      lastName: me?.lastName || "",
-      email: me?.email || "",
-      username: me?.username || "",
-    },
-  })
+  const form = useForm({ defaultValues: { bio: me?.bio || "" } })
   const router = useRouter()
 
   const utils = api.useUtils()

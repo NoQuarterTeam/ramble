@@ -28,7 +28,7 @@ export const userRouter = createTRPCRouter({
       },
     })
     if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
-    return user
+    return { ...user, isFollowedByMe: user.followers && user.followers.length > 0 }
   }),
   update: protectedProcedure.input(updateSchema).mutation(async ({ ctx, input }) => {
     const username = input.username?.toLowerCase().trim()
