@@ -46,7 +46,7 @@ export function AccountScreen() {
   if (!me)
     return (
       <TabView title="account">
-        <LoginPlaceholder text="Log in to start saving spots">
+        <LoginPlaceholder text="Log in to create your profile">
           <View className="space-y-4">
             <TouchableOpacity onPress={() => push("AuthLayout", { screen: "RegisterScreen" })}>
               <Text className="text-lg">

@@ -31,7 +31,7 @@ export function ListsScreen() {
   if (!me)
     return (
       <TabView title="lists">
-        <LoginPlaceholder text="Log in to start saving spots" />
+        <LoginPlaceholder text="Log in to create lists" />
       </TabView>
     )
   return (
