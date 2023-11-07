@@ -27,7 +27,7 @@ export const authRouter = createTRPCRouter({
     const existingEmail = await ctx.prisma.user.findUnique({ where: { email: input.email } })
     if (existingEmail) throw new TRPCError({ code: "BAD_REQUEST", message: "Email already in use" })
     const trimmedCode = code.toUpperCase().trim()
-    const accessRequest = await ctx.prisma.accessRequest.findUnique({ where: { code, acceptedAt: null } })
+    const accessRequest = await ctx.prisma.accessRequest.findFirst({ where: { code: trimmedCode, user: null } })
     const inviteCode = await ctx.prisma.inviteCode.findFirst({ where: { code: trimmedCode, acceptedAt: null } })
     if (!accessRequest && !inviteCode) throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid code" })
     const username = input.username.toLowerCase().trim()

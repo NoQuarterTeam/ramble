@@ -56,7 +56,7 @@ export const action = ({ request }: ActionFunctionArgs) =>
 
           const trimmedCode = code.toUpperCase().trim()
           const inviteCode = await db.inviteCode.findFirst({ where: { code: trimmedCode, acceptedAt: null } })
-          const accessRequest = await db.accessRequest.findUnique({ where: { code: trimmedCode, acceptedAt: null } })
+          const accessRequest = await db.accessRequest.findFirst({ where: { code: trimmedCode, user: null } })
 
           if (!accessRequest && !inviteCode) return formError({ formError: "Invalid code" })
 
