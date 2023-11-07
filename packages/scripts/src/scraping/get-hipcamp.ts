@@ -1,7 +1,7 @@
 import { prisma } from "@ramble/database"
 import { gql, GraphQLClient } from "graphql-request"
 
-const LIMIT = 5
+const LIMIT = 300
 
 const ROOT_URL = "https://www.hipcamp.com"
 const camperEndpoint = ROOT_URL + "/graphql/camper"
@@ -173,10 +173,20 @@ async function run() {
 
     // console.dir(nodes, { depth: null })
 
+    const existingHipcampSpots = await prisma.spot.findMany({
+      where: { hipcampId: { not: { equals: null } } },
+    })
+    const existingHipcampIds = existingHipcampSpots.map((spot) => spot.hipcampId)
+
     for (const node of nodes) {
       try {
         const last = node.url.split("-").length - 1
         const landId = node.url.split("-")[last]
+
+        // if in db, skip
+        const exists = existingHipcampIds.includes(landId)
+        if (exists) continue
+
         const landRes: LandRes = await camper.request(landQuery, { landId, landIdType: "MASKED" })
         const land = landRes.land
         const landSitesRes: LandSitesRes = await camper.request(landSitesQuery, { landId, landIdType: "MASKED", siteFilter: {} })
@@ -197,7 +207,7 @@ async function run() {
             name: node.name,
             latitude: parseFloat(node.coordinate.latitude),
             longitude: parseFloat(node.coordinate.longitude),
-            address: [node.cityName + node.countyName + node.stateName].join(", "),
+            address: [node.cityName, node.countyName, node.stateName].filter((e) => !!e).join(", "),
             type: "CAMPING",
             creator: { connect: { email: "dan@noquarter.co" } },
             sourceUrl: ROOT_URL + node.url,
