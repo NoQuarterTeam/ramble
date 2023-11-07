@@ -180,6 +180,11 @@ async function run() {
 
     for (const node of nodes) {
       try {
+        count++
+        process.stdout.clearLine(0)
+        process.stdout.cursorTo(0)
+        process.stdout.write(`Processing: ${count}/${results}`)
+
         const last = node.url.split("-").length - 1
         const landId = node.url.split("-")[last]
 
@@ -230,11 +235,6 @@ async function run() {
             },
           },
         })
-
-        count++
-        process.stdout.clearLine(0)
-        process.stdout.cursorTo(0)
-        process.stdout.write(`Processing: ${count}/${results}`)
       } catch (e) {
         console.log("error attempting ", node.url)
         errors.push(e)
