@@ -22,6 +22,7 @@ import { useRouter } from "../../router"
 import { type Filters, initialFilters, MapFilters } from "./MapFilters"
 import { SpotPreview } from "./SpotPreview"
 import { useMe } from "../../../lib/hooks/useMe"
+import { RegisterCheck } from "../../../components/RegisterCheck"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
@@ -185,6 +186,7 @@ export function SpotsMapScreen() {
   const [preferences, setPreferences, isReady] = usePreferences()
   return (
     <View className="flex-1">
+      <RegisterCheck />
       <Mapbox.MapView
         onLayout={handleSetUserLocation}
         className="flex-1"
