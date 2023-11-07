@@ -1,7 +1,7 @@
 import { prisma } from "@ramble/database"
 import { gql, GraphQLClient } from "graphql-request"
 
-const LIMIT = 300
+const LIMIT = 100
 
 const ROOT_URL = "https://www.hipcamp.com"
 const camperEndpoint = ROOT_URL + "/graphql/camper"
@@ -29,17 +29,23 @@ const headers = {
 const search = new GraphQLClient(searchEndpoint, { headers })
 const camper = new GraphQLClient(camperEndpoint, { headers })
 
-const ukBoundingBox = {
-  southwestLatitude: 49.15437455073152,
-  southwestLongitude: -14.155521505444824,
-  northeastLatitude: 59.064346051468334,
-  northeastLongitude: 1.9696403331486465,
+// const ukBoundingBox = {
+//   southwestLatitude: 49.15437455073152,
+//   southwestLongitude: -14.155521505444824,
+//   northeastLatitude: 59.064346051468334,
+//   northeastLongitude: 1.9696403331486465,
+// }
+const franceSpainPortugalBoundingBox = {
+  southwestLatitude: 34.26465635258491,
+  southwestLongitude: -13.909058402557605,
+  northeastLatitude: 51.24275392456704,
+  northeastLongitude: 8.235671705008116,
 }
 
 const searchVariables = {
   landFilter: {
     accommodations: ["rv-motorhomes", "vehicles"],
-    boundingBox: ukBoundingBox,
+    boundingBox: franceSpainPortugalBoundingBox,
   },
   privateOffset: 0,
   privateLimit: LIMIT,
