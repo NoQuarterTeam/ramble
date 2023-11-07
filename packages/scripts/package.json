@@ -25,6 +25,8 @@
     "typescript": "5.2.2"
   },
   "dependencies": {
+    "graphql": "^16.8.1",
+    "graphql-request": "^6.1.0",
     "puppeteer": "^21.3.8"
   }
 }
