@@ -106,7 +106,7 @@ const columns = [
     header: () => "Name",
     cell: (info) => {
       return (
-        <Link to={`/spots/${info.row.id}`} target="_blank" className="flex items-center space-x-2">
+        <Link to={`/spots/${info.row.original.id}`} target="_blank" className="flex items-center space-x-2">
           <SpotIcon type={info.row.original.type} size={16} className="flex-shrink-0" />
           <p className="truncate">{info.getValue()}</p>
         </Link>
