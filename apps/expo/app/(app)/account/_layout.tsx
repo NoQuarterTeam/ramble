@@ -4,10 +4,12 @@ import { useBackgroundColor } from "../../../lib/tailwind"
 import { type ScreenParamsList } from "../../router"
 import { getSharedScreens } from "../shared/getSharedScreens"
 import { AccountScreen } from "."
+import { AccountFeedbackScreen } from "./feedback"
 import { AccountInfoScreen } from "./info"
 import { InterestsScreen } from "./interests"
 import { AccountSettingsScreen } from "./settings"
 import { VanScreen } from "./van"
+import { AccountInviteScreen } from "./invite"
 
 const AccountStack = createNativeStackNavigator<ScreenParamsList>()
 
@@ -25,6 +27,8 @@ export function AccountLayout() {
       <AccountStack.Screen name="AccountVanScreen" component={VanScreen} />
       <AccountStack.Screen name="AccountInterestsScreen" component={InterestsScreen} />
       <AccountStack.Screen name="AccountSettingsScreen" component={AccountSettingsScreen} />
+      <AccountStack.Screen name="AccountInviteScreen" component={AccountInviteScreen} />
+      <AccountStack.Screen name="AccountFeedbackScreen" component={AccountFeedbackScreen} />
       {sharedScreens}
     </AccountStack.Navigator>
   )

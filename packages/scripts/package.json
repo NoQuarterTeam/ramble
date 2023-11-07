@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "pnpm with-env ts-node src/index.ts",
     "blur": "pnpm with-env ts-node ./src/format/gen-blurhash.ts",
-    "park4night": "pnpm with-env ts-node ./scripts/get-park4night.ts",
+    "crag": "pnpm with-env ts-node ./src/scraping/get-thecrag.ts",
     "with-env": "dotenv -e ../../.env --"
   },
   "sideEffects": false,

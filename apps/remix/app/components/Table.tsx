@@ -39,7 +39,7 @@ export function Table<T>({
   })
   return (
     <Tile className="space-y-1 p-2">
-      <table className="w-full table-fixed">
+      <table className="w-full min-w-[1000px] table-fixed">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>

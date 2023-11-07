@@ -1,7 +1,7 @@
 import * as React from "react"
 import { type SerializeFrom } from "@remix-run/node"
 import type { Fetcher, FetcherWithComponents, FormProps as RemixFormProps } from "@remix-run/react"
-import { Form as RemixForm, useFetcher as useRemixFetcher, useNavigation } from "@remix-run/react"
+import { Form as RemixForm, useFetcher as useRemixFetcher, useFetchers, useNavigation } from "@remix-run/react"
 import { X } from "lucide-react"
 import { AuthenticityTokenInput } from "remix-utils/csrf/react"
 import { type z } from "zod"
@@ -11,9 +11,10 @@ import { createImageUrl, merge } from "@ramble/shared"
 import { type ButtonProps, type InputProps, type InputStyleProps } from "~/components/ui"
 import { Button, IconButton, Input, inputStyles } from "~/components/ui"
 import { FORM_ACTION, useFormErrors } from "~/lib/form"
+import { type ActionDataErrorResponse } from "~/lib/form.server"
 
 import { ImageUploader } from "./ImageUploader"
-import { ActionDataErrorResponse } from "~/lib/form.server"
+// import { ActionDataErrorResponse } from "~/lib/form.server"
 
 export const Form = React.forwardRef(function _Form(props: RemixFormProps, ref: React.ForwardedRef<HTMLFormElement> | null) {
   const form = useFormErrors()
@@ -24,6 +25,7 @@ export const Form = React.forwardRef(function _Form(props: RemixFormProps, ref: 
       aria-describedby="form-error"
       aria-invalid={form?.formError ? true : undefined}
       ref={ref}
+      navigate={props.navigate || props.fetcherKey ? false : undefined}
       {...props}
     >
       <AuthenticityTokenInput />
@@ -32,28 +34,21 @@ export const Form = React.forwardRef(function _Form(props: RemixFormProps, ref: 
   )
 })
 
-const fetcherContext = React.createContext<Pick<
-  Fetcher<ActionDataErrorResponse<z.AnyZodObject>>,
-  "data" | "state" | "formData"
-> | null>(null)
-
-interface UseFetcherProps<T> {
-  onFinish?: (data: T) => void
-}
-
-export function useFetcher<T>(props?: UseFetcherProps<T>): FetcherWithComponents<SerializeFrom<T>> & {
+export function useFetcher<T>(
+  props?: Parameters<typeof useRemixFetcher>[0] & {
+    onFinish?: (data: T) => void
+  },
+): FetcherWithComponents<SerializeFrom<T>> & {
   FormButton: React.ForwardRefExoticComponent<ButtonProps & React.RefAttributes<HTMLButtonElement>>
 } {
-  const fetcher = useRemixFetcher()
+  const fetcher = useRemixFetcher({ key: props?.key })
 
   function Form({ children, ...rest }: RemixFormProps) {
     return (
-      <fetcherContext.Provider value={{ state: fetcher.state, data: fetcher.data, formData: fetcher.formData }}>
-        <fetcher.Form method="POST" replace {...rest}>
-          <AuthenticityTokenInput />
-          {children}
-        </fetcher.Form>
-      </fetcherContext.Provider>
+      <fetcher.Form method="POST" replace {...rest}>
+        <AuthenticityTokenInput />
+        {children}
+      </fetcher.Form>
     )
   }
 
@@ -62,7 +57,9 @@ export function useFetcher<T>(props?: UseFetcherProps<T>): FetcherWithComponents
       <Button
         type="submit"
         name={rest.value ? FORM_ACTION : undefined}
-        isLoading={fetcher.state !== "idle" && fetcher.formData?.get(FORM_ACTION) === rest.value}
+        isLoading={
+          rest.value ? fetcher.state !== "idle" && fetcher.formData?.get(FORM_ACTION) === rest.value : fetcher.state !== "idle"
+        }
         {...rest}
         ref={ref}
       />
@@ -70,9 +67,9 @@ export function useFetcher<T>(props?: UseFetcherProps<T>): FetcherWithComponents
   })
 
   React.useEffect(() => {
-    if (!fetcher.data || !props) return
+    if (!fetcher.data || !props?.onFinish) return
     if (fetcher.state === "loading" && fetcher.data) {
-      props.onFinish?.(fetcher.data)
+      props.onFinish(fetcher.data)
     }
   }, [fetcher.state, props, fetcher.data])
 
@@ -116,14 +113,18 @@ interface FormFieldProps extends InputProps {
   input?: React.ReactElement
   errors?: string | string[] | null | false
   shouldPassProps?: boolean
+  fetcherKey?: string
 }
 
 export const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(function FormField(
-  { label, errors, input, ...props },
+  { label, errors, input, fetcherKey, ...props },
   ref,
 ) {
   const form = useFormErrors<z.AnyZodObject>()
-  const fetcher = React.useContext(fetcherContext)
+  const fetchers = useFetchers()
+  const fetcher: Fetcher<ActionDataErrorResponse<z.AnyZodObject>> | undefined = fetcherKey
+    ? fetchers.find((f) => f.key === fetcherKey)
+    : undefined
   const fieldErrors = errors || fetcher?.data?.fieldErrors?.[props.name] || form?.fieldErrors?.[props.name]
   const inputClassName = input?.props.className
   const className = merge(props.className, inputClassName, fieldErrors && "border-red-500 focus:border-red-500")
@@ -148,46 +149,6 @@ export const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(func
       )}
       {clonedInput || <Input {...sharedProps} />}
 
-      {typeof fieldErrors === "string" ? (
-        <FormFieldError>{fieldErrors}</FormFieldError>
-      ) : fieldErrors?.length ? (
-        <ul id={props.name + "-error"}>{fieldErrors?.map((error, i) => <FormFieldError key={i}>{error}</FormFieldError>)}</ul>
-      ) : null}
-    </div>
-  )
-})
-export const InlineFormField = React.forwardRef<HTMLInputElement, FormFieldProps>(function FormField(
-  { label, errors, input, shouldPassProps = true, ...props },
-  ref,
-) {
-  const form = useFormErrors<z.AnyZodObject>()
-  const fieldErrors = errors || form?.fieldErrors?.[props.name]
-  const className = merge(props.className, fieldErrors && "border-red-500 focus:border-red-500")
-  const sharedProps = shouldPassProps
-    ? {
-        "aria-invalid": fieldErrors || fieldErrors?.length ? true : undefined,
-        "aria-errormessage": props.name + "-error",
-        id: props.name,
-        ref,
-        defaultValue: form?.data?.[props.name],
-        ...props,
-        name: props.name,
-        className,
-      }
-    : {}
-  const clonedInput = input && React.cloneElement(input, sharedProps)
-  return (
-    <div className="w-full">
-      <div className="flex flex-col space-x-0 md:flex-row md:space-x-3">
-        {label && (
-          <div className="w-min-content">
-            <FormFieldLabel name={props.name} required={props.required} className="w-24">
-              {label}
-            </FormFieldLabel>
-          </div>
-        )}
-        {clonedInput || <Input {...sharedProps} />}
-      </div>
       {typeof fieldErrors === "string" ? (
         <FormFieldError>{fieldErrors}</FormFieldError>
       ) : fieldErrors?.length ? (
@@ -267,9 +228,12 @@ export function ImageField(props: ImageFieldProps) {
   )
 }
 
-export function FormError({ error }: { error?: string | null | false }) {
+export function FormError({ error, fetcherKey }: { error?: string | null | false; fetcherKey?: string }) {
   const form = useFormErrors<z.AnyZodObject>()
-  const fetcher = React.useContext(fetcherContext)
+  const fetchers = useFetchers()
+  const fetcher: Fetcher<ActionDataErrorResponse<z.AnyZodObject>> | undefined = fetcherKey
+    ? fetchers.find((f) => f.key === fetcherKey)
+    : undefined
   const formError = error || fetcher?.data?.formError || form?.formError
   if (!formError) return null
   return <FormFieldError id="form-error">{formError}</FormFieldError>

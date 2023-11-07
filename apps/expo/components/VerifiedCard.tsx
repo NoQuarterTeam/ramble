@@ -5,9 +5,10 @@ import { type Spot, type User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
 import { useRouter } from "../app/router"
+import { useMe } from "../lib/hooks/useMe"
+import { Icon } from "./Icon"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
-import { Icon } from "./Icon"
 
 interface Props {
   spot: Pick<Spot, "verifiedAt"> & {
@@ -16,12 +17,17 @@ interface Props {
 }
 
 export function VerifiedCard({ spot }: Props) {
+  const { me } = useMe()
   const router = useRouter()
   return (
     <>
       {spot.verifiedAt && spot.verifier ? (
         <TouchableOpacity
-          onPress={() => router.push("UserScreen", { username: spot.verifier?.username || "" })}
+          onPress={
+            me
+              ? () => router.push("UserScreen", { username: spot.verifier?.username || "" })
+              : () => router.push("AuthLayout", { screen: "LoginScreen" })
+          }
           className="rounded-xs flex flex-row items-center justify-between border border-gray-200 p-1.5 px-2.5 dark:border-gray-700/70"
         >
           <View>

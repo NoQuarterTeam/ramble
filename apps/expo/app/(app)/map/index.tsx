@@ -9,6 +9,7 @@ import { type SpotType } from "@ramble/database/types"
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
+import { Icon } from "../../../components/Icon"
 import { SpotMarker } from "../../../components/SpotMarker"
 import { ModalView } from "../../../components/ui/ModalView"
 import { Spinner } from "../../../components/ui/Spinner"
@@ -20,7 +21,8 @@ import { usePreferences } from "../../../lib/hooks/usePreferences"
 import { useRouter } from "../../router"
 import { type Filters, initialFilters, MapFilters } from "./MapFilters"
 import { SpotPreview } from "./SpotPreview"
-import { Icon } from "../../../components/Icon"
+import { useMe } from "../../../lib/hooks/useMe"
+import { RegisterCheck } from "../../../components/RegisterCheck"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
@@ -28,11 +30,23 @@ type Cluster = RouterOutputs["spot"]["clusters"][number]
 
 export function SpotsMapScreen() {
   const { push } = useRouter()
+  const { me } = useMe()
   const [clusters, setClusters] = React.useState<Cluster[] | null>(null)
   const filterModalProps = useDisclosure()
   const mapLayerModalProps = useDisclosure()
   const [activeSpotId, setActiveSpotId] = React.useState<string | null>(null)
-  const [filters, setFilters] = useAsyncStorage<Filters>("ramble.map.filters", initialFilters)
+  const [filters, setFilters] = useAsyncStorage<Filters>("ramble.map.filters", {
+    ...initialFilters,
+    types: [
+      "CAMPING",
+      "FREE_CAMPING",
+      me?.isMountainBiker ? "MOUNTAIN_BIKING" : null,
+      me?.isClimber ? "CLIMBING" : null,
+      me?.isHiker ? "HIKING_TRAIL" : null,
+      me?.isSurfer ? "SURFING" : null,
+      me?.isPaddleBoarder ? "PADDLE_KAYAK" : null,
+    ].filter(Boolean) as SpotType[],
+  })
   const camera = React.useRef<Camera>(null)
   const mapRef = React.useRef<MapType>(null)
   const theme = useColorScheme()
@@ -172,6 +186,7 @@ export function SpotsMapScreen() {
   const [preferences, setPreferences, isReady] = usePreferences()
   return (
     <View className="flex-1">
+      <RegisterCheck />
       <Mapbox.MapView
         onLayout={handleSetUserLocation}
         className="flex-1"

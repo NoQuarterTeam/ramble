@@ -5,6 +5,7 @@ import { ChevronDown, PlusCircle } from "lucide-react-native"
 
 import { join, useDisclosure } from "@ramble/shared"
 
+import { Icon } from "../../../components/Icon"
 import { ListItem } from "../../../components/ListItem"
 import { LoginPlaceholder } from "../../../components/LoginPlaceholder"
 import { BrandHeading } from "../../../components/ui/BrandHeading"
@@ -15,7 +16,6 @@ import { api } from "../../../lib/api"
 import { height, isTablet, width } from "../../../lib/device"
 import { useMe } from "../../../lib/hooks/useMe"
 import { useRouter } from "../../router"
-import { Icon } from "../../../components/Icon"
 
 const SORT_OPTIONS = { mine: "my lists", following: "following" } as const
 
@@ -31,7 +31,7 @@ export function ListsScreen() {
   if (!me)
     return (
       <TabView title="lists">
-        <LoginPlaceholder text="Log in to start saving spots" />
+        <LoginPlaceholder text="Log in to create lists" />
       </TabView>
     )
   return (

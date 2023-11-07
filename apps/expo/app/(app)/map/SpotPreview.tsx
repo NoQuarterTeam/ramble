@@ -5,6 +5,7 @@ import { Heart, Star, X } from "lucide-react-native"
 
 import { displayRating, isPartnerSpot } from "@ramble/shared"
 
+import { Icon } from "../../../components/Icon"
 import { PartnerLink } from "../../../components/PartnerLink"
 import { SpotIcon } from "../../../components/SpotIcon"
 import { Button } from "../../../components/ui/Button"
@@ -14,9 +15,9 @@ import { Text } from "../../../components/ui/Text"
 import { VerifiedCard } from "../../../components/VerifiedCard"
 import { api } from "../../../lib/api"
 import { height, isTablet, width } from "../../../lib/device"
+import { useMe } from "../../../lib/hooks/useMe"
 import { useBackgroundColor } from "../../../lib/tailwind"
 import { useRouter } from "../../router"
-import { Icon } from "../../../components/Icon"
 // import * as Device from 'expo-device';
 
 export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: string | null; onClose: () => void }) {
@@ -27,7 +28,7 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
   } = api.spot.mapPreview.useQuery({ id: id || "" }, { enabled: !!id, keepPreviousData: true })
   const { push, navigate } = useRouter()
   const colorScheme = useColorScheme()
-
+  const { me } = useMe()
   const bottomSheetRef = React.useRef<BottomSheet>(null)
 
   const handleSheetClose = React.useCallback(() => {
@@ -90,7 +91,9 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
                 <Button
                   size="xs"
                   variant="outline"
-                  onPress={() => navigate("SaveSpotScreen", { id: spot.id })}
+                  onPress={
+                    me ? () => navigate("SaveSpotScreen", { id: spot.id }) : () => push("AuthLayout", { screen: "LoginScreen" })
+                  }
                   leftIcon={
                     <Icon
                       icon={Heart}

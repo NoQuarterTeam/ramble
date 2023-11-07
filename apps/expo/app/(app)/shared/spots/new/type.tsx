@@ -3,12 +3,12 @@ import { ScrollView, View } from "react-native"
 
 import { type SpotType } from "@ramble/database/types"
 
+import { Icon } from "../../../../../components/Icon"
 import { Button } from "../../../../../components/ui/Button"
 import { Text } from "../../../../../components/ui/Text"
 import { SPOT_OPTIONS } from "../../../../../lib/models/spot"
 import { useParams, useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
-import { Icon } from "../../../../../components/Icon"
 
 export function NewSpotTypeScreen() {
   const { params } = useParams<"NewSpotTypeScreen">()

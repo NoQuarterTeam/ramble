@@ -20,5 +20,7 @@ export const userSchema = z.object({
   isMountainBiker: z.boolean(),
 })
 export const loginSchema = userSchema.pick({ email: true, password: true })
-export const registerSchema = userSchema.pick({ email: true, password: true, username: true, firstName: true, lastName: true })
+export const registerSchema = userSchema
+  .pick({ email: true, password: true, username: true, firstName: true, lastName: true })
+  .extend({ code: z.string() })
 export const updateSchema = userSchema.partial()

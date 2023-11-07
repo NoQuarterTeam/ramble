@@ -5,6 +5,7 @@ import { ChevronDown, PlusCircle } from "lucide-react-native"
 
 import { join, useDisclosure } from "@ramble/shared"
 
+import { Icon } from "../../../components/Icon"
 import { SpotItem } from "../../../components/SpotItem"
 import { BrandHeading } from "../../../components/ui/BrandHeading"
 import { Spinner } from "../../../components/ui/Spinner"
@@ -13,7 +14,6 @@ import { Text } from "../../../components/ui/Text"
 import { api } from "../../../lib/api"
 import { height, isTablet, width } from "../../../lib/device"
 import { useRouter } from "../../router"
-import { Icon } from "../../../components/Icon"
 
 const SORT_OPTIONS = { latest: "latest", rated: "top rated", saved: "most saved" } as const
 

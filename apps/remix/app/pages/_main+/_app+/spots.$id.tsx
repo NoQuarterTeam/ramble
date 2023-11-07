@@ -34,7 +34,6 @@ import {
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { createAction, createActions } from "~/lib/form.server"
-
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 import { badRequest, json, notFound, redirect } from "~/lib/remix.server"

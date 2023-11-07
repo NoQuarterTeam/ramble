@@ -10,6 +10,7 @@ const envSchema = z.object({
   VERCEL_URL: z.string().optional(),
   FLICKR_ACCESS_KEY: z.string(),
   FLICKR_SECRET_KEY: z.string(),
+  SLACK_TOKEN: z.string(),
 })
 
 export const {
@@ -21,4 +22,5 @@ export const {
   VERCEL_URL,
   FLICKR_ACCESS_KEY,
   FLICKR_SECRET_KEY,
+  SLACK_TOKEN,
 } = envSchema.parse(process.env)

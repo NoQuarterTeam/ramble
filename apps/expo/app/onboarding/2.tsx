@@ -3,6 +3,7 @@ import { ScrollView, Switch, View } from "react-native"
 
 import colors from "@ramble/tailwind-config/src/colors"
 
+import { Icon } from "../../components/Icon"
 import { Button } from "../../components/ui/Button"
 import { FormError } from "../../components/ui/FormError"
 import { Heading } from "../../components/ui/Heading"
@@ -48,7 +49,7 @@ export default function OnboardingStep2Screen() {
             <InterestSelector
               key={interest.value}
               onToggle={() => onToggle(interest.value as keyof typeof interests)}
-              Icon={interest.Icon}
+              icon={interest.Icon}
               label={interest.label}
               isSelected={interests[interest.value as keyof typeof interests]}
             />
@@ -77,17 +78,17 @@ function InterestSelector({
   label,
   isSelected,
   onToggle,
-  Icon,
+  icon,
 }: {
   isSelected: boolean
   onToggle: () => void
   label: string
-  Icon: (props: IconProps) => JSX.Element
+  icon: (props: IconProps) => JSX.Element
 }) {
   return (
     <View className="mb-2 flex w-full flex-row items-center justify-between p-4">
       <View className="flex flex-row items-center space-x-2">
-        <Icon className="sq-4 text-black dark:text-white" />
+        <Icon icon={icon} className="sq-4" />
         <Text className="text-xl">{label}</Text>
       </View>
       <Switch trackColor={{ true: colors.primary[600] }} value={isSelected} onValueChange={onToggle} />

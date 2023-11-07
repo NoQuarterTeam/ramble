@@ -2,7 +2,7 @@ import { type ActionFunctionArgs } from "@remix-run/node"
 import { promiseHash } from "remix-utils/promise"
 import { z } from "zod"
 
-import { sendFeedbackSentToAdminsEmail } from "@ramble/api"
+import { sendFeedbackSentToAdminsEmail, sendSlackMessage } from "@ramble/api"
 import { FeedbackType } from "@ramble/database/types"
 
 import { track } from "~/lib/analytics.server"
@@ -12,9 +12,8 @@ import { badRequest, json } from "~/lib/remix.server"
 import { type Actions } from "~/pages/api+/feedback"
 
 import { getCurrentUser } from "../auth/auth.server"
-import { sendSlackMessage } from "~/lib/slack.server"
 
-const createSchema = z.object({ message: z.string().min(1), type: z.nativeEnum(FeedbackType) })
+const createSchema = z.object({ message: z.string().min(10), type: z.nativeEnum(FeedbackType) })
 
 export type CreateSchema = typeof createSchema
 

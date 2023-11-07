@@ -15,6 +15,7 @@ import { Check, ChevronDown, ChevronLeft, Compass, Edit2, Heart, Star, Trash } f
 
 import { AMENITIES, canManageSpot, displayRating, isPartnerSpot, merge } from "@ramble/shared"
 
+import { Icon } from "../../../../../components/Icon"
 import { PartnerLink } from "../../../../../components/PartnerLink"
 import { ReviewItem } from "../../../../../components/ReviewItem"
 import { Button } from "../../../../../components/ui/Button"
@@ -28,7 +29,6 @@ import { height, width } from "../../../../../lib/device"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { AMENITIES_ICONS } from "../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../router"
-import { Icon } from "../../../../../components/Icon"
 
 export function SpotDetailScreen() {
   const [location, setLocation] = React.useState<Location.LocationObjectCoords | null>(null)
@@ -161,7 +161,11 @@ export function SpotDetailScreen() {
               <Text className="text-sm">Added by </Text>
               <TouchableOpacity
                 activeOpacity={0.8}
-                onPress={() => router.push("UserScreen", { username: spot.creator.username })}
+                onPress={
+                  me
+                    ? () => router.push("UserScreen", { username: spot.creator.username })
+                    : () => router.push("AuthLayout", { screen: "LoginScreen" })
+                }
               >
                 <Text className="text-sm">
                   {spot.creator.firstName} {spot.creator.lastName}

@@ -1,9 +1,20 @@
 import { ScrollView, TouchableOpacity, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { AlertCircle, ChevronRight, Cog, type LucideIcon, ToggleRight, User, User2 } from "lucide-react-native"
+import {
+  AlertCircle,
+  ChevronRight,
+  Cog,
+  type LucideIcon,
+  MessageCircle,
+  ToggleRight,
+  User,
+  User2,
+  UserPlus,
+} from "lucide-react-native"
 
 import { createImageUrl } from "@ramble/shared"
 
+import { Icon } from "../../../components/Icon"
 import { LoginPlaceholder } from "../../../components/LoginPlaceholder"
 import { Button } from "../../../components/ui/Button"
 import { Heading } from "../../../components/ui/Heading"
@@ -16,7 +27,6 @@ import { api, AUTH_TOKEN } from "../../../lib/api"
 import { UPDATE_ID, VERSION } from "../../../lib/config"
 import { useMe } from "../../../lib/hooks/useMe"
 import { type ScreenParamsList, useRouter } from "../../router"
-import { Icon } from "../../../components/Icon"
 
 export function AccountScreen() {
   const { me } = useMe()
@@ -36,7 +46,7 @@ export function AccountScreen() {
   if (!me)
     return (
       <TabView title="account">
-        <LoginPlaceholder text="Log in to start saving spots">
+        <LoginPlaceholder text="Log in to create your profile">
           <View className="space-y-4">
             <TouchableOpacity onPress={() => push("AuthLayout", { screen: "RegisterScreen" })}>
               <Text className="text-lg">
@@ -61,6 +71,7 @@ export function AccountScreen() {
               <Icon icon={AlertCircle} size={20} />
               <Text className="text-lg">Your account is not yet verified</Text>
             </View>
+            <Text>Didn't receive an email?</Text>
             <Button onPress={() => mutate()} disabled={!!data} size="sm">
               Send verification email
             </Button>
@@ -108,8 +119,14 @@ export function AccountScreen() {
               <ProfileLink to="AccountVanScreen" icon={Icons.Van}>
                 Van
               </ProfileLink>
+              <ProfileLink to="AccountInviteScreen" icon={UserPlus}>
+                Invites
+              </ProfileLink>
               <ProfileLink to="AccountSettingsScreen" icon={Cog}>
                 Settings
+              </ProfileLink>
+              <ProfileLink to="AccountFeedbackScreen" icon={MessageCircle}>
+                Feedback
               </ProfileLink>
             </View>
           </View>

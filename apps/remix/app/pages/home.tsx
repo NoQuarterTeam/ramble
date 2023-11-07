@@ -1,32 +1,40 @@
 import { Link } from "@remix-run/react"
+import { Instagram } from "lucide-react"
 import { ClientOnly } from "remix-utils/client-only"
 import { z } from "zod"
 
-import { sendAccessRequestConfirmationEmail, sendAccessRequestConfirmationToAdminsEmail } from "@ramble/api"
+import {
+  createAccessRequest,
+  sendAccessRequestConfirmationEmail,
+  sendAccessRequestConfirmationToAdminsEmail,
+  sendSlackMessage,
+} from "@ramble/api"
 import { join, merge } from "@ramble/shared"
 
-import { useFetcher } from "~/components/Form"
+import { Form, useFetcher } from "~/components/Form"
 import { PageContainer } from "~/components/PageContainer"
+import { Spinner } from "~/components/ui"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { type ActionDataErrorResponse, formError, validateFormData } from "~/lib/form.server"
 // import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { json } from "~/lib/remix.server"
 import { type LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
-import { Instagram } from "lucide-react"
-import { sendSlackMessage } from "~/lib/slack.server"
 
 export const config = {
   // runtime: "edge",
 }
 
+const schema = z.object({ email: z.string().email().toLowerCase() })
 export const action = async ({ request }: LoaderFunctionArgs) => {
-  const schema = z.object({ email: z.string().email().toLowerCase() })
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
   const accessRequest = await db.accessRequest.findFirst({ where: { email: result.data.email } })
   if (accessRequest) return formError({ formError: "Email already requested access" })
-  await db.accessRequest.create({ data: { email: result.data.email } })
+
+  const success = await createAccessRequest(result.data.email)
+  if (!success) return formError({ formError: "Error creating request, please try again" })
+
   const admins = await db.user.findMany({ where: { isAdmin: true }, select: { email: true } })
   sendSlackMessage("🚀 New access request from " + result.data.email)
   void sendAccessRequestConfirmationToAdminsEmail(
@@ -218,10 +226,9 @@ export default function Home() {
   )
 }
 
+const formKey = "access-request"
 function RequestAccessForm({ mode }: { mode?: "light" | "dark" }) {
-  // how to include zod here?
-  // eslint-disable-next-line
-  const accessFetcher = useFetcher<ActionDataErrorResponse<any>>()
+  const accessFetcher = useFetcher<ActionDataErrorResponse<typeof schema>>({ key: formKey })
 
   if (accessFetcher.data?.success)
     return (
@@ -231,19 +238,13 @@ function RequestAccessForm({ mode }: { mode?: "light" | "dark" }) {
     )
 
   return (
-    <accessFetcher.Form action="/home" className="flex flex-col gap-2 sm:flex-row">
+    <Form fetcherKey={formKey} action="/home" className="flex flex-col gap-2 sm:flex-row">
       <div>
-        <input
-          required
-          defaultValue={accessFetcher.data?.data?.email || ""}
-          name="email"
-          placeholder="Email"
-          className="rounded-xs h-10 border px-4 text-black focus:bg-white"
-        />
-        {!accessFetcher.data?.success && accessFetcher.data?.fieldErrors?.email && (
+        <input required name="email" placeholder="Email" className="rounded-xs h-10 border px-4 text-black focus:bg-white" />
+        {accessFetcher.data?.fieldErrors?.email && (
           <p className={join("text-black", mode === "dark" && "text-white")}>{accessFetcher.data.fieldErrors.email}</p>
         )}
-        {!accessFetcher.data?.success && accessFetcher.data?.formError && (
+        {accessFetcher.data?.formError && (
           <p className={join("text-black", mode === "dark" && "text-white")}>{accessFetcher.data.formError}</p>
         )}
       </div>
@@ -252,14 +253,14 @@ function RequestAccessForm({ mode }: { mode?: "light" | "dark" }) {
         <button
           disabled={accessFetcher.state === "submitting"}
           className={merge(
-            "border-xs rounded-xs h-10 whitespace-nowrap bg-black px-4 text-center text-white hover:opacity-80 disabled:opacity-70",
+            "border-xs rounded-xs flex h-10 w-[100px] items-center justify-center whitespace-nowrap bg-black px-4 text-center text-white hover:opacity-80 disabled:opacity-70",
             mode === "dark" && "bg-white text-black",
           )}
         >
-          Join beta
+          {accessFetcher.state === "submitting" ? <Spinner /> : "Join beta"}
         </button>
       </div>
-    </accessFetcher.Form>
+    </Form>
   )
 }
 
@@ -289,6 +290,6 @@ const FEATURES = [
   "Find nearby outdoor activity spots for surfing, hiking, mountain biking, climbing and more, ",
   "A community of creative and nature loving van folk. Share and follow traveller’s profiles including info on their beloved van build.",
   "Useful and informative map layers for weather, bio-diversity, cellular signal, light pollution and more.",
-  "Add your own spots and keep them organized in custom lists. Follow and copy other members’ lists for inspiration for you next trip.",
+  "Add your own spots and keep them organized in custom lists. Follow and copy other members’ lists for inspiration for your next trip.",
   "Renewable diesel fill-up stations, electric charging points, trustworthy mechanics and essential part suppliers.",
 ]

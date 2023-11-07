@@ -8,10 +8,10 @@ import { createImageUrl } from "@ramble/shared"
 import { useRouter } from "../app/router"
 import { api } from "../lib/api"
 import { useMe } from "../lib/hooks/useMe"
+import { Icon } from "./Icon"
 import { Button } from "./ui/Button"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
-import { Icon } from "./Icon"
 
 export function ReviewItem({
   review,
@@ -34,7 +34,11 @@ export function ReviewItem({
     <View className="rounded-xs space-y-2 border border-gray-200 p-4 dark:border-gray-700">
       <View className="flex flex-row justify-between">
         <TouchableOpacity
-          onPress={() => push("UserScreen", { username: review.user.username })}
+          onPress={
+            me
+              ? () => push("UserScreen", { username: review.user.username })
+              : () => push("AuthLayout", { screen: "LoginScreen" })
+          }
           activeOpacity={0.8}
           className="flex flex-row space-x-2"
         >

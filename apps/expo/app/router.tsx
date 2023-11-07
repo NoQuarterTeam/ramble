@@ -8,9 +8,10 @@ type SpotFormParams = Pick<Spot, "latitude" | "longitude" | "type" | "name" | "d
 } & { amenities?: Omit<SpotAmenities, "id" | "spotId" | "createdAt" | "updatedAt"> }
 
 export type ScreenParamsList = {
-  AuthLayout: { screen?: "LoginScreen" | "RegisterScreen" } | undefined
+  AuthLayout: { screen?: "LoginScreen" | "RegisterScreen" | "RequestAccessScreen" } | undefined
   LoginScreen: undefined
   RegisterScreen: undefined
+  RequestAccessScreen: undefined
 
   OnboardingLayout: undefined
   OnboardingStep1Screen: undefined
@@ -25,6 +26,8 @@ export type ScreenParamsList = {
   AccountVanScreen: undefined
   AccountInterestsScreen: undefined
   AccountSettingsScreen: undefined
+  AccountInviteScreen: undefined
+  AccountFeedbackScreen: undefined
 
   MapLayout: undefined
   SpotsMapScreen: undefined

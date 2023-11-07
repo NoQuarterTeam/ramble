@@ -24,7 +24,7 @@ export function RegisterScreen() {
     },
   })
   const form = useForm({
-    defaultValues: { email: "", password: "", username: "", firstName: "", lastName: "" },
+    defaultValues: { code: "", email: "", password: "", username: "", firstName: "", lastName: "" },
   })
 
   const onSubmit = form.handleSubmit(async (data) => {
@@ -41,6 +41,7 @@ export function RegisterScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View>
+            <FormInput name="code" label="Invite code" autoCapitalize="characters" error={error} />
             <FormInput autoCapitalize="none" name="email" label="Email" error={error} />
             <FormInput autoCapitalize="none" name="password" secureTextEntry label="Password" error={error} />
             <FormInput autoCapitalize="none" name="username" label="Username" error={error} />
@@ -49,6 +50,10 @@ export function RegisterScreen() {
             <Button className="mb-1" isLoading={isLoading} onPress={onSubmit}>
               Register
             </Button>
+            <Button className="mb-1" variant="link" onPress={() => navigation.replace("RequestAccessScreen")}>
+              No code? Request access
+            </Button>
+
             <FormError className="mb-1" error={error} />
           </View>
 

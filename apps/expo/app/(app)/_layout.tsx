@@ -5,6 +5,7 @@ import { Heart, List, Map, User } from "lucide-react-native"
 import { createImageUrl, join } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
+import { Icon } from "../../components/Icon"
 import { OptimizedImage } from "../../components/ui/OptimisedImage"
 import { useMe } from "../../lib/hooks/useMe"
 import { useBackgroundColor } from "../../lib/tailwind"
@@ -12,7 +13,6 @@ import { AccountLayout } from "./account/_layout"
 import { ListsLayout } from "./lists/_layout"
 import { MapLayout } from "./map/_layout"
 import { SpotsLayout } from "./spots/_layout"
-import { Icon } from "../../components/Icon"
 
 const Tab = createBottomTabNavigator()
 
@@ -35,21 +35,21 @@ export function AppLayout() {
         name="MapLayout"
         component={MapLayout}
         options={{
-          tabBarIcon: (props) => <Icon icon={Map} size={24} color={!!props.focused && "primary"} />,
+          tabBarIcon: (props) => <Icon icon={Map} size={22} color={!!props.focused && "primary"} />,
         }}
       />
       <Tab.Screen
         name="SpotsLayout"
         component={SpotsLayout}
         options={{
-          tabBarIcon: (props) => <Icon icon={List} size={24} color={!!props.focused && "primary"} />,
+          tabBarIcon: (props) => <Icon icon={List} size={22} color={!!props.focused && "primary"} />,
         }}
       />
       <Tab.Screen
         name="ListsLayout"
         component={ListsLayout}
         options={{
-          tabBarIcon: (props) => <Icon icon={Heart} size={24} color={!!props.focused && "primary"} />,
+          tabBarIcon: (props) => <Icon icon={Heart} size={22} color={!!props.focused && "primary"} />,
         }}
       />
       <Tab.Screen
@@ -70,7 +70,7 @@ export function AppLayout() {
                 )}
               />
             ) : (
-              <Icon icon={User} size={24} color={props.focused ? "primary" : isDark ? "white" : "black"} />
+              <Icon icon={User} size={22} color={props.focused ? "primary" : isDark ? "white" : "black"} />
             ),
         }}
       />

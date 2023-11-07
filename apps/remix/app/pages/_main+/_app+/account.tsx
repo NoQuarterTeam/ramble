@@ -1,6 +1,7 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Outlet, useActionData, useLoaderData } from "@remix-run/react"
-import { AlertCircle, Settings, ToggleRight, User } from "lucide-react"
+
+import { AlertCircle, Settings, ToggleRight, User, UserPlus } from "lucide-react"
 
 import { sendAccountVerificationEmail } from "@ramble/api"
 import { createImageUrl, merge } from "@ramble/shared"
@@ -53,6 +54,7 @@ export default function AccountLayout() {
             <p>Your account is not yet verified</p>
           </div>
           <Form>
+            <p>Didn't receive an email?</p>
             <FormButton disabled={!!data?.success} size="sm">
               Send verification email
             </FormButton>
@@ -84,6 +86,9 @@ export default function AccountLayout() {
           </AccountLink>
           <AccountLink Icon={Icons.Van} to="/account/van">
             My van
+          </AccountLink>
+          <AccountLink Icon={UserPlus} to="/account/invites">
+            Invites
           </AccountLink>
           <AccountLink Icon={Settings} to="/account/settings">
             Settings
