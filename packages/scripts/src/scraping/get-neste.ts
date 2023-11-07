@@ -1,85 +1,76 @@
-import * as cheerio from "cheerio"
-
-const url = `https://www.neste.nl/neste-my-renewable-diesel/distributeurs`
+import nesteData from "./neste.json"
 
 import { prisma } from "@ramble/database"
 
 export type Spot = {
-  id: string
+  nesteId: string
   name: string
+  description: string
+  sourceUrl: string
   address: string
-  imageUrl: string
-  latitude?: number
-  longitude?: number
+  images: { create: { path: string; creator: { connect: { email: string } } }[] }
+  latitude: number
+  longitude: number
+  creator: { connect: { email: string } }
+  verifier: { connect: { email: string } }
+  type: "GAS_STATION"
 }
 
+const description =
+  "Neste MY Renewable DieselTM (HVO100) is fully compatible with all diesel engines and current diesel fuel distribution infrastructure – from refinery to service stations and end-users. Neste MY Renewable Diesel has a similar chemical composition to fossil diesel. This means that it is a drop-in replacement for fossil diesel. A drop-in fuel can be used without any modifications, neat or blended at any ratio with fossil diesel. The use of Neste MY Renewable Diesel, made from 100% renewable raw materials, can result in up to 90% less greenhouse gas (GHG or CO2e) emissions* over the fuel’s life cycle when compared with fossil diesel. Make a difference today by switching to renewable diesel."
+
 async function getCards() {
-  const res = await fetch(url)
-  const html = await res.text()
-
-  const $ = cheerio.load(html)
-
-  const spots: Spot[] = []
-
-  $(".map-marker-list-item").each((_, card) => {
-    const id = $(card).attr("id")
-
-    // use cheerio to return the name based on the class neste-map-item-title which is a child of a child of the card
-    const name = $(card).find(".neste-map-item-title span").text()
-    const address = $(card).find(".neste-map-item-info").text().trim()
-    const carIcon = $(card).find(".neste-map-list-icon-car-show")
-
-    if (!id || !name || !address || !carIcon) return
-    spots.push({
-      id,
-      name,
-      address,
-      imageUrl:
-        "https://lh3.googleusercontent.com/IT2gbAip6StRHkmGQis6wbbjvXSebPK9GvLab4Ml8bCfG8DCJSDG5oxSepshXBQfCj9zudEUSW7Y85yx0ZXmLtu31TOxsnek5NLzcSXog9TGJdYYB2x4CJED2iE1zmDZuhlGuR5a",
-    })
+  const newData = nesteData as typeof nesteData
+  const currentData = await prisma.spot.findMany({
+    where: { nesteId: { in: newData.map((n) => n.nid.toString()) } },
   })
-  const existingSpots = await prisma.spot.findMany({ where: { nesteId: { in: spots.map((s) => s.id) } } })
-  console.log(spots.length + " stations found")
-  for (let index = 0; index < spots.length; index++) {
-    const spot = spots[index]
 
-    try {
-      // if in data.json, continue
-      const exists = existingSpots.find((s) => s.nesteId === spot.name)
-      if (exists) continue
+  await Promise.all(
+    newData.map(async (neste) => {
+      const exists = currentData.find((s) => s.nesteId === neste.nid.toString())
 
-      // geocode to get lat and lng based on address with mapbox
-      // const res = await fetch(
-      //   `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
-      //     spot.address,
-      //   )}.json?access_token=pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw`,
-      // )
+      if (exists) return
 
-      const res = await fetch(
-        `http://api.positionstack.com/v1/forward?access_key=b455825338d7d352fcdc6ba1a99a196a&query=${encodeURIComponent(
-          spot.address,
-        )}`,
-      )
-
-      const json = await res.json()
-
+      if (!neste.vehicles.includes("car")) return
+      if (!neste.lat || !neste.lng) return
       await prisma.spot.create({
         data: {
-          name: spot.name,
-          address: spot.address,
-          latitude: json.data[0].latitude,
-          longitude: json.data[0].longitude,
+          nesteId: neste.nid.toString(),
+          name: decodeURIComponent(neste.title),
+          description,
+          address: decodeURIComponent(
+            neste.company_name +
+              ", " +
+              neste.station_name +
+              ", " +
+              neste.street +
+              ", " +
+              neste.city.value +
+              ", " +
+              neste.state.value +
+              ", " +
+              neste.country.value +
+              ", " +
+              neste.postal_code,
+          ),
+          latitude: neste.lat,
+          longitude: neste.lng,
           creator: { connect: { email: "george@noquarter.co" } },
           verifier: { connect: { email: "george@noquarter.co" } },
-          nesteId: spot.name,
           type: "GAS_STATION",
-          images: { create: [{ path: spot.imageUrl, creator: { connect: { email: "george@noquarter.co" } } }] },
+          sourceUrl: "https://www.neste.be/en/neste-my-renewable-diesel-be",
+          images: {
+            create: [
+              {
+                path: "https://lh3.googleusercontent.com/IT2gbAip6StRHkmGQis6wbbjvXSebPK9GvLab4Ml8bCfG8DCJSDG5oxSepshXBQfCj9zudEUSW7Y85yx0ZXmLtu31TOxsnek5NLzcSXog9TGJdYYB2x4CJED2iE1zmDZuhlGuR5a",
+                creator: { connect: { email: "george@noquarter.co" } },
+              },
+            ],
+          },
         },
       })
-    } catch (error) {
-      console.log(error)
-    }
-  }
+    }),
+  )
 }
 
 async function main() {
