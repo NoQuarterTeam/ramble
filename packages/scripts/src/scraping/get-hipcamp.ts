@@ -195,14 +195,19 @@ async function run() {
         const landRes: LandRes = await camper.request(landQuery, { landId, landIdType: "MASKED" })
         const land = landRes.land
         const landSitesRes: LandSitesRes = await camper.request(landSitesQuery, { landId, landIdType: "MASKED", siteFilter: {} })
-        const amenities = landSitesRes.land.sites.edges[0].node.amenities.map((amenity) => ({
-          slug: amenity.slug,
-          state: amenity.state,
-        }))
+
+        const amenities =
+          landSitesRes.land.sites.edges.length > 0
+            ? landSitesRes.land.sites.edges[0].node.amenities.map((amenity) => ({
+                slug: amenity.slug,
+                state: amenity.state,
+              }))
+            : []
         const firePit = !!amenities.find((amenity) => amenity.slug === "fire" && amenity.state === "PRESENT")
         const toilet = !!amenities.find((amenity) => amenity.slug === "toilet" && amenity.state === "PRESENT")
         const water = !!amenities.find((amenity) => amenity.slug === "water" && amenity.state === "PRESENT")
         const electricity = !!amenities.find((amenity) => amenity.slug === "electricity-hookup" && amenity.state === "PRESENT")
+
         // console.dir(amenities, { depth: null })
         // console.dir(landRes, { depth: null })
         const images = node.topPhotos.flatMap((topPhoto) => topPhoto.urls.map((url) => url.url))
