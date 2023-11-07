@@ -14,13 +14,17 @@ export function useAsyncStorage<T>(key: string, initialValue: T) {
       setIsReady(true)
     }
   }, [key])
-  const setAsyncState = async (val: T) => {
-    try {
-      const payload = JSON.stringify(val)
-      setState(val)
-      await AsyncStorage.setItem(key, payload)
-    } catch {}
-  }
+
+  const setAsyncState = React.useCallback(
+    async (val: T) => {
+      try {
+        const payload = JSON.stringify(val)
+        setState(val)
+        await AsyncStorage.setItem(key, payload)
+      } catch {}
+    },
+    [key],
+  )
 
   React.useEffect(() => {
     getState()
