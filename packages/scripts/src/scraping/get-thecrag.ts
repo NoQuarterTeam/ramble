@@ -85,7 +85,7 @@ async function getPageCards(currentPage: number) {
         console.log("no name", spot.id, spot.link)
         continue
       }
-      const grade = $(".heading__t .grade").text().replace("{FB}", "").trim()
+      const grade = $(".heading__t .grade").text().replace("{FB}", "").replace("{UIAA}", "").trim()
       if (!grade) {
         console.log("no grade", spot.id, spot.link)
         continue
