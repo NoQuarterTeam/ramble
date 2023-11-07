@@ -85,8 +85,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     },
     {
       headers: [
-        ["set-cookie", csrfCookieHeader || ""],
+        ["set-cookie", csrfCookieHeader as string],
         ["set-cookie", await flashSession.commit()],
+        ["set-cookie", await gdprSession.commit()],
         ["set-cookie", await themeSession.commit()],
       ],
     },
