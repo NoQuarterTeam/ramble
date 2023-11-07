@@ -29,23 +29,29 @@ const headers = {
 const search = new GraphQLClient(searchEndpoint, { headers })
 const camper = new GraphQLClient(camperEndpoint, { headers })
 
-// const ukBoundingBox = {
+// const ukBbox = {
 //   southwestLatitude: 49.15437455073152,
 //   southwestLongitude: -14.155521505444824,
 //   northeastLatitude: 59.064346051468334,
 //   northeastLongitude: 1.9696403331486465,
 // }
-const franceSpainPortugalBoundingBox = {
-  southwestLatitude: 34.26465635258491,
-  southwestLongitude: -13.909058402557605,
-  northeastLatitude: 51.24275392456704,
-  northeastLongitude: 8.235671705008116,
+// const franceSpainPortugalBBox = {
+//   southwestLatitude: 34.26465635258491,
+//   southwestLongitude: -13.909058402557605,
+//   northeastLatitude: 51.24275392456704,
+//   northeastLongitude: 8.235671705008116,
+// }
+const restOfEuropeBBox = {
+  southwestLatitude: 32.51242431674814,
+  southwestLongitude: 6.64222969997283,
+  northeastLatitude: 59.8403587102855,
+  northeastLongitude: 45.25582584298422,
 }
 
 const searchVariables = {
   landFilter: {
     accommodations: ["rv-motorhomes", "vehicles"],
-    boundingBox: franceSpainPortugalBoundingBox,
+    boundingBox: restOfEuropeBBox,
   },
   privateOffset: 0,
   privateLimit: LIMIT,
