@@ -56,8 +56,7 @@ export async function validateFormData<Schema extends z.ZodTypeAny>(
   request: Request,
   schema: Schema,
 ): Promise<ValidForm<Schema> | InvalidForm<Schema>> {
-  const csrfRequest = request.clone()
-  await csrf.validate(csrfRequest)
+  await csrf.validate(request)
   const clonedRequest = request.clone()
   const formData = await clonedRequest.formData()
   const data = Object.fromEntries(formData)
