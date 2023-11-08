@@ -28,7 +28,7 @@ Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZW
 
 type Cluster = RouterOutputs["spot"]["clusters"][number]
 
-export function SpotsMapScreen() {
+export function MapScreen() {
   const { push } = useRouter()
   const { me } = useMe()
   const [clusters, setClusters] = React.useState<Cluster[] | null>(null)
