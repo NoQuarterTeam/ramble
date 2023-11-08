@@ -72,7 +72,7 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
                 <View className="sq-12 flex items-center justify-center rounded-full border border-gray-200 dark:border-gray-700">
                   <SpotIcon size={20} type={spot.type} />
                 </View>
-                <Text numberOfLines={2} className="pr-14 text-base leading-6 text-black hover:underline dark:text-white">
+                <Text numberOfLines={2} className="pr-16 text-base leading-6 text-black hover:underline dark:text-white">
                   {spot.name}
                 </Text>
               </TouchableOpacity>
