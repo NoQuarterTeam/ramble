@@ -218,6 +218,7 @@ function Document({ theme, children }: DocumentProps) {
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
         <meta name="msapplication-TileColor" content={theme === "dark" ? "#241c17" : "#fffefe"} />
         <meta name="theme-color" content={theme === "dark" ? "#241c17" : "#fffefe"} />
+        <meta name="apple-itunes-app" content="app-id=6468265289" />
         <Meta />
         <Links />
       </head>
