@@ -18,29 +18,25 @@ import { height, isTablet, width } from "../../../lib/device"
 import { useMe } from "../../../lib/hooks/useMe"
 import { useBackgroundColor } from "../../../lib/tailwind"
 import { useRouter } from "../../router"
-// import * as Device from 'expo-device';
 
-export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: string | null; onClose: () => void }) {
-  const {
-    data: spot,
-    isLoading,
-    isFetching,
-  } = api.spot.mapPreview.useQuery({ id: id || "" }, { enabled: !!id, keepPreviousData: true })
+export function SpotPreview({ id, onClose }: { id: string | null; onClose: () => void }) {
+  const { data: spot, isLoading } = api.spot.mapPreview.useQuery({ id: id || "" }, { enabled: !!id, keepPreviousData: false })
   const { push, navigate } = useRouter()
-  const colorScheme = useColorScheme()
   const { me } = useMe()
   const bottomSheetRef = React.useRef<BottomSheet>(null)
 
   const handleSheetClose = React.useCallback(() => {
     bottomSheetRef.current?.close()
     onClose()
-  }, [onClose])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   const animationConfigs = useBottomSheetSpringConfigs({
     damping: 40,
     overshootClamping: true,
     stiffness: 500,
   })
 
+  const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
 
   const backgroundColor = useBackgroundColor()
@@ -51,11 +47,10 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
       ref={bottomSheetRef}
       handleComponent={null}
       index={id ? 0 : -1}
-      onClose={onClose}
       snapPoints={[height * 0.5]}
     >
       <View style={{ backgroundColor }} className="rounded-t-xs h-full p-4">
-        {isLoading || (isFetching && id !== spot?.id) ? (
+        {isLoading ? (
           <View className="flex items-center justify-center p-10">
             <Spinner />
           </View>
@@ -128,4 +123,4 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
       </View>
     </BottomSheet>
   )
-})
+}
