@@ -1,3 +1,4 @@
+import * as Sentry from "sentry-expo"
 import * as React from "react"
 import { Modal, Switch, TouchableOpacity, useColorScheme, View } from "react-native"
 import Mapbox, { Camera, type MapView as MapType, MarkerView, RasterLayer, RasterSource } from "@rnmapbox/maps"
@@ -28,7 +29,7 @@ Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZW
 
 type Cluster = RouterOutputs["spot"]["clusters"][number]
 
-export function SpotsMapScreen() {
+export function MapScreen() {
   const { push } = useRouter()
   const { me } = useMe()
   const [clusters, setClusters] = React.useState<Cluster[] | null>(null)
@@ -312,12 +313,16 @@ function RainRadar({ shouldRender }: { shouldRender: boolean }) {
   const { data, isLoading } = useQuery({
     queryKey: ["rainRadar"],
     queryFn: async () => {
-      const res = await fetch(
-        "https://api.weather.com/v3/TileServer/series/productSet/PPAcore?apiKey=d7adbfe03bf54ea0adbfe03bf5fea065",
-      )
-      const jsonData = await res.json()
-      const data = jsonData.seriesInfo.radarEurope.series[0]?.ts as number | undefined
-      return data
+      try {
+        const res = await fetch(
+          "https://api.weather.com/v3/TileServer/series/productSet/PPAcore?apiKey=d7adbfe03bf54ea0adbfe03bf5fea065",
+        )
+        const jsonData = await res.json()
+        const data = jsonData.seriesInfo.radarEurope.series[0]?.ts as number | undefined
+        return data
+      } catch (error) {
+        Sentry.Native.captureException(error)
+      }
     },
     keepPreviousData: true,
     refetchInterval: 1000 * 60 * 5,

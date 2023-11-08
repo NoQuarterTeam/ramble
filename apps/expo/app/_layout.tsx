@@ -58,23 +58,47 @@ const prefix = Linking.createURL("/")
 const linking: LinkingOptions<ScreenParamsList> = {
   prefixes: [prefix, "ramble.guide", "dev.ramble.guide", "ramble://"],
   config: {
+    initialRouteName: "AppLayout",
     screens: {
       AppLayout: {
         screens: {
           MapLayout: {
+            initialRouteName: "MapScreen",
             screens: {
-              SpotsMapScreen: "map",
-              SpotDetailScreen: "spots/:id",
+              MapScreen: "map",
               UserScreen: ":username",
             },
           },
-          ProfileLayout: {
+          SpotsLayout: {
+            initialRouteName: "SpotsScreen",
             screens: {
-              ProfileScreen: "account",
-              VanScreen: "account/van",
-              InterestScreen: "account/interests",
+              SpotsScreen: "spots",
+              SpotDetailScreen: "spots/:id",
             },
           },
+          ListsLayout: {
+            initialRouteName: "ListsScreen",
+            screens: {
+              ListsScreen: "lists",
+              ListDetailScreen: "lists/:id",
+            },
+          },
+          AccountLayout: {
+            initialRouteName: "AccountScreen",
+            screens: {
+              AccountScreen: "account",
+              AccountVanScreen: "account/van",
+              AccountInterestsScreen: "account/interests",
+            },
+          },
+        },
+      },
+      AuthLayout: {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        screens: {
+          LoginScreen: "login",
+          RegisterScreen: "register",
         },
       },
     },
