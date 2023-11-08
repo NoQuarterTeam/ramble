@@ -1,3 +1,4 @@
+import * as Sentry from "sentry-expo"
 import * as React from "react"
 import { AppState, type AppStateStatus } from "react-native"
 import * as Updates from "expo-updates"
@@ -11,13 +12,17 @@ export function useCheckExpoUpdates() {
   const checkForExpoUpdates = async () => {
     try {
       if (IS_DEV) return setIsDoneChecking(true)
-      const { isAvailable } = await Updates.checkForUpdateAsync()
+      const timeoutRace: Promise<never> = new Promise((_, reject) =>
+        setTimeout(() => reject("Expo update timeout of 5s reached"), 5000),
+      )
+      const { isAvailable } = await Promise.race([Updates.checkForUpdateAsync(), timeoutRace])
       if (isAvailable) {
         await Updates.fetchUpdateAsync()
         await Updates.reloadAsync()
       }
-    } catch {
-      // do nothing
+    } catch (error) {
+      console.log("expo update timeout reached")
+      Sentry.Native.captureException(error)
     } finally {
       return setIsDoneChecking(true)
     }
