@@ -71,8 +71,16 @@ export const action = ({ request }: ActionFunctionArgs) =>
               lists: { create: { name: "Favourites", description: "All my favourite spots" } },
             },
           })
-          if (accessRequest) await db.accessRequest.update({ where: { id: accessRequest.id }, data: { acceptedAt: new Date() } })
-          if (inviteCode) await db.inviteCode.update({ where: { id: inviteCode.id }, data: { acceptedAt: new Date() } })
+          if (accessRequest)
+            await db.accessRequest.update({
+              where: { id: accessRequest.id },
+              data: { acceptedAt: new Date(), user: { connect: { id: user.id } } },
+            })
+          if (inviteCode)
+            await db.inviteCode.update({
+              where: { id: inviteCode.id },
+              data: { acceptedAt: new Date(), user: { connect: { id: user.id } } },
+            })
 
           const codes = generateInviteCodes(user.id)
           await db.inviteCode.createMany({ data: codes.map((c) => ({ code: c, ownerId: user.id })) })
