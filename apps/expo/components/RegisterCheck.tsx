@@ -11,9 +11,8 @@ export function RegisterCheck() {
   React.useEffect(() => {
     if (isLoading || !isReady) return
     if (!me && !isChecked) router.push("AuthLayout", { screen: "RegisterScreen" })
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [me, isLoading, isReady])
+  }, [me, isLoading, isChecked, isReady])
 
   return null
 }
