@@ -37,17 +37,22 @@ export const authRouter = createTRPCRouter({
     const user = await ctx.prisma.user.create({
       data: {
         ...input,
-        isVerified: true,
+        isVerified: true, // temp
         lists: { create: { name: "Favourites", description: "All my favourite spots" } },
         password: hashedPassword,
-        usedInviteCode: inviteCode ? { connect: { id: inviteCode.id } } : undefined,
       },
     })
     if (accessRequest) {
-      await ctx.prisma.accessRequest.update({ where: { id: accessRequest.id }, data: { acceptedAt: new Date() } })
+      await ctx.prisma.accessRequest.update({
+        where: { id: accessRequest.id },
+        data: { acceptedAt: new Date(), user: { connect: { id: user.id } } },
+      })
     }
     if (inviteCode) {
-      await ctx.prisma.inviteCode.update({ where: { id: inviteCode.id }, data: { acceptedAt: new Date() } })
+      await ctx.prisma.inviteCode.update({
+        where: { id: inviteCode.id },
+        data: { acceptedAt: new Date(), user: { connect: { id: user.id } } },
+      })
     }
     const codes = generateInviteCodes(user.id)
     await ctx.prisma.inviteCode.createMany({ data: codes.map((c) => ({ code: c, ownerId: user.id })) })
