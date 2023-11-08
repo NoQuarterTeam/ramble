@@ -51,6 +51,7 @@ export interface InputProps
   name?: string
   leftElement?: React.ReactNode
   rightElement?: React.ReactNode
+  ref?: React.Ref<HTMLInputElement>
 }
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(function _Input(
   { size, variant, leftElement, rightElement, ...props },
