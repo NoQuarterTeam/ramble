@@ -25,52 +25,54 @@ async function getCards() {
     where: { nesteId: { in: newData.map((n) => n.nid.toString()) } },
   })
 
-  await Promise.all(
-    newData.map(async (neste) => {
-      const exists = currentData.find((s) => s.nesteId === neste.nid.toString())
+  for (const neste of newData) {
+    const exists = currentData.find((s) => s.nesteId === neste.nid.toString())
 
-      if (exists) return
+    if (exists) {
+      console.log("exists")
+      continue
+    }
 
-      if (!neste.vehicles.includes("car")) return
-      if (!neste.lat || !neste.lng) return
-      await prisma.spot.create({
-        data: {
-          nesteId: neste.nid.toString(),
-          name: decodeURIComponent(neste.title),
-          description,
-          address: decodeURIComponent(
-            neste.company_name +
-              ", " +
-              neste.station_name +
-              ", " +
-              neste.street +
-              ", " +
-              neste.city.value +
-              ", " +
-              neste.state.value +
-              ", " +
-              neste.country.value +
-              ", " +
-              neste.postal_code,
-          ),
-          latitude: neste.lat,
-          longitude: neste.lng,
-          creator: { connect: { email: "george@noquarter.co" } },
-          verifier: { connect: { email: "george@noquarter.co" } },
-          type: "GAS_STATION",
-          sourceUrl: "https://www.neste.be/en/neste-my-renewable-diesel-be",
-          images: {
-            create: [
-              {
-                path: "https://lh3.googleusercontent.com/IT2gbAip6StRHkmGQis6wbbjvXSebPK9GvLab4Ml8bCfG8DCJSDG5oxSepshXBQfCj9zudEUSW7Y85yx0ZXmLtu31TOxsnek5NLzcSXog9TGJdYYB2x4CJED2iE1zmDZuhlGuR5a",
-                creator: { connect: { email: "george@noquarter.co" } },
-              },
-            ],
-          },
+    if (!neste.vehicles.includes("car")) continue
+    if (!neste.lat || !neste.lng) continue
+
+    await prisma.spot.create({
+      data: {
+        nesteId: neste.nid.toString(),
+        name: decodeURIComponent(neste.title),
+        description,
+        address: decodeURIComponent(
+          neste.company_name +
+            ", " +
+            neste.station_name +
+            ", " +
+            neste.street +
+            ", " +
+            neste.city.value +
+            ", " +
+            neste.state.value +
+            ", " +
+            neste.country.value +
+            ", " +
+            neste.postal_code,
+        ),
+        latitude: neste.lat,
+        longitude: neste.lng,
+        creator: { connect: { email: "george@noquarter.co" } },
+        verifier: { connect: { email: "george@noquarter.co" } },
+        type: "GAS_STATION",
+        sourceUrl: "https://www.neste.be/en/neste-my-renewable-diesel-be",
+        images: {
+          create: [
+            {
+              path: "https://lh3.googleusercontent.com/IT2gbAip6StRHkmGQis6wbbjvXSebPK9GvLab4Ml8bCfG8DCJSDG5oxSepshXBQfCj9zudEUSW7Y85yx0ZXmLtu31TOxsnek5NLzcSXog9TGJdYYB2x4CJED2iE1zmDZuhlGuR5a",
+              creator: { connect: { email: "george@noquarter.co" } },
+            },
+          ],
         },
-      })
-    }),
-  )
+      },
+    })
+  }
 }
 
 async function main() {
