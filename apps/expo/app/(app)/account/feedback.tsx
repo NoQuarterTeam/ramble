@@ -1,6 +1,6 @@
 import * as React from "react"
 import { FormProvider, useForm } from "react-hook-form"
-import { ScrollView, TouchableOpacity, View } from "react-native"
+import { Keyboard, ScrollView, TouchableOpacity, View } from "react-native"
 import { Bug, Lightbulb, MessageCircle } from "lucide-react-native"
 
 import { type FeedbackType } from "@ramble/database/types"
@@ -41,6 +41,7 @@ export function AccountFeedbackScreen() {
 
   const onSubmit = form.handleSubmit((data) => {
     if (!type) return toast({ title: "Please select a feedback type" })
+    Keyboard.dismiss()
     mutate({ ...data, type })
   })
 
@@ -57,7 +58,11 @@ export function AccountFeedbackScreen() {
           ) : undefined
         }
       >
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{ flexGrow: 1 }}
+          showsVerticalScrollIndicator={false}
+        >
           <View className="flex flex-row items-center justify-between gap-2">
             {feedbackTypes.map((feedbackType) => (
               <TouchableOpacity

@@ -56,20 +56,20 @@ export default function OnboardingStep2Screen() {
           ))}
         </View>
         <FormError error={error} />
-      </ScrollView>
-      <View className="absolute bottom-10 left-0 right-0 flex flex-row items-center justify-between px-4">
-        <Button onPress={router.goBack} variant="ghost">
-          Back
-        </Button>
-        <View className="flex flex-row items-center space-x-2">
-          <Button onPress={() => router.push("OnboardingStep3Screen")} variant="link">
-            Skip
+        <View className="mt-4 flex flex-row items-center justify-between px-4">
+          <Button onPress={router.goBack} variant="ghost">
+            Back
           </Button>
-          <Button className="w-[120px]" isLoading={isLoading} onPress={onSubmit}>
-            Next
-          </Button>
+          <View className="flex flex-row items-center space-x-2">
+            <Button onPress={() => router.push("OnboardingStep3Screen")} variant="link">
+              Skip
+            </Button>
+            <Button className="w-[120px]" isLoading={isLoading} onPress={onSubmit}>
+              Next
+            </Button>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   )
 }
@@ -86,7 +86,7 @@ function InterestSelector({
   icon: (props: IconProps) => JSX.Element
 }) {
   return (
-    <View className="mb-2 flex w-full flex-row items-center justify-between p-4">
+    <View className="flex w-full flex-row items-center justify-between p-4">
       <View className="flex flex-row items-center space-x-2">
         <Icon icon={icon} className="sq-4" />
         <Text className="text-xl">{label}</Text>

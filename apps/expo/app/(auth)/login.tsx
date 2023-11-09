@@ -40,11 +40,19 @@ export function LoginScreen() {
     <ModalView title="login" onBack={() => navigation.navigate("AppLayout")}>
       <FormProvider {...form}>
         <ScrollView
+          keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ flexGrow: 1, paddingBottom: 100, justifyContent: "space-between" }}
           showsVerticalScrollIndicator={false}
         >
           <View>
-            <FormInput autoCapitalize="none" autoComplete="email" name="email" label="Email" error={error} />
+            <FormInput
+              autoCapitalize="none"
+              keyboardType="email-address"
+              autoComplete="email"
+              name="email"
+              label="Email"
+              error={error}
+            />
             <FormInput
               autoCapitalize="none"
               name="password"
