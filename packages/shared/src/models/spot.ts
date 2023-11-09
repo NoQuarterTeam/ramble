@@ -9,6 +9,7 @@ export const spotPartnerFields = {
   natuurKampeerterreinenId: true,
   roadsurferId: true,
   nesteId: true,
+  hipcampId: true,
   surflineId: true,
   theCragId: true,
   sourceUrl: true,
@@ -21,12 +22,27 @@ export const isPartnerSpot = (spot: SpotPartnerFields) =>
   spot.surflineId ||
   spot.komootId ||
   spot.nesteId ||
+  spot.hipcampId ||
   spot.park4nightId ||
   spot.roadsurferId ||
   spot.cucortuId ||
   spot.theCragId ||
   spot.loodusegakoosId ||
   spot.natuurKampeerterreinenId
+
+export const partners = {
+  campspace: { name: "Campspace", logo: { light: "/partners/campspace.svg", dark: "/partners/campspace-dark.svg" } },
+  komoot: { name: "Komoot", logo: { light: "/partners/komoot.svg", dark: "/partners/komoot-dark.svg" } },
+  park4night: { name: "Park4Night", logo: { light: "/partners/park4night.svg", dark: "/partners/park4night-dark.svg" } },
+  surfline: { name: "Surfline", logo: { light: "/partners/surfline.svg", dark: "/partners/surfline-dark.svg" } },
+  natuur: { name: "Natuurkampeerterrein", logo: { light: "/partners/natuur.svg", dark: "/partners/natuur.svg" } },
+  roadsurfer: { name: "Roadsurfer", logo: { light: "/partners/roadsurfer.svg", dark: "/partners/roadsurfer-dark.svg" } },
+  loodusegakoos: { name: "Loodusega koos ", logo: { light: "/partners/loodusegakoos.svg", dark: "/partners/loodusegakoos.svg" } },
+  cucortu: { name: "Cucortu'", logo: { light: "/partners/cucortu.png", dark: "/partners/cucortu-dark.png" } },
+  theCrag: { name: "The Crag", logo: { light: "/partners/the-crag.svg", dark: "/partners/the-crag-dark.svg" } },
+  neste: { name: "Neste", logo: { light: "/partners/neste.png", dark: "/partners/neste.png" } },
+  hipcamp: { name: "Hipcamp", logo: { light: "/partners/hipcamp.svg", dark: "/partners/hipcamp-dark.svg" } },
+} as const
 
 export type SpotItemWithStatsAndImage = Pick<Spot, "id" | "name" | "address" | "type"> & {
   rating: string
