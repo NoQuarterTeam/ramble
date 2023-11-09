@@ -54,7 +54,7 @@
     "expo-updates": "~0.18.17",
     "expo-web-browser": "~12.3.2",
     "lucide-react-native": "0.292.0",
-    "nativewind": "2.0.11",
+    "nativewind": "4.0.13",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "7.48.2",
