@@ -2,13 +2,13 @@ import { Link, useSearchParams } from "@remix-run/react"
 import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
-import { generateInviteCodes, sendAccountVerificationEmail, sendSlackMessage } from "@ramble/api"
+import { generateInviteCodes, sendSlackMessage } from "@ramble/api"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { createAction, createActions, formError } from "~/lib/form.server"
-import { createToken } from "~/lib/jwt.server"
+
 import { redirect } from "~/lib/remix.server"
 import type { ActionFunctionArgs, MetaFunction } from "~/lib/vendor/vercel.server"
 import { hashPassword } from "~/services/auth/password.server"
@@ -85,8 +85,6 @@ export const action = ({ request }: ActionFunctionArgs) =>
           const codes = generateInviteCodes(user.id)
           await db.inviteCode.createMany({ data: codes.map((c) => ({ code: c, ownerId: user.id })) })
           const { setUser } = await getUserSession(request)
-          const token = await createToken({ id: user.id })
-          await sendAccountVerificationEmail(user, token)
           const headers = new Headers([["set-cookie", await setUser(user.id)]])
           track("Registered", { userId: user.id, code })
           sendSlackMessage(`🔥 @${user.username} signed up!`)
