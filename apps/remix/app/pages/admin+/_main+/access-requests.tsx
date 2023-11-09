@@ -110,7 +110,7 @@ const columns = [
     header: () => null,
     cell: ({ row }) => (
       <div className="hstack justify-end">
-        {!row.original.user && <AcceptAction item={row.original} />}
+        {!row.original.user && !row.original.acceptedAt && <AcceptAction item={row.original} />}
         {!row.original.acceptedAt && <DeleteAction item={row.original} />}
       </div>
     ),
@@ -157,7 +157,7 @@ function AcceptAction({ item }: { item: AccessRequest }) {
       <input type="hidden" name="id" value={item.id} />
 
       <FormActionInput value={Actions.accept} />
-      <Tooltip label={item.acceptedAt ? "Resend invite" : "Send invite"}>
+      <Tooltip label="Send invite">
         <IconButton type="submit" isLoading={fetcher.state !== "idle"} aria-label="delete" size="sm" icon={<Check size={16} />} />
       </Tooltip>
     </fetcher.Form>
