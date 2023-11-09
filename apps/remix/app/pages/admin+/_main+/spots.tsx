@@ -218,24 +218,24 @@ export default function Spots() {
             ))}
           </Select>
         </div>
-        {unverifiedSpotsCount > 0 && (
-          <div>
-            <Button
-              variant={searchParams.get("unverified") === "true" ? "primary" : "outline"}
-              onClick={() => {
-                const existingParams = queryString.parse(searchParams.toString())
-                setSearchParams(
-                  queryString.stringify({
-                    ...existingParams,
-                    unverified: searchParams.get("unverified") === "true" ? undefined : true,
-                  }),
-                )
-              }}
-            >
-              Show {unverifiedSpotsCount} unverified
-            </Button>
-          </div>
-        )}
+
+        <div>
+          <Button
+            variant={searchParams.get("unverified") === "true" ? "primary" : "outline"}
+            onClick={() => {
+              const existingParams = queryString.parse(searchParams.toString())
+              setSearchParams(
+                queryString.stringify({
+                  ...existingParams,
+                  unverified: searchParams.get("unverified") === "true" ? undefined : true,
+                }),
+              )
+            }}
+          >
+            Show {unverifiedSpotsCount} unverified
+          </Button>
+        </div>
+
         <div>
           <Search className="max-w-[400px]" />
         </div>

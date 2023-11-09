@@ -44,8 +44,15 @@ export function LoginScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View>
-            <FormInput autoCapitalize="none" name="email" label="Email" error={error} />
-            <FormInput autoCapitalize="none" name="password" secureTextEntry label="Password" error={error} />
+            <FormInput autoCapitalize="none" autoComplete="email" name="email" label="Email" error={error} />
+            <FormInput
+              autoCapitalize="none"
+              name="password"
+              autoComplete="password"
+              secureTextEntry
+              label="Password"
+              error={error}
+            />
             <Button className="mb-1" isLoading={isLoading} disabled={isLoading} onPress={onSubmit}>
               Login
             </Button>

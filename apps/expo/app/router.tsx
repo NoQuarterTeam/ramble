@@ -30,7 +30,7 @@ export type ScreenParamsList = {
   AccountFeedbackScreen: undefined
 
   MapLayout: undefined
-  SpotsMapScreen: undefined
+  MapScreen: undefined
 
   SpotsLayout: undefined
   SpotsScreen: undefined

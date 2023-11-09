@@ -30,24 +30,30 @@ export const authRouter = createTRPCRouter({
     const accessRequest = await ctx.prisma.accessRequest.findFirst({ where: { code: trimmedCode, user: null } })
     const inviteCode = await ctx.prisma.inviteCode.findFirst({ where: { code: trimmedCode, acceptedAt: null } })
     if (!accessRequest && !inviteCode) throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid code" })
-    const username = input.username.toLowerCase().trim()
-    const existingUsername = await ctx.prisma.user.findUnique({ where: { username } })
+    const formattedUsername = input.username.toLowerCase().trim()
+    const existingUsername = await ctx.prisma.user.findUnique({ where: { username: formattedUsername } })
     if (existingUsername) throw new TRPCError({ code: "BAD_REQUEST", message: "User with this username already exists" })
     const hashedPassword = bcrypt.hashSync(input.password, 10)
     const user = await ctx.prisma.user.create({
       data: {
         ...input,
-        isVerified: true,
+        username: formattedUsername,
+        isVerified: true, // temp
         lists: { create: { name: "Favourites", description: "All my favourite spots" } },
         password: hashedPassword,
-        usedInviteCode: inviteCode ? { connect: { id: inviteCode.id } } : undefined,
       },
     })
     if (accessRequest) {
-      await ctx.prisma.accessRequest.update({ where: { id: accessRequest.id }, data: { acceptedAt: new Date() } })
+      await ctx.prisma.accessRequest.update({
+        where: { id: accessRequest.id },
+        data: { acceptedAt: new Date(), user: { connect: { id: user.id } } },
+      })
     }
     if (inviteCode) {
-      await ctx.prisma.inviteCode.update({ where: { id: inviteCode.id }, data: { acceptedAt: new Date() } })
+      await ctx.prisma.inviteCode.update({
+        where: { id: inviteCode.id },
+        data: { acceptedAt: new Date(), user: { connect: { id: user.id } } },
+      })
     }
     const codes = generateInviteCodes(user.id)
     await ctx.prisma.inviteCode.createMany({ data: codes.map((c) => ({ code: c, ownerId: user.id })) })

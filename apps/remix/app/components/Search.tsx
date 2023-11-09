@@ -9,16 +9,16 @@ import { IconButton, Input, type InputProps } from "~/components/ui"
 
 export function Search({ placeholder, name = "search", ...props }: InputProps) {
   const [params, setParams] = useSearchParams()
-  const [search, setSearch] = React.useState(params.get(name) || "")
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!search && !params.get(name)) return
+    const val = e.target as HTMLFormElement
+    const search = val[name] as HTMLInputElement
     const existingParams = queryString.parse(params.toString())
     if (!search) {
       delete existingParams[name]
     } else {
-      existingParams[name] = search
+      existingParams[name] = search.value
     }
     if (existingParams.page) delete existingParams.page
     setParams(queryString.stringify(existingParams))
@@ -27,10 +27,7 @@ export function Search({ placeholder, name = "search", ...props }: InputProps) {
     const existingParams = queryString.parse(params.toString())
     delete existingParams[name]
     setParams(queryString.stringify(existingParams))
-    setSearch("")
   }
-
-  const isPendingSearch = !!search || !!params.get(name)
 
   return (
     <form className="relative w-full" onSubmit={handleSubmit}>
@@ -40,14 +37,13 @@ export function Search({ placeholder, name = "search", ...props }: InputProps) {
       <Input
         name={name}
         placeholder={placeholder || "Search"}
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        key={params.get(name) || ""}
+        defaultValue={params.get(name) || ""}
         {...props}
-        ref={undefined}
         className={merge("px-9", props.className)}
       />
       <div className="center absolute right-1 top-0 h-full">
-        {!!isPendingSearch && (
+        {!!params.get(name) && (
           <IconButton size="xs" onClick={clearSearch} aria-label="clear search" variant="ghost" icon={<X className="sq-4" />} />
         )}
       </div>

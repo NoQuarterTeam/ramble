@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 import { json } from "~/lib/vendor/vercel.server"
-import { csrf } from "~/services/session/csrf.server"
+// import { csrf } from "~/services/session/csrf.server"
 
 import { FORM_ACTION } from "./form"
 import { badRequest } from "./remix.server"
@@ -56,8 +56,7 @@ export async function validateFormData<Schema extends z.ZodTypeAny>(
   request: Request,
   schema: Schema,
 ): Promise<ValidForm<Schema> | InvalidForm<Schema>> {
-  const csrfRequest = request.clone()
-  await csrf.validate(csrfRequest)
+  // await csrf.validate(request) // temp disable
   const clonedRequest = request.clone()
   const formData = await clonedRequest.formData()
   const data = Object.fromEntries(formData)

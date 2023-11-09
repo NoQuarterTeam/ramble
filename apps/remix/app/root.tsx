@@ -85,8 +85,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     },
     {
       headers: [
-        ["set-cookie", csrfCookieHeader || ""],
+        ["set-cookie", csrfCookieHeader as string],
         ["set-cookie", await flashSession.commit()],
+        ["set-cookie", await gdprSession.commit()],
         ["set-cookie", await themeSession.commit()],
       ],
     },
@@ -217,6 +218,7 @@ function Document({ theme, children }: DocumentProps) {
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
         <meta name="msapplication-TileColor" content={theme === "dark" ? "#241c17" : "#fffefe"} />
         <meta name="theme-color" content={theme === "dark" ? "#241c17" : "#fffefe"} />
+        <meta name="apple-itunes-app" content="app-id=6468265289" />
         <Meta />
         <Links />
       </head>

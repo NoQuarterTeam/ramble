@@ -42,11 +42,18 @@ export function RegisterScreen() {
         >
           <View>
             <FormInput name="code" label="Invite code" autoCapitalize="characters" error={error} />
-            <FormInput autoCapitalize="none" name="email" label="Email" error={error} />
-            <FormInput autoCapitalize="none" name="password" secureTextEntry label="Password" error={error} />
-            <FormInput autoCapitalize="none" name="username" label="Username" error={error} />
-            <FormInput name="firstName" label="First name" error={error} />
-            <FormInput name="lastName" label="Last name" error={error} />
+            <FormInput autoCapitalize="none" autoComplete="email" name="email" label="Email" error={error} />
+            <FormInput
+              autoCapitalize="none"
+              name="password"
+              autoComplete="password-new"
+              secureTextEntry
+              label="Password"
+              error={error}
+            />
+            <FormInput autoCapitalize="none" name="username" autoComplete="username" label="Username" error={error} />
+            <FormInput name="firstName" label="First name" autoComplete="nickname" error={error} />
+            <FormInput name="lastName" label="Last name" autoComplete="family-name" error={error} />
             <Button className="mb-1" isLoading={isLoading} onPress={onSubmit}>
               Register
             </Button>
