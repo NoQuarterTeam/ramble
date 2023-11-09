@@ -7,6 +7,7 @@ import { createAuthToken } from "../lib/jwt"
 import { generateBlurHash } from "../services/generateBlurHash.server"
 import { sendAccountVerificationEmail } from "../services/mailers/user.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
+import { sendSlackMessage } from "../services/slack.server"
 
 export const userRouter = createTRPCRouter({
   me: publicProcedure.query(({ ctx }) => ctx.user),
@@ -79,6 +80,7 @@ export const userRouter = createTRPCRouter({
     return true
   }),
   deleteAccount: protectedProcedure.mutation(async ({ ctx }) => {
+    sendSlackMessage(`😭 User @${ctx.user.username} deleted their account.`)
     await ctx.prisma.user.delete({ where: { id: ctx.user.id } })
     return true
   }),
