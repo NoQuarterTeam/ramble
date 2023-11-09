@@ -1,5 +1,5 @@
 import { FormProvider } from "react-hook-form"
-import { ScrollView, TouchableOpacity, View } from "react-native"
+import { Keyboard, ScrollView, TouchableOpacity, View } from "react-native"
 import * as ImagePicker from "expo-image-picker"
 import { Edit2, User2 } from "lucide-react-native"
 
@@ -45,6 +45,7 @@ export function AccountInfoScreen() {
 
   const onSubmit = form.handleSubmit((data) => {
     if (data.username.trim().includes(" ")) return toast({ title: "Username can not contain empty spaces" })
+    Keyboard.dismiss()
     mutate(data)
   })
 

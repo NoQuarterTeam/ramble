@@ -34,6 +34,7 @@ export function RequestAccessScreen() {
     <ModalView title="request access" onBack={() => navigation.navigate("AppLayout")}>
       <FormProvider {...form}>
         <ScrollView
+          keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ flexGrow: 1, paddingBottom: 100, justifyContent: "space-between" }}
           showsVerticalScrollIndicator={false}
         >

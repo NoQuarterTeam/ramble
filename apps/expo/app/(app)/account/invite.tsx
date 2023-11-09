@@ -1,5 +1,5 @@
 import { Copy, User2 } from "lucide-react-native"
-import * as React from "react"
+
 import { ScrollView, TouchableOpacity, View } from "react-native"
 import Clipboard from "@react-native-clipboard/clipboard"
 
@@ -8,7 +8,7 @@ import { ScreenView } from "../../../components/ui/ScreenView"
 import { Spinner } from "../../../components/ui/Spinner"
 import { Text } from "../../../components/ui/Text"
 import { api } from "../../../lib/api"
-import { createImageUrl, join } from "@ramble/shared"
+import { createImageUrl } from "@ramble/shared"
 import { OptimizedImage } from "../../../components/ui/OptimisedImage"
 import { useRouter } from "../../router"
 import { toast } from "../../../components/ui/Toast"
@@ -36,10 +36,10 @@ export function AccountInviteScreen() {
           data.map((inviteCode) => (
             <TouchableOpacity
               key={inviteCode.id}
-              // disabled={!!inviteCode.user}
               onPress={
                 !!inviteCode.user
-                  ? () => router.push("UserScreen", { username: inviteCode.user!.username })
+                  ? // eslint-disable-next-line
+                    () => router.push("UserScreen", { username: inviteCode.user!.username })
                   : () => handleCopy(inviteCode.code)
               }
               activeOpacity={0.8}

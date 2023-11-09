@@ -25,7 +25,11 @@ export function NewReviewScreen() {
   const { data: spot } = api.spot.detail.useQuery({ id: spotId })
   return (
     <ModalView title="new review">
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ flexGrow: 1 }}
+        showsVerticalScrollIndicator={false}
+      >
         <Text className="pb-4">{spot?.name}</Text>
         <ReviewForm isLoading={isLoading} error={error} onCreate={mutate} spotId={spotId} />
       </ScrollView>
