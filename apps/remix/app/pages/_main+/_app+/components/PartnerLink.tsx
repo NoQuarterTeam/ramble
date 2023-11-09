@@ -1,23 +1,10 @@
-import { isPartnerSpot, type SpotPartnerFields } from "@ramble/shared"
+import { isPartnerSpot, partners, type SpotPartnerFields } from "@ramble/shared"
 
 import { useTheme } from "~/lib/theme"
 
 interface Props {
   spot: SpotPartnerFields
 }
-
-const partners = {
-  campspace: { name: "Campspace", logo: { light: "/partners/campspace.svg", dark: "/partners/campspace-dark.svg" } },
-  komoot: { name: "Komoot", logo: { light: "/partners/komoot.svg", dark: "/partners/komoot-dark.svg" } },
-  park4night: { name: "Park4Night", logo: { light: "/partners/park4night.svg", dark: "/partners/park4night-dark.svg" } },
-  surfline: { name: "Surfline", logo: { light: "/partners/surfline.svg", dark: "/partners/surfline-dark.svg" } },
-  natuur: { name: "Natuurkampeerterrein", logo: { light: "/partners/natuur.svg", dark: "/partners/natuur.svg" } },
-  roadsurfer: { name: "Roadsurfer", logo: { light: "/partners/roadsurfer.svg", dark: "/partners/roadsurfer-dark.svg" } },
-  loodusegakoos: { name: "Loodusega koos ", logo: { light: "/partners/loodusegakoos.svg", dark: "/partners/loodusegakoos.svg" } },
-  cucortu: { name: "Cucortu'", logo: { light: "/partners/cucortu.png", dark: "/partners/cucortu-dark.png" } },
-  theCrag: { name: "The Crag", logo: { light: "/partners/the-crag.svg", dark: "/partners/the-crag-dark.svg" } },
-  neste: { name: "Neste", logo: { light: "/partners/neste.png", dark: "/partners/neste.png" } },
-} as const
 
 export function PartnerLink(props: Props) {
   const theme = useTheme()
@@ -28,6 +15,8 @@ export function PartnerLink(props: Props) {
     : props.spot.theCragId
     ? partners.theCrag
     : props.spot.komootId
+    ? partners.komoot
+    : props.spot.hipcampId
     ? partners.komoot
     : props.spot.natuurKampeerterreinenId
     ? partners.natuur
