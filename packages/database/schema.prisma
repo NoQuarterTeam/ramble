@@ -190,6 +190,8 @@ model Spot {
   hipcampId                String? @unique
   // the crag
   theCragId                String? @unique
+  // norcamp
+  norcampId                String? @unique
 
   @@index([createdAt])
   @@index([verifiedAt])
