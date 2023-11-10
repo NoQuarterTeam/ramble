@@ -7,9 +7,9 @@ import { AccountScreen } from "."
 import { AccountFeedbackScreen } from "./feedback"
 import { AccountInfoScreen } from "./info"
 import { InterestsScreen } from "./interests"
+import { AccountInviteScreen } from "./invite"
 import { AccountSettingsScreen } from "./settings"
 import { VanScreen } from "./van"
-import { AccountInviteScreen } from "./invite"
 
 const AccountStack = createNativeStackNavigator<ScreenParamsList>()
 

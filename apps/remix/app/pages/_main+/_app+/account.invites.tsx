@@ -1,5 +1,5 @@
-import { LoaderFunctionArgs, json } from "@vercel/remix"
 import { Link, useLoaderData } from "@remix-run/react"
+import { json, type LoaderFunctionArgs } from "@vercel/remix"
 import { Copy } from "lucide-react"
 
 // import { generateInviteCodes } from "@ramble/api"

@@ -4,7 +4,8 @@ import * as cheerio from "cheerio"
 // const url = `https://www.park4night.com/api/places/around?lang=en&filter=%7B%22type%22:[%22ACC_G%22],%22services%22:[],%22activities%22:[],%22maxHeight%22:%220%22%7D&radius=200&`
 
 // farm
-const url = `https://www.park4night.com/api/places/around?lang=en&filter=%7B%22type%22:[%22F%22],%22services%22:[],%22activities%22:[],%22maxHeight%22:%220%22%7D&radius=200&`
+// const url = `https://www.park4night.com/api/places/around?lang=en&filter=%7B%22type%22:[%22F%22],%22services%22:[],%22activities%22:[],%22maxHeight%22:%220%22%7D&radius=200&`
+const url = ` https://park4night.com/api/places/around?lat=44.74516439740855&lng=15.216064453125&radius=200&filter=%7B%22type%22:[%22F%22,%22C%22],%22services%22:[],%22activities%22:[],%22maxHeight%22:%220%22%7D&lang=en`
 
 // lat=48.25744095909484&lng=3.3044850246652686
 import exampleData from "./park4night.json"
@@ -12,7 +13,7 @@ import exampleData from "./park4night.json"
 import { prisma } from "@ramble/database"
 import { SpotType } from "@ramble/database/types"
 
-async function getCards({ lat, lng }: { lat: number; lng: number }) {
+async function getCards() {
   // const fixes = await prisma.spot.findMany({
   //   select: { id: true, name: true },
   //   where: { type: "CAMPING", name: { startsWith: "(" } },
@@ -26,7 +27,8 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
 
   // return
 
-  const res = await fetch(url + `lat=${lat}&lng=${lng}`)
+  // const res = await fetch(url + `lat=${lat}&lng=${lng}`)
+  const res = await fetch(url)
   const newSpots = (await res.json()) as typeof exampleData
 
   console.log(newSpots.length + " spots")
@@ -50,8 +52,10 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
         type: SpotType.CAMPING,
         park4nightId: spot.id,
         address: spot.address.street + ", " + spot.address.city + ", " + spot.address.country + ", " + spot.address.zipcode,
-        name: spot.title_short.replace(/^\(\d+\)\s*/, "").trim(),
-        createdAt: new Date(spot.created_at),
+        name: spot.title_short
+          .replace(/\([^)]+\)/g, "")
+          .replace("() ", "")
+          .trim(),
         description: spot.description,
         latitude: spot.lat,
         longitude: spot.lng,
@@ -71,7 +75,8 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
         bbq: false,
       }
 
-      const detailPage = await fetch(`https://www.park4night.com/en/place/${spot.id}`)
+      const sourceUrl = `https://www.park4night.com/en/place/${spot.id}`
+      const detailPage = await fetch(sourceUrl)
       const text = await detailPage.text()
 
       const $ = cheerio.load(text)
@@ -79,12 +84,13 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
       let images: string[] = []
       $(".place-header-gallery-image").each((_, img) => {
         const href = $(img).attr("href")
-        if (href) images.push(href)
+        if (href && href !== "#") images.push(href)
       })
 
       await prisma.spot.create({
         data: {
           ...data,
+          sourceUrl,
           amenities: { create: amenities },
           images: {
             create: images.map((url) => ({ path: url, creator: { connect: { email: "jack@noquarter.co" } } })),
@@ -100,7 +106,7 @@ async function main() {
   try {
     // lat and lng coords of europe in large squares
 
-    await getCards({ lat: 50, lng: 4 })
+    await getCards()
   } catch (error) {
     console.log(error)
     process.exit(1)
