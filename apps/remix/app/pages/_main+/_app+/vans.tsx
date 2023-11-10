@@ -6,11 +6,12 @@ import { createImageUrl } from "@ramble/shared"
 
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { PageContainer } from "~/components/PageContainer"
-import { Avatar, Button, Icons } from "~/components/ui"
+import { Avatar, Badge, Button, Icons } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import type { LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
+import dayjs from "dayjs"
 
 export const config = {
   // runtime: "edge",
@@ -24,12 +25,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const skip = parseInt((searchParams.get("skip") as string) || "0")
 
   const vans = await db.van.findMany({
-    take: 12,
+    take: 16,
     skip,
     orderBy: { createdAt: "desc" },
     select: {
       id: true,
       name: true,
+      createdAt: true,
       model: true,
       year: true,
       images: { take: 1, orderBy: { createdAt: "desc" } },
@@ -68,13 +70,13 @@ export default function Vans() {
   return (
     <PageContainer className="space-y-2">
       <h1 className="text-3xl">Latest vans</h1>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {vans.map((van) => (
           <VanItem key={van.id} van={van} />
         ))}
       </div>
       {count > vans.length && (
-        <div className="center">
+        <div className="center mt-6">
           <Button size="lg" isLoading={vanFetcher.state === "loading"} variant="outline" onClick={onNext}>
             Load more
           </Button>
@@ -90,20 +92,27 @@ function VanItem(props: { van: SerializeFrom<LoaderData>["vans"][number] }) {
       to={`/${props.van.user.username}/van`}
       className="rounded-xs space-y-2 overflow-hidden border transition-colors hover:opacity-75"
     >
-      {props.van.images[0] ? (
-        <OptimizedImage
-          alt="van"
-          width={400}
-          height={300}
-          className="h-[300px] object-contain"
-          src={createImageUrl(props.van.images[0].path)}
-          placeholder={props.van.images[0].blurHash}
-        />
-      ) : (
-        <div className="center h-[300px] bg-gray-50 dark:bg-gray-800">
-          <Icons.Van size={80} className="opacity-70" />
-        </div>
-      )}
+      <div className="relative h-[200px]">
+        {props.van.images[0] ? (
+          <OptimizedImage
+            alt="van"
+            width={300}
+            height={200}
+            className="h-full object-contain"
+            src={createImageUrl(props.van.images[0].path)}
+            placeholder={props.van.images[0].blurHash}
+          />
+        ) : (
+          <div className="center h-full bg-gray-50 dark:bg-gray-800">
+            <Icons.Van size={60} className="opacity-70" strokeWidth={1} />
+          </div>
+        )}
+        {dayjs(props.van.createdAt).isAfter(dayjs().subtract(3, "days")) && (
+          <Badge size="sm" colorScheme="green" className="absolute right-2 top-2 bg-green-100 text-xs dark:bg-green-900">
+            New
+          </Badge>
+        )}
+      </div>
       <div className="space-y-2 p-2">
         <div>
           <p className="text-2xl leading-5">{props.van.name}</p>
