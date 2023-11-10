@@ -6,12 +6,9 @@ import { loginSchema, registerSchema } from "@ramble/shared"
 
 import { createAuthToken } from "../lib/jwt"
 import { createAccessRequest } from "../services/access-request.server"
-import {
-  sendAccessRequestConfirmationEmail,
-  sendAccessRequestConfirmationToAdminsEmail,
-} from "../services/mailers/access-request.server"
-import { sendSlackMessage } from "../services/slack.server"
 import { generateInviteCodes } from "../services/inviteCodes.server"
+import { sendAccessRequestConfirmationEmail } from "../services/mailers/access-request.server"
+import { sendSlackMessage } from "../services/slack.server"
 import { createTRPCRouter, publicProcedure } from "../trpc"
 
 export const authRouter = createTRPCRouter({
@@ -66,12 +63,7 @@ export const authRouter = createTRPCRouter({
     if (accessRequest) throw new TRPCError({ code: "BAD_REQUEST", message: "Email already requested access" })
     const success = await createAccessRequest(input.email)
     if (!success) throw new TRPCError({ code: "BAD_REQUEST", message: "Error creating request, please try again" })
-    const admins = await ctx.prisma.user.findMany({ where: { isAdmin: true }, select: { email: true } })
     sendSlackMessage("🚀 New access request from " + input.email)
-    void sendAccessRequestConfirmationToAdminsEmail(
-      admins.map((a) => a.email),
-      input.email,
-    )
     void sendAccessRequestConfirmationEmail(input.email)
     return true
   }),

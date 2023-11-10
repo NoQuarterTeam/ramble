@@ -1,6 +1,7 @@
 import * as React from "react"
 import { FormProvider } from "react-hook-form"
 import { ScrollView, View } from "react-native"
+import { AvoidSoftInputView } from "react-native-avoid-softinput"
 
 import { Button } from "../../components/ui/Button"
 import { FormError } from "../../components/ui/FormError"
@@ -9,7 +10,6 @@ import { Heading } from "../../components/ui/Heading"
 import { api } from "../../lib/api"
 import { useForm } from "../../lib/hooks/useForm"
 import { useRouter } from "../router"
-import { AvoidSoftInputView } from "react-native-avoid-softinput"
 
 export default function OnboardingStep3Screen() {
   const { data, isLoading } = api.van.mine.useQuery()

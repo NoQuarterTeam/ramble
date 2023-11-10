@@ -1,16 +1,17 @@
-import * as Sentry from "sentry-expo"
 import * as React from "react"
 import { Modal, Switch, TouchableOpacity, useColorScheme, View } from "react-native"
 import Mapbox, { Camera, type MapView as MapType, MarkerView, RasterLayer, RasterSource } from "@rnmapbox/maps"
 import { useQuery } from "@tanstack/react-query"
 import * as Location from "expo-location"
 import { CloudRain, Layers, Navigation, PlusCircle, Settings2 } from "lucide-react-native"
+import * as Sentry from "sentry-expo"
 
 import { type SpotType } from "@ramble/database/types"
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { Icon } from "../../../components/Icon"
+import { RegisterCheck } from "../../../components/RegisterCheck"
 import { SpotMarker } from "../../../components/SpotMarker"
 import { ModalView } from "../../../components/ui/ModalView"
 import { Spinner } from "../../../components/ui/Spinner"
@@ -18,12 +19,11 @@ import { Text } from "../../../components/ui/Text"
 import { toast } from "../../../components/ui/Toast"
 import { api, type RouterOutputs } from "../../../lib/api"
 import { useAsyncStorage } from "../../../lib/hooks/useAsyncStorage"
+import { useMe } from "../../../lib/hooks/useMe"
 import { usePreferences } from "../../../lib/hooks/usePreferences"
 import { useRouter } from "../../router"
 import { type Filters, initialFilters, MapFilters } from "./MapFilters"
 import { SpotPreview } from "./SpotPreview"
-import { useMe } from "../../../lib/hooks/useMe"
-import { RegisterCheck } from "../../../components/RegisterCheck"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 

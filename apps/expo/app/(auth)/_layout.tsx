@@ -1,11 +1,11 @@
 import * as React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
+import { REGISTER_CHECK_KEY } from "../../components/RegisterCheck"
+import { useAsyncStorage } from "../../lib/hooks/useAsyncStorage"
 import { LoginScreen } from "./login"
 import { RegisterScreen } from "./register"
 import { RequestAccessScreen } from "./request-access"
-import { useAsyncStorage } from "../../lib/hooks/useAsyncStorage"
-import { REGISTER_CHECK_KEY } from "../../components/RegisterCheck"
 
 const AuthStack = createNativeStackNavigator()
 

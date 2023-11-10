@@ -1,17 +1,17 @@
-import { Copy, User2 } from "lucide-react-native"
-
 import { ScrollView, TouchableOpacity, View } from "react-native"
 import Clipboard from "@react-native-clipboard/clipboard"
+import { Copy, User2 } from "lucide-react-native"
+
+import { createImageUrl } from "@ramble/shared"
 
 import { Icon } from "../../../components/Icon"
+import { OptimizedImage } from "../../../components/ui/OptimisedImage"
 import { ScreenView } from "../../../components/ui/ScreenView"
 import { Spinner } from "../../../components/ui/Spinner"
 import { Text } from "../../../components/ui/Text"
-import { api } from "../../../lib/api"
-import { createImageUrl } from "@ramble/shared"
-import { OptimizedImage } from "../../../components/ui/OptimisedImage"
-import { useRouter } from "../../router"
 import { toast } from "../../../components/ui/Toast"
+import { api } from "../../../lib/api"
+import { useRouter } from "../../router"
 
 export function AccountInviteScreen() {
   const router = useRouter()
