@@ -9,7 +9,6 @@ export * from "./src/services/access-request.server"
 
 export * from "./src/services/mailers/access-request.server"
 export * from "./src/services/mailers/beta-invitation.server"
-export * from "./src/services/mailers/feedback.server"
 export * from "./src/services/mailers/guide-request.server"
 export * from "./src/services/mailers/user.server"
 

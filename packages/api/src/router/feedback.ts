@@ -2,7 +2,6 @@ import { z } from "zod"
 
 import { FeedbackType } from "@ramble/database/types"
 
-import { sendFeedbackSentToAdminsEmail } from "../services/mailers/feedback.server"
 import { sendSlackMessage } from "../services/slack.server"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
@@ -11,12 +10,7 @@ export const feedbackRouter = createTRPCRouter({
     .input(z.object({ message: z.string(), type: z.nativeEnum(FeedbackType) }))
     .mutation(async ({ ctx, input }) => {
       const user = ctx.user
-      const feedback = await ctx.prisma.feedback.create({ data: { ...input, userId: user.id }, include: { user: true } })
-      const admins = await ctx.prisma.user.findMany({ where: { isAdmin: true }, select: { email: true } })
-      await sendFeedbackSentToAdminsEmail(
-        admins.map((a) => a.email),
-        feedback,
-      )
+      await ctx.prisma.feedback.create({ data: { ...input, userId: user.id }, include: { user: true } })
       sendSlackMessage(`🙏 New feedback submitted (${input.type}) by @${user.username}: ` + input.message)
       return true
     }),

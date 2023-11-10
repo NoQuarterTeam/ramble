@@ -3,12 +3,7 @@ import { Instagram } from "lucide-react"
 import { ClientOnly } from "remix-utils/client-only"
 import { z } from "zod"
 
-import {
-  createAccessRequest,
-  sendAccessRequestConfirmationEmail,
-  sendAccessRequestConfirmationToAdminsEmail,
-  sendSlackMessage,
-} from "@ramble/api"
+import { createAccessRequest, sendAccessRequestConfirmationEmail, sendSlackMessage } from "@ramble/api"
 import { join, merge } from "@ramble/shared"
 
 import { Form, useFetcher } from "~/components/Form"
@@ -35,12 +30,7 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
   const success = await createAccessRequest(result.data.email)
   if (!success) return formError({ formError: "Error creating request, please try again" })
 
-  const admins = await db.user.findMany({ where: { isAdmin: true }, select: { email: true } })
   sendSlackMessage("🚀 New access request from " + result.data.email)
-  void sendAccessRequestConfirmationToAdminsEmail(
-    admins.map((a) => a.email),
-    result.data.email,
-  )
   void sendAccessRequestConfirmationEmail(result.data.email)
   track("Access requested", { email: result.data.email })
   return json({ success: true })

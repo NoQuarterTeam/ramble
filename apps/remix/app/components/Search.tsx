@@ -1,4 +1,4 @@
-import * as React from "react"
+import type * as React from "react"
 import { useSearchParams } from "@remix-run/react"
 import { SearchIcon, X } from "lucide-react"
 import queryString from "query-string"

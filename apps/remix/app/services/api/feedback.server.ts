@@ -1,8 +1,7 @@
 import { type ActionFunctionArgs } from "@remix-run/node"
-import { promiseHash } from "remix-utils/promise"
 import { z } from "zod"
 
-import { sendFeedbackSentToAdminsEmail, sendSlackMessage } from "@ramble/api"
+import { sendSlackMessage } from "@ramble/api"
 import { FeedbackType } from "@ramble/database/types"
 
 import { track } from "~/lib/analytics.server"
@@ -25,14 +24,7 @@ export const feedbackActions = ({ request }: ActionFunctionArgs) =>
         .handler(async (data) => {
           try {
             const user = await getCurrentUser(request)
-            const { feedback, admins } = await promiseHash({
-              feedback: db.feedback.create({ data: { ...data, userId: user.id }, include: { user: true } }),
-              admins: db.user.findMany({ where: { isAdmin: true }, select: { email: true } }),
-            })
-            await sendFeedbackSentToAdminsEmail(
-              admins.map((a) => a.email),
-              feedback,
-            )
+            const feedback = await db.feedback.create({ data: { ...data, userId: user.id }, include: { user: true } })
             sendSlackMessage(`🙏 New feedback submitted (${data.type}) by @${user.username}: ` + data.message)
             track("Feedback created", { feedbackId: feedback.id, userId: user.id })
             return json({ success: true }, request, {

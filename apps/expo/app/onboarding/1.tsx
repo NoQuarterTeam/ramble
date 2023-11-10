@@ -1,5 +1,6 @@
 import { FormProvider } from "react-hook-form"
 import { ScrollView, View } from "react-native"
+import { AvoidSoftInputView } from "react-native-avoid-softinput"
 
 import { Button } from "../../components/ui/Button"
 import { FormError } from "../../components/ui/FormError"
@@ -9,7 +10,6 @@ import { api } from "../../lib/api"
 import { useForm } from "../../lib/hooks/useForm"
 import { useMe } from "../../lib/hooks/useMe"
 import { useRouter } from "../router"
-import { AvoidSoftInputView } from "react-native-avoid-softinput"
 
 export default function OnboardingStep1Screen() {
   const { me } = useMe()

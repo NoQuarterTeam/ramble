@@ -1,6 +1,5 @@
 export * from "./templates/access-request"
 export * from "./templates/beta-invitation"
-export * from "./templates/feedback-sent"
 export * from "./templates/guide-request"
 export * from "./templates/reset-password"
 export * from "./templates/verify-account"

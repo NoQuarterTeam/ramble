@@ -1,6 +1,7 @@
 import * as React from "react"
 import { FormProvider } from "react-hook-form"
 import { Keyboard, ScrollView, TouchableOpacity, View } from "react-native"
+import { AvoidSoftInputView } from "react-native-avoid-softinput"
 import * as ImagePicker from "expo-image-picker"
 import { Plus, X } from "lucide-react-native"
 
@@ -17,7 +18,6 @@ import { api } from "../../../lib/api"
 import { useForm } from "../../../lib/hooks/useForm"
 import { useKeyboardController } from "../../../lib/hooks/useKeyboardController"
 import { useS3Upload } from "../../../lib/hooks/useS3"
-import { AvoidSoftInputView } from "react-native-avoid-softinput"
 
 export function VanScreen() {
   useKeyboardController()
