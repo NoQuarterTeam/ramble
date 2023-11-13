@@ -17,7 +17,7 @@ export function PartnerLink(props: Props) {
     : props.spot.komootId
     ? partners.komoot
     : props.spot.hipcampId
-    ? partners.komoot
+    ? partners.hipcamp
     : props.spot.natuurKampeerterreinenId
     ? partners.natuur
     : props.spot.park4nightId
