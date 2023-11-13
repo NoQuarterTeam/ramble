@@ -59,7 +59,7 @@ export function MapFilters(props: Props) {
             <SpotTypeSection
               {...{ filters, setFilters }}
               title="Other"
-              types={["NATURE_EDUCATION", "ART_FILM_PHOTOGRAPHY", "VOLUNTEERING"]}
+              types={["REWILDING", "NATURE_EDUCATION", "ART_FILM_PHOTOGRAPHY", "VOLUNTEERING"]}
             />
           </View>
         </View>
