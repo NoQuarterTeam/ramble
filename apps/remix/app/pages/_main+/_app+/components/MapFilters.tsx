@@ -89,7 +89,7 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
             <SpotTypeSection title="Hospitality" types={[SpotType.CAFE, SpotType.RESTAURANT, SpotType.SHOP, SpotType.BAR]} />
             <SpotTypeSection
               title="Other"
-              types={[SpotType.NATURE_EDUCATION, SpotType.ART_FILM_PHOTOGRAPHY, SpotType.VOLUNTEERING]}
+              types={[SpotType.REWILDING, SpotType.NATURE_EDUCATION, SpotType.ART_FILM_PHOTOGRAPHY, SpotType.VOLUNTEERING]}
             />
           </div>
           <hr />

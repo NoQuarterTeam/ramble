@@ -115,6 +115,7 @@ export const spotMarkerColorTypes = {
   NATURE_EDUCATION: "border-gray-500 bg-gray-50",
   REWILDING: "border-gray-500 bg-gray-50",
   VOLUNTEERING: "border-gray-500 bg-gray-50",
+  REWILDING: "border-gray-500 bg-gray-50",
 } satisfies Record<SpotType, string>
 
 export const spotMarkerTextColorTypes = {
@@ -144,6 +145,7 @@ export const spotMarkerTextColorTypes = {
   NATURE_EDUCATION: "text-black",
   REWILDING: "text-black",
   VOLUNTEERING: "text-black",
+  REWILDING: "text-black",
 } satisfies Record<SpotType, string>
 
 export const spotMarkerTriangleColorTypes = {
@@ -172,4 +174,5 @@ export const spotMarkerTriangleColorTypes = {
   NATURE_EDUCATION: "bg-gray-100",
   REWILDING: "bg-gray-100",
   VOLUNTEERING: "bg-gray-100",
+  REWILDING: "bg-gray-100",
 } satisfies Record<SpotType, string>
