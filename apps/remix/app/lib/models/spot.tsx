@@ -33,7 +33,7 @@ export type SpotTypeInfo = {
   Icon: RambleIcon
   isComingSoon: boolean
 }
-export const SPOT_TYPES: { [key in SpotType]: SpotTypeInfo } = {
+export const SPOT_TYPES = {
   // Stays
   [SpotType.CAMPING]: { value: SpotType.CAMPING, label: "Long stay", Icon: Icons.Van, isComingSoon: false },
   [SpotType.FREE_CAMPING]: { value: SpotType.FREE_CAMPING, label: "Overnight stop-off", Icon: Icons.Timer, isComingSoon: false },
@@ -75,7 +75,7 @@ export const SPOT_TYPES: { [key in SpotType]: SpotTypeInfo } = {
     isComingSoon: true,
   },
   [SpotType.VOLUNTEERING]: { value: SpotType.VOLUNTEERING, label: "Volunteering", Icon: HeartHandshake, isComingSoon: true },
-} as const
+} satisfies Record<SpotType, SpotTypeInfo>
 
 export const SPOT_TYPE_OPTIONS = Object.entries(SPOT_TYPES).map(([_, val]) => val)
 
