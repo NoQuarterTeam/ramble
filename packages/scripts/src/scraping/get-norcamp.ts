@@ -1,6 +1,6 @@
-import puppeteer, { Browser } from "puppeteer"
+import puppeteer from "puppeteer"
 import * as cheerio from "cheerio"
-import norcampMapData from "./norcamp.json"
+import norcampMapData from "./data/norcamp.json"
 import { prisma } from "@ramble/database"
 
 interface NorcampMapData {
@@ -61,15 +61,27 @@ async function run() {
             ? $($("img[title='Address']").parent().siblings()[0]).text()
             : ""
 
-        if (!acceptedTypes.includes(listItems[0])) continue // skip unless accepted spot type
-        if ($("img[title='Campervan Pitches']").length === 0) continue // skip if not suitable for campervans
+        if (!acceptedTypes.includes(listItems[0])) {
+          console.log("---------------------- ONION -------------------")
+          continue // skip unless accepted spot type
+        }
+        if ($("img[title='Campervan Pitches']").length === 0) {
+          console.log("------------- WEAPON ------------")
+          continue // skip if not suitable for campervans
+        }
 
         const images: string[] = []
         $('[id^="slick-slide0"] img').each((_, img) => {
           const src = $(img).attr("src")
+          const dataLazy = $(img).attr("data-lazy")
           if (src?.startsWith("http")) images.push(src)
+          if (dataLazy?.startsWith("http")) images.push(dataLazy)
         })
-        if (images.length < 3) continue // skip if they don't have at least 3 images
+        if (images.length < 3) {
+          console.log("----------------- JULIAS ------------------")
+          console.log(url)
+          continue // skip if they don't have at least 3 images
+        }
 
         const isPetFriendly = $("img[title='Dogs Allowed']").length > 0
         const toilet = $("img[title='Toilet']").length > 0

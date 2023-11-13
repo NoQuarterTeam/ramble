@@ -1,0 +1,5360 @@
+[
+  {
+    "id": "ZUOSqRIAACcAtFhh",
+    "uid": "white-clawed-crayfish-reintroductions",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22ZUOSqRIAACcAtFhh%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2023-11-03T16:03:24+0000",
+    "last_publication_date": "2023-11-07T14:43:35+0000",
+    "slugs": [
+      "reintroducing-the-endangered-white-clawed-crayfish",
+      "white-clawed-crayfish-reintroductions",
+      "white-clawed-crayfish",
+      "restoring-rare-butterfly-habitats"
+    ],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Reintroducing the Endangered White-Clawed Crayfish",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Bringing back a piece of the river ecology puzzle in the Central Apennines",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 900,
+          "height": 800
+        },
+        "alt": "white-clawed crayfish up close",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/15207d98-100a-435f-bf89-bebcb4c840ab_WhiteClawedCrayfish_Credit-Bruno_D%27Amicis.jpg?auto=compress,format&rect=219,0,900,800&w=900&h=800"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 800
+        },
+        "alt": "white-clawed crayfish up close",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/15207d98-100a-435f-bf89-bebcb4c840ab_WhiteClawedCrayfish_Credit-Bruno_D%27Amicis.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 41.974509,
+        "longitude": 13.957206
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "Crayfish Asset 234.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/34c60530-4343-41b7-a934-0b2d049ef6f6_Crayfish+Asset+234.svg?auto=compress,format",
+        "size": "20404",
+        "height": "150",
+        "width": "137"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "The white-clawed crayfish (Austropotamobius pallipes) is somewhat of a superstar of freshwater streams. It claims an impressive collection of ecological accolades as a keystone species, ecosystem engineer, flagship species and bioindicator of habitat quality. This incredibly resilient crustacean has a lineage dating back 250 millions years!",
+          "spans": [
+            {
+              "start": 27,
+              "end": 52,
+              "type": "em"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "Today, however, white-clawed crayfish are in hot water in the streams of Italy’s Central Apennines and are now an endangered species. This project is designed to bolster populations of white-clawed crayfish across key catchments of the Central Apennines. We are supporting Rewilding Apennines to protect critical riverfront habitat on the Gizio river and to establish a new crayfish breeding centre.",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ZRVQhBEAACIAnMXu",
+    "uid": "the-mountain-birch-project",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22ZRVQhBEAACIAnMXu%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2023-09-30T09:18:24+0000",
+    "last_publication_date": "2023-11-08T19:17:45+0000",
+    "slugs": ["the-mountain-birch-project", "reinstating-mountain-birch-woodlands", "translocating-european-ground-squirrels"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "The Mountain Birch Project",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Locating, distributing and propagating a rare high-altitude tree",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 1200,
+          "height": 900
+        },
+        "alt": "mountain birch woodland in Norway",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/91255d94-7861-4677-be95-8e03da4235a0_mountain+birch+woodland+norway.jpg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 900
+        },
+        "alt": "mountain birch woodland in Norway",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/91255d94-7861-4677-be95-8e03da4235a0_mountain+birch+woodland+norway.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 56.980833,
+        "longitude": -4.3725
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "Mountain birch assest map.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/d1c8e04c-b776-4bbf-a6ce-2bb36b9fc65a_Mountain+birch+assest+map.svg?auto=compress,format",
+        "size": "10022",
+        "height": "150",
+        "width": "139"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "Montane woodland is a virtually extinct habitat in Scotland. Of the 5.1% of native forests in the Scottish Highlands, only a mere 4% exists above altitudes of 400 metres. Although important restoration schemes are working to restore Caledonian pine forest, temperate rainforests and montane willow scrub, a missing piece of the landscape is largely, if not completely neglected - mountain birch woodland. In what should be a transitional zone between lower and higher mountain woodlands, high-altitude adapted species like mountain birch have all but disappeared, leaving a gap in this ecological niche. This Mountain Birch Project (MBP), led by Reforesting Scotland, aims to progress efforts to reinstate mountain birch woodland in Scotland. It will involve locating remaining fragments, mapping their distribution and seed collection and propagation, as well as the establishment of a seed orchard.",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ZMD8OBEAACQlGgl7",
+    "uid": "saving-endemic-island-plants-and-beetles",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22ZMD8OBEAACQlGgl7%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2023-08-01T13:02:47+0000",
+    "last_publication_date": "2023-10-02T09:35:50+0000",
+    "slugs": [
+      "saving-endemic-island-plants-and-beetles",
+      "a-rapid-response-to-protect-the-only-known-population-in-croatia",
+      "safeguarding-the-lesser-blind-mole-rat"
+    ],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Saving Endemic Island Plants and Beetles",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Securing the future of unique species on the Selvagens Islands",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 1200,
+          "height": 1200
+        },
+        "alt": "Euphorbia anachoreta",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/182fa2c4-1990-4cc8-9f93-fde9e82cfa3c_IMG-20230429-WA0011_reduced.jpg?auto=compress,format&rect=156,0,675,675&w=1200&h=1200"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 900
+        },
+        "alt": "Euphorbia anachoreta",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/389e6401-34aa-4515-942f-d019068e6c37_Euphorbia+anachoreta.jpeg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 30.035560263923333,
+        "longitude": -16.028001308441166
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "Asset 188 (1).svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/a46edc7b-d73e-4d64-8882-7ecdbd66c793_Asset+188+%281%29.svg?auto=compress,format",
+        "size": "14467",
+        "height": "150",
+        "width": "137"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "The Selvagens or ‘Savage’ islands are a group of small isolated Atlantic islands which have allured researchers since the turn of the 20th century. On this distant Portuguese archipelago, a rich array of species have evolved in its pristine waters and rocky terrain. Today, many of the island’s species are vulnerable to the threat of climate change and rising sea levels. We are joining a coalition of conservation experts on a pioneering project to prevent several species from slipping into extinction. The goal is to save three endemic species - two vascular plants and a beetle - on the islands Selvagem Pequena and Ilhéu de Fora. ",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ZJmQQhAAACAA__KV",
+    "uid": "safeguarding-croatias-lesser-blind-mole-rat",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22ZJmQQhAAACAA__KV%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2023-06-28T11:15:10+0000",
+    "last_publication_date": "2023-10-20T14:01:47+0000",
+    "slugs": [
+      "safeguarding-the-lesser-blind-mole-rat",
+      "safeguarding-croatias-lesser-blind-mole-rat",
+      "saving-the-lesser-blind-mole-rat",
+      "predolac-cave-cleanup"
+    ],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Safeguarding the Lesser Blind Mole Rat",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "A rapid response to protect the only known population in Croatia",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 1200,
+          "height": 1200
+        },
+        "alt": "a lesser blind mole rat in a field",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/556a4eaf-2e21-4bf2-9d9b-dfd7bec1842f_ahmad-kanbar-cLXoMUtGi0k-unsplash.jpg?auto=compress,format&rect=200,0,800,800&w=1200&h=1200"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 800
+        },
+        "alt": "a lesser blind mole rat in a field",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/556a4eaf-2e21-4bf2-9d9b-dfd7bec1842f_ahmad-kanbar-cLXoMUtGi0k-unsplash.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 45.338296,
+        "longitude": 19.035059
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "Lesser blind mole rat map icon 185.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/6bde222d-ce03-433f-8efb-84f09d3fbb36_Lesser+blind+mole+rat+map+icon+185.svg?auto=compress,format",
+        "size": "10478",
+        "height": "150",
+        "width": "137"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "The lesser blind mole rat, a peculiar underground rodent, has been rediscovered in Croatia. Thought to be regionally extinct, sightings of this small subterranean mammal provide new hope for the future of the species in the country. Spending most of its life underground building complex tunnel systems, these mole rats have an interesting effect on the areas they inhibit. As ecosystem engineers, their burrowing behaviour affects soil structure and species composition. Having already suffered a difficult past being branded as agricultural pests, we are working quickly with partners, BIOTA, to prevent the Croatian population from vanishing again. This mission begins with addressing a knowledge gap through detecting the newly discovered population using eDNA analysis and assessing their status and threats.",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ZIckohAAACQAuuse",
+    "uid": "restoring-rare-butterfly-habitats",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22ZIckohAAACQAuuse%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2023-06-14T14:39:54+0000",
+    "last_publication_date": "2023-11-10T14:14:23+0000",
+    "slugs": ["restoring-rare-butterfly-habitats", "may-2023", "predolac-cave-cleanup"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Restoring Rare Butterfly Habitats",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Using conservation grazing to restore oak wood pastures and orchid meadows in Slovakia",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 1200,
+          "height": 1200
+        },
+        "alt": "green-veined white butterfly",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/932e4b2d-c411-423f-b01f-bf5479e2a93b_Pieris+napi_green-veined+white.jpg?auto=compress,format&rect=55,0,1090,1090&w=1200&h=1200"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 853
+        },
+        "alt": "Polygonia c",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/86a88065-1072-4e11-ac28-2700422b30b3_Polygonia+c-album.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 48.77530382721759,
+        "longitude": 17.893391847610477
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "Asset 240.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/f7f85028-2689-4385-8110-0e329991b257_Asset+240.svg?auto=compress,format",
+        "size": "9763",
+        "height": "150",
+        "width": "137"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "Butterflies are one of nature’s most eye-catching creations and best embodiments of beauty. They also act as important health indicators of their environment. Many butterfly species are specialists, meaning they require very specific food and habitat conditions to complete their life cycles. Consequently, this makes butterflies highly susceptible to environmental changes. Across much of Europe, both overgrazing and undergrazing as well as changes in forestry practices are affecting butterfly habitats and driving populations down. This project seeks to rewild a butterfly meadow in an area of Slovakia called Beckovske Skalice (near Beckov castle). We are working with BROZ to improve the conditions for butterfly and moth host plants through conservation grazing and clearing shrubs and woody vegetation from overgrown meadows.",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ZG-vQxEAAH-qI8iF",
+    "uid": "predolac-cave-cleanup",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22ZG-vQxEAAH-qI8iF%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2023-05-26T15:27:58+0000",
+    "last_publication_date": "2023-10-16T15:32:41+0000",
+    "slugs": ["predolac-cave-cleanup", "restoring-fish-spawning-tributaries-and-riparian-habitat"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Predolac Cave Cleanup",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Ridding submerged caves of waste to protect distinct cave-dwelling species",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 900,
+          "height": 1200
+        },
+        "alt": "cave divers at Predolac cave removing waste from the cave's lake.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/15cef1f8-f7df-4211-8357-eb6b750a5ff4_IMG_0786.png?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 900
+        },
+        "alt": "entrance to Predolac cave.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/35111a87-2a78-4d63-8874-39e9b907649e_IMG_0806.png?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 43.049165,
+        "longitude": 17.653667
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "cave clean up map@4x.png",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/d07e4f01-0229-42d0-bcef-2f7ec5503713_cave+clean+up+map%404x.png?auto=compress,format",
+        "size": "59674",
+        "height": "715",
+        "width": "652"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "For millions of years, water has run over the limestone and dolomite bedrocks of Croatia carving out a special subterranean world. In this mysterious underground terrain, uniquely adapted species have evolved in the dark, damp environments in what’s known as karst caves. Although we are no longer cave-dwelling species ourselves, our impact on these fragile ecosystems is still being felt. For decades, caves in Croatia have been used as dumping grounds for waste, which is threatening endemic cave species and polluting important sources of water. Supporting our partners BIOTA, we are attempting to undo some of the footprint by sending a team of technical divers into the Predolac cave to remove waste.",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ZGTxwREAAH-qCoYB",
+    "uid": "spawning-tributary-restoration",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22ZGTxwREAAH-qCoYB%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2023-05-19T17:14:00+0000",
+    "last_publication_date": "2023-11-10T15:22:55+0000",
+    "slugs": [
+      "restoring-fish-spawning-tributaries-and-riparian-habitat",
+      "spawning-tributary-restoration",
+      "native-oyster-restoration"
+    ],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Restoring Fish Spawning Tributaries and Riparian Habitat",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Improving connectivity and habitats in the River Chew catchment",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 1200,
+          "height": 1200
+        },
+        "alt": "river chew cloaked in vegetation",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/e6f4f2c8-ae80-491e-85b8-bdff75d5d235_good+habitat+2%403x.jpg?auto=compress,format&rect=263,0,675,675&w=1200&h=1200"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 675
+        },
+        "alt": "river chew cloaked in vegetation",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/e6f4f2c8-ae80-491e-85b8-bdff75d5d235_good+habitat+2%403x.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 51.38248235294719,
+        "longitude": -2.50468589394301
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "Asset 226.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/17f6cbf5-a93f-4637-9c16-43c1218ff68d_Asset+226.svg?auto=compress,format",
+        "size": "6313",
+        "height": "178",
+        "width": "162"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "The River Chew is a scenic watercourse that forms part of the Bristol Avon network of rivers, streams and lakes in the British countryside. Along stretches of the river, trees and vegetation provide food, shelter and spawning grounds for important migratory fish and invertebrates, including the protected Atlantic salmon. Where there is sufficient shade, trees help improve water temperatures, sediment levels and the riverbank. However, sections of the River Chew don’t have this delicate balance of vegetation cover and have been degraded by surrounding land use. Partnering with BART (Bristol Avon River Trust), we are focusing on river habitat restoration, riparian tree management, landowner engagement and habitat and fish spawning surveys to improve two key fish spawning tributaries.",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "ZEfjNxEAACoAii-8",
+    "uid": "translocating-european-ground-squirrels",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22ZEfjNxEAACoAii-8%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2023-05-01T08:49:32+0000",
+    "last_publication_date": "2023-10-19T08:40:34+0000",
+    "slugs": ["translocating-european-ground-squirrels", "riparian-restoration-at-glassie-farm"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Translocating European Ground Squirrels",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Boosting genetic diversity of a critically endangered grassland species",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 675,
+          "height": 675
+        },
+        "alt": "Two European ground squirrels peering out of a burrow across grasslands.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/5f379e73-e177-4093-8c18-1087898de2c6_Thumbnail+sq.jpg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 675
+        },
+        "alt": "Two European ground squirrels peering out of a burrow across grasslands.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/3d17bfc8-82c3-42bb-b629-2e956eee6b27_IMG-0635.JPG?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 48.757200211905214,
+        "longitude": 20.072504281997684
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "Final_ ground squi.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/cd97a8bf-ac8a-4f11-8d2d-a9a1ef9e5a80_Final_+ground+squi.svg?auto=compress,format",
+        "size": "7826",
+        "height": "150",
+        "width": "137"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "The European ground squirrel, aka the European souslik (Spermophilus citellus), is a charismatic rodent iconic to the open steppe grasslands of southeastern Europe. They are regarded as an umbrella species, which means having healthy squirrel colonies positively impacts other species in the ecosystem. Unfortunately, the numbers of ground squirrels are declining rapidly in much of the species range due to a destructive combination of habitat loss, degradation and fragmentation. In Slovakia, populations, which had numbered in the millions, have declined by 99% in just 50 years, making the species critically endangered. However, restoration efforts led by BROZ have seen remarkable results, doubling the number of ground squirrels in just 2 years. Translocating ground squirrels is believed to be a key factor to this success. Mossy Earth is proudly supporting the next series of translocations aimed at mimicking natural dispersal cycles and ensuring gene flow between isolated populations.",
+          "spans": [
+            {
+              "start": 56,
+              "end": 77,
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "ZCLAihEAACkAFp4j",
+    "uid": "native-oyster-restoration",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22ZCLAihEAACkAFp4j%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2023-03-31T12:26:24+0000",
+    "last_publication_date": "2023-05-16T16:33:39+0000",
+    "slugs": [
+      "native-oyster-restoration",
+      "native-oyster-restoration-in-the-scottish-highlands",
+      "marine-habitat-restoration-in-the-scottish-highlands",
+      "moray-firth-marine-habitat-restoration",
+      "pond-restoration-for-the-great-crested-newt"
+    ],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Native Oyster Restoration",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Exploring the feasibility of marine habitat restoration in the Scottish Highlands",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 700,
+          "height": 757
+        },
+        "alt": "a European flat oyster (Ostrea edulis) in a person's hand at a low tide at Munlochy Bay",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/5c155dc8-8724-43ba-84cc-f79da4439653_52753789285_880905978a_o.jpg?auto=compress,format&rect=0,0,700,757&w=700&h=757"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1010,
+          "height": 757
+        },
+        "alt": "a European flat oyster (Ostrea edulis) in a person's hand at a low tide at Munlochy Bay",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/5c155dc8-8724-43ba-84cc-f79da4439653_52753789285_880905978a_o.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 57.58740999277327,
+        "longitude": -4.243372678756715
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "Asset 166.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/73ec8918-e65f-4d93-bb04-13608be8893f_Asset+166.svg?auto=compress,format",
+        "size": "7282",
+        "height": "150",
+        "width": "135"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "The European flat oyster (Ostrea edulis) is a native mollusc that has been a common feature of Scotland’s coastlines for millennia. Otherwise known as the native oyster, they form living reefs that provide shelter and breeding grounds for a range of underwater species. A single adult oyster can filter up to 240 litres of water per day helping light-reliant species such as seagrasses. Due to a range of threats, native oysters in the wider UK have experienced a dramatic decline of 95% since the mid nineteenth century. This once widespread species (coined as 'the poor man's food') now exists in small, isolated populations. This project sets out to explore the feasibility of restoring this important species. The first stage involves conducting species and habitat surveys in collaboration with Moray Ocean Community. In conjunction with this, there will be native oyster survival trials conducted in the project area to see whether they can still thrive there.",
+          "spans": [
+            {
+              "start": 25,
+              "end": 41,
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "ZBR4JBEAACoA6gLg",
+    "uid": "restoring-wet-sedge-meadows",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22ZBR4JBEAACoA6gLg%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2023-03-22T13:34:12+0000",
+    "last_publication_date": "2023-10-13T12:05:08+0000",
+    "slugs": [
+      "restoring-rare-wet-sedge-meadows",
+      "restoring-a-rare-wetland-of-the-ciliz-brook",
+      "restoring-the-rare-wetlands-of-the-ciliz-brook",
+      "mimicking-beaver-dams-to-buildup-biodiversity-and-mitigate-floods",
+      "riparian-restoration-at-glassie-farm"
+    ],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Restoring Rare Wet Sedge Meadows",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Creating a wetland oasis in a dry agricultural landscape",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 794,
+          "height": 794
+        },
+        "alt": "A European fire-bellied toad",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/87fda8db-e1ed-4e22-b7a5-a5a37236a246_kunka_%C4%8Dervenobruch%C3%A1_Peter_Fodor.jpg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 675
+        },
+        "alt": "A wet sedge meadow mowed in strips with birds flying over it",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/c330bf7f-de78-4500-b365-5dba5be46a61_DJI_0928+%281%29.JPG?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 47.786814,
+        "longitude": 17.739426
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "Asset 164 (1).svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/40c45040-ae58-4b54-9ae7-07bb11ca223e_Asset+164+%281%29.svg?auto=compress,format",
+        "size": "5663",
+        "height": "150",
+        "width": "135"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "Healthy wetland habitats are one of the most vibrant ecosystems for biodiversity in Europe. Flora and fauna can flourish when free flowing water meanders through the land creating wetland conditions along its path. The Čiliz Brook is a stream in southwest Slovakia trying to do this, but comes up against several problems as it winds through an agricultural maze. The stream has been altered, polluted and blocked. With our partners and specialists in wetland restoration, BROZ, we plan to unclog this ‘artery’ and supply much needed water to dry lands. This will flood a small forest and a field to create amphibian ponds and transform an area into a rare wetland habitat - wet sedge meadows.",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "Y8pdShIAACIAyYLo",
+    "uid": "riparian-restoration-glassie-farm",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22Y8pdShIAACIAyYLo%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2023-01-30T15:00:06+0000",
+    "last_publication_date": "2023-11-08T13:44:44+0000",
+    "slugs": ["riparian-restoration-at-glassie-farm", "rewilding-a-former-mining-site"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Riparian Restoration at Glassie Farm",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Mimicking beaver dams to buildup biodiversity and mitigate floods",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 675,
+          "height": 675
+        },
+        "alt": "The stream at Glassie Farm, the location of Mossy Earth's riparian restoration project.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/367d1238-27bf-4d6d-9040-5228569a7eb8_Salmon__OCT22_SCOTLAND_mavicair2s_1107.00_10_06_01.Still010.jpeg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 675
+        },
+        "alt": "Glassie Farm, the site of Mossy Earth's riparian restoration project.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/3044e6ea-6207-43d9-9adf-9ec561a87112_Glassie+Header.png?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 56.639677215206774,
+        "longitude": -3.880754516500278
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "Asset 182.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/c515feaa-42e6-43a1-b38d-6547494fec6e_Asset+182.svg?auto=compress,format",
+        "size": "5467",
+        "height": "178",
+        "width": "162"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "Beavers have rightly claimed a lot of accolades in the recent rewilding movement for their central role in restoring riparian areas. The dams they engineer create habitats, filter water and help mitigate flood damage and droughts. For degraded riparian areas devoid of trees and beavers, artificial structures called Beaver Dam Analogues (BDAs) are being used to mimic the effects of beaver dams. This is the case for our latest project in Scotland at Glassie Farm, a member of the Northwoods Rewilding Network (NRN). Habitat degradation, pollution and rising water temperatures are threatening a host of important native species. In partnership with River Revivers, we’re building BDAs and planting native trees and scrub to create habitat, help improve water quality, stabilise water temperature and mitigate flood damage.",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "Y20GQBEAACAAm82b",
+    "uid": "rewilding-a-former-mine",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22Y20GQBEAACAAm82b%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2022-11-16T15:32:06+0000",
+    "last_publication_date": "2023-10-09T15:17:04+0000",
+    "slugs": [
+      "rewilding-a-former-mining-site",
+      "rewilding-paul-de-toiroes-quarry",
+      "rewilding-paul-de-toiroes",
+      "red-kite-reintroductions-in-the-iberian-peninsula"
+    ],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Rewilding a Former Mining Site",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Handing an exploited landscape back to nature",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 675,
+          "height": 675
+        },
+        "alt": "A digger doing earthworks at Paul de Toirões rewilding project.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/d19486ff-4bc8-4d14-ba7b-07bc0015240c_Quarry+thumbnail+sq.png?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 675
+        },
+        "alt": "A digger doing earthworks at Paul de Toirões rewilding project.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/c09352dd-ee2a-4a86-932c-1019c27e1cee_Quarry+thumbnail.png?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 40.50079628598712,
+        "longitude": -6.870419383049012
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "Quarry_maps.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/07ce264d-5d15-41d1-9cb3-1e900b1b8d16_Quarry_maps.svg?auto=compress,format",
+        "size": "6122",
+        "height": "150",
+        "width": "137"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "Paul de Toirões is an important area for landscape connectivity in northwest Portugal where nature is recovering from years of mining. The 300-hectare property boasts one of the largest water surface areas in the Greater Côa Valley, consisting of lagoons, canals, and ponds. Its diverse range of environments are connected by seasonal flooding which supports a variety of wildlife and vegetation. In an area managed by our partners, Rewilding Portugal, this project presents an excellent opportunity to expand its habitats and establish a stronghold for wilderness in the region. Starting with our first intervention, we aim to enlarge and diversify the habitats through earthworks.",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "Y1kUuBAAACIA87pp",
+    "uid": "great-crested-newt-pond-restoration",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22Y1kUuBAAACIA87pp%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2022-10-31T15:00:50+0000",
+    "last_publication_date": "2023-10-09T17:45:08+0000",
+    "slugs": [
+      "pond-restoration-for-the-great-crested-newt",
+      "great-crested-newt-pond-restoration",
+      "lesser-kestrels-gps-tagging"
+    ],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Pond Restoration for the Great Crested Newt ",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Safeguarding breeding grounds for pond wildlife",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 800,
+          "height": 800
+        },
+        "alt": "a great crested newt",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/7315f01f-7a23-45c3-9909-db752583b766_Great+Crested+Newt+%281%29.jpg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 800
+        },
+        "alt": "a great crested newt",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/9f578657-c29c-4539-b443-ee2773e6bc70_Great+Crested+Newt.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 52.71438765667289,
+        "longitude": -2.770909667015076
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "Asset 115.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/90a84855-8475-41be-a083-5a7d87173033_Asset+115.svg?auto=compress,format",
+        "size": "4120",
+        "height": "150",
+        "width": "135"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "The great crested newt, one of Britain’s flamboyant native amphibians, relies heavily on the health of pond ecosystems for its survival. In an area of Shropshire in the UK, where this protected species is found, we’re working to restore a pond before it disappears completely along with the wildlife that inhabits it. By excavating and enlarging the pond, with our partners Shropshire Wildlife Trust, we hope to secure a breeding ground for the great crested newt, among many other species, for at least the next 30 years.",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "YyLXEBAAACIA5_dl",
+    "uid": "lesser-kestrels-gps-tagging",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YyLXEBAAACIA5_dl%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2022-09-23T12:15:37+0000",
+    "last_publication_date": "2022-10-24T08:16:24+0000",
+    "slugs": ["lesser-kestrels-gps-tagging", "red-kite-reintroductions-in-the-iberian-peninsula"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Lesser Kestrels GPS Tagging ",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Addressing the knowledge gap on juvenile mortalities",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 787,
+          "height": 787
+        },
+        "alt": "Catarina from DEMA holding a GPS tagged lesser kestrel.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/e06ff9b3-cbef-4151-9dd6-bda1d9e38a42_Catarina+3.jpg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 800
+        },
+        "alt": "a lesser kestrel hovering above.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/8ea40617-c20b-4603-8b48-1175eff40e3b_dema-hembra-primilla.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 37.10962175902727,
+        "longitude": -4.834826588630677
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "kestrel_circle.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/3d6c794e-7da1-4fb5-918c-8b3034d73231_kestrel_circle.svg?auto=compress,format",
+        "size": "2773",
+        "height": "150",
+        "width": "137"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "The Lesser Kestrel (Falco naumanni) is a small falcon that historically, was one of the most abundant birds of prey in Europe. The latter half of the 20th century saw the bird fall from grace as their numbers dramatically declined. Over the last 30 years, there’s been a huge effort to conserve the species in Europe and now populations are recovering. Still, there is a lack of data, especially on the high rate of juvenile mortalities, which is why we’re funding the GPS tagging of juvenile Lesser Kestrels. This project presents an opportunity to start filling the knowledge gap on this small, but no ‘lesser’ bird of prey on its remarkable migration patterns.",
+          "spans": [
+            {
+              "start": 19,
+              "end": 36,
+              "type": "em"
+            },
+            {
+              "start": 451,
+              "end": 509,
+              "type": "strong"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "Yx88-RAAAIhm14Gb",
+    "uid": "water-vole-reintroductions",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22Yx88-RAAAIhm14Gb%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2022-09-13T11:51:12+0000",
+    "last_publication_date": "2023-09-12T08:56:24+0000",
+    "slugs": ["water-vole-reintroductions-in-the-uk", "using-technology-to-combat-poaching-in-romania"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Water Vole Reintroductions in the UK",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Repopulating Cornwall with a riverside ecosystem engineer",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 1010,
+          "height": 1010
+        },
+        "alt": "A water vole at Mossy Earth's water vole reintroduction at Trelusback farm, Cornwall.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/783bf8cd-8255-402e-9649-7a40774e5afb_Water+Voles+4+%284155%29.jpg?auto=compress,format&rect=32,0,808,808&w=1010&h=1010"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1010,
+          "height": 808
+        },
+        "alt": "A water vole at Mossy Earth's water vole reintroduction at Trelusback farm, Cornwall.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/783bf8cd-8255-402e-9649-7a40774e5afb_Water+Voles+4+%284155%29.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 50.200892193789414,
+        "longitude": -5.207612394865098
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "water_vole_circle.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/da13a3f6-717c-4168-b969-b0d412f951cd_water_vole_circle.svg?auto=compress,format",
+        "size": "3827",
+        "height": "150",
+        "width": "136"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "Water voles were a common semi-aquatic rodent found around the UK’s waterways until around the 1990s. Since then, they’ve become one of the fastest declining species in Britain. Their demise hasn’t gone unnoticed with a series of recent reintroduction programmes taking place around the UK to save this keystone species. This project, which is part of the nationwide effort to reintroduce ‘Ratty’ - the character famed in the children’s story Wind in the Willows, aims to bring water voles back to Cornwall in the southwest of England where they went extinct in the late 1990s.",
+          "spans": [
+            {
+              "start": 443,
+              "end": 464,
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "YxB-iBAAACMAlUwO",
+    "uid": "monitoring-pine-martens-mountain-hares",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YxB-iBAAACMAlUwO%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2022-09-06T16:41:32+0000",
+    "last_publication_date": "2022-10-05T14:01:48+0000",
+    "slugs": ["camera-trap-monitoring-pine-martens--mountain-hares", "using-technology-to-combat-poaching-in-romania"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Camera Trap Monitoring Pine Martens & Mountain Hares",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Capturing data on these rare species in the Scottish Highlands",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 840,
+          "height": 840
+        },
+        "alt": "a pine marten at night caught on Mossy Earth's camera trap project in 2021.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/2321ebec-9af0-4456-b1fc-7090d4465aa3_Pmarten2+sq.jpg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1050,
+          "height": 840
+        },
+        "alt": "a mountain hare captured on a camera trap",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/1580c445-2501-461a-a1ee-523b9f4c35f5_Mountain+Hare+header.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 57.8697,
+        "longitude": -4.6333
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "camera_trap_circle.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/1064206a-bb21-4085-b1d3-d129ffce8714_camera_trap_circle.svg?auto=compress,format",
+        "size": "2079",
+        "height": "150",
+        "width": "137"
+      },
+      "summary": []
+    }
+  },
+  {
+    "id": "YwToERAAACIAwGG7",
+    "uid": "combating-poaching",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YwToERAAACIAwGG7%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2022-08-30T11:17:14+0000",
+    "last_publication_date": "2022-10-20T13:37:22+0000",
+    "slugs": [
+      "using-technology-to-combat-poaching-in-romania",
+      "combating-poaching-in-the-fagaras-mountains",
+      "anti-poaching-acoustic-surveillance",
+      "termite-mound-restoration"
+    ],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Using Technology to Combat Poaching in Romania",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Keeping a watchful eye and ear over the forest",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 787,
+          "height": 787
+        },
+        "alt": "Rainforest Connection's Guardian device installed in a forest.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/9dde0839-f2cb-4f26-b7b4-d6d4b188cc53_Guardian+device+thumbnail+sq.jpg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1050,
+          "height": 787
+        },
+        "alt": "Rainforest Connection's Guardian device installed in a forest's canopy.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/e46e1445-39bf-4a0e-b720-3564d14fd350_anti-poaching+header.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 45.43972,
+        "longitude": 24.712583
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "The Făgăraș mountains are the highest in the Southern Carpathians mountain range. A place where you can find virgin forests with trees over 140 years old and Europe’s most treasured large carnivores - bears, wolves and lynx. Poaching, especially in remote parts of the forest, is threatening these strictly protected species and others. Despite the hard work of our partners, Foundation Conservation Carpathia (FCC), current anti-poaching methods are proving limited. To increase the speed and efficiency at which rangers can respond to potential poaching, we are purchasing new acoustic surveillance equipment. These ‘Guardian’ threat detection devices can record, analyse, and transmit real-time alerts to rangers to help eliminate poaching in the area.",
+          "spans": [
+            {
+              "start": 376,
+              "end": 410,
+              "type": "em"
+            },
+            {
+              "start": 468,
+              "end": 611,
+              "type": "strong"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "Yvu0ohAAACIAltng",
+    "uid": "mountain-woodland-survey",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22Yvu0ohAAACIAltng%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2022-08-18T15:45:57+0000",
+    "last_publication_date": "2023-09-25T15:37:38+0000",
+    "slugs": [
+      "mountain-woodland-survey-in-the-scottish-highlands",
+      "montane-woodland-survey-in-the-scottish-highlands",
+      "mountain-woodland-survey",
+      "restoring-the-understory-in-scottish-woodlands"
+    ],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Mountain Woodland Survey in the Scottish Highlands",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Searching for a lost ecosystem",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 790,
+          "height": 1050
+        },
+        "alt": "Montane scrub with a lake in the valley below",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/75cacde8-8a6f-4ad9-ae2c-0d679450c0e0_downy+willow+%26+lake.jpg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 675
+        },
+        "alt": "The side of a Scottish mountain where we are surveying montane woodland species.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/5031d795-d32d-496e-a7ac-9d12158a58ee_Montane+header.JPG?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 57.8697,
+        "longitude": -4.6333
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "mountain_woodland_circle.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/36dda3b4-4c7b-4b42-bc06-ccde4aa54536_mountain_woodland_circle.svg?auto=compress,format",
+        "size": "2221",
+        "height": "150",
+        "width": "136"
+      },
+      "summary": []
+    }
+  },
+  {
+    "id": "YvYofxAAACIAffS3",
+    "uid": "red-kite-reintroductions",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YvYofxAAACIAffS3%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2022-08-16T13:16:30+0000",
+    "last_publication_date": "2023-10-09T17:42:25+0000",
+    "slugs": [
+      "red-kite-reintroductions-in-the-iberian-peninsula",
+      "red-kites-reintroductions-in-the-iberian-peninsula",
+      "termite-mound-restoration"
+    ],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Red Kite Reintroductions in the Iberian Peninsula",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Reinforcing raptor populations in their southernmost range",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 787,
+          "height": 787
+        },
+        "alt": "A red kite at the Iberian Peninsula reintroduction LIFE project.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/82f39ad0-e7b3-474a-a9af-3badbbcc704b_New+card.jpg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 856
+        },
+        "alt": "A red kite at the Iberian Peninsula reintroduction LIFE project.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/b3174a3f-c259-499d-b177-330045f8d12e_DSCN3144.JPG?auto=compress,format&rect=0,0,4608,3287&w=1200&h=856"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 38.255722,
+        "longitude": -7.136306
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "red_kite_circle.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/a4ec486a-eb7a-4998-a418-d7802942105d_red_kite_circle.svg?auto=compress,format",
+        "size": "3394",
+        "height": "150",
+        "width": "136"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "The red kite (Milvus milvus), an iconic, graceful raptor has had a turbulent relationship with people over the centuries, from once being praised to almost going extinct in the UK. Translocated Spanish red kites saved UK populations last century but now their Spanish cousins are in severe trouble. This project is reinforcing the southernmost populations through reintroducing 90-100 red kites from the UK to Extremadura in Spain, over a 3-year period.",
+          "spans": [
+            {
+              "start": 299,
+              "end": 453,
+              "type": "strong"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "YugBvxAAACEAPkEC",
+    "uid": "termite-mound-restoration",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YugBvxAAACEAPkEC%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2022-08-02T13:56:03+0000",
+    "last_publication_date": "2023-10-25T10:43:10+0000",
+    "slugs": [
+      "reversing-desertification",
+      "reverting-desertification",
+      "termite-mound-restoration",
+      "terrific-termites",
+      "wardlaw-wood",
+      "restoring-the-understory-in-scottish-woodlands"
+    ],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Reversing Desertification",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Exploring the power of termites and native plants to bring degraded drylands back to life",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 1200,
+          "height": 675
+        },
+        "alt": "A drone shot of a field of termite mounds restoration project.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/c2cdb473-1faa-410e-9fea-202bf6252565_termite+banner.JPG?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 675
+        },
+        "alt": "A drone shot of a field of termite mounds restoration project.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/c2cdb473-1faa-410e-9fea-202bf6252565_termite+banner.JPG?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 11.2992543864937,
+        "longitude": 2.418531323302529
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "termite_circle.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/df1a1adc-5e55-4634-8275-afd872ba4b1e_termite_circle.svg?auto=compress,format",
+        "size": "4693",
+        "height": "150",
+        "width": "137"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "Nature works wonders. Termites and their mounds are a prime example. These little ecosystem engineers build mounds that aren't just aesthetically impressive, but also have an important ecological role in protecting savannahs against desertification. In the construction of their mounds, termites alter the soil structure so it retains more water. Their behaviour also increases the concentration of nutrients in the soil. These effects generate \"islands of fertility\" which often have a greater diversity and abundance of vegetation. Although these impacts are well researched, termites are rarely considered in direct conservation or restoration work. This long-term project aims to explore methods of reversing desertification and land degradation in areas of Benin, West Africa using termites, native plants, soil and water conservation techniques.",
+          "spans": [
+            {
+              "start": 445,
+              "end": 467,
+              "type": "strong"
+            },
+            {
+              "start": 653,
+              "end": 851,
+              "type": "strong"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "YuT_GxAAACMAMOAW",
+    "uid": "freshwater-pearl-mussels",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YuT_GxAAACMAMOAW%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2022-07-30T20:47:37+0000",
+    "last_publication_date": "2022-10-05T14:05:34+0000",
+    "slugs": [
+      "freshwater-pearl-mussel-survey",
+      "surveying-freshwater-pearl-mussels",
+      "restoring-the-understory-in-scottish-woodlands"
+    ],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Freshwater Pearl Mussel Survey",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Detecting the presence or absence of a freshwater filterer",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 675,
+          "height": 675
+        },
+        "alt": "Sam, a researcher, collects a water sample from a river with grassy banks",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/bc9757cc-4f51-4344-bb29-e85a4af54d1c_SamFWPM_Sample.jpg?auto=compress,format&rect=376,0,675,675&w=675&h=675"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 675
+        },
+        "alt": "Sam, a researcher, collects a water sample from a river with grassy banks",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/bc9757cc-4f51-4344-bb29-e85a4af54d1c_SamFWPM_Sample.jpg?auto=compress,format"
+      },
+      "project_status": "done",
+      "project_location": {
+        "latitude": 57.86266369104172,
+        "longitude": -4.627573299514358
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "pearl_mussel_circle.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/38b6d235-cfff-4e4a-8637-2e22fa02cf77_pearl_mussel_circle.svg?auto=compress,format",
+        "size": "2793",
+        "height": "150",
+        "width": "136"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "Freshwater Pearl Mussels are members of molluscs, a group of animals that contain more species than all birds, mammals, reptiles, amphibians and fishes combined. With such a significant biomass, they play an important role in a functioning ecosystem by filtering the water. They are also used as a ‘bioindicator’ species to monitor the health of aquatic environments. The sharp global decline of nonmarine molluscs over the last decade is therefore raising concern, particularly freshwater pearl mussels, the most endangered species. This project aims to detect the presence or absence of freshwater pearl mussels from two potentially suitable habitats in Scotland. ",
+          "spans": [
+            {
+              "start": 195,
+              "end": 274,
+              "type": "strong"
+            },
+            {
+              "start": 534,
+              "end": 613,
+              "type": "strong"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "Ytar2BAAACAAzYYc",
+    "uid": "understory-restoration",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22Ytar2BAAACAAzYYc%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2022-07-30T09:30:28+0000",
+    "last_publication_date": "2023-06-05T15:55:32+0000",
+    "slugs": [
+      "restoring-the-understory-in-scottish-woodlands",
+      "understory-restoration",
+      "understorey-resto",
+      "snail-species-rescue"
+    ],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Restoring the Understory in Scottish Woodlands",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "For a healthier, more diverse woodlands",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 787,
+          "height": 1050
+        },
+        "alt": "A rare twinflower in a health understory in Scottish woodlands.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/ad3cc422-8fa6-4b37-b942-e827230aebf2_Understory+Thumbnail+Twin+flower.jpg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 787,
+          "height": 1050
+        },
+        "alt": "A rare twinflower in a health understory in Scottish woodlands.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/ad3cc422-8fa6-4b37-b942-e827230aebf2_Understory+Thumbnail+Twin+flower.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 55.84065773099649,
+        "longitude": -4.682734102706581
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "understory_circle.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/cda6f05a-72c2-4df8-b94d-05bfafc0dcb8_understory_circle.svg?auto=compress,format",
+        "size": "4010",
+        "height": "150",
+        "width": "135"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "Woodland restoration is happening at astonishing rates in Scotland to protect native species of conservation concern like the red squirrel, pine marten and capercaillie. However, one area that is being largely ignored, is the understory. A healthy woodland in Scotland is carpeted in shrubs, wildflowers, mosses and fungi. While we have given woodlands a helping hand by bringing native trees back to the landscape, some understory species are slow or entirely unable to recolonize. This 4-year-long project aims to restore a rich, resilient woodland habitat with a healthy understory at 3 different sites in Scotland. ",
+          "spans": [
+            {
+              "start": 483,
+              "end": 619,
+              "type": "strong"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "YnenbBAAACAAqdQE",
+    "uid": "kelp-nursery",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YnenbBAAACAAqdQE%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2022-05-08T14:40:02+0000",
+    "last_publication_date": "2023-10-19T11:24:37+0000",
+    "slugs": ["scaling-up-kelp-forest-restoration", "restoring-wetlands"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Scaling up Kelp Forest Restoration",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Building a kelp nursery to produce and deploy green gravel kelp at scale",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 600,
+          "height": 607
+        },
+        "alt": "Diver holding pebble with kelp attached as part of green gravel kelp restoration technique. Photo credit: João Nuno Franco ",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/67165f73-9f1f-4991-b913-b0b18ba80425_Screenshot+2022-05-08+122352.png?auto=compress,format&rect=83,0,600,607&w=600&h=607"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 900
+        },
+        "alt": "A healthy kelp forest on the coast of Portugal. Photo credit João Nuno Franco ",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/d74d8682-a895-440d-96b1-eab2d4dbd126_vlcsnap-2022-05-08-13h41m21s446.png?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 39.357694819410185,
+        "longitude": -9.37412738800049
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "kelp_circle.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/d71b00e4-1ffb-4c8f-b772-d5f172871379_kelp_circle.svg?auto=compress,format",
+        "size": "6206",
+        "height": "150",
+        "width": "136"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "Underwater forests are an immensely important ecosystem: they support biodiversity, improve water quality and sequester carbon. Despite their significance for marine life and the fight against climate change, the loss of kelp forests from coastlines worldwide has captured much less of the spotlight on deforestation. This is why since 2020, we have been working with SeaForester to restore kelp forests in Portugal where large areas of kelp have disappeared. We have built a kelp nursery to produce and deploy kelp that tests a new method called ‘green gravel’ with the potential for large-scale marine reforestation.",
+          "spans": [
+            {
+              "start": 460,
+              "end": 488,
+              "type": "strong"
+            },
+            {
+              "start": 489,
+              "end": 617,
+              "type": "strong"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "YmpquhAAACMA3LnL",
+    "uid": "reforesting-iceland",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YmpquhAAACMA3LnL%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2022-04-28T13:32:14+0000",
+    "last_publication_date": "2023-09-28T13:23:49+0000",
+    "slugs": ["reforesting-iceland", "restoring-wetlands"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Reforesting Iceland",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Bringing Icelandic birchwoods back to the land of fire and ice",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 799,
+          "height": 799
+        },
+        "alt": "An Icelandic tundra, the type of bare landscape which our reforestation efforts are attempting to restore.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/b1d4b7f9-991d-4784-b520-58833139229e_iceland+landscape.jpg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyjxIAACEAQnVN",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "reforestation",
+        "first_publication_date": "2020-06-05T11:55:00+0000",
+        "last_publication_date": "2021-01-16T15:36:51+0000",
+        "uid": "reforestation",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyjxIAACEAQnVN",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "reforestation",
+            "first_publication_date": "2020-06-05T11:55:00+0000",
+            "last_publication_date": "2021-01-16T15:36:51+0000",
+            "uid": "reforestation",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 799,
+          "height": 400
+        },
+        "alt": "An Icelandic tundra, the type of bare landscape which our reforestation efforts are attempting to restore.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/b1d4b7f9-991d-4784-b520-58833139229e_iceland+landscape.jpg?auto=compress,format&rect=0,245,799,400&w=799&h=400"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 64.12898,
+        "longitude": -19.94713
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "Iceland is known for its vast open landscapes shaped by massive volcanos and expansive glaciers. Native birchwoods, the only woodland type to form in Iceland, are also an important part of the landscape. They offer food and shelter for biodiversity, help stabilise soil, provide wind breaks, and sequester carbon. At one point, it is thought that 25-40% of Iceland was covered in birchwoods. Now, it is a mere 1.5%. This project, in partnership with the Iceland Forest Service, aims to restore birchwoods to an area about 120km east of Reykjavik where natural succession could take centuries or even millennia.",
+          "spans": [
+            {
+              "start": 454,
+              "end": 476,
+              "type": "hyperlink",
+              "data": {
+                "link_type": "Web",
+                "url": "https://www.skogur.is/en/about/about-the-ifs/icelandic-forest-service-skograektin"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "Yj28HREAACAAinuu",
+    "uid": "restoring-wetlands",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22Yj28HREAACAAinuu%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2022-03-28T14:29:56+0000",
+    "last_publication_date": "2023-10-26T13:53:37+0000",
+    "slugs": ["restoring-wetlands", "restoring-aspen"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Restoring Wetlands",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Turning a forest back into a biodiverse, carbon rich wetland",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 800,
+          "height": 800
+        },
+        "alt": "Duarte, co-founder at Mossy Earth, standing in a flood forest at Mossy Earth's Restoring Wetlands project.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/122ce52a-f0c7-42f7-b124-63d49a564f10_Duarte+wetland+card.JPG?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 675
+        },
+        "alt": "A wetland forest in Slovakia at Mossy Earth's Restoring Wetlands project site.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/a0e08517-4e20-4b6b-915f-4ac444c901d2_Banner.JPG?auto=compress,format"
+      },
+      "project_status": "done",
+      "project_location": {
+        "latitude": 47.84033828035143,
+        "longitude": 17.56101765265444
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "wetland_circle.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/28e1ebc2-b78f-4668-aae4-ffb4b3d47c26_wetland_circle.svg?auto=compress,format",
+        "size": "3024",
+        "height": "150",
+        "width": "137"
+      },
+      "summary": []
+    }
+  },
+  {
+    "id": "Yhe5VBMAACAAgU0P",
+    "uid": "helping-forest-giants",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22Yhe5VBMAACAAgU0P%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2022-02-25T17:04:22+0000",
+    "last_publication_date": "2023-04-17T14:03:57+0000",
+    "slugs": ["helping-forest-giants"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Helping Forest Giants",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Conservation of the Obô giant snail ",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 500,
+          "height": 600
+        },
+        "alt": "A giant snail held by a researcher during fieldwork. João Alves © Fundação Príncipe",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/6b2bdfdd-97da-49aa-9bd3-82207cc6e678_IMG_20211120_094131.jpg?auto=compress,format&rect=401,0,750,900&w=500&h=600"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 900
+        },
+        "alt": "The lush rainforests of Princípe. João Alves © Fundação Príncipe",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/b7001a36-40e0-4ade-8d60-0f8d027e24f9_IMG_20211210_070232.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 1.638914244540553,
+        "longitude": 7.420630019942785
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "giant_snail_circle.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/8582ab73-32e3-4e06-8b5c-01bcef01a200_giant_snail_circle.svg?auto=compress,format",
+        "size": "2420",
+        "height": "150",
+        "width": "136"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "The tropical forests of the islands of São Tomé and Príncipe provide habitat for a host of species found nowhere else on earth. Among them is a peculiar forest giant, the Obô Giant Snail. Although it used to be locally abundant it is now threatened with extinction due to habitat degradation, overharvesting, predation by invasive species and the spread of a mysterious disease. This project focuses on the conservation of this extraordinary species by carrying out important fieldwork and research, and by helping to maintain a conservation centre for the species.",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "YcsTmhIAACAAaOGr",
+    "uid": "snail-species-rescue",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YcsTmhIAACAAaOGr%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2021-12-28T19:45:23+0000",
+    "last_publication_date": "2022-10-27T15:57:45+0000",
+    "slugs": ["snail-species-rescue", "restoring-aspen"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Snail Species Rescue",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Preventing snail extinctions on a small remote island",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 799,
+          "height": 799
+        },
+        "alt": "Discula lyelliana, one of the snail species Mossy Earth are working to rescue from extinction on the remote island Deserta Grande.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/1cc1a421-90e3-46b0-acf0-5f5534f76abf_Discula+lyelliana+Snail.jpg?auto=compress,format&rect=200,0,799,799&w=799&h=799"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 799
+        },
+        "alt": "Discula lyelliana, one of the snail species Mossy Earth are working to rescue from extinction on the remote island Deserta Grande.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/1cc1a421-90e3-46b0-acf0-5f5534f76abf_Discula+lyelliana+Snail.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 32.538139,
+        "longitude": -16.519556
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "snail_circle.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/523f1e90-6063-46a5-ac66-d46505d5ba5d_snail_circle.svg?auto=compress,format",
+        "size": "9892",
+        "height": "150",
+        "width": "135"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "Four species of snail thought to be extinct have been found on a small Atlantic island. After more than 100 years without a confirmed observation, the species were rediscovered on Deserta Grande by the local conservationists at IFCN. Their only home and habitat had been devastated by invasive species so their reappearance comes as a very pleasant surprise. However, initial estimates of their numbers (less than 50) suggest they may be on the verge of extinction. For this project, we have joined a hopeful rescue operation led by the IFCN that aims to ensure the long term survival of these species. ",
+          "spans": [
+            {
+              "start": 88,
+              "end": 194,
+              "type": "strong"
+            },
+            {
+              "start": 426,
+              "end": 466,
+              "type": "strong"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "YYwr8hAAACIAm4Zb",
+    "uid": "saving-rare-cliff-plants",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YYwr8hAAACIAm4Zb%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2021-11-10T20:33:49+0000",
+    "last_publication_date": "2023-09-22T11:47:46+0000",
+    "slugs": [
+      "saving-rare-sea-cliff-plants",
+      "saving-rare-sea-cliff-plants-in-portugal",
+      "saving-rare-cliff-plants-in-portugal",
+      "saving-rare-cliff-plants"
+    ],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Saving Rare Sea Cliff Plants",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "With the help of local rock climbers",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 1200,
+          "height": 799
+        },
+        "alt": "Steep cliffs of cabo espichel in spring with many flowering plants at sunset",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/018d2238-daa7-4aab-be9c-63021a95783f_cliffs_landscape+.jpg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 799
+        },
+        "alt": "Steep cliffs of cabo espichel in spring with many flowering plants at sunset",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/018d2238-daa7-4aab-be9c-63021a95783f_cliffs_landscape+.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 38.41121060669699,
+        "longitude": -9.205115471760546
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "cliff_circle.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/ed756f0b-a3d1-4558-8500-a7de34bdc03c_cliff_circle.svg?auto=compress,format",
+        "size": "2969",
+        "height": "150",
+        "width": "137"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "On a stunning 15 km stretch of Portuguese coast two special cliff plants found nowhere else on earth are facing extinction. The main threat comes from a dominating invasive species carpeting the cliff called the ‘ice plant’. Access to the sheer cliff faces poses a challenge for their conservation. This is why we’ve gathered local rock climbers and cavers, passionate about local biodiversity, to remove the invasive ice plant. We’re also using drone technology to document changes to the vegetation. Protecting these precious plants not only reduces biodiversity loss but treasures nature in all its glorious forms.",
+          "spans": [
+            {
+              "start": 122,
+              "end": 124,
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "YXa5bBEAACMAGycz",
+    "uid": "alladale-wildlife-monitoring",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YXa5bBEAACMAGycz%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2021-11-05T11:50:19+0000",
+    "last_publication_date": "2023-04-17T14:10:03+0000",
+    "slugs": ["monitoring-wildlife-at-alladale-wilderness-reserve", "translocating-water-voles"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Monitoring Wildlife at Alladale Wilderness Reserve",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "A promising snapshot of the reserve's wildlife on camera",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 502,
+          "height": 669
+        },
+        "alt": "Mossy Earth Conservational Biologist, Hannah Kirkland, installs a camera trap at Alladale Wilderness Reserve in the Scottish Highlands.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/ecad5abc-c793-4f2d-96d8-431beaaa6f95_Hannah+Camera+Trap.jpg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 502,
+          "height": 669
+        },
+        "alt": "Mossy Earth Conservational Biologist, Hannah Kirkland, installs a camera trap at Alladale Wilderness Reserve in the Scottish Highlands.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/ecad5abc-c793-4f2d-96d8-431beaaa6f95_Hannah+Camera+Trap.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 57.86712743303275,
+        "longitude": -4.631381034851075
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "camera_trap_circle.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/1064206a-bb21-4085-b1d3-d129ffce8714_camera_trap_circle.svg?auto=compress,format",
+        "size": "2079",
+        "height": "150",
+        "width": "137"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "Our partners Alladale Wilderness Reserve have an inspiring vision for their 10,000-hectare reserve in the Scottish Highlands. They are trying to restore the reserve to its former self - a variety of landscapes brimming with biodiversity. This project will be helping to discover what wildlife is already there and how we can welcome back more. ",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "YUnJzBAAACMAGvNe",
+    "uid": "translocating-water-voles",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YUnJzBAAACMAGvNe%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2021-09-27T20:06:12+0000",
+    "last_publication_date": "2023-04-17T14:10:53+0000",
+    "slugs": ["translocating-water-voles", "restoring-californias-sea-otter-populations"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Translocating Water Voles",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Assisting in the effort to restore one of Britain's beloved mammals",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 500,
+          "height": 787
+        },
+        "alt": "A UK water vole grazing on vegetation in a river.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/880fbddd-91af-44f5-9026-951f82828bab_water+vole.jpg?auto=compress,format&rect=301,20,474,746&w=500&h=787"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1050,
+          "height": 787
+        },
+        "alt": "A UK water vole grazing on vegetation in a river.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/880fbddd-91af-44f5-9026-951f82828bab_water+vole.jpg?auto=compress,format"
+      },
+      "project_status": "done",
+      "project_location": {
+        "latitude": 55.233636236031124,
+        "longitude": -2.5842547416687016
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": []
+    }
+  },
+  {
+    "id": "YR0BFxAAACMAYx02",
+    "uid": "restoring-californias-sea-otters",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YR0BFxAAACMAYx02%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2021-08-25T18:59:24+0000",
+    "last_publication_date": "2022-09-23T10:56:59+0000",
+    "slugs": [
+      "monitoring-californias-sea-otter-populations",
+      "restoring-californias-sea-otter-populations",
+      "gps-tagging-griffon-vultures"
+    ],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Monitoring California’s Sea Otter Populations",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Researching the impacts of human disturbance",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 1200,
+          "height": 673
+        },
+        "alt": "A Southern sea otter grooming its fur in the Elkhorn Slough on the Central California coast, where we aim to monitor their populations.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/819f74c2-ac17-4c0d-bb8d-ca8b493206ea_Single+sea+otter.jpg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 673
+        },
+        "alt": "A Southern sea otter grooming its fur in the Elkhorn Slough on the Central California coast, where we aim to monitor their populations",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/819f74c2-ac17-4c0d-bb8d-ca8b493206ea_Single+sea+otter.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 36.81136342335589,
+        "longitude": -121.78177392088357
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": []
+    }
+  },
+  {
+    "id": "YP6e9BEAAD1LaDZs",
+    "uid": "irish-salmon",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YP6e9BEAAD1LaDZs%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2021-07-26T12:36:24+0000",
+    "last_publication_date": "2023-04-17T14:05:31+0000",
+    "slugs": [
+      "monitoring-the-effects-of-fish-farms-on-wild-salmonids",
+      "looking-out-for-irish-salmon-and-sea-trout",
+      "discovering-the-secrets-of-the-fairy-cave"
+    ],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Monitoring the Effects of Fish Farms on Wild Salmonids",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Using an underwater camera sysytem",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 508,
+          "height": 446
+        },
+        "alt": null,
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/652b4ed0-901d-4ee6-9374-f3e54fdfbc18_salmon+thumbnail2.jpg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 800,
+          "height": 478
+        },
+        "alt": "Wild salmon leaping",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/ec87ce1b-a144-4a04-a403-151f7f392a94_salmon+background.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 51.87311553168766,
+        "longitude": -10.125437302356751
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "Migratory fish such as Atlantic salmon and sea trout play a very important role in their ecosystem but in Ireland, their numbers are a very small fraction of what they once were. One contributor to this sad trend has been the infestation of lice from artificial salmon aquaculture facilities. Sadly, government-led schemes to monitor this issue have been insufficient to tackle the problem so far and much of the impact goes unnoticed. To address this we have partnered with Salmon Watch Ireland on a project to showcase the state of Irish migratory fish populations using an underwater camera. The goal is to increase surveillance where it is lacking and to collect data that can help to address this problem. ",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "YJ0K8xAAACEA9aWX",
+    "uid": "monitoring-bison",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YJ0K8xAAACEA9aWX%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2021-05-13T11:50:36+0000",
+    "last_publication_date": "2022-09-16T12:37:30+0000",
+    "slugs": [
+      "monitoring-reintroduced-european-bison",
+      "monitoring-reintroduced-european-bison-in-spain",
+      "saving-slovakias-ground-squirrels"
+    ],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Monitoring Reintroduced European Bison",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Using GPS collars and camera traps",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 792,
+          "height": 800
+        },
+        "alt": "A close up photo of a European bison facing the camera with a blurred out bison grazing in the background.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/f18df20a-7bb6-49d7-8d82-026f57c28189_Daniel+Buron_square.jpg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 518
+        },
+        "alt": "Seven bison are standing in an open patch of grass some with their heads down grazing against a background of dense green trees",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/da4428a7-0ab5-4ac7-9168-a40a1f2ee8c2_Herd+of+bison+foraging_wide.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 38.151837403006766,
+        "longitude": -3.957692017089317
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "Like many European countries, Spain is undergoing a process of widespread land abandonment. For decades, the landscape in Andalucía has been shaped by grazing by both wild and domestic herbivores. The current trend of abandoning livestock grazing activities and removing livestock from the landscape is having serious consequences for the open and semi-open habitats that many species there thrive on, such as wild rabbits and red-legged partridges, important prey species for the endangered Iberian lynx. The European bison, or wisent, is capable of having a profound impact on the landscape through its grazing and trampling behaviours. This project is monitoring reintroductions of this keystone species - the heaviest in Europe - and its potential to restore these vital habitats.",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "YHhyyxEAACEARezE",
+    "uid": "saving-ground-squirrels",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YHhyyxEAACEARezE%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2021-04-15T17:35:43+0000",
+    "last_publication_date": "2023-03-08T08:33:05+0000",
+    "slugs": ["saving-slovakias-ground-squirrels", "restoring-aspen"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Saving Slovakia's Ground Squirrels",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Increasing Feeding Opportunities and Reducing Predation Pressure",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 797,
+          "height": 797
+        },
+        "alt": "Three ground squirrels eating purple flowers in a field of green grass",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/c823f83c-866c-4f7b-9ede-e8b4dbc633aa_ground+squirrels.tif?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 800
+        },
+        "alt": "Three ground squirrels eating purple flowers in a field of green grass",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/860162e0-0a52-4a38-8a1d-b698966e2d7c_ground+squirrels.tif?auto=compress,format"
+      },
+      "project_status": "done",
+      "project_location": {
+        "latitude": 48.356249029540734,
+        "longitude": 17.358398437500004
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": []
+    }
+  },
+  {
+    "id": "YGdBhBIAACAAVBGD",
+    "uid": "cave-clean-up",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YGdBhBIAACAAVBGD%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2021-04-02T19:11:03+0000",
+    "last_publication_date": "2023-05-26T15:36:21+0000",
+    "slugs": ["cave-cleanup", "cave-clean-up", "restoring-aspen"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Cave Cleanup",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Removing toxic waste to help unique creatures of the underworld ",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 800,
+          "height": 801
+        },
+        "alt": "A caver in a full red suit and helmet abseils over a huge pile of solid waste inside Rupečica cave.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/df43b3e2-3ba4-49b3-9f51-436b4178d0ec_waste_removal800.png?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 800,
+          "height": 800
+        },
+        "alt": "Photo of the olm, a blind pale-pink coloured salamander with red protruding gills and a slender body. The animal is resting on a rock in a submerged cave. Photo credit: PROTEUS project team.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/004a8903-9c7b-4fb0-b37e-e3d819834308_olm800.jpg?auto=compress,format&rect=0,0,2848,2848&w=800&h=800"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 45.19195769867928,
+        "longitude": 15.211831927299501
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": []
+    }
+  },
+  {
+    "id": "YGRkGRIAACIAp0Ch",
+    "uid": "restoring-aspen",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YGRkGRIAACIAp0Ch%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2021-03-31T12:37:38+0000",
+    "last_publication_date": "2023-01-01T11:45:23+0000",
+    "slugs": ["restoring-aspen", "restoring-alaotra-gentle-lemur-habitat"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Restoring Aspen",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Returning a Keystone Tree to the Scottish Highlands",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 640,
+          "height": 640
+        },
+        "alt": "A stand of aspen with golden autumnal leaves and silver bark",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/e1deb675-6b76-4e62-8625-cdb51d8e4e56_Aspen+%281%29.jpg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        },
+        {
+          "project_category": {
+            "id": "XtoyjxIAACEAQnVN",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "reforestation",
+            "first_publication_date": "2020-06-05T11:55:00+0000",
+            "last_publication_date": "2021-01-16T15:36:51+0000",
+            "uid": "reforestation",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 960,
+          "height": 640
+        },
+        "alt": "A stand of aspen with golden autumnal leaves and silver bark ",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/30a0a14d-cf64-47eb-9004-c13b2f1e2174_Aspen.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 58.04582052640176,
+        "longitude": -5.194129943847657
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "aspen_circle.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/a68ddd2a-0de4-473d-9baf-7b46cea244ff_aspen_circle.svg?auto=compress,format",
+        "size": "3926",
+        "height": "150",
+        "width": "137"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "Eurasian aspen (Populus tremula) is a keystone species that is largely missing from Scottish woodlands today. In Europe, its often found alongside birch, rowan, willow, and alder in the broadleaf component of northern coniferous forests. Together, they can occupy around 15-20% of the forest. In Scotland, aspen mostly exists as small, isolated fragments often consisting of single relict trees. To restore the natural diversity of the native pinewoods and return aspen to the landscape, we are embarking on a long-term project to plant and support the natural regeneration of aspen trees in Scotland.",
+          "spans": [
+            {
+              "start": 16,
+              "end": 31,
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "YDUOaxIAACUAo1Ss",
+    "uid": "conserving-lemurs",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YDUOaxIAACUAo1Ss%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2021-02-24T16:37:35+0000",
+    "last_publication_date": "2022-09-06T16:50:19+0000",
+    "slugs": [
+      "restoring-alaotra-gentle-lemur-habitat",
+      "restoring-gentle-lemur-habitat",
+      "conserving-lemurs",
+      "restoring-the-habitat-of-the-critically-endangered-alaotra-gentle-lemur",
+      "supporting-livestock-guarding-dogs"
+    ],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Restoring Alaotra Gentle Lemur Habitat",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Clearing Invasive Plants To Protect a Critically Endangered Lemur",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 627,
+          "height": 627
+        },
+        "alt": "A brown and grey furry lemur grasps a green reed and looks to the right ",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/5c188bdc-12b7-4370-a6ea-69a3eb3e6a7b_DWCT_Bandro3_Chris+Scarffe.jpg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 940,
+          "height": 627
+        },
+        "alt": "A group of lemurs huddled together in the middle of the image grasping tall reeds against a background of green leaves and vines",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/1722ba30-480b-434c-918c-3951b6296011_Gentle+Lemur+Troop+CREDIT+Chris+Scarffe.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": -17.465307935150772,
+        "longitude": 48.52500243392615
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": []
+    }
+  },
+  {
+    "id": "X9s6UhIAACIA7-7g",
+    "uid": "building-tree-nursery",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22X9s6UhIAACIA7-7g%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2021-01-12T10:52:10+0000",
+    "last_publication_date": "2022-09-16T11:47:36+0000",
+    "slugs": ["building-a-tree-nursery", "investigating-thermal-refuges"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Building A Tree Nursery",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Preparing For Future Reforestation and Habitat Restoration",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 1200,
+          "height": 900
+        },
+        "alt": "Invasive plants covering the river beds in an otherwise desert landscape",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/73653848-73de-4da1-b7ed-3c4eb19ab6d1_INVASIVE+TREES.jpg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        },
+        {
+          "project_category": {
+            "id": "XtoyjxIAACEAQnVN",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "reforestation",
+            "first_publication_date": "2020-06-05T11:55:00+0000",
+            "last_publication_date": "2021-01-16T15:36:51+0000",
+            "uid": "reforestation",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 900
+        },
+        "alt": "Invasive plants covering the river beds in an otherwise desert landscape",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/73653848-73de-4da1-b7ed-3c4eb19ab6d1_INVASIVE+TREES.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": -28.761019199804036,
+        "longitude": 18.958998896491824
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "In early 2021, we partnered with Oana Namibia to fund a native plant nursery to support future large-scale reforestation and reforestation efforts. Oana is located in Southern Namibia, where the landscape is characterised by open desert shrubland interspersed by mountainous terrain, wooded ephemeral (intermittent water) and perennial (constant water) river beds, and grassy sand and gravel plains. These habitats are threatened by overgrazing, the spread of non-native Prosopis spp., climate change and erosion. Oana has already made great progress in clearing large areas of Prosopis and will soon be able to start restoring the river beds as well as the grassland ecosystem through planting. ",
+          "spans": [
+            {
+              "start": 54,
+              "end": 148,
+              "type": "strong"
+            },
+            {
+              "start": 471,
+              "end": 480,
+              "type": "em"
+            },
+            {
+              "start": 514,
+              "end": 518,
+              "type": "hyperlink",
+              "data": {
+                "link_type": "Web",
+                "url": "https://www.oananamibia.org/"
+              }
+            },
+            {
+              "start": 578,
+              "end": 587,
+              "type": "em"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "X9sy0xIAACEA7802",
+    "uid": "vulture-restaurant",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22X9sy0xIAACEA7802%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2021-01-12T10:22:21+0000",
+    "last_publication_date": "2023-04-17T14:06:53+0000",
+    "slugs": ["building-a-vulture-restaurant", "kelp-restoration-trial"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Building a Vulture Restaurant",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Supporting the return of endangered vultures",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 853,
+          "height": 853
+        },
+        "alt": "Portrait of a white-backed vulture",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/95a92af5-518f-4ea0-a1ef-0500a86fead3_White+backed+vulture.jpg?auto=compress,format&rect=394,0,853,853&w=853&h=853"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1280,
+          "height": 853
+        },
+        "alt": "Portrait of a white-backed vulture",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/95a92af5-518f-4ea0-a1ef-0500a86fead3_White+backed+vulture.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": -28.812453317010483,
+        "longitude": 18.955155014991764
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": []
+    }
+  },
+  {
+    "id": "X4b9EBAAACQAdopV",
+    "uid": "kelp-restoration-trial",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22X4b9EBAAACQAdopV%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2020-10-18T10:16:42+0000",
+    "last_publication_date": "2022-10-05T14:07:43+0000",
+    "slugs": ["kelp-restoration-trial", "option-1-kelp-restoration-trial", "supporting-livestock-guarding-dogs"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Kelp Restoration Trial",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Bringing back underwater forests",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 1200,
+          "height": 800
+        },
+        "alt": "Kelp forest",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/76a99bf6-9f2b-4083-bf53-d6864f6d5a01_kelp.jpg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 800
+        },
+        "alt": "Kelp forest",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/76a99bf6-9f2b-4083-bf53-d6864f6d5a01_kelp.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 38.69694883064954,
+        "longitude": -9.404071569442747
+      },
+      "icon": {
+        "link_type": "Media",
+        "name": "kelp_circle.svg",
+        "kind": "image",
+        "url": "https://images.prismic.io/mossyearth/d71b00e4-1ffb-4c8f-b772-d5f172871379_kelp_circle.svg?auto=compress,format",
+        "size": "6206",
+        "height": "150",
+        "width": "136"
+      },
+      "summary": []
+    }
+  },
+  {
+    "id": "Xzo_sxIAACMALEtT",
+    "uid": "supporting-livestock-guarding-dogs",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22Xzo_sxIAACMALEtT%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2020-08-17T08:29:25+0000",
+    "last_publication_date": "2022-10-04T16:17:06+0000",
+    "slugs": ["supporting-livestock-guarding-dogs"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Supporting Livestock Guarding Dogs",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Human-wolf coexistence in northern Portugal",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 1200,
+          "height": 800
+        },
+        "alt": null,
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/ac00fa33-c68d-4563-92a9-77fe7ba131b9_thumbnail_lgd.jpg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 800
+        },
+        "alt": null,
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/e510fdea-0194-46b7-993c-16c93b97d5cb_LGD1.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 40.82731951134558,
+        "longitude": -7.653340101242065
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": []
+    }
+  },
+  {
+    "id": "XvsYyhAAACIAi4-8",
+    "uid": "natural-engineering",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22XvsYyhAAACIAi4-8%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2020-06-30T12:55:32+0000",
+    "last_publication_date": "2022-09-06T16:52:58+0000",
+    "slugs": ["natural-engineering", "radio-tagging-salmon"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Natural Engineering",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "At our oak woodland restoration project",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 803,
+          "height": 803
+        },
+        "alt": "A beaver stands in a grassy field",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/24ddcc80-ada7-4081-a7c9-50b4511b2a7f_Beaver.jpg?auto=compress,format&rect=199,0,803,803&w=803&h=803"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 803
+        },
+        "alt": "A beaver stands in a grassy field",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/24ddcc80-ada7-4081-a7c9-50b4511b2a7f_Beaver.jpg?auto=compress,format"
+      },
+      "project_status": "done",
+      "project_location": {
+        "latitude": 40.79925662005223,
+        "longitude": -8.12490463256836
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": []
+    }
+  },
+  {
+    "id": "XvsBlBAAACAAixW2",
+    "uid": "foraois-reforesting-ireland",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22XvsBlBAAACAAixW2%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2020-06-30T09:35:59+0000",
+    "last_publication_date": "2022-09-16T11:48:18+0000",
+    "slugs": ["foraois--reforesting-ireland", "oak-woodland-restoration"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Foraois | Reforesting Ireland",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "The land of the \"Forest People\"",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 1200,
+          "height": 676
+        },
+        "alt": "A newly planted tree against a background of tree planters in Ireland.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/67f05292-fc4f-4ed7-88c8-e772550346cb_Ireland+planting.jpeg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyjxIAACEAQnVN",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "reforestation",
+        "first_publication_date": "2020-06-05T11:55:00+0000",
+        "last_publication_date": "2021-01-16T15:36:51+0000",
+        "uid": "reforestation",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyjxIAACEAQnVN",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "reforestation",
+            "first_publication_date": "2020-06-05T11:55:00+0000",
+            "last_publication_date": "2021-01-16T15:36:51+0000",
+            "uid": "reforestation",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 676
+        },
+        "alt": "A newly planted tree against a background of tree planters in Ireland.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/67f05292-fc4f-4ed7-88c8-e772550346cb_Ireland+planting.jpeg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 52.8823912222619,
+        "longitude": -9.327381849288942
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "Ireland was once the most forested country in Europe. Today it has just 11% tree cover, only 2% of which is native forest. Working with our tree planting partners Hometree, our Reforesting Ireland project seeks to reforest and rewild a 60 hectare property in an area that currently has no wild forests.",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "Xvr89hAAACMAiwD-",
+    "uid": "supporting-ranger-salaries",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22Xvr89hAAACMAiwD-%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2020-06-30T09:25:43+0000",
+    "last_publication_date": "2022-09-06T16:50:34+0000",
+    "slugs": ["supporting-ranger-patrols", "protecting-turtle-nests"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Supporting Ranger Patrols ",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "To protect the old-growth forests of the Southern Carpathians ",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 1200,
+          "height": 1200
+        },
+        "alt": "An FCC ranger next to his 4x4 in the Southern Carpathians in Romania. ",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/d67db7d1-aca2-443e-ac4c-8ce45141128e_Ranger.JPG?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1400,
+          "height": 933
+        },
+        "alt": "A landscape photo of the dense forests of the Southern Carpathian mountains",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/c8e00b67-3ce3-496b-b83c-651caf461543_Canopy+Romania.jpg?auto=compress,format"
+      },
+      "project_status": "done",
+      "project_location": {
+        "latitude": 45.46241827166541,
+        "longitude": 25.201714038848877
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": []
+    }
+  },
+  {
+    "id": "XvnHqRAAACEAhZ53",
+    "uid": "oak-woodland-restoration",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22XvnHqRAAACEAhZ53%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2020-06-29T11:35:15+0000",
+    "last_publication_date": "2022-09-16T11:45:42+0000",
+    "slugs": ["oak-woodland-restoration", "wildfire-restoration"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Oak Woodland Restoration",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Restoring native oak woodlands in areas prone to wildfires",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 1200,
+          "height": 800
+        },
+        "alt": "A thriving oak woodland with green trees and a lush understory",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/4571479e-bd30-4005-9c25-10ee5e391ac2_Oak+woodland.jpeg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyjxIAACEAQnVN",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "reforestation",
+        "first_publication_date": "2020-06-05T11:55:00+0000",
+        "last_publication_date": "2021-01-16T15:36:51+0000",
+        "uid": "reforestation",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyjxIAACEAQnVN",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "reforestation",
+            "first_publication_date": "2020-06-05T11:55:00+0000",
+            "last_publication_date": "2021-01-16T15:36:51+0000",
+            "uid": "reforestation",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 800
+        },
+        "alt": "An aerial view of our Oak Woodland Restoration project in the centre of Portugal. You can see pockets of native oaks amongst the shrub. ",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/05fd042d-acad-409f-a7da-7dba98585310_Oak+woodland+landscape.jpeg?auto=compress,format"
+      },
+      "project_status": "done",
+      "project_location": {
+        "latitude": 40.799256620052255,
+        "longitude": -8.12490463256836
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "Working alongside our local partner, Montis, we restore native oak woodlands and combat dominant Portuguese Broom and Portugal's summer wildfires. Our vision is to have a dense native oak woodland within 15 years, where the canopy shade manages the shrub overgrowth, fuel availability is lower, and biodiversity is higher.",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "XvSfvhAAACMAbusP",
+    "uid": "reforesting-the-southern-carpathians",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22XvSfvhAAACMAbusP%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2020-06-25T13:45:00+0000",
+    "last_publication_date": "2023-01-13T12:26:26+0000",
+    "slugs": ["the-southern-carpathians", "reforesting-the-southern-carpathians", "southern-carpathians", "reforesting-scotland"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "The Southern Carpathians",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Healing clear-cuts in Europe's last remaining wilderness",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 1200,
+          "height": 675
+        },
+        "alt": "Vast forests carpet the Southern Carpathian mountains",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/ad02f7d8-5dc0-4dc0-8590-637b41adcd7e_Carpathian+woodlands.png?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyjxIAACEAQnVN",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "reforestation",
+        "first_publication_date": "2020-06-05T11:55:00+0000",
+        "last_publication_date": "2021-01-16T15:36:51+0000",
+        "uid": "reforestation",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyjxIAACEAQnVN",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "reforestation",
+            "first_publication_date": "2020-06-05T11:55:00+0000",
+            "last_publication_date": "2021-01-16T15:36:51+0000",
+            "uid": "reforestation",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 675
+        },
+        "alt": "Vast forests carpet the Southern Carpathian mountains",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/ad02f7d8-5dc0-4dc0-8590-637b41adcd7e_Carpathian+woodlands.png?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 45.53280788583923,
+        "longitude": 25.24762272834778
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "Romania's Carpathian Mountains are home to some of Europe’s last remaining truly wild forests and the largest population of bears, wolves and lynx. Sadly, this ecosystem hangs in the balance due to years of illegal logging. Our goal is to restore the barren clear cuts that threaten these forests. In partnership with Foundation Conservation Carpathia we are working to restore clear cuts in the Romania's Southern Carpathian Mountains. ",
+          "spans": [
+            {
+              "start": 318,
+              "end": 351,
+              "type": "hyperlink",
+              "data": {
+                "link_type": "Web",
+                "url": "https://www.carpathia.org/"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "XvR7wxAAACAAbkkd",
+    "uid": "protecting-turtle-nests",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22XvR7wxAAACAAbkkd%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2020-06-25T11:07:00+0000",
+    "last_publication_date": "2023-04-17T14:07:48+0000",
+    "slugs": ["protecting-turtle-eggs--nests", "protecting-turtle-nests", "radio-tagging-salmon"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Protecting Turtle Eggs & Nests",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Conserving Slovakia's European pond turtle",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 801,
+          "height": 801
+        },
+        "alt": "A European pond turtle walks on sandy soil",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/404c40d5-8b12-40bf-9706-9699bd591e32_European+pond+turtle.jpeg?auto=compress,format&rect=200,0,801,801&w=801&h=801"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 801
+        },
+        "alt": "A European pond turtle walking on sandy soil",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/404c40d5-8b12-40bf-9706-9699bd591e32_European+pond+turtle.jpeg?auto=compress,format"
+      },
+      "project_status": "done",
+      "project_location": {
+        "latitude": 47.81315451752768,
+        "longitude": 18.149410815812082
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": []
+    }
+  },
+  {
+    "id": "XvNP7RAAACIAnwq4",
+    "uid": "restoring-floodplain-forests",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22XvNP7RAAACIAnwq4%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2020-06-24T14:05:30+0000",
+    "last_publication_date": "2023-01-13T12:28:49+0000",
+    "slugs": ["restoring-floodplain-forests", "restoring-the-floodplain-forests", "slovakia", "reforesting-scotland"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Restoring Floodplain Forests",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Along the Danube, Slovakia",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 1200,
+          "height": 800
+        },
+        "alt": "A drone image of the turquoise streams of the Danube running through native and monoculture forests",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/4eee3afd-1d19-4062-8dd6-1d4f81bfda0a_Floodplain+forest.jpeg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyjxIAACEAQnVN",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "reforestation",
+        "first_publication_date": "2020-06-05T11:55:00+0000",
+        "last_publication_date": "2021-01-16T15:36:51+0000",
+        "uid": "reforestation",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyjxIAACEAQnVN",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "reforestation",
+            "first_publication_date": "2020-06-05T11:55:00+0000",
+            "last_publication_date": "2021-01-16T15:36:51+0000",
+            "uid": "reforestation",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 800
+        },
+        "alt": "A drone image of the turquoise streams of the Danube running through native and monoculture forests",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/4eee3afd-1d19-4062-8dd6-1d4f81bfda0a_Floodplain+forest.jpeg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 47.99636925925152,
+        "longitude": 17.607240546494722
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "With our local partner Broz, we are restoring one of the last remnants of Central Europe’s floodplain forests. This project aims to conserve the diversity of fauna and flora that inhabits this unique forest along the Danube river in Slovakia. By planting open areas with native trees, such as poplars, elms and maples, we are working to increase forest cover and habitat availability for species like the locally endangered black stork, the charismatic beaver and the rare large copper butterfly. Floodplain forests are an important carbon sink and their restoration has the potential to sequester a large amount of carbon and contribute to the fight against the climate crisis. ",
+          "spans": [
+            {
+              "start": 23,
+              "end": 27,
+              "type": "hyperlink",
+              "data": {
+                "link_type": "Web",
+                "url": "https://broz.sk/"
+              }
+            },
+            {
+              "start": 57,
+              "end": 109,
+              "type": "strong"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "XvMWGRAAACAAngSg",
+    "uid": "tagging-salmon-in-scotland",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22XvMWGRAAACAAngSg%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2020-06-24T09:33:13+0000",
+    "last_publication_date": "2022-09-16T12:41:30+0000",
+    "slugs": ["radio-tagging-atlantic-salmon", "radio-tagging-salmon", "building-eagle-nest-platforms"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Radio Tagging Atlantic Salmon",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "In the Scottish Highlands",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 800,
+          "height": 800
+        },
+        "alt": "A wild Atlantic salmon leaps out of the water up stream in Scotland. A common sight during the salmon migration season",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/59b61cf7-db8d-46c3-b3b2-d8f84992c350_lighter-3.jpeg?auto=compress,format&rect=294,0,800,800&w=800&h=800"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 800
+        },
+        "alt": "A wild Atlantic salmon leaps out of the water up stream in Scotland. A common sight during the salmon migration season",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/59b61cf7-db8d-46c3-b3b2-d8f84992c350_lighter-3.jpeg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 57.95858891305305,
+        "longitude": -5.34210741519928
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "In early 2021, we will be supporting the Kyle of Sutherland Fisheries Trust to monitor Atlantic salmon migration, and identify barriers to their movements, at Alladale Wilderness Reserve. We will be sponsoring 10 radio tags to enable the Trust to monitor the movement of salmon upstream. This project is funded through our wonderful business partners Inlumi. ",
+          "spans": [
+            {
+              "start": 210,
+              "end": 287,
+              "type": "strong"
+            },
+            {
+              "start": 351,
+              "end": 357,
+              "type": "hyperlink",
+              "data": {
+                "link_type": "Web",
+                "url": "https://www.inlumi.com/"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "XvHjSRAAACAAmLov",
+    "uid": "reforesting-scotland",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22XvHjSRAAACAAmLov%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2020-06-23T11:32:28+0000",
+    "last_publication_date": "2023-09-25T14:58:54+0000",
+    "slugs": ["reforesting-scotland", "wildfire-restoration"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Reforesting Scotland",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Restoring the great Caledonian Forest",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 800,
+          "height": 800
+        },
+        "alt": "The birchwoods of Glen Mor in the Scottish Highlands. ",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/5d512986-1b73-41e5-af59-4ebcfc2d7da1_Birchwoods.jpg?auto=compress,format&rect=200,0,800,800&w=800&h=800"
+      },
+      "category": {
+        "id": "XtoyjxIAACEAQnVN",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "reforestation",
+        "first_publication_date": "2020-06-05T11:55:00+0000",
+        "last_publication_date": "2021-01-16T15:36:51+0000",
+        "uid": "reforestation",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyjxIAACEAQnVN",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "reforestation",
+            "first_publication_date": "2020-06-05T11:55:00+0000",
+            "last_publication_date": "2021-01-16T15:36:51+0000",
+            "uid": "reforestation",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 800
+        },
+        "alt": "The birchwoods of Glen Mor in the Scottish Highlands. ",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/5d512986-1b73-41e5-af59-4ebcfc2d7da1_Birchwoods.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 57.92024994903515,
+        "longitude": -4.408655432542181
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "This reforesting Scotland project aims to restore a diversity of woodland types to Scotland, prioritising the pinewood and riparian woodland habitats. Scots pine and downy birch saplings, alongside a diversity of food-producing broadleaf trees, such as hazel and bird cherry, are being planted across the valley bottoms and hillsides, while alders, downy birch, willows and other important riparian tree species are being planted alongside degraded riverbanks.",
+          "spans": []
+        }
+      ]
+    }
+  },
+  {
+    "id": "XvDVYBAAACQAlAk0",
+    "uid": "wildfire-restoration",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22XvDVYBAAACQAlAk0%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2020-06-22T16:30:20+0000",
+    "last_publication_date": "2022-10-07T11:54:42+0000",
+    "slugs": ["wildfire-restoration", "oak-woodland-restoration"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Wildfire Restoration",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Bringing hope and life to a valley devastated by fire",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 798,
+          "height": 798
+        },
+        "alt": "A lone tree stands in a carpet of ash at our wildfire restoration project.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/c6d9853e-ad3f-4c7f-af71-7e9c2454b8a8_Mossy+Earth+Wildfire+Restoration+2.jpg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyjxIAACEAQnVN",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "reforestation",
+        "first_publication_date": "2020-06-05T11:55:00+0000",
+        "last_publication_date": "2021-01-16T15:36:51+0000",
+        "uid": "reforestation",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyjxIAACEAQnVN",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "reforestation",
+            "first_publication_date": "2020-06-05T11:55:00+0000",
+            "last_publication_date": "2021-01-16T15:36:51+0000",
+            "uid": "reforestation",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 798
+        },
+        "alt": "A lone tree stands in a carpet of ash at our wildfire restoration project.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/c50317ec-4ad4-49f8-80f8-3e7b1b3d906f_The+Lucky+One.jpg?auto=compress,format"
+      },
+      "project_status": "done",
+      "project_location": {
+        "latitude": 41.05961493287291,
+        "longitude": -6.897740364074707
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "In partnership with Associação Transumância e Natureza and Rewilding Portugal, our Wildfire Restoration project focused on restoring forests to an area of the Duoro Valley in Portugal under threat from centuries of agriculture and, more recently, the devastating Portugal wildfires of 2017. After planting along all the waterlines and flatter fertile areas of the mountain valley, we successfully reached our tree planting capacity in 2019. Ongoing work will involve monitoring tree survival rates, replanting lost trees, weeding, and watering. We also supported the tagging of 6 griffon vultures with GPS devices for monitoring purposes in the nearby Côa Valley.",
+          "spans": [
+            {
+              "start": 20,
+              "end": 54,
+              "type": "hyperlink",
+              "data": {
+                "link_type": "Web",
+                "url": "https://www.faiabrava.pt/pt/"
+              }
+            },
+            {
+              "start": 59,
+              "end": 77,
+              "type": "hyperlink",
+              "data": {
+                "link_type": "Web",
+                "url": "https://rewilding-portugal.com/"
+              }
+            },
+            {
+              "start": 83,
+              "end": 171,
+              "type": "strong"
+            },
+            {
+              "start": 553,
+              "end": 613,
+              "type": "hyperlink",
+              "data": {
+                "link_type": "Web",
+                "url": "https://mossy.earth/projects/rewilding/gps-tagging-griffon-vultures"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "XvDHORAAACMAk8i9",
+    "uid": "building-eagle-nest-platforms",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22XvDHORAAACMAk8i9%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2020-06-22T16:02:50+0000",
+    "last_publication_date": "2022-10-04T16:31:44+0000",
+    "slugs": ["building-eagle-nest-platforms", "gps-tagging-griffon-vultures"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Building Eagle Nest Platforms ",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "In the Scottish Highlands",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 814,
+          "height": 814
+        },
+        "alt": "A white tailed sea eagle carries a fish in its talons in Scotland. ",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/32623040-b3da-4c00-a74e-81aa1bf9a0cc_white-tailed+eagle.png?auto=compress,format&rect=228,0,814,814&w=814&h=814"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 814
+        },
+        "alt": "A white-tailed sea eagle carries a fish in its talons in Scotland. ",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/32623040-b3da-4c00-a74e-81aa1bf9a0cc_white-tailed+eagle.png?auto=compress,format"
+      },
+      "project_status": "done",
+      "project_location": {
+        "latitude": 58.147518599073585,
+        "longitude": -5.559082031250001
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": [
+        {
+          "type": "paragraph",
+          "text": "In the autumn of 2020, we supported Alladale Wilderness Reserve and the Roy Dennis Wildlife Foundation in building eagle nest platforms in Scottish pinewoods. The nests aim to promote breeding among the resident population of golden eagles and support the return of white-tailed eagles, two birds of prey of conservation concern in the UK. This project was funded through the business membership of our partner Inlumi.",
+          "spans": [
+            {
+              "start": 375,
+              "end": 395,
+              "type": "hyperlink",
+              "data": {
+                "link_type": "Web",
+                "url": "https://mossy.earth/businesses"
+              }
+            },
+            {
+              "start": 411,
+              "end": 417,
+              "type": "hyperlink",
+              "data": {
+                "link_type": "Web",
+                "url": "https://www.inlumi.com/"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "XvB6CBAAACIAkmvK",
+    "uid": "gps-tagging-griffon-vultures",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22XvB6CBAAACIAkmvK%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": "2020-06-22T14:27:37+0000",
+    "last_publication_date": "2022-10-04T16:19:06+0000",
+    "slugs": ["gps-tagging-griffon-vultures", "brown-bears"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "GPS Tagging Griffon Vultures",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "In the Côa Valley, Portugal",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 800,
+          "height": 531
+        },
+        "alt": "A vulture feeding frenzy. A vulture feeding frenzy. GPS tagging vultures is invaluable for vulture conservation.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/a5e8200b-b090-43a2-b473-a5b6dbf454f3_Vultures+Feeding+Frenzy.jpg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 800,
+          "height": 531
+        },
+        "alt": "A vulture feeding frenzy. A vulture feeding frenzy. GPS tagging vultures is invaluable for vulture conservation.",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/a5e8200b-b090-43a2-b473-a5b6dbf454f3_Vultures+Feeding+Frenzy.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 40.95976743212508,
+        "longitude": -7.0903927087783805
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": []
+    }
+  },
+  {
+    "id": "YMXcnxEAACIAjEii",
+    "uid": "fairy-cave",
+    "url": null,
+    "type": "project",
+    "href": "https://mossyearth.cdn.prismic.io/api/v2/documents/search?ref=ZU5KzxQAACQAGAi4&q=%5B%5B%3Ad+%3D+at%28document.id%2C+%22YMXcnxEAACIAjEii%22%29+%5D%5D",
+    "tags": [],
+    "first_publication_date": null,
+    "last_publication_date": "2022-10-04T16:18:22+0000",
+    "slugs": ["discovering-the-secrets-of-the-fairy-cave", "cave-clean-up"],
+    "linked_documents": [],
+    "lang": "en-gb",
+    "alternate_languages": [],
+    "data": {
+      "title": [
+        {
+          "type": "heading1",
+          "text": "Discovering the Secrets of the Fairy Cave",
+          "spans": []
+        }
+      ],
+      "subtitle": [
+        {
+          "type": "heading2",
+          "text": "Revealing and protecting the biodiversity of an unexplored cave ",
+          "spans": []
+        }
+      ],
+      "card_bg": {
+        "dimensions": {
+          "width": 1200,
+          "height": 800
+        },
+        "alt": "Mapping an unexplored cave in Bosnia and Herzegovina",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/bf67b07b-f042-4d4d-83a1-c05bde66bf3a_C1017T01.jpg?auto=compress,format"
+      },
+      "category": {
+        "id": "XtoyRBIAACMAQnP7",
+        "type": "project_category",
+        "tags": [],
+        "lang": "en-gb",
+        "slug": "rewilding",
+        "first_publication_date": "2020-06-05T11:53:44+0000",
+        "last_publication_date": "2021-01-16T15:38:50+0000",
+        "uid": "rewilding",
+        "link_type": "Document",
+        "isBroken": false
+      },
+      "categories": [
+        {
+          "project_category": {
+            "id": "XtoyRBIAACMAQnP7",
+            "type": "project_category",
+            "tags": [],
+            "lang": "en-gb",
+            "slug": "rewilding",
+            "first_publication_date": "2020-06-05T11:53:44+0000",
+            "last_publication_date": "2021-01-16T15:38:50+0000",
+            "uid": "rewilding",
+            "link_type": "Document",
+            "isBroken": false
+          }
+        }
+      ],
+      "header_image": {
+        "dimensions": {
+          "width": 1200,
+          "height": 800
+        },
+        "alt": "Mapping an unexplored cave in Bosnia and Herzegovina",
+        "copyright": null,
+        "url": "https://images.prismic.io/mossyearth/bf67b07b-f042-4d4d-83a1-c05bde66bf3a_C1017T01.jpg?auto=compress,format"
+      },
+      "project_status": "in_progress",
+      "project_location": {
+        "latitude": 43.107948,
+        "longitude": 18.466734
+      },
+      "icon": {
+        "link_type": "Media"
+      },
+      "summary": []
+    }
+  }
+]

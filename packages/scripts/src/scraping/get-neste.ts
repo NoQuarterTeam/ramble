@@ -1,4 +1,4 @@
-import nesteData from "./neste.json"
+import nesteData from "./data/neste.json"
 
 import { prisma } from "@ramble/database"
 
