@@ -12,6 +12,8 @@ export const spotPartnerFields = {
   hipcampId: true,
   surflineId: true,
   theCragId: true,
+  norcampId: true,
+  mossyEarthId: true,
   sourceUrl: true,
 } satisfies Prisma.SpotSelect
 
@@ -28,7 +30,9 @@ export const isPartnerSpot = (spot: SpotPartnerFields) =>
   spot.cucortuId ||
   spot.theCragId ||
   spot.loodusegakoosId ||
-  spot.natuurKampeerterreinenId
+  spot.natuurKampeerterreinenId ||
+  spot.norcampId ||
+  spot.mossyEarthId
 
 export const partners = {
   campspace: { name: "Campspace", logo: { light: "/partners/campspace.svg", dark: "/partners/campspace-dark.svg" } },
@@ -42,6 +46,8 @@ export const partners = {
   theCrag: { name: "The Crag", logo: { light: "/partners/the-crag.svg", dark: "/partners/the-crag-dark.svg" } },
   neste: { name: "Neste", logo: { light: "/partners/neste.png", dark: "/partners/neste.png" } },
   hipcamp: { name: "Hipcamp", logo: { light: "/partners/hipcamp.svg", dark: "/partners/hipcamp-dark.svg" } },
+  norcamp: { name: "Norcamp", logo: { light: "/partners/norcamp.png", dark: "/partners/norcamp.png" } },
+  mossyEarth: { name: "Mossy Earth", logo: { light: "/partners/mossy-earth.png", dark: "/partners/mossy-earth-dark.png" } },
 } as const
 
 export type SpotItemWithStatsAndImage = Pick<Spot, "id" | "name" | "address" | "type"> & {
@@ -107,6 +113,7 @@ export const spotMarkerColorTypes = {
   ART_FILM_PHOTOGRAPHY: "border-gray-500 bg-gray-50",
   FESTIVAL: "border-gray-500 bg-gray-50",
   NATURE_EDUCATION: "border-gray-500 bg-gray-50",
+  REWILDING: "border-gray-500 bg-gray-50",
   VOLUNTEERING: "border-gray-500 bg-gray-50",
   REWILDING: "border-gray-500 bg-gray-50",
 } satisfies Record<SpotType, string>
@@ -136,6 +143,7 @@ export const spotMarkerTextColorTypes = {
   ART_FILM_PHOTOGRAPHY: "text-black",
   FESTIVAL: "text-black",
   NATURE_EDUCATION: "text-black",
+  REWILDING: "text-black",
   VOLUNTEERING: "text-black",
   REWILDING: "text-black",
 } satisfies Record<SpotType, string>
@@ -164,6 +172,7 @@ export const spotMarkerTriangleColorTypes = {
   ART_FILM_PHOTOGRAPHY: "bg-gray-100",
   FESTIVAL: "bg-gray-100",
   NATURE_EDUCATION: "bg-gray-100",
+  REWILDING: "bg-gray-100",
   VOLUNTEERING: "bg-gray-100",
   REWILDING: "bg-gray-100",
 } satisfies Record<SpotType, string>
