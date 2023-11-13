@@ -65,6 +65,7 @@ export const SPOT_TYPES: { [key in SpotType]: SpotTypeInfo } = {
   [SpotType.BAR]: { value: SpotType.BAR, label: "Bar", Icon: Beer, isComingSoon: true },
   [SpotType.SHOP]: { value: SpotType.SHOP, label: "Shop", Icon: ShoppingCart, isComingSoon: true },
   // Other
+  [SpotType.REWILDING]: { value: SpotType.REWILDING, label: "Rewilding", Icon: Leaf, isComingSoon: false },
   [SpotType.NATURE_EDUCATION]: { value: SpotType.NATURE_EDUCATION, label: "Nature Education", Icon: Leaf, isComingSoon: true },
   [SpotType.FESTIVAL]: { value: SpotType.FESTIVAL, label: "Festival", Icon: PartyPopper, isComingSoon: true },
   [SpotType.ART_FILM_PHOTOGRAPHY]: {
