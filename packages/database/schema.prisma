@@ -135,6 +135,7 @@ enum SpotType {
   ART_FILM_PHOTOGRAPHY
   NATURE_EDUCATION
   FESTIVAL
+  REWILDING
 }
 
 model Spot {
@@ -192,6 +193,8 @@ model Spot {
   theCragId                String? @unique
   // norcamp
   norcampId                String? @unique
+  // mossyEarth
+  mossyEarthId             String? @unique
 
   @@index([createdAt])
   @@index([verifiedAt])
