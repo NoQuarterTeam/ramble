@@ -49,7 +49,7 @@
     "@vercel/analytics": "1.1.1",
     "@vercel/edge": "1.1.1",
     "@vercel/remix": "2.2.0",
-    "axios": "1.6.1",
+    "axios": "1.6.2",
     "bcryptjs": "2.4.3",
     "blurhash": "2.0.5",
     "class-variance-authority": "0.7.0",
