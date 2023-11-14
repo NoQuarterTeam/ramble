@@ -30,7 +30,11 @@ export function PartnerLink(props: Props) {
     ? partners.roadsurfer
     : props.spot.cucortuId
     ? partners.cucortu
-    : partners.loodusegakoos
+    : props.spot.loodusegakoosId
+    ? partners.loodusegakoos
+    : props.spot.norcampId
+    ? partners.norcamp
+    : partners.mossyEarth
 
   if (!props.spot.sourceUrl) return null
   return (

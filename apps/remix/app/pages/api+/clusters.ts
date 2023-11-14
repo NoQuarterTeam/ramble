@@ -33,7 +33,7 @@ async function getMapClusters(request: Request) {
   if (!result.success) return []
   const { zoom, type, isUnverified, isPetFriendly, ...coords } = result.data
 
-  const defaultTypes = [SpotType.CAMPING, SpotType.FREE_CAMPING]
+  const defaultTypes = [SpotType.CAMPING, SpotType.FREE_CAMPING, SpotType.REWILDING]
   const spots = await db.spot.findMany({
     select: { id: true, latitude: true, longitude: true, type: true },
     where: {

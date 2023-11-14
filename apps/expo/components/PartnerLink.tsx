@@ -36,7 +36,11 @@ export function PartnerLink(props: Props) {
     ? partners.roadsurfer
     : props.spot.cucortuId
     ? partners.cucortu
-    : partners.loodusegakoos
+    : props.spot.loodusegakoosId
+    ? partners.loodusegakoos
+    : props.spot.norcampId
+    ? partners.norcamp
+    : partners.mossyEarth
 
   const handleOpen = async () => {
     try {
