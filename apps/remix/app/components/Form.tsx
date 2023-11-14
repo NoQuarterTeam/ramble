@@ -28,8 +28,8 @@ export const Form = React.forwardRef(function _Form(props: RemixFormProps, ref: 
       navigate={props.navigate || props.fetcherKey ? false : undefined}
       {...props}
     >
-      <AuthenticityTokenInput />
       {props.children}
+      <AuthenticityTokenInput />
     </RemixForm>
   )
 })
@@ -46,8 +46,8 @@ export function useFetcher<T>(
   function Form({ children, ...rest }: RemixFormProps) {
     return (
       <fetcher.Form method="POST" replace {...rest}>
-        <AuthenticityTokenInput />
         {children}
+        <AuthenticityTokenInput />
       </fetcher.Form>
     )
   }
