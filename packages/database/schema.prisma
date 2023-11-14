@@ -195,6 +195,8 @@ model Spot {
   norcampId                String? @unique
   // mossyEarth
   mossyEarthId             String? @unique
+  // rewildingEurope
+  rewildingEuropeId        String? @unique
 
   @@index([createdAt])
   @@index([verifiedAt])
