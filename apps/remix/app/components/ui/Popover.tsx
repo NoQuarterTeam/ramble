@@ -12,7 +12,7 @@ export const PopoverContent = React.forwardRef<HTMLDivElement, Popover.PopoverCo
       ref={ref}
       {...props}
       className={merge(
-        "bg-background rounded-xs z-50 w-80 border border-gray-100 shadow-lg dark:border-gray-600",
+        "bg-background rounded-xs z-50 w-80 border border-gray-200 shadow-lg dark:border-gray-700",
         props.className,
       )}
     >
