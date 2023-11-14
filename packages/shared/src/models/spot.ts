@@ -113,7 +113,6 @@ export const spotMarkerColorTypes = {
   ART_FILM_PHOTOGRAPHY: "border-gray-500 bg-gray-50",
   FESTIVAL: "border-gray-500 bg-gray-50",
   NATURE_EDUCATION: "border-gray-500 bg-gray-50",
-  REWILDING: "border-gray-500 bg-gray-50",
   VOLUNTEERING: "border-gray-500 bg-gray-50",
   REWILDING: "border-gray-500 bg-gray-50",
 } satisfies Record<SpotType, string>
@@ -143,7 +142,6 @@ export const spotMarkerTextColorTypes = {
   ART_FILM_PHOTOGRAPHY: "text-black",
   FESTIVAL: "text-black",
   NATURE_EDUCATION: "text-black",
-  REWILDING: "text-black",
   VOLUNTEERING: "text-black",
   REWILDING: "text-black",
 } satisfies Record<SpotType, string>
@@ -172,7 +170,6 @@ export const spotMarkerTriangleColorTypes = {
   ART_FILM_PHOTOGRAPHY: "bg-gray-100",
   FESTIVAL: "bg-gray-100",
   NATURE_EDUCATION: "bg-gray-100",
-  REWILDING: "bg-gray-100",
   VOLUNTEERING: "bg-gray-100",
   REWILDING: "bg-gray-100",
 } satisfies Record<SpotType, string>
