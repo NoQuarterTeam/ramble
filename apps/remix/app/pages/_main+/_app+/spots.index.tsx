@@ -1,25 +1,30 @@
 import * as React from "react"
 import { useLoaderData, useSearchParams } from "@remix-run/react"
-import { Settings2 } from "lucide-react"
+import "mapbox-gl/dist/mapbox-gl.css"
+
+import Map, { GeolocateControl, LngLatLike, MapRef, Marker, NavigationControl } from "react-map-gl"
+import { MapIcon, Settings2 } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 import { promiseHash } from "remix-utils/promise"
 
 import { publicSpotWhereClauseRaw } from "@ramble/api"
 import { Prisma, SpotType } from "@ramble/database/types"
-import { type SpotItemWithStatsAndImage, useDisclosure } from "@ramble/shared"
+import { type SpotItemWithStatsAndImage, useDisclosure, join, INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
 
-import { useFetcher } from "~/components/Form"
-import { Button, Modal, Select } from "~/components/ui"
+import { Button, IconButton, Modal, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { fetchAndJoinSpotImages, SPOT_TYPE_OPTIONS, STAY_SPOT_TYPE_OPTIONS } from "~/lib/models/spot"
-import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import type { LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
 import { getUserSession } from "~/services/session/session.server"
 
 import { PageContainer } from "../../../components/PageContainer"
 import { SpotItem } from "./components/SpotItem"
+import { useTheme } from "~/lib/theme"
+import { SpotMarker } from "./components/SpotMarker"
+import { bbox, lineString } from "~/lib/vendor/turf.server"
 
 export const config = {
   // runtime: "edge",
@@ -34,11 +39,12 @@ const SORT_OPTIONS = [
   { value: "saved", label: "Most saved" },
 ] as const
 
-const TAKE = 12
+type SpotItemWithStatsAndCoords = SpotItemWithStatsAndImage & { longitude: number; latitude: number }
+
+const TAKE = 24
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { userId } = await getUserSession(request)
   const searchParams = new URL(request.url).searchParams
-  const skip = parseInt((searchParams.get("skip") as string) || "0")
 
   let type = searchParams.get("type") as SpotType | undefined
   if (type && !SpotType[type as SpotType]) type = undefined
@@ -63,9 +69,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     }`
 
   const { spots } = await promiseHash({
-    spots: db.$queryRaw<Array<SpotItemWithStatsAndImage>>`
+    spots: db.$queryRaw<Array<SpotItemWithStatsAndCoords>>`
       SELECT 
         Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
+        Spot.latitude, Spot.longitude,
         (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
         (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
       FROM
@@ -76,15 +83,20 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       GROUP BY
         Spot.id
       ${ORDER_BY}
-      LIMIT ${TAKE}
-      OFFSET ${skip};
+      LIMIT ${TAKE};
     `,
   })
-
   await fetchAndJoinSpotImages(spots)
+  const coords = spots.length > 0 ? spots.map((spot) => [spot.longitude, spot.latitude]) : null
+
+  let bounds: LngLatLike | undefined = undefined
+  if (coords) {
+    const line = lineString(coords)
+    bounds = bbox(line) as unknown as LngLatLike
+  }
 
   return json(
-    { spots },
+    { spots, bounds },
     {
       headers: {
         "Cache-Control": cacheHeader({ public: true, sMaxage: "1hour", staleWhileRevalidate: "1min", maxAge: "1hour" }),
@@ -94,25 +106,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Latest() {
-  const { spots: initialSpots } = useLoaderData<typeof loader>()
+  const { spots, bounds } = useLoaderData<typeof loader>()
   const [searchParams, setSearchParams] = useSearchParams()
   const type = searchParams.get("type") || ""
   const sort = searchParams.get("sort") || "latest"
-  const spotFetcher = useFetcher<typeof loader>()
-  const [spots, setSpots] = React.useState(initialSpots)
-
-  const onNext = () => spotFetcher.load(`/spots?skip=${spots.length}&type=${type}&sort=${sort}`)
-
-  React.useEffect(() => {
-    setSpots(initialSpots)
-  }, [initialSpots])
-
-  React.useEffect(() => {
-    if (spotFetcher.state === "loading") return
-    const data = spotFetcher.data?.spots
-    if (data) setSpots((prev) => [...prev, ...data])
-  }, [spotFetcher.data, spotFetcher.state])
-
+  const isMapVisible = searchParams.get("map") === "true" || false
+  const scrollRef = React.useRef<HTMLDivElement>(null)
   const modalProps = useDisclosure()
   return (
     <PageContainer className="pt-0">
@@ -198,38 +197,102 @@ export default function Latest() {
               ))}
             </Select>
           </div>
+          <IconButton
+            className="hidden md:block"
+            variant={isMapVisible ? "primary" : "outline"}
+            aria-label="toggle map"
+            icon={<MapIcon size={18} />}
+            onClick={() => {
+              const existingParams = queryString.parse(searchParams.toString())
+              setSearchParams(queryString.stringify({ ...existingParams, map: isMapVisible ? undefined : true }))
+            }}
+          />
         </div>
       </div>
-      <div className="space-y-10">
-        {spots.length === 0 ? (
-          <div className="flex flex-col items-center justify-center gap-4 p-10">
-            <p className="text-xl">No spots yet</p>
-            {type && (
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setSearchParams(queryString.stringify({ type: undefined }))
-                }}
-              >
-                Clear filter
-              </Button>
-            )}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {spots.map((spot) => (
-              <SpotItem key={spot.id} spot={spot} />
-            ))}
-          </div>
-        )}
-        {spots.length !== 0 && spots.length % TAKE === 0 && (
-          <div className="center">
-            <Button size="lg" isLoading={spotFetcher.state === "loading"} variant="outline" onClick={onNext}>
-              Load more
-            </Button>
-          </div>
+      <div className={join(isMapVisible && "grid grid-cols-2 gap-4 md:h-[78vh] lg:grid-cols-3")}>
+        <div
+          ref={scrollRef}
+          key={sort + type}
+          className={join("space-y-10", isMapVisible ? "scrollbar-hide col-span-2 overflow-y-scroll md:col-span-1" : " pb-20")}
+        >
+          {spots.length === 0 ? (
+            <div className="flex flex-col items-center justify-center gap-4 p-10">
+              <p className="text-xl">No spots yet</p>
+              {type && (
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setSearchParams(queryString.stringify({ type: undefined }))
+                  }}
+                >
+                  Clear filter
+                </Button>
+              )}
+            </div>
+          ) : (
+            <div className={join("grid grid-cols-1 gap-4", !isMapVisible && "md:grid-cols-2 lg:grid-cols-3")}>
+              {spots.map((spot) => (
+                <SpotItem key={spot.id} spot={spot} />
+              ))}
+            </div>
+          )}
+        </div>
+        {isMapVisible && (
+          <SpotsMap spots={spots} bounds={bounds} onClick={(index) => scrollRef.current?.scrollTo({ top: index * 340 })} />
         )}
       </div>
     </PageContainer>
+  )
+}
+
+function SpotsMap({ spots, bounds, onClick }: SerializeFrom<typeof loader> & { onClick: (index: number) => void }) {
+  const mapRef = React.useRef<MapRef>(null)
+  const theme = useTheme()
+
+  const markers = React.useMemo(
+    () =>
+      spots.map((spot, i) => {
+        return (
+          <Marker key={spot.id} onClick={() => onClick(i)} anchor="bottom" longitude={spot.longitude} latitude={spot.latitude}>
+            <SpotMarker spot={spot} />
+          </Marker>
+        )
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [spots],
+  )
+  React.useEffect(() => {
+    if (!mapRef.current) return
+    if (!bounds) return
+    mapRef.current.fitBounds(bounds, { padding: 50 })
+  }, [bounds])
+  return (
+    <div className="rounded-xs col-span-1 hidden overflow-hidden md:block lg:col-span-2">
+      <Map
+        ref={mapRef}
+        mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
+        maxZoom={20}
+        style={{ height: "100%", width: "100%" }}
+        initialViewState={
+          bounds
+            ? { bounds, fitBoundsOptions: { padding: 50 } }
+            : {
+                latitude: spots[0]?.latitude || INITIAL_LATITUDE,
+                longitude: spots[0]?.longitude || INITIAL_LONGITUDE,
+                zoom: 10,
+              }
+        }
+        attributionControl={false}
+        mapStyle={
+          theme === "dark"
+            ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
+            : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
+        }
+      >
+        {markers}
+        <GeolocateControl position="bottom-right" />
+        <NavigationControl position="bottom-right" />
+      </Map>
+    </div>
   )
 }
