@@ -34,10 +34,13 @@
   "ignoreDeps": [
     "@expo/config-plugins",
     "@prisma/adapter-planetscale",
+    "@react-email/components",
     "@react-native-async-storage/async-storage",
+    "@sentry/react-native",
     "@shopify/flash-list",
     "expo-application",
     "expo-constants",
+    "expo-dev-client",
     "expo-dev-client",
     "expo-font",
     "expo-image-picker",
@@ -58,8 +61,8 @@
     "react-native-web",
     "react-native",
     "remix-utils",
+    "sentry-expo",
     "tailwindcss",
-    "uuid",
-    "@react-email/components"
+    "uuid"
   ]
 }
