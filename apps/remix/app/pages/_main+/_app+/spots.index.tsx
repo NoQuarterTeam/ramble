@@ -41,7 +41,7 @@ const SORT_OPTIONS = [
 
 type SpotItemWithStatsAndCoords = SpotItemWithStatsAndImage & { longitude: number; latitude: number }
 
-const TAKE = 12
+const TAKE = 24
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { userId } = await getUserSession(request)
   const searchParams = new URL(request.url).searchParams
@@ -62,7 +62,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   `ORDER BY
     ${
       sort === "latest"
-        ? Prisma.sql`Spot.verifiedAt DESC, Spot.id`
+        ? Prisma.sql`Spot.createdAt DESC, Spot.id`
         : sort === "saved"
         ? Prisma.sql`savedCount DESC, Spot.id`
         : Prisma.sql`rating DESC, Spot.id`
