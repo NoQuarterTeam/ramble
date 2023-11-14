@@ -1,25 +1,25 @@
-import puppeteer from "puppeteer"
-import * as cheerio from "cheerio"
+// import puppeteer from "puppeteer"
+// import * as cheerio from "cheerio"
 import mossyEarthData from "./data/mossy-earth.json"
 import { prisma } from "@ramble/database"
 import { geocodeCoords } from "./helpers/geocode"
 
-interface MossyEarthData {
-  id: string
-  uid: string
-  data: {
-    title: [{ text: string }]
-    subtitle: [{ text: string }]
-    header_image: {
-      url: string
-    }
-    project_location: {
-      latitude: number
-      longitude: number
-    }
-    summary: [{ text: string }]
-  }
-}
+// interface MossyEarthData {
+//   id: string
+//   uid: string
+//   data: {
+//     title: [{ text: string }]
+//     subtitle: [{ text: string }]
+//     header_image: {
+//       url: string
+//     }
+//     project_location: {
+//       latitude: number
+//       longitude: number
+//     }
+//     summary: [{ text: string }]
+//   }
+// }
 
 async function run() {
   const errors: unknown[] = []
@@ -41,43 +41,49 @@ async function run() {
       const exists = existingMossyEarthSpotIds.includes(spot.id)
       if (exists) continue // skip if already in db
 
-      const url = `https://www.mossy.earth/projects/${spot.uid}`
-      const latitude = spot.data.project_location.latitude
-      const longitude = spot.data.project_location.longitude
+      try {
+        const name = spot.data.title[0]?.text
+        const sourceUrl = `https://www.mossy.earth/projects/${spot.uid}`
+        const latitude = spot.data.project_location.latitude
+        const longitude = spot.data.project_location.longitude
+        const address = await geocodeCoords({ latitude: Number(latitude), longitude: Number(longitude) })
+        const description = [spot.data.subtitle[0]?.text, spot.data.summary[0]?.text].join(". ")
 
-      const address = await geocodeCoords({ latitude: Number(latitude), longitude: Number(longitude) })
-      const description = [spot.data.subtitle[0].text, spot.data.summary[0].text].join(". ")
-
-      await prisma.spot.create({
-        data: {
-          mossyEarthId: spot.id,
-          name: spot.data.title[0].text,
-          latitude,
-          longitude,
-          address,
-          type: "REWILDING",
-          creator: { connect: { email: "dan@noquarter.co" } },
-          sourceUrl: url,
-          description: spot.data.,
-          images: { create: [{ path: spot.data.header_image.url, creator: { connect: { email: "dan@noquarter.co" } } }] },
-          isPetFriendly: false,
-          amenities: {
-            create: {
-              bbq: false,
-              shower: false,
-              kitchen: false,
-              sauna: false,
-              firePit: false,
-              wifi: false,
-              toilet: false,
-              water: false,
-              electricity: false,
-              hotWater: false,
-              pool: false,
+        await prisma.spot.create({
+          data: {
+            mossyEarthId: spot.id,
+            name,
+            latitude,
+            longitude,
+            address,
+            type: "REWILDING",
+            creator: { connect: { email: "dan@noquarter.co" } },
+            sourceUrl,
+            description,
+            images: { create: [{ path: spot.data.header_image.url, creator: { connect: { email: "dan@noquarter.co" } } }] },
+            isPetFriendly: false,
+            amenities: {
+              create: {
+                bbq: false,
+                shower: false,
+                kitchen: false,
+                sauna: false,
+                firePit: false,
+                wifi: false,
+                toilet: false,
+                water: false,
+                electricity: false,
+                hotWater: false,
+                pool: false,
+              },
             },
           },
-        },
-      })
+        })
+      } catch (e) {
+        console.log(`error attempting ${spot.data.title[0]?.text || "no name"} (${spot.id})`)
+        errors.push(e)
+        continue
+      }
     }
   } catch (e) {
     console.log("---------- ERROR ----------")
