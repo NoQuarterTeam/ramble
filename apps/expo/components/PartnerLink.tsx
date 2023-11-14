@@ -40,7 +40,9 @@ export function PartnerLink(props: Props) {
     ? partners.loodusegakoos
     : props.spot.norcampId
     ? partners.norcamp
-    : partners.mossyEarth
+    : props.spot.mossyEarthId
+    ? partners.mossyEarth
+    : partners.rewildingEurope
 
   const handleOpen = async () => {
     try {

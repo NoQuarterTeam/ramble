@@ -14,6 +14,7 @@ export const spotPartnerFields = {
   theCragId: true,
   norcampId: true,
   mossyEarthId: true,
+  rewildingEuropeId: true,
   sourceUrl: true,
 } satisfies Prisma.SpotSelect
 
@@ -32,7 +33,8 @@ export const isPartnerSpot = (spot: SpotPartnerFields) =>
   spot.loodusegakoosId ||
   spot.natuurKampeerterreinenId ||
   spot.norcampId ||
-  spot.mossyEarthId
+  spot.mossyEarthId ||
+  spot.rewildingEuropeId
 
 export const partners = {
   campspace: { name: "Campspace", logo: { light: "/partners/campspace.svg", dark: "/partners/campspace-dark.svg" } },
@@ -48,6 +50,10 @@ export const partners = {
   hipcamp: { name: "Hipcamp", logo: { light: "/partners/hipcamp.svg", dark: "/partners/hipcamp-dark.svg" } },
   norcamp: { name: "Norcamp", logo: { light: "/partners/norcamp.png", dark: "/partners/norcamp.png" } },
   mossyEarth: { name: "Mossy Earth", logo: { light: "/partners/mossy-earth.png", dark: "/partners/mossy-earth-dark.png" } },
+  rewildingEurope: {
+    name: "Rewilding Europe",
+    logo: { light: "/partners/rewilding-europe.png", dark: "/partners/rewilding-europe-dark.png" },
+  },
 } as const
 
 export type SpotItemWithStatsAndImage = Pick<Spot, "id" | "name" | "address" | "type"> & {
