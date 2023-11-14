@@ -96,7 +96,7 @@ export const spotRouter = createTRPCRouter({
       `ORDER BY
         ${
           sort === "latest"
-            ? Prisma.sql`Spot.createdAt DESC, Spot.id`
+            ? Prisma.sql`Spot.verifiedAt DESC, Spot.id`
             : sort === "saved"
             ? Prisma.sql`savedCount DESC, Spot.id`
             : Prisma.sql`rating DESC, Spot.id`
