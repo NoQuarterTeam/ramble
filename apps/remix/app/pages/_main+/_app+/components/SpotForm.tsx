@@ -124,7 +124,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
   const user = useMaybeUser()
   return (
     <div className="grid grid-cols-1 md:grid-cols-2">
-      <Form className="md:h-nav-screen relative h-auto space-y-4 overflow-scroll p-4 pb-40 md:p-8 md:pb-40">
+      <Form className="md:h-nav-screen relative h-auto space-y-4 overflow-scroll p-4 pb-40 md:p-6 md:pb-40">
         <div>
           <div className="flex justify-between">
             <h1 className="text-3xl">{spot ? "Edit spot" : "Add a new spot"}</h1>
@@ -222,7 +222,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
 
           <FormError />
         </div>
-        <div className="bg-background fixed bottom-0 left-0 z-10 flex w-full justify-end space-x-4 border-t px-10 py-4 md:w-1/2">
+        <div className="bg-background fixed bottom-0 left-0 z-10 flex w-full justify-end space-x-4 border-t px-6 py-4 md:w-1/2">
           {!spot && (
             <Tooltip label="The spot will be made public in 2 weeks">
               <label htmlFor="shouldPublishLater" className="hstack">
