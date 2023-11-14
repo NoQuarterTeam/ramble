@@ -59,6 +59,7 @@ export function Nav() {
                   onClick={() => navigate(`/spots/new${window.location.search}`)}
                   icon={<Plus className="sq-4" />}
                   aria-label="add spot"
+                  // className="bg-primary text-white"
                   variant="outline"
                 />
               </Tooltip>
