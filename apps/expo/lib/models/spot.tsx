@@ -16,6 +16,7 @@ import {
   ShoppingCart,
   Utensils,
   Wrench,
+  Sprout,
 } from "lucide-react-native"
 
 import { type SpotType } from "@ramble/database/types"
@@ -60,7 +61,7 @@ export const SPOT_TYPES: { [key in SpotType]: { value: SpotType; label: string; 
   BAR: { value: "BAR", label: "Bar", Icon: Beer, isComingSoon: true },
   SHOP: { value: "SHOP", label: "Shop", Icon: ShoppingCart, isComingSoon: true },
   // Other
-  REWILDING: { value: "REWILDING", label: "Rewilding", Icon: Leaf, isComingSoon: false },
+  REWILDING: { value: "REWILDING", label: "Rewilding", Icon: Sprout, isComingSoon: false },
   NATURE_EDUCATION: { value: "NATURE_EDUCATION", label: "Nature Education", Icon: Leaf, isComingSoon: true },
   FESTIVAL: { value: "FESTIVAL", label: "Festival", Icon: PartyPopper, isComingSoon: true },
   ART_FILM_PHOTOGRAPHY: {
