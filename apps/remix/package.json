@@ -58,7 +58,7 @@
     "dayjs": "1.11.10",
     "geojson": "0.5.0",
     "isbot": "latest",
-    "jose": "5.1.0",
+    "jose": "5.1.1",
     "lucide-react": "0.292.0",
     "mapbox-gl": "2.15.0",
     "nprogress": "0.2.0",
