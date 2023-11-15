@@ -65,6 +65,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   },
   plugins: [
     "sentry-expo",
+    "expo-localization",
     "./expo-plugins/with-modify-gradle.js",
     "./expo-plugins/android-manifest.plugin.js",
     [

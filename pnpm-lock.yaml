@@ -125,6 +125,9 @@ importers:
       expo-device:
         specifier: ~5.4.0
         version: 5.4.0(expo@49.0.16)
+      expo-file-system:
+        specifier: ~15.4.4
+        version: 15.4.4(expo@49.0.16)
       expo-font:
         specifier: ~11.4.0
         version: 11.4.0(expo@49.0.16)
@@ -137,6 +140,9 @@ importers:
       expo-linking:
         specifier: ~5.0.2
         version: 5.0.2(expo@49.0.16)
+      expo-localization:
+        specifier: ~14.3.0
+        version: 14.3.0(expo@49.0.16)
       expo-location:
         specifier: ~16.1.0
         version: 16.1.0(expo@49.0.16)
@@ -161,6 +167,9 @@ importers:
       nativewind:
         specifier: 2.0.11
         version: 2.0.11(react@18.2.0)(tailwindcss@3.3.2)
+      posthog-react-native:
+        specifier: ^2.8.1
+        version: 2.8.1(@react-native-async-storage/async-storage@1.18.2)(@react-navigation/native@6.1.9)(expo-application@5.3.1)(expo-device@5.4.0)(expo-file-system@15.4.4)(expo-localization@14.3.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -11400,6 +11409,15 @@ packages:
       - supports-color
     dev: false
 
+  /expo-localization@14.3.0(expo@49.0.16):
+    resolution: {integrity: sha512-TML3TeVtwpfuSNwbhBspC9XsGJaa0TWJNh+UaR/35YP9fQiaJfVWUMSrAq84ba6rY1Pm3kti07LV8UUa505oqg==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      expo: 49.0.16(@babel/core@7.23.3)
+      rtl-detect: 1.1.2
+    dev: false
+
   /expo-location@16.1.0(expo@49.0.16):
     resolution: {integrity: sha512-/jfRyYrXb9vjr8HoYmVHnzEqnw+0jaoRbHsxj6ePPAbevXmvXZqYHFRtfZtQ+q32SB4X6kUAXu28eBcLS+tqaA==}
     peerDependencies:
@@ -16095,6 +16113,43 @@ packages:
       fflate: 0.4.8
     dev: false
 
+  /posthog-react-native@2.8.1(@react-native-async-storage/async-storage@1.18.2)(@react-navigation/native@6.1.9)(expo-application@5.3.1)(expo-device@5.4.0)(expo-file-system@15.4.4)(expo-localization@14.3.0):
+    resolution: {integrity: sha512-ozaqyn2eaAwb0Wza+bFsVpEuv1vVFjtVF17m4lHN7b8RO9FGBdBPiHA6LAD+ESAB59H16y+J9SxDVmmq23ATDw==}
+    peerDependencies:
+      '@react-native-async-storage/async-storage': '>=1.0.0'
+      '@react-navigation/native': '>= 5.0.10'
+      expo-application: '>= 4.0.0'
+      expo-device: '>= 4.0.0'
+      expo-file-system: '>= 13.0.0'
+      expo-localization: '>= 11.0.0'
+      react-native-device-info: '>= 10.0.0'
+      react-native-navigation: '>=6.0.0'
+    peerDependenciesMeta:
+      '@react-native-async-storage/async-storage':
+        optional: true
+      '@react-navigation/native':
+        optional: true
+      expo-application:
+        optional: true
+      expo-device:
+        optional: true
+      expo-file-system:
+        optional: true
+      expo-localization:
+        optional: true
+      react-native-device-info:
+        optional: true
+      react-native-navigation:
+        optional: true
+    dependencies:
+      '@react-native-async-storage/async-storage': 1.18.2(react-native@0.72.6)
+      '@react-navigation/native': 6.1.9(react-native@0.72.6)(react@18.2.0)
+      expo-application: 5.3.1(expo@49.0.16)
+      expo-device: 5.4.0(expo@49.0.16)
+      expo-file-system: 15.4.4(expo@49.0.16)
+      expo-localization: 14.3.0(expo@49.0.16)
+    dev: false
+
   /potpack@2.0.0:
     resolution: {integrity: sha512-Q+/tYsFU9r7xoOJ+y/ZTtdVQwTWfzjbiXBDMM/JKUux3+QPP02iUuIoeBQ+Ot6oEDlC+/PGjB/5A3K7KKb7hcw==}
     dev: false
@@ -17319,6 +17374,10 @@ packages:
     optionalDependencies:
       fsevents: 2.3.3
     dev: true
+
+  /rtl-detect@1.1.2:
+    resolution: {integrity: sha512-PGMBq03+TTG/p/cRB7HCLKJ1MgDIi07+QU1faSjiYRfmY5UsAttV9Hs08jDAHVwcOwmVLcSJkpwyfXszVjWfIQ==}
+    dev: false
 
   /run-applescript@5.0.0:
     resolution: {integrity: sha512-XcT5rBksx1QdIhlFOCtgZkB99ZEouFZ1E2Kc2LHqNW13U3/74YGdkQRmThTwxy4QIyookibDKYZOPqX//6BlAg==}

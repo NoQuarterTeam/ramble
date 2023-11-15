@@ -24,6 +24,7 @@ import { usePreferences } from "../../../lib/hooks/usePreferences"
 import { useRouter } from "../../router"
 import { type Filters, initialFilters, MapFilters } from "./MapFilters"
 import { SpotPreview } from "./SpotPreview"
+import { FeedbackCheck } from "../../../components/FeedbackCheck"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
@@ -148,10 +149,10 @@ export function MapScreen() {
                   point.properties.point_count > 150
                     ? "sq-20"
                     : point.properties.point_count > 75
-                    ? "sq-16"
-                    : point.properties.point_count > 10
-                    ? "sq-12"
-                    : "sq-8",
+                      ? "sq-16"
+                      : point.properties.point_count > 10
+                        ? "sq-12"
+                        : "sq-8",
                 )}
               >
                 <Text className="text-center text-sm text-white">{point.properties.point_count_abbreviated}</Text>
@@ -188,6 +189,7 @@ export function MapScreen() {
   return (
     <View className="flex-1">
       <RegisterCheck />
+      <FeedbackCheck />
       <Mapbox.MapView
         onLayout={handleSetUserLocation}
         className="flex-1"

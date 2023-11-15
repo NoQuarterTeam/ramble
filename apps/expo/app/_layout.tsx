@@ -1,4 +1,5 @@
 import * as React from "react"
+import { PostHogProvider, usePostHog } from "posthog-react-native"
 import { useColorScheme } from "react-native"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { SafeAreaProvider } from "react-native-safe-area-context"
@@ -45,6 +46,7 @@ import { NewSpotLayout } from "./(app)/shared/spots/new/_layout"
 import { AuthLayout } from "./(auth)/_layout"
 import { OnboardingLayout } from "./onboarding/_layout"
 import { type ScreenParamsList } from "./router"
+import { IS_PRODUCTION } from "../lib/config"
 
 Sentry.init({
   dsn: "https://db8195777a2bb905e405557687f085b9@o204549.ingest.sentry.io/4506140516024320",
@@ -141,27 +143,34 @@ export default function RootLayout() {
         <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
           <SafeAreaProvider>
             <NavigationContainer linking={linking}>
-              <Container.Navigator
-                initialRouteName="AppLayout"
-                screenOptions={{ headerShown: false, contentStyle: { backgroundColor } }}
+              <PostHogProvider
+                autocapture
+                apiKey="phc_3HuNiIa6zCcsNHFmXst4X0HJjOLq32yRyRPVZQhsD31"
+                options={{ host: "https://eu.posthog.com", enable: IS_PRODUCTION }}
               >
-                <Container.Group>
-                  <Container.Screen name="AppLayout" component={AppLayout} />
-                  <Container.Screen name="OnboardingLayout" component={OnboardingLayout} />
-                </Container.Group>
-                <Container.Group screenOptions={{ presentation: "modal", contentStyle: { backgroundColor } }}>
-                  <Container.Screen name="AuthLayout" component={AuthLayout} />
-                  <Container.Screen name="NewSpotLayout" component={NewSpotLayout} />
-                  <Container.Screen name="EditSpotLayout" component={EditSpotLayout} />
-                  <Container.Screen name="NewListScreen" component={NewListScreen} />
-                  <Container.Screen name="EditListScreen" component={EditListScreen} />
-                  <Container.Screen name="NewReviewScreen" component={NewReviewScreen} />
-                  <Container.Screen name="ReviewDetailScreen" component={ReviewDetailScreen} />
-                  <Container.Screen name="SaveSpotScreen" component={SaveSpotScreen} />
-                  <Container.Screen name="SaveSpotImagesScreen" component={SaveSpotImagesScreen} />
-                  <Container.Screen name="DeleteSpotScreen" component={DeleteSpotScreen} />
-                </Container.Group>
-              </Container.Navigator>
+                <IdentifyUser />
+                <Container.Navigator
+                  initialRouteName="AppLayout"
+                  screenOptions={{ headerShown: false, contentStyle: { backgroundColor } }}
+                >
+                  <Container.Group>
+                    <Container.Screen name="AppLayout" component={AppLayout} />
+                    <Container.Screen name="OnboardingLayout" component={OnboardingLayout} />
+                  </Container.Group>
+                  <Container.Group screenOptions={{ presentation: "modal", contentStyle: { backgroundColor } }}>
+                    <Container.Screen name="AuthLayout" component={AuthLayout} />
+                    <Container.Screen name="NewSpotLayout" component={NewSpotLayout} />
+                    <Container.Screen name="EditSpotLayout" component={EditSpotLayout} />
+                    <Container.Screen name="NewListScreen" component={NewListScreen} />
+                    <Container.Screen name="EditListScreen" component={EditListScreen} />
+                    <Container.Screen name="NewReviewScreen" component={NewReviewScreen} />
+                    <Container.Screen name="ReviewDetailScreen" component={ReviewDetailScreen} />
+                    <Container.Screen name="SaveSpotScreen" component={SaveSpotScreen} />
+                    <Container.Screen name="SaveSpotImagesScreen" component={SaveSpotImagesScreen} />
+                    <Container.Screen name="DeleteSpotScreen" component={DeleteSpotScreen} />
+                  </Container.Group>
+                </Container.Navigator>
+              </PostHogProvider>
             </NavigationContainer>
             <Toast />
             <StatusBar style={isDark ? "light" : "dark"} />
@@ -178,11 +187,21 @@ function PrefetchTabs(props: { children: React.ReactNode }) {
   React.useEffect(() => {
     utils.spot.list.prefetch({ skip: 0, sort: "latest" })
     if (isLoading || !me) return
-    Sentry.React.setUser({ id: me.id, username: me.username })
     utils.user.profile.prefetch({ username: me.username })
     utils.list.allByUser.prefetch({ username: me.username })
   }, [me, isLoading, utils.spot.list, utils.user.profile, utils.list.allByUser])
   if (isLoading) return null
 
   return <>{props.children}</>
+}
+
+function IdentifyUser() {
+  const { me, isLoading } = useMe()
+  const posthog = usePostHog()
+  React.useEffect(() => {
+    if (isLoading || !me) return
+    if (posthog) posthog.identify(me.id, { username: me.username, name: me.firstName + " " + me.lastName })
+    Sentry.React.setUser({ id: me.id, username: me.username })
+  }, [me, isLoading, posthog])
+  return null
 }

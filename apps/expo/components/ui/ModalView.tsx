@@ -15,7 +15,7 @@ interface Props {
   title?: string
   shouldRenderToast?: boolean
   onBack?: () => void
-  children: React.ReactNode
+  children?: React.ReactNode
 }
 
 export function ModalView(props: Props) {
