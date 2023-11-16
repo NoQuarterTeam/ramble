@@ -82,7 +82,7 @@ export function SpotDetailScreen() {
       longitude: spot.longitude,
       sourceLatitude: location?.latitude,
       sourceLongitude: location?.longitude,
-      title: spot.name,
+      title: spot.type !== "GAS_STATION" ? spot.name : spot.address || spot.name,
       googleForceLatLon: spot.type !== "GAS_STATION",
       alwaysIncludeGoogle: true,
       directionsMode: "car",
