@@ -49,7 +49,7 @@ export const spotRouter = createTRPCRouter({
                 : { in: defaultTypes }
             : { in: defaultTypes },
         },
-        orderBy: { createdAt: "desc" },
+        orderBy: { verifiedAt: "desc" },
         take: 8000,
       })
       if (spots.length === 0) return []

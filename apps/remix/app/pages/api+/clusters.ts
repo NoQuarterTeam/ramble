@@ -46,11 +46,11 @@ async function getMapClusters(request: Request) {
         ? typeof type === "string"
           ? { equals: type as SpotType }
           : type.length > 0
-          ? { in: type as SpotType[] }
-          : { in: defaultTypes }
+            ? { in: type as SpotType[] }
+            : { in: defaultTypes }
         : { in: defaultTypes },
     },
-    orderBy: { createdAt: "desc" },
+    orderBy: { verifiedAt: "desc" },
     take: 8000,
   })
   if (spots.length === 0) return []
