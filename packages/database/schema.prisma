@@ -198,17 +198,10 @@ model Spot {
   // rewildingEurope
   rewildingEuropeId        String? @unique
 
-  @@index([createdAt])
   @@index([verifiedAt])
-  @@index([publishedAt])
-  @@index([deletedAt])
   @@index([type, verifiedAt, deletedAt, publishedAt, creatorId])
-  @@index([type, verifiedAt, deletedAt, publishedAt, creatorId, latitude, longitude, isPetFriendly])
+  @@index([latitude, longitude, type, verifiedAt, deletedAt, publishedAt, creatorId])
   @@index([type])
-  @@index([type, longitude])
-  @@index([type, latitude])
-  @@index([latitude])
-  @@index([longitude])
   @@index([ownerId])
   @@index([verifierId])
   @@index([creatorId])
