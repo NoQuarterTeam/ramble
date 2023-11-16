@@ -42,8 +42,8 @@ export function UserScreen() {
 
   React.useEffect(() => {
     if (!user) return
-    setIsFollowedByMe(user?.isFollowedByMe)
-  }, [user?.isFollowedByMe])
+    setIsFollowedByMe(user.isFollowedByMe)
+  }, [user, user?.isFollowedByMe])
 
   const onToggleFollow = () => {
     setIsFollowedByMe(!isFollowedByMe)

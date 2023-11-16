@@ -3,13 +3,15 @@ import { Modal, Switch, TouchableOpacity, useColorScheme, View } from "react-nat
 import Mapbox, { Camera, type MapView as MapType, MarkerView, RasterLayer, RasterSource } from "@rnmapbox/maps"
 import { useQuery } from "@tanstack/react-query"
 import * as Location from "expo-location"
-import { CloudRain, Layers, Navigation, PlusCircle, Settings2 } from "lucide-react-native"
+import { StatusBar } from "expo-status-bar"
+import { CloudRain, Layers, MountainSnow, Navigation, PlusCircle, Settings2 } from "lucide-react-native"
 import * as Sentry from "sentry-expo"
 
 import { type SpotType } from "@ramble/database/types"
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
+import { FeedbackCheck } from "../../../components/FeedbackCheck"
 import { Icon } from "../../../components/Icon"
 import { RegisterCheck } from "../../../components/RegisterCheck"
 import { SpotMarker } from "../../../components/SpotMarker"
@@ -24,7 +26,6 @@ import { usePreferences } from "../../../lib/hooks/usePreferences"
 import { useRouter } from "../../router"
 import { type Filters, initialFilters, MapFilters } from "./MapFilters"
 import { SpotPreview } from "./SpotPreview"
-import { FeedbackCheck } from "../../../components/FeedbackCheck"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 
@@ -188,6 +189,7 @@ export function MapScreen() {
   const [preferences, setPreferences, isReady] = usePreferences()
   return (
     <View className="flex-1">
+      {preferences.mapStyleSatellite && <StatusBar style="light" />}
       <RegisterCheck />
       <FeedbackCheck />
       <Mapbox.MapView
@@ -202,7 +204,11 @@ export function MapScreen() {
         compassFadeWhenNorth
         scaleBarEnabled={false}
         styleURL={
-          isDark ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1" : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
+          preferences.mapStyleSatellite
+            ? "mapbox://styles/jclackett/clp122bar007z01qu21kc8h4g"
+            : isDark
+              ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
+              : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
         }
       >
         <Mapbox.UserLocation />
@@ -239,9 +245,9 @@ export function MapScreen() {
           className="sq-12 bg-background flex flex-row items-center justify-center rounded-full"
         >
           <Icon icon={Layers} size={20} color="black" />
-          {preferences.mapLayerRain && (
+          {Object.values(preferences).filter(Boolean).length > 0 && (
             <View className="sq-5 bg-background absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-700">
-              <Text className="text-xs text-black">{1}</Text>
+              <Text className="text-xs text-black">{Object.values(preferences).filter(Boolean).length}</Text>
             </View>
           )}
         </TouchableOpacity>
@@ -288,12 +294,12 @@ export function MapScreen() {
         <ModalView title="map layers" onBack={mapLayerModalProps.onClose}>
           <View className="space-y-2">
             <View className="flex flex-row items-center justify-between space-x-2">
-              <View className="flex flex-row items-center space-x-4">
+              <View className="flex flex-row items-center space-x-3">
                 <Icon icon={CloudRain} size={30} />
                 <View>
-                  <Text className="text-lg">Rain</Text>
-                  <Text numberOfLines={2} className="max-w-[200px] text-sm opacity-75">
-                    Shows the current rain radar over europe
+                  <Text className="h-[22px] text-lg">Rain</Text>
+                  <Text numberOfLines={2} className="max-w-[220px] text-sm opacity-75">
+                    Shows the current european rain radar
                   </Text>
                 </View>
               </View>
@@ -303,7 +309,23 @@ export function MapScreen() {
                 onValueChange={() => setPreferences({ ...preferences, mapLayerRain: !preferences.mapLayerRain })}
               />
             </View>
-            <Text>More coming soon!</Text>
+            <View className="flex flex-row items-center justify-between space-x-2">
+              <View className="flex flex-row items-center space-x-3">
+                <Icon icon={MountainSnow} size={30} />
+                <View>
+                  <Text className="h-[22px] text-lg">Satellite view</Text>
+                  <Text numberOfLines={2} className="max-w-[220px] text-sm opacity-75">
+                    Changes the map to satellite view
+                  </Text>
+                </View>
+              </View>
+              <Switch
+                trackColor={{ true: colors.primary[600] }}
+                value={preferences.mapStyleSatellite}
+                onValueChange={() => setPreferences({ ...preferences, mapStyleSatellite: !preferences.mapStyleSatellite })}
+              />
+            </View>
+            <Text className="pt-6">More coming soon!</Text>
           </View>
         </ModalView>
       </Modal>
@@ -312,7 +334,7 @@ export function MapScreen() {
 }
 
 function RainRadar({ shouldRender }: { shouldRender: boolean }) {
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ["rainRadar"],
     queryFn: async () => {
       try {
@@ -326,10 +348,13 @@ function RainRadar({ shouldRender }: { shouldRender: boolean }) {
         Sentry.Native.captureException(error)
       }
     },
+    enabled: shouldRender,
+    staleTime: Infinity,
+    cacheTime: Infinity,
     keepPreviousData: true,
     refetchInterval: 1000 * 60 * 5,
   })
-  if (!data || isLoading) return null
+  if (!data) return null
 
   return (
     <>
@@ -340,7 +365,7 @@ function RainRadar({ shouldRender }: { shouldRender: boolean }) {
           `https://api.weather.com/v3/TileServer/tile/radarEurope?ts=${data}&xyz={x}:{y}:{z}&apiKey=d7adbfe03bf54ea0adbfe03bf5fea065`,
         ]}
       />
-      <RasterLayer sourceID="twcRadar" id="radar" style={{ visibility: shouldRender ? "visible" : "none", rasterOpacity: 0.4 }} />
+      <RasterLayer sourceID="twcRadar" id="radar" style={{ rasterOpacity: 0.4 }} />
     </>
   )
 }
