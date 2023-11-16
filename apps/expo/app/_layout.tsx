@@ -1,5 +1,4 @@
 import * as React from "react"
-import { PostHogProvider, usePostHog } from "posthog-react-native"
 import { useColorScheme } from "react-native"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { SafeAreaProvider } from "react-native-safe-area-context"
@@ -26,10 +25,12 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import * as Linking from "expo-linking"
 import * as SplashScreen from "expo-splash-screen"
 import { StatusBar } from "expo-status-bar"
+import { PostHogProvider, usePostHog } from "posthog-react-native"
 import * as Sentry from "sentry-expo"
 
 import { Toast } from "../components/ui/Toast"
 import { api, TRPCProvider } from "../lib/api"
+import { IS_PRODUCTION } from "../lib/config"
 import { useCheckExpoUpdates } from "../lib/hooks/useCheckExpoUpdates"
 import { useMe } from "../lib/hooks/useMe"
 import { useBackgroundColor } from "../lib/tailwind"
@@ -46,7 +47,6 @@ import { NewSpotLayout } from "./(app)/shared/spots/new/_layout"
 import { AuthLayout } from "./(auth)/_layout"
 import { OnboardingLayout } from "./onboarding/_layout"
 import { type ScreenParamsList } from "./router"
-import { IS_PRODUCTION } from "../lib/config"
 
 Sentry.init({
   dsn: "https://db8195777a2bb905e405557687f085b9@o204549.ingest.sentry.io/4506140516024320",

@@ -26,8 +26,8 @@ export function Icon({ icon: Comp, ...props }: Props) {
       ? props.color[colorScheme === "dark" ? "dark" : "light"]
       : colorMap[props.color] || props.color
     : colorScheme === "dark"
-    ? "white"
-    : "black"
+      ? "white"
+      : "black"
 
   return <Comp {...props} color={color} />
 }

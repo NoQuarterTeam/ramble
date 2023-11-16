@@ -14,9 +14,9 @@ import {
   PartyPopper,
   PlugZap,
   ShoppingCart,
+  Sprout,
   Utensils,
   Wrench,
-  Sprout,
 } from "lucide-react-native"
 
 import { type SpotType } from "@ramble/database/types"
