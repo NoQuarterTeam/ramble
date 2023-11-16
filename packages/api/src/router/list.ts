@@ -74,7 +74,8 @@ export const listRouter = createTRPCRouter({
     await fetchAndJoinSpotImages(ctx.prisma, spots)
 
     if (spots.length === 0) return { list, spots }
-    if (spots.length === 1) return { list, spots, center: [spots[0].longitude, spots[0].latitude] as [number, number] }
+
+    if (spots[0]) return { list, spots, center: [spots[0].longitude, spots[0].latitude] as [number, number] }
     const spotCoords = spots.map((spot) => [spot.longitude, spot.latitude])
 
     const line = lineString(spotCoords)
