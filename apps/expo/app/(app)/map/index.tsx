@@ -3,7 +3,6 @@ import { Modal, Switch, TouchableOpacity, useColorScheme, View } from "react-nat
 import Mapbox, { Camera, type MapView as MapType, MarkerView, RasterLayer, RasterSource } from "@rnmapbox/maps"
 import { useQuery } from "@tanstack/react-query"
 import * as Location from "expo-location"
-import { StatusBar } from "expo-status-bar"
 import { CloudRain, Layers, MountainSnow, Navigation, PlusCircle, Settings2 } from "lucide-react-native"
 import * as Sentry from "sentry-expo"
 
@@ -189,7 +188,6 @@ export function MapScreen() {
   const [preferences, setPreferences, isReady] = usePreferences()
   return (
     <View className="flex-1">
-      {preferences.mapStyleSatellite && <StatusBar style="light" />}
       <RegisterCheck />
       <FeedbackCheck />
       <Mapbox.MapView
