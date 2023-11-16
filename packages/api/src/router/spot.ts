@@ -36,11 +36,9 @@ export const spotRouter = createTRPCRouter({
       const spots = await ctx.prisma.spot.findMany({
         select: { id: true, latitude: true, longitude: true, type: true },
         where: {
-          ...publicSpotWhereClause(ctx.user?.id),
-          verifiedAt: isUnverified ? undefined : { not: { equals: null } },
-          isPetFriendly: isPetFriendly ? { equals: true } : undefined,
           latitude: { gt: coords.minLat, lt: coords.maxLat },
           longitude: { gt: coords.minLng, lt: coords.maxLng },
+          verifiedAt: isUnverified ? undefined : { not: { equals: null } },
           type: types
             ? typeof types === "string"
               ? { equals: types as SpotType }
@@ -48,6 +46,8 @@ export const spotRouter = createTRPCRouter({
                 ? { in: types as SpotType[] }
                 : { in: defaultTypes }
             : { in: defaultTypes },
+          ...publicSpotWhereClause(ctx.user?.id),
+          isPetFriendly: isPetFriendly ? { equals: true } : undefined,
         },
         orderBy: { verifiedAt: "desc" },
         take: 8000,
@@ -111,10 +111,10 @@ export const spotRouter = createTRPCRouter({
           LEFT JOIN
             ListSpot ON Spot.id = ListSpot.spotId
           WHERE
-            Spot.verifiedAt IS NOT NULL AND ${publicSpotWhereClauseRaw(ctx.user?.id)} AND Spot.type IN (${Prisma.join([
+            Spot.verifiedAt IS NOT NULL AND Spot.type IN (${Prisma.join([
               SpotType.CAMPING,
               SpotType.FREE_CAMPING,
-            ])})
+            ])}) AND ${publicSpotWhereClauseRaw(ctx.user?.id)} 
           GROUP BY
             Spot.id
           ${ORDER_BY}
