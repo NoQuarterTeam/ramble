@@ -161,6 +161,8 @@ export default function MapView() {
   //   }
   // }, [theme])
 
+  const preferences = usePreferences()
+
   return (
     <div className="h-nav-screen relative w-screen overflow-hidden">
       {!noMap && (
@@ -179,9 +181,11 @@ export default function MapView() {
           initialViewState={initialViewState}
           attributionControl={false}
           mapStyle={
-            theme === "dark"
-              ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
-              : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
+            preferences.mapStyleSatellite
+              ? "mapbox://styles/jclackett/clp122bar007z01qu21kc8h4g"
+              : theme === "dark"
+                ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
+                : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
           }
           // mapStyle={"mapbox://styles/mapbox/standard-beta"}
         >
@@ -221,10 +225,10 @@ function ClusterMarker(props: MarkerProps) {
             props.point.properties.point_count > 150
               ? "sq-20"
               : props.point.properties.point_count > 75
-              ? "sq-16"
-              : props.point.properties.point_count > 10
-              ? "sq-12"
-              : "sq-8",
+                ? "sq-16"
+                : props.point.properties.point_count > 10
+                  ? "sq-12"
+                  : "sq-8",
           )}
         >
           <p className="text-center text-sm">{props.point.properties.point_count_abbreviated}</p>
