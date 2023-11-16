@@ -288,11 +288,7 @@ export function SpotDetailScreen() {
             activeOpacity={0.8}
             className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
           >
-            <Icon
-              icon={Heart}
-              size={20}
-              fill={data.listSpots && data.listSpots.length > 0 ? (isDark ? "white" : "black") : undefined}
-            />
+            <Icon icon={Heart} size={20} fill={spot.isLiked ? (isDark ? "white" : "black") : "transparent"} />
           </TouchableOpacity>
         </View>
       </View>
