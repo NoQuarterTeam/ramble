@@ -10,6 +10,7 @@ import { Text } from "../../../../../components/ui/Text"
 import { api, type RouterOutputs } from "../../../../../lib/api"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { useParams } from "../../../../router"
+import { Spinner } from "../../../../../components/ui/Spinner"
 
 export function SaveSpotScreen() {
   const {
@@ -25,7 +26,11 @@ export function SaveSpotScreen() {
     )
   return (
     <ModalView title="save to list">
-      {isLoading ? null : (
+      {isLoading ? (
+        <View className="flex flex-row items-center justify-center pt-6">
+          <Spinner />
+        </View>
+      ) : (
         <FlashList
           showsVerticalScrollIndicator={false}
           estimatedItemSize={100}
@@ -57,9 +62,11 @@ function SaveableListItem({ list, spotId }: Props) {
 
   const { mutate } = api.list.saveToList.useMutation({
     onSuccess: () => {
-      utils.list.allByUserWithSavedSpots.refetch()
-      utils.spot.detail.refetch({ id: spotId })
-      utils.spot.mapPreview.refetch({ id: spotId })
+      void utils.list.allByUserWithSavedSpots.refetch()
+      void utils.list.detail.refetch()
+      void utils.list.spotClusters.refetch()
+      void utils.spot.detail.refetch({ id: spotId })
+      void utils.spot.mapPreview.refetch({ id: spotId })
     },
   })
   const colorScheme = useColorScheme()
@@ -83,7 +90,7 @@ function SaveableListItem({ list, spotId }: Props) {
         </View>
         <Text className="text-base">{list.description}</Text>
       </View>
-      <Icon icon={Heart} size={20} fill={isSaved ? (isDark ? "white" : "black") : undefined} />
+      <Icon icon={Heart} size={20} fill={isSaved ? (isDark ? "white" : "black") : "transparent"} />
     </TouchableOpacity>
   )
 }

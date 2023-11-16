@@ -17,20 +17,18 @@ import { generateBlurHash } from "../services/generateBlurHash.server"
 import { geocodeCoords } from "../services/geocode.server"
 import { publicSpotWhereClause, publicSpotWhereClauseRaw } from "../shared/spot.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
+import { clusterSchema } from "../lib/clusters"
 
 export const spotRouter = createTRPCRouter({
   clusters: publicProcedure
     .input(
-      z.object({
-        zoom: z.number(),
-        minLat: z.number(),
-        maxLat: z.number(),
-        minLng: z.number(),
-        maxLng: z.number(),
-        types: z.array(z.string()).or(z.string()).optional(),
-        isPetFriendly: z.boolean().nullish(),
-        isUnverified: z.boolean().nullish(),
-      }),
+      z
+        .object({
+          types: z.array(z.string()).or(z.string()).optional(),
+          isPetFriendly: z.boolean().nullish(),
+          isUnverified: z.boolean().nullish(),
+        })
+        .and(clusterSchema),
     )
     .query(async ({ ctx, input }) => {
       const { zoom, types, isUnverified, isPetFriendly, ...coords } = input
@@ -47,8 +45,8 @@ export const spotRouter = createTRPCRouter({
             ? typeof types === "string"
               ? { equals: types as SpotType }
               : types.length > 0
-              ? { in: types as SpotType[] }
-              : { in: defaultTypes }
+                ? { in: types as SpotType[] }
+                : { in: defaultTypes }
             : { in: defaultTypes },
         },
         orderBy: { createdAt: "desc" },
@@ -98,8 +96,8 @@ export const spotRouter = createTRPCRouter({
           sort === "latest"
             ? Prisma.sql`Spot.verifiedAt DESC, Spot.id`
             : sort === "saved"
-            ? Prisma.sql`savedCount DESC, Spot.id`
-            : Prisma.sql`rating DESC, Spot.id`
+              ? Prisma.sql`savedCount DESC, Spot.id`
+              : Prisma.sql`rating DESC, Spot.id`
         }
       `
       try {
@@ -177,7 +175,7 @@ export const spotRouter = createTRPCRouter({
     })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
     const rating = await ctx.prisma.review.aggregate({ where: { spotId: input.id }, _avg: { rating: true } })
-    return { ...spot, rating }
+    return { ...spot, isLiked: !!ctx.user && spot.listSpots.length > 0, rating }
   }),
   byUser: publicProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {
     const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })

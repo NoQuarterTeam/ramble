@@ -54,7 +54,7 @@ export function MapScreen() {
   const theme = useColorScheme()
   const isDark = theme === "dark"
   const [isFetching, setIsFetching] = React.useState(false)
-  const queryClient = api.useUtils()
+  const utils = api.useUtils()
 
   React.useEffect(() => {
     ;(async () => {
@@ -96,7 +96,7 @@ export function MapScreen() {
         maxLat: properties[0][1],
         zoom: zoom || 13,
       }
-      const data = await queryClient.spot.clusters.fetch(input)
+      const data = await utils.spot.clusters.fetch(input)
       setClusters(data)
     } catch {
       toast({ title: "Error fetching spots", type: "error" })
@@ -116,7 +116,7 @@ export function MapScreen() {
         maxLat: properties.bounds.ne[1] || 0,
         zoom: properties.zoom,
       }
-      const data = await queryClient.spot.clusters.fetch(input)
+      const data = await utils.spot.clusters.fetch(input)
       setClusters(data)
     } catch {
       toast({ title: "Error fetching spots", type: "error" })
@@ -221,8 +221,11 @@ export function MapScreen() {
         {markers}
       </Mapbox.MapView>
 
-      {isFetching && !!!clusters && (
-        <View className="absolute left-4 top-10 flex flex-col items-center justify-center rounded-full bg-white p-2 dark:bg-gray-800">
+      {isFetching && (
+        <View
+          pointerEvents="none"
+          className="absolute left-4 top-10 flex flex-col items-center justify-center rounded-full bg-white p-2 dark:bg-gray-800"
+        >
           <Spinner />
         </View>
       )}
@@ -236,7 +239,7 @@ export function MapScreen() {
         <Icon icon={PlusCircle} size={20} color="white" />
       </TouchableOpacity>
 
-      <View className="absolute bottom-3 left-3 flex space-y-2">
+      <View pointerEvents="box-none" className="absolute bottom-3 left-3 flex space-y-2">
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={mapLayerModalProps.onOpen}

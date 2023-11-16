@@ -50,28 +50,6 @@ export function SpotsScreen() {
         </TouchableOpacity>
       }
     >
-      {sortProps.isOpen && (
-        <TouchableOpacity
-          activeOpacity={1}
-          onPress={sortProps.onClose}
-          className="absolute inset-0 z-10 px-4 pt-[100px]"
-          style={{ width, height }}
-        >
-          <View className="rounded-xs w-[200px] bg-white px-4 py-2 shadow-md dark:bg-gray-950">
-            {Object.entries(SORT_OPTIONS).map(([key, label]) => (
-              <TouchableOpacity
-                key={key}
-                onPress={() => {
-                  setSort(key as keyof typeof SORT_OPTIONS)
-                  sortProps.onClose()
-                }}
-              >
-                <Text className={join("py-2 text-lg", sort === key && "underline")}>{label}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </TouchableOpacity>
-      )}
       {isLoading ? (
         <View className="flex items-center justify-center pt-16">
           <Spinner />
@@ -93,6 +71,28 @@ export function SpotsScreen() {
             </View>
           )}
         />
+      )}
+      {sortProps.isOpen && (
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={sortProps.onClose}
+          className="absolute inset-0 z-10 px-4 pt-[100px]"
+          style={{ width, height }}
+        >
+          <View className="rounded-xs w-[200px] bg-white px-4 py-2 shadow-md dark:bg-gray-950">
+            {Object.entries(SORT_OPTIONS).map(([key, label]) => (
+              <TouchableOpacity
+                key={key}
+                onPress={() => {
+                  setSort(key as keyof typeof SORT_OPTIONS)
+                  sortProps.onClose()
+                }}
+              >
+                <Text className={join("py-2 text-lg", sort === key && "underline")}>{label}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </TouchableOpacity>
       )}
     </TabView>
   )

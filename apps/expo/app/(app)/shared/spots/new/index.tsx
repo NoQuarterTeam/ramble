@@ -94,7 +94,10 @@ export function NewSpotLocationScreen() {
             <Icon icon={CircleDot} size={30} color="white" />
           </View>
 
-          <View className="absolute bottom-12 left-5 right-5 flex flex-row items-center justify-between space-y-2">
+          <View
+            pointerEvents="box-none"
+            className="absolute bottom-12 left-5 right-5 flex flex-row items-center justify-between space-y-2"
+          >
             <View className="w-12" />
             {coords && (
               <Button
