@@ -266,7 +266,7 @@ export function MapScreen() {
         <Icon icon={Navigation} size={20} color="black" />
       </TouchableOpacity>
 
-      <SpotPreview id={activeSpotId} onClose={() => setActiveSpotId(null)} />
+      {activeSpotId && <SpotPreview id={activeSpotId} onClose={() => setActiveSpotId(null)} />}
       <Modal
         animationType="slide"
         presentationStyle="formSheet"
