@@ -1,6 +1,14 @@
 import * as React from "react"
-import { Modal, Switch, TouchableOpacity, useColorScheme, View } from "react-native"
-import Mapbox, { Camera, type MapView as MapType, MarkerView, RasterLayer, RasterSource } from "@rnmapbox/maps"
+import { Modal, Switch, TouchableOpacity, View } from "react-native"
+import {
+  Camera,
+  type MapView as MapType,
+  MarkerView,
+  RasterLayer,
+  RasterSource,
+  UserLocation,
+  type MapState,
+} from "@rnmapbox/maps"
 import { useQuery } from "@tanstack/react-query"
 import * as Location from "expo-location"
 import { CloudRain, Layers, MountainSnow, Navigation, PlusCircle, Settings2 } from "lucide-react-native"
@@ -25,8 +33,7 @@ import { usePreferences } from "../../../lib/hooks/usePreferences"
 import { useRouter } from "../../router"
 import { type Filters, initialFilters, MapFilters } from "./MapFilters"
 import { SpotPreview } from "./SpotPreview"
-
-Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
+import { Map } from "../../../components/Map"
 
 type Cluster = RouterOutputs["spot"]["clusters"][number]
 
@@ -51,8 +58,6 @@ export function MapScreen() {
   })
   const camera = React.useRef<Camera>(null)
   const mapRef = React.useRef<MapType>(null)
-  const theme = useColorScheme()
-  const isDark = theme === "dark"
   const [isFetching, setIsFetching] = React.useState(false)
   const utils = api.useUtils()
 
@@ -104,7 +109,7 @@ export function MapScreen() {
     }
   }
 
-  const onMapMove = async ({ properties }: Mapbox.MapState) => {
+  const onMapMove = async ({ properties }: MapState) => {
     try {
       setIsFetching(true)
       if (!properties.bounds) return
@@ -190,26 +195,8 @@ export function MapScreen() {
     <View className="flex-1">
       <RegisterCheck />
       <FeedbackCheck />
-      <Mapbox.MapView
-        onLayout={handleSetUserLocation}
-        className="flex-1"
-        logoEnabled={false}
-        compassEnabled
-        onMapIdle={onMapMove}
-        onPress={() => setActiveSpotId(null)}
-        ref={mapRef}
-        pitchEnabled={false}
-        compassFadeWhenNorth
-        scaleBarEnabled={false}
-        styleURL={
-          preferences.mapStyleSatellite
-            ? "mapbox://styles/jclackett/clp122bar007z01qu21kc8h4g"
-            : isDark
-              ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
-              : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
-        }
-      >
-        <Mapbox.UserLocation />
+      <Map onLayout={handleSetUserLocation} onMapIdle={onMapMove} onPress={() => setActiveSpotId(null)} ref={mapRef}>
+        <UserLocation />
 
         <RainRadar shouldRender={isReady && preferences.mapLayerRain} />
         <Camera
@@ -219,7 +206,7 @@ export function MapScreen() {
         />
 
         {markers}
-      </Mapbox.MapView>
+      </Map>
 
       {isFetching && (
         <View

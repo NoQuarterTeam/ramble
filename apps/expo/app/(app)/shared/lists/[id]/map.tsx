@@ -1,11 +1,11 @@
-import Mapbox, { Camera, MarkerView, type MapView as MapType } from "@rnmapbox/maps"
+import { Camera, MarkerView, type MapView as MapType, type MapState, UserLocation } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import * as React from "react"
-import { TouchableOpacity, View, useColorScheme } from "react-native"
+import { TouchableOpacity, View } from "react-native"
 import { SpotMarker } from "../../../../../components/SpotMarker"
 import { Button } from "../../../../../components/ui/Button"
 import { RouterOutputs, api } from "../../../../../lib/api"
-import { usePreferences } from "../../../../../lib/hooks/usePreferences"
+
 import { useParams, useRouter } from "../../../../router"
 import { Spinner } from "../../../../../components/ui/Spinner"
 import { Navigation } from "lucide-react-native"
@@ -15,6 +15,7 @@ import { Text } from "../../../../../components/ui/Text"
 import { SpotType } from "@ramble/database/types"
 import { join } from "@ramble/shared"
 import { toast } from "../../../../../components/ui/Toast"
+import { Map } from "../../../../../components/Map"
 
 // todo: need to figure out how to get this to work using actual endpoint
 type Cluster = RouterOutputs["spot"]["clusters"][number]
@@ -25,8 +26,7 @@ export function ListDetailMapScreen() {
   const [isFetching, setIsFetching] = React.useState(true)
   const camera = React.useRef<Camera>(null)
   const mapRef = React.useRef<MapType>(null)
-  const theme = useColorScheme()
-  const isDark = theme === "dark"
+
   const navigate = useRouter()
 
   const handleSetUserLocation = async () => {
@@ -53,12 +53,10 @@ export function ListDetailMapScreen() {
     })()
   }, [])
 
-  const [preferences] = usePreferences()
-
   const [activeSpotId, setActiveSpotId] = React.useState<string | null>(null)
 
   const utils = api.useUtils()
-  const onMapMove = async ({ properties }: Mapbox.MapState) => {
+  const onMapMove = async ({ properties }: MapState) => {
     try {
       setIsFetching(true)
       if (!properties.bounds) return
@@ -139,25 +137,8 @@ export function ListDetailMapScreen() {
 
   return (
     <View className="relative flex-1">
-      <Mapbox.MapView
-        className="flex-1"
-        logoEnabled={false}
-        compassEnabled
-        onMapIdle={onMapMove}
-        onPress={() => setActiveSpotId(null)}
-        ref={mapRef}
-        pitchEnabled={false}
-        compassFadeWhenNorth
-        scaleBarEnabled={false}
-        styleURL={
-          preferences.mapStyleSatellite
-            ? "mapbox://styles/jclackett/clp122bar007z01qu21kc8h4g"
-            : isDark
-              ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
-              : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
-        }
-      >
-        <Mapbox.UserLocation />
+      <Map onMapIdle={onMapMove} onPress={() => setActiveSpotId(null)} ref={mapRef}>
+        <UserLocation />
         {markers}
 
         <Camera
@@ -180,7 +161,7 @@ export function ListDetailMapScreen() {
                 : undefined
           }
         />
-      </Mapbox.MapView>
+      </Map>
       {activeSpotId && <SpotPreview id={activeSpotId} onClose={() => setActiveSpotId(null)} />}
       <View pointerEvents="box-none" className="absolute bottom-4 flex w-full flex-row items-center justify-center">
         <Button

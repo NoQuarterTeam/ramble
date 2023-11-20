@@ -1,6 +1,6 @@
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
-import Mapbox, { Camera, type MapView as MapType } from "@rnmapbox/maps"
+import { Camera, UserLocation, type MapView as MapType, type MapState } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { CircleDot, Navigation } from "lucide-react-native"
 
@@ -13,6 +13,7 @@ import { toast } from "../../../../../components/ui/Toast"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
+import { Map } from "../../../../../components/Map"
 
 export function NewSpotLocationScreen() {
   const [coords, setCoords] = React.useState<number[] | null>(null)
@@ -52,7 +53,7 @@ export function NewSpotLocationScreen() {
       console.log("oops -  setting location")
     }
   }
-  const onMapMove = ({ properties }: Mapbox.MapState) => setCoords(properties.center)
+  const onMapMove = ({ properties }: MapState) => setCoords(properties.center)
 
   if (!me)
     return (
@@ -65,18 +66,13 @@ export function NewSpotLocationScreen() {
     <NewSpotModalView shouldRenderToast title="new spot" canGoBack={false}>
       {!isLoadingLocation && (
         <>
-          <Mapbox.MapView
+          <Map
             className="rounded-xs mb-10 mt-4 flex-1 overflow-hidden"
-            logoEnabled={false}
-            compassEnabled
             onMapIdle={onMapMove}
             ref={mapRef}
-            pitchEnabled={false}
-            compassFadeWhenNorth
-            scaleBarEnabled={false}
-            styleURL="mapbox://styles/mapbox/satellite-v9"
+            styleURL="mapbox://styles/jclackett/clp122bar007z01qu21kc8h4g"
           >
-            <Mapbox.UserLocation />
+            <UserLocation />
 
             <Camera
               ref={camera}
@@ -86,7 +82,7 @@ export function NewSpotLocationScreen() {
                 zoomLevel: 14,
               }}
             />
-          </Mapbox.MapView>
+          </Map>
           <View
             style={{ transform: [{ translateX: -15 }, { translateY: -15 }] }}
             className="absolute left-1/2 top-1/2 flex items-center justify-center"
