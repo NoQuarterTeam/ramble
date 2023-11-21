@@ -68,8 +68,8 @@ function FeedbackForm({ onClose }: { onClose: () => void }) {
     ? type === "IDEA"
       ? "What could make Ramble better?"
       : type === "ISSUE"
-      ? "What seems to be the problem?"
-      : "Let us know your thoughts"
+        ? "What seems to be the problem?"
+        : "Let us know your thoughts"
     : "What kind of feedback do you have?"
 
   return (

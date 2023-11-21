@@ -1,21 +1,22 @@
-import { Camera, MarkerView, type MapView as MapType, type MapState, UserLocation } from "@rnmapbox/maps"
-import * as Location from "expo-location"
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
+import { Camera, type MapState, type MapView as MapType, MarkerView, UserLocation } from "@rnmapbox/maps"
+import * as Location from "expo-location"
+import { Navigation } from "lucide-react-native"
+
+import { type SpotType } from "@ramble/database/types"
+import { join } from "@ramble/shared"
+
+import { Icon } from "../../../../../components/Icon"
+import { Map } from "../../../../../components/Map"
 import { SpotMarker } from "../../../../../components/SpotMarker"
 import { Button } from "../../../../../components/ui/Button"
-import { RouterOutputs, api } from "../../../../../lib/api"
-
-import { useParams, useRouter } from "../../../../router"
 import { Spinner } from "../../../../../components/ui/Spinner"
-import { Navigation } from "lucide-react-native"
-import { Icon } from "../../../../../components/Icon"
-import { SpotPreview } from "../../../map/SpotPreview"
 import { Text } from "../../../../../components/ui/Text"
-import { SpotType } from "@ramble/database/types"
-import { join } from "@ramble/shared"
 import { toast } from "../../../../../components/ui/Toast"
-import { Map } from "../../../../../components/Map"
+import { api, type RouterOutputs } from "../../../../../lib/api"
+import { useParams, useRouter } from "../../../../router"
+import { SpotPreview } from "../../../map/SpotPreview"
 
 // todo: need to figure out how to get this to work using actual endpoint
 type Cluster = RouterOutputs["spot"]["clusters"][number]

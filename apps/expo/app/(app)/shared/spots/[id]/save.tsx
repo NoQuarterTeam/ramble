@@ -6,11 +6,11 @@ import { Heart, Lock } from "lucide-react-native"
 import { Icon } from "../../../../../components/Icon"
 import { LoginPlaceholder } from "../../../../../components/LoginPlaceholder"
 import { ModalView } from "../../../../../components/ui/ModalView"
+import { Spinner } from "../../../../../components/ui/Spinner"
 import { Text } from "../../../../../components/ui/Text"
 import { api, type RouterOutputs } from "../../../../../lib/api"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { useParams } from "../../../../router"
-import { Spinner } from "../../../../../components/ui/Spinner"
 
 export function SaveSpotScreen() {
   const {

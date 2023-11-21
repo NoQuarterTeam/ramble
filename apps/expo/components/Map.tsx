@@ -1,7 +1,9 @@
-import Mapbox from "@rnmapbox/maps"
-import { usePreferences } from "../lib/hooks/usePreferences"
 import { useColorScheme } from "react-native"
+import Mapbox from "@rnmapbox/maps"
+
 import { merge } from "@ramble/shared"
+
+import { usePreferences } from "../lib/hooks/usePreferences"
 
 Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw")
 

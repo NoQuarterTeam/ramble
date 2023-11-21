@@ -2,12 +2,12 @@ import * as React from "react"
 import { Modal, Switch, TouchableOpacity, View } from "react-native"
 import {
   Camera,
+  type MapState,
   type MapView as MapType,
   MarkerView,
   RasterLayer,
   RasterSource,
   UserLocation,
-  type MapState,
 } from "@rnmapbox/maps"
 import { useQuery } from "@tanstack/react-query"
 import * as Location from "expo-location"
@@ -20,6 +20,7 @@ import colors from "@ramble/tailwind-config/src/colors"
 
 import { FeedbackCheck } from "../../../components/FeedbackCheck"
 import { Icon } from "../../../components/Icon"
+import { Map } from "../../../components/Map"
 import { RegisterCheck } from "../../../components/RegisterCheck"
 import { SpotMarker } from "../../../components/SpotMarker"
 import { ModalView } from "../../../components/ui/ModalView"
@@ -33,7 +34,6 @@ import { usePreferences } from "../../../lib/hooks/usePreferences"
 import { useRouter } from "../../router"
 import { type Filters, initialFilters, MapFilters } from "./MapFilters"
 import { SpotPreview } from "./SpotPreview"
-import { Map } from "../../../components/Map"
 
 type Cluster = RouterOutputs["spot"]["clusters"][number]
 

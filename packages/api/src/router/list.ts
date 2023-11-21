@@ -1,17 +1,17 @@
 import { TRPCError } from "@trpc/server"
+import bbox from "@turf/bbox"
+import { lineString } from "@turf/helpers"
+import Supercluster from "supercluster"
 import { z } from "zod"
 
+import { type SpotType } from "@ramble/database/types"
 import { listSchema } from "@ramble/shared"
 import { type SpotItemWithStatsAndImage } from "@ramble/shared"
 
+import { clusterSchema } from "../lib/clusters"
 import { fetchAndJoinSpotImages } from "../lib/models/spot"
 import { publicSpotWhereClauseRaw } from "../shared/spot.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
-import { lineString } from "@turf/helpers"
-import bbox from "@turf/bbox"
-import Supercluster from "supercluster"
-import { SpotType } from "@ramble/database/types"
-import { clusterSchema } from "../lib/clusters"
 
 type SpotItemWithStatsAndCoords = SpotItemWithStatsAndImage & { longitude: number; latitude: number }
 

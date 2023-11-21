@@ -1,6 +1,6 @@
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
-import { Camera, UserLocation, type MapView as MapType, type MapState } from "@rnmapbox/maps"
+import { Camera, type MapState, type MapView as MapType, UserLocation } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { CircleDot, Navigation } from "lucide-react-native"
 
@@ -8,12 +8,12 @@ import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
 
 import { Icon } from "../../../../../components/Icon"
 import { LoginPlaceholder } from "../../../../../components/LoginPlaceholder"
+import { Map } from "../../../../../components/Map"
 import { Button } from "../../../../../components/ui/Button"
 import { toast } from "../../../../../components/ui/Toast"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
-import { Map } from "../../../../../components/Map"
 
 export function NewSpotLocationScreen() {
   const [coords, setCoords] = React.useState<number[] | null>(null)

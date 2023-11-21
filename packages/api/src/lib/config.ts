@@ -8,5 +8,5 @@ export const IS_DEV = !VERCEL_ENV
 export const FULL_WEB_URL = IS_DEV
   ? "http://localhost:3000"
   : IS_PREVIEW
-  ? `https://${VERCEL_GIT_COMMIT_REF === "develop" ? "dev.ramble.guide" : VERCEL_URL}`
-  : `https://ramble.guide`
+    ? `https://${VERCEL_GIT_COMMIT_REF === "develop" ? "dev.ramble.guide" : VERCEL_URL}`
+    : `https://ramble.guide`

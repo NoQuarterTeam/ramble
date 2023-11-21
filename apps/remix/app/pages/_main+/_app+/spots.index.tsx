@@ -1,8 +1,8 @@
-import * as React from "react"
-import { useLoaderData, useSearchParams } from "@remix-run/react"
 import "mapbox-gl/dist/mapbox-gl.css"
 
-import Map, { GeolocateControl, LngLatLike, MapRef, Marker, NavigationControl } from "react-map-gl"
+import * as React from "react"
+import Map, { GeolocateControl, type LngLatLike, type MapRef, Marker, NavigationControl } from "react-map-gl"
+import { useLoaderData, useSearchParams } from "@remix-run/react"
 import { MapIcon, Settings2 } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
@@ -10,21 +10,21 @@ import { promiseHash } from "remix-utils/promise"
 
 import { publicSpotWhereClauseRaw } from "@ramble/api"
 import { Prisma, SpotType } from "@ramble/database/types"
-import { type SpotItemWithStatsAndImage, useDisclosure, join, INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE, join, type SpotItemWithStatsAndImage, useDisclosure } from "@ramble/shared"
 
 import { Button, IconButton, Modal, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { fetchAndJoinSpotImages, SPOT_TYPE_OPTIONS, STAY_SPOT_TYPE_OPTIONS } from "~/lib/models/spot"
+import { useTheme } from "~/lib/theme"
+import { bbox, lineString } from "~/lib/vendor/turf.server"
 import type { LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
 import { getUserSession } from "~/services/session/session.server"
 
 import { PageContainer } from "../../../components/PageContainer"
 import { SpotItem } from "./components/SpotItem"
-import { useTheme } from "~/lib/theme"
 import { SpotMarker } from "./components/SpotMarker"
-import { bbox, lineString } from "~/lib/vendor/turf.server"
 
 export const config = {
   // runtime: "edge",

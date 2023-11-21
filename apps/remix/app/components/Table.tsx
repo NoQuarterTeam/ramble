@@ -58,8 +58,8 @@ export function Table<T>({
                               orderBy && orderBy !== header.column.id
                                 ? order || "desc"
                                 : order === "asc" || !order
-                                ? "desc"
-                                : "asc",
+                                  ? "desc"
+                                  : "asc",
                           })
                           setSearchParams(newSearchParams)
                         }

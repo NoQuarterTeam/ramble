@@ -12,12 +12,12 @@ import {
   spotSchemaWithoutType,
 } from "@ramble/shared"
 
+import { clusterSchema } from "../lib/clusters"
 import { fetchAndJoinSpotImages } from "../lib/models/spot"
 import { generateBlurHash } from "../services/generateBlurHash.server"
 import { geocodeCoords } from "../services/geocode.server"
 import { publicSpotWhereClause, publicSpotWhereClauseRaw } from "../shared/spot.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
-import { clusterSchema } from "../lib/clusters"
 
 export const spotRouter = createTRPCRouter({
   clusters: publicProcedure
