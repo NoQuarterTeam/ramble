@@ -77,7 +77,6 @@
     "tailwindcss-radix": "2.8.0",
     "turbo": "1.10.16",
     "use-onclickoutside": "0.4.1",
-    "uuid": "3.4.0",
     "zod": "3.22.4",
     "zodix": "0.4.4"
   },
