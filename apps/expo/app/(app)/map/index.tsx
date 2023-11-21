@@ -34,6 +34,7 @@ import { usePreferences } from "../../../lib/hooks/usePreferences"
 import { useRouter } from "../../router"
 import { type Filters, initialFilters, MapFilters } from "./MapFilters"
 import { SpotPreview } from "./SpotPreview"
+import { isAndroid } from "../../../lib/device"
 
 type Cluster = RouterOutputs["spot"]["clusters"][number]
 
@@ -208,7 +209,7 @@ export function MapScreen() {
         {markers}
       </Map>
 
-      {isFetching && (
+      {((isAndroid && isFetching) || (!isAndroid && isFetching && !!!clusters)) && (
         <View
           pointerEvents="none"
           className="absolute left-4 top-10 flex flex-col items-center justify-center rounded-full bg-white p-2 dark:bg-gray-800"
