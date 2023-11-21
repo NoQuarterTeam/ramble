@@ -21,7 +21,7 @@
     "@ramble/emails": "workspace:*",
     "@ramble/shared": "workspace:*",
     "@slack/web-api": "^6.9.1",
-    "@trpc/server": "10.43.7",
+    "@trpc/server": "10.44.0",
     "@turf/bbox": "^6.5.0",
     "@turf/center": "^6.5.0",
     "@turf/helpers": "^6.5.0",

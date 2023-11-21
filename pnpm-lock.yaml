@@ -96,14 +96,14 @@ importers:
         specifier: 4.36.1
         version: 4.36.1(react-dom@18.2.0)(react-native@0.72.6)(react@18.2.0)
       '@trpc/client':
-        specifier: 10.43.7
-        version: 10.43.7(@trpc/server@10.43.7)
+        specifier: 10.44.0
+        version: 10.44.0(@trpc/server@10.44.0)
       '@trpc/react-query':
-        specifier: 10.43.7
-        version: 10.43.7(@tanstack/react-query@4.36.1)(@trpc/client@10.43.7)(@trpc/server@10.43.7)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 10.44.0
+        version: 10.44.0(@tanstack/react-query@4.36.1)(@trpc/client@10.44.0)(@trpc/server@10.44.0)(react-dom@18.2.0)(react@18.2.0)
       '@trpc/server':
-        specifier: 10.43.7
-        version: 10.43.7
+        specifier: 10.44.0
+        version: 10.44.0
       class-variance-authority:
         specifier: 0.7.0
         version: 0.7.0
@@ -322,8 +322,8 @@ importers:
         specifier: 8.10.7
         version: 8.10.7(react-dom@18.2.0)(react@18.2.0)
       '@trpc/server':
-        specifier: 10.43.7
-        version: 10.43.7
+        specifier: 10.44.0
+        version: 10.44.0
       '@turf/bbox':
         specifier: 6.5.0
         version: 6.5.0(patch_hash=llmcs46qko6dssxqwpy2iedvzi)
@@ -388,8 +388,8 @@ importers:
         specifier: 0.2.0
         version: 0.2.0
       posthog-js:
-        specifier: 1.92.0
-        version: 1.92.0
+        specifier: 1.92.1
+        version: 1.92.1
       pretty-cache-header:
         specifier: 1.0.0
         version: 1.0.0
@@ -548,8 +548,8 @@ importers:
         specifier: ^6.9.1
         version: 6.9.1
       '@trpc/server':
-        specifier: 10.43.7
-        version: 10.43.7
+        specifier: 10.44.0
+        version: 10.44.0
       '@turf/bbox':
         specifier: ^6.5.0
         version: 6.5.0(patch_hash=llmcs46qko6dssxqwpy2iedvzi)
@@ -6848,32 +6848,32 @@ packages:
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
     dev: true
 
-  /@trpc/client@10.43.7(@trpc/server@10.43.7):
-    resolution: {integrity: sha512-dnZdHGrN6jZ6CO+stgGsM5M+A1iFYh/W5iuNs7O3sm0jX5I2/U26dSQrMuCu2PZxhl3MUC/i/PU4G8uS8/vcOw==}
+  /@trpc/client@10.44.0(@trpc/server@10.44.0):
+    resolution: {integrity: sha512-6PAL5rXMGTMlsKKGW9aBsij8XFBbLUbOCJ7jNVX3IripGqiQG3b/VJyTsHRWkss/oaz/sZMOn62amhfev1UVfg==}
     peerDependencies:
-      '@trpc/server': 10.43.7
+      '@trpc/server': 10.44.0
     dependencies:
-      '@trpc/server': 10.43.7
+      '@trpc/server': 10.44.0
     dev: false
 
-  /@trpc/react-query@10.43.7(@tanstack/react-query@4.36.1)(@trpc/client@10.43.7)(@trpc/server@10.43.7)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-JG73mbFhVSOHk9jpNKJiaWjJ4j7wxGL4EwzUF0Oqo22ilLgPjDGBCtl1A6MvIO1Tb8mfmSa3kaoFEmP1XVn4kA==}
+  /@trpc/react-query@10.44.0(@tanstack/react-query@4.36.1)(@trpc/client@10.44.0)(@trpc/server@10.44.0)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-0l9mar1kSamm/sePnHOuhX8v9LFQbgpVJ2U2s/hWnScNexBFzV03SpCjLAkXtiIapw5lkIG0QlveZXu4G86Xnw==}
     peerDependencies:
       '@tanstack/react-query': ^4.18.0
-      '@trpc/client': 10.43.7
-      '@trpc/server': 10.43.7
+      '@trpc/client': 10.44.0
+      '@trpc/server': 10.44.0
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
     dependencies:
       '@tanstack/react-query': 4.36.1(react-dom@18.2.0)(react-native@0.72.6)(react@18.2.0)
-      '@trpc/client': 10.43.7(@trpc/server@10.43.7)
-      '@trpc/server': 10.43.7
+      '@trpc/client': 10.44.0(@trpc/server@10.44.0)
+      '@trpc/server': 10.44.0
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@trpc/server@10.43.7:
-    resolution: {integrity: sha512-i02zxH9ypeSrld6CAYdqwDJEAcnWvTZ8k3f5vWoi5dB7Qxw6dyxyLQY4ioV5D9cRJk6kBUJqEWc1lK0/SwUncg==}
+  /@trpc/server@10.44.0:
+    resolution: {integrity: sha512-QBq/FnjyU6a7CAl9p2dv6kApn2i8MFuPt8uVLyGr0oa2aFv31rHaX0m+ibdsviE/3fOJIC8EUOfMYOJma5uK2w==}
     engines: {node: '>=18.0.0'}
     dev: false
 
@@ -15297,8 +15297,8 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.0.2
 
-  /posthog-js@1.92.0:
-    resolution: {integrity: sha512-87bZ/qwBbIqvkIV4YYn65oIPEsRcWihA3jX7WV33LvZWaU1InlE6cwj95SleIVLiND4Ofm+cKXZeWwcRnrXkKA==}
+  /posthog-js@1.92.1:
+    resolution: {integrity: sha512-xtuTfM/acfDauiEfIdKF6d911KUZQ7RLii2COAYEoPWr3cVUFoNUoRQz9QJvgDlV2j22Zwl+mnXacUeua+Yi1A==}
     dependencies:
       fflate: 0.4.8
     dev: false
