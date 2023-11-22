@@ -78,8 +78,8 @@ export default function Home() {
         </div>
       </div>
       <div className="flex justify-end px-6">
-        <a href="https://unsplash.com/@danieljschwarz" target="_blank" rel="noreferrer noopener" className="hover:opacity-80">
-          Photos by: Daniel J. Schwarz
+        <a href="https://unsplash.com/@tobiastu" target="_blank" rel="noreferrer noopener" className="hover:opacity-80">
+          Photo by: Tobias Tullius
         </a>
       </div>
       <div className="mx-auto max-w-5xl px-6 py-20 text-center">
@@ -117,13 +117,20 @@ export default function Home() {
             </p>
           </div>
         </div>
-        <img
-          width={500}
-          height={800}
-          alt="mission"
-          src="/landing/mission.avif"
-          className="rounded-xs min-w-full object-cover md:min-w-[40%]"
-        />
+        <div>
+          <img
+            width={500}
+            height={800}
+            alt="mission"
+            src="/landing/mission.avif"
+            className="rounded-xs min-w-full object-cover md:min-w-[40%]"
+          />
+          <div className="flex justify-end px-2">
+            <a href="https://unsplash.com/@danieljschwarz" target="_blank" rel="noreferrer noopener" className="hover:opacity-80">
+              Photo by: Daniel J. Schwarz
+            </a>
+          </div>
+        </div>
       </div>
       <div className="bg-primary-50/5 px-4 py-20 md:py-32">
         <div className="mx-auto max-w-6xl space-y-4">
