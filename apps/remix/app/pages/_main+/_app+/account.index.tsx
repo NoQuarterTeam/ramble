@@ -5,7 +5,7 @@ import { z } from "zod"
 import { generateBlurHash } from "@ramble/api"
 import { join } from "@ramble/shared"
 
-import { Form, FormButton, FormField, ImageField } from "~/components/Form"
+import { Form, FormButton, FormError, FormField, ImageField } from "~/components/Form"
 import { Input, inputStyles, Textarea } from "~/components/ui"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
@@ -31,27 +31,30 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request, { id: true, avatarBlurHash: true, avatar: true })
   const schema = z.object({
-    firstName: z.string().min(1),
-    lastName: z.string().min(1),
-    instagram: NullableFormString,
+    firstName: z.string().min(1).optional(),
+    lastName: z.string().min(1).optional(),
+    instagram: NullableFormString.optional(),
     username: z
       .string()
       .min(2)
-      .refine((username) => !username.trim().includes(" "), "Username can not contain empty spaces"),
-    email: z.string().email(),
-    bio: NullableFormString,
-    avatar: NullableFormString,
+      .refine((username) => !username.trim().includes(" "), "Username can not contain empty spaces")
+      .optional(),
+    email: z.string().email().optional(),
+    bio: NullableFormString.optional(),
+    avatar: NullableFormString.optional(),
   })
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
-  const username = result.data.username.toLowerCase().trim()
-  const existingUsername = await db.user.findFirst({ where: { username, id: { not: { equals: user.id } } } })
-  if (existingUsername) return formError({ formError: "User with this username already exists" })
+  const username = result.data.username?.toLowerCase().trim()
+  if (username) {
+    const existingUsername = await db.user.findFirst({ where: { username, id: { not: { equals: user.id } } } })
+    if (existingUsername) return formError({ formError: "User with this username already exists" })
+  }
   let avatarBlurHash = user.avatarBlurHash
   if (result.data.avatar && result.data.avatar !== user.avatar) {
     avatarBlurHash = await generateBlurHash(result.data.avatar)
   }
-  await db.user.update({ where: { id: user.id }, data: { ...result.data, avatarBlurHash } })
+  await db.user.update({ where: { id: user.id }, data: { ...result.data, username, avatarBlurHash } })
   track("Account updated", { userId: user.id })
   return redirect("/account", request, { flash: { title: "Account updated" } })
 }
@@ -77,10 +80,10 @@ export default function Account() {
         </div>
         <div className="space-y-2">
           <FormField autoCapitalize="none" defaultValue={user.username || ""} name="username" label="Username" />
-
           <ImageField className={join("sq-52", inputStyles())} defaultValue={user.avatar} name="avatar" label="Avatar" />
         </div>
       </div>
+      <FormError />
       <FormButton>Save</FormButton>
     </Form>
   )
