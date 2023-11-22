@@ -1,6 +1,5 @@
 import * as React from "react"
-import * as Crypto from "expo-crypto"
-
+import { v4 } from "uuid"
 import { assetPrefix } from "@ramble/shared"
 
 import { api } from "../api"
@@ -11,7 +10,7 @@ export function useS3Upload(): [(fileUrl: string) => Promise<string>, { isLoadin
   async function upload(fileUrl: string) {
     try {
       setIsLoading(true)
-      const key = Crypto.randomUUID()
+      const key = v4()
       const res = await mutateAsync({ key: assetPrefix + key })
       const resp = await fetch(fileUrl)
       const imageBody = await resp.blob()
