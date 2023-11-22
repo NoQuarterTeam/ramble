@@ -241,8 +241,8 @@ importers:
         specifier: 18.2.38
         version: 18.2.38
       '@types/uuid':
-        specifier: 3.4.0
-        version: 3.4.0
+        specifier: 3.4.13
+        version: 3.4.13
       eslint:
         specifier: 8.54.0
         version: 8.54.0
@@ -7303,10 +7303,8 @@ packages:
     resolution: {integrity: sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==}
     dev: true
 
-  /@types/uuid@3.4.0:
-    resolution: {integrity: sha512-Vd+WmnrQKrrfVJ+9LWyOWqlBQJFsfi8rhKRm3ag3ZrOjY5SmzZkGmxbkgRIk9jpZt4dpvE21cmbBSp1dCV7/fw==}
-    dependencies:
-      '@types/node': 18.18.6
+  /@types/uuid@3.4.13:
+    resolution: {integrity: sha512-pAeZeUbLE4Z9Vi9wsWV2bYPTweEHeJJy0G4pEjOA/FSvy1Ad5U5Km8iDV6TKre1mjBiVNfAdVHKruP8bAh4Q5A==}
     dev: true
 
   /@types/wrap-ansi@3.0.0:
