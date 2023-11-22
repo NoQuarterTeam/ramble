@@ -40,7 +40,6 @@
     "@shopify/flash-list",
     "expo-application",
     "expo-constants",
-    "expo-crypto",
     "expo-dev-client",
     "expo-device",
     "expo-file-system",
@@ -65,6 +64,7 @@
     "react-native",
     "remix-utils",
     "sentry-expo",
-    "tailwindcss"
+    "tailwindcss",
+    "uuid"
   ]
 }

@@ -94,7 +94,6 @@
     "@types/react-dom": "18.2.17",
     "@types/sharp": "0.31.1",
     "@types/supercluster": "7.1.3",
-    "@types/uuid": "9.0.7",
     "@typescript-eslint/eslint-plugin": "6.12.0",
     "@typescript-eslint/parser": "6.12.0",
     "autoprefixer": "10.4.16",
