@@ -41,7 +41,7 @@ export function ListItem({ list }: Props) {
                 className="sq-6 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
               />
             ) : (
-              <View className="sq-24 flex items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
+              <View className="sq-6 flex items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
                 <Icon icon={User2} />
               </View>
             )}
