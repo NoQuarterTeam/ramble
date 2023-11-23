@@ -34,7 +34,8 @@ export const userRouter = createTRPCRouter({
     if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
     return { ...user, isFollowedByMe: user.followers && user.followers.length > 0 }
   }),
-  hasSubmittedFeedback: protectedProcedure.query(async ({ ctx }) => {
+  hasSubmittedFeedback: publicProcedure.query(async ({ ctx }) => {
+    if (!ctx.user) return true
     const feedback = await ctx.prisma.feedback.findFirst({ where: { userId: ctx.user.id }, select: { id: true } })
     return !!feedback
   }),
