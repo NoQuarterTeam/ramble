@@ -33,20 +33,14 @@ async function getMapClusters(request: Request) {
   if (!result.success) return []
   const { zoom, type, isUnverified, isPetFriendly, ...coords } = result.data
 
-  const defaultTypes = [SpotType.CAMPING, SpotType.FREE_CAMPING, SpotType.REWILDING]
+  if (!type || type.length === 0) return []
   const spots = await db.spot.findMany({
     select: { id: true, latitude: true, longitude: true, type: true },
     where: {
       latitude: { gt: coords.minLat, lt: coords.maxLat },
       longitude: { gt: coords.minLng, lt: coords.maxLng },
       verifiedAt: isUnverified ? undefined : { not: { equals: null } },
-      type: type
-        ? typeof type === "string"
-          ? { equals: type as SpotType }
-          : type.length > 0
-            ? { in: type as SpotType[] }
-            : { in: defaultTypes }
-        : { in: defaultTypes },
+      type: typeof type === "string" ? { equals: type as SpotType } : { in: type as SpotType[] },
       ...publicSpotWhereClause(userId),
       isPetFriendly: isPetFriendly ? { equals: true } : undefined,
     },

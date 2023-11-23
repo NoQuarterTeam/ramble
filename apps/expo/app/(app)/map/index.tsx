@@ -54,6 +54,7 @@ export function MapScreen() {
     types: [
       "CAMPING",
       "FREE_CAMPING",
+      "REWILDING",
       me?.isMountainBiker ? "MOUNTAIN_BIKING" : null,
       me?.isClimber ? "CLIMBING" : null,
       me?.isHiker ? "HIKING_TRAIL" : null,

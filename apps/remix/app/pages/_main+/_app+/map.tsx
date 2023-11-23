@@ -106,9 +106,23 @@ export default function MapView() {
   }, [])
 
   const onParamsChange = (params: string) => {
-    clustersFetcher.load(`/api/clusters?${params}`)
-    userClustersFetcher.load(`/api/user-clusters?${params}`)
-    window.history.replaceState(null, "", `${window.location.pathname}?${params}`)
+    const parsed = queryString.parse(params, { arrayFormat: "bracket" })
+    const type = parsed.type
+    const formatted = queryString.stringify(
+      {
+        ...parsed,
+        type: !type || type.length === 0 ? ["CAMPING", "FREE_CAMPING", "REWILDING"] : type === "none" ? undefined : type,
+      },
+      { arrayFormat: "bracket" },
+    )
+    const formattedSearch = queryString.stringify(
+      { ...parsed, type: !type ? ["CAMPING", "FREE_CAMPING", "REWILDING"] : type },
+      { arrayFormat: "bracket" },
+    )
+
+    clustersFetcher.load(`/api/clusters?${formatted}`)
+    userClustersFetcher.load(`/api/user-clusters?${formatted}`)
+    window.history.replaceState(null, "", `${window.location.pathname}?${formattedSearch}`)
   }
   const onMove = (e: mapboxgl.MapboxEvent<undefined> | ViewStateChangeEvent) => {
     const bounds = e.target.getBounds()

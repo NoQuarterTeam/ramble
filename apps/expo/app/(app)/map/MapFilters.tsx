@@ -21,7 +21,7 @@ export type Filters = {
 export const initialFilters = {
   isPetFriendly: false,
   isUnverified: false,
-  types: [],
+  types: ["CAMPING", "FREE_CAMPING", "REWILDING"],
 } satisfies Filters
 
 interface Props {
@@ -98,7 +98,7 @@ export function MapFilters(props: Props) {
       </ScrollView>
       <View className="flex flex-row justify-between pt-4">
         <Button variant="link" onPress={() => props.onSave(initialFilters)}>
-          Clear all
+          Reset
         </Button>
         <Button className="w-[120px]" onPress={() => props.onSave(filters)}>
           Save filters

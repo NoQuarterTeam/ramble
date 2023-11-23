@@ -18,7 +18,7 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
     const newParams = queryString.stringify(
       {
         ...existingParams,
-        type: type || undefined,
+        type: type ? (type.length === 0 ? "none" : type) : undefined,
         isUnverified: values.isUnverified || undefined,
         isPetFriendly: values.isPetFriendly || undefined,
       },
@@ -130,7 +130,7 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
 
           <div className="flex w-full justify-between">
             <Button variant="link" size="lg" onClick={onClear}>
-              Clear all
+              Reset
             </Button>
             <Button size="lg" type="submit">
               Save filters
