@@ -17,7 +17,10 @@ export const userSchema = z.object({
   isPaddleBoarder: z.boolean(),
   isHiker: z.boolean(),
   isPetOwner: z.boolean(),
+  isLocationPrivate: z.boolean(),
   isMountainBiker: z.boolean(),
+  latitude: z.number().nullish(),
+  longitude: z.number().nullish(),
 })
 export const loginSchema = userSchema.pick({ email: true, password: true })
 export const registerSchema = userSchema

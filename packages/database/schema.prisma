@@ -7,7 +7,6 @@ datasource db {
   provider     = "mysql"
   relationMode = "prisma"
   url          = env("DATABASE_URL")
-  // directUrl    = env("DIRECT_URL")
 }
 
 enum Role {
@@ -31,6 +30,8 @@ model User {
   isVerified             Boolean @default(false)
   isAdmin                Boolean @default(false)
   isPendingGuideApproval Boolean @default(false)
+  latitude               Float?
+  longitude              Float?
 
   // Preferences
   isPetOwner      Boolean @default(false)
@@ -39,6 +40,9 @@ model User {
   isMountainBiker Boolean @default(false)
   isPaddleBoarder Boolean @default(false)
   isSurfer        Boolean @default(false)
+
+  // Settings
+  isLocationPrivate Boolean @default(false)
 
   // Relations
   followers        User[]       @relation("UserFollows")

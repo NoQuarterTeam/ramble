@@ -11,11 +11,11 @@ import {
 } from "@rnmapbox/maps"
 import { useQuery } from "@tanstack/react-query"
 import * as Location from "expo-location"
-import { CloudRain, Layers, MountainSnow, Navigation, PlusCircle, Settings2 } from "lucide-react-native"
+import { CloudRain, Layers, MountainSnow, Navigation, PlusCircle, Settings2, User, Users2 } from "lucide-react-native"
 import * as Sentry from "sentry-expo"
 
 import { type SpotType } from "@ramble/database/types"
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
+import { createImageUrl, INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { FeedbackCheck } from "../../../components/FeedbackCheck"
@@ -35,12 +35,16 @@ import { useRouter } from "../../router"
 import { type Filters, initialFilters, MapFilters } from "./MapFilters"
 import { SpotPreview } from "./SpotPreview"
 import { isAndroid } from "../../../lib/device"
+import { OptimizedImage } from "../../../components/ui/OptimisedImage"
 
 type Cluster = RouterOutputs["spot"]["clusters"][number]
+type UserCluster = RouterOutputs["user"]["clusters"][number]
 
 export function MapScreen() {
   const { push } = useRouter()
   const { me } = useMe()
+  const [preferences, setPreferences, isReady] = usePreferences()
+
   const [clusters, setClusters] = React.useState<Cluster[] | null>(null)
   const filterModalProps = useDisclosure()
   const mapLayerModalProps = useDisclosure()
@@ -62,6 +66,26 @@ export function MapScreen() {
   const [isFetching, setIsFetching] = React.useState(false)
   const utils = api.useUtils()
 
+  const [users, setUsers] = React.useState<UserCluster[] | null>(null)
+
+  const { mutate: updateUser } = api.user.update.useMutation()
+
+  const handleSetUserLocation = React.useCallback(async () => {
+    try {
+      const loc = await Location.getLastKnownPositionAsync()
+      if (!loc) return
+      camera.current?.setCamera({
+        animationDuration: 0,
+        animationMode: "none",
+        centerCoordinate: [loc.coords.longitude, loc.coords.latitude],
+      })
+      if (!me) return
+      updateUser({ latitude: Number(loc.coords.latitude.toFixed(2)), longitude: Number(loc.coords.longitude.toFixed(2)) })
+    } catch {
+      console.log("oops -  setting location")
+    }
+  }, [updateUser, me])
+
   React.useEffect(() => {
     ;(async () => {
       try {
@@ -72,21 +96,8 @@ export function MapScreen() {
         console.log("oops -  getting location")
       }
     })()
-  }, [])
+  }, [handleSetUserLocation])
 
-  const handleSetUserLocation = async () => {
-    try {
-      const loc = await Location.getLastKnownPositionAsync()
-      if (!loc) return
-      camera.current?.setCamera({
-        animationDuration: 0,
-        animationMode: "none",
-        centerCoordinate: [loc.coords.longitude, loc.coords.latitude],
-      })
-    } catch {
-      console.log("oops -  setting location")
-    }
-  }
   const onFiltersChange = async (f: Filters) => {
     try {
       filterModalProps.onClose()
@@ -122,8 +133,11 @@ export function MapScreen() {
         maxLat: properties.bounds.ne[1] || 0,
         zoom: properties.zoom,
       }
-      const data = await utils.spot.clusters.fetch(input)
-      setClusters(data)
+
+      void utils.spot.clusters.fetch(input).then(setClusters)
+      if (preferences.mapUsers && me) {
+        void utils.user.clusters.fetch(input).then(setUsers)
+      }
     } catch {
       toast({ title: "Error fetching spots", type: "error" })
       console.log("oops - fetching clusters on map move")
@@ -132,7 +146,7 @@ export function MapScreen() {
     }
   }
 
-  const markers = React.useMemo(
+  const spotMarkers = React.useMemo(
     () =>
       clusters?.map((point, i) => {
         if (point.properties.cluster) {
@@ -189,9 +203,80 @@ export function MapScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [clusters],
   )
+  const userMarkers = React.useMemo(
+    () =>
+      preferences.mapUsers &&
+      users?.map((point, i) => {
+        if (point.properties.cluster) {
+          const onPress = async () => {
+            camera.current?.setCamera({
+              zoomLevel: (point.properties.cluster && point.properties.zoomLevel) || undefined,
+              animationMode: "linearTo",
+              animationDuration: 300,
+              centerCoordinate: point.geometry.coordinates,
+              padding: { paddingBottom: 0, paddingLeft: 0, paddingRight: 0, paddingTop: 0 },
+            })
+          }
+          return (
+            <MarkerView key={i} coordinate={point.geometry.coordinates}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={onPress}
+                className={join(
+                  "flex items-center justify-center rounded-full border border-purple-100 bg-purple-700",
+                  point.properties.point_count > 150
+                    ? "sq-20"
+                    : point.properties.point_count > 75
+                      ? "sq-16"
+                      : point.properties.point_count > 10
+                        ? "sq-12"
+                        : "sq-8",
+                )}
+              >
+                <Text className="text-center text-sm text-white">{point.properties.point_count_abbreviated}</Text>
+              </TouchableOpacity>
+            </MarkerView>
+          )
+        } else {
+          const user = point.properties as {
+            cluster: false
+            username: string
+            id: string
+            avatar: string | null
+            avatarBlurHash: string | null
+          }
+          const onPress = () => {
+            push("UserScreen", { username: user.username })
+          }
+          return (
+            <MarkerView key={user.id} coordinate={point.geometry.coordinates}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={onPress}
+                className="sq-8 flex items-center justify-center overflow-hidden rounded-full border border-purple-100 bg-purple-500"
+              >
+                {user.avatar ? (
+                  <OptimizedImage
+                    width={50}
+                    height={50}
+                    placeholder={user.avatarBlurHash}
+                    style={{ width: 32, height: 32 }}
+                    source={{ uri: createImageUrl(user.avatar) }}
+                    className=" object-cover"
+                  />
+                ) : (
+                  <Icon icon={User} size={16} color="white" />
+                )}
+              </TouchableOpacity>
+            </MarkerView>
+          )
+        }
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [users, preferences.mapUsers],
+  )
   const filterCount = (filters.isPetFriendly ? 1 : 0) + (filters.isUnverified ? 1 : 0) + (filters.types.length > 0 ? 1 : 0)
 
-  const [preferences, setPreferences, isReady] = usePreferences()
   return (
     <View className="flex-1">
       <RegisterCheck />
@@ -206,7 +291,8 @@ export function MapScreen() {
           defaultSettings={{ centerCoordinate: [INITIAL_LONGITUDE, INITIAL_LATITUDE], zoomLevel: 8 }}
         />
 
-        {markers}
+        {spotMarkers}
+        {userMarkers}
       </Map>
 
       {((isAndroid && isFetching) || (!isAndroid && isFetching && !!!clusters)) && (
@@ -286,8 +372,8 @@ export function MapScreen() {
               <View className="flex flex-row items-center space-x-3">
                 <Icon icon={CloudRain} size={30} />
                 <View>
-                  <Text className="h-[22px] text-lg">Rain</Text>
-                  <Text numberOfLines={2} className="max-w-[220px] text-sm opacity-75">
+                  <Text className="h-[25px] text-lg">Rain</Text>
+                  <Text numberOfLines={2} style={{ lineHeight: 16 }} className="max-w-[220px] text-sm opacity-75">
                     Shows the current european rain radar
                   </Text>
                 </View>
@@ -302,8 +388,8 @@ export function MapScreen() {
               <View className="flex flex-row items-center space-x-3">
                 <Icon icon={MountainSnow} size={30} />
                 <View>
-                  <Text className="h-[22px] text-lg">Satellite view</Text>
-                  <Text numberOfLines={2} className="max-w-[220px] text-sm opacity-75">
+                  <Text className="h-[25px] text-lg">Satellite view</Text>
+                  <Text numberOfLines={2} style={{ lineHeight: 16 }} className="max-w-[220px] text-sm opacity-75">
                     Changes the map to satellite view
                   </Text>
                 </View>
@@ -314,6 +400,24 @@ export function MapScreen() {
                 onValueChange={() => setPreferences({ ...preferences, mapStyleSatellite: !preferences.mapStyleSatellite })}
               />
             </View>
+            {me && (
+              <View className="flex flex-row items-center justify-between space-x-2">
+                <View className="flex flex-row items-center space-x-3">
+                  <Icon icon={Users2} size={30} />
+                  <View>
+                    <Text className="h-[25px] text-lg">Ramble users</Text>
+                    <Text numberOfLines={2} style={{ lineHeight: 16 }} className="max-w-[220px] text-sm opacity-75">
+                      See the approximate location of other Ramble users
+                    </Text>
+                  </View>
+                </View>
+                <Switch
+                  trackColor={{ true: colors.primary[600] }}
+                  value={preferences.mapUsers}
+                  onValueChange={() => setPreferences({ ...preferences, mapUsers: !preferences.mapUsers })}
+                />
+              </View>
+            )}
             <Text className="pt-6">More coming soon!</Text>
           </View>
         </ModalView>

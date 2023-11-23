@@ -1,3 +1,5 @@
+import crypto from "crypto"
+
 const NUMBER_TO_GENERATE = 10
 export function generateInviteCodes(userId: string) {
   const prefix = userId.slice(0, 4)

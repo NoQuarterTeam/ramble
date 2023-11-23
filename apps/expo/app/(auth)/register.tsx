@@ -11,6 +11,7 @@ import { api, AUTH_TOKEN } from "../../lib/api"
 import { useForm } from "../../lib/hooks/useForm"
 import { useKeyboardController } from "../../lib/hooks/useKeyboardController"
 import { useRouter } from "../router"
+import { IS_DEV } from "../../lib/config"
 
 export function RegisterScreen() {
   useKeyboardController()
@@ -28,9 +29,22 @@ export function RegisterScreen() {
   })
 
   const onSubmit = form.handleSubmit(async (data) => {
-    if (data.username.trim().includes(" ")) return toast({ title: "Username can not contain empty spaces" })
+    let parsedData = data
+    if (IS_DEV && !data.code) {
+      const randomString = Math.random().toString(36).substring(7)
+      const randomInt = Math.floor(Math.random() * 1000)
+      parsedData = {
+        username: randomString,
+        email: randomString + "@noquarter.co",
+        code: "DEV",
+        password: "password",
+        firstName: "Test",
+        lastName: "User" + randomInt,
+      }
+    }
+    if (parsedData.username.trim().includes(" ")) return toast({ title: "Username can not contain empty spaces" })
     await AsyncStorage.removeItem(AUTH_TOKEN).catch()
-    mutate(data)
+    mutate(parsedData)
   })
 
   return (

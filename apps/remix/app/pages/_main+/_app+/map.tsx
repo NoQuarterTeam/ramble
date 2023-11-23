@@ -30,7 +30,7 @@ import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 
 import type { SpotType } from "@ramble/database/types"
-import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE, join } from "@ramble/shared"
+import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE, createImageUrl, join } from "@ramble/shared"
 
 import { usePreferences } from "~/lib/hooks/usePreferences"
 import { useTheme } from "~/lib/theme"
@@ -38,10 +38,13 @@ import type { LinksFunction, LoaderFunctionArgs, SerializeFrom } from "~/lib/ven
 import { json } from "~/lib/vendor/vercel.server"
 import { MapFilters } from "~/pages/_main+/_app+/components/MapFilters"
 
-import type { Cluster, clustersLoader } from "../../api+/clusters"
+import type { SpotCluster, clustersLoader } from "../../api+/clusters"
 import { MapLayerControls } from "./components/MapLayerControls"
 import { MapSearch } from "./components/MapSearch"
 import { SpotMarker } from "./components/SpotMarker"
+import { UserCluster, userClustersLoader } from "~/pages/api+/user-clusters"
+import { OptimizedImage } from "~/components/OptimisedImage"
+import { User } from "lucide-react"
 
 export const config = {
   // runtime: "edge",
@@ -69,8 +72,10 @@ export const shouldRevalidate = () => false
 
 export default function MapView() {
   const clustersFetcher = useFetcher<typeof clustersLoader>()
+  const userClustersFetcher = useFetcher<typeof userClustersLoader>()
   const ipInfo = useLoaderData<typeof loader>()
   const clusters = clustersFetcher.data
+  const userClusters = userClustersFetcher.data
 
   const theme = useTheme()
   const mapRef = React.useRef<MapRef>(null)
@@ -102,6 +107,7 @@ export default function MapView() {
 
   const onParamsChange = (params: string) => {
     clustersFetcher.load(`/api/clusters?${params}`)
+    userClustersFetcher.load(`/api/user-clusters?${params}`)
     window.history.replaceState(null, "", `${window.location.pathname}?${params}`)
   }
   const onMove = (e: mapboxgl.MapboxEvent<undefined> | ViewStateChangeEvent) => {
@@ -125,7 +131,7 @@ export default function MapView() {
   const markers = React.useMemo(
     () =>
       clusters?.map((point, i) => (
-        <ClusterMarker
+        <SpotClusterMarker
           point={point}
           key={i}
           onClick={(e) => {
@@ -148,6 +154,30 @@ export default function MapView() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [clusters],
   )
+  const preferences = usePreferences()
+
+  const userMarkers = React.useMemo(
+    () =>
+      preferences.mapUsers &&
+      userClusters?.map((point, i) => (
+        <UserClusterMarker
+          point={point}
+          key={i}
+          onClick={(e) => {
+            e.originalEvent.stopPropagation()
+            if (!point.properties.cluster) {
+              navigate(`/${point.properties.username}`)
+            } else {
+              const zoom = Math.min(point.properties.zoomLevel, 20)
+              const center = point.geometry.coordinates as LngLatLike
+              mapRef.current?.flyTo({ center, duration: 1000, padding: 50, zoom })
+            }
+          }}
+        />
+      )),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [userClusters, preferences.mapUsers],
+  )
   const noMap = searchParams.get("noMap")
 
   // React.useEffect(() => {
@@ -160,8 +190,6 @@ export default function MapView() {
   //     mapRef.current.setConfigProperty("basemap", "lightPreset", theme === "light" ? "day" : "night")
   //   }
   // }, [theme])
-
-  const preferences = usePreferences()
 
   return (
     <div className="h-nav-screen relative w-screen overflow-hidden">
@@ -191,6 +219,7 @@ export default function MapView() {
         >
           <MapLayers />
           {markers}
+          {userMarkers}
           <GeolocateControl position="bottom-right" />
           <NavigationControl position="bottom-right" />
         </Map>
@@ -208,9 +237,9 @@ export default function MapView() {
 
 interface MarkerProps {
   onClick: (e: MarkerEvent<MarkerInstance, MouseEvent>) => void
-  point: Cluster
+  point: SpotCluster
 }
-function ClusterMarker(props: MarkerProps) {
+function SpotClusterMarker(props: MarkerProps) {
   return (
     <Marker
       onClick={props.onClick}
@@ -235,6 +264,52 @@ function ClusterMarker(props: MarkerProps) {
         </div>
       ) : (
         <SpotMarker spot={props.point.properties as { type: SpotType }} />
+      )}
+    </Marker>
+  )
+}
+interface UserMarkerProps {
+  onClick: (e: MarkerEvent<MarkerInstance, MouseEvent>) => void
+  point: UserCluster
+}
+function UserClusterMarker(props: UserMarkerProps) {
+  return (
+    <Marker
+      onClick={props.onClick}
+      anchor="bottom"
+      longitude={props.point.geometry.coordinates[0]!}
+      latitude={props.point.geometry.coordinates[1]!}
+    >
+      {props.point.properties.cluster ? (
+        <div
+          className={join(
+            "center cursor-pointer rounded-full border border-purple-100 bg-purple-700 text-white shadow transition-transform hover:scale-110",
+            props.point.properties.point_count > 150
+              ? "sq-20"
+              : props.point.properties.point_count > 75
+                ? "sq-16"
+                : props.point.properties.point_count > 10
+                  ? "sq-12"
+                  : "sq-8",
+          )}
+        >
+          <p className="text-center text-sm">{props.point.properties.point_count_abbreviated}</p>
+        </div>
+      ) : (
+        <div className="sq-10 center cursor-pointer overflow-hidden rounded-full border border-purple-100 bg-purple-500 shadow transition-transform hover:scale-110">
+          {props.point.properties.avatar ? (
+            <OptimizedImage
+              width={50}
+              alt="user location"
+              height={50}
+              placeholder={props.point.properties.avatarBlurHash}
+              src={createImageUrl(props.point.properties.avatar)}
+              className="sq-10 object-cover"
+            />
+          ) : (
+            <User size={18} className="text-white" />
+          )}
+        </div>
       )}
     </Marker>
   )

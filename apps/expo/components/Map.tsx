@@ -1,3 +1,4 @@
+import * as React from "react"
 import { useColorScheme } from "react-native"
 import Mapbox from "@rnmapbox/maps"
 
@@ -9,7 +10,7 @@ Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZW
 
 type MapViewProps = React.ComponentProps<typeof Mapbox.MapView>
 
-export function Map(props: MapViewProps & { children: React.ReactNode; ref?: React.Ref<Mapbox.MapView> }) {
+export const Map = React.forwardRef<Mapbox.MapView, MapViewProps & { children: React.ReactNode }>(function _Map(props, ref) {
   const [preferences] = usePreferences()
   const isDark = useColorScheme() === "dark"
   return (
@@ -17,6 +18,7 @@ export function Map(props: MapViewProps & { children: React.ReactNode; ref?: Rea
       logoEnabled={false}
       compassEnabled
       pitchEnabled={false}
+      ref={ref}
       compassFadeWhenNorth
       scaleBarEnabled={false}
       styleURL={
@@ -30,4 +32,4 @@ export function Map(props: MapViewProps & { children: React.ReactNode; ref?: Rea
       className={merge("flex-1", props.className)}
     />
   )
-}
+})

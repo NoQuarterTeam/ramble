@@ -112,7 +112,7 @@ export function VanScreen() {
         <AvoidSoftInputView>
           <ScrollView
             keyboardShouldPersistTaps="handled"
-            contentContainerStyle={{ flexGrow: 1, paddingBottom: 80 }}
+            contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}
             showsVerticalScrollIndicator={false}
           >
             <FormInput name="name" label="Name" error={error} />

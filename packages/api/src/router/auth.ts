@@ -10,6 +10,7 @@ import { generateInviteCodes } from "../services/inviteCodes.server"
 import { sendAccessRequestConfirmationEmail } from "../services/mailers/access-request.server"
 import { sendSlackMessage } from "../services/slack.server"
 import { createTRPCRouter, publicProcedure } from "../trpc"
+import { IS_DEV } from "../lib/config"
 
 export const authRouter = createTRPCRouter({
   login: publicProcedure.input(loginSchema).mutation(async ({ ctx, input }) => {
@@ -26,7 +27,9 @@ export const authRouter = createTRPCRouter({
     const trimmedCode = code.toUpperCase().trim()
     const accessRequest = await ctx.prisma.accessRequest.findFirst({ where: { code: trimmedCode, user: null } })
     const inviteCode = await ctx.prisma.inviteCode.findFirst({ where: { code: trimmedCode, acceptedAt: null } })
-    if (!accessRequest && !inviteCode) throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid code" })
+    if (!IS_DEV) {
+      if (!accessRequest && !inviteCode) throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid code" })
+    }
     const formattedUsername = input.username.toLowerCase().trim()
     const existingUsername = await ctx.prisma.user.findUnique({ where: { username: formattedUsername } })
     if (existingUsername) throw new TRPCError({ code: "BAD_REQUEST", message: "User with this username already exists" })

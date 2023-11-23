@@ -8,6 +8,8 @@ import { generateBlurHash } from "../services/generateBlurHash.server"
 import { sendAccountVerificationEmail } from "../services/mailers/user.server"
 import { sendSlackMessage } from "../services/slack.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
+import { clusterSchema } from "../lib/clusters"
+import Supercluster from "supercluster"
 
 export const userRouter = createTRPCRouter({
   me: publicProcedure.query(({ ctx }) => ctx.user),
@@ -22,6 +24,7 @@ export const userRouter = createTRPCRouter({
         lastName: true,
         avatar: true,
         avatarBlurHash: true,
+        isLocationPrivate: true,
         ...userInterestFields,
         followers: ctx.user ? { where: { id: ctx.user.id } } : undefined,
         _count: { select: { followers: true, following: true } },
@@ -61,6 +64,36 @@ export const userRouter = createTRPCRouter({
     return ctx.prisma.user.findUnique({ where: { username: input.username } }).following({
       select: { id: true, username: true, firstName: true, lastName: true, avatar: true, avatarBlurHash: true },
     })
+  }),
+  clusters: protectedProcedure.input(clusterSchema).query(async ({ ctx, input: coords }) => {
+    const users = await ctx.prisma.user.findMany({
+      where: { isLocationPrivate: false, longitude: { not: null }, latitude: { not: null } },
+      select: { id: true, username: true, avatar: true, avatarBlurHash: true, longitude: true, latitude: true },
+    })
+    const supercluster = new Supercluster<{ id: string; cluster: false }, { cluster: true }>({
+      maxZoom: 16,
+      radius: 50,
+    })
+    const clustersData = supercluster.load(
+      users.map((user) => ({
+        type: "Feature",
+        geometry: { type: "Point", coordinates: [user.longitude!, user.latitude!] },
+        properties: {
+          cluster: false,
+          id: user.id,
+          username: user.username,
+          avatar: user.avatar,
+          avatarBlurHash: user.avatarBlurHash,
+        },
+      })),
+    )
+    const clusters = clustersData.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], coords.zoom || 5)
+    return clusters.map((c) => ({
+      ...c,
+      properties: c.properties.cluster
+        ? { ...c.properties, zoomLevel: supercluster.getClusterExpansionZoom(c.properties.cluster_id) }
+        : c.properties,
+    }))
   }),
   sendVerificationEmail: protectedProcedure.mutation(async ({ ctx }) => {
     const token = createAuthToken({ id: ctx.user.id })

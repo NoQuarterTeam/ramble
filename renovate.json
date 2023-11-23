@@ -50,6 +50,7 @@
     "expo-localization",
     "expo-location",
     "expo-splash-screen",
+    "react-native-get-random-values",
     "expo-status-bar",
     "expo-system-ui",
     "expo-updates",

@@ -57,7 +57,7 @@ async function getMapClusters(request: Request) {
 
   const supercluster = new Supercluster<{ id: string; type: SpotType; cluster: false }, { cluster: true }>({
     maxZoom: 16,
-    radius: !type || typeof type === "string" ? 40 : type.length > 4 ? 60 : 50,
+    radius: !type || typeof type === "string" ? 30 : type.length > 4 ? 60 : 40,
   })
 
   const clusterData = supercluster.load(
@@ -78,7 +78,7 @@ async function getMapClusters(request: Request) {
   }))
 }
 
-export type Cluster = Awaited<ReturnType<typeof getMapClusters>>[number]
+export type SpotCluster = Awaited<ReturnType<typeof getMapClusters>>[number]
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const spots = await getMapClusters(request)

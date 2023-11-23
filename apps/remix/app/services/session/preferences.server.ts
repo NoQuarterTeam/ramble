@@ -9,6 +9,7 @@ export const preferencesSchema = z.object({
   mapLayerRain: FormCheckbox,
   mapLayerTemp: FormCheckbox,
   mapStyleSatellite: FormCheckbox,
+  mapUsers: FormCheckbox,
 })
 
 export type Preferences = z.infer<typeof preferencesSchema>
@@ -17,4 +18,5 @@ export const defaultPreferences = {
   mapLayerRain: false,
   mapLayerTemp: false,
   mapStyleSatellite: false,
+  mapUsers: false,
 } satisfies Preferences
