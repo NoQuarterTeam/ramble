@@ -19,6 +19,8 @@ import { geocodeCoords } from "../services/geocode.server"
 import { publicSpotWhereClause, publicSpotWhereClauseRaw } from "../shared/spot.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
+type SpotClusterTypes = { [key in SpotType]?: number }
+
 export const spotRouter = createTRPCRouter({
   clusters: publicProcedure
     .input(
@@ -62,7 +64,14 @@ export const spotRouter = createTRPCRouter({
       return clusters.map((c) => ({
         ...c,
         properties: c.properties.cluster
-          ? { ...c.properties, zoomLevel: supercluster.getClusterExpansionZoom(c.properties.cluster_id) }
+          ? {
+              ...c.properties,
+              types: supercluster.getLeaves(c.properties.cluster_id).reduce<SpotClusterTypes>((acc, spot) => {
+                acc[spot.properties.type] = (acc[spot.properties.type] || 0) + 1
+                return acc
+              }, {}),
+              zoomLevel: supercluster.getClusterExpansionZoom(c.properties.cluster_id),
+            }
           : c.properties,
       }))
     }),

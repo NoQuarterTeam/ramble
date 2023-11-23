@@ -1,4 +1,5 @@
 import type { Prisma, Spot, SpotImage, SpotType, User } from "@ramble/database/types"
+import colors from "@ramble/tailwind-config/src/colors"
 
 export const spotPartnerFields = {
   campspaceId: true,
@@ -153,6 +154,7 @@ export const spotMarkerTextColorTypes = {
 } satisfies Record<SpotType, string>
 
 export const spotMarkerTriangleColorTypes = {
+  // stays
   CAMPING: "bg-green-600",
   FREE_CAMPING: "bg-cyan-700",
   PARKING: "bg-gray-100",
@@ -178,4 +180,33 @@ export const spotMarkerTriangleColorTypes = {
   NATURE_EDUCATION: "bg-gray-100",
   VOLUNTEERING: "bg-gray-100",
   REWILDING: "bg-gray-100",
+} satisfies Record<SpotType, string>
+
+export const spotMarkerClusterColorTypes = {
+  // stays
+  CAMPING: colors.green[700],
+  FREE_CAMPING: colors.cyan[800],
+  PARKING: colors.gray[50],
+  // activities
+  SURFING: colors.blue[500],
+  CLIMBING: colors.blue[500],
+  MOUNTAIN_BIKING: colors.blue[500],
+  HIKING_TRAIL: colors.blue[500],
+  PADDLE_KAYAK: colors.blue[500],
+  // services
+  GAS_STATION: colors.gray[50],
+  ELECTRIC_CHARGE_POINT: colors.gray[50],
+  MECHANIC_PARTS: colors.gray[50],
+  VET: colors.gray[50],
+  // hospitality
+  BAR: colors.gray[50],
+  CAFE: colors.gray[50],
+  RESTAURANT: colors.gray[50],
+  SHOP: colors.gray[50],
+  // other
+  ART_FILM_PHOTOGRAPHY: colors.gray[50],
+  FESTIVAL: colors.gray[50],
+  NATURE_EDUCATION: colors.gray[50],
+  VOLUNTEERING: colors.gray[50],
+  REWILDING: colors.gray[50],
 } satisfies Record<SpotType, string>

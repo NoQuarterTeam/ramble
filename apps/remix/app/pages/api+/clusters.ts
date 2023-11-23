@@ -33,7 +33,7 @@ async function getMapClusters(request: Request) {
   if (!result.success) return []
   const { zoom, type, isUnverified, isPetFriendly, ...coords } = result.data
 
-  if (!type || type.length === 0) return []
+  if (!type || type.length === 0 || !zoom) return []
   const spots = await db.spot.findMany({
     select: { id: true, latitude: true, longitude: true, type: true },
     where: {
@@ -62,17 +62,25 @@ async function getMapClusters(request: Request) {
     })),
   )
 
-  const clusters = clusterData.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], zoom || 5)
+  const clusters = clusterData.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], zoom)
 
   return clusters.map((c) => ({
     ...c,
     properties: c.properties.cluster
-      ? { ...c.properties, zoomLevel: supercluster.getClusterExpansionZoom(c.properties.cluster_id) }
+      ? {
+          ...c.properties,
+          types: supercluster.getLeaves(c.properties.cluster_id).reduce<SpotClusterTypes>((acc, spot) => {
+            acc[spot.properties.type] = (acc[spot.properties.type] || 0) + 1
+            return acc
+          }, {}),
+          zoomLevel: supercluster.getClusterExpansionZoom(c.properties.cluster_id),
+        }
       : c.properties,
   }))
 }
 
 export type SpotCluster = Awaited<ReturnType<typeof getMapClusters>>[number]
+export type SpotClusterTypes = { [key in SpotType]?: number }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const spots = await getMapClusters(request)

@@ -3,16 +3,18 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "clean": "rm -rf .expo .turbo node_modules",
     "dev": "APP_VARIANT=development expo start --ios --dev-client",
-    "dev:android": "expo start --android",
-    "dev:ios": "expo start --ios",
+    "build:all": "pnpm run build:production && pnpm run build:development && pnpm run build:preview",
+    "build:production": "eas build --profile production --platform all --auto-submit",
+    "build:preview": "eas build --profile preview --platform all",
+    "build:development": "eas build --profile development --platform ios",
     "lint:fix": "eslint --config .eslintrc.commit.js --fix --cache --ext .ts,.tsx .",
     "lint": "eslint --config .eslintrc.js --ext .ts,.tsx .",
     "prettier": "prettier --check .",
     "prettier:fix": "prettier --write .",
     "format": "pnpm run lint:fix && pnpm run prettier:fix",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf .expo .turbo node_modules"
   },
   "dependencies": {
     "@expo-google-fonts/urbanist": "0.2.3",
@@ -37,6 +39,7 @@
     "@trpc/react-query": "10.44.0",
     "@trpc/server": "10.44.0",
     "class-variance-authority": "0.7.0",
+    "d3-shape": "^3.2.0",
     "dayjs": "1.11.10",
     "expo": "~49.0.20",
     "expo-application": "~5.3.1",
@@ -84,6 +87,7 @@
     "@expo/config-plugins": "7.2.5",
     "@ramble/eslint-config": "workspace:*",
     "@ramble/tailwind-config": "workspace:*",
+    "@types/d3-shape": "^3.1.6",
     "@types/react": "18.2.38",
     "@types/uuid": "3.4.13",
     "eslint": "8.54.0",

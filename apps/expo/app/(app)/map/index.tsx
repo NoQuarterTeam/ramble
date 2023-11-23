@@ -22,7 +22,7 @@ import { FeedbackCheck } from "../../../components/FeedbackCheck"
 import { Icon } from "../../../components/Icon"
 import { Map } from "../../../components/Map"
 import { RegisterCheck } from "../../../components/RegisterCheck"
-import { SpotMarker } from "../../../components/SpotMarker"
+import { SpotClusterMarker } from "../../../components/SpotMarker"
 import { ModalView } from "../../../components/ui/ModalView"
 import { Spinner } from "../../../components/ui/Spinner"
 import { Text } from "../../../components/ui/Text"
@@ -149,9 +149,11 @@ export function MapScreen() {
 
   const spotMarkers = React.useMemo(
     () =>
-      clusters?.map((point, i) => {
-        if (point.properties.cluster) {
-          const onPress = async () => {
+      clusters?.map((point, i) => (
+        <SpotClusterMarker
+          point={point}
+          key={i}
+          onPress={() => {
             camera.current?.setCamera({
               zoomLevel: (point.properties.cluster && point.properties.zoomLevel) || undefined,
               animationMode: "linearTo",
@@ -159,48 +161,13 @@ export function MapScreen() {
               centerCoordinate: point.geometry.coordinates,
               padding: { paddingBottom: activeSpotId ? 300 : 0, paddingLeft: 0, paddingRight: 0, paddingTop: 0 },
             })
-          }
-          return (
-            <MarkerView key={i} coordinate={point.geometry.coordinates}>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={onPress}
-                className={join(
-                  "border-primary-100 bg-primary-700 flex items-center justify-center rounded-full border",
-                  point.properties.point_count > 150
-                    ? "sq-20"
-                    : point.properties.point_count > 75
-                      ? "sq-16"
-                      : point.properties.point_count > 10
-                        ? "sq-12"
-                        : "sq-8",
-                )}
-              >
-                <Text className="text-center text-sm text-white">{point.properties.point_count_abbreviated}</Text>
-              </TouchableOpacity>
-            </MarkerView>
-          )
-        } else {
-          const spot = point.properties as { type: SpotType; id: string }
-          const onPress = () => {
-            camera.current?.setCamera({
-              animationMode: "linearTo",
-              animationDuration: 300,
-              centerCoordinate: point.geometry.coordinates,
-              padding: { paddingBottom: 300, paddingLeft: 0, paddingRight: 0, paddingTop: 0 },
-            })
-            setActiveSpotId(spot.id)
-          }
-          return (
-            <MarkerView key={spot.id} coordinate={point.geometry.coordinates}>
-              <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
-                <SpotMarker spot={spot} />
-              </TouchableOpacity>
-            </MarkerView>
-          )
-        }
-      }),
-    // activeSpotId breaks here
+            if (!point.properties.cluster) {
+              setActiveSpotId(point.properties.id)
+            }
+          }}
+        />
+      )),
+    // dont add activeSpotId here
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [clusters],
   )

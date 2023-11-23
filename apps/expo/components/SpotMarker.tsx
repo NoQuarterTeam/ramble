@@ -1,11 +1,20 @@
-import { View } from "react-native"
+import { TouchableOpacity, View } from "react-native"
 import { cva } from "class-variance-authority"
 import { type ClassValue } from "class-variance-authority/dist/types"
 
 import type { SpotType } from "@ramble/database/types"
-import { spotMarkerColorTypes, spotMarkerTextColorTypes, spotMarkerTriangleColorTypes } from "@ramble/shared"
+import {
+  spotMarkerClusterColorTypes,
+  spotMarkerColorTypes,
+  spotMarkerTextColorTypes,
+  spotMarkerTriangleColorTypes,
+} from "@ramble/shared"
 
 import { SpotIconMap } from "./SpotIcon"
+import { MarkerView } from "@rnmapbox/maps"
+import { Text } from "./ui/Text"
+import { RouterOutputs } from "../lib/api"
+import { PieChart } from "./PieChart"
 
 interface MarkerProps {
   spot: { type: SpotType }
@@ -40,3 +49,52 @@ export const spotTriangleColors = cva<MarkerConfig>("sq-2 absolute -bottom-[2px]
     type: spotMarkerTriangleColorTypes,
   },
 })
+type SpotClusterTypes = { [key in SpotType]?: number }
+
+function ClusterMarker({ countAbbr, count, types }: { countAbbr: string | number; count: number; types: SpotClusterTypes }) {
+  const outerSize = count > 150 ? 80 : count > 75 ? 64 : count > 10 ? 48 : 32
+  const innerSize = outerSize - 8
+  return (
+    <View className="relative flex items-center justify-center rounded-full border border-white dark:border-black">
+      <PieChart
+        size={outerSize}
+        series={Object.values(types)}
+        sliceColor={Object.keys(types).map((type) => spotMarkerClusterColorTypes[type as SpotType])}
+      />
+      <View className="absolute inset-0 flex items-center justify-center">
+        <View className="bg-background dark:bg-background-dark flex items-center justify-center rounded-full border border-gray-100 shadow dark:border-gray-700">
+          <Text
+            style={{ width: innerSize, height: innerSize, lineHeight: innerSize }}
+            className="text-center text-sm text-black dark:text-white"
+          >
+            {countAbbr}
+          </Text>
+        </View>
+      </View>
+    </View>
+  )
+}
+
+type SpotCluster = RouterOutputs["spot"]["clusters"][number]
+
+interface SpotClusterMarkerProps {
+  point: SpotCluster
+  onPress: () => void
+}
+export function SpotClusterMarker(props: SpotClusterMarkerProps) {
+  return (
+    <MarkerView coordinate={props.point.geometry.coordinates}>
+      <TouchableOpacity activeOpacity={0.7} onPress={props.onPress}>
+        {props.point.properties.cluster ? (
+          <ClusterMarker
+            types={props.point.properties.types}
+            countAbbr={props.point.properties.point_count_abbreviated}
+            count={props.point.properties.point_count}
+          />
+        ) : (
+          <SpotMarker spot={props.point.properties as { type: SpotType }} />
+        )}
+      </TouchableOpacity>
+    </MarkerView>
+  )
+}

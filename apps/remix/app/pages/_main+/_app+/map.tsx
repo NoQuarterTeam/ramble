@@ -1,21 +1,9 @@
 import "mapbox-gl/dist/mapbox-gl.css"
 
-import * as React from "react"
-import Map, {
-  GeolocateControl,
-  Layer,
-  type LngLatLike,
-  type MapRef,
-  Marker,
-  NavigationControl,
-  Source,
-  type ViewStateChangeEvent,
-} from "react-map-gl"
-import { type MarkerEvent, type MarkerInstance } from "react-map-gl/dist/esm/types"
 import { cssBundleHref } from "@remix-run/css-bundle"
 import {
-  isRouteErrorResponse,
   Outlet,
+  isRouteErrorResponse,
   useFetcher,
   useLoaderData,
   useNavigate,
@@ -28,8 +16,19 @@ import type { Geo } from "@vercel/edge"
 import { geolocation } from "@vercel/edge"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
+import * as React from "react"
+import Map, {
+  GeolocateControl,
+  Layer,
+  Marker,
+  NavigationControl,
+  Source,
+  type LngLatLike,
+  type MapRef,
+  type ViewStateChangeEvent,
+} from "react-map-gl"
+import { type MarkerEvent, type MarkerInstance } from "react-map-gl/dist/esm/types"
 
-import type { SpotType } from "@ramble/database/types"
 import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE, createImageUrl, join } from "@ramble/shared"
 
 import { usePreferences } from "~/lib/hooks/usePreferences"
@@ -38,13 +37,13 @@ import type { LinksFunction, LoaderFunctionArgs, SerializeFrom } from "~/lib/ven
 import { json } from "~/lib/vendor/vercel.server"
 import { MapFilters } from "~/pages/_main+/_app+/components/MapFilters"
 
-import type { SpotCluster, clustersLoader } from "../../api+/clusters"
+import { User } from "lucide-react"
+import { OptimizedImage } from "~/components/OptimisedImage"
+import { UserCluster, userClustersLoader } from "~/pages/api+/user-clusters"
+import type { clustersLoader } from "../../api+/clusters"
 import { MapLayerControls } from "./components/MapLayerControls"
 import { MapSearch } from "./components/MapSearch"
-import { SpotMarker } from "./components/SpotMarker"
-import { UserCluster, userClustersLoader } from "~/pages/api+/user-clusters"
-import { OptimizedImage } from "~/components/OptimisedImage"
-import { User } from "lucide-react"
+import { SpotClusterMarker } from "./components/SpotMarker"
 
 export const config = {
   // runtime: "edge",
@@ -249,39 +248,6 @@ export default function MapView() {
   )
 }
 
-interface MarkerProps {
-  onClick: (e: MarkerEvent<MarkerInstance, MouseEvent>) => void
-  point: SpotCluster
-}
-function SpotClusterMarker(props: MarkerProps) {
-  return (
-    <Marker
-      onClick={props.onClick}
-      anchor="bottom"
-      longitude={props.point.geometry.coordinates[0]!}
-      latitude={props.point.geometry.coordinates[1]!}
-    >
-      {props.point.properties.cluster ? (
-        <div
-          className={join(
-            "border-primary-100 bg-primary-700 center cursor-pointer rounded-full border text-white shadow transition-transform hover:scale-110",
-            props.point.properties.point_count > 150
-              ? "sq-20"
-              : props.point.properties.point_count > 75
-                ? "sq-16"
-                : props.point.properties.point_count > 10
-                  ? "sq-12"
-                  : "sq-8",
-          )}
-        >
-          <p className="text-center text-sm">{props.point.properties.point_count_abbreviated}</p>
-        </div>
-      ) : (
-        <SpotMarker spot={props.point.properties as { type: SpotType }} />
-      )}
-    </Marker>
-  )
-}
 interface UserMarkerProps {
   onClick: (e: MarkerEvent<MarkerInstance, MouseEvent>) => void
   point: UserCluster
