@@ -22,17 +22,16 @@ import {
 
 import { Form, FormButton, FormError, FormField, FormFieldError, FormFieldLabel, ImageField } from "~/components/Form"
 import { ImageUploader } from "~/components/ImageUploader"
+import { SpotIcon } from "~/components/SpotIcon"
 import type { RambleIcon } from "~/components/ui"
 import { Button, Checkbox, CloseButton, IconButton, Spinner, Textarea, Tooltip } from "~/components/ui"
 import { useFormErrors } from "~/lib/form"
 import { FormNumber, NullableFormString } from "~/lib/form.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
-
 import { useTheme } from "~/lib/theme"
 import type { SerializeFrom } from "~/lib/vendor/vercel.server"
 import type { geocodeLoader } from "~/pages/api+/mapbox+/geocode"
-import { SpotIcon } from "~/components/SpotIcon"
 
 export const amenitiesSchema = z.object({
   bbq: zx.BoolAsString,

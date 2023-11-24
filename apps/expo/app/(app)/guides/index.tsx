@@ -1,14 +1,15 @@
 import * as React from "react"
-import { createImageUrl } from "@ramble/shared"
+import { TouchableOpacity, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 
-import { TouchableOpacity, View } from "react-native"
+import { createImageUrl } from "@ramble/shared"
+
 import { LoginPlaceholder } from "../../../components/LoginPlaceholder"
 import { OptimizedImage } from "../../../components/ui/OptimisedImage"
 import { Spinner } from "../../../components/ui/Spinner"
 import { TabView } from "../../../components/ui/TabView"
 import { Text } from "../../../components/ui/Text"
-import { RouterOutputs, api } from "../../../lib/api"
+import { api, type RouterOutputs } from "../../../lib/api"
 import { isTablet } from "../../../lib/device"
 import { useMe } from "../../../lib/hooks/useMe"
 import { useRouter } from "../../router"

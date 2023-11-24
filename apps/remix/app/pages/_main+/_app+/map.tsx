@@ -1,9 +1,21 @@
 import "mapbox-gl/dist/mapbox-gl.css"
 
+import * as React from "react"
+import Map, {
+  GeolocateControl,
+  Layer,
+  type LngLatLike,
+  type MapRef,
+  Marker,
+  NavigationControl,
+  Source,
+  type ViewStateChangeEvent,
+} from "react-map-gl"
+import { type MarkerEvent, type MarkerInstance } from "react-map-gl/dist/esm/types"
 import { cssBundleHref } from "@remix-run/css-bundle"
 import {
-  Outlet,
   isRouteErrorResponse,
+  Outlet,
   useFetcher,
   useLoaderData,
   useNavigate,
@@ -14,38 +26,26 @@ import center from "@turf/center"
 import { points } from "@turf/helpers"
 import type { Geo } from "@vercel/edge"
 import { geolocation } from "@vercel/edge"
+import { User } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
-import * as React from "react"
-import Map, {
-  GeolocateControl,
-  Layer,
-  Marker,
-  NavigationControl,
-  Source,
-  type LngLatLike,
-  type MapRef,
-  type ViewStateChangeEvent,
-} from "react-map-gl"
-import { type MarkerEvent, type MarkerInstance } from "react-map-gl/dist/esm/types"
 
-import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE, createImageUrl, join } from "@ramble/shared"
+import { ClientOnly, createImageUrl, INITIAL_LATITUDE, INITIAL_LONGITUDE, join } from "@ramble/shared"
 
+import { OptimizedImage } from "~/components/OptimisedImage"
+import { db } from "~/lib/db.server"
 import { usePreferences } from "~/lib/hooks/usePreferences"
 import { useTheme } from "~/lib/theme"
 import type { LinksFunction, LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
 import { MapFilters } from "~/pages/_main+/_app+/components/MapFilters"
+import { type UserCluster, type userClustersLoader } from "~/pages/api+/user-clusters"
+import { getUserSession } from "~/services/session/session.server"
 
-import { User } from "lucide-react"
-import { OptimizedImage } from "~/components/OptimisedImage"
-import { UserCluster, userClustersLoader } from "~/pages/api+/user-clusters"
 import type { clustersLoader } from "../../api+/clusters"
 import { MapLayerControls } from "./components/MapLayerControls"
 import { MapSearch } from "./components/MapSearch"
 import { SpotClusterMarker } from "./components/SpotMarker"
-import { getUserSession } from "~/services/session/session.server"
-import { db } from "~/lib/db.server"
 
 export const config = {
   // runtime: "edge",

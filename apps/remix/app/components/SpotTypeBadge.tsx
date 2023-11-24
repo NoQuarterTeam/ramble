@@ -1,6 +1,7 @@
-import { Spot } from "@ramble/database/types"
-import { SpotIcon } from "./SpotIcon"
+import { type Spot } from "@ramble/database/types"
 import { SPOT_TYPES } from "@ramble/shared"
+
+import { SpotIcon } from "./SpotIcon"
 
 interface Props {
   spot: Pick<Spot, "type">

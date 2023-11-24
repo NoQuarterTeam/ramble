@@ -1,16 +1,16 @@
+import { ScrollView, TouchableOpacity, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import {
   AlertCircle,
   ChevronRight,
+  type LucideIcon,
   MessageCircle,
   Settings,
   ToggleRight,
   User,
   User2,
   UserPlus,
-  type LucideIcon,
 } from "lucide-react-native"
-import { ScrollView, TouchableOpacity, View } from "react-native"
 
 import { createImageUrl } from "@ramble/shared"
 
@@ -26,7 +26,7 @@ import { toast } from "../../../components/ui/Toast"
 import { api, AUTH_TOKEN } from "../../../lib/api"
 import { UPDATE_ID, VERSION } from "../../../lib/config"
 import { useMe } from "../../../lib/hooks/useMe"
-import { useRouter, type ScreenParamsList } from "../../router"
+import { type ScreenParamsList, useRouter } from "../../router"
 
 export function AccountScreen() {
   const { me } = useMe()

@@ -1,6 +1,8 @@
+import { Marker } from "react-map-gl"
+import { type MarkerEvent, type MarkerInstance } from "react-map-gl/dist/esm/types"
 import { cva } from "class-variance-authority"
 import { type ClassValue } from "class-variance-authority/types"
-import { type MarkerEvent, type MarkerInstance } from "react-map-gl/dist/esm/types"
+
 import type { SpotType } from "@ramble/database/types"
 import {
   spotMarkerClusterColorTypes,
@@ -9,10 +11,9 @@ import {
   spotMarkerTriangleColorTypes,
 } from "@ramble/shared"
 
-import { SpotIcon } from "~/components/SpotIcon"
-import { Marker } from "react-map-gl"
-import { SpotCluster, SpotClusterTypes } from "~/pages/api+/clusters"
 import { PieChart } from "~/components/PieChart"
+import { SpotIcon } from "~/components/SpotIcon"
+import { type SpotCluster, type SpotClusterTypes } from "~/pages/api+/clusters"
 
 interface MarkerProps {
   spot: { type: SpotType }

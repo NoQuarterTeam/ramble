@@ -8,10 +8,10 @@ import { FormInput } from "../../components/ui/FormInput"
 import { ModalView } from "../../components/ui/ModalView"
 import { toast } from "../../components/ui/Toast"
 import { api, AUTH_TOKEN } from "../../lib/api"
+import { IS_DEV } from "../../lib/config"
 import { useForm } from "../../lib/hooks/useForm"
 import { useKeyboardController } from "../../lib/hooks/useKeyboardController"
 import { useRouter } from "../router"
-import { IS_DEV } from "../../lib/config"
 
 export function RegisterScreen() {
   useKeyboardController()

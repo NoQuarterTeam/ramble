@@ -20,6 +20,7 @@ import { Form, FormButton } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage, transformImageSrc } from "~/components/OptimisedImage"
 import { PageContainer } from "~/components/PageContainer"
+import { SpotTypeBadge } from "~/components/SpotTypeBadge"
 import {
   AlertDialogCancel,
   AlertDialogContent,
@@ -47,7 +48,6 @@ import { SaveToList } from "../../api+/save-to-list"
 import { PartnerLink } from "./components/PartnerLink"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { SpotMarker } from "./components/SpotMarker"
-import { SpotTypeBadge } from "~/components/SpotTypeBadge"
 
 export const config = {
   // runtime: "edge",

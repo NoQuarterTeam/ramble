@@ -12,7 +12,7 @@ import { clusterSchema } from "../lib/clusters"
 import { fetchAndJoinSpotImages } from "../lib/models/spot"
 import { publicSpotWhereClauseRaw } from "../shared/spot.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
-import { SpotClusterTypes } from "./spot"
+import { type SpotClusterTypes } from "./spot"
 
 type SpotItemWithStatsAndCoords = SpotItemWithStatsAndImage & { longitude: number; latitude: number }
 

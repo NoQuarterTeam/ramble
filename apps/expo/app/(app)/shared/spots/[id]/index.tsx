@@ -18,6 +18,7 @@ import { AMENITIES, canManageSpot, displayRating, isPartnerSpot, merge } from "@
 import { Icon } from "../../../../../components/Icon"
 import { PartnerLink } from "../../../../../components/PartnerLink"
 import { ReviewItem } from "../../../../../components/ReviewItem"
+import { SpotTypeBadge } from "../../../../../components/SpotTypeBadge"
 import { Button } from "../../../../../components/ui/Button"
 import { Heading } from "../../../../../components/ui/Heading"
 import { SpotImageCarousel } from "../../../../../components/ui/SpotImageCarousel"
@@ -29,7 +30,6 @@ import { height, width } from "../../../../../lib/device"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { AMENITIES_ICONS } from "../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../router"
-import { SpotTypeBadge } from "../../../../../components/SpotTypeBadge"
 
 export function SpotDetailScreen() {
   const [location, setLocation] = React.useState<Location.LocationObjectCoords | null>(null)

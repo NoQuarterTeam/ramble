@@ -1,8 +1,9 @@
 import { Modal, ScrollView, Switch, View } from "react-native"
+import { MapPin } from "lucide-react-native"
 
 import { useDisclosure } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
-import { MapPin } from "lucide-react-native"
+
 import { Icon } from "../../../components/Icon"
 import { Button } from "../../../components/ui/Button"
 import { ModalView } from "../../../components/ui/ModalView"

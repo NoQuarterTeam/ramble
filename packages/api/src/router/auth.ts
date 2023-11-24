@@ -4,13 +4,13 @@ import { z } from "zod"
 
 import { loginSchema, registerSchema } from "@ramble/shared"
 
+import { IS_DEV } from "../lib/config"
 import { createAuthToken } from "../lib/jwt"
 import { createAccessRequest } from "../services/access-request.server"
 import { generateInviteCodes } from "../services/inviteCodes.server"
 import { sendAccessRequestConfirmationEmail } from "../services/mailers/access-request.server"
 import { sendSlackMessage } from "../services/slack.server"
 import { createTRPCRouter, publicProcedure } from "../trpc"
-import { IS_DEV } from "../lib/config"
 
 export const authRouter = createTRPCRouter({
   login: publicProcedure.input(loginSchema).mutation(async ({ ctx, input }) => {

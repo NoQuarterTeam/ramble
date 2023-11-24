@@ -1,15 +1,15 @@
 import { TRPCError } from "@trpc/server"
+import Supercluster from "supercluster"
 import { z } from "zod"
 
 import { updateSchema, userInterestFields } from "@ramble/shared"
 
+import { clusterSchema } from "../lib/clusters"
 import { createAuthToken } from "../lib/jwt"
 import { generateBlurHash } from "../services/generateBlurHash.server"
 import { sendAccountVerificationEmail } from "../services/mailers/user.server"
 import { sendSlackMessage } from "../services/slack.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
-import { clusterSchema } from "../lib/clusters"
-import Supercluster from "supercluster"
 
 export const userRouter = createTRPCRouter({
   me: publicProcedure.query(({ ctx }) => ctx.user),

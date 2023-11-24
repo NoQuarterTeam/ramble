@@ -6,6 +6,7 @@ import { ChevronDown, PlusCircle } from "lucide-react-native"
 import { join, useDisclosure } from "@ramble/shared"
 
 import { Icon } from "../../../components/Icon"
+import { LoginPlaceholder } from "../../../components/LoginPlaceholder"
 import { SpotItem } from "../../../components/SpotItem"
 import { BrandHeading } from "../../../components/ui/BrandHeading"
 import { Spinner } from "../../../components/ui/Spinner"
@@ -13,9 +14,8 @@ import { TabView } from "../../../components/ui/TabView"
 import { Text } from "../../../components/ui/Text"
 import { api } from "../../../lib/api"
 import { height, isTablet, width } from "../../../lib/device"
-import { useRouter } from "../../router"
 import { useMe } from "../../../lib/hooks/useMe"
-import { LoginPlaceholder } from "../../../components/LoginPlaceholder"
+import { useRouter } from "../../router"
 
 const SORT_OPTIONS = { latest: "latest", rated: "top rated", saved: "most saved" } as const
 

@@ -1,7 +1,9 @@
-import { Spot } from "@ramble/database/types"
-import { SpotIcon } from "./SpotIcon"
-import { SPOT_TYPES } from "@ramble/shared"
 import { View } from "react-native"
+
+import { type Spot } from "@ramble/database/types"
+import { SPOT_TYPES } from "@ramble/shared"
+
+import { SpotIcon } from "./SpotIcon"
 import { Text } from "./ui/Text"
 
 interface Props {

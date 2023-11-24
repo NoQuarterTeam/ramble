@@ -19,7 +19,7 @@ import {
 } from "lucide-react"
 
 import { joinSpotImages, type LatestSpotImages, spotImagesRawQuery } from "@ramble/api"
-import { SpotType } from "@ramble/database/types"
+import { type SpotType } from "@ramble/database/types"
 import { type SpotItemWithStatsAndImage } from "@ramble/shared"
 
 import type { RambleIcon } from "~/components/ui"

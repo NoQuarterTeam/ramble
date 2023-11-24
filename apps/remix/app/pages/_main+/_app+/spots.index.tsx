@@ -14,12 +14,13 @@ import {
   INITIAL_LATITUDE,
   INITIAL_LONGITUDE,
   join,
-  type SpotItemWithStatsAndImage,
-  useDisclosure,
-  STAY_SPOT_TYPE_OPTIONS,
   SPOT_TYPE_OPTIONS,
+  type SpotItemWithStatsAndImage,
+  STAY_SPOT_TYPE_OPTIONS,
+  useDisclosure,
 } from "@ramble/shared"
 
+import { SpotIcon } from "~/components/SpotIcon"
 import { Button, IconButton, Modal, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
@@ -33,7 +34,6 @@ import { getUserSession } from "~/services/session/session.server"
 import { PageContainer } from "../../../components/PageContainer"
 import { SpotItem } from "./components/SpotItem"
 import { SpotMarker } from "./components/SpotMarker"
-import { SpotIcon } from "~/components/SpotIcon"
 
 export const config = {
   // runtime: "edge",

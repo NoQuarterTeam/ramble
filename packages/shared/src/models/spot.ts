@@ -1,4 +1,4 @@
-import { Prisma, type Spot, type SpotImage, type SpotType, type User } from "@ramble/database/types"
+import { type Prisma, type Spot, type SpotImage, type SpotType, type User } from "@ramble/database/types"
 import colors from "@ramble/tailwind-config/src/colors"
 
 export type SpotTypeInfo = {
