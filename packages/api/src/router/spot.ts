@@ -19,7 +19,7 @@ import { geocodeCoords } from "../services/geocode.server"
 import { publicSpotWhereClause, publicSpotWhereClauseRaw } from "../shared/spot.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
-type SpotClusterTypes = { [key in SpotType]?: number }
+export type SpotClusterTypes = { [key in SpotType]?: number }
 
 export const spotRouter = createTRPCRouter({
   clusters: publicProcedure

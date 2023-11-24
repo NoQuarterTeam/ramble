@@ -3,14 +3,14 @@ import { ScrollView, Switch, useColorScheme, View } from "react-native"
 import { BadgeX, Dog } from "lucide-react-native"
 
 import { type SpotType } from "@ramble/database/types"
-import { join } from "@ramble/shared"
+import { join, SPOT_TYPES, SpotTypeInfo } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { Icon } from "../../../components/Icon"
 import { Button } from "../../../components/ui/Button"
 import { Heading } from "../../../components/ui/Heading"
 import { Text } from "../../../components/ui/Text"
-import { SPOT_TYPES, type SpotTypeInfo } from "../../../lib/models/spot"
+import { SPOT_TYPE_ICONS } from "../../../lib/models/spot"
 
 export type Filters = {
   isPetFriendly: boolean
@@ -155,7 +155,7 @@ function SpotTypeSelector({ type, onPress, isSelected }: { type: SpotTypeInfo; i
         variant={isSelected ? "primary" : "outline"}
         leftIcon={
           <Icon
-            icon={type.Icon}
+            icon={SPOT_TYPE_ICONS[type.value]}
             size={20}
             color={{ light: isSelected ? "white" : "black", dark: isSelected ? "black" : "white" }}
           />

@@ -1,18 +1,14 @@
-import * as React from "react"
-import { TouchableOpacity, View } from "react-native"
-import { Camera, type MapState, type MapView as MapType, MarkerView, UserLocation } from "@rnmapbox/maps"
+import { Camera, UserLocation, type MapState, type MapView as MapType } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { Navigation } from "lucide-react-native"
-
-import { type SpotType } from "@ramble/database/types"
-import { join } from "@ramble/shared"
+import * as React from "react"
+import { TouchableOpacity, View } from "react-native"
 
 import { Icon } from "../../../../../components/Icon"
 import { Map } from "../../../../../components/Map"
-import { SpotMarker } from "../../../../../components/SpotMarker"
+import { SpotClusterMarker } from "../../../../../components/SpotMarker"
 import { Button } from "../../../../../components/ui/Button"
 import { Spinner } from "../../../../../components/ui/Spinner"
-import { Text } from "../../../../../components/ui/Text"
 import { toast } from "../../../../../components/ui/Toast"
 import { api, type RouterOutputs } from "../../../../../lib/api"
 import { useParams, useRouter } from "../../../../router"
@@ -78,11 +74,13 @@ export function ListDetailMapScreen() {
     }
   }
 
-  const markers = React.useMemo(
+  const spotMarkers = React.useMemo(
     () =>
-      clusters?.map((point, i) => {
-        if (point.properties.cluster) {
-          const onPress = async () => {
+      clusters?.map((point, i) => (
+        <SpotClusterMarker
+          point={point}
+          key={i}
+          onPress={() => {
             camera.current?.setCamera({
               zoomLevel: (point.properties.cluster && point.properties.zoomLevel) || undefined,
               animationMode: "linearTo",
@@ -90,48 +88,13 @@ export function ListDetailMapScreen() {
               centerCoordinate: point.geometry.coordinates,
               padding: { paddingBottom: activeSpotId ? 300 : 0, paddingLeft: 0, paddingRight: 0, paddingTop: 0 },
             })
-          }
-          return (
-            <MarkerView key={i} coordinate={point.geometry.coordinates}>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={onPress}
-                className={join(
-                  "border-primary-100 bg-primary-700 flex items-center justify-center rounded-full border",
-                  point.properties.point_count > 150
-                    ? "sq-20"
-                    : point.properties.point_count > 75
-                      ? "sq-16"
-                      : point.properties.point_count > 10
-                        ? "sq-12"
-                        : "sq-8",
-                )}
-              >
-                <Text className="text-center text-sm text-white">{point.properties.point_count_abbreviated}</Text>
-              </TouchableOpacity>
-            </MarkerView>
-          )
-        } else {
-          const spot = point.properties as { type: SpotType; id: string }
-          const onPress = () => {
-            camera.current?.setCamera({
-              animationMode: "linearTo",
-              animationDuration: 300,
-              centerCoordinate: point.geometry.coordinates,
-              padding: { paddingBottom: 300, paddingLeft: 0, paddingRight: 0, paddingTop: 0 },
-            })
-            setActiveSpotId(spot.id)
-          }
-          return (
-            <MarkerView key={spot.id} coordinate={point.geometry.coordinates}>
-              <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
-                <SpotMarker spot={spot} />
-              </TouchableOpacity>
-            </MarkerView>
-          )
-        }
-      }),
-    // activeSpotId breaks here
+            if (!point.properties.cluster) {
+              setActiveSpotId(point.properties.id)
+            }
+          }}
+        />
+      )),
+    // dont add activeSpotId here
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [clusters],
   )
@@ -140,7 +103,7 @@ export function ListDetailMapScreen() {
     <View className="relative flex-1">
       <Map onMapIdle={onMapMove} onPress={() => setActiveSpotId(null)} ref={mapRef}>
         <UserLocation />
-        {markers}
+        {spotMarkers}
 
         <Camera
           ref={camera}

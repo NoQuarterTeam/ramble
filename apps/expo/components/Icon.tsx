@@ -5,9 +5,11 @@ import { colorGray, colorPrimary, colorRed } from "../lib/tailwind"
 
 export type IconColors = "primary" | "red" | "white" | "black" | "gray"
 
+export type IconColorProp = IconColors | { dark: IconColors; light: IconColors } | false
+
 interface Props extends Omit<LucideProps, "color"> {
   icon: LucideIcon
-  color?: IconColors | { dark: IconColors; light: IconColors } | false
+  color?: IconColorProp
 }
 
 const colorMap: Record<IconColors, string> = {

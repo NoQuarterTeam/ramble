@@ -17,6 +17,7 @@ import {
   doesSpotTypeRequireDescription,
   INITIAL_LATITUDE,
   INITIAL_LONGITUDE,
+  SPOT_TYPE_OPTIONS,
 } from "@ramble/shared"
 
 import { Form, FormButton, FormError, FormField, FormFieldError, FormFieldLabel, ImageField } from "~/components/Form"
@@ -27,10 +28,11 @@ import { useFormErrors } from "~/lib/form"
 import { FormNumber, NullableFormString } from "~/lib/form.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
-import { SPOT_TYPE_OPTIONS } from "~/lib/models/spot"
+
 import { useTheme } from "~/lib/theme"
 import type { SerializeFrom } from "~/lib/vendor/vercel.server"
 import type { geocodeLoader } from "~/pages/api+/mapbox+/geocode"
+import { SpotIcon } from "~/components/SpotIcon"
 
 export const amenitiesSchema = z.object({
   bbq: zx.BoolAsString,
@@ -171,7 +173,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
                   variant={type === spotType.value ? "primary" : "outline"}
                   type="button"
                   size="lg"
-                  leftIcon={<spotType.Icon className="sq-4" />}
+                  leftIcon={<SpotIcon type={spotType.value} className="sq-4" />}
                   onClick={() => setType(spotType.value)}
                 >
                   {spotType.label}

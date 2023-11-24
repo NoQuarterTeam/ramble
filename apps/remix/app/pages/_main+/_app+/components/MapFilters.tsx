@@ -3,10 +3,10 @@ import { BadgeX, Dog, Settings2 } from "lucide-react"
 import queryString from "query-string"
 
 import { SpotType } from "@ramble/database/types"
-import { useDisclosure } from "@ramble/shared"
+import { SPOT_TYPES, SpotTypeInfo, useDisclosure } from "@ramble/shared"
 
 import { Button, IconButton, Modal, Switch, Tooltip } from "~/components/ui"
-import { SPOT_TYPES, type SpotTypeInfo } from "~/lib/models/spot"
+import { SpotIcon } from "~/components/SpotIcon"
 
 export function MapFilters({ onChange }: { onChange: (params: string) => void }) {
   const onSubmit = (e: React.SyntheticEvent) => {
@@ -168,7 +168,7 @@ function SpotTypeSelector({ type, defaultValue }: { type: SpotTypeInfo; defaultV
         variant={isSelected ? "primary" : "outline"}
         type="button"
         className="min-w-[100px]"
-        leftIcon={<type.Icon className="sq-4" />}
+        leftIcon={<SpotIcon type={type.value} className="sq-4" />}
         onClick={() => setIsSelected((s) => !s)}
       >
         {type.label}
