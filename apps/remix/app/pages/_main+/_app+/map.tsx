@@ -44,6 +44,8 @@ import type { clustersLoader } from "../../api+/clusters"
 import { MapLayerControls } from "./components/MapLayerControls"
 import { MapSearch } from "./components/MapSearch"
 import { SpotClusterMarker } from "./components/SpotMarker"
+import { getUserSession } from "~/services/session/session.server"
+import { db } from "~/lib/db.server"
 
 export const config = {
   // runtime: "edge",
@@ -55,7 +57,15 @@ export const links: LinksFunction = () => {
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const geo = geolocation(request) as Geo | undefined
+  const { userId } = await getUserSession(request)
   if (!geo) return json({ latitude: null, longitude: null, city: null, country: null })
+
+  if (userId && geo.latitude && geo.longitude) {
+    await db.user.update({
+      where: { id: userId },
+      data: { latitude: Number(Number(geo.latitude).toFixed(3)), longitude: Number(Number(geo.longitude).toFixed(3)) },
+    })
+  }
   return json(
     {
       latitude: geo.latitude ? parseFloat(geo.latitude) : null,
