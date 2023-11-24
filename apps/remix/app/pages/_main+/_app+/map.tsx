@@ -290,7 +290,7 @@ function UserClusterMarker(props: UserMarkerProps) {
           <p className="text-center text-sm">{props.point.properties.point_count_abbreviated}</p>
         </div>
       ) : (
-        <div className="sq-10 center cursor-pointer overflow-hidden rounded-full border border-purple-100 bg-purple-500 shadow transition-transform hover:scale-110">
+        <div className="center sq-10 group relative cursor-pointer rounded-full border border-purple-100 bg-purple-500 shadow transition-transform hover:scale-110">
           {props.point.properties.avatar ? (
             <OptimizedImage
               width={50}
@@ -298,11 +298,14 @@ function UserClusterMarker(props: UserMarkerProps) {
               height={50}
               placeholder={props.point.properties.avatarBlurHash}
               src={createImageUrl(props.point.properties.avatar)}
-              className="sq-10 object-cover"
+              className="sq-10 rounded-full object-cover"
             />
           ) : (
             <User size={18} className="text-white" />
           )}
+          <div className="bg-background rounded-xs absolute -bottom-5 left-1/2 hidden -translate-x-1/2 px-2 py-1 group-hover:block">
+            <p className="text-xs">{props.point.properties.username}</p>
+          </div>
         </div>
       )}
     </Marker>
