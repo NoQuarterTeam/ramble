@@ -4,13 +4,13 @@ import type { ColumnDef, Row } from "@tanstack/react-table"
 import { flexRender, getCoreRowModel, getExpandedRowModel, useReactTable } from "@tanstack/react-table"
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, MoveDown, MoveUp } from "lucide-react"
 import queryString from "query-string"
+import { ExistingSearchParams } from "remix-utils/existing-search-params"
 
 import { join } from "@ramble/shared"
 
 import { DEFAULT_TAKE } from "~/lib/table"
 
 import { IconButton, Select, Tile } from "./ui"
-import { ExistingSearchParams } from "./ExistingSearchParams"
 
 export function Table<T>({
   data,

@@ -1,11 +1,10 @@
 import { Form, useSearchParams } from "@remix-run/react"
 import { SearchIcon, X } from "lucide-react"
+import { ExistingSearchParams } from "remix-utils/existing-search-params"
 
 import { merge } from "@ramble/shared"
 
 import { IconButton, Input, type InputProps } from "~/components/ui"
-
-import { ExistingSearchParams } from "./ExistingSearchParams"
 
 export function Search({ placeholder, name = "search", ...props }: InputProps) {
   const [params] = useSearchParams()

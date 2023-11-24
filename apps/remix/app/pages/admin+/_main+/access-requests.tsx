@@ -3,6 +3,7 @@ import { createColumnHelper } from "@tanstack/react-table"
 import dayjs from "dayjs"
 import { Check, Trash } from "lucide-react"
 import queryString from "query-string"
+import { ExistingSearchParams } from "remix-utils/existing-search-params"
 import { promiseHash } from "remix-utils/promise"
 import { z } from "zod"
 import { zx } from "zodix"
@@ -22,7 +23,6 @@ import { badRequest, json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"
 import { type ActionFunctionArgs, type LoaderFunctionArgs, type SerializeFrom } from "~/lib/vendor/vercel.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
-import { ExistingSearchParams } from "~/components/ExistingSearchParams"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { orderBy, search, skip, take } = getTableParams(request)

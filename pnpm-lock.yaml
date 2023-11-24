@@ -424,8 +424,8 @@ importers:
         specifier: 7.1.6
         version: 7.1.6(mapbox-gl@2.15.0)(react-dom@18.2.0)(react@18.2.0)
       remix-utils:
-        specifier: 7.0.2
-        version: 7.0.2(@remix-run/node@2.3.1)(@remix-run/react@2.3.1)(crypto-js@4.2.0)(react@18.2.0)(zod@3.22.4)
+        specifier: 7.2.0
+        version: 7.2.0(@remix-run/node@2.3.1)(@remix-run/react@2.3.1)(crypto-js@4.2.0)(react@18.2.0)(zod@3.22.4)
       sharp:
         specifier: 0.32.6
         version: 0.32.6
@@ -16051,8 +16051,8 @@ packages:
       minimatch: 5.1.6
     dev: true
 
-  /remix-utils@7.0.2(@remix-run/node@2.3.1)(@remix-run/react@2.3.1)(crypto-js@4.2.0)(react@18.2.0)(zod@3.22.4):
-    resolution: {integrity: sha512-BsGmOgUzbT+Ui0hlWe5XR37N/MAbOSRyKBkxs8yckU+VOCzIuSRiOPk6qK+Hch4F18QSMRm/5IlrsROtrM1l2A==}
+  /remix-utils@7.2.0(@remix-run/node@2.3.1)(@remix-run/react@2.3.1)(crypto-js@4.2.0)(react@18.2.0)(zod@3.22.4):
+    resolution: {integrity: sha512-eFfwUZnGwKvINpC10HaF6fzywp0CsJ3cI/voNM7tv3NN+mbrqiwuOb/ANkVCOj51wdoXyGyvi1rix6j1IJf21w==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       '@remix-run/cloudflare': ^2.0.0

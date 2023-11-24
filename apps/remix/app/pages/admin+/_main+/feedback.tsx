@@ -2,7 +2,7 @@ import { Form, useLoaderData, useSearchParams } from "@remix-run/react"
 import { createColumnHelper } from "@tanstack/react-table"
 import dayjs from "dayjs"
 import { Trash } from "lucide-react"
-
+import { ExistingSearchParams } from "remix-utils/existing-search-params"
 import { promiseHash } from "remix-utils/promise"
 import { z } from "zod"
 
@@ -21,7 +21,6 @@ import { badRequest, json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"
 import { type ActionFunctionArgs, type LoaderFunctionArgs, type SerializeFrom } from "~/lib/vendor/vercel.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
-import { ExistingSearchParams } from "~/components/ExistingSearchParams"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { orderBy, search, skip, take } = getTableParams(request)

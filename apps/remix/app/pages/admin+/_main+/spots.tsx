@@ -4,6 +4,7 @@ import { createColumnHelper } from "@tanstack/react-table"
 import dayjs from "dayjs"
 import { Check, ExternalLink, Eye, EyeOff, Trash } from "lucide-react"
 import queryString from "query-string"
+import { ExistingSearchParams } from "remix-utils/existing-search-params"
 import { promiseHash } from "remix-utils/promise"
 import { z } from "zod"
 import { zx } from "zodix"
@@ -26,7 +27,6 @@ import { getTableParams } from "~/lib/table"
 import { useTheme } from "~/lib/theme"
 import type { ActionFunctionArgs, LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
-import { ExistingSearchParams } from "~/components/ExistingSearchParams"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const schema = z.object({ type: z.string().optional(), unverified: zx.BoolAsString.optional() })

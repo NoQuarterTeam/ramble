@@ -1,15 +1,16 @@
 import "mapbox-gl/dist/mapbox-gl.css"
 
+import * as React from "react"
+import Map, { GeolocateControl, type LngLatLike, type MapRef, Marker, NavigationControl } from "react-map-gl"
 import { Form, useLoaderData, useSearchParams } from "@remix-run/react"
 import { MapIcon } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
-import * as React from "react"
-import Map, { GeolocateControl, Marker, NavigationControl, type LngLatLike, type MapRef } from "react-map-gl"
+import { ExistingSearchParams } from "remix-utils/existing-search-params"
 import { promiseHash } from "remix-utils/promise"
 
 import { publicSpotWhereClauseRaw } from "@ramble/api"
 import { Prisma, SpotType } from "@ramble/database/types"
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE, STAY_SPOT_TYPE_OPTIONS, join, type SpotItemWithStatsAndImage } from "@ramble/shared"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE, join, type SpotItemWithStatsAndImage, STAY_SPOT_TYPE_OPTIONS } from "@ramble/shared"
 
 import { SpotIcon } from "~/components/SpotIcon"
 import { Button, IconButton, Select } from "~/components/ui"
@@ -22,7 +23,6 @@ import type { LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.serv
 import { json } from "~/lib/vendor/vercel.server"
 import { getUserSession } from "~/services/session/session.server"
 
-import { ExistingSearchParams } from "~/components/ExistingSearchParams"
 import { PageContainer } from "../../../components/PageContainer"
 import { SpotItem } from "./components/SpotItem"
 import { SpotMarker } from "./components/SpotMarker"
