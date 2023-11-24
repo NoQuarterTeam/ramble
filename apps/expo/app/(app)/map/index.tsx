@@ -83,8 +83,8 @@ export function MapScreen() {
       if (!me) return
       const randomVariant = Math.random() * (0.02 - 0.001) + 0.001 * (Math.random() > 0.5 ? 1 : -1)
       updateUser({
-        latitude: Number(loc.coords.latitude.toFixed(3)) + randomVariant,
-        longitude: Number(loc.coords.longitude.toFixed(3)) + randomVariant,
+        latitude: Number(loc.coords.latitude) + randomVariant,
+        longitude: Number(loc.coords.longitude) + randomVariant,
       })
     } catch {
       console.log("oops -  setting location")
