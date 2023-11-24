@@ -61,13 +61,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   if (!geo) return json({ latitude: null, longitude: null, city: null, country: null })
 
   if (userId && geo.latitude && geo.longitude) {
-    // random number between 0.001 and 0.02, then randomly add or subtract it
     const randomVariant = Math.random() * (0.02 - 0.001) + 0.001 * (Math.random() > 0.5 ? 1 : -1)
     await db.user.update({
       where: { id: userId },
       data: {
-        latitude: Number(Number(geo.latitude).toFixed(3)) + randomVariant,
-        longitude: Number(Number(geo.longitude).toFixed(3)) + randomVariant,
+        latitude: Number(geo.latitude) + randomVariant,
+        longitude: Number(geo.longitude) + randomVariant,
       },
     })
   }
