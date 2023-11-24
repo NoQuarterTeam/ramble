@@ -81,7 +81,11 @@ export function MapScreen() {
         centerCoordinate: [loc.coords.longitude, loc.coords.latitude],
       })
       if (!me) return
-      updateUser({ latitude: Number(loc.coords.latitude.toFixed(2)), longitude: Number(loc.coords.longitude.toFixed(2)) })
+      const randomVariant = Math.random() * (0.02 - 0.001) + 0.001 * (Math.random() > 0.5 ? 1 : -1)
+      updateUser({
+        latitude: Number(loc.coords.latitude.toFixed(3)) + randomVariant,
+        longitude: Number(loc.coords.longitude.toFixed(3)) + randomVariant,
+      })
     } catch {
       console.log("oops -  setting location")
     }
