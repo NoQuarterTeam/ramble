@@ -14,8 +14,7 @@ import { api, type RouterOutputs } from "../../../../../lib/api"
 import { useParams, useRouter } from "../../../../router"
 import { SpotPreview } from "../../../map/SpotPreview"
 
-// todo: need to figure out how to get this to work using actual endpoint
-type Cluster = RouterOutputs["spot"]["clusters"][number]
+type Cluster = RouterOutputs["list"]["spotClusters"][number]
 
 export function ListDetailMapScreen() {
   const { params } = useParams<"ListDetailMapScreen">()
