@@ -163,7 +163,7 @@ export function MapScreen() {
               animationMode: "linearTo",
               animationDuration: 300,
               centerCoordinate: point.geometry.coordinates,
-              padding: { paddingBottom: activeSpotId ? 300 : 0, paddingLeft: 0, paddingRight: 0, paddingTop: 0 },
+              padding: { paddingBottom: activeSpotId ? 430 : 0, paddingLeft: 0, paddingRight: 0, paddingTop: 0 },
             })
             if (!point.properties.cluster) {
               setActiveSpotId(point.properties.id)

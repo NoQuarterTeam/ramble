@@ -1,6 +1,6 @@
-import type * as React from "react"
 import { Link, useNavigate, useParams } from "@remix-run/react"
 import { ArrowLeft, ArrowRight, Frown, Heart, Image, Star } from "lucide-react"
+import type * as React from "react"
 import { useAuthenticityToken } from "remix-utils/csrf/react"
 import { z } from "zod"
 
@@ -12,7 +12,6 @@ import { useFetcher } from "~/components/Form"
 import { ImageUploader } from "~/components/ImageUploader"
 import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
-import { SpotIcon } from "~/components/SpotIcon"
 import { Button, CloseButton } from "~/components/ui"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
@@ -26,6 +25,7 @@ import { SaveToList } from "~/pages/api+/save-to-list"
 import { type SpotPreviewData } from "~/pages/api+/spots+/$id.preview"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
+import { SpotTypeBadge } from "~/components/SpotTypeBadge"
 import { PartnerLink } from "./components/PartnerLink"
 import { ReviewItem } from "./components/ReviewItem"
 import { NEW_REVIEW_REDIRECTS } from "./spots.$id_.reviews.new"
@@ -79,10 +79,8 @@ export default function SpotPreview() {
     <SpotContainer>
       <div className="space-y-4">
         <div className="space-y-1">
+          <SpotTypeBadge spot={spot} />
           <div className={join("flex items-center space-x-2", state === "loading" && "animate-pulse-fast")}>
-            <div className="sq-8 flex flex-shrink-0 items-center justify-center rounded-full border border-gray-200 dark:border-gray-600">
-              <SpotIcon type={spot.type} className="sq-4" />
-            </div>
             {!(["SURFING", "HIKING", "MOUNTAIN_BIKING"] as SpotType[]).includes(spot.type) ? (
               <Link
                 target="_blank"
@@ -100,16 +98,15 @@ export default function SpotPreview() {
 
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <div className="flex items-center space-x-1 text-sm">
+              <div className="flex items-center space-x-1">
                 <Star className="sq-4" />
                 <p>{displayRating(rating)}</p>
               </div>
-              <div className="flex items-center space-x-1 text-sm">
+              <div className="flex items-center space-x-1">
                 <Heart className="sq-4" />
                 <p>{spot._count.listSpots || 0}</p>
               </div>
             </div>
-
             {user && <SaveToList spotId={spot.id} />}
           </div>
         </div>
@@ -197,14 +194,20 @@ export default function SpotPreview() {
 
 function SpotFallback() {
   return (
-    <div className="space-y-2">
-      <Skeleton className="h-12 w-11/12" />
-      <Skeleton className="h-6 w-10" />
-      <Skeleton className="h-5 w-40" />
-      <div className="rounded-xs flex h-[225px] w-full space-x-2 overflow-hidden">
-        <Skeleton className="rounded-xs h-[225px] min-w-[350px]" />
-        <Skeleton className="rounded-xs h-[225px] min-w-[75px]" />
+    <div className="space-y-4">
+      <div className="space-y-1">
+        <Skeleton className="h-12 w-3/12 rounded-full" />
+        <Skeleton className="h-12 w-11/12" />
+        <div className="flex w-full items-center justify-between">
+          <Skeleton className="h-8 w-20" />
+          <Skeleton className="h-8 w-20" />
+        </div>
       </div>
+      <div className="rounded-xs flex h-[225px] w-full space-x-2 overflow-hidden">
+        <Skeleton className="h-[225px] min-w-[350px]" />
+        <Skeleton className="h-[225px] min-w-[100px]" />
+      </div>
+      <Skeleton className="h-12 w-full" />
       <Skeleton className="h-32 w-full" />
       <div className="flex justify-end">
         <Skeleton className="h-8 w-20" />
