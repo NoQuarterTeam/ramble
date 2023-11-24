@@ -10,12 +10,20 @@ import { promiseHash } from "remix-utils/promise"
 
 import { publicSpotWhereClauseRaw } from "@ramble/api"
 import { Prisma, SpotType } from "@ramble/database/types"
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE, join, type SpotItemWithStatsAndImage, useDisclosure } from "@ramble/shared"
+import {
+  INITIAL_LATITUDE,
+  INITIAL_LONGITUDE,
+  join,
+  type SpotItemWithStatsAndImage,
+  useDisclosure,
+  STAY_SPOT_TYPE_OPTIONS,
+  SPOT_TYPE_OPTIONS,
+} from "@ramble/shared"
 
 import { Button, IconButton, Modal, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
-import { fetchAndJoinSpotImages, SPOT_TYPE_OPTIONS, STAY_SPOT_TYPE_OPTIONS } from "~/lib/models/spot"
+import { fetchAndJoinSpotImages } from "~/lib/models/spot"
 import { useTheme } from "~/lib/theme"
 import { bbox, lineString } from "~/lib/vendor/turf.server"
 import type { LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
@@ -25,6 +33,7 @@ import { getUserSession } from "~/services/session/session.server"
 import { PageContainer } from "../../../components/PageContainer"
 import { SpotItem } from "./components/SpotItem"
 import { SpotMarker } from "./components/SpotMarker"
+import { SpotIcon } from "~/components/SpotIcon"
 
 export const config = {
   // runtime: "edge",
@@ -128,7 +137,7 @@ export default function Latest() {
               >
                 All
               </Button>
-              {STAY_SPOT_TYPE_OPTIONS.map(({ value, Icon, label }) => (
+              {STAY_SPOT_TYPE_OPTIONS.map(({ value, label }) => (
                 <Button
                   key={value}
                   onClick={() => {
@@ -138,7 +147,7 @@ export default function Latest() {
                     )
                   }}
                   variant={type === value ? "primary" : "outline"}
-                  leftIcon={<Icon size={16} />}
+                  leftIcon={<SpotIcon type={value} className="sq-4" />}
                 >
                   {label}
                 </Button>
@@ -163,7 +172,7 @@ export default function Latest() {
             )}
             <Modal title="Filters" {...modalProps}>
               <div className="flex flex-wrap gap-2">
-                {SPOT_TYPE_OPTIONS.map(({ value, Icon, label }) => (
+                {SPOT_TYPE_OPTIONS.map(({ value, label }) => (
                   <Button
                     key={value}
                     onClick={() => {
@@ -174,7 +183,7 @@ export default function Latest() {
                       modalProps.onClose()
                     }}
                     variant={type === value ? "primary" : "outline"}
-                    leftIcon={<Icon size={16} />}
+                    leftIcon={<SpotIcon type={value} className="sq-4" />}
                   >
                     {label}
                   </Button>

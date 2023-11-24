@@ -3,11 +3,12 @@ import { ScrollView, View } from "react-native"
 
 import { type SpotType } from "@ramble/database/types"
 
-import { Icon } from "../../../../../../components/Icon"
 import { Button } from "../../../../../../components/ui/Button"
-import { SPOT_OPTIONS } from "../../../../../../lib/models/spot"
+
 import { useParams, useRouter } from "../../../../../router"
 import { EditSpotModalView } from "./EditSpotModalView"
+import { SPOT_TYPE_OPTIONS } from "@ramble/shared"
+import { SpotIcon } from "../../../../../../components/SpotIcon"
 
 export function EditSpotTypeScreen() {
   const { params } = useParams<"EditSpotTypeScreen">()
@@ -17,12 +18,12 @@ export function EditSpotTypeScreen() {
     <EditSpotModalView title="what type?">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
         <View className="flex flex-row flex-wrap gap-2 pt-4">
-          {SPOT_OPTIONS.filter((s) => !s.isComingSoon).map((spotType) => (
+          {SPOT_TYPE_OPTIONS.filter((s) => !s.isComingSoon).map((spotType) => (
             <Button
               variant={type === spotType.value ? "primary" : "outline"}
               leftIcon={
-                <Icon
-                  icon={spotType.Icon}
+                <SpotIcon
+                  type={spotType.value}
                   size={20}
                   color={{
                     light: type === spotType.value ? "white" : "black",

@@ -1,4 +1,3 @@
-import type { LucideIcon } from "lucide-react"
 import {
   Beer,
   Bike,
@@ -28,67 +27,37 @@ import { Icons } from "~/components/ui"
 
 import { db } from "../db.server"
 
-export type SpotTypeInfo = {
-  value: SpotType
-  label: string
+export type SpotTypeIconInfo = {
   Icon: RambleIcon
-  isComingSoon: boolean
 }
-export const SPOT_TYPES = {
+export const SPOT_TYPE_ICONS = {
   // Stays
-  [SpotType.CAMPING]: { value: SpotType.CAMPING, label: "Long stay", Icon: Icons.Van, isComingSoon: false },
-  [SpotType.FREE_CAMPING]: { value: SpotType.FREE_CAMPING, label: "Overnight stop-off", Icon: Icons.Timer, isComingSoon: false },
-  [SpotType.PARKING]: { value: SpotType.PARKING, label: "Safe parking", Icon: ParkingCircle, isComingSoon: true },
+  CAMPING: Icons.Van,
+  FREE_CAMPING: Icons.Timer,
+  PARKING: ParkingCircle,
   // Activities
-  [SpotType.SURFING]: { value: SpotType.SURFING, label: "Surfing", Icon: Icons.Surf, isComingSoon: false },
-  [SpotType.CLIMBING]: { value: SpotType.CLIMBING, label: "Climbing", Icon: Mountain, isComingSoon: false },
-  [SpotType.MOUNTAIN_BIKING]: { value: SpotType.MOUNTAIN_BIKING, label: "MTBing", Icon: Bike, isComingSoon: false },
-  [SpotType.PADDLE_KAYAK]: { value: SpotType.PADDLE_KAYAK, label: "SUPing / Kayaking", Icon: Icons.Sup, isComingSoon: false },
-  [SpotType.HIKING_TRAIL]: {
-    value: SpotType.HIKING_TRAIL,
-    label: "Hiking / Trail running",
-    Icon: Footprints,
-    isComingSoon: false,
-  },
+  SURFING: Icons.Surf,
+  CLIMBING: Mountain,
+  MOUNTAIN_BIKING: Bike,
+  PADDLE_KAYAK: Icons.Sup,
+  HIKING_TRAIL: Footprints,
   // Services
-  [SpotType.GAS_STATION]: { value: SpotType.GAS_STATION, label: "Renewable diesel", Icon: Fuel, isComingSoon: false },
-  [SpotType.ELECTRIC_CHARGE_POINT]: {
-    value: SpotType.ELECTRIC_CHARGE_POINT,
-    label: "Electric Charge Point",
-    Icon: PlugZap,
-    isComingSoon: true,
-  },
-  [SpotType.MECHANIC_PARTS]: { value: SpotType.MECHANIC_PARTS, label: "Mechanic / Parts", Icon: Wrench, isComingSoon: true },
-  [SpotType.VET]: { value: SpotType.VET, label: "Vet", Icon: Dog, isComingSoon: true },
+  GAS_STATION: Fuel,
+  ELECTRIC_CHARGE_POINT: PlugZap,
+  MECHANIC_PARTS: Wrench,
+  VET: Dog,
   // Hospitality
-  [SpotType.CAFE]: { value: SpotType.CAFE, label: "Cafe", Icon: Coffee, isComingSoon: true },
-  [SpotType.RESTAURANT]: { value: SpotType.RESTAURANT, label: "Restaurant", Icon: Utensils, isComingSoon: true },
-  [SpotType.BAR]: { value: SpotType.BAR, label: "Bar", Icon: Beer, isComingSoon: true },
-  [SpotType.SHOP]: { value: SpotType.SHOP, label: "Shop", Icon: ShoppingCart, isComingSoon: true },
+  CAFE: Coffee,
+  RESTAURANT: Utensils,
+  BAR: Beer,
+  SHOP: ShoppingCart,
   // Other
-  [SpotType.REWILDING]: { value: SpotType.REWILDING, label: "Rewilding", Icon: Sprout, isComingSoon: false },
-  [SpotType.NATURE_EDUCATION]: { value: SpotType.NATURE_EDUCATION, label: "Nature Education", Icon: Leaf, isComingSoon: true },
-  [SpotType.FESTIVAL]: { value: SpotType.FESTIVAL, label: "Festival", Icon: PartyPopper, isComingSoon: true },
-  [SpotType.ART_FILM_PHOTOGRAPHY]: {
-    value: SpotType.ART_FILM_PHOTOGRAPHY,
-    label: "Art, Film & Photography",
-    Icon: Camera,
-    isComingSoon: true,
-  },
-  [SpotType.VOLUNTEERING]: { value: SpotType.VOLUNTEERING, label: "Volunteering", Icon: HeartHandshake, isComingSoon: true },
-} satisfies Record<SpotType, SpotTypeInfo>
-
-export const SPOT_TYPE_OPTIONS = Object.entries(SPOT_TYPES).map(([_, val]) => val)
-
-export const STAY_SPOT_TYPE_OPTIONS = Object.entries({
-  [SpotType.CAMPING]: SPOT_TYPES.CAMPING,
-  [SpotType.FREE_CAMPING]: SPOT_TYPES.FREE_CAMPING,
-}).map(([_, { label, Icon, value, isComingSoon }]) => ({ label, value, Icon, isComingSoon })) as {
-  label: string
-  value: SpotType
-  Icon: LucideIcon
-  isComingSoon: boolean
-}[]
+  REWILDING: Sprout,
+  NATURE_EDUCATION: Leaf,
+  FESTIVAL: PartyPopper,
+  ART_FILM_PHOTOGRAPHY: Camera,
+  VOLUNTEERING: HeartHandshake,
+} satisfies Record<SpotType, RambleIcon>
 
 export const fetchAndJoinSpotImages = async (spots: SpotItemWithStatsAndImage[]) => {
   // get spot images and join to original spot payload

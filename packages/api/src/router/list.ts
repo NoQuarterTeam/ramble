@@ -12,6 +12,7 @@ import { clusterSchema } from "../lib/clusters"
 import { fetchAndJoinSpotImages } from "../lib/models/spot"
 import { publicSpotWhereClauseRaw } from "../shared/spot.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
+import { SpotClusterTypes } from "./spot"
 
 type SpotItemWithStatsAndCoords = SpotItemWithStatsAndImage & { longitude: number; latitude: number }
 
@@ -118,7 +119,14 @@ export const listRouter = createTRPCRouter({
       return clusters.map((c) => ({
         ...c,
         properties: c.properties.cluster
-          ? { ...c.properties, zoomLevel: supercluster.getClusterExpansionZoom(c.properties.cluster_id) }
+          ? {
+              ...c.properties,
+              types: supercluster.getLeaves(c.properties.cluster_id).reduce<SpotClusterTypes>((acc, spot) => {
+                acc[spot.properties.type] = (acc[spot.properties.type] || 0) + 1
+                return acc
+              }, {}),
+              zoomLevel: supercluster.getClusterExpansionZoom(c.properties.cluster_id),
+            }
           : c.properties,
       }))
     }),
