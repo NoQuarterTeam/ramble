@@ -29,6 +29,7 @@ import { height, width } from "../../../../../lib/device"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { AMENITIES_ICONS } from "../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../router"
+import { SpotTypeBadge } from "../../../../../components/SpotTypeBadge"
 
 export function SpotDetailScreen() {
   const [location, setLocation] = React.useState<Location.LocationObjectCoords | null>(null)
@@ -124,6 +125,7 @@ export function SpotDetailScreen() {
         </Animated.View>
         <View className="space-y-3 p-4">
           <View className="space-y-2">
+            <SpotTypeBadge spot={spot} />
             <Heading className="text-2xl leading-7">{spot.name}</Heading>
             <View className="flex flex-row items-center space-x-2">
               <View className="flex flex-row items-center space-x-1">
