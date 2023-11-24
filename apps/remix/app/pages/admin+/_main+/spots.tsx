@@ -1,4 +1,4 @@
-import { Link, useLoaderData, useRouteError, useSearchParams } from "@remix-run/react"
+import { Form, Link, useLoaderData, useRouteError, useSearchParams } from "@remix-run/react"
 import type { Row } from "@tanstack/react-table"
 import { createColumnHelper } from "@tanstack/react-table"
 import dayjs from "dayjs"
@@ -11,7 +11,7 @@ import { zx } from "zodix"
 import type { Prisma, SpotType } from "@ramble/database/types"
 import { createImageUrl, merge, SPOT_TYPE_OPTIONS } from "@ramble/shared"
 
-import { FormButton, useFetcher } from "~/components/Form"
+import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { Search } from "~/components/Search"
@@ -26,6 +26,7 @@ import { getTableParams } from "~/lib/table"
 import { useTheme } from "~/lib/theme"
 import type { ActionFunctionArgs, LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
+import { ExistingSearchParams } from "~/components/ExistingSearchParams"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const schema = z.object({ type: z.string().optional(), unverified: zx.BoolAsString.optional() })
@@ -191,21 +192,19 @@ const columns = [
 ]
 
 export default function Spots() {
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams] = useSearchParams()
   const { spots, count, unverifiedSpotsCount } = useLoaderData<typeof loader>()
 
   return (
     <div className="space-y-2">
       <h1 className="text-4xl">Spots</h1>
       <div className="flex items-end gap-2">
-        <div>
+        <Form>
+          <ExistingSearchParams exclude={["type"]} />
           <p className="text-sm font-medium">Type</p>
           <Select
             defaultValue={searchParams.get("type") || ""}
-            onChange={(e) => {
-              const existingParams = queryString.parse(searchParams.toString())
-              setSearchParams(queryString.stringify({ ...existingParams, type: e.target.value }))
-            }}
+            onChange={(e) => e.currentTarget.form?.dispatchEvent(new Event("submit", { bubbles: true }))}
             className="max-w-[200px]"
             name="type"
           >
@@ -216,24 +215,19 @@ export default function Spots() {
               </option>
             ))}
           </Select>
-        </div>
+        </Form>
 
-        <div>
+        <Form>
+          <ExistingSearchParams exclude={["unverified"]} />
           <Button
             variant={searchParams.get("unverified") === "true" ? "primary" : "outline"}
-            onClick={() => {
-              const existingParams = queryString.parse(searchParams.toString())
-              setSearchParams(
-                queryString.stringify({
-                  ...existingParams,
-                  unverified: searchParams.get("unverified") === "true" ? undefined : true,
-                }),
-              )
-            }}
+            type="submit"
+            name={searchParams.get("unverified") === "true" ? undefined : "unverified"}
+            value={searchParams.get("unverified") === "true" ? undefined : "true"}
           >
             Show {unverifiedSpotsCount} unverified
           </Button>
-        </div>
+        </Form>
 
         <div>
           <Search className="max-w-[400px]" />
@@ -281,11 +275,10 @@ function VerifyAction({ item }: { item: Spot }) {
   const verifyFetcher = useFetcher()
   return (
     <verifyFetcher.Form>
-      <FormActionInput value={Actions.verify} />
       <input type="hidden" name="id" value={item.id} />
-      <FormButton size="sm" leftIcon={<Check size={16} />}>
+      <verifyFetcher.FormButton value={Actions.verify} size="sm" leftIcon={<Check size={16} />}>
         verify
-      </FormButton>
+      </verifyFetcher.FormButton>
     </verifyFetcher.Form>
   )
 }

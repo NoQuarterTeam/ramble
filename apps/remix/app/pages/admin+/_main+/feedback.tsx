@@ -1,8 +1,8 @@
-import { useLoaderData, useSearchParams } from "@remix-run/react"
+import { Form, useLoaderData, useSearchParams } from "@remix-run/react"
 import { createColumnHelper } from "@tanstack/react-table"
 import dayjs from "dayjs"
 import { Trash } from "lucide-react"
-import queryString from "query-string"
+
 import { promiseHash } from "remix-utils/promise"
 import { z } from "zod"
 
@@ -21,6 +21,7 @@ import { badRequest, json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"
 import { type ActionFunctionArgs, type LoaderFunctionArgs, type SerializeFrom } from "~/lib/vendor/vercel.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
+import { ExistingSearchParams } from "~/components/ExistingSearchParams"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { orderBy, search, skip, take } = getTableParams(request)
@@ -116,7 +117,7 @@ const columns = [
 ]
 export default function Feedbacks() {
   const { feedbacks, count } = useLoaderData<typeof loader>()
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams] = useSearchParams()
   return (
     <div className="space-y-2">
       <h1 className="text-4xl">Feedback</h1>
@@ -124,23 +125,21 @@ export default function Feedbacks() {
         <div>
           <Search className="max-w-[400px]" />
         </div>
-        <div>
+        <Form>
+          <ExistingSearchParams exclude={["type"]} />
           <p className="text-sm font-medium">Type</p>
           <Select
             defaultValue={searchParams.get("type") || ""}
-            onChange={(e) => {
-              const existingParams = queryString.parse(searchParams.toString())
-              setSearchParams(queryString.stringify({ ...existingParams, type: e.target.value }))
-            }}
+            onChange={(e) => e.currentTarget.form?.dispatchEvent(new Event("submit", { bubbles: true }))}
             className="w-[100px]"
             name="type"
           >
             <option value="">All</option>
             <option value="ISSUE">Issue</option>
             <option value="IDEA">Idea</option>
-            <option value="Other">Other</option>
+            <option value="OTHER">Other</option>
           </Select>
-        </div>
+        </Form>
       </div>
       <Table data={feedbacks} count={count} columns={columns} />
     </div>
