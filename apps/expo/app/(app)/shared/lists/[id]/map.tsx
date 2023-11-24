@@ -1,8 +1,8 @@
-import { Camera, UserLocation, type MapState, type MapView as MapType } from "@rnmapbox/maps"
-import * as Location from "expo-location"
-import { Navigation } from "lucide-react-native"
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
+import { Camera, type MapState, type MapView as MapType, UserLocation } from "@rnmapbox/maps"
+import * as Location from "expo-location"
+import { Navigation } from "lucide-react-native"
 
 import { Icon } from "../../../../../components/Icon"
 import { Map } from "../../../../../components/Map"

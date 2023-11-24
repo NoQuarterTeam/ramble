@@ -4,7 +4,7 @@ import Supercluster from "supercluster"
 import { z } from "zod"
 import { NumAsString } from "zodix"
 
-import { User } from "@ramble/database/types"
+import { type User } from "@ramble/database/types"
 
 import { db } from "~/lib/db.server"
 import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"

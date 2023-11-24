@@ -1,4 +1,5 @@
 import { TouchableOpacity, View } from "react-native"
+import { MarkerView } from "@rnmapbox/maps"
 import { cva } from "class-variance-authority"
 import { type ClassValue } from "class-variance-authority/dist/types"
 
@@ -10,11 +11,10 @@ import {
   spotMarkerTriangleColorTypes,
 } from "@ramble/shared"
 
-import { SpotIconMap } from "./SpotIcon"
-import { MarkerView } from "@rnmapbox/maps"
-import { Text } from "./ui/Text"
-import { RouterOutputs } from "../lib/api"
+import { type RouterOutputs } from "../lib/api"
 import { PieChart } from "./PieChart"
+import { SpotIconMap } from "./SpotIcon"
+import { Text } from "./ui/Text"
 
 interface MarkerProps {
   spot: { type: SpotType }

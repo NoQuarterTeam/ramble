@@ -1,6 +1,6 @@
 import { useColorScheme } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import { Heart, List, Map, User } from "lucide-react-native"
+import { Heart, List, Map, UserCircle, Users } from "lucide-react-native"
 
 import { createImageUrl, join } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
@@ -10,6 +10,7 @@ import { OptimizedImage } from "../../components/ui/OptimisedImage"
 import { useMe } from "../../lib/hooks/useMe"
 import { useBackgroundColor } from "../../lib/tailwind"
 import { AccountLayout } from "./account/_layout"
+import { GuidesLayout } from "./guides/_layout"
 import { ListsLayout } from "./lists/_layout"
 import { MapLayout } from "./map/_layout"
 import { SpotsLayout } from "./spots/_layout"
@@ -53,6 +54,13 @@ export function AppLayout() {
         }}
       />
       <Tab.Screen
+        name="GuidesLayout"
+        component={GuidesLayout}
+        options={{
+          tabBarIcon: (props) => <Icon icon={Users} size={22} color={!!props.focused && "primary"} />,
+        }}
+      />
+      <Tab.Screen
         name="AccountLayout"
         component={AccountLayout}
         options={{
@@ -70,7 +78,7 @@ export function AppLayout() {
                 )}
               />
             ) : (
-              <Icon icon={User} size={22} color={props.focused ? "primary" : isDark ? "white" : "black"} />
+              <Icon icon={UserCircle} size={22} color={props.focused ? "primary" : isDark ? "white" : "black"} />
             ),
         }}
       />

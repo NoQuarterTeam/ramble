@@ -3,7 +3,7 @@ import { ScrollView, Switch, useColorScheme, View } from "react-native"
 import { BadgeX, Dog } from "lucide-react-native"
 
 import { type SpotType } from "@ramble/database/types"
-import { join, SPOT_TYPES, SpotTypeInfo } from "@ramble/shared"
+import { join, SPOT_TYPES, type SpotTypeInfo } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { Icon } from "../../../components/Icon"

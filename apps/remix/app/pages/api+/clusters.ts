@@ -5,7 +5,7 @@ import { z } from "zod"
 import { CheckboxAsString, NumAsString } from "zodix"
 
 import { publicSpotWhereClause } from "@ramble/api"
-import { SpotType } from "@ramble/database/types"
+import { type SpotType } from "@ramble/database/types"
 
 import { db } from "~/lib/db.server"
 import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"

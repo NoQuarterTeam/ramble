@@ -2,6 +2,7 @@ import { useFetcher } from "@remix-run/react"
 import { MapPin } from "lucide-react"
 import { z } from "zod"
 import { zx } from "zodix"
+
 import { Form, FormButton, FormField } from "~/components/Form"
 import { Switch } from "~/components/ui"
 import { db } from "~/lib/db.server"

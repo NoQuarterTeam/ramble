@@ -3,9 +3,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import {
   AlertCircle,
   ChevronRight,
-  Cog,
   type LucideIcon,
   MessageCircle,
+  Settings,
   ToggleRight,
   User,
   User2,
@@ -122,7 +122,7 @@ export function AccountScreen() {
               <ProfileLink to="AccountInviteScreen" icon={UserPlus}>
                 Invites
               </ProfileLink>
-              <ProfileLink to="AccountSettingsScreen" icon={Cog}>
+              <ProfileLink to="AccountSettingsScreen" icon={Settings}>
                 Settings
               </ProfileLink>
               <ProfileLink to="AccountFeedbackScreen" icon={MessageCircle}>

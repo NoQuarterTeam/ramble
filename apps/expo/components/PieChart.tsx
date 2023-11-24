@@ -1,4 +1,4 @@
-import { Svg, G, Path } from "react-native-svg"
+import { G, Path, Svg } from "react-native-svg"
 import * as d3 from "d3-shape"
 
 interface Props {

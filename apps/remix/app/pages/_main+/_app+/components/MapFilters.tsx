@@ -3,10 +3,10 @@ import { BadgeX, Dog, Settings2 } from "lucide-react"
 import queryString from "query-string"
 
 import { SpotType } from "@ramble/database/types"
-import { SPOT_TYPES, SpotTypeInfo, useDisclosure } from "@ramble/shared"
+import { SPOT_TYPES, type SpotTypeInfo, useDisclosure } from "@ramble/shared"
 
-import { Button, IconButton, Modal, Switch, Tooltip } from "~/components/ui"
 import { SpotIcon } from "~/components/SpotIcon"
+import { Button, IconButton, Modal, Switch, Tooltip } from "~/components/ui"
 
 export function MapFilters({ onChange }: { onChange: (params: string) => void }) {
   const onSubmit = (e: React.SyntheticEvent) => {

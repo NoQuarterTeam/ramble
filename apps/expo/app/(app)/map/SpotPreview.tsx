@@ -1,6 +1,6 @@
-import { Heart, Star, X } from "lucide-react-native"
 import { TouchableOpacity, useColorScheme, View } from "react-native"
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
+import { Heart, Star, X } from "lucide-react-native"
 
 import { displayRating, isPartnerSpot } from "@ramble/shared"
 

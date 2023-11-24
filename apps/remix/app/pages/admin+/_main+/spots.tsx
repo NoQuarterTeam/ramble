@@ -9,7 +9,7 @@ import { z } from "zod"
 import { zx } from "zodix"
 
 import type { Prisma, SpotType } from "@ramble/database/types"
-import { SPOT_TYPE_OPTIONS, createImageUrl, merge } from "@ramble/shared"
+import { createImageUrl, merge, SPOT_TYPE_OPTIONS } from "@ramble/shared"
 
 import { FormButton, useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -21,7 +21,6 @@ import { Avatar, Button, buttonStyles, IconButton, iconbuttonStyles, Select } fr
 import { db } from "~/lib/db.server"
 import { FormActionInput } from "~/lib/form"
 import { createAction, createActions } from "~/lib/form.server"
-
 import { badRequest, json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"
 import { useTheme } from "~/lib/theme"
