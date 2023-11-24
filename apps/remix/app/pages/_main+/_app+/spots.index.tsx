@@ -1,27 +1,18 @@
 import "mapbox-gl/dist/mapbox-gl.css"
 
-import * as React from "react"
-import Map, { GeolocateControl, type LngLatLike, type MapRef, Marker, NavigationControl } from "react-map-gl"
-import { useLoaderData, useSearchParams } from "@remix-run/react"
-import { MapIcon, Settings2 } from "lucide-react"
+import { Form, useLoaderData, useSearchParams } from "@remix-run/react"
+import { MapIcon } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
-import queryString from "query-string"
+import * as React from "react"
+import Map, { GeolocateControl, Marker, NavigationControl, type LngLatLike, type MapRef } from "react-map-gl"
 import { promiseHash } from "remix-utils/promise"
 
 import { publicSpotWhereClauseRaw } from "@ramble/api"
 import { Prisma, SpotType } from "@ramble/database/types"
-import {
-  INITIAL_LATITUDE,
-  INITIAL_LONGITUDE,
-  join,
-  SPOT_TYPE_OPTIONS,
-  type SpotItemWithStatsAndImage,
-  STAY_SPOT_TYPE_OPTIONS,
-  useDisclosure,
-} from "@ramble/shared"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE, STAY_SPOT_TYPE_OPTIONS, join, type SpotItemWithStatsAndImage } from "@ramble/shared"
 
 import { SpotIcon } from "~/components/SpotIcon"
-import { Button, IconButton, Modal, Select } from "~/components/ui"
+import { Button, IconButton, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { fetchAndJoinSpotImages } from "~/lib/models/spot"
@@ -31,6 +22,7 @@ import type { LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.serv
 import { json } from "~/lib/vendor/vercel.server"
 import { getUserSession } from "~/services/session/session.server"
 
+import { ExistingSearchParams } from "~/components/ExistingSearchParams"
 import { PageContainer } from "../../../components/PageContainer"
 import { SpotItem } from "./components/SpotItem"
 import { SpotMarker } from "./components/SpotMarker"
@@ -96,7 +88,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     `,
   })
   await fetchAndJoinSpotImages(spots)
-  const coords = spots.length > 0 ? spots.map((spot) => [spot.longitude, spot.latitude]) : null
+  const coords = spots.length > 1 ? spots.map((spot) => [spot.longitude, spot.latitude]) : null
 
   let bounds: LngLatLike | undefined = undefined
   if (coords) {
@@ -116,106 +108,82 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export default function Latest() {
   const { spots, bounds } = useLoaderData<typeof loader>()
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams] = useSearchParams()
   const type = searchParams.get("type") || ""
   const sort = searchParams.get("sort") || "latest"
   const isMapVisible = searchParams.get("map") === "true" || false
   const scrollRef = React.useRef<HTMLDivElement>(null)
-  const modalProps = useDisclosure()
+
   return (
     <PageContainer className="pt-0">
       <div className="top-nav bg-background sticky z-[1] py-4">
         <div className="flex w-full items-center justify-between gap-2">
-          <div className="relative hidden w-[calc(100%-140px)] md:block">
-            <div className="scrollbar-hide flex gap-1 overflow-x-scroll pr-10">
-              <Button
-                onClick={() => {
-                  const existingParams = queryString.parse(searchParams.toString())
-                  setSearchParams(queryString.stringify({ ...existingParams, type: undefined }))
-                }}
-                variant={!type ? "primary" : "outline"}
-              >
+          <div className="flex gap-1">
+            <Form>
+              <ExistingSearchParams exclude={["type"]} />
+              <Button type="submit" variant={!type ? "primary" : "outline"}>
                 All
               </Button>
-              {STAY_SPOT_TYPE_OPTIONS.map(({ value, label }) => (
+            </Form>
+            {STAY_SPOT_TYPE_OPTIONS.map(({ value, label }) => (
+              <Form key={value}>
+                <ExistingSearchParams exclude={["type"]} />
                 <Button
-                  key={value}
-                  onClick={() => {
-                    const existingParams = queryString.parse(searchParams.toString())
-                    setSearchParams(
-                      queryString.stringify({ ...existingParams, type: type && type === value ? undefined : value }),
-                    )
-                  }}
+                  type="submit"
+                  name="type"
+                  value={value}
+                  className="hidden md:flex"
                   variant={type === value ? "primary" : "outline"}
                   leftIcon={<SpotIcon type={value} className="sq-4" />}
                 >
                   {label}
                 </Button>
-              ))}
+                <IconButton
+                  aria-label={`Filter ${label}`}
+                  icon={<SpotIcon type={value} className="sq-4" />}
+                  type="submit"
+                  name="type"
+                  className="flex md:hidden"
+                  value={value}
+                  variant={type === value ? "primary" : "outline"}
+                  leftIcon={<SpotIcon type={value} className="sq-4" />}
+                />
+              </Form>
+            ))}
+          </div>
+
+          <div className="flex items-center space-x-1">
+            <div className="w-[140px]">
+              <Form>
+                <ExistingSearchParams exclude={["sort"]} />
+                <Select
+                  defaultValue={sort}
+                  name="sort"
+                  onChange={(e) => {
+                    e.currentTarget.form?.dispatchEvent(new Event("submit", { bubbles: true }))
+                  }}
+                >
+                  {SORT_OPTIONS.map(({ value, label }) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
+                </Select>
+              </Form>
             </div>
-            {/* <div className="pointer-events-none absolute right-0 top-0 h-full w-20 bg-gradient-to-r from-transparent to-white dark:to-gray-800" /> */}
+            <Form>
+              <ExistingSearchParams exclude={["map"]} />
+              <IconButton
+                name="map"
+                value={isMapVisible ? undefined : "true"}
+                className="hidden md:block"
+                variant={isMapVisible ? "primary" : "outline"}
+                aria-label="toggle map"
+                icon={<MapIcon size={18} />}
+                type="submit"
+              />
+            </Form>
           </div>
-          <div className="flex items-center gap-2 md:hidden">
-            <Button onClick={modalProps.onOpen} variant="outline" leftIcon={<Settings2 size={18} />}>
-              Filters
-            </Button>
-            {type && (
-              <Button
-                variant="link"
-                onClick={() => {
-                  const existingParams = queryString.parse(searchParams.toString())
-                  setSearchParams(queryString.stringify({ ...existingParams, type: undefined }))
-                }}
-              >
-                Clear
-              </Button>
-            )}
-            <Modal title="Filters" {...modalProps}>
-              <div className="flex flex-wrap gap-2">
-                {SPOT_TYPE_OPTIONS.map(({ value, label }) => (
-                  <Button
-                    key={value}
-                    onClick={() => {
-                      const existingParams = queryString.parse(searchParams.toString())
-                      setSearchParams(
-                        queryString.stringify({ ...existingParams, type: type && type === value ? undefined : value }),
-                      )
-                      modalProps.onClose()
-                    }}
-                    variant={type === value ? "primary" : "outline"}
-                    leftIcon={<SpotIcon type={value} className="sq-4" />}
-                  >
-                    {label}
-                  </Button>
-                ))}
-              </div>
-            </Modal>
-          </div>
-          <div className="w-[140px]">
-            <Select
-              defaultValue={sort}
-              onChange={(e) => {
-                const existingParams = queryString.parse(searchParams.toString())
-                setSearchParams(queryString.stringify({ ...existingParams, sort: e.target.value }))
-              }}
-            >
-              {SORT_OPTIONS.map(({ value, label }) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </Select>
-          </div>
-          <IconButton
-            className="hidden md:block"
-            variant={isMapVisible ? "primary" : "outline"}
-            aria-label="toggle map"
-            icon={<MapIcon size={18} />}
-            onClick={() => {
-              const existingParams = queryString.parse(searchParams.toString())
-              setSearchParams(queryString.stringify({ ...existingParams, map: isMapVisible ? undefined : true }))
-            }}
-          />
         </div>
       </div>
       <div className={join(isMapVisible && "grid grid-cols-2 gap-4 md:h-[78vh] lg:grid-cols-3")}>
@@ -228,14 +196,12 @@ export default function Latest() {
             <div className="flex flex-col items-center justify-center gap-4 p-10">
               <p className="text-xl">No spots yet</p>
               {type && (
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setSearchParams(queryString.stringify({ type: undefined }))
-                  }}
-                >
-                  Clear filter
-                </Button>
+                <Form>
+                  <ExistingSearchParams exclude={["type"]} />
+                  <Button type="submit" variant="outline">
+                    Clear filter
+                  </Button>
+                </Form>
               )}
             </div>
           ) : (

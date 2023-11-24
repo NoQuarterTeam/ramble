@@ -1,5 +1,5 @@
 import * as React from "react"
-import { useSearchParams } from "@remix-run/react"
+import { Form, useSearchParams } from "@remix-run/react"
 import type { ColumnDef, Row } from "@tanstack/react-table"
 import { flexRender, getCoreRowModel, getExpandedRowModel, useReactTable } from "@tanstack/react-table"
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, MoveDown, MoveUp } from "lucide-react"
@@ -10,6 +10,7 @@ import { join } from "@ramble/shared"
 import { DEFAULT_TAKE } from "~/lib/table"
 
 import { IconButton, Select, Tile } from "./ui"
+import { ExistingSearchParams } from "./ExistingSearchParams"
 
 export function Table<T>({
   data,
@@ -120,11 +121,11 @@ export function Table<T>({
   )
 }
 function Pagination({ count }: { count: number }) {
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams] = useSearchParams()
   const take = Number(searchParams.get("take") || `${DEFAULT_TAKE}`)
   const noOfPages = Math.ceil(count / take)
   const currentPage = Number(searchParams.get("page") || "1")
-  const existingParams = queryString.parse(searchParams.toString())
+
   const maxPages = 5
   const halfMaxPages = Math.floor(maxPages / 2)
   const pageNumbers = [] as Array<number>
@@ -155,76 +156,87 @@ function Pagination({ count }: { count: number }) {
     <div className="flex items-center justify-between px-2">
       <p>{count} items</p>
       <div className="flex items-center gap-2">
-        <span className="flex items-center gap-1">
-          <div>Page</div>
-          <strong>{currentPage}</strong>
-          of
-          <strong>{noOfPages}</strong>
-        </span>
+        <Form className="flex items-center gap-2">
+          <span className="flex items-center gap-1">
+            <div>Page</div>
+            <strong>{currentPage}</strong>
+            of
+            <strong>{noOfPages}</strong>
+          </span>
+          <ExistingSearchParams exclude={["page"]} />
+          <IconButton
+            size="sm"
+            name="page"
+            value="1"
+            type="submit"
+            aria-label="first page"
+            icon={<ChevronsLeft size={16} />}
+            variant="outline"
+            disabled={currentPage === 1}
+          />
+          <IconButton
+            size="sm"
+            name="page"
+            value={currentPage - 1}
+            type="submit"
+            aria-label="previous page"
+            icon={<ChevronLeft size={16} />}
+            variant="outline"
+            disabled={currentPage === 1}
+          />
+          {pageNumbers.map((pageNumber) => {
+            const isCurrentPage = pageNumber === currentPage
+            const isValidPage = pageNumber >= 0 && pageNumber <= count
+            return (
+              <IconButton
+                variant={isCurrentPage ? "secondary" : "outline"}
+                size="sm"
+                name="page"
+                value={pageNumber}
+                type="submit"
+                key={`${pageNumber}-active`}
+                aria-label={`Page ${pageNumber}`}
+                disabled={!isValidPage}
+                icon={<div>{pageNumber}</div>}
+              />
+            )
+          })}
+          <IconButton
+            size="sm"
+            aria-label="next page"
+            name="page"
+            value={currentPage + 1}
+            type="submit"
+            icon={<ChevronRight size={16} />}
+            variant="outline"
+            disabled={currentPage === noOfPages}
+          />
+          <IconButton
+            size="sm"
+            icon={<ChevronsRight size={16} />}
+            aria-label="last page"
+            variant="outline"
+            name="page"
+            value={noOfPages}
+            type="submit"
+            disabled={currentPage === noOfPages}
+          />
+        </Form>
 
-        <IconButton
-          size="sm"
-          aria-label="first page"
-          icon={<ChevronsLeft size={16} />}
-          variant="outline"
-          onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: 1 }))}
-          disabled={currentPage === 1}
-        />
-
-        <IconButton
-          size="sm"
-          aria-label="previous page"
-          icon={<ChevronLeft size={16} />}
-          variant="outline"
-          onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: currentPage - 1 }))}
-          disabled={currentPage === 1}
-        />
-        {pageNumbers.map((pageNumber) => {
-          const isCurrentPage = pageNumber === currentPage
-          const isValidPage = pageNumber >= 0 && pageNumber <= count
-
-          return (
-            <IconButton
-              variant={isCurrentPage ? "secondary" : "outline"}
-              size="sm"
-              key={`${pageNumber}-active`}
-              aria-label={`Page ${pageNumber}`}
-              disabled={!isValidPage}
-              onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: pageNumber }))}
-              icon={<div>{pageNumber}</div>}
-            />
-          )
-        })}
-
-        <IconButton
-          size="sm"
-          aria-label="next page"
-          icon={<ChevronRight size={16} />}
-          variant="outline"
-          onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: currentPage + 1 }))}
-          disabled={currentPage === noOfPages}
-        />
-
-        <IconButton
-          size="sm"
-          icon={<ChevronsRight size={16} />}
-          aria-label="last page"
-          variant="outline"
-          onClick={() => setSearchParams(queryString.stringify({ ...existingParams, page: noOfPages }))}
-          disabled={currentPage === noOfPages}
-        />
-
-        <Select
-          className="w-[130px]"
-          size="sm"
-          name="take"
-          value={take}
-          onChange={(e) => setSearchParams(queryString.stringify({ ...existingParams, take: e.target.value }))}
-        >
-          <option value="15">15 per page</option>
-          <option value="30">30 per page</option>
-          <option value="50">50 per page</option>
-        </Select>
+        <Form>
+          <ExistingSearchParams exclude={["take"]} />
+          <Select
+            className="w-[130px]"
+            size="sm"
+            name="take"
+            value={take}
+            onChange={(e) => e.currentTarget.form?.dispatchEvent(new Event("submit", { bubbles: true }))}
+          >
+            <option value="15">15 per page</option>
+            <option value="30">30 per page</option>
+            <option value="50">50 per page</option>
+          </Select>
+        </Form>
       </div>
     </div>
   )

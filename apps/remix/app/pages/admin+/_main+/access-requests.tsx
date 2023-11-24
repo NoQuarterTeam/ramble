@@ -1,4 +1,4 @@
-import { useLoaderData, useRouteError, useSearchParams } from "@remix-run/react"
+import { Form, useLoaderData, useRouteError, useSearchParams } from "@remix-run/react"
 import { createColumnHelper } from "@tanstack/react-table"
 import dayjs from "dayjs"
 import { Check, Trash } from "lucide-react"
@@ -22,6 +22,7 @@ import { badRequest, json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"
 import { type ActionFunctionArgs, type LoaderFunctionArgs, type SerializeFrom } from "~/lib/vendor/vercel.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
+import { ExistingSearchParams } from "~/components/ExistingSearchParams"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { orderBy, search, skip, take } = getTableParams(request)
@@ -118,27 +119,22 @@ const columns = [
 ]
 export default function AccessRequests() {
   const { accessRequests, count } = useLoaderData<typeof loader>()
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams] = useSearchParams()
   return (
     <div className="space-y-2">
       <h1 className="text-4xl">Access Requests</h1>
       <div className="flex gap-2">
-        <div>
+        <Form>
+          <ExistingSearchParams exclude={["unaccepted"]} />
           <Button
             variant={searchParams.get("unaccepted") === "true" ? "primary" : "outline"}
-            onClick={() => {
-              const existingParams = queryString.parse(searchParams.toString())
-              setSearchParams(
-                queryString.stringify({
-                  ...existingParams,
-                  unaccepted: searchParams.get("unaccepted") === "true" ? undefined : true,
-                }),
-              )
-            }}
+            type="submit"
+            name={searchParams.get("unaccepted") === "true" ? undefined : "unaccepted"}
+            value={searchParams.get("unaccepted") === "true" ? undefined : "true"}
           >
             Show unaccepted
           </Button>
-        </div>
+        </Form>
 
         <div>
           <Search className="max-w-[400px]" />
