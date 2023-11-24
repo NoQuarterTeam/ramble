@@ -122,4 +122,27 @@ export const userRouter = createTRPCRouter({
     await ctx.prisma.user.delete({ where: { id: ctx.user.id } })
     return true
   }),
+  guides: protectedProcedure.input(z.object({ skip: z.number() })).query(async ({ ctx, input }) => {
+    return ctx.prisma.user.findMany({
+      where: { role: "GUIDE" },
+      skip: input.skip,
+      take: 12,
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        username: true,
+        avatar: true,
+        avatarBlurHash: true,
+        _count: {
+          select: {
+            followers: true,
+            lists: { where: { isPrivate: false } },
+            verifiedSpots: { where: { sourceUrl: { equals: null }, deletedAt: null } },
+          },
+        },
+      },
+    })
+  }),
 })

@@ -14,6 +14,8 @@ import { Text } from "../../../components/ui/Text"
 import { api } from "../../../lib/api"
 import { height, isTablet, width } from "../../../lib/device"
 import { useRouter } from "../../router"
+import { useMe } from "../../../lib/hooks/useMe"
+import { LoginPlaceholder } from "../../../components/LoginPlaceholder"
 
 const SORT_OPTIONS = { latest: "latest", rated: "top rated", saved: "most saved" } as const
 
@@ -24,7 +26,7 @@ export function SpotsScreen() {
   const { data: initialSpots, isLoading } = api.spot.list.useQuery({ skip: 0, sort })
 
   const [spots, setSpots] = React.useState(initialSpots)
-
+  const { me } = useMe()
   React.useEffect(() => {
     setSpots(initialSpots)
   }, [initialSpots])
@@ -35,6 +37,13 @@ export function SpotsScreen() {
     const newSpots = await utils.spot.list.fetch({ skip: spots?.length || 0, sort: "latest" })
     setSpots([...(spots || []), ...newSpots])
   }, [spots, utils.spot.list])
+
+  if (!me)
+    return (
+      <TabView title="latest">
+        <LoginPlaceholder text="Log in to view latest spots" />
+      </TabView>
+    )
 
   return (
     <TabView

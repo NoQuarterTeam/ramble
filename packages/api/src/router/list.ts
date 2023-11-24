@@ -35,7 +35,6 @@ export const listRouter = createTRPCRouter({
         include: input.showFollowing
           ? { creator: { select: { avatar: true, avatarBlurHash: true, firstName: true, lastName: true } } }
           : undefined,
-        take: 10,
       })
     }),
   detail: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
@@ -135,7 +134,6 @@ export const listRouter = createTRPCRouter({
       where: { creatorId: ctx.user.id },
       orderBy: { createdAt: "desc" },
       include: { listSpots: { where: { spotId: input.spotId } } },
-      take: 10,
     })
   }),
   saveToList: protectedProcedure.input(z.object({ spotId: z.string(), listId: z.string() })).mutation(async ({ ctx, input }) => {

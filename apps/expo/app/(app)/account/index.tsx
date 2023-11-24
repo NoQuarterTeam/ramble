@@ -1,16 +1,16 @@
-import { ScrollView, TouchableOpacity, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import {
   AlertCircle,
   ChevronRight,
-  Cog,
-  type LucideIcon,
   MessageCircle,
+  Settings,
   ToggleRight,
   User,
   User2,
   UserPlus,
+  type LucideIcon,
 } from "lucide-react-native"
+import { ScrollView, TouchableOpacity, View } from "react-native"
 
 import { createImageUrl } from "@ramble/shared"
 
@@ -26,7 +26,7 @@ import { toast } from "../../../components/ui/Toast"
 import { api, AUTH_TOKEN } from "../../../lib/api"
 import { UPDATE_ID, VERSION } from "../../../lib/config"
 import { useMe } from "../../../lib/hooks/useMe"
-import { type ScreenParamsList, useRouter } from "../../router"
+import { useRouter, type ScreenParamsList } from "../../router"
 
 export function AccountScreen() {
   const { me } = useMe()
@@ -122,7 +122,7 @@ export function AccountScreen() {
               <ProfileLink to="AccountInviteScreen" icon={UserPlus}>
                 Invites
               </ProfileLink>
-              <ProfileLink to="AccountSettingsScreen" icon={Cog}>
+              <ProfileLink to="AccountSettingsScreen" icon={Settings}>
                 Settings
               </ProfileLink>
               <ProfileLink to="AccountFeedbackScreen" icon={MessageCircle}>
