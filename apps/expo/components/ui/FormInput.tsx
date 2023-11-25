@@ -32,7 +32,7 @@ export function FormInput({ label, name, error, updater, rightElement, ...props 
               accessibilityLabel="input"
               accessibilityLabelledBy={name}
               onChangeText={(text) => (updater ? onChange(updater(text)) : onChange(text))}
-              value={value}
+              value={value ? String(value) : ""}
               textAlignVertical="top"
               onBlur={onBlur}
               className={merge(rightElement && "flex-1", props.className)}

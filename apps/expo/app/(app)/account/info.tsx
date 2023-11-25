@@ -25,12 +25,12 @@ export function AccountInfoScreen() {
 
   const form = useForm({
     defaultValues: {
-      bio: me?.bio || "",
       firstName: me?.firstName || "",
       lastName: me?.lastName || "",
       email: me?.email || "",
       username: me?.username || "",
-      instagram: me?.instagram || "",
+      instagram: me?.instagram,
+      bio: me?.bio,
     },
   })
 
@@ -38,7 +38,14 @@ export function AccountInfoScreen() {
   const { mutate, isLoading, error } = api.user.update.useMutation({
     onSuccess: (data) => {
       utils.user.me.setData(undefined, data)
-      form.reset({}, { keepValues: true })
+      form.reset({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        username: data.username,
+        instagram: data.instagram,
+        bio: data.bio,
+      })
       toast({ title: "Account updated." })
     },
   })
@@ -46,6 +53,8 @@ export function AccountInfoScreen() {
   const onSubmit = form.handleSubmit((data) => {
     if (data.username.trim().includes(" ")) return toast({ title: "Username can not contain empty spaces" })
     Keyboard.dismiss()
+    console.log({ data })
+
     mutate(data)
   })
 
