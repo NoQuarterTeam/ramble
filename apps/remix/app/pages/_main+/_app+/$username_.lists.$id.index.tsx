@@ -4,10 +4,11 @@ import Map, { Marker, NavigationControl } from "react-map-gl"
 import { Link, useLoaderData, useNavigate } from "@remix-run/react"
 import { ChevronLeft, Copy } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
+import { ClientOnly } from "remix-utils/client-only"
 import { promiseHash } from "remix-utils/promise"
 
-import { publicSpotWhereClauseRaw } from "@ramble/api"
-import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE, type SpotItemWithStatsAndImage } from "@ramble/shared"
+import { publicSpotWhereClauseRaw } from "@ramble/server-services"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE, type SpotItemWithStatsAndImage } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -202,30 +203,32 @@ export default function ListDetail() {
         </div>
         <div className="rounded-xs col-span-12 h-[80vh] w-full overflow-hidden pb-4 md:col-span-8 md:pb-0">
           <ClientOnly>
-            <Map
-              doubleClickZoom={true}
-              scrollZoom={false}
-              mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
-              style={{ height: "100%", width: "100%" }}
-              initialViewState={
-                bounds
-                  ? { bounds, fitBoundsOptions: { padding: 50 } }
-                  : {
-                      latitude: spots[0]?.latitude || INITIAL_LATITUDE,
-                      longitude: spots[0]?.longitude || INITIAL_LONGITUDE,
-                      zoom: 10,
-                    }
-              }
-              attributionControl={false}
-              mapStyle={
-                theme === "dark"
-                  ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
-                  : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
-              }
-            >
-              {markers}
-              <NavigationControl position="bottom-right" />
-            </Map>
+            {() => (
+              <Map
+                doubleClickZoom={true}
+                scrollZoom={false}
+                mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
+                style={{ height: "100%", width: "100%" }}
+                initialViewState={
+                  bounds
+                    ? { bounds, fitBoundsOptions: { padding: 50 } }
+                    : {
+                        latitude: spots[0]?.latitude || INITIAL_LATITUDE,
+                        longitude: spots[0]?.longitude || INITIAL_LONGITUDE,
+                        zoom: 10,
+                      }
+                }
+                attributionControl={false}
+                mapStyle={
+                  theme === "dark"
+                    ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
+                    : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
+                }
+              >
+                {markers}
+                <NavigationControl position="bottom-right" />
+              </Map>
+            )}
           </ClientOnly>
         </div>
       </div>

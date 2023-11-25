@@ -6,8 +6,7 @@ import { ZodError } from "zod"
 
 import { prisma } from "@ramble/database"
 import { type User } from "@ramble/database/types"
-
-import { decodeAuthToken } from "./lib/jwt"
+import { decodeAuthToken } from "@ramble/server-services"
 
 export async function createContext({ req }: trpcFetch.FetchCreateContextFnOptions) {
   const headers = new Headers(req.headers)

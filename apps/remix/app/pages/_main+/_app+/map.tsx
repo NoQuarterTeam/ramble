@@ -29,8 +29,9 @@ import { geolocation } from "@vercel/edge"
 import { User } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
+import { ClientOnly } from "remix-utils/client-only"
 
-import { ClientOnly, createImageUrl, INITIAL_LATITUDE, INITIAL_LONGITUDE, join } from "@ramble/shared"
+import { createImageUrl, INITIAL_LATITUDE, INITIAL_LONGITUDE, join } from "@ramble/shared"
 
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { db } from "~/lib/db.server"
@@ -252,9 +253,7 @@ export default function MapView() {
         </Map>
       )}
 
-      <ClientOnly>
-        <MapFilters onChange={onParamsChange} />
-      </ClientOnly>
+      <ClientOnly>{() => <MapFilters onChange={onParamsChange} />}</ClientOnly>
       <MapLayerControls />
       <MapSearch onSearch={(center) => mapRef.current?.flyTo({ center })} />
       <Outlet />

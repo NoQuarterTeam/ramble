@@ -1,10 +1,9 @@
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 import Supercluster from "supercluster"
-import { z } from "zod"
-import { NumAsString } from "zodix"
 
 import { type User } from "@ramble/database/types"
+import { clusterSchema } from "@ramble/server-schemas"
 
 import { db } from "~/lib/db.server"
 import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
@@ -18,14 +17,8 @@ export const config = {
 
 async function getUserClusters(request: Request) {
   await requireUser(request)
-  const schema = z.object({
-    zoom: NumAsString,
-    minLat: NumAsString,
-    maxLat: NumAsString,
-    minLng: NumAsString,
-    maxLng: NumAsString,
-  })
-  const result = schema.safeParse(queryString.parse(new URL(request.url).search, { arrayFormat: "bracket" }))
+
+  const result = clusterSchema.safeParse(queryString.parse(new URL(request.url).search, { arrayFormat: "bracket" }))
   if (!result.success) return []
   const coords = result.data
 

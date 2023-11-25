@@ -1,14 +1,14 @@
 import { useLoaderData } from "@remix-run/react"
-import { z } from "zod"
 
-import { generateBlurHash } from "@ramble/api"
+import { userSchema } from "@ramble/server-schemas"
+import { generateBlurHash } from "@ramble/server-services"
 
 import { Form, FormButton, FormError, FormField, FormFieldLabel, ImageField } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { Textarea } from "~/components/ui"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { formError, NullableFormString, validateFormData } from "~/lib/form.server"
+import { formError, validateFormData } from "~/lib/form.server"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { json, redirect } from "~/lib/vendor/vercel.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
@@ -20,13 +20,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return json(user)
 }
 
-const schema = z.object({
-  bio: NullableFormString,
-  avatar: NullableFormString,
-})
-
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const result = await validateFormData(request, schema)
+  const result = await validateFormData(request, userSchema.pick({ bio: true, avatar: true }))
   if (!result.success) return formError(result)
   const user = await getCurrentUser(request, { id: true, avatar: true, avatarBlurHash: true })
   let avatarBlurHash = user.avatarBlurHash

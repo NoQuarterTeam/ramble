@@ -1,6 +1,7 @@
 import { z } from "zod"
 
-import { createSignedUrl } from "../services/s3.server"
+import { createSignedUrl } from "@ramble/server-services"
+
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const s3Router = createTRPCRouter({

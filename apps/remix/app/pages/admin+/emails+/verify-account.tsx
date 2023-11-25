@@ -1,11 +1,11 @@
-import { sendAccountVerificationEmail } from "@ramble/api"
-import { VerifyAccountContent } from "@ramble/emails"
+import { sendAccountVerificationEmail } from "@ramble/server-services"
 
 import { useConfig } from "~/lib/hooks/useConfig"
 import { json } from "~/lib/remix.server"
 import { type ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
 
+import { VerifyAccountContent } from "../../../../../../packages/emails/src"
 import { type TemplateHandle } from "./_layout"
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -20,6 +20,6 @@ export const handle: TemplateHandle = {
 
 export default function Template() {
   const config = useConfig()
-  const link = `${config.WEB_URL}/admin`
+  const link = `${config.FULL_WEB_URL}/admin`
   return <VerifyAccountContent link={link} />
 }

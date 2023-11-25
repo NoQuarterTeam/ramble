@@ -16,8 +16,7 @@
   "sideEffects": false,
   "dependencies": {
     "@ramble/database": "workspace:*",
-    "tailwind-merge": "^2.0.0",
-    "zod": "3.22.4"
+    "tailwind-merge": "^2.0.0"
   },
   "devDependencies": {
     "@ramble/eslint-config": "workspace:*",

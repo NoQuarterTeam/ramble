@@ -1,6 +1,6 @@
-import type { HeadersFunction } from "~/lib/vendor/vercel.server"
+import { IS_DEV } from "@ramble/server-env"
 
-import { IS_DEV } from "./config.server"
+import type { HeadersFunction } from "~/lib/vendor/vercel.server"
 
 export const useLoaderHeaders: HeadersFunction = ({ loaderHeaders }) => {
   const headers = new Headers()

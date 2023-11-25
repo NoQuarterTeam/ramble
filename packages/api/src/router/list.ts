@@ -5,12 +5,11 @@ import Supercluster from "supercluster"
 import { z } from "zod"
 
 import { type SpotType } from "@ramble/database/types"
-import { listSchema } from "@ramble/shared"
+import { clusterSchema, listSchema, userSchema } from "@ramble/server-schemas"
+import { publicSpotWhereClauseRaw } from "@ramble/server-services"
 import { type SpotItemWithStatsAndImage } from "@ramble/shared"
 
-import { clusterSchema } from "../lib/clusters"
-import { fetchAndJoinSpotImages } from "../lib/models/spot"
-import { publicSpotWhereClauseRaw } from "../shared/spot.server"
+import { fetchAndJoinSpotImages } from "../lib/spot"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 import { type SpotClusterTypes } from "./spot"
 
@@ -18,7 +17,7 @@ type SpotItemWithStatsAndCoords = SpotItemWithStatsAndImage & { longitude: numbe
 
 export const listRouter = createTRPCRouter({
   allByUser: publicProcedure
-    .input(z.object({ username: z.string(), showFollowing: z.boolean().optional() }))
+    .input(userSchema.pick({ username: true }).and(z.object({ showFollowing: z.boolean().optional() })))
     .query(async ({ ctx, input }) => {
       const currentUser = ctx.user?.username
       const followers =

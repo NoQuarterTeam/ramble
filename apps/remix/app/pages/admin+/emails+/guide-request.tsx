@@ -1,5 +1,4 @@
-import { sendGuideRequestSentToAdminsEmail } from "@ramble/api"
-import { GuideRequestContent } from "@ramble/emails"
+import { sendGuideRequestSentToAdminsEmail } from "@ramble/server-services"
 
 import { useConfig } from "~/lib/hooks/useConfig"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
@@ -7,6 +6,7 @@ import { json } from "~/lib/remix.server"
 import { type ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
 
+import { GuideRequestContent } from "../../../../../../packages/emails/src"
 import { type TemplateHandle } from "./_layout"
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -23,6 +23,6 @@ export default function Template() {
   const config = useConfig()
   const user = useMaybeUser()
   if (!user) return null
-  const link = `${config.WEB_URL}/${user.username}`
+  const link = `${config.FULL_WEB_URL}/${user.username}`
   return <GuideRequestContent link={link} user={user} />
 }

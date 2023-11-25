@@ -309,6 +309,15 @@ importers:
       '@ramble/emails':
         specifier: workspace:*
         version: link:../../packages/emails
+      '@ramble/server-env':
+        specifier: workspace:*
+        version: link:../../packages/server/env
+      '@ramble/server-schemas':
+        specifier: workspace:*
+        version: link:../../packages/server/schemas
+      '@ramble/server-services':
+        specifier: workspace:*
+        version: link:../../packages/server/services
       '@ramble/shared':
         specifier: workspace:*
         version: link:../../packages/shared
@@ -363,9 +372,6 @@ importers:
       axios:
         specifier: 1.6.2
         version: 1.6.2
-      bcryptjs:
-        specifier: 2.4.3
-        version: 2.4.3
       blurhash:
         specifier: 2.0.5
         version: 2.0.5
@@ -384,9 +390,6 @@ importers:
       dayjs:
         specifier: 1.11.10
         version: 1.11.10
-      geojson:
-        specifier: 0.5.0
-        version: 0.5.0
       isbot:
         specifier: latest
         version: 3.7.1
@@ -466,18 +469,9 @@ importers:
       '@tailwindcss/forms':
         specifier: 0.5.7
         version: 0.5.7(tailwindcss@3.3.2)
-      '@types/bcryptjs':
-        specifier: 2.4.6
-        version: 2.4.6
       '@types/d3-shape':
         specifier: ^3.1.6
         version: 3.1.6
-      '@types/jsonwebtoken':
-        specifier: 9.0.5
-        version: 9.0.5
-      '@types/nodemailer':
-        specifier: 6.4.14
-        version: 6.4.14
       '@types/nprogress':
         specifier: 0.2.3
         version: 0.2.3
@@ -541,27 +535,24 @@ importers:
 
   packages/api:
     dependencies:
-      '@aws-sdk/client-s3':
-        specifier: ^3.454.0
-        version: 3.456.0
-      '@aws-sdk/lib-storage':
-        specifier: ^3.454.0
-        version: 3.456.0(@aws-sdk/client-s3@3.456.0)
-      '@aws-sdk/s3-request-presigner':
-        specifier: ^3.454.0
-        version: 3.456.0
       '@ramble/database':
         specifier: workspace:*
         version: link:../database
       '@ramble/emails':
         specifier: workspace:*
         version: link:../emails
+      '@ramble/server-env':
+        specifier: workspace:*
+        version: link:../server/env
+      '@ramble/server-schemas':
+        specifier: workspace:*
+        version: link:../server/schemas
+      '@ramble/server-services':
+        specifier: workspace:*
+        version: link:../server/services
       '@ramble/shared':
         specifier: workspace:*
         version: link:../shared
-      '@slack/web-api':
-        specifier: ^6.9.1
-        version: 6.10.0
       '@trpc/server':
         specifier: 10.44.1
         version: 10.44.1
@@ -574,27 +565,9 @@ importers:
       '@turf/helpers':
         specifier: ^6.5.0
         version: 6.5.0(patch_hash=s37llybtaw4egw46iemlnuvpdu)
-      bcryptjs:
-        specifier: ^2.4.3
-        version: 2.4.3
-      blurhash:
-        specifier: ^2.0.5
-        version: 2.0.5
       dayjs:
         specifier: 1.11.10
         version: 1.11.10
-      flickr-sdk:
-        specifier: 7.0.0-beta.6
-        version: 7.0.0-beta.6
-      jsonwebtoken:
-        specifier: 9.0.2
-        version: 9.0.2
-      nodemailer:
-        specifier: 6.9.7
-        version: 6.9.7
-      resend:
-        specifier: ^2.0.0
-        version: 2.0.0
       supercluster:
         specifier: ^8.0.1
         version: 8.0.1
@@ -608,12 +581,6 @@ importers:
       '@ramble/eslint-config':
         specifier: workspace:*
         version: link:../config/eslint
-      '@types/bcryptjs':
-        specifier: ^2.4.5
-        version: 2.4.6
-      '@types/jsonwebtoken':
-        specifier: 9.0.5
-        version: 9.0.5
       '@types/node':
         specifier: ^18.18.6
         version: 18.18.12
@@ -702,9 +669,9 @@ importers:
       '@prisma/client':
         specifier: 5.6.0
         version: 5.6.0(prisma@5.6.0)
-      '@prisma/extension-accelerate':
-        specifier: ^0.6.2
-        version: 0.6.2(@prisma/client@5.6.0)
+      '@ramble/server-env':
+        specifier: workspace:*
+        version: link:../server/env
       prisma:
         specifier: 5.6.0
         version: 5.6.0
@@ -750,7 +717,69 @@ importers:
         specifier: 5.3.2
         version: 5.3.2
 
-  packages/scripts:
+  packages/server/env:
+    dependencies:
+      zod:
+        specifier: 3.22.4
+        version: 3.22.4
+    devDependencies:
+      '@ramble/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint
+      '@types/node':
+        specifier: ^18.18.6
+        version: 18.18.12
+      dotenv-cli:
+        specifier: ^7.3.0
+        version: 7.3.0
+      eslint:
+        specifier: 8.54.0
+        version: 8.54.0
+      prettier:
+        specifier: 3.1.0
+        version: 3.1.0
+      typescript:
+        specifier: 5.3.2
+        version: 5.3.2
+
+  packages/server/schemas:
+    dependencies:
+      '@ramble/database':
+        specifier: workspace:*
+        version: link:../../database
+      '@ramble/shared':
+        specifier: workspace:*
+        version: link:../../shared
+      tailwind-merge:
+        specifier: ^2.0.0
+        version: 2.0.0
+      zod:
+        specifier: 3.22.4
+        version: 3.22.4
+      zodix:
+        specifier: 0.4.4
+        version: 0.4.4(@remix-run/server-runtime@2.3.1)(zod@3.22.4)
+    devDependencies:
+      '@ramble/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint
+      '@ramble/tailwind-config':
+        specifier: workspace:*
+        version: link:../../config/tailwind
+      '@types/node':
+        specifier: ^18.18.4
+        version: 18.18.12
+      eslint:
+        specifier: 8.54.0
+        version: 8.54.0
+      prettier:
+        specifier: 3.1.0
+        version: 3.1.0
+      typescript:
+        specifier: 5.3.2
+        version: 5.3.2
+
+  packages/server/scripts:
     devDependencies:
       '@faker-js/faker':
         specifier: ^8.1.0
@@ -760,16 +789,16 @@ importers:
         version: 3.3.0
       '@ramble/api':
         specifier: workspace:*
-        version: link:../api
+        version: link:../../api
       '@ramble/database':
         specifier: workspace:*
-        version: link:../database
+        version: link:../../database
       '@ramble/eslint-config':
         specifier: workspace:*
-        version: link:../config/eslint
+        version: link:../../config/eslint
       '@ramble/shared':
         specifier: workspace:*
-        version: link:../shared
+        version: link:../../shared
       '@types/html-to-text':
         specifier: ^9.0.2
         version: 9.0.4
@@ -804,6 +833,85 @@ importers:
         specifier: 5.3.2
         version: 5.3.2
 
+  packages/server/services:
+    dependencies:
+      '@aws-sdk/client-s3':
+        specifier: ^3.456.0
+        version: 3.456.0
+      '@aws-sdk/lib-storage':
+        specifier: ^3.456.0
+        version: 3.456.0(@aws-sdk/client-s3@3.456.0)
+      '@aws-sdk/s3-request-presigner':
+        specifier: ^3.456.0
+        version: 3.456.0
+      '@ramble/database':
+        specifier: workspace:*
+        version: link:../../database
+      '@ramble/emails':
+        specifier: workspace:*
+        version: link:../../emails
+      '@ramble/server-env':
+        specifier: workspace:*
+        version: link:../env
+      '@ramble/shared':
+        specifier: workspace:*
+        version: link:../../shared
+      '@slack/web-api':
+        specifier: ^6.9.1
+        version: 6.10.0
+      bcryptjs:
+        specifier: ^2.4.3
+        version: 2.4.3
+      blurhash:
+        specifier: ^2.0.5
+        version: 2.0.5
+      dayjs:
+        specifier: 1.11.10
+        version: 1.11.10
+      flickr-sdk:
+        specifier: 7.0.0-beta.6
+        version: 7.0.0-beta.6
+      jsonwebtoken:
+        specifier: 9.0.2
+        version: 9.0.2
+      nodemailer:
+        specifier: 6.9.7
+        version: 6.9.7
+      resend:
+        specifier: ^2.0.0
+        version: 2.0.0
+      zod:
+        specifier: 3.22.4
+        version: 3.22.4
+    devDependencies:
+      '@ramble/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint
+      '@types/bcryptjs':
+        specifier: ^2.4.5
+        version: 2.4.6
+      '@types/jsonwebtoken':
+        specifier: 9.0.5
+        version: 9.0.5
+      '@types/node':
+        specifier: ^18.18.6
+        version: 18.18.12
+      '@types/nodemailer':
+        specifier: ^6.4.14
+        version: 6.4.14
+      dotenv-cli:
+        specifier: ^7.3.0
+        version: 7.3.0
+      eslint:
+        specifier: 8.54.0
+        version: 8.54.0
+      prettier:
+        specifier: 3.1.0
+        version: 3.1.0
+      typescript:
+        specifier: 5.3.2
+        version: 5.3.2
+
   packages/shared:
     dependencies:
       '@ramble/database':
@@ -812,9 +920,6 @@ importers:
       tailwind-merge:
         specifier: ^2.0.0
         version: 2.0.0
-      zod:
-        specifier: 3.22.4
-        version: 3.22.4
     devDependencies:
       '@ramble/eslint-config':
         specifier: workspace:*
@@ -4289,15 +4394,6 @@ packages:
   /@prisma/engines@5.6.0:
     resolution: {integrity: sha512-Mt2q+GNJpU2vFn6kif24oRSBQv1KOkYaterQsi0k2/lA+dLvhRX6Lm26gon6PYHwUM8/h8KRgXIUMU0PCLB6bw==}
     requiresBuild: true
-    dev: false
-
-  /@prisma/extension-accelerate@0.6.2(@prisma/client@5.6.0):
-    resolution: {integrity: sha512-KIBVPeWt8qaSg7wQ+TXmCVeUDoW75whtXcdS9dbHxRoO2OWFH5I9+qbkHBhx5Wj/h1wQpS8usuxGnsZqiBjUpQ==}
-    engines: {node: '>=16'}
-    peerDependencies:
-      '@prisma/client': '>=4.16.1'
-    dependencies:
-      '@prisma/client': 5.6.0(prisma@5.6.0)
     dev: false
 
   /@puppeteer/browsers@1.8.0:
@@ -11065,11 +11161,6 @@ packages:
 
   /geojson-vt@3.2.1:
     resolution: {integrity: sha512-EvGQQi/zPrDA6zr6BnJD/YhwAkBP8nnJ9emh3EnHQKVMfg/MRVtPbMYdgVy/IaEmn4UfagD2a6fafPDL5hbtwg==}
-    dev: false
-
-  /geojson@0.5.0:
-    resolution: {integrity: sha512-/Bx5lEn+qRF4TfQ5aLu6NH+UKtvIv7Lhc487y/c8BdludrCTpiWf9wyI0RTyqg49MFefIAvFDuEi5Dfd/zgNxQ==}
-    engines: {node: '>= 0.10'}
     dev: false
 
   /get-caller-file@2.0.5:

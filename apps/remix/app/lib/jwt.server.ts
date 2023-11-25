@@ -1,10 +1,10 @@
 import { jwtVerify, SignJWT } from "jose"
 
-import { APP_SECRET } from "./env.server"
+import { env } from "@ramble/server-env"
 
 type Payload = Record<string, unknown>
 
-const secret = new TextEncoder().encode(APP_SECRET)
+const secret = new TextEncoder().encode(env.APP_SECRET)
 const alg = "HS256"
 export const createToken = async (payload: Payload) => {
   try {

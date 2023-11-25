@@ -1,11 +1,11 @@
 import { getClientIPAddress } from "remix-utils/get-client-ip-address"
 
-import { IPAPI_KEY } from "~/lib/env.server"
+import { env } from "@ramble/server-env"
 
 export async function getIpInfo(request: Request) {
   const ip = getClientIPAddress(request)
   if (!ip) return null
-  const res = await fetch(`http://api.ipapi.com/api/${ip}?access_key=${IPAPI_KEY}`)
+  const res = await fetch(`http://api.ipapi.com/api/${ip}?access_key=${env.IPAPI_KEY}`)
   const data = (await res.json()) as IPInfo
   return {
     ip: data.ip,

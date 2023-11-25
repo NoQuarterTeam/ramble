@@ -1,9 +1,9 @@
 import { Link } from "@remix-run/react"
 import { Instagram } from "lucide-react"
 import { ClientOnly } from "remix-utils/client-only"
-import { z } from "zod"
 
-import { createAccessRequest, sendAccessRequestConfirmationEmail, sendSlackMessage } from "@ramble/api"
+import { userSchema } from "@ramble/server-schemas"
+import { createAccessRequest, sendAccessRequestConfirmationEmail, sendSlackMessage } from "@ramble/server-services"
 import { join, merge } from "@ramble/shared"
 
 import { Form, useFetcher } from "~/components/Form"
@@ -14,14 +14,15 @@ import { db } from "~/lib/db.server"
 import { type ActionDataErrorResponse, formError, validateFormData } from "~/lib/form.server"
 // import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { json } from "~/lib/remix.server"
-import { type LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { type ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 
 export const config = {
   // runtime: "edge",
 }
 
-const schema = z.object({ email: z.string().email().toLowerCase() })
-export const action = async ({ request }: LoaderFunctionArgs) => {
+const schema = userSchema.pick({ email: true })
+
+export const action = async ({ request }: ActionFunctionArgs) => {
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
   const accessRequest = await db.accessRequest.findFirst({ where: { email: result.data.email } })

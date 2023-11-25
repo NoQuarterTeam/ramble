@@ -8,8 +8,8 @@ import { promiseHash } from "remix-utils/promise"
 import { z } from "zod"
 import { zx } from "zodix"
 
-import { sendBetaInvitationEmail } from "@ramble/api"
 import { type Prisma } from "@ramble/database/types"
+import { sendBetaInvitationEmail } from "@ramble/server-services"
 
 import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"

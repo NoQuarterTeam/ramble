@@ -3,7 +3,7 @@ import { useFetcher, useLoaderData, useParams } from "@remix-run/react"
 import { cacheHeader } from "pretty-cache-header"
 import { promiseHash } from "remix-utils/promise"
 
-import { publicSpotWhereClauseRaw } from "@ramble/api"
+import { publicSpotWhereClauseRaw } from "@ramble/server-services"
 import { type SpotItemWithStatsAndImage } from "@ramble/shared"
 
 import { Button } from "~/components/ui"

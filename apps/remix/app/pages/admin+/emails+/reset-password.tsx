@@ -1,12 +1,12 @@
 import { type ActionFunctionArgs } from "@remix-run/node"
 
-import { sendResetPasswordEmail } from "@ramble/api"
-import { ResetPasswordContent } from "@ramble/emails"
+import { sendResetPasswordEmail } from "@ramble/server-services"
 
 import { useConfig } from "~/lib/hooks/useConfig"
 import { json } from "~/lib/remix.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
 
+import { ResetPasswordContent } from "../../../../../../packages/emails/src"
 import { type TemplateHandle } from "./_layout"
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -21,6 +21,6 @@ export const handle: TemplateHandle = {
 
 export default function Template() {
   const config = useConfig()
-  const link = `${config.WEB_URL}/admin`
+  const link = `${config.FULL_WEB_URL}/admin`
   return <ResetPasswordContent link={link} />
 }

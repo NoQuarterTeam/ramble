@@ -1,9 +1,10 @@
 import { useLoaderData } from "@remix-run/react"
-import { z } from "zod"
+
+import { reviewDataSchema } from "@ramble/server-schemas"
 
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { formError, FormNumber, validateFormData } from "~/lib/form.server"
+import { formError, validateFormData } from "~/lib/form.server"
 import { notFound, redirect } from "~/lib/remix.server"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
@@ -34,15 +35,11 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const userId = await requireUser(request)
-  const schema = z.object({
-    description: z.string().min(10),
-    rating: FormNumber.min(1).max(5),
-  })
   const url = new URL(request.url)
   const redirectVal = url.searchParams.get("redirect") as NEW_REVIEW_REDIRECTS
   const redirectLocation = redirectVal === NEW_REVIEW_REDIRECTS.Map ? "/map/" + params.id : "/spots/" + params.id
 
-  const result = await validateFormData(request, schema)
+  const result = await validateFormData(request, reviewDataSchema)
   if (!result.success) return formError(result)
   const spot = await db.spot.findUnique({ where: { id: params.id } })
   if (!spot) throw notFound()

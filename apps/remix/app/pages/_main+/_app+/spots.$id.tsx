@@ -4,7 +4,7 @@ import dayjs from "dayjs"
 import { Check, Edit2, Heart, Star, Trash } from "lucide-react"
 import { promiseHash } from "remix-utils/promise"
 
-import { getSpotFlickrImages, publicSpotWhereClause } from "@ramble/api"
+import { getSpotFlickrImages, publicSpotWhereClause } from "@ramble/server-services"
 import {
   activitySpotTypes,
   AMENITIES,
@@ -104,7 +104,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 }
 
 export const meta: MetaFunction<typeof loader, { root: typeof rootLoader }> = ({ data, matches }) => {
-  const WEB_URL = matches.find((r) => r.id === "root")?.data.config.WEB_URL || "localhost:3000"
+  const FULL_WEB_URL = matches.find((r) => r.id === "root")?.data.config.FULL_WEB_URL || "localhost:3000"
   const image = data?.spot.images[0]?.path
   return [
     { title: data?.spot.name },
@@ -113,7 +113,7 @@ export const meta: MetaFunction<typeof loader, { root: typeof rootLoader }> = ({
     { name: "og:description", content: data?.spot.description },
     {
       name: "og:image",
-      content: image ? WEB_URL + transformImageSrc(createImageUrl(image), { width: 600, height: 400 }) : null,
+      content: image ? FULL_WEB_URL + transformImageSrc(createImageUrl(image), { width: 600, height: 400 }) : null,
     },
   ]
 }

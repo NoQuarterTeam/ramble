@@ -2,10 +2,11 @@ import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 import Supercluster from "supercluster"
 import { z } from "zod"
-import { CheckboxAsString, NumAsString } from "zodix"
+import { CheckboxAsString } from "zodix"
 
-import { publicSpotWhereClause } from "@ramble/api"
-import { type SpotType } from "@ramble/database/types"
+import { SpotType } from "@ramble/database/types"
+import { clusterSchema } from "@ramble/server-schemas"
+import { publicSpotWhereClause } from "@ramble/server-services"
 
 import { db } from "~/lib/db.server"
 import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
@@ -19,16 +20,13 @@ export const config = {
 
 async function getMapClusters(request: Request) {
   const { userId } = await getUserSession(request)
-  const schema = z.object({
-    zoom: NumAsString,
-    minLat: NumAsString,
-    maxLat: NumAsString,
-    minLng: NumAsString,
-    maxLng: NumAsString,
-    type: z.array(z.string()).or(z.string()).optional(),
-    isPetFriendly: CheckboxAsString.optional(),
-    isUnverified: CheckboxAsString.optional(),
-  })
+  const schema = clusterSchema.and(
+    z.object({
+      type: z.array(z.nativeEnum(SpotType)).or(z.nativeEnum(SpotType)).optional(),
+      isPetFriendly: CheckboxAsString.optional(),
+      isUnverified: CheckboxAsString.optional(),
+    }),
+  )
   const result = schema.safeParse(queryString.parse(new URL(request.url).search, { arrayFormat: "bracket" }))
   if (!result.success) return []
   const { zoom, type, isUnverified, isPetFriendly, ...coords } = result.data
@@ -40,7 +38,7 @@ async function getMapClusters(request: Request) {
       latitude: { gt: coords.minLat, lt: coords.maxLat },
       longitude: { gt: coords.minLng, lt: coords.maxLng },
       verifiedAt: isUnverified ? undefined : { not: { equals: null } },
-      type: typeof type === "string" ? { equals: type as SpotType } : { in: type as SpotType[] },
+      type: typeof type === "string" ? { equals: type } : { in: type },
       ...publicSpotWhereClause(userId),
       isPetFriendly: isPetFriendly ? { equals: true } : undefined,
     },

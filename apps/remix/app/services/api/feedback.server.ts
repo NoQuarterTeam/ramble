@@ -1,8 +1,8 @@
 import { type ActionFunctionArgs } from "@remix-run/node"
 import { z } from "zod"
 
-import { sendSlackMessage } from "@ramble/api"
 import { FeedbackType } from "@ramble/database/types"
+import { sendSlackMessage } from "@ramble/server-services"
 
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"

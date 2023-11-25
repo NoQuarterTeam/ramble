@@ -1,9 +1,9 @@
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
-import { vanSchema } from "@ramble/shared"
+import { vanSchema } from "@ramble/server-schemas"
+import { generateBlurHash } from "@ramble/server-services"
 
-import { generateBlurHash } from "../services/generateBlurHash.server"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const vanRouter = createTRPCRouter({

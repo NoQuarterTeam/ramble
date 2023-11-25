@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { createSignedUrl } from "@ramble/api"
+import { createSignedUrl } from "@ramble/server-services"
 
 import { formError, validateFormData } from "~/lib/form.server"
 import type { ActionFunctionArgs } from "~/lib/vendor/vercel.server"

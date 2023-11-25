@@ -1,7 +1,7 @@
 import { useFetcher } from "@remix-run/react"
 import { MapPin } from "lucide-react"
-import { z } from "zod"
-import { zx } from "zodix"
+
+import { userSchema } from "@ramble/server-schemas"
 
 import { Form, FormButton, FormField } from "~/components/Form"
 import { Switch } from "~/components/ui"
@@ -29,7 +29,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       }),
     updateSettings: () =>
       createAction(request)
-        .input(z.object({ isLocationPrivate: zx.BoolAsString }))
+        .input(userSchema.pick({ isLocationPrivate: true }))
         .handler(async (data) => {
           await db.user.update({ where: { id: user.id }, data: { isLocationPrivate: data.isLocationPrivate } })
           return redirect("/account/settings", request, { flash: { title: "Settings updated" } })

@@ -1,7 +1,8 @@
 import { useLoaderData } from "@remix-run/react"
-import { type z } from "zod"
+import { z } from "zod"
 
-import { generateBlurHash, publicSpotWhereClause } from "@ramble/api"
+import { NullableFormString, spotAmenitiesSchema, spotSchema } from "@ramble/server-schemas"
+import { generateBlurHash, publicSpotWhereClause } from "@ramble/server-services"
 import { canManageSpot, doesSpotTypeRequireAmenities } from "@ramble/shared"
 
 import { track } from "~/lib/analytics.server"
@@ -12,7 +13,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel
 import { json, redirect } from "~/lib/vendor/vercel.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
-import { amenitiesSchema, SpotForm, spotSchema } from "./components/SpotForm"
+import { SpotForm } from "./components/SpotForm"
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, { role: true, id: true, isAdmin: true, isVerified: true })
@@ -27,7 +28,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request, { id: true, role: true, isAdmin: true, isVerified: true })
 
-  const result = await validateFormData(request, spotSchema)
+  const result = await validateFormData(request, spotSchema.and(z.object({ customAddress: NullableFormString })))
 
   if (!result.success) return formError(result)
 
@@ -35,9 +36,9 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   if (!spot) throw notFound()
   if (!canManageSpot(spot, user)) throw redirect("/spots")
 
-  let amenities: undefined | z.infer<typeof amenitiesSchema>
+  let amenities: undefined | z.infer<typeof spotAmenitiesSchema>
   if (doesSpotTypeRequireAmenities(result.data.type)) {
-    const amenitiesResult = await validateFormData(request, amenitiesSchema)
+    const amenitiesResult = await validateFormData(request, spotAmenitiesSchema)
     if (!amenitiesResult.success) return formError(amenitiesResult)
     amenities = amenitiesResult.data
   }

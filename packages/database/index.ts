@@ -1,10 +1,9 @@
 import { connect } from "@planetscale/database"
 import { PrismaPlanetScale } from "@prisma/adapter-planetscale"
 import { PrismaClient } from "@prisma/client"
+import { env } from "@ramble/server-env"
 
-// import { withAccelerate } from "@prisma/extension-accelerate"
-
-const connection = connect({ url: process.env.DATABASE_URL })
+const connection = connect({ url: env.DATABASE_URL })
 const adapter = new PrismaPlanetScale(connection)
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }

@@ -4,7 +4,8 @@ import { Edit, Instagram, type LucideIcon } from "lucide-react"
 import { z } from "zod"
 import { zx } from "zodix"
 
-import { generateBlurHash } from "@ramble/api"
+import { userSchema } from "@ramble/server-schemas"
+import { generateBlurHash } from "@ramble/server-services"
 import { createImageUrl, merge, userInterestFields } from "@ramble/shared"
 
 import { Form, FormButton, useFetcher } from "~/components/Form"
@@ -75,7 +76,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         }),
     updateAvatar: () =>
       createAction(request)
-        .input(z.object({ avatar: z.string() }))
+        .input(userSchema.pick({ avatar: true }))
         .handler(async (data) => {
           let avatarBlurHash = user.avatarBlurHash
           if (data.avatar && data.avatar !== user.avatar) {

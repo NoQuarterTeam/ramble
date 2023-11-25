@@ -1,4 +1,4 @@
-import { sendGuideRequestSentToAdminsEmail } from "@ramble/api"
+import { sendGuideRequestSentToAdminsEmail } from "@ramble/server-services"
 
 import { useFetcher } from "~/components/Form"
 import { track } from "~/lib/analytics.server"

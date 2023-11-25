@@ -4,8 +4,8 @@ import { ArrowLeft, ArrowRight, Frown, Heart, Image, Star } from "lucide-react"
 import { useAuthenticityToken } from "remix-utils/csrf/react"
 import { z } from "zod"
 
-import { generateBlurHash } from "@ramble/api"
 import { type SpotType } from "@ramble/database/types"
+import { generateBlurHash } from "@ramble/server-services"
 import { createImageUrl, displayRating, isPartnerSpot, join, merge } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"

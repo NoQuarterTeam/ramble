@@ -31,7 +31,7 @@ export function AccountSettingsScreen() {
   const { mutate: updateUser } = api.user.update.useMutation({
     onMutate: (data) => {
       if (!me) return
-      utils.user.me.setData(undefined, { ...me, isLocationPrivate: data.isLocationPrivate || false })
+      utils.user.me.setData(undefined, { ...me, isLocationPrivate: Boolean(data.isLocationPrivate) || false })
     },
   })
 

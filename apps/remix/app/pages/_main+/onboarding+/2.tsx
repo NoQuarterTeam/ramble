@@ -1,8 +1,7 @@
 import * as React from "react"
 import { useLoaderData } from "@remix-run/react"
-import { z } from "zod"
-import { zx } from "zodix"
 
+import { userSchema } from "@ramble/server-schemas"
 import { userInterestFields } from "@ramble/shared"
 
 import { Form, FormButton, FormError } from "~/components/Form"
@@ -29,16 +28,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return json(user)
 }
 
-const schema = z.object({
-  isSurfer: zx.BoolAsString,
-  isClimber: zx.BoolAsString,
-  isMountainBiker: zx.BoolAsString,
-  isPaddleBoarder: zx.BoolAsString,
-  isHiker: zx.BoolAsString,
-})
-
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const result = await validateFormData(request, schema)
+  const result = await validateFormData(request, userSchema.pick(userInterestFields))
   if (!result.success) return formError(result)
   const id = await requireUser(request)
   const user = await db.user.update({ where: { id }, data: result.data })
@@ -56,17 +47,15 @@ export default function Onboarding2() {
         <p className="opacity-70">Some things that may interest you</p>
       </div>
       <div className="flex w-full flex-wrap items-center justify-center gap-2 md:gap-4">
-        {interestOptions
-          .filter((i) => i.value !== "isPetOwner")
-          .map((interest) => (
-            <InterestSelector
-              key={interest.value}
-              Icon={interest.Icon}
-              label={interest.label}
-              field={interest.value}
-              defaultValue={user[interest.value as keyof typeof user]}
-            />
-          ))}
+        {interestOptions.map((interest) => (
+          <InterestSelector
+            key={interest.value}
+            Icon={interest.Icon}
+            label={interest.label}
+            field={interest.value}
+            defaultValue={user[interest.value as keyof typeof user]}
+          />
+        ))}
       </div>
       <FormError />
       <Footer>

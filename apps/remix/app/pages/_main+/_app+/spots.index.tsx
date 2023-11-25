@@ -8,8 +8,8 @@ import { cacheHeader } from "pretty-cache-header"
 import { ExistingSearchParams } from "remix-utils/existing-search-params"
 import { promiseHash } from "remix-utils/promise"
 
-import { publicSpotWhereClauseRaw } from "@ramble/api"
 import { Prisma, SpotType } from "@ramble/database/types"
+import { publicSpotWhereClauseRaw } from "@ramble/server-services"
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, join, type SpotItemWithStatsAndImage, STAY_SPOT_TYPE_OPTIONS } from "@ramble/shared"
 
 import { SpotIcon } from "~/components/SpotIcon"

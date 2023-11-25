@@ -78,14 +78,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   return createActions<Actions>(request, {
     delete: () =>
       createAction(request)
-        .input(z.object({ id: z.string() }))
+        .input(z.object({ id: z.string().uuid() }))
         .handler(async (data) => {
           await db.spot.update({ where: { id: data.id }, data: { deletedAt: new Date() } })
           return json({ success: true })
         }),
     verify: () =>
       createAction(request)
-        .input(z.object({ id: z.string() }))
+        .input(z.object({ id: z.string().uuid() }))
         .handler(async (data) => {
           await db.spot.update({
             where: { id: data.id },

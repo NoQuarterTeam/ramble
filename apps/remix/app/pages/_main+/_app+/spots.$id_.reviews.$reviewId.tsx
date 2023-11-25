@@ -1,9 +1,11 @@
 import { useLoaderData } from "@remix-run/react"
 import { z } from "zod"
 
+import { FormNumber } from "@ramble/server-schemas"
+
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { createAction, createActions, FormNumber } from "~/lib/form.server"
+import { createAction, createActions } from "~/lib/form.server"
 import { badRequest, notFound, redirect } from "~/lib/remix.server"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"

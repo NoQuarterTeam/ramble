@@ -1,8 +1,8 @@
 import { z } from "zod"
 
 import { FeedbackType } from "@ramble/database/types"
+import { sendSlackMessage } from "@ramble/server-services"
 
-import { sendSlackMessage } from "../services/slack.server"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const feedbackRouter = createTRPCRouter({

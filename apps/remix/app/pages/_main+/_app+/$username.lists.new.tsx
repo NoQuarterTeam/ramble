@@ -1,8 +1,8 @@
-import { z } from "zod"
+import { listSchema } from "@ramble/server-schemas"
 
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { FormCheckbox, formError, NullableFormString, validateFormData } from "~/lib/form.server"
+import { formError, validateFormData } from "~/lib/form.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { notFound, redirect } from "~/lib/remix.server"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
@@ -22,14 +22,8 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request)
-  const schema = z.object({
-    name: z.string().min(1, "List name must be at least 1 character"),
-    description: NullableFormString,
-    isPrivate: FormCheckbox,
-  })
-  const result = await validateFormData(request, schema)
+  const result = await validateFormData(request, listSchema)
   if (!result.success) return formError(result)
-
   const list = await db.list.create({ data: { ...result.data, creator: { connect: { id: user.id } } } })
   track("List created", { listId: list.id, userId: user.id })
   return redirect(`/${user.username}/lists`, request, {

@@ -2,7 +2,7 @@ import { Link, useLoaderData } from "@remix-run/react"
 import { json, type LoaderFunctionArgs } from "@vercel/remix"
 import { Copy } from "lucide-react"
 
-// import { generateInviteCodes } from "@ramble/api"
+// import { generateInviteCodes } from "@ramble/server-services"
 import { createImageUrl } from "@ramble/shared"
 
 // import { Form, FormButton } from "~/components/Form"
@@ -72,7 +72,7 @@ export default function AccountInvite() {
 
 function InviteCodeButton(props: { code: string }) {
   const config = useConfig()
-  const link = config.WEB_URL + "/register?code=" + props.code
+  const link = config.FULL_WEB_URL + "/register?code=" + props.code
   const [isCopied, copy] = useClipboard(link)
 
   return (

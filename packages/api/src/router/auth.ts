@@ -2,14 +2,16 @@ import { TRPCError } from "@trpc/server"
 import bcrypt from "bcryptjs"
 import { z } from "zod"
 
-import { loginSchema, registerSchema } from "@ramble/shared"
+import { IS_DEV } from "@ramble/server-env"
+import { loginSchema, registerSchema } from "@ramble/server-schemas"
+import {
+  createAccessRequest,
+  createAuthToken,
+  generateInviteCodes,
+  sendAccessRequestConfirmationEmail,
+  sendSlackMessage,
+} from "@ramble/server-services"
 
-import { IS_DEV } from "../lib/config"
-import { createAuthToken } from "../lib/jwt"
-import { createAccessRequest } from "../services/access-request.server"
-import { generateInviteCodes } from "../services/inviteCodes.server"
-import { sendAccessRequestConfirmationEmail } from "../services/mailers/access-request.server"
-import { sendSlackMessage } from "../services/slack.server"
 import { createTRPCRouter, publicProcedure } from "../trpc"
 
 export const authRouter = createTRPCRouter({
@@ -24,20 +26,19 @@ export const authRouter = createTRPCRouter({
   register: publicProcedure.input(registerSchema).mutation(async ({ ctx, input: { code, ...input } }) => {
     const existingEmail = await ctx.prisma.user.findUnique({ where: { email: input.email } })
     if (existingEmail) throw new TRPCError({ code: "BAD_REQUEST", message: "Email already in use" })
-    const trimmedCode = code.toUpperCase().trim()
-    const accessRequest = await ctx.prisma.accessRequest.findFirst({ where: { code: trimmedCode, user: null } })
-    const inviteCode = await ctx.prisma.inviteCode.findFirst({ where: { code: trimmedCode, acceptedAt: null } })
+
+    const accessRequest = await ctx.prisma.accessRequest.findFirst({ where: { code, user: null } })
+    const inviteCode = await ctx.prisma.inviteCode.findFirst({ where: { code, acceptedAt: null } })
     if (!IS_DEV) {
       if (!accessRequest && !inviteCode) throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid code" })
     }
-    const formattedUsername = input.username.toLowerCase().trim()
-    const existingUsername = await ctx.prisma.user.findUnique({ where: { username: formattedUsername } })
+
+    const existingUsername = await ctx.prisma.user.findUnique({ where: { username: input.username } })
     if (existingUsername) throw new TRPCError({ code: "BAD_REQUEST", message: "User with this username already exists" })
     const hashedPassword = bcrypt.hashSync(input.password, 10)
     const user = await ctx.prisma.user.create({
       data: {
         ...input,
-        username: formattedUsername,
         isVerified: true, // temp
         lists: { create: { name: "Favourites", description: "All my favourite spots" } },
         password: hashedPassword,
@@ -61,13 +62,22 @@ export const authRouter = createTRPCRouter({
     sendSlackMessage(`🔥 @${user.username} signed up!`)
     return { user: user, token }
   }),
-  requestAccess: publicProcedure.input(z.object({ email: z.string().email() })).mutation(async ({ ctx, input }) => {
-    const accessRequest = await ctx.prisma.accessRequest.findFirst({ where: { email: input.email } })
-    if (accessRequest) throw new TRPCError({ code: "BAD_REQUEST", message: "Email already requested access" })
-    const success = await createAccessRequest(input.email)
-    if (!success) throw new TRPCError({ code: "BAD_REQUEST", message: "Error creating request, please try again" })
-    sendSlackMessage("🚀 New access request from " + input.email)
-    void sendAccessRequestConfirmationEmail(input.email)
-    return true
-  }),
+  requestAccess: publicProcedure
+    .input(
+      z.object({
+        email: z
+          .string()
+          .email()
+          .transform((e) => e.toLowerCase().trim()),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const accessRequest = await ctx.prisma.accessRequest.findFirst({ where: { email: input.email } })
+      if (accessRequest) throw new TRPCError({ code: "BAD_REQUEST", message: "Email already requested access" })
+      const success = await createAccessRequest(input.email)
+      if (!success) throw new TRPCError({ code: "BAD_REQUEST", message: "Error creating request, please try again" })
+      sendSlackMessage("🚀 New access request from " + input.email)
+      void sendAccessRequestConfirmationEmail(input.email)
+      return true
+    }),
 })

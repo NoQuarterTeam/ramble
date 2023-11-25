@@ -1,8 +1,7 @@
 import React from "react"
 import { useLoaderData } from "@remix-run/react"
-import { z } from "zod"
-import { zx } from "zodix"
 
+import { userSchema } from "@ramble/server-schemas"
 import { userInterestFields } from "@ramble/shared"
 
 import { Form, FormButton, FormError } from "~/components/Form"
@@ -24,15 +23,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request, { id: true, van: { select: { id: true } } })
-  const schema = z.object({
-    isSurfer: zx.BoolAsString,
-    isClimber: zx.BoolAsString,
-    isPetOwner: zx.BoolAsString,
-    isMountainBiker: zx.BoolAsString,
-    isPaddleBoarder: zx.BoolAsString,
-    isHiker: zx.BoolAsString,
-  })
-  const result = await validateFormData(request, schema)
+  const result = await validateFormData(request, userSchema.pick(userInterestFields))
   if (!result.success) return formError(result)
 
   await db.user.update({ where: { id: user.id }, data: result.data })
