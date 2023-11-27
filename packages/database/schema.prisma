@@ -143,15 +143,16 @@ enum SpotType {
 }
 
 model Spot {
-  id          String    @id @default(uuid())
-  name        String
-  type        SpotType
-  description String?   @db.LongText
-  address     String?
-  latitude    Float
-  longitude   Float
-  publishedAt DateTime?
-  verifiedAt  DateTime?
+  id            String                                                                 @id @default(uuid())
+  name          String
+  type          SpotType
+  description   String?                                                                @db.LongText
+  address       String?
+  latitude      Float
+  longitude     Float
+  publishedAt   DateTime?
+  verifiedAt    DateTime?
+  pointLocation Unsupported("GENERATED ALWAYS AS (Point(latitude, longitude)) STORED")
 
   // Options 
   isPetFriendly Boolean @default(true)
@@ -194,6 +195,8 @@ model Spot {
   @@index([ownerId])
   @@index([verifierId])
   @@index([creatorId])
+  @@index([latitude])
+  @@index([longitude])
   @@index([verifiedAt, type, deletedAt, creatorId, publishedAt])
   @@index([latitude, longitude, verifiedAt, type, deletedAt, creatorId, publishedAt])
 }
