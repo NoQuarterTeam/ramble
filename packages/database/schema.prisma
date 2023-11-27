@@ -143,16 +143,18 @@ enum SpotType {
 }
 
 model Spot {
-  id            String                                                                 @id @default(uuid())
-  name          String
-  type          SpotType
-  description   String?                                                                @db.LongText
-  address       String?
-  latitude      Float
-  longitude     Float
-  publishedAt   DateTime?
-  verifiedAt    DateTime?
-  pointLocation Unsupported("GENERATED ALWAYS AS (Point(latitude, longitude)) STORED")
+  id          String    @id @default(uuid())
+  name        String
+  type        SpotType
+  description String?   @db.LongText
+  address     String?
+  latitude    Float
+  longitude   Float
+  publishedAt DateTime?
+  verifiedAt  DateTime?
+
+  // this works
+  // pointLocation Unsupported("POINT GENERATED ALWAYS AS (ST_GeomFromText(CONCAT('POINT(',longitude,' ',latitude,')'))) STORED")?
 
   // Options 
   isPetFriendly Boolean @default(true)
