@@ -38,27 +38,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 }
 
 export default function Home() {
-  // const me = useMaybeUser()
   const randomPerson = PEOPLE[Math.floor(Math.random() * PEOPLE.length)]
   return (
     <div className="bg-background dark font-serif text-white">
-      {/* <div className="absolute right-6 top-16 md:top-6">
-        {me ? (
-          <Link
-            to="/map"
-            className="border-xs rounded-xs whitespace-nowrap bg-black px-4 py-2 text-center text-white hover:opacity-80 disabled:opacity-70"
-          >
-            Map
-          </Link>
-        ) : (
-          <Link
-            to="/login"
-            className="border-xs rounded-xs whitespace-nowrap bg-black px-4 py-2 text-center text-white hover:opacity-80 disabled:opacity-70"
-          >
-            Login
-          </Link>
-        )}
-      </div> */}
       <div className="h-[94vh] w-screen space-y-20 bg-[url('/landing/hero.avif')] bg-cover bg-center px-2 pt-10">
         <div className="mx-auto flex max-w-7xl flex-col items-start space-y-8">
           <div className="flex flex-col items-center">
