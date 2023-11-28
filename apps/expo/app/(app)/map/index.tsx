@@ -430,7 +430,7 @@ function RainRadar({ shouldRender }: { shouldRender: boolean }) {
           `https://api.weather.com/v3/TileServer/tile/radarEurope?ts=${data}&xyz={x}:{y}:{z}&apiKey=d7adbfe03bf54ea0adbfe03bf5fea065`,
         ]}
       />
-      <RasterLayer sourceID="twcRadar" id="radar" style={{ rasterOpacity: 0.4 }} />
+      {shouldRender && <RasterLayer sourceID="twcRadar" id="radar" style={{ rasterOpacity: 0.4 }} />}
     </>
   )
 }
