@@ -62,13 +62,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   if (!geo) return json({ latitude: null, longitude: null, city: null, country: null })
 
   if (userId && geo.latitude && geo.longitude) {
-    const randomVariant = Math.random() * (0.02 - 0.001) + 0.001 * (Math.random() > 0.5 ? 1 : -1)
+    const randomVariant = Math.random() * (0.03 - 0.02) + 0.02 * (Math.random() > 0.5 ? 1 : -1)
     await db.user.update({
       where: { id: userId },
-      data: {
-        latitude: Number(geo.latitude) + randomVariant,
-        longitude: Number(geo.longitude) + randomVariant,
-      },
+      data: { latitude: Number(geo.latitude) + randomVariant, longitude: Number(geo.longitude) + randomVariant },
     })
   }
   return json(
