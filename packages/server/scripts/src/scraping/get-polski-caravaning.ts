@@ -1,6 +1,8 @@
 import puppeteer from "puppeteer"
 import * as cheerio from "cheerio"
 import { prisma } from "@ramble/database"
+import { uniq } from "./helpers/utils"
+import { geocodeCoords } from "./helpers/geocode"
 
 async function run() {
   const errors: unknown[] = []
@@ -11,19 +13,31 @@ async function run() {
   const page = await browser.newPage()
   const BASE_URL = "https://polskicaravaning.pl"
   const natureSpotUrl = BASE_URL + "/miejscowki?q=t&par=19"
+
+  const existingPolskiSpots = await prisma.spot.findMany({
+    where: { polskiCaravaningId: { not: { equals: null } } },
+  })
+  const existingPolskiSpotIds = existingPolskiSpots.map((spot) => spot.polskiCaravaningId)
+
   try {
     await page.goto(natureSpotUrl)
 
     const markers = await page.$x("//img[contains(@class, 'leaflet-marker-icon')]")
-    for (const marker of [markers[0]]) {
+    // for (const marker of [markers[0]]) {
+    for (const marker of markers) {
+      count++
+      process.stdout.clearLine(0)
+      process.stdout.cursorTo(0)
+      process.stdout.write(`Processing: ${count}/${markers.length}`)
+
       try {
         // @ts-ignore
         await marker.click()
-        await new Promise((r) => setTimeout(r, 100)) // wait a lil bit for popup content to load
+        await new Promise((r) => setTimeout(r, 200)) // wait a lil bit for popup content to load
         const mapPageData = await page.evaluate(() => ({ html: document.documentElement.innerHTML }))
         const $1 = cheerio.load(mapPageData.html)
         const href = $1(".leaflet-popup-content a").attr("href")
-        const name = $(".leaflet-popup-content h3").text()
+        const name = $1(".leaflet-popup-content h3").text()
         // const img = $(".leaflet-popup-content a").children("img").attr("src")
         // console.log(href)
         // console.log(title)
@@ -33,13 +47,52 @@ async function run() {
 
         const polskiCaravaningId = href.split(",").length > 0 ? href.split(",")[1] : ""
         if (!polskiCaravaningId) continue
+        const exists = existingPolskiSpotIds.includes(polskiCaravaningId)
+        if (exists) continue // skip if already in db
 
-        await page.goto(BASE_URL + href)
+        const sourceUrl = BASE_URL + href
+
+        await page.goto(sourceUrl)
 
         const pageData = await page.evaluate(() => ({ html: document.documentElement.innerHTML }))
         const $2 = cheerio.load(pageData.html)
 
         // console.log($2("h3.forms").length)
+
+        let coords: number[] = []
+        let latitude
+        let longitude
+        // const script = $2(".map-box").find("script").html()
+        // if (script) {
+        //   const index = script.indexOf("var map = L.map('mapid').setView(")
+        //   const matchCharLength = 35
+        //   const expectedSubtringLength = 22
+        //   coords = script
+        //     .substring(index + matchCharLength, index + matchCharLength + expectedSubtringLength)
+        //     .split("', '")
+        //     .map((coord) => parseFloat(coord))
+        // }
+        const buttonHref = $2("a[data-btn='geo']").attr("href")
+        if (!buttonHref) continue
+        const popped = buttonHref.split("/").pop()
+        if (!popped) continue
+        coords = popped.split(",").map((coord) => parseFloat(coord))
+
+        if (coords.length === 2) {
+          latitude = coords[0]
+          longitude = coords[1]
+        }
+        if (!latitude || !longitude) {
+          errors.push("no coords found for:", sourceUrl)
+          continue
+        }
+
+        // console.log(sourceUrl)
+        // console.log(latitude)
+        // console.log(longitude)
+
+        const address = await geocodeCoords({ latitude, longitude })
+        // console.log(address)
 
         const paragraphs: string[] = []
         $2("h3.forms")
@@ -77,7 +130,7 @@ async function run() {
             latitude,
             longitude,
             address,
-            type: "REWILDING",
+            type: "CAMPING",
             creator: { connect: { email: "dan@noquarter.co" } },
             sourceUrl,
             description,
