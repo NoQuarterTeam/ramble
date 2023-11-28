@@ -71,7 +71,7 @@ export function MapScreen() {
 
   const { mutate: updateUser } = api.user.update.useMutation()
 
-  const handleSetUserLocation = React.useCallback(async () => {
+  const handleSetUserLocation = async () => {
     try {
       const loc = await Location.getLastKnownPositionAsync()
       if (!loc) return
@@ -89,19 +89,18 @@ export function MapScreen() {
     } catch {
       console.log("oops -  setting location")
     }
-  }, [updateUser, me])
+  }
 
   React.useEffect(() => {
     ;(async () => {
       try {
         const { status } = await Location.requestForegroundPermissionsAsync()
         if (status !== "granted") return
-        await handleSetUserLocation()
       } catch {
         console.log("oops -  getting location")
       }
     })()
-  }, [handleSetUserLocation])
+  }, [])
 
   const onFiltersChange = async (f: Filters) => {
     try {

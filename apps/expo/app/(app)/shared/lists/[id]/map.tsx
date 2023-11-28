@@ -85,7 +85,7 @@ export function ListDetailMapScreen() {
               animationMode: "linearTo",
               animationDuration: 300,
               centerCoordinate: point.geometry.coordinates,
-              padding: { paddingBottom: activeSpotId ? 300 : 0, paddingLeft: 0, paddingRight: 0, paddingTop: 0 },
+              padding: { paddingBottom: point.properties.cluster ? 0 : 300, paddingLeft: 0, paddingRight: 0, paddingTop: 0 },
             })
             if (!point.properties.cluster) {
               setActiveSpotId(point.properties.id)
@@ -93,8 +93,6 @@ export function ListDetailMapScreen() {
           }}
         />
       )),
-    // dont add activeSpotId here
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [clusters],
   )
 
