@@ -33,7 +33,7 @@ model User {
   latitude               Float?
   longitude              Float?
 
-  // Preferences
+  // Spot preferences
   isPetOwner      Boolean @default(false)
   isClimber       Boolean @default(false)
   isHiker         Boolean @default(false)
@@ -43,6 +43,7 @@ model User {
 
   // Settings
   isLocationPrivate Boolean @default(false)
+  preferredLanguage String?
 
   // Relations
   followers        User[]       @relation("UserFollows")

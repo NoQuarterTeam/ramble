@@ -1,5 +1,5 @@
 import Map, { Marker } from "react-map-gl"
-import { Link, useLoaderData } from "@remix-run/react"
+import { Link, useFetcher, useLoaderData } from "@remix-run/react"
 import dayjs from "dayjs"
 import { Check, Edit2, Heart, Star, Trash } from "lucide-react"
 import { promiseHash } from "remix-utils/promise"
@@ -13,6 +13,8 @@ import {
   createImageUrl,
   displayRating,
   isPartnerSpot,
+  join,
+  languages,
   spotPartnerFields,
 } from "@ramble/shared"
 
@@ -30,6 +32,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
   Button,
+  Select,
 } from "~/components/ui"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
@@ -48,6 +51,7 @@ import { SaveToList } from "../../api+/save-to-list"
 import { PartnerLink } from "./components/PartnerLink"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { SpotMarker } from "./components/SpotMarker"
+import { TranslateSpot } from "~/pages/api+/spots+/$id.translate.$lang"
 
 export const config = {
   // runtime: "edge",
@@ -163,6 +167,8 @@ export default function SpotDetail() {
   const user = useMaybeUser()
   const theme = useTheme()
 
+  const descriptionFetcher = useFetcher<TranslateSpot>()
+
   return (
     <div className="relative">
       <div className="w-screen overflow-x-scroll">
@@ -217,8 +223,28 @@ export default function SpotDetail() {
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <div className="space-y-3">
               {isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}
-              <h3 className="text-lg font-medium">Description</h3>
-              <p className="whitespace-pre-wrap">{spot.description}</p>
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-medium">Description</h3>
+
+                <Select
+                  size="sm"
+                  onChange={(e) =>
+                    e.target.value ? descriptionFetcher.load(`/api/spots/${spot.id}/translate/${e.target.value}`) : undefined
+                  }
+                >
+                  <option value="" disabled selected>
+                    Translate
+                  </option>
+                  {languages.map((lang) => (
+                    <option value={lang.code} key={lang.code}>
+                      {lang.name}
+                    </option>
+                  ))}
+                </Select>
+              </div>
+              <p className={join("whitespace-pre-wrap", descriptionFetcher.state === "loading" && "animate-pulse-fast")}>
+                {descriptionFetcher.data?.text || spot.description}
+              </p>
               <p className="text-sm italic">{spot.address}</p>
               {spot.amenities && (
                 <div className="flex flex-row flex-wrap gap-2">

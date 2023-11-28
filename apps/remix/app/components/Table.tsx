@@ -226,7 +226,6 @@ function Pagination({ count }: { count: number }) {
         <Form>
           <ExistingSearchParams exclude={["take"]} />
           <Select
-            className="w-[130px]"
             size="sm"
             name="take"
             value={take}

@@ -106,7 +106,7 @@ export function Select({ variant, size, ...props }: SelectProps) {
     <select
       id={props.name}
       {...props}
-      className={merge(inputStyles({ variant, size }), inputSizeStyles({ size }), props.className)}
+      className={merge(inputStyles({ variant, size }), inputSizeStyles({ size }), "w-auto pr-8", props.className)}
     >
       {props.children}
     </select>
