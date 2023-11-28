@@ -1,17 +1,18 @@
-import { Link, useLoaderData, useRouteError, useSearchParams } from "@remix-run/react"
+import { Form, Link, useLoaderData, useRouteError, useSearchParams } from "@remix-run/react"
 import type { Row } from "@tanstack/react-table"
 import { createColumnHelper } from "@tanstack/react-table"
 import dayjs from "dayjs"
 import { Check, ExternalLink, Eye, EyeOff, Trash } from "lucide-react"
 import queryString from "query-string"
+import { ExistingSearchParams } from "remix-utils/existing-search-params"
 import { promiseHash } from "remix-utils/promise"
 import { z } from "zod"
 import { zx } from "zodix"
 
 import type { Prisma, SpotType } from "@ramble/database/types"
-import { createImageUrl, merge } from "@ramble/shared"
+import { createImageUrl, merge, SPOT_TYPE_OPTIONS } from "@ramble/shared"
 
-import { FormButton, useFetcher } from "~/components/Form"
+import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { Search } from "~/components/Search"
@@ -21,7 +22,6 @@ import { Avatar, Button, buttonStyles, IconButton, iconbuttonStyles, Select } fr
 import { db } from "~/lib/db.server"
 import { FormActionInput } from "~/lib/form"
 import { createAction, createActions } from "~/lib/form.server"
-import { SPOT_TYPE_OPTIONS } from "~/lib/models/spot"
 import { badRequest, json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"
 import { useTheme } from "~/lib/theme"
@@ -78,14 +78,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   return createActions<Actions>(request, {
     delete: () =>
       createAction(request)
-        .input(z.object({ id: z.string() }))
+        .input(z.object({ id: z.string().uuid() }))
         .handler(async (data) => {
           await db.spot.update({ where: { id: data.id }, data: { deletedAt: new Date() } })
           return json({ success: true })
         }),
     verify: () =>
       createAction(request)
-        .input(z.object({ id: z.string() }))
+        .input(z.object({ id: z.string().uuid() }))
         .handler(async (data) => {
           await db.spot.update({
             where: { id: data.id },
@@ -192,21 +192,19 @@ const columns = [
 ]
 
 export default function Spots() {
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams] = useSearchParams()
   const { spots, count, unverifiedSpotsCount } = useLoaderData<typeof loader>()
 
   return (
     <div className="space-y-2">
       <h1 className="text-4xl">Spots</h1>
       <div className="flex items-end gap-2">
-        <div>
+        <Form>
+          <ExistingSearchParams exclude={["type"]} />
           <p className="text-sm font-medium">Type</p>
           <Select
             defaultValue={searchParams.get("type") || ""}
-            onChange={(e) => {
-              const existingParams = queryString.parse(searchParams.toString())
-              setSearchParams(queryString.stringify({ ...existingParams, type: e.target.value }))
-            }}
+            onChange={(e) => e.currentTarget.form?.dispatchEvent(new Event("submit", { bubbles: true }))}
             className="max-w-[200px]"
             name="type"
           >
@@ -217,24 +215,19 @@ export default function Spots() {
               </option>
             ))}
           </Select>
-        </div>
+        </Form>
 
-        <div>
+        <Form>
+          <ExistingSearchParams exclude={["unverified"]} />
           <Button
             variant={searchParams.get("unverified") === "true" ? "primary" : "outline"}
-            onClick={() => {
-              const existingParams = queryString.parse(searchParams.toString())
-              setSearchParams(
-                queryString.stringify({
-                  ...existingParams,
-                  unverified: searchParams.get("unverified") === "true" ? undefined : true,
-                }),
-              )
-            }}
+            type="submit"
+            name={searchParams.get("unverified") === "true" ? undefined : "unverified"}
+            value={searchParams.get("unverified") === "true" ? undefined : "true"}
           >
             Show {unverifiedSpotsCount} unverified
           </Button>
-        </div>
+        </Form>
 
         <div>
           <Search className="max-w-[400px]" />
@@ -282,11 +275,10 @@ function VerifyAction({ item }: { item: Spot }) {
   const verifyFetcher = useFetcher()
   return (
     <verifyFetcher.Form>
-      <FormActionInput value={Actions.verify} />
       <input type="hidden" name="id" value={item.id} />
-      <FormButton size="sm" leftIcon={<Check size={16} />}>
+      <verifyFetcher.FormButton value={Actions.verify} size="sm" leftIcon={<Check size={16} />}>
         verify
-      </FormButton>
+      </verifyFetcher.FormButton>
     </verifyFetcher.Form>
   )
 }

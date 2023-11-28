@@ -1,6 +1,6 @@
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
-import Mapbox, { Camera, type MapView as MapType } from "@rnmapbox/maps"
+import { Camera, type MapState, type MapView as MapType, UserLocation } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { CircleDot, Navigation } from "lucide-react-native"
 
@@ -8,6 +8,7 @@ import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
 
 import { Icon } from "../../../../../components/Icon"
 import { LoginPlaceholder } from "../../../../../components/LoginPlaceholder"
+import { Map } from "../../../../../components/Map"
 import { Button } from "../../../../../components/ui/Button"
 import { toast } from "../../../../../components/ui/Toast"
 import { useMe } from "../../../../../lib/hooks/useMe"
@@ -52,7 +53,7 @@ export function NewSpotLocationScreen() {
       console.log("oops -  setting location")
     }
   }
-  const onMapMove = ({ properties }: Mapbox.MapState) => setCoords(properties.center)
+  const onMapMove = ({ properties }: MapState) => setCoords(properties.center)
 
   if (!me)
     return (
@@ -65,18 +66,13 @@ export function NewSpotLocationScreen() {
     <NewSpotModalView shouldRenderToast title="new spot" canGoBack={false}>
       {!isLoadingLocation && (
         <>
-          <Mapbox.MapView
+          <Map
             className="rounded-xs mb-10 mt-4 flex-1 overflow-hidden"
-            logoEnabled={false}
-            compassEnabled
             onMapIdle={onMapMove}
             ref={mapRef}
-            pitchEnabled={false}
-            compassFadeWhenNorth
-            scaleBarEnabled={false}
-            styleURL="mapbox://styles/mapbox/satellite-v9"
+            styleURL="mapbox://styles/jclackett/clp122bar007z01qu21kc8h4g"
           >
-            <Mapbox.UserLocation />
+            <UserLocation />
 
             <Camera
               ref={camera}
@@ -86,7 +82,7 @@ export function NewSpotLocationScreen() {
                 zoomLevel: 14,
               }}
             />
-          </Mapbox.MapView>
+          </Map>
           <View
             style={{ transform: [{ translateX: -15 }, { translateY: -15 }] }}
             className="absolute left-1/2 top-1/2 flex items-center justify-center"
@@ -94,7 +90,10 @@ export function NewSpotLocationScreen() {
             <Icon icon={CircleDot} size={30} color="white" />
           </View>
 
-          <View className="absolute bottom-12 left-5 right-5 flex flex-row items-center justify-between space-y-2">
+          <View
+            pointerEvents="box-none"
+            className="absolute bottom-12 left-5 right-5 flex flex-row items-center justify-between space-y-2"
+          >
             <View className="w-12" />
             {coords && (
               <Button

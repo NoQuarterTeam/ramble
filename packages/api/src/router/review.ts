@@ -1,12 +1,12 @@
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
-import { reviewSchema } from "@ramble/shared"
+import { reviewDataSchema, reviewSchema } from "@ramble/server-schemas"
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const reviewRouter = createTRPCRouter({
-  detail: publicProcedure.input(z.object({ id: z.string() })).query(({ ctx, input }) => {
+  detail: publicProcedure.input(z.object({ id: z.string().uuid() })).query(({ ctx, input }) => {
     return ctx.prisma.review.findUnique({ where: { id: input.id }, include: { spot: true } })
   }),
   create: protectedProcedure.input(reviewSchema).mutation(async ({ ctx, input }) => {
@@ -22,14 +22,14 @@ export const reviewRouter = createTRPCRouter({
     return ctx.prisma.review.create({ data: { ...input, userId: ctx.user.id } })
   }),
   update: protectedProcedure
-    .input(reviewSchema.partial().extend({ id: z.string() }))
+    .input(reviewDataSchema.partial().extend({ id: z.string().uuid() }))
     .mutation(async ({ ctx, input: { id, ...input } }) => {
       const review = await ctx.prisma.review.findUnique({ where: { id }, select: { userId: true } })
       if (!review) throw new TRPCError({ code: "NOT_FOUND" })
       if (review.userId !== ctx.user.id) throw new TRPCError({ code: "UNAUTHORIZED" })
       return ctx.prisma.review.update({ where: { id }, data: input })
     }),
-  delete: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
+  delete: protectedProcedure.input(z.object({ id: z.string().uuid() })).mutation(async ({ ctx, input }) => {
     const review = await ctx.prisma.review.findUnique({ where: { id: input.id }, select: { userId: true } })
     if (!review) throw new TRPCError({ code: "NOT_FOUND" })
     if (review.userId !== ctx.user.id) throw new TRPCError({ code: "UNAUTHORIZED" })

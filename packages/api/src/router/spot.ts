@@ -4,60 +4,46 @@ import Supercluster from "supercluster"
 import { z } from "zod"
 
 import { Prisma, SpotType } from "@ramble/database/types"
-import {
-  amenitiesFields,
-  spotAmenitiesSchema,
-  type SpotItemWithStatsAndImage,
-  spotPartnerFields,
-  spotSchemaWithoutType,
-} from "@ramble/shared"
+import { clusterSchema, spotAmenitiesSchema, spotSchema, userSchema } from "@ramble/server-schemas"
+import { generateBlurHash, geocodeCoords, publicSpotWhereClause, publicSpotWhereClauseRaw } from "@ramble/server-services"
+import { amenitiesFields, type SpotItemWithStatsAndImage, spotPartnerFields } from "@ramble/shared"
 
-import { fetchAndJoinSpotImages } from "../lib/models/spot"
-import { generateBlurHash } from "../services/generateBlurHash.server"
-import { geocodeCoords } from "../services/geocode.server"
-import { publicSpotWhereClause, publicSpotWhereClauseRaw } from "../shared/spot.server"
+import { fetchAndJoinSpotImages } from "../lib/spot"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
+
+export type SpotClusterTypes = { [key in SpotType]?: number }
 
 export const spotRouter = createTRPCRouter({
   clusters: publicProcedure
     .input(
-      z.object({
-        zoom: z.number(),
-        minLat: z.number(),
-        maxLat: z.number(),
-        minLng: z.number(),
-        maxLng: z.number(),
-        types: z.array(z.string()).or(z.string()).optional(),
-        isPetFriendly: z.boolean().nullish(),
-        isUnverified: z.boolean().nullish(),
-      }),
+      z
+        .object({
+          types: z.array(z.nativeEnum(SpotType)).or(z.nativeEnum(SpotType)).optional(),
+          isPetFriendly: z.boolean().nullish(),
+          isUnverified: z.boolean().nullish(),
+        })
+        .and(clusterSchema),
     )
     .query(async ({ ctx, input }) => {
       const { zoom, types, isUnverified, isPetFriendly, ...coords } = input
-      const defaultTypes = [SpotType.CAMPING, SpotType.FREE_CAMPING]
+      if (!types || types.length === 0) return []
       const spots = await ctx.prisma.spot.findMany({
         select: { id: true, latitude: true, longitude: true, type: true },
         where: {
-          ...publicSpotWhereClause(ctx.user?.id),
-          verifiedAt: isUnverified ? undefined : { not: { equals: null } },
-          isPetFriendly: isPetFriendly ? { equals: true } : undefined,
           latitude: { gt: coords.minLat, lt: coords.maxLat },
           longitude: { gt: coords.minLng, lt: coords.maxLng },
-          type: types
-            ? typeof types === "string"
-              ? { equals: types as SpotType }
-              : types.length > 0
-              ? { in: types as SpotType[] }
-              : { in: defaultTypes }
-            : { in: defaultTypes },
+          verifiedAt: isUnverified ? undefined : { not: { equals: null } },
+          type: typeof types === "string" ? { equals: types } : { in: types },
+          ...publicSpotWhereClause(ctx.user?.id),
+          isPetFriendly: isPetFriendly ? { equals: true } : undefined,
         },
-        orderBy: { createdAt: "desc" },
+        orderBy: { verifiedAt: "desc" },
         take: 8000,
       })
       if (spots.length === 0) return []
       const supercluster = new Supercluster<{ id: string; type: SpotType; cluster: false }, { cluster: true }>({
         maxZoom: 16,
-        radius: !types || typeof types === "string" ? 40 : types.length > 4 ? 60 : 50,
+        radius: !types || typeof types === "string" ? 30 : types.length > 4 ? 60 : 40,
       })
       const clustersData = supercluster.load(
         spots.map((spot) => ({
@@ -70,11 +56,18 @@ export const spotRouter = createTRPCRouter({
       return clusters.map((c) => ({
         ...c,
         properties: c.properties.cluster
-          ? { ...c.properties, zoomLevel: supercluster.getClusterExpansionZoom(c.properties.cluster_id) }
+          ? {
+              ...c.properties,
+              types: supercluster.getLeaves(c.properties.cluster_id).reduce<SpotClusterTypes>((acc, spot) => {
+                acc[spot.properties.type] = (acc[spot.properties.type] || 0) + 1
+                return acc
+              }, {}),
+              zoomLevel: supercluster.getClusterExpansionZoom(c.properties.cluster_id),
+            }
           : c.properties,
       }))
     }),
-  verify: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
+  verify: protectedProcedure.input(z.object({ id: z.string().uuid() })).mutation(async ({ ctx, input }) => {
     const spot = await ctx.prisma.spot.findUnique({ where: { id: input.id } })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
     if (spot.verifiedAt) throw new TRPCError({ code: "BAD_REQUEST", message: "Already verified" })
@@ -83,7 +76,7 @@ export const spotRouter = createTRPCRouter({
       data: { verifiedAt: new Date(), verifier: { connect: { id: ctx.user.id } } },
     })
   }),
-  delete: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
+  delete: protectedProcedure.input(z.object({ id: z.string().uuid() })).mutation(async ({ ctx, input }) => {
     const spot = await ctx.prisma.spot.findUnique({ where: { id: input.id } })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
     return ctx.prisma.spot.update({ where: { id: input.id }, data: { deletedAt: new Date() } })
@@ -98,8 +91,8 @@ export const spotRouter = createTRPCRouter({
           sort === "latest"
             ? Prisma.sql`Spot.verifiedAt DESC, Spot.id`
             : sort === "saved"
-            ? Prisma.sql`savedCount DESC, Spot.id`
-            : Prisma.sql`rating DESC, Spot.id`
+              ? Prisma.sql`savedCount DESC, Spot.id`
+              : Prisma.sql`rating DESC, Spot.id`
         }
       `
       try {
@@ -113,10 +106,10 @@ export const spotRouter = createTRPCRouter({
           LEFT JOIN
             ListSpot ON Spot.id = ListSpot.spotId
           WHERE
-            Spot.verifiedAt IS NOT NULL AND ${publicSpotWhereClauseRaw(ctx.user?.id)} AND Spot.type IN (${Prisma.join([
+            Spot.verifiedAt IS NOT NULL AND Spot.type IN (${Prisma.join([
               SpotType.CAMPING,
               SpotType.FREE_CAMPING,
-            ])})
+            ])}) AND ${publicSpotWhereClauseRaw(ctx.user?.id)} 
           GROUP BY
             Spot.id
           ${ORDER_BY}
@@ -131,7 +124,7 @@ export const spotRouter = createTRPCRouter({
         return []
       }
     }),
-  mapPreview: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
+  mapPreview: publicProcedure.input(z.object({ id: z.string().uuid() })).query(async ({ ctx, input }) => {
     const spot = await ctx.prisma.spot.findUnique({
       where: { id: input.id, ...publicSpotWhereClause(ctx.user?.id) },
       select: {
@@ -150,7 +143,7 @@ export const spotRouter = createTRPCRouter({
     const rating = await ctx.prisma.review.aggregate({ where: { spotId: input.id }, _avg: { rating: true } })
     return { ...spot, rating }
   }),
-  detail: publicProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
+  detail: publicProcedure.input(z.object({ id: z.string().uuid() })).query(async ({ ctx, input }) => {
     const spot = await ctx.prisma.spot.findUnique({
       where: { id: input.id, ...publicSpotWhereClause(ctx.user?.id) },
       select: {
@@ -177,9 +170,9 @@ export const spotRouter = createTRPCRouter({
     })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
     const rating = await ctx.prisma.review.aggregate({ where: { spotId: input.id }, _avg: { rating: true } })
-    return { ...spot, rating }
+    return { ...spot, isLiked: !!ctx.user && spot.listSpots.length > 0, rating }
   }),
-  byUser: publicProcedure.input(z.object({ username: z.string() })).query(async ({ ctx, input }) => {
+  byUser: publicProcedure.input(userSchema.pick({ username: true })).query(async ({ ctx, input }) => {
     const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })
     if (!user) throw new TRPCError({ code: "NOT_FOUND" })
     const spots = await ctx.prisma.$queryRaw<SpotItemWithStatsAndImage[]>`
@@ -204,12 +197,14 @@ export const spotRouter = createTRPCRouter({
   }),
   create: protectedProcedure
     .input(
-      spotSchemaWithoutType.extend({
-        type: z.nativeEnum(SpotType),
-        images: z.array(z.object({ path: z.string() })),
-        amenities: spotAmenitiesSchema.partial().optional(),
-        shouldPublishLater: z.boolean().optional(),
-      }),
+      spotSchema.and(
+        z.object({
+          type: z.nativeEnum(SpotType),
+          images: z.array(z.object({ path: z.string() })),
+          amenities: spotAmenitiesSchema.partial().optional(),
+          shouldPublishLater: z.boolean().optional(),
+        }),
+      ),
     )
     .mutation(async ({ ctx, input }) => {
       const { shouldPublishLater } = input
@@ -237,12 +232,13 @@ export const spotRouter = createTRPCRouter({
     }),
   update: protectedProcedure
     .input(
-      spotSchemaWithoutType.extend({
-        id: z.string(),
-        type: z.nativeEnum(SpotType),
-        images: z.array(z.object({ path: z.string() })),
-        amenities: spotAmenitiesSchema.partial().optional(),
-      }),
+      spotSchema.and(
+        z.object({
+          id: z.string().uuid(),
+          images: z.array(z.object({ path: z.string() })),
+          amenities: spotAmenitiesSchema.partial().optional(),
+        }),
+      ),
     )
     .mutation(async ({ ctx, input }) => {
       const { id, ...data } = input
@@ -273,7 +269,7 @@ export const spotRouter = createTRPCRouter({
       })
     }),
   addImages: protectedProcedure
-    .input(z.object({ id: z.string(), images: z.array(z.object({ path: z.string() })) }))
+    .input(z.object({ id: z.string().uuid(), images: z.array(z.object({ path: z.string() })) }))
     .mutation(async ({ ctx, input }) => {
       const { id, images } = input
       const spot = await ctx.prisma.spot.findUnique({ where: { id }, include: { images: true } })

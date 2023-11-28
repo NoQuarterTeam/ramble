@@ -6,63 +6,30 @@ import turfCenter from "@turf/center"
 import * as turf from "@turf/helpers"
 import { CircleDot, Lock, Plus } from "lucide-react"
 import queryString from "query-string"
-import { z } from "zod"
-import { zx } from "zodix"
 
 import type { Spot, SpotAmenities, SpotImage } from "@ramble/database/types"
-import { SpotType } from "@ramble/database/types"
+import { type SpotType } from "@ramble/database/types"
+import { type spotAmenitiesSchema, type spotSchema } from "@ramble/server-schemas"
 import {
   AMENITIES,
   doesSpotTypeRequireAmenities,
   doesSpotTypeRequireDescription,
   INITIAL_LATITUDE,
   INITIAL_LONGITUDE,
+  SPOT_TYPE_OPTIONS,
 } from "@ramble/shared"
 
 import { Form, FormButton, FormError, FormField, FormFieldError, FormFieldLabel, ImageField } from "~/components/Form"
 import { ImageUploader } from "~/components/ImageUploader"
+import { SpotIcon } from "~/components/SpotIcon"
 import type { RambleIcon } from "~/components/ui"
 import { Button, Checkbox, CloseButton, IconButton, Spinner, Textarea, Tooltip } from "~/components/ui"
 import { useFormErrors } from "~/lib/form"
-import { FormNumber, NullableFormString } from "~/lib/form.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
-import { SPOT_TYPE_OPTIONS } from "~/lib/models/spot"
 import { useTheme } from "~/lib/theme"
 import type { SerializeFrom } from "~/lib/vendor/vercel.server"
 import type { geocodeLoader } from "~/pages/api+/mapbox+/geocode"
-
-export const amenitiesSchema = z.object({
-  bbq: zx.BoolAsString,
-  electricity: zx.BoolAsString,
-  water: zx.BoolAsString,
-  toilet: zx.BoolAsString,
-  shower: zx.BoolAsString,
-  wifi: zx.BoolAsString,
-  kitchen: zx.BoolAsString,
-  pool: zx.BoolAsString,
-  hotWater: zx.BoolAsString,
-  firePit: zx.BoolAsString,
-  sauna: zx.BoolAsString,
-})
-
-export const spotSchema = z
-  .object({
-    latitude: FormNumber,
-    longitude: FormNumber,
-    name: z.string().min(2),
-    address: z.string().min(2),
-    customAddress: NullableFormString,
-    type: z.nativeEnum(SpotType),
-    description: NullableFormString,
-  })
-  .refine(
-    (data) => {
-      if (doesSpotTypeRequireDescription(data.type) && (!data.description || data.description.length < 50)) return false
-      return true
-    },
-    { message: "Description must be at least 50 characters long", path: ["description"] },
-  )
 
 export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotImage[]; amenities?: SpotAmenities | null }> }) {
   // const ipInfo = useRouteLoaderData("pages/_app") as IpInfo
@@ -84,7 +51,6 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
       )
     }
     return {
-      // zoom: zoom ? parseInt(zoom) : ipInfo ? 6 : 5,
       zoom: zoom ? parseInt(zoom) : 5,
       longitude: spot?.longitude || centerFromParams?.geometry.coordinates[0] || INITIAL_LONGITUDE,
       latitude: spot?.latitude || centerFromParams?.geometry.coordinates[1] || INITIAL_LATITUDE,
@@ -171,7 +137,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
                   variant={type === spotType.value ? "primary" : "outline"}
                   type="button"
                   size="lg"
-                  leftIcon={<spotType.Icon className="sq-4" />}
+                  leftIcon={<SpotIcon type={spotType.value} className="sq-4" />}
                   onClick={() => setType(spotType.value)}
                 >
                   {spotType.label}
@@ -275,7 +241,7 @@ function AmenitySelector({
   value: string
   Icon: RambleIcon | null
 }) {
-  const form = useFormErrors<typeof amenitiesSchema>()
+  const form = useFormErrors<typeof spotAmenitiesSchema>()
   const errors = form?.fieldErrors?.[value as keyof typeof form.fieldErrors]
   const [isSelected, setIsSelected] = React.useState(defaultIsSelected)
   return (

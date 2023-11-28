@@ -2,20 +2,20 @@ import { type LucideProps } from "lucide-react-native"
 
 import { type SpotType } from "@ramble/database/types"
 
-import { SPOT_TYPES } from "../lib/models/spot"
-import { Icon, type IconColors } from "./Icon"
+import { SPOT_TYPE_ICONS } from "../lib/models/spot"
+import { Icon, type IconColorProp } from "./Icon"
 
-interface Props extends LucideProps {
+interface Props extends Omit<LucideProps, "color"> {
   type: SpotType
-  color?: IconColors
+  color?: IconColorProp
 }
 
 export function SpotIcon({ type, ...props }: Props) {
-  const Comp = SPOT_TYPES[type].Icon
+  const Comp = SPOT_TYPE_ICONS[type]
   return <Icon icon={Comp} {...props} />
 }
 
-export function SpotIconMap({ type, ...props }: Props) {
-  const Comp = SPOT_TYPES[type].Icon
+export function SpotIconMap({ type, ...props }: Omit<Props, "color">) {
+  const Comp = SPOT_TYPE_ICONS[type]
   return <Comp {...props} />
 }

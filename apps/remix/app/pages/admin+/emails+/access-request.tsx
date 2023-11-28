@@ -1,10 +1,10 @@
-import { sendAccessRequestConfirmationEmail } from "@ramble/api"
-import { AccessRequestContent } from "@ramble/emails"
+import { sendAccessRequestConfirmationEmail } from "@ramble/server-services"
 
 import { json } from "~/lib/remix.server"
 import { type ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
 
+import { AccessRequestContent } from "../../../../../../packages/emails/src"
 import { type TemplateHandle } from "./_layout"
 
 export const action = async ({ request }: ActionFunctionArgs) => {

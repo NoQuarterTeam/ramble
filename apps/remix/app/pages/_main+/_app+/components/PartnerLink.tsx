@@ -13,30 +13,30 @@ export function PartnerLink(props: Props) {
   const partner = props.spot.campspaceId
     ? partners.campspace
     : props.spot.theCragId
-    ? partners.theCrag
-    : props.spot.komootId
-    ? partners.komoot
-    : props.spot.hipcampId
-    ? partners.hipcamp
-    : props.spot.natuurKampeerterreinenId
-    ? partners.natuur
-    : props.spot.park4nightId
-    ? partners.park4night
-    : props.spot.nesteId
-    ? partners.neste
-    : props.spot.surflineId
-    ? partners.surfline
-    : props.spot.roadsurferId
-    ? partners.roadsurfer
-    : props.spot.cucortuId
-    ? partners.cucortu
-    : props.spot.loodusegakoosId
-    ? partners.loodusegakoos
-    : props.spot.norcampId
-    ? partners.norcamp
-    : props.spot.mossyEarthId
-    ? partners.mossyEarth
-    : partners.rewildingEurope
+      ? partners.theCrag
+      : props.spot.komootId
+        ? partners.komoot
+        : props.spot.hipcampId
+          ? partners.hipcamp
+          : props.spot.natuurKampeerterreinenId
+            ? partners.natuur
+            : props.spot.park4nightId
+              ? partners.park4night
+              : props.spot.nesteId
+                ? partners.neste
+                : props.spot.surflineId
+                  ? partners.surfline
+                  : props.spot.roadsurferId
+                    ? partners.roadsurfer
+                    : props.spot.cucortuId
+                      ? partners.cucortu
+                      : props.spot.loodusegakoosId
+                        ? partners.loodusegakoos
+                        : props.spot.norcampId
+                          ? partners.norcamp
+                          : props.spot.mossyEarthId
+                            ? partners.mossyEarth
+                            : partners.rewildingEurope
 
   if (!props.spot.sourceUrl) return null
   return (

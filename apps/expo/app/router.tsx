@@ -32,6 +32,9 @@ export type ScreenParamsList = {
   MapLayout: undefined
   MapScreen: undefined
 
+  GuidesLayout: undefined
+  GuidesScreen: undefined
+
   SpotsLayout: undefined
   SpotsScreen: undefined
 
@@ -67,7 +70,12 @@ export type ScreenParamsList = {
   NewReviewScreen: { spotId: string }
   ReviewDetailScreen: { id: string }
   ListDetailScreen: { id: string; name: string }
-  ListDetailMapScreen: { id: string }
+  ListDetailMapScreen: {
+    id: string
+    name: string
+    initialBounds?: [number, number, number, number]
+    initialCenter?: [number, number]
+  }
   UserScreen: { username: string; tab?: "spots" | "lists" | "van" }
   UserFollowers: { username: string }
   UserFollowing: { username: string }

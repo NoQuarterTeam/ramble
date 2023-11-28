@@ -2,7 +2,7 @@ import { Link } from "@remix-run/react"
 import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
-import { sendResetPasswordEmail } from "@ramble/api"
+import { sendResetPasswordEmail } from "@ramble/server-services"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { track } from "~/lib/analytics.server"

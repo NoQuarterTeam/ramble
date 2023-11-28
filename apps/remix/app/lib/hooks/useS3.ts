@@ -1,7 +1,6 @@
 "use client"
 import * as React from "react"
 import { useAuthenticityToken } from "remix-utils/csrf/react"
-import { v4 } from "uuid"
 
 import { assetPrefix } from "@ramble/shared"
 
@@ -17,7 +16,7 @@ export function useS3Upload(): [(file: File) => Promise<string>, { isLoading: bo
   async function upload(file: File) {
     try {
       setIsLoading(true)
-      const key = v4()
+      const key = crypto.randomUUID()
       const formData = new FormData()
       formData.append("key", assetPrefix + key)
       formData.append("csrf", csrf)

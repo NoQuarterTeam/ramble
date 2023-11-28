@@ -1,3 +1,5 @@
+import "react-native-get-random-values"
+
 import * as React from "react"
 import { v4 } from "uuid"
 

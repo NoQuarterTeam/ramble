@@ -1,13 +1,17 @@
-import { Modal, ScrollView, View } from "react-native"
+import { Modal, ScrollView, Switch, View } from "react-native"
+import { MapPin } from "lucide-react-native"
 
 import { useDisclosure } from "@ramble/shared"
+import colors from "@ramble/tailwind-config/src/colors"
 
+import { Icon } from "../../../components/Icon"
 import { Button } from "../../../components/ui/Button"
 import { ModalView } from "../../../components/ui/ModalView"
 import { ScreenView } from "../../../components/ui/ScreenView"
 import { Text } from "../../../components/ui/Text"
 import { toast } from "../../../components/ui/Toast"
 import { api } from "../../../lib/api"
+import { useMe } from "../../../lib/hooks/useMe"
 import { useRouter } from "../../router"
 
 export function AccountSettingsScreen() {
@@ -15,6 +19,7 @@ export function AccountSettingsScreen() {
   const router = useRouter()
   const utils = api.useUtils()
 
+  const { me } = useMe()
   const { mutate: deleteAccount, isLoading } = api.user.deleteAccount.useMutation({
     onSuccess: async () => {
       modalProps.onClose()
@@ -23,10 +28,32 @@ export function AccountSettingsScreen() {
       toast({ title: "Account deleted." })
     },
   })
+  const { mutate: updateUser } = api.user.update.useMutation({
+    onMutate: (data) => {
+      if (!me) return
+      utils.user.me.setData(undefined, { ...me, isLocationPrivate: Boolean(data.isLocationPrivate) || false })
+    },
+  })
 
   return (
     <ScreenView title="Settings">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+        <View className="flex flex-row items-center justify-between space-x-2">
+          <View className="flex flex-row items-center space-x-3">
+            <Icon icon={MapPin} size={30} />
+            <View>
+              <Text className="h-[26px] text-lg">Hide location</Text>
+              <Text style={{ lineHeight: 16 }} numberOfLines={3} className="max-w-[220px] text-sm opacity-75">
+                Hide your location on map. (It's only a rough estimate anyway)
+              </Text>
+            </View>
+          </View>
+          <Switch
+            trackColor={{ true: colors.primary[600] }}
+            value={me?.isLocationPrivate}
+            onValueChange={() => updateUser({ isLocationPrivate: !me?.isLocationPrivate })}
+          />
+        </View>
         <View className="pt-4">
           <Button onPress={modalProps.onOpen}>Delete account</Button>
         </View>

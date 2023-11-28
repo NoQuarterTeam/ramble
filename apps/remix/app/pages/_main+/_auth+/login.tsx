@@ -1,13 +1,14 @@
 import { Link, useSearchParams } from "@remix-run/react"
-import { z } from "zod"
+
+import { loginSchema, NullableFormString } from "@ramble/server-schemas"
+import { comparePasswords } from "@ramble/server-services"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { createAction, createActions, formError, NullableFormString } from "~/lib/form.server"
+import { createAction, createActions, formError } from "~/lib/form.server"
 import type { ActionFunctionArgs, MetaFunction } from "~/lib/vendor/vercel.server"
 import { redirect } from "~/lib/vendor/vercel.server"
-import { comparePasswords } from "~/services/auth/password.server"
 import { getUserSession } from "~/services/session/session.server"
 
 // export const config = {
@@ -27,13 +28,7 @@ export const action = async ({ request }: ActionFunctionArgs) =>
   createActions<Actions>(request, {
     login: () =>
       createAction(request)
-        .input(
-          z.object({
-            email: z.string().min(3).email("Invalid email"),
-            password: z.string().min(8, "Must be at least 8 characters"),
-            redirectTo: NullableFormString,
-          }),
-        )
+        .input(loginSchema.extend({ redirectTo: NullableFormString }))
         .handler(async (data) => {
           const user = await db.user.findUnique({ where: { email: data.email } })
           if (!user) return formError({ formError: "Incorrect email or password" })

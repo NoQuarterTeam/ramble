@@ -1,23 +1,26 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react"
-import { Instagram, type LucideIcon } from "lucide-react"
+import { Edit, Instagram, type LucideIcon } from "lucide-react"
 import { z } from "zod"
 import { zx } from "zodix"
 
+import { userSchema } from "@ramble/server-schemas"
+import { generateBlurHash } from "@ramble/server-services"
 import { createImageUrl, merge, userInterestFields } from "@ramble/shared"
 
-import { Form, FormButton } from "~/components/Form"
+import { Form, FormButton, useFetcher } from "~/components/Form"
+import { ImageUploader } from "~/components/ImageUploader"
 import { LinkButton } from "~/components/LinkButton"
 import { Avatar, Badge, buttonSizeStyles, buttonStyles, Tooltip } from "~/components/ui"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { formError, validateFormData } from "~/lib/form.server"
+import { FORM_ACTION } from "~/lib/form"
+import { createAction, createActions } from "~/lib/form.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { interestOptions } from "~/lib/models/user"
-import { notFound } from "~/lib/remix.server"
+import { badRequest, json, notFound } from "~/lib/remix.server"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
-import { json } from "~/lib/vendor/vercel.server"
 import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
 
 export const headers = useLoaderHeaders
@@ -48,28 +51,52 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   return json({ ...user, isFollowed: user.followers && user.followers.length > 0 })
 }
 
+enum Actions {
+  Follow = "follow",
+  UpdateAvatar = "updateAvatar",
+}
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request)
-  const schema = z.object({ shouldFollow: zx.BoolAsString })
-  const result = await validateFormData(request, schema)
-  if (!result.success) return formError(result)
-  if (user.username === params.username) return json({ success: false, message: "You can't follow yourself" })
-  const shouldFollow = result.data.shouldFollow
-  await db.user.update({
-    where: { username: params.username?.toLowerCase().trim() },
-    data: { followers: shouldFollow ? { connect: { id: user.id } } : { disconnect: { id: user.id } } },
+  const username = params.username?.toLowerCase().trim()
+  if (!username) throw new Error("No username")
+  return createActions<Actions>(request, {
+    follow: () =>
+      createAction(request)
+        .input(z.object({ shouldFollow: zx.BoolAsString }))
+        .handler(async (data) => {
+          if (user.username === username)
+            return badRequest({ success: false }, request, { flash: { title: "You can't follow yourself" } })
+          const shouldFollow = data.shouldFollow
+          await db.user.update({
+            where: { username },
+            data: { followers: shouldFollow ? { connect: { id: user.id } } : { disconnect: { id: user.id } } },
+          })
+          track(shouldFollow ? "User followed" : "User unfollowed", { username, userId: user.id })
+          return json({ success: true })
+        }),
+    updateAvatar: () =>
+      createAction(request)
+        .input(userSchema.pick({ avatar: true }))
+        .handler(async (data) => {
+          let avatarBlurHash = user.avatarBlurHash
+          if (data.avatar && data.avatar !== user.avatar) {
+            avatarBlurHash = await generateBlurHash(data.avatar)
+          }
+          await db.user.update({ where: { id: user.id }, data: { avatar: data.avatar, avatarBlurHash } })
+          return json({ success: true })
+        }),
   })
-  track(shouldFollow ? "User followed" : "User unfollowed", {
-    username: params.username?.toLowerCase().trim() || "",
-    userId: user.id,
-  })
-  return json({ success: true })
 }
 
 export default function ProfileLists() {
   const user = useLoaderData<typeof loader>()
-
   const currentUser = useMaybeUser()
+  const isCurrentUser = currentUser?.username === user.username
+  const fetcher = useFetcher()
+  const handleImageUpload = async (path: string) => {
+    fetcher.submit({ avatar: path, [FORM_ACTION]: Actions.UpdateAvatar }, { method: "post", navigate: false })
+  }
+
   return (
     <div className="mx-auto px-4 pb-20 lg:px-12">
       <div className="grid grid-cols-10 gap-6">
@@ -77,12 +104,21 @@ export default function ProfileLists() {
           <div className="md:top-nav relative pt-4 md:sticky">
             <div className="rounded-xs flex flex-col gap-4 border p-4">
               <div className="flex items-center space-x-3">
-                <Avatar
-                  size={200}
-                  placeholder={user.avatarBlurHash}
-                  className="sq-28 md:sq-20 xl:sq-32"
-                  src={createImageUrl(user.avatar)}
-                />
+                <ImageUploader onSubmit={handleImageUpload} dropzoneOptions={{ disabled: !isCurrentUser }}>
+                  <div className="group relative">
+                    <Avatar
+                      size={200}
+                      placeholder={user.avatarBlurHash}
+                      className="sq-28 md:sq-20 xl:sq-32"
+                      src={createImageUrl(user.avatar)}
+                    />
+                    {isCurrentUser && (
+                      <div className="absolute inset-0 hidden cursor-pointer items-center justify-center rounded-full bg-gray-800/40 group-hover:flex">
+                        <Edit aria-label="Edit avatar" size={20} />
+                      </div>
+                    )}
+                  </div>
+                </ImageUploader>
                 <div className="space-y-1">
                   {user.role === "GUIDE" && <Badge colorScheme="green">Guide</Badge>}
                   <h1 className="text-2xl md:text-xl lg:text-3xl">{user.username}</h1>
@@ -115,7 +151,7 @@ export default function ProfileLists() {
                 ) : currentUser.username === user.username ? null : (
                   <Form>
                     <input type="hidden" name="shouldFollow" value={String(!user.isFollowed)} />
-                    <FormButton variant={user.isFollowed ? "outline" : "primary"} size="sm">
+                    <FormButton value={Actions.Follow} variant={user.isFollowed ? "outline" : "primary"} size="sm">
                       {user.isFollowed ? "Unfollow" : "Follow"}
                     </FormButton>
                   </Form>

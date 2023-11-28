@@ -13,7 +13,7 @@ export function useCheckExpoUpdates() {
     try {
       if (IS_DEV) return setIsDoneChecking(true)
       const timeoutRace: Promise<never> = new Promise((_, reject) =>
-        setTimeout(() => reject("Expo update timeout of 5s reached"), 5000),
+        setTimeout(() => reject("Expo update timeout of 10s reached"), 10000),
       )
       const { isAvailable } = await Promise.race([Updates.checkForUpdateAsync(), timeoutRace])
       if (isAvailable) {

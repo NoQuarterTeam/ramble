@@ -2,7 +2,8 @@ import { Link, useSearchParams } from "@remix-run/react"
 import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
-import { generateInviteCodes, sendSlackMessage } from "@ramble/api"
+import { registerSchema } from "@ramble/server-schemas"
+import { generateInviteCodes, hashPassword, sendSlackMessage } from "@ramble/server-services"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { track } from "~/lib/analytics.server"
@@ -10,7 +11,6 @@ import { db } from "~/lib/db.server"
 import { createAction, createActions, formError } from "~/lib/form.server"
 import { redirect } from "~/lib/remix.server"
 import type { ActionFunctionArgs, MetaFunction } from "~/lib/vendor/vercel.server"
-import { hashPassword } from "~/services/auth/password.server"
 import { getUserSession } from "~/services/session/session.server"
 
 export const meta: MetaFunction = () => {
@@ -30,40 +30,20 @@ export const action = ({ request }: ActionFunctionArgs) =>
   createActions<Actions>(request, {
     register: () =>
       createAction(request)
-        .input(
-          z.object({
-            email: z.string().min(3).email("Invalid email"),
-            username: z
-              .string()
-              .min(2)
-              .refine((username) => !username.trim().includes(" "), "Username can not contain empty spaces"),
-            password: z.string().min(8, "Must be at least 8 characters"),
-            firstName: z.string().min(2, "Must be at least 2 characters"),
-            lastName: z.string().min(2, "Must be at least 2 characters"),
-            passwordConfirmation: z.string().optional(),
-            code: z.string().min(4, "Must be at least 4 characters"),
-          }),
-        )
+        .input(registerSchema.and(z.object({ passwordConfirmation: z.string().optional() })))
         .handler(async ({ passwordConfirmation, code, ...data }) => {
           if (passwordConfirmation) return redirect("/") // honey pot
-          const email = data.email.toLowerCase().trim()
-          const existingEmail = await db.user.findFirst({ where: { email } })
+          const existingEmail = await db.user.findFirst({ where: { email: data.email } })
           if (existingEmail) return formError({ data, formError: "User with this email already exists" })
-          const username = data.username.toLowerCase().trim()
-          const existingUsername = await db.user.findFirst({ where: { username } })
+          const existingUsername = await db.user.findFirst({ where: { username: data.username } })
           if (existingUsername) return formError({ data, formError: "User with this username already exists" })
-
-          const trimmedCode = code.toUpperCase().trim()
-          const inviteCode = await db.inviteCode.findFirst({ where: { code: trimmedCode, acceptedAt: null } })
-          const accessRequest = await db.accessRequest.findFirst({ where: { code: trimmedCode, user: null } })
-
+          const inviteCode = await db.inviteCode.findFirst({ where: { code, acceptedAt: null } })
+          const accessRequest = await db.accessRequest.findFirst({ where: { code, user: null } })
           if (!accessRequest && !inviteCode) return formError({ formError: "Invalid code" })
-
           const password = await hashPassword(data.password)
           const user = await db.user.create({
             data: {
               ...data,
-              email,
               isVerified: true,
               usedInviteCode: inviteCode ? { connect: { id: inviteCode.id } } : undefined,
               password,

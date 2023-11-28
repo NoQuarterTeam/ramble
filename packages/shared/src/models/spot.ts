@@ -1,5 +1,51 @@
-import type { Prisma, Spot, SpotImage, SpotType, User } from "@ramble/database/types"
+import { type Prisma, type Spot, type SpotImage, type SpotType, type User } from "@ramble/database/types"
+import colors from "@ramble/tailwind-config/src/colors"
 
+export type SpotTypeInfo = {
+  value: SpotType
+  label: string
+  isComingSoon: boolean
+}
+
+export const SPOT_TYPES = {
+  // Stays
+  CAMPING: { value: "CAMPING", label: "Long stay", isComingSoon: false },
+  FREE_CAMPING: { value: "FREE_CAMPING", label: "Overnight stop-off", isComingSoon: false },
+  PARKING: { value: "PARKING", label: "Safe parking", isComingSoon: true },
+  // Activities
+  SURFING: { value: "SURFING", label: "Surfing", isComingSoon: false },
+  CLIMBING: { value: "CLIMBING", label: "Climbing", isComingSoon: false },
+  MOUNTAIN_BIKING: { value: "MOUNTAIN_BIKING", label: "MTBing", isComingSoon: false },
+  PADDLE_KAYAK: { value: "PADDLE_KAYAK", label: "SUPing / Kayaking", isComingSoon: false },
+  HIKING_TRAIL: { value: "HIKING_TRAIL", label: "Hiking / Trail running", isComingSoon: false },
+  // Services
+  GAS_STATION: { value: "GAS_STATION", label: "Renewable diesel", isComingSoon: false },
+  ELECTRIC_CHARGE_POINT: { value: "ELECTRIC_CHARGE_POINT", label: "Electric Charge Point", isComingSoon: true },
+  MECHANIC_PARTS: { value: "MECHANIC_PARTS", label: "Mechanic / Parts", isComingSoon: true },
+  VET: { value: "VET", label: "Vet", isComingSoon: true },
+  // Hospitality
+  CAFE: { value: "CAFE", label: "Cafe", isComingSoon: true },
+  RESTAURANT: { value: "RESTAURANT", label: "Restaurant", isComingSoon: true },
+  BAR: { value: "BAR", label: "Bar", isComingSoon: true },
+  SHOP: { value: "SHOP", label: "Shop", isComingSoon: true },
+  // Other
+  REWILDING: { value: "REWILDING", label: "Rewilding", isComingSoon: false },
+  NATURE_EDUCATION: { value: "NATURE_EDUCATION", label: "Nature Education", isComingSoon: true },
+  FESTIVAL: { value: "FESTIVAL", label: "Festival", isComingSoon: true },
+  ART_FILM_PHOTOGRAPHY: { value: "ART_FILM_PHOTOGRAPHY", label: "Art, Film & Photography", isComingSoon: true },
+  VOLUNTEERING: { value: "VOLUNTEERING", label: "Volunteering", isComingSoon: true },
+} satisfies Record<SpotType, SpotTypeInfo>
+
+export const SPOT_TYPE_OPTIONS = Object.entries(SPOT_TYPES).map(([_, val]) => val)
+
+export const STAY_SPOT_TYPE_OPTIONS = Object.entries({
+  CAMPING: SPOT_TYPES.CAMPING,
+  FREE_CAMPING: SPOT_TYPES.FREE_CAMPING,
+}).map(([_, { label, value, isComingSoon }]) => ({ label, value, isComingSoon })) as {
+  label: string
+  value: SpotType
+  isComingSoon: boolean
+}[]
 export const spotPartnerFields = {
   campspaceId: true,
   cucortuId: true,
@@ -153,6 +199,7 @@ export const spotMarkerTextColorTypes = {
 } satisfies Record<SpotType, string>
 
 export const spotMarkerTriangleColorTypes = {
+  // stays
   CAMPING: "bg-green-600",
   FREE_CAMPING: "bg-cyan-700",
   PARKING: "bg-gray-100",
@@ -178,4 +225,33 @@ export const spotMarkerTriangleColorTypes = {
   NATURE_EDUCATION: "bg-gray-100",
   VOLUNTEERING: "bg-gray-100",
   REWILDING: "bg-gray-100",
+} satisfies Record<SpotType, string>
+
+export const spotMarkerClusterColorTypes = {
+  // stays
+  CAMPING: colors.green[700],
+  FREE_CAMPING: colors.cyan[800],
+  PARKING: colors.gray[50],
+  // activities
+  SURFING: colors.blue[500],
+  CLIMBING: colors.blue[500],
+  MOUNTAIN_BIKING: colors.blue[500],
+  HIKING_TRAIL: colors.blue[500],
+  PADDLE_KAYAK: colors.blue[500],
+  // services
+  GAS_STATION: colors.gray[50],
+  ELECTRIC_CHARGE_POINT: colors.gray[50],
+  MECHANIC_PARTS: colors.gray[50],
+  VET: colors.gray[50],
+  // hospitality
+  BAR: colors.gray[50],
+  CAFE: colors.gray[50],
+  RESTAURANT: colors.gray[50],
+  SHOP: colors.gray[50],
+  // other
+  ART_FILM_PHOTOGRAPHY: colors.gray[50],
+  FESTIVAL: colors.gray[50],
+  NATURE_EDUCATION: colors.gray[50],
+  VOLUNTEERING: colors.gray[50],
+  REWILDING: colors.gray[50],
 } satisfies Record<SpotType, string>

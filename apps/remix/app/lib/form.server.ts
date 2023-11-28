@@ -1,23 +1,10 @@
-import { z } from "zod"
+import { type z } from "zod"
 
 import { json } from "~/lib/vendor/vercel.server"
 
 // import { csrf } from "~/services/session/csrf.server"
 import { FORM_ACTION } from "./form"
 import { badRequest } from "./remix.server"
-
-export const NullableFormString = z.preprocess((v) => (v === "" ? null : v), z.string().nullish())
-
-export const NullableFormNumber = z.preprocess(
-  (v) => (v === "" ? null : v),
-  z.coerce.number({ invalid_type_error: "Not a number" }).nullish(),
-)
-export const FormNumber = z.coerce.number({ invalid_type_error: "Not a number" })
-
-export const FormCheckbox = z
-  .literal("on")
-  .optional()
-  .transform((value) => value === "on")
 
 export type FormError<T> = { formError?: string; fieldErrors?: FieldErrors<T>; data?: Record<string, unknown> }
 
@@ -70,7 +57,9 @@ export function formError<Schema extends z.ZodTypeAny>(args: Omit<ActionDataErro
   return json({ ...args, success: false }, { status: 400 })
 }
 
-export function createAction<Schema extends z.AnyZodObject>(request: Request) {
+type ZodInput = z.ZodTypeAny
+
+export function createAction<Schema extends ZodInput>(request: Request) {
   return {
     input: <T extends Schema>(schema: T) => {
       return {

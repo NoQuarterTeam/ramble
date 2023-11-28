@@ -1,7 +1,8 @@
 import dayjs from "dayjs"
-import { type z } from "zod"
+import { z } from "zod"
 
-import { generateBlurHash } from "@ramble/api"
+import { NullableFormString, spotAmenitiesSchema, spotSchema } from "@ramble/server-schemas"
+import { generateBlurHash } from "@ramble/server-services"
 import { doesSpotTypeRequireAmenities } from "@ramble/shared"
 
 import { track } from "~/lib/analytics.server"
@@ -11,7 +12,7 @@ import { json, redirect } from "~/lib/remix.server"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
-import { amenitiesSchema, SpotForm, spotSchema } from "./components/SpotForm"
+import { SpotForm } from "./components/SpotForm"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, { isVerified: true })
@@ -23,7 +24,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request)
   if (!user.isVerified) return redirect("/account", request, { flash: { title: "Account not verified" } })
 
-  const result = await validateFormData(request, spotSchema)
+  const result = await validateFormData(request, spotSchema.and(z.object({ customAddress: NullableFormString })))
   if (!result.success) return formError(result)
 
   const formData = await request.formData()
@@ -37,9 +38,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }),
   )
 
-  let amenities: undefined | z.infer<typeof amenitiesSchema>
+  let amenities: undefined | z.infer<typeof spotAmenitiesSchema>
   if (doesSpotTypeRequireAmenities(result.data.type)) {
-    const amenitiesResult = await validateFormData(request, amenitiesSchema)
+    const amenitiesResult = await validateFormData(request, spotAmenitiesSchema)
     if (!amenitiesResult.success) return formError(amenitiesResult)
     amenities = amenitiesResult.data
   }

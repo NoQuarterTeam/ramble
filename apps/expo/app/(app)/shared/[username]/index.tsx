@@ -23,7 +23,8 @@ export function UserScreen() {
   const isDark = colorScheme === "dark"
   const { me } = useMe()
   const { params } = useParams<"UserScreen">()
-  const username = params.username.toLowerCase().trim()
+  const username = params.username
+
   const { data: user, isLoading } = api.user.profile.useQuery({ username })
   const tab = params.tab || "spots"
   const router = useRouter()
@@ -42,12 +43,12 @@ export function UserScreen() {
 
   React.useEffect(() => {
     if (!user) return
-    setIsFollowedByMe(user?.isFollowedByMe)
-  }, [user?.isFollowedByMe])
+    setIsFollowedByMe(user.isFollowedByMe)
+  }, [user, user?.isFollowedByMe])
 
   const onToggleFollow = () => {
     setIsFollowedByMe(!isFollowedByMe)
-    mutate({ username })
+    mutate(params)
   }
 
   return (

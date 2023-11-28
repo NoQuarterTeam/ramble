@@ -1,9 +1,9 @@
 import { Link } from "@remix-run/react"
 import { Instagram } from "lucide-react"
 import { ClientOnly } from "remix-utils/client-only"
-import { z } from "zod"
 
-import { createAccessRequest, sendAccessRequestConfirmationEmail, sendSlackMessage } from "@ramble/api"
+import { userSchema } from "@ramble/server-schemas"
+import { createAccessRequest, sendAccessRequestConfirmationEmail, sendSlackMessage } from "@ramble/server-services"
 import { join, merge } from "@ramble/shared"
 
 import { Form, useFetcher } from "~/components/Form"
@@ -14,14 +14,15 @@ import { db } from "~/lib/db.server"
 import { type ActionDataErrorResponse, formError, validateFormData } from "~/lib/form.server"
 // import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { json } from "~/lib/remix.server"
-import { type LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { type ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 
 export const config = {
   // runtime: "edge",
 }
 
-const schema = z.object({ email: z.string().email().toLowerCase() })
-export const action = async ({ request }: LoaderFunctionArgs) => {
+const schema = userSchema.pick({ email: true })
+
+export const action = async ({ request }: ActionFunctionArgs) => {
   const result = await validateFormData(request, schema)
   if (!result.success) return formError(result)
   const accessRequest = await db.accessRequest.findFirst({ where: { email: result.data.email } })
@@ -37,27 +38,9 @@ export const action = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Home() {
-  // const me = useMaybeUser()
   const randomPerson = PEOPLE[Math.floor(Math.random() * PEOPLE.length)]
   return (
     <div className="bg-background dark font-serif text-white">
-      {/* <div className="absolute right-6 top-16 md:top-6">
-        {me ? (
-          <Link
-            to="/map"
-            className="border-xs rounded-xs whitespace-nowrap bg-black px-4 py-2 text-center text-white hover:opacity-80 disabled:opacity-70"
-          >
-            Map
-          </Link>
-        ) : (
-          <Link
-            to="/login"
-            className="border-xs rounded-xs whitespace-nowrap bg-black px-4 py-2 text-center text-white hover:opacity-80 disabled:opacity-70"
-          >
-            Login
-          </Link>
-        )}
-      </div> */}
       <div className="h-[94vh] w-screen space-y-20 bg-[url('/landing/hero.avif')] bg-cover bg-center px-2 pt-10">
         <div className="mx-auto flex max-w-7xl flex-col items-start space-y-8">
           <div className="flex flex-col items-center">
@@ -78,8 +61,8 @@ export default function Home() {
         </div>
       </div>
       <div className="flex justify-end px-6">
-        <a href="https://unsplash.com/@danieljschwarz" target="_blank" rel="noreferrer noopener" className="hover:opacity-80">
-          Photos by: Daniel J. Schwarz
+        <a href="https://unsplash.com/@tobiastu" target="_blank" rel="noreferrer noopener" className="hover:opacity-80">
+          Photo by: Tobias Tullius
         </a>
       </div>
       <div className="mx-auto max-w-5xl px-6 py-20 text-center">
@@ -117,13 +100,20 @@ export default function Home() {
             </p>
           </div>
         </div>
-        <img
-          width={500}
-          height={800}
-          alt="mission"
-          src="/landing/mission.avif"
-          className="rounded-xs min-w-full object-cover md:min-w-[40%]"
-        />
+        <div>
+          <img
+            width={500}
+            height={800}
+            alt="mission"
+            src="/landing/mission.avif"
+            className="rounded-xs min-w-full object-cover md:min-w-[40%]"
+          />
+          <div className="flex justify-end px-2">
+            <a href="https://unsplash.com/@danieljschwarz" target="_blank" rel="noreferrer noopener" className="hover:opacity-80">
+              Photo by: Daniel J. Schwarz
+            </a>
+          </div>
+        </div>
       </div>
       <div className="bg-primary-50/5 px-4 py-20 md:py-32">
         <div className="mx-auto max-w-6xl space-y-4">

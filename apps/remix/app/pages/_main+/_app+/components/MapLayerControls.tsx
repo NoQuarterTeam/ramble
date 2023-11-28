@@ -1,4 +1,4 @@
-import { CloudRain, Layers, Thermometer } from "lucide-react"
+import { CloudRain, Layers, MountainSnow, Thermometer, Users2 } from "lucide-react"
 
 import { useDisclosure } from "@ramble/shared"
 
@@ -54,6 +54,31 @@ export function MapLayerControls() {
                 </div>
               </div>
               <Switch name="mapLayerTemp" id="mapLayerTemp" defaultChecked={preferences.mapLayerTemp} className="mt-1" />
+            </label>
+            <label htmlFor="mapStyleSatellite" className="flex items-center justify-between space-x-4">
+              <div className="flex items-center space-x-4">
+                <MountainSnow className="sq-6" />
+                <div>
+                  <p>Satellite view</p>
+                  <p className="text-sm opacity-70">Changes the map to satellite view</p>
+                </div>
+              </div>
+              <Switch
+                name="mapStyleSatellite"
+                id="mapStyleSatellite"
+                defaultChecked={preferences.mapStyleSatellite}
+                className="mt-1"
+              />
+            </label>
+            <label htmlFor="mapUsers" className="flex items-center justify-between space-x-4">
+              <div className="flex items-center space-x-4">
+                <Users2 className="sq-6" />
+                <div>
+                  <p>Ramble users</p>
+                  <p className="text-sm opacity-70"> See the approximate location of other Ramble users</p>
+                </div>
+              </div>
+              <Switch name="mapUsers" id="mapUsers" defaultChecked={preferences.mapUsers} className="mt-1" />
             </label>
           </div>
 

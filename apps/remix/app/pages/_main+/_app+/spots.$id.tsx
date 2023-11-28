@@ -4,7 +4,7 @@ import dayjs from "dayjs"
 import { Check, Edit2, Heart, Star, Trash } from "lucide-react"
 import { promiseHash } from "remix-utils/promise"
 
-import { getSpotFlickrImages, publicSpotWhereClause } from "@ramble/api"
+import { getSpotFlickrImages, publicSpotWhereClause } from "@ramble/server-services"
 import {
   activitySpotTypes,
   AMENITIES,
@@ -20,7 +20,7 @@ import { Form, FormButton } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage, transformImageSrc } from "~/components/OptimisedImage"
 import { PageContainer } from "~/components/PageContainer"
-import { SpotIcon } from "~/components/SpotIcon"
+import { SpotTypeBadge } from "~/components/SpotTypeBadge"
 import {
   AlertDialogCancel,
   AlertDialogContent,
@@ -104,7 +104,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 }
 
 export const meta: MetaFunction<typeof loader, { root: typeof rootLoader }> = ({ data, matches }) => {
-  const WEB_URL = matches.find((r) => r.id === "root")?.data.config.WEB_URL || "localhost:3000"
+  const FULL_WEB_URL = matches.find((r) => r.id === "root")?.data.config.FULL_WEB_URL || "localhost:3000"
   const image = data?.spot.images[0]?.path
   return [
     { title: data?.spot.name },
@@ -113,7 +113,7 @@ export const meta: MetaFunction<typeof loader, { root: typeof rootLoader }> = ({
     { name: "og:description", content: data?.spot.description },
     {
       name: "og:image",
-      content: image ? WEB_URL + transformImageSrc(createImageUrl(image), { width: 600, height: 400 }) : null,
+      content: image ? FULL_WEB_URL + transformImageSrc(createImageUrl(image), { width: 600, height: 400 }) : null,
     },
   ]
 }
@@ -196,22 +196,18 @@ export default function SpotDetail() {
       <PageContainer className="space-y-10 pb-40 pt-4 lg:pt-8">
         <div className="space-y-4">
           <div className="space-y-2">
-            <div className="flex flex-col items-start justify-between space-y-1 md:flex-row">
-              <div className="flex items-center space-x-2">
-                <div className="sq-8 md:sq-16 flex flex-shrink-0 items-center justify-center rounded-full border border-gray-200 dark:border-gray-600">
-                  <SpotIcon type={spot.type} className="sq-4 md:sq-6" />
-                </div>
-                <h1 className="text-lg md:text-2xl lg:text-3xl">{spot.name}</h1>
-              </div>
+            <div className="flex items-center justify-between">
+              <SpotTypeBadge spot={spot} />
               <div className="flex items-center space-x-1">{user && <SaveToList spotId={spot.id} />}</div>
             </div>
+            <h1 className="text-lg md:text-2xl lg:text-3xl">{spot.name}</h1>
 
             <div className="flex items-center space-x-2">
-              <div className="flex items-center space-x-1 text-sm">
+              <div className="flex items-center space-x-1">
                 <Star className="sq-4" />
                 <p>{displayRating(spot.rating._avg.rating)}</p>
               </div>
-              <div className="flex items-center space-x-1 text-sm">
+              <div className="flex items-center space-x-1">
                 <Heart className="sq-4" />
                 <p>{spot._count.listSpots || 0}</p>
               </div>

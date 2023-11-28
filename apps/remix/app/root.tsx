@@ -32,6 +32,7 @@ import posthog from "posthog-js"
 import { AuthenticityTokenProvider } from "remix-utils/csrf/react"
 import { promiseHash } from "remix-utils/promise"
 
+import { ENV, FULL_WEB_URL } from "@ramble/server-env"
 import { join } from "@ramble/shared"
 
 import { Toaster } from "~/components/ui"
@@ -44,7 +45,6 @@ import {
 } from "~/lib/vendor/vercel.server"
 
 import { LinkButton } from "./components/LinkButton"
-import { ENV, FULL_WEB_URL } from "./lib/config.server"
 import { type Theme } from "./lib/theme"
 import { GDPR } from "./pages/api+/gdpr"
 import { getMaybeUser } from "./services/auth/auth.server"
@@ -81,7 +81,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       flash: flashSession.message,
       preferences: preferences || defaultPreferences,
       theme: themeSession.theme,
-      config: { WEB_URL: FULL_WEB_URL, ENV },
+      config: { FULL_WEB_URL, ENV },
     },
     {
       headers: [

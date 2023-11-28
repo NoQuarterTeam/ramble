@@ -1,15 +1,15 @@
 import { useLoaderData } from "@remix-run/react"
 import { AtSign } from "lucide-react"
-import { z } from "zod"
 
-import { generateBlurHash } from "@ramble/api"
+import { userSchema } from "@ramble/server-schemas"
+import { generateBlurHash } from "@ramble/server-services"
 import { join } from "@ramble/shared"
 
-import { Form, FormButton, FormField, ImageField } from "~/components/Form"
+import { Form, FormButton, FormError, FormField, ImageField } from "~/components/Form"
 import { Input, inputStyles, Textarea } from "~/components/ui"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { formError, NullableFormString, validateFormData } from "~/lib/form.server"
+import { formError, validateFormData } from "~/lib/form.server"
 import { redirect } from "~/lib/remix.server"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
@@ -30,23 +30,18 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request, { id: true, avatarBlurHash: true, avatar: true })
-  const schema = z.object({
-    firstName: z.string().min(1),
-    lastName: z.string().min(1),
-    instagram: NullableFormString,
-    username: z
-      .string()
-      .min(2)
-      .refine((username) => !username.trim().includes(" "), "Username can not contain empty spaces"),
-    email: z.string().email(),
-    bio: NullableFormString,
-    avatar: NullableFormString,
-  })
-  const result = await validateFormData(request, schema)
+  const result = await validateFormData(
+    request,
+    userSchema.pick({ firstName: true, lastName: true, instagram: true, username: true, email: true, bio: true, avatar: true }),
+  )
   if (!result.success) return formError(result)
-  const username = result.data.username.toLowerCase().trim()
-  const existingUsername = await db.user.findFirst({ where: { username, id: { not: { equals: user.id } } } })
-  if (existingUsername) return formError({ formError: "User with this username already exists" })
+
+  if (result.data.username) {
+    const existingUsername = await db.user.findFirst({
+      where: { username: result.data.username, id: { not: { equals: user.id } } },
+    })
+    if (existingUsername) return formError({ formError: "User with this username already exists" })
+  }
   let avatarBlurHash = user.avatarBlurHash
   if (result.data.avatar && result.data.avatar !== user.avatar) {
     avatarBlurHash = await generateBlurHash(result.data.avatar)
@@ -77,10 +72,10 @@ export default function Account() {
         </div>
         <div className="space-y-2">
           <FormField autoCapitalize="none" defaultValue={user.username || ""} name="username" label="Username" />
-
           <ImageField className={join("sq-52", inputStyles())} defaultValue={user.avatar} name="avatar" label="Avatar" />
         </div>
       </div>
+      <FormError />
       <FormButton>Save</FormButton>
     </Form>
   )

@@ -1,8 +1,8 @@
 import { createTypedSessionStorage } from "remix-utils/typed-session"
 import { z } from "zod"
 
-import { IS_PRODUCTION } from "~/lib/config.server"
-import { FLASH_SESSION_SECRET } from "~/lib/env.server"
+import { env, IS_PRODUCTION } from "@ramble/server-env"
+
 import { createCookieSessionStorage } from "~/lib/vendor/vercel.server"
 
 const FLASH_COOKIE_KEY = IS_PRODUCTION ? "ramble_session_flash" : "ramble_session_dev_flash"
@@ -15,7 +15,7 @@ export enum FlashType {
 const storage = createCookieSessionStorage({
   cookie: {
     name: FLASH_COOKIE_KEY,
-    secrets: [FLASH_SESSION_SECRET],
+    secrets: [env.FLASH_SESSION_SECRET],
     secure: IS_PRODUCTION,
     sameSite: "lax",
     path: "/",

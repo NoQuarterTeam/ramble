@@ -4,7 +4,7 @@ import * as crypto from "crypto"
 import { cacheHeader } from "pretty-cache-header"
 import sharp from "sharp"
 
-import { deleteObject, getHead, uploadStream } from "@ramble/api"
+import { deleteObject, getHead, uploadStream } from "@ramble/server-services"
 import { s3Url, srcWhitelist } from "@ramble/shared"
 
 import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"

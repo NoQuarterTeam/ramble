@@ -7,7 +7,6 @@ datasource db {
   provider     = "mysql"
   relationMode = "prisma"
   url          = env("DATABASE_URL")
-  // directUrl    = env("DIRECT_URL")
 }
 
 enum Role {
@@ -31,6 +30,8 @@ model User {
   isVerified             Boolean @default(false)
   isAdmin                Boolean @default(false)
   isPendingGuideApproval Boolean @default(false)
+  latitude               Float?
+  longitude              Float?
 
   // Preferences
   isPetOwner      Boolean @default(false)
@@ -39,6 +40,9 @@ model User {
   isMountainBiker Boolean @default(false)
   isPaddleBoarder Boolean @default(false)
   isSurfer        Boolean @default(false)
+
+  // Settings
+  isLocationPrivate Boolean @default(false)
 
   // Relations
   followers        User[]       @relation("UserFollows")
@@ -149,6 +153,9 @@ model Spot {
   publishedAt DateTime?
   verifiedAt  DateTime?
 
+  // this works
+  // pointLocation Unsupported("POINT GENERATED ALWAYS AS (ST_GeomFromText(CONCAT('POINT(',longitude,' ',latitude,')'))) STORED")?
+
   // Options 
   isPetFriendly Boolean @default(true)
 
@@ -169,49 +176,33 @@ model Spot {
   updatedAt DateTime  @default(now()) @updatedAt
 
   sourceUrl                String? @db.VarChar(500)
-  // Campspace
   campspaceId              Int?    @unique
-  // Neste
   nesteId                  String? @unique
-  // park4night
   park4nightId             Int?    @unique
-  // komoot
   komootId                 String? @unique
-  // surfline    
   surflineId               String? @unique
-  // natuurKampeerterreinen
   natuurKampeerterreinenId String? @unique
-  // cucortu
   cucortuId                String? @unique
-  // loodusegakoos
   loodusegakoosId          String? @unique
-  // roadsurfer
   roadsurferId             String? @unique
-  // hipcamp
   hipcampId                String? @unique
-  // the crag
   theCragId                String? @unique
-  // norcamp
   norcampId                String? @unique
-  // mossyEarth
   mossyEarthId             String? @unique
-  // rewildingEurope
   rewildingEuropeId        String? @unique
   // polskiCaravaning
   polskiCaravaningId       String? @unique
 
-  @@index([createdAt])
   @@index([verifiedAt])
   @@index([publishedAt])
-  @@index([deletedAt])
   @@index([type])
-  @@index([type, longitude])
-  @@index([type, latitude])
-  @@index([latitude])
-  @@index([longitude])
   @@index([ownerId])
   @@index([verifierId])
   @@index([creatorId])
+  @@index([latitude])
+  @@index([longitude])
+  @@index([verifiedAt, type, deletedAt, creatorId, publishedAt])
+  @@index([latitude, longitude, verifiedAt, type, deletedAt, creatorId, publishedAt])
 }
 
 model SpotAmenities {

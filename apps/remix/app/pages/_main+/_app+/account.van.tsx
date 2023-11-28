@@ -1,17 +1,17 @@
 import * as React from "react"
 import { useLoaderData } from "@remix-run/react"
 import { Plus } from "lucide-react"
-import { z } from "zod"
 
-import { generateBlurHash } from "@ramble/api"
 import { type VanImage } from "@ramble/database/types"
+import { vanSchema } from "@ramble/server-schemas"
+import { generateBlurHash } from "@ramble/server-services"
 
 import { Form, FormButton, FormError, FormField, FormFieldLabel, ImageField } from "~/components/Form"
 import { ImageUploader } from "~/components/ImageUploader"
 import { IconButton, Textarea } from "~/components/ui"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { formError, FormNumber, NullableFormString, validateFormData } from "~/lib/form.server"
+import { formError, validateFormData } from "~/lib/form.server"
 import { redirect } from "~/lib/remix.server"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
@@ -28,13 +28,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request, { id: true, van: { select: { id: true } } })
-  const schema = z.object({
-    name: z.string().min(1),
-    model: z.string().min(1),
-    year: FormNumber.min(1950).max(new Date().getFullYear() + 2),
-    description: NullableFormString,
-  })
-  const result = await validateFormData(request, schema)
+
+  const result = await validateFormData(request, vanSchema)
   if (!result.success) return formError(result)
   const formData = await request.formData()
   const images = (formData.getAll("image") as string[]).filter(Boolean)

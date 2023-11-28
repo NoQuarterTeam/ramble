@@ -10,27 +10,18 @@ import { Heading } from "../../components/ui/Heading"
 import { api } from "../../lib/api"
 import { useForm } from "../../lib/hooks/useForm"
 import { useRouter } from "../router"
+import { toast } from "../../components/ui/Toast"
 
 export default function OnboardingStep3Screen() {
   const { data, isLoading } = api.van.mine.useQuery()
 
   const form = useForm({
-    defaultValues: {
-      name: data?.name || "",
-      model: data?.model || "",
-      year: data?.year ? String(data?.year) : "",
-      description: data?.description || "",
-    },
+    defaultValues: { name: data?.name, model: data?.model, year: data?.year, description: data?.description },
   })
 
   React.useEffect(() => {
     if (!data || isLoading) return
-    form.reset({
-      name: data.name || "",
-      model: data.model || "",
-      year: data?.year ? String(data?.year) : "",
-      description: data.description || "",
-    })
+    form.reset({ name: data.name, model: data.model, year: data.year, description: data.description })
   }, [data, form, isLoading])
   const router = useRouter()
 
@@ -46,7 +37,13 @@ export default function OnboardingStep3Screen() {
     },
   })
 
-  const onSubmit = form.handleSubmit((van) => mutate({ ...van, year: Number(van.year), id: data?.id }))
+  const onSubmit = form.handleSubmit((van) => {
+    const { name, model, year } = van
+    if (!model) return toast({ title: "Model is required" })
+    if (!name) return toast({ title: "Name is required" })
+    if (!year) return toast({ title: "Year is required" })
+    mutate({ model, name, year, id: data?.id })
+  })
   return (
     <FormProvider {...form}>
       <AvoidSoftInputView>

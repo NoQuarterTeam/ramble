@@ -14,7 +14,7 @@ export function ListDetailScreen() {
   const { params } = useParams<"ListDetailScreen">()
   const { me } = useMe()
   const { data, isLoading } = api.list.detail.useQuery({ id: params.id })
-  const navigation = useRouter()
+  const navigate = useRouter()
 
   const list = data?.list
 
@@ -26,7 +26,7 @@ export function ListDetailScreen() {
         me?.id === list.creatorId && (
           <TouchableOpacity
             className="sq-8 flex items-center justify-center"
-            onPress={() => navigation.push("EditListScreen", { id: list.id })}
+            onPress={() => navigate.push("EditListScreen", { id: list.id })}
           >
             <Text className="underline">Edit</Text>
           </TouchableOpacity>
@@ -49,7 +49,7 @@ export function ListDetailScreen() {
           ListEmptyComponent={
             <View>
               <Text className="w-full py-4 text-center text-xl">No spots yet</Text>
-              <Button variant="outline" onPress={() => navigation.navigate("MapLayout")} className="w-full">
+              <Button variant="outline" onPress={() => navigate.navigate("MapLayout")} className="w-full">
                 Explore
               </Button>
             </View>
@@ -58,6 +58,19 @@ export function ListDetailScreen() {
           ItemSeparatorComponent={() => <View className="h-6" />}
           renderItem={({ item }) => <SpotItem spot={item} />}
         />
+      )}
+      {data && (!!data.bounds || !!data.center) && (
+        <View pointerEvents="box-none" className="absolute bottom-4 left-4 flex w-full flex-row items-center justify-center">
+          <Button
+            onPress={() =>
+              navigate.push("ListDetailMapScreen", { ...params, initialBounds: data.bounds, initialCenter: data.center })
+            }
+            className="rounded-full"
+            size="sm"
+          >
+            Map
+          </Button>
+        </View>
       )}
     </ScreenView>
   )

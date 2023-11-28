@@ -18,6 +18,7 @@ import { AMENITIES, canManageSpot, displayRating, isPartnerSpot, merge } from "@
 import { Icon } from "../../../../../components/Icon"
 import { PartnerLink } from "../../../../../components/PartnerLink"
 import { ReviewItem } from "../../../../../components/ReviewItem"
+import { SpotTypeBadge } from "../../../../../components/SpotTypeBadge"
 import { Button } from "../../../../../components/ui/Button"
 import { Heading } from "../../../../../components/ui/Heading"
 import { SpotImageCarousel } from "../../../../../components/ui/SpotImageCarousel"
@@ -82,7 +83,7 @@ export function SpotDetailScreen() {
       longitude: spot.longitude,
       sourceLatitude: location?.latitude,
       sourceLongitude: location?.longitude,
-      title: spot.name,
+      title: spot.type !== "GAS_STATION" ? spot.name : spot.address || spot.name,
       googleForceLatLon: spot.type !== "GAS_STATION",
       alwaysIncludeGoogle: true,
       directionsMode: "car",
@@ -124,6 +125,7 @@ export function SpotDetailScreen() {
         </Animated.View>
         <View className="space-y-3 p-4">
           <View className="space-y-2">
+            <SpotTypeBadge spot={spot} />
             <Heading className="text-2xl leading-7">{spot.name}</Heading>
             <View className="flex flex-row items-center space-x-2">
               <View className="flex flex-row items-center space-x-1">
@@ -288,11 +290,7 @@ export function SpotDetailScreen() {
             activeOpacity={0.8}
             className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
           >
-            <Icon
-              icon={Heart}
-              size={20}
-              fill={data.listSpots && data.listSpots.length > 0 ? (isDark ? "white" : "black") : undefined}
-            />
+            <Icon icon={Heart} size={20} fill={spot.isLiked ? (isDark ? "white" : "black") : "transparent"} />
           </TouchableOpacity>
         </View>
       </View>

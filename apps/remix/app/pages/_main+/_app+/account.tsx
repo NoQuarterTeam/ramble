@@ -2,7 +2,7 @@ import type { NavLinkProps } from "@remix-run/react"
 import { Outlet, useActionData, useLoaderData } from "@remix-run/react"
 import { AlertCircle, Settings, ToggleRight, User, UserPlus } from "lucide-react"
 
-import { sendAccountVerificationEmail } from "@ramble/api"
+import { sendAccountVerificationEmail } from "@ramble/server-services"
 import { createImageUrl, merge } from "@ramble/shared"
 
 import { Form, FormButton } from "~/components/Form"

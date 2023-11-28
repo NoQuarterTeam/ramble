@@ -19,7 +19,7 @@ export const saveToListActions = async ({ request }: ActionFunctionArgs) => {
   return createActions<Actions>(request, {
     "toggle-save": () =>
       createAction(request)
-        .input(z.object({ shouldSave: zx.BoolAsString, listId: z.string(), spotId: z.string() }))
+        .input(z.object({ shouldSave: zx.BoolAsString, listId: z.string().uuid(), spotId: z.string().uuid() }))
         .handler(async ({ shouldSave, listId, spotId }) => {
           await db.list.findFirstOrThrow({ select: { id: true }, where: { id: listId, creator: { id: userId } } })
           const listSpot = await db.listSpot.findFirst({ where: { listId, spotId, list: { creator: { id: userId } } } })

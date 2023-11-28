@@ -2,10 +2,11 @@ import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 import Supercluster from "supercluster"
 import { z } from "zod"
-import { CheckboxAsString, NumAsString } from "zodix"
+import { CheckboxAsString } from "zodix"
 
-import { publicSpotWhereClause } from "@ramble/api"
 import { SpotType } from "@ramble/database/types"
+import { clusterSchema } from "@ramble/server-schemas"
+import { publicSpotWhereClause } from "@ramble/server-services"
 
 import { db } from "~/lib/db.server"
 import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
@@ -19,45 +20,36 @@ export const config = {
 
 async function getMapClusters(request: Request) {
   const { userId } = await getUserSession(request)
-  const schema = z.object({
-    zoom: NumAsString,
-    minLat: NumAsString,
-    maxLat: NumAsString,
-    minLng: NumAsString,
-    maxLng: NumAsString,
-    type: z.array(z.string()).or(z.string()).optional(),
-    isPetFriendly: CheckboxAsString.optional(),
-    isUnverified: CheckboxAsString.optional(),
-  })
+  const schema = clusterSchema.and(
+    z.object({
+      type: z.array(z.nativeEnum(SpotType)).or(z.nativeEnum(SpotType)).optional(),
+      isPetFriendly: CheckboxAsString.optional(),
+      isUnverified: CheckboxAsString.optional(),
+    }),
+  )
   const result = schema.safeParse(queryString.parse(new URL(request.url).search, { arrayFormat: "bracket" }))
   if (!result.success) return []
   const { zoom, type, isUnverified, isPetFriendly, ...coords } = result.data
 
-  const defaultTypes = [SpotType.CAMPING, SpotType.FREE_CAMPING, SpotType.REWILDING]
+  if (!type || type.length === 0 || !zoom) return []
   const spots = await db.spot.findMany({
     select: { id: true, latitude: true, longitude: true, type: true },
     where: {
-      ...publicSpotWhereClause(userId),
-      verifiedAt: isUnverified ? undefined : { not: { equals: null } },
-      isPetFriendly: isPetFriendly ? { equals: true } : undefined,
       latitude: { gt: coords.minLat, lt: coords.maxLat },
       longitude: { gt: coords.minLng, lt: coords.maxLng },
-      type: type
-        ? typeof type === "string"
-          ? { equals: type as SpotType }
-          : type.length > 0
-          ? { in: type as SpotType[] }
-          : { in: defaultTypes }
-        : { in: defaultTypes },
+      verifiedAt: isUnverified ? undefined : { not: { equals: null } },
+      type: typeof type === "string" ? { equals: type } : { in: type },
+      ...publicSpotWhereClause(userId),
+      isPetFriendly: isPetFriendly ? { equals: true } : undefined,
     },
-    orderBy: { createdAt: "desc" },
+    orderBy: { verifiedAt: "desc" },
     take: 8000,
   })
   if (spots.length === 0) return []
 
   const supercluster = new Supercluster<{ id: string; type: SpotType; cluster: false }, { cluster: true }>({
     maxZoom: 16,
-    radius: !type || typeof type === "string" ? 40 : type.length > 4 ? 60 : 50,
+    radius: !type || typeof type === "string" ? 30 : type.length > 4 ? 60 : 40,
   })
 
   const clusterData = supercluster.load(
@@ -68,17 +60,25 @@ async function getMapClusters(request: Request) {
     })),
   )
 
-  const clusters = clusterData.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], zoom || 5)
+  const clusters = clusterData.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], zoom)
 
   return clusters.map((c) => ({
     ...c,
     properties: c.properties.cluster
-      ? { ...c.properties, zoomLevel: supercluster.getClusterExpansionZoom(c.properties.cluster_id) }
+      ? {
+          ...c.properties,
+          types: supercluster.getLeaves(c.properties.cluster_id).reduce<SpotClusterTypes>((acc, spot) => {
+            acc[spot.properties.type] = (acc[spot.properties.type] || 0) + 1
+            return acc
+          }, {}),
+          zoomLevel: supercluster.getClusterExpansionZoom(c.properties.cluster_id),
+        }
       : c.properties,
   }))
 }
 
-export type Cluster = Awaited<ReturnType<typeof getMapClusters>>[number]
+export type SpotCluster = Awaited<ReturnType<typeof getMapClusters>>[number]
+export type SpotClusterTypes = { [key in SpotType]?: number }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const spots = await getMapClusters(request)

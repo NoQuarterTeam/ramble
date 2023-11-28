@@ -1,14 +1,15 @@
-import { useLoaderData, useRouteError, useSearchParams } from "@remix-run/react"
+import { Form, useLoaderData, useRouteError, useSearchParams } from "@remix-run/react"
 import { createColumnHelper } from "@tanstack/react-table"
 import dayjs from "dayjs"
 import { Check, Trash } from "lucide-react"
 import queryString from "query-string"
+import { ExistingSearchParams } from "remix-utils/existing-search-params"
 import { promiseHash } from "remix-utils/promise"
 import { z } from "zod"
 import { zx } from "zodix"
 
-import { sendBetaInvitationEmail } from "@ramble/api"
 import { type Prisma } from "@ramble/database/types"
+import { sendBetaInvitationEmail } from "@ramble/server-services"
 
 import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -118,27 +119,22 @@ const columns = [
 ]
 export default function AccessRequests() {
   const { accessRequests, count } = useLoaderData<typeof loader>()
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams] = useSearchParams()
   return (
     <div className="space-y-2">
       <h1 className="text-4xl">Access Requests</h1>
       <div className="flex gap-2">
-        <div>
+        <Form>
+          <ExistingSearchParams exclude={["unaccepted"]} />
           <Button
             variant={searchParams.get("unaccepted") === "true" ? "primary" : "outline"}
-            onClick={() => {
-              const existingParams = queryString.parse(searchParams.toString())
-              setSearchParams(
-                queryString.stringify({
-                  ...existingParams,
-                  unaccepted: searchParams.get("unaccepted") === "true" ? undefined : true,
-                }),
-              )
-            }}
+            type="submit"
+            name={searchParams.get("unaccepted") === "true" ? undefined : "unaccepted"}
+            value={searchParams.get("unaccepted") === "true" ? undefined : "true"}
           >
             Show unaccepted
           </Button>
-        </div>
+        </Form>
 
         <div>
           <Search className="max-w-[400px]" />

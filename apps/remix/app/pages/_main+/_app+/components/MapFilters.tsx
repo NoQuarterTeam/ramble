@@ -3,10 +3,10 @@ import { BadgeX, Dog, Settings2 } from "lucide-react"
 import queryString from "query-string"
 
 import { SpotType } from "@ramble/database/types"
-import { useDisclosure } from "@ramble/shared"
+import { SPOT_TYPES, type SpotTypeInfo, useDisclosure } from "@ramble/shared"
 
+import { SpotIcon } from "~/components/SpotIcon"
 import { Button, IconButton, Modal, Switch, Tooltip } from "~/components/ui"
-import { SPOT_TYPES, type SpotTypeInfo } from "~/lib/models/spot"
 
 export function MapFilters({ onChange }: { onChange: (params: string) => void }) {
   const onSubmit = (e: React.SyntheticEvent) => {
@@ -18,7 +18,7 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
     const newParams = queryString.stringify(
       {
         ...existingParams,
-        type: type || undefined,
+        type: type ? (type.length === 0 ? "none" : type) : undefined,
         isUnverified: values.isUnverified || undefined,
         isPetFriendly: values.isPetFriendly || undefined,
       },
@@ -130,7 +130,7 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
 
           <div className="flex w-full justify-between">
             <Button variant="link" size="lg" onClick={onClear}>
-              Clear all
+              Reset
             </Button>
             <Button size="lg" type="submit">
               Save filters
@@ -168,7 +168,7 @@ function SpotTypeSelector({ type, defaultValue }: { type: SpotTypeInfo; defaultV
         variant={isSelected ? "primary" : "outline"}
         type="button"
         className="min-w-[100px]"
-        leftIcon={<type.Icon className="sq-4" />}
+        leftIcon={<SpotIcon type={type.value} className="sq-4" />}
         onClick={() => setIsSelected((s) => !s)}
       >
         {type.label}

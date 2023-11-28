@@ -6,6 +6,7 @@ import { ChevronDown, PlusCircle } from "lucide-react-native"
 import { join, useDisclosure } from "@ramble/shared"
 
 import { Icon } from "../../../components/Icon"
+import { LoginPlaceholder } from "../../../components/LoginPlaceholder"
 import { SpotItem } from "../../../components/SpotItem"
 import { BrandHeading } from "../../../components/ui/BrandHeading"
 import { Spinner } from "../../../components/ui/Spinner"
@@ -13,6 +14,7 @@ import { TabView } from "../../../components/ui/TabView"
 import { Text } from "../../../components/ui/Text"
 import { api } from "../../../lib/api"
 import { height, isTablet, width } from "../../../lib/device"
+import { useMe } from "../../../lib/hooks/useMe"
 import { useRouter } from "../../router"
 
 const SORT_OPTIONS = { latest: "latest", rated: "top rated", saved: "most saved" } as const
@@ -24,7 +26,7 @@ export function SpotsScreen() {
   const { data: initialSpots, isLoading } = api.spot.list.useQuery({ skip: 0, sort })
 
   const [spots, setSpots] = React.useState(initialSpots)
-
+  const { me } = useMe()
   React.useEffect(() => {
     setSpots(initialSpots)
   }, [initialSpots])
@@ -35,6 +37,13 @@ export function SpotsScreen() {
     const newSpots = await utils.spot.list.fetch({ skip: spots?.length || 0, sort: "latest" })
     setSpots([...(spots || []), ...newSpots])
   }, [spots, utils.spot.list])
+
+  if (!me)
+    return (
+      <TabView title="latest">
+        <LoginPlaceholder text="Log in to view latest spots" />
+      </TabView>
+    )
 
   return (
     <TabView
@@ -50,28 +59,6 @@ export function SpotsScreen() {
         </TouchableOpacity>
       }
     >
-      {sortProps.isOpen && (
-        <TouchableOpacity
-          activeOpacity={1}
-          onPress={sortProps.onClose}
-          className="absolute inset-0 z-10 px-4 pt-[100px]"
-          style={{ width, height }}
-        >
-          <View className="rounded-xs w-[200px] bg-white px-4 py-2 shadow-md dark:bg-gray-950">
-            {Object.entries(SORT_OPTIONS).map(([key, label]) => (
-              <TouchableOpacity
-                key={key}
-                onPress={() => {
-                  setSort(key as keyof typeof SORT_OPTIONS)
-                  sortProps.onClose()
-                }}
-              >
-                <Text className={join("py-2 text-lg", sort === key && "underline")}>{label}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </TouchableOpacity>
-      )}
       {isLoading ? (
         <View className="flex items-center justify-center pt-16">
           <Spinner />
@@ -93,6 +80,28 @@ export function SpotsScreen() {
             </View>
           )}
         />
+      )}
+      {sortProps.isOpen && (
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={sortProps.onClose}
+          className="absolute inset-0 z-10 px-4 pt-[100px]"
+          style={{ width, height }}
+        >
+          <View className="rounded-xs w-[200px] bg-white px-4 py-2 shadow-md dark:bg-gray-950">
+            {Object.entries(SORT_OPTIONS).map(([key, label]) => (
+              <TouchableOpacity
+                key={key}
+                onPress={() => {
+                  setSort(key as keyof typeof SORT_OPTIONS)
+                  sortProps.onClose()
+                }}
+              >
+                <Text className={join("py-2 text-lg", sort === key && "underline")}>{label}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </TouchableOpacity>
       )}
     </TabView>
   )

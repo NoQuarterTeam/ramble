@@ -91,10 +91,10 @@ export const Button = React.forwardRef(function _Button(
                 ? "black"
                 : "white"
               : variant === "destructive"
-              ? "white"
-              : isDark
-              ? "white"
-              : "black"
+                ? "white"
+                : isDark
+                  ? "white"
+                  : "black"
           }
         />
       )}

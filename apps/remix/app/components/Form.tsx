@@ -41,7 +41,7 @@ export function useFetcher<T>(
 ): FetcherWithComponents<SerializeFrom<T>> & {
   FormButton: React.ForwardRefExoticComponent<ButtonProps & React.RefAttributes<HTMLButtonElement>>
 } {
-  const fetcher = useRemixFetcher({ key: props?.key })
+  const fetcher = useRemixFetcher<T>({ key: props?.key })
 
   function Form({ children, ...rest }: RemixFormProps) {
     return (
@@ -69,7 +69,7 @@ export function useFetcher<T>(
   React.useEffect(() => {
     if (!fetcher.data || !props?.onFinish) return
     if (fetcher.state === "loading" && fetcher.data) {
-      props.onFinish(fetcher.data)
+      props.onFinish(fetcher.data as T)
     }
   }, [fetcher.state, props, fetcher.data])
 

@@ -26,22 +26,27 @@ import center from "@turf/center"
 import { points } from "@turf/helpers"
 import type { Geo } from "@vercel/edge"
 import { geolocation } from "@vercel/edge"
+import { User } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
+import { ClientOnly } from "remix-utils/client-only"
 
-import type { SpotType } from "@ramble/database/types"
-import { ClientOnly, INITIAL_LATITUDE, INITIAL_LONGITUDE, join } from "@ramble/shared"
+import { createImageUrl, INITIAL_LATITUDE, INITIAL_LONGITUDE, join } from "@ramble/shared"
 
+import { OptimizedImage } from "~/components/OptimisedImage"
+import { db } from "~/lib/db.server"
 import { usePreferences } from "~/lib/hooks/usePreferences"
 import { useTheme } from "~/lib/theme"
 import type { LinksFunction, LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
 import { MapFilters } from "~/pages/_main+/_app+/components/MapFilters"
+import { type UserCluster, type userClustersLoader } from "~/pages/api+/user-clusters"
+import { getUserSession } from "~/services/session/session.server"
 
-import type { Cluster, clustersLoader } from "../../api+/clusters"
+import type { clustersLoader } from "../../api+/clusters"
 import { MapLayerControls } from "./components/MapLayerControls"
 import { MapSearch } from "./components/MapSearch"
-import { SpotMarker } from "./components/SpotMarker"
+import { SpotClusterMarker } from "./components/SpotMarker"
 
 export const config = {
   // runtime: "edge",
@@ -53,7 +58,16 @@ export const links: LinksFunction = () => {
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const geo = geolocation(request) as Geo | undefined
+  const { userId } = await getUserSession(request)
   if (!geo) return json({ latitude: null, longitude: null, city: null, country: null })
+
+  if (userId && geo.latitude && geo.longitude) {
+    const randomVariant = Math.random() * (0.03 - 0.02) + 0.02 * (Math.random() > 0.5 ? 1 : -1)
+    await db.user.update({
+      where: { id: userId },
+      data: { latitude: Number(geo.latitude) + randomVariant, longitude: Number(geo.longitude) + randomVariant },
+    })
+  }
   return json(
     {
       latitude: geo.latitude ? parseFloat(geo.latitude) : null,
@@ -69,8 +83,10 @@ export const shouldRevalidate = () => false
 
 export default function MapView() {
   const clustersFetcher = useFetcher<typeof clustersLoader>()
+  const userClustersFetcher = useFetcher<typeof userClustersLoader>()
   const ipInfo = useLoaderData<typeof loader>()
   const clusters = clustersFetcher.data
+  const userClusters = userClustersFetcher.data
 
   const theme = useTheme()
   const mapRef = React.useRef<MapRef>(null)
@@ -101,8 +117,23 @@ export default function MapView() {
   }, [])
 
   const onParamsChange = (params: string) => {
-    clustersFetcher.load(`/api/clusters?${params}`)
-    window.history.replaceState(null, "", `${window.location.pathname}?${params}`)
+    const parsed = queryString.parse(params, { arrayFormat: "bracket" })
+    const type = parsed.type
+    const formatted = queryString.stringify(
+      {
+        ...parsed,
+        type: !type || type.length === 0 ? ["CAMPING", "FREE_CAMPING", "REWILDING"] : type === "none" ? undefined : type,
+      },
+      { arrayFormat: "bracket" },
+    )
+    const formattedSearch = queryString.stringify(
+      { ...parsed, type: !type ? ["CAMPING", "FREE_CAMPING", "REWILDING"] : type },
+      { arrayFormat: "bracket" },
+    )
+
+    clustersFetcher.load(`/api/clusters?${formatted}`)
+    userClustersFetcher.load(`/api/user-clusters?${formatted}`)
+    window.history.replaceState(null, "", `${window.location.pathname}?${formattedSearch}`)
   }
   const onMove = (e: mapboxgl.MapboxEvent<undefined> | ViewStateChangeEvent) => {
     const bounds = e.target.getBounds()
@@ -125,7 +156,7 @@ export default function MapView() {
   const markers = React.useMemo(
     () =>
       clusters?.map((point, i) => (
-        <ClusterMarker
+        <SpotClusterMarker
           point={point}
           key={i}
           onClick={(e) => {
@@ -147,6 +178,30 @@ export default function MapView() {
       )),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [clusters],
+  )
+  const preferences = usePreferences()
+
+  const userMarkers = React.useMemo(
+    () =>
+      preferences.mapUsers &&
+      userClusters?.map((point, i) => (
+        <UserClusterMarker
+          point={point}
+          key={i}
+          onClick={(e) => {
+            e.originalEvent.stopPropagation()
+            if (!point.properties.cluster) {
+              navigate(`/${point.properties.username}`)
+            } else {
+              const zoom = Math.min(point.properties.zoomLevel, 20)
+              const center = point.geometry.coordinates as LngLatLike
+              mapRef.current?.flyTo({ center, duration: 1000, padding: 50, zoom })
+            }
+          }}
+        />
+      )),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [userClusters, preferences.mapUsers],
   )
   const noMap = searchParams.get("noMap")
 
@@ -179,22 +234,23 @@ export default function MapView() {
           initialViewState={initialViewState}
           attributionControl={false}
           mapStyle={
-            theme === "dark"
-              ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
-              : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
+            preferences.mapStyleSatellite
+              ? "mapbox://styles/jclackett/clp122bar007z01qu21kc8h4g"
+              : theme === "dark"
+                ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
+                : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
           }
           // mapStyle={"mapbox://styles/mapbox/standard-beta"}
         >
           <MapLayers />
           {markers}
+          {userMarkers}
           <GeolocateControl position="bottom-right" />
           <NavigationControl position="bottom-right" />
         </Map>
       )}
 
-      <ClientOnly>
-        <MapFilters onChange={onParamsChange} />
-      </ClientOnly>
+      <ClientOnly>{() => <MapFilters onChange={onParamsChange} />}</ClientOnly>
       <MapLayerControls />
       <MapSearch onSearch={(center) => mapRef.current?.flyTo({ center })} />
       <Outlet />
@@ -202,11 +258,11 @@ export default function MapView() {
   )
 }
 
-interface MarkerProps {
+interface UserMarkerProps {
   onClick: (e: MarkerEvent<MarkerInstance, MouseEvent>) => void
-  point: Cluster
+  point: UserCluster
 }
-function ClusterMarker(props: MarkerProps) {
+function UserClusterMarker(props: UserMarkerProps) {
   return (
     <Marker
       onClick={props.onClick}
@@ -217,20 +273,36 @@ function ClusterMarker(props: MarkerProps) {
       {props.point.properties.cluster ? (
         <div
           className={join(
-            "border-primary-100 bg-primary-700 center cursor-pointer rounded-full border text-white shadow transition-transform hover:scale-110",
+            "center cursor-pointer rounded-full border border-purple-100 bg-purple-700 text-white shadow transition-transform hover:scale-110",
             props.point.properties.point_count > 150
               ? "sq-20"
               : props.point.properties.point_count > 75
-              ? "sq-16"
-              : props.point.properties.point_count > 10
-              ? "sq-12"
-              : "sq-8",
+                ? "sq-16"
+                : props.point.properties.point_count > 10
+                  ? "sq-12"
+                  : "sq-8",
           )}
         >
           <p className="text-center text-sm">{props.point.properties.point_count_abbreviated}</p>
         </div>
       ) : (
-        <SpotMarker spot={props.point.properties as { type: SpotType }} />
+        <div className="center sq-10 group relative cursor-pointer rounded-full border border-purple-100 bg-purple-500 shadow transition-transform hover:scale-110">
+          {props.point.properties.avatar ? (
+            <OptimizedImage
+              width={50}
+              alt="user location"
+              height={50}
+              placeholder={props.point.properties.avatarBlurHash}
+              src={createImageUrl(props.point.properties.avatar)}
+              className="sq-10 rounded-full object-cover"
+            />
+          ) : (
+            <User size={18} className="text-white" />
+          )}
+          <div className="bg-background rounded-xs absolute -bottom-5 left-1/2 hidden -translate-x-1/2 px-2 py-1 group-hover:block">
+            <p className="text-xs">{props.point.properties.username}</p>
+          </div>
+        </div>
       )}
     </Marker>
   )

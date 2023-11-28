@@ -1,8 +1,8 @@
 import { createTypedSessionStorage } from "remix-utils/typed-session"
 import { z } from "zod"
 
-import { IS_PRODUCTION } from "~/lib/config.server"
-import { THEME_SESSION_SECRET } from "~/lib/env.server"
+import { env, IS_PRODUCTION } from "@ramble/server-env"
+
 import { isTheme, type Theme } from "~/lib/theme"
 import { createCookieSessionStorage } from "~/lib/vendor/vercel.server"
 
@@ -11,7 +11,7 @@ const THEME_COOKIE_KEY = IS_PRODUCTION ? "ramble_session_theme" : "ramble_sessio
 const storage = createCookieSessionStorage({
   cookie: {
     name: THEME_COOKIE_KEY,
-    secrets: [THEME_SESSION_SECRET],
+    secrets: [env.THEME_SESSION_SECRET],
     sameSite: "lax",
     secure: IS_PRODUCTION,
     path: "/",

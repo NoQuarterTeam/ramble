@@ -25,22 +25,12 @@ export function VanScreen() {
   const { data, isLoading } = api.van.mine.useQuery()
 
   const form = useForm({
-    defaultValues: {
-      name: data?.name || "",
-      model: data?.model || "",
-      year: data?.year ? String(data?.year) : "",
-      description: data?.description || "",
-    },
+    defaultValues: { name: data?.name, model: data?.model, year: data?.year, description: data?.description },
   })
 
   React.useEffect(() => {
     if (!data || isLoading) return
-    form.reset({
-      name: data.name || "",
-      model: data.model || "",
-      year: data?.year ? String(data?.year) : "",
-      description: data.description || "",
-    })
+    form.reset({ name: data.name, model: data.model, year: data.year, description: data.description })
   }, [data, form, isLoading])
 
   const utils = api.useUtils()
@@ -49,15 +39,19 @@ export function VanScreen() {
     isLoading: updateLoading,
     error,
   } = api.van.upsert.useMutation({
-    onSuccess: () => {
-      form.reset({}, { keepValues: true })
+    onSuccess: (res) => {
+      form.reset({ name: res.name, model: res.model, year: res.year, description: res.description })
       toast({ title: "Van updated." })
     },
   })
 
   const onSubmit = form.handleSubmit((van) => {
     Keyboard.dismiss()
-    mutate({ ...van, year: Number(van.year), id: data?.id })
+    const { name, model, year } = van
+    if (!model) return toast({ title: "Model is required" })
+    if (!name) return toast({ title: "Name is required" })
+    if (!year) return toast({ title: "Year is required" })
+    mutate({ model, name, year, id: data?.id })
   })
 
   const { mutate: removeImage } = api.van.removeImage.useMutation({
@@ -112,7 +106,7 @@ export function VanScreen() {
         <AvoidSoftInputView>
           <ScrollView
             keyboardShouldPersistTaps="handled"
-            contentContainerStyle={{ flexGrow: 1, paddingBottom: 80 }}
+            contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}
             showsVerticalScrollIndicator={false}
           >
             <FormInput name="name" label="Name" error={error} />

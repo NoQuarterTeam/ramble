@@ -1,10 +1,11 @@
 import { useLoaderData } from "@remix-run/react"
-import { z } from "zod"
+
+import { listSchema } from "@ramble/server-schemas"
 
 import { PageContainer } from "~/components/PageContainer"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
-import { FormCheckbox, formError, NullableFormString, validateFormData } from "~/lib/form.server"
+import { formError, validateFormData } from "~/lib/form.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { notFound, redirect } from "~/lib/remix.server"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
@@ -31,22 +32,12 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     where: { id: params.id, creatorId: user.id },
   })
   if (!list) throw redirect(`/${user.username}/lists`, request, { flash: { title: "List not found" } })
-  const schema = z.object({
-    name: z.string().min(1, "List name must be at least 1 character"),
-    description: NullableFormString,
-    isPrivate: FormCheckbox,
-  })
-  const result = await validateFormData(request, schema)
+  const result = await validateFormData(request, listSchema)
   if (!result.success) return formError(result)
   const { name, description } = result.data
-  await db.list.update({
-    where: { id: list.id },
-    data: { name, description },
-  })
+  await db.list.update({ where: { id: list.id }, data: { name, description } })
   track("List updated", { listId: list.id, userId: user.id })
-  return redirect(`/${user.username}/lists/${list.id}`, request, {
-    flash: { title: "List updated" },
-  })
+  return redirect(`/${user.username}/lists/${list.id}`, request, { flash: { title: "List updated" } })
 }
 
 export default function ListDetail() {

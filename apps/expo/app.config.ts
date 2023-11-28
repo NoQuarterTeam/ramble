@@ -1,5 +1,8 @@
 import { ConfigContext, ExpoConfig } from "expo/config"
 
+const VERSION = "1.0.9"
+const BUILD = 15
+
 const splash: ExpoConfig["splash"] = {
   image: "./assets/splash.png",
   resizeMode: "contain",
@@ -19,7 +22,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   slug: "ramble",
   scheme: "ramble",
   owner: "noquarter",
-  version: "1.0.6",
+  version: VERSION,
   jsEngine: "hermes",
   orientation: "portrait",
   icon: "./assets/icon.png",
@@ -46,7 +49,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     infoPlist: {
       LSApplicationQueriesSchemes: ["comgooglemaps"],
     },
-    buildNumber: "10",
+    buildNumber: BUILD.toString(),
   },
   android: {
     adaptiveIcon: {
@@ -56,7 +59,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     softwareKeyboardLayoutMode: "resize",
     package: IS_DEV ? "co.noquarter.ramble.dev" : "co.noquarter.ramble",
     splash,
-    versionCode: 10,
+    versionCode: BUILD,
   },
   extra: {
     eas: {
@@ -65,6 +68,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   },
   plugins: [
     "sentry-expo",
+    "expo-localization",
     "./expo-plugins/with-modify-gradle.js",
     "./expo-plugins/android-manifest.plugin.js",
     [

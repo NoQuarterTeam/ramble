@@ -1,0 +1,29 @@
+{
+  "name": "@ramble/server-schemas",
+  "version": "1.0.0",
+  "main": "./src/index.ts",
+  "scripts": {
+    "lint:fix": "eslint --config .eslintrc.commit.js --fix --cache --ext .ts,.tsx src",
+    "lint": "eslint --config .eslintrc.js --ext .ts,.tsx src",
+    "prettier": "prettier --check src",
+    "prettier:fix": "prettier --write src",
+    "format": "pnpm run lint:fix && pnpm run prettier:fix",
+    "typecheck": "tsc --noEmit"
+  },
+  "sideEffects": false,
+  "dependencies": {
+    "@ramble/database": "workspace:*",
+    "@ramble/shared": "workspace:*",
+    "tailwind-merge": "^2.0.0",
+    "zod": "3.22.4",
+    "zodix": "0.4.4"
+  },
+  "devDependencies": {
+    "@ramble/eslint-config": "workspace:*",
+    "@ramble/tailwind-config": "workspace:*",
+    "@types/node": "^18.18.4",
+    "eslint": "8.54.0",
+    "prettier": "3.1.0",
+    "typescript": "5.3.2"
+  }
+}
