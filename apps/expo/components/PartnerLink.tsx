@@ -4,7 +4,7 @@ import * as WebBrowser from "expo-web-browser"
 
 import { isPartnerSpot, partners, type SpotPartnerFields } from "@ramble/shared"
 
-import { WEB_URL } from "../lib/config"
+import { FULL_WEB_URL } from "../lib/config"
 import { Text } from "./ui/Text"
 import { toast } from "./ui/Toast"
 
@@ -64,7 +64,7 @@ export function PartnerLink(props: Props) {
       <Image
         contentFit="contain"
         className="h-[40px] w-[120px] bg-right object-contain"
-        source={{ uri: WEB_URL + partner.logo[theme] }}
+        source={{ uri: FULL_WEB_URL + partner.logo[theme] }}
       />
     </TouchableOpacity>
   )

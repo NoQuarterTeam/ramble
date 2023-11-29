@@ -10,7 +10,6 @@ import "~/styles/app.css"
 import * as React from "react"
 import * as Tooltip from "@radix-ui/react-tooltip"
 import { cssBundleHref } from "@remix-run/css-bundle"
-import type { ShouldRevalidateFunction } from "@remix-run/react"
 import {
   isRouteErrorResponse,
   Links,
@@ -92,10 +91,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       ],
     },
   )
-}
-
-export const shouldRevalidate: ShouldRevalidateFunction = (args) => {
-  return args.formMethod === "POST"
 }
 
 export type RootLoader = SerializeFrom<typeof loader>

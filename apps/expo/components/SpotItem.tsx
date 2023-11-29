@@ -9,6 +9,7 @@ import { Icon } from "./Icon"
 import { SpotIcon } from "./SpotIcon"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
+import { api } from "../lib/api"
 
 interface Props {
   spot: SpotItemWithStatsAndImage
@@ -16,8 +17,17 @@ interface Props {
 
 export function SpotItem({ spot }: Props) {
   const { push } = useRouter()
+  const utils = api.useUtils()
+
   return (
-    <TouchableOpacity className="w-full" onPress={() => push("SpotDetailScreen", { id: spot.id })} activeOpacity={0.8}>
+    <TouchableOpacity
+      onPressIn={() => {
+        void utils.spot.detail.prefetch({ id: spot.id })
+      }}
+      className="w-full"
+      onPress={() => push("SpotDetailScreen", { id: spot.id })}
+      activeOpacity={0.8}
+    >
       <View className="relative h-[250px] w-full">
         {spot.image ? (
           <OptimizedImage

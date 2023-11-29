@@ -5,17 +5,38 @@ import superjson from "superjson"
 import { ZodError } from "zod"
 
 import { prisma } from "@ramble/database"
-import { type User } from "@ramble/database/types"
+import { type Prisma } from "@ramble/database/types"
 import { decodeAuthToken } from "@ramble/server-services"
+import { userInterestFields } from "@ramble/shared"
+
+const userSelectFields = {
+  id: true,
+  email: true,
+  isVerified: true,
+  firstName: true,
+  lastName: true,
+  preferredLanguage: true,
+  avatar: true,
+  isAdmin: true,
+  isPendingGuideApproval: true,
+  isLocationPrivate: true,
+  avatarBlurHash: true,
+  username: true,
+  instagram: true,
+  bio: true,
+  role: true,
+  createdAt: true,
+  ...userInterestFields,
+} satisfies Prisma.UserSelect
 
 export async function createContext({ req }: trpcFetch.FetchCreateContextFnOptions) {
   const headers = new Headers(req.headers)
   const authHeader = headers.get("authorization")
   const token = authHeader?.split("Bearer ")[1]
-  let user: User | null = null
+  let user: Prisma.UserGetPayload<{ select: typeof userSelectFields }> | null = null
   if (token) {
     const payload = decodeAuthToken(token)
-    user = await prisma.user.findUnique({ where: { id: payload.id } })
+    user = await prisma.user.findUnique({ where: { id: payload.id }, select: userSelectFields })
   }
   return { req, prisma, user }
 }

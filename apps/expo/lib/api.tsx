@@ -9,7 +9,7 @@ import superjson from "superjson"
 
 import { type AppRouter } from "@ramble/api"
 
-import { WEB_URL } from "./config"
+import { FULL_WEB_URL } from "./config"
 
 /**
  * A set of typesafe hooks for consuming your API.
@@ -41,7 +41,7 @@ const getBaseUrl = () => {
   // return "https://ramble.app"
   const debuggerHost = Constants.debuggerHost ?? Constants.manifest2?.extra?.expoGo?.debuggerHost
   const localhost = debuggerHost?.split(":")[0]
-  if (!localhost) return WEB_URL
+  if (!localhost) return FULL_WEB_URL
   return `http://${localhost}:3000`
 }
 

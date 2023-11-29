@@ -1,7 +1,5 @@
 import { type z } from "zod"
 
-import { IS_DEV } from "@ramble/server-env"
-
 import { json as remixJson, redirect as remixRedirect } from "~/lib/vendor/vercel.server"
 import { type createFlashSchema, getFlashSession } from "~/services/session/flash.server"
 
@@ -29,11 +27,6 @@ export async function json<T>(data: T, request?: Request, init?: ResponseInit & 
     const { createFlash } = await getFlashSession(request)
     headers.append("set-cookie", await createFlash(flash))
   }
-
-  if (headers.get("Cache-Control") && IS_DEV) {
-    headers.delete("Cache-Control")
-  }
-
   return remixJson(data, { status: 200, ...init, headers })
 }
 

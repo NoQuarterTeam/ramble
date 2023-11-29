@@ -75,11 +75,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
         Spot.latitude, Spot.longitude,
         (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
-        (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
+        CAST((SELECT COUNT(ListSpot.spotId) FROM ListSpot WHERE ListSpot.spotId = Spot.id) AS CHAR(32)) AS savedCount
       FROM
         Spot
-      LEFT JOIN
-        ListSpot ON Spot.id = ListSpot.spotId
       ${WHERE}
       GROUP BY
         Spot.id
@@ -146,7 +144,6 @@ export default function Latest() {
                   className="flex md:hidden"
                   value={value}
                   variant={type === value ? "primary" : "outline"}
-                  leftIcon={<SpotIcon type={value} className="sq-4" />}
                 />
               </Form>
             ))}

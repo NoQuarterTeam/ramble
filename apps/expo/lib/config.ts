@@ -15,7 +15,7 @@ if (Updates.channel === "production") {
   config.ENV = "preview"
 }
 
-export const WEB_URL = config.WEB_URL
+export const FULL_WEB_URL = config.WEB_URL
 export const ENV = config.ENV
 
 export const VERSION = Application.nativeApplicationVersion

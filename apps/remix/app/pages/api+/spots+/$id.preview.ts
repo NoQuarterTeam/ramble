@@ -1,32 +1,36 @@
 import { type LoaderFunctionArgs, type SerializeFrom } from "@vercel/remix"
+import crypto from "crypto"
 import { cacheHeader } from "pretty-cache-header"
 import { promiseHash } from "remix-utils/promise"
 
+import { FULL_WEB_URL } from "@ramble/server-env"
 import { getSpotFlickrImages, publicSpotWhereClause } from "@ramble/server-services"
 import { spotPartnerFields } from "@ramble/shared"
 
 import { db } from "~/lib/db.server"
 import { json, notFound } from "~/lib/remix.server"
 import { reviewItemSelectFields } from "~/pages/_main+/_app+/components/ReviewItem"
-import { getUserSession } from "~/services/session/session.server"
+import { getMaybeUser } from "~/services/auth/auth.server"
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-  const { userId } = await getUserSession(request)
-
+  const user = await getMaybeUser(request)
+  const searchParams = new URLSearchParams(new URL(request.url).search)
+  const language = searchParams.get("lang") || user?.preferredLanguage || "en"
   const initialSpot = await db.spot.findUnique({
-    where: { id: params.id, ...publicSpotWhereClause(userId) },
-    select: { id: true, latitude: true, longitude: true },
+    where: { id: params.id, ...publicSpotWhereClause(user?.id) },
+    select: { id: true, latitude: true, longitude: true, description: true },
   })
   if (!initialSpot) throw notFound()
+  const descriptionHash = initialSpot.description ? crypto.createHash("sha1").update(initialSpot.description).digest("hex") : ""
 
   const data = await promiseHash({
     sameLocationSpots: db.spot.findMany({
-      where: { ...publicSpotWhereClause(userId), latitude: initialSpot.latitude, longitude: initialSpot.longitude },
+      where: { ...publicSpotWhereClause(user?.id), latitude: initialSpot.latitude, longitude: initialSpot.longitude },
       select: { id: true },
       orderBy: { createdAt: "desc" },
     }),
     spot: db.spot.findUniqueOrThrow({
-      where: { id: initialSpot.id, ...publicSpotWhereClause(userId) },
+      where: { id: initialSpot.id, ...publicSpotWhereClause(user?.id) },
       select: {
         id: true,
         name: true,
@@ -48,6 +52,9 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
       },
     }),
     rating: db.review.aggregate({ where: { spotId: initialSpot.id }, _avg: { rating: true } }),
+    translatedDescription: descriptionHash
+      ? fetch(FULL_WEB_URL + `/api/spots/${initialSpot.id}/translate/${language}`).then((r) => r.json())
+      : (async () => null)(),
   })
   const flickrImages = await getSpotFlickrImages(data.spot)
 
@@ -57,6 +64,8 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
       rating: data.rating._avg.rating,
       sameLocationSpots: data.sameLocationSpots,
       flickrImages,
+      translatedDescription: data.translatedDescription,
+      descriptionHash,
     },
     request,
     {

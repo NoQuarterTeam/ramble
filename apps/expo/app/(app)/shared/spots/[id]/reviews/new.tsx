@@ -22,7 +22,8 @@ export function NewReviewScreen() {
       goBack()
     },
   })
-  const { data: spot } = api.spot.detail.useQuery({ id: spotId })
+  const { data } = api.spot.detail.useQuery({ id: spotId })
+  const spot = data?.spot
   return (
     <ModalView title="new review">
       <ScrollView

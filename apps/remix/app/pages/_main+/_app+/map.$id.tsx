@@ -6,7 +6,7 @@ import { z } from "zod"
 
 import { type SpotType } from "@ramble/database/types"
 import { generateBlurHash } from "@ramble/server-services"
-import { createImageUrl, displayRating, isPartnerSpot, join, merge } from "@ramble/shared"
+import { createImageUrl, displayRating, isPartnerSpot, join } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
 import { ImageUploader } from "~/components/ImageUploader"
@@ -14,6 +14,7 @@ import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { SpotTypeBadge } from "~/components/SpotTypeBadge"
 import { Button, CloseButton } from "~/components/ui"
+import { Skeleton } from "~/components/ui/Skeleton"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form.server"
@@ -22,12 +23,13 @@ import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { json, notFound } from "~/lib/remix.server"
 import type { ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
-import { SaveToList } from "~/pages/api+/save-to-list"
+import { SaveToList } from "~/pages/api+/spots+/$id.save-to-list"
 import { type SpotPreviewData } from "~/pages/api+/spots+/$id.preview"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { PartnerLink } from "./components/PartnerLink"
 import { ReviewItem } from "./components/ReviewItem"
+import { TranslateSpotDescription } from "./components/TranslateSpotDescription"
 import { NEW_REVIEW_REDIRECTS } from "./spots.$id_.reviews.new"
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -84,6 +86,7 @@ export default function SpotPreview() {
             {!(["SURFING", "HIKING", "MOUNTAIN_BIKING"] as SpotType[]).includes(spot.type) ? (
               <Link
                 target="_blank"
+                prefetch="render"
                 rel="noopener norefer"
                 to={`/spots/${spot.id}`}
                 className="line-clamp-2 text-xl leading-6 hover:underline"
@@ -110,7 +113,7 @@ export default function SpotPreview() {
             {user && <SaveToList spotId={spot.id} />}
           </div>
         </div>
-        <div key={spot.id} className="rounded-xs w-full overflow-x-scroll">
+        <div className="rounded-xs w-full overflow-x-scroll">
           <div className="relative flex h-[225px] w-max space-x-2">
             {data.flickrImages
               ? data.flickrImages.map((photo) => (
@@ -155,8 +158,12 @@ export default function SpotPreview() {
           </div>
         </div>
         {isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}
-
-        <p className="line-clamp-6 whitespace-pre-wrap">{spot.description}</p>
+        <TranslateSpotDescription
+          key={params.id}
+          spot={spot}
+          translatedDescription={data.translatedDescription}
+          hash={data.descriptionHash}
+        />
         <p className="text-sm italic">{spot.address}</p>
         {!(["SURFING", "HIKING", "MOUNTAIN_BIKING"] as SpotType[]).includes(spot.type) && (
           <div className="flex justify-end">
@@ -222,9 +229,6 @@ function SpotFallback() {
       <Skeleton className="h-40 w-full" />
     </div>
   )
-}
-export function Skeleton(props: React.HTMLAttributes<HTMLDivElement>) {
-  return <div {...props} className={merge("rounded-xs animate-pulse bg-gray-100 dark:bg-gray-700", props.className)} />
 }
 
 function SpotContainer(props: { children: React.ReactNode }) {
