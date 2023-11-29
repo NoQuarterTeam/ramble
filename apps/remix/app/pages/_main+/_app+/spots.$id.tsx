@@ -1,7 +1,7 @@
 import { Suspense } from "react"
 import Map, { Marker } from "react-map-gl"
 import { defer, type SerializeFrom } from "@remix-run/node"
-import { Await, Link, useLoaderData } from "@remix-run/react"
+import { Await, Link, ShouldRevalidateFunctionArgs, useLoaderData } from "@remix-run/react"
 import crypto from "crypto"
 import dayjs from "dayjs"
 import { Check, Edit2, Heart, Star, Trash } from "lucide-react"
@@ -48,11 +48,12 @@ import { type TranslateSpot } from "~/pages/api+/spots+/$id.translate.$lang"
 import type { loader as rootLoader } from "~/root"
 import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
 
-import { SaveToList } from "../../api+/save-to-list"
+import { SaveToList, Actions as SaveActions } from "../../api+/spots+/$id.save-to-list"
 import { PartnerLink } from "./components/PartnerLink"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { SpotMarker } from "./components/SpotMarker"
 import { TranslateSpotDescription } from "./components/TranslateSpotDescription"
+import { FORM_ACTION } from "~/lib/form"
 
 export const config = {
   // runtime: "edge",
@@ -60,6 +61,11 @@ export const config = {
 }
 
 // export const headers = useLoaderHeaders
+
+export const shouldRevalidate = ({ formData }: ShouldRevalidateFunctionArgs) => {
+  if (formData?.get(FORM_ACTION) === SaveActions.ToggleSave) return false
+  return true
+}
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const user = await getMaybeUser(request)

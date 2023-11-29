@@ -8,7 +8,7 @@ import { OptimizedImage } from "~/components/OptimisedImage"
 import { SpotIcon } from "~/components/SpotIcon"
 import { IconButton } from "~/components/ui"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
-import { SaveToList } from "~/pages/api+/save-to-list"
+import { SaveToList } from "~/pages/api+/spots+/$id.save-to-list"
 
 interface Props {
   spot: SpotItemWithStatsAndImage

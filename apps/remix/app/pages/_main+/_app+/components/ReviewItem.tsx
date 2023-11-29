@@ -67,12 +67,14 @@ export function ReviewItem({ review }: Props) {
       <p>{review.description}</p>
       {user?.id === review.user.id && (
         <div className="flex space-x-2">
-          <LinkButton variant="outline" to={`reviews/${review.id}`}>
+          <LinkButton size="sm" variant="outline" to={`reviews/${review.id}`}>
             Edit
           </LinkButton>
           <AlertDialogRoot>
             <AlertDialogTrigger asChild>
-              <Button variant="destructive">Delete</Button>
+              <Button size="sm" variant="destructive">
+                Delete
+              </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>

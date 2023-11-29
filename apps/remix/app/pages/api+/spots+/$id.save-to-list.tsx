@@ -1,8 +1,7 @@
-import * as React from "react"
 import { Heart, Plus } from "lucide-react"
-import { useAuthenticityToken } from "remix-utils/csrf/react"
+import * as React from "react"
 
-import { useDisclosure } from "@ramble/shared"
+import { join, useDisclosure } from "@ramble/shared"
 
 import { Form, FormError, FormField, useFetcher } from "~/components/Form"
 import {
@@ -18,22 +17,23 @@ import {
   Tooltip,
 } from "~/components/ui"
 import { db } from "~/lib/db.server"
-import { FORM_ACTION } from "~/lib/form"
 import type { ActionDataErrorResponse } from "~/lib/form.server"
 import { useFetcherQuery } from "~/lib/hooks/useFetcherQuery"
 import { json } from "~/lib/remix.server"
 import type { LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
-import { type CreateListSchema, saveToListActions } from "~/services/api/save-to-list.server"
+import { saveToListActions, type CreateListSchema } from "~/services/api/save-to-list.server"
 import { requireUser } from "~/services/auth/auth.server"
+import { FormActionInput } from "~/lib/form"
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const userId = await requireUser(request)
+  const spotId = params.id
   const lists = await db.list.findMany({
     where: { creatorId: userId },
     select: { id: true, name: true, listSpots: { select: { spotId: true } } },
     orderBy: { createdAt: "desc" },
   })
-  return json(lists)
+  return json(lists.map((l) => ({ id: l.id, name: l.name, isSaved: l.listSpots.some((s) => s.spotId === spotId) })))
 }
 
 export enum Actions {
@@ -43,7 +43,7 @@ export enum Actions {
 
 export const action = saveToListActions
 
-const SAVE_TO_LIST_URL = "/api/save-to-list"
+const SAVE_TO_LIST_URL = (spotId: string) => `/api/spots/${spotId}/save-to-list`
 
 interface Props {
   spotId: string
@@ -53,7 +53,7 @@ interface Props {
 const key = "save-to-list"
 export function SaveToList(props: Props) {
   const popoverProps = useDisclosure()
-  const listsFetcher = useFetcherQuery<typeof loader>(SAVE_TO_LIST_URL, { isEnabled: popoverProps.isOpen })
+  const listsFetcher = useFetcherQuery<typeof loader>(SAVE_TO_LIST_URL(props.spotId), { isEnabled: popoverProps.isOpen })
   const newListModalProps = useDisclosure()
   const lists = listsFetcher.data
 
@@ -109,18 +109,10 @@ export function SaveToList(props: Props) {
               </Button>
             </div>
           ) : (
-            lists.map((list) => (
-              <ListItem
-                key={list.id}
-                spotId={props.spotId}
-                list={list}
-                isSaved={!!list.listSpots.find((s) => s.spotId === props.spotId)}
-              />
-            ))
+            lists.map((list) => <ListItem key={list.id} spotId={props.spotId} list={list} />)
           )}
           <Modal title="Create new list" {...newListModalProps}>
-            <Form fetcherKey={key} className="space-y-2" action={SAVE_TO_LIST_URL}>
-              <input type="hidden" name="spotId" value={props.spotId} />
+            <Form fetcherKey={key} className="space-y-2" action={SAVE_TO_LIST_URL(props.spotId)}>
               <FormField fetcherKey={key} required name="name" label="Name" />
               <FormField fetcherKey={key} name="description" label="Description" />
               <FormError fetcherKey={key} />
@@ -133,29 +125,29 @@ export function SaveToList(props: Props) {
   )
 }
 
-function ListItem({ list, isSaved, spotId }: { spotId: string; list: SerializeFrom<typeof loader>[number]; isSaved: boolean }) {
+function ListItem({ list, spotId }: { spotId: string; list: SerializeFrom<typeof loader>[number] }) {
   const listFetcher = useFetcher<typeof action>()
-  const csrf = useAuthenticityToken()
-
-  const shouldBeChecked = listFetcher.state !== "idle" ? listFetcher.formData?.get("shouldSave") === "true" : isSaved
-
   return (
-    <Button
-      disabled={listFetcher.state !== "idle"}
-      className="w-full px-2"
-      onClick={() =>
-        listFetcher.submit(
-          { [FORM_ACTION]: Actions.ToggleSave, shouldSave: String(!isSaved), listId: list.id, spotId, csrf },
-          { method: "POST", action: SAVE_TO_LIST_URL },
-        )
-      }
-      size="md"
-      variant="outline"
-    >
-      <div className="flex w-full items-center justify-between">
-        <span>{list.name}</span>
-        <Checkbox readOnly checked={shouldBeChecked} />
-      </div>
-    </Button>
+    <listFetcher.Form action={SAVE_TO_LIST_URL(spotId)}>
+      <input type="hidden" name="listId" value={list.id} />
+      <input type="hidden" name="shouldSave" value={String(!list.isSaved)} />
+      <FormActionInput value={Actions.ToggleSave} />
+      <Button
+        disabled={listFetcher.state !== "idle"}
+        className={join("w-full px-2", listFetcher.state !== "idle" && "pointer-events-none")}
+        type="submit"
+        size="md"
+        variant="outline"
+      >
+        <div className="flex w-full items-center justify-between">
+          <span>{list.name}</span>
+          {listFetcher.state !== "idle" ? (
+            <Spinner />
+          ) : (
+            <Checkbox className="pointer-events-none" readOnly checked={list.isSaved} />
+          )}
+        </div>
+      </Button>
+    </listFetcher.Form>
   )
 }

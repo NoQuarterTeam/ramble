@@ -23,7 +23,7 @@ import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { json, notFound } from "~/lib/remix.server"
 import type { ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
-import { SaveToList } from "~/pages/api+/save-to-list"
+import { SaveToList } from "~/pages/api+/spots+/$id.save-to-list"
 import { type SpotPreviewData } from "~/pages/api+/spots+/$id.preview"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
