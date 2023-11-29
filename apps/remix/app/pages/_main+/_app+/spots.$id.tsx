@@ -252,7 +252,12 @@ export default function SpotDetail() {
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <div className="space-y-3">
               {isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}
-              <TranslateSpotDescription spot={spot} translatedDescription={translatedDescription} hash={descriptionHash} />
+              <TranslateSpotDescription
+                key={spot.id}
+                spot={spot}
+                translatedDescription={translatedDescription}
+                hash={descriptionHash}
+              />
 
               <p className="text-sm italic">{spot.address}</p>
               {spot.amenities && (
