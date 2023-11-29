@@ -56,7 +56,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
       ? fetch(FULL_WEB_URL + `/api/spots/${initialSpot.id}/translate/${language}`).then((r) => r.json())
       : (async () => null)(),
   })
-  const { flickrImages } = await promiseHash({ flickrImages: getSpotFlickrImages(data.spot) })
+  const flickrImages = await getSpotFlickrImages(data.spot)
 
   return json(
     {

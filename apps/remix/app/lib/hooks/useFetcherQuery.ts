@@ -1,8 +1,12 @@
 import * as React from "react"
 import { useFetcher } from "@remix-run/react"
 
-export function useFetcherQuery<T>(url: string, opts?: { isEnabled?: boolean }) {
-  const fetcher = useFetcher<T>()
+export function useFetcherQuery<T>(
+  url: string,
+  opts?: { isEnabled?: boolean },
+  fetcherOptions?: Parameters<typeof useFetcher>[0],
+) {
+  const fetcher = useFetcher<T>(fetcherOptions)
 
   React.useEffect(() => {
     if (opts && !opts.isEnabled) return

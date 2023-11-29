@@ -112,7 +112,7 @@ export default function SpotPreview() {
             {user && <SaveToList spotId={spot.id} />}
           </div>
         </div>
-        <div key={spot.id} className="rounded-xs w-full overflow-x-scroll">
+        <div className="rounded-xs w-full overflow-x-scroll">
           <div className="relative flex h-[225px] w-max space-x-2">
             {data.flickrImages
               ? data.flickrImages.map((photo) => (
@@ -158,7 +158,7 @@ export default function SpotPreview() {
         </div>
         {isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}
         <TranslateSpotDescription
-          key={spot.id}
+          key={params.id}
           spot={spot}
           translatedDescription={data.translatedDescription}
           hash={data.descriptionHash}
