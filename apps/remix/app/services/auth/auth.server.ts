@@ -19,6 +19,7 @@ const userSelectFields = {
   isVerified: true,
   firstName: true,
   lastName: true,
+  preferredLanguage: true,
   avatar: true,
   isAdmin: true,
   isPendingGuideApproval: true,

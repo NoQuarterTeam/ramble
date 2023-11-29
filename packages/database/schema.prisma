@@ -43,7 +43,7 @@ model User {
 
   // Settings
   isLocationPrivate Boolean @default(false)
-  preferredLanguage String?
+  preferredLanguage String  @default("en")
 
   // Relations
   followers        User[]       @relation("UserFollows")

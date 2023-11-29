@@ -1,35 +1,43 @@
-import { env } from "@ramble/server-env"
-import { LoaderFunctionArgs, SerializeFrom } from "@vercel/remix"
+import { type LoaderFunctionArgs, type SerializeFrom } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
+
+import { type Spot, type User } from "@ramble/database/types"
+import { env } from "@ramble/server-env"
+
 import { db } from "~/lib/db.server"
-import { badRequest, json } from "~/lib/remix.server"
+import { json, notFound } from "~/lib/remix.server"
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const { id, lang } = params
-  if (!id || !lang) throw badRequest({ message: "Missing spot id or lang" })
-  const spot = await db.spot.findUniqueOrThrow({ where: { id }, select: { id: true, description: true } })
-  if (!spot.description) return json({ text: "", sourceLang: "" })
-
-  const detectParams = new URLSearchParams()
-  detectParams.append("q", spot.description)
-  detectParams.append("key", env.GOOGLE_API_KEY)
-  const detectRes = await fetch(`https://translation.googleapis.com/language/translate/v2/detect?${detectParams.toString()}`)
-  const detectData = await detectRes.json()
-  const detectedLang = detectData.data?.detections[0]?.[0]?.language as string | undefined
-  if (!detectedLang) throw badRequest({ message: "Could not detect language" })
-  if (detectData === lang) return json({ text: spot.description, sourceLang: detectedLang })
-  const searchParams = new URLSearchParams()
-  searchParams.append("q", spot.description)
-  searchParams.append("target", lang)
-  searchParams.append("source", detectedLang)
-  searchParams.append("key", env.GOOGLE_API_KEY)
-  searchParams.append("format", "text")
-  const res = await fetch(`https://translation.googleapis.com/language/translate/v2?${searchParams.toString()}`)
-  const data = await res.json()
-  const translatedText = data.data?.translations?.[0]?.translatedText as string | undefined
-  return json({ text: translatedText, sourceLang: detectedLang }, request, {
-    headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "1month", sMaxage: "1hour" }) },
+  const spot = await db.spot.findUnique({ where: { id }, select: { description: true } })
+  if (!spot || !lang) throw notFound()
+  const text = await getSpotDescription(spot, lang)
+  return json(text, request, {
+    headers: { "Cache-Control": cacheHeader({ immutable: true, public: true, maxAge: "1month", sMaxage: "1hour" }) },
   })
 }
 
 export type TranslateSpot = SerializeFrom<typeof loader>
+
+export async function getSpotDescription(
+  spot: Pick<Spot, "description">,
+  preferredLang: Pick<User, "preferredLanguage">["preferredLanguage"],
+) {
+  if (!spot.description) return null
+  if (!preferredLang) return spot.description
+  const params = new URLSearchParams()
+  params.append("q", spot.description)
+  params.append("key", env.GOOGLE_API_KEY)
+  const detectRes = await fetch(`https://translation.googleapis.com/language/translate/v2/detect?${params.toString()}`)
+  const detectData = await detectRes.json()
+  const detectedLang = detectData.data?.detections[0]?.[0]?.language as string | undefined
+  if (!detectedLang) return spot.description
+  if (detectData === preferredLang) return spot.description
+  params.append("target", preferredLang)
+  params.append("source", detectedLang)
+  params.append("format", "text")
+  const res = await fetch(`https://translation.googleapis.com/language/translate/v2?${params.toString()}`)
+  const data = await res.json()
+  const translatedText = data.data?.translations?.[0]?.translatedText as string | undefined
+  return translatedText || spot.description
+}

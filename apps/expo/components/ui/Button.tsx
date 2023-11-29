@@ -55,10 +55,11 @@ export interface ButtonProps extends TouchableOpacityProps, ButtonStyleProps {
   children: React.ReactNode
   isLoading?: boolean
   leftIcon?: React.ReactNode
+  rightIcon?: React.ReactNode
 }
 
 export const Button = React.forwardRef(function _Button(
-  { variant = "primary", leftIcon, size = "md", isLoading, ...props }: ButtonProps,
+  { variant = "primary", leftIcon, rightIcon, size = "md", isLoading, ...props }: ButtonProps,
   ref,
 ) {
   const colorScheme = useColorScheme()
@@ -98,6 +99,7 @@ export const Button = React.forwardRef(function _Button(
           }
         />
       )}
+      {rightIcon && <View className={join(isLoading && "opacity-0")}>{rightIcon}</View>}
     </TouchableOpacity>
   )
 })
