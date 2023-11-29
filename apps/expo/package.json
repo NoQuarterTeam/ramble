@@ -81,9 +81,9 @@
     "zod": "3.22.4"
   },
   "devDependencies": {
-    "@babel/core": "7.23.3",
-    "@babel/preset-env": "7.23.3",
-    "@babel/runtime": "7.23.4",
+    "@babel/core": "7.23.5",
+    "@babel/preset-env": "7.23.5",
+    "@babel/runtime": "7.23.5",
     "@expo/config-plugins": "7.2.5",
     "@ramble/eslint-config": "workspace:*",
     "@ramble/tailwind-config": "workspace:*",
