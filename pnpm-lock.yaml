@@ -880,6 +880,9 @@ importers:
       resend:
         specifier: ^2.0.0
         version: 2.0.0
+      sharp:
+        specifier: 0.33.0
+        version: 0.33.0
       zod:
         specifier: 3.22.4
         version: 3.22.4
