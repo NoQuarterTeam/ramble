@@ -1,5 +1,5 @@
 import { Modal, ScrollView, Switch, View } from "react-native"
-import { ChevronDown, Languages, MapPin } from "lucide-react-native"
+import { AlertCircle, ChevronDown, Languages, MapPin } from "lucide-react-native"
 
 import { languages, useDisclosure } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
@@ -17,6 +17,7 @@ import { useRouter } from "../../router"
 
 export function AccountSettingsScreen() {
   const modalProps = useDisclosure()
+  const deleteAccountModalProps = useDisclosure()
   const router = useRouter()
   const utils = api.useUtils()
 
@@ -44,7 +45,7 @@ export function AccountSettingsScreen() {
   return (
     <ScreenView title="Settings">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
-        <View className="space-y-4">
+        <View className="flex-1 space-y-4">
           <View className="flex flex-row items-center justify-between space-x-2">
             <View className="flex flex-row items-center space-x-3">
               <Icon icon={Languages} size={30} />
@@ -55,7 +56,13 @@ export function AccountSettingsScreen() {
                 </Text>
               </View>
             </View>
-            <Button onPress={modalProps.onOpen} variant="outline" size="xs" rightIcon={<Icon icon={ChevronDown} size={16} />}>
+            <Button
+              onPress={modalProps.onOpen}
+              variant="outline"
+              size="xs"
+              rightIcon={<Icon icon={ChevronDown} size={16} />}
+              textClassName="pl-1 pr-2 text-left"
+            >
               {languages.find((l) => l.code === me.preferredLanguage)?.code.toUpperCase() || "EN"}
             </Button>
             <LanguageSelector
@@ -80,29 +87,29 @@ export function AccountSettingsScreen() {
               onValueChange={() => updateUser({ isLocationPrivate: !me?.isLocationPrivate })}
             />
           </View>
-          <View className="pt-4">
-            <Button variant="ghost" onPress={modalProps.onOpen}>
-              Delete account
-            </Button>
-          </View>
+        </View>
+        <View className="pb-8">
+          <Button leftIcon={<Icon icon={AlertCircle} size={16} />} variant="ghost" onPress={deleteAccountModalProps.onOpen}>
+            Delete account
+          </Button>
+          <Modal
+            animationType="slide"
+            presentationStyle="formSheet"
+            visible={deleteAccountModalProps.isOpen}
+            onRequestClose={deleteAccountModalProps.onClose}
+            onDismiss={deleteAccountModalProps.onClose}
+          >
+            <ModalView title="are you sure?" onBack={deleteAccountModalProps.onClose}>
+              <View className="space-y-2 pt-4">
+                <Text>This can't be undone!</Text>
+                <Button isLoading={isLoading} onPress={() => deleteAccount()} variant="destructive">
+                  Confirm
+                </Button>
+              </View>
+            </ModalView>
+          </Modal>
         </View>
       </ScrollView>
-      <Modal
-        animationType="slide"
-        presentationStyle="formSheet"
-        visible={modalProps.isOpen}
-        onRequestClose={modalProps.onClose}
-        onDismiss={modalProps.onClose}
-      >
-        <ModalView title="are you sure?" onBack={modalProps.onClose}>
-          <View className="space-y-2 pt-4">
-            <Text>This can't be undone!</Text>
-            <Button isLoading={isLoading} onPress={() => deleteAccount()} variant="destructive">
-              Confirm
-            </Button>
-          </View>
-        </ModalView>
-      </Modal>
     </ScreenView>
   )
 }
