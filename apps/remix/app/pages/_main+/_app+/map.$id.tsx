@@ -157,7 +157,12 @@ export default function SpotPreview() {
           </div>
         </div>
         {isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}
-        <TranslateSpotDescription spot={spot} translatedDescription={data.translatedDescription} hash={data.descriptionHash} />
+        <TranslateSpotDescription
+          key={spot.id}
+          spot={spot}
+          translatedDescription={data.translatedDescription}
+          hash={data.descriptionHash}
+        />
         <p className="text-sm italic">{spot.address}</p>
         {!(["SURFING", "HIKING", "MOUNTAIN_BIKING"] as SpotType[]).includes(spot.type) && (
           <div className="flex justify-end">
