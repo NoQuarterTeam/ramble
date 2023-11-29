@@ -31,11 +31,9 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       SELECT
         Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
         (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
-        (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
+        CAST((SELECT COUNT(ListSpot.spotId) FROM ListSpot WHERE ListSpot.spotId = Spot.id) AS CHAR(32)) AS savedCount
       FROM
         Spot
-      LEFT JOIN
-        ListSpot ON Spot.id = ListSpot.spotId
       WHERE
         Spot.creatorId = ${user.id} AND ${publicSpotWhereClauseRaw(userId)} AND Spot.sourceUrl IS NULL
       GROUP BY
