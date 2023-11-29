@@ -146,7 +146,6 @@ export default function Latest() {
                   className="flex md:hidden"
                   value={value}
                   variant={type === value ? "primary" : "outline"}
-                  leftIcon={<SpotIcon type={value} className="sq-4" />}
                 />
               </Form>
             ))}

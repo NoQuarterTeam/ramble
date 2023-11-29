@@ -86,6 +86,7 @@ export default function SpotPreview() {
             {!(["SURFING", "HIKING", "MOUNTAIN_BIKING"] as SpotType[]).includes(spot.type) ? (
               <Link
                 target="_blank"
+                prefetch="render"
                 rel="noopener norefer"
                 to={`/spots/${spot.id}`}
                 className="line-clamp-2 text-xl leading-6 hover:underline"

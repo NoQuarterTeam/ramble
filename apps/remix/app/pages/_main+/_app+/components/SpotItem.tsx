@@ -20,7 +20,7 @@ export function SpotItem({ spot }: Props) {
   const pathname = useLocation().pathname
   return (
     <div className="relative">
-      <Link to={`/spots/${spot.id}`} className="space-y-2 hover:opacity-80">
+      <Link prefetch="intent" to={`/spots/${spot.id}`} className="space-y-2 hover:opacity-80">
         <div className="relative h-[250px] w-full">
           {spot.image ? (
             <OptimizedImage

@@ -1,3 +1,4 @@
+import * as React from "react"
 import { TouchableOpacity, useColorScheme, View } from "react-native"
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
 import { Heart, Star, X } from "lucide-react-native"
@@ -26,6 +27,12 @@ export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }
 
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
+  const utils = api.useUtils()
+  React.useEffect(() => {
+    if (!spot) return
+    void utils.spot.detail.prefetch({ id: spot.id })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [spot])
 
   const backgroundColor = useBackgroundColor()
 
