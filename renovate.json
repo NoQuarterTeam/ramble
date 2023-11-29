@@ -64,6 +64,7 @@
     "react-native-web",
     "react-native",
     "remix-utils",
+    "sharp",
     "sentry-expo",
     "tailwindcss",
     "uuid"
