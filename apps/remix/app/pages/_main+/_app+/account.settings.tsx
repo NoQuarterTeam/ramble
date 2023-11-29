@@ -1,15 +1,16 @@
 import { useFetcher } from "@remix-run/react"
-import { MapPin } from "lucide-react"
+import { Languages, MapPin } from "lucide-react"
 
 import { userSchema } from "@ramble/server-schemas"
+import { languages } from "@ramble/shared"
 
 import { Form, FormButton, FormField } from "~/components/Form"
-import { Switch } from "~/components/ui"
+import { Select, Switch } from "~/components/ui"
 import { db } from "~/lib/db.server"
-import { FORM_ACTION } from "~/lib/form"
+import { FORM_ACTION, FormActionInput } from "~/lib/form"
 import { createAction, createActions } from "~/lib/form.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
-import { redirect } from "~/lib/remix.server"
+import { json, redirect } from "~/lib/remix.server"
 import type { ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
@@ -29,10 +30,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       }),
     updateSettings: () =>
       createAction(request)
-        .input(userSchema.pick({ isLocationPrivate: true }))
+        .input(userSchema.pick({ isLocationPrivate: true, preferredLanguage: true }))
         .handler(async (data) => {
-          await db.user.update({ where: { id: user.id }, data: { isLocationPrivate: data.isLocationPrivate } })
-          return redirect("/account/settings", request, { flash: { title: "Settings updated" } })
+          await db.user.update({ where: { id: user.id }, data })
+          return json({ success: true }, request, { flash: { title: "Settings updated" } })
         }),
   })
 }
@@ -41,10 +42,43 @@ export default function AccountSettings() {
   const user = useMaybeUser()
   const fetcher = useFetcher()
   return (
-    <div className="space-y-2">
+    <div className="space-y-4">
       <h1 className="text-3xl">Settings</h1>
+      <Form>
+        <FormActionInput value={Actions.UpdateSettings} />
+        <div className="flex flex-col justify-between gap-2 space-x-2 md:flex-row md:items-center">
+          <div className="flex flex-row items-center space-x-3">
+            <Languages size={30} />
+            <div>
+              <p className="text-lg">Spot description language</p>
+              <p className="text-sm opacity-75">Control what language to show for the spot description</p>
+            </div>
+          </div>
 
-      <div className="flex flex-row items-center justify-between space-x-2">
+          <FormField
+            name="preferredLanguage"
+            input={
+              <Select
+                defaultValue={user?.preferredLanguage || ""}
+                onChange={(e) => {
+                  e.currentTarget.form?.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }))
+                }}
+              >
+                <option value="" disabled selected>
+                  Default
+                </option>
+                {languages.map((lang) => (
+                  <option key={lang.code} value={lang.code}>
+                    {lang.name}
+                  </option>
+                ))}
+              </Select>
+            }
+          />
+        </div>
+      </Form>
+
+      <div className="flex flex-col justify-between gap-2 space-x-2 md:flex-row md:items-center">
         <div className="flex flex-row items-center space-x-3">
           <MapPin size={30} />
           <div>

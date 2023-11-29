@@ -8,14 +8,17 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated"
+import { useMutation } from "@tanstack/react-query"
 import dayjs from "dayjs"
 import * as Location from "expo-location"
 import { StatusBar } from "expo-status-bar"
-import { Check, ChevronDown, ChevronLeft, Compass, Edit2, Heart, Star, Trash } from "lucide-react-native"
+import { Check, ChevronDown, ChevronLeft, Compass, Edit2, Heart, Languages, Star, Trash } from "lucide-react-native"
 
-import { AMENITIES, canManageSpot, displayRating, isPartnerSpot, merge } from "@ramble/shared"
+import { type Spot } from "@ramble/database/types"
+import { AMENITIES, canManageSpot, displayRating, isPartnerSpot, languages, merge, useDisclosure } from "@ramble/shared"
 
 import { Icon } from "../../../../../components/Icon"
+import { LanguageSelector } from "../../../../../components/LanguageSelector"
 import { PartnerLink } from "../../../../../components/PartnerLink"
 import { ReviewItem } from "../../../../../components/ReviewItem"
 import { SpotTypeBadge } from "../../../../../components/SpotTypeBadge"
@@ -26,6 +29,7 @@ import { Text } from "../../../../../components/ui/Text"
 import { toast } from "../../../../../components/ui/Toast"
 import { VerifiedCard } from "../../../../../components/VerifiedCard"
 import { api } from "../../../../../lib/api"
+import { FULL_WEB_URL } from "../../../../../lib/config"
 import { height, width } from "../../../../../lib/device"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { AMENITIES_ICONS } from "../../../../../lib/models/amenities"
@@ -38,7 +42,7 @@ export function SpotDetailScreen() {
   const isDark = colorScheme === "dark"
   const { params } = useParams<"SpotDetailScreen">()
   const { data, isLoading } = api.spot.detail.useQuery({ id: params.id })
-  const spot = data
+  const spot = data?.spot
   const translationY = useSharedValue(0)
 
   const scrollHandler = useAnimatedScrollHandler({
@@ -103,7 +107,7 @@ export function SpotDetailScreen() {
   })
 
   if (isLoading) return <SpotLoading />
-  if (!spot)
+  if (!spot || !data)
     return (
       <View className="space-y-2 px-4 pt-16">
         <Text className="text-lg">Spot not found</Text>
@@ -130,7 +134,7 @@ export function SpotDetailScreen() {
             <View className="flex flex-row items-center space-x-2">
               <View className="flex flex-row items-center space-x-1">
                 <Icon icon={Star} size={16} />
-                <Text className="text-sm">{displayRating(spot.rating._avg.rating)}</Text>
+                <Text className="text-sm">{displayRating(data.rating._avg.rating)}</Text>
               </View>
               <View className="flex flex-row flex-wrap items-center space-x-1">
                 <Icon icon={Heart} size={16} />
@@ -140,7 +144,13 @@ export function SpotDetailScreen() {
           </View>
           <View className="space-y-1">
             <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}</View>
-            <Text>{spot.description}</Text>
+            <View>
+              <TranslateSpotDescription
+                spot={spot}
+                hash={data.descriptionHash}
+                translatedDescription={data.translatedDescription}
+              />
+            </View>
             <Text className="font-400-italic text-sm">{spot.address}</Text>
             {spot.amenities && (
               <View className="flex flex-row flex-wrap gap-2">
@@ -231,7 +241,7 @@ export function SpotDetailScreen() {
                 <Text>·</Text>
                 <View className="flex flex-row items-center space-x-1">
                   <Icon icon={Star} size={20} />
-                  <Text className="pt-1">{displayRating(spot.rating._avg.rating)}</Text>
+                  <Text className="pt-1">{displayRating(data.rating._avg.rating)}</Text>
                 </View>
               </View>
               {me && (
@@ -290,7 +300,7 @@ export function SpotDetailScreen() {
             activeOpacity={0.8}
             className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
           >
-            <Icon icon={Heart} size={20} fill={spot.isLiked ? (isDark ? "white" : "black") : "transparent"} />
+            <Icon icon={Heart} size={20} fill={data.isLiked ? (isDark ? "white" : "black") : "transparent"} />
           </TouchableOpacity>
         </View>
       </View>
@@ -327,4 +337,60 @@ function SpotLoading() {
 
 function Skeleton(props: ViewProps) {
   return <View {...props} className={merge("rounded-xs bg-gray-100 dark:bg-gray-700", props.className)} />
+}
+
+interface DescProps {
+  spot: Pick<Spot, "id" | "description">
+  hash?: string | null
+  translatedDescription?: string | null
+}
+
+type TranslateInput = { id: string; lang: string; hash: string }
+async function getTranslation({ id, lang, hash }: TranslateInput) {
+  try {
+    const res = await fetch(FULL_WEB_URL + `/api/spots/${id}/translate/${lang}?hash=${hash}`)
+    return await res.json()
+  } catch {
+    return "Error translating description"
+  }
+}
+
+function TranslateSpotDescription(props: DescProps) {
+  const modalProps = useDisclosure()
+  const { me } = useMe()
+  const [lang, setLang] = React.useState<string>(me?.preferredLanguage || "en")
+  const { data, error, mutate, isLoading } = useMutation<string, string, TranslateInput>({
+    mutationFn: getTranslation,
+  })
+
+  if (!props.spot.description) return null
+  return (
+    <View className="mt-2 space-y-1">
+      <View className="flex flex-row items-center justify-between">
+        <Text className="font-600 text-sm">Description</Text>
+        <Button
+          leftIcon={<Icon icon={Languages} size={16} />}
+          rightIcon={<Icon icon={ChevronDown} size={16} />}
+          isLoading={isLoading}
+          variant="outline"
+          disabled={!!!me}
+          size="xs"
+          onPress={modalProps.onOpen}
+        >
+          {languages.find((l) => l.code === lang)?.name || "English"}
+        </Button>
+      </View>
+      <Text>{data || props.translatedDescription || props.spot.description}</Text>
+      {error && <Text className="text-sm">{error}</Text>}
+      <LanguageSelector
+        modalProps={modalProps}
+        selectedLanguage={lang}
+        setSelectedLang={(l) => {
+          if (!me) return
+          setLang(l)
+          mutate({ id: props.spot.id, lang: l, hash: props.hash || "" })
+        }}
+      />
+    </View>
+  )
 }

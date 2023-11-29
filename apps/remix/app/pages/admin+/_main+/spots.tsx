@@ -205,7 +205,6 @@ export default function Spots() {
           <Select
             defaultValue={searchParams.get("type") || ""}
             onChange={(e) => e.currentTarget.form?.dispatchEvent(new Event("submit", { bubbles: true }))}
-            className="max-w-[200px]"
             name="type"
           >
             <option value="">All</option>

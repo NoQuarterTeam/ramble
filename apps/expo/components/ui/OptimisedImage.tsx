@@ -2,7 +2,7 @@ import { Image, type ImageProps } from "expo-image"
 
 import { srcWhitelist } from "@ramble/shared"
 
-import { WEB_URL } from "../../lib/config"
+import { FULL_WEB_URL } from "../../lib/config"
 
 const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj["
@@ -38,5 +38,5 @@ export function transformImageSrc(
     return acc + `&${key}=${value}`
   }, "")
 
-  return WEB_URL + "/api/image/?src=" + encodeURIComponent(src) + optionsString
+  return FULL_WEB_URL + "/api/image/?src=" + encodeURIComponent(src) + optionsString
 }

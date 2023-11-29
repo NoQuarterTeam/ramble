@@ -6,7 +6,7 @@ import { z } from "zod"
 
 import { type SpotType } from "@ramble/database/types"
 import { generateBlurHash } from "@ramble/server-services"
-import { createImageUrl, displayRating, isPartnerSpot, join, merge } from "@ramble/shared"
+import { createImageUrl, displayRating, isPartnerSpot, join } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
 import { ImageUploader } from "~/components/ImageUploader"
@@ -14,6 +14,7 @@ import { LinkButton } from "~/components/LinkButton"
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { SpotTypeBadge } from "~/components/SpotTypeBadge"
 import { Button, CloseButton } from "~/components/ui"
+import { Skeleton } from "~/components/ui/Skeleton"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form.server"
@@ -28,6 +29,7 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { PartnerLink } from "./components/PartnerLink"
 import { ReviewItem } from "./components/ReviewItem"
+import { TranslateSpotDescription } from "./components/TranslateSpotDescription"
 import { NEW_REVIEW_REDIRECTS } from "./spots.$id_.reviews.new"
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
@@ -155,8 +157,7 @@ export default function SpotPreview() {
           </div>
         </div>
         {isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}
-
-        <p className="line-clamp-6 whitespace-pre-wrap">{spot.description}</p>
+        <TranslateSpotDescription spot={spot} translatedDescription={data.translatedDescription} hash={data.descriptionHash} />
         <p className="text-sm italic">{spot.address}</p>
         {!(["SURFING", "HIKING", "MOUNTAIN_BIKING"] as SpotType[]).includes(spot.type) && (
           <div className="flex justify-end">
@@ -222,9 +223,6 @@ function SpotFallback() {
       <Skeleton className="h-40 w-full" />
     </div>
   )
-}
-export function Skeleton(props: React.HTMLAttributes<HTMLDivElement>) {
-  return <div {...props} className={merge("rounded-xs animate-pulse bg-gray-100 dark:bg-gray-700", props.className)} />
 }
 
 function SpotContainer(props: { children: React.ReactNode }) {

@@ -1,3 +1,4 @@
+import crypto from "crypto"
 import { TRPCError } from "@trpc/server"
 import dayjs from "dayjs"
 import Supercluster from "supercluster"
@@ -6,10 +7,11 @@ import { z } from "zod"
 import { Prisma, SpotType } from "@ramble/database/types"
 import { clusterSchema, spotAmenitiesSchema, spotSchema, userSchema } from "@ramble/server-schemas"
 import { generateBlurHash, geocodeCoords, publicSpotWhereClause, publicSpotWhereClauseRaw } from "@ramble/server-services"
-import { amenitiesFields, type SpotItemWithStatsAndImage, spotPartnerFields } from "@ramble/shared"
+import { amenitiesFields, type SpotItemWithStatsAndImage, spotPartnerFields, promiseHash } from "@ramble/shared"
 
 import { fetchAndJoinSpotImages } from "../lib/spot"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
+import { FULL_WEB_URL } from "@ramble/server-env"
 
 export type SpotClusterTypes = { [key in SpotType]?: number }
 
@@ -144,33 +146,48 @@ export const spotRouter = createTRPCRouter({
     return { ...spot, rating }
   }),
   detail: publicProcedure.input(z.object({ id: z.string().uuid() })).query(async ({ ctx, input }) => {
-    const spot = await ctx.prisma.spot.findUnique({
-      where: { id: input.id, ...publicSpotWhereClause(ctx.user?.id) },
-      select: {
-        id: true,
-        name: true,
-        description: true,
-        latitude: true,
-        longitude: true,
-        createdAt: true,
-        verifiedAt: true,
-        type: true,
-        isPetFriendly: true,
-        ownerId: true,
-        address: true,
-        verifier: true,
-        creator: true,
-        ...spotPartnerFields,
-        _count: { select: { reviews: true, listSpots: true } },
-        reviews: { take: 5, include: { user: true }, orderBy: { createdAt: "desc" } },
-        images: true,
-        amenities: { select: amenitiesFields },
-        listSpots: ctx.user ? { where: { list: { creatorId: ctx.user.id } } } : undefined,
-      },
+    const { spot, rating } = await promiseHash({
+      spot: ctx.prisma.spot.findUnique({
+        where: { id: input.id, ...publicSpotWhereClause(ctx.user?.id) },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          latitude: true,
+          longitude: true,
+          createdAt: true,
+          verifiedAt: true,
+          type: true,
+          isPetFriendly: true,
+          ownerId: true,
+          address: true,
+          verifier: true,
+          creator: true,
+          ...spotPartnerFields,
+          _count: { select: { reviews: true, listSpots: true } },
+          reviews: { take: 5, include: { user: true }, orderBy: { createdAt: "desc" } },
+          images: true,
+          amenities: { select: amenitiesFields },
+          listSpots: ctx.user ? { where: { list: { creatorId: ctx.user.id } } } : undefined,
+        },
+      }),
+      rating: ctx.prisma.review.aggregate({ where: { spotId: input.id }, _avg: { rating: true } }),
     })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
-    const rating = await ctx.prisma.review.aggregate({ where: { spotId: input.id }, _avg: { rating: true } })
-    return { ...spot, isLiked: !!ctx.user && spot.listSpots.length > 0, rating }
+    let translatedDescription: string | null | undefined
+    let descriptionHash: string | undefined
+    if (ctx.user && spot.description) {
+      descriptionHash = crypto.createHash("sha1").update(spot.description).digest("hex") as string
+      translatedDescription = await fetch(
+        FULL_WEB_URL + `/api/spots/${spot.id}/translate/${ctx.user.preferredLanguage}?hash=${descriptionHash}`,
+      )
+        .then((r) => r.json() as Promise<string | null>)
+        .catch((error) => {
+          console.log(error)
+          return null
+        })
+    }
+    return { spot, translatedDescription, descriptionHash, isLiked: !!ctx.user && spot.listSpots.length > 0, rating }
   }),
   byUser: publicProcedure.input(userSchema.pick({ username: true })).query(async ({ ctx, input }) => {
     const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })
