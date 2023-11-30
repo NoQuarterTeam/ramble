@@ -185,7 +185,15 @@ export const spotRouter = createTRPCRouter({
           return null
         })
     }
-    return { spot, translatedDescription, descriptionHash, isLiked: !!ctx.user && spot.listSpots.length > 0, rating }
+    return {
+      // remove ...spot after new deploys
+      ...spot,
+      spot,
+      translatedDescription,
+      descriptionHash,
+      isLiked: !!ctx.user && spot.listSpots.length > 0,
+      rating,
+    }
   }),
   byUser: publicProcedure.input(userSchema.pick({ username: true })).query(async ({ ctx, input }) => {
     const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })
