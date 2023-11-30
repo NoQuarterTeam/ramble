@@ -1,9 +1,10 @@
+import * as React from "react"
 import { Link } from "@remix-run/react"
 import dayjs from "dayjs"
 import { Star } from "lucide-react"
 
 import type { Prisma } from "@ramble/database/types"
-import { createImageUrl } from "@ramble/shared"
+import { createImageUrl, join } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -22,12 +23,14 @@ import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import type { SerializeFrom } from "~/lib/vendor/vercel.server"
 
 import { Actions } from "../spots.$id_.reviews.$reviewId"
+import { TranslateReview } from "~/pages/api+/reviews+/$id.translate.$lang"
 
 export const reviewItemSelectFields = {
   id: true,
   spotId: true,
   description: true,
   rating: true,
+  language: true,
   createdAt: true,
   user: {
     select: {
@@ -47,6 +50,9 @@ interface Props {
 export function ReviewItem({ review }: Props) {
   const user = useMaybeUser()
   const deleteFetcher = useFetcher()
+  const [isTranslated, setIsTranslated] = React.useState(false)
+  const translateFetcher = useFetcher<TranslateReview>()
+
   return (
     <div className="rounded-xs space-y-2 border px-4 py-3">
       <div className="flex justify-between">
@@ -64,34 +70,52 @@ export function ReviewItem({ review }: Props) {
           <p>{review.rating}</p>
         </div>
       </div>
-      <p>{review.description}</p>
-      {user?.id === review.user.id && (
-        <div className="flex space-x-2">
-          <LinkButton size="sm" variant="outline" to={`reviews/${review.id}`}>
-            Edit
-          </LinkButton>
-          <AlertDialogRoot>
-            <AlertDialogTrigger asChild>
-              <Button size="sm" variant="destructive">
-                Delete
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-              <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
-              <AlertDialogFooter>
-                <AlertDialogCancel asChild>
-                  <Button variant="ghost">Cancel</Button>
-                </AlertDialogCancel>
+      <p className={join(translateFetcher.state === "loading" && "animate-pulse-fast")}>
+        {(isTranslated && user && translateFetcher.data) || review.description}
+      </p>
+      {user ? (
+        user.id === review.user.id ? (
+          <div className="flex space-x-2">
+            <LinkButton size="sm" variant="outline" to={`reviews/${review.id}`}>
+              Edit
+            </LinkButton>
+            <AlertDialogRoot>
+              <AlertDialogTrigger asChild>
+                <Button size="sm" variant="destructive">
+                  Delete
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+                <AlertDialogFooter>
+                  <AlertDialogCancel asChild>
+                    <Button variant="ghost">Cancel</Button>
+                  </AlertDialogCancel>
 
-                <deleteFetcher.Form action={`/spots/${review.spotId}/reviews/${review.id}`}>
-                  <deleteFetcher.FormButton value={Actions.Delete}>Confirm</deleteFetcher.FormButton>
-                </deleteFetcher.Form>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialogRoot>
-        </div>
-      )}
+                  <deleteFetcher.Form action={`/spots/${review.spotId}/reviews/${review.id}`}>
+                    <deleteFetcher.FormButton value={Actions.Delete}>Confirm</deleteFetcher.FormButton>
+                  </deleteFetcher.Form>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialogRoot>
+          </div>
+        ) : (
+          user.preferredLanguage !== review.language && (
+            <Button
+              onClick={() => {
+                setIsTranslated(!isTranslated)
+                translateFetcher.load(`/api/reviews/${review.id}/translate/${user.preferredLanguage}`)
+              }}
+              variant="link"
+              size="sm"
+              className="px-0"
+            >
+              {isTranslated ? "See original" : "See translation"}
+            </Button>
+          )
+        )
+      ) : null}
     </div>
   )
 }

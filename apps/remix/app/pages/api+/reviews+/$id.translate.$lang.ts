@@ -7,12 +7,12 @@ import { getTranslation } from "~/services/translate.server"
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const { id, lang } = params
-  const spot = await db.spot.findUnique({ where: { id }, select: { description: true } })
-  if (!spot || !lang) throw notFound()
-  const text = await getTranslation(spot.description, lang)
+  const review = await db.review.findUnique({ where: { id }, select: { description: true } })
+  if (!review || !lang) throw notFound()
+  const text = await getTranslation(review.description, lang)
   return json(text, request, {
     headers: { "Cache-Control": cacheHeader({ immutable: true, public: true, maxAge: "1month", sMaxage: "1hour" }) },
   })
 }
 
-export type TranslateSpot = SerializeFrom<typeof loader>
+export type TranslateReview = SerializeFrom<typeof loader>

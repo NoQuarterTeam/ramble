@@ -1,22 +1,35 @@
-import { TouchableOpacity, View } from "react-native"
 import dayjs from "dayjs"
 import { Star, User2 } from "lucide-react-native"
+import * as React from "react"
+import { TouchableOpacity, View } from "react-native"
 
 import { type Review, type User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
+import { useQuery } from "@tanstack/react-query"
 import { useRouter } from "../app/router"
 import { api } from "../lib/api"
+import { FULL_WEB_URL } from "../lib/config"
 import { useMe } from "../lib/hooks/useMe"
 import { Icon } from "./Icon"
 import { Button } from "./ui/Button"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
 
+type TranslateInput = { id: string; lang: string }
+async function getTranslation({ id, lang }: TranslateInput) {
+  try {
+    const res = await fetch(FULL_WEB_URL + `/api/reviews/${id}/translate/${lang}`)
+    return await res.json()
+  } catch {
+    return "Error translating description"
+  }
+}
+
 export function ReviewItem({
   review,
 }: {
-  review: Pick<Review, "id" | "createdAt" | "description" | "rating" | "spotId"> & {
+  review: Pick<Review, "id" | "createdAt" | "description" | "rating" | "spotId" | "language"> & {
     user: Pick<User, "id" | "avatar" | "firstName" | "lastName" | "username" | "avatarBlurHash">
   }
 }) {
@@ -30,6 +43,16 @@ export function ReviewItem({
       utils.spot.mapPreview.refetch({ id: review.spotId })
     },
   })
+
+  const [isTranslated, setIsTranslated] = React.useState(false)
+
+  const { data, error, isInitialLoading } = useQuery<TranslateInput, string, string>({
+    queryKey: ["review-translation", { id: review.id, lang: me!.preferredLanguage }],
+    queryFn: () => getTranslation({ id: review.id, lang: me!.preferredLanguage }),
+    cacheTime: Infinity,
+    enabled: isTranslated && !!me,
+  })
+
   return (
     <View className="rounded-xs space-y-2 border border-gray-200 p-4 dark:border-gray-700">
       <View className="flex flex-row justify-between">
@@ -70,18 +93,35 @@ export function ReviewItem({
         </View>
       </View>
 
-      <Text>{review.description}</Text>
+      <Text>{(isTranslated && me && data) || review.description}</Text>
+      {error && <Text className="text-sm">Error translating description</Text>}
 
-      {me?.id === review.user.id && (
-        <View className="flex flex-row space-x-1">
-          <Button size="sm" variant="secondary" onPress={() => push("ReviewDetailScreen", { id: review.id })}>
-            Edit
-          </Button>
-          <Button size="sm" isLoading={deleteLoading} variant="destructive" onPress={() => deleteReview({ id: review.id })}>
-            Delete
-          </Button>
-        </View>
-      )}
+      {me ? (
+        me.id === review.user.id ? (
+          <View className="flex flex-row space-x-1">
+            <Button size="sm" variant="secondary" onPress={() => push("ReviewDetailScreen", { id: review.id })}>
+              Edit
+            </Button>
+            <Button size="sm" isLoading={deleteLoading} variant="destructive" onPress={() => deleteReview({ id: review.id })}>
+              Delete
+            </Button>
+          </View>
+        ) : (
+          me.preferredLanguage !== review.language && (
+            <View className="flex items-start">
+              <Button
+                onPress={() => setIsTranslated((t) => !t)}
+                isLoading={isInitialLoading}
+                variant="ghost"
+                size="sm"
+                className="h-8 px-0"
+              >
+                {isTranslated ? "See original" : "See translation"}
+              </Button>
+            </View>
+          )
+        )
+      ) : null}
     </View>
   )
 }

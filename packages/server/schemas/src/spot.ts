@@ -18,7 +18,7 @@ export const spotSchema = z
   })
   .refine(
     (data) => {
-      if (doesSpotTypeRequireDescription(data.type) && (!data.description || data.description.length < 50)) return false
+      if (doesSpotTypeRequireDescription(data.type) && (!data.description || data.description.length < 5)) return false
       return true
     },
     { message: "Description must be at least 50 characters long", path: ["description"] },

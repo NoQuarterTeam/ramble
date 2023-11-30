@@ -167,7 +167,7 @@ export default function SpotPreview() {
         <p className="text-sm italic">{spot.address}</p>
         {!(["SURFING", "HIKING", "MOUNTAIN_BIKING"] as SpotType[]).includes(spot.type) && (
           <div className="flex justify-end">
-            <LinkButton variant="link" to={`/spots/${spot.id}`}>
+            <LinkButton variant="ghost" to={`/spots/${spot.id}`}>
               Read more
             </LinkButton>
           </div>

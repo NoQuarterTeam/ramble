@@ -4,6 +4,7 @@ import { z } from "zod"
 import { reviewDataSchema, reviewSchema } from "@ramble/server-schemas"
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
+import { getLanguage } from "@ramble/server-services"
 
 export const reviewRouter = createTRPCRouter({
   detail: publicProcedure.input(z.object({ id: z.string().uuid() })).query(({ ctx, input }) => {
@@ -19,12 +20,16 @@ export const reviewRouter = createTRPCRouter({
     })
     if (existingReviewsWithin1Month > 0)
       throw new TRPCError({ code: "BAD_REQUEST", message: "You can only review a spot once per month." })
-    return ctx.prisma.review.create({ data: { ...input, userId: ctx.user.id } })
+    const language = await getLanguage(input.description)
+    return ctx.prisma.review.create({ data: { ...input, language, userId: ctx.user.id } })
   }),
   update: protectedProcedure
     .input(reviewDataSchema.partial().extend({ id: z.string().uuid() }))
     .mutation(async ({ ctx, input: { id, ...input } }) => {
-      const review = await ctx.prisma.review.findUnique({ where: { id }, select: { userId: true } })
+      const review = await ctx.prisma.review.findUnique({
+        where: { id },
+        select: { userId: true, description: true, language: true },
+      })
       if (!review) throw new TRPCError({ code: "NOT_FOUND" })
       if (review.userId !== ctx.user.id) throw new TRPCError({ code: "UNAUTHORIZED" })
       return ctx.prisma.review.update({ where: { id }, data: input })

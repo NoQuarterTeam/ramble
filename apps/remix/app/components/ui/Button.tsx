@@ -27,7 +27,7 @@ export const buttonStyles = cva(
           "border-red-500 bg-transparent text-red-600 hover:border-red-600 hover:bg-red-500/10 active:border-red-700",
         outline: "border-black/10 dark:border-white/10",
         ghost: "",
-        link: "underline",
+        link: "bg-transparent px-0 text-black hover:underline dark:text-white",
       },
       disabled: {
         true: "relative cursor-not-allowed opacity-70",
@@ -35,7 +35,7 @@ export const buttonStyles = cva(
     },
     compoundVariants: [
       {
-        variant: ["ghost", "outline", "link"],
+        variant: ["ghost", "outline"],
         className:
           "bg-transparent text-black hover:bg-black/5 active:bg-black/20 dark:text-white dark:hover:bg-white/10 dark:active:bg-white/20",
       },

@@ -129,7 +129,7 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
           </div>
 
           <div className="flex w-full justify-between">
-            <Button variant="link" size="lg" onClick={onClear}>
+            <Button variant="outline" size="lg" onClick={onClear}>
               Reset
             </Button>
             <Button size="lg" type="submit">

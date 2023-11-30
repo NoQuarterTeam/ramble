@@ -8,6 +8,7 @@ export * from "./inviteCodes.server"
 export * from "./jwt.server"
 export * from "./password.server"
 export * from "./s3.server"
+export * from "./language.server"
 export * from "./slack.server"
 export * from "./spot.server"
 

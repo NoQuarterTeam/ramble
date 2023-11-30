@@ -297,9 +297,10 @@ model ListSpot {
 }
 
 model Review {
-  id          String @id @default(uuid())
+  id          String  @id @default(uuid())
   rating      Int
-  description String @db.LongText
+  description String  @db.LongText
+  language    String?
 
   spotId String
   spot   Spot   @relation(fields: [spotId], references: [id], onDelete: Cascade)

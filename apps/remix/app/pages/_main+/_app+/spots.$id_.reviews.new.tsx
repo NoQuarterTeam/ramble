@@ -11,6 +11,7 @@ import { json } from "~/lib/vendor/vercel.server"
 import { requireUser } from "~/services/auth/auth.server"
 
 import { ReviewForm } from "./components/ReviewForm"
+import { getLanguage } from "@ramble/server-services"
 
 export const config = {
   // runtime: "edge",
@@ -54,8 +55,9 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 
   if (existingReviewsWithin1Month > 0) return formError({ formError: "You can only review a spot once per month." })
 
+  const language = await getLanguage(result.data.description)
   const review = await db.review.create({
-    data: { description: result.data.description, rating: result.data.rating, spotId: spot.id, userId },
+    data: { description: result.data.description, rating: result.data.rating, spotId: spot.id, userId, language },
   })
   track("Review created", { reviewId: review.id, userId })
 

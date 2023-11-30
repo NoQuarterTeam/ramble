@@ -8,7 +8,7 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated"
-import { useMutation } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import dayjs from "dayjs"
 import * as Location from "expo-location"
 import { StatusBar } from "expo-status-bar"
@@ -359,8 +359,11 @@ function TranslateSpotDescription(props: DescProps) {
   const modalProps = useDisclosure()
   const { me } = useMe()
   const [lang, setLang] = React.useState<string>(me?.preferredLanguage || "en")
-  const { data, error, mutate, isLoading } = useMutation<string, string, TranslateInput>({
-    mutationFn: getTranslation,
+  const { data, error, isInitialLoading } = useQuery<TranslateInput, string, string>({
+    queryKey: ["spot-translation", { id: props.spot.id, lang, hash: props.hash || "" }],
+    queryFn: () => getTranslation({ id: props.spot.id, lang, hash: props.hash || "" }),
+    cacheTime: Infinity,
+    enabled: !!me && lang !== me.preferredLanguage,
   })
 
   if (!props.spot.description) return null
@@ -371,7 +374,7 @@ function TranslateSpotDescription(props: DescProps) {
         <Button
           leftIcon={<Icon icon={Languages} size={16} />}
           rightIcon={<Icon icon={ChevronDown} size={16} />}
-          isLoading={isLoading}
+          isLoading={isInitialLoading}
           variant="outline"
           disabled={!!!me}
           size="xs"
@@ -382,15 +385,7 @@ function TranslateSpotDescription(props: DescProps) {
       </View>
       <Text>{data || props.translatedDescription || props.spot.description}</Text>
       {error && <Text className="text-sm">{error}</Text>}
-      <LanguageSelector
-        modalProps={modalProps}
-        selectedLanguage={lang}
-        setSelectedLang={(l) => {
-          if (!me) return
-          setLang(l)
-          mutate({ id: props.spot.id, lang: l, hash: props.hash || "" })
-        }}
-      />
+      <LanguageSelector modalProps={modalProps} selectedLanguage={lang} setSelectedLang={setLang} />
     </View>
   )
 }
