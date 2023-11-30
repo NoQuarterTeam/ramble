@@ -42,7 +42,9 @@ export function PartnerLink(props: Props) {
                           ? partners.norcamp
                           : props.spot.mossyEarthId
                             ? partners.mossyEarth
-                            : partners.rewildingEurope
+                            : props.spot.rewildingEuropeId
+                              ? partners.rewildingEurope
+                              : partners.polskiCaravaning
 
   const handleOpen = async () => {
     try {

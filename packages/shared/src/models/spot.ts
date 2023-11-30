@@ -61,6 +61,7 @@ export const spotPartnerFields = {
   norcampId: true,
   mossyEarthId: true,
   rewildingEuropeId: true,
+  polskiCaravaningId: true,
   sourceUrl: true,
 } satisfies Prisma.SpotSelect
 
@@ -80,7 +81,8 @@ export const isPartnerSpot = (spot: SpotPartnerFields) =>
   spot.natuurKampeerterreinenId ||
   spot.norcampId ||
   spot.mossyEarthId ||
-  spot.rewildingEuropeId
+  spot.rewildingEuropeId ||
+  spot.polskiCaravaningId
 
 export const partners = {
   campspace: { name: "Campspace", logo: { light: "/partners/campspace.svg", dark: "/partners/campspace-dark.svg" } },
@@ -99,6 +101,10 @@ export const partners = {
   rewildingEurope: {
     name: "Rewilding Europe",
     logo: { light: "/partners/rewilding-europe.png", dark: "/partners/rewilding-europe-dark.png" },
+  },
+  polskiCaravaning: {
+    name: "Polski Caravaning",
+    logo: { light: "/partners/polski-caravaning.svg", dark: "/partners/polski-caravaning.svg" },
   },
 } as const
 
