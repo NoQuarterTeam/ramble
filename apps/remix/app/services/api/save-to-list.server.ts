@@ -9,19 +9,18 @@ import { type ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 import { type Actions } from "~/pages/api+/spots+/$id.save-to-list"
 
 import { requireUser } from "../auth/auth.server"
+import { listSchema } from "@ramble/server-schemas"
 
-const createListSchema = z.object({ name: z.string().min(1), description: z.string().optional(), spotId: z.string() })
-
-export type CreateListSchema = typeof createListSchema
+export type CreateListSchema = typeof listSchema
 
 export const saveToListActions = async ({ request, params }: ActionFunctionArgs) => {
   const userId = await requireUser(request)
+  const spotId = params.id as string
   return createActions<Actions>(request, {
     "toggle-save": () =>
       createAction(request)
         .input(z.object({ shouldSave: zx.BoolAsString, listId: z.string().uuid() }))
         .handler(async ({ shouldSave, listId }) => {
-          const spotId = params.id as string
           if (!spotId) return badRequest("Missing spotId")
           await db.list.findFirstOrThrow({ select: { id: true }, where: { id: listId, creator: { id: userId } } })
           const listSpot = await db.listSpot.findFirst({ where: { listId, spotId, list: { creator: { id: userId } } } })
@@ -40,8 +39,8 @@ export const saveToListActions = async ({ request, params }: ActionFunctionArgs)
         }),
     "create-and-save-to-list": () =>
       createAction(request)
-        .input(createListSchema)
-        .handler(async ({ spotId, ...data }) => {
+        .input(listSchema)
+        .handler(async (data) => {
           const list = await db.list.create({ data: { ...data, creatorId: userId, listSpots: { create: { spotId } } } })
           track("Saved to new list", { listId: list.id, spotId })
           return json({ success: true })
