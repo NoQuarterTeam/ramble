@@ -2,11 +2,11 @@
   "name": "@ramble/root",
   "private": true,
   "dependencies": {
-    "turbo": "^1.10.12"
+    "turbo": "1.10.16"
   },
   "devDependencies": {
     "prettier": "3.1.0",
-    "prettier-plugin-tailwindcss": "^0.5.0",
+    "prettier-plugin-tailwindcss": "0.5.7",
     "typescript": "5.3.2"
   },
   "scripts": {
