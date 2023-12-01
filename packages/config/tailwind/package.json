@@ -21,6 +21,6 @@
     "typescript": "5.3.2"
   },
   "dependencies": {
-    "tailwindcss-animate": "1.0.5"
+    "tailwindcss-animate": "1.0.7"
   }
 }
