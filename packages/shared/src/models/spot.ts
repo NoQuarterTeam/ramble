@@ -1,4 +1,4 @@
-import { type Prisma, type Spot, type SpotImage, type SpotType, type User } from "@ramble/database/types"
+import { type SpotImage, type Prisma, type Spot, type SpotType, type User } from "@ramble/database/types"
 import colors from "@ramble/tailwind-config/src/colors"
 
 export type SpotTypeInfo = {
@@ -107,13 +107,6 @@ export const partners = {
     logo: { light: "/partners/polski-caravaning.svg", dark: "/partners/polski-caravaning.svg" },
   },
 } as const
-
-export type SpotItemWithStatsAndImage = Pick<Spot, "id" | "name" | "address" | "type"> & {
-  rating: string
-  savedCount: string
-  image?: SpotImage["path"] | null
-  blurHash?: SpotImage["blurHash"] | null
-}
 
 export const canManageSpot = (
   spot: Pick<Spot, "ownerId"> | null,
@@ -261,3 +254,13 @@ export const spotMarkerClusterColorTypes = {
   VOLUNTEERING: colors.gray[50],
   REWILDING: colors.gray[50],
 } satisfies Record<SpotType, string>
+
+export type SpotListSort = "latest" | "rated" | "saved" | "near"
+
+export type SpotItemWithStatsAndImage = Pick<Spot, "id" | "name" | "address" | "type" | "latitude" | "longitude"> & {
+  rating: string
+  savedCount: string
+  image?: SpotImage["path"] | null
+  blurHash?: SpotImage["blurHash"] | null
+  distanceFromMe?: number | null
+}

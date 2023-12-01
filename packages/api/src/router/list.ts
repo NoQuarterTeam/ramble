@@ -13,8 +13,6 @@ import { fetchAndJoinSpotImages } from "../lib/spot"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 import { type SpotClusterTypes } from "./spot"
 
-type SpotItemWithStatsAndCoords = SpotItemWithStatsAndImage & { longitude: number; latitude: number }
-
 export const listRouter = createTRPCRouter({
   allByUser: publicProcedure
     .input(userSchema.pick({ username: true }).and(z.object({ showFollowing: z.boolean().optional() })))
@@ -50,7 +48,7 @@ export const listRouter = createTRPCRouter({
           description: true,
         },
       }),
-      ctx.prisma.$queryRaw<Array<SpotItemWithStatsAndCoords>>`
+      ctx.prisma.$queryRaw<Array<SpotItemWithStatsAndImage>>`
         SELECT 
           Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
           Spot.latitude, Spot.longitude,

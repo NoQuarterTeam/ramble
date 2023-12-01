@@ -8,7 +8,8 @@ import { ClientOnly } from "remix-utils/client-only"
 import { promiseHash } from "remix-utils/promise"
 
 import { publicSpotWhereClauseRaw } from "@ramble/server-services"
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE, type SpotItemWithStatsAndImage } from "@ramble/shared"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
+import { type SpotItemWithStatsAndImage } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -28,13 +29,18 @@ import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
 
 import { SpotItem } from "./components/SpotItem"
 import { SpotMarker } from "./components/SpotMarker"
+import { Prisma } from "@ramble/database/types"
 
 export const headers = useLoaderHeaders
 
-type SpotItemWithStatsAndCoords = SpotItemWithStatsAndImage & { longitude: number; latitude: number }
-
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-  const user = await getMaybeUser(request)
+  const user = await getMaybeUser(request, { id: true, username: true, latitude: true, longitude: true })
+
+  const DISTANCE_FROM_ME =
+    user?.latitude && user?.longitude
+      ? Prisma.sql`ST_DISTANCE(Spot.pointLocation, POINT("${user.longitude}", "${user.latitude}")) as distanceFromMe,`
+      : Prisma.sql`null as distanceFromMe,`
+
   const { list, spots } = await promiseHash({
     list: db.list.findFirst({
       where: { id: params.id, isPrivate: !user || user.username !== params.username ? false : undefined },
@@ -46,10 +52,11 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
         description: true,
       },
     }),
-    spots: db.$queryRaw<SpotItemWithStatsAndCoords[]>`
+    spots: db.$queryRaw<SpotItemWithStatsAndImage[]>`
       SELECT 
         Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
         Spot.latitude, Spot.longitude,
+        ${DISTANCE_FROM_ME}
         (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
         (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
       FROM

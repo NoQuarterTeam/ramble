@@ -3,7 +3,7 @@ import { TouchableOpacity, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import { ChevronDown, PlusCircle } from "lucide-react-native"
 
-import { join, useDisclosure } from "@ramble/shared"
+import { SpotListSort, join, useDisclosure } from "@ramble/shared"
 
 import { Icon } from "../../../components/Icon"
 import { LoginPlaceholder } from "../../../components/LoginPlaceholder"
@@ -17,7 +17,12 @@ import { height, isTablet, width } from "../../../lib/device"
 import { useMe } from "../../../lib/hooks/useMe"
 import { useRouter } from "../../router"
 
-const SORT_OPTIONS = { latest: "latest", rated: "top rated", saved: "most saved" } as const
+const SORT_OPTIONS: { [key in SpotListSort]: string } = {
+  latest: "latest",
+  rated: "top rated",
+  saved: "most saved",
+  near: "near me",
+} as const
 
 export function SpotsScreen() {
   const sortProps = useDisclosure()

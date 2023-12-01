@@ -46,18 +46,15 @@ export function SpotItem({ spot }: Props) {
         </div>
 
         <div className="space-y-0.5">
-          <p className="line-clamp-2 truncate text-lg leading-tight">{spot.name}</p>
-          <p className="line-clamp-1 text-sm font-thin opacity-70">{spot.address || "-"}</p>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center justify-between gap-4">
+            <p className="truncate text-lg leading-tight">{spot.name}</p>
             <div className="flex items-center space-x-1">
               <Star className="sq-4" />
-              <p className="text-sm">{displayRating(spot.rating)}</p>
-            </div>
-            <div className="flex items-center space-x-1">
-              <Heart className="sq-4" />
-              <p className="text-sm">{spot.savedCount}</p>
+              <p>{displayRating(spot.rating)}</p>
             </div>
           </div>
+          {spot.address && <p className="line-clamp-1 text-sm font-thin opacity-70">{spot.address}</p>}
+          {spot.distanceFromMe && <p className="text-sm font-thin opacity-70">{Math.round(spot.distanceFromMe)} km away</p>}
         </div>
       </Link>
       <div className="absolute right-2 top-2">

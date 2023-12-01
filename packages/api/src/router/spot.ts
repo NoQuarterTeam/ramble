@@ -4,10 +4,17 @@ import dayjs from "dayjs"
 import Supercluster from "supercluster"
 import { z } from "zod"
 
-import { Prisma, SpotType } from "@ramble/database/types"
+import { SpotType } from "@ramble/database/types"
 import { clusterSchema, spotAmenitiesSchema, spotSchema, userSchema } from "@ramble/server-schemas"
-import { generateBlurHash, geocodeCoords, publicSpotWhereClause, publicSpotWhereClauseRaw } from "@ramble/server-services"
-import { amenitiesFields, type SpotItemWithStatsAndImage, spotPartnerFields, promiseHash } from "@ramble/shared"
+import {
+  generateBlurHash,
+  geocodeCoords,
+  publicSpotWhereClause,
+  publicSpotWhereClauseRaw,
+  spotListQuery,
+} from "@ramble/server-services"
+import { amenitiesFields, spotPartnerFields, promiseHash } from "@ramble/shared"
+import { type SpotItemWithStatsAndImage } from "@ramble/shared"
 
 import { fetchAndJoinSpotImages } from "../lib/spot"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
@@ -84,40 +91,15 @@ export const spotRouter = createTRPCRouter({
     return ctx.prisma.spot.update({ where: { id: input.id }, data: { deletedAt: new Date() } })
   }),
   list: publicProcedure
-    .input(z.object({ skip: z.number().optional(), sort: z.enum(["latest", "rated", "saved"]).optional() }))
+    .input(z.object({ skip: z.number().optional(), sort: z.enum(["latest", "rated", "saved", "near"]).optional() }))
     .query(async ({ ctx, input }) => {
       const sort = input.sort || "latest"
-      const ORDER_BY = Prisma.sql // prepared orderBy
-      `ORDER BY
-        ${
-          sort === "latest"
-            ? Prisma.sql`Spot.verifiedAt DESC, Spot.id`
-            : sort === "saved"
-              ? Prisma.sql`savedCount DESC, Spot.id`
-              : Prisma.sql`rating DESC, Spot.id`
-        }
-      `
+
       try {
         const spots = await ctx.prisma.$queryRaw<Array<SpotItemWithStatsAndImage>>`
-          SELECT
-            Spot.id, Spot.name, Spot.type, Spot.address,  null as image, null as blurHash,
-            (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
-            CAST((SELECT COUNT(ListSpot.spotId) FROM ListSpot WHERE ListSpot.spotId = Spot.id) AS CHAR(32)) AS savedCount
-          FROM
-            Spot
-          WHERE
-            Spot.verifiedAt IS NOT NULL AND Spot.type IN (${Prisma.join([
-              SpotType.CAMPING,
-              SpotType.FREE_CAMPING,
-            ])}) AND ${publicSpotWhereClauseRaw(ctx.user?.id)} 
-          GROUP BY
-            Spot.id
-          ${ORDER_BY}
-          LIMIT 20
-          OFFSET ${input.skip || 0}
+          ${spotListQuery({ user: ctx.user, sort, take: 20, skip: input.skip })}
         `
         await fetchAndJoinSpotImages(ctx.prisma, spots)
-
         return spots
       } catch (error) {
         console.log(error)
@@ -201,6 +183,7 @@ export const spotRouter = createTRPCRouter({
     const spots = await ctx.prisma.$queryRaw<SpotItemWithStatsAndImage[]>`
       SELECT
         Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
+        Spot.latitude, Spot.longitude,
         (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
         CAST((SELECT COUNT(ListSpot.spotId) FROM ListSpot WHERE ListSpot.spotId = Spot.id) AS CHAR(32)) AS savedCount
       FROM

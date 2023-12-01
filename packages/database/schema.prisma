@@ -156,8 +156,7 @@ model Spot {
   publishedAt DateTime?
   verifiedAt  DateTime?
 
-  // this works
-  // pointLocation Unsupported("POINT GENERATED ALWAYS AS (ST_GeomFromText(CONCAT('POINT(',longitude,' ',latitude,')'))) STORED")?
+  pointLocation Unsupported("POINT GENERATED ALWAYS AS (ST_GeomFromText(CONCAT('POINT(',longitude,' ',latitude,')'))) STORED")?
 
   // Options 
   isPetFriendly Boolean @default(true)

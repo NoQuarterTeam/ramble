@@ -1,8 +1,7 @@
 import { TouchableOpacity, View } from "react-native"
 import { Heart, Star } from "lucide-react-native"
 
-import { type SpotItemWithStatsAndImage } from "@ramble/shared"
-import { createImageUrl, displayRating } from "@ramble/shared"
+import { SpotItemWithStatsAndImage, createImageUrl, displayRating } from "@ramble/shared"
 
 import { useRouter } from "../app/router"
 import { Icon } from "./Icon"

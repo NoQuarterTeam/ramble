@@ -1,17 +1,22 @@
 import "mapbox-gl/dist/mapbox-gl.css"
 
-import * as React from "react"
-import Map, { GeolocateControl, type LngLatLike, type MapRef, Marker, NavigationControl } from "react-map-gl"
 import { Form, useLoaderData, useSearchParams } from "@remix-run/react"
 import { MapIcon } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
+import * as React from "react"
+import Map, { GeolocateControl, Marker, NavigationControl, type LngLatLike, type MapRef } from "react-map-gl"
 import { ExistingSearchParams } from "remix-utils/existing-search-params"
-import { promiseHash } from "remix-utils/promise"
 
-import { Prisma, SpotType } from "@ramble/database/types"
-import { publicSpotWhereClauseRaw } from "@ramble/server-services"
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE, join, type SpotItemWithStatsAndImage, STAY_SPOT_TYPE_OPTIONS } from "@ramble/shared"
-
+import { SpotType } from "@ramble/database/types"
+import { spotListQuery } from "@ramble/server-services"
+import {
+  INITIAL_LATITUDE,
+  INITIAL_LONGITUDE,
+  STAY_SPOT_TYPE_OPTIONS,
+  SpotItemWithStatsAndImage,
+  SpotListSort,
+  join,
+} from "@ramble/shared"
 import { SpotIcon } from "~/components/SpotIcon"
 import { Button, IconButton, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
@@ -21,8 +26,9 @@ import { useTheme } from "~/lib/theme"
 import { bbox, lineString } from "~/lib/vendor/turf.server"
 import type { LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
-import { getUserSession } from "~/services/session/session.server"
 
+import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
+import { getMaybeUser } from "~/services/auth/auth.server"
 import { PageContainer } from "../../../components/PageContainer"
 import { SpotItem } from "./components/SpotItem"
 import { SpotMarker } from "./components/SpotMarker"
@@ -34,60 +40,27 @@ export const config = {
 
 export const headers = useLoaderHeaders
 
-const SORT_OPTIONS = [
+const SORT_OPTIONS: { value: SpotListSort; label: string }[] = [
   { value: "latest", label: "Latest" },
   { value: "rated", label: "Top rated" },
   { value: "saved", label: "Most saved" },
+  { value: "near", label: "Near me" },
 ] as const
-
-type SpotItemWithStatsAndCoords = SpotItemWithStatsAndImage & { longitude: number; latitude: number }
 
 const TAKE = 24
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { userId } = await getUserSession(request)
+  const user = await getMaybeUser(request, { id: true, latitude: true, longitude: true })
   const searchParams = new URL(request.url).searchParams
 
   let type = searchParams.get("type") as SpotType | undefined
   if (type && !SpotType[type as SpotType]) type = undefined
-  let sort = searchParams.get("sort") || "latest"
+  let sort = (searchParams.get("sort") as SpotListSort) || "latest"
   if (!SORT_OPTIONS.find((o) => o.value === sort)) sort = "latest"
 
-  const WHERE = type
-    ? Prisma.sql`WHERE Spot.verifiedAt IS NOT NULL AND Spot.type = ${type} AND ${publicSpotWhereClauseRaw(userId)}`
-    : Prisma.sql`WHERE Spot.verifiedAt IS NOT NULL AND Spot.type IN (${Prisma.join([
-        SpotType.CAMPING,
-        SpotType.FREE_CAMPING,
-      ])}) AND ${publicSpotWhereClauseRaw(userId)} `
-
-  const ORDER_BY = Prisma.sql // prepared orderBy
-  `ORDER BY
-    ${
-      sort === "latest"
-        ? Prisma.sql`Spot.verifiedAt DESC, Spot.id`
-        : sort === "saved"
-          ? Prisma.sql`savedCount DESC, Spot.id`
-          : Prisma.sql`rating DESC, Spot.id`
-    }`
-
-  const { spots } = await promiseHash({
-    spots: db.$queryRaw<Array<SpotItemWithStatsAndCoords>>`
-      SELECT 
-        Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
-        Spot.latitude, Spot.longitude,
-        (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
-        CAST((SELECT COUNT(ListSpot.spotId) FROM ListSpot WHERE ListSpot.spotId = Spot.id) AS CHAR(32)) AS savedCount
-      FROM
-        Spot
-      ${WHERE}
-      GROUP BY
-        Spot.id
-      ${ORDER_BY}
-      LIMIT ${TAKE};
-    `,
-  })
+  const spots = await db.$queryRaw<Array<SpotItemWithStatsAndImage>>`${spotListQuery({ user, type, sort, take: TAKE })}`
   await fetchAndJoinSpotImages(spots)
-  const coords = spots.length > 1 ? spots.map((spot) => [spot.longitude, spot.latitude]) : null
 
+  const coords = spots.length > 1 ? spots.map((spot) => [spot.longitude, spot.latitude]) : null
   let bounds: LngLatLike | undefined = undefined
   if (coords) {
     const line = lineString(coords)
@@ -105,6 +78,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 export default function Latest() {
+  const user = useMaybeUser()
   const { spots, bounds } = useLoaderData<typeof loader>()
   const [searchParams] = useSearchParams()
   const type = searchParams.get("type") || ""
@@ -160,11 +134,13 @@ export default function Latest() {
                     e.currentTarget.form?.dispatchEvent(new Event("submit", { bubbles: true }))
                   }}
                 >
-                  {SORT_OPTIONS.map(({ value, label }) => (
-                    <option key={value} value={value}>
-                      {label}
-                    </option>
-                  ))}
+                  {SORT_OPTIONS.filter((o) => (o.value === "near" ? !!user?.latitude && !!user.longitude : true)).map(
+                    ({ value, label }) => (
+                      <option key={value} value={value}>
+                        {label}
+                      </option>
+                    ),
+                  )}
                 </Select>
               </Form>
             </div>

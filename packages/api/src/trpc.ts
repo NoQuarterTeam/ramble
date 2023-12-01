@@ -24,6 +24,8 @@ const userSelectFields = {
   username: true,
   instagram: true,
   bio: true,
+  latitude: true,
+  longitude: true,
   role: true,
   createdAt: true,
   ...userInterestFields,

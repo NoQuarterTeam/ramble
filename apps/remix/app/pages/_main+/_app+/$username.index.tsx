@@ -13,9 +13,10 @@ import { fetchAndJoinSpotImages } from "~/lib/models/spot"
 import { notFound } from "~/lib/remix.server"
 import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
-import { getUserSession } from "~/services/session/session.server"
 
 import { SpotItem } from "./components/SpotItem"
+import { getMaybeUser } from "~/services/auth/auth.server"
+import { Prisma } from "@ramble/database/types"
 
 export const headers = useLoaderHeaders
 
@@ -25,17 +26,24 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   if (!user) throw notFound()
   const searchParams = new URL(request.url).searchParams
   const skip = parseInt((searchParams.get("skip") as string) || "0")
-  const { userId } = await getUserSession(request)
+  const currentUser = await getMaybeUser(request, { id: true, latitude: true, longitude: true })
+  const DISTANCE_FROM_ME =
+    user?.latitude && user?.longitude
+      ? Prisma.sql`ST_DISTANCE(Spot.pointLocation, POINT("${user.longitude}", "${user.latitude}")) as distanceFromMe,`
+      : Prisma.sql`null as distanceFromMe,`
+
   const { spots } = await promiseHash({
     spots: db.$queryRaw<SpotItemWithStatsAndImage[]>`
       SELECT
         Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
+        Spot.latitude, Spot.longitude,
         (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
+        ${DISTANCE_FROM_ME}
         CAST((SELECT COUNT(ListSpot.spotId) FROM ListSpot WHERE ListSpot.spotId = Spot.id) AS CHAR(32)) AS savedCount
       FROM
         Spot
       WHERE
-        Spot.creatorId = ${user.id} AND ${publicSpotWhereClauseRaw(userId)} AND Spot.sourceUrl IS NULL
+        Spot.creatorId = ${user.id} AND ${publicSpotWhereClauseRaw(currentUser?.id)} AND Spot.sourceUrl IS NULL
       GROUP BY
         Spot.id
       ORDER BY
