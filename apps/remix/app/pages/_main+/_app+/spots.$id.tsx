@@ -3,7 +3,7 @@ import Map, { Marker } from "react-map-gl"
 import { Await, Link, type ShouldRevalidateFunctionArgs, useLoaderData } from "@remix-run/react"
 import crypto from "crypto"
 import dayjs from "dayjs"
-import { Check, Edit2, Heart, Star, Trash } from "lucide-react"
+import { Check, Edit2, Heart, Star, Trash, Flag } from "lucide-react"
 import { promiseHash } from "remix-utils/promise"
 
 import { FULL_WEB_URL } from "@ramble/server-env"
@@ -321,6 +321,9 @@ export default function SpotDetail() {
                     </AlertDialogContent>
                   </AlertDialogRoot>
                 )}
+                <LinkButton to="report" variant="link" leftIcon={<Flag className="sq-3" />}>
+                  Report incorrect data
+                </LinkButton>
               </div>
             </div>
 
