@@ -1,6 +1,6 @@
 import { ConfigContext, ExpoConfig } from "expo/config"
 
-const VERSION = "1.0.9"
+const VERSION = "1.0.10"
 const BUILD = 16
 
 const splash: ExpoConfig["splash"] = {
