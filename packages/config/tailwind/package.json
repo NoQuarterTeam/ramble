@@ -13,7 +13,7 @@
     "types": "tsc"
   },
   "devDependencies": {
-    "@tailwindcss/forms": "0.5.3",
+    "@tailwindcss/forms": "0.5.7",
     "@ramble/eslint-config": "workspace:*",
     "eslint": "8.54.0",
     "prettier": "3.1.0",
