@@ -1,6 +1,6 @@
 import { Suspense } from "react"
 import Map, { Marker } from "react-map-gl"
-import { defer, type SerializeFrom } from "@remix-run/node"
+import { type SerializeFrom } from "@remix-run/node"
 import { Await, Link, ShouldRevalidateFunctionArgs, useLoaderData } from "@remix-run/react"
 import crypto from "crypto"
 import dayjs from "dayjs"
@@ -42,7 +42,7 @@ import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 import { badRequest, json, notFound, redirect } from "~/lib/remix.server"
 import { useTheme } from "~/lib/theme"
-import { type ActionFunctionArgs, type LoaderFunctionArgs, type MetaFunction } from "~/lib/vendor/vercel.server"
+import { defer, type ActionFunctionArgs, type LoaderFunctionArgs, type MetaFunction } from "~/lib/vendor/vercel.server"
 import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
 import { type TranslateSpot } from "~/pages/api+/spots+/$id.translate.$lang"
 import type { loader as rootLoader } from "~/root"
@@ -137,7 +137,8 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 }
 
 export const meta: MetaFunction<typeof loader, { root: typeof rootLoader }> = ({ data, matches }) => {
-  const parsedData = data as unknown as SerializeFrom<typeof loader>
+  // temp fix for vercel defer
+  const parsedData = data as unknown as SerializeFrom<typeof loader>["data"]
   const FULL_WEB_URL = matches.find((r) => r.id === "root")?.data.config.FULL_WEB_URL || "localhost:3000"
   const image = parsedData?.spot.images[0]?.path
   return [
@@ -192,9 +193,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   })
 }
 
+// temp fix
+type LoaderData = NonNullable<SerializeFrom<typeof loader>["data"]>
+
 export default function SpotDetail() {
   const { spot, stats, reviewCount, reviews, activitySpots, translatedDescription, descriptionHash, flickrImages } =
-    useLoaderData<typeof loader>()
+    // eslint-disable-next-line
+    useLoaderData() as any
   const user = useMaybeUser()
   const theme = useTheme()
 
@@ -203,7 +208,7 @@ export default function SpotDetail() {
       <div className="w-screen overflow-x-scroll">
         <div className="flex w-max gap-2 p-2">
           {flickrImages
-            ? flickrImages.map((photo) => (
+            ? flickrImages.map((photo: NonNullable<LoaderData["flickrImages"]>[number]) => (
                 <a
                   key={photo.id}
                   href={photo.link}
@@ -215,7 +220,7 @@ export default function SpotDetail() {
                   <img src="/flickr.svg" className="absolute bottom-1 left-1 object-contain" width={100} />
                 </a>
               ))
-            : spot.images.map((image) => (
+            : spot.images.map((image: NonNullable<LoaderData["spot"]["images"]>[number]) => (
                 <OptimizedImage
                   alt="spot"
                   key={image.id}
@@ -344,18 +349,21 @@ export default function SpotDetail() {
                 <Suspense>
                   <Await resolve={activitySpots}>
                     {(spots) =>
-                      spots.map((activitySpot) => (
-                        <Marker
-                          key={activitySpot.id}
-                          anchor="bottom"
-                          longitude={activitySpot.longitude}
-                          latitude={activitySpot.latitude}
-                        >
-                          <a href={`/spots/${activitySpot.id}`} target="_blank" rel="noopener noreferrer">
-                            <SpotMarker spot={activitySpot} />
-                          </a>
-                        </Marker>
-                      ))
+                      spots.map(
+                        // eslint-disable-next-line
+                        (activitySpot: any) => (
+                          <Marker
+                            key={activitySpot.id}
+                            anchor="bottom"
+                            longitude={activitySpot.longitude}
+                            latitude={activitySpot.latitude}
+                          >
+                            <a href={`/spots/${activitySpot.id}`} target="_blank" rel="noopener noreferrer">
+                              <SpotMarker spot={activitySpot} />
+                            </a>
+                          </Marker>
+                        ),
+                      )
                     }
                   </Await>
                 </Suspense>
@@ -394,7 +402,14 @@ export default function SpotDetail() {
           </div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             <Suspense>
-              <Await resolve={reviews}>{(val) => val.map((review) => <ReviewItem key={review.id} review={review} />)}</Await>
+              <Await resolve={reviews}>
+                {(val) =>
+                  val.map(
+                    // eslint-disable-next-line
+                    (review: any) => <ReviewItem key={review.id} review={review} />,
+                  )
+                }
+              </Await>
             </Suspense>
           </div>
         </div>
