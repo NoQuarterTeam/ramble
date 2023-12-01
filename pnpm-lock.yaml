@@ -866,8 +866,8 @@ importers:
         specifier: 1.11.10
         version: 1.11.10
       flickr-sdk:
-        specifier: 7.0.0-beta.6
-        version: 7.0.0-beta.6
+        specifier: 7.0.0-beta.7
+        version: 7.0.0-beta.7
       jsonwebtoken:
         specifier: 9.0.2
         version: 9.0.2
@@ -10936,8 +10936,8 @@ packages:
     resolution: {integrity: sha512-36yxDn5H7OFZQla0/jFJmbIKTdZAQHngCedGxiMmpNfEZM0sdEeT+WczLQrjK6D7o2aiyLYDnkw0R3JK0Qv1RQ==}
     dev: true
 
-  /flickr-sdk@7.0.0-beta.6:
-    resolution: {integrity: sha512-D2Cj4iaO5RVyqf91unHsb0Hb3dikD4RHIzQ3pZhj7ql/nLECW7KvO+6yt4OVypuNcMsWKb4m0lszrvG626b9iA==}
+  /flickr-sdk@7.0.0-beta.7:
+    resolution: {integrity: sha512-ILmQuRSioeFht0vAhQUBfuLaHVxxmI4b9H1/GVuvj7u8kDc7Wkfb3b118Mt8L1joS0fQeAhDRb8irzxNUymtng==}
     engines: {node: '>= 18'}
     dependencies:
       '@rgrove/parse-xml': 4.1.0
