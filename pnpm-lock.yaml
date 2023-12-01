@@ -782,8 +782,8 @@ importers:
         specifier: 8.3.1
         version: 8.3.1
       '@inquirer/prompts':
-        specifier: 3.2.0
-        version: 3.2.0
+        specifier: 3.3.0
+        version: 3.3.0
       '@ramble/api':
         specifier: workspace:*
         version: link:../../api
@@ -4485,8 +4485,8 @@ packages:
       chalk: 4.1.2
     dev: true
 
-  /@inquirer/prompts@3.2.0:
-    resolution: {integrity: sha512-sfT7eDoveChXr8iIfwUYkoVBjUcKqXluhjM0EVhRhN59ZuJCc5DAdnuKwaFXomwESDoN0f+2zHy+MpxUg+EZuQ==}
+  /@inquirer/prompts@3.3.0:
+    resolution: {integrity: sha512-BBCqdSnhNs+WziSIo4f/RNDu6HAj4R/Q5nMgJb5MNPFX8sJGCvj9BoALdmR0HTWXyDS7TO8euKj6W6vtqCQG7A==}
     engines: {node: '>=14.18.0'}
     dependencies:
       '@inquirer/checkbox': 1.5.0

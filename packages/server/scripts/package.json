@@ -11,7 +11,7 @@
   "sideEffects": false,
   "devDependencies": {
     "@faker-js/faker": "8.3.1",
-    "@inquirer/prompts": "3.2.0",
+    "@inquirer/prompts": "3.3.0",
     "@ramble/api": "workspace:*",
     "@ramble/database": "workspace:*",
     "@ramble/eslint-config": "workspace:*",
