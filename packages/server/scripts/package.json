@@ -10,7 +10,7 @@
   },
   "sideEffects": false,
   "devDependencies": {
-    "@faker-js/faker": "8.1.0",
+    "@faker-js/faker": "8.3.1",
     "@inquirer/prompts": "3.2.0",
     "@ramble/api": "workspace:*",
     "@ramble/database": "workspace:*",
