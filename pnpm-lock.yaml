@@ -633,8 +633,8 @@ importers:
   packages/config/tailwind:
     dependencies:
       tailwindcss-animate:
-        specifier: 1.0.5
-        version: 1.0.5(tailwindcss@3.3.2)
+        specifier: 1.0.7
+        version: 1.0.7(tailwindcss@3.3.2)
     devDependencies:
       '@ramble/eslint-config':
         specifier: workspace:*
@@ -17610,8 +17610,8 @@ packages:
     resolution: {integrity: sha512-X324n9OtpTmOMqEgDUEA/RgLrNfBF/jwJdctaPZDzB3mppxJk7TLIDmOreEDm1Bq4R9LSPu4Epf8VSdovNU+iA==}
     dev: false
 
-  /tailwindcss-animate@1.0.5(tailwindcss@3.3.2):
-    resolution: {integrity: sha512-UU3qrOJ4lFQABY+MVADmBm+0KW3xZyhMdRvejwtXqYOL7YjHYxmuREFAZdmVG5LPe5E9CAst846SLC4j5I3dcw==}
+  /tailwindcss-animate@1.0.7(tailwindcss@3.3.2):
+    resolution: {integrity: sha512-bl6mpH3T7I3UFxuvDEXLxy/VuFxBk5bbzplh7tXI68mwMokNYd1t9qPBHlnyTwfa4JGC4zP516I1hYYtQ/vspA==}
     peerDependencies:
       tailwindcss: '>=3.0.0 || insiders'
     dependencies:
