@@ -31,7 +31,7 @@ import posthog from "posthog-js"
 import { AuthenticityTokenProvider } from "remix-utils/csrf/react"
 import { promiseHash } from "remix-utils/promise"
 
-import { ENV, FULL_WEB_URL, IS_PRODUCTION } from "@ramble/server-env"
+import { ENV, FULL_WEB_URL } from "@ramble/server-env"
 import { join } from "@ramble/shared"
 
 import { Toaster } from "~/components/ui"
@@ -52,6 +52,7 @@ import { getFlashSession } from "./services/session/flash.server"
 import { getGdprSession } from "./services/session/gdpr.server"
 import { defaultPreferences, type Preferences, preferencesCookies } from "./services/session/preferences.server"
 import { getThemeSession } from "./services/session/theme.server"
+import { useConfig } from "./lib/hooks/useConfig"
 
 export const meta: MetaFunction = () => {
   return [{ title: "Ramble: Van Travel App" }, { name: "description", content: "Everything you need for van life in Europe." }]
@@ -147,6 +148,7 @@ export default function App() {
 export function ErrorBoundary() {
   const error = useRouteError()
   const isCatchError = isRouteErrorResponse(error)
+  const config = useConfig()
 
   return (
     <Document theme="dark">
@@ -169,7 +171,7 @@ export function ErrorBoundary() {
             <Frown className="sq-20" />
             <h1 className="text-3xl">Oops, there was an error!</h1>
             <p>{error.message}</p>
-            {!IS_PRODUCTION && error.stack ? (
+            {config.ENV !== "production" && error.stack ? (
               <>
                 <hr />
                 <div className="rounded-xs bg-gray-200 p-4 dark:bg-gray-700 ">
