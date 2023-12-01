@@ -1,7 +1,6 @@
 import { Suspense } from "react"
 import Map, { Marker } from "react-map-gl"
-import { type SerializeFrom } from "@remix-run/node"
-import { Await, Link, ShouldRevalidateFunctionArgs, useLoaderData } from "@remix-run/react"
+import { Await, Link, type ShouldRevalidateFunctionArgs, useLoaderData } from "@remix-run/react"
 import crypto from "crypto"
 import dayjs from "dayjs"
 import { Check, Edit2, Heart, Star, Trash } from "lucide-react"
@@ -37,23 +36,23 @@ import {
 } from "~/components/ui"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
+import { FORM_ACTION } from "~/lib/form"
 import { createAction, createActions } from "~/lib/form.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 import { badRequest, json, notFound, redirect } from "~/lib/remix.server"
 import { useTheme } from "~/lib/theme"
-import { defer, type ActionFunctionArgs, type LoaderFunctionArgs, type MetaFunction } from "~/lib/vendor/vercel.server"
+import { type ActionFunctionArgs, defer, type LoaderFunctionArgs, type MetaFunction } from "~/lib/vendor/vercel.server"
 import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
 import { type TranslateSpot } from "~/pages/api+/spots+/$id.translate.$lang"
 import type { loader as rootLoader } from "~/root"
 import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
 
-import { SaveToList, Actions as SaveActions } from "../../api+/spots+/$id.save-to-list"
+import { Actions as SaveActions, SaveToList } from "../../api+/spots+/$id.save-to-list"
 import { PartnerLink } from "./components/PartnerLink"
 import { ReviewItem, reviewItemSelectFields } from "./components/ReviewItem"
 import { SpotMarker } from "./components/SpotMarker"
 import { TranslateSpotDescription } from "./components/TranslateSpotDescription"
-import { FORM_ACTION } from "~/lib/form"
 
 export const config = {
   // runtime: "edge",
@@ -137,15 +136,13 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 }
 
 export const meta: MetaFunction<typeof loader, { root: typeof rootLoader }> = ({ data, matches }) => {
-  // temp fix for vercel defer
-  const parsedData = data as unknown as SerializeFrom<typeof loader>["data"]
   const FULL_WEB_URL = matches.find((r) => r.id === "root")?.data.config.FULL_WEB_URL || "localhost:3000"
-  const image = parsedData?.spot.images[0]?.path
+  const image = data?.spot.images[0]?.path
   return [
-    { title: parsedData?.spot.name },
-    { name: "description", content: parsedData?.spot.description },
-    { name: "og:title", content: parsedData?.spot.name },
-    { name: "og:description", content: parsedData?.spot.description },
+    { title: data?.spot.name },
+    { name: "description", content: data?.spot.description },
+    { name: "og:title", content: data?.spot.name },
+    { name: "og:description", content: data?.spot.description },
     {
       name: "og:image",
       content: image ? FULL_WEB_URL + transformImageSrc(createImageUrl(image), { width: 600, height: 400 }) : null,
@@ -193,13 +190,9 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   })
 }
 
-// temp fix
-type LoaderData = NonNullable<SerializeFrom<typeof loader>["data"]>
-
 export default function SpotDetail() {
   const { spot, stats, reviewCount, reviews, activitySpots, translatedDescription, descriptionHash, flickrImages } =
-    // eslint-disable-next-line
-    useLoaderData() as any
+    useLoaderData<typeof loader>()
   const user = useMaybeUser()
   const theme = useTheme()
 
@@ -208,7 +201,7 @@ export default function SpotDetail() {
       <div className="w-screen overflow-x-scroll">
         <div className="flex w-max gap-2 p-2">
           {flickrImages
-            ? flickrImages.map((photo: NonNullable<LoaderData["flickrImages"]>[number]) => (
+            ? flickrImages.map((photo) => (
                 <a
                   key={photo.id}
                   href={photo.link}
@@ -220,7 +213,7 @@ export default function SpotDetail() {
                   <img src="/flickr.svg" className="absolute bottom-1 left-1 object-contain" width={100} />
                 </a>
               ))
-            : spot.images.map((image: NonNullable<LoaderData["spot"]["images"]>[number]) => (
+            : spot.images.map((image) => (
                 <OptimizedImage
                   alt="spot"
                   key={image.id}
@@ -349,21 +342,18 @@ export default function SpotDetail() {
                 <Suspense>
                   <Await resolve={activitySpots}>
                     {(spots) =>
-                      spots.map(
-                        // eslint-disable-next-line
-                        (activitySpot: any) => (
-                          <Marker
-                            key={activitySpot.id}
-                            anchor="bottom"
-                            longitude={activitySpot.longitude}
-                            latitude={activitySpot.latitude}
-                          >
-                            <a href={`/spots/${activitySpot.id}`} target="_blank" rel="noopener noreferrer">
-                              <SpotMarker spot={activitySpot} />
-                            </a>
-                          </Marker>
-                        ),
-                      )
+                      spots.map((activitySpot) => (
+                        <Marker
+                          key={activitySpot.id}
+                          anchor="bottom"
+                          longitude={activitySpot.longitude}
+                          latitude={activitySpot.latitude}
+                        >
+                          <a href={`/spots/${activitySpot.id}`} target="_blank" rel="noopener noreferrer">
+                            <SpotMarker spot={activitySpot} />
+                          </a>
+                        </Marker>
+                      ))
                     }
                   </Await>
                 </Suspense>
@@ -402,14 +392,7 @@ export default function SpotDetail() {
           </div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             <Suspense>
-              <Await resolve={reviews}>
-                {(val) =>
-                  val.map(
-                    // eslint-disable-next-line
-                    (review: any) => <ReviewItem key={review.id} review={review} />,
-                  )
-                }
-              </Await>
+              <Await resolve={reviews}>{(val) => val.map((review) => <ReviewItem key={review.id} review={review} />)}</Await>
             </Suspense>
           </div>
         </div>

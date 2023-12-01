@@ -1,6 +1,7 @@
 import { useLoaderData } from "@remix-run/react"
 
 import { reviewDataSchema } from "@ramble/server-schemas"
+import { getLanguage } from "@ramble/server-services"
 
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
@@ -11,7 +12,6 @@ import { json } from "~/lib/vendor/vercel.server"
 import { requireUser } from "~/services/auth/auth.server"
 
 import { ReviewForm } from "./components/ReviewForm"
-import { getLanguage } from "@ramble/server-services"
 
 export const config = {
   // runtime: "edge",

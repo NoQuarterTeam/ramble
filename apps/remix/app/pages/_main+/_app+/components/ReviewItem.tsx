@@ -21,9 +21,9 @@ import {
 } from "~/components/ui"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import type { SerializeFrom } from "~/lib/vendor/vercel.server"
+import { type TranslateReview } from "~/pages/api+/reviews+/$id.translate.$lang"
 
 import { Actions } from "../spots.$id_.reviews.$reviewId"
-import { TranslateReview } from "~/pages/api+/reviews+/$id.translate.$lang"
 
 export const reviewItemSelectFields = {
   id: true,
