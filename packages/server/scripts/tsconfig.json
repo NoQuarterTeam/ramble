@@ -19,7 +19,7 @@
     "emitDecoratorMetadata": true,
     "sourceMap": true,
     "lib": ["ES2021", "DOM"],
-    "module": "commonjs",
+    "module": "CommonJS",
     "target": "ES2021",
     "strict": true,
     "skipLibCheck": true
