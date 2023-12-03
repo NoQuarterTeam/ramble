@@ -36,7 +36,7 @@
     "@ramble/eslint-config": "workspace:*",
     "@types/bcryptjs": "2.4.6",
     "@types/jsonwebtoken": "9.0.5",
-    "@types/node": "18.19.1",
+    "@types/node": "18.19.2",
     "@types/nodemailer": "6.4.14",
     "dotenv-cli": "7.3.0",
     "eslint": "8.55.0",
