@@ -7,6 +7,7 @@ const { flatRoutes } = require("remix-flat-routes")
 module.exports = {
   cacheDirectory: "./node_modules/.cache/remix",
   serverModuleFormat: "cjs",
+  serverBuildTarget: "cjs",
   future: {
     cssSideEffectImports: true,
   },
