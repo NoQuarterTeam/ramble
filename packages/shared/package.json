@@ -16,12 +16,12 @@
   "sideEffects": false,
   "dependencies": {
     "@ramble/database": "workspace:*",
-    "tailwind-merge": "2.0.0"
+    "tailwind-merge": "2.1.0"
   },
   "devDependencies": {
     "@ramble/eslint-config": "workspace:*",
     "@ramble/tailwind-config": "workspace:*",
-    "@types/node": "18.19.1",
+    "@types/node": "18.19.2",
     "eslint": "8.55.0",
     "prettier": "3.1.0",
     "typescript": "5.3.2"
