@@ -64,7 +64,7 @@ export function SpotItem({ spot }: Props) {
             </div>
           </div>
           {spot.address && <p className="line-clamp-1 text-sm font-thin opacity-70">{spot.address}</p>}
-          {spot.distanceFromMe && <p className="text-sm font-thin opacity-70">{Math.round(spot.distanceFromMe)} km away</p>}
+          {spot.distanceFromMe && <p className="text-sm font-thin opacity-70">{spot.distanceFromMe} km away</p>}
         </div>
       </Link>
       <div className="absolute right-2 top-2">

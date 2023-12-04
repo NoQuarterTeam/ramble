@@ -75,7 +75,9 @@ export const spotListQuery = ({
       : sort === "saved"
         ? Prisma.sql`savedCount DESC, Spot.id`
         : sort === "near"
-          ? Prisma.sql`distanceFromMe ASC, Spot.id`
+          ? user
+            ? Prisma.sql`distanceFromMe ASC, Spot.id`
+            : Prisma.sql`Spot.verifiedAt DESC, Spot.id`
           : Prisma.sql`rating DESC, Spot.id`
   }`
 
