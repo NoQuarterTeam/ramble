@@ -1,7 +1,7 @@
 import { TouchableOpacity, View } from "react-native"
 import { Heart, Star } from "lucide-react-native"
 
-import { SpotItemWithStatsAndImage, createImageUrl, displayRating } from "@ramble/shared"
+import { SpotItemType, createImageUrl, displayRating } from "@ramble/shared"
 
 import { useRouter } from "../app/router"
 import { Icon } from "./Icon"
@@ -11,7 +11,7 @@ import { Text } from "./ui/Text"
 import { api } from "../lib/api"
 
 interface Props {
-  spot: SpotItemWithStatsAndImage
+  spot: SpotItemType
 }
 
 export function SpotItem({ spot }: Props) {
@@ -51,22 +51,21 @@ export function SpotItem({ spot }: Props) {
       </View>
 
       <View className="pt-1">
-        <Text numberOfLines={2} className="text-xl">
-          {spot.name}
-        </Text>
-        <Text numberOfLines={1} className="font-300 pb-0.5 text-sm opacity-80">
-          {spot.address}
-        </Text>
-        <View className="flex flex-row items-center space-x-2">
-          <View className="flex flex-row items-center space-x-1">
+        <View className="flex flex-row items-center justify-between">
+          <Text numberOfLines={1} className="w-5/6 text-lg">
+            {spot.name}
+          </Text>
+          <View className="flex w-1/6 flex-row items-center justify-end space-x-1">
             <Icon icon={Star} size={16} />
-            <Text className="text-sm">{displayRating(spot.rating)}</Text>
-          </View>
-          <View className="flex flex-row flex-wrap items-center space-x-1">
-            <Icon icon={Heart} size={16} />
-            <Text className="text-sm">{spot.savedCount}</Text>
+            <Text className="text-lg">{displayRating(spot.rating)}</Text>
           </View>
         </View>
+        {spot.address && (
+          <Text numberOfLines={1} className="font-300 pb-0.5 text-sm opacity-80">
+            {spot.address}
+          </Text>
+        )}
+        {spot.distanceFromMe && <Text className="font-300 pb-0.5 text-sm opacity-80">{Math.round(spot.distanceFromMe)} km</Text>}
       </View>
     </TouchableOpacity>
   )

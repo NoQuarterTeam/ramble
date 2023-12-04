@@ -127,6 +127,11 @@ export function displayRating(rating: number | string | null | undefined) {
   if (!rating) return "New"
   return Math.round(Number(rating) * 100) / 100
 }
+export function displaySaved(saved: number | string | null | undefined) {
+  if (!saved) return null
+  if (typeof saved === "string" && parseInt(saved) > 50) return "50+"
+  return saved
+}
 
 export function doesSpotTypeRequireAmenities(type?: SpotType | null | undefined) {
   if (!type) return false
@@ -257,7 +262,7 @@ export const spotMarkerClusterColorTypes = {
 
 export type SpotListSort = "latest" | "rated" | "saved" | "near"
 
-export type SpotItemWithStatsAndImage = Pick<Spot, "id" | "name" | "address" | "type" | "latitude" | "longitude"> & {
+export type SpotItemType = Pick<Spot, "id" | "name" | "address" | "type" | "latitude" | "longitude"> & {
   rating: string
   savedCount: string
   image?: SpotImage["path"] | null

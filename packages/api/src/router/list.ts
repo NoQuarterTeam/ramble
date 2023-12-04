@@ -6,8 +6,8 @@ import { z } from "zod"
 
 import { type SpotType } from "@ramble/database/types"
 import { clusterSchema, listSchema, userSchema } from "@ramble/server-schemas"
-import { publicSpotWhereClauseRaw } from "@ramble/server-services"
-import { type SpotItemWithStatsAndImage } from "@ramble/shared"
+import { publicSpotWhereClauseRaw, spotItemDistanceFromMeField, spotItemSelectFields } from "@ramble/server-services"
+import { type SpotItemType } from "@ramble/shared"
 
 import { fetchAndJoinSpotImages } from "../lib/spot"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
@@ -48,12 +48,10 @@ export const listRouter = createTRPCRouter({
           description: true,
         },
       }),
-      ctx.prisma.$queryRaw<Array<SpotItemWithStatsAndImage>>`
+      ctx.prisma.$queryRaw<Array<SpotItemType>>`
         SELECT 
-          Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
-          Spot.latitude, Spot.longitude,
-          (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
-          (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
+          ${spotItemDistanceFromMeField(ctx.user)}
+          ${spotItemSelectFields}
         FROM
           Spot
         LEFT JOIN

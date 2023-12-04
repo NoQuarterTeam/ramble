@@ -1,5 +1,5 @@
 import { Prisma, type User, type SpotImage, SpotType } from "@ramble/database/types"
-import { SpotItemWithStatsAndImage, SpotListSort } from "@ramble/shared"
+import { SpotItemType, SpotListSort } from "@ramble/shared"
 
 export const publicSpotWhereClause = (userId?: string | null) => {
   return {
@@ -29,16 +29,25 @@ export const spotImagesRawQuery = (ids: string[]) => {
   `
 }
 
-export const joinSpotImages = (
-  spots: Array<SpotItemWithStatsAndImage>,
-  images: Array<Pick<SpotImage, "spotId" | "path" | "blurHash">>,
-) => {
+export const joinSpotImages = (spots: Array<SpotItemType>, images: Array<Pick<SpotImage, "spotId" | "path" | "blurHash">>) => {
   spots.forEach((spot) => {
     const image = images.find((i) => i.spotId === spot.id)
     spot.blurHash = image?.blurHash || null
     spot.image = image?.path || null
   })
 }
+
+export const spotItemSelectFields = Prisma.sql`
+  Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
+  Spot.latitude, Spot.longitude,
+  (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
+  CAST((SELECT COUNT(ListSpot.spotId) FROM ListSpot WHERE ListSpot.spotId = Spot.id) AS CHAR(32)) AS savedCount
+`
+
+export const spotItemDistanceFromMeField = (user?: Pick<User, "id" | "latitude" | "longitude"> | null) =>
+  user?.latitude && user?.longitude
+    ? Prisma.sql`ST_DISTANCE(Spot.pointLocation, POINT("${user.longitude}", "${user.latitude}")) as distanceFromMe`
+    : Prisma.sql`null as distanceFromMe`
 
 export const spotListQuery = ({
   user,
@@ -53,42 +62,35 @@ export const spotListQuery = ({
   skip?: number
   type?: SpotType
 }) => {
-  const WHERE = type
-    ? Prisma.sql`WHERE Spot.verifiedAt IS NOT NULL AND Spot.type = ${type} AND ${publicSpotWhereClauseRaw(user?.id)}`
-    : Prisma.sql`WHERE Spot.verifiedAt IS NOT NULL AND Spot.type IN (${Prisma.join([
+  const whereClause = type
+    ? Prisma.sql`Spot.verifiedAt IS NOT NULL AND Spot.type = ${type} AND ${publicSpotWhereClauseRaw(user?.id)}`
+    : Prisma.sql`Spot.verifiedAt IS NOT NULL AND Spot.type IN (${Prisma.join([
         SpotType.CAMPING,
         SpotType.FREE_CAMPING,
-      ])}) AND ${publicSpotWhereClauseRaw(user?.id)} `
+      ])}) AND ${publicSpotWhereClauseRaw(user?.id)}`
 
-  const DISTANCE_FROM_ME =
-    user?.latitude && user?.longitude
-      ? Prisma.sql`ST_DISTANCE(Spot.pointLocation, POINT("${user.longitude}", "${user.latitude}")) as distanceFromMe,`
-      : Prisma.sql`null as distanceFromMe,`
-
-  const ORDER_BY = Prisma.sql`ORDER BY
-    ${
-      sort === "latest"
-        ? Prisma.sql`Spot.verifiedAt DESC, Spot.id`
-        : sort === "saved"
-          ? Prisma.sql`savedCount DESC, Spot.id`
-          : sort === "near"
-            ? Prisma.sql`distanceFromMe ASC, Spot.id`
-            : Prisma.sql`rating DESC, Spot.id`
-    }`
+  const orderByClause = Prisma.sql`${
+    sort === "latest"
+      ? Prisma.sql`Spot.verifiedAt DESC, Spot.id`
+      : sort === "saved"
+        ? Prisma.sql`savedCount DESC, Spot.id`
+        : sort === "near"
+          ? Prisma.sql`distanceFromMe ASC, Spot.id`
+          : Prisma.sql`rating DESC, Spot.id`
+  }`
 
   return Prisma.sql`
-    SELECT 
-      Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
-      Spot.latitude, Spot.longitude,
-      ${DISTANCE_FROM_ME}
-      (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
-      CAST((SELECT COUNT(ListSpot.spotId) FROM ListSpot WHERE ListSpot.spotId = Spot.id) AS CHAR(32)) AS savedCount
+    SELECT
+      ${spotItemDistanceFromMeField(user)},
+      ${spotItemSelectFields}
     FROM
       Spot
-    ${WHERE}
+    WHERE
+      ${whereClause}
     GROUP BY
       Spot.id
-    ${ORDER_BY}
+    ORDER BY
+      ${orderByClause}
     LIMIT ${take}
     OFFSET ${skip || 0}
   `

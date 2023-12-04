@@ -11,10 +11,12 @@ import {
   geocodeCoords,
   publicSpotWhereClause,
   publicSpotWhereClauseRaw,
+  spotItemDistanceFromMeField,
+  spotItemSelectFields,
   spotListQuery,
 } from "@ramble/server-services"
 import { amenitiesFields, spotPartnerFields, promiseHash } from "@ramble/shared"
-import { type SpotItemWithStatsAndImage } from "@ramble/shared"
+import { type SpotItemType } from "@ramble/shared"
 
 import { fetchAndJoinSpotImages } from "../lib/spot"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
@@ -96,7 +98,7 @@ export const spotRouter = createTRPCRouter({
       const sort = input.sort || "latest"
 
       try {
-        const spots = await ctx.prisma.$queryRaw<Array<SpotItemWithStatsAndImage>>`
+        const spots = await ctx.prisma.$queryRaw<Array<SpotItemType>>`
           ${spotListQuery({ user: ctx.user, sort, take: 20, skip: input.skip })}
         `
         await fetchAndJoinSpotImages(ctx.prisma, spots)
@@ -180,16 +182,16 @@ export const spotRouter = createTRPCRouter({
   byUser: publicProcedure.input(userSchema.pick({ username: true })).query(async ({ ctx, input }) => {
     const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })
     if (!user) throw new TRPCError({ code: "NOT_FOUND" })
-    const spots = await ctx.prisma.$queryRaw<SpotItemWithStatsAndImage[]>`
+    const spots = await ctx.prisma.$queryRaw<SpotItemType[]>`
       SELECT
-        Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
-        Spot.latitude, Spot.longitude,
-        (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
-        CAST((SELECT COUNT(ListSpot.spotId) FROM ListSpot WHERE ListSpot.spotId = Spot.id) AS CHAR(32)) AS savedCount
+        ${spotItemDistanceFromMeField(ctx.user)},
+        ${spotItemSelectFields}
       FROM
         Spot
       WHERE
-        Spot.creatorId = ${user.id} AND ${publicSpotWhereClauseRaw(user.id)} AND Spot.sourceUrl IS NULL
+        Spot.creatorId = ${user.id} AND Spot.verifiedAt IS NOT NULL AND ${publicSpotWhereClauseRaw(
+          user.id,
+        )} AND Spot.sourceUrl IS NULL
       GROUP BY
         Spot.id
       ORDER BY

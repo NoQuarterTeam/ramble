@@ -9,14 +9,7 @@ import { ExistingSearchParams } from "remix-utils/existing-search-params"
 
 import { SpotType } from "@ramble/database/types"
 import { spotListQuery } from "@ramble/server-services"
-import {
-  INITIAL_LATITUDE,
-  INITIAL_LONGITUDE,
-  STAY_SPOT_TYPE_OPTIONS,
-  SpotItemWithStatsAndImage,
-  SpotListSort,
-  join,
-} from "@ramble/shared"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE, STAY_SPOT_TYPE_OPTIONS, SpotItemType, SpotListSort, join } from "@ramble/shared"
 import { SpotIcon } from "~/components/SpotIcon"
 import { Button, IconButton, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
@@ -57,7 +50,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   let sort = (searchParams.get("sort") as SpotListSort) || "latest"
   if (!SORT_OPTIONS.find((o) => o.value === sort)) sort = "latest"
 
-  const spots = await db.$queryRaw<Array<SpotItemWithStatsAndImage>>`${spotListQuery({ user, type, sort, take: TAKE })}`
+  const spots = await db.$queryRaw<Array<SpotItemType>>`${spotListQuery({ user, type, sort, take: TAKE })}`
   await fetchAndJoinSpotImages(spots)
 
   const coords = spots.length > 1 ? spots.map((spot) => [spot.longitude, spot.latitude]) : null

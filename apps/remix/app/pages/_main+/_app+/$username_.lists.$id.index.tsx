@@ -7,9 +7,9 @@ import { cacheHeader } from "pretty-cache-header"
 import { ClientOnly } from "remix-utils/client-only"
 import { promiseHash } from "remix-utils/promise"
 
-import { publicSpotWhereClauseRaw } from "@ramble/server-services"
+import { publicSpotWhereClauseRaw, spotItemDistanceFromMeField, spotItemSelectFields } from "@ramble/server-services"
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
-import { type SpotItemWithStatsAndImage } from "@ramble/shared"
+import { type SpotItemType } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -29,17 +29,11 @@ import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
 
 import { SpotItem } from "./components/SpotItem"
 import { SpotMarker } from "./components/SpotMarker"
-import { Prisma } from "@ramble/database/types"
 
 export const headers = useLoaderHeaders
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const user = await getMaybeUser(request, { id: true, username: true, latitude: true, longitude: true })
-
-  const DISTANCE_FROM_ME =
-    user?.latitude && user?.longitude
-      ? Prisma.sql`ST_DISTANCE(Spot.pointLocation, POINT("${user.longitude}", "${user.latitude}")) as distanceFromMe,`
-      : Prisma.sql`null as distanceFromMe,`
 
   const { list, spots } = await promiseHash({
     list: db.list.findFirst({
@@ -52,13 +46,10 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
         description: true,
       },
     }),
-    spots: db.$queryRaw<SpotItemWithStatsAndImage[]>`
+    spots: db.$queryRaw<SpotItemType[]>`
       SELECT 
-        Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
-        Spot.latitude, Spot.longitude,
-        ${DISTANCE_FROM_ME}
-        (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
-        (CAST(COUNT(ListSpot.spotId) as CHAR(32))) AS savedCount
+       ${spotItemDistanceFromMeField(user)},
+       ${spotItemSelectFields}
       FROM
         Spot
       LEFT JOIN

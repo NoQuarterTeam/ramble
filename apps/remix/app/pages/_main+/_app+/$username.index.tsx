@@ -3,8 +3,8 @@ import { useFetcher, useLoaderData, useParams } from "@remix-run/react"
 import { cacheHeader } from "pretty-cache-header"
 import { promiseHash } from "remix-utils/promise"
 
-import { publicSpotWhereClauseRaw } from "@ramble/server-services"
-import { type SpotItemWithStatsAndImage } from "@ramble/shared"
+import { publicSpotWhereClauseRaw, spotItemDistanceFromMeField, spotItemSelectFields } from "@ramble/server-services"
+import { type SpotItemType } from "@ramble/shared"
 
 import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
@@ -16,7 +16,6 @@ import { json } from "~/lib/vendor/vercel.server"
 
 import { SpotItem } from "./components/SpotItem"
 import { getMaybeUser } from "~/services/auth/auth.server"
-import { Prisma } from "@ramble/database/types"
 
 export const headers = useLoaderHeaders
 
@@ -27,19 +26,12 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const searchParams = new URL(request.url).searchParams
   const skip = parseInt((searchParams.get("skip") as string) || "0")
   const currentUser = await getMaybeUser(request, { id: true, latitude: true, longitude: true })
-  const DISTANCE_FROM_ME =
-    user?.latitude && user?.longitude
-      ? Prisma.sql`ST_DISTANCE(Spot.pointLocation, POINT("${user.longitude}", "${user.latitude}")) as distanceFromMe,`
-      : Prisma.sql`null as distanceFromMe,`
 
   const { spots } = await promiseHash({
-    spots: db.$queryRaw<SpotItemWithStatsAndImage[]>`
+    spots: db.$queryRaw<SpotItemType[]>`
       SELECT
-        Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
-        Spot.latitude, Spot.longitude,
-        (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
-        ${DISTANCE_FROM_ME}
-        CAST((SELECT COUNT(ListSpot.spotId) FROM ListSpot WHERE ListSpot.spotId = Spot.id) AS CHAR(32)) AS savedCount
+        ${spotItemDistanceFromMeField(currentUser)},
+        ${spotItemSelectFields}
       FROM
         Spot
       WHERE
