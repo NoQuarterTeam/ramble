@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 const { flatRoutes } = require("remix-flat-routes")
 
 /**
@@ -5,13 +6,10 @@ const { flatRoutes } = require("remix-flat-routes")
  */
 module.exports = {
   cacheDirectory: "./node_modules/.cache/remix",
-  ignoredRouteFiles: ["**/*"],
   serverModuleFormat: "cjs",
   future: {
     cssSideEffectImports: true,
   },
-  tailwind: true,
-  postcss: true,
   serverDependenciesToBundle: [
     /@ramble/,
     /d3-/,

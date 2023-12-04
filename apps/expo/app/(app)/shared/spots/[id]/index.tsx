@@ -252,7 +252,9 @@ export function SpotDetailScreen() {
             </View>
             <View>
               {spot.reviews.map((review) => (
-                <ReviewItem key={review.id} review={review} />
+                <View key={review.id} className="mb-2">
+                  <ReviewItem review={review} />
+                </View>
               ))}
             </View>
           </View>

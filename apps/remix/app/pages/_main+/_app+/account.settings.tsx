@@ -50,8 +50,8 @@ export default function AccountSettings() {
           <div className="flex flex-row items-center space-x-3">
             <Languages size={30} />
             <div>
-              <p className="text-lg">Spot description language</p>
-              <p className="text-sm opacity-75">Control what language to show for the spot description</p>
+              <p className="text-lg">Description & review language</p>
+              <p className="text-sm opacity-75">What language to show for the spot description and reviews</p>
             </div>
           </div>
 

@@ -52,6 +52,7 @@ import { getFlashSession } from "./services/session/flash.server"
 import { getGdprSession } from "./services/session/gdpr.server"
 import { defaultPreferences, type Preferences, preferencesCookies } from "./services/session/preferences.server"
 import { getThemeSession } from "./services/session/theme.server"
+import { useConfig } from "./lib/hooks/useConfig"
 
 export const meta: MetaFunction = () => {
   return [{ title: "Ramble: Van Travel App" }, { name: "description", content: "Everything you need for van life in Europe." }]
@@ -115,14 +116,16 @@ export default function App() {
 
   React.useEffect(() => {
     if ((gdpr && !gdpr.isAnalyticsEnabled) || config.ENV !== "production") return
-    posthog.init("phc_3HuNiIa6zCcsNHFmXst4X0HJjOLq32yRyRPVZQhsD31", {
-      api_host: "https://eu.posthog.com",
-      loaded: () => setIsHogLoaded(true),
-    })
+    if (!isHogLoaded) {
+      posthog.init("phc_3HuNiIa6zCcsNHFmXst4X0HJjOLq32yRyRPVZQhsD31", {
+        api_host: "https://eu.posthog.com",
+        loaded: () => setIsHogLoaded(true),
+      })
+    }
     if (user) {
       posthog.identify(user.id, { email: user.email, firstName: user.firstName, lastName: user.lastName })
     }
-  }, [gdpr, user, config])
+  }, [gdpr, user, config, isHogLoaded])
 
   React.useEffect(() => {
     if (!isHogLoaded || !location.pathname) return
@@ -145,10 +148,12 @@ export default function App() {
 export function ErrorBoundary() {
   const error = useRouteError()
   const isCatchError = isRouteErrorResponse(error)
+  const config = useConfig()
 
   return (
     <Document theme="dark">
-      <div className="flex items-center overflow-scroll p-20 pt-40">
+      <h1 className="brand-header p-6 text-3xl">ramble</h1>
+      <div className="flex flex-col overflow-scroll px-32 pt-40">
         {isCatchError ? (
           <div className="space-y-6">
             <div className="space-y-2">
@@ -164,20 +169,27 @@ export function ErrorBoundary() {
         ) : error instanceof Error ? (
           <div className="max-w-4xl space-y-6">
             <Frown className="sq-20" />
-            <h1 className="text-3xl">Oops, there was an error.</h1>
+            <h1 className="text-3xl">Oops, there was an error!</h1>
             <p>{error.message}</p>
-            {error.stack && (
+            {config.ENV !== "production" && error.stack ? (
               <>
                 <hr />
                 <div className="rounded-xs bg-gray-200 p-4 dark:bg-gray-700 ">
                   <pre className="overflow-scroll text-sm">{error.stack}</pre>
                 </div>
               </>
+            ) : (
+              <>
+                <hr />
+                <p>We have been notified and will fix the issue as soon as possible.</p>
+              </>
             )}
           </div>
         ) : (
           <div>
-            <h1 className="text-6xl">Sorry, an unknown error has occured</h1>
+            <h1 className="text-6xl">Sorry, an unknown error has occured!</h1>
+            <hr />
+            <p>We have been notified and will fix the issue as soon as possible.</p>
           </div>
         )}
       </div>
