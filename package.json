@@ -28,8 +28,8 @@
   },
   "packageManager": "pnpm@8.11.0",
   "engines": {
-    "node": ">=18.17.0",
-    "pnpm": ">=8.0.0"
+    "node": ">=18",
+    "pnpm": ">=8"
   },
   "pnpm": {
     "patchedDependencies": {
@@ -38,17 +38,6 @@
       "@turf/boolean-point-in-polygon@6.5.0": "patches/@turf__boolean-point-in-polygon@6.5.0.patch",
       "@turf/center@6.5.0": "patches/@turf__center@6.5.0.patch",
       "@turf/bbox@6.5.0": "patches/@turf__bbox@6.5.0.patch"
-    },
-    "supportedArchitectures": {
-      "os": [
-        "darwin",
-        "current",
-        "linux"
-      ],
-      "cpu": [
-        "x64",
-        "arm64"
-      ]
     }
   }
 }
