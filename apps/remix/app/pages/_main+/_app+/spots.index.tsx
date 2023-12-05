@@ -1,27 +1,35 @@
 import "mapbox-gl/dist/mapbox-gl.css"
 
+import * as React from "react"
+import Map, { GeolocateControl, type LngLatLike, type MapRef, Marker, NavigationControl } from "react-map-gl"
 import { Form, useLoaderData, useSearchParams } from "@remix-run/react"
 import { MapIcon } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
-import * as React from "react"
-import Map, { GeolocateControl, Marker, NavigationControl, type LngLatLike, type MapRef } from "react-map-gl"
 import { ExistingSearchParams } from "remix-utils/existing-search-params"
 
 import { SpotType } from "@ramble/database/types"
 import { spotListQuery } from "@ramble/server-services"
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE, STAY_SPOT_TYPE_OPTIONS, SpotItemType, SpotListSort, join } from "@ramble/shared"
+import {
+  INITIAL_LATITUDE,
+  INITIAL_LONGITUDE,
+  join,
+  type SpotItemType,
+  type SpotListSort,
+  STAY_SPOT_TYPE_OPTIONS,
+} from "@ramble/shared"
+
 import { SpotIcon } from "~/components/SpotIcon"
 import { Button, IconButton, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
+import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { fetchAndJoinSpotImages } from "~/lib/models/spot"
 import { useTheme } from "~/lib/theme"
 import { bbox, lineString } from "~/lib/vendor/turf.server"
 import type { LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
-
-import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { getMaybeUser } from "~/services/auth/auth.server"
+
 import { PageContainer } from "../../../components/PageContainer"
 import { SpotItem } from "./components/SpotItem"
 import { SpotMarker } from "./components/SpotMarker"

@@ -44,6 +44,7 @@ import {
 } from "~/lib/vendor/vercel.server"
 
 import { LinkButton } from "./components/LinkButton"
+import { useConfig } from "./lib/hooks/useConfig"
 import { type Theme } from "./lib/theme"
 import { GDPR } from "./pages/api+/gdpr"
 import { getMaybeUser } from "./services/auth/auth.server"
@@ -52,7 +53,6 @@ import { getFlashSession } from "./services/session/flash.server"
 import { getGdprSession } from "./services/session/gdpr.server"
 import { defaultPreferences, type Preferences, preferencesCookies } from "./services/session/preferences.server"
 import { getThemeSession } from "./services/session/theme.server"
-import { useConfig } from "./lib/hooks/useConfig"
 
 export const meta: MetaFunction = () => {
   return [{ title: "Ramble: Van Travel App" }, { name: "description", content: "Everything you need for van life in Europe." }]

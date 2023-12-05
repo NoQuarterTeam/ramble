@@ -1,14 +1,14 @@
-import { TouchableOpacity, View, useColorScheme } from "react-native"
+import { TouchableOpacity, useColorScheme, View } from "react-native"
 import { Heart, Star } from "lucide-react-native"
 
-import { SpotItemType, createImageUrl, displayRating, displaySaved } from "@ramble/shared"
+import { createImageUrl, displayRating, displaySaved, type SpotItemType } from "@ramble/shared"
 
 import { useRouter } from "../app/router"
+import { api } from "../lib/api"
 import { Icon } from "./Icon"
 import { SpotIcon } from "./SpotIcon"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
-import { api } from "../lib/api"
 
 interface Props {
   spot: SpotItemType

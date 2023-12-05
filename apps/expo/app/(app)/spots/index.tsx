@@ -3,7 +3,7 @@ import { TouchableOpacity, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import { ChevronDown, PlusCircle } from "lucide-react-native"
 
-import { SpotListSort, join, useDisclosure } from "@ramble/shared"
+import { join, type SpotListSort, useDisclosure } from "@ramble/shared"
 
 import { Icon } from "../../../components/Icon"
 import { LoginPlaceholder } from "../../../components/LoginPlaceholder"

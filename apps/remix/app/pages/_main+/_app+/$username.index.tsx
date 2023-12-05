@@ -13,9 +13,9 @@ import { fetchAndJoinSpotImages } from "~/lib/models/spot"
 import { notFound } from "~/lib/remix.server"
 import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
+import { getMaybeUser } from "~/services/auth/auth.server"
 
 import { SpotItem } from "./components/SpotItem"
-import { getMaybeUser } from "~/services/auth/auth.server"
 
 export const headers = useLoaderHeaders
 
