@@ -182,7 +182,7 @@ export default function SpotPreview() {
               </p>
               <p>·</p>
               <div className="flex items-center space-x-1">
-                <Star className="sq-5" />
+                <Star className="sq-5 fill-black dark:fill-white" />
                 <p>{displayRating(rating)}</p>
               </div>
             </div>
