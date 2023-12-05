@@ -3,16 +3,17 @@ import { useFetcher, useLocation, useNavigate, useSearchParams } from "@remix-ru
 
 import type { Spot, SpotAmenities, SpotImage, SpotType } from "@ramble/database/types"
 
-import { Form, FormButton, FormError, FormField, FormFieldLabel, ImageField } from "~/components/Form"
-import { Button, CloseButton, Spinner, Textarea } from "~/components/ui"
+import { Form, FormButton, FormError, FormField, FormFieldLabel } from "~/components/Form"
+import { Button, CloseButton, IconButton, Spinner, Textarea } from "~/components/ui"
 import type { SerializeFrom } from "~/lib/vendor/vercel.server"
 import {
   AMENITIES,
   INITIAL_LATITUDE,
   INITIAL_LONGITUDE,
   SPOT_TYPE_OPTIONS,
+  createImageUrl,
   doesSpotTypeRequireAmenities,
-  doesSpotTypeRequireDescription,
+  merge,
 } from "@ramble/shared"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 import { SpotIcon } from "~/components/SpotIcon"
@@ -20,7 +21,7 @@ import { AmenitySelector } from "./SpotForm"
 import { geocodeLoader } from "~/pages/api+/mapbox+/geocode"
 import type { ViewStateChangeEvent } from "react-map-gl"
 import Map, { GeolocateControl, NavigationControl } from "react-map-gl"
-import { CircleDot } from "lucide-react"
+import { CircleDot, Flag, X } from "lucide-react"
 import { useTheme } from "~/lib/theme"
 import queryString from "query-string"
 import turfCenter from "@turf/center"
@@ -84,8 +85,21 @@ export function SpotReportForm({
 
   const navigate = useNavigate()
   const theme = useTheme()
-  // const [images, setImages] = React.useState<Pick<SpotImage, "path">[]>(spot.images || [])
-  const [hasNotes, setHasNotes] = React.useState(false)
+  const [flaggedImageIds, setFlaggedImageIds] = React.useState<string[]>([])
+  const [incorrectLocation, setIncorrectLocation] = React.useState(false)
+  const [isLocationUnknown, setIsLocationUnknown] = React.useState(false)
+
+  const isFlagged = (id: string) => {
+    return !!flaggedImageIds.find((imageId) => imageId === id)
+  }
+  const handleClickImage = (id: string) => {
+    if (isFlagged(id)) {
+      const newIds = flaggedImageIds.filter((imageId) => imageId !== id)
+      setFlaggedImageIds(newIds)
+    } else {
+      setFlaggedImageIds([id, ...flaggedImageIds])
+    }
+  }
 
   // const user = useMaybeUser()
   return (
@@ -100,32 +114,64 @@ export function SpotReportForm({
         </div>
         <input type="hidden" name="latitude" value={latitude || ""} />
         <input type="hidden" name="longitude" value={longitude || ""} />
+        {flaggedImageIds.map((id) => (
+          <input key={id} type="hidden" name="flaggedImageId" value={id} />
+        ))}
         <div className="space-y-2">
-          <FormField required name="name" label="Name" defaultValue={spot.name} />
-          <FormField
-            required={doesSpotTypeRequireDescription(type)}
-            name="description"
-            label="Description"
-            defaultValue={spot.description || ""}
-            input={<Textarea rows={3} />}
-          />
+          <FormField name="name" label="Name" defaultValue={spot.name} />
+          <FormField name="description" label="Description" defaultValue={spot.description || ""} input={<Textarea rows={3} />} />
 
-          <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-            <div className="opacity-70">
-              <FormFieldLabel name="address">Address - move map to set</FormFieldLabel>
-              <div className="relative">
-                <FormField
-                  className="hover:border-gray-200 dark:hover:border-gray-700"
-                  // disabled
-                  readOnly
-                  name="address"
-                  value={address || ""}
-                />
-                {geocodeFetcher.state === "loading" && <Spinner size="xs" className="absolute -left-5 top-2" />}
+          {incorrectLocation ? (
+            <div className="relative">
+              <IconButton
+                size="xs"
+                variant="ghost"
+                aria-label="back"
+                className="absolute right-0 z-10"
+                icon={<X className="sq-4" />}
+                onClick={() => setIncorrectLocation(false)}
+              />
+              <div className="grid grid-cols-1 gap-2 pt-2 xl:grid-cols-2">
+                <div className="opacity-70">
+                  <FormFieldLabel name="address">Corrected address - move map to set</FormFieldLabel>
+                  <div className="relative">
+                    <FormField
+                      className="hover:border-gray-200 dark:hover:border-gray-700"
+                      // disabled
+                      readOnly
+                      name="address"
+                      value={address || ""}
+                    />
+                    {geocodeFetcher.state === "loading" && <Spinner size="xs" className="absolute -left-5 top-2" />}
+                  </div>
+                </div>
+                <FormField name="customAddress" defaultValue={spot.address || ""} label="Or write a custom address" />
               </div>
             </div>
-            <FormField name="customAddress" defaultValue={spot.address || ""} label="Or write a custom address" />
-          </div>
+          ) : (
+            <div className="pt-2">
+              <FormFieldLabel name="address">Is the location incorrect?</FormFieldLabel>
+              <div className="flex flex-wrap items-center gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setIncorrectLocation(true)
+                    setIsLocationUnknown(false)
+                  }}
+                >
+                  Yes, and I know the correct location
+                </Button>
+                <p className="h-[intrinsic]">or</p>
+                <Button
+                  variant={isLocationUnknown ? "primary" : "outline"}
+                  onClick={() => setIsLocationUnknown(!isLocationUnknown)}
+                >
+                  Yes, but I don't know where it is
+                </Button>
+              </div>
+              <input type="hidden" name="isLocationUnknown" value={isLocationUnknown.toString()} />
+            </div>
+          )}
 
           <div className="space-y-0.5">
             <FormFieldLabel required>Type</FormFieldLabel>
@@ -153,7 +199,7 @@ export function SpotReportForm({
           </div>
           {doesSpotTypeRequireAmenities(type) && (
             <div className="space-y-0.5">
-              <FormFieldLabel required>Amenities</FormFieldLabel>
+              <FormFieldLabel>Amenities</FormFieldLabel>
               <div className="flex flex-wrap gap-1">
                 {Object.entries(AMENITIES).map(([key, label]) => (
                   <AmenitySelector
@@ -167,20 +213,26 @@ export function SpotReportForm({
               </div>
             </div>
           )}
-          <div className="space-y-0.5">
-            <FormFieldLabel required>Images</FormFieldLabel>
-            <p className="py-2 text-sm opacity-80">Select any images that are incorrect or innappropriate</p>
+          <div className="space-y-1">
+            <div>
+              <FormFieldLabel>Images</FormFieldLabel>
+              <p className="text-sm opacity-80">Flag any images that are incorrect or innappropriate</p>
+            </div>
 
-            {spot.images.map(({ path }) => (
-              <ImageField
-                className="h-[300px] overflow-hidden rounded"
-                errors={[]}
-                // onRemove={() => setImages(images.filter((image) => image.path !== path))}
-                defaultValue={path}
-                key={path}
-                name="image"
-              />
-            ))}
+            {spot.images.map(({ id, path }) => {
+              const base = "h-[300px] w-full cursor-pointer overflow-hidden rounded object-cover hover:opacity-80"
+              const className = merge(base, isFlagged(id) && "outline-solid opacity-80 outline outline-red-500")
+              return (
+                <div key={path} className="relative" onClick={() => handleClickImage(id)}>
+                  <div className="absolute left-2 top-2 z-10">
+                    <Button variant={isFlagged(id) ? "destructive" : "secondary"} leftIcon={<Flag className="sq-4" />}>
+                      {isFlagged(id) ? "Flagged" : "Flag"}
+                    </Button>
+                  </div>
+                  <img src={createImageUrl(path)} className={className} alt="spot image" />
+                </div>
+              )
+            })}
           </div>
 
           <FormError />
@@ -188,19 +240,11 @@ export function SpotReportForm({
         <div className="bg-background fixed bottom-0 left-0 z-10 w-full space-x-4 border-t px-6 py-4 md:w-1/2">
           <div className="flex-col">
             <div>
-              <FormField
-                required
-                name="notes"
-                label="Notes"
-                input={<Textarea rows={3} />}
-                onChange={(e) => setHasNotes(!!e.target.value)}
-              />
+              <FormField required name="notes" label="Notes" input={<Textarea rows={3} />} />
               <p className="py-2 text-sm opacity-80">Tell us more about what was wrong</p>
             </div>
             <div className="flex justify-end">
-              <FormButton size="lg" disabled={!hasNotes}>
-                Submit report
-              </FormButton>
+              <FormButton size="lg">Submit report</FormButton>
             </div>
           </div>
         </div>
@@ -231,34 +275,3 @@ export function SpotReportForm({
     </div>
   )
 }
-
-// function AmenitySelector({
-//   label,
-//   defaultIsSelected,
-//   value,
-//   Icon,
-// }: {
-//   label: string
-//   defaultIsSelected: boolean
-//   value: string
-//   Icon: RambleIcon | null
-// }) {
-//   const form = useFormErrors<typeof spotAmenitiesSchema>()
-//   const errors = form?.fieldErrors?.[value as keyof typeof form.fieldErrors]
-//   const [isSelected, setIsSelected] = React.useState(defaultIsSelected)
-//   return (
-//     <div>
-//       <Button
-//         leftIcon={Icon && <Icon size={20} />}
-//         variant={isSelected ? "primary" : "outline"}
-//         type="button"
-//         size="md"
-//         onClick={() => setIsSelected(!isSelected)}
-//       >
-//         {label}
-//       </Button>
-//       {errors && <ul id="type-error">{errors?.map((error, i) => <FormFieldError key={i}>{error}</FormFieldError>)}</ul>}
-//       <input type="hidden" name={value} value={String(isSelected)} />
-//     </div>
-//   )
-// }
