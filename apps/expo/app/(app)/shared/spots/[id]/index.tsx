@@ -15,7 +15,16 @@ import { StatusBar } from "expo-status-bar"
 import { Check, ChevronDown, ChevronLeft, Compass, Edit2, Heart, Languages, Star, Trash } from "lucide-react-native"
 
 import { type Spot } from "@ramble/database/types"
-import { AMENITIES, canManageSpot, displayRating, isPartnerSpot, languages, merge, useDisclosure } from "@ramble/shared"
+import {
+  AMENITIES,
+  canManageSpot,
+  displayRating,
+  displaySaved,
+  isPartnerSpot,
+  languages,
+  merge,
+  useDisclosure,
+} from "@ramble/shared"
 
 import { Icon } from "../../../../../components/Icon"
 import { LanguageSelector } from "../../../../../components/LanguageSelector"
@@ -132,13 +141,13 @@ export function SpotDetailScreen() {
             <SpotTypeBadge spot={spot} />
             <Heading className="text-2xl leading-7">{spot.name}</Heading>
             <View className="flex flex-row items-center space-x-2">
-              <View className="flex flex-row items-center space-x-1">
-                <Icon icon={Star} size={16} />
-                <Text className="text-sm">{displayRating(data.rating._avg.rating)}</Text>
-              </View>
               <View className="flex flex-row flex-wrap items-center space-x-1">
-                <Icon icon={Heart} size={16} />
-                <Text className="text-sm">{spot._count.listSpots || 0}</Text>
+                <Icon icon={Heart} size={16} fill={isDark ? "white" : "black"} />
+                <Text className="text-sm">{displaySaved(spot._count.listSpots) || 0}</Text>
+              </View>
+              <View className="flex flex-row items-center space-x-1">
+                <Icon icon={Star} size={16} fill={isDark ? "white" : "black"} />
+                <Text className="text-sm">{displayRating(data.rating._avg.rating)}</Text>
               </View>
             </View>
           </View>

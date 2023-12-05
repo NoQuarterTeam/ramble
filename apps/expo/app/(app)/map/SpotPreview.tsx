@@ -66,13 +66,13 @@ export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }
           </TouchableOpacity>
           <View className="flex flex-row items-center justify-between">
             <View className="flex flex-row items-center space-x-2">
-              <View className="flex flex-row items-center space-x-1">
-                <Icon icon={Star} size={16} />
-                <Text className="text-sm">{displayRating(spot.rating._avg.rating)}</Text>
-              </View>
               <View className="flex flex-row flex-wrap items-center space-x-1">
-                <Icon icon={Heart} size={16} />
+                <Icon icon={Heart} size={16} fill={isDark ? "white" : "black"} />
                 <Text className="text-sm">{spot._count.listSpots || 0}</Text>
+              </View>
+              <View className="flex flex-row items-center space-x-1">
+                <Icon icon={Star} size={16} fill={isDark ? "white" : "black"} />
+                <Text className="text-sm">{displayRating(spot.rating._avg.rating)}</Text>
               </View>
             </View>
 
