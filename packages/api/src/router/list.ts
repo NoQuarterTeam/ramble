@@ -50,7 +50,7 @@ export const listRouter = createTRPCRouter({
       }),
       ctx.prisma.$queryRaw<Array<SpotItemType>>`
         SELECT 
-          ${spotItemDistanceFromMeField(ctx.user)}
+          ${spotItemDistanceFromMeField(ctx.user)},
           ${spotItemSelectFields}
         FROM
           Spot
