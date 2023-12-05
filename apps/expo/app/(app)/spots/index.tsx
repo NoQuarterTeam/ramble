@@ -94,17 +94,19 @@ export function SpotsScreen() {
           style={{ width, height }}
         >
           <View className="rounded-xs w-[200px] bg-white px-4 py-2 shadow-md dark:bg-gray-950">
-            {Object.entries(SORT_OPTIONS).map(([key, label]) => (
-              <TouchableOpacity
-                key={key}
-                onPress={() => {
-                  setSort(key as keyof typeof SORT_OPTIONS)
-                  sortProps.onClose()
-                }}
-              >
-                <Text className={join("py-2 text-lg", sort === key && "underline")}>{label}</Text>
-              </TouchableOpacity>
-            ))}
+            {Object.entries(SORT_OPTIONS)
+              .filter(([key]) => (key === "near" ? !!me?.latitude && !!me?.longitude : true))
+              .map(([key, label]) => (
+                <TouchableOpacity
+                  key={key}
+                  onPress={() => {
+                    setSort(key as keyof typeof SORT_OPTIONS)
+                    sortProps.onClose()
+                  }}
+                >
+                  <Text className={join("py-2 text-lg", sort === key && "underline")}>{label}</Text>
+                </TouchableOpacity>
+              ))}
           </View>
         </TouchableOpacity>
       )}

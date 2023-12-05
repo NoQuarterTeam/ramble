@@ -46,7 +46,7 @@ export const spotItemSelectFields = Prisma.sql`
 
 export const spotItemDistanceFromMeField = (user?: Pick<User, "id" | "latitude" | "longitude"> | null) =>
   user?.latitude && user?.longitude
-    ? Prisma.sql`ST_DISTANCE(Spot.pointLocation, POINT("${user.longitude}", "${user.latitude}")) as distanceFromMe`
+    ? Prisma.sql`ST_DISTANCE_SPHERE(Spot.pointLocation, POINT(${user.longitude}, ${user.latitude})) * 0.001 as distanceFromMe`
     : Prisma.sql`null as distanceFromMe`
 
 export const spotListQuery = ({
@@ -69,6 +69,14 @@ export const spotListQuery = ({
         SpotType.FREE_CAMPING,
       ])}) AND ${publicSpotWhereClauseRaw(user?.id)}`
 
+  const whereWithDistanceSort =
+    sort === "near" && user?.latitude && user?.longitude
+      ? Prisma.sql`AND Spot.latitude BETWEEN ${user.latitude - 1}
+                    AND ${user.latitude + 1}
+                    AND Spot.longitude BETWEEN ${user.longitude - 1}
+                    AND ${user.longitude + 1}`
+      : Prisma.sql``
+
   const orderByClause = Prisma.sql`${
     sort === "latest"
       ? Prisma.sql`Spot.verifiedAt DESC, Spot.id`
@@ -89,6 +97,7 @@ export const spotListQuery = ({
       Spot
     WHERE
       ${whereClause}
+      ${whereWithDistanceSort}
     GROUP BY
       Spot.id
     ORDER BY

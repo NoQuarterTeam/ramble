@@ -46,25 +46,25 @@ export function SpotItem({ spot }: Props) {
         </div>
 
         <div className="space-y-0.5">
-          <div className="flex items-center justify-between gap-4">
-            <p className="truncate text-lg leading-tight">{spot.name}</p>
+          <div className="flex items-center justify-between gap-2">
+            <p className="truncate text-lg font-medium leading-tight">{spot.name}</p>
             <div className="flex items-center space-x-1.5">
               {spot.savedCount && spot.savedCount !== "0" && (
                 <div className="flex items-center space-x-1">
-                  <Heart className="sq-3.5 fill-black dark:fill-white" />
-                  <p className="font-light">{displaySaved(spot.savedCount)}</p>
+                  <Heart className="sq-3 fill-black dark:fill-white" />
+                  <p className="h-[18px] text-sm font-light">{displaySaved(spot.savedCount)}</p>
                 </div>
               )}
               {spot.rating && spot.rating !== "0" && (
                 <div className="flex items-center space-x-1">
-                  <Star className="sq-4 fill-black dark:fill-white" />
-                  <p className="font-light">{displayRating(spot.rating)}</p>
+                  <Star className="sq-3.5 fill-black dark:fill-white" />
+                  <p className="h-[18px] text-sm font-light">{displayRating(spot.rating)}</p>
                 </div>
               )}
             </div>
           </div>
           {spot.address && <p className="line-clamp-1 text-sm font-thin opacity-70">{spot.address}</p>}
-          {spot.distanceFromMe && <p className="text-sm font-thin opacity-70">{spot.distanceFromMe} km away</p>}
+          {spot.distanceFromMe && <p className="text-sm font-thin opacity-70">{Math.round(spot.distanceFromMe)} km away</p>}
         </div>
       </Link>
       <div className="absolute right-2 top-2">
