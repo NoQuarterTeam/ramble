@@ -240,11 +240,11 @@ export default function SpotDetail() {
                 {({ listsCount, rating }) => (
                   <div className="flex items-center space-x-2">
                     <div className="flex items-center space-x-1">
-                      <Star className="sq-4" />
+                      <Star className="sq-4 fill-black dark:fill-white" />
                       <p>{displayRating(rating)}</p>
                     </div>
                     <div className="flex items-center space-x-1">
-                      <Heart className="sq-4" />
+                      <Heart className="sq-4 fill-black dark:fill-white" />
                       <p>{listsCount || 0}</p>
                     </div>
                   </div>
@@ -378,7 +378,7 @@ export default function SpotDetail() {
               </Suspense>
               <p>·</p>
               <div className="flex items-center space-x-1">
-                <Star className="sq-5" />
+                <Star className="sq-5 fill-black dark:fill-white" />
                 <Suspense fallback={<p className="pt-1"> </p>}>
                   <Await resolve={stats}>{(val) => <p className="pt-1">{displayRating(val.rating)}</p>}</Await>
                 </Suspense>

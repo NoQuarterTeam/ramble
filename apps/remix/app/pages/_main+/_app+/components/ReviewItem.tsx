@@ -66,7 +66,7 @@ export function ReviewItem({ review }: Props) {
           </div>
         </div>
         <div className="hstack">
-          <Star className="sq-5" />
+          <Star className="sq-5 fill-black dark:fill-white" />
           <p>{review.rating}</p>
         </div>
       </div>
