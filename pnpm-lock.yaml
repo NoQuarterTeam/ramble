@@ -370,8 +370,8 @@ importers:
         specifier: 1.1.1
         version: 1.1.1
       '@vercel/remix':
-        specifier: 2.2.0
-        version: 2.2.0(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
+        specifier: 2.3.1
+        version: 2.3.1(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
       '@vercel/remix-run-dev':
         specifier: ^2.2.0
         version: 2.2.0(@remix-run/serve@2.2.0)(typescript@5.3.3)
@@ -5884,6 +5884,26 @@ packages:
       stream-slice: 0.1.2
       typescript: 5.3.3
 
+  /@remix-run/node@2.3.1(typescript@5.3.3):
+    resolution: {integrity: sha512-dXoNrmLrPblUM8UjgPzq3YBLXEGzm3HwtIt0iob1SlgKx0I5ii40JG0IXHDTI9f+fN9f/Ufx7Cjp0MGcUVXWVw==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      typescript: ^5.1.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@remix-run/server-runtime': 2.3.1(typescript@5.3.3)
+      '@remix-run/web-fetch': 4.4.1
+      '@remix-run/web-file': 3.1.0
+      '@remix-run/web-stream': 1.1.0
+      '@web3-storage/multipart-parser': 1.0.0
+      cookie-signature: 1.2.1
+      source-map-support: 0.5.21
+      stream-slice: 0.1.2
+      typescript: 5.3.3
+    dev: false
+
   /@remix-run/react@2.2.0(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3):
     resolution: {integrity: sha512-1nD5ihI0A1wUpFr9Eo9bquEtqjhjvg1OwFF7qDXXHgQ4Zh13y3MKO5dRmHf+Os999o0vqVJ+xSnVPN+Vbco3uA==}
     engines: {node: '>=18.0.0'}
@@ -7687,15 +7707,15 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@vercel/remix@2.2.0(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3):
-    resolution: {integrity: sha512-FmaGaJCLM8H3UrvYN9IPtdPgzJHhPeVl43Yt4g9cC/FKQGVLnGLsd5pAwWUl9ylkQGZxyfRx80UZ2+ByFP4PMA==}
+  /@vercel/remix@2.3.1(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-5ywdcJ2lqM348qhenKiBghiA4WbFRLQIsVkeWQhKWmpspYnSQMnTNsLe3hTUh5jgdJYey5eldObCKtkb7wCwTw==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: '*'
       react-dom: '*'
     dependencies:
-      '@remix-run/node': 2.2.0(typescript@5.3.3)
-      '@remix-run/server-runtime': 2.2.0(typescript@5.3.3)
+      '@remix-run/node': 2.3.1(typescript@5.3.3)
+      '@remix-run/server-runtime': 2.3.1(typescript@5.3.3)
       isbot: 3.7.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
