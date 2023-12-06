@@ -108,7 +108,7 @@
     "prettier": "3.1.0",
     "remix-flat-routes": "0.6.4",
     "tailwindcss": "3.3.2",
-    "typescript": "5.3.2"
+    "typescript": "5.3.3"
   },
   "sideEffects": false
 }
