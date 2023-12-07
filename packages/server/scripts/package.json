@@ -17,7 +17,7 @@
     "@ramble/eslint-config": "workspace:*",
     "@ramble/shared": "workspace:*",
     "@types/html-to-text": "9.0.4",
-    "@types/node": "18.19.2",
+    "@types/node": "18.19.3",
     "cheerio": "1.0.0-rc.12",
     "csv-stringify": "6.4.4",
     "dotenv-cli": "7.3.0",
