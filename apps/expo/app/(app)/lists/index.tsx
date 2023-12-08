@@ -1,5 +1,5 @@
 import * as React from "react"
-import { TouchableOpacity, View } from "react-native"
+import { TouchableOpacity, View, useColorScheme } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import { ChevronDown, PlusCircle } from "lucide-react-native"
 
@@ -23,6 +23,7 @@ export function ListsScreen() {
   const sortProps = useDisclosure()
   const [sort, setSort] = React.useState<keyof typeof SORT_OPTIONS>("mine")
   const { me } = useMe()
+  const isDark = useColorScheme() === "dark"
   const { push } = useRouter()
   const { data: lists, isLoading } = api.list.allByUser.useQuery(
     { username: me?.username || "", showFollowing: sort === "following" || undefined },
@@ -52,10 +53,18 @@ export function ListsScreen() {
         <TouchableOpacity
           activeOpacity={1}
           onPress={sortProps.onClose}
-          className="absolute inset-0 z-10 px-4 pt-[100px]"
+          className="absolute inset-0 z-10 px-4 pt-[110px]"
           style={{ width, height }}
         >
-          <View className="rounded-xs w-[200px] bg-white px-4 py-2 shadow-md dark:bg-gray-950">
+          <View
+            style={{
+              shadowOffset: { width: 0, height: 5 },
+              shadowRadius: 10,
+              shadowColor: isDark ? "black" : "gray",
+              shadowOpacity: isDark ? 0.7 : 0.5,
+            }}
+            className="bg-background dark:bg-background-dark w-[200px] rounded-sm px-4 py-2"
+          >
             {Object.entries(SORT_OPTIONS).map(([key, label]) => (
               <TouchableOpacity
                 key={key}

@@ -96,7 +96,6 @@ export const spotRouter = createTRPCRouter({
     .input(z.object({ skip: z.number().optional(), sort: z.enum(["latest", "rated", "saved", "near"]).optional() }))
     .query(async ({ ctx, input }) => {
       const sort = input.sort || "latest"
-
       try {
         const spots = await ctx.prisma.$queryRaw<Array<SpotItemType>>`
           ${spotListQuery({ user: ctx.user, sort, take: 20, skip: input.skip })}
@@ -170,8 +169,9 @@ export const spotRouter = createTRPCRouter({
         })
     }
     return {
-      // remove ...spot after new deploys
+      // --- remove ...spot after new deploys
       ...spot,
+      // ---
       spot,
       translatedDescription,
       descriptionHash,

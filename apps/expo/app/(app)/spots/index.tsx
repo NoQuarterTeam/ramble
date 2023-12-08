@@ -1,5 +1,5 @@
 import * as React from "react"
-import { TouchableOpacity, View } from "react-native"
+import { TouchableOpacity, View, useColorScheme } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import { ChevronDown, PlusCircle } from "lucide-react-native"
 
@@ -16,6 +16,7 @@ import { api } from "../../../lib/api"
 import { height, isTablet, width } from "../../../lib/device"
 import { useMe } from "../../../lib/hooks/useMe"
 import { useRouter } from "../../router"
+import { useAsyncStorage } from "../../../lib/hooks/useAsyncStorage"
 
 const SORT_OPTIONS: { [key in SpotListSort]: string } = {
   latest: "latest",
@@ -26,9 +27,10 @@ const SORT_OPTIONS: { [key in SpotListSort]: string } = {
 
 export function SpotsScreen() {
   const sortProps = useDisclosure()
-  const [sort, setSort] = React.useState<keyof typeof SORT_OPTIONS>("latest")
+  const isDark = useColorScheme() === "dark"
+  const [sort, setSort, isReady] = useAsyncStorage<keyof typeof SORT_OPTIONS>("ramble.spots.sort", "latest")
   const { push } = useRouter()
-  const { data: initialSpots, isLoading } = api.spot.list.useQuery({ skip: 0, sort })
+  const { data: initialSpots, isLoading } = api.spot.list.useQuery({ skip: 0, sort }, { enabled: isReady })
 
   const [spots, setSpots] = React.useState(initialSpots)
   const { me } = useMe()
@@ -39,9 +41,9 @@ export function SpotsScreen() {
   const utils = api.useUtils()
 
   const handleLoadMore = React.useCallback(async () => {
-    const newSpots = await utils.spot.list.fetch({ skip: spots?.length || 0, sort: "latest" })
+    const newSpots = await utils.spot.list.fetch({ skip: spots?.length || 0, sort })
     setSpots([...(spots || []), ...newSpots])
-  }, [spots, utils.spot.list])
+  }, [spots, utils.spot.list, sort])
 
   if (!me)
     return (
@@ -90,10 +92,18 @@ export function SpotsScreen() {
         <TouchableOpacity
           activeOpacity={1}
           onPress={sortProps.onClose}
-          className="absolute inset-0 z-10 px-4 pt-[100px]"
+          className="absolute inset-0 z-10 px-4 pt-[110px]"
           style={{ width, height }}
         >
-          <View className="rounded-xs w-[200px] bg-white px-4 py-2 shadow-md dark:bg-gray-950">
+          <View
+            style={{
+              shadowOffset: { width: 0, height: 5 },
+              shadowRadius: 10,
+              shadowColor: isDark ? "black" : "gray",
+              shadowOpacity: isDark ? 0.7 : 0.5,
+            }}
+            className="bg-background dark:bg-background-dark w-[200px] rounded-sm px-4 py-2"
+          >
             {Object.entries(SORT_OPTIONS)
               .filter(([key]) => (key === "near" ? !!me?.latitude && !!me?.longitude : true))
               .map(([key, label]) => (
