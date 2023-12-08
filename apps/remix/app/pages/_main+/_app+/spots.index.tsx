@@ -67,8 +67,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     const line = lineString(coords)
     bounds = bbox(line) as unknown as LngLatLike
   }
-  console.log(spots[0]?.distanceFromMe)
-
   return json(
     { spots, bounds },
     {
