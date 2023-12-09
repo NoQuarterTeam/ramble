@@ -32,6 +32,7 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
 
   const onClear = () => {
     setSearch("")
+    inputRef.current?.blur()
     Keyboard.dismiss()
     searchWidth.value = 0
   }
@@ -82,6 +83,7 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
           activeOpacity={0.8}
           onPress={() => {
             searchWidth.value = width - 32
+            inputRef.current?.focus()
           }}
           className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"
         >
