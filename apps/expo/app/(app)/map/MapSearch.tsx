@@ -73,7 +73,7 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={onClear}
-          className="sq-12 bg-background dark:bg-background-dark  flex flex-row items-center justify-center rounded-full"
+          className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"
         >
           <Icon icon={X} size={22} />
         </TouchableOpacity>
