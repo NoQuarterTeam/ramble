@@ -1,5 +1,5 @@
 import * as React from "react"
-import { TouchableOpacity, useColorScheme, View, type ViewProps } from "react-native"
+import { TouchableOpacity, Share as RNShare, useColorScheme, View, type ViewProps, Alert } from "react-native"
 import { showLocation } from "react-native-map-link"
 import Animated, {
   Extrapolation,
@@ -12,7 +12,7 @@ import { useQuery } from "@tanstack/react-query"
 import dayjs from "dayjs"
 import * as Location from "expo-location"
 import { StatusBar } from "expo-status-bar"
-import { Check, ChevronDown, ChevronLeft, Compass, Edit2, Heart, Languages, Star, Trash } from "lucide-react-native"
+import { Check, ChevronDown, ChevronLeft, Compass, Edit2, Heart, Languages, Share, Star, Trash } from "lucide-react-native"
 
 import { type Spot } from "@ramble/database/types"
 import {
@@ -276,7 +276,7 @@ export function SpotDetailScreen() {
       />
 
       <View className="absolute left-0 right-0 top-14 flex flex-row justify-between px-4">
-        <View className="flex flex-row items-center space-x-0.5">
+        <View className="flex flex-1 flex-row items-center space-x-0.5">
           <TouchableOpacity
             onPress={router.canGoBack() ? router.goBack : () => router.navigate("AppLayout")}
             activeOpacity={0.8}
@@ -284,20 +284,32 @@ export function SpotDetailScreen() {
           >
             {router.canGoBack() ? <Icon icon={ChevronLeft} className="pr-1" /> : <Icon icon={ChevronDown} className="pr-1" />}
           </TouchableOpacity>
-          <Animated.View style={[{ width: width - 148 }, nameStyle]}>
+          <Animated.View style={[nameStyle]}>
             <Text className="text-lg text-black dark:text-white" numberOfLines={1}>
               {spot.name}
             </Text>
           </Animated.View>
         </View>
-        <View className="flex flex-row items-center space-x-3">
-          {/* <TouchableOpacity
-            // onPress={handleGetDirections}
+        <View className="flex flex-shrink-0 flex-row items-center space-x-3">
+          <TouchableOpacity
+            onPress={async () => {
+              try {
+                await RNShare.share({
+                  title: spot.name,
+                  message: "Check out this spot",
+                  url: FULL_WEB_URL + `/spots/${spot.id}`,
+                })
+              } catch (error: unknown) {
+                if (error instanceof Error) {
+                  Alert.alert(error.message)
+                }
+              }
+            }}
             activeOpacity={0.8}
-            className="sq-8 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
+            className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
           >
-            <Icon icon={Share} size={20}  />
-          </TouchableOpacity> */}
+            <Icon icon={Share} size={20} />
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={handleGetDirections}
             activeOpacity={0.8}
