@@ -55,10 +55,14 @@ export function SpotsScreen() {
   return (
     <TabView
       title={
-        <TouchableOpacity onPress={sortProps.onOpen} className="flex flex-row items-center">
-          <BrandHeading className="py-2 text-4xl">{SORT_OPTIONS[sort]}</BrandHeading>
-          <Icon icon={ChevronDown} size={20} color="primary" />
-        </TouchableOpacity>
+        isReady ? (
+          <TouchableOpacity onPress={sortProps.onOpen} className="flex flex-row items-center">
+            <BrandHeading className="py-2 text-4xl">{SORT_OPTIONS[sort]}</BrandHeading>
+            <Icon icon={ChevronDown} size={20} color="primary" />
+          </TouchableOpacity>
+        ) : (
+          <BrandHeading className="py-2 text-4xl"> </BrandHeading>
+        )
       }
       rightElement={
         <TouchableOpacity onPress={() => push("NewSpotLayout")}>
