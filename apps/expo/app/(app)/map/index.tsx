@@ -35,6 +35,7 @@ import { useMe } from "../../../lib/hooks/useMe"
 import { usePreferences } from "../../../lib/hooks/usePreferences"
 import { useRouter } from "../../router"
 import { type Filters, initialFilters, MapFilters } from "./MapFilters"
+import { MapSearch } from "./MapSearch"
 import { SpotPreview } from "./SpotPreview"
 
 type Cluster = RouterOutputs["spot"]["clusters"][number]
@@ -269,11 +270,17 @@ export function MapScreen() {
       {((isAndroid && isFetching) || (!isAndroid && isFetching && !!!clusters)) && (
         <View
           pointerEvents="none"
-          className="absolute left-4 top-10 flex flex-col items-center justify-center rounded-full bg-white p-2 dark:bg-gray-800"
+          className="absolute right-4 top-14 flex flex-col items-center justify-center rounded-full bg-white p-2 dark:bg-gray-800"
         >
           <Spinner />
         </View>
       )}
+
+      <MapSearch
+        onSearch={(center) => {
+          camera.current?.setCamera({ animationDuration: 600, zoomLevel: 14, centerCoordinate: center })
+        }}
+      />
 
       <TouchableOpacity
         activeOpacity={0.8}
@@ -288,24 +295,24 @@ export function MapScreen() {
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={mapLayerModalProps.onOpen}
-          className="sq-12 bg-background flex flex-row items-center justify-center rounded-full"
+          className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"
         >
-          <Icon icon={Layers} size={20} color="black" />
+          <Icon icon={Layers} size={20} />
           {Object.values(preferences).filter(Boolean).length > 0 && (
-            <View className="sq-5 bg-background absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-700">
-              <Text className="text-xs text-black">{Object.values(preferences).filter(Boolean).length}</Text>
+            <View className="sq-5 bg-background dark:bg-background-dark absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-700">
+              <Text className="text-xs">{Object.values(preferences).filter(Boolean).length}</Text>
             </View>
           )}
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={filterModalProps.onOpen}
-          className="sq-12 bg-background flex flex-row items-center justify-center rounded-full"
+          className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"
         >
-          <Icon icon={Settings2} size={20} color="black" />
+          <Icon icon={Settings2} size={20} />
           {filterCount > 0 && (
-            <View className="sq-5 bg-background absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-700">
-              <Text className="text-xs text-black">{filterCount}</Text>
+            <View className="sq-5 bg-background dark:bg-background-dark absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-700">
+              <Text className="text-xs ">{filterCount}</Text>
             </View>
           )}
         </TouchableOpacity>
@@ -313,9 +320,9 @@ export function MapScreen() {
 
       <TouchableOpacity
         onPress={handleSetUserLocation}
-        className="sq-12 bg-background absolute bottom-3 right-3 flex flex-row items-center justify-center rounded-full"
+        className="sq-12 bg-background dark:bg-background-dark absolute bottom-3 right-3 flex flex-row items-center justify-center rounded-full"
       >
-        <Icon icon={Navigation} size={20} color="black" />
+        <Icon icon={Navigation} size={20} />
       </TouchableOpacity>
 
       {activeSpotId && <SpotPreview id={activeSpotId} onClose={() => setActiveSpotId(null)} />}

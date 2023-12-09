@@ -20,13 +20,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const jsonResponse = (await res.json()) as FeatureCollection
 
+  console.log(jsonResponse.features[0])
+
   const places = jsonResponse.features.map((place) => ({
     name: place.place_name,
     center: place.center,
   }))
   return json(places || "Unknown address", {
     headers: {
-      "Cache-Control": cacheHeader({ public: true, maxAge: "1hour", sMaxage: "1hour", staleWhileRevalidate: "1min" }),
+      "Cache-Control": cacheHeader({ public: true, maxAge: "1week", sMaxage: "1week" }),
     },
   })
 }

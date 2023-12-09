@@ -1,5 +1,5 @@
 import * as React from "react"
-import { TouchableOpacity, View, useColorScheme } from "react-native"
+import { TouchableOpacity, useColorScheme, View } from "react-native"
 import { useQuery } from "@tanstack/react-query"
 import dayjs from "dayjs"
 import { Star, User2 } from "lucide-react-native"

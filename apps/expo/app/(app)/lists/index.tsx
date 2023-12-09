@@ -1,5 +1,5 @@
 import * as React from "react"
-import { TouchableOpacity, View, useColorScheme } from "react-native"
+import { TouchableOpacity, useColorScheme, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import { ChevronDown, PlusCircle } from "lucide-react-native"
 

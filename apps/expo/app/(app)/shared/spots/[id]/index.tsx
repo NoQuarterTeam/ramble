@@ -1,5 +1,5 @@
 import * as React from "react"
-import { TouchableOpacity, Share as RNShare, useColorScheme, View, type ViewProps, Alert } from "react-native"
+import { Alert, Share as RNShare, TouchableOpacity, useColorScheme, View, type ViewProps } from "react-native"
 import { showLocation } from "react-native-map-link"
 import Animated, {
   Extrapolation,

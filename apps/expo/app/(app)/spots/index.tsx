@@ -1,5 +1,5 @@
 import * as React from "react"
-import { TouchableOpacity, View, useColorScheme } from "react-native"
+import { TouchableOpacity, useColorScheme, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import { ChevronDown, PlusCircle } from "lucide-react-native"
 
@@ -14,9 +14,9 @@ import { TabView } from "../../../components/ui/TabView"
 import { Text } from "../../../components/ui/Text"
 import { api } from "../../../lib/api"
 import { height, isTablet, width } from "../../../lib/device"
+import { useAsyncStorage } from "../../../lib/hooks/useAsyncStorage"
 import { useMe } from "../../../lib/hooks/useMe"
 import { useRouter } from "../../router"
-import { useAsyncStorage } from "../../../lib/hooks/useAsyncStorage"
 
 const SORT_OPTIONS: { [key in SpotListSort]: string } = {
   latest: "latest",
