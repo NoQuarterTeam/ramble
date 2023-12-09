@@ -42,7 +42,7 @@ export function ListItem({ list }: Props) {
               />
             ) : (
               <View className="sq-6 flex items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
-                <Icon icon={User2} />
+                <Icon icon={User2} size={14} />
               </View>
             )}
             <Text className="text-base">{list.creator.firstName}</Text>
