@@ -1,5 +1,5 @@
 import * as React from "react"
-import { TextInput, TouchableOpacity, View } from "react-native"
+import { Keyboard, TextInput, TouchableOpacity, View } from "react-native"
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { useQuery } from "@tanstack/react-query"
 import { Search, X } from "lucide-react-native"
@@ -18,9 +18,11 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
     width: withTiming(searchWidth.value, { duration: 100 }),
   }))
 
-  const { data, isLoading, isFetching } = useQuery({
+  const { data, isFetching } = useQuery({
     enabled: !!search,
     queryKey: ["map-search", { search }],
+    cacheTime: Infinity,
+    staleTime: Infinity,
     queryFn: async () => {
       const res = await fetch(`${FULL_WEB_URL}/api/mapbox/location-search?search=${search}`)
       return res.json() as Promise<{ name: string; center: [number, number] }[]>
@@ -30,6 +32,7 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
 
   const onClear = () => {
     setSearch("")
+    Keyboard.dismiss()
     searchWidth.value = 0
   }
 
@@ -82,7 +85,7 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
           }}
           className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"
         >
-          {isLoading || isFetching ? <Spinner /> : <Icon icon={Search} size={22} />}
+          {isFetching ? <Spinner /> : <Icon icon={Search} size={22} />}
         </TouchableOpacity>
       </View>
     </>
