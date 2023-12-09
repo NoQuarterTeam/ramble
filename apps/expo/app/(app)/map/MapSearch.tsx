@@ -62,7 +62,6 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
           value={search}
           onChangeText={setSearch}
           ref={inputRef}
-          autoFocus
           placeholder="Search a location"
           className="font-500 text-black dark:text-white"
           placeholderTextColor="#666"
