@@ -42,7 +42,7 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
   return (
     <>
       {data && !!search && (
-        <View className="bg-background dark:bg-background-dark absolute left-4 right-4 top-14 rounded-[24px] p-3 pt-12">
+        <View className="absolute left-4 right-4 top-14 rounded-[24px] bg-gray-50 p-2 pt-12 dark:bg-gray-900">
           {data.map((item) => (
             <Button
               onPress={() => {
