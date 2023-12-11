@@ -9,6 +9,7 @@ import { Button } from "../../../components/ui/Button"
 import { Spinner } from "../../../components/ui/Spinner"
 import { FULL_WEB_URL } from "../../../lib/config"
 import { width } from "../../../lib/device"
+import { useKeyboardController } from "../../../lib/hooks/useKeyboardController"
 
 export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) => void }) {
   const [search, setSearch] = React.useState("")
@@ -36,7 +37,7 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
     Keyboard.dismiss()
     searchWidth.value = 0
   }
-
+  useKeyboardController()
   const inputRef = React.useRef<TextInput>(null)
 
   return (
