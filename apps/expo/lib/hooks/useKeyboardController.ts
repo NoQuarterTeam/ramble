@@ -6,11 +6,10 @@ export function useKeyboardController() {
   const onFocusEffect = React.useCallback(() => {
     AvoidSoftInput.setEnabled(true)
     AvoidSoftInput.setAvoidOffset(100)
-    AvoidSoftInput.setShouldMimicIOSBehavior(true)
+
     return () => {
       AvoidSoftInput.setEnabled(false)
       AvoidSoftInput.setAvoidOffset(0)
-      AvoidSoftInput.setShouldMimicIOSBehavior(false)
     }
   }, [])
 

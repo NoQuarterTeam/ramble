@@ -6,9 +6,9 @@ import { Search, X } from "lucide-react-native"
 
 import { Icon } from "../../../components/Icon"
 import { Button } from "../../../components/ui/Button"
+import { Spinner } from "../../../components/ui/Spinner"
 import { FULL_WEB_URL } from "../../../lib/config"
 import { width } from "../../../lib/device"
-import { Spinner } from "../../../components/ui/Spinner"
 
 export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) => void }) {
   const [search, setSearch] = React.useState("")
