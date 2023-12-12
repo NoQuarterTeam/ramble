@@ -33,7 +33,6 @@
   ],
   "ignoreDeps": [
     "@expo/config-plugins",
-    "@prisma/adapter-planetscale",
     "@react-email/components",
     "@react-native-async-storage/async-storage",
     "@sentry/react-native",
@@ -63,7 +62,6 @@
     "react-native-svg",
     "react-native-web",
     "react-native",
-    "remix-utils",
     "sharp",
     "sentry-expo",
     "tailwindcss",
