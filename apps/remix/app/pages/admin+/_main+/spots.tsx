@@ -27,6 +27,7 @@ import { getTableParams } from "~/lib/table"
 import { useTheme } from "~/lib/theme"
 import type { ActionFunctionArgs, LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
+import { cacheHeader } from "pretty-cache-header"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const schema = z.object({ type: z.string().optional(), unverified: zx.BoolAsString.optional() })
@@ -65,7 +66,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     count: db.spot.count({ where, take: undefined, skip: undefined }),
     unverifiedSpotsCount: db.spot.count({ where: { ...where, verifiedAt: null }, take: undefined, skip: undefined }),
   })
-  return json(data)
+  return json(data, request, {
+    headers: {
+      "cache-control": cacheHeader({ maxAge: "1 hour", sMaxage: "1 hour" }),
+    },
+  })
 }
 
 enum Actions {
@@ -116,6 +121,7 @@ const columns = [
   columnHelper.accessor((row) => row.description, {
     id: "description",
     size: 400,
+    maxSize: 400,
     enableSorting: false,
     cell: (info) => info.getValue(),
     header: () => "Description",
@@ -229,7 +235,7 @@ export default function Spots() {
         </Form>
 
         <div>
-          <Search className="max-w-[400px]" />
+          <Search />
         </div>
       </div>
       <Table data={spots} count={count} columns={columns} ExpandComponent={RenderSubComponent} />

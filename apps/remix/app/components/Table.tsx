@@ -40,82 +40,83 @@ export function Table<T>({
   })
   return (
     <Tile className="space-y-1 p-2">
-      <table className="w-full min-w-[1000px] table-fixed">
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  colSpan={header.colSpan}
-                  style={{ width: header.getSize() }}
-                  onClick={
-                    header.column.getCanSort()
-                      ? () => {
-                          const newSearchParams = queryString.stringify({
-                            ...queryString.parse(searchParams.toString()),
-                            orderBy: header.column.id,
-                            order:
-                              orderBy && orderBy !== header.column.id
-                                ? order || "desc"
-                                : order === "asc" || !order
-                                  ? "desc"
-                                  : "asc",
-                          })
-                          setSearchParams(newSearchParams)
-                        }
-                      : undefined
-                  }
-                >
-                  <div
-                    className={join(
-                      "mb-1 flex items-center justify-between whitespace-nowrap px-2 py-1 text-left font-medium",
-                      header.column.getCanSort() &&
-                        "rounded-xs cursor-pointer select-none hover:bg-gray-100 dark:hover:bg-gray-700",
-                    )}
+      <div className="scrollbar-hide w-full overflow-x-scroll">
+        <table className="w-full">
+          <thead>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th
+                    key={header.id}
+                    colSpan={header.colSpan}
+                    style={{ width: header.getSize() }}
+                    onClick={
+                      header.column.getCanSort()
+                        ? () => {
+                            const newSearchParams = queryString.stringify({
+                              ...queryString.parse(searchParams.toString()),
+                              orderBy: header.column.id,
+                              order:
+                                orderBy && orderBy !== header.column.id
+                                  ? order || "desc"
+                                  : order === "asc" || !order
+                                    ? "desc"
+                                    : "asc",
+                            })
+                            setSearchParams(newSearchParams)
+                          }
+                        : undefined
+                    }
                   >
-                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                    {orderBy && order && header.column.getCanSort() && header.column.id === orderBy ? (
-                      <span className="w-4">{order === "asc" ? <MoveUp size={16} /> : <MoveDown size={16} />}</span>
-                    ) : (
-                      <span className="w-4" />
-                    )}
-                  </div>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.length === 0 ? (
-            <tr>
-              <td colSpan={table.getAllFlatColumns().length} className="p-8 text-center">
-                No items found
-              </td>
-            </tr>
-          ) : (
-            table.getRowModel().rows.map((row, i) => (
-              <React.Fragment key={row.id}>
-                <tr className={join(i % 2 === 0 ? "bg-gray-100 dark:bg-gray-700/70" : "bg-background")}>
-                  {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="truncate px-2 py-1" style={{ width: cell.column.getSize() }}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </td>
-                  ))}
-                </tr>
-                {ExpandComponent && row.getIsExpanded() && (
-                  <tr className={join(i % 2 === 0 ? "bg-gray-100 dark:bg-gray-700" : "bg-background")}>
-                    <td style={{ maxWidth: table.getTotalSize() }} colSpan={row.getVisibleCells().length}>
-                      {ExpandComponent && <ExpandComponent row={row} />}
-                    </td>
+                    <div
+                      className={join(
+                        "mb-1 flex items-center justify-between whitespace-nowrap px-2 py-1 text-left font-medium",
+                        header.column.getCanSort() &&
+                          "rounded-xs cursor-pointer select-none hover:bg-gray-100 dark:hover:bg-gray-700",
+                      )}
+                    >
+                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                      {orderBy && order && header.column.getCanSort() && header.column.id === orderBy ? (
+                        <span className="w-4">{order === "asc" ? <MoveUp size={16} /> : <MoveDown size={16} />}</span>
+                      ) : (
+                        <span className="w-4" />
+                      )}
+                    </div>
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.length === 0 ? (
+              <tr>
+                <td colSpan={table.getAllFlatColumns().length} className="p-8 text-center">
+                  No items found
+                </td>
+              </tr>
+            ) : (
+              table.getRowModel().rows.map((row, i) => (
+                <React.Fragment key={row.id}>
+                  <tr className={join(i % 2 === 0 ? "bg-gray-100 dark:bg-gray-700/70" : "bg-background")}>
+                    {row.getVisibleCells().map((cell) => (
+                      <td key={cell.id} className="truncate px-2 py-1" style={{ maxWidth: cell.column.columnDef.maxSize }}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </td>
+                    ))}
                   </tr>
-                )}
-              </React.Fragment>
-            ))
-          )}
-        </tbody>
-      </table>
-
+                  {ExpandComponent && row.getIsExpanded() && (
+                    <tr className={join(i % 2 === 0 ? "bg-gray-100 dark:bg-gray-700" : "bg-background")}>
+                      <td style={{ maxWidth: table.getTotalSize() }} colSpan={row.getVisibleCells().length}>
+                        {ExpandComponent && <ExpandComponent row={row} />}
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
       <Pagination count={count} />
     </Tile>
   )
@@ -155,9 +156,9 @@ function Pagination({ count }: { count: number }) {
   return (
     <div className="flex items-center justify-between px-2">
       <p>{count} items</p>
-      <div className="flex items-center gap-2">
-        <Form className="flex items-center gap-2">
-          <span className="flex items-center gap-1">
+      <div className="flex items-center gap-1">
+        <Form className="flex items-center gap-1">
+          <span className="flex items-center gap-1 text-sm">
             <div>Page</div>
             <strong>{currentPage}</strong>
             of
@@ -165,7 +166,7 @@ function Pagination({ count }: { count: number }) {
           </span>
           <ExistingSearchParams exclude={["page"]} />
           <IconButton
-            size="sm"
+            size="xs"
             name="page"
             value="1"
             type="submit"
@@ -175,7 +176,7 @@ function Pagination({ count }: { count: number }) {
             disabled={currentPage === 1}
           />
           <IconButton
-            size="sm"
+            size="xs"
             name="page"
             value={currentPage - 1}
             type="submit"
@@ -190,7 +191,7 @@ function Pagination({ count }: { count: number }) {
             return (
               <IconButton
                 variant={isCurrentPage ? "secondary" : "outline"}
-                size="sm"
+                size="xs"
                 name="page"
                 value={pageNumber}
                 type="submit"
@@ -202,7 +203,7 @@ function Pagination({ count }: { count: number }) {
             )
           })}
           <IconButton
-            size="sm"
+            size="xs"
             aria-label="next page"
             name="page"
             value={currentPage + 1}
@@ -212,7 +213,7 @@ function Pagination({ count }: { count: number }) {
             disabled={currentPage === noOfPages}
           />
           <IconButton
-            size="sm"
+            size="xs"
             icon={<ChevronsRight size={16} />}
             aria-label="last page"
             variant="outline"
@@ -226,7 +227,7 @@ function Pagination({ count }: { count: number }) {
         <Form>
           <ExistingSearchParams exclude={["take"]} />
           <Select
-            size="sm"
+            size="xs"
             name="take"
             value={take}
             onChange={(e) => e.currentTarget.form?.dispatchEvent(new Event("submit", { bubbles: true }))}
