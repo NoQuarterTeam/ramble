@@ -22,7 +22,7 @@ export function Search({ placeholder, name = "search", ...props }: InputProps) {
           key={params.get(name) || ""}
           defaultValue={params.get(name) || ""}
           {...props}
-          className={merge("px-9", props.className)}
+          className={merge("min-w-[100px] pl-9", !!params.get(name) && "pr-9", props.className)}
         />
       </Form>
       <Form className="center absolute right-1 top-0 h-full">

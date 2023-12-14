@@ -59,7 +59,7 @@ export default function AdminLayout() {
           </themeFetcher.Form>
         </div>
       </div>
-      <div className="ml-[50px] w-full md:ml-[200px]">
+      <div className="w-full pl-[50px] md:pl-[200px]">
         <Outlet />
       </div>
     </div>
