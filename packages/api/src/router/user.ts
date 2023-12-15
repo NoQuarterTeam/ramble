@@ -3,7 +3,13 @@ import Supercluster from "supercluster"
 import { z } from "zod"
 
 import { clusterSchema, updateUserSchema, userSchema } from "@ramble/server-schemas"
-import { createAuthToken, generateBlurHash, sendAccountVerificationEmail, sendSlackMessage } from "@ramble/server-services"
+import {
+  createAuthToken,
+  generateBlurHash,
+  sendAccountVerificationEmail,
+  sendSlackMessage,
+  updateLoopsContact,
+} from "@ramble/server-services"
 import { userInterestFields } from "@ramble/shared"
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
@@ -46,6 +52,7 @@ export const userRouter = createTRPCRouter({
       avatarBlurHash = await generateBlurHash(input.avatar)
     }
     const user = await ctx.prisma.user.update({ where: { id: ctx.user.id }, data: { ...input, avatarBlurHash } })
+    void updateLoopsContact({ userId: user.id, email: user.email, ...input })
     return user
   }),
   followers: publicProcedure.input(userSchema.pick({ username: true })).query(async ({ ctx, input }) => {

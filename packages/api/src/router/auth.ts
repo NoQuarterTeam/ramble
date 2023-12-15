@@ -7,9 +7,11 @@ import { loginSchema, registerSchema } from "@ramble/server-schemas"
 import {
   createAccessRequest,
   createAuthToken,
+  deleteLoopsContact,
   generateInviteCodes,
   sendAccessRequestConfirmationEmail,
   sendSlackMessage,
+  updateLoopsContact,
 } from "@ramble/server-services"
 
 import { createTRPCRouter, publicProcedure } from "../trpc"
@@ -59,6 +61,10 @@ export const authRouter = createTRPCRouter({
     const codes = generateInviteCodes(user.id)
     await ctx.prisma.inviteCode.createMany({ data: codes.map((c) => ({ code: c, ownerId: user.id })) })
     const token = createAuthToken({ id: user.id })
+    if (accessRequest && accessRequest.email !== user.email) {
+      void deleteLoopsContact({ email: accessRequest.email })
+    }
+    void updateLoopsContact({ ...user, signedUpAt: user.createdAt, userGroup: "beta", userId: user.id })
     sendSlackMessage(`🔥 @${user.username} signed up!`)
     return { user: user, token }
   }),

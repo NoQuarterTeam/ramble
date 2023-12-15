@@ -1,3 +1,4 @@
+import { updateLoopsContact } from "@ramble/server-services"
 import { db } from "~/lib/db.server"
 import { decryptToken } from "~/lib/jwt.server"
 import { redirect } from "~/lib/remix.server"
@@ -15,5 +16,6 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   const user = await db.user.findUnique({ where: { id } })
   if (!user) return redirect("/")
   await db.user.update({ where: { id }, data: { isVerified: true } })
+  void updateLoopsContact({ email: user.email, isVerified: true })
   return redirect("/map/verified")
 }

@@ -72,7 +72,7 @@ export default function AccountInvite() {
 
 function InviteCodeButton(props: { code: string }) {
   const config = useConfig()
-  const link = config.FULL_WEB_URL + "/register?code=" + props.code
+  const link = config.FULL_WEB_URL + "/register/" + props.code
   const [isCopied, copy] = useClipboard(link)
 
   return (

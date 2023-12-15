@@ -1,5 +1,5 @@
 import { prisma } from "@ramble/database"
-import { generateBlurHash } from "@ramble/api/src/services/generateBlurHash.server"
+import { generateBlurHash } from "@ramble/server-services"
 
 async function main() {
   const images = await prisma.spotImage.findMany({

@@ -1,16 +1,22 @@
-import { Link, useSearchParams } from "@remix-run/react"
+import { Link, useLoaderData } from "@remix-run/react"
 import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
 import { registerSchema } from "@ramble/server-schemas"
-import { generateInviteCodes, hashPassword, sendSlackMessage } from "@ramble/server-services"
+import {
+  deleteLoopsContact,
+  generateInviteCodes,
+  hashPassword,
+  sendSlackMessage,
+  updateLoopsContact,
+} from "@ramble/server-services"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { createAction, createActions, formError } from "~/lib/form.server"
-import { redirect } from "~/lib/remix.server"
-import type { ActionFunctionArgs, MetaFunction } from "~/lib/vendor/vercel.server"
+import { json, redirect } from "~/lib/remix.server"
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "~/lib/vendor/vercel.server"
 import { getUserSession } from "~/services/session/session.server"
 
 export const meta: MetaFunction = () => {
@@ -22,6 +28,15 @@ export const headers = () => {
   }
 }
 
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
+  const accessRequest = await db.accessRequest.findFirst({
+    where: { code: params.code },
+    select: { code: true, email: true, userId: true },
+  })
+  if (!accessRequest) throw json(null, request, { flash: { title: "Invalid code", description: "Please try again" } })
+  if (accessRequest.userId) throw json(null, request, { flash: { title: "Code already used", description: "Please try again" } })
+  return json({ code: accessRequest.code, email: accessRequest.email })
+}
 enum Actions {
   register = "register",
 }
@@ -44,7 +59,7 @@ export const action = ({ request }: ActionFunctionArgs) =>
           const user = await db.user.create({
             data: {
               ...data,
-              isVerified: true,
+              isVerified: true, // temp
               usedInviteCode: inviteCode ? { connect: { id: inviteCode.id } } : undefined,
               password,
               lists: { create: { name: "Favourites", description: "All my favourite spots" } },
@@ -61,6 +76,10 @@ export const action = ({ request }: ActionFunctionArgs) =>
               data: { acceptedAt: new Date(), user: { connect: { id: user.id } } },
             })
 
+          if (accessRequest && accessRequest.email !== user.email) {
+            void deleteLoopsContact({ email: accessRequest.email })
+          }
+          void updateLoopsContact({ ...user, signedUpAt: user.createdAt, userGroup: "beta", userId: user.id })
           const codes = generateInviteCodes(user.id)
           await db.inviteCode.createMany({ data: codes.map((c) => ({ code: c, ownerId: user.id })) })
           const { setUser } = await getUserSession(request)
@@ -75,7 +94,7 @@ export const action = ({ request }: ActionFunctionArgs) =>
   })
 
 export default function Register() {
-  const [searchParams] = useSearchParams()
+  const { code, email } = useLoaderData<typeof loader>()
 
   return (
     <Form className="space-y-2">
@@ -85,12 +104,12 @@ export default function Register() {
         autoCapitalize="none"
         className="uppercase"
         required
-        defaultValue={searchParams.get("code") || ""}
+        defaultValue={code}
         label="Invite code"
         name="code"
         placeholder="1F54AF3G"
       />
-      <FormField autoCapitalize="none" required label="Email address" name="email" placeholder="jim@gmail.com" />
+      <FormField autoCapitalize="none" defaultValue={email} required label="Email address" name="email" />
       <FormField required label="Password" name="password" type="password" placeholder="********" />
       <input name="passwordConfirmation" className="hidden" />
       <FormField autoCapitalize="none" required label="Choose a username" name="username" placeholder="Jim93" />
