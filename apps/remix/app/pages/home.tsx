@@ -33,10 +33,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const accessRequest = await db.accessRequest.findFirst({ where: { email: result.data.email } })
   if (accessRequest) return formError({ formError: "Email already requested access" })
 
-  const success = await createAccessRequest(result.data.email)
-  if (!success) return formError({ formError: "Error creating request, please try again" })
+  const codeResult = await createAccessRequest(result.data.email)
+  if (!codeResult.success) return formError({ formError: "Error creating request, please try again" })
 
-  void updateLoopsContact({ email: result.data.email, accessRequestedAt: new Date() })
+  void updateLoopsContact({ inviteCode: codeResult.code, email: result.data.email, accessRequestedAt: new Date() })
   void sendSlackMessage("🚀 New access request from " + result.data.email)
   void sendAccessRequestConfirmationEmail(result.data.email)
   track("Access requested", { email: result.data.email })
