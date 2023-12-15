@@ -6,7 +6,8 @@
     "blur": "pnpm with-env ts-node ./src/format/gen-blurhash.ts",
     "crag": "pnpm with-env ts-node ./src/scraping/get-thecrag.ts",
     "gpt": "pnpm with-env ts-node ./src/export/ramble-gpt.ts",
-    "with-env": "dotenv -e ../../../.env --"
+    "users": "pnpm with-env ts-node ./src/export/initial-users.ts",
+    "with-env": "dotenv -e ../../../../.env --"
   },
   "sideEffects": false,
   "devDependencies": {
@@ -16,6 +17,7 @@
     "@ramble/database": "workspace:*",
     "@ramble/eslint-config": "workspace:*",
     "@ramble/shared": "workspace:*",
+    "@ramble/server-services": "workspace:*",
     "@types/html-to-text": "9.0.4",
     "@types/node": "18.19.3",
     "cheerio": "1.0.0-rc.12",

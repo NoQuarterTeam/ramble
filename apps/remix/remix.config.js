@@ -18,6 +18,7 @@ module.exports = {
     "decode-uri-component",
     "filter-obj",
     "kdbush",
+    "loops",
     "query-string",
     "split-on-first",
     "supercluster",

@@ -814,6 +814,9 @@ importers:
       '@ramble/eslint-config':
         specifier: workspace:*
         version: link:../../config/eslint
+      '@ramble/server-services':
+        specifier: workspace:*
+        version: link:../services
       '@ramble/shared':
         specifier: workspace:*
         version: link:../../shared
@@ -892,6 +895,9 @@ importers:
       jsonwebtoken:
         specifier: 9.0.2
         version: 9.0.2
+      loops:
+        specifier: ^0.1.3
+        version: 0.1.3
       nodemailer:
         specifier: 6.9.7
         version: 6.9.7
@@ -12750,6 +12756,10 @@ packages:
 
   /longest-streak@3.1.0:
     resolution: {integrity: sha512-9Ri+o0JYgehTaVBBDoMqIl8GXtbWg711O3srftcHhZ0dqnETqLaoIK0x17fUw9rFSlK/0NlsKe0Ahhyl5pXE2g==}
+
+  /loops@0.1.3:
+    resolution: {integrity: sha512-IJh1Se/wExb1bwkZ4oYEffnGP7l/PV7K/dC5htX6/Vs6Q8XO5XsqNTedbiPVvJjjkS374mtw7cjYTcqWeC+31g==}
+    dev: false
 
   /loose-envify@1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}

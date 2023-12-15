@@ -3,7 +3,12 @@ import { Instagram } from "lucide-react"
 import { ClientOnly } from "remix-utils/client-only"
 
 import { userSchema } from "@ramble/server-schemas"
-import { createAccessRequest, sendAccessRequestConfirmationEmail, sendSlackMessage } from "@ramble/server-services"
+import {
+  createAccessRequest,
+  sendAccessRequestConfirmationEmail,
+  sendSlackMessage,
+  updateLoopsContact,
+} from "@ramble/server-services"
 import { join, merge } from "@ramble/shared"
 
 import { Form, useFetcher } from "~/components/Form"
@@ -31,7 +36,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const success = await createAccessRequest(result.data.email)
   if (!success) return formError({ formError: "Error creating request, please try again" })
 
-  sendSlackMessage("🚀 New access request from " + result.data.email)
+  void updateLoopsContact({ email: result.data.email, accessRequestedAt: new Date() })
+  void sendSlackMessage("🚀 New access request from " + result.data.email)
   void sendAccessRequestConfirmationEmail(result.data.email)
   track("Access requested", { email: result.data.email })
   return json({ success: true })

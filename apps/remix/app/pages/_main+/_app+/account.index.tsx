@@ -2,7 +2,7 @@ import { useLoaderData } from "@remix-run/react"
 import { AtSign } from "lucide-react"
 
 import { userSchema } from "@ramble/server-schemas"
-import { generateBlurHash } from "@ramble/server-services"
+import { generateBlurHash, updateLoopsContact } from "@ramble/server-services"
 import { join } from "@ramble/shared"
 
 import { Form, FormButton, FormError, FormField, ImageField } from "~/components/Form"
@@ -22,8 +22,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     avatar: true,
     username: true,
     firstName: true,
-    instagram: true,
     lastName: true,
+    instagram: true,
   })
   return json(user)
 }
@@ -47,6 +47,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     avatarBlurHash = await generateBlurHash(result.data.avatar)
   }
   await db.user.update({ where: { id: user.id }, data: { ...result.data, avatarBlurHash } })
+  void updateLoopsContact({ userId: user.id, ...result.data })
   track("Account updated", { userId: user.id })
   return redirect("/account", request, { flash: { title: "Account updated" } })
 }
