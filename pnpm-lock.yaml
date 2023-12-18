@@ -430,8 +430,8 @@ importers:
         specifier: 14.2.3
         version: 14.2.3(react@18.2.0)
       react-map-gl:
-        specifier: 7.1.6
-        version: 7.1.6(mapbox-gl@2.15.0)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 7.1.7
+        version: 7.1.7(mapbox-gl@2.15.0)(react-dom@18.2.0)(react@18.2.0)
       remix-utils:
         specifier: 7.2.0
         version: 7.2.0(@remix-run/node@2.4.0)(@remix-run/react@2.4.0)(crypto-js@4.2.0)(react@18.2.0)(zod@3.22.4)
@@ -15603,8 +15603,8 @@ packages:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
     dev: false
 
-  /react-map-gl@7.1.6(mapbox-gl@2.15.0)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-9XbrvpFF67Fyi+e6vRLJFnGpo3UF6ZHifIa8cS/wUYSsnv9sVyzGsN++FJy57zkz3Jh3kmf0xKZemR8K0FZLVw==}
+  /react-map-gl@7.1.7(mapbox-gl@2.15.0)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-mwjc0obkBJOXCcoXQr3VoLqmqwo9vS4bXfbGsdxXzEgVCv/PM0v+1QggL7W0d/ccIy+VCjbXNlGij+PENz6VNg==}
     peerDependencies:
       mapbox-gl: '>=1.13.0'
       maplibre-gl: '>=1.13.0'
