@@ -1,18 +1,26 @@
-import * as React from "react"
-import { Modal, Switch, TouchableOpacity, View } from "react-native"
 import {
   Camera,
-  type MapState,
-  type MapView as MapType,
   MarkerView,
   RasterLayer,
   RasterSource,
   UserLocation,
+  type MapState,
+  type MapView as MapType,
 } from "@rnmapbox/maps"
-import { useQuery } from "@tanstack/react-query"
 import * as Location from "expo-location"
-import { CloudRain, Layers, MountainSnow, Navigation, PlusCircle, Settings2, User, Users2 } from "lucide-react-native"
-import * as Sentry from "sentry-expo"
+import {
+  CloudRain,
+  Layers,
+  // MountainSnow,
+  Navigation,
+  PlusCircle,
+  Settings2,
+  Thermometer,
+  User,
+  Users2,
+} from "lucide-react-native"
+import * as React from "react"
+import { Modal, Switch, TouchableOpacity, View } from "react-native"
 
 import { type SpotType } from "@ramble/database/types"
 import { createImageUrl, INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
@@ -34,7 +42,7 @@ import { useAsyncStorage } from "../../../lib/hooks/useAsyncStorage"
 import { useMe } from "../../../lib/hooks/useMe"
 import { usePreferences } from "../../../lib/hooks/usePreferences"
 import { useRouter } from "../../router"
-import { type Filters, initialFilters, MapFilters } from "./MapFilters"
+import { initialFilters, MapFilters, type Filters } from "./MapFilters"
 import { MapSearch } from "./MapSearch"
 import { SpotPreview } from "./SpotPreview"
 
@@ -44,7 +52,7 @@ type UserCluster = RouterOutputs["user"]["clusters"][number]
 export function MapScreen() {
   const { push } = useRouter()
   const { me } = useMe()
-  const [preferences, setPreferences, isReady] = usePreferences()
+  const [preferences, setPreferences] = usePreferences()
 
   const [clusters, setClusters] = React.useState<Cluster[] | null>(null)
   const filterModalProps = useDisclosure()
@@ -256,11 +264,11 @@ export function MapScreen() {
       <Map onLayout={handleSetUserLocation} onMapIdle={onMapMove} onPress={() => setActiveSpotId(null)} ref={mapRef}>
         <UserLocation />
 
-        <RainRadar shouldRender={isReady && preferences.mapLayerRain} />
+        <MapLayers />
         <Camera
           ref={camera}
           allowUpdates
-          defaultSettings={{ centerCoordinate: [INITIAL_LONGITUDE, INITIAL_LATITUDE], zoomLevel: 8 }}
+          defaultSettings={{ centerCoordinate: [INITIAL_LONGITUDE, INITIAL_LATITUDE], zoomLevel: 8, pitch: 0, heading: 0 }}
         />
 
         {spotMarkers}
@@ -352,7 +360,7 @@ export function MapScreen() {
                 <View>
                   <Text className="h-[25px] text-lg">Rain</Text>
                   <Text numberOfLines={2} style={{ lineHeight: 16 }} className="max-w-[220px] text-sm opacity-75">
-                    Shows the current european rain radar
+                    Shows the current rain radar
                   </Text>
                 </View>
               </View>
@@ -363,6 +371,22 @@ export function MapScreen() {
               />
             </View>
             <View className="flex flex-row items-center justify-between space-x-2">
+              <View className="flex flex-row items-center space-x-3">
+                <Icon icon={Thermometer} size={30} />
+                <View>
+                  <Text className="h-[25px] text-lg">Temperature</Text>
+                  <Text numberOfLines={2} style={{ lineHeight: 16 }} className="max-w-[220px] text-sm opacity-75">
+                    Shows the current temperature
+                  </Text>
+                </View>
+              </View>
+              <Switch
+                trackColor={{ true: colors.primary[600] }}
+                value={preferences.mapLayerTemp}
+                onValueChange={() => setPreferences({ ...preferences, mapLayerTemp: !preferences.mapLayerTemp })}
+              />
+            </View>
+            {/* <View className="flex flex-row items-center justify-between space-x-2">
               <View className="flex flex-row items-center space-x-3">
                 <Icon icon={MountainSnow} size={30} />
                 <View>
@@ -377,7 +401,7 @@ export function MapScreen() {
                 value={preferences.mapStyleSatellite}
                 onValueChange={() => setPreferences({ ...preferences, mapStyleSatellite: !preferences.mapStyleSatellite })}
               />
-            </View>
+            </View> */}
             {me && (
               <View className="flex flex-row items-center justify-between space-x-2">
                 <View className="flex flex-row items-center space-x-3">
@@ -404,39 +428,36 @@ export function MapScreen() {
   )
 }
 
-function RainRadar({ shouldRender }: { shouldRender: boolean }) {
-  const { data } = useQuery({
-    queryKey: ["rainRadar"],
-    queryFn: async () => {
-      try {
-        const res = await fetch(
-          "https://api.weather.com/v3/TileServer/series/productSet/PPAcore?apiKey=d7adbfe03bf54ea0adbfe03bf5fea065",
-        )
-        const jsonData = await res.json()
-        const data = jsonData.seriesInfo.radarEurope.series[0]?.ts as number | undefined
-        return data
-      } catch (error) {
-        Sentry.Native.captureException(error)
-      }
-    },
-    enabled: shouldRender,
-    staleTime: Infinity,
-    cacheTime: Infinity,
-    keepPreviousData: true,
-    refetchInterval: 1000 * 60 * 5,
-  })
-  if (!data) return null
+function MapLayers() {
+  const [preferences, _, isReady] = usePreferences()
 
+  if (!isReady) return null
   return (
     <>
-      <RasterSource
-        id="twcRadar"
-        tileSize={256}
-        tileUrlTemplates={[
-          `https://api.weather.com/v3/TileServer/tile/radarEurope?ts=${data}&xyz={x}:{y}:{z}&apiKey=d7adbfe03bf54ea0adbfe03bf5fea065`,
-        ]}
-      />
-      {shouldRender && <RasterLayer sourceID="twcRadar" id="radar" style={{ rasterOpacity: 0.4 }} />}
+      {preferences.mapLayerTemp && (
+        <>
+          <RasterSource
+            id="temp"
+            tileSize={256}
+            tileUrlTemplates={[
+              `https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63`,
+            ]}
+          />
+          <RasterLayer id="tempLayer" sourceID="temp" style={{ rasterOpacity: 0.4 }} />
+        </>
+      )}
+      {preferences.mapLayerRain && (
+        <>
+          <RasterSource
+            id="rain"
+            tileSize={256}
+            tileUrlTemplates={[
+              `https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63`,
+            ]}
+          />
+          <RasterLayer id="rainLayer" sourceID="rain" style={{ rasterOpacity: 0.4 }} />
+        </>
+      )}
     </>
   )
 }

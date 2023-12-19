@@ -47,7 +47,7 @@ export const Map = React.forwardRef<MapRef, MapViewProps & { children?: React.Re
         props.onLoad?.(e)
       }}
     >
-      {props.children}
+      {isLoaded && props.children}
       <GeolocateControl position="bottom-right" />
       <NavigationControl position="bottom-right" />
     </ReactGLMap>

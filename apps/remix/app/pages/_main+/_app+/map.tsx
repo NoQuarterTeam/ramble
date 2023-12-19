@@ -289,24 +289,6 @@ export function ErrorBoundary() {
 
 function MapLayers() {
   const preferences = usePreferences()
-  const [rainData, setRainData] = React.useState<number | undefined>(undefined)
-  React.useEffect(() => {
-    if (preferences.mapLayerRain) {
-      async function getData() {
-        try {
-          const res = await fetch(
-            "https://api.weather.com/v3/TileServer/series/productSet/PPAcore?apiKey=d7adbfe03bf54ea0adbfe03bf5fea065",
-          )
-          const jsonData = await res.json()
-          const data = jsonData.seriesInfo.radarEurope.series[0]?.ts as number | undefined
-          setRainData(data)
-        } catch (error) {
-          console.log(error)
-        }
-      }
-      getData()
-    }
-  }, [preferences.mapLayerRain])
 
   return (
     <>
@@ -318,25 +300,7 @@ function MapLayers() {
             tileSize={256}
             tiles={[`https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63`]}
           />
-          <Layer
-            id="tempLayer"
-            source="temp"
-            type="raster"
-            // paint={{
-            //   "raster-scaling": "lanczos",
-            //   "raster-colorizer-default-mode": "linear",
-            //   "raster-colorizer-default-color": "transparent",
-            //   "raster-colorizer-stops": `
-            //     stop(0, rgba(225, 200, 100, 0))
-            //     stop(0.1, rgba(200, 150, 150, 0))
-            //     stop(0.2, rgba(150, 150, 170, 0))
-            //     stop(0.5, rgba(120, 120, 190, 0))
-            //     stop(1, rgba(210, 110, 205, 0.3))
-            //     stop(10, rgba(20,80, 225, 0.7))
-            //     stop(140, rgba(200, 20, 255, 0.9))
-            //   `,
-            // }}
-          />
+          <Layer id="tempLayer" source="temp" type="raster" />
           <div className="bg-background rounded-xs absolute right-20 top-4 flex items-center space-x-4 px-2 py-1 text-xs shadow">
             <p>Temperature, °C</p>
             <div>
@@ -357,17 +321,17 @@ function MapLayers() {
           </div>
         </>
       )}
-      {preferences.mapLayerRain && rainData && (
+      {preferences.mapLayerRain && (
         <>
           <Source
             id="rain"
             type="raster"
             tileSize={256}
             tiles={[
-              `https://api.weather.com/v3/TileServer/tile/radarEurope?ts=${rainData}&xyz={x}:{y}:{z}&apiKey=d7adbfe03bf54ea0adbfe03bf5fea065`,
+              `https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63`,
             ]}
           />
-          <Layer type="raster" source="rain" id="rainLayer" />
+          <Layer id="rainLayer" source="rain" type="raster" />
         </>
       )}
     </>

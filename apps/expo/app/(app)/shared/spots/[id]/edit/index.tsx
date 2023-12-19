@@ -1,6 +1,6 @@
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
-import { Camera, type MapState, type MapView as MapType, UserLocation } from "@rnmapbox/maps"
+import { Camera, type MapState, type MapView as MapType, UserLocation, StyleURL } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { CircleDot, Navigation } from "lucide-react-native"
 
@@ -45,10 +45,10 @@ export function EditSpotLocationScreen() {
         className="rounded-xs mb-10 mt-4 flex-1 overflow-hidden"
         onMapIdle={onMapMove}
         ref={mapRef}
-        styleURL="mapbox://styles/jclackett/clp122bar007z01qu21kc8h4g"
+        styleURL={StyleURL.SatelliteStreet}
       >
         <UserLocation />
-        <Camera ref={camera} allowUpdates defaultSettings={{ centerCoordinate: coords, zoomLevel: 14 }} />
+        <Camera ref={camera} allowUpdates defaultSettings={{ centerCoordinate: coords, zoomLevel: 14, pitch: 0, heading: 0 }} />
       </Map>
       <View
         style={{ transform: [{ translateX: -15 }, { translateY: -15 }] }}

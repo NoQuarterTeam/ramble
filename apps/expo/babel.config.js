@@ -6,6 +6,6 @@ module.exports = function (api) {
       "nativewind/babel",
       ["react-native-reanimated/plugin"],
     ],
-    presets: [["module:metro-react-native-babel-preset", { useTransformReactJSXExperimental: true }], "babel-preset-expo"],
+    presets: ["babel-preset-expo"],
   }
 }
