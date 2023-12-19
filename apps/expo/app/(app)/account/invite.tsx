@@ -1,5 +1,5 @@
 import { ScrollView, TouchableOpacity, View } from "react-native"
-import Clipboard from "@react-native-clipboard/clipboard"
+import * as Clipboard from "expo-clipboard"
 import { Copy, User2 } from "lucide-react-native"
 
 import { createImageUrl } from "@ramble/shared"
@@ -16,8 +16,8 @@ import { useRouter } from "../../router"
 export function AccountInviteScreen() {
   const router = useRouter()
   const { data, isLoading } = api.inviteCode.myCodes.useQuery()
-  const handleCopy = (code: string) => {
-    Clipboard.setString(code)
+  const handleCopy = async (code: string) => {
+    await Clipboard.setStringAsync(code)
     toast({ title: "Copied to clipboard!" })
   }
 
