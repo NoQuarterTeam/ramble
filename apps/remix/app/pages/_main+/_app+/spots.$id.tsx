@@ -1,5 +1,5 @@
 import { Suspense } from "react"
-import Map, { Marker } from "react-map-gl"
+import { Marker } from "react-map-gl"
 import { Await, Link, type ShouldRevalidateFunctionArgs, useLoaderData } from "@remix-run/react"
 import crypto from "crypto"
 import dayjs from "dayjs"
@@ -21,6 +21,7 @@ import {
 
 import { Form, FormButton } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
+import { Map } from "~/components/Map"
 import { OptimizedImage, transformImageSrc } from "~/components/OptimisedImage"
 import { PageContainer } from "~/components/PageContainer"
 import { SpotTypeBadge } from "~/components/SpotTypeBadge"
@@ -41,7 +42,6 @@ import { createAction, createActions } from "~/lib/form.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 import { badRequest, json, notFound, redirect } from "~/lib/remix.server"
-import { useTheme } from "~/lib/theme"
 import { type ActionFunctionArgs, defer, type LoaderFunctionArgs, type MetaFunction } from "~/lib/vendor/vercel.server"
 import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
 import { type TranslateSpot } from "~/pages/api+/spots+/$id.translate.$lang"
@@ -194,7 +194,6 @@ export default function SpotDetail() {
   const { spot, stats, reviewCount, reviews, activitySpots, translatedDescription, descriptionHash, flickrImages } =
     useLoaderData<typeof loader>()
   const user = useMaybeUser()
-  const theme = useTheme()
 
   return (
     <div className="relative">
@@ -325,17 +324,7 @@ export default function SpotDetail() {
             </div>
 
             <div className="rounded-xs h-[400px] w-full overflow-hidden">
-              <Map
-                mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
-                style={{ height: "100%", width: "100%" }}
-                initialViewState={{ latitude: spot.latitude, longitude: spot.longitude, zoom: 10 }}
-                attributionControl={false}
-                mapStyle={
-                  theme === "dark"
-                    ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
-                    : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
-                }
-              >
+              <Map initialViewState={{ latitude: spot.latitude, longitude: spot.longitude, zoom: 10 }}>
                 <Marker anchor="bottom" longitude={spot.longitude} latitude={spot.latitude}>
                   <SpotMarker spot={spot} isInteractable={false} />
                 </Marker>

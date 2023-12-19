@@ -1,16 +1,5 @@
-import "mapbox-gl/dist/mapbox-gl.css"
-
 import * as React from "react"
-import Map, {
-  GeolocateControl,
-  Layer,
-  type LngLatLike,
-  type MapRef,
-  Marker,
-  NavigationControl,
-  Source,
-  type ViewStateChangeEvent,
-} from "react-map-gl"
+import { Layer, type LngLatLike, type MapRef, Marker, Source, type ViewStateChangeEvent } from "react-map-gl"
 import { type MarkerEvent, type MarkerInstance } from "react-map-gl/dist/esm/types"
 import { cssBundleHref } from "@remix-run/css-bundle"
 import {
@@ -33,10 +22,10 @@ import { ClientOnly } from "remix-utils/client-only"
 
 import { createImageUrl, INITIAL_LATITUDE, INITIAL_LONGITUDE, join } from "@ramble/shared"
 
+import { Map } from "~/components/Map"
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { db } from "~/lib/db.server"
 import { usePreferences } from "~/lib/hooks/usePreferences"
-import { useTheme } from "~/lib/theme"
 import type { LinksFunction, LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
 import { MapFilters } from "~/pages/_main+/_app+/components/MapFilters"
@@ -88,7 +77,6 @@ export default function MapView() {
   const clusters = clustersFetcher.data
   const userClusters = userClustersFetcher.data
 
-  const theme = useTheme()
   const mapRef = React.useRef<MapRef>(null)
 
   const [searchParams] = useSearchParams()
@@ -203,52 +191,22 @@ export default function MapView() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [userClusters, preferences.mapUsers],
   )
-  const noMap = searchParams.get("noMap")
-
-  // React.useEffect(() => {
-  //   if (mapRef.current) {
-  //     console.log("stufffff")
-  //     console.log(mapRef.current)
-  //     console.log("done")
-  //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  //     // @ts-ignore
-  //     mapRef.current.setConfigProperty("basemap", "lightPreset", theme === "light" ? "day" : "night")
-  //   }
-  // }, [theme])
 
   return (
     <div className="h-nav-screen relative w-screen overflow-hidden">
-      {!noMap && (
-        <Map
-          mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
-          onLoad={(e) => {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            // e.target.setConfigProperty("basemap", "lightPreset", theme === "light" ? "day" : "dusk")
-            onMove(e)
-          }}
-          onMoveEnd={onMove}
-          ref={mapRef}
-          maxZoom={20}
-          style={{ height: "100%", width: "100%" }}
-          initialViewState={initialViewState}
-          attributionControl={false}
-          mapStyle={
-            preferences.mapStyleSatellite
-              ? "mapbox://styles/jclackett/clp122bar007z01qu21kc8h4g"
-              : theme === "dark"
-                ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
-                : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
-          }
-          // mapStyle={"mapbox://styles/mapbox/standard-beta"}
-        >
-          <MapLayers />
-          {markers}
-          {userMarkers}
-          <GeolocateControl position="bottom-right" />
-          <NavigationControl position="bottom-right" />
-        </Map>
-      )}
+      <Map
+        onLoad={onMove}
+        onMoveEnd={onMove}
+        ref={mapRef}
+        initialViewState={initialViewState}
+        mapStyle={
+          preferences.mapStyleSatellite ? "mapbox://styles/mapbox/satellite-streets-v12" : "mapbox://styles/mapbox/standard"
+        }
+      >
+        <MapLayers />
+        {markers}
+        {userMarkers}
+      </Map>
 
       <ClientOnly>{() => <MapFilters onChange={onParamsChange} />}</ClientOnly>
       <MapLayerControls />

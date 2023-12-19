@@ -1,6 +1,5 @@
 import * as React from "react"
 import type { ViewStateChangeEvent } from "react-map-gl"
-import Map, { GeolocateControl, NavigationControl } from "react-map-gl"
 import { useFetcher, useLocation, useNavigate, useSearchParams } from "@remix-run/react"
 import turfCenter from "@turf/center"
 import * as turf from "@turf/helpers"
@@ -21,13 +20,13 @@ import {
 
 import { Form, FormButton, FormError, FormField, FormFieldError, FormFieldLabel, ImageField } from "~/components/Form"
 import { ImageUploader } from "~/components/ImageUploader"
+import { Map } from "~/components/Map"
 import { SpotIcon } from "~/components/SpotIcon"
 import type { RambleIcon } from "~/components/ui"
 import { Button, Checkbox, CloseButton, IconButton, Spinner, Textarea, Tooltip } from "~/components/ui"
 import { useFormErrors } from "~/lib/form"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
-import { useTheme } from "~/lib/theme"
 import type { SerializeFrom } from "~/lib/vendor/vercel.server"
 import type { geocodeLoader } from "~/pages/api+/mapbox+/geocode"
 
@@ -84,7 +83,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
   const address = geocodeFetcher.data
 
   const navigate = useNavigate()
-  const theme = useTheme()
+
   const [images, setImages] = React.useState<Pick<SpotImage, "path">[]>(spot?.images || [])
 
   const user = useMaybeUser()
@@ -205,24 +204,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
       </Form>
 
       <div className="h-nav-screen relative w-full">
-        <Map
-          mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
-          onLoad={onMove}
-          onMoveEnd={onMove}
-          doubleClickZoom={true}
-          scrollZoom={false}
-          style={{ height: "100%", width: "100%" }}
-          initialViewState={initialViewState}
-          attributionControl={false}
-          mapStyle={
-            theme === "dark"
-              ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
-              : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
-          }
-        >
-          <GeolocateControl position="bottom-right" />
-          <NavigationControl position="bottom-right" />
-        </Map>
+        <Map onLoad={onMove} onMoveEnd={onMove} doubleClickZoom={true} scrollZoom={false} initialViewState={initialViewState} />
 
         <CircleDot className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
       </div>

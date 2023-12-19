@@ -1,6 +1,6 @@
 import * as React from "react"
 import type { LngLatLike } from "react-map-gl"
-import Map, { Marker, NavigationControl } from "react-map-gl"
+import { Marker } from "react-map-gl"
 import { Link, useLoaderData, useNavigate } from "@remix-run/react"
 import { ChevronLeft, Copy } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
@@ -13,6 +13,7 @@ import { type SpotItemType } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
+import { Map } from "~/components/Map"
 import { PageContainer } from "~/components/PageContainer"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
@@ -21,7 +22,6 @@ import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { fetchAndJoinSpotImages } from "~/lib/models/spot"
 import { notFound, redirect } from "~/lib/remix.server"
-import { useTheme } from "~/lib/theme"
 import { bbox, lineString } from "~/lib/vendor/turf.server"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
@@ -118,7 +118,6 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 export default function ListDetail() {
   const { list, spots, bounds } = useLoaderData<typeof loader>()
   const currentUser = useMaybeUser()
-  const theme = useTheme()
 
   const navigate = useNavigate()
   const deleteFetcher = useFetcher()
@@ -205,8 +204,6 @@ export default function ListDetail() {
               <Map
                 doubleClickZoom={true}
                 scrollZoom={false}
-                mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
-                style={{ height: "100%", width: "100%" }}
                 initialViewState={
                   bounds
                     ? { bounds, fitBoundsOptions: { padding: 50 } }
@@ -216,15 +213,8 @@ export default function ListDetail() {
                         zoom: 10,
                       }
                 }
-                attributionControl={false}
-                mapStyle={
-                  theme === "dark"
-                    ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
-                    : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
-                }
               >
                 {markers}
-                <NavigationControl position="bottom-right" />
               </Map>
             )}
           </ClientOnly>

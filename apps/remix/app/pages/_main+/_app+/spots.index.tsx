@@ -1,7 +1,5 @@
-import "mapbox-gl/dist/mapbox-gl.css"
-
 import * as React from "react"
-import Map, { GeolocateControl, type LngLatLike, type MapRef, Marker, NavigationControl } from "react-map-gl"
+import { type LngLatLike, type MapRef, Marker } from "react-map-gl"
 import { Form, useLoaderData, useSearchParams } from "@remix-run/react"
 import { MapIcon } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
@@ -18,13 +16,13 @@ import {
   STAY_SPOT_TYPE_OPTIONS,
 } from "@ramble/shared"
 
+import { Map } from "~/components/Map"
 import { SpotIcon } from "~/components/SpotIcon"
 import { Button, IconButton, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { fetchAndJoinSpotImages } from "~/lib/models/spot"
-import { useTheme } from "~/lib/theme"
 import { bbox, lineString } from "~/lib/vendor/turf.server"
 import type { LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
@@ -195,7 +193,6 @@ export default function Latest() {
 
 function SpotsMap({ spots, bounds, onClick }: SerializeFrom<typeof loader> & { onClick: (index: number) => void }) {
   const mapRef = React.useRef<MapRef>(null)
-  const theme = useTheme()
 
   const markers = React.useMemo(
     () =>
@@ -218,9 +215,6 @@ function SpotsMap({ spots, bounds, onClick }: SerializeFrom<typeof loader> & { o
     <div className="rounded-xs col-span-1 hidden overflow-hidden md:block lg:col-span-2">
       <Map
         ref={mapRef}
-        mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
-        maxZoom={20}
-        style={{ height: "100%", width: "100%" }}
         initialViewState={
           bounds
             ? { bounds, fitBoundsOptions: { padding: 50 } }
@@ -230,16 +224,8 @@ function SpotsMap({ spots, bounds, onClick }: SerializeFrom<typeof loader> & { o
                 zoom: 10,
               }
         }
-        attributionControl={false}
-        mapStyle={
-          theme === "dark"
-            ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
-            : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
-        }
       >
         {markers}
-        <GeolocateControl position="bottom-right" />
-        <NavigationControl position="bottom-right" />
       </Map>
     </div>
   )
