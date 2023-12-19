@@ -1,7 +1,7 @@
 import { ConfigContext, ExpoConfig } from "expo/config"
 
-const VERSION = "1.0.11"
-const BUILD = 18
+const VERSION = "1.1.0"
+const BUILD = 19
 
 const splash: ExpoConfig["splash"] = {
   image: "./assets/splash.png",
@@ -71,6 +71,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     "expo-localization",
     "./expo-plugins/with-modify-gradle.js",
     "./expo-plugins/android-manifest.plugin.js",
+    "expo-font",
     [
       "expo-location",
       {
