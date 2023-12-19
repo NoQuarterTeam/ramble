@@ -1,6 +1,6 @@
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
-import { Camera, type MapState, type MapView as MapType, UserLocation, StyleURL } from "@rnmapbox/maps"
+import { Camera, type MapState, type MapView as MapType, StyleURL, UserLocation } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { CircleDot, Navigation } from "lucide-react-native"
 

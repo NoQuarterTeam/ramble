@@ -1,6 +1,6 @@
 import LoopsClient from "loops"
 
-import { Role } from "@ramble/database/types"
+import { type Role } from "@ramble/database/types"
 import { env } from "@ramble/server-env"
 
 const loops = new LoopsClient(env.LOOPS_API_KEY)

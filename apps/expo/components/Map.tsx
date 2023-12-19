@@ -1,6 +1,6 @@
-import Mapbox, { StyleImport } from "@rnmapbox/maps"
 import * as React from "react"
 import { useColorScheme } from "react-native"
+import Mapbox, { StyleImport } from "@rnmapbox/maps"
 
 import { merge } from "@ramble/shared"
 
