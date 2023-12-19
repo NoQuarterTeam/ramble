@@ -296,7 +296,7 @@ export function SpotDetailScreen() {
               try {
                 await RNShare.share({
                   title: spot.name,
-                  message: "Check out this spot",
+                  message: FULL_WEB_URL + `/spots/${spot.id}`,
                   url: FULL_WEB_URL + `/spots/${spot.id}`,
                 })
               } catch (error: unknown) {
