@@ -1,7 +1,7 @@
 import { ConfigContext, ExpoConfig } from "expo/config"
 
 const VERSION = "1.1.0"
-const BUILD = 19
+const BUILD = 21
 
 const splash: ExpoConfig["splash"] = {
   image: "./assets/splash.png",
@@ -68,21 +68,15 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   },
   plugins: [
     "sentry-expo",
-    "expo-localization",
     "./expo-plugins/with-modify-gradle.js",
     "./expo-plugins/android-manifest.plugin.js",
-    "expo-font",
     [
       "expo-location",
-      {
-        locationWhenInUsePermission: "The app uses your location to show spots that are near to you on the map.",
-      },
+      { locationWhenInUsePermission: "The app uses your location to show spots that are near to you on the map." },
     ],
     [
       "expo-image-picker",
-      {
-        photosPermission: "The app accesses your photos to allow you to upload a profile picture and share spot pictures",
-      },
+      { photosPermission: "The app accesses your photos to allow you to upload a profile picture and share spot pictures" },
     ],
     [
       "@rnmapbox/maps",
