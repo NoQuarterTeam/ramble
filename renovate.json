@@ -64,6 +64,7 @@
     "react-native",
     "sharp",
     "sentry-expo",
+    "@rnmapbox/maps",
     "tailwindcss",
     "uuid"
   ]
