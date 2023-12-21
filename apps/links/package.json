@@ -1,6 +1,0 @@
-{
-  "name": "@ramble/links",
-  "dependencies": {
-    "@vercel/node": "^3.0.14"
-  }
-}
