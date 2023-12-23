@@ -4,12 +4,14 @@ import { showLocation } from "react-native-map-link"
 import Animated, {
   Extrapolation,
   interpolate,
+  runOnJS,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated"
 import { useQuery } from "@tanstack/react-query"
 import dayjs from "dayjs"
+import { LinearGradient } from "expo-linear-gradient"
 import * as Location from "expo-location"
 import { StatusBar } from "expo-status-bar"
 import { Check, ChevronDown, ChevronLeft, Compass, Edit2, Heart, Languages, Share, Star, Trash } from "lucide-react-native"
@@ -53,12 +55,25 @@ export function SpotDetailScreen() {
   const { data, isLoading } = api.spot.detail.useQuery({ id: params.id })
   const spot = data?.spot
   const translationY = useSharedValue(0)
-
-  const scrollHandler = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      translationY.value = event.contentOffset.y
+  const [isScrolledPassedThreshold, setIsScrolledPassedThreshold] = React.useState(false)
+  const scrollHandler = useAnimatedScrollHandler(
+    {
+      onScroll: (event) => {
+        translationY.value = event.contentOffset.y
+        if (event.contentOffset.y > 200) {
+          if (!isScrolledPassedThreshold) {
+            runOnJS(setIsScrolledPassedThreshold)(true)
+          }
+        } else {
+          if (isScrolledPassedThreshold) {
+            runOnJS(setIsScrolledPassedThreshold)(false)
+          }
+        }
+      },
     },
-  })
+    [isScrolledPassedThreshold],
+  )
+
   const router = useRouter()
 
   const topBarStyle = useAnimatedStyle(() => {
@@ -125,7 +140,7 @@ export function SpotDetailScreen() {
     )
   return (
     <View>
-      <StatusBar animated style={isDark ? "light" : "dark"} />
+      <StatusBar style={isDark ? "light" : isScrolledPassedThreshold ? "light" : "dark"} />
       <Animated.ScrollView
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
@@ -327,6 +342,9 @@ export function SpotDetailScreen() {
           </TouchableOpacity>
         </View>
       </View>
+      {!isScrolledPassedThreshold && (
+        <LinearGradient className="absolute left-0 right-0 top-0 h-16" colors={["rgba(0,0,0,0.8)", "transparent"]} />
+      )}
     </View>
   )
 }
