@@ -41,7 +41,7 @@ import { toast } from "../../../../../components/ui/Toast"
 import { VerifiedCard } from "../../../../../components/VerifiedCard"
 import { api } from "../../../../../lib/api"
 import { FULL_WEB_URL } from "../../../../../lib/config"
-import { height, width } from "../../../../../lib/device"
+import { height, isAndroid, width } from "../../../../../lib/device"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { AMENITIES_ICONS } from "../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../router"
@@ -140,7 +140,7 @@ export function SpotDetailScreen() {
     )
   return (
     <View>
-      <StatusBar style={isDark ? "light" : isScrolledPassedThreshold ? "light" : "dark"} />
+      <StatusBar style={isDark ? "light" : isScrolledPassedThreshold ? "dark" : "light"} />
       <Animated.ScrollView
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
@@ -285,13 +285,16 @@ export function SpotDetailScreen() {
         </View>
       </Animated.ScrollView>
 
+      {!isScrolledPassedThreshold && (
+        <LinearGradient className="absolute left-0 right-0 top-0 h-16" colors={["#231C18", "transparent"]} />
+      )}
       <Animated.View
         className="bg-background dark:bg-background-dark absolute left-0 right-0 top-0 h-[100px] border border-b border-gray-200 dark:border-gray-800"
         style={topBarStyle}
       />
 
-      <View className="absolute left-0 right-0 top-14 flex flex-row justify-between px-4">
-        <View className="flex flex-1 flex-row items-center space-x-0.5">
+      <View className="absolute left-0 right-0 top-14 flex w-full flex-row justify-between px-4">
+        <View className="flex w-full flex-1 flex-row items-center space-x-0.5">
           <TouchableOpacity
             onPress={router.canGoBack() ? router.goBack : () => router.navigate("AppLayout")}
             activeOpacity={0.8}
@@ -299,11 +302,13 @@ export function SpotDetailScreen() {
           >
             {router.canGoBack() ? <Icon icon={ChevronLeft} className="pr-1" /> : <Icon icon={ChevronDown} className="pr-1" />}
           </TouchableOpacity>
-          <Animated.View style={[nameStyle]}>
-            <Text className="text-lg text-black dark:text-white" numberOfLines={1}>
-              {spot.name}
-            </Text>
-          </Animated.View>
+          <Animated.Text
+            style={[nameStyle, { maxWidth: width - 175 }]}
+            className="font-400 pr-4 text-lg text-black dark:text-white"
+            numberOfLines={1}
+          >
+            {spot.name}
+          </Animated.Text>
         </View>
         <View className="flex flex-shrink-0 flex-row items-center space-x-3">
           <TouchableOpacity
@@ -311,7 +316,7 @@ export function SpotDetailScreen() {
               try {
                 await RNShare.share({
                   title: spot.name,
-                  message: FULL_WEB_URL + `/spots/${spot.id}`,
+                  message: isAndroid ? FULL_WEB_URL + `/spots/${spot.id}` : spot.name,
                   url: FULL_WEB_URL + `/spots/${spot.id}`,
                 })
               } catch (error: unknown) {
@@ -342,9 +347,6 @@ export function SpotDetailScreen() {
           </TouchableOpacity>
         </View>
       </View>
-      {!isScrolledPassedThreshold && (
-        <LinearGradient className="absolute left-0 right-0 top-0 h-16" colors={["rgba(0,0,0,0.8)", "transparent"]} />
-      )}
     </View>
   )
 }
