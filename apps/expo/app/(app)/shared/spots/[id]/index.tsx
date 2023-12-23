@@ -56,6 +56,7 @@ export function SpotDetailScreen() {
   const spot = data?.spot
   const translationY = useSharedValue(0)
   const [isScrolledPassedThreshold, setIsScrolledPassedThreshold] = React.useState(false)
+
   const scrollHandler = useAnimatedScrollHandler(
     {
       onScroll: (event) => {
