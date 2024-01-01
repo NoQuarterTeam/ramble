@@ -63,7 +63,7 @@
     "dayjs": "1.11.10",
     "isbot": "latest",
     "jose": "5.2.0",
-    "lucide-react": "0.301.0",
+    "lucide-react": "0.303.0",
     "mapbox-gl": "3.0.1",
     "nprogress": "0.2.0",
     "posthog-js": "1.96.1",
