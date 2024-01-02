@@ -1,97 +1,206 @@
-// import * as React from "react"
+import * as React from "react"
+
 import { useParams, useRouter } from "../../../../router"
 import { TouchableOpacity, View } from "react-native"
 import { Text } from "../../../../../components/ui/Text"
-import { join } from "@ramble/shared"
+import { AMENITIES, doesSpotTypeRequireAmenities, join } from "@ramble/shared"
 import { isAndroid } from "../../../../../lib/device"
 import { Icon } from "../../../../../components/Icon"
-import { ChevronLeft } from "lucide-react-native"
+import { ChevronLeft, ChevronRight } from "lucide-react-native"
 import { BrandHeading } from "../../../../../components/ui/BrandHeading"
+import Modal from "react-native-modal"
+import { ReportSpotEditLocation } from "../../../../../components/ReportSpotEditLocation"
+import { ReportSpotEditInfo } from "../../../../../components/ReportSpotEditInfo"
+import { RouterOutputs, api } from "../../../../../lib/api"
+import { Spinner } from "../../../../../components/ui/Spinner"
+import { FormInputLabel } from "../../../../../components/ui/FormInput"
+import { Input } from "../../../../../components/ui/Input"
+import { Button } from "../../../../../components/ui/Button"
+import { toast } from "../../../../../components/ui/Toast"
+import { ReportSpotEditAmenities } from "../../../../../components/ReportSpotEditAmenities"
+import { AmenityObject } from "./edit/amenities"
+import { ReportSpotEditType } from "../../../../../components/ReportSpotEditType"
+import { ReportSpotEditImages } from "../../../../../components/ReportSpotEditImages"
+
+export type IsEditing = "info" | "location" | "type" | "amenities" | "images" | null
 
 export function SpotReportScreen() {
   const { params } = useParams<"SpotReportScreen">()
 
-  // const [coords, setCoords] = React.useState<number[]>([params.longitude, params.latitude])
+  const { data: spot, isLoading } = api.spot.report.useQuery({ id: params.id })
 
-  // const camera = React.useRef<Camera>(null)
-  // const mapRef = React.useRef<MapType>(null)
+  if (isLoading)
+    return (
+      <View className="flex items-center justify-center py-4">
+        <Spinner />
+      </View>
+    )
+  if (!spot) return null
+  return <ReportFlow spot={spot} />
+}
 
-  // const { me } = useMe()
-  // const router = useRouter()
+interface Props {
+  spot: RouterOutputs["spot"]["report"]
+}
 
-  // const handleSetUserLocation = async () => {
-  //   try {
-  //     const loc = await Location.getLastKnownPositionAsync()
-  //     if (!loc) return
-  //     camera.current?.setCamera({
-  //       zoomLevel: 14,
-  //       animationDuration: 0,
-  //       animationMode: "none",
-  //       centerCoordinate: [loc.coords.longitude, loc.coords.latitude],
-  //     })
-  //   } catch {
-  //     console.log("oops -  setting location")
-  //   }
-  // }
-  // const onMapMove = ({ properties }: MapState) => setCoords(properties.center)
+function ReportFlow({ spot }: Props) {
+  const router = useRouter()
 
-  const navigation = useRouter()
+  const [name, setName] = React.useState(spot.name)
+  const [description, setDescription] = React.useState(spot.description || "")
+  const [isPetFriendly, setIsPetFriendly] = React.useState(spot.isPetFriendly)
+  const [isLocationUnknown, setIsLocationUnknown] = React.useState<boolean | null>(null)
+  const [latitude, setLatitude] = React.useState(spot.latitude)
+  const [longitude, setLongitude] = React.useState(spot.longitude)
+  const [type, setType] = React.useState(spot.type)
+  const [amenities, setAmenities] = React.useState(
+    spot.amenities
+      ? Object.entries(spot.amenities).reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {} as AmenityObject)
+      : Object.keys(AMENITIES).reduce((acc, key) => ({ ...acc, [key]: false }), {} as AmenityObject),
+  )
+  const [flaggedImages, setFlaggedImages] = React.useState<string[]>([])
+  const [notes, setNotes] = React.useState("")
+  const [isEditing, setIsEditing] = React.useState<IsEditing>()
+
+  const handleClose = () => setIsEditing(null)
+
+  // const { mutate, isLoading, error } = api.spotRevision.create.useMutation({
+  //   onSuccess: (data) => {
+  //     router.navigate("SpotDetailScreen", { id: data.id })
+  //     toast({ title: "Report submitted", message: "Your report has been submitted. Thank you for making Ramble even better!" })
+  //   },
+  //   onError: () => {
+  //     toast({ type: "error", title: "Error submitting report" })
+  //     console.log(error)
+  //   },
+  // })
+
+  const handleSubmit = () => {
+    if (!notes) return toast({ title: "Notes are required" })
+    // const revisionNotes = {
+    //   name,
+    //   description,
+    //   isLocationUnknown,
+    //   // address: data.address || customAddress,
+    //   latitude: latitude,
+    //   longitude: longitude,
+    //   // isPetFriendly: data.isPetFriendly,
+    //   type: type,
+    //   amenities: amenities
+    //     ? { update: spot.amenities ? amenities : undefined, create: spot.amenities ? undefined : amenities }
+    //     : { delete: spot.amenities ? true : undefined },
+    //   flaggedImageIds: flaggedImageIds.join(", "),
+    //   notes,
+    // }
+    // mutate({
+    //   id: params.id,
+    //   description: params.description,
+    //   name: params.name,
+    //   latitude: params.latitude,
+    //   longitude: params.longitude,
+    //   type: params.type,
+    //   images: [...newImageKeys, ...existingImages].map((i) => ({ path: i })),
+    //   amenities: params.amenities,
+    //   isPetFriendly: params.isPetFriendly,
+    // })
+  }
 
   return (
     <View className={join("bg-background dark:bg-background-dark h-full flex-grow px-4", isAndroid ? "pt-14" : "pt-10")}>
       <View className="flex flex-row justify-between pb-2">
-        <View className={join("flex flex-row items-center space-x-0.5")}>
-          <TouchableOpacity onPress={navigation.goBack} className="mt-1 p-1">
+        <View className={"flex flex-row items-center space-x-0.5"}>
+          <TouchableOpacity onPress={router.goBack} className="mt-1 p-1">
             <Icon icon={ChevronLeft} size={24} color="primary" />
           </TouchableOpacity>
-          <BrandHeading className="text-3xl">Report spot</BrandHeading>
+          <BrandHeading className="text-3xl">Report incorrect data</BrandHeading>
         </View>
       </View>
-      <View>
-        <Text>Edit the below information to let us know what you think is correct</Text>
+      <View className="flex space-y-4">
+        <Text>Let us know what you think is incorrect</Text>
+        <View className="flex space-y-5">
+          <TouchableOpacity className="flex flex-row items-center justify-between" onPress={() => setIsEditing("info")}>
+            <View>
+              <Text className="text-lg">Basic info</Text>
+              <Text className="text-sm text-gray-400">the name or description is incorrect</Text>
+            </View>
+            <Icon icon={ChevronRight} size={24} color="primary" />
+          </TouchableOpacity>
+          <TouchableOpacity className="flex flex-row items-center justify-between" onPress={() => setIsEditing("location")}>
+            <View>
+              <Text className="text-lg">Location</Text>
+              <Text className="text-sm text-gray-400">the location is incorrect</Text>
+            </View>
+            <Icon icon={ChevronRight} size={24} color="primary" />
+          </TouchableOpacity>
+          <TouchableOpacity className="flex flex-row items-center justify-between" onPress={() => setIsEditing("type")}>
+            <View>
+              <Text className="text-lg">Type</Text>
+              <Text className="text-sm text-gray-400">the spot is a different type</Text>
+            </View>
+            <Icon icon={ChevronRight} size={24} color="primary" />
+          </TouchableOpacity>
+          {doesSpotTypeRequireAmenities(spot.type) && (
+            <TouchableOpacity className="flex flex-row items-center justify-between" onPress={() => setIsEditing("amenities")}>
+              <View>
+                <Text className="text-lg">Amenities</Text>
+                <Text className="text-sm text-gray-400">the amenities are incorrect</Text>
+              </View>
+              <Icon icon={ChevronRight} size={24} color="primary" />
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity className="flex flex-row items-center justify-between" onPress={() => setIsEditing("images")}>
+            <View>
+              <Text className="text-lg">Images</Text>
+              <Text className="text-sm text-gray-400">the images are inaccurate or inappropriate</Text>
+            </View>
+            <Icon icon={ChevronRight} size={24} color="primary" />
+          </TouchableOpacity>
+          <View>
+            <FormInputLabel label="Notes" />
+            <Input value={notes} onChangeText={setNotes} />
+            <Text className="text-sm text-gray-400">Tell us more about what was wrong</Text>
+          </View>
+          {/* {error && <Text className="text-red-500">{error.message}</Text>} */}
+          {/* <Button onPress={handleSubmit} isLoading={isLoading}>Submit report</Button> */}
+          <Button onPress={handleSubmit}>Submit report</Button>
+        </View>
       </View>
+      <Modal isVisible={!!isEditing} style={{ margin: 0 }}>
+        <View className={join("bg-background dark:bg-background-dark h-full flex-grow px-6", isAndroid ? "pt-16" : "pt-12")}>
+          {isEditing === "info" ? (
+            <ReportSpotEditInfo
+              name={name}
+              setName={setName}
+              description={description}
+              setDescription={setDescription}
+              isPetFriendly={isPetFriendly}
+              setIsPetFriendly={setIsPetFriendly}
+              handleClose={handleClose}
+            />
+          ) : isEditing === "location" ? (
+            <ReportSpotEditLocation
+              isLocationUnknown={isLocationUnknown}
+              setIsLocationUnknown={setIsLocationUnknown}
+              latitude={latitude}
+              setLatitude={setLatitude}
+              longitude={longitude}
+              setLongitude={setLongitude}
+              handleClose={handleClose}
+            />
+          ) : isEditing === "type" ? (
+            <ReportSpotEditType type={type} setType={setType} handleClose={handleClose} />
+          ) : isEditing === "amenities" ? (
+            <ReportSpotEditAmenities amenities={amenities} setAmenities={setAmenities} handleClose={handleClose} />
+          ) : isEditing === "images" ? (
+            <ReportSpotEditImages
+              images={spot.images.map((i) => i.path)}
+              flaggedImages={flaggedImages}
+              setFlaggedImages={setFlaggedImages}
+              handleClose={handleClose}
+            />
+          ) : null}
+        </View>
+      </Modal>
     </View>
-    // <EditSpotModalView shouldRenderToast title="Edit spot" canGoBack={false}>
-    //   <Map
-    //     className="rounded-xs mb-10 mt-4 flex-1 overflow-hidden"
-    //     onMapIdle={onMapMove}
-    //     ref={mapRef}
-    //     styleURL="mapbox://styles/jclackett/clp122bar007z01qu21kc8h4g"
-    //   >
-    //     <UserLocation />
-    //     <Camera ref={camera} allowUpdates defaultSettings={{ centerCoordinate: coords, zoomLevel: 14 }} />
-    //   </Map>
-    //   <View
-    //     style={{ transform: [{ translateX: -15 }, { translateY: -15 }] }}
-    //     className="absolute left-1/2 top-1/2 flex items-center justify-center"
-    //   >
-    //     <Icon icon={CircleDot} size={30} color="white" />
-    //   </View>
-
-    //   <View className="absolute bottom-12 left-5 right-5 flex flex-row items-center justify-between space-y-2">
-    //     <View className="w-12" />
-
-    //     <Button
-    //       className="bg-background rounded-full"
-    //       textClassName="text-black"
-    //       onPress={() => {
-    //         if (!me) return
-    //         if (!me.isVerified) return toast({ title: "Please verify your account" })
-    //         if (!coords[0] || !coords[1]) return toast({ title: "Please select a location" })
-    //         router.push("EditSpotTypeScreen", { ...params, latitude: coords[1], longitude: coords[0] })
-    //       }}
-    //     >
-    //       Next
-    //     </Button>
-
-    //     <TouchableOpacity
-    //       activeOpacity={0.8}
-    //       onPress={handleSetUserLocation}
-    //       className="sq-12 bg-background flex flex-row items-center justify-center rounded-full"
-    //     >
-    //       <Icon icon={Navigation} size={20} color="black" />
-    //     </TouchableOpacity>
-    //   </View>
-    // </EditSpotModalView>
   )
 }

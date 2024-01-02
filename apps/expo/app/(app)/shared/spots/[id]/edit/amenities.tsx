@@ -12,7 +12,7 @@ import { AMENITIES_ICONS } from "../../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../../router"
 import { EditSpotModalView } from "./EditSpotModalView"
 
-type AmenityObject = { [key in keyof typeof AMENITIES]: boolean }
+export type AmenityObject = { [key in keyof typeof AMENITIES]: boolean }
 
 export function EditSpotAmenitiesScreen() {
   const { params } = useParams<"EditSpotAmenitiesScreen">()
@@ -46,7 +46,7 @@ export function EditSpotAmenitiesScreen() {
   )
 }
 
-function AmenitySelector({
+export function AmenitySelector({
   label,
   isSelected,
   onToggle,

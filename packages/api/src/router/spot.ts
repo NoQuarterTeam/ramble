@@ -126,6 +126,24 @@ export const spotRouter = createTRPCRouter({
     const rating = await ctx.prisma.review.aggregate({ where: { spotId: input.id }, _avg: { rating: true } })
     return { ...spot, rating }
   }),
+  report: publicProcedure.input(z.object({ id: z.string().uuid() })).query(async ({ ctx, input }) => {
+    const spot = await ctx.prisma.spot.findUnique({
+      where: { id: input.id, ...publicSpotWhereClause(ctx.user?.id) },
+      select: {
+        id: true,
+        type: true,
+        name: true,
+        description: true,
+        isPetFriendly: true,
+        latitude: true,
+        longitude: true,
+        images: true,
+        amenities: { select: amenitiesFields },
+      },
+    })
+    if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
+    return spot
+  }),
   detail: publicProcedure.input(z.object({ id: z.string().uuid() })).query(async ({ ctx, input }) => {
     const { spot, rating } = await promiseHash({
       spot: ctx.prisma.spot.findUnique({
