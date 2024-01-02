@@ -53,7 +53,7 @@ export async function getMaybeUser<T extends Prisma.UserSelect>(request: Request
   if (!user) return null
   return user as unknown as Prisma.UserGetPayload<{ select: T }>
 }
-export type MayubeUser = Await<typeof getMaybeUser>
+export type MaybeUser = Await<typeof getMaybeUser>
 
 export async function getCurrentAdmin(request: Request) {
   const userId = await requireUser(request)
