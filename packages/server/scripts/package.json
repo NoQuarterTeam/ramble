@@ -6,7 +6,8 @@
     "blur": "pnpm with-env ts-node ./src/format/gen-blurhash.ts",
     "crag": "pnpm with-env ts-node ./src/scraping/get-thecrag.ts",
     "gpt": "pnpm with-env ts-node ./src/export/ramble-gpt.ts",
-    "with-env": "dotenv -e ../../../.env --"
+    "users": "pnpm with-env ts-node ./src/export/initial-users.ts",
+    "with-env": "dotenv -e ../../../../.env --"
   },
   "sideEffects": false,
   "devDependencies": {
@@ -16,16 +17,17 @@
     "@ramble/database": "workspace:*",
     "@ramble/eslint-config": "workspace:*",
     "@ramble/shared": "workspace:*",
+    "@ramble/server-services": "workspace:*",
     "@types/html-to-text": "9.0.4",
-    "@types/node": "18.19.2",
+    "@types/node": "18.19.4",
     "cheerio": "1.0.0-rc.12",
-    "csv-stringify": "6.4.4",
+    "csv-stringify": "6.4.5",
     "dotenv-cli": "7.3.0",
     "graphql-request": "6.1.0",
     "graphql": "16.8.1",
     "html-to-text": "9.0.5",
-    "puppeteer": "21.5.2",
-    "ts-node": "10.9.1",
-    "typescript": "5.3.2"
+    "puppeteer": "21.6.1",
+    "ts-node": "10.9.2",
+    "typescript": "5.3.3"
   }
 }

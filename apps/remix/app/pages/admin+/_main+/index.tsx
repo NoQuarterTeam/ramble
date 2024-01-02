@@ -1,5 +1,4 @@
 import * as React from "react"
-// import { type SerializeFrom } from "@remix-run/node"
 import { Await, useLoaderData } from "@remix-run/react"
 import { cacheHeader } from "pretty-cache-header"
 
@@ -27,11 +26,9 @@ export const loader = async () => {
     },
   )
 }
-// type Res = SerializeFrom<typeof loader>
 
 export default function AdminHome() {
-  // eslint-disable-next-line
-  const promise: any = useLoaderData()
+  const promise = useLoaderData<typeof loader>()
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
       <Tile>

@@ -1,12 +1,10 @@
 import * as React from "react"
 import { decode } from "blurhash"
+import queryString from "query-string"
 
-import { merge, srcWhitelist } from "@ramble/shared"
+import { defaultBlurHash, merge, srcWhitelist } from "@ramble/shared"
 
 type Fit = "cover" | "contain" | "fill" | "inside" | "outside"
-
-const blurhash =
-  "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj["
 
 export interface OptimizedImageProps extends Omit<React.ComponentPropsWithoutRef<"img">, "placeholder" | "srcSet"> {
   height: number
@@ -26,7 +24,7 @@ export const OptimizedImage = React.forwardRef<HTMLImageElement, OptimizedImageP
   const newSrc = transformImageSrc(src, { width: props.width, height: props.height, quality, fit })
   return (
     <div className={merge("relative overflow-hidden", props.className)}>
-      <BlurCanvas blurHash={placeholder || blurhash} />
+      <BlurCanvas blurHash={placeholder || defaultBlurHash} />
       <img ref={ref} {...props} className="relative h-full w-full rounded-[inherit] object-cover" alt={props.alt} src={newSrc} />
     </div>
   )
@@ -39,12 +37,8 @@ export function transformImageSrc(
   if (!src) return undefined
 
   if (!srcWhitelist.some((s) => src.startsWith(s))) return src
-  const optionsString = Object.entries(options).reduce((acc, [key, value]) => {
-    if (value === undefined) return acc
-    return acc + `&${key}=${value}`
-  }, "")
-
-  return "/api/image/?src=" + encodeURIComponent(src) + optionsString
+  const searchParams = queryString.stringify({ src, ...options })
+  return "/api/image?" + searchParams
 }
 
 interface BlurCanvasProps {

@@ -27,6 +27,8 @@ const userSelectFields = {
   avatarBlurHash: true,
   username: true,
   role: true,
+  latitude: true,
+  longitude: true,
   createdAt: true,
 } satisfies Prisma.UserSelect
 

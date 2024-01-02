@@ -3,8 +3,8 @@ import { useFetcher, useLoaderData, useParams } from "@remix-run/react"
 import { cacheHeader } from "pretty-cache-header"
 import { promiseHash } from "remix-utils/promise"
 
-import { publicSpotWhereClauseRaw } from "@ramble/server-services"
-import { type SpotItemWithStatsAndImage } from "@ramble/shared"
+import { publicSpotWhereClauseRaw, spotItemDistanceFromMeField, spotItemSelectFields } from "@ramble/server-services"
+import { type SpotItemType } from "@ramble/shared"
 
 import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
@@ -13,7 +13,7 @@ import { fetchAndJoinSpotImages } from "~/lib/models/spot"
 import { notFound } from "~/lib/remix.server"
 import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
-import { getUserSession } from "~/services/session/session.server"
+import { getMaybeUser } from "~/services/auth/auth.server"
 
 import { SpotItem } from "./components/SpotItem"
 
@@ -25,17 +25,17 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   if (!user) throw notFound()
   const searchParams = new URL(request.url).searchParams
   const skip = parseInt((searchParams.get("skip") as string) || "0")
-  const { userId } = await getUserSession(request)
+  const currentUser = await getMaybeUser(request, { id: true, latitude: true, longitude: true })
+
   const { spots } = await promiseHash({
-    spots: db.$queryRaw<SpotItemWithStatsAndImage[]>`
+    spots: db.$queryRaw<SpotItemType[]>`
       SELECT
-        Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
-        (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
-        CAST((SELECT COUNT(ListSpot.spotId) FROM ListSpot WHERE ListSpot.spotId = Spot.id) AS CHAR(32)) AS savedCount
+        ${spotItemDistanceFromMeField(currentUser)},
+        ${spotItemSelectFields}
       FROM
         Spot
       WHERE
-        Spot.creatorId = ${user.id} AND ${publicSpotWhereClauseRaw(userId)} AND Spot.sourceUrl IS NULL
+        Spot.creatorId = ${user.id} AND ${publicSpotWhereClauseRaw(currentUser?.id)} AND Spot.sourceUrl IS NULL
       GROUP BY
         Spot.id
       ORDER BY

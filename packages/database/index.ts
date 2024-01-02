@@ -1,10 +1,11 @@
-import { connect } from "@planetscale/database"
+import { Client } from "@planetscale/database"
 import { PrismaPlanetScale } from "@prisma/adapter-planetscale"
 import { PrismaClient } from "@prisma/client"
 import { env } from "@ramble/server-env"
 
-const connection = connect({ url: env.DATABASE_URL })
-const adapter = new PrismaPlanetScale(connection)
+const client = new Client({ url: env.DATABASE_URL })
+
+const adapter = new PrismaPlanetScale(client)
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }
 

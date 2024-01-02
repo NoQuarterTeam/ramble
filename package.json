@@ -2,12 +2,13 @@
   "name": "@ramble/root",
   "private": true,
   "dependencies": {
-    "turbo": "1.10.16"
+    "turbo": "1.11.2"
   },
+  "type": "commonjs",
   "devDependencies": {
-    "prettier": "3.1.0",
-    "prettier-plugin-tailwindcss": "0.5.7",
-    "typescript": "5.3.2"
+    "prettier": "3.1.1",
+    "prettier-plugin-tailwindcss": "0.5.10",
+    "typescript": "5.3.3"
   },
   "scripts": {
     "build": "turbo run build",
@@ -25,10 +26,10 @@
   "prisma": {
     "schema": "./packages/database/schema.prisma"
   },
-  "packageManager": "pnpm@8.11.0",
+  "packageManager": "pnpm@8.12.0",
   "engines": {
-    "node": ">=18.17.0",
-    "pnpm": ">=8.0.0"
+    "node": ">=18",
+    "pnpm": ">=8"
   },
   "pnpm": {
     "patchedDependencies": {
@@ -37,17 +38,6 @@
       "@turf/boolean-point-in-polygon@6.5.0": "patches/@turf__boolean-point-in-polygon@6.5.0.patch",
       "@turf/center@6.5.0": "patches/@turf__center@6.5.0.patch",
       "@turf/bbox@6.5.0": "patches/@turf__bbox@6.5.0.patch"
-    },
-    "supportedArchitectures": {
-      "os": [
-        "darwin",
-        "current",
-        "linux"
-      ],
-      "cpu": [
-        "x64",
-        "arm64"
-      ]
     }
   }
 }

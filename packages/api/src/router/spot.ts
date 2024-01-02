@@ -1,17 +1,26 @@
-import crypto from "crypto"
 import { TRPCError } from "@trpc/server"
+import crypto from "crypto"
 import dayjs from "dayjs"
 import Supercluster from "supercluster"
 import { z } from "zod"
 
-import { Prisma, SpotType } from "@ramble/database/types"
+import { SpotType } from "@ramble/database/types"
+import { FULL_WEB_URL } from "@ramble/server-env"
 import { clusterSchema, spotAmenitiesSchema, spotSchema, userSchema } from "@ramble/server-schemas"
-import { generateBlurHash, geocodeCoords, publicSpotWhereClause, publicSpotWhereClauseRaw } from "@ramble/server-services"
-import { amenitiesFields, type SpotItemWithStatsAndImage, spotPartnerFields, promiseHash } from "@ramble/shared"
+import {
+  generateBlurHash,
+  geocodeCoords,
+  publicSpotWhereClause,
+  publicSpotWhereClauseRaw,
+  spotItemDistanceFromMeField,
+  spotItemSelectFields,
+  spotListQuery,
+} from "@ramble/server-services"
+import { amenitiesFields, promiseHash, spotPartnerFields } from "@ramble/shared"
+import { type SpotItemType } from "@ramble/shared"
 
 import { fetchAndJoinSpotImages } from "../lib/spot"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
-import { FULL_WEB_URL } from "@ramble/server-env"
 
 export type SpotClusterTypes = { [key in SpotType]?: number }
 
@@ -84,40 +93,14 @@ export const spotRouter = createTRPCRouter({
     return ctx.prisma.spot.update({ where: { id: input.id }, data: { deletedAt: new Date() } })
   }),
   list: publicProcedure
-    .input(z.object({ skip: z.number().optional(), sort: z.enum(["latest", "rated", "saved"]).optional() }))
+    .input(z.object({ skip: z.number().optional(), sort: z.enum(["latest", "rated", "saved", "near"]).optional() }))
     .query(async ({ ctx, input }) => {
       const sort = input.sort || "latest"
-      const ORDER_BY = Prisma.sql // prepared orderBy
-      `ORDER BY
-        ${
-          sort === "latest"
-            ? Prisma.sql`Spot.verifiedAt DESC, Spot.id`
-            : sort === "saved"
-              ? Prisma.sql`savedCount DESC, Spot.id`
-              : Prisma.sql`rating DESC, Spot.id`
-        }
-      `
       try {
-        const spots = await ctx.prisma.$queryRaw<Array<SpotItemWithStatsAndImage>>`
-          SELECT
-            Spot.id, Spot.name, Spot.type, Spot.address,  null as image, null as blurHash,
-            (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
-            CAST((SELECT COUNT(ListSpot.spotId) FROM ListSpot WHERE ListSpot.spotId = Spot.id) AS CHAR(32)) AS savedCount
-          FROM
-            Spot
-          WHERE
-            Spot.verifiedAt IS NOT NULL AND Spot.type IN (${Prisma.join([
-              SpotType.CAMPING,
-              SpotType.FREE_CAMPING,
-            ])}) AND ${publicSpotWhereClauseRaw(ctx.user?.id)} 
-          GROUP BY
-            Spot.id
-          ${ORDER_BY}
-          LIMIT 20
-          OFFSET ${input.skip || 0}
+        const spots = await ctx.prisma.$queryRaw<Array<SpotItemType>>`
+          ${spotListQuery({ user: ctx.user, sort, take: 20, skip: input.skip })}
         `
         await fetchAndJoinSpotImages(ctx.prisma, spots)
-
         return spots
       } catch (error) {
         console.log(error)
@@ -186,8 +169,9 @@ export const spotRouter = createTRPCRouter({
         })
     }
     return {
-      // remove ...spot after new deploys
+      // --- remove ...spot after new deploys
       ...spot,
+      // ---
       spot,
       translatedDescription,
       descriptionHash,
@@ -198,15 +182,16 @@ export const spotRouter = createTRPCRouter({
   byUser: publicProcedure.input(userSchema.pick({ username: true })).query(async ({ ctx, input }) => {
     const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })
     if (!user) throw new TRPCError({ code: "NOT_FOUND" })
-    const spots = await ctx.prisma.$queryRaw<SpotItemWithStatsAndImage[]>`
+    const spots = await ctx.prisma.$queryRaw<SpotItemType[]>`
       SELECT
-        Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
-        (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
-        CAST((SELECT COUNT(ListSpot.spotId) FROM ListSpot WHERE ListSpot.spotId = Spot.id) AS CHAR(32)) AS savedCount
+        ${spotItemDistanceFromMeField(ctx.user)},
+        ${spotItemSelectFields}
       FROM
         Spot
       WHERE
-        Spot.creatorId = ${user.id} AND ${publicSpotWhereClauseRaw(user.id)} AND Spot.sourceUrl IS NULL
+        Spot.creatorId = ${user.id} AND Spot.verifiedAt IS NOT NULL AND ${publicSpotWhereClauseRaw(
+          user.id,
+        )} AND Spot.sourceUrl IS NULL
       GROUP BY
         Spot.id
       ORDER BY

@@ -102,11 +102,11 @@ export default function SpotPreview() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <div className="flex items-center space-x-1">
-                <Star className="sq-4" />
+                <Star className="sq-4 fill-black dark:fill-white" />
                 <p>{displayRating(rating)}</p>
               </div>
               <div className="flex items-center space-x-1">
-                <Heart className="sq-4" />
+                <Heart className="sq-4 fill-black dark:fill-white" />
                 <p>{spot._count.listSpots || 0}</p>
               </div>
             </div>
@@ -184,7 +184,7 @@ export default function SpotPreview() {
               </p>
               <p>·</p>
               <div className="flex items-center space-x-1">
-                <Star className="sq-5" />
+                <Star className="sq-5 fill-black dark:fill-white" />
                 <p>{displayRating(rating)}</p>
               </div>
             </div>

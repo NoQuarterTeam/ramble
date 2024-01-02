@@ -1,24 +1,24 @@
-import { TouchableOpacity, View } from "react-native"
+import { TouchableOpacity, useColorScheme, View } from "react-native"
 import { Heart, Star } from "lucide-react-native"
 
-import { type SpotItemWithStatsAndImage } from "@ramble/shared"
-import { createImageUrl, displayRating } from "@ramble/shared"
+import { createImageUrl, displayRating, displaySaved, type SpotItemType } from "@ramble/shared"
 
 import { useRouter } from "../app/router"
+import { api } from "../lib/api"
 import { Icon } from "./Icon"
 import { SpotIcon } from "./SpotIcon"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
-import { api } from "../lib/api"
 
 interface Props {
-  spot: SpotItemWithStatsAndImage
+  spot: SpotItemType
 }
 
 export function SpotItem({ spot }: Props) {
   const { push } = useRouter()
   const utils = api.useUtils()
 
+  const isDark = useColorScheme() === "dark"
   return (
     <TouchableOpacity
       onPressIn={() => {
@@ -52,22 +52,31 @@ export function SpotItem({ spot }: Props) {
       </View>
 
       <View className="pt-1">
-        <Text numberOfLines={2} className="text-xl">
-          {spot.name}
-        </Text>
-        <Text numberOfLines={1} className="font-300 pb-0.5 text-sm opacity-80">
-          {spot.address}
-        </Text>
-        <View className="flex flex-row items-center space-x-2">
-          <View className="flex flex-row items-center space-x-1">
-            <Icon icon={Star} size={16} />
-            <Text className="text-sm">{displayRating(spot.rating)}</Text>
-          </View>
-          <View className="flex flex-row flex-wrap items-center space-x-1">
-            <Icon icon={Heart} size={16} />
-            <Text className="text-sm">{spot.savedCount}</Text>
+        <View className="flex w-full flex-row items-center justify-between">
+          <Text numberOfLines={1} className="font-500 flex-1 text-lg">
+            {spot.name}
+          </Text>
+          <View className="flex flex-row items-center justify-end space-x-1.5 pl-1">
+            {spot.savedCount && spot.savedCount !== "0" && (
+              <View className="flex flex-row items-center space-x-1">
+                <Icon icon={Heart} size={15} fill={isDark ? "white" : "black"} />
+                <Text className="text-base">{displaySaved(spot.savedCount)}</Text>
+              </View>
+            )}
+            {spot.rating && spot.rating !== "0" && (
+              <View className="flex flex-row items-center space-x-1">
+                <Icon icon={Star} size={16} fill={isDark ? "white" : "black"} />
+                <Text className="text-base">{displayRating(spot.rating)}</Text>
+              </View>
+            )}
           </View>
         </View>
+        {spot.address && (
+          <Text numberOfLines={1} className="font-400 pb-0.5 text-sm opacity-80">
+            {spot.address}
+          </Text>
+        )}
+        {spot.distanceFromMe && <Text className="font-400 pb-0.5 text-sm opacity-80">{Math.round(spot.distanceFromMe)} km</Text>}
       </View>
     </TouchableOpacity>
   )

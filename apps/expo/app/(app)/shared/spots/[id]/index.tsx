@@ -1,21 +1,32 @@
 import * as React from "react"
-import { TouchableOpacity, useColorScheme, View, type ViewProps } from "react-native"
+import { Alert, Share as RNShare, TouchableOpacity, useColorScheme, View, type ViewProps } from "react-native"
 import { showLocation } from "react-native-map-link"
 import Animated, {
   Extrapolation,
   interpolate,
+  runOnJS,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated"
 import { useQuery } from "@tanstack/react-query"
 import dayjs from "dayjs"
+import { LinearGradient } from "expo-linear-gradient"
 import * as Location from "expo-location"
 import { StatusBar } from "expo-status-bar"
-import { Check, ChevronDown, ChevronLeft, Compass, Edit2, Heart, Languages, Star, Trash } from "lucide-react-native"
+import { Check, ChevronDown, ChevronLeft, Compass, Edit2, Heart, Languages, Share, Star, Trash } from "lucide-react-native"
 
 import { type Spot } from "@ramble/database/types"
-import { AMENITIES, canManageSpot, displayRating, isPartnerSpot, languages, merge, useDisclosure } from "@ramble/shared"
+import {
+  AMENITIES,
+  canManageSpot,
+  displayRating,
+  displaySaved,
+  isPartnerSpot,
+  languages,
+  merge,
+  useDisclosure,
+} from "@ramble/shared"
 
 import { Icon } from "../../../../../components/Icon"
 import { LanguageSelector } from "../../../../../components/LanguageSelector"
@@ -30,7 +41,7 @@ import { toast } from "../../../../../components/ui/Toast"
 import { VerifiedCard } from "../../../../../components/VerifiedCard"
 import { api } from "../../../../../lib/api"
 import { FULL_WEB_URL } from "../../../../../lib/config"
-import { height, width } from "../../../../../lib/device"
+import { height, isAndroid, width } from "../../../../../lib/device"
 import { useMe } from "../../../../../lib/hooks/useMe"
 import { AMENITIES_ICONS } from "../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../router"
@@ -44,12 +55,26 @@ export function SpotDetailScreen() {
   const { data, isLoading } = api.spot.detail.useQuery({ id: params.id })
   const spot = data?.spot
   const translationY = useSharedValue(0)
+  const [isScrolledPassedThreshold, setIsScrolledPassedThreshold] = React.useState(false)
 
-  const scrollHandler = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      translationY.value = event.contentOffset.y
+  const scrollHandler = useAnimatedScrollHandler(
+    {
+      onScroll: (event) => {
+        translationY.value = event.contentOffset.y
+        if (event.contentOffset.y > 200) {
+          if (!isScrolledPassedThreshold) {
+            runOnJS(setIsScrolledPassedThreshold)(true)
+          }
+        } else {
+          if (isScrolledPassedThreshold) {
+            runOnJS(setIsScrolledPassedThreshold)(false)
+          }
+        }
+      },
     },
-  })
+    [isScrolledPassedThreshold],
+  )
+
   const router = useRouter()
 
   const topBarStyle = useAnimatedStyle(() => {
@@ -116,7 +141,7 @@ export function SpotDetailScreen() {
     )
   return (
     <View>
-      <StatusBar animated style={isDark ? "light" : "dark"} />
+      <StatusBar style={isDark ? "light" : isScrolledPassedThreshold ? "dark" : "light"} />
       <Animated.ScrollView
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
@@ -132,13 +157,13 @@ export function SpotDetailScreen() {
             <SpotTypeBadge spot={spot} />
             <Heading className="text-2xl leading-7">{spot.name}</Heading>
             <View className="flex flex-row items-center space-x-2">
-              <View className="flex flex-row items-center space-x-1">
-                <Icon icon={Star} size={16} />
-                <Text className="text-sm">{displayRating(data.rating._avg.rating)}</Text>
-              </View>
               <View className="flex flex-row flex-wrap items-center space-x-1">
-                <Icon icon={Heart} size={16} />
-                <Text className="text-sm">{spot._count.listSpots || 0}</Text>
+                <Icon icon={Heart} size={16} fill={isDark ? "white" : "black"} />
+                <Text className="text-sm">{displaySaved(spot._count.listSpots) || 0}</Text>
+              </View>
+              <View className="flex flex-row items-center space-x-1">
+                <Icon icon={Star} size={16} fill={isDark ? "white" : "black"} />
+                <Text className="text-sm">{displayRating(data.rating._avg.rating)}</Text>
               </View>
             </View>
           </View>
@@ -261,13 +286,16 @@ export function SpotDetailScreen() {
         </View>
       </Animated.ScrollView>
 
+      {!isScrolledPassedThreshold && (
+        <LinearGradient className="absolute left-0 right-0 top-0 h-16" colors={["#231C18", "transparent"]} />
+      )}
       <Animated.View
         className="bg-background dark:bg-background-dark absolute left-0 right-0 top-0 h-[100px] border border-b border-gray-200 dark:border-gray-800"
         style={topBarStyle}
       />
 
-      <View className="absolute left-0 right-0 top-14 flex flex-row justify-between px-4">
-        <View className="flex flex-row items-center space-x-0.5">
+      <View className="absolute left-0 right-0 top-14 flex w-full flex-row justify-between px-4">
+        <View className="flex w-full flex-1 flex-row items-center space-x-0.5">
           <TouchableOpacity
             onPress={router.canGoBack() ? router.goBack : () => router.navigate("AppLayout")}
             activeOpacity={0.8}
@@ -275,20 +303,34 @@ export function SpotDetailScreen() {
           >
             {router.canGoBack() ? <Icon icon={ChevronLeft} className="pr-1" /> : <Icon icon={ChevronDown} className="pr-1" />}
           </TouchableOpacity>
-          <Animated.View style={[{ width: width - 148 }, nameStyle]}>
-            <Text className="text-lg text-black dark:text-white" numberOfLines={1}>
-              {spot.name}
-            </Text>
-          </Animated.View>
-        </View>
-        <View className="flex flex-row items-center space-x-3">
-          {/* <TouchableOpacity
-            // onPress={handleGetDirections}
-            activeOpacity={0.8}
-            className="sq-8 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
+          <Animated.Text
+            style={[nameStyle, { maxWidth: width - 175 }]}
+            className="font-400 pr-4 text-lg text-black dark:text-white"
+            numberOfLines={1}
           >
-            <Icon icon={Share} size={20}  />
-          </TouchableOpacity> */}
+            {spot.name}
+          </Animated.Text>
+        </View>
+        <View className="flex flex-shrink-0 flex-row items-center space-x-3">
+          <TouchableOpacity
+            onPress={async () => {
+              try {
+                await RNShare.share({
+                  title: spot.name,
+                  message: isAndroid ? FULL_WEB_URL + `/spots/${spot.id}` : spot.name,
+                  url: FULL_WEB_URL + `/spots/${spot.id}`,
+                })
+              } catch (error: unknown) {
+                if (error instanceof Error) {
+                  Alert.alert(error.message)
+                }
+              }
+            }}
+            activeOpacity={0.8}
+            className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
+          >
+            <Icon icon={Share} size={20} />
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={handleGetDirections}
             activeOpacity={0.8}

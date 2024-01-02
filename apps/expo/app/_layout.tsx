@@ -1,5 +1,6 @@
 import * as React from "react"
 import { useColorScheme } from "react-native"
+import { AvoidSoftInput } from "react-native-avoid-softinput"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { enableScreens } from "react-native-screens"
@@ -53,9 +54,11 @@ Sentry.init({
   enableInExpoDevelopment: false,
   debug: true,
 })
+AvoidSoftInput.setShouldMimicIOSBehavior(true)
 
 SplashScreen.preventAutoHideAsync()
 enableScreens()
+
 const prefix = Linking.createURL("/")
 const linking: LinkingOptions<ScreenParamsList> = {
   prefixes: [prefix, "ramble.guide", "dev.ramble.guide", "ramble://"],

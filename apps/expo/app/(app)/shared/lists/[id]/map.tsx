@@ -107,9 +107,11 @@ export function ListDetailMapScreen() {
           allowUpdates
           defaultSettings={
             params.initialCenter
-              ? { centerCoordinate: params.initialCenter, zoomLevel: 5 }
+              ? { pitch: 0, heading: 0, centerCoordinate: params.initialCenter, zoomLevel: 5 }
               : params.initialBounds
                 ? {
+                    pitch: 0,
+                    heading: 0,
                     bounds: {
                       paddingBottom: 50,
                       paddingTop: 50,

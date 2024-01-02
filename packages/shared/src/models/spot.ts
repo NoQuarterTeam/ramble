@@ -108,13 +108,6 @@ export const partners = {
   },
 } as const
 
-export type SpotItemWithStatsAndImage = Pick<Spot, "id" | "name" | "address" | "type"> & {
-  rating: string
-  savedCount: string
-  image?: SpotImage["path"] | null
-  blurHash?: SpotImage["blurHash"] | null
-}
-
 export const canManageSpot = (
   spot: Pick<Spot, "ownerId"> | null,
   user: Pick<User, "id" | "isAdmin" | "role" | "isVerified"> | null | undefined,
@@ -133,6 +126,11 @@ export const canManageSpot = (
 export function displayRating(rating: number | string | null | undefined) {
   if (!rating) return "New"
   return Math.round(Number(rating) * 100) / 100
+}
+export function displaySaved(saved: number | string | null | undefined) {
+  if (!saved) return null
+  if (typeof saved === "string" && parseInt(saved) > 50) return "50+"
+  return saved
 }
 
 export function doesSpotTypeRequireAmenities(type?: SpotType | null | undefined) {
@@ -261,3 +259,13 @@ export const spotMarkerClusterColorTypes = {
   VOLUNTEERING: colors.gray[50],
   REWILDING: colors.gray[50],
 } satisfies Record<SpotType, string>
+
+export type SpotListSort = "latest" | "rated" | "saved" | "near"
+
+export type SpotItemType = Pick<Spot, "id" | "name" | "address" | "type" | "latitude" | "longitude"> & {
+  rating: string
+  savedCount: string
+  image?: SpotImage["path"] | null
+  blurHash?: SpotImage["blurHash"] | null
+  distanceFromMe?: number | null
+}

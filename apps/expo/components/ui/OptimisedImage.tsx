@@ -1,11 +1,8 @@
 import { Image, type ImageProps } from "expo-image"
 
-import { srcWhitelist } from "@ramble/shared"
+import { defaultBlurHash, srcWhitelist } from "@ramble/shared"
 
 import { FULL_WEB_URL } from "../../lib/config"
-
-const blurhash =
-  "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj["
 
 type Fit = "cover" | "contain" | "fill" | "inside" | "outside"
 
@@ -24,7 +21,7 @@ interface Props extends ImageProps, Options {
 
 export function OptimizedImage({ source, height, width, quality, fit, ...props }: Props) {
   const newSrc = transformImageSrc(source.uri, { height, width, quality, fit })
-  return <Image {...props} placeholder={props.placeholder || blurhash} source={{ uri: newSrc }} />
+  return <Image {...props} placeholder={props.placeholder || defaultBlurHash} source={{ uri: newSrc }} />
 }
 
 export function transformImageSrc(
@@ -38,5 +35,5 @@ export function transformImageSrc(
     return acc + `&${key}=${value}`
   }, "")
 
-  return FULL_WEB_URL + "/api/image/?src=" + encodeURIComponent(src) + optionsString
+  return FULL_WEB_URL + "/api/image?src=" + encodeURIComponent(src) + optionsString
 }

@@ -15,7 +15,6 @@ import { Text } from "../../../components/ui/Text"
 import { VerifiedCard } from "../../../components/VerifiedCard"
 import { api } from "../../../lib/api"
 import { isTablet, width } from "../../../lib/device"
-import { useMe } from "../../../lib/hooks/useMe"
 import { useBackgroundColor } from "../../../lib/tailwind"
 import { useRouter } from "../../router"
 
@@ -23,7 +22,6 @@ const cardHeight = 470
 export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }) {
   const { data: spot, isLoading } = api.spot.mapPreview.useQuery({ id })
   const { push, navigate } = useRouter()
-  const { me } = useMe()
 
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
@@ -67,56 +65,39 @@ export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }
             </TouchableOpacity>
             <View className="flex flex-row items-center justify-between">
               <View className="flex flex-row items-center space-x-2">
-                <View className="flex flex-row items-center space-x-1">
-                  <Icon icon={Star} size={16} />
-                  <Text className="text-sm">{displayRating(spot.rating._avg.rating)}</Text>
-                </View>
                 <View className="flex flex-row flex-wrap items-center space-x-1">
-                  <Icon icon={Heart} size={16} />
+                  <Icon icon={Heart} size={16} fill={isDark ? "white" : "black"} />
                   <Text className="text-sm">{spot._count.listSpots || 0}</Text>
+                </View>
+                <View className="flex flex-row items-center space-x-1">
+                  <Icon icon={Star} size={16} fill={isDark ? "white" : "black"} />
+                  <Text className="text-sm">{displayRating(spot.rating._avg.rating)}</Text>
                 </View>
               </View>
 
+              <View className="rounded-xs overflow-hidden">
+                <SpotImageCarousel
+                  canAddMore
+                  onPress={() => push("SpotDetailScreen", { id: spot.id })}
+                  key={spot.id} // so images reload
+                  spotId={spot.id}
+                  width={width - 32}
+                  height={235}
+                  noOfColumns={isTablet ? 2 : 1}
+                  images={spot.images}
+                />
+              </View>
+              <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}</View>
+            </View>
+            <View>
               <Button
-                size="xs"
-                variant="outline"
-                onPress={
-                  me ? () => navigate("SaveSpotScreen", { id: spot.id }) : () => push("AuthLayout", { screen: "LoginScreen" })
-                }
-                leftIcon={
-                  <Icon
-                    icon={Heart}
-                    size={14}
-                    fill={spot.listSpots && spot.listSpots.length > 0 ? (isDark ? "white" : "black") : undefined}
-                  />
-                }
+                variant="link"
+                leftIcon={<Icon icon={Flag} size={16} />}
+                onPress={() => navigate("SpotReportScreen", { id: spot.id })}
               >
-                Save
+                Report incorrect data
               </Button>
             </View>
-
-            <View className="rounded-xs overflow-hidden">
-              <SpotImageCarousel
-                canAddMore
-                onPress={() => push("SpotDetailScreen", { id: spot.id })}
-                key={spot.id} // so images reload
-                spotId={spot.id}
-                width={width - 32}
-                height={235}
-                noOfColumns={isTablet ? 2 : 1}
-                images={spot.images}
-              />
-            </View>
-            <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}</View>
-          </View>
-          <View>
-            <Button
-              variant="link"
-              leftIcon={<Icon icon={Flag} size={16} />}
-              onPress={() => navigate("SpotReportScreen", { id: spot.id })}
-            >
-              Report incorrect data
-            </Button>
           </View>
         </View>
       )}

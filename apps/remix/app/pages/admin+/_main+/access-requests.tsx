@@ -9,7 +9,7 @@ import { z } from "zod"
 import { zx } from "zodix"
 
 import { type Prisma } from "@ramble/database/types"
-import { sendBetaInvitationEmail } from "@ramble/server-services"
+import { sendBetaInvitationEmail, updateLoopsContact } from "@ramble/server-services"
 
 import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -64,7 +64,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         .input(z.object({ id: z.string() }))
         .handler(async (data) => {
           const request = await db.accessRequest.update({ where: { id: data.id }, data: { acceptedAt: new Date() } })
-          await sendBetaInvitationEmail(request.email, request.code || "")
+          await sendBetaInvitationEmail(request.email, request.code)
+          void updateLoopsContact({ email: request.email, accessRequestAcceptedAt: new Date(), inviteCode: request.code })
           return json({ success: true })
         }),
     delete: () =>

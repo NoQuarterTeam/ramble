@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from "@remix-run/react"
 import { Heart, Star } from "lucide-react"
 
-import { type SpotItemWithStatsAndImage } from "@ramble/shared"
+import { displaySaved, type SpotItemType } from "@ramble/shared"
 import { createImageUrl, displayRating } from "@ramble/shared"
 
 import { OptimizedImage } from "~/components/OptimisedImage"
@@ -11,7 +11,7 @@ import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { SaveToList } from "~/pages/api+/spots+/$id.save-to-list"
 
 interface Props {
-  spot: SpotItemWithStatsAndImage
+  spot: SpotItemType
 }
 
 export function SpotItem({ spot }: Props) {
@@ -46,18 +46,25 @@ export function SpotItem({ spot }: Props) {
         </div>
 
         <div className="space-y-0.5">
-          <p className="line-clamp-2 truncate text-lg leading-tight">{spot.name}</p>
-          <p className="line-clamp-1 text-sm font-thin opacity-70">{spot.address || "-"}</p>
-          <div className="flex items-center space-x-2">
-            <div className="flex items-center space-x-1">
-              <Star className="sq-4" />
-              <p className="text-sm">{displayRating(spot.rating)}</p>
-            </div>
-            <div className="flex items-center space-x-1">
-              <Heart className="sq-4" />
-              <p className="text-sm">{spot.savedCount}</p>
+          <div className="flex items-center justify-between gap-2">
+            <p className="truncate text-lg font-medium leading-tight">{spot.name}</p>
+            <div className="flex items-center space-x-1.5">
+              {spot.savedCount && spot.savedCount !== "0" && (
+                <div className="flex items-center space-x-1">
+                  <Heart className="sq-3 fill-black dark:fill-white" />
+                  <p className="h-[18px] text-sm font-light">{displaySaved(spot.savedCount)}</p>
+                </div>
+              )}
+              {spot.rating && spot.rating !== "0" && (
+                <div className="flex items-center space-x-1">
+                  <Star className="sq-3.5 fill-black dark:fill-white" />
+                  <p className="h-[18px] text-sm font-light">{displayRating(spot.rating)}</p>
+                </div>
+              )}
             </div>
           </div>
+          {spot.address && <p className="line-clamp-1 text-sm font-thin opacity-70">{spot.address}</p>}
+          {spot.distanceFromMe && <p className="text-sm font-thin opacity-70">{Math.round(spot.distanceFromMe)} km away</p>}
         </div>
       </Link>
       <div className="absolute right-2 top-2">

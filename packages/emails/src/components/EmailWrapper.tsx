@@ -18,8 +18,8 @@ export function EmailWrapper({ children }: { children: React.ReactNode }) {
         </Container>
         <Container>
           <div className="p-10">
-            <p className="text-center text-sm text-gray-500">No Quarter B.V</p>
-            <p className="text-center text-sm text-gray-500">8A ms.Oslofjordweg 1033 SM, Amsterdam, The Netherlands</p>
+            <p className="text-center text-sm text-gray-500">No Quarter</p>
+            <p className="text-center text-sm text-gray-500">Huidekoperstraat 30 H, 1017 ZM, Amsterdam, The Netherlands</p>
           </div>
         </Container>
       </Container>

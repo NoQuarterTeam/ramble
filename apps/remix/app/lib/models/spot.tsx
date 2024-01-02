@@ -20,7 +20,7 @@ import {
 
 import { type SpotType } from "@ramble/database/types"
 import { joinSpotImages, type LatestSpotImages, spotImagesRawQuery } from "@ramble/server-services"
-import { type SpotItemWithStatsAndImage } from "@ramble/shared"
+import { type SpotItemType } from "@ramble/shared"
 
 import type { RambleIcon } from "~/components/ui"
 import { Icons } from "~/components/ui"
@@ -59,7 +59,7 @@ export const SPOT_TYPE_ICONS = {
   VOLUNTEERING: HeartHandshake,
 } satisfies Record<SpotType, RambleIcon>
 
-export const fetchAndJoinSpotImages = async (spots: SpotItemWithStatsAndImage[]) => {
+export const fetchAndJoinSpotImages = async (spots: SpotItemType[]) => {
   // get spot images and join to original spot payload
   const images = spots.length > 0 && (await db.$queryRaw<LatestSpotImages>(spotImagesRawQuery(spots.map((s) => s.id))))
   images && joinSpotImages(spots, images)

@@ -9,10 +9,18 @@ import {
   RasterSource,
   UserLocation,
 } from "@rnmapbox/maps"
-import { useQuery } from "@tanstack/react-query"
 import * as Location from "expo-location"
-import { CloudRain, Layers, MountainSnow, Navigation, PlusCircle, Settings2, User, Users2 } from "lucide-react-native"
-import * as Sentry from "sentry-expo"
+import {
+  CloudRain,
+  Layers,
+  // MountainSnow,
+  Navigation,
+  PlusCircle,
+  Settings2,
+  Thermometer,
+  User,
+  Users2,
+} from "lucide-react-native"
 
 import { type SpotType } from "@ramble/database/types"
 import { createImageUrl, INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
@@ -35,6 +43,7 @@ import { useMe } from "../../../lib/hooks/useMe"
 import { usePreferences } from "../../../lib/hooks/usePreferences"
 import { useRouter } from "../../router"
 import { type Filters, initialFilters, MapFilters } from "./MapFilters"
+import { MapSearch } from "./MapSearch"
 import { SpotPreview } from "./SpotPreview"
 
 type Cluster = RouterOutputs["spot"]["clusters"][number]
@@ -43,7 +52,7 @@ type UserCluster = RouterOutputs["user"]["clusters"][number]
 export function MapScreen() {
   const { push } = useRouter()
   const { me } = useMe()
-  const [preferences, setPreferences, isReady] = usePreferences()
+  const [preferences, setPreferences] = usePreferences()
 
   const [clusters, setClusters] = React.useState<Cluster[] | null>(null)
   const filterModalProps = useDisclosure()
@@ -255,11 +264,11 @@ export function MapScreen() {
       <Map onLayout={handleSetUserLocation} onMapIdle={onMapMove} onPress={() => setActiveSpotId(null)} ref={mapRef}>
         <UserLocation />
 
-        <RainRadar shouldRender={isReady && preferences.mapLayerRain} />
+        <MapLayers />
         <Camera
           ref={camera}
           allowUpdates
-          defaultSettings={{ centerCoordinate: [INITIAL_LONGITUDE, INITIAL_LATITUDE], zoomLevel: 8 }}
+          defaultSettings={{ centerCoordinate: [INITIAL_LONGITUDE, INITIAL_LATITUDE], zoomLevel: 8, pitch: 0, heading: 0 }}
         />
 
         {spotMarkers}
@@ -269,11 +278,17 @@ export function MapScreen() {
       {((isAndroid && isFetching) || (!isAndroid && isFetching && !!!clusters)) && (
         <View
           pointerEvents="none"
-          className="absolute left-4 top-10 flex flex-col items-center justify-center rounded-full bg-white p-2 dark:bg-gray-800"
+          className="absolute right-4 top-14 flex flex-col items-center justify-center rounded-full bg-white p-2 dark:bg-gray-800"
         >
           <Spinner />
         </View>
       )}
+
+      <MapSearch
+        onSearch={(center) => {
+          camera.current?.setCamera({ animationDuration: 600, zoomLevel: 14, centerCoordinate: center })
+        }}
+      />
 
       <TouchableOpacity
         activeOpacity={0.8}
@@ -288,24 +303,24 @@ export function MapScreen() {
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={mapLayerModalProps.onOpen}
-          className="sq-12 bg-background flex flex-row items-center justify-center rounded-full"
+          className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"
         >
-          <Icon icon={Layers} size={20} color="black" />
+          <Icon icon={Layers} size={20} />
           {Object.values(preferences).filter(Boolean).length > 0 && (
-            <View className="sq-5 bg-background absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-700">
-              <Text className="text-xs text-black">{Object.values(preferences).filter(Boolean).length}</Text>
+            <View className="sq-5 bg-background dark:bg-background-dark absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-700">
+              <Text className="text-xs">{Object.values(preferences).filter(Boolean).length}</Text>
             </View>
           )}
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={filterModalProps.onOpen}
-          className="sq-12 bg-background flex flex-row items-center justify-center rounded-full"
+          className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"
         >
-          <Icon icon={Settings2} size={20} color="black" />
+          <Icon icon={Settings2} size={20} />
           {filterCount > 0 && (
-            <View className="sq-5 bg-background absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-700">
-              <Text className="text-xs text-black">{filterCount}</Text>
+            <View className="sq-5 bg-background dark:bg-background-dark absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-700">
+              <Text className="text-xs ">{filterCount}</Text>
             </View>
           )}
         </TouchableOpacity>
@@ -313,9 +328,9 @@ export function MapScreen() {
 
       <TouchableOpacity
         onPress={handleSetUserLocation}
-        className="sq-12 bg-background absolute bottom-3 right-3 flex flex-row items-center justify-center rounded-full"
+        className="sq-12 bg-background dark:bg-background-dark absolute bottom-3 right-3 flex flex-row items-center justify-center rounded-full"
       >
-        <Icon icon={Navigation} size={20} color="black" />
+        <Icon icon={Navigation} size={20} />
       </TouchableOpacity>
 
       {activeSpotId && <SpotPreview id={activeSpotId} onClose={() => setActiveSpotId(null)} />}
@@ -345,7 +360,7 @@ export function MapScreen() {
                 <View>
                   <Text className="h-[25px] text-lg">Rain</Text>
                   <Text numberOfLines={2} style={{ lineHeight: 16 }} className="max-w-[220px] text-sm opacity-75">
-                    Shows the current european rain radar
+                    Shows the current rain radar
                   </Text>
                 </View>
               </View>
@@ -356,6 +371,22 @@ export function MapScreen() {
               />
             </View>
             <View className="flex flex-row items-center justify-between space-x-2">
+              <View className="flex flex-row items-center space-x-3">
+                <Icon icon={Thermometer} size={30} />
+                <View>
+                  <Text className="h-[25px] text-lg">Temperature</Text>
+                  <Text numberOfLines={2} style={{ lineHeight: 16 }} className="max-w-[220px] text-sm opacity-75">
+                    Shows the current temperature
+                  </Text>
+                </View>
+              </View>
+              <Switch
+                trackColor={{ true: colors.primary[600] }}
+                value={preferences.mapLayerTemp}
+                onValueChange={() => setPreferences({ ...preferences, mapLayerTemp: !preferences.mapLayerTemp })}
+              />
+            </View>
+            {/* <View className="flex flex-row items-center justify-between space-x-2">
               <View className="flex flex-row items-center space-x-3">
                 <Icon icon={MountainSnow} size={30} />
                 <View>
@@ -370,7 +401,7 @@ export function MapScreen() {
                 value={preferences.mapStyleSatellite}
                 onValueChange={() => setPreferences({ ...preferences, mapStyleSatellite: !preferences.mapStyleSatellite })}
               />
-            </View>
+            </View> */}
             {me && (
               <View className="flex flex-row items-center justify-between space-x-2">
                 <View className="flex flex-row items-center space-x-3">
@@ -397,39 +428,36 @@ export function MapScreen() {
   )
 }
 
-function RainRadar({ shouldRender }: { shouldRender: boolean }) {
-  const { data } = useQuery({
-    queryKey: ["rainRadar"],
-    queryFn: async () => {
-      try {
-        const res = await fetch(
-          "https://api.weather.com/v3/TileServer/series/productSet/PPAcore?apiKey=d7adbfe03bf54ea0adbfe03bf5fea065",
-        )
-        const jsonData = await res.json()
-        const data = jsonData.seriesInfo.radarEurope.series[0]?.ts as number | undefined
-        return data
-      } catch (error) {
-        Sentry.Native.captureException(error)
-      }
-    },
-    enabled: shouldRender,
-    staleTime: Infinity,
-    cacheTime: Infinity,
-    keepPreviousData: true,
-    refetchInterval: 1000 * 60 * 5,
-  })
-  if (!data) return null
+function MapLayers() {
+  const [preferences, _, isReady] = usePreferences()
 
+  if (!isReady) return null
   return (
     <>
-      <RasterSource
-        id="twcRadar"
-        tileSize={256}
-        tileUrlTemplates={[
-          `https://api.weather.com/v3/TileServer/tile/radarEurope?ts=${data}&xyz={x}:{y}:{z}&apiKey=d7adbfe03bf54ea0adbfe03bf5fea065`,
-        ]}
-      />
-      {shouldRender && <RasterLayer sourceID="twcRadar" id="radar" style={{ rasterOpacity: 0.4 }} />}
+      {preferences.mapLayerTemp && (
+        <>
+          <RasterSource
+            id="temp"
+            tileSize={256}
+            tileUrlTemplates={[
+              `https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63`,
+            ]}
+          />
+          <RasterLayer id="tempLayer" sourceID="temp" style={{ rasterOpacity: 0.4 }} />
+        </>
+      )}
+      {preferences.mapLayerRain && (
+        <>
+          <RasterSource
+            id="rain"
+            tileSize={256}
+            tileUrlTemplates={[
+              `https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63`,
+            ]}
+          />
+          <RasterLayer id="rainLayer" sourceID="rain" style={{ rasterOpacity: 0.4 }} />
+        </>
+      )}
     </>
   )
 }

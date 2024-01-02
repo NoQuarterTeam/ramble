@@ -1,16 +1,5 @@
-import "mapbox-gl/dist/mapbox-gl.css"
-
 import * as React from "react"
-import Map, {
-  GeolocateControl,
-  Layer,
-  type LngLatLike,
-  type MapRef,
-  Marker,
-  NavigationControl,
-  Source,
-  type ViewStateChangeEvent,
-} from "react-map-gl"
+import { Layer, type LngLatLike, type MapRef, Marker, Source, type ViewStateChangeEvent } from "react-map-gl"
 import { type MarkerEvent, type MarkerInstance } from "react-map-gl/dist/esm/types"
 import { cssBundleHref } from "@remix-run/css-bundle"
 import {
@@ -33,10 +22,10 @@ import { ClientOnly } from "remix-utils/client-only"
 
 import { createImageUrl, INITIAL_LATITUDE, INITIAL_LONGITUDE, join } from "@ramble/shared"
 
+import { Map } from "~/components/Map"
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { db } from "~/lib/db.server"
 import { usePreferences } from "~/lib/hooks/usePreferences"
-import { useTheme } from "~/lib/theme"
 import type { LinksFunction, LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
 import { MapFilters } from "~/pages/_main+/_app+/components/MapFilters"
@@ -88,7 +77,6 @@ export default function MapView() {
   const clusters = clustersFetcher.data
   const userClusters = userClustersFetcher.data
 
-  const theme = useTheme()
   const mapRef = React.useRef<MapRef>(null)
 
   const [searchParams] = useSearchParams()
@@ -203,52 +191,22 @@ export default function MapView() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [userClusters, preferences.mapUsers],
   )
-  const noMap = searchParams.get("noMap")
-
-  // React.useEffect(() => {
-  //   if (mapRef.current) {
-  //     console.log("stufffff")
-  //     console.log(mapRef.current)
-  //     console.log("done")
-  //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  //     // @ts-ignore
-  //     mapRef.current.setConfigProperty("basemap", "lightPreset", theme === "light" ? "day" : "night")
-  //   }
-  // }, [theme])
 
   return (
     <div className="h-nav-screen relative w-screen overflow-hidden">
-      {!noMap && (
-        <Map
-          mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
-          onLoad={(e) => {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            // e.target.setConfigProperty("basemap", "lightPreset", theme === "light" ? "day" : "dusk")
-            onMove(e)
-          }}
-          onMoveEnd={onMove}
-          ref={mapRef}
-          maxZoom={20}
-          style={{ height: "100%", width: "100%" }}
-          initialViewState={initialViewState}
-          attributionControl={false}
-          mapStyle={
-            preferences.mapStyleSatellite
-              ? "mapbox://styles/jclackett/clp122bar007z01qu21kc8h4g"
-              : theme === "dark"
-                ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
-                : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
-          }
-          // mapStyle={"mapbox://styles/mapbox/standard-beta"}
-        >
-          <MapLayers />
-          {markers}
-          {userMarkers}
-          <GeolocateControl position="bottom-right" />
-          <NavigationControl position="bottom-right" />
-        </Map>
-      )}
+      <Map
+        onLoad={onMove}
+        onMoveEnd={onMove}
+        ref={mapRef}
+        initialViewState={initialViewState}
+        mapStyle={
+          preferences.mapStyleSatellite ? "mapbox://styles/mapbox/satellite-streets-v12" : "mapbox://styles/mapbox/standard"
+        }
+      >
+        <MapLayers />
+        {markers}
+        {userMarkers}
+      </Map>
 
       <ClientOnly>{() => <MapFilters onChange={onParamsChange} />}</ClientOnly>
       <MapLayerControls />
@@ -331,24 +289,6 @@ export function ErrorBoundary() {
 
 function MapLayers() {
   const preferences = usePreferences()
-  const [rainData, setRainData] = React.useState<number | undefined>(undefined)
-  React.useEffect(() => {
-    if (preferences.mapLayerRain) {
-      async function getData() {
-        try {
-          const res = await fetch(
-            "https://api.weather.com/v3/TileServer/series/productSet/PPAcore?apiKey=d7adbfe03bf54ea0adbfe03bf5fea065",
-          )
-          const jsonData = await res.json()
-          const data = jsonData.seriesInfo.radarEurope.series[0]?.ts as number | undefined
-          setRainData(data)
-        } catch (error) {
-          console.log(error)
-        }
-      }
-      getData()
-    }
-  }, [preferences.mapLayerRain])
 
   return (
     <>
@@ -360,25 +300,7 @@ function MapLayers() {
             tileSize={256}
             tiles={[`https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63`]}
           />
-          <Layer
-            id="tempLayer"
-            source="temp"
-            type="raster"
-            // paint={{
-            //   "raster-scaling": "lanczos",
-            //   "raster-colorizer-default-mode": "linear",
-            //   "raster-colorizer-default-color": "transparent",
-            //   "raster-colorizer-stops": `
-            //     stop(0, rgba(225, 200, 100, 0))
-            //     stop(0.1, rgba(200, 150, 150, 0))
-            //     stop(0.2, rgba(150, 150, 170, 0))
-            //     stop(0.5, rgba(120, 120, 190, 0))
-            //     stop(1, rgba(210, 110, 205, 0.3))
-            //     stop(10, rgba(20,80, 225, 0.7))
-            //     stop(140, rgba(200, 20, 255, 0.9))
-            //   `,
-            // }}
-          />
+          <Layer id="tempLayer" source="temp" type="raster" />
           <div className="bg-background rounded-xs absolute right-20 top-4 flex items-center space-x-4 px-2 py-1 text-xs shadow">
             <p>Temperature, °C</p>
             <div>
@@ -399,17 +321,17 @@ function MapLayers() {
           </div>
         </>
       )}
-      {preferences.mapLayerRain && rainData && (
+      {preferences.mapLayerRain && (
         <>
           <Source
             id="rain"
             type="raster"
             tileSize={256}
             tiles={[
-              `https://api.weather.com/v3/TileServer/tile/radarEurope?ts=${rainData}&xyz={x}:{y}:{z}&apiKey=d7adbfe03bf54ea0adbfe03bf5fea065`,
+              `https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63`,
             ]}
           />
-          <Layer type="raster" source="rain" id="rainLayer" />
+          <Layer id="rainLayer" source="rain" type="raster" />
         </>
       )}
     </>

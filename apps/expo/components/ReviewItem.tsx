@@ -1,12 +1,12 @@
+import * as React from "react"
+import { TouchableOpacity, useColorScheme, View } from "react-native"
+import { useQuery } from "@tanstack/react-query"
 import dayjs from "dayjs"
 import { Star, User2 } from "lucide-react-native"
-import * as React from "react"
-import { TouchableOpacity, View } from "react-native"
 
 import { type Review, type User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
-import { useQuery } from "@tanstack/react-query"
 import { useRouter } from "../app/router"
 import { api } from "../lib/api"
 import { FULL_WEB_URL } from "../lib/config"
@@ -53,6 +53,7 @@ export function ReviewItem({
     enabled: isTranslated && !!me,
   })
 
+  const isDark = useColorScheme() === "dark"
   return (
     <View className="rounded-xs space-y-2 border border-gray-200 p-4 dark:border-gray-700">
       <View className="flex flex-row justify-between">
@@ -83,12 +84,12 @@ export function ReviewItem({
             <Text>
               {review.user.firstName} {review.user.lastName}
             </Text>
-            <Text className="text-sm   opacity-70">{dayjs(review.createdAt).format("DD/MM/YYYY")}</Text>
+            <Text className="text-sm opacity-70">{dayjs(review.createdAt).format("DD/MM/YYYY")}</Text>
           </View>
         </TouchableOpacity>
 
         <View className="flex flex-row items-center space-x-1">
-          <Icon icon={Star} size={20} />
+          <Icon icon={Star} size={20} fill={isDark ? "white" : "black"} />
           <Text className="text-sm">{review.rating}</Text>
         </View>
       </View>

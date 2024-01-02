@@ -53,8 +53,6 @@ export function AccountInfoScreen() {
   const onSubmit = form.handleSubmit((data) => {
     if (data.username.trim().includes(" ")) return toast({ title: "Username can not contain empty spaces" })
     Keyboard.dismiss()
-    console.log({ data })
-
     mutate(data)
   })
 
