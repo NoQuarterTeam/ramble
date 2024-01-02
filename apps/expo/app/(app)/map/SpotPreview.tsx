@@ -1,7 +1,7 @@
 import * as React from "react"
 import { TouchableOpacity, useColorScheme, View } from "react-native"
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
-import { Heart, Star, X } from "lucide-react-native"
+import { Flag, Heart, Star, X } from "lucide-react-native"
 
 import { displayRating, isPartnerSpot } from "@ramble/shared"
 
@@ -19,7 +19,7 @@ import { useMe } from "../../../lib/hooks/useMe"
 import { useBackgroundColor } from "../../../lib/tailwind"
 import { useRouter } from "../../router"
 
-const cardHeight = 430
+const cardHeight = 470
 export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }) {
   const { data: spot, isLoading } = api.spot.mapPreview.useQuery({ id })
   const { push, navigate } = useRouter()
@@ -50,63 +50,74 @@ export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }
       ) : !spot ? (
         <Text>Spot not found</Text>
       ) : (
-        <View className="space-y-2">
-          <TouchableOpacity onPress={() => push("SpotDetailScreen", { id: spot.id })} activeOpacity={0.9}>
-            <SpotTypeBadge spot={spot} />
-          </TouchableOpacity>
+        <View>
+          <View className="space-y-2">
+            <TouchableOpacity onPress={() => push("SpotDetailScreen", { id: spot.id })} activeOpacity={0.9}>
+              <SpotTypeBadge spot={spot} />
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => push("SpotDetailScreen", { id: spot.id })}
-            activeOpacity={0.7}
-            className="flex flex-row items-center space-x-2"
-          >
-            <Text numberOfLines={1} className="text-lg leading-6">
-              {spot.name}
-            </Text>
-          </TouchableOpacity>
-          <View className="flex flex-row items-center justify-between">
-            <View className="flex flex-row items-center space-x-2">
-              <View className="flex flex-row items-center space-x-1">
-                <Icon icon={Star} size={16} />
-                <Text className="text-sm">{displayRating(spot.rating._avg.rating)}</Text>
+            <TouchableOpacity
+              onPress={() => push("SpotDetailScreen", { id: spot.id })}
+              activeOpacity={0.7}
+              className="flex flex-row items-center space-x-2"
+            >
+              <Text numberOfLines={1} className="text-lg leading-6">
+                {spot.name}
+              </Text>
+            </TouchableOpacity>
+            <View className="flex flex-row items-center justify-between">
+              <View className="flex flex-row items-center space-x-2">
+                <View className="flex flex-row items-center space-x-1">
+                  <Icon icon={Star} size={16} />
+                  <Text className="text-sm">{displayRating(spot.rating._avg.rating)}</Text>
+                </View>
+                <View className="flex flex-row flex-wrap items-center space-x-1">
+                  <Icon icon={Heart} size={16} />
+                  <Text className="text-sm">{spot._count.listSpots || 0}</Text>
+                </View>
               </View>
-              <View className="flex flex-row flex-wrap items-center space-x-1">
-                <Icon icon={Heart} size={16} />
-                <Text className="text-sm">{spot._count.listSpots || 0}</Text>
-              </View>
+
+              <Button
+                size="xs"
+                variant="outline"
+                onPress={
+                  me ? () => navigate("SaveSpotScreen", { id: spot.id }) : () => push("AuthLayout", { screen: "LoginScreen" })
+                }
+                leftIcon={
+                  <Icon
+                    icon={Heart}
+                    size={14}
+                    fill={spot.listSpots && spot.listSpots.length > 0 ? (isDark ? "white" : "black") : undefined}
+                  />
+                }
+              >
+                Save
+              </Button>
             </View>
 
+            <View className="rounded-xs overflow-hidden">
+              <SpotImageCarousel
+                canAddMore
+                onPress={() => push("SpotDetailScreen", { id: spot.id })}
+                key={spot.id} // so images reload
+                spotId={spot.id}
+                width={width - 32}
+                height={235}
+                noOfColumns={isTablet ? 2 : 1}
+                images={spot.images}
+              />
+            </View>
+            <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}</View>
+          </View>
+          <View>
             <Button
-              size="xs"
-              variant="outline"
-              onPress={
-                me ? () => navigate("SaveSpotScreen", { id: spot.id }) : () => push("AuthLayout", { screen: "LoginScreen" })
-              }
-              leftIcon={
-                <Icon
-                  icon={Heart}
-                  size={14}
-                  fill={spot.listSpots && spot.listSpots.length > 0 ? (isDark ? "white" : "black") : undefined}
-                />
-              }
+              variant="link"
+              leftIcon={<Icon icon={Flag} size={16} />}
+              onPress={() => navigate("SpotReportScreen", { id: spot.id })}
             >
-              Save
+              Report incorrect data
             </Button>
           </View>
-
-          <View className="rounded-xs overflow-hidden">
-            <SpotImageCarousel
-              canAddMore
-              onPress={() => push("SpotDetailScreen", { id: spot.id })}
-              key={spot.id} // so images reload
-              spotId={spot.id}
-              width={width - 32}
-              height={235}
-              noOfColumns={isTablet ? 2 : 1}
-              images={spot.images}
-            />
-          </View>
-          <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}</View>
         </View>
       )}
 
