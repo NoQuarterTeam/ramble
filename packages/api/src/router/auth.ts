@@ -1,14 +1,16 @@
 import { TRPCError } from "@trpc/server"
-import bcrypt from "bcryptjs"
+
 import { z } from "zod"
 
 import { IS_DEV } from "@ramble/server-env"
 import { loginSchema, registerSchema } from "@ramble/server-schemas"
 import {
+  comparePasswords,
   createAccessRequest,
   createAuthToken,
   deleteLoopsContact,
   generateInviteCodes,
+  hashPassword,
   sendAccessRequestConfirmationEmail,
   sendSlackMessage,
   updateLoopsContact,
@@ -20,7 +22,7 @@ export const authRouter = createTRPCRouter({
   login: publicProcedure.input(loginSchema).mutation(async ({ ctx, input }) => {
     const user = await ctx.prisma.user.findUnique({ where: { email: input.email } })
     if (!user) throw new TRPCError({ code: "BAD_REQUEST", message: "Incorrect email or password" })
-    const isSamePassword = bcrypt.compareSync(input.password, user.password)
+    const isSamePassword = comparePasswords(input.password, user.password)
     if (!isSamePassword) throw new TRPCError({ code: "BAD_REQUEST", message: "Incorrect email or password" })
     const token = createAuthToken({ id: user.id })
     return { user, token }
@@ -37,7 +39,7 @@ export const authRouter = createTRPCRouter({
 
     const existingUsername = await ctx.prisma.user.findUnique({ where: { username: input.username } })
     if (existingUsername) throw new TRPCError({ code: "BAD_REQUEST", message: "User with this username already exists" })
-    const hashedPassword = bcrypt.hashSync(input.password, 10)
+    const hashedPassword = hashPassword(input.password)
     const user = await ctx.prisma.user.create({
       data: {
         ...input,
