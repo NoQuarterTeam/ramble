@@ -31,7 +31,7 @@ const config = {
     },
   },
   plugins: [
-    plugin(function ({ addUtilities, theme, config }) {
+    plugin(function ({ addUtilities }) {
       addUtilities({
         ".brand-header": {
           "@apply font-serif font-bold italic text-primary": {},
