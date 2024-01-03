@@ -8,16 +8,16 @@ import { displayRating, isPartnerSpot } from "@ramble/shared"
 import { Icon } from "../../../components/Icon"
 import { PartnerLink } from "../../../components/PartnerLink"
 import { SpotTypeBadge } from "../../../components/SpotTypeBadge"
+import { Button } from "../../../components/ui/Button"
 import { Spinner } from "../../../components/ui/Spinner"
 import { SpotImageCarousel } from "../../../components/ui/SpotImageCarousel"
 import { Text } from "../../../components/ui/Text"
 import { VerifiedCard } from "../../../components/VerifiedCard"
 import { api } from "../../../lib/api"
 import { isTablet, width } from "../../../lib/device"
+import { useMe } from "../../../lib/hooks/useMe"
 import { useBackgroundColor } from "../../../lib/tailwind"
 import { useRouter } from "../../router"
-import { useMe } from "../../../lib/hooks/useMe"
-import { Button } from "../../../components/ui/Button"
 
 const cardHeight = 430
 export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }) {
