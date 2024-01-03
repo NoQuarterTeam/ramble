@@ -1,14 +1,13 @@
 import * as React from "react"
 import { TouchableOpacity, useColorScheme, View } from "react-native"
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
-import { Flag, Heart, Star, X } from "lucide-react-native"
+import { Heart, Star, X } from "lucide-react-native"
 
 import { displayRating, isPartnerSpot } from "@ramble/shared"
 
 import { Icon } from "../../../components/Icon"
 import { PartnerLink } from "../../../components/PartnerLink"
 import { SpotTypeBadge } from "../../../components/SpotTypeBadge"
-import { Button } from "../../../components/ui/Button"
 import { Spinner } from "../../../components/ui/Spinner"
 import { SpotImageCarousel } from "../../../components/ui/SpotImageCarousel"
 import { Text } from "../../../components/ui/Text"
@@ -21,7 +20,7 @@ import { useRouter } from "../../router"
 const cardHeight = 470
 export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }) {
   const { data: spot, isLoading } = api.spot.mapPreview.useQuery({ id })
-  const { push, navigate } = useRouter()
+  const { push } = useRouter()
 
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
@@ -88,15 +87,6 @@ export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }
                 />
               </View>
               <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}</View>
-            </View>
-            <View>
-              <Button
-                variant="link"
-                leftIcon={<Icon icon={Flag} size={16} />}
-                onPress={() => navigate("SpotReportScreen", { id: spot.id })}
-              >
-                Report incorrect data
-              </Button>
             </View>
           </View>
         </View>

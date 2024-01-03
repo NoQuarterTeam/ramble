@@ -1,18 +1,13 @@
 import * as React from "react"
-import { ScrollView, Switch, View } from "react-native"
+import { ScrollView, View } from "react-native"
 
 import { AMENITIES } from "@ramble/shared"
-import colors from "@ramble/tailwind-config/src/colors"
 
-import { Icon } from "../../../../../../components/Icon"
 import { Button } from "../../../../../../components/ui/Button"
-import { type RambleIcon } from "../../../../../../components/ui/Icons"
-import { Text } from "../../../../../../components/ui/Text"
 import { AMENITIES_ICONS } from "../../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../../router"
 import { EditSpotModalView } from "./EditSpotModalView"
-
-export type AmenityObject = { [key in keyof typeof AMENITIES]: boolean }
+import { AmenityObject, AmenitySelector } from "../../../../../../components/AmenitySelector"
 
 export function EditSpotAmenitiesScreen() {
   const { params } = useParams<"EditSpotAmenitiesScreen">()
@@ -43,27 +38,5 @@ export function EditSpotAmenitiesScreen() {
         </Button>
       </View>
     </EditSpotModalView>
-  )
-}
-
-export function AmenitySelector({
-  label,
-  isSelected,
-  onToggle,
-  icon,
-}: {
-  label: string
-  isSelected: boolean
-  onToggle: () => void
-  icon: RambleIcon | null
-}) {
-  return (
-    <View className="flex w-full flex-row items-center justify-between py-1">
-      <View className="flex flex-row items-center space-x-1">
-        {icon && <Icon icon={icon} size={20} />}
-        <Text className="text-xl">{label}</Text>
-      </View>
-      <Switch trackColor={{ true: colors.primary[600] }} value={isSelected} onValueChange={onToggle} />
-    </View>
   )
 }

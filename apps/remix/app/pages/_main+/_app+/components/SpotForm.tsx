@@ -8,7 +8,7 @@ import queryString from "query-string"
 
 import type { Spot, SpotAmenities, SpotImage } from "@ramble/database/types"
 import { type SpotType } from "@ramble/database/types"
-import { type spotAmenitiesSchema, type spotSchema } from "@ramble/server-schemas"
+import { type spotSchema } from "@ramble/server-schemas"
 import {
   AMENITIES,
   doesSpotTypeRequireAmenities,
@@ -22,13 +22,13 @@ import { Form, FormButton, FormError, FormField, FormFieldError, FormFieldLabel,
 import { ImageUploader } from "~/components/ImageUploader"
 import { Map } from "~/components/Map"
 import { SpotIcon } from "~/components/SpotIcon"
-import type { RambleIcon } from "~/components/ui"
 import { Button, Checkbox, CloseButton, IconButton, Spinner, Textarea, Tooltip } from "~/components/ui"
 import { useFormErrors } from "~/lib/form"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 import type { SerializeFrom } from "~/lib/vendor/vercel.server"
 import type { geocodeLoader } from "~/pages/api+/mapbox+/geocode"
+import { AmenitySelector } from "~/components/AmenitySelector"
 
 export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotImage[]; amenities?: SpotAmenities | null }> }) {
   // const ipInfo = useRouteLoaderData("pages/_app") as IpInfo
@@ -208,37 +208,6 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
 
         <CircleDot className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
       </div>
-    </div>
-  )
-}
-
-export function AmenitySelector({
-  label,
-  defaultIsSelected,
-  value,
-  Icon,
-}: {
-  label: string
-  defaultIsSelected: boolean
-  value: string
-  Icon: RambleIcon | null
-}) {
-  const form = useFormErrors<typeof spotAmenitiesSchema>()
-  const errors = form?.fieldErrors?.[value as keyof typeof form.fieldErrors]
-  const [isSelected, setIsSelected] = React.useState(defaultIsSelected)
-  return (
-    <div>
-      <Button
-        leftIcon={Icon && <Icon size={20} />}
-        variant={isSelected ? "primary" : "outline"}
-        type="button"
-        size="md"
-        onClick={() => setIsSelected(!isSelected)}
-      >
-        {label}
-      </Button>
-      {errors && <ul id="type-error">{errors?.map((error, i) => <FormFieldError key={i}>{error}</FormFieldError>)}</ul>}
-      <input type="hidden" name={value} value={String(isSelected)} />
     </div>
   )
 }

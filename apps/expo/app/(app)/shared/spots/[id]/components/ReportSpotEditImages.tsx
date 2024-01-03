@@ -1,11 +1,11 @@
 import * as React from "react"
 import { ScrollView, TouchableOpacity, View } from "react-native"
-import { Button } from "./ui/Button"
 import { Image } from "expo-image"
-import { BrandHeading } from "./ui/BrandHeading"
-import { Icon } from "./Icon"
 import { Flag, X } from "lucide-react-native"
 import { createImageUrl, join } from "@ramble/shared"
+import { BrandHeading } from "../../../../../../components/ui/BrandHeading"
+import { Icon } from "../../../../../../components/Icon"
+import { Button } from "../../../../../../components/ui/Button"
 
 interface Props {
   images: { id: string; path: string }[]

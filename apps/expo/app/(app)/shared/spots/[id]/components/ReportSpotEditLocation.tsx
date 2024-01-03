@@ -3,11 +3,11 @@ import * as Location from "expo-location"
 import { Camera, MapState, UserLocation, type MapView as MapType } from "@rnmapbox/maps"
 import { CircleDot, Navigation, X } from "lucide-react-native"
 import { TouchableOpacity, View } from "react-native"
-import { Icon } from "./Icon"
-import { BrandHeading } from "./ui/BrandHeading"
-import { Text } from "./ui/Text"
-import { Button } from "./ui/Button"
-import { Map } from "./Map"
+import { BrandHeading } from "../../../../../../components/ui/BrandHeading"
+import { Icon } from "../../../../../../components/Icon"
+import { Button } from "../../../../../../components/ui/Button"
+import { Text } from "../../../../../../components/ui/Text"
+import { Map } from "../../../../../../components/Map"
 
 interface Props {
   isLocationUnknown: boolean | null

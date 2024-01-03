@@ -17,7 +17,6 @@ import {
 } from "@ramble/shared"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 import { SpotIcon } from "~/components/SpotIcon"
-import { AmenitySelector } from "./SpotForm"
 import { geocodeLoader } from "~/pages/api+/mapbox+/geocode"
 import type { ViewStateChangeEvent } from "react-map-gl"
 import Map, { GeolocateControl, NavigationControl } from "react-map-gl"
@@ -26,6 +25,7 @@ import { useTheme } from "~/lib/theme"
 import queryString from "query-string"
 import turfCenter from "@turf/center"
 import * as turf from "@turf/helpers"
+import { AmenitySelector } from "~/components/AmenitySelector"
 
 export function SpotReportForm({
   spot,

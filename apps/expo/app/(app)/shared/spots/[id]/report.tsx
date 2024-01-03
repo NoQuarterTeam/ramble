@@ -1,26 +1,25 @@
 import * as React from "react"
 
 import { useParams, useRouter } from "../../../../router"
-import { TouchableOpacity, View } from "react-native"
+import { Modal, TouchableOpacity, View } from "react-native"
 import { Text } from "../../../../../components/ui/Text"
 import { AMENITIES, doesSpotTypeRequireAmenities, join } from "@ramble/shared"
 import { isAndroid } from "../../../../../lib/device"
 import { Icon } from "../../../../../components/Icon"
 import { ChevronLeft, ChevronRight } from "lucide-react-native"
 import { BrandHeading } from "../../../../../components/ui/BrandHeading"
-import Modal from "react-native-modal"
-import { ReportSpotEditLocation } from "../../../../../components/ReportSpotEditLocation"
-import { ReportSpotEditInfo } from "../../../../../components/ReportSpotEditInfo"
 import { RouterOutputs, api } from "../../../../../lib/api"
 import { Spinner } from "../../../../../components/ui/Spinner"
 import { FormInputLabel } from "../../../../../components/ui/FormInput"
 import { Input } from "../../../../../components/ui/Input"
 import { Button } from "../../../../../components/ui/Button"
 import { toast } from "../../../../../components/ui/Toast"
-import { ReportSpotEditAmenities } from "../../../../../components/ReportSpotEditAmenities"
-import { AmenityObject } from "./edit/amenities"
-import { ReportSpotEditType } from "../../../../../components/ReportSpotEditType"
-import { ReportSpotEditImages } from "../../../../../components/ReportSpotEditImages"
+import { AmenityObject } from "../../../../../components/AmenitySelector"
+import { ReportSpotEditInfo } from "./components/ReportSpotEditInfo"
+import { ReportSpotEditLocation } from "./components/ReportSpotEditLocation"
+import { ReportSpotEditType } from "./components/ReportSpotEditType"
+import { ReportSpotEditAmenities } from "./components/ReportSpotEditAmenities"
+import { ReportSpotEditImages } from "./components/ReportSpotEditImages"
 
 export type IsEditing = "info" | "location" | "type" | "amenities" | "images" | null
 
@@ -154,7 +153,7 @@ function ReportFlow({ spot }: Props) {
           </Button>
         </View>
       </View>
-      <Modal isVisible={!!isEditing} style={{ margin: 0 }}>
+      <Modal animationType="slide" visible={!!isEditing} style={{ margin: 0 }}>
         <View className={join("bg-background dark:bg-background-dark h-full flex-grow px-6", isAndroid ? "pt-16" : "pt-12")}>
           {isEditing === "info" ? (
             <ReportSpotEditInfo
