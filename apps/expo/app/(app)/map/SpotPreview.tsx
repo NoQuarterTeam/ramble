@@ -17,7 +17,7 @@ import { isTablet, width } from "../../../lib/device"
 import { useBackgroundColor } from "../../../lib/tailwind"
 import { useRouter } from "../../router"
 
-const cardHeight = 470
+const cardHeight = 430
 export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }) {
   const { data: spot, isLoading } = api.spot.mapPreview.useQuery({ id })
   const { push } = useRouter()
