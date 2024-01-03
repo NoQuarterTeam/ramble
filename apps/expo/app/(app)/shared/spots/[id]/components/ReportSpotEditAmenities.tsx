@@ -1,12 +1,14 @@
-import * as React from "react"
+import type * as React from "react"
 import { ScrollView, TouchableOpacity, View } from "react-native"
-import { Button } from "../../../../../../components/ui/Button"
-import { AMENITIES } from "@ramble/shared"
-import { AMENITIES_ICONS } from "../../../../../../lib/models/amenities"
-import { BrandHeading } from "../../../../../../components/ui/BrandHeading"
-import { Icon } from "../../../../../../components/Icon"
 import { X } from "lucide-react-native"
-import { AmenityObject, AmenitySelector } from "../../../../../../components/AmenitySelector"
+
+import { AMENITIES } from "@ramble/shared"
+
+import { type AmenityObject, AmenitySelector } from "../../../../../../components/AmenitySelector"
+import { Icon } from "../../../../../../components/Icon"
+import { BrandHeading } from "../../../../../../components/ui/BrandHeading"
+import { Button } from "../../../../../../components/ui/Button"
+import { AMENITIES_ICONS } from "../../../../../../lib/models/amenities"
 
 interface Props {
   amenities: AmenityObject

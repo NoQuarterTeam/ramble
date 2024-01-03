@@ -1,8 +1,11 @@
 import * as React from "react"
+
+import { type spotAmenitiesSchema } from "@ramble/server-schemas"
+
 import { useFormErrors } from "~/lib/form"
-import { Button, RambleIcon } from "./ui"
-import { spotAmenitiesSchema } from "@ramble/server-schemas"
+
 import { FormFieldError } from "./Form"
+import { Button, type RambleIcon } from "./ui"
 
 export function AmenitySelector({
   label,

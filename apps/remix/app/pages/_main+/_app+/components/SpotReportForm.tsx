@@ -1,31 +1,31 @@
 import * as React from "react"
-import { useFetcher, useLocation, useNavigate, useSearchParams } from "@remix-run/react"
-
-import type { Spot, SpotAmenities, SpotImage, SpotType } from "@ramble/database/types"
-
-import { Form, FormButton, FormError, FormField, FormFieldLabel } from "~/components/Form"
-import { Button, CloseButton, IconButton, Spinner, Textarea } from "~/components/ui"
-import type { SerializeFrom } from "~/lib/vendor/vercel.server"
-import {
-  AMENITIES,
-  INITIAL_LATITUDE,
-  INITIAL_LONGITUDE,
-  SPOT_TYPE_OPTIONS,
-  createImageUrl,
-  doesSpotTypeRequireAmenities,
-  merge,
-} from "@ramble/shared"
-import { AMENITIES_ICONS } from "~/lib/models/amenities"
-import { SpotIcon } from "~/components/SpotIcon"
-import { geocodeLoader } from "~/pages/api+/mapbox+/geocode"
 import type { ViewStateChangeEvent } from "react-map-gl"
 import Map, { GeolocateControl, NavigationControl } from "react-map-gl"
-import { CircleDot, Flag, X } from "lucide-react"
-import { useTheme } from "~/lib/theme"
-import queryString from "query-string"
+import { useFetcher, useLocation, useNavigate, useSearchParams } from "@remix-run/react"
 import turfCenter from "@turf/center"
 import * as turf from "@turf/helpers"
+import { CircleDot, Flag, X } from "lucide-react"
+import queryString from "query-string"
+
+import type { Spot, SpotAmenities, SpotImage, SpotType } from "@ramble/database/types"
+import {
+  AMENITIES,
+  createImageUrl,
+  doesSpotTypeRequireAmenities,
+  INITIAL_LATITUDE,
+  INITIAL_LONGITUDE,
+  merge,
+  SPOT_TYPE_OPTIONS,
+} from "@ramble/shared"
+
 import { AmenitySelector } from "~/components/AmenitySelector"
+import { Form, FormButton, FormError, FormField, FormFieldLabel } from "~/components/Form"
+import { SpotIcon } from "~/components/SpotIcon"
+import { Button, CloseButton, IconButton, Spinner, Textarea } from "~/components/ui"
+import { AMENITIES_ICONS } from "~/lib/models/amenities"
+import { useTheme } from "~/lib/theme"
+import type { SerializeFrom } from "~/lib/vendor/vercel.server"
+import { type geocodeLoader } from "~/pages/api+/mapbox+/geocode"
 
 export function SpotReportForm({
   spot,

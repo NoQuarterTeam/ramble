@@ -3,11 +3,11 @@ import { ScrollView, View } from "react-native"
 
 import { AMENITIES } from "@ramble/shared"
 
+import { type AmenityObject, AmenitySelector } from "../../../../../../components/AmenitySelector"
 import { Button } from "../../../../../../components/ui/Button"
 import { AMENITIES_ICONS } from "../../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../../router"
 import { EditSpotModalView } from "./EditSpotModalView"
-import { AmenityObject, AmenitySelector } from "../../../../../../components/AmenitySelector"
 
 export function EditSpotAmenitiesScreen() {
   const { params } = useParams<"EditSpotAmenitiesScreen">()

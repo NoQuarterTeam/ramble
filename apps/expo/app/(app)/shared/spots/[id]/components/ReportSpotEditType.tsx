@@ -1,11 +1,13 @@
-import * as React from "react"
+import type * as React from "react"
 import { ScrollView, TouchableOpacity, View } from "react-native"
-import { SPOT_TYPE_OPTIONS } from "@ramble/shared"
 import { X } from "lucide-react-native"
-import { SpotType } from "@ramble/database/types"
-import { BrandHeading } from "../../../../../../components/ui/BrandHeading"
+
+import { type SpotType } from "@ramble/database/types"
+import { SPOT_TYPE_OPTIONS } from "@ramble/shared"
+
 import { Icon } from "../../../../../../components/Icon"
 import { SpotIcon } from "../../../../../../components/SpotIcon"
+import { BrandHeading } from "../../../../../../components/ui/BrandHeading"
 import { Button } from "../../../../../../components/ui/Button"
 
 interface Props {

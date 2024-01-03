@@ -1,25 +1,26 @@
 import * as React from "react"
-
-import { useParams, useRouter } from "../../../../router"
 import { Modal, TouchableOpacity, View } from "react-native"
-import { Text } from "../../../../../components/ui/Text"
-import { AMENITIES, doesSpotTypeRequireAmenities, join } from "@ramble/shared"
-import { isAndroid } from "../../../../../lib/device"
-import { Icon } from "../../../../../components/Icon"
 import { ChevronLeft, ChevronRight } from "lucide-react-native"
+
+import { AMENITIES, doesSpotTypeRequireAmenities, join } from "@ramble/shared"
+
+import { type AmenityObject } from "../../../../../components/AmenitySelector"
+import { Icon } from "../../../../../components/Icon"
 import { BrandHeading } from "../../../../../components/ui/BrandHeading"
-import { RouterOutputs, api } from "../../../../../lib/api"
-import { Spinner } from "../../../../../components/ui/Spinner"
+import { Button } from "../../../../../components/ui/Button"
 import { FormInputLabel } from "../../../../../components/ui/FormInput"
 import { Input } from "../../../../../components/ui/Input"
-import { Button } from "../../../../../components/ui/Button"
+import { Spinner } from "../../../../../components/ui/Spinner"
+import { Text } from "../../../../../components/ui/Text"
 import { toast } from "../../../../../components/ui/Toast"
-import { AmenityObject } from "../../../../../components/AmenitySelector"
+import { api, type RouterOutputs } from "../../../../../lib/api"
+import { isAndroid } from "../../../../../lib/device"
+import { useParams, useRouter } from "../../../../router"
+import { ReportSpotEditAmenities } from "./components/ReportSpotEditAmenities"
+import { ReportSpotEditImages } from "./components/ReportSpotEditImages"
 import { ReportSpotEditInfo } from "./components/ReportSpotEditInfo"
 import { ReportSpotEditLocation } from "./components/ReportSpotEditLocation"
 import { ReportSpotEditType } from "./components/ReportSpotEditType"
-import { ReportSpotEditAmenities } from "./components/ReportSpotEditAmenities"
-import { ReportSpotEditImages } from "./components/ReportSpotEditImages"
 
 export type IsEditing = "info" | "location" | "type" | "amenities" | "images" | null
 

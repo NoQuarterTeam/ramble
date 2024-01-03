@@ -1,18 +1,19 @@
 import { useLoaderData } from "@remix-run/react"
+import { z } from "zod"
 
 import { NullableFormString, spotAmenitiesSchema, spotRevisionSchema } from "@ramble/server-schemas"
 import { publicSpotWhereClause } from "@ramble/server-services"
 import { canManageSpot, doesSpotTypeRequireAmenities } from "@ramble/shared"
-import { z } from "zod"
 
+import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form.server"
 import { notFound, redirect } from "~/lib/remix.server"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
+
 import { SpotReportForm } from "./components/SpotReportForm"
-import { track } from "~/lib/analytics.server"
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const user = await getCurrentUser(request, { role: true, id: true, isAdmin: true, isVerified: true })

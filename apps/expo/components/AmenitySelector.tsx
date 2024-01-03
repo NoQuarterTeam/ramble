@@ -1,9 +1,11 @@
-import { RambleIcon } from "./ui/Icons"
-import { Text } from "./ui/Text"
 import { Switch, View } from "react-native"
-import { Icon } from "./Icon"
+
+import { type AMENITIES } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
-import { AMENITIES } from "@ramble/shared"
+
+import { Icon } from "./Icon"
+import { type RambleIcon } from "./ui/Icons"
+import { Text } from "./ui/Text"
 
 export type AmenityObject = { [key in keyof typeof AMENITIES]: boolean }
 

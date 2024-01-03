@@ -1,13 +1,14 @@
 import * as React from "react"
-import * as Location from "expo-location"
-import { Camera, MapState, UserLocation, type MapView as MapType } from "@rnmapbox/maps"
-import { CircleDot, Navigation, X } from "lucide-react-native"
 import { TouchableOpacity, View } from "react-native"
-import { BrandHeading } from "../../../../../../components/ui/BrandHeading"
+import { Camera, type MapState, type MapView as MapType, UserLocation } from "@rnmapbox/maps"
+import * as Location from "expo-location"
+import { CircleDot, Navigation, X } from "lucide-react-native"
+
 import { Icon } from "../../../../../../components/Icon"
+import { Map } from "../../../../../../components/Map"
+import { BrandHeading } from "../../../../../../components/ui/BrandHeading"
 import { Button } from "../../../../../../components/ui/Button"
 import { Text } from "../../../../../../components/ui/Text"
-import { Map } from "../../../../../../components/Map"
 
 interface Props {
   isLocationUnknown: boolean | null

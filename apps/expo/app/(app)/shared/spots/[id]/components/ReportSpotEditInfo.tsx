@@ -1,13 +1,15 @@
-import * as React from "react"
+import type * as React from "react"
 import { ScrollView, Switch, TouchableOpacity, View } from "react-native"
 import { Dog, X } from "lucide-react-native"
+
 import colors from "@ramble/tailwind-config/src/colors"
-import { Button } from "../../../../../../components/ui/Button"
-import { Text } from "../../../../../../components/ui/Text"
-import { BrandHeading } from "../../../../../../components/ui/BrandHeading"
+
 import { Icon } from "../../../../../../components/Icon"
+import { BrandHeading } from "../../../../../../components/ui/BrandHeading"
+import { Button } from "../../../../../../components/ui/Button"
 import { FormInputLabel } from "../../../../../../components/ui/FormInput"
 import { Input } from "../../../../../../components/ui/Input"
+import { Text } from "../../../../../../components/ui/Text"
 
 interface Props {
   name: string

@@ -18,6 +18,7 @@ import {
   SPOT_TYPE_OPTIONS,
 } from "@ramble/shared"
 
+import { AmenitySelector } from "~/components/AmenitySelector"
 import { Form, FormButton, FormError, FormField, FormFieldError, FormFieldLabel, ImageField } from "~/components/Form"
 import { ImageUploader } from "~/components/ImageUploader"
 import { Map } from "~/components/Map"
@@ -28,7 +29,6 @@ import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 import type { SerializeFrom } from "~/lib/vendor/vercel.server"
 import type { geocodeLoader } from "~/pages/api+/mapbox+/geocode"
-import { AmenitySelector } from "~/components/AmenitySelector"
 
 export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotImage[]; amenities?: SpotAmenities | null }> }) {
   // const ipInfo = useRouteLoaderData("pages/_app") as IpInfo
