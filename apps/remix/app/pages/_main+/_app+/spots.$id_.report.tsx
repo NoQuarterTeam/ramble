@@ -52,9 +52,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     longitude: data.longitude,
     // isPetFriendly: data.isPetFriendly,
     type: data.type,
-    amenities: amenities
-      ? { update: spot.amenities ? amenities : undefined, create: spot.amenities ? undefined : amenities }
-      : { delete: spot.amenities ? true : undefined },
+    amenities,
     flaggedImageIds: flaggedImageIds.join(", "),
     notes: data.notes,
   }

@@ -8,22 +8,22 @@ import { Flag, X } from "lucide-react-native"
 import { createImageUrl, join } from "@ramble/shared"
 
 interface Props {
-  images: string[]
-  flaggedImages: string[]
-  setFlaggedImages: React.Dispatch<React.SetStateAction<string[]>>
+  images: { id: string; path: string }[]
+  flaggedImageIds: string[]
+  setFlaggedImageIds: React.Dispatch<React.SetStateAction<string[]>>
   handleClose: () => void
 }
 
-export function ReportSpotEditImages({ images, flaggedImages, setFlaggedImages, handleClose }: Props) {
-  const isFlagged = (image: string) => {
-    return !!flaggedImages.find((flaggedImage) => flaggedImage === image)
+export function ReportSpotEditImages({ images, flaggedImageIds, setFlaggedImageIds, handleClose }: Props) {
+  const isFlagged = (id: string) => {
+    return !!flaggedImageIds.find((flaggedImageId) => flaggedImageId === id)
   }
-  const handleClickImage = (image: string) => {
-    if (isFlagged(image)) {
-      const newImages = flaggedImages.filter((flaggedImage) => flaggedImage !== image)
-      setFlaggedImages(newImages)
+  const handleClickImage = (id: string) => {
+    if (isFlagged(id)) {
+      const newImages = flaggedImageIds.filter((flaggedImageId) => flaggedImageId !== id)
+      setFlaggedImageIds(newImages)
     } else {
-      setFlaggedImages([image, ...flaggedImages])
+      setFlaggedImageIds([id, ...flaggedImageIds])
     }
   }
 
@@ -38,21 +38,21 @@ export function ReportSpotEditImages({ images, flaggedImages, setFlaggedImages, 
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 120 }} showsVerticalScrollIndicator={false}>
         <View className="flex flex-row flex-wrap gap-2 py-4">
           <View className="flex-row flex-wrap space-y-2">
-            {images.map((image) => {
+            {images.map(({ id, path }) => {
               const base = "rounded-xs h-[200px] w-full bg-gray-50 object-cover dark:bg-gray-700"
-              const className = join(base, isFlagged(image) && "outline-solid opacity-80 outline outline-red-500")
+              const className = join(base, isFlagged(id) && "outline-solid opacity-80 outline outline-red-500")
               return (
-                <View key={image} className="w-full">
-                  <TouchableOpacity onPress={() => handleClickImage(image)}>
-                    <Image className={className} source={{ uri: image.startsWith("file://") ? image : createImageUrl(image) }} />
+                <View key={id} className="w-full">
+                  <TouchableOpacity onPress={() => handleClickImage(id)}>
+                    <Image className={className} source={{ uri: path.startsWith("file://") ? path : createImageUrl(path) }} />
                   </TouchableOpacity>
                   <View className="absolute left-2 top-2 z-10">
                     <Button
                       size="sm"
-                      variant={isFlagged(image) ? "destructive" : "secondary"}
-                      leftIcon={<Flag size={18} color={isFlagged(image) ? "white" : "black"} />}
+                      variant={isFlagged(id) ? "destructive" : "secondary"}
+                      leftIcon={<Flag size={18} color={isFlagged(id) ? "white" : "black"} />}
                     >
-                      {isFlagged(image) ? "Flagged" : "Flag"}
+                      {isFlagged(id) ? "Flagged" : "Flag"}
                     </Button>
                   </View>
                 </View>

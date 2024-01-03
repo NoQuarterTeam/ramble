@@ -1,27 +1,24 @@
-// import { spotRevisionSchema } from "@ramble/server-schemas"
+import { createTRPCRouter, publicProcedure } from "../trpc"
+import { z } from "zod"
+import { TRPCError } from "@trpc/server"
 
-// import { createTRPCRouter, publicProcedure } from "../trpc"
-
-// export const spotRevisionRouter = createTRPCRouter({
-//   create: publicProcedure
-//     .input(
-//       spotRevisionSchema,
-//       // spotRevisionSchema.and(
-//       // 	z.object({
-//       // 		type: z.nativeEnum(SpotType),
-//       // 		images: z.array(z.object({ path: z.string() })),
-//       // 		amenities: spotAmenitiesSchema.partial().optional(),
-//       // 		shouldPublishLater: z.boolean().optional(),
-//       // 	}),
-//       // ),
-//     )
-//     .mutation(async ({ ctx, input }) => {
-//       const spotRevision = await ctx.prisma.spotRevision.create({
-//         data: {
-//           spotId: input.spotId,
-//           notes: input.notes,
-//         },
-//       })
-//       return spotRevision
-//     }),
-// })
+export const spotRevisionRouter = createTRPCRouter({
+  create: publicProcedure
+    .input(
+      z.object({
+        spotId: z.string(),
+        notes: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (!ctx.user) throw new TRPCError({ code: "NOT_FOUND" })
+      const spotRevision = await ctx.prisma.spotRevision.create({
+        data: {
+          spotId: input.spotId,
+          notes: JSON.parse(input.notes),
+          creatorId: ctx.user.id,
+        },
+      })
+      return spotRevision
+    }),
+})

@@ -31,7 +31,7 @@ export function SpotReportScreen() {
 
   if (isLoading)
     return (
-      <View className="flex items-center justify-center py-4">
+      <View className="flex h-full items-center justify-center py-4">
         <Spinner />
       </View>
     )
@@ -58,51 +58,39 @@ function ReportFlow({ spot }: Props) {
       ? Object.entries(spot.amenities).reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {} as AmenityObject)
       : Object.keys(AMENITIES).reduce((acc, key) => ({ ...acc, [key]: false }), {} as AmenityObject),
   )
-  const [flaggedImages, setFlaggedImages] = React.useState<string[]>([])
+  const [flaggedImageIds, setFlaggedImageIds] = React.useState<string[]>([])
   const [notes, setNotes] = React.useState("")
   const [isEditing, setIsEditing] = React.useState<IsEditing>()
 
   const handleClose = () => setIsEditing(null)
 
-  // const { mutate, isLoading, error } = api.spotRevision.create.useMutation({
-  //   onSuccess: (data) => {
-  //     router.navigate("SpotDetailScreen", { id: data.id })
-  //     toast({ title: "Report submitted", message: "Your report has been submitted. Thank you for making Ramble even better!" })
-  //   },
-  //   onError: () => {
-  //     toast({ type: "error", title: "Error submitting report" })
-  //     console.log(error)
-  //   },
-  // })
+  const { mutate, isLoading, error } = api.spotRevision.create.useMutation({
+    onSuccess: () => {
+      router.navigate("SpotDetailScreen", { id: spot.id })
+      toast({ title: "Report submitted", message: "Thank you for making Ramble even better!" })
+    },
+    onError: () => {
+      toast({ type: "error", title: "Error submitting report" })
+      console.log(error)
+    },
+  })
 
   const handleSubmit = () => {
     if (!notes) return toast({ title: "Notes are required" })
-    // const revisionNotes = {
-    //   name,
-    //   description,
-    //   isLocationUnknown,
-    //   // address: data.address || customAddress,
-    //   latitude: latitude,
-    //   longitude: longitude,
-    //   // isPetFriendly: data.isPetFriendly,
-    //   type: type,
-    //   amenities: amenities
-    //     ? { update: spot.amenities ? amenities : undefined, create: spot.amenities ? undefined : amenities }
-    //     : { delete: spot.amenities ? true : undefined },
-    //   flaggedImageIds: flaggedImageIds.join(", "),
-    //   notes,
-    // }
-    // mutate({
-    //   id: params.id,
-    //   description: params.description,
-    //   name: params.name,
-    //   latitude: params.latitude,
-    //   longitude: params.longitude,
-    //   type: params.type,
-    //   images: [...newImageKeys, ...existingImages].map((i) => ({ path: i })),
-    //   amenities: params.amenities,
-    //   isPetFriendly: params.isPetFriendly,
-    // })
+    const revisionNotes = {
+      name,
+      description,
+      isLocationUnknown,
+      // address: data.address || customAddress,
+      latitude,
+      longitude,
+      isPetFriendly,
+      type,
+      amenities,
+      flaggedImageIds: flaggedImageIds.join(", "),
+      notes,
+    }
+    mutate({ spotId: spot.id, notes: JSON.stringify(revisionNotes) })
   }
 
   return (
@@ -160,9 +148,10 @@ function ReportFlow({ spot }: Props) {
             <Input value={notes} onChangeText={setNotes} />
             <Text className="text-sm text-gray-400">Tell us more about what was wrong</Text>
           </View>
-          {/* {error && <Text className="text-red-500">{error.message}</Text>} */}
-          {/* <Button onPress={handleSubmit} isLoading={isLoading}>Submit report</Button> */}
-          <Button onPress={handleSubmit}>Submit report</Button>
+          {error && <Text className="text-red-500">{error.message}</Text>}
+          <Button onPress={handleSubmit} isLoading={isLoading}>
+            Submit report
+          </Button>
         </View>
       </View>
       <Modal isVisible={!!isEditing} style={{ margin: 0 }}>
@@ -193,9 +182,9 @@ function ReportFlow({ spot }: Props) {
             <ReportSpotEditAmenities amenities={amenities} setAmenities={setAmenities} handleClose={handleClose} />
           ) : isEditing === "images" ? (
             <ReportSpotEditImages
-              images={spot.images.map((i) => i.path)}
-              flaggedImages={flaggedImages}
-              setFlaggedImages={setFlaggedImages}
+              images={spot.images.map((i) => ({ id: i.id, path: i.path }))}
+              flaggedImageIds={flaggedImageIds}
+              setFlaggedImageIds={setFlaggedImageIds}
               handleClose={handleClose}
             />
           ) : null}
