@@ -47,47 +47,45 @@ export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }
       ) : !spot ? (
         <Text>Spot not found</Text>
       ) : (
-        <View>
-          <View className="space-y-2">
-            <TouchableOpacity onPress={() => push("SpotDetailScreen", { id: spot.id })} activeOpacity={0.9}>
-              <SpotTypeBadge spot={spot} />
-            </TouchableOpacity>
+        <View className="space-y-2">
+          <TouchableOpacity onPress={() => push("SpotDetailScreen", { id: spot.id })} activeOpacity={0.9}>
+            <SpotTypeBadge spot={spot} />
+          </TouchableOpacity>
 
-            <TouchableOpacity
-              onPress={() => push("SpotDetailScreen", { id: spot.id })}
-              activeOpacity={0.7}
-              className="flex flex-row items-center space-x-2"
-            >
-              <Text numberOfLines={1} className="text-lg leading-6">
-                {spot.name}
-              </Text>
-            </TouchableOpacity>
-            <View className="flex flex-row items-center justify-between">
-              <View className="flex flex-row items-center space-x-2">
-                <View className="flex flex-row flex-wrap items-center space-x-1">
-                  <Icon icon={Heart} size={16} fill={isDark ? "white" : "black"} />
-                  <Text className="text-sm">{spot._count.listSpots || 0}</Text>
-                </View>
-                <View className="flex flex-row items-center space-x-1">
-                  <Icon icon={Star} size={16} fill={isDark ? "white" : "black"} />
-                  <Text className="text-sm">{displayRating(spot.rating._avg.rating)}</Text>
-                </View>
+          <TouchableOpacity
+            onPress={() => push("SpotDetailScreen", { id: spot.id })}
+            activeOpacity={0.7}
+            className="flex flex-row items-center space-x-2"
+          >
+            <Text numberOfLines={1} className="text-lg leading-6">
+              {spot.name}
+            </Text>
+          </TouchableOpacity>
+          <View className="flex flex-row items-center justify-between">
+            <View className="flex flex-row items-center space-x-2">
+              <View className="flex flex-row flex-wrap items-center space-x-1">
+                <Icon icon={Heart} size={16} fill={isDark ? "white" : "black"} />
+                <Text className="text-sm">{spot._count.listSpots || 0}</Text>
               </View>
-
-              <View className="rounded-xs overflow-hidden">
-                <SpotImageCarousel
-                  canAddMore
-                  onPress={() => push("SpotDetailScreen", { id: spot.id })}
-                  key={spot.id} // so images reload
-                  spotId={spot.id}
-                  width={width - 32}
-                  height={235}
-                  noOfColumns={isTablet ? 2 : 1}
-                  images={spot.images}
-                />
+              <View className="flex flex-row items-center space-x-1">
+                <Icon icon={Star} size={16} fill={isDark ? "white" : "black"} />
+                <Text className="text-sm">{displayRating(spot.rating._avg.rating)}</Text>
               </View>
-              <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}</View>
             </View>
+
+            <View className="rounded-xs overflow-hidden">
+              <SpotImageCarousel
+                canAddMore
+                onPress={() => push("SpotDetailScreen", { id: spot.id })}
+                key={spot.id} // so images reload
+                spotId={spot.id}
+                width={width - 32}
+                height={235}
+                noOfColumns={isTablet ? 2 : 1}
+                images={spot.images}
+              />
+            </View>
+            <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}</View>
           </View>
         </View>
       )}
