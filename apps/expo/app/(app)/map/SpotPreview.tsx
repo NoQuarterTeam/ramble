@@ -16,11 +16,14 @@ import { api } from "../../../lib/api"
 import { isTablet, width } from "../../../lib/device"
 import { useBackgroundColor } from "../../../lib/tailwind"
 import { useRouter } from "../../router"
+import { useMe } from "../../../lib/hooks/useMe"
+import { Button } from "../../../components/ui/Button"
 
 const cardHeight = 430
 export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }) {
   const { data: spot, isLoading } = api.spot.mapPreview.useQuery({ id })
-  const { push } = useRouter()
+  const { push, navigate } = useRouter()
+  const { me } = useMe()
 
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
@@ -73,20 +76,37 @@ export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }
               </View>
             </View>
 
-            <View className="rounded-xs overflow-hidden">
-              <SpotImageCarousel
-                canAddMore
-                onPress={() => push("SpotDetailScreen", { id: spot.id })}
-                key={spot.id} // so images reload
-                spotId={spot.id}
-                width={width - 32}
-                height={235}
-                noOfColumns={isTablet ? 2 : 1}
-                images={spot.images}
-              />
-            </View>
-            <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}</View>
+            <Button
+              size="xs"
+              variant="outline"
+              onPress={
+                me ? () => navigate("SaveSpotScreen", { id: spot.id }) : () => push("AuthLayout", { screen: "LoginScreen" })
+              }
+              leftIcon={
+                <Icon
+                  icon={Heart}
+                  size={14}
+                  fill={spot.listSpots && spot.listSpots.length > 0 ? (isDark ? "white" : "black") : undefined}
+                />
+              }
+            >
+              Save
+            </Button>
           </View>
+
+          <View className="rounded-xs overflow-hidden">
+            <SpotImageCarousel
+              canAddMore
+              onPress={() => push("SpotDetailScreen", { id: spot.id })}
+              key={spot.id} // so images reload
+              spotId={spot.id}
+              width={width - 32}
+              height={235}
+              noOfColumns={isTablet ? 2 : 1}
+              images={spot.images}
+            />
+          </View>
+          <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}</View>
         </View>
       )}
 
