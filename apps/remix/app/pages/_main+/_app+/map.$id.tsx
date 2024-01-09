@@ -1,6 +1,6 @@
 import type * as React from "react"
 import { Link, useNavigate, useParams } from "@remix-run/react"
-import { ArrowLeft, ArrowRight, Frown, Heart, Image, Star } from "lucide-react"
+import { ArrowLeft, ArrowRight, Flag, Frown, Heart, Image, Star } from "lucide-react"
 import { useAuthenticityToken } from "remix-utils/csrf/react"
 import { z } from "zod"
 
@@ -165,14 +165,16 @@ export default function SpotPreview() {
           hash={data.descriptionHash}
         />
         <p className="text-sm italic">{spot.address}</p>
-        {!(["SURFING", "HIKING", "MOUNTAIN_BIKING"] as SpotType[]).includes(spot.type) && (
-          <div className="flex justify-end">
+        <div className="flex justify-between">
+          {!(["SURFING", "HIKING", "MOUNTAIN_BIKING"] as SpotType[]).includes(spot.type) && (
             <LinkButton variant="ghost" to={`/spots/${spot.id}`}>
               Read more
             </LinkButton>
-          </div>
-        )}
-
+          )}
+          <LinkButton to={`/spots/${spot.id}/report`} variant="link" leftIcon={<Flag className="sq-3" />}>
+            Report incorrect data
+          </LinkButton>
+        </div>
         <hr />
         <div className="space-y-4">
           <div className="flex justify-between">

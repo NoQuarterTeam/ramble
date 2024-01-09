@@ -4,7 +4,7 @@ import * as RTooltip from "@radix-ui/react-tooltip"
 
 interface Props {
   children: React.ReactNode
-  label: string
+  label: React.ReactNode
   side?: RTooltip.TooltipContentProps["side"]
 }
 

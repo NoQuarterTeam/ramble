@@ -14,7 +14,7 @@ import dayjs from "dayjs"
 import { LinearGradient } from "expo-linear-gradient"
 import * as Location from "expo-location"
 import { StatusBar } from "expo-status-bar"
-import { Check, ChevronDown, ChevronLeft, Compass, Edit2, Heart, Languages, Share, Star, Trash } from "lucide-react-native"
+import { Check, ChevronDown, ChevronLeft, Compass, Edit2, Flag, Heart, Languages, Share, Star, Trash } from "lucide-react-native"
 
 import { type Spot } from "@ramble/database/types"
 import {
@@ -254,6 +254,13 @@ export function SpotDetailScreen() {
                 </Button>
               )}
             </View>
+            <Button
+              variant="link"
+              leftIcon={<Icon icon={Flag} size={16} />}
+              onPress={() => router.navigate("SpotReportScreen", { id: spot.id })}
+            >
+              Report incorrect data
+            </Button>
           </View>
 
           <View className="h-px w-full bg-gray-200 dark:bg-gray-700" />
