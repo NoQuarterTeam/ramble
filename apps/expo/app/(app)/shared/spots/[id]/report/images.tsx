@@ -51,7 +51,7 @@ export function SpotReportImagesScreen() {
                     onPress={() => handleClickImage(id)}
                     size="sm"
                     variant={isFlagged(id) ? "destructive" : "secondary"}
-                    leftIcon={<Flag size={18} color={isFlagged(id) ? "white" : "black"} />}
+                    leftIcon={<Flag size={18} color={isFlagged(id) ? "white" : undefined} />}
                   >
                     {isFlagged(id) ? "Flagged" : "Flag"}
                   </Button>

@@ -80,7 +80,12 @@ function ReportFlow({ spot }: Props) {
   }
 
   return (
-    <ScrollView className="flex-1 space-y-4" showsVerticalScrollIndicator={false}>
+    <ScrollView
+      keyboardShouldPersistTaps="handled"
+      className="flex-1 space-y-4"
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingBottom: 400 }}
+    >
       <Text>Let us know what you think is incorrect</Text>
       <View className="space-y-5">
         <ReportLink
