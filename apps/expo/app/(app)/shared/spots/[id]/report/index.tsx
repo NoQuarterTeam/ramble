@@ -23,11 +23,11 @@ export function SpotReportScreen() {
   return (
     <ModalView title="report spot">
       {isLoading ? (
-        <View className="flex h-full items-center justify-center py-4">
+        <View className="flex items-center justify-center py-4">
           <Spinner />
         </View>
       ) : !spot ? (
-        <View className="flex h-full items-center justify-center py-4">
+        <View className="flex items-center justify-center py-4">
           <Text>Spot not found</Text>
         </View>
       ) : (
