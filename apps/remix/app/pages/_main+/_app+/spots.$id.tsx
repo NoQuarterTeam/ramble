@@ -320,7 +320,7 @@ export default function SpotDetail() {
                     </AlertDialogContent>
                   </AlertDialogRoot>
                 )}
-                <LinkButton to="report" variant="link" leftIcon={<Flag className="sq-3" />}>
+                <LinkButton to="report" variant="ghost" leftIcon={<Flag className="sq-3" />}>
                   Report incorrect data
                 </LinkButton>
               </div>

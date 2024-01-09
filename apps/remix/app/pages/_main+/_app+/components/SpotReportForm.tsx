@@ -104,7 +104,7 @@ export function SpotReportForm({
   // const user = useMaybeUser()
   return (
     <div className="grid grid-cols-1 md:grid-cols-2">
-      <Form className="md:h-nav-screen relative h-auto space-y-4 overflow-scroll p-4 pb-40 md:p-6 md:pb-40">
+      <Form className="md:h-nav-screen relative h-auto space-y-4 overflow-scroll p-4 pb-40 md:p-6 md:pb-60">
         <div>
           <div className="flex justify-between">
             <h1 className="text-3xl">Report incorrect data</h1>
@@ -220,8 +220,6 @@ export function SpotReportForm({
             </div>
 
             {spot.images.map(({ id, path }) => {
-              const base = "h-[300px] w-full cursor-pointer overflow-hidden rounded object-cover hover:opacity-80"
-              const className = merge(base, isFlagged(id) && "outline-solid opacity-80 outline outline-red-500")
               return (
                 <div key={path} className="relative" onClick={() => handleClickImage(id)}>
                   <div className="absolute left-2 top-2 z-10">
@@ -229,7 +227,14 @@ export function SpotReportForm({
                       {isFlagged(id) ? "Flagged" : "Flag"}
                     </Button>
                   </div>
-                  <img src={createImageUrl(path)} className={className} alt="spot image" />
+                  <img
+                    src={createImageUrl(path)}
+                    className={merge(
+                      "h-[300px] w-full cursor-pointer overflow-hidden rounded object-cover hover:opacity-80",
+                      isFlagged(id) && "outline-solid opacity-80 outline outline-red-500",
+                    )}
+                    alt="spot image"
+                  />
                 </div>
               )
             })}
