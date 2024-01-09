@@ -1,11 +1,15 @@
 import { type RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { type NativeStackNavigationProp } from "@react-navigation/native-stack"
 
-import { type Spot, type SpotAmenities } from "@ramble/database/types"
+import { type Spot, type SpotAmenities, type SpotImage } from "@ramble/database/types"
 
 type SpotFormParams = Pick<Spot, "latitude" | "longitude" | "type" | "name" | "description" | "isPetFriendly"> & {
   images: string[]
 } & { amenities?: Omit<SpotAmenities, "id" | "spotId" | "createdAt" | "updatedAt"> }
+
+type SpotReportParams = Pick<Spot, "latitude" | "longitude" | "type" | "name" | "description" | "isPetFriendly"> & {
+  amenities?: null | Omit<SpotAmenities, "id" | "spotId" | "createdAt" | "updatedAt">
+} & { flaggedImageIds: string[]; isLocationUnknown: boolean }
 
 export type ScreenParamsList = {
   AuthLayout: { screen?: "LoginScreen" | "RegisterScreen" | "RequestAccessScreen" } | undefined
@@ -63,8 +67,15 @@ export type ScreenParamsList = {
   EditListScreen: { id: string }
 
   // SHARED
+  SpotReportLayout: { id: string }
+  SpotReportScreen: { id: string } & SpotReportParams
+  SpotReportInfoScreen: { id: string } & SpotReportParams
+  SpotReportLocationScreen: { id: string } & SpotReportParams
+  SpotReportTypeScreen: { id: string } & SpotReportParams
+  SpotReportAmenitiesScreen: { id: string } & SpotReportParams
+  SpotReportImagesScreen: { id: string; images: Pick<SpotImage, "id" | "path">[] } & SpotReportParams
+
   SpotDetailScreen: { id: string }
-  SpotReportScreen: { id: string }
   SaveSpotScreen: { id: string }
   SaveSpotImagesScreen: { id: string; images: string[] }
   DeleteSpotScreen: { id: string }

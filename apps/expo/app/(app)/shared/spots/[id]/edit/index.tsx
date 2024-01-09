@@ -40,7 +40,7 @@ export function EditSpotLocationScreen() {
   const onMapMove = ({ properties }: MapState) => setCoords(properties.center)
 
   return (
-    <EditSpotModalView shouldRenderToast title="Edit spot" canGoBack={false}>
+    <EditSpotModalView shouldRenderToast title="edit spot" canGoBack={false}>
       <Map
         className="rounded-xs mb-10 mt-4 flex-1 overflow-hidden"
         onMapIdle={onMapMove}

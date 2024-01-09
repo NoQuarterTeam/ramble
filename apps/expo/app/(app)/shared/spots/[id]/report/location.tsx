@@ -2,37 +2,24 @@ import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
 import { Camera, type MapState, type MapView as MapType, UserLocation } from "@rnmapbox/maps"
 import * as Location from "expo-location"
-import { CircleDot, Navigation, X } from "lucide-react-native"
+import { CircleDot, Navigation } from "lucide-react-native"
 
 import { Icon } from "../../../../../../components/Icon"
 import { Map } from "../../../../../../components/Map"
-import { BrandHeading } from "../../../../../../components/ui/BrandHeading"
 import { Button } from "../../../../../../components/ui/Button"
 import { Text } from "../../../../../../components/ui/Text"
+import { useParams, useRouter } from "../../../../../router"
+import { ReportSpotModalView } from "./ReportSpotModalView"
 
-interface Props {
-  isLocationUnknown: boolean | null
-  setIsLocationUnknown: React.Dispatch<React.SetStateAction<boolean | null>>
-  latitude: number
-  setLatitude: React.Dispatch<React.SetStateAction<number>>
-  longitude: number
-  setLongitude: React.Dispatch<React.SetStateAction<number>>
-  handleClose: () => void
-}
-
-export function ReportSpotEditLocation({
-  isLocationUnknown,
-  setIsLocationUnknown,
-  latitude,
-  setLatitude,
-  longitude,
-  setLongitude,
-  handleClose,
-}: Props) {
+export function SpotReportLocationScreen() {
+  const router = useRouter()
+  const { params } = useParams<"SpotReportLocationScreen">()
+  const [latitude, setLatitude] = React.useState(params.latitude)
+  const [longitude, setLongitude] = React.useState(params.longitude)
   const camera = React.useRef<Camera>(null)
   const mapRef = React.useRef<MapType>(null)
 
-  const [showMap, setShowMap] = React.useState(false)
+  const [showMap, setShowMap] = React.useState(!params.isLocationUnknown)
 
   const handleSetUserLocation = async () => {
     try {
@@ -55,31 +42,22 @@ export function ReportSpotEditLocation({
     }
   }
 
+  const onClose = () => {
+    router.navigate("SpotReportScreen", { ...params, isLocationUnknown: false, latitude, longitude })
+  }
+
   return (
-    <View className="flex-grow">
-      <View className="flex flex-row justify-between pb-2">
-        <BrandHeading className="text-3xl">Location</BrandHeading>
-        <TouchableOpacity onPress={handleClose} className="p-1">
-          <Icon icon={X} size={24} />
-        </TouchableOpacity>
-      </View>
+    <ReportSpotModalView title="location">
       {!showMap ? (
         <View className="flex space-y-2 pt-4">
-          <Button
-            variant="outline"
-            onPress={() => {
-              setIsLocationUnknown(false)
-              setShowMap(true)
-            }}
-          >
+          <Button variant="outline" onPress={() => setShowMap(true)}>
             I know the correct location
           </Button>
           <Text className="text-center">or</Text>
           <Button
             variant="outline"
             onPress={() => {
-              setIsLocationUnknown(true)
-              handleClose()
+              router.navigate("SpotReportScreen", params)
             }}
           >
             I don't know where it is
@@ -87,7 +65,19 @@ export function ReportSpotEditLocation({
         </View>
       ) : (
         <View className="flex-grow space-y-2">
-          <Text>Set the correct location using the map</Text>
+          <View className="flex flex-row items-center justify-between">
+            <Text>Set the correct location</Text>
+            <Button
+              size="sm"
+              variant="link"
+              className="h-5 rounded-full"
+              onPress={() => {
+                router.navigate("SpotReportScreen", { ...params, isLocationUnknown: true })
+              }}
+            >
+              Not sure?
+            </Button>
+          </View>
           <Map
             className="rounded-xs mb-10 mt-4 flex-1 overflow-hidden"
             onMapIdle={onMapMove}
@@ -103,21 +93,28 @@ export function ReportSpotEditLocation({
           >
             <Icon icon={CircleDot} size={30} color="white" />
           </View>
-          <View className="absolute bottom-12 left-2 right-2 flex flex-row items-center justify-between space-y-2">
-            <View className="w-12" />
-            <Button className="bg-background rounded-full" textClassName="text-black" onPress={handleClose}>
-              Next
-            </Button>
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={handleSetUserLocation}
-              className="sq-12 bg-background flex flex-row items-center justify-center rounded-full"
-            >
-              <Icon icon={Navigation} size={20} color="black" />
-            </TouchableOpacity>
+          <View
+            pointerEvents="box-none"
+            className="absolute bottom-12 left-2 right-2 flex flex-row items-center justify-between space-y-2"
+          >
+            <View className="flex-1" pointerEvents="box-none" />
+            <View className="flex-1 items-center justify-center">
+              <Button className="bg-background rounded-full" textClassName="text-black" onPress={onClose}>
+                Done
+              </Button>
+            </View>
+            <View className="flex-1 items-end">
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={handleSetUserLocation}
+                className="sq-12 bg-background flex flex-row items-center justify-center rounded-full"
+              >
+                <Icon icon={Navigation} size={20} color="black" />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       )}
-    </View>
+    </ReportSpotModalView>
   )
 }

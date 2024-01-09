@@ -1,34 +1,35 @@
-import type * as React from "react"
-import { ScrollView, TouchableOpacity, View } from "react-native"
-import { X } from "lucide-react-native"
+import * as React from "react"
+import { ScrollView } from "react-native"
 
 import { AMENITIES } from "@ramble/shared"
 
 import { type AmenityObject, AmenitySelector } from "../../../../../../components/AmenitySelector"
-import { Icon } from "../../../../../../components/Icon"
-import { BrandHeading } from "../../../../../../components/ui/BrandHeading"
 import { Button } from "../../../../../../components/ui/Button"
 import { AMENITIES_ICONS } from "../../../../../../lib/models/amenities"
+import { useParams, useRouter } from "../../../../../router"
+import { ReportSpotModalView } from "./ReportSpotModalView"
 
-interface Props {
-  amenities: AmenityObject
-  setAmenities: React.Dispatch<React.SetStateAction<AmenityObject>>
-  handleClose: () => void
-}
+export function SpotReportAmenitiesScreen() {
+  const { params } = useParams<"SpotReportAmenitiesScreen">()
+  const [amenities, setAmenities] = React.useState(
+    params.amenities
+      ? Object.entries(params.amenities).reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {} as AmenityObject)
+      : Object.keys(AMENITIES).reduce((acc, key) => ({ ...acc, [key]: false }), {} as AmenityObject),
+  )
 
-export function ReportSpotEditAmenities({ amenities, setAmenities, handleClose }: Props) {
+  const router = useRouter()
+
+  const handleClose = () => {
+    router.navigate("SpotReportScreen", { ...params, amenities })
+  }
+
   return (
-    <View className="space-y-6">
-      <View className="flex flex-row justify-between pb-2">
-        <BrandHeading className="text-3xl">Basic info</BrandHeading>
-        <TouchableOpacity onPress={handleClose} className="p-1">
-          <Icon icon={X} size={24} />
-        </TouchableOpacity>
-      </View>
+    <ReportSpotModalView title="amenities">
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
+        className="space-y-2"
       >
         {Object.entries(AMENITIES).map(([key, label]) => (
           <AmenitySelector
@@ -39,8 +40,8 @@ export function ReportSpotEditAmenities({ amenities, setAmenities, handleClose }
             onToggle={() => setAmenities((a) => ({ ...a, [key]: !a[key as keyof typeof AMENITIES] }))}
           />
         ))}
+        <Button onPress={handleClose}>Done</Button>
       </ScrollView>
-      <Button onPress={handleClose}>Next</Button>
-    </View>
+    </ReportSpotModalView>
   )
 }

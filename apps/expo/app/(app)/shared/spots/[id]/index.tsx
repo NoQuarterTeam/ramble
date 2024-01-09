@@ -210,9 +210,10 @@ export function SpotDetailScreen() {
               </TouchableOpacity>
               <Text className="text-sm"> on the {dayjs(spot.createdAt).format("DD/MM/YYYY")}</Text>
             </View>
-            <View className="flex flex-row space-x-2 py-4">
+            <View className="flex flex-row justify-between space-x-2 py-4">
               {canManageSpot(spot, me) && !spot.verifiedAt && (
                 <Button
+                  className="flex-1"
                   size="sm"
                   onPress={() => verifySpot({ id: spot.id })}
                   isLoading={isVerifyingLoading}
@@ -223,6 +224,7 @@ export function SpotDetailScreen() {
               )}
               {canManageSpot(spot, me) && (
                 <Button
+                  className="flex-1"
                   size="sm"
                   onPress={() =>
                     router.push("EditSpotLayout", {
@@ -243,24 +245,27 @@ export function SpotDetailScreen() {
                   Edit
                 </Button>
               )}
-              {me?.isAdmin && (
-                <Button
-                  size="sm"
-                  onPress={() => router.push("DeleteSpotScreen", { id: spot.id })}
-                  variant="destructive"
-                  leftIcon={<Trash size={18} className="text-white" />}
-                >
-                  Delete
-                </Button>
-              )}
+              <Button
+                size="sm"
+                className="flex-1"
+                variant="ghost"
+                leftIcon={<Icon icon={Flag} size={16} />}
+                onPress={() => router.navigate("SpotReportLayout", { id: spot.id })}
+              >
+                Report spot
+              </Button>
             </View>
-            <Button
-              variant="link"
-              leftIcon={<Icon icon={Flag} size={16} />}
-              onPress={() => router.navigate("SpotReportScreen", { id: spot.id })}
-            >
-              Report incorrect data
-            </Button>
+            {me?.isAdmin && (
+              <Button
+                className="flex-1"
+                size="sm"
+                onPress={() => router.push("DeleteSpotScreen", { id: spot.id })}
+                variant="destructive"
+                leftIcon={<Trash size={18} className="text-white" />}
+              >
+                Delete
+              </Button>
+            )}
           </View>
 
           <View className="h-px w-full bg-gray-200 dark:bg-gray-700" />

@@ -1,32 +1,26 @@
-import type * as React from "react"
-import { ScrollView, TouchableOpacity, View } from "react-native"
-import { X } from "lucide-react-native"
+import * as React from "react"
+import { ScrollView, View } from "react-native"
 
-import { type SpotType } from "@ramble/database/types"
 import { SPOT_TYPE_OPTIONS } from "@ramble/shared"
 
-import { Icon } from "../../../../../../components/Icon"
 import { SpotIcon } from "../../../../../../components/SpotIcon"
-import { BrandHeading } from "../../../../../../components/ui/BrandHeading"
 import { Button } from "../../../../../../components/ui/Button"
+import { useParams, useRouter } from "../../../../../router"
+import { ReportSpotModalView } from "./ReportSpotModalView"
 
-interface Props {
-  type: SpotType
-  setType: React.Dispatch<React.SetStateAction<SpotType>>
-  handleClose: () => void
-}
+export function SpotReportTypeScreen() {
+  const router = useRouter()
+  const { params } = useParams<"SpotReportTypeScreen">()
+  const [type, setType] = React.useState(params.type)
 
-export function ReportSpotEditType({ type, setType, handleClose }: Props) {
+  const onClose = () => {
+    router.navigate("SpotReportScreen", { ...params, type })
+  }
   return (
-    <View className="space-y-6">
-      <View className="flex flex-row justify-between pb-2">
-        <BrandHeading className="text-3xl">Basic info</BrandHeading>
-        <TouchableOpacity onPress={handleClose} className="p-1">
-          <Icon icon={X} size={24} />
-        </TouchableOpacity>
-      </View>
+    <ReportSpotModalView title="Type">
       <ScrollView
         keyboardShouldPersistTaps="handled"
+        className="space-y-2"
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
       >
@@ -51,8 +45,8 @@ export function ReportSpotEditType({ type, setType, handleClose }: Props) {
             </Button>
           ))}
         </View>
+        <Button onPress={onClose}>Done</Button>
       </ScrollView>
-      <Button onPress={handleClose}>Next</Button>
-    </View>
+    </ReportSpotModalView>
   )
 }

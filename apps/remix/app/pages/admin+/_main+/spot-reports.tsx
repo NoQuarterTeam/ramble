@@ -104,7 +104,11 @@ const columns = [
     id: "notes",
     size: 400,
     enableSorting: false,
-    cell: (info) => <NotesTooltip notes={info.getValue() as Prisma.JsonObject | null} />,
+    cell: (info) => (
+      <div className="relative">
+        <NotesTooltip notes={info.getValue() as Prisma.JsonObject | null} />
+      </div>
+    ),
     header: () => "Report notes",
   }),
   columnHelper.accessor((row) => row.creator, {
@@ -183,7 +187,7 @@ function ApproveAction({ item }: { item: SpotRevision }) {
     <verifyFetcher.Form>
       <input type="hidden" name="id" value={item.id} />
       <verifyFetcher.FormButton value={Actions.approve} size="sm" leftIcon={<Check size={16} />}>
-        mark as approved
+        Mark as approved
       </verifyFetcher.FormButton>
     </verifyFetcher.Form>
   )

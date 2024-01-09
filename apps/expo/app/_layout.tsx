@@ -40,6 +40,7 @@ import { NewListScreen } from "./(app)/lists/new"
 import { EditListScreen } from "./(app)/shared/lists/[id]/edit"
 import { DeleteSpotScreen } from "./(app)/shared/spots/[id]/delete"
 import { EditSpotLayout } from "./(app)/shared/spots/[id]/edit/_layout"
+import { SpotReportLayout } from "./(app)/shared/spots/[id]/report/_layout"
 import { ReviewDetailScreen } from "./(app)/shared/spots/[id]/reviews/[id]"
 import { NewReviewScreen } from "./(app)/shared/spots/[id]/reviews/new"
 import { SaveSpotScreen } from "./(app)/shared/spots/[id]/save"
@@ -169,6 +170,7 @@ export default function RootLayout() {
                     <Container.Screen name="NewReviewScreen" component={NewReviewScreen} />
                     <Container.Screen name="ReviewDetailScreen" component={ReviewDetailScreen} />
                     <Container.Screen name="SaveSpotScreen" component={SaveSpotScreen} />
+                    <Container.Screen name="SpotReportLayout" component={SpotReportLayout} />
                     <Container.Screen name="SaveSpotImagesScreen" component={SaveSpotImagesScreen} />
                     <Container.Screen name="DeleteSpotScreen" component={DeleteSpotScreen} />
                   </Container.Group>
