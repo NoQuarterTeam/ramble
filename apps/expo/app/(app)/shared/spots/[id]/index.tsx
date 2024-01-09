@@ -245,15 +245,17 @@ export function SpotDetailScreen() {
                   Edit
                 </Button>
               )}
-              <Button
-                size="sm"
-                className="flex-1"
-                variant="ghost"
-                leftIcon={<Icon icon={Flag} size={16} />}
-                onPress={() => router.navigate("SpotReportLayout", { id: spot.id })}
-              >
-                Report spot
-              </Button>
+              {me && (
+                <Button
+                  size="sm"
+                  className="flex-1"
+                  variant="ghost"
+                  leftIcon={<Icon icon={Flag} size={16} />}
+                  onPress={() => router.navigate("SpotReportLayout", { id: spot.id })}
+                >
+                  Report spot
+                </Button>
+              )}
             </View>
             {me?.isAdmin && (
               <Button
