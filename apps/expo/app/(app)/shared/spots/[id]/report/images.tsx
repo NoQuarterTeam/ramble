@@ -8,6 +8,7 @@ import { createImageUrl, join } from "@ramble/shared"
 import { Button } from "../../../../../../components/ui/Button"
 import { useParams, useRouter } from "../../../../../router"
 import { ReportSpotModalView } from "./ReportSpotModalView"
+import { Icon } from "../../../../../../components/Icon"
 
 export function SpotReportImagesScreen() {
   const { params } = useParams<"SpotReportImagesScreen">()
@@ -51,7 +52,7 @@ export function SpotReportImagesScreen() {
                     onPress={() => handleClickImage(id)}
                     size="sm"
                     variant={isFlagged(id) ? "destructive" : "secondary"}
-                    leftIcon={<Flag size={18} color={isFlagged(id) ? "white" : undefined} />}
+                    leftIcon={<Icon icon={Flag} size={18} color={isFlagged(id) ? "white" : undefined} />}
                   >
                     {isFlagged(id) ? "Flagged" : "Flag"}
                   </Button>
