@@ -1,7 +1,7 @@
 import { Link, useLoaderData } from "@remix-run/react"
-import { createColumnHelper } from "@tanstack/react-table"
+import { Row, createColumnHelper } from "@tanstack/react-table"
 import dayjs from "dayjs"
-import { Check, Trash } from "lucide-react"
+import { Check, Eye, EyeOff, Trash } from "lucide-react"
 import { promiseHash } from "remix-utils/promise"
 import { z } from "zod"
 
@@ -12,7 +12,7 @@ import { useFetcher } from "~/components/Form"
 import { Search } from "~/components/Search"
 import { SpotIcon } from "~/components/SpotIcon"
 import { Table } from "~/components/Table"
-import { Avatar, IconButton, Tooltip } from "~/components/ui"
+import { Avatar, IconButton } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { FormActionInput } from "~/lib/form"
 import { createAction, createActions } from "~/lib/form.server"
@@ -100,17 +100,7 @@ const columns = [
     ),
     header: () => "Spot",
   }),
-  columnHelper.accessor((row) => row.notes, {
-    id: "notes",
-    size: 400,
-    enableSorting: false,
-    cell: (info) => (
-      <div className="relative">
-        <NotesTooltip notes={info.getValue() as Prisma.JsonObject | null} />
-      </div>
-    ),
-    header: () => "Report notes",
-  }),
+
   columnHelper.accessor((row) => row.creator, {
     id: "creator.firstName",
     size: 120,
@@ -159,6 +149,13 @@ const columns = [
     header: () => null,
     cell: ({ row }) => (
       <div className="flex items-center space-x-1">
+        <IconButton
+          variant="ghost"
+          size="sm"
+          aria-label="expand"
+          onClick={row.getToggleExpandedHandler()}
+          icon={row.getIsExpanded() ? <EyeOff size={16} /> : <Eye size={16} />}
+        />
         <DeleteAction item={row.original} />
       </div>
     ),
@@ -176,7 +173,7 @@ export default function SpotReports() {
           <Search className="max-w-[400px]" placeholder="Search notes" />
         </div>
       </div>
-      <Table data={spotRevisions} count={count} columns={columns} />
+      <Table data={spotRevisions} count={count} columns={columns} ExpandComponent={RenderSubComponent} />
     </div>
   )
 }
@@ -210,51 +207,66 @@ function DeleteAction({ item }: { item: SpotRevision }) {
   )
 }
 
-function NotesTooltip({ notes }: { notes: Prisma.JsonObject | null }) {
-  if (!notes) return null
+function RenderSubComponent({ row }: { row: Row<SpotRevision> }) {
+  const notes = row.original.notes as Prisma.JsonObject
+  const spot = row.original.spot
   return (
-    <Tooltip
-      label={
-        <ul className="max-w-sm">
-          <li>
-            <b>Name: </b>
-            {notes.name?.toString()}
-          </li>
-          <li>
-            <b>Description: </b>
-            {notes.description?.toString()}
-          </li>
-          <li>
-            <b>Type: </b>
-            {notes.type?.toString()}
-          </li>
-          <li>
-            <b>Address: </b>
-            {notes.address?.toString()}
-          </li>
-          <li>
-            <b>Latitude: </b>
-            {notes.latitude?.toString()}
-          </li>
-          <li>
-            <b>Longitude: </b>
-            {notes.longitude?.toString()}
-          </li>
-          <li>
-            <b>Amenities: </b>
-            {
-              // TODO: better amenities rendering
-              JSON.stringify(notes.amenities)
-            }
-          </li>
-          <li>
-            <b>Notes: </b>
-            {notes.notes?.toString()}
-          </li>
-        </ul>
-      }
-    >
-      <p className="italic text-gray-500">Hover to see notes</p>
-    </Tooltip>
+    <ul className="p-2">
+      {spot.name !== notes.name && (
+        <li>
+          <b>Name: </b>
+          {notes.name?.toString()}
+        </li>
+      )}
+      {spot.description !== notes.description && (
+        <li>
+          <b>Description: </b>
+          {notes.description?.toString()}
+        </li>
+      )}
+      {notes.flaggedImageIds && notes.flaggedImageIds.toString().length > 0 && (
+        <li>
+          <b>Flagged image Ids: </b>
+          {notes.flaggedImageIds?.toString()}
+        </li>
+      )}
+      {notes.type !== spot.type && (
+        <li>
+          <b>Type: </b>
+          {notes.type?.toString()}
+        </li>
+      )}
+      {notes.address && notes.address !== spot.address && (
+        <li>
+          <b>Address: </b>
+          {notes.address?.toString()}
+        </li>
+      )}
+      {notes.latitude && notes.latitude !== spot.latitude && (
+        <li>
+          <b>Latitude: </b>
+          {notes.latitude?.toString()}
+        </li>
+      )}
+
+      {notes.longitude && notes.longitude !== spot.longitude && (
+        <li>
+          <b>Longitude: </b>
+          {notes.longitude?.toString()}
+        </li>
+      )}
+      {notes.amenties && (
+        <li>
+          <b>Amenities: </b>
+          {JSON.stringify(notes.amenities)}
+        </li>
+      )}
+      {notes.notes && (
+        <li>
+          <b>Notes: </b>
+          {notes.notes?.toString()}
+        </li>
+      )}
+    </ul>
   )
 }
