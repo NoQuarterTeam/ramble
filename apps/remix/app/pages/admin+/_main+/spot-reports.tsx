@@ -215,7 +215,7 @@ function NotesTooltip({ notes }: { notes: Prisma.JsonObject | null }) {
   return (
     <Tooltip
       label={
-        <ul>
+        <ul className="max-w-sm">
           <li>
             <b>Name: </b>
             {notes.name?.toString()}
