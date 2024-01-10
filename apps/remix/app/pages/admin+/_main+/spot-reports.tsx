@@ -248,7 +248,8 @@ function NotesTooltip({ notes }: { notes: Prisma.JsonObject | null }) {
             }
           </li>
           <li>
-            <b>Flagged image Ids: </b>s{notes.flaggedImageIds?.toString()}
+            <b>Flagged image Ids: </b>
+            {notes.flaggedImageIds?.toString()}
           </li>
           <li>
             <b>Notes: </b>
