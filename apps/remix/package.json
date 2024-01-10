@@ -81,7 +81,8 @@
     "tailwindcss-radix": "2.8.0",
     "use-onclickoutside": "0.4.1",
     "zod": "3.22.4",
-    "zodix": "0.4.4"
+    "zodix": "0.4.4",
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
     "@ramble/eslint-config": "workspace:*",
