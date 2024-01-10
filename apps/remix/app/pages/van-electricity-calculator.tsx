@@ -72,6 +72,8 @@ export function VanElectricityCalculator() {
                       <Input
                         className="pl-2"
                         value={item.hours || ""}
+                        max={24}
+                        min={0}
                         type="number"
                         onChange={(e) => {
                           updateItem({ ...item, hours: Number(e.target.value) })
@@ -82,6 +84,7 @@ export function VanElectricityCalculator() {
                       <Input
                         className="pl-2"
                         value={item.watts || ""}
+                        min={0}
                         type="number"
                         onChange={(e) => {
                           updateItem({ ...item, watts: Number(e.target.value) })
@@ -145,6 +148,8 @@ export function VanElectricityCalculator() {
                 <p>Hours of sun</p>
                 <Input
                   value={sunHours || ""}
+                  min={0}
+                  max={24}
                   onChange={(e) => setSunHours(Number(e.target.value))}
                   className="pl-2"
                   type="number"
@@ -153,6 +158,8 @@ export function VanElectricityCalculator() {
               <div className="flex justify-between space-x-2">
                 <p>Solar panel wattage</p>
                 <Input
+                  min={0}
+                  max={100000}
                   value={panelWattage || ""}
                   onChange={(e) => setPanelWattage(Number(e.target.value))}
                   className="pl-2"
