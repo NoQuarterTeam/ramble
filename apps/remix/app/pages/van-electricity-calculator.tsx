@@ -4,14 +4,18 @@ import { create } from "zustand"
 import { persist } from "zustand/middleware"
 import { Button, IconButton, Input, Select } from "~/components/ui"
 import { Trash } from "lucide-react"
+import { ClientOnly } from "remix-utils/client-only"
 
 export const headers = () => {
   return {
     "Cache-Control": cacheHeader({ maxAge: "1week", sMaxage: "1hour", staleWhileRevalidate: "10mins", public: true }),
   }
 }
+export default function Calc() {
+  return <ClientOnly>{() => <VanElectricityCalculator />}</ClientOnly>
+}
 
-export default function VanElectricityCalculator() {
+export function VanElectricityCalculator() {
   const {
     items,
     addItem,
@@ -114,7 +118,7 @@ export default function VanElectricityCalculator() {
                         onChange={(e) => {
                           const item = ITEM_PRESETS.find((i) => i.id === Number(e.target.value))
                           if (item) {
-                            addItem(item)
+                            addItem({ ...item, id: new Date().getMilliseconds() })
                             e.currentTarget.value = ""
                             e.currentTarget.blur()
                           }
@@ -247,91 +251,91 @@ const BATTERY_TYPES = [
 
 const ITEM_PRESETS: Item[] = [
   {
-    id: new Date().getMilliseconds() + 1,
+    id: 1,
     name: "LED lights",
     hours: 5,
     watts: 10,
   },
   {
-    id: new Date().getMilliseconds() + 2,
+    id: 2,
     name: "Laptop",
     hours: 4,
     watts: 100,
   },
   {
-    id: new Date().getMilliseconds() + 3,
+    id: 3,
     name: "Phone",
     hours: 2,
     watts: 10,
   },
   {
-    id: new Date().getMilliseconds() + 4,
+    id: 4,
     name: "Fridge",
     hours: 24,
     watts: 100,
   },
   {
-    id: new Date().getMilliseconds() + 5,
+    id: 5,
     name: "Fan",
     hours: 12,
     watts: 50,
   },
   {
-    id: new Date().getMilliseconds() + 6,
+    id: 6,
     name: "Water pump",
     hours: 1,
     watts: 100,
   },
   {
-    id: new Date().getMilliseconds() + 7,
+    id: 7,
     name: "Inverter",
     hours: 1,
     watts: 100,
   },
   {
-    id: new Date().getMilliseconds() + 8,
+    id: 8,
     name: "TV",
     hours: 2,
     watts: 100,
   },
   {
-    id: new Date().getMilliseconds() + 9,
+    id: 9,
     name: "Microwave",
     hours: 1,
     watts: 1000,
   },
   {
-    id: new Date().getMilliseconds() + 10,
+    id: 10,
     name: "Coffee machine",
     hours: 1,
     watts: 1000,
   },
   {
-    id: new Date().getMilliseconds() + 11,
+    id: 11,
     name: "Toaster",
     hours: 1,
     watts: 1000,
   },
   {
-    id: new Date().getMilliseconds() + 12,
+    id: 12,
     name: "Hair dryer",
     hours: 1,
     watts: 1000,
   },
   {
-    id: new Date().getMilliseconds() + 13,
+    id: 13,
     name: "Kettle",
     hours: 1,
     watts: 1000,
   },
   {
-    id: new Date().getMilliseconds() + 14,
+    id: 14,
     name: "Electric blanket",
     hours: 1,
     watts: 100,
   },
   {
-    id: new Date().getMilliseconds() + 15,
+    id: 15,
     name: "Heater",
     hours: 1,
     watts: 1000,
