@@ -38,7 +38,9 @@ export async function createContext({ req }: trpcFetch.FetchCreateContextFnOptio
   let user: Prisma.UserGetPayload<{ select: typeof userSelectFields }> | null = null
   if (token) {
     const payload = decodeAuthToken(token)
-    user = await prisma.user.findUnique({ where: { id: payload.id }, select: userSelectFields })
+    if (payload) {
+      user = await prisma.user.findUnique({ where: { id: payload.id }, select: userSelectFields })
+    }
   }
   return { req, prisma, user }
 }
