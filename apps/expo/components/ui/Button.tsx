@@ -66,7 +66,7 @@ export const Button = React.forwardRef(function _Button(
   const isDark = colorScheme === "dark"
   return (
     <TouchableOpacity
-      ref={ref as React.LegacyRef<TouchableOpacity>}
+      ref={ref as React.RefObject<TouchableOpacity>}
       {...props}
       disabled={props.disabled || isLoading}
       activeOpacity={0.7}
