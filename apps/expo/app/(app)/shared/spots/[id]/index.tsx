@@ -9,6 +9,7 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated"
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 import { useQuery } from "@tanstack/react-query"
 import dayjs from "dayjs"
 import { LinearGradient } from "expo-linear-gradient"
@@ -131,13 +132,15 @@ export function SpotDetailScreen() {
     },
   })
 
+  const insets = useSafeAreaInsets()
+
   if (isLoading) return <SpotLoading />
   if (!spot || !data)
     return (
-      <View className="space-y-2 px-4 pt-16">
+      <SafeAreaView className="space-y-2 p-4">
         <Text className="text-lg">Spot not found</Text>
         {router.canGoBack() && <Button onPress={router.goBack}>Back</Button>}
-      </View>
+      </SafeAreaView>
     )
   return (
     <View>
@@ -301,14 +304,19 @@ export function SpotDetailScreen() {
       </Animated.ScrollView>
 
       {!isScrolledPassedThreshold && (
-        <LinearGradient className="absolute left-0 right-0 top-0 h-16" colors={["#231C18", "transparent"]} />
+        <LinearGradient
+          style={{ height: insets.top + 5 }}
+          className="absolute left-0 right-0 top-0"
+          colors={["#231C18", "transparent"]}
+        />
       )}
+
       <Animated.View
-        className="bg-background dark:bg-background-dark absolute left-0 right-0 top-0 h-[100px] border border-b border-gray-200 dark:border-gray-800"
-        style={topBarStyle}
+        className="bg-background dark:bg-background-dark absolute left-0 right-0 top-0 border border-b border-gray-200 dark:border-gray-800"
+        style={[topBarStyle, { height: 50 + insets.top }]}
       />
 
-      <View className="absolute left-0 right-0 top-14 flex w-full flex-row justify-between px-4">
+      <SafeAreaView className="absolute left-0 right-0 top-2 flex w-full flex-row justify-between px-4">
         <View className="flex w-full flex-1 flex-row items-center space-x-0.5">
           <TouchableOpacity
             onPress={router.canGoBack() ? router.goBack : () => router.navigate("AppLayout")}
@@ -361,7 +369,7 @@ export function SpotDetailScreen() {
             <Icon icon={Heart} size={20} fill={data.isLiked ? (isDark ? "white" : "black") : "transparent"} />
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     </View>
   )
 }
@@ -394,7 +402,7 @@ function SpotLoading() {
 }
 
 function Skeleton(props: ViewProps) {
-  return <View {...props} className={merge("rounded-xs bg-gray-100 dark:bg-gray-700", props.className)} />
+  return <View {...props} className={merge("rounded-xs bgrk:bg-gray-700", props.className)} />
 }
 
 interface DescProps {

@@ -1,13 +1,11 @@
 import { FormProvider } from "react-hook-form"
 import { Keyboard, Modal, ScrollView, TouchableOpacity, useColorScheme, View } from "react-native"
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 import dayjs from "dayjs"
 import { StatusBar } from "expo-status-bar"
 import { CheckSquare2, Square, Star } from "lucide-react-native"
 
-import { join } from "@ramble/shared"
-
 import { api } from "../lib/api"
-import { isAndroid } from "../lib/device"
 import { useForm } from "../lib/hooks/useForm"
 import { useKeyboardController } from "../lib/hooks/useKeyboardController"
 import { useMe } from "../lib/hooks/useMe"
@@ -57,88 +55,92 @@ export function FeedbackCheck() {
   if (isLoading || feedbackLoading || hasSubmittedFeedback) return null
   return (
     <Modal animationType="slide" presentationStyle="formSheet" visible>
-      <ScrollView
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}
-        showsVerticalScrollIndicator={false}
-        className={join("bg-background dark:bg-background-dark h-full flex-1 flex-grow px-4 pt-6", isAndroid ? "pt-10" : "pt-6")}
-      >
-        <FormProvider {...form}>
-          <View className="space-y-2">
-            <View>
-              <BrandHeading className="w-11/12 pb-2 text-2xl">we'd love your feedback</BrandHeading>
-              <Text>
-                Hey {me?.firstName}, thanks for using the beta, we hope you're enjoying Ramble. We'd love to hear your feedback so
-                we can make it even better!
-              </Text>
-            </View>
-            <View>
-              <FormInputLabel label="1. How are you enjoying the app so far?" />
-              <View className="my-4 flex flex-row items-center justify-center space-x-6">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <TouchableOpacity key={i} onPress={() => form.setValue("rating", i + 1)}>
-                    <Icon
-                      icon={Star}
-                      strokeWidth={1}
-                      size={40}
-                      fill={rating > i ? (isDark ? backgroundLight : backgroundDark) : "transparent"}
-                    />
-                  </TouchableOpacity>
-                ))}
+      <SafeAreaProvider>
+        <SafeAreaView edges={["top"]} className="flex-1">
+          <ScrollView
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}
+            showsVerticalScrollIndicator={false}
+            className="bg-background dark:bg-background-dark flex-1 flex-grow px-4 pt-4"
+          >
+            <FormProvider {...form}>
+              <View className="space-y-2">
+                <View>
+                  <BrandHeading className="w-11/12 pb-2 text-2xl">we'd love your feedback</BrandHeading>
+                  <Text>
+                    Hey {me?.firstName}, thanks for using the beta, we hope you're enjoying Ramble. We'd love to hear your
+                    feedback so we can make it even better!
+                  </Text>
+                </View>
+                <View>
+                  <FormInputLabel label="1. How are you enjoying the app so far?" />
+                  <View className="my-4 flex flex-row items-center justify-center space-x-6">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <TouchableOpacity key={i} onPress={() => form.setValue("rating", i + 1)}>
+                        <Icon
+                          icon={Star}
+                          strokeWidth={1}
+                          size={40}
+                          fill={rating > i ? (isDark ? backgroundLight : backgroundDark) : "transparent"}
+                        />
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </View>
+                <View>
+                  <FormInputLabel label="2. What could we improve?" />
+                  <View className="my-2 space-y-2">
+                    {[
+                      "More spots",
+                      "More social/community features",
+                      "More spot categories (cafe's etc)",
+                      "More smart trip planning features",
+                      "More integrations (weather etc)",
+                    ].map((need) => {
+                      const isSelected = needs.includes(need)
+                      return (
+                        <TouchableOpacity
+                          key={need}
+                          className="flex flex-row items-center space-x-2 py-0.5"
+                          onPress={() => form.setValue("needs", isSelected ? needs.filter((n) => n !== need) : [...needs, need])}
+                        >
+                          <Icon icon={isSelected ? CheckSquare2 : Square} />
+                          <Text>{need}</Text>
+                        </TouchableOpacity>
+                      )
+                    })}
+                  </View>
+                </View>
+                <View>
+                  <FormInputLabel label="3. How likely are you to share Ramble with a friend?" />
+                  <View className="my-4 flex flex-row items-center justify-center space-x-6">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <TouchableOpacity key={i} onPress={() => form.setValue("shareable", i + 1)}>
+                        <Icon
+                          icon={Star}
+                          strokeWidth={1}
+                          size={40}
+                          fill={shareable > i ? (isDark ? backgroundLight : backgroundDark) : "transparent"}
+                        />
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </View>
+                <FormInput
+                  label="4. Anything else you wana mention? e.g. other features you would like to see"
+                  name="other"
+                  multiline
+                />
+                <Button isLoading={createLoading} disabled={createLoading} onPress={handleSubmit}>
+                  Send feedback
+                </Button>
               </View>
-            </View>
-            <View>
-              <FormInputLabel label="2. What could we improve?" />
-              <View className="my-2 space-y-2">
-                {[
-                  "More spots",
-                  "More social/community features",
-                  "More spot categories (cafe's etc)",
-                  "More smart trip planning features",
-                  "More integrations (weather etc)",
-                ].map((need) => {
-                  const isSelected = needs.includes(need)
-                  return (
-                    <TouchableOpacity
-                      key={need}
-                      className="flex flex-row items-center space-x-2 py-0.5"
-                      onPress={() => form.setValue("needs", isSelected ? needs.filter((n) => n !== need) : [...needs, need])}
-                    >
-                      <Icon icon={isSelected ? CheckSquare2 : Square} />
-                      <Text>{need}</Text>
-                    </TouchableOpacity>
-                  )
-                })}
-              </View>
-            </View>
-            <View>
-              <FormInputLabel label="3. How likely are you to share Ramble with a friend?" />
-              <View className="my-4 flex flex-row items-center justify-center space-x-6">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <TouchableOpacity key={i} onPress={() => form.setValue("shareable", i + 1)}>
-                    <Icon
-                      icon={Star}
-                      strokeWidth={1}
-                      size={40}
-                      fill={shareable > i ? (isDark ? backgroundLight : backgroundDark) : "transparent"}
-                    />
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </View>
-            <FormInput
-              label="4. Anything else you wana mention? e.g. other features you would like to see"
-              name="other"
-              multiline
-            />
-            <Button isLoading={createLoading} disabled={createLoading} onPress={handleSubmit}>
-              Send feedback
-            </Button>
-          </View>
-        </FormProvider>
-      </ScrollView>
-      <StatusBar style="light" />
-      <Toast />
+            </FormProvider>
+          </ScrollView>
+          <StatusBar style="light" />
+          <Toast />
+        </SafeAreaView>
+      </SafeAreaProvider>
     </Modal>
   )
 }

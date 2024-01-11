@@ -36,6 +36,7 @@
     "@react-email/components",
     "@react-native-async-storage/async-storage",
     "@sentry/react-native",
+    "lucide-react-native",
     "@shopify/flash-list",
     "expo-application",
     "expo-constants",

@@ -1,5 +1,6 @@
 import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 import colors from "@ramble/tailwind-config/src/colors"
 
@@ -41,10 +42,11 @@ export default function OnboardingStep2Screen() {
   const onSubmit = () => mutate(interests)
 
   return (
-    <View className="flex-1">
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
-        <View className="px-4 pt-16">
-          <Heading className="mb-4 text-2xl">What are you into?</Heading>
+    <SafeAreaView className="flex-1 px-4">
+      <ScrollView className="space-y-4" contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+        <Heading className="text-2xl">What are you into?</Heading>
+
+        <View>
           {interestOptions.map((interest) => (
             <InterestSelector
               key={interest.value}
@@ -55,8 +57,9 @@ export default function OnboardingStep2Screen() {
             />
           ))}
         </View>
+
         <FormError error={error} />
-        <View className="mt-4 flex flex-row items-center justify-between px-4">
+        <View className="flex flex-row items-center justify-between">
           <Button onPress={router.goBack} variant="ghost">
             Back
           </Button>
@@ -70,7 +73,7 @@ export default function OnboardingStep2Screen() {
           </View>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   )
 }
 

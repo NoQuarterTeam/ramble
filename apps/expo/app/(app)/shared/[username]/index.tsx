@@ -1,5 +1,6 @@
 import * as React from "react"
 import { Linking, ScrollView, TouchableOpacity, useColorScheme, View } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
 import { ChevronLeft, Heart, Instagram, User2 } from "lucide-react-native"
 
 import { createImageUrl } from "@ramble/shared"
@@ -52,7 +53,7 @@ export function UserScreen() {
   }
 
   return (
-    <View className="pt-16">
+    <SafeAreaView className="flex-1">
       <View className="flex flex-row items-center justify-between px-4 pb-2">
         <View className="flex flex-row items-center">
           {router.canGoBack() && (
@@ -176,7 +177,7 @@ export function UserScreen() {
           </View>
         </ScrollView>
       )}
-    </View>
+    </SafeAreaView>
   )
 }
 

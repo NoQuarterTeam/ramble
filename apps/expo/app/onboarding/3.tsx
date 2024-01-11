@@ -2,6 +2,7 @@ import * as React from "react"
 import { FormProvider } from "react-hook-form"
 import { ScrollView, View } from "react-native"
 import { AvoidSoftInputView } from "react-native-avoid-softinput"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 import { Button } from "../../components/ui/Button"
 import { FormError } from "../../components/ui/FormError"
@@ -45,36 +46,38 @@ export default function OnboardingStep3Screen() {
     mutate({ model, name, year, id: data?.id })
   })
   return (
-    <FormProvider {...form}>
-      <AvoidSoftInputView>
-        <ScrollView
-          keyboardShouldPersistTaps="handled"
-          contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}
-          showsVerticalScrollIndicator={false}
-        >
-          <View className="px-4 pt-16">
-            <Heading className="mb-4 text-2xl">Tell us a little bit about your van?</Heading>
+    <SafeAreaView className="flex-1 px-4">
+      <FormProvider {...form}>
+        <AvoidSoftInputView>
+          <ScrollView
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}
+            showsVerticalScrollIndicator={false}
+            className="space-y-4"
+          >
+            <Heading className="text-2xl">Tell us a little bit about your van?</Heading>
             <FormInput error={error} name="name" label="What's it's name?" placeholder="Patrick" />
             <FormInput error={error} name="model" label="What type of van is it?" placeholder="Citroën Jumper" />
             <FormInput error={error} name="year" label="What year was it born?" placeholder="2013" />
             <FormInput error={error} multiline name="description" label="Anything else you wanna mention?" />
-          </View>
-          <FormError error={error} />
-          <View className="mt-4 flex flex-row items-center justify-between px-4">
-            <Button onPress={router.goBack} variant="ghost">
-              Back
-            </Button>
-            <View className="flex flex-row items-center space-x-2">
-              <Button onPress={() => router.replace("AppLayout")} variant="link">
-                Skip
+
+            <FormError error={error} />
+            <View className="flex flex-row items-center justify-between">
+              <Button onPress={router.goBack} variant="ghost">
+                Back
               </Button>
-              <Button className="w-[120px]" isLoading={updateLoading} onPress={onSubmit}>
-                Finish
-              </Button>
+              <View className="flex flex-row items-center space-x-2">
+                <Button onPress={() => router.replace("AppLayout")} variant="link">
+                  Skip
+                </Button>
+                <Button className="w-[120px]" isLoading={updateLoading} onPress={onSubmit}>
+                  Finish
+                </Button>
+              </View>
             </View>
-          </View>
-        </ScrollView>
-      </AvoidSoftInputView>
-    </FormProvider>
+          </ScrollView>
+        </AvoidSoftInputView>
+      </FormProvider>
+    </SafeAreaView>
   )
 }

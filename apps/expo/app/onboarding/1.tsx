@@ -1,5 +1,5 @@
 import { FormProvider } from "react-hook-form"
-import { ScrollView, View } from "react-native"
+import { SafeAreaView, ScrollView, View } from "react-native"
 import { AvoidSoftInputView } from "react-native-avoid-softinput"
 
 import { Button } from "../../components/ui/Button"
@@ -26,15 +26,16 @@ export default function OnboardingStep1Screen() {
 
   const onSubmit = form.handleSubmit((data) => mutate(data))
   return (
-    <FormProvider {...form}>
-      <AvoidSoftInputView>
-        <ScrollView
-          contentContainerStyle={{ flexGrow: 1 }}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-        >
-          <View className="px-4 pt-16">
-            <Heading className="mb-4 text-2xl">Tell us a bit about youself</Heading>
+    <SafeAreaView className="flex-1 px-4">
+      <FormProvider {...form}>
+        <AvoidSoftInputView>
+          <ScrollView
+            contentContainerStyle={{ flexGrow: 1 }}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+            className="space-y-4"
+          >
+            <Heading className="text-2xl">Tell us a bit about youself</Heading>
             <FormInput
               multiline
               className="h-[100px]"
@@ -43,21 +44,22 @@ export default function OnboardingStep1Screen() {
               label="A little bio, just a few words about yourself and your interests"
               error={error}
             />
-          </View>
-          <FormError error={error} />
-          <View className="mt-4 flex flex-row items-center justify-between px-4">
-            <View />
-            <View className="flex flex-row items-center space-x-2">
-              <Button onPress={() => router.push("OnboardingStep2Screen")} variant="link">
-                Skip
-              </Button>
-              <Button className="w-[120px]" isLoading={isLoading} onPress={onSubmit}>
-                Next
-              </Button>
+            <FormError error={error} />
+
+            <View className="flex flex-row items-center justify-between">
+              <View />
+              <View className="flex flex-row items-center space-x-2">
+                <Button onPress={() => router.push("OnboardingStep2Screen")} variant="link">
+                  Skip
+                </Button>
+                <Button className="w-[120px]" isLoading={isLoading} onPress={onSubmit}>
+                  Next
+                </Button>
+              </View>
             </View>
-          </View>
-        </ScrollView>
-      </AvoidSoftInputView>
-    </FormProvider>
+          </ScrollView>
+        </AvoidSoftInputView>
+      </FormProvider>
+    </SafeAreaView>
   )
 }

@@ -67,7 +67,7 @@ export function NewSpotLocationScreen() {
       {!isLoadingLocation && (
         <>
           <Map
-            className="rounded-xs mb-10 mt-4 flex-1 overflow-hidden"
+            className="rounded-xs mt-2 flex-1 overflow-hidden"
             onMapIdle={onMapMove}
             ref={mapRef}
             styleURL={StyleURL.SatelliteStreet}

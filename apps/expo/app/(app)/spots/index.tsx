@@ -71,7 +71,7 @@ export function SpotsScreen() {
       }
     >
       {isLoading ? (
-        <View className="flex items-center justify-center pt-16">
+        <View className="flex items-center justify-center p-4">
           <Spinner />
         </View>
       ) : (

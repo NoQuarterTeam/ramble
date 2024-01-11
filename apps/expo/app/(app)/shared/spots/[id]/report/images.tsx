@@ -5,10 +5,10 @@ import { Flag } from "lucide-react-native"
 
 import { createImageUrl, join } from "@ramble/shared"
 
+import { Icon } from "../../../../../../components/Icon"
 import { Button } from "../../../../../../components/ui/Button"
 import { useParams, useRouter } from "../../../../../router"
 import { ReportSpotModalView } from "./ReportSpotModalView"
-import { Icon } from "../../../../../../components/Icon"
 
 export function SpotReportImagesScreen() {
   const { params } = useParams<"SpotReportImagesScreen">()

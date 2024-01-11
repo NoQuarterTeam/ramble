@@ -25,11 +25,11 @@ export function AccountInviteScreen() {
     <ScreenView title="invite codes">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
         {isLoading ? (
-          <View className="flex items-center justify-center pt-16">
+          <View className="flex items-center justify-center pt-4">
             <Spinner />
           </View>
         ) : !data || data?.length === 0 ? (
-          <View className="flex items-center justify-center pt-16">
+          <View className="flex items-center justify-center pt-4">
             <Text>No codes yet</Text>
           </View>
         ) : (

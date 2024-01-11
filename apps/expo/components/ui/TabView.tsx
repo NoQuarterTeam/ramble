@@ -1,5 +1,6 @@
 import type * as React from "react"
 import { View } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 import { join } from "@ramble/shared"
 
@@ -13,7 +14,7 @@ interface Props {
 
 export function TabView(props: Props) {
   return (
-    <View className="min-h-full px-4 pt-14">
+    <SafeAreaView className="flex-1 px-4">
       <View className="flex flex-row items-center justify-between">
         <View className={join("flex flex-row items-center space-x-0.5")}>
           {typeof props.title === "string" ? <BrandHeading className="py-2 text-4xl">{props.title}</BrandHeading> : props.title}
@@ -21,6 +22,6 @@ export function TabView(props: Props) {
         {props.rightElement}
       </View>
       {props.children}
-    </View>
+    </SafeAreaView>
   )
 }
