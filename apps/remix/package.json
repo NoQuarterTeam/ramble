@@ -43,7 +43,7 @@
     "@remix-run/react": "2.5.0",
     "@remix-run/serve": "2.5.0",
     "@tailwindcss/container-queries": "0.1.1",
-    "@tanstack/react-table": "8.11.4",
+    "@tanstack/react-table": "8.11.6",
     "@trpc/server": "10.45.0",
     "@turf/bbox": "6.5.0",
     "@turf/boolean-point-in-polygon": "6.5.0",
