@@ -17,6 +17,7 @@ import { useS3Upload } from "../../../../../lib/hooks/useS3"
 import { AMENITIES_ICONS } from "../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
+import { FormError } from "../../../../../components/ui/FormError"
 
 export function NewSpotConfirmScreen() {
   const { params } = useParams<"NewSpotConfirmScreen">()
@@ -119,7 +120,7 @@ export function NewSpotConfirmScreen() {
       </ScrollView>
 
       <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
-        {error && <Text className="text-red-500">{error.message}</Text>}
+        <FormError error={error} />
         <Button
           isLoading={createLoading || isLoading}
           leftIcon={<Icon icon={Check} size={20} color={{ light: "white", dark: "black" }} />}
