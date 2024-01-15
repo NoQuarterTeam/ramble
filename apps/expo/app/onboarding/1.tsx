@@ -1,6 +1,7 @@
 import { FormProvider } from "react-hook-form"
-import { SafeAreaView, ScrollView, View } from "react-native"
+import { ScrollView, View } from "react-native"
 import { AvoidSoftInputView } from "react-native-avoid-softinput"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 import { Button } from "../../components/ui/Button"
 import { FormError } from "../../components/ui/FormError"
