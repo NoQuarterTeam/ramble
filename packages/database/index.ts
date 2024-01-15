@@ -10,6 +10,7 @@ const adapter = new PrismaPlanetScale(client)
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }
 
 // export const prisma = globalForPrisma.prisma || new PrismaClient({ adapter, log: ["query"] })
-export const prisma = globalForPrisma.prisma || new PrismaClient({ adapter })
+export const prisma =
+  globalForPrisma.prisma || new PrismaClient(!env.DATABASE_URL.includes("127.0.0.1") ? { adapter } : undefined)
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma
+if (env.NODE_ENV !== "production") globalForPrisma.prisma = prisma
