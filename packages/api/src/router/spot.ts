@@ -307,4 +307,8 @@ export const spotRouter = createTRPCRouter({
       )
       return ctx.prisma.spot.update({ where: { id }, data: { images: { create: imageData } } })
     }),
+  geocodeCoords: publicProcedure.input(z.object({ latitude: z.number(), longitude: z.number() })).query(async ({ input }) => {
+    const address = await geocodeCoords({ latitude: input.latitude, longitude: input.longitude })
+    return address || "Unknown address"
+  }),
 })

@@ -11,19 +11,33 @@ import { LoginPlaceholder } from "../../../../../components/LoginPlaceholder"
 import { Map } from "../../../../../components/Map"
 import { Button } from "../../../../../components/ui/Button"
 import { toast } from "../../../../../components/ui/Toast"
+import { Text } from "../../../../../components/ui/Text"
 import { useMe } from "../../../../../lib/hooks/useMe"
-import { useRouter } from "../../../../router"
+import { useParams, useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
+import { api } from "../../../../../lib/api"
+import { Input } from "../../../../../components/ui/Input"
 
 export function NewSpotLocationScreen() {
   const [coords, setCoords] = React.useState<number[] | null>(null)
   const [isLoadingLocation, setIsLoadingLocation] = React.useState(true)
+  const [hasCustomAddress, setHasCustomAddress] = React.useState(false)
+  const [customAddress, setCustomAddress] = React.useState("")
   const [location, setLocation] = React.useState<Location.LocationObjectCoords | null>(null)
   const camera = React.useRef<Camera>(null)
   const mapRef = React.useRef<MapType>(null)
+  const { params } = useParams<"NewSpotLocationScreen">()
 
   const { me } = useMe()
   const router = useRouter()
+
+  const { data: address, isLoading } = api.spot.geocodeCoords.useQuery(
+    {
+      latitude: (coords && coords[1]) || 0,
+      longitude: (coords && coords[0]) || 0,
+    },
+    { enabled: !!coords },
+  )
 
   React.useEffect(() => {
     ;(async () => {
@@ -63,7 +77,43 @@ export function NewSpotLocationScreen() {
     )
 
   return (
-    <NewSpotModalView shouldRenderToast title="new spot" canGoBack={false}>
+    <NewSpotModalView
+      shouldRenderToast
+      title={params.canClose ? "new spot" : "add your first spot"}
+      canGoBack={false}
+      canClose={params.canClose}
+    >
+      {!params.canClose && (
+        <Text className="text-sm leading-4">
+          It's important to contribute to the Ramble community, why not start by sharing your favourite spot with everyone!
+        </Text>
+      )}
+      {!hasCustomAddress ? (
+        <>
+          <Input
+            nativeID="address"
+            value={isLoading ? "Loading ..." : address}
+            editable={false}
+            placeholder="Address - move map to set"
+          />
+          <Button variant="link" size="sm" onPress={() => setHasCustomAddress(true)}>
+            enter a custom address
+          </Button>
+        </>
+      ) : (
+        <>
+          <Input
+            nativeID="customAddress"
+            value={customAddress}
+            onChangeText={setCustomAddress}
+            editable // weirdly having to set this to true, otherwise it's not editable after the switch in state
+            placeholder="Enter a custom address"
+          />
+          <Button variant="link" size="sm" onPress={() => setHasCustomAddress(false)}>
+            back to using the map
+          </Button>
+        </>
+      )}
       {!isLoadingLocation && (
         <>
           <Map
@@ -97,15 +147,15 @@ export function NewSpotLocationScreen() {
             className="absolute bottom-12 left-5 right-5 flex flex-row items-center justify-between space-y-2"
           >
             <View className="w-12" />
-            {coords && (
+            {coords && address && address !== "Unknown address" && (
               <Button
                 className="bg-background rounded-full"
                 textClassName="text-black"
                 onPress={() => {
-                  if (!me) return
+                  if (!me || !address || address === "Unknown address") return
                   if (!me.isVerified) return toast({ title: "Please verify your account" })
                   if (!coords[0] || !coords[1]) return toast({ title: "Please select a location" })
-                  router.push("NewSpotTypeScreen", { longitude: coords[0], latitude: coords[1] })
+                  router.push("NewSpotTypeScreen", { longitude: coords[0], latitude: coords[1], canClose: params.canClose })
                 }}
               >
                 Next

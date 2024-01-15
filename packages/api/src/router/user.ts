@@ -42,6 +42,11 @@ export const userRouter = createTRPCRouter({
     const feedback = await ctx.prisma.feedback.findFirst({ where: { userId: ctx.user.id }, select: { id: true } })
     return !!feedback
   }),
+  hasCreatedSpot: publicProcedure.query(async ({ ctx }) => {
+    if (!ctx.user) return false
+    const spot = await ctx.prisma.spot.findFirst({ where: { creatorId: ctx.user.id }, select: { id: true } })
+    return !!spot
+  }),
   update: protectedProcedure.input(updateUserSchema).mutation(async ({ ctx, input }) => {
     if (input.username && input.username !== ctx.user.username) {
       const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })

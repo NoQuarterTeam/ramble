@@ -28,11 +28,13 @@ export function NewSpotConfirmScreen() {
     isLoading: createLoading,
     error,
   } = api.spot.create.useMutation({
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       utils.spot.list.refetch({ skip: 0, sort: "latest" })
       router.navigate("AppLayout")
       router.navigate("SpotDetailScreen", { id: data.id })
-      toast({ title: "Spot created!" })
+      const title = params.canClose ? "Spot created!" : "Thank you for contributing to the community!"
+      toast({ title })
+      await utils.user.hasCreatedSpot.refetch()
     },
     onError: () => {
       setLoading(false)
@@ -59,7 +61,7 @@ export function NewSpotConfirmScreen() {
   }
 
   return (
-    <NewSpotModalView title="confirm">
+    <NewSpotModalView title="confirm" canClose={params.canClose}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }} showsVerticalScrollIndicator={false}>
         <View className="space-y-3">
           <View className="flex h-[50px] flex-row items-center space-x-2">

@@ -13,11 +13,3 @@ export const spotRevisionSchema = z.object({
   type: z.nativeEnum(SpotType),
   notes: z.string().min(1),
 })
-// .refine(
-//   (data) => {
-//     // Only enforce 50 char limit if there was already a description
-//     if (doesSpotTypeRequireDescription(data.type) && data.description && data.description.length < 50) return false
-//     return true
-//   },
-//   { message: "Description must be at least 50 characters long", path: ["description"] },
-// )

@@ -79,6 +79,8 @@ export function MapScreen() {
   const [users, setUsers] = React.useState<UserCluster[] | null>(null)
 
   const { mutate: updateUser } = api.user.update.useMutation()
+  const { data: hasCreatedSpot, isLoading } = api.user.hasCreatedSpot.useQuery(undefined, { enabled: !!me })
+  const canClose = (!isLoading && hasCreatedSpot) || false
 
   const handleSetUserLocation = async () => {
     try {
@@ -292,7 +294,10 @@ export function MapScreen() {
 
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => push("NewSpotLayout")}
+        onPress={() => {
+          if (isLoading) return
+          push("NewSpotLayout", { canClose })
+        }}
         style={{ transform: [{ translateX: -26 }] }}
         className="bg-primary absolute bottom-3 left-1/2 rounded-full p-4 "
       >

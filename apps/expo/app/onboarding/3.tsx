@@ -34,7 +34,8 @@ export default function OnboardingStep3Screen() {
   } = api.van.upsert.useMutation({
     onSuccess: async () => {
       await utils.user.me.refetch()
-      router.replace("AppLayout")
+      router.navigate("AppLayout")
+      router.navigate("NewSpotLayout", { canClose: false })
     },
   })
 
@@ -67,7 +68,13 @@ export default function OnboardingStep3Screen() {
                 Back
               </Button>
               <View className="flex flex-row items-center space-x-2">
-                <Button onPress={() => router.replace("AppLayout")} variant="link">
+                <Button
+                  onPress={() => {
+                    router.replace("AppLayout")
+                    router.navigate("NewSpotLayout", { canClose: false })
+                  }}
+                  variant="link"
+                >
                   Skip
                 </Button>
                 <Button className="w-[120px]" isLoading={updateLoading} onPress={onSubmit}>

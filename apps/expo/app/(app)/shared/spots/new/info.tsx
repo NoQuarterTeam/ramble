@@ -21,8 +21,9 @@ export function NewSpotOptionsScreen() {
   const [description, setDescription] = React.useState<string>()
   const [isPetFriendly, setIsPetFriendly] = React.useState(false)
   const router = useRouter()
+
   return (
-    <NewSpotModalView title="some info">
+    <NewSpotModalView title="some info" canClose={params.canClose}>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ flexGrow: 1 }}

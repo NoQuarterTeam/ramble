@@ -42,16 +42,19 @@ export type ScreenParamsList = {
   SpotsLayout: undefined
   SpotsScreen: undefined
 
-  NewSpotLayout: undefined
-  NewSpotLocationScreen: undefined
-  NewSpotTypeScreen: Pick<SpotFormParams, "latitude" | "longitude">
-  NewSpotOptionsScreen: Pick<SpotFormParams, "latitude" | "longitude" | "type">
-  NewSpotAmenitiesScreen: Pick<SpotFormParams, "latitude" | "longitude" | "type" | "name" | "description" | "isPetFriendly">
-  NewSpotImagesScreen: Pick<
+  NewSpotLayout: { canClose: boolean }
+  NewSpotLocationScreen: { canClose: boolean }
+  NewSpotTypeScreen: { canClose: boolean } & Pick<SpotFormParams, "latitude" | "longitude">
+  NewSpotOptionsScreen: { canClose: boolean } & Pick<SpotFormParams, "latitude" | "longitude" | "type">
+  NewSpotAmenitiesScreen: { canClose: boolean } & Pick<
+    SpotFormParams,
+    "latitude" | "longitude" | "type" | "name" | "description" | "isPetFriendly"
+  >
+  NewSpotImagesScreen: { canClose: boolean } & Pick<
     SpotFormParams,
     "latitude" | "longitude" | "type" | "name" | "description" | "isPetFriendly" | "amenities"
   >
-  NewSpotConfirmScreen: SpotFormParams
+  NewSpotConfirmScreen: { canClose: boolean } & SpotFormParams
 
   EditSpotLayout: { id: string } & SpotFormParams
   EditSpotLocationScreen: { id: string } & SpotFormParams

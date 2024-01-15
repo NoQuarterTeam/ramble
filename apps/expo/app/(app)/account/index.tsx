@@ -24,13 +24,13 @@ import { TabView } from "../../../components/ui/TabView"
 import { Text } from "../../../components/ui/Text"
 import { toast } from "../../../components/ui/Toast"
 import { api, AUTH_TOKEN } from "../../../lib/api"
-import { UPDATE_ID, VERSION } from "../../../lib/config"
+import { IS_DEV, UPDATE_ID, VERSION } from "../../../lib/config"
 import { useMe } from "../../../lib/hooks/useMe"
 import { type ScreenParamsList, useRouter } from "../../router"
 
 export function AccountScreen() {
   const { me } = useMe()
-  const { push } = useRouter()
+  const { push, replace } = useRouter()
   const utils = api.useUtils()
 
   const { mutate, data } = api.user.sendVerificationEmail.useMutation({
@@ -137,6 +137,14 @@ export function AccountScreen() {
           </Button>
           <Text className="text-center">v{VERSION}</Text>
           <Text className="text-center opacity-60">{UPDATE_ID}</Text>
+          {IS_DEV && (
+            <View className="relative my-4 border-2 border-solid border-black p-2">
+              <Text className="absolute left-1 text-sm">DEV TESTING</Text>
+              <Button onPress={() => replace("OnboardingLayout")} variant="link">
+                Trigger onboarding
+              </Button>
+            </View>
+          )}
         </View>
       </ScrollView>
     </TabView>

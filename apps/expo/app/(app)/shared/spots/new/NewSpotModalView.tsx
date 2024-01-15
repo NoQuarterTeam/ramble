@@ -13,10 +13,11 @@ interface Props {
   title?: string
   shouldRenderToast?: boolean
   canGoBack?: boolean
+  canClose?: boolean
   children: React.ReactNode
 }
 
-export function NewSpotModalView({ canGoBack = true, ...props }: Props) {
+export function NewSpotModalView({ canGoBack = true, canClose = true, ...props }: Props) {
   const navigation = useRouter()
 
   return (
@@ -32,9 +33,11 @@ export function NewSpotModalView({ canGoBack = true, ...props }: Props) {
 
             {props.title ? <BrandHeading className="text-2xl">{props.title}</BrandHeading> : <Text />}
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate("AppLayout")} className="p-1">
-            <Icon icon={X} size={24} />
-          </TouchableOpacity>
+          {canClose && (
+            <TouchableOpacity onPress={() => navigation.navigate("AppLayout")} className="p-1">
+              <Icon icon={X} size={24} />
+            </TouchableOpacity>
+          )}
         </View>
 
         {props.children}

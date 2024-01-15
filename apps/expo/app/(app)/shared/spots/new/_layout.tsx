@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 
 import { useBackgroundColor } from "../../../../../lib/tailwind"
-import { type ScreenParamsList } from "../../../../router"
+import { useParams, type ScreenParamsList } from "../../../../router"
 import { NewSpotLocationScreen } from "."
 import { NewSpotAmenitiesScreen } from "./amenities"
 import { NewSpotConfirmScreen } from "./confirm"
@@ -12,6 +12,7 @@ import { NewSpotTypeScreen } from "./type"
 const NewSpotStack = createNativeStackNavigator<ScreenParamsList>()
 
 export function NewSpotLayout() {
+  const { params } = useParams<"NewSpotLayout">()
   const backgroundColor = useBackgroundColor()
 
   return (
@@ -19,7 +20,7 @@ export function NewSpotLayout() {
       initialRouteName="NewSpotLocationScreen"
       screenOptions={{ contentStyle: { backgroundColor }, headerShown: false }}
     >
-      <NewSpotStack.Screen name="NewSpotLocationScreen" component={NewSpotLocationScreen} />
+      <NewSpotStack.Screen name="NewSpotLocationScreen" component={NewSpotLocationScreen} initialParams={params} />
       <NewSpotStack.Screen name="NewSpotTypeScreen" component={NewSpotTypeScreen} />
       <NewSpotStack.Screen name="NewSpotOptionsScreen" component={NewSpotOptionsScreen} />
       <NewSpotStack.Screen name="NewSpotAmenitiesScreen" component={NewSpotAmenitiesScreen} />
