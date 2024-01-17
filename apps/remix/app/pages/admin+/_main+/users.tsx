@@ -7,7 +7,7 @@ import { type Prisma } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
 import { Search } from "~/components/Search"
-import { Table } from "~/components/Table"
+import { Table } from "~/components/ui/Table"
 import { Avatar } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { json } from "~/lib/remix.server"

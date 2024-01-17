@@ -10,7 +10,7 @@ import { join } from "@ramble/shared"
 
 import { DEFAULT_TAKE } from "~/lib/table"
 
-import { IconButton, Select, Tile } from "./ui"
+import { IconButton, Select, Tile } from "."
 
 export function Table<T>({
   data,

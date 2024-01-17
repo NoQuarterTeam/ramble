@@ -14,7 +14,7 @@ import { sendBetaInvitationEmail, updateLoopsContact } from "@ramble/server-serv
 import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
 import { Search } from "~/components/Search"
-import { Table } from "~/components/Table"
+import { Table } from "~/components/ui/Table"
 import { Button, IconButton, Tooltip } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { FormActionInput } from "~/lib/form"
