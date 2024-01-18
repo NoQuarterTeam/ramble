@@ -1,7 +1,7 @@
 import type { LucideIcon, LucideProps } from "lucide-react"
 import { Bug, Lightbulb, MessageCircle } from "lucide-react"
 
-import type { FeedbackType, SpotType } from "@ramble/database/types"
+import type { FeedbackType } from "@ramble/database/types"
 
 import type { RambleIcon } from "~/components/ui"
 
@@ -13,7 +13,7 @@ export const FEEDBACKS: { [key in FeedbackType]: { label: string; Icon: RambleIc
 
 export const FEEDBACK_OPTIONS = Object.entries(FEEDBACKS).map(([value, { label, Icon }]) => ({ label, value, Icon })) as {
   label: string
-  value: SpotType
+  value: FeedbackType
   Icon: LucideIcon
 }[]
 
