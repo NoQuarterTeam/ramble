@@ -403,8 +403,8 @@ importers:
         specifier: 0.309.0
         version: 0.309.0(react@18.2.0)
       mapbox-gl:
-        specifier: 3.0.1
-        version: 3.0.1
+        specifier: 3.1.0
+        version: 3.1.0
       nprogress:
         specifier: 0.2.0
         version: 0.2.0
@@ -428,7 +428,7 @@ importers:
         version: 14.2.3(react@18.2.0)
       react-map-gl:
         specifier: 7.1.7
-        version: 7.1.7(mapbox-gl@3.0.1)(react-dom@18.2.0)(react@18.2.0)
+        version: 7.1.7(mapbox-gl@3.1.0)(react-dom@18.2.0)(react@18.2.0)
       remix-utils:
         specifier: 7.5.0
         version: 7.5.0(@remix-run/node@2.5.0)(@remix-run/react@2.5.0)(crypto-js@4.2.0)(react@18.2.0)(zod@3.22.4)
@@ -12747,8 +12747,8 @@ packages:
       tmpl: 1.0.5
     dev: false
 
-  /mapbox-gl@3.0.1:
-    resolution: {integrity: sha512-o7C6sAlj6Hkdd4xQVEgQflgJYNYyZOAtYahhIOb9m8chI8umtWcCp8Ie0iGLYJvce1WHRMa3WGzs69ggwuWlDA==}
+  /mapbox-gl@3.1.0:
+    resolution: {integrity: sha512-X6gaQ7WCNwMK6MnQn+rlq6ugzRItdE775TSzmyGPy0wN6hs/8PONi/G+hioeGV5ZyQ0a0BmvmF+gCUH0FBvavw==}
     dependencies:
       '@mapbox/geojson-rewind': 0.5.2
       '@mapbox/jsonlint-lines-primitives': 2.0.2
@@ -15572,7 +15572,7 @@ packages:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
     dev: false
 
-  /react-map-gl@7.1.7(mapbox-gl@3.0.1)(react-dom@18.2.0)(react@18.2.0):
+  /react-map-gl@7.1.7(mapbox-gl@3.1.0)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-mwjc0obkBJOXCcoXQr3VoLqmqwo9vS4bXfbGsdxXzEgVCv/PM0v+1QggL7W0d/ccIy+VCjbXNlGij+PENz6VNg==}
     peerDependencies:
       mapbox-gl: '>=1.13.0'
@@ -15587,7 +15587,7 @@ packages:
     dependencies:
       '@maplibre/maplibre-gl-style-spec': 19.3.3
       '@types/mapbox-gl': 2.7.19
-      mapbox-gl: 3.0.1
+      mapbox-gl: 3.1.0
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
