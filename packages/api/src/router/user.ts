@@ -126,7 +126,7 @@ export const userRouter = createTRPCRouter({
     return true
   }),
   deleteAccount: protectedProcedure.mutation(async ({ ctx }) => {
-    sendSlackMessage(`😭 User @${ctx.user.username} deleted their account.`)
+    void sendSlackMessage(`😭 User @${ctx.user.username} deleted their account.`)
     await ctx.prisma.user.delete({ where: { id: ctx.user.id } })
     return true
   }),

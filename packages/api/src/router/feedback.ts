@@ -11,7 +11,7 @@ export const feedbackRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const user = ctx.user
       await ctx.prisma.feedback.create({ data: { ...input, userId: user.id }, include: { user: true } })
-      sendSlackMessage(`🙏 New feedback submitted (${input.type}) by @${user.username}: ` + input.message)
+      void sendSlackMessage(`🙏 New feedback submitted (${input.type}) by @${user.username}: ` + input.message)
       return true
     }),
 })

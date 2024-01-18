@@ -25,7 +25,7 @@ export const feedbackActions = ({ request }: ActionFunctionArgs) =>
           try {
             const user = await getCurrentUser(request)
             const feedback = await db.feedback.create({ data: { ...data, userId: user.id }, include: { user: true } })
-            sendSlackMessage(`🙏 New feedback submitted (${data.type}) by @${user.username}: ` + data.message)
+            void sendSlackMessage(`🙏 New feedback submitted (${data.type}) by @${user.username}: ` + data.message)
             track("Feedback created", { feedbackId: feedback.id, userId: user.id })
             return json({ success: true }, request, {
               flash: { type: "success", title: "Feedback sent", description: "We'll take a look as soon as possible" },
