@@ -35,7 +35,7 @@ export default function OnboardingStep3Screen() {
     onSuccess: async () => {
       await utils.user.me.refetch()
       router.navigate("AppLayout")
-      router.navigate("NewSpotLayout", { canClose: false })
+      router.navigate("NewSpotLayout")
     },
   })
 
@@ -71,7 +71,7 @@ export default function OnboardingStep3Screen() {
                 <Button
                   onPress={() => {
                     router.replace("AppLayout")
-                    router.navigate("NewSpotLayout", { canClose: false })
+                    router.navigate("NewSpotLayout")
                   }}
                   variant="link"
                 >

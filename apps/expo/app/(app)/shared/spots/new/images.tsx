@@ -34,7 +34,7 @@ export function NewSpotImagesScreen() {
 
   const router = useRouter()
   return (
-    <NewSpotModalView title="upload images" canClose={params.canClose}>
+    <NewSpotModalView title="upload images">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View className="flex flex-row flex-wrap">
           {images.map((image) => (

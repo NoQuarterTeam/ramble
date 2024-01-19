@@ -6,7 +6,7 @@ import { NewSpotLocationScreen } from "."
 import { NewSpotAmenitiesScreen } from "./amenities"
 import { NewSpotConfirmScreen } from "./confirm"
 import { NewSpotImagesScreen } from "./images"
-import { NewSpotOptionsScreen } from "./info"
+import { NewSpotInfoScreen } from "./info"
 import { NewSpotTypeScreen } from "./type"
 
 const NewSpotStack = createNativeStackNavigator<ScreenParamsList>()
@@ -22,7 +22,7 @@ export function NewSpotLayout() {
     >
       <NewSpotStack.Screen name="NewSpotLocationScreen" component={NewSpotLocationScreen} initialParams={params} />
       <NewSpotStack.Screen name="NewSpotTypeScreen" component={NewSpotTypeScreen} />
-      <NewSpotStack.Screen name="NewSpotOptionsScreen" component={NewSpotOptionsScreen} />
+      <NewSpotStack.Screen name="NewSpotInfoScreen" component={NewSpotInfoScreen} />
       <NewSpotStack.Screen name="NewSpotAmenitiesScreen" component={NewSpotAmenitiesScreen} />
       <NewSpotStack.Screen name="NewSpotImagesScreen" component={NewSpotImagesScreen} />
       <NewSpotStack.Screen name="NewSpotConfirmScreen" component={NewSpotConfirmScreen} />

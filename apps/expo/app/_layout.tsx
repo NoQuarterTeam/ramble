@@ -161,13 +161,9 @@ export default function RootLayout() {
                     <Container.Screen name="AppLayout" component={AppLayout} />
                     <Container.Screen name="OnboardingLayout" component={OnboardingLayout} />
                   </Container.Group>
-                  <Container.Group
-                    screenOptions={{ presentation: "modal", contentStyle: { backgroundColor }, gestureEnabled: false }}
-                  >
-                    <Container.Screen name="NewSpotLayout" component={NewSpotLayout} />
-                  </Container.Group>
                   <Container.Group screenOptions={{ presentation: "modal", contentStyle: { backgroundColor } }}>
                     <Container.Screen name="AuthLayout" component={AuthLayout} />
+                    <Container.Screen name="NewSpotLayout" component={NewSpotLayout} />
                     <Container.Screen name="EditSpotLayout" component={EditSpotLayout} />
                     <Container.Screen name="NewListScreen" component={NewListScreen} />
                     <Container.Screen name="EditListScreen" component={EditListScreen} />

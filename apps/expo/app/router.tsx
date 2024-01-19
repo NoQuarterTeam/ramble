@@ -3,7 +3,7 @@ import { type NativeStackNavigationProp } from "@react-navigation/native-stack"
 
 import { type Spot, type SpotAmenities, type SpotImage } from "@ramble/database/types"
 
-type SpotFormParams = Pick<Spot, "latitude" | "longitude" | "type" | "name" | "description" | "isPetFriendly"> & {
+type SpotFormParams = Pick<Spot, "latitude" | "longitude" | "address" | "type" | "name" | "description" | "isPetFriendly"> & {
   images: string[]
 } & { amenities?: Omit<SpotAmenities, "id" | "spotId" | "createdAt" | "updatedAt"> }
 
@@ -42,19 +42,19 @@ export type ScreenParamsList = {
   SpotsLayout: undefined
   SpotsScreen: undefined
 
-  NewSpotLayout: { canClose: boolean }
-  NewSpotLocationScreen: { canClose: boolean }
-  NewSpotTypeScreen: { canClose: boolean } & Pick<SpotFormParams, "latitude" | "longitude">
-  NewSpotOptionsScreen: { canClose: boolean } & Pick<SpotFormParams, "latitude" | "longitude" | "type">
-  NewSpotAmenitiesScreen: { canClose: boolean } & Pick<
+  NewSpotLayout: undefined
+  NewSpotLocationScreen: undefined
+  NewSpotTypeScreen: Pick<SpotFormParams, "latitude" | "longitude" | "address">
+  NewSpotInfoScreen: Pick<SpotFormParams, "latitude" | "longitude" | "address" | "type">
+  NewSpotAmenitiesScreen: Pick<
     SpotFormParams,
-    "latitude" | "longitude" | "type" | "name" | "description" | "isPetFriendly"
+    "latitude" | "longitude" | "address" | "type" | "name" | "description" | "isPetFriendly"
   >
-  NewSpotImagesScreen: { canClose: boolean } & Pick<
+  NewSpotImagesScreen: Pick<
     SpotFormParams,
-    "latitude" | "longitude" | "type" | "name" | "description" | "isPetFriendly" | "amenities"
+    "latitude" | "longitude" | "address" | "type" | "name" | "description" | "isPetFriendly" | "amenities"
   >
-  NewSpotConfirmScreen: { canClose: boolean } & SpotFormParams
+  NewSpotConfirmScreen: SpotFormParams
 
   EditSpotLayout: { id: string } & SpotFormParams
   EditSpotLocationScreen: { id: string } & SpotFormParams

@@ -15,7 +15,7 @@ export function NewSpotTypeScreen() {
   const [type, setType] = React.useState<SpotType>()
   const router = useRouter()
   return (
-    <NewSpotModalView title="what type?" canClose={params.canClose}>
+    <NewSpotModalView title="what type?">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
         <View className="flex flex-row flex-wrap gap-2 py-4">
           {SPOT_TYPE_OPTIONS.filter((s) => !s.isComingSoon).map((spotType) => (
@@ -43,7 +43,7 @@ export function NewSpotTypeScreen() {
       </ScrollView>
       {type && (
         <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
-          <Button className="rounded-full" onPress={() => router.push("NewSpotOptionsScreen", { ...params, type })}>
+          <Button className="rounded-full" onPress={() => router.push("NewSpotInfoScreen", { ...params, type })}>
             Next
           </Button>
         </View>

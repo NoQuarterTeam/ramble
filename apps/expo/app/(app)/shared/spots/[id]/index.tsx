@@ -234,6 +234,7 @@ export function SpotDetailScreen() {
                       id: spot.id,
                       latitude: spot.latitude,
                       longitude: spot.longitude,
+                      address: spot.address,
                       type: spot.type,
                       name: spot.name,
                       description: spot.description,

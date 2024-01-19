@@ -1,6 +1,6 @@
 import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
-import { Check, Dog, Lock } from "lucide-react-native"
+import { Check, Dog, Lock, MapPin } from "lucide-react-native"
 
 import { AMENITIES } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
@@ -33,8 +33,7 @@ export function NewSpotConfirmScreen() {
       utils.spot.list.refetch({ skip: 0, sort: "latest" })
       router.navigate("AppLayout")
       router.navigate("SpotDetailScreen", { id: data.id })
-      const title = params.canClose ? "Spot created!" : "Thank you for contributing to the community!"
-      toast({ title })
+      toast({ title: "Spot created", message: "Thank you for contributing to the community!" })
       await utils.user.hasCreatedSpot.refetch()
     },
     onError: () => {
@@ -54,6 +53,7 @@ export function NewSpotConfirmScreen() {
       name: params.name,
       latitude: params.latitude,
       longitude: params.longitude,
+      address: params.address,
       isPetFriendly: params.isPetFriendly,
       type: params.type,
       images: images.map((i) => ({ path: i })),
@@ -62,7 +62,7 @@ export function NewSpotConfirmScreen() {
   }
 
   return (
-    <NewSpotModalView title="confirm" canClose={params.canClose}>
+    <NewSpotModalView title="confirm">
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }} showsVerticalScrollIndicator={false}>
         <View className="space-y-3">
           <View className="flex h-[50px] flex-row items-center space-x-2">
@@ -84,6 +84,10 @@ export function NewSpotConfirmScreen() {
           )}
 
           <Text>{params.description}</Text>
+          <View className="flex flex-row items-center space-x-2">
+            <Icon icon={MapPin} size={20} />
+            <Text>{params.address}</Text>
+          </View>
           {params.isPetFriendly && (
             <View className="flex flex-row items-center space-x-2">
               <Icon icon={Dog} size={20} />

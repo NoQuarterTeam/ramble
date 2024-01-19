@@ -14,16 +14,16 @@ import { useKeyboardController } from "../../../../../lib/hooks/useKeyboardContr
 import { useParams, useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
 
-export function NewSpotOptionsScreen() {
+export function NewSpotInfoScreen() {
   useKeyboardController()
-  const { params } = useParams<"NewSpotOptionsScreen">()
+  const { params } = useParams<"NewSpotInfoScreen">()
   const [name, setName] = React.useState<string>()
   const [description, setDescription] = React.useState<string>()
   const [isPetFriendly, setIsPetFriendly] = React.useState(false)
   const router = useRouter()
 
   return (
-    <NewSpotModalView title="some info" canClose={params.canClose}>
+    <NewSpotModalView title="some info">
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ flexGrow: 1 }}
