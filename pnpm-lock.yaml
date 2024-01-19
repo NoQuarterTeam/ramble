@@ -367,8 +367,8 @@ importers:
         specifier: 1.1.1
         version: 1.1.1
       '@vercel/remix':
-        specifier: 2.5.0
-        version: 2.5.0(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
+        specifier: 2.5.1
+        version: 2.5.1(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
       '@vercel/remix-run-dev':
         specifier: 2.5.0
         version: 2.5.0(@remix-run/serve@2.5.1)(typescript@5.3.3)
@@ -455,7 +455,7 @@ importers:
         version: 3.22.4
       zodix:
         specifier: 0.4.4
-        version: 0.4.4(@remix-run/server-runtime@2.5.0)(zod@3.22.4)
+        version: 0.4.4(@remix-run/server-runtime@2.5.1)(zod@3.22.4)
       zustand:
         specifier: ^4.4.7
         version: 4.4.7(@types/react@18.2.48)(react@18.2.0)
@@ -776,7 +776,7 @@ importers:
         version: 3.22.4
       zodix:
         specifier: 0.4.4
-        version: 0.4.4(@remix-run/server-runtime@2.5.0)(zod@3.22.4)
+        version: 0.4.4(@remix-run/server-runtime@2.5.1)(zod@3.22.4)
     devDependencies:
       '@ramble/eslint-config':
         specifier: workspace:*
@@ -7641,15 +7641,15 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@vercel/remix@2.5.0(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3):
-    resolution: {integrity: sha512-RogfKvAVl4poOQT4VMN2BEpfoeDjEeL1tIfavAQR9HtdsWOICBS8ePX7uC01ayKnUmNI660xOVJRw5v7PZDvNQ==}
+  /@vercel/remix@2.5.1(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-b38Av3htXlF5L/Gy0vufWtSPLQOCKTYGLANWIrpLnB2m3Ro8Q56SgkBE1iMqVnHQ6A32fyAXg9y0BrVRRLhy6A==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: '*'
       react-dom: '*'
     dependencies:
-      '@remix-run/node': 2.5.0(typescript@5.3.3)
-      '@remix-run/server-runtime': 2.5.0(typescript@5.3.3)
+      '@remix-run/node': 2.5.1(typescript@5.3.3)
+      '@remix-run/server-runtime': 2.5.1(typescript@5.3.3)
       isbot: 3.7.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -18439,13 +18439,13 @@ packages:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
     dev: false
 
-  /zodix@0.4.4(@remix-run/server-runtime@2.5.0)(zod@3.22.4):
+  /zodix@0.4.4(@remix-run/server-runtime@2.5.1)(zod@3.22.4):
     resolution: {integrity: sha512-msoW2RM8t0ktSKmQYT7/AjsGTqzWHeEwY+U/6w7Jzd29yoeh/QceseQG8PBb5lpY4KUUowMsYRWm926vGrwrdQ==}
     peerDependencies:
       '@remix-run/server-runtime': 1.x || 2.x
       zod: 3.x
     dependencies:
-      '@remix-run/server-runtime': 2.5.0(typescript@5.3.3)
+      '@remix-run/server-runtime': 2.5.1(typescript@5.3.3)
       zod: 3.22.4
     dev: false
 
