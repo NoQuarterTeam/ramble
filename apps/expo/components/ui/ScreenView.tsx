@@ -17,7 +17,7 @@ interface Props {
 export function ScreenView(props: Props) {
   const { goBack } = useRouter()
   return (
-    <SafeAreaView className="flex-1 px-4 pt-2">
+    <SafeAreaView edges={["top"]} className="flex-1 px-4 pt-2">
       <View className="flex flex-row items-center justify-between pb-2">
         <View className="flex h-[40px] flex-row items-center space-x-0.5">
           <TouchableOpacity onPress={props.onBack || goBack} className="sq-8 flex items-center justify-center pt-0.5">

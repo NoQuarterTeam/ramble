@@ -64,7 +64,7 @@ export function AccountScreen() {
     )
   return (
     <TabView title="account">
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false} className="space-y-4 pt-2">
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false} className="flex-1 space-y-4 pt-2">
         {!me.isVerified && (
           <View className="rounded-xs flex flex-col space-y-3 border border-gray-200 p-2 pl-4 dark:border-gray-700">
             <View className="flex flex-row items-center space-x-2">
@@ -131,21 +131,18 @@ export function AccountScreen() {
             </View>
           </View>
         </View>
-        <View className="pt-10">
+        <View className="py-10">
           <Button onPress={handleLogout} variant="link">
             Log out
           </Button>
           <Text className="text-center">v{VERSION}</Text>
           <Text className="text-center opacity-60">{UPDATE_ID}</Text>
-          {IS_DEV && (
-            <View className="relative my-4 border-2 border-solid border-black p-2">
-              <Text className="absolute left-1 text-sm">DEV TESTING</Text>
-              <Button onPress={() => replace("OnboardingLayout")} variant="link">
-                Trigger onboarding
-              </Button>
-            </View>
-          )}
         </View>
+        {IS_DEV && (
+          <Button className="mb-10" onPress={() => replace("OnboardingLayout")} variant="outline">
+            DEV: Trigger onboarding
+          </Button>
+        )}
       </ScrollView>
     </TabView>
   )
