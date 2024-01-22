@@ -310,7 +310,7 @@ export const spotRouter = createTRPCRouter({
     }),
   geocodeCoords: publicProcedure.input(z.object({ latitude: z.number(), longitude: z.number() })).query(async ({ input }) => {
     const address = await geocodeCoords({ latitude: input.latitude, longitude: input.longitude })
-    return address || "Unknown address"
+    return address || null
   }),
   geocodeAddress: publicProcedure.input(z.object({ address: z.string() })).query(async ({ input }) => {
     const coords = await geocodeAddress({ address: input.address })

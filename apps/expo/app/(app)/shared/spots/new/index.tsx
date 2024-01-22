@@ -4,7 +4,7 @@ import { Camera, type MapState, type MapView as MapType, StyleURL, UserLocation 
 import * as Location from "expo-location"
 import { AlertTriangle, CircleDot, MapPinned, Navigation } from "lucide-react-native"
 
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE, join } from "@ramble/shared"
 
 import { Icon } from "../../../../../components/Icon"
 import { LoginPlaceholder } from "../../../../../components/LoginPlaceholder"
@@ -30,14 +30,18 @@ export function NewSpotLocationScreen() {
   const { me } = useMe()
   const router = useRouter()
 
-  const { data: address, isLoading: addressLoading } = api.spot.geocodeCoords.useQuery(
+  const {
+    data: address,
+    isLoading: addressLoading,
+    isFetching,
+  } = api.spot.geocodeCoords.useQuery(
     {
       latitude: (coords && coords[1]) || 0,
       longitude: (coords && coords[0]) || 0,
     },
-    { enabled: !!coords && !!coords[0] && !!coords[1] },
+    { enabled: !!coords && !!coords[0] && !!coords[1], keepPreviousData: true },
   )
-  const isUnknownAddress = address === "Unknown address"
+  const isUnknownAddress = !!!address
   const { data: geocodedCoords } = api.spot.geocodeAddress.useQuery({ address: search }, { enabled: !!search })
 
   const { data: hasCreatedSpot, isLoading: spotCheckLoading } = api.user.hasCreatedSpot.useQuery(undefined, {
@@ -101,26 +105,23 @@ export function NewSpotLocationScreen() {
           everyone!
         </Text>
       )}
-      <View className="mb-2 flex w-full flex-row items-center space-x-2 overflow-hidden">
-        {addressLoading ? (
-          <Spinner size={18} />
+      <View className="mb-2 flex w-full flex-row items-center space-x-1 overflow-hidden">
+        {addressLoading || isFetching ? (
+          <Spinner size="small" />
         ) : (
-          <Icon icon={isUnknownAddress ? AlertTriangle : MapPinned} size={18} color={isUnknownAddress ? "primary" : "gray"} />
+          <Icon
+            icon={isUnknownAddress ? AlertTriangle : MapPinned}
+            size={20}
+            color={isUnknownAddress ? "primary" : undefined}
+            className={join(!!!isUnknownAddress && "opacity-80")}
+          />
         )}
-        <Text numberOfLines={1} className="max-w-[300px] leading-6 text-gray-700">
-          {addressLoading ? "Loading ..." : address || "Address - move map to set"}
+        <Text numberOfLines={1} className="flex-1 text-sm opacity-70">
+          {addressLoading ? "" : address || "Unknown address - move map to set"}
         </Text>
       </View>
       {!isLoadingLocation && (
         <View className="relative flex-1">
-          <Input
-            className="absolute left-2 top-2 z-10 w-[95%] rounded-sm bg-white"
-            placeholder="Search here"
-            onBlur={(e) => setSearch(e.nativeEvent.text)}
-            onSubmitEditing={(e) => setSearch(e.nativeEvent.text)}
-            clearButtonMode="while-editing"
-            returnKeyType="search"
-          />
           <Map
             className="rounded-xs overflow-hidden"
             onMapIdle={onMapMove}
@@ -141,6 +142,16 @@ export function NewSpotLocationScreen() {
               }}
             />
           </Map>
+          <View className="absolute left-2 right-2 top-2">
+            <Input
+              className="bg-background dark:bg-background-dark rounded-sm"
+              placeholder="Search here"
+              onBlur={(e) => setSearch(e.nativeEvent.text)}
+              onSubmitEditing={(e) => setSearch(e.nativeEvent.text)}
+              clearButtonMode="while-editing"
+              returnKeyType="search"
+            />
+          </View>
           <View
             style={{ transform: [{ translateX: -15 }, { translateY: -15 }] }}
             className="absolute left-1/2 top-1/2 flex items-center justify-center"
