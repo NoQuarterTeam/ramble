@@ -18,8 +18,10 @@ import { AMENITIES_ICONS } from "../../../../../lib/models/amenities"
 import { useParams, useRouter } from "../../../../router"
 import { NewSpotModalView } from "./NewSpotModalView"
 import { FormError } from "../../../../../components/ui/FormError"
+import { useMe } from "../../../../../lib/hooks/useMe"
 
 export function NewSpotConfirmScreen() {
+  const { me } = useMe()
   const { params } = useParams<"NewSpotConfirmScreen">()
   const router = useRouter()
   const [shouldPublishLater, setShouldPublishLater] = React.useState(false)
@@ -32,8 +34,12 @@ export function NewSpotConfirmScreen() {
     onSuccess: async (data) => {
       utils.spot.list.refetch({ skip: 0, sort: "latest" })
       router.navigate("AppLayout")
-      router.navigate("SpotDetailScreen", { id: data.id })
-      toast({ title: "Spot created", message: "Thank you for contributing to the community!" })
+      if (me?.role === "GUIDE") {
+        router.navigate("SpotDetailScreen", { id: data.id })
+        toast({ title: "Spot created", message: "Thank you for contributing to the community!" })
+      } else {
+        toast({ title: "A guide will review your spot", message: "Thank you for contributing to the community!" })
+      }
       await utils.user.hasCreatedSpot.refetch()
     },
     onError: () => {

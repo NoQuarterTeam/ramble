@@ -2,12 +2,21 @@ export async function geocodeCoords({ latitude, longitude }: { latitude: number;
   const res = await fetch(
     `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw`,
   )
-
   const jsonResponse = (await res.json()) as FeatureCollection
+  return jsonResponse.features.find((feature) => feature.place_type.includes("address"))?.place_name
+}
 
-  const address = jsonResponse.features.find((feature) => feature.place_type.includes("address"))?.place_name
-
-  return address
+export async function geocodeAddress({ address }: { address: string }) {
+  const res = await fetch(
+    `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+      address,
+    )}.json?access_token=pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw`,
+  )
+  const jsonResponse = (await res.json()) as FeatureCollection
+  if (jsonResponse.features.length === 0) return []
+  const addressCoords = jsonResponse.features.find((feature) => feature.place_type.includes("address"))?.center
+  const placeCoords = jsonResponse.features[0].center
+  return addressCoords || placeCoords
 }
 
 type Context = {
