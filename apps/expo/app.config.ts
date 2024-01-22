@@ -67,8 +67,17 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     },
   },
   plugins: [
+    "expo-router",
     "expo-font",
-    "sentry-expo",
+    [
+      "@sentry/react-native/expo",
+      {
+        url: "https://sentry.io/",
+        authToken: process.env.SENTRY_AUTH_TOKEN,
+        project: "ramble-app",
+        organization: "noquarter",
+      },
+    ],
     "./expo-plugins/with-modify-gradle.js",
     "./expo-plugins/android-manifest.plugin.js",
     [
@@ -88,17 +97,6 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
       },
     ],
   ],
-  hooks: {
-    postPublish: [
-      {
-        file: "sentry-expo/upload-sourcemaps",
-        config: {
-          organization: "noquarter",
-          project: "ramble-app",
-        },
-      },
-    ],
-  },
 })
 
 export default defineConfig

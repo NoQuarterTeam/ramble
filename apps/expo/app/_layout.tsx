@@ -27,7 +27,7 @@ import * as Linking from "expo-linking"
 import * as SplashScreen from "expo-splash-screen"
 import { StatusBar } from "expo-status-bar"
 import { PostHogProvider, usePostHog } from "posthog-react-native"
-import * as Sentry from "sentry-expo"
+import * as Sentry from "@sentry/react-native"
 
 import { Toast } from "../components/ui/Toast"
 import { api, TRPCProvider } from "../lib/api"
@@ -52,7 +52,6 @@ import { type ScreenParamsList } from "./router"
 
 Sentry.init({
   dsn: "https://db8195777a2bb905e405557687f085b9@o204549.ingest.sentry.io/4506140516024320",
-  enableInExpoDevelopment: false,
   debug: true,
 })
 AvoidSoftInput.setShouldMimicIOSBehavior(true)
@@ -207,7 +206,7 @@ function IdentifyUser() {
   React.useEffect(() => {
     if (isLoading || !me) return
     if (posthog) posthog.identify(me.id, { username: me.username, name: me.firstName + " " + me.lastName })
-    Sentry.React.setUser({ id: me.id, username: me.username })
+    Sentry.setUser({ id: me.id, username: me.username })
   }, [me, isLoading, posthog])
   return null
 }
