@@ -1,6 +1,6 @@
 import { Bike, Dog, Footprints, type LucideProps, Mountain } from "lucide-react-native"
 
-import { Icons } from "../../components/ui/Icons"
+import { Icons } from "~/components/ui/Icons"
 
 export const interestOptions: { label: string; value: string; Icon: (props: LucideProps) => JSX.Element }[] = [
   {

@@ -1,15 +1,15 @@
 import { FormProvider } from "react-hook-form"
 import { ScrollView, View } from "react-native"
 
-import { Button } from "../../components/ui/Button"
-import { FormError } from "../../components/ui/FormError"
-import { FormInput } from "../../components/ui/FormInput"
-import { ModalView } from "../../components/ui/ModalView"
-import { toast } from "../../components/ui/Toast"
-import { api } from "../../lib/api"
-import { useForm } from "../../lib/hooks/useForm"
-import { useKeyboardController } from "../../lib/hooks/useKeyboardController"
-import { useRouter } from "../router"
+import { Button } from "~/components/ui/Button"
+import { FormError } from "~/components/ui/FormError"
+import { FormInput } from "~/components/ui/FormInput"
+import { ModalView } from "~/components/ui/ModalView"
+import { toast } from "~/components/ui/Toast"
+import { api } from "~/lib/api"
+import { useForm } from "~/lib/hooks/useForm"
+import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
+import { useRouter } from "expo-router"
 
 export default function RequestAccessScreen() {
   useKeyboardController()
@@ -17,9 +17,9 @@ export default function RequestAccessScreen() {
   const { mutate, error, isLoading } = api.auth.requestAccess.useMutation({
     onSuccess: () => {
       if (navigation.canGoBack()) {
-        navigation.goBack()
+        navigation.back()
       } else {
-        navigation.push("AppLayout")
+        navigation.push("/")
       }
       toast({ title: "Thanks! We will get in contact soon!" })
     },
@@ -31,7 +31,7 @@ export default function RequestAccessScreen() {
   const onSubmit = form.handleSubmit((data) => mutate(data))
 
   return (
-    <ModalView title="request access" onBack={() => navigation.navigate("AppLayout")}>
+    <ModalView title="request access" onBack={() => navigation.back()}>
       <FormProvider {...form}>
         <ScrollView
           keyboardShouldPersistTaps="handled"

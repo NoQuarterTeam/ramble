@@ -7,25 +7,21 @@ import { createImageUrl } from "@ramble/shared"
 import { Icon } from "~/components/Icon"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { Text } from "~/components/ui/Text"
-import { AllRoutes, Href, useRouter } from "expo-router"
+import { useRouter } from "expo-router"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 interface Props {
   user: Pick<User, "avatar" | "username" | "firstName" | "lastName" | "avatarBlurHash">
-  pathname?: Href<AllRoutes>
 }
 
 export function UserItem(props: Props) {
   const router = useRouter()
+  const tab = useTabSegment()
   return (
     <TouchableOpacity
       activeOpacity={0.8}
       className="flex flex-row items-center space-x-2"
-      onPress={() =>
-        router.push({
-          pathname: props.pathname || `/(home)/(shared)/[username]/(profile)/`,
-          params: { username: props.user.username },
-        })
-      }
+      onPress={() => router.push(`/${tab}/${props.user.username}/(profile)`)}
     >
       {props.user.avatar ? (
         <OptimizedImage

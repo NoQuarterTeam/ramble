@@ -11,7 +11,7 @@ import {
   spotMarkerTriangleColorTypes,
 } from "@ramble/shared"
 
-import { type RouterOutputs } from "../lib/api"
+import { type RouterOutputs } from "~/lib/api"
 import { PieChart } from "./PieChart"
 import { SpotIconMap } from "./SpotIcon"
 import { Text } from "./ui/Text"

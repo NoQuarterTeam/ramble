@@ -4,16 +4,16 @@ import { SafeAreaView } from "react-native-safe-area-context"
 
 import colors from "@ramble/tailwind-config/src/colors"
 
-import { Icon } from "../../components/Icon"
-import { Button } from "../../components/ui/Button"
-import { FormError } from "../../components/ui/FormError"
-import { Heading } from "../../components/ui/Heading"
-import { type IconProps } from "../../components/ui/Icons"
-import { Text } from "../../components/ui/Text"
-import { api } from "../../lib/api"
-import { useMe } from "../../lib/hooks/useMe"
-import { interestOptions } from "../../lib/models/user"
-import { useRouter } from "../router"
+import { Icon } from "~/components/Icon"
+import { Button } from "~/components/ui/Button"
+import { FormError } from "~/components/ui/FormError"
+import { Heading } from "~/components/ui/Heading"
+import { type IconProps } from "~/components/ui/Icons"
+import { Text } from "~/components/ui/Text"
+import { api } from "~/lib/api"
+import { useMe } from "~/lib/hooks/useMe"
+import { interestOptions } from "~/lib/models/user"
+import { useRouter } from "expo-router"
 
 export default function OnboardingStep2Screen() {
   const { me } = useMe()

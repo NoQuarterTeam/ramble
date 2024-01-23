@@ -4,20 +4,20 @@ import { Camera, type MapState, type MapView as MapType, UserLocation } from "@r
 import * as Location from "expo-location"
 import { Navigation } from "lucide-react-native"
 
-import { Icon } from "../../../../components/Icon"
-import { Map } from "../../../../components/Map"
-import { SpotClusterMarker } from "../../../../components/SpotMarker"
-import { Button } from "../../../../components/ui/Button"
-import { Spinner } from "../../../../components/ui/Spinner"
-import { toast } from "../../../../components/ui/Toast"
-import { api, type RouterOutputs } from "../../../../lib/api"
-import { useParams, useRouter } from "../../../router"
-import { SpotPreview } from "../../../(home)/map/SpotPreview"
+import { Icon } from "~/components/Icon"
+import { Map } from "~/components/Map"
+import { SpotClusterMarker } from "~/components/SpotMarker"
+import { Button } from "~/components/ui/Button"
+import { Spinner } from "~/components/ui/Spinner"
+import { toast } from "~/components/ui/Toast"
+import { api, type RouterOutputs } from "~/lib/api"
+import { useLocalSearchParams, useRouter } from "expo-router"
+import { SpotPreview } from "~/components/SpotPreview"
 
 type Cluster = RouterOutputs["list"]["spotClusters"][number]
 
 export function ListDetailMapScreen() {
-  const { params } = useParams<"ListDetailMapScreen">()
+  const params = useLocalSearchParams<{ id: string }>()
   const [clusters, setClusters] = React.useState<Cluster[] | null>(null)
   const [isFetching, setIsFetching] = React.useState(true)
   const camera = React.useRef<Camera>(null)

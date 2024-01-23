@@ -28,12 +28,12 @@ import * as SplashScreen from "expo-splash-screen"
 import { StatusBar } from "expo-status-bar"
 import { PostHogProvider, usePostHog } from "posthog-react-native"
 
-import { Toast } from "../components/ui/Toast"
-import { api, TRPCProvider } from "../lib/api"
-import { IS_DEV, IS_PRODUCTION } from "../lib/config"
-import { useCheckExpoUpdates } from "../lib/hooks/useCheckExpoUpdates"
-import { useMe } from "../lib/hooks/useMe"
-import { useBackgroundColor } from "../lib/tailwind"
+import { Toast } from "~/components/ui/Toast"
+import { api, TRPCProvider } from "~/lib/api"
+import { IS_DEV, IS_PRODUCTION } from "~/lib/config"
+import { useCheckExpoUpdates } from "~/lib/hooks/useCheckExpoUpdates"
+import { useMe } from "~/lib/hooks/useMe"
+import { useBackgroundColor } from "~/lib/tailwind"
 
 Sentry.init({
   dsn: "https://db8195777a2bb905e405557687f085b9@o204549.ingest.sentry.io/4506140516024320",
@@ -93,6 +93,7 @@ export default function RootLayout() {
               <Stack initialRouteName="(home)" screenOptions={{ headerShown: false, contentStyle: { backgroundColor } }}>
                 <Stack.Screen name="(home)" />
                 <Stack.Screen name="(auth)" options={{ presentation: "modal" }} />
+                <Stack.Screen name="new-spot" options={{ presentation: "modal" }} />
               </Stack>
             </PostHogProvider>
             <Toast />

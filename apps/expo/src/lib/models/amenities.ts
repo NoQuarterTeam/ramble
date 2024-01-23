@@ -1,6 +1,6 @@
 import { Droplet, Flame, ShowerHead, Thermometer, UtensilsCrossed, Wifi, Zap } from "lucide-react-native"
 
-import { Icons } from "../../components/ui/Icons"
+import { Icons } from "~/components/ui/Icons"
 
 export const AMENITIES_ICONS = {
   bbq: Icons.Bbq,

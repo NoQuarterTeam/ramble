@@ -7,13 +7,14 @@ import { Image } from "lucide-react-native"
 import { type SpotImage } from "@ramble/database/types"
 import { createImageUrl, merge } from "@ramble/shared"
 
-import { useRouter } from "../../app/router"
-import { useMe } from "../../lib/hooks/useMe"
+import { useMe } from "~/lib/hooks/useMe"
 import { Icon } from "../Icon"
 import { Button } from "./Button"
 import { OptimizedImage } from "./OptimisedImage"
 import { Text } from "./Text"
 import { toast } from "./Toast"
+import { useRouter } from "expo-router"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 type SpotImageType = Pick<SpotImage, "path" | "blurHash">
 
@@ -47,8 +48,9 @@ export function SpotImageCarousel({
   onPress,
 }: Props & (AddMoreProps | NoAddMoreProps)) {
   const { me } = useMe()
+  const tab = useTabSegment()
   const [imageIndex, setImageIndex] = React.useState(0)
-  const { navigate } = useRouter()
+  const router = useRouter()
   const onPickImage = async () => {
     if (!canAddMore) return
     try {
@@ -59,7 +61,10 @@ export function SpotImageCarousel({
       })
       if (result.canceled || result.assets.length === 0) return
 
-      navigate("SaveSpotImagesScreen", { id: spotId, images: result.assets.map((asset) => asset.uri) })
+      const searchParams = new URLSearchParams({
+        images: result.assets.map((asset) => asset.uri).join(","),
+      })
+      router.push(`/${tab}/spot/${spotId}/save-spot-images?${searchParams}`)
     } catch (error) {
       console.log(error)
       let message

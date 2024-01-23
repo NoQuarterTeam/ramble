@@ -20,7 +20,7 @@ import {
 
 import { type SpotType } from "@ramble/database/types"
 
-import { Icons, type RambleIcon } from "../../components/ui/Icons"
+import { Icons, type RambleIcon } from "~/components/ui/Icons"
 
 export type SpotTypeIconInfo = {
   Icon: RambleIcon

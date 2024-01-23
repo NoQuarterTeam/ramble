@@ -4,7 +4,7 @@ import { Switch, View } from "react-native"
 import { merge } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
-import { type ApiError } from "../../lib/hooks/useForm"
+import { type ApiError } from "~/lib/hooks/useForm"
 import { Input, type InputProps } from "./Input"
 import { Text } from "./Text"
 

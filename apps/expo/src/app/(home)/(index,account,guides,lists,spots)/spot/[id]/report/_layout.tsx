@@ -1,0 +1,18 @@
+import { useBackgroundColor } from "~/lib/tailwind"
+
+import { Stack } from "expo-router"
+
+export default function SpotReportLayout() {
+  const backgroundColor = useBackgroundColor()
+
+  return (
+    <Stack screenOptions={{ contentStyle: { backgroundColor }, headerShown: false }}>
+      <Stack.Screen name="index" />
+      <Stack.Screen name="location" />
+      <Stack.Screen name="info" />
+      <Stack.Screen name="type" />
+      <Stack.Screen name="amenities" />
+      <Stack.Screen name="images" />
+    </Stack>
+  )
+}

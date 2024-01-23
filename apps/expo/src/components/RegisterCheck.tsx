@@ -1,8 +1,8 @@
 import * as React from "react"
 
-import { useRouter } from "../app/router"
-import { useAsyncStorage } from "../lib/hooks/useAsyncStorage"
-import { useMe } from "../lib/hooks/useMe"
+import { useRouter } from "../router"
+import { useAsyncStorage } from "~/lib/hooks/useAsyncStorage"
+import { useMe } from "~/lib/hooks/useMe"
 
 export const REGISTER_CHECK_KEY = "ramble.register.check"
 export function RegisterCheck() {

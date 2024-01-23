@@ -1,17 +1,19 @@
 import RNToast, { BaseToast, type ToastShowParams } from "react-native-toast-message"
 
 import colors from "@ramble/tailwind-config/src/colors"
+import { useColorScheme } from "react-native"
 
 export function Toast() {
+  const isDark = useColorScheme() === "dark"
   return (
     <RNToast
       config={{
         success: (props) => (
           <BaseToast
             {...props}
-            style={{ borderLeftWidth: 0, backgroundColor: colors.gray[800], borderRadius: 100 }}
-            text1Style={{ color: "white", fontSize: 13, fontFamily: "urbanist400" }}
-            text2Style={{ color: "white", opacity: 0.8, fontSize: 11, fontFamily: "urbanist400" }}
+            style={{ borderLeftWidth: 0, backgroundColor: isDark ? "white" : colors.gray[800], borderRadius: 100 }}
+            text1Style={{ color: isDark ? "black" : "white", fontSize: 13, fontFamily: "urbanist400" }}
+            text2Style={{ color: isDark ? "black" : "white", opacity: 0.8, fontSize: 11, fontFamily: "urbanist400" }}
           />
         ),
         error: (props) => (

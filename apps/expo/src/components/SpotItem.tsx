@@ -3,29 +3,31 @@ import { Heart, Star } from "lucide-react-native"
 
 import { createImageUrl, displayRating, displaySaved, type SpotItemType } from "@ramble/shared"
 
-import { useRouter } from "../app/router"
-import { api } from "../lib/api"
+import { api } from "~/lib/api"
 import { Icon } from "./Icon"
 import { SpotIcon } from "./SpotIcon"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
+import { useRouter } from "expo-router"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 interface Props {
   spot: SpotItemType
 }
 
 export function SpotItem({ spot }: Props) {
-  const { push } = useRouter()
   const utils = api.useUtils()
-
+  const router = useRouter()
+  const tab = useTabSegment()
   const isDark = useColorScheme() === "dark"
+
   return (
     <TouchableOpacity
       onPressIn={() => {
         void utils.spot.detail.prefetch({ id: spot.id })
       }}
       className="w-full"
-      onPress={() => push("SpotDetailScreen", { id: spot.id })}
+      onPress={() => router.push(`/${tab}/spot/${spot.id}/`)}
       activeOpacity={0.8}
     >
       <View className="relative h-[250px] w-full">

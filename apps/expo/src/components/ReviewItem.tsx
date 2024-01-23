@@ -7,14 +7,15 @@ import { Star, User2 } from "lucide-react-native"
 import { type Review, type User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
-import { useRouter } from "../app/router"
-import { api } from "../lib/api"
-import { FULL_WEB_URL } from "../lib/config"
-import { useMe } from "../lib/hooks/useMe"
+import { api } from "~/lib/api"
+import { FULL_WEB_URL } from "~/lib/config"
+import { useMe } from "~/lib/hooks/useMe"
 import { Icon } from "./Icon"
 import { Button } from "./ui/Button"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
+import { useRouter } from "expo-router"
 
 type TranslateInput = { id: string; lang: string }
 async function getTranslation({ id, lang }: TranslateInput) {
@@ -34,7 +35,7 @@ export function ReviewItem({
   }
 }) {
   const { me } = useMe()
-  const { push } = useRouter()
+  const router = useRouter()
   const utils = api.useUtils()
   const { mutate: deleteReview, isLoading: deleteLoading } = api.review.delete.useMutation({
     onSuccess: () => {
@@ -50,19 +51,16 @@ export function ReviewItem({
     queryKey: ["review-translation", { id: review.id, lang: me!.preferredLanguage }],
     queryFn: () => getTranslation({ id: review.id, lang: me!.preferredLanguage }),
     cacheTime: Infinity,
-    enabled: isTranslated && !!me,
+    enabled: isTranslated && !!me && !!me!.preferredLanguage,
   })
 
+  const tab = useTabSegment()
   const isDark = useColorScheme() === "dark"
   return (
     <View className="rounded-xs space-y-2 border border-gray-200 p-4 dark:border-gray-700">
       <View className="flex flex-row justify-between">
         <TouchableOpacity
-          onPress={
-            me
-              ? () => push("UserScreen", { username: review.user.username })
-              : () => push("AuthLayout", { screen: "LoginScreen" })
-          }
+          onPress={me ? () => router.push(`/${tab}/${review.user.username}/(profile)`) : () => router.push("/login")}
           activeOpacity={0.8}
           className="flex flex-row space-x-2"
         >
@@ -100,7 +98,11 @@ export function ReviewItem({
       {me ? (
         me.id === review.user.id ? (
           <View className="flex flex-row space-x-1">
-            <Button size="sm" variant="secondary" onPress={() => push("ReviewDetailScreen", { id: review.id })}>
+            <Button
+              size="sm"
+              variant="secondary"
+              onPress={() => router.push(`/${tab}/spot/${review.spotId}/reviews/${review.id}/`)}
+            >
               Edit
             </Button>
             <Button size="sm" isLoading={deleteLoading} variant="destructive" onPress={() => deleteReview({ id: review.id })}>

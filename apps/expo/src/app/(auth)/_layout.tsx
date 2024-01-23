@@ -1,8 +1,8 @@
 import * as React from "react"
 
 import { Stack } from "expo-router"
-import { REGISTER_CHECK_KEY } from "../../components/RegisterCheck"
-import { useAsyncStorage } from "../../lib/hooks/useAsyncStorage"
+import { REGISTER_CHECK_KEY } from "~/components/RegisterCheck"
+import { useAsyncStorage } from "~/lib/hooks/useAsyncStorage"
 
 export default function AuthLayout() {
   const [isChecked, setIsChecked, isReady] = useAsyncStorage(REGISTER_CHECK_KEY, false)

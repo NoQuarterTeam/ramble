@@ -2,15 +2,15 @@ import { FormProvider } from "react-hook-form"
 import { ScrollView, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
-import { Button } from "../../components/ui/Button"
-import { FormError } from "../../components/ui/FormError"
-import { FormInput } from "../../components/ui/FormInput"
-import { ModalView } from "../../components/ui/ModalView"
-import { Text } from "../../components/ui/Text"
-import { api, AUTH_TOKEN } from "../../lib/api"
-import { useForm } from "../../lib/hooks/useForm"
-import { useKeyboardController } from "../../lib/hooks/useKeyboardController"
-import { useRouter } from "../router"
+import { Button } from "~/components/ui/Button"
+import { FormError } from "~/components/ui/FormError"
+import { FormInput } from "~/components/ui/FormInput"
+import { ModalView } from "~/components/ui/ModalView"
+import { Text } from "~/components/ui/Text"
+import { api, AUTH_TOKEN } from "~/lib/api"
+import { useForm } from "~/lib/hooks/useForm"
+import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
+import { useRouter } from "expo-router"
 
 export default function LoginScreen() {
   useKeyboardController()
@@ -24,9 +24,9 @@ export default function LoginScreen() {
       await AsyncStorage.setItem(AUTH_TOKEN, data.token)
       queryClient.user.me.setData(undefined, data.user)
       if (navigation.canGoBack()) {
-        navigation.goBack()
+        navigation.back()
       } else {
-        navigation.push("AppLayout")
+        navigation.push("/")
       }
     },
   })
@@ -37,7 +37,7 @@ export default function LoginScreen() {
   })
 
   return (
-    <ModalView title="login" onBack={() => navigation.navigate("AppLayout")}>
+    <ModalView title="login" onBack={() => navigation.back()}>
       <FormProvider {...form}>
         <ScrollView
           keyboardShouldPersistTaps="handled"
@@ -68,7 +68,7 @@ export default function LoginScreen() {
           </View>
           <View className="flex flex-row items-center justify-center">
             <Text className="text-base">No account yet?</Text>
-            <Button className="px-1" variant="link" onPress={() => navigation.replace("RegisterScreen")}>
+            <Button className="px-1" variant="link" onPress={() => navigation.replace("/register")}>
               Register
             </Button>
           </View>

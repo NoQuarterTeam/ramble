@@ -1,17 +1,17 @@
 import { TouchableOpacity, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 
-import { SpotItem } from "../../../../components/SpotItem"
-import { Button } from "../../../../components/ui/Button"
-import { ScreenView } from "../../../../components/ui/ScreenView"
-import { Spinner } from "../../../../components/ui/Spinner"
-import { Text } from "../../../../components/ui/Text"
-import { api } from "../../../../lib/api"
-import { useMe } from "../../../../lib/hooks/useMe"
-import { useParams, useRouter } from "../../../router"
+import { SpotItem } from "~/components/SpotItem"
+import { Button } from "~/components/ui/Button"
+import { ScreenView } from "~/components/ui/ScreenView"
+import { Spinner } from "~/components/ui/Spinner"
+import { Text } from "~/components/ui/Text"
+import { api } from "~/lib/api"
+import { useMe } from "~/lib/hooks/useMe"
+import { useGlobalSearchParams, useRouter } from "expo-router"
 
 export function ListDetailScreen() {
-  const { params } = useParams<"ListDetailScreen">()
+  const params = useGlobalSearchParams<"ListDetailScreen">()
   const { me } = useMe()
   const { data, isLoading } = api.list.detail.useQuery({ id: params.id })
   const navigate = useRouter()

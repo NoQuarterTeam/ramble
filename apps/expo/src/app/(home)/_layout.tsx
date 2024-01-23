@@ -6,10 +6,10 @@ import { createImageUrl, join } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { Tabs } from "expo-router"
-import { Icon } from "../../components/Icon"
-import { OptimizedImage } from "../../components/ui/OptimisedImage"
-import { useMe } from "../../lib/hooks/useMe"
-import { useBackgroundColor } from "../../lib/tailwind"
+import { Icon } from "~/components/Icon"
+import { OptimizedImage } from "~/components/ui/OptimisedImage"
+import { useMe } from "~/lib/hooks/useMe"
+import { useBackgroundColor } from "~/lib/tailwind"
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
@@ -23,7 +23,6 @@ export default function HomeLayout() {
   const backgroundColor = useBackgroundColor()
   return (
     <Tabs
-      initialRouteName="(map)"
       sceneContainerStyle={{ backgroundColor }}
       screenOptions={{
         tabBarStyle: { backgroundColor, borderTopColor: colors.gray[isDark ? 700 : 200] },
@@ -32,31 +31,31 @@ export default function HomeLayout() {
       }}
     >
       <Tabs.Screen
-        name="(map)"
+        name="(index)"
         options={{
           tabBarIcon: (props) => <Icon icon={Map} size={22} color={!!props.focused && "primary"} />,
         }}
       />
       <Tabs.Screen
-        name="spots"
+        name="(spots)"
         options={{
           tabBarIcon: (props) => <Icon icon={List} size={22} color={!!props.focused && "primary"} />,
         }}
       />
       <Tabs.Screen
-        name="lists"
+        name="(lists)"
         options={{
           tabBarIcon: (props) => <Icon icon={Heart} size={22} color={!!props.focused && "primary"} />,
         }}
       />
       <Tabs.Screen
-        name="guides"
+        name="(guides)"
         options={{
           tabBarIcon: (props) => <Icon icon={Users} size={22} color={!!props.focused && "primary"} />,
         }}
       />
       <Tabs.Screen
-        name="account"
+        name="(account)"
         options={{
           tabBarIcon: (props) =>
             me?.avatar ? (

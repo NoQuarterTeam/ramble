@@ -2,16 +2,16 @@ import { FormProvider } from "react-hook-form"
 import { ScrollView, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
-import { Button } from "../../components/ui/Button"
-import { FormError } from "../../components/ui/FormError"
-import { FormInput } from "../../components/ui/FormInput"
-import { ModalView } from "../../components/ui/ModalView"
-import { toast } from "../../components/ui/Toast"
-import { api, AUTH_TOKEN } from "../../lib/api"
-import { IS_DEV } from "../../lib/config"
-import { useForm } from "../../lib/hooks/useForm"
-import { useKeyboardController } from "../../lib/hooks/useKeyboardController"
-import { useRouter } from "../router"
+import { Button } from "~/components/ui/Button"
+import { FormError } from "~/components/ui/FormError"
+import { FormInput } from "~/components/ui/FormInput"
+import { ModalView } from "~/components/ui/ModalView"
+import { toast } from "~/components/ui/Toast"
+import { api, AUTH_TOKEN } from "~/lib/api"
+import { IS_DEV } from "~/lib/config"
+import { useForm } from "~/lib/hooks/useForm"
+import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
+import { useRouter } from "expo-router"
 
 export default function RegisterScreen() {
   useKeyboardController()
@@ -21,7 +21,7 @@ export default function RegisterScreen() {
     onSuccess: async (data) => {
       await AsyncStorage.setItem(AUTH_TOKEN, data.token)
       queryClient.user.me.setData(undefined, data.user)
-      navigation.replace("OnboardingLayout")
+      navigation.replace("/onboarding/1")
     },
   })
   const form = useForm({
@@ -48,7 +48,7 @@ export default function RegisterScreen() {
   })
 
   return (
-    <ModalView title="register" onBack={() => navigation.navigate("AppLayout")}>
+    <ModalView title="register" onBack={() => navigation.back()}>
       <FormProvider {...form}>
         <ScrollView
           keyboardShouldPersistTaps="handled"
@@ -79,7 +79,7 @@ export default function RegisterScreen() {
             <Button className="mb-1" isLoading={isLoading} onPress={onSubmit}>
               Register
             </Button>
-            <Button className="mb-1" variant="link" onPress={() => navigation.replace("RequestAccessScreen")}>
+            <Button className="mb-1" variant="link" onPress={() => navigation.replace("/request-access")}>
               No code? Request access
             </Button>
 
@@ -87,7 +87,7 @@ export default function RegisterScreen() {
           </View>
 
           <View className="flex flex-row items-center justify-center">
-            <Button className="px-1" variant="link" onPress={() => navigation.replace("LoginScreen")}>
+            <Button className="px-1" variant="link" onPress={() => navigation.replace("/login")}>
               Login
             </Button>
           </View>

@@ -4,10 +4,10 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
 import { X } from "lucide-react-native"
 
-import { useRouter } from "../../app/router"
 import { Icon } from "../Icon"
 import { BrandHeading } from "./BrandHeading"
 import { Toast } from "./Toast"
+import { useRouter } from "expo-router"
 
 interface Props {
   title?: string
@@ -17,14 +17,14 @@ interface Props {
 }
 
 export function ModalView(props: Props) {
-  const navigation = useRouter()
+  const router = useRouter()
 
   return (
     <SafeAreaProvider>
       <SafeAreaView edges={["top"]} className="bg-background dark:bg-background-dark flex-1 px-4 pt-4">
         <View className="flex flex-row justify-between pb-2">
           {props.title ? <BrandHeading className="w-11/12 text-3xl">{props.title}</BrandHeading> : <Text />}
-          <TouchableOpacity onPress={props.onBack || navigation.goBack} className="p-1">
+          <TouchableOpacity onPress={props.onBack || router.back} className="p-1">
             <Icon icon={X} size={24} />
           </TouchableOpacity>
         </View>

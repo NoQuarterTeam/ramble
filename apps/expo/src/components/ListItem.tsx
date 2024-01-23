@@ -4,7 +4,7 @@ import { Lock, User2 } from "lucide-react-native"
 import { type List, type User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
-import { useRouter } from "../app/router"
+import { useRouter } from "../router"
 import { Icon } from "./Icon"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
