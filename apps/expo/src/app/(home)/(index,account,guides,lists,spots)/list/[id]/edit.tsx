@@ -5,16 +5,15 @@ import { ModalView } from "~/components/ui/ModalView"
 import { Text } from "~/components/ui/Text"
 import { api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
-import { useGlobalSearchParams, useRouter } from "expo-router"
-import { ListForm } from "./ListForm"
+import { useLocalSearchParams, useRouter } from "expo-router"
+import { ListForm } from "~/components/ListForm"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
-export function EditListScreen() {
-  const {
-    params: { id },
-  } = useParams<"EditListScreen">()
+export default function EditListScreen() {
+  const { id } = useLocalSearchParams<{ id: string }>()
   const { data, isLoading: listLoading } = api.list.detail.useQuery({ id })
   const list = data?.list
-  const { goBack, navigate } = useRouter()
+  const router = useRouter()
   const { me } = useMe()
   const utils = api.useUtils()
   const { mutate, error, isLoading } = api.list.update.useMutation({
@@ -22,15 +21,16 @@ export function EditListScreen() {
       if (!me) return
       utils.list.detail.refetch({ id })
       utils.list.allByUser.refetch({ username: me.username })
-      goBack()
+      router.back()
     },
   })
 
+  const tab = useTabSegment()
   const { mutate: deleteList, isLoading: deleteLoading } = api.list.delete.useMutation({
     onSuccess: () => {
       if (!me) return
       utils.list.allByUser.refetch({ username: me.username })
-      navigate("ListsScreen")
+      router.navigate(`/${tab}/lists`)
     },
   })
 

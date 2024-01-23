@@ -4,17 +4,17 @@ import { ModalView } from "~/components/ui/ModalView"
 import { api, type RouterInputs } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 import { useRouter } from "expo-router"
-import { ListForm } from "../../../../lists/[id]/ListForm"
+import { ListForm } from "~/components/ListForm"
 
 export default function NewListScreen() {
-  const { goBack } = useRouter()
+  const router = useRouter()
   const { me } = useMe()
   const utils = api.useUtils()
   const { mutate, error, isLoading } = api.list.create.useMutation({
     onSuccess: () => {
       if (!me) return
       utils.list.allByUser.refetch({ username: me.username })
-      goBack()
+      router.back()
     },
   })
 

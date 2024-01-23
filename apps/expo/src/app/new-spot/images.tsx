@@ -9,10 +9,10 @@ import { Button } from "~/components/ui/Button"
 import { toast } from "~/components/ui/Toast"
 
 import { NewSpotModalView } from "./NewSpotModalView"
-import { useGlobalSearchParams, useRouter } from "expo-router"
+import { useLocalSearchParams, useRouter } from "expo-router"
 
 export default function NewSpotImagesScreen() {
-  const params = useGlobalSearchParams<any>()
+  const params = useLocalSearchParams()
   const router = useRouter()
   const [images, setImages] = React.useState<string[]>([])
 
@@ -55,7 +55,10 @@ export default function NewSpotImagesScreen() {
       </ScrollView>
 
       <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
-        <Button className="rounded-full" onPress={() => router.push("NewSpotConfirmScreen", { ...params, images })}>
+        <Button
+          className="rounded-full"
+          onPress={() => router.push({ pathname: `/new-spot/confirm`, params: { ...params, images: images.join(",") } })}
+        >
           Next
         </Button>
       </View>

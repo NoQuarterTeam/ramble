@@ -13,17 +13,18 @@ import { toast } from "~/components/ui/Toast"
 import { api, type RouterOutputs } from "~/lib/api"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { SpotPreview } from "~/components/SpotPreview"
+import { isAndroid } from "~/lib/device"
 
 type Cluster = RouterOutputs["list"]["spotClusters"][number]
 
-export function ListDetailMapScreen() {
-  const params = useLocalSearchParams<{ id: string }>()
+export default function ListDetailMapScreen() {
+  const params = useLocalSearchParams<{ id: string; initialBounds?: string; initialCenter?: string }>()
   const [clusters, setClusters] = React.useState<Cluster[] | null>(null)
   const [isFetching, setIsFetching] = React.useState(true)
   const camera = React.useRef<Camera>(null)
   const mapRef = React.useRef<MapType>(null)
 
-  const navigate = useRouter()
+  const router = useRouter()
 
   const handleSetUserLocation = async () => {
     try {
@@ -96,6 +97,9 @@ export function ListDetailMapScreen() {
     [clusters],
   )
 
+  const initialBounds = params.initialBounds?.split(",").map(Number)
+  const initialCenter = params.initialCenter?.split(",").map(Number)
+
   return (
     <View className="relative flex-1">
       <Map onMapIdle={onMapMove} onPress={() => setActiveSpotId(null)} ref={mapRef}>
@@ -106,9 +110,9 @@ export function ListDetailMapScreen() {
           ref={camera}
           allowUpdates
           defaultSettings={
-            params.initialCenter
-              ? { pitch: 0, heading: 0, centerCoordinate: params.initialCenter, zoomLevel: 5 }
-              : params.initialBounds
+            initialCenter
+              ? { pitch: 0, heading: 0, centerCoordinate: initialCenter, zoomLevel: 5 }
+              : initialBounds
                 ? {
                     pitch: 0,
                     heading: 0,
@@ -117,8 +121,8 @@ export function ListDetailMapScreen() {
                       paddingTop: 50,
                       paddingLeft: 50,
                       paddingRight: 50,
-                      sw: [params.initialBounds[0], params.initialBounds[1]],
-                      ne: [params.initialBounds[2], params.initialBounds[3]],
+                      sw: [initialBounds[0]!, initialBounds[1]!],
+                      ne: [initialBounds[2]!, initialBounds[3]!],
                     },
                   }
                 : undefined
@@ -127,15 +131,11 @@ export function ListDetailMapScreen() {
       </Map>
       {activeSpotId && <SpotPreview id={activeSpotId} onClose={() => setActiveSpotId(null)} />}
       <View pointerEvents="box-none" className="absolute bottom-4 flex w-full flex-row items-center justify-center">
-        <Button
-          onPress={() => (navigate.canGoBack() ? navigate.goBack() : navigate.push("ListDetailScreen", params))}
-          className="rounded-full"
-          size="sm"
-        >
+        <Button onPress={router.back} className="rounded-full" size="sm">
           View list
         </Button>
       </View>
-      {isFetching && (
+      {!!isAndroid && isFetching && (
         <View
           pointerEvents="none"
           className="absolute left-4 top-10 flex flex-col items-center justify-center rounded-full bg-white p-2 dark:bg-gray-800"

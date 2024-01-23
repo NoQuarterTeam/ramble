@@ -24,7 +24,7 @@ export default function OnboardingStep2Screen() {
   const { mutate, isLoading, error } = api.user.update.useMutation({
     onSuccess: async () => {
       await utils.user.me.refetch()
-      router.push("OnboardingStep3Screen")
+      router.push("/onboarding/3")
     },
   })
 
@@ -60,11 +60,11 @@ export default function OnboardingStep2Screen() {
 
         <FormError error={error} />
         <View className="flex flex-row items-center justify-between">
-          <Button onPress={router.goBack} variant="ghost">
+          <Button onPress={router.back} variant="ghost">
             Back
           </Button>
           <View className="flex flex-row items-center space-x-2">
-            <Button onPress={() => router.push("OnboardingStep3Screen")} variant="link">
+            <Button onPress={() => router.push("/onboarding/3")} variant="link">
               Skip
             </Button>
             <Button className="w-[120px]" isLoading={isLoading} onPress={onSubmit}>

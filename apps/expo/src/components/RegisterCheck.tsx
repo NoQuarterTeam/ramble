@@ -1,6 +1,6 @@
+import { useRouter } from "expo-router"
 import * as React from "react"
 
-import { useRouter } from "../router"
 import { useAsyncStorage } from "~/lib/hooks/useAsyncStorage"
 import { useMe } from "~/lib/hooks/useMe"
 
@@ -11,7 +11,7 @@ export function RegisterCheck() {
   const router = useRouter()
   React.useEffect(() => {
     if (isLoading || !isReady) return
-    if (!me && !isChecked) router.push("AuthLayout", { screen: "RegisterScreen" })
+    if (!me && !isChecked) router.push("/register")
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [me, isLoading, isChecked, isReady])
 

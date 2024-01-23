@@ -20,13 +20,31 @@ import { NewSpotModalView } from "./NewSpotModalView"
 import { FormError } from "~/components/ui/FormError"
 import { useMe } from "~/lib/hooks/useMe"
 import { useGlobalSearchParams, useRouter } from "expo-router"
+import { type SpotType } from "@ramble/database/types"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
+
+type Params = {
+  name: string
+  description: string
+  latitude: string
+  longitude: string
+  address: string
+  type: SpotType
+  isPetFriendly: string
+  images: string
+  amenities: string
+}
 
 export default function NewSpotConfirmScreen() {
   const { me } = useMe()
-  const params = useGlobalSearchParams<any>()
+  const params = useGlobalSearchParams<Params>()
   const router = useRouter()
   const [shouldPublishLater, setShouldPublishLater] = React.useState(false)
   const utils = api.useUtils()
+
+  const tab = useTabSegment()
+  console.log({ tab })
+
   const {
     mutate,
     isLoading: createLoading,
@@ -34,11 +52,11 @@ export default function NewSpotConfirmScreen() {
   } = api.spot.create.useMutation({
     onSuccess: async (data) => {
       utils.spot.list.refetch({ skip: 0, sort: "latest" })
-      router.navigate("AppLayout")
       if (me?.role === "GUIDE") {
-        router.navigate("SpotDetailScreen", { id: data.id })
+        router.navigate(`/${tab}/spot/${data.id}`)
         toast({ title: "Spot created", message: "Thank you for contributing to the community!" })
       } else {
+        router.navigate("/")
         toast({ title: "A guide will review your spot", message: "Thank you for contributing to the community!" })
       }
       await utils.user.hasCreatedSpot.refetch()
@@ -48,23 +66,28 @@ export default function NewSpotConfirmScreen() {
     },
   })
 
+  const parsedAmenities = React.useMemo(() => {
+    if (!params.amenities) return null
+    return JSON.parse(params.amenities)
+  }, [params.amenities])
+
   const [isLoading, setLoading] = React.useState(false)
   const [upload] = useS3Upload()
 
   const handleCreateSpot = async () => {
     // upload images
     setLoading(true)
-    const images = await Promise.all(params.images.map((i) => upload(i)))
+    const images = await Promise.all(params.images.split(",").map((i) => upload(i)))
     mutate({
       description: params.description,
       name: params.name,
-      latitude: params.latitude,
-      longitude: params.longitude,
+      latitude: Number(params.latitude),
+      longitude: Number(params.longitude),
       address: params.address,
       isPetFriendly: params.isPetFriendly,
       type: params.type,
       images: images.map((i) => ({ path: i })),
-      amenities: params.amenities,
+      amenities: parsedAmenities,
     })
   }
 
@@ -85,7 +108,7 @@ export default function NewSpotConfirmScreen() {
               <SpotImageCarousel
                 width={width - 32}
                 height={200}
-                images={params.images.map((path) => ({ path, blurHash: null }))}
+                images={params.images.split(",").map((path) => ({ path, blurHash: null }))}
               />
             </View>
           )}
@@ -101,10 +124,10 @@ export default function NewSpotConfirmScreen() {
               <Text>Pet friendly</Text>
             </View>
           )}
-          {params.amenities && (
+          {parsedAmenities && (
             <View className="flex flex-row flex-wrap gap-2">
               {Object.entries(AMENITIES).map(([key, value]) => {
-                if (!params.amenities?.[key as keyof typeof AMENITIES]) return null
+                if (!parsedAmenities?.[key as keyof typeof AMENITIES]) return null
                 const icon = AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]
                 return (
                   <View key={key} className="rounded-xs flex flex-row space-x-1 border border-gray-200 p-2 dark:border-gray-700">

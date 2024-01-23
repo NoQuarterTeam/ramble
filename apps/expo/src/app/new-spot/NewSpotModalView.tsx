@@ -21,7 +21,7 @@ export function NewSpotModalView({ canGoBack = true, ...props }: Props) {
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView edges={["top"]} className="bg-background dark:bg-background-dark flex-1 px-4 pt-4">
+      <SafeAreaView className="bg-background dark:bg-background-dark flex-1 px-4 pt-4">
         <View className="flex flex-row justify-between pb-2">
           <View className="flex flex-row items-center space-x-0.5">
             {canGoBack && (

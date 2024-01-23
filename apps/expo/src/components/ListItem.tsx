@@ -4,10 +4,11 @@ import { Lock, User2 } from "lucide-react-native"
 import { type List, type User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
-import { useRouter } from "../router"
 import { Icon } from "./Icon"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
+import { useRouter } from "expo-router"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 interface Props {
   list: Pick<List, "id" | "name" | "description" | "isPrivate"> & {
@@ -16,10 +17,11 @@ interface Props {
 }
 
 export function ListItem({ list }: Props) {
-  const { push } = useRouter()
+  const router = useRouter()
+  const tab = useTabSegment()
   return (
     <TouchableOpacity
-      onPress={() => push("ListDetailScreen", { id: list.id, name: list.name })}
+      onPress={() => router.push(`/${tab}/list/${list.id}`)}
       activeOpacity={0.8}
       className="rounded-xs border border-gray-100 p-4 dark:border-gray-700"
     >

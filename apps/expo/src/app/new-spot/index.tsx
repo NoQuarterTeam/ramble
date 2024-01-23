@@ -37,10 +37,7 @@ export default function NewSpotLocationScreen() {
     isLoading: addressLoading,
     isFetching,
   } = api.spot.geocodeCoords.useQuery(
-    {
-      latitude: (coords && coords[1]) || 0,
-      longitude: (coords && coords[0]) || 0,
-    },
+    { latitude: (coords && coords[1]) || 0, longitude: (coords && coords[0]) || 0 },
     { enabled: !!coords && !!coords[0] && !!coords[1], keepPreviousData: true },
   )
   const isUnknownAddress = !!!address
@@ -173,14 +170,7 @@ export default function NewSpotLocationScreen() {
                 if (!coords || !me || !address || isUnknownAddress) return
                 if (!me.isVerified) return toast({ title: "Please verify your account" })
                 if (!coords[0] || !coords[1]) return toast({ title: "Please select a location" })
-                router.push({
-                  pathname: `/new-spot/type`,
-                  params: {
-                    longitude: coords[0],
-                    latitude: coords[1],
-                    address,
-                  },
-                })
+                router.push({ pathname: `/new-spot/type`, params: { longitude: coords[0], latitude: coords[1], address } })
               }}
               disabled={!coords || (coords && (!coords[0] || !coords[1])) || !address || isUnknownAddress}
             >

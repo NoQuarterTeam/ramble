@@ -24,11 +24,12 @@ export default function ListsScreen() {
   const [sort, setSort] = React.useState<keyof typeof SORT_OPTIONS>("mine")
   const { me } = useMe()
   const isDark = useColorScheme() === "dark"
-  const { push } = useRouter()
+  const router = useRouter()
   const { data: lists, isLoading } = api.list.allByUser.useQuery(
     { username: me?.username || "", showFollowing: sort === "following" || undefined },
     { enabled: !!me },
   )
+
   if (!me)
     return (
       <TabView title="lists">
@@ -44,7 +45,7 @@ export default function ListsScreen() {
         </TouchableOpacity>
       }
       rightElement={
-        <TouchableOpacity onPress={() => push("NewListScreen")}>
+        <TouchableOpacity onPress={() => router.push(`/(home)/(lists)/lists/new`)}>
           <Icon icon={PlusCircle} />
         </TouchableOpacity>
       }

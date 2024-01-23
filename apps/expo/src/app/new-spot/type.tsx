@@ -9,10 +9,10 @@ import { Button } from "~/components/ui/Button"
 import { Text } from "~/components/ui/Text"
 
 import { NewSpotModalView } from "./NewSpotModalView"
-import { useGlobalSearchParams, useRouter } from "expo-router"
+import { useLocalSearchParams, useRouter } from "expo-router"
 
 export default function NewSpotTypeScreen() {
-  const params = useGlobalSearchParams<any>()
+  const params = useLocalSearchParams()
   const router = useRouter()
   const [type, setType] = React.useState<SpotType>()
   return (
@@ -44,7 +44,10 @@ export default function NewSpotTypeScreen() {
       </ScrollView>
       {type && (
         <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
-          <Button className="rounded-full" onPress={() => router.push("NewSpotInfoScreen", { ...params, type })}>
+          <Button
+            className="rounded-full"
+            onPress={() => router.push({ pathname: `/new-spot/info`, params: { ...params, type } })}
+          >
             Next
           </Button>
         </View>

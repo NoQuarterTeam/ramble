@@ -64,14 +64,13 @@ export default function OnboardingStep3Screen() {
 
             <FormError error={error} />
             <View className="flex flex-row items-center justify-between">
-              <Button onPress={router.goBack} variant="ghost">
+              <Button onPress={router.back} variant="ghost">
                 Back
               </Button>
               <View className="flex flex-row items-center space-x-2">
                 <Button
                   onPress={() => {
-                    router.replace("AppLayout")
-                    router.navigate("NewSpotLayout")
+                    router.navigate("/new-spot")
                   }}
                   variant="link"
                 >

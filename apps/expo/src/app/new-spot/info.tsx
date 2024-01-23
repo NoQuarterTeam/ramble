@@ -13,11 +13,12 @@ import { Text } from "~/components/ui/Text"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
 
 import { NewSpotModalView } from "./NewSpotModalView"
-import { useGlobalSearchParams, useRouter } from "expo-router"
+import { useLocalSearchParams, useRouter } from "expo-router"
+import { type SpotType } from "@ramble/database/types"
 
 export default function NewSpotInfoScreen() {
   useKeyboardController()
-  const params = useGlobalSearchParams<any>()
+  const params = useLocalSearchParams<{ type: SpotType }>()
   const router = useRouter()
   const [name, setName] = React.useState<string>()
   const [description, setDescription] = React.useState<string>()
@@ -51,11 +52,14 @@ export default function NewSpotInfoScreen() {
           <Button
             className="rounded-full"
             onPress={() =>
-              router.push(doesSpotTypeRequireAmenities(params.type) ? "NewSpotAmenitiesScreen" : "NewSpotImagesScreen", {
-                ...params,
-                name,
-                description,
-                isPetFriendly,
+              router.push({
+                pathname: doesSpotTypeRequireAmenities(params.type) ? `/new-spot/amenities` : `/new-spot/images`,
+                params: {
+                  ...params,
+                  name,
+                  description: description || "",
+                  isPetFriendly: String(isPetFriendly),
+                },
               })
             }
           >

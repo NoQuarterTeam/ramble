@@ -14,7 +14,7 @@ import { NewSpotModalView } from "./NewSpotModalView"
 import { useGlobalSearchParams, useRouter } from "expo-router"
 
 export default function NewSpotAmenitiesScreen() {
-  const params = useGlobalSearchParams<any>()
+  const params = useGlobalSearchParams()
   const [amenities, setAmenities] = React.useState(
     Object.keys(AMENITIES).reduce((acc, key) => ({ ...acc, [key]: false }), {} as { [key in keyof typeof AMENITIES]: boolean }),
   )
@@ -35,7 +35,12 @@ export default function NewSpotAmenitiesScreen() {
       </ScrollView>
 
       <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
-        <Button className="rounded-full" onPress={() => router.push("NewSpotImagesScreen", { ...params, amenities })}>
+        <Button
+          className="rounded-full"
+          onPress={() =>
+            router.push({ pathname: `/new-spot/images`, params: { ...params, amenities: JSON.stringify(amenities) } })
+          }
+        >
           Next
         </Button>
       </View>
