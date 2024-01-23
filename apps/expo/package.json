@@ -1,7 +1,7 @@
 {
   "name": "@ramble/expo",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "expo-router/entry",
   "scripts": {
     "dev": "APP_VARIANT=development expo start --ios --dev-client",
     "build:all": "pnpm run build:production && pnpm run build:development && pnpm run build:preview",

@@ -1,8 +1,14 @@
 {
   "compilerOptions": {
-    "types": ["nativewind/types"],
+    "types": [
+      "nativewind/types"
+    ],
     "target": "es2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "checkJs": true,
     "skipLibCheck": true,
@@ -16,9 +22,25 @@
     "isolatedModules": true,
     "jsx": "react-native",
     "incremental": true,
-    "noUncheckedIndexedAccess": true
+    "noUncheckedIndexedAccess": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": [
+        "src/*"
+      ]
+    }
   },
-  "include": ["expo-plugins", "./my-app.d.ts", "./**/*.ts", "./**/*.tsx"],
-  "exclude": ["node_modules", "./expo-plugins/**/*"],
+  "include": [
+    "expo-plugins",
+    "./my-app.d.ts",
+    "./**/*.ts",
+    "./**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "./expo-plugins/**/*"
+  ],
   "extends": "expo/tsconfig.base"
 }

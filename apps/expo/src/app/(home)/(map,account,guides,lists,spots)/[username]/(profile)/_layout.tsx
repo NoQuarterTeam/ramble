@@ -1,0 +1,179 @@
+import * as React from "react"
+import { Linking, ScrollView, TouchableOpacity, useColorScheme, View } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
+import { ChevronLeft, Heart, Instagram, User2 } from "lucide-react-native"
+
+import { createImageUrl } from "@ramble/shared"
+
+import { Icon } from "~/components/Icon"
+import { BrandHeading } from "~/components/ui/BrandHeading"
+import { Button } from "~/components/ui/Button"
+import { OptimizedImage } from "~/components/ui/OptimisedImage"
+import { Spinner } from "~/components/ui/Spinner"
+import { Text } from "~/components/ui/Text"
+import { api } from "~/lib/api"
+import { useMe } from "~/lib/hooks/useMe"
+import { interestOptions } from "~/lib/models/user"
+
+import { Slot, useGlobalSearchParams, useRouter, useSegments } from "expo-router"
+
+export default function UserScreen() {
+  const colorScheme = useColorScheme()
+  const isDark = colorScheme === "dark"
+  const { me } = useMe()
+  const params = useGlobalSearchParams<{ username: string; tab: string }>()
+  const username = params.username
+
+  const { data: user, isLoading } = api.user.profile.useQuery({ username })
+  const tab = params.tab || "spots"
+  const router = useRouter()
+  const utils = api.useUtils()
+  const { mutate } = api.user.toggleFollow.useMutation({
+    onSuccess: () => {
+      if (!me) return
+      void utils.user.followers.refetch({ username })
+      void utils.user.profile.refetch({ username })
+      void utils.user.following.refetch({ username: me.username })
+      void utils.user.profile.refetch({ username: me.username })
+    },
+  })
+
+  const [isFollowedByMe, setIsFollowedByMe] = React.useState(!!user?.isFollowedByMe)
+
+  React.useEffect(() => {
+    if (!user) return
+    setIsFollowedByMe(user.isFollowedByMe)
+  }, [user, user?.isFollowedByMe])
+
+  const onToggleFollow = () => {
+    setIsFollowedByMe(!isFollowedByMe)
+    mutate(params)
+  }
+
+  const segments = useSegments()
+  console.log(segments)
+
+  return (
+    <SafeAreaView className="flex-1">
+      <View className="flex flex-row items-center justify-between px-4 pb-2">
+        <View className="flex flex-row items-center">
+          {router.canGoBack() && (
+            <TouchableOpacity className="sq-8 flex items-center justify-center" onPress={router.back} activeOpacity={0.8}>
+              <ChevronLeft className="text-primary mt-2" />
+            </TouchableOpacity>
+          )}
+          <BrandHeading className="pl-1 text-3xl">{username}</BrandHeading>
+        </View>
+        {user && me && me.username !== username && (
+          <TouchableOpacity
+            onPress={onToggleFollow}
+            activeOpacity={0.8}
+            className="sq-8 bg-background flex items-center justify-center rounded-full dark:bg-gray-800"
+          >
+            <Icon icon={Heart} size={20} fill={isFollowedByMe ? (isDark ? "white" : "black") : "transparent"} />
+          </TouchableOpacity>
+        )}
+      </View>
+      {isLoading ? (
+        <View className="flex items-center justify-center p-4">
+          <Spinner />
+        </View>
+      ) : !user ? (
+        <View className="p-4">
+          <Text>User not found</Text>
+        </View>
+      ) : (
+        <ScrollView className="min-h-full" stickyHeaderIndices={[1]} showsVerticalScrollIndicator={false}>
+          <View className="space-y-2 px-4 py-2">
+            <View className="flex flex-row items-center space-x-3">
+              {user.avatar ? (
+                <OptimizedImage
+                  width={100}
+                  placeholder={user.avatarBlurHash}
+                  height={100}
+                  source={{ uri: createImageUrl(user.avatar) }}
+                  className="sq-24 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
+                />
+              ) : (
+                <View className="sq-24 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
+                  <Icon icon={User2} />
+                </View>
+              )}
+              <View className="space-y-px">
+                <Text className="text-xl">
+                  {user.firstName} {user.lastName}
+                </Text>
+
+                <View className="flex flex-row items-center space-x-4">
+                  <TouchableOpacity
+                    className="flex flex-row space-x-1 pb-1"
+                    onPress={() => router.push({ pathname: `/(home)/(shared)/[username]/following`, params: { username } })}
+                  >
+                    <Text className="font-600">{user._count.following}</Text>
+                    <Text className="opacity-70">following</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    className="flex flex-row space-x-1 pb-1"
+                    onPress={() => router.push({ pathname: `/(home)/(shared)/[username]/followers`, params: { username } })}
+                  >
+                    <Text className="font-600">{user._count.followers}</Text>
+                    <Text className="opacity-70">followers</Text>
+                  </TouchableOpacity>
+                </View>
+                <View className="flex flex-row items-center space-x-1">
+                  {interestOptions
+                    .filter((i) => user[i.value as keyof typeof user])
+                    .map((interest) => (
+                      <View key={interest.value} className="rounded-xs border border-gray-100 p-2 dark:border-gray-700">
+                        <Icon icon={interest.Icon} size={18} />
+                      </View>
+                    ))}
+                </View>
+              </View>
+            </View>
+            {user.instagram && (
+              <TouchableOpacity
+                activeOpacity={0.8}
+                className="flex flex-row items-center space-x-1"
+                onPress={() => Linking.openURL(`https://www.instagram.com/${user.instagram}`)}
+              >
+                <Icon icon={Instagram} />
+                <Text>{user.instagram}</Text>
+              </TouchableOpacity>
+            )}
+            <Text>{user.bio}</Text>
+          </View>
+
+          <View className="bg-background dark:bg-background-dark flex flex-row items-center justify-center space-x-2 border-b border-gray-100 py-2 dark:border-gray-800">
+            <Button
+              variant={tab === "spots" ? "secondary" : "ghost"}
+              size="sm"
+              onPress={() => router.navigate({ pathname: `/(home)/(shared)/[username]/(profile)/index`, params: { username } })}
+            >
+              Spots
+            </Button>
+
+            <Button
+              variant={tab === "van" ? "secondary" : "ghost"}
+              size="sm"
+              onPress={() => router.navigate({ pathname: `/(home)/(shared)/[username]/(profile)/van`, params: { username } })}
+            >
+              Van
+            </Button>
+
+            <Button
+              variant={tab === "lists" ? "secondary" : "ghost"}
+              size="sm"
+              onPress={() => router.navigate({ pathname: `/(home)/(shared)/[username]/(profile)/lists`, params: { username } })}
+            >
+              Lists
+            </Button>
+          </View>
+          <View className="p-2 pb-20">
+            <Slot />
+          </View>
+        </ScrollView>
+      )}
+    </SafeAreaView>
+  )
+}

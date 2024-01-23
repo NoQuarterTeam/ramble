@@ -33,6 +33,10 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     url: "https://u.expo.dev/b868666b-33e3-40d3-a88b-71c40a54e3dd",
     checkAutomatically: "ON_LOAD",
   },
+  experiments: {
+    typedRoutes: true,
+    tsconfigPaths: true,
+  },
   assetBundlePatterns: ["**/*"],
   runtimeVersion: {
     policy: "nativeVersion",
