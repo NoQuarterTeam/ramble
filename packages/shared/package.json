@@ -16,14 +16,14 @@
   "sideEffects": false,
   "dependencies": {
     "@ramble/database": "workspace:*",
-    "tailwind-merge": "2.2.0"
+    "tailwind-merge": "2.2.1"
   },
   "devDependencies": {
     "@ramble/eslint-config": "workspace:*",
     "@ramble/tailwind-config": "workspace:*",
     "@types/node": "18.19.8",
-    "@typescript-eslint/eslint-plugin": "6.19.0",
-    "@typescript-eslint/parser": "6.19.0",
+    "@typescript-eslint/eslint-plugin": "6.19.1",
+    "@typescript-eslint/parser": "6.19.1",
     "eslint": "8.56.0",
     "prettier": "3.2.4",
     "typescript": "5.3.3"
