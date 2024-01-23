@@ -43,7 +43,6 @@ export default function NewSpotConfirmScreen() {
   const utils = api.useUtils()
 
   const tab = useTabSegment()
-  console.log({ tab })
 
   const {
     mutate,

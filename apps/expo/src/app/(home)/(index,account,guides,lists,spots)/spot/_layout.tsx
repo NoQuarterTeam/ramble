@@ -4,5 +4,9 @@ import { useBackgroundColor } from "~/lib/tailwind"
 export default function Layout() {
   const backgroundColor = useBackgroundColor()
 
-  return <Stack initialRouteName="[id]" screenOptions={{ contentStyle: { backgroundColor }, headerShown: false }} />
+  return (
+    <Stack screenOptions={{ contentStyle: { backgroundColor }, headerShown: false }}>
+      <Stack.Screen name="[id]" />
+    </Stack>
+  )
 }

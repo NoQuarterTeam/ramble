@@ -141,7 +141,7 @@ export default function AccountScreen() {
           <Text className="text-center opacity-60">{UPDATE_ID}</Text>
         </View>
         {IS_DEV && (
-          <Button className="mb-10" onPress={() => router.navigate("OnboardingLayout")} variant="outline">
+          <Button className="mb-10" onPress={() => router.replace("/onboarding/1")} variant="outline">
             DEV: Trigger onboarding
           </Button>
         )}

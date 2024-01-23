@@ -1,10 +1,11 @@
-import * as React from "react"
-import { TouchableOpacity, useColorScheme, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import { ChevronDown, PlusCircle } from "lucide-react-native"
+import * as React from "react"
+import { TouchableOpacity, useColorScheme, View } from "react-native"
 
-import { join, type SpotListSort, useDisclosure } from "@ramble/shared"
+import { join, useDisclosure, type SpotListSort } from "@ramble/shared"
 
+import { useRouter } from "expo-router"
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { SpotItem } from "~/components/SpotItem"
@@ -16,8 +17,6 @@ import { api } from "~/lib/api"
 import { height, isTablet, width } from "~/lib/device"
 import { useAsyncStorage } from "~/lib/hooks/useAsyncStorage"
 import { useMe } from "~/lib/hooks/useMe"
-import { useRouter } from "expo-router"
-import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 const SORT_OPTIONS: { [key in SpotListSort]: string } = {
   latest: "latest",
@@ -39,7 +38,6 @@ export default function SpotsScreen() {
     setSpots(initialSpots)
   }, [initialSpots])
 
-  const tab = useTabSegment()
   const utils = api.useUtils()
 
   const handleLoadMore = React.useCallback(async () => {
@@ -67,7 +65,7 @@ export default function SpotsScreen() {
         )
       }
       rightElement={
-        <TouchableOpacity onPress={() => router.push({ pathname: `/new-spot/`, params: { redirect: tab } })}>
+        <TouchableOpacity onPress={() => router.push(`/new/`)}>
           <Icon icon={PlusCircle} />
         </TouchableOpacity>
       }

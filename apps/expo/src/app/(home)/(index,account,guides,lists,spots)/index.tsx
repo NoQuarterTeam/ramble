@@ -1,13 +1,11 @@
-import * as React from "react"
-import { Modal, Switch, TouchableOpacity, View } from "react-native"
 import {
   Camera,
-  type MapState,
-  type MapView as MapType,
   MarkerView,
   RasterLayer,
   RasterSource,
   UserLocation,
+  type MapState,
+  type MapView as MapType,
 } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import {
@@ -21,6 +19,8 @@ import {
   User,
   Users2,
 } from "lucide-react-native"
+import * as React from "react"
+import { Modal, Switch, TouchableOpacity, View } from "react-native"
 
 import { type SpotType } from "@ramble/database/types"
 import { createImageUrl, INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
@@ -42,11 +42,10 @@ import { useAsyncStorage } from "~/lib/hooks/useAsyncStorage"
 import { useMe } from "~/lib/hooks/useMe"
 import { usePreferences } from "~/lib/hooks/usePreferences"
 
-import { type Filters, initialFilters, MapFilters } from "../../../components/MapFilters"
+import { useRouter } from "expo-router"
+import { initialFilters, MapFilters, type Filters } from "../../../components/MapFilters"
 import { MapSearch } from "../../../components/MapSearch"
 import { SpotPreview } from "../../../components/SpotPreview"
-import { useRouter } from "expo-router"
-import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 type Cluster = RouterOutputs["spot"]["clusters"][number]
 type UserCluster = RouterOutputs["user"]["clusters"][number]
@@ -259,8 +258,6 @@ export default function MapScreen() {
   )
   const filterCount = (filters.isPetFriendly ? 1 : 0) + (filters.isUnverified ? 1 : 0) + (filters.types.length > 0 ? 1 : 0)
 
-  const tab = useTabSegment()
-
   return (
     <View className="flex-1">
       <RegisterCheck />
@@ -296,7 +293,7 @@ export default function MapScreen() {
 
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => router.push(`/new-spot/?redirect=${tab}`)}
+        onPress={() => router.push("/new/")}
         style={{ transform: [{ translateX: -26 }] }}
         className="bg-primary absolute bottom-3 left-1/2 rounded-full p-4 "
       >

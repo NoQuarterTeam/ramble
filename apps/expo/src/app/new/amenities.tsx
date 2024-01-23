@@ -10,8 +10,8 @@ import { type RambleIcon } from "~/components/ui/Icons"
 import { Text } from "~/components/ui/Text"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 
-import { NewSpotModalView } from "./NewSpotModalView"
 import { useGlobalSearchParams, useRouter } from "expo-router"
+import { NewSpotModalView } from "./NewSpotModalView"
 
 export default function NewSpotAmenitiesScreen() {
   const params = useGlobalSearchParams()
@@ -37,9 +37,7 @@ export default function NewSpotAmenitiesScreen() {
       <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
         <Button
           className="rounded-full"
-          onPress={() =>
-            router.push({ pathname: `/new-spot/images`, params: { ...params, amenities: JSON.stringify(amenities) } })
-          }
+          onPress={() => router.push({ pathname: `/new/images`, params: { ...params, amenities: JSON.stringify(amenities) } })}
         >
           Next
         </Button>

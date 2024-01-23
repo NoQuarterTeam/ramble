@@ -92,8 +92,9 @@ export default function RootLayout() {
               <IdentifyUser />
               <Stack initialRouteName="(home)" screenOptions={{ headerShown: false, contentStyle: { backgroundColor } }}>
                 <Stack.Screen name="(home)" />
+                <Stack.Screen name="onboarding" />
                 <Stack.Screen name="(auth)" options={{ presentation: "modal" }} />
-                <Stack.Screen name="new-spot" options={{ presentation: "modal" }} />
+                <Stack.Screen name="new" options={{ presentation: "modal" }} />
               </Stack>
             </PostHogProvider>
             <Toast />

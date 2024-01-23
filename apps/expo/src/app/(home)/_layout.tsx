@@ -23,6 +23,7 @@ export default function HomeLayout() {
   const backgroundColor = useBackgroundColor()
   return (
     <Tabs
+      initialRouteName="(index)"
       sceneContainerStyle={{ backgroundColor }}
       screenOptions={{
         tabBarStyle: { backgroundColor, borderTopColor: colors.gray[isDark ? 700 : 200] },

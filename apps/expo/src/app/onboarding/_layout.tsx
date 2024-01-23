@@ -7,7 +7,7 @@ import OnboardingStep3Screen from "./3"
 
 const OnboardingStack = createNativeStackNavigator()
 
-export function OnboardingLayout() {
+export default function OnboardingLayout() {
   const backgroundColor = useBackgroundColor()
   return (
     <OnboardingStack.Navigator

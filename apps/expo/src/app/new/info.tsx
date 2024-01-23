@@ -1,6 +1,6 @@
+import { Dog } from "lucide-react-native"
 import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
-import { Dog } from "lucide-react-native"
 
 import { doesSpotTypeRequireAmenities } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
@@ -12,9 +12,9 @@ import { Input } from "~/components/ui/Input"
 import { Text } from "~/components/ui/Text"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
 
-import { NewSpotModalView } from "./NewSpotModalView"
-import { useLocalSearchParams, useRouter } from "expo-router"
 import { type SpotType } from "@ramble/database/types"
+import { useLocalSearchParams, useRouter } from "expo-router"
+import { NewSpotModalView } from "./NewSpotModalView"
 
 export default function NewSpotInfoScreen() {
   useKeyboardController()
@@ -53,7 +53,7 @@ export default function NewSpotInfoScreen() {
             className="rounded-full"
             onPress={() =>
               router.push({
-                pathname: doesSpotTypeRequireAmenities(params.type) ? `/new-spot/amenities` : `/new-spot/images`,
+                pathname: doesSpotTypeRequireAmenities(params.type) ? `/new/amenities` : `/new/images`,
                 params: {
                   ...params,
                   name,

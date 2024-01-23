@@ -70,7 +70,7 @@ export default function OnboardingStep3Screen() {
               <View className="flex flex-row items-center space-x-2">
                 <Button
                   onPress={() => {
-                    router.navigate("/new-spot")
+                    router.navigate("/new")
                   }}
                   variant="link"
                 >

@@ -1,15 +1,15 @@
-import * as React from "react"
-import { ScrollView, TouchableOpacity, View } from "react-native"
 import { Image } from "expo-image"
 import * as ImagePicker from "expo-image-picker"
 import { Plus, X } from "lucide-react-native"
+import * as React from "react"
+import { ScrollView, TouchableOpacity, View } from "react-native"
 
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
 import { toast } from "~/components/ui/Toast"
 
-import { NewSpotModalView } from "./NewSpotModalView"
 import { useLocalSearchParams, useRouter } from "expo-router"
+import { NewSpotModalView } from "./NewSpotModalView"
 
 export default function NewSpotImagesScreen() {
   const params = useLocalSearchParams()
@@ -57,7 +57,12 @@ export default function NewSpotImagesScreen() {
       <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
         <Button
           className="rounded-full"
-          onPress={() => router.push({ pathname: `/new-spot/confirm`, params: { ...params, images: images.join(",") } })}
+          onPress={() =>
+            router.push({
+              pathname: `/new/confirm`,
+              params: { ...params, images: images.join(",") },
+            })
+          }
         >
           Next
         </Button>
