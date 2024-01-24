@@ -41,7 +41,7 @@ export default function GuidesScreen() {
   return (
     <TabView title="guides">
       {isLoading ? (
-        <View className="flex items-center justify-center  p-4">
+        <View className="flex items-center justify-center p-4">
           <Spinner />
         </View>
       ) : (
@@ -50,7 +50,6 @@ export default function GuidesScreen() {
           estimatedItemSize={142}
           onEndReached={handleLoadMore}
           numColumns={isTablet ? 2 : undefined}
-          contentContainerStyle={{ paddingVertical: 10 }}
           ListEmptyComponent={<Text className="text-center">No guides yet</Text>}
           data={guides}
           ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
@@ -68,7 +67,7 @@ export default function GuidesScreen() {
 function GuideItem(props: { guide: RouterOutputs["user"]["guides"][number] }) {
   return (
     <Link asChild push href={`/(home)/(guides)/${props.guide.username}/(profile)`}>
-      <TouchableOpacity activeOpacity={0.8} className="rounded-xs space-y-1 border border-gray-100 p-4 dark:border-gray-700">
+      <TouchableOpacity activeOpacity={0.8} className="rounded-xs space-y-1 border border-gray-200 p-4 dark:border-gray-700">
         <View className="flex flex-row items-center space-x-2">
           <OptimizedImage
             className="sq-16 rounded-full"

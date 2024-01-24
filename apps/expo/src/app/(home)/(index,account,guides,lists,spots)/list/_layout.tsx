@@ -1,12 +1,7 @@
 import { Stack } from "expo-router"
 import { useBackgroundColor } from "~/lib/tailwind"
 
-export default function ListsLayout() {
+export default function Layout() {
   const backgroundColor = useBackgroundColor()
-
-  return (
-    <Stack screenOptions={{ contentStyle: { backgroundColor }, headerShown: false }}>
-      <Stack.Screen name="[id]" />
-    </Stack>
-  )
+  return <Stack screenOptions={{ contentStyle: { backgroundColor }, headerShown: false }} />
 }

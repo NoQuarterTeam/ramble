@@ -1,6 +1,5 @@
 import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
 
 import colors from "@ramble/tailwind-config/src/colors"
 
@@ -14,6 +13,7 @@ import { api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 import { interestOptions } from "~/lib/models/user"
 import { useRouter } from "expo-router"
+import { SafeAreaView } from "~/components/SafeAreaView"
 
 export default function OnboardingStep2Screen() {
   const { me } = useMe()
@@ -42,37 +42,39 @@ export default function OnboardingStep2Screen() {
   const onSubmit = () => mutate(interests)
 
   return (
-    <SafeAreaView className="flex-1 px-4">
-      <ScrollView className="space-y-4" contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
-        <Heading className="text-2xl">What are you into?</Heading>
+    <SafeAreaView>
+      <View className="flex-1 px-4">
+        <ScrollView className="space-y-4" contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+          <Heading className="text-2xl">What are you into?</Heading>
 
-        <View>
-          {interestOptions.map((interest) => (
-            <InterestSelector
-              key={interest.value}
-              onToggle={() => onToggle(interest.value as keyof typeof interests)}
-              icon={interest.Icon}
-              label={interest.label}
-              isSelected={interests[interest.value as keyof typeof interests]}
-            />
-          ))}
-        </View>
-
-        <FormError error={error} />
-        <View className="flex flex-row items-center justify-between">
-          <Button onPress={router.back} variant="ghost">
-            Back
-          </Button>
-          <View className="flex flex-row items-center space-x-2">
-            <Button onPress={() => router.push("/onboarding/3")} variant="link">
-              Skip
-            </Button>
-            <Button className="w-[120px]" isLoading={isLoading} onPress={onSubmit}>
-              Next
-            </Button>
+          <View>
+            {interestOptions.map((interest) => (
+              <InterestSelector
+                key={interest.value}
+                onToggle={() => onToggle(interest.value as keyof typeof interests)}
+                icon={interest.Icon}
+                label={interest.label}
+                isSelected={interests[interest.value as keyof typeof interests]}
+              />
+            ))}
           </View>
-        </View>
-      </ScrollView>
+
+          <FormError error={error} />
+          <View className="flex flex-row items-center justify-between">
+            <Button onPress={router.back} variant="ghost">
+              Back
+            </Button>
+            <View className="flex flex-row items-center space-x-2">
+              <Button onPress={() => router.push("/onboarding/3")} variant="link">
+                Skip
+              </Button>
+              <Button className="w-[120px]" isLoading={isLoading} onPress={onSubmit}>
+                Next
+              </Button>
+            </View>
+          </View>
+        </ScrollView>
+      </View>
     </SafeAreaView>
   )
 }

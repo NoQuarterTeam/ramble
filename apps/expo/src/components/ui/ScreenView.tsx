@@ -1,11 +1,12 @@
 import type * as React from "react"
 import { TouchableOpacity, View } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
+
 import { ChevronLeft } from "lucide-react-native"
 
 import { Icon } from "../Icon"
 import { BrandHeading } from "./BrandHeading"
 import { useRouter } from "expo-router"
+import { SafeAreaView } from "~/components/SafeAreaView"
 
 interface Props {
   title: string
@@ -17,17 +18,19 @@ interface Props {
 export function ScreenView(props: Props) {
   const router = useRouter()
   return (
-    <SafeAreaView edges={["top"]} className="flex-1 px-4 pt-2">
-      <View className="flex flex-row items-center justify-between pb-2">
-        <View className="flex h-[40px] flex-row items-center space-x-0.5">
-          <TouchableOpacity onPress={props.onBack || router.back} className="sq-8 flex items-center justify-center pt-0.5">
-            <Icon icon={ChevronLeft} color="primary" />
-          </TouchableOpacity>
-          <BrandHeading className="text-xl">{props.title.toLowerCase()}</BrandHeading>
+    <SafeAreaView>
+      <View className="flex-1 px-4 pt-2">
+        <View className="flex flex-row items-center justify-between pb-2">
+          <View className="flex h-[40px] flex-row items-center space-x-0.5">
+            <TouchableOpacity onPress={props.onBack || router.back} className="sq-8 flex items-center justify-center pt-0.5">
+              <Icon icon={ChevronLeft} color="primary" />
+            </TouchableOpacity>
+            <BrandHeading className="text-xl">{props.title.toLowerCase()}</BrandHeading>
+          </View>
+          {props.rightElement}
         </View>
-        {props.rightElement}
+        {props.children}
       </View>
-      {props.children}
     </SafeAreaView>
   )
 }

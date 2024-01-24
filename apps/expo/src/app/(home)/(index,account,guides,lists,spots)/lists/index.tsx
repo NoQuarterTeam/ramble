@@ -89,7 +89,6 @@ export default function ListsScreen() {
           showsVerticalScrollIndicator={false}
           estimatedItemSize={86}
           numColumns={isTablet ? 2 : undefined}
-          contentContainerStyle={{ paddingVertical: 10 }}
           ListEmptyComponent={<Text className="text-center">No lists yet</Text>}
           data={lists}
           ItemSeparatorComponent={() => <View style={{ height: 4 }} />}

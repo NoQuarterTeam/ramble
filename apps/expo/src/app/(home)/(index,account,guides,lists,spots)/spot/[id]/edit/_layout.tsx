@@ -6,7 +6,7 @@ export default function EditSpotLayout() {
   const backgroundColor = useBackgroundColor()
 
   return (
-    <Stack screenOptions={{ contentStyle: { backgroundColor }, headerShown: false }}>
+    <Stack initialRouteName="index" screenOptions={{ contentStyle: { backgroundColor }, headerShown: false }}>
       <Stack.Screen name="index" />
       <Stack.Screen name="type" />
       <Stack.Screen name="info" />

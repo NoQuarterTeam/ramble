@@ -2,7 +2,6 @@ import * as React from "react"
 import { FormProvider } from "react-hook-form"
 import { ScrollView, View } from "react-native"
 import { AvoidSoftInputView } from "react-native-avoid-softinput"
-import { SafeAreaView } from "react-native-safe-area-context"
 
 import { Button } from "~/components/ui/Button"
 import { FormError } from "~/components/ui/FormError"
@@ -12,6 +11,7 @@ import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
 import { useForm } from "~/lib/hooks/useForm"
 import { useRouter } from "expo-router"
+import { SafeAreaView } from "~/components/SafeAreaView"
 
 export default function OnboardingStep3Screen() {
   const { data, isLoading } = api.van.mine.useQuery()
@@ -47,43 +47,45 @@ export default function OnboardingStep3Screen() {
     mutate({ model, name, year, id: data?.id })
   })
   return (
-    <SafeAreaView className="flex-1 px-4">
-      <FormProvider {...form}>
-        <AvoidSoftInputView>
-          <ScrollView
-            keyboardShouldPersistTaps="handled"
-            contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}
-            showsVerticalScrollIndicator={false}
-            className="space-y-4"
-          >
-            <Heading className="text-2xl">Tell us a little bit about your van?</Heading>
-            <FormInput error={error} name="name" label="What's it's name?" placeholder="Patrick" />
-            <FormInput error={error} name="model" label="What type of van is it?" placeholder="Citroën Jumper" />
-            <FormInput error={error} name="year" label="What year was it born?" placeholder="2013" />
-            <FormInput error={error} multiline name="description" label="Anything else you wanna mention?" />
+    <SafeAreaView>
+      <View className="flex-1 px-4">
+        <FormProvider {...form}>
+          <AvoidSoftInputView>
+            <ScrollView
+              keyboardShouldPersistTaps="handled"
+              contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}
+              showsVerticalScrollIndicator={false}
+              className="space-y-4"
+            >
+              <Heading className="text-2xl">Tell us a little bit about your van?</Heading>
+              <FormInput error={error} name="name" label="What's it's name?" placeholder="Patrick" />
+              <FormInput error={error} name="model" label="What type of van is it?" placeholder="Citroën Jumper" />
+              <FormInput error={error} name="year" label="What year was it born?" placeholder="2013" />
+              <FormInput error={error} multiline name="description" label="Anything else you wanna mention?" />
 
-            <FormError error={error} />
-            <View className="flex flex-row items-center justify-between">
-              <Button onPress={router.back} variant="ghost">
-                Back
-              </Button>
-              <View className="flex flex-row items-center space-x-2">
-                <Button
-                  onPress={() => {
-                    router.navigate("/new")
-                  }}
-                  variant="link"
-                >
-                  Skip
+              <FormError error={error} />
+              <View className="flex flex-row items-center justify-between">
+                <Button onPress={router.back} variant="ghost">
+                  Back
                 </Button>
-                <Button className="w-[120px]" isLoading={updateLoading} onPress={onSubmit}>
-                  Finish
-                </Button>
+                <View className="flex flex-row items-center space-x-2">
+                  <Button
+                    onPress={() => {
+                      router.navigate("/new")
+                    }}
+                    variant="link"
+                  >
+                    Skip
+                  </Button>
+                  <Button className="w-[120px]" isLoading={updateLoading} onPress={onSubmit}>
+                    Finish
+                  </Button>
+                </View>
               </View>
-            </View>
-          </ScrollView>
-        </AvoidSoftInputView>
-      </FormProvider>
+            </ScrollView>
+          </AvoidSoftInputView>
+        </FormProvider>
+      </View>
     </SafeAreaView>
   )
 }

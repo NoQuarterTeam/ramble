@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Linking, ScrollView, TouchableOpacity, useColorScheme, View } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
+
 import { ChevronLeft, Heart, Instagram, User2 } from "lucide-react-native"
 
 import { createImageUrl } from "@ramble/shared"
@@ -18,6 +18,7 @@ import { interestOptions } from "~/lib/models/user"
 import { Slot, useLocalSearchParams, useRouter, useSegments } from "expo-router"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { StatusBar } from "expo-status-bar"
+import { SafeAreaView } from "~/components/SafeAreaView"
 
 export default function UserScreen() {
   const colorScheme = useColorScheme()
@@ -56,7 +57,7 @@ export default function UserScreen() {
   const segments = useSegments()
 
   return (
-    <SafeAreaView edges={["top"]} className="flex-1">
+    <SafeAreaView>
       <View className="flex flex-row items-center justify-between px-4 pb-2">
         <View className="flex flex-row items-center">
           {router.canGoBack() && (
@@ -176,7 +177,7 @@ export default function UserScreen() {
           </View>
         </ScrollView>
       )}
-      <StatusBar style="dark" />
+      <StatusBar style="auto" />
     </SafeAreaView>
   )
 }

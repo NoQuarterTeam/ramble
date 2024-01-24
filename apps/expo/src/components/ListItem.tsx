@@ -23,7 +23,7 @@ export function ListItem({ list }: Props) {
     <TouchableOpacity
       onPress={() => router.push(`/${tab}/list/${list.id}`)}
       activeOpacity={0.8}
-      className="rounded-xs border border-gray-100 p-4 dark:border-gray-700"
+      className="rounded-xs border border-gray-200 p-4 dark:border-gray-700"
     >
       <View className="flex flex-row items-center space-x-2">
         {list.isPrivate && <Icon icon={Lock} size={20} />}

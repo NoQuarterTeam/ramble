@@ -3,7 +3,15 @@ import { useBackgroundColor } from "~/lib/tailwind"
 
 export default function AccountLayout() {
   const backgroundColor = useBackgroundColor()
-  // const sharedScreens = getSharedScreens(AccountStack)
-
-  return <Stack screenOptions={{ contentStyle: { backgroundColor }, headerShown: false }} />
+  return (
+    <Stack initialRouteName="index" screenOptions={{ contentStyle: { backgroundColor }, headerShown: false }}>
+      <Stack.Screen name="index" />
+      <Stack.Screen name="feedback" />
+      <Stack.Screen name="info" />
+      <Stack.Screen name="interests" />
+      <Stack.Screen name="invite" />
+      <Stack.Screen name="settings" />
+      <Stack.Screen name="van" />
+    </Stack>
+  )
 }

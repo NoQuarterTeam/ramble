@@ -1,6 +1,6 @@
 import type * as React from "react"
 import { Text, TouchableOpacity, View } from "react-native"
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
+
 import { StatusBar } from "expo-status-bar"
 import { ChevronLeft, X } from "lucide-react-native"
 
@@ -9,7 +9,8 @@ import { join } from "@ramble/shared"
 import { Icon } from "~/components/Icon"
 import { BrandHeading } from "~/components/ui/BrandHeading"
 import { Toast } from "~/components/ui/Toast"
-import { useRouter, useSegments } from "expo-router"
+import { useRouter } from "expo-router"
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 
 interface Props {
   title?: string
@@ -20,8 +21,6 @@ interface Props {
 
 export function EditSpotModalView({ canGoBack = true, ...props }: Props) {
   const router = useRouter()
-  const segments = useSegments()
-  console.log({ segments })
 
   return (
     <SafeAreaProvider>
@@ -36,7 +35,7 @@ export function EditSpotModalView({ canGoBack = true, ...props }: Props) {
 
             {props.title ? <BrandHeading className="text-3xl">{props.title}</BrandHeading> : <Text />}
           </View>
-          <TouchableOpacity onPress={() => router.navigate(`/`)} className="p-1">
+          <TouchableOpacity onPress={() => router.back()} className="p-1">
             <Icon icon={X} size={24} />
           </TouchableOpacity>
         </View>

@@ -27,7 +27,7 @@ export function SpotItem({ spot }: Props) {
         void utils.spot.detail.prefetch({ id: spot.id })
       }}
       className="w-full"
-      onPress={() => router.push(`/${tab}/spot/${spot.id}/`)}
+      onPress={() => router.push(`/${tab}/spot/${spot.id}`)}
       activeOpacity={0.8}
     >
       <View className="relative h-[250px] w-full">

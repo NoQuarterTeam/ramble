@@ -9,7 +9,7 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated"
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useQuery } from "@tanstack/react-query"
 import dayjs from "dayjs"
 import { LinearGradient } from "expo-linear-gradient"
@@ -49,12 +49,11 @@ import { useLocalSearchParams, useRouter } from "expo-router"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 export default function SpotDetailScreen() {
-  const [location, setLocation] = React.useState<Location.LocationObjectCoords | null>(null)
   const { me } = useMe()
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
   const params = useLocalSearchParams<{ id: string }>()
-  const { data, isLoading } = api.spot.detail.useQuery({ id: params.id })
+  const { data, isLoading } = api.spot.detail.useQuery({ id: params.id }, { cacheTime: Infinity })
   const spot = data?.spot
   const translationY = useSharedValue(0)
   const [isScrolledPassedThreshold, setIsScrolledPassedThreshold] = React.useState(false)
@@ -94,31 +93,24 @@ export default function SpotDetailScreen() {
     return { transform: [{ scale }, { translateY }] }
   })
 
-  React.useEffect(() => {
-    ;(async () => {
-      try {
-        const { status } = await Location.requestForegroundPermissionsAsync()
-        if (status !== "granted") return
-        const loc = await Location.getCurrentPositionAsync()
-        setLocation(loc.coords)
-      } catch {
-        console.log("oops -  getting location")
-      }
-    })()
-  }, [])
-
   const handleGetDirections = async () => {
-    if (!spot) return
-    showLocation({
-      latitude: spot.latitude,
-      longitude: spot.longitude,
-      sourceLatitude: location?.latitude,
-      sourceLongitude: location?.longitude,
-      title: spot.type !== "GAS_STATION" ? spot.name : spot.address || spot.name,
-      googleForceLatLon: spot.type !== "GAS_STATION",
-      alwaysIncludeGoogle: true,
-      directionsMode: "car",
-    })
+    try {
+      if (!spot) return
+      const { status } = await Location.requestForegroundPermissionsAsync()
+      if (status !== "granted") return
+      const location = await Location.getCurrentPositionAsync()
+
+      showLocation({
+        latitude: spot.latitude,
+        longitude: spot.longitude,
+        sourceLatitude: location.coords.latitude,
+        sourceLongitude: location.coords.longitude,
+        title: spot.type !== "GAS_STATION" ? spot.name : spot.address || spot.name,
+        googleForceLatLon: spot.type !== "GAS_STATION",
+        alwaysIncludeGoogle: true,
+        directionsMode: "car",
+      })
+    } catch (error) {}
   }
   const utils = api.useUtils()
   const { mutate: verifySpot, isLoading: isVerifyingLoading } = api.spot.verify.useMutation({
@@ -134,14 +126,16 @@ export default function SpotDetailScreen() {
   })
 
   const insets = useSafeAreaInsets()
+
   const tab = useTabSegment()
+
   if (isLoading) return <SpotLoading />
   if (!spot || !data)
     return (
-      <SafeAreaView className="space-y-2 p-4">
+      <View style={{ top: insets.top }} className="space-y-2 p-4">
         <Text className="text-lg">Spot not found</Text>
         {router.canGoBack() && <Button onPress={router.back}>Back</Button>}
-      </SafeAreaView>
+      </View>
     )
   return (
     <View>
@@ -314,7 +308,7 @@ export default function SpotDetailScreen() {
         style={[topBarStyle, { height: 50 + insets.top }]}
       />
 
-      <SafeAreaView className="absolute left-0 right-0 top-2 flex w-full flex-row justify-between px-4">
+      <View style={{ top: insets.top + 8 }} className="absolute left-0 right-0 flex w-full flex-row justify-between px-4">
         <View className="flex w-full flex-1 flex-row items-center space-x-0.5">
           <TouchableOpacity
             onPress={router.canGoBack() ? router.back : () => router.navigate("/")}
@@ -367,7 +361,7 @@ export default function SpotDetailScreen() {
             <Icon icon={Heart} size={20} fill={data.isLiked ? (isDark ? "white" : "black") : "transparent"} />
           </TouchableOpacity>
         </View>
-      </SafeAreaView>
+      </View>
     </View>
   )
 }

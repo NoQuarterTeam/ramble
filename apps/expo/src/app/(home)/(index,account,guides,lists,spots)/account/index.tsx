@@ -27,6 +27,7 @@ import { api, AUTH_TOKEN } from "~/lib/api"
 import { IS_DEV, UPDATE_ID, VERSION } from "~/lib/config"
 import { useMe } from "~/lib/hooks/useMe"
 import { AllRoutes, Href, Link, useRouter } from "expo-router"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 export default function AccountScreen() {
   const { me } = useMe()
@@ -67,7 +68,7 @@ export default function AccountScreen() {
     )
   return (
     <TabView title="account">
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false} className="flex-1 space-y-4 pt-2">
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false} className="flex-1 space-y-4">
         {!me.isVerified && (
           <View className="rounded-xs flex flex-col space-y-3 border border-gray-200 p-2 pl-4 dark:border-gray-700">
             <View className="flex flex-row items-center space-x-2">
@@ -112,22 +113,22 @@ export default function AccountScreen() {
             </Link>
 
             <View>
-              <ProfileLink to="/account/info" icon={User}>
+              <ProfileLink to="info" icon={User}>
                 Info
               </ProfileLink>
-              <ProfileLink to="/account/interests" icon={ToggleRight}>
+              <ProfileLink to="interests" icon={ToggleRight}>
                 Interests
               </ProfileLink>
-              <ProfileLink to="/account/van" icon={Icons.Van}>
+              <ProfileLink to="van" icon={Icons.Van}>
                 Van
               </ProfileLink>
-              <ProfileLink to="/account/invite" icon={UserPlus}>
+              <ProfileLink to="invite" icon={UserPlus}>
                 Invites
               </ProfileLink>
-              <ProfileLink to="/account/settings" icon={Settings}>
+              <ProfileLink to="settings" icon={Settings}>
                 Settings
               </ProfileLink>
-              <ProfileLink to="/account/feedback" icon={MessageCircle}>
+              <ProfileLink to="feedback" icon={MessageCircle}>
                 Feedback
               </ProfileLink>
             </View>
@@ -150,13 +151,15 @@ export default function AccountScreen() {
   )
 }
 
-function ProfileLink({ children, to, icon }: { to: Href<AllRoutes>; children: string; icon: LucideIcon }) {
+function ProfileLink({ children, to, icon }: { to: string; children: string; icon: LucideIcon }) {
   const router = useRouter()
+  const tab = useTabSegment()
+  const path = `/${tab}/account/${to}` as Href<AllRoutes>
   return (
     <TouchableOpacity
       activeOpacity={0.8}
       className="rounded-xs mb-1 flex flex-row items-center justify-between border border-gray-200 px-4 py-3 dark:border-gray-700"
-      onPress={() => router.push(to)}
+      onPress={() => router.push(path)}
     >
       <View className="flex flex-row items-center space-x-2">
         <Icon icon={icon} size={16} />
