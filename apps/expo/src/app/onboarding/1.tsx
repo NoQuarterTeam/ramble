@@ -1,7 +1,7 @@
 import { FormProvider } from "react-hook-form"
 import { ScrollView, View } from "react-native"
 import { AvoidSoftInputView } from "react-native-avoid-softinput"
-import { useRouter } from "expo-router"
+import { Link, useRouter } from "expo-router"
 
 import { SafeAreaView } from "~/components/SafeAreaView"
 import { Button } from "~/components/ui/Button"
@@ -52,9 +52,10 @@ export default function OnboardingStep1Screen() {
               <View className="flex flex-row items-center justify-between">
                 <View />
                 <View className="flex flex-row items-center space-x-2">
-                  <Button onPress={() => router.push("/onboarding/2")} variant="link">
-                    Skip
-                  </Button>
+                  <Link asChild href="/onboarding/2">
+                    <Button variant="link">Skip</Button>
+                  </Link>
+
                   <Button className="w-[120px]" isLoading={isLoading} onPress={onSubmit}>
                     Next
                   </Button>

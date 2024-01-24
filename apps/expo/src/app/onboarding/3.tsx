@@ -34,8 +34,8 @@ export default function OnboardingStep3Screen() {
   } = api.van.upsert.useMutation({
     onSuccess: async () => {
       await utils.user.me.refetch()
-      router.navigate("AppLayout")
-      router.navigate("NewSpotLayout")
+      router.navigate("/")
+      router.navigate("/new")
     },
   })
 
@@ -44,7 +44,7 @@ export default function OnboardingStep3Screen() {
     if (!model) return toast({ title: "Model is required" })
     if (!name) return toast({ title: "Name is required" })
     if (!year) return toast({ title: "Year is required" })
-    mutate({ model, name, year, id: data?.id })
+    mutate({ model, name, year, id: data?.id, description: van.description })
   })
   return (
     <SafeAreaView>
@@ -55,13 +55,20 @@ export default function OnboardingStep3Screen() {
               keyboardShouldPersistTaps="handled"
               contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}
               showsVerticalScrollIndicator={false}
-              className="space-y-4"
             >
               <Heading className="text-2xl">Tell us a little bit about your van?</Heading>
-              <FormInput error={error} name="name" label="What's it's name?" placeholder="Patrick" />
-              <FormInput error={error} name="model" label="What type of van is it?" placeholder="Citroën Jumper" />
-              <FormInput error={error} name="year" label="What year was it born?" placeholder="2013" />
-              <FormInput error={error} multiline name="description" label="Anything else you wanna mention?" />
+              <View>
+                <FormInput error={error} name="name" label="What's it's name?" placeholder="Patrick" />
+              </View>
+              <View>
+                <FormInput error={error} name="model" label="What type of van is it?" placeholder="Citroën Jumper" />
+              </View>
+              <View>
+                <FormInput error={error} name="year" label="What year was it born?" placeholder="2013" />
+              </View>
+              <View>
+                <FormInput error={error} multiline name="description" label="Anything else you wanna mention?" />
+              </View>
 
               <FormError error={error} />
               <View className="flex flex-row items-center justify-between">
@@ -71,6 +78,7 @@ export default function OnboardingStep3Screen() {
                 <View className="flex flex-row items-center space-x-2">
                   <Button
                     onPress={() => {
+                      router.navigate("/")
                       router.navigate("/new")
                     }}
                     variant="link"

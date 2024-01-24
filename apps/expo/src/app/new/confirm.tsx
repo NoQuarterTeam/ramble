@@ -18,21 +18,20 @@ import { api } from "~/lib/api"
 import { width } from "~/lib/device"
 import { useMe } from "~/lib/hooks/useMe"
 import { useS3Upload } from "~/lib/hooks/useS3"
-import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 
 import { NewSpotModalView } from "./NewSpotModalView"
 
 type Params = {
-  name: string
-  description: string
-  latitude: string
-  longitude: string
-  address: string
-  type: SpotType
-  isPetFriendly: string
-  images: string
-  amenities: string
+  name?: string
+  description?: string
+  latitude?: string
+  longitude?: string
+  address?: string
+  type?: SpotType
+  isPetFriendly?: string
+  images?: string
+  amenities?: string
 }
 
 export default function NewSpotConfirmScreen() {
@@ -42,8 +41,6 @@ export default function NewSpotConfirmScreen() {
   const [shouldPublishLater, setShouldPublishLater] = React.useState(false)
   const utils = api.useUtils()
 
-  const tab = useTabSegment()
-
   const {
     mutate,
     isLoading: createLoading,
@@ -52,7 +49,7 @@ export default function NewSpotConfirmScreen() {
     onSuccess: async (data) => {
       utils.spot.list.refetch({ skip: 0, sort: "latest" })
       if (me?.role === "GUIDE") {
-        router.navigate(`/${tab}/spot/${data.id}`)
+        router.navigate(`/(home)/(index)/spot/${data.id}`)
         toast({ title: "Spot created", message: "Thank you for contributing to the community!" })
       } else {
         router.navigate("/")
@@ -76,17 +73,20 @@ export default function NewSpotConfirmScreen() {
   const handleCreateSpot = async () => {
     // upload images
     setLoading(true)
-    const images = await Promise.all(params.images.split(",").map((i) => upload(i)))
+    const images = params.images && (await Promise.all(params.images.split(",").map((i) => upload(i))))
+    if (!params.name || !params.type) return toast({ title: "Name is required", type: "error" })
+    console.log(parsedAmenities)
+
     mutate({
       description: params.description,
       name: params.name,
       latitude: Number(params.latitude),
       longitude: Number(params.longitude),
       address: params.address,
-      isPetFriendly: params.isPetFriendly,
+      isPetFriendly: params.isPetFriendly === "true",
       type: params.type,
-      images: images.map((i) => ({ path: i })),
-      amenities: parsedAmenities,
+      images: images ? images.map((i) => ({ path: i })) : [],
+      amenities: parsedAmenities || undefined,
     })
   }
 
@@ -95,14 +95,16 @@ export default function NewSpotConfirmScreen() {
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }} showsVerticalScrollIndicator={false}>
         <View className="space-y-3">
           <View className="flex h-[50px] flex-row items-center space-x-2">
-            <View className="sq-12 flex items-center justify-center rounded-full border border-gray-200 dark:border-gray-700">
-              <SpotIcon size={20} type={params.type} />
-            </View>
+            {params.type && (
+              <View className="sq-12 flex items-center justify-center rounded-full border border-gray-200 dark:border-gray-700">
+                <SpotIcon size={20} type={params.type} />
+              </View>
+            )}
             <Text numberOfLines={2} className="text-lg leading-6">
               {params.name}
             </Text>
           </View>
-          {params.images.length > 0 && (
+          {params.images && params.images.length > 0 && (
             <View className="rounded-xs overflow-hidden">
               <SpotImageCarousel
                 width={width - 32}
@@ -137,7 +139,7 @@ export default function NewSpotConfirmScreen() {
               })}
             </View>
           )}
-          <View className="flex w-full flex-row items-center justify-between px-4 py-2">
+          <View className="flex w-full flex-row items-center justify-between p-2">
             <View className="flex flex-row items-center space-x-2">
               <Icon icon={Lock} size={24} />
               <View>

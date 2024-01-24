@@ -49,10 +49,10 @@ export function ReviewItem({
   const [isTranslated, setIsTranslated] = React.useState(false)
 
   const { data, error, isInitialLoading } = useQuery<TranslateInput, string, string>({
-    queryKey: ["review-translation", { id: review.id, lang: me!.preferredLanguage }],
-    queryFn: () => getTranslation({ id: review.id, lang: me!.preferredLanguage }),
+    queryKey: ["review-translation", { id: review.id, lang: me?.preferredLanguage || "en" }],
+    queryFn: () => getTranslation({ id: review.id, lang: me?.preferredLanguage || "en" }),
     cacheTime: Infinity,
-    enabled: isTranslated && !!me && !!me!.preferredLanguage,
+    enabled: isTranslated && !!me && !!me?.preferredLanguage,
   })
 
   const tab = useTabSegment()
