@@ -1,14 +1,15 @@
 import * as React from "react"
 import { ScrollView, View } from "react-native"
+import { useLocalSearchParams, useRouter } from "expo-router"
 
+import { type SpotType } from "@ramble/database/types"
 import { SPOT_TYPE_OPTIONS } from "@ramble/shared"
 
 import { SpotIcon } from "~/components/SpotIcon"
 import { Button } from "~/components/ui/Button"
-import { useLocalSearchParams, useRouter } from "expo-router"
-import { ReportSpotModalView } from "./ReportSpotModalView"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
-import { type SpotType } from "@ramble/database/types"
+
+import { ReportSpotModalView } from "./ReportSpotModalView"
 
 export default function SpotReportTypeScreen() {
   const router = useRouter()

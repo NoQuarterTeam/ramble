@@ -1,14 +1,15 @@
 import { TouchableOpacity, View } from "react-native"
+import { useRouter } from "expo-router"
 import { Lock, User2 } from "lucide-react-native"
 
 import { type List, type User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
+
 import { Icon } from "./Icon"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
-import { useRouter } from "expo-router"
-import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 interface Props {
   list: Pick<List, "id" | "name" | "description" | "isPrivate"> & {

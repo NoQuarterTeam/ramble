@@ -1,27 +1,27 @@
 import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
+import { useGlobalSearchParams, useRouter } from "expo-router"
 import { Check, Dog, Lock, MapPin } from "lucide-react-native"
 
+import { type SpotType } from "@ramble/database/types"
 import { AMENITIES } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { Icon } from "~/components/Icon"
 import { SpotIcon } from "~/components/SpotIcon"
 import { Button } from "~/components/ui/Button"
+import { FormError } from "~/components/ui/FormError"
 import { SpotImageCarousel } from "~/components/ui/SpotImageCarousel"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
 import { width } from "~/lib/device"
+import { useMe } from "~/lib/hooks/useMe"
 import { useS3Upload } from "~/lib/hooks/useS3"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 
 import { NewSpotModalView } from "./NewSpotModalView"
-import { FormError } from "~/components/ui/FormError"
-import { useMe } from "~/lib/hooks/useMe"
-import { useGlobalSearchParams, useRouter } from "expo-router"
-import { type SpotType } from "@ramble/database/types"
-import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 type Params = {
   name: string

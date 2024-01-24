@@ -1,7 +1,7 @@
+import { useColorScheme } from "react-native"
 import RNToast, { BaseToast, type ToastShowParams } from "react-native-toast-message"
 
 import colors from "@ramble/tailwind-config/src/colors"
-import { useColorScheme } from "react-native"
 
 export function Toast() {
   const isDark = useColorScheme() === "dark"

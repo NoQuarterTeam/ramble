@@ -1,7 +1,9 @@
 import * as React from "react"
 import { ScrollView, TouchableOpacity, View } from "react-native"
+import { useLocalSearchParams, useRouter } from "expo-router"
 import { ChevronRight } from "lucide-react-native"
 
+import { type SpotType } from "@ramble/database/types"
 import { doesSpotTypeRequireAmenities } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
@@ -13,9 +15,7 @@ import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api, type RouterOutputs } from "~/lib/api"
-import { useLocalSearchParams, useRouter } from "expo-router"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
-import { type SpotType } from "@ramble/database/types"
 
 export default function SpotReportScreen() {
   const params = useLocalSearchParams<{ id: string }>()

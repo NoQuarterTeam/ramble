@@ -1,5 +1,6 @@
 import { ScrollView, TouchableOpacity, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { type AllRoutes, type Href, Link, useRouter } from "expo-router"
 import {
   AlertCircle,
   ChevronRight,
@@ -26,7 +27,6 @@ import { toast } from "~/components/ui/Toast"
 import { api, AUTH_TOKEN } from "~/lib/api"
 import { IS_DEV, UPDATE_ID, VERSION } from "~/lib/config"
 import { useMe } from "~/lib/hooks/useMe"
-import { AllRoutes, Href, Link, useRouter } from "expo-router"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 export default function AccountScreen() {

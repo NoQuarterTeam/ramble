@@ -1,12 +1,12 @@
 import type * as React from "react"
 import { TouchableOpacity, View } from "react-native"
-
+import { useRouter } from "expo-router"
 import { ChevronLeft } from "lucide-react-native"
+
+import { SafeAreaView } from "~/components/SafeAreaView"
 
 import { Icon } from "../Icon"
 import { BrandHeading } from "./BrandHeading"
-import { useRouter } from "expo-router"
-import { SafeAreaView } from "~/components/SafeAreaView"
 
 interface Props {
   title: string

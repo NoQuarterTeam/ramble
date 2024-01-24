@@ -1,11 +1,10 @@
 import { View } from "react-native"
+import { useLocalSearchParams } from "expo-router"
 
 import { SpotItem } from "~/components/SpotItem"
 import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
 import { api } from "~/lib/api"
-
-import { useLocalSearchParams } from "expo-router"
 
 export default function UserSpots() {
   const params = useLocalSearchParams<{ username: string }>()

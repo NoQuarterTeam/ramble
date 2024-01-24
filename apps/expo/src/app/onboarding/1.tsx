@@ -1,7 +1,9 @@
 import { FormProvider } from "react-hook-form"
 import { ScrollView, View } from "react-native"
 import { AvoidSoftInputView } from "react-native-avoid-softinput"
+import { useRouter } from "expo-router"
 
+import { SafeAreaView } from "~/components/SafeAreaView"
 import { Button } from "~/components/ui/Button"
 import { FormError } from "~/components/ui/FormError"
 import { FormInput } from "~/components/ui/FormInput"
@@ -9,8 +11,6 @@ import { Heading } from "~/components/ui/Heading"
 import { api } from "~/lib/api"
 import { useForm } from "~/lib/hooks/useForm"
 import { useMe } from "~/lib/hooks/useMe"
-import { useRouter } from "expo-router"
-import { SafeAreaView } from "~/components/SafeAreaView"
 
 export default function OnboardingStep1Screen() {
   const { me } = useMe()

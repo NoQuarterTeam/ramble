@@ -1,9 +1,11 @@
 import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
+import { useRouter } from "expo-router"
 
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { Icon } from "~/components/Icon"
+import { SafeAreaView } from "~/components/SafeAreaView"
 import { Button } from "~/components/ui/Button"
 import { FormError } from "~/components/ui/FormError"
 import { Heading } from "~/components/ui/Heading"
@@ -12,8 +14,6 @@ import { Text } from "~/components/ui/Text"
 import { api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 import { interestOptions } from "~/lib/models/user"
-import { useRouter } from "expo-router"
-import { SafeAreaView } from "~/components/SafeAreaView"
 
 export default function OnboardingStep2Screen() {
   const { me } = useMe()

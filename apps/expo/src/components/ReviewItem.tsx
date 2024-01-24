@@ -2,6 +2,7 @@ import * as React from "react"
 import { TouchableOpacity, useColorScheme, View } from "react-native"
 import { useQuery } from "@tanstack/react-query"
 import dayjs from "dayjs"
+import { useRouter } from "expo-router"
 import { Star, User2 } from "lucide-react-native"
 
 import { type Review, type User } from "@ramble/database/types"
@@ -10,12 +11,12 @@ import { createImageUrl } from "@ramble/shared"
 import { api } from "~/lib/api"
 import { FULL_WEB_URL } from "~/lib/config"
 import { useMe } from "~/lib/hooks/useMe"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
+
 import { Icon } from "./Icon"
 import { Button } from "./ui/Button"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
-import { useTabSegment } from "~/lib/hooks/useTabSegment"
-import { useRouter } from "expo-router"
 
 type TranslateInput = { id: string; lang: string }
 async function getTranslation({ id, lang }: TranslateInput) {

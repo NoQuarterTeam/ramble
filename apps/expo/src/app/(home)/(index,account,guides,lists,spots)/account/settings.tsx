@@ -1,4 +1,5 @@
 import { Modal, ScrollView, Switch, View } from "react-native"
+import { router } from "expo-router"
 import { AlertCircle, ChevronDown, Languages, MapPin } from "lucide-react-native"
 
 import { languages, useDisclosure } from "@ramble/shared"
@@ -13,8 +14,6 @@ import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
-
-import { router } from "expo-router"
 
 export default function AccountSettingsScreen() {
   const modalProps = useDisclosure()

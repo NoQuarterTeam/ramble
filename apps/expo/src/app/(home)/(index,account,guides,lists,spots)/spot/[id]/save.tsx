@@ -1,6 +1,7 @@
 import * as React from "react"
 import { TouchableOpacity, useColorScheme, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
+import { useLocalSearchParams } from "expo-router"
 import { Heart, Lock } from "lucide-react-native"
 
 import { Icon } from "~/components/Icon"
@@ -10,7 +11,6 @@ import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
 import { api, type RouterOutputs } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
-import { useLocalSearchParams } from "expo-router"
 
 export default function SaveSpotScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()

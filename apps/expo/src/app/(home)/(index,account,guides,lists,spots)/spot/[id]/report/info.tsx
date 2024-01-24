@@ -1,5 +1,6 @@
 import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
+import { useLocalSearchParams, useRouter } from "expo-router"
 import { Dog } from "lucide-react-native"
 
 import colors from "@ramble/tailwind-config/src/colors"
@@ -9,9 +10,9 @@ import { Button } from "~/components/ui/Button"
 import { FormInputLabel } from "~/components/ui/FormInput"
 import { Input } from "~/components/ui/Input"
 import { Text } from "~/components/ui/Text"
-import { useLocalSearchParams, useRouter } from "expo-router"
-import { ReportSpotModalView } from "./ReportSpotModalView"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
+
+import { ReportSpotModalView } from "./ReportSpotModalView"
 
 export default function SpotReportInfoScreen() {
   const router = useRouter()

@@ -1,13 +1,16 @@
+import * as React from "react"
+import { Modal, Switch, TouchableOpacity, View } from "react-native"
 import {
   Camera,
+  type MapState,
+  type MapView as MapType,
   MarkerView,
   RasterLayer,
   RasterSource,
   UserLocation,
-  type MapState,
-  type MapView as MapType,
 } from "@rnmapbox/maps"
 import * as Location from "expo-location"
+import { useRouter } from "expo-router"
 import {
   CloudRain,
   Layers,
@@ -19,8 +22,6 @@ import {
   User,
   Users2,
 } from "lucide-react-native"
-import * as React from "react"
-import { Modal, Switch, TouchableOpacity, View } from "react-native"
 
 import { type SpotType } from "@ramble/database/types"
 import { createImageUrl, INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
@@ -42,8 +43,7 @@ import { useAsyncStorage } from "~/lib/hooks/useAsyncStorage"
 import { useMe } from "~/lib/hooks/useMe"
 import { usePreferences } from "~/lib/hooks/usePreferences"
 
-import { useRouter } from "expo-router"
-import { initialFilters, MapFilters, type Filters } from "../../../components/MapFilters"
+import { type Filters, initialFilters, MapFilters } from "../../../components/MapFilters"
 import { MapSearch } from "../../../components/MapSearch"
 import { SpotPreview } from "../../../components/SpotPreview"
 

@@ -1,4 +1,5 @@
 import { View } from "react-native"
+import { useLocalSearchParams } from "expo-router"
 
 import { createImageUrl } from "@ramble/shared"
 
@@ -7,8 +8,6 @@ import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
 import { api } from "~/lib/api"
 import { isTablet } from "~/lib/device"
-
-import { useLocalSearchParams } from "expo-router"
 
 export default function UserVan() {
   const params = useLocalSearchParams<{ username: string }>()

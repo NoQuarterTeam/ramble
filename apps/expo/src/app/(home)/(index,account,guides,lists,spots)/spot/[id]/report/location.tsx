@@ -2,15 +2,16 @@ import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
 import { Camera, type MapState, type MapView as MapType, UserLocation } from "@rnmapbox/maps"
 import * as Location from "expo-location"
+import { useLocalSearchParams, useRouter } from "expo-router"
 import { CircleDot, Navigation } from "lucide-react-native"
 
 import { Icon } from "~/components/Icon"
 import { Map } from "~/components/Map"
 import { Button } from "~/components/ui/Button"
 import { Text } from "~/components/ui/Text"
-import { useLocalSearchParams, useRouter } from "expo-router"
-import { ReportSpotModalView } from "./ReportSpotModalView"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
+
+import { ReportSpotModalView } from "./ReportSpotModalView"
 
 export default function SpotReportLocationScreen() {
   const router = useRouter()

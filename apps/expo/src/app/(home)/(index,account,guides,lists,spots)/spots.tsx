@@ -1,11 +1,11 @@
-import { FlashList } from "@shopify/flash-list"
-import { ChevronDown, PlusCircle } from "lucide-react-native"
 import * as React from "react"
 import { TouchableOpacity, useColorScheme, View } from "react-native"
-
-import { join, useDisclosure, type SpotListSort } from "@ramble/shared"
-
+import { FlashList } from "@shopify/flash-list"
 import { useRouter } from "expo-router"
+import { ChevronDown, PlusCircle } from "lucide-react-native"
+
+import { join, type SpotListSort, useDisclosure } from "@ramble/shared"
+
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { SpotItem } from "~/components/SpotItem"

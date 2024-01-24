@@ -1,7 +1,9 @@
 import * as React from "react"
 import { ScrollView, View } from "react-native"
+import { useLocalSearchParams, useRouter } from "expo-router"
 import { Check, Dog } from "lucide-react-native"
 
+import { type SpotType } from "@ramble/database/types"
 import { AMENITIES } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
@@ -13,12 +15,10 @@ import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
 import { width } from "~/lib/device"
 import { useS3Upload } from "~/lib/hooks/useS3"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 
 import { EditSpotModalView } from "./EditSpotModalView"
-import { useLocalSearchParams, useRouter } from "expo-router"
-import { useTabSegment } from "~/lib/hooks/useTabSegment"
-import { type SpotType } from "@ramble/database/types"
 
 type Params = {
   id: string

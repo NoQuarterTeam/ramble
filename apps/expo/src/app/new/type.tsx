@@ -1,5 +1,6 @@
 import * as React from "react"
 import { ScrollView, View } from "react-native"
+import { useLocalSearchParams, useRouter } from "expo-router"
 
 import { type SpotType } from "@ramble/database/types"
 import { SPOT_TYPE_OPTIONS } from "@ramble/shared"
@@ -8,7 +9,6 @@ import { SpotIcon } from "~/components/SpotIcon"
 import { Button } from "~/components/ui/Button"
 import { Text } from "~/components/ui/Text"
 
-import { useLocalSearchParams, useRouter } from "expo-router"
 import { NewSpotModalView } from "./NewSpotModalView"
 
 export default function NewSpotTypeScreen() {

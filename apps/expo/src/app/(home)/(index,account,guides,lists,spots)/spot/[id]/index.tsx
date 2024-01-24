@@ -14,6 +14,7 @@ import { useQuery } from "@tanstack/react-query"
 import dayjs from "dayjs"
 import { LinearGradient } from "expo-linear-gradient"
 import * as Location from "expo-location"
+import { useLocalSearchParams, useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { Check, ChevronDown, ChevronLeft, Compass, Edit2, Flag, Heart, Languages, Share, Star, Trash } from "lucide-react-native"
 
@@ -44,9 +45,8 @@ import { api } from "~/lib/api"
 import { FULL_WEB_URL } from "~/lib/config"
 import { height, isAndroid, width } from "~/lib/device"
 import { useMe } from "~/lib/hooks/useMe"
-import { AMENITIES_ICONS } from "~/lib/models/amenities"
-import { useLocalSearchParams, useRouter } from "expo-router"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
+import { AMENITIES_ICONS } from "~/lib/models/amenities"
 
 export default function SpotDetailScreen() {
   const { me } = useMe()

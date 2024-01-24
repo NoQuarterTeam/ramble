@@ -1,6 +1,7 @@
 import * as React from "react"
 import { TouchableOpacity, useColorScheme, View } from "react-native"
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
+import { useRouter } from "expo-router"
 import { Heart, Star, X } from "lucide-react-native"
 
 import { displayRating, isPartnerSpot } from "@ramble/shared"
@@ -17,7 +18,6 @@ import { api } from "~/lib/api"
 import { isTablet, width } from "~/lib/device"
 import { useMe } from "~/lib/hooks/useMe"
 import { useBackgroundColor } from "~/lib/tailwind"
-import { useRouter } from "expo-router"
 
 const cardHeight = 430
 export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }) {

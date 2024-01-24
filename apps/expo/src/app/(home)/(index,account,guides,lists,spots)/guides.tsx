@@ -1,6 +1,7 @@
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
+import { Link } from "expo-router"
 
 import { createImageUrl } from "@ramble/shared"
 
@@ -12,8 +13,6 @@ import { Text } from "~/components/ui/Text"
 import { api, type RouterOutputs } from "~/lib/api"
 import { isTablet } from "~/lib/device"
 import { useMe } from "~/lib/hooks/useMe"
-
-import { Link } from "expo-router"
 
 export default function GuidesScreen() {
   const { me } = useMe()

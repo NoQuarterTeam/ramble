@@ -1,15 +1,16 @@
 import { TouchableOpacity, View } from "react-native"
+import { useRouter } from "expo-router"
 import { BadgeX, User2, Verified } from "lucide-react-native"
 
 import { type Spot, type User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
 import { useMe } from "~/lib/hooks/useMe"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
+
 import { Icon } from "./Icon"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
-import { useTabSegment } from "~/lib/hooks/useTabSegment"
-import { useRouter } from "expo-router"
 
 interface Props {
   spot: Pick<Spot, "verifiedAt"> & {

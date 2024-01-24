@@ -1,6 +1,7 @@
 import * as React from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { Keyboard, ScrollView, TouchableOpacity, View } from "react-native"
+import { useRouter } from "expo-router"
 import { Bug, Lightbulb, MessageCircle } from "lucide-react-native"
 
 import { type FeedbackType } from "@ramble/database/types"
@@ -15,7 +16,6 @@ import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
-import { useRouter } from "expo-router"
 
 const feedbackTypes = [
   { label: "Issue", value: "ISSUE", icon: Bug },

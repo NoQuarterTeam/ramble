@@ -1,10 +1,10 @@
 import { ScrollView } from "react-native"
+import { useRouter } from "expo-router"
 
+import { ListForm } from "~/components/ListForm"
 import { ModalView } from "~/components/ui/ModalView"
 import { api, type RouterInputs } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
-import { useRouter } from "expo-router"
-import { ListForm } from "~/components/ListForm"
 
 export default function NewListScreen() {
   const router = useRouter()

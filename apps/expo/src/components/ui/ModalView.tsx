@@ -1,13 +1,13 @@
 import type * as React from "react"
 import { Text, TouchableOpacity, View } from "react-native"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
+import { useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { X } from "lucide-react-native"
 
 import { Icon } from "../Icon"
 import { BrandHeading } from "./BrandHeading"
 import { Toast } from "./Toast"
-import { useRouter } from "expo-router"
 
 interface Props {
   title?: string

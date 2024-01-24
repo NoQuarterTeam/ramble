@@ -1,11 +1,13 @@
 import * as React from "react"
 import { Linking, ScrollView, TouchableOpacity, useColorScheme, View } from "react-native"
-
+import { Slot, useLocalSearchParams, useRouter, useSegments } from "expo-router"
+import { StatusBar } from "expo-status-bar"
 import { ChevronLeft, Heart, Instagram, User2 } from "lucide-react-native"
 
 import { createImageUrl } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
+import { SafeAreaView } from "~/components/SafeAreaView"
 import { BrandHeading } from "~/components/ui/BrandHeading"
 import { Button } from "~/components/ui/Button"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
@@ -13,12 +15,8 @@ import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
 import { api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
-import { interestOptions } from "~/lib/models/user"
-
-import { Slot, useLocalSearchParams, useRouter, useSegments } from "expo-router"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
-import { StatusBar } from "expo-status-bar"
-import { SafeAreaView } from "~/components/SafeAreaView"
+import { interestOptions } from "~/lib/models/user"
 
 export default function UserScreen() {
   const colorScheme = useColorScheme()

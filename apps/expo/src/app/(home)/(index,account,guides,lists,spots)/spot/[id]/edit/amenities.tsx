@@ -1,15 +1,15 @@
 import * as React from "react"
 import { ScrollView, View } from "react-native"
+import { useLocalSearchParams, useRouter } from "expo-router"
 
 import { AMENITIES } from "@ramble/shared"
 
 import { type AmenityObject, AmenitySelector } from "~/components/AmenitySelector"
 import { Button } from "~/components/ui/Button"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 
 import { EditSpotModalView } from "./EditSpotModalView"
-import { useLocalSearchParams, useRouter } from "expo-router"
-import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 export default function EditSpotAmenitiesScreen() {
   const { id, ...params } = useLocalSearchParams<{ id: string; amenities: string }>()

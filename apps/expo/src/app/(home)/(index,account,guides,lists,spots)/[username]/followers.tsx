@@ -1,13 +1,12 @@
 import { View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
+import { useLocalSearchParams } from "expo-router"
 
 import { ScreenView } from "~/components/ui/ScreenView"
 import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
-import { api } from "~/lib/api"
-
 import { UserItem } from "~/components/UserItem"
-import { useLocalSearchParams } from "expo-router"
+import { api } from "~/lib/api"
 
 export default function UserFollowers() {
   const params = useLocalSearchParams<{ username: string }>()

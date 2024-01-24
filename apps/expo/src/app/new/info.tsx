@@ -1,7 +1,9 @@
-import { Dog } from "lucide-react-native"
 import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
+import { useLocalSearchParams, useRouter } from "expo-router"
+import { Dog } from "lucide-react-native"
 
+import { type SpotType } from "@ramble/database/types"
 import { doesSpotTypeRequireAmenities } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
@@ -12,8 +14,6 @@ import { Input } from "~/components/ui/Input"
 import { Text } from "~/components/ui/Text"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
 
-import { type SpotType } from "@ramble/database/types"
-import { useLocalSearchParams, useRouter } from "expo-router"
 import { NewSpotModalView } from "./NewSpotModalView"
 
 export default function NewSpotInfoScreen() {

@@ -1,15 +1,16 @@
 import { TouchableOpacity, useColorScheme, View } from "react-native"
+import { useRouter } from "expo-router"
 import { Heart, Star } from "lucide-react-native"
 
 import { createImageUrl, displayRating, displaySaved, type SpotItemType } from "@ramble/shared"
 
 import { api } from "~/lib/api"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
+
 import { Icon } from "./Icon"
 import { SpotIcon } from "./SpotIcon"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
-import { useRouter } from "expo-router"
-import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 interface Props {
   spot: SpotItemType

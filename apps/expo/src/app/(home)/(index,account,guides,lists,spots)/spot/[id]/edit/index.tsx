@@ -2,6 +2,7 @@ import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
 import { Camera, type MapState, type MapView as MapType, StyleURL, UserLocation } from "@rnmapbox/maps"
 import * as Location from "expo-location"
+import { useLocalSearchParams, useRouter } from "expo-router"
 import { CircleDot, Navigation } from "lucide-react-native"
 
 import { Icon } from "~/components/Icon"
@@ -9,9 +10,9 @@ import { Map } from "~/components/Map"
 import { Button } from "~/components/ui/Button"
 import { toast } from "~/components/ui/Toast"
 import { useMe } from "~/lib/hooks/useMe"
-import { useLocalSearchParams, useRouter } from "expo-router"
-import { EditSpotModalView } from "./EditSpotModalView"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
+
+import { EditSpotModalView } from "./EditSpotModalView"
 
 export default function EditSpotLocationScreen() {
   const { id, ...params } = useLocalSearchParams<{ id: string; longitude: string; latitude: string }>()

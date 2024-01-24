@@ -1,5 +1,6 @@
 import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
+import { useGlobalSearchParams, useRouter } from "expo-router"
 
 import { AMENITIES } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
@@ -10,7 +11,6 @@ import { type RambleIcon } from "~/components/ui/Icons"
 import { Text } from "~/components/ui/Text"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 
-import { useGlobalSearchParams, useRouter } from "expo-router"
 import { NewSpotModalView } from "./NewSpotModalView"
 
 export default function NewSpotAmenitiesScreen() {

@@ -1,7 +1,9 @@
 import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
+import { useLocalSearchParams, useRouter } from "expo-router"
 import { Dog } from "lucide-react-native"
 
+import { type SpotType } from "@ramble/database/types"
 import { doesSpotTypeRequireAmenities } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
@@ -11,10 +13,9 @@ import { FormInputLabel } from "~/components/ui/FormInput"
 import { Input } from "~/components/ui/Input"
 import { Text } from "~/components/ui/Text"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
-import { useLocalSearchParams, useRouter } from "expo-router"
-import { EditSpotModalView } from "./EditSpotModalView"
-import { type SpotType } from "@ramble/database/types"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
+
+import { EditSpotModalView } from "./EditSpotModalView"
 
 export default function EditSpotOptionsScreen() {
   useKeyboardController()

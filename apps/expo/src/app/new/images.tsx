@@ -1,14 +1,14 @@
-import { Image } from "expo-image"
-import * as ImagePicker from "expo-image-picker"
-import { Plus, X } from "lucide-react-native"
 import * as React from "react"
 import { ScrollView, TouchableOpacity, View } from "react-native"
+import { Image } from "expo-image"
+import * as ImagePicker from "expo-image-picker"
+import { useLocalSearchParams, useRouter } from "expo-router"
+import { Plus, X } from "lucide-react-native"
 
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
 import { toast } from "~/components/ui/Toast"
 
-import { useLocalSearchParams, useRouter } from "expo-router"
 import { NewSpotModalView } from "./NewSpotModalView"
 
 export default function NewSpotImagesScreen() {

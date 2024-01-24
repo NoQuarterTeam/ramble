@@ -2,6 +2,7 @@ import * as React from "react"
 import { ScrollView, TouchableOpacity, View } from "react-native"
 import { Image } from "expo-image"
 import * as ImagePicker from "expo-image-picker"
+import { useLocalSearchParams, useRouter } from "expo-router"
 import { Plus, X } from "lucide-react-native"
 
 import { createImageUrl } from "@ramble/shared"
@@ -9,9 +10,9 @@ import { createImageUrl } from "@ramble/shared"
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
 import { toast } from "~/components/ui/Toast"
-import { useLocalSearchParams, useRouter } from "expo-router"
-import { EditSpotModalView } from "./EditSpotModalView"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
+
+import { EditSpotModalView } from "./EditSpotModalView"
 
 export default function EditSpotImagesScreen() {
   const { id, ...params } = useLocalSearchParams<{ id: string; images: string }>()

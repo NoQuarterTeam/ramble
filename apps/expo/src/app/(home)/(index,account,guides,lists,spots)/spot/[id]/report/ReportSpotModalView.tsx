@@ -1,6 +1,6 @@
 import type * as React from "react"
 import { TouchableOpacity, View } from "react-native"
-
+import { useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { ChevronLeft } from "lucide-react-native"
 
@@ -9,7 +9,6 @@ import { join } from "@ramble/shared"
 import { Icon } from "~/components/Icon"
 import { BrandHeading } from "~/components/ui/BrandHeading"
 import { Toast } from "~/components/ui/Toast"
-import { useRouter } from "expo-router"
 
 interface Props {
   title: string

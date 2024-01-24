@@ -1,6 +1,7 @@
 import { FormProvider } from "react-hook-form"
 import { ScrollView, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { useRouter } from "expo-router"
 
 import { Button } from "~/components/ui/Button"
 import { FormError } from "~/components/ui/FormError"
@@ -11,7 +12,6 @@ import { api, AUTH_TOKEN } from "~/lib/api"
 import { IS_DEV } from "~/lib/config"
 import { useForm } from "~/lib/hooks/useForm"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
-import { useRouter } from "expo-router"
 
 export default function RegisterScreen() {
   useKeyboardController()

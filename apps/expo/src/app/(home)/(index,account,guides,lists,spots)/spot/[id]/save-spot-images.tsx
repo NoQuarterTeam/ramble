@@ -2,6 +2,7 @@ import * as React from "react"
 import { ScrollView, TouchableOpacity, View } from "react-native"
 import { Image } from "expo-image"
 import * as ImagePicker from "expo-image-picker"
+import { useLocalSearchParams, useRouter } from "expo-router"
 import { Plus, X } from "lucide-react-native"
 
 import { Icon } from "~/components/Icon"
@@ -10,7 +11,6 @@ import { ModalView } from "~/components/ui/ModalView"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
 import { useS3Upload } from "~/lib/hooks/useS3"
-import { useLocalSearchParams, useRouter } from "expo-router"
 
 export default function SaveSpotImagesScreen() {
   const router = useRouter()

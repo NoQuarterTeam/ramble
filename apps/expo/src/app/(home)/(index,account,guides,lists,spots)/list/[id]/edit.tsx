@@ -1,12 +1,12 @@
 import { ScrollView, View } from "react-native"
+import { useLocalSearchParams, useRouter } from "expo-router"
 
+import { ListForm } from "~/components/ListForm"
 import { DeleteButton } from "~/components/ui/DeleteButton"
 import { ModalView } from "~/components/ui/ModalView"
 import { Text } from "~/components/ui/Text"
 import { api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
-import { useLocalSearchParams, useRouter } from "expo-router"
-import { ListForm } from "~/components/ListForm"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 export default function EditListScreen() {

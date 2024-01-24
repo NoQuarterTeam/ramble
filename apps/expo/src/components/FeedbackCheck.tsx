@@ -1,6 +1,5 @@
 import { FormProvider } from "react-hook-form"
 import { Keyboard, Modal, ScrollView, TouchableOpacity, useColorScheme, View } from "react-native"
-
 import dayjs from "dayjs"
 import { StatusBar } from "expo-status-bar"
 import { CheckSquare2, Square, Star } from "lucide-react-native"
@@ -10,6 +9,7 @@ import { useForm } from "~/lib/hooks/useForm"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
 import { useMe } from "~/lib/hooks/useMe"
 import { backgroundDark, backgroundLight } from "~/lib/tailwind"
+
 import { Icon } from "./Icon"
 import { BrandHeading } from "./ui/BrandHeading"
 import { Button } from "./ui/Button"

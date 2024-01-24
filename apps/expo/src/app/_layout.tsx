@@ -1,3 +1,9 @@
+import * as React from "react"
+import { useColorScheme } from "react-native"
+import { AvoidSoftInput } from "react-native-avoid-softinput"
+import { GestureHandlerRootView } from "react-native-gesture-handler"
+import { SafeAreaProvider } from "react-native-safe-area-context"
+import { enableScreens } from "react-native-screens"
 import {
   Urbanist_300Light,
   Urbanist_300Light_Italic,
@@ -15,15 +21,8 @@ import {
   Urbanist_900Black_Italic,
   useFonts,
 } from "@expo-google-fonts/urbanist"
-import { Stack } from "expo-router"
-import * as React from "react"
-import { useColorScheme } from "react-native"
-import { AvoidSoftInput } from "react-native-avoid-softinput"
-import { GestureHandlerRootView } from "react-native-gesture-handler"
-import { SafeAreaProvider } from "react-native-safe-area-context"
-import { enableScreens } from "react-native-screens"
-
 import * as Sentry from "@sentry/react-native"
+import { Stack } from "expo-router"
 import * as SplashScreen from "expo-splash-screen"
 import { StatusBar } from "expo-status-bar"
 import { PostHogProvider, usePostHog } from "posthog-react-native"

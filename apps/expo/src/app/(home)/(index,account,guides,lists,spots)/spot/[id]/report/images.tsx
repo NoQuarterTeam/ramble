@@ -1,16 +1,17 @@
 import * as React from "react"
 import { ScrollView, TouchableOpacity, View } from "react-native"
 import { Image } from "expo-image"
+import { useLocalSearchParams, useRouter } from "expo-router"
 import { Flag } from "lucide-react-native"
 
 import { createImageUrl, join } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
-import { useLocalSearchParams, useRouter } from "expo-router"
-import { ReportSpotModalView } from "./ReportSpotModalView"
 import { api } from "~/lib/api"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
+
+import { ReportSpotModalView } from "./ReportSpotModalView"
 
 export default function SpotReportImagesScreen() {
   const { id, ...params } = useLocalSearchParams<{ id: string; flaggedImageIds: string }>()

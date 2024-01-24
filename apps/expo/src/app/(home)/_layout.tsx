@@ -1,11 +1,10 @@
 import { useColorScheme } from "react-native"
-
+import { Tabs } from "expo-router"
 import { Heart, List, Map, UserCircle, Users } from "lucide-react-native"
 
 import { createImageUrl, join } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
-import { Tabs } from "expo-router"
 import { Icon } from "~/components/Icon"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { useMe } from "~/lib/hooks/useMe"

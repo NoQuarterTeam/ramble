@@ -1,5 +1,6 @@
 import { TouchableOpacity, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
+import { useLocalSearchParams, useRouter } from "expo-router"
 
 import { SpotItem } from "~/components/SpotItem"
 import { Button } from "~/components/ui/Button"
@@ -8,7 +9,6 @@ import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
 import { api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
-import { useLocalSearchParams, useRouter } from "expo-router"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 export default function ListDetailScreen() {

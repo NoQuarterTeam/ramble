@@ -1,5 +1,5 @@
-import { useLocalSearchParams, useRouter } from "expo-router"
 import { View } from "react-native"
+import { useLocalSearchParams, useRouter } from "expo-router"
 
 import { Button } from "~/components/ui/Button"
 import { ModalView } from "~/components/ui/ModalView"

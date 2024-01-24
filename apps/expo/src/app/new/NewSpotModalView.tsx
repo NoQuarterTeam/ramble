@@ -1,13 +1,13 @@
-import { StatusBar } from "expo-status-bar"
-import { ChevronLeft, X } from "lucide-react-native"
 import type * as React from "react"
 import { Text, TouchableOpacity, View } from "react-native"
-
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 import { useRouter } from "expo-router"
+import { StatusBar } from "expo-status-bar"
+import { ChevronLeft, X } from "lucide-react-native"
+
 import { Icon } from "~/components/Icon"
 import { BrandHeading } from "~/components/ui/BrandHeading"
 import { Toast } from "~/components/ui/Toast"
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 
 interface Props {
   title?: string
