@@ -37,8 +37,8 @@ export default function NewSpotLocationScreen() {
     isLoading: addressLoading,
     isFetching,
   } = api.spot.geocodeCoords.useQuery(
-    { latitude: (coords && coords[1]) || 0, longitude: (coords && coords[0]) || 0 },
-    { enabled: !!coords && !!coords[0] && !!coords[1], keepPreviousData: true },
+    { latitude: coords?.[1]!, longitude: coords?.[0]! },
+    { enabled: !!coords?.[0] && !!coords?.[1], keepPreviousData: true },
   )
   const isUnknownAddress = !!!address
   const { data: geocodedCoords } = api.spot.geocodeAddress.useQuery({ address: search }, { enabled: !!search })
