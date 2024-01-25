@@ -1,6 +1,6 @@
 import * as React from "react"
 import type { ViewStateChangeEvent } from "react-map-gl"
-import Map, { GeolocateControl, NavigationControl } from "react-map-gl"
+
 import { useFetcher, useLocation, useNavigate, useSearchParams } from "@remix-run/react"
 import turfCenter from "@turf/center"
 import * as turf from "@turf/helpers"
@@ -23,9 +23,10 @@ import { Form, FormButton, FormError, FormField, FormFieldLabel } from "~/compon
 import { SpotIcon } from "~/components/SpotIcon"
 import { Button, CloseButton, IconButton, Spinner, Textarea } from "~/components/ui"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
-import { useTheme } from "~/lib/theme"
+
 import type { SerializeFrom } from "~/lib/vendor/vercel.server"
 import { type geocodeLoader } from "~/pages/api+/mapbox+/geocode"
+import { Map } from "~/components/Map"
 
 export function SpotReportForm({
   spot,
@@ -84,7 +85,7 @@ export function SpotReportForm({
   const address = geocodeFetcher.data
 
   const navigate = useNavigate()
-  const theme = useTheme()
+
   const [flaggedImageIds, setFlaggedImageIds] = React.useState<string[]>([])
   const [incorrectLocation, setIncorrectLocation] = React.useState(false)
   const [isLocationUnknown, setIsLocationUnknown] = React.useState(false)
@@ -256,24 +257,7 @@ export function SpotReportForm({
       </Form>
 
       <div className="h-nav-screen relative w-full">
-        <Map
-          mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
-          onLoad={onMove}
-          onMoveEnd={onMove}
-          doubleClickZoom={true}
-          scrollZoom={false}
-          style={{ height: "100%", width: "100%" }}
-          initialViewState={initialViewState}
-          attributionControl={false}
-          mapStyle={
-            theme === "dark"
-              ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
-              : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
-          }
-        >
-          <GeolocateControl position="bottom-right" />
-          <NavigationControl position="bottom-right" />
-        </Map>
+        <Map onLoad={onMove} onMoveEnd={onMove} doubleClickZoom={true} scrollZoom={false} initialViewState={initialViewState} />
 
         <CircleDot className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
       </div>
