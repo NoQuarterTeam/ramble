@@ -56,14 +56,18 @@ export default function UserScreen() {
 
   return (
     <SafeAreaView>
-      <View className="flex flex-row items-center justify-between px-4 pb-2">
+      <View className="flex flex-row items-center justify-between px-4 py-2">
         <View className="flex flex-row items-center">
           {router.canGoBack() && (
             <TouchableOpacity className="sq-8 flex items-center justify-center" onPress={router.back} activeOpacity={0.8}>
               <ChevronLeft className="text-primary mt-2" />
             </TouchableOpacity>
           )}
-          <BrandHeading className="pl-1 text-3xl">{username}</BrandHeading>
+          <View>
+            <BrandHeading style={{ paddingLeft: 6 }} className="text-3xl">
+              {username}
+            </BrandHeading>
+          </View>
         </View>
         {user && me && me.username !== username && (
           <TouchableOpacity
