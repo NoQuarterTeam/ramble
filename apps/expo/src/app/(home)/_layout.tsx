@@ -12,7 +12,7 @@ import { useBackgroundColor } from "~/lib/tailwind"
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: "(map)",
+  initialRouteName: "(index)",
 }
 
 export default function HomeLayout() {
@@ -22,7 +22,7 @@ export default function HomeLayout() {
   const backgroundColor = useBackgroundColor()
   return (
     <Tabs
-      initialRouteName="(map)"
+      initialRouteName="(index)"
       sceneContainerStyle={{ backgroundColor }}
       screenOptions={{
         tabBarStyle: { backgroundColor, borderTopColor: colors.gray[isDark ? 700 : 200] },
@@ -31,7 +31,7 @@ export default function HomeLayout() {
       }}
     >
       <Tabs.Screen
-        name="(map)"
+        name="(index)"
         options={{
           tabBarIcon: (props) => <Icon icon={Map} size={22} color={!!props.focused && "primary"} />,
         }}

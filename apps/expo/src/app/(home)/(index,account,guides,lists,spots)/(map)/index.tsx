@@ -206,7 +206,7 @@ export default function MapScreen() {
             avatarBlurHash: string | null
           }
           const onPress = () => {
-            router.push(`/(home)/(map)/${user.username}/(profile)`)
+            router.push(`/(home)/(index)/${user.username}/(profile)`)
           }
           return (
             <MarkerView key={user.id} coordinate={point.geometry.coordinates}>

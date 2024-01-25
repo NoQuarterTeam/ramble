@@ -50,7 +50,7 @@ export default function NewSpotConfirmScreen() {
       await utils.user.hasCreatedSpot.refetch()
       utils.spot.list.refetch({ skip: 0, sort: "latest" })
       if (me?.role === "GUIDE") {
-        router.navigate(`/(home)/(map)/spot/${data.id}`)
+        router.navigate(`/(home)/(index)/spot/${data.id}`)
         await new Promise((resolve) => setTimeout(resolve, 1000))
         toast({ title: "Spot created", message: "Thank you for contributing to the community!" })
       } else {
