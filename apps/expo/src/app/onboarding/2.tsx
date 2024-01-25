@@ -2,6 +2,7 @@ import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
 import { useRouter } from "expo-router"
 
+import { type SpotType } from "@ramble/database/types"
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { Icon } from "~/components/Icon"
@@ -14,8 +15,8 @@ import { Text } from "~/components/ui/Text"
 import { api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 import { interestOptions } from "~/lib/models/user"
+
 import { useMapFilters } from "../(home)/(map,account,guides,lists,spots)/(map)/filters"
-import { type SpotType } from "@ramble/database/types"
 
 export default function OnboardingStep2Screen() {
   const { me } = useMe()

@@ -1,12 +1,12 @@
-import { z } from "zod"
-
+import { Switch, TouchableOpacity, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { CloudRain, MountainSnow, SunMoon, Thermometer, Users2 } from "lucide-react-native"
+import { z } from "zod"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 
 import colors from "@ramble/tailwind-config/src/colors"
-import { CloudRain, Thermometer, MountainSnow, Users2, SunMoon } from "lucide-react-native"
-import { View, TouchableOpacity, Switch } from "react-native"
+
 import { Icon } from "~/components/Icon"
 import { ModalView } from "~/components/ui/ModalView"
 import { Text } from "~/components/ui/Text"

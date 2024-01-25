@@ -1,39 +1,37 @@
+import * as React from "react"
+import { TouchableOpacity, useColorScheme, View } from "react-native"
 import {
   Camera,
+  type MapState,
+  type MapView as MapType,
   MarkerView,
   RasterLayer,
   RasterSource,
   UserLocation,
-  type MapState,
-  type MapView as MapType,
 } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { Link, useRouter } from "expo-router"
 import { Layers, Navigation, PlusCircle, Settings2, User } from "lucide-react-native"
-import * as React from "react"
-import { TouchableOpacity, useColorScheme, View } from "react-native"
 
 import { createImageUrl, INITIAL_LATITUDE, INITIAL_LONGITUDE, join } from "@ramble/shared"
 
 import { FeedbackCheck } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
 import { Map } from "~/components/Map"
+import { MapSearch } from "~/components/MapSearch"
 import { RegisterCheck } from "~/components/RegisterCheck"
 import { SpotClusterMarker } from "~/components/SpotMarker"
-
+import { SpotPreview } from "~/components/SpotPreview"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api, type RouterOutputs } from "~/lib/api"
 import { isAndroid } from "~/lib/device"
-
 import { useMe } from "~/lib/hooks/useMe"
 
-import { MapSearch } from "~/components/MapSearch"
-import { SpotPreview } from "~/components/SpotPreview"
-import { useMapLayers } from "./layers"
 import { useMapFilters } from "./filters"
+import { useMapLayers } from "./layers"
 
 type Cluster = RouterOutputs["spot"]["clusters"][number]
 type UserCluster = RouterOutputs["user"]["clusters"][number]

@@ -1,25 +1,23 @@
-import colors from "@ramble/tailwind-config/src/colors"
+import * as React from "react"
 import { Switch, View } from "react-native"
-import { Icon } from "~/components/Icon"
-import { ModalView } from "~/components/ui/ModalView"
-import { Text } from "~/components/ui/Text"
+import { ScrollView, useColorScheme } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { useRouter } from "expo-router"
+import { BadgeX, Dog } from "lucide-react-native"
+import { z } from "zod"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 
-import { BadgeX, Dog } from "lucide-react-native"
-import * as React from "react"
-import { ScrollView, useColorScheme } from "react-native"
-
 import { type SpotType } from "@ramble/database/types"
 import { join, SPOT_TYPE_NAMES, SPOT_TYPES, type SpotTypeInfo } from "@ramble/shared"
+import colors from "@ramble/tailwind-config/src/colors"
 
+import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
 import { Heading } from "~/components/ui/Heading"
-
+import { ModalView } from "~/components/ui/ModalView"
+import { Text } from "~/components/ui/Text"
 import { SPOT_TYPE_ICONS } from "~/lib/models/spot"
-import { z } from "zod"
-import { useRouter } from "expo-router"
 
 const mapFiltersSchema = z.object({
   types: z.array(z.enum(SPOT_TYPE_NAMES)),
