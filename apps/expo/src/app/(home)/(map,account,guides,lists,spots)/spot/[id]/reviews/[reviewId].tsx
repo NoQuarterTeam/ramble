@@ -18,12 +18,13 @@ export default function ReviewDetailScreen() {
   const { data: review, isLoading: reviewLoading } = api.review.detail.useQuery({ id: reviewId })
 
   const { mutate, isLoading, error } = api.review.update.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       if (!review) return
-      utils.spot.detail.refetch({ id: review.spotId })
-      utils.spot.mapPreview.refetch({ id: review.spotId })
-      toast({ title: "Review updated" })
+      void utils.spot.detail.refetch({ id: review.spotId })
+      void utils.spot.mapPreview.refetch({ id: review.spotId })
       router.back()
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      toast({ title: "Review updated" })
     },
   })
 

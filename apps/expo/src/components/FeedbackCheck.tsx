@@ -33,9 +33,9 @@ export function FeedbackCheck() {
   })
   const { mutate, isLoading: createLoading } = api.feedback.create.useMutation({
     onSuccess: async () => {
-      toast({ title: "Thank you so much for the feedback!" })
-      await new Promise((r) => setTimeout(r, 1000))
       await utils.user.hasSubmittedFeedback.refetch()
+      await new Promise((r) => setTimeout(r, 1000))
+      toast({ title: "Thank you so much for the feedback!" })
     },
   })
 

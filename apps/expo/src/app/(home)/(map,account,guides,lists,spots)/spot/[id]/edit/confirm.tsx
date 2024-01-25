@@ -46,6 +46,7 @@ export default function EditSpotConfirmScreen() {
       utils.spot.list.refetch({ skip: 0, sort: "latest" })
       await utils.spot.detail.refetch({ id: data.id }).catch()
       router.navigate(`/${tab}/spot/${data.id}`)
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       toast({ title: "Spot updated!" })
     },
     onError: () => {

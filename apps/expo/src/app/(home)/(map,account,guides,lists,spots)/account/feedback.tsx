@@ -33,8 +33,9 @@ export default function AccountFeedbackScreen() {
   })
 
   const { mutate, isLoading, error } = api.feedback.create.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       router.back()
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       toast({ title: "Feedback sent! Thank you!" })
     },
   })

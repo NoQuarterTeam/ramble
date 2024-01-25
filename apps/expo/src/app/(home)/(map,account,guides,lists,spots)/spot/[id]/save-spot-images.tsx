@@ -22,8 +22,9 @@ export default function SaveSpotImagesScreen() {
   const { mutate, isLoading: mutationLoading } = api.spot.addImages.useMutation({
     onSuccess: async () => {
       await Promise.all([utils.spot.mapPreview.refetch({ id: params.id }), utils.spot.detail.refetch({ id: params.id })])
-      toast({ title: "Images added!" })
       router.back()
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      toast({ title: "Images added!" })
     },
     onSettled: () => {
       setIsLoading(false)

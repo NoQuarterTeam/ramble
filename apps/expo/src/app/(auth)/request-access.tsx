@@ -15,12 +15,13 @@ export default function RequestAccessScreen() {
   useKeyboardController()
   const navigation = useRouter()
   const { mutate, error, isLoading } = api.auth.requestAccess.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       if (navigation.canGoBack()) {
         navigation.back()
       } else {
         navigation.push("/")
       }
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       toast({ title: "Thanks! We will get in contact soon!" })
     },
   })

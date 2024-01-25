@@ -76,8 +76,9 @@ function ReportFlow({ spot }: Props) {
   const [notes, setNotes] = React.useState("")
 
   const { mutate, isLoading, error } = api.spotRevision.create.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       router.navigate(`/${tab}/spot/${id}`)
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       toast({ title: "Report submitted", message: "Thank you for making Ramble even better!" })
     },
     onError: () => {

@@ -47,15 +47,17 @@ export default function NewSpotConfirmScreen() {
     error,
   } = api.spot.create.useMutation({
     onSuccess: async (data) => {
+      await utils.user.hasCreatedSpot.refetch()
       utils.spot.list.refetch({ skip: 0, sort: "latest" })
       if (me?.role === "GUIDE") {
         router.navigate(`/(home)/(map)/spot/${data.id}`)
+        await new Promise((resolve) => setTimeout(resolve, 1000))
         toast({ title: "Spot created", message: "Thank you for contributing to the community!" })
       } else {
         router.navigate("/")
+        await new Promise((resolve) => setTimeout(resolve, 1000))
         toast({ title: "A guide will review your spot", message: "Thank you for contributing to the community!" })
       }
-      await utils.user.hasCreatedSpot.refetch()
     },
     onError: () => {
       setLoading(false)

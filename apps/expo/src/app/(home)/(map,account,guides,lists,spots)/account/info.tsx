@@ -59,6 +59,7 @@ export default function AccountInfoScreen() {
   const { mutate: saveAvatar, isLoading: isAvatarSavingLoading } = api.user.update.useMutation({
     onSuccess: async () => {
       await utils.user.me.refetch()
+      await new Promise((resolve) => setTimeout(resolve, 500))
       toast({ title: "Avatar updated." })
     },
   })

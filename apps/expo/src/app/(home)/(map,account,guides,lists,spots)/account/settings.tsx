@@ -27,6 +27,7 @@ export default function AccountSettingsScreen() {
       modalProps.onClose()
       router.navigate("/")
       utils.user.me.setData(undefined, null)
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       toast({ title: "Account deleted." })
     },
   })

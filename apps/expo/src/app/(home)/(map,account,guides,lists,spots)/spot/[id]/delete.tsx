@@ -17,6 +17,7 @@ export default function DeleteSpotScreen() {
     onSuccess: async () => {
       await utils.spot.list.refetch({ skip: 0, sort: "latest" })
       router.navigate("/")
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       toast({ title: "Spot deleted" })
     },
   })
