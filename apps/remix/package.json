@@ -54,7 +54,7 @@
     "@vercel/edge": "1.1.1",
     "@vercel/remix": "2.5.1",
     "@vercel/remix-run-dev": "2.5.1",
-    "axios": "1.6.5",
+    "axios": "1.6.6",
     "blurhash": "2.0.5",
     "class-variance-authority": "0.7.0",
     "copy-to-clipboard": "3.3.3",
