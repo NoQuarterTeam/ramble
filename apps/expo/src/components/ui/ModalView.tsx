@@ -18,7 +18,6 @@ interface Props {
 
 export function ModalView(props: Props) {
   const router = useRouter()
-
   return (
     <SafeAreaProvider>
       <SafeAreaView edges={["top"]} className="bg-background dark:bg-background-dark flex-1 px-4 pt-4">

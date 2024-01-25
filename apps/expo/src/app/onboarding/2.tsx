@@ -14,16 +14,30 @@ import { Text } from "~/components/ui/Text"
 import { api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 import { interestOptions } from "~/lib/models/user"
+import { useMapFilters } from "../(home)/(map,account,guides,lists,spots)/(map)/filters"
+import { type SpotType } from "@ramble/database/types"
 
 export default function OnboardingStep2Screen() {
   const { me } = useMe()
 
   const router = useRouter()
-
+  const setFilters = useMapFilters((state) => state.setFilters)
   const utils = api.useUtils()
   const { mutate, isLoading, error } = api.user.update.useMutation({
-    onSuccess: async () => {
+    onSuccess: async (data) => {
       await utils.user.me.refetch()
+      setFilters({
+        types: [
+          "CAMPING",
+          "FREE_CAMPING",
+          "REWILDING",
+          data?.isMountainBiker ? "MOUNTAIN_BIKING" : null,
+          data?.isClimber ? "CLIMBING" : null,
+          data?.isHiker ? "HIKING_TRAIL" : null,
+          data?.isSurfer ? "SURFING" : null,
+          data?.isPaddleBoarder ? "PADDLE_KAYAK" : null,
+        ].filter(Boolean) as SpotType[],
+      })
       router.push("/onboarding/3")
     },
   })

@@ -11,30 +11,29 @@ import * as Location from "expo-location"
 import { Link, useRouter } from "expo-router"
 import { Layers, Navigation, PlusCircle, Settings2, User } from "lucide-react-native"
 import * as React from "react"
-import { Modal, TouchableOpacity, useColorScheme, View } from "react-native"
+import { TouchableOpacity, useColorScheme, View } from "react-native"
 
-import { type SpotType } from "@ramble/database/types"
-import { createImageUrl, INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
+import { createImageUrl, INITIAL_LATITUDE, INITIAL_LONGITUDE, join } from "@ramble/shared"
 
 import { FeedbackCheck } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
 import { Map } from "~/components/Map"
 import { RegisterCheck } from "~/components/RegisterCheck"
 import { SpotClusterMarker } from "~/components/SpotMarker"
-import { ModalView } from "~/components/ui/ModalView"
+
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api, type RouterOutputs } from "~/lib/api"
 import { isAndroid } from "~/lib/device"
-import { useAsyncStorage } from "~/lib/hooks/useAsyncStorage"
-import { useMe } from "~/lib/hooks/useMe"
-import { usePreferences } from "~/lib/hooks/usePreferences"
 
-import { initialFilters, MapFilters, type Filters } from "../../../components/MapFilters"
-import { MapSearch } from "../../../components/MapSearch"
-import { SpotPreview } from "../../../components/SpotPreview"
+import { useMe } from "~/lib/hooks/useMe"
+
+import { MapSearch } from "~/components/MapSearch"
+import { SpotPreview } from "~/components/SpotPreview"
+import { useMapLayers } from "./layers"
+import { useMapFilters } from "./filters"
 
 type Cluster = RouterOutputs["spot"]["clusters"][number]
 type UserCluster = RouterOutputs["user"]["clusters"][number]
@@ -42,36 +41,25 @@ type UserCluster = RouterOutputs["user"]["clusters"][number]
 export default function MapScreen() {
   const router = useRouter()
   const { me } = useMe()
-  const preferences = usePreferences((s) => s.preferences)
+  const layers = useMapLayers((s) => s.layers)
   const isDark = useColorScheme() === "dark"
   const [clusters, setClusters] = React.useState<Cluster[] | null>(null)
-  const filterModalProps = useDisclosure()
 
   const [activeSpotId, setActiveSpotId] = React.useState<string | null>(null)
-  const [filters, setFilters] = useAsyncStorage<Filters>("ramble.map.filters", {
-    ...initialFilters,
-    types: [
-      "CAMPING",
-      "FREE_CAMPING",
-      "REWILDING",
-      me?.isMountainBiker ? "MOUNTAIN_BIKING" : null,
-      me?.isClimber ? "CLIMBING" : null,
-      me?.isHiker ? "HIKING_TRAIL" : null,
-      me?.isSurfer ? "SURFING" : null,
-      me?.isPaddleBoarder ? "PADDLE_KAYAK" : null,
-    ].filter(Boolean) as SpotType[],
-  })
+  const filters = useMapFilters((s) => s.filters)
   const camera = React.useRef<Camera>(null)
   const mapRef = React.useRef<MapType>(null)
   const [isFetching, setIsFetching] = React.useState(false)
   const utils = api.useUtils()
 
+  const [isLoaded, setIsLoaded] = React.useState(false)
   const [users, setUsers] = React.useState<UserCluster[] | null>(null)
 
   const { mutate: updateUser } = api.user.update.useMutation()
 
   const handleSetUserLocation = async () => {
     try {
+      setIsLoaded(true)
       const loc = await Location.getLastKnownPositionAsync()
       if (!loc) return
       camera.current?.setCamera({
@@ -101,28 +89,32 @@ export default function MapScreen() {
     })()
   }, [])
 
-  const onFiltersChange = async (f: Filters) => {
-    try {
-      filterModalProps.onClose()
-      setFilters(f)
-      const properties = await mapRef.current?.getVisibleBounds()
-      const zoom = await mapRef.current?.getZoom()
-      if (!properties) return
-      const input = {
-        ...f,
-        minLng: properties[1][0],
-        minLat: properties[1][1],
-        maxLng: properties[0][0],
-        maxLat: properties[0][1],
-        zoom: zoom || 13,
+  React.useEffect(() => {
+    if (!isLoaded) return
+    async function updateMapAfterFiltersChange() {
+      try {
+        if (!mapRef.current) return
+        const properties = await mapRef.current?.getVisibleBounds()
+        const zoom = await mapRef.current?.getZoom()
+        if (!properties) return
+        const input = {
+          ...filters,
+          minLng: properties[1][0],
+          minLat: properties[1][1],
+          maxLng: properties[0][0],
+          maxLat: properties[0][1],
+          zoom: zoom || 13,
+        }
+        const data = await utils.spot.clusters.fetch(input)
+        setClusters(data)
+      } catch {
+        toast({ title: "Error fetching spots", type: "error" })
+        console.log("oops - fetching clusters on filter")
       }
-      const data = await utils.spot.clusters.fetch(input)
-      setClusters(data)
-    } catch {
-      toast({ title: "Error fetching spots", type: "error" })
-      console.log("oops - fetching clusters on filter")
     }
-  }
+    updateMapAfterFiltersChange()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters, isLoaded])
 
   const onMapMove = async ({ properties }: MapState) => {
     try {
@@ -138,7 +130,7 @@ export default function MapScreen() {
       }
 
       void utils.spot.clusters.fetch(input).then(setClusters)
-      if (preferences.mapUsers && me) {
+      if (layers.shouldShowUsers && me) {
         void utils.user.clusters.fetch(input).then(setUsers)
       }
     } catch {
@@ -175,7 +167,7 @@ export default function MapScreen() {
   )
   const userMarkers = React.useMemo(
     () =>
-      preferences.mapUsers &&
+      layers.shouldShowUsers &&
       users?.map((point, i) => {
         if (point.properties.cluster) {
           const onPress = async () => {
@@ -216,7 +208,7 @@ export default function MapScreen() {
             avatarBlurHash: string | null
           }
           const onPress = () => {
-            router.push(`/(home)/(index)/${user.username}/(profile)`)
+            router.push(`/(home)/(map)/${user.username}/(profile)`)
           }
           return (
             <MarkerView key={user.id} coordinate={point.geometry.coordinates}>
@@ -243,9 +235,9 @@ export default function MapScreen() {
         }
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [users, preferences.mapUsers],
+    [users, layers.shouldShowUsers],
   )
-  const filterCount = (filters.isPetFriendly ? 1 : 0) + (filters.isUnverified ? 1 : 0) + (filters.types.length > 0 ? 1 : 0)
+  // const filterCount = (filters.isPetFriendly ? 1 : 0) + (filters.isUnverified ? 1 : 0) + (filters.types.length > 0 ? 1 : 0)
 
   return (
     <View className="flex-1">
@@ -257,9 +249,9 @@ export default function MapScreen() {
         onPress={() => setActiveSpotId(null)}
         ref={mapRef}
         styleURL={
-          preferences.mapLayer === "rain" || preferences.mapLayer === "temp"
+          layers.layer === "rain" || layers.layer === "temp"
             ? `mapbox://styles/mapbox/${isDark ? "dark" : "light"}-v11`
-            : preferences.mapLayer === "satellite"
+            : layers.layer === "satellite"
               ? "mapbox://styles/mapbox/satellite-streets-v12"
               : undefined
         }
@@ -302,31 +294,32 @@ export default function MapScreen() {
       </TouchableOpacity>
 
       <View pointerEvents="box-none" className="absolute bottom-3 left-3 flex space-y-2">
-        <Link push href="/map-layers/" asChild>
+        <Link push href={`/layers`} asChild>
           <TouchableOpacity
             activeOpacity={0.8}
             className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"
           >
             <Icon icon={Layers} size={20} />
-            {Object.values(preferences).filter(Boolean).length > 0 && (
+            {/* {Object.values(layers).filter(Boolean).length > 0 && (
               <View className="sq-5 bg-background dark:bg-background-dark absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-700">
-                <Text className="text-xs">{Object.values(preferences).filter(Boolean).length}</Text>
+                <Text className="text-xs">{Object.values(layers).filter(Boolean).length}</Text>
               </View>
-            )}
+            )} */}
           </TouchableOpacity>
         </Link>
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={filterModalProps.onOpen}
-          className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"
-        >
-          <Icon icon={Settings2} size={20} />
-          {filterCount > 0 && (
-            <View className="sq-5 bg-background dark:bg-background-dark absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-700">
-              <Text className="text-xs ">{filterCount}</Text>
-            </View>
-          )}
-        </TouchableOpacity>
+        <Link push href={`/filters`} asChild>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"
+          >
+            <Icon icon={Settings2} size={20} />
+            {/* {filterCount > 0 && (
+              <View className="sq-5 bg-background dark:bg-background-dark absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-700">
+                <Text className="text-xs ">{filterCount}</Text>
+              </View>
+            )} */}
+          </TouchableOpacity>
+        </Link>
       </View>
 
       <TouchableOpacity
@@ -337,23 +330,12 @@ export default function MapScreen() {
       </TouchableOpacity>
 
       {activeSpotId && <SpotPreview id={activeSpotId} onClose={() => setActiveSpotId(null)} />}
-      <Modal
-        animationType="slide"
-        presentationStyle="formSheet"
-        visible={filterModalProps.isOpen}
-        onRequestClose={filterModalProps.onClose}
-        onDismiss={filterModalProps.onClose}
-      >
-        <ModalView title="filters" onBack={filterModalProps.onClose}>
-          <MapFilters {...filterModalProps} initialFilters={filters} onSave={onFiltersChange} />
-        </ModalView>
-      </Modal>
     </View>
   )
 }
 
 function MapLayers() {
-  const preferences = usePreferences((s) => s.preferences)
+  const layers = useMapLayers((s) => s.layers)
 
   return (
     <>
@@ -362,7 +344,7 @@ function MapLayers() {
         tileSize={256}
         tileUrlTemplates={[`https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63`]}
       />
-      {preferences.mapLayer === "temp" && <RasterLayer id="tempLayer" sourceID="temp" style={{ rasterOpacity: 1 }} />}
+      {layers.layer === "temp" && <RasterLayer id="tempLayer" sourceID="temp" style={{ rasterOpacity: 1 }} />}
 
       <RasterSource
         id="rain"
@@ -371,7 +353,7 @@ function MapLayers() {
           `https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63`,
         ]}
       />
-      {preferences.mapLayer === "rain" && <RasterLayer id="rainLayer" sourceID="rain" style={{ rasterOpacity: 1 }} />}
+      {layers.layer === "rain" && <RasterLayer id="rainLayer" sourceID="rain" style={{ rasterOpacity: 1 }} />}
     </>
   )
 }

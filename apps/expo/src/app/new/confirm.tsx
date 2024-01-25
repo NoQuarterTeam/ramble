@@ -49,7 +49,7 @@ export default function NewSpotConfirmScreen() {
     onSuccess: async (data) => {
       utils.spot.list.refetch({ skip: 0, sort: "latest" })
       if (me?.role === "GUIDE") {
-        router.navigate(`/(home)/(index)/spot/${data.id}`)
+        router.navigate(`/(home)/(map)/spot/${data.id}`)
         toast({ title: "Spot created", message: "Thank you for contributing to the community!" })
       } else {
         router.navigate("/")
@@ -75,8 +75,6 @@ export default function NewSpotConfirmScreen() {
     setLoading(true)
     const images = params.images && (await Promise.all(params.images.split(",").map((i) => upload(i))))
     if (!params.name || !params.type) return toast({ title: "Name is required", type: "error" })
-    console.log(parsedAmenities)
-
     mutate({
       description: params.description,
       name: params.name,

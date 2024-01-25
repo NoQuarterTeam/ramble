@@ -51,12 +51,12 @@ export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }
         <Text>Spot not found</Text>
       ) : (
         <View className="space-y-2">
-          <TouchableOpacity onPress={() => router.push(`/(home)/(index)/spot/${spot.id}`)} activeOpacity={0.9}>
+          <TouchableOpacity onPress={() => router.push(`/(home)/(map)/spot/${spot.id}`)} activeOpacity={0.9}>
             <SpotTypeBadge spot={spot} />
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => router.push(`/(home)/(index)/spot/${spot.id}`)}
+            onPress={() => router.push(`/(home)/(map)/spot/${spot.id}`)}
             activeOpacity={0.7}
             className="flex flex-row items-center space-x-2"
           >
@@ -79,7 +79,7 @@ export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }
             <Button
               size="xs"
               variant="outline"
-              onPress={me ? () => router.push(`/(home)/(index)/spot/${spot.id}/save`) : () => router.push("/login")}
+              onPress={me ? () => router.push(`/(home)/(map)/spot/${spot.id}/save`) : () => router.push("/login")}
               leftIcon={
                 <Icon
                   icon={Heart}
@@ -95,7 +95,7 @@ export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }
           <View className="rounded-xs overflow-hidden">
             <SpotImageCarousel
               canAddMore
-              onPress={() => router.push(`/(home)/(index)/spot/${spot.id}`)}
+              onPress={() => router.push(`/(home)/(map)/spot/${spot.id}`)}
               key={spot.id} // so images reload
               spotId={spot.id}
               width={width - 32}

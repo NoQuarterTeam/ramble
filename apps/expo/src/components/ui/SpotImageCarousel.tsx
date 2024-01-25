@@ -67,7 +67,6 @@ export function SpotImageCarousel({
       })
       router.push(`/${tab}/spot/${spotId}/save-spot-images?${searchParams}`)
     } catch (error) {
-      console.log(error)
       let message
       if (error instanceof Error) message = error.message
       else message = String(error)
