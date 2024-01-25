@@ -42,8 +42,7 @@ export const userRouter = createTRPCRouter({
     const feedback = await ctx.prisma.feedback.findFirst({ where: { userId: ctx.user.id }, select: { id: true } })
     return !!feedback
   }),
-  hasCreatedSpot: publicProcedure.query(async ({ ctx }) => {
-    if (!ctx.user) return false
+  hasCreatedSpot: protectedProcedure.query(async ({ ctx }) => {
     const spot = await ctx.prisma.spot.findFirst({ where: { creatorId: ctx.user.id }, select: { id: true } })
     return !!spot
   }),

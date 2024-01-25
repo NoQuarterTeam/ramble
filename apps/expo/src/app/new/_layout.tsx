@@ -4,9 +4,10 @@ import { useBackgroundColor } from "~/lib/tailwind"
 
 export default function NewSpotLayout() {
   const backgroundColor = useBackgroundColor()
+  console.log("the oookokk")
 
   return (
-    <Stack screenOptions={{ presentation: "card", contentStyle: { backgroundColor }, headerShown: false }}>
+    <Stack initialRouteName="index" screenOptions={{ contentStyle: { backgroundColor }, headerShown: false }}>
       <Stack.Screen name="index" />
       <Stack.Screen name="type" />
       <Stack.Screen name="info" />

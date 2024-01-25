@@ -88,7 +88,8 @@ export default function NewSpotLocationScreen() {
   }
   const onMapMove = ({ properties }: MapState) => setCoords(properties.center)
 
-  if (spotCheckLoading) return null
+  if (me && spotCheckLoading) return null
+
   if (!me)
     return (
       <NewSpotModalView title="new spot" canGoBack={false}>
