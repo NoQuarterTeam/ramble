@@ -1,31 +1,20 @@
-import * as React from "react"
-import { Modal, Switch, TouchableOpacity, View } from "react-native"
 import {
   Camera,
-  type MapState,
-  type MapView as MapType,
   MarkerView,
   RasterLayer,
   RasterSource,
   UserLocation,
+  type MapState,
+  type MapView as MapType,
 } from "@rnmapbox/maps"
 import * as Location from "expo-location"
-import { useRouter } from "expo-router"
-import {
-  CloudRain,
-  Layers,
-  // MountainSnow,
-  Navigation,
-  PlusCircle,
-  Settings2,
-  Thermometer,
-  User,
-  Users2,
-} from "lucide-react-native"
+import { Link, useRouter } from "expo-router"
+import { Layers, Navigation, PlusCircle, Settings2, User } from "lucide-react-native"
+import * as React from "react"
+import { Modal, TouchableOpacity, useColorScheme, View } from "react-native"
 
 import { type SpotType } from "@ramble/database/types"
 import { createImageUrl, INITIAL_LATITUDE, INITIAL_LONGITUDE, join, useDisclosure } from "@ramble/shared"
-import colors from "@ramble/tailwind-config/src/colors"
 
 import { FeedbackCheck } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
@@ -43,7 +32,7 @@ import { useAsyncStorage } from "~/lib/hooks/useAsyncStorage"
 import { useMe } from "~/lib/hooks/useMe"
 import { usePreferences } from "~/lib/hooks/usePreferences"
 
-import { type Filters, initialFilters, MapFilters } from "../../../components/MapFilters"
+import { initialFilters, MapFilters, type Filters } from "../../../components/MapFilters"
 import { MapSearch } from "../../../components/MapSearch"
 import { SpotPreview } from "../../../components/SpotPreview"
 
@@ -53,11 +42,11 @@ type UserCluster = RouterOutputs["user"]["clusters"][number]
 export default function MapScreen() {
   const router = useRouter()
   const { me } = useMe()
-  const [preferences, setPreferences] = usePreferences()
-
+  const preferences = usePreferences((s) => s.preferences)
+  const isDark = useColorScheme() === "dark"
   const [clusters, setClusters] = React.useState<Cluster[] | null>(null)
   const filterModalProps = useDisclosure()
-  const mapLayerModalProps = useDisclosure()
+
   const [activeSpotId, setActiveSpotId] = React.useState<string | null>(null)
   const [filters, setFilters] = useAsyncStorage<Filters>("ramble.map.filters", {
     ...initialFilters,
@@ -262,7 +251,19 @@ export default function MapScreen() {
     <View className="flex-1">
       <RegisterCheck />
       <FeedbackCheck />
-      <Map onLayout={handleSetUserLocation} onMapIdle={onMapMove} onPress={() => setActiveSpotId(null)} ref={mapRef}>
+      <Map
+        onLayout={handleSetUserLocation}
+        onMapIdle={onMapMove}
+        onPress={() => setActiveSpotId(null)}
+        ref={mapRef}
+        styleURL={
+          preferences.mapLayer === "rain" || preferences.mapLayer === "temp"
+            ? `mapbox://styles/mapbox/${isDark ? "dark" : "light"}-v11`
+            : preferences.mapLayer === "satellite"
+              ? "mapbox://styles/mapbox/satellite-streets-v12"
+              : undefined
+        }
+      >
         <UserLocation />
 
         <MapLayers />
@@ -301,18 +302,19 @@ export default function MapScreen() {
       </TouchableOpacity>
 
       <View pointerEvents="box-none" className="absolute bottom-3 left-3 flex space-y-2">
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={mapLayerModalProps.onOpen}
-          className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"
-        >
-          <Icon icon={Layers} size={20} />
-          {Object.values(preferences).filter(Boolean).length > 0 && (
-            <View className="sq-5 bg-background dark:bg-background-dark absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-700">
-              <Text className="text-xs">{Object.values(preferences).filter(Boolean).length}</Text>
-            </View>
-          )}
-        </TouchableOpacity>
+        <Link push href="/map-layers/" asChild>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"
+          >
+            <Icon icon={Layers} size={20} />
+            {Object.values(preferences).filter(Boolean).length > 0 && (
+              <View className="sq-5 bg-background dark:bg-background-dark absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-700">
+                <Text className="text-xs">{Object.values(preferences).filter(Boolean).length}</Text>
+              </View>
+            )}
+          </TouchableOpacity>
+        </Link>
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={filterModalProps.onOpen}
@@ -346,119 +348,30 @@ export default function MapScreen() {
           <MapFilters {...filterModalProps} initialFilters={filters} onSave={onFiltersChange} />
         </ModalView>
       </Modal>
-      <Modal
-        animationType="slide"
-        presentationStyle="formSheet"
-        visible={mapLayerModalProps.isOpen}
-        onRequestClose={mapLayerModalProps.onClose}
-        onDismiss={mapLayerModalProps.onClose}
-      >
-        <ModalView title="map layers" onBack={mapLayerModalProps.onClose}>
-          <View className="space-y-2">
-            <View className="flex flex-row items-center justify-between space-x-2">
-              <View className="flex flex-row items-center space-x-3">
-                <Icon icon={CloudRain} size={30} />
-                <View>
-                  <Text className="h-[25px] text-lg">Rain</Text>
-                  <Text numberOfLines={2} style={{ lineHeight: 16 }} className="max-w-[220px] text-sm opacity-75">
-                    Shows the current rain radar
-                  </Text>
-                </View>
-              </View>
-              <Switch
-                trackColor={{ true: colors.primary[600] }}
-                value={preferences.mapLayerRain}
-                onValueChange={() => setPreferences({ ...preferences, mapLayerRain: !preferences.mapLayerRain })}
-              />
-            </View>
-            <View className="flex flex-row items-center justify-between space-x-2">
-              <View className="flex flex-row items-center space-x-3">
-                <Icon icon={Thermometer} size={30} />
-                <View>
-                  <Text className="h-[25px] text-lg">Temperature</Text>
-                  <Text numberOfLines={2} style={{ lineHeight: 16 }} className="max-w-[220px] text-sm opacity-75">
-                    Shows the current temperature
-                  </Text>
-                </View>
-              </View>
-              <Switch
-                trackColor={{ true: colors.primary[600] }}
-                value={preferences.mapLayerTemp}
-                onValueChange={() => setPreferences({ ...preferences, mapLayerTemp: !preferences.mapLayerTemp })}
-              />
-            </View>
-            {/* <View className="flex flex-row items-center justify-between space-x-2">
-              <View className="flex flex-row items-center space-x-3">
-                <Icon icon={MountainSnow} size={30} />
-                <View>
-                  <Text className="h-[25px] text-lg">Satellite view</Text>
-                  <Text numberOfLines={2} style={{ lineHeight: 16 }} className="max-w-[220px] text-sm opacity-75">
-                    Changes the map to satellite view
-                  </Text>
-                </View>
-              </View>
-              <Switch
-                trackColor={{ true: colors.primary[600] }}
-                value={preferences.mapStyleSatellite}
-                onValueChange={() => setPreferences({ ...preferences, mapStyleSatellite: !preferences.mapStyleSatellite })}
-              />
-            </View> */}
-            {me && (
-              <View className="flex flex-row items-center justify-between space-x-2">
-                <View className="flex flex-row items-center space-x-3">
-                  <Icon icon={Users2} size={30} />
-                  <View>
-                    <Text className="h-[25px] text-lg">Ramble users</Text>
-                    <Text numberOfLines={2} style={{ lineHeight: 16 }} className="max-w-[220px] text-sm opacity-75">
-                      See the approximate location of other Ramble users
-                    </Text>
-                  </View>
-                </View>
-                <Switch
-                  trackColor={{ true: colors.primary[600] }}
-                  value={preferences.mapUsers}
-                  onValueChange={() => setPreferences({ ...preferences, mapUsers: !preferences.mapUsers })}
-                />
-              </View>
-            )}
-            <Text className="pt-6">More coming soon!</Text>
-          </View>
-        </ModalView>
-      </Modal>
     </View>
   )
 }
 
 function MapLayers() {
-  const [preferences, _, isReady] = usePreferences()
+  const preferences = usePreferences((s) => s.preferences)
 
-  if (!isReady) return null
   return (
     <>
-      {preferences.mapLayerTemp && (
-        <>
-          <RasterSource
-            id="temp"
-            tileSize={256}
-            tileUrlTemplates={[
-              `https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63`,
-            ]}
-          />
-          <RasterLayer id="tempLayer" sourceID="temp" style={{ rasterOpacity: 0.4 }} />
-        </>
-      )}
-      {preferences.mapLayerRain && (
-        <>
-          <RasterSource
-            id="rain"
-            tileSize={256}
-            tileUrlTemplates={[
-              `https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63`,
-            ]}
-          />
-          <RasterLayer id="rainLayer" sourceID="rain" style={{ rasterOpacity: 0.4 }} />
-        </>
-      )}
+      <RasterSource
+        id="temp"
+        tileSize={256}
+        tileUrlTemplates={[`https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63`]}
+      />
+      {preferences.mapLayer === "temp" && <RasterLayer id="tempLayer" sourceID="temp" style={{ rasterOpacity: 1 }} />}
+
+      <RasterSource
+        id="rain"
+        tileSize={256}
+        tileUrlTemplates={[
+          `https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63`,
+        ]}
+      />
+      {preferences.mapLayer === "rain" && <RasterLayer id="rainLayer" sourceID="rain" style={{ rasterOpacity: 1 }} />}
     </>
   )
 }

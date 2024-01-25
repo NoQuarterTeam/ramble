@@ -9,9 +9,7 @@ Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZW
 type MapViewProps = React.ComponentProps<typeof Mapbox.MapView>
 
 export const Map = React.forwardRef<Mapbox.MapView, MapViewProps & { children: React.ReactNode }>(function _Map(props, mapRef) {
-  const isDark = useColorScheme() === "dark"
-  const lightPreset = isDark ? "night" : "day"
-
+  const styleURL = props.styleURL || "mapbox://styles/mapbox/standard"
   return (
     <Mapbox.MapView
       logoEnabled={false}
@@ -20,19 +18,29 @@ export const Map = React.forwardRef<Mapbox.MapView, MapViewProps & { children: R
       ref={mapRef}
       compassFadeWhenNorth
       scaleBarEnabled={false}
-      // styleURL={
-      //   preferences.mapStyleSatellite
-      //   ? "mapbox://styles/jclackett/clp122bar007z01qu21kc8h4g"
-      //   : isDark
-      //   ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
-      //   : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
-      // }
-      styleURL={"mapbox://styles/mapbox/standard"}
       {...props}
+      styleURL={styleURL}
       className={merge("flex-1", props.className)}
     >
       {props.children}
-      {!props.styleURL && props.styleURL !== "satellite" && <StyleImport id="basemap" existing config={{ lightPreset }} />}
+      <ThemeSwitcher styleUrl={styleURL} />
     </Mapbox.MapView>
   )
 })
+
+function ThemeSwitcher(props: { styleUrl: string }) {
+  const [isLoaded, setIsLoaded] = React.useState(false)
+  const isDark = useColorScheme() === "dark"
+  const lightPreset = isDark ? "night" : "day"
+
+  React.useEffect(() => {
+    setIsLoaded(false)
+    if (props.styleUrl === "mapbox://styles/mapbox/standard") {
+      new Promise((resolve) => setTimeout(resolve, 100)).then(() => setIsLoaded(true))
+    }
+  }, [props.styleUrl])
+
+  if (!isLoaded || props.styleUrl !== "mapbox://styles/mapbox/standard") return null
+
+  return <StyleImport id="basemap" existing config={{ lightPreset }} />
+}

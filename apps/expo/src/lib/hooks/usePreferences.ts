@@ -1,23 +1,22 @@
 import { z } from "zod"
 
-import { useAsyncStorage } from "./useAsyncStorage"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { create } from "zustand"
+import { createJSONStorage, persist } from "zustand/middleware"
 
 const preferencesSchema = z.object({
-  mapLayerRain: z.boolean(),
-  mapLayerTemp: z.boolean(),
-  mapStyleSatellite: z.boolean(),
+  mapLayer: z.enum(["rain", "temp", "satellite"]).nullable(),
   mapUsers: z.boolean(),
 })
-
-type Preferences = z.infer<typeof preferencesSchema>
-
-export const defaultPreferences = {
-  mapLayerRain: false,
-  mapLayerTemp: false,
-  mapStyleSatellite: false,
-  mapUsers: false,
-} satisfies Preferences
-
-export function usePreferences() {
-  return useAsyncStorage<Preferences>("preferences", defaultPreferences)
-}
+export const usePreferences = create<{
+  preferences: z.infer<typeof preferencesSchema>
+  setPreferences: (preference: Partial<z.infer<typeof preferencesSchema>>) => void
+}>()(
+  persist(
+    (set) => ({
+      preferences: { mapLayer: null, mapUsers: true },
+      setPreferences: (preference) => set((state) => ({ preferences: { ...state.preferences, ...preference } })),
+    }),
+    { name: "ramble.preferences", storage: createJSONStorage(() => AsyncStorage) },
+  ),
+)
