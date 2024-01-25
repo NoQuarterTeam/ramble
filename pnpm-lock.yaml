@@ -111,58 +111,58 @@ importers:
         specifier: 50.0.3
         version: 50.0.3(@babel/core@7.23.7)(@react-native/babel-preset@0.73.19)
       expo-application:
-        specifier: ~5.8.3
+        specifier: 5.8.3
         version: 5.8.3(expo@50.0.3)
       expo-clipboard:
-        specifier: ~5.0.1
+        specifier: 5.0.1
         version: 5.0.1(expo@50.0.3)
       expo-constants:
-        specifier: ~15.4.5
+        specifier: 15.4.5
         version: 15.4.5(expo@50.0.3)
       expo-dev-client:
-        specifier: ~3.3.7
+        specifier: 3.3.7
         version: 3.3.7(expo@50.0.3)
       expo-device:
-        specifier: ~5.9.3
+        specifier: 5.9.3
         version: 5.9.3(expo@50.0.3)
       expo-file-system:
-        specifier: ~16.0.5
+        specifier: 16.0.5
         version: 16.0.5(expo@50.0.3)
       expo-font:
-        specifier: ~11.10.2
+        specifier: 11.10.2
         version: 11.10.2(expo@50.0.3)
       expo-image:
         specifier: 1.10.5
         version: 1.10.5(expo@50.0.3)
       expo-image-picker:
-        specifier: ~14.7.1
+        specifier: 14.7.1
         version: 14.7.1(expo@50.0.3)
       expo-linear-gradient:
-        specifier: ~12.7.1
+        specifier: 12.7.1
         version: 12.7.1(expo@50.0.3)
       expo-linking:
-        specifier: ~6.2.2
+        specifier: 6.2.2
         version: 6.2.2(expo@50.0.3)
       expo-location:
-        specifier: ~16.5.2
+        specifier: 16.5.2
         version: 16.5.2(expo@50.0.3)
       expo-router:
         specifier: ^3.4.5
         version: 3.4.5(expo-constants@15.4.5)(expo-linking@6.2.2)(expo-modules-autolinking@1.10.2)(expo-status-bar@1.11.1)(expo@50.0.3)(react-dom@18.2.0)(react-native-reanimated@3.6.1)(react-native-safe-area-context@4.8.2)(react-native-screens@3.29.0)(react-native@0.73.2)(react@18.2.0)
       expo-splash-screen:
-        specifier: ~0.26.4
+        specifier: 0.26.4
         version: 0.26.4(expo-modules-autolinking@1.10.2)(expo@50.0.3)
       expo-status-bar:
-        specifier: ~1.11.1
+        specifier: 1.11.1
         version: 1.11.1
       expo-system-ui:
         specifier: 2.9.3
         version: 2.9.3(expo@50.0.3)
       expo-updates:
-        specifier: ~0.24.8
+        specifier: 0.24.8
         version: 0.24.8(expo@50.0.3)
       expo-web-browser:
-        specifier: ~12.8.2
+        specifier: 12.8.2
         version: 12.8.2(expo@50.0.3)
       lucide-react-native:
         specifier: 0.303.0
@@ -204,7 +204,7 @@ importers:
         specifier: 4.8.2
         version: 4.8.2(react-native@0.73.2)(react@18.2.0)
       react-native-screens:
-        specifier: ~3.29.0
+        specifier: 3.29.0
         version: 3.29.0(react-native@0.73.2)(react@18.2.0)
       react-native-svg:
         specifier: 14.1.0
@@ -213,7 +213,7 @@ importers:
         specifier: 2.2.0
         version: 2.2.0(react-native@0.73.2)(react@18.2.0)
       react-native-web:
-        specifier: ~0.19.9
+        specifier: 0.19.9
         version: 0.19.9(react-dom@18.2.0)(react@18.2.0)
       superjson:
         specifier: 1.13.3
