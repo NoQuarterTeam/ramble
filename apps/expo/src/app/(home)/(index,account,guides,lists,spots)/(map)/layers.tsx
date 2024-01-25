@@ -108,7 +108,7 @@ export default function MapLayers() {
         </View>
         <View className="h-1 border-t border-gray-200 dark:border-gray-700" />
 
-        {!me && (
+        {me && (
           <View className="flex flex-row items-center justify-between space-x-2 p-3">
             <View className="flex flex-row items-center space-x-3">
               <Icon icon={Users2} size={24} />
