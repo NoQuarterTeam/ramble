@@ -403,8 +403,8 @@ importers:
         specifier: 0.314.0
         version: 0.314.0(react@18.2.0)
       mapbox-gl:
-        specifier: 3.1.0
-        version: 3.1.0
+        specifier: 3.1.1
+        version: 3.1.1
       nprogress:
         specifier: 0.2.0
         version: 0.2.0
@@ -428,7 +428,7 @@ importers:
         version: 14.2.3(react@18.2.0)
       react-map-gl:
         specifier: 7.1.7
-        version: 7.1.7(mapbox-gl@3.1.0)(react-dom@18.2.0)(react@18.2.0)
+        version: 7.1.7(mapbox-gl@3.1.1)(react-dom@18.2.0)(react@18.2.0)
       remix-utils:
         specifier: 7.5.0
         version: 7.5.0(@remix-run/node@2.5.1)(@remix-run/react@2.5.1)(crypto-js@4.2.0)(react@18.2.0)(zod@3.22.4)
@@ -800,8 +800,8 @@ importers:
   packages/server/scripts:
     devDependencies:
       '@faker-js/faker':
-        specifier: 8.3.1
-        version: 8.3.1
+        specifier: 8.4.0
+        version: 8.4.0
       '@inquirer/prompts':
         specifier: 3.3.0
         version: 3.3.0
@@ -3890,8 +3890,8 @@ packages:
       js-yaml: 4.1.0
     dev: false
 
-  /@faker-js/faker@8.3.1:
-    resolution: {integrity: sha512-FdgpFxY6V6rLZE9mmIBb9hM0xpfvQOSNOLnzolzKwsE1DH+gC7lEKV1p1IbR0lAYyvYd5a4u3qWJzowUkw1bIw==}
+  /@faker-js/faker@8.4.0:
+    resolution: {integrity: sha512-htW87352wzUCdX1jyUQocUcmAaFqcR/w082EC8iP/gtkF0K+aKcBp0hR5Arb7dzR8tQ1TrhE9DNa5EbJELm84w==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0, npm: '>=6.14.13'}
     dev: true
 
@@ -13084,8 +13084,8 @@ packages:
       tmpl: 1.0.5
     dev: false
 
-  /mapbox-gl@3.1.0:
-    resolution: {integrity: sha512-X6gaQ7WCNwMK6MnQn+rlq6ugzRItdE775TSzmyGPy0wN6hs/8PONi/G+hioeGV5ZyQ0a0BmvmF+gCUH0FBvavw==}
+  /mapbox-gl@3.1.1:
+    resolution: {integrity: sha512-sjtKnddDKrPUHYP6lhFYrit+qJkfPC+PVmbGF0VFhHHKCPy4iOFEMCdFgOv2F7AfA1CHK66Kx2Cjau6q8uTTEg==}
     dependencies:
       '@mapbox/geojson-rewind': 0.5.2
       '@mapbox/jsonlint-lines-primitives': 2.0.2
@@ -15827,7 +15827,7 @@ packages:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
     dev: false
 
-  /react-map-gl@7.1.7(mapbox-gl@3.1.0)(react-dom@18.2.0)(react@18.2.0):
+  /react-map-gl@7.1.7(mapbox-gl@3.1.1)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-mwjc0obkBJOXCcoXQr3VoLqmqwo9vS4bXfbGsdxXzEgVCv/PM0v+1QggL7W0d/ccIy+VCjbXNlGij+PENz6VNg==}
     peerDependencies:
       mapbox-gl: '>=1.13.0'
@@ -15842,7 +15842,7 @@ packages:
     dependencies:
       '@maplibre/maplibre-gl-style-spec': 19.3.3
       '@types/mapbox-gl': 2.7.19
-      mapbox-gl: 3.1.0
+      mapbox-gl: 3.1.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
