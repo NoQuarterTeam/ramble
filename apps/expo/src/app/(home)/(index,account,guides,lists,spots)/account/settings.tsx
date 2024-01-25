@@ -1,6 +1,6 @@
 import { Modal, ScrollView, Switch, View } from "react-native"
 import { router } from "expo-router"
-import { AlertCircle, ChevronDown, Languages, MapPin } from "lucide-react-native"
+import { AlertCircle, ChevronDown, Languages, MapPinOff } from "lucide-react-native"
 
 import { languages, useDisclosure } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
@@ -74,7 +74,7 @@ export default function AccountSettingsScreen() {
           </View>
           <View className="flex flex-row items-center justify-between space-x-2">
             <View className="flex flex-row items-center space-x-3">
-              <Icon icon={MapPin} size={30} />
+              <Icon icon={MapPinOff} size={30} />
               <View>
                 <Text className="h-[22px] text-base">Hide location</Text>
                 <Text style={{ lineHeight: 16 }} numberOfLines={3} className="max-w-[220px] text-sm opacity-75">
