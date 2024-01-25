@@ -127,7 +127,11 @@ export const userRouter = createTRPCRouter({
   }),
   deleteAccount: protectedProcedure.mutation(async ({ ctx }) => {
     void sendSlackMessage(`😭 User @${ctx.user.username} deleted their account.`)
-    await ctx.prisma.user.delete({ where: { id: ctx.user.id } })
+    const myCodes = await ctx.prisma.inviteCode.findMany({ where: { ownerId: { equals: ctx.user.id } } })
+    await ctx.prisma.$transaction([
+      ctx.prisma.inviteCode.deleteMany({ where: { id: { in: myCodes.map((c) => c.id) } } }),
+      ctx.prisma.user.delete({ where: { id: ctx.user.id } }),
+    ])
     return true
   }),
   guides: protectedProcedure.input(z.object({ skip: z.number() })).query(async ({ ctx, input }) => {

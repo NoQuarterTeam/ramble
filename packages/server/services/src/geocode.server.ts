@@ -15,7 +15,7 @@ export async function geocodeAddress({ address }: { address: string }) {
   const jsonResponse = (await res.json()) as FeatureCollection
   if (jsonResponse.features.length === 0) return []
   const addressCoords = jsonResponse.features.find((feature) => feature.place_type.includes("address"))?.center
-  const placeCoords = jsonResponse.features[0].center
+  const placeCoords = jsonResponse.features[0]?.center
   return addressCoords || placeCoords
 }
 
