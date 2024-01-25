@@ -199,9 +199,7 @@ export default function MapView() {
         onMoveEnd={onMove}
         ref={mapRef}
         initialViewState={initialViewState}
-        mapStyle={
-          preferences.mapStyleSatellite ? "mapbox://styles/mapbox/satellite-streets-v12" : "mapbox://styles/mapbox/standard"
-        }
+        mapStyle={!!preferences.mapStyleSatellite ? "mapbox://styles/mapbox/satellite-streets-v12" : undefined}
       >
         <MapLayers />
         {markers}
