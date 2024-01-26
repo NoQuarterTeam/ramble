@@ -138,6 +138,7 @@ function TrackScreens() {
   const posthog = usePostHog()
   React.useEffect(() => {
     if (!posthog) return
+    if (params.params) delete params.params
     posthog.screen(pathname, { params })
   }, [pathname, params, posthog])
 
