@@ -11,7 +11,7 @@ import { ListItem } from "~/components/ListItem"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { BrandHeading } from "~/components/ui/BrandHeading"
 import { Spinner } from "~/components/ui/Spinner"
-import { TabView } from "~/components/ui/TabView"
+import { ScreenView } from "~/components/ui/ScreenView"
 import { Text } from "~/components/ui/Text"
 import { api } from "~/lib/api"
 import { height, isTablet, width } from "~/lib/device"
@@ -32,20 +32,20 @@ export default function ListsScreen() {
 
   if (!me)
     return (
-      <TabView title="lists">
+      <ScreenView title="lists">
         <LoginPlaceholder text="Log in to create lists" />
-      </TabView>
+      </ScreenView>
     )
   return (
-    <TabView
+    <ScreenView
       title={
         <TouchableOpacity onPress={sortProps.onOpen} className="flex flex-row items-center">
-          <BrandHeading className="py-2 text-4xl">{SORT_OPTIONS[sort]}</BrandHeading>
+          <BrandHeading className="text-xl">{SORT_OPTIONS[sort]}</BrandHeading>
           <Icon icon={ChevronDown} size={20} color="primary" />
         </TouchableOpacity>
       }
       rightElement={
-        <TouchableOpacity onPress={() => router.push(`/(home)/(lists)/lists/new`)}>
+        <TouchableOpacity onPress={() => router.push(`/(home)/(account)/account/lists/new`)}>
           <Icon icon={PlusCircle} />
         </TouchableOpacity>
       }
@@ -99,6 +99,6 @@ export default function ListsScreen() {
           )}
         />
       )}
-    </TabView>
+    </ScreenView>
   )
 }

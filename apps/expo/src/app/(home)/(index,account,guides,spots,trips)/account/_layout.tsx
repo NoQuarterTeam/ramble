@@ -10,6 +10,7 @@ export default function AccountLayout() {
       <Stack.Screen name="feedback" />
       <Stack.Screen name="info" />
       <Stack.Screen name="interests" />
+      <Stack.Screen name="lists" />
       <Stack.Screen name="invite" />
       <Stack.Screen name="settings" />
       <Stack.Screen name="van" />

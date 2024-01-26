@@ -9,7 +9,7 @@ import { Icon } from "../Icon"
 import { BrandHeading } from "./BrandHeading"
 
 interface Props {
-  title: string
+  title: string | React.ReactNode
   children?: React.ReactNode
   onBack?: () => void
   rightElement?: React.ReactNode
@@ -25,7 +25,11 @@ export function ScreenView(props: Props) {
             <TouchableOpacity onPress={props.onBack || router.back} className="sq-8 flex items-center justify-center pt-0.5">
               <Icon icon={ChevronLeft} color="primary" />
             </TouchableOpacity>
-            <BrandHeading className="text-xl">{props.title.toLowerCase()}</BrandHeading>
+            {typeof props.title === "string" ? (
+              <BrandHeading className="text-xl">{props.title.toLowerCase()}</BrandHeading>
+            ) : (
+              props.title
+            )}
           </View>
           {props.rightElement}
         </View>

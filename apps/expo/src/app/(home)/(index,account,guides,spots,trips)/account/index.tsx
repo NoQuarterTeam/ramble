@@ -125,6 +125,9 @@ export default function AccountScreen() {
               <ProfileLink to="invite" icon={UserPlus}>
                 Invites
               </ProfileLink>
+              <ProfileLink to="lists" icon={MessageCircle}>
+                Lists
+              </ProfileLink>
               <ProfileLink to="settings" icon={Settings}>
                 Settings
               </ProfileLink>
