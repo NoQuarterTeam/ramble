@@ -2,6 +2,7 @@ import { FormProvider } from "react-hook-form"
 import { ScrollView, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { useRouter } from "expo-router"
+import { usePostHog } from "posthog-react-native"
 
 import { Button } from "~/components/ui/Button"
 import { FormError } from "~/components/ui/FormError"
@@ -17,8 +18,10 @@ export default function RegisterScreen() {
   useKeyboardController()
   const queryClient = api.useUtils()
   const navigation = useRouter()
+  const posthog = usePostHog()
   const { mutate, error, isLoading } = api.auth.register.useMutation({
     onSuccess: async (data) => {
+      posthog?.capture("user registered")
       await AsyncStorage.setItem(AUTH_TOKEN, data.token)
       queryClient.user.me.setData(undefined, data.user)
       navigation.replace("/onboarding/1")

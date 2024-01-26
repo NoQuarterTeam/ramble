@@ -4,6 +4,7 @@ import { ScrollView, useColorScheme } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { useRouter } from "expo-router"
 import { BadgeX, Dog } from "lucide-react-native"
+import { usePostHog } from "posthog-react-native"
 import { z } from "zod"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
@@ -50,6 +51,7 @@ export default function MapFilters() {
   const initialState = useMapFilters()
   const [filters, setFilters] = React.useState(initialState.filters)
   const router = useRouter()
+  const posthog = usePostHog()
   return (
     <ModalView title="map filters">
       <View className="flex-1 pb-10 pt-4">
@@ -116,10 +118,11 @@ export default function MapFilters() {
             </View>
           </View>
         </ScrollView>
-        <View className="flex flex-row justify-between pt-4">
+        <View ph-no-capture className="flex flex-row justify-between pt-4">
           <Button
             variant="link"
             onPress={() => {
+              posthog?.capture("map filters reset")
               initialState.setFilters(initialFilters)
               router.back()
             }}
@@ -129,6 +132,7 @@ export default function MapFilters() {
           <Button
             className="w-[120px]"
             onPress={() => {
+              posthog?.capture("map filters changed", { ...filters, types: filters.types.join(", ") })
               initialState.setFilters(filters)
               router.back()
             }}
