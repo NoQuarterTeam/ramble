@@ -39,7 +39,7 @@ export default function ListsScreen() {
   return (
     <TabView
       title={
-        <TouchableOpacity ph-label="lists list sort" onPress={sortProps.onOpen} className="flex flex-row items-center">
+        <TouchableOpacity ph-label="lists-list-sort" onPress={sortProps.onOpen} className="flex flex-row items-center">
           <BrandHeading className="py-2 text-4xl">{SORT_OPTIONS[sort]}</BrandHeading>
           <Icon icon={ChevronDown} size={20} color="primary" />
         </TouchableOpacity>
