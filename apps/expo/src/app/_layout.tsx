@@ -95,7 +95,6 @@ export default function RootLayout() {
                 <Stack.Screen name="onboarding" />
                 <Stack.Screen name="(auth)" options={{ presentation: "modal" }} />
                 <Stack.Screen name="new" options={{ presentation: "modal" }} />
-                {/* <Stack.Screen name="map-layers" options={{ presentation: "modal" }} /> */}
               </Stack>
             </PostHogProvider>
             <Toast />
@@ -139,6 +138,7 @@ function TrackScreens() {
   const posthog = usePostHog()
   React.useEffect(() => {
     if (!posthog) return
+    if (params.params) delete params.params
     posthog.screen(pathname, { params })
   }, [pathname, params, posthog])
 
