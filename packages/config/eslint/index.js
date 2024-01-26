@@ -18,6 +18,7 @@ module.exports = {
   rules: {
     "@typescript-eslint/no-non-null-assertion": OFF,
     "@typescript-eslint/no-var-requires": ERROR,
+    "@typescript-eslint/no-non-null-asserted-optional-chain": OFF,
     "react/function-component-definition": ERROR,
     "@typescript-eslint/no-unused-vars": [ERROR, { args: "none", argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
     "react/prop-types": OFF,

@@ -226,7 +226,7 @@ export const spotRouter = createTRPCRouter({
         z.object({
           type: z.nativeEnum(SpotType),
           images: z.array(z.object({ path: z.string() })),
-          amenities: spotAmenitiesSchema.partial().optional(),
+          amenities: spotAmenitiesSchema.partial().nullish(),
           shouldPublishLater: z.boolean().optional(),
         }),
       ),

@@ -15,11 +15,17 @@ export const Map = React.forwardRef<MapRef, MapViewProps & { children?: React.Re
   const theme = useTheme()
 
   React.useEffect(() => {
-    if (!ref?.current) return
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    ref.current.setConfigProperty("basemap", "lightPreset", theme === "light" ? "day" : "night")
-  }, [theme, ref])
+    if (!ref?.current || !!props.mapStyle) return
+    const timeout = setTimeout(() => {
+      // need to wait for map to paint new style
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      ref.current.setConfigProperty("basemap", "lightPreset", theme === "light" ? "day" : "night")
+    }, 500)
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [theme, ref, props.mapStyle])
 
   return (
     <ReactGLMap
@@ -34,13 +40,15 @@ export const Map = React.forwardRef<MapRef, MapViewProps & { children?: React.Re
       //       ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
       //       : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
       // }
-      mapStyle={"mapbox://styles/mapbox/standard"}
       {...props}
+      mapStyle={props.mapStyle || "mapbox://styles/mapbox/standard"}
       style={{ height: "100%", width: "100%", ...props.style, opacity: isLoaded ? 1 : 0 }}
       onLoad={(e) => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        e.target.setConfigProperty("basemap", "lightPreset", theme === "light" ? "day" : "night")
+        if (!props.mapStyle) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          e.target.setConfigProperty("basemap", "lightPreset", theme === "light" ? "day" : "night")
+        }
         new Promise((resolve) => setTimeout(resolve, 200)).then(() => {
           setIsLoaded(true)
         })

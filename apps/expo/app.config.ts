@@ -1,7 +1,7 @@
 import { ConfigContext, ExpoConfig } from "expo/config"
 
-const VERSION = "1.1.5"
-const BUILD = 28
+const VERSION = "1.2.0"
+const BUILD = 33
 
 const splash: ExpoConfig["splash"] = {
   image: "./assets/splash.png",
@@ -32,6 +32,10 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     fallbackToCacheTimeout: 0,
     url: "https://u.expo.dev/b868666b-33e3-40d3-a88b-71c40a54e3dd",
     checkAutomatically: "ON_LOAD",
+  },
+  experiments: {
+    typedRoutes: true,
+    tsconfigPaths: true,
   },
   assetBundlePatterns: ["**/*"],
   runtimeVersion: {
@@ -67,7 +71,17 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
     },
   },
   plugins: [
-    "sentry-expo",
+    "expo-router",
+    "expo-font",
+    [
+      "@sentry/react-native/expo",
+      {
+        url: "https://sentry.io/",
+        authToken: process.env.SENTRY_AUTH_TOKEN,
+        project: "ramble-app",
+        organization: "noquarter",
+      },
+    ],
     "./expo-plugins/with-modify-gradle.js",
     "./expo-plugins/android-manifest.plugin.js",
     [
@@ -87,17 +101,6 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
       },
     ],
   ],
-  hooks: {
-    postPublish: [
-      {
-        file: "sentry-expo/upload-sourcemaps",
-        config: {
-          organization: "noquarter",
-          project: "ramble-app",
-        },
-      },
-    ],
-  },
 })
 
 export default defineConfig

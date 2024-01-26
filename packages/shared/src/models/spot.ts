@@ -38,6 +38,35 @@ export const SPOT_TYPES = {
 
 export const SPOT_TYPE_OPTIONS = Object.entries(SPOT_TYPES).map(([_, val]) => val)
 
+// TODO: how to enforce all types? need const assertion
+export const SPOT_TYPE_NAMES = [
+  "CAMPING",
+  "FREE_CAMPING",
+  "PARKING",
+  // Activities
+  "SURFING",
+  "CLIMBING",
+  "MOUNTAIN_BIKING",
+  "PADDLE_KAYAK",
+  "HIKING_TRAIL",
+  // Services
+  "GAS_STATION",
+  "ELECTRIC_CHARGE_POINT",
+  "MECHANIC_PARTS",
+  "VET",
+  // Hospitality
+  "CAFE",
+  "RESTAURANT",
+  "BAR",
+  "SHOP",
+  // Other
+  "REWILDING",
+  "NATURE_EDUCATION",
+  "FESTIVAL",
+  "ART_FILM_PHOTOGRAPHY",
+  "VOLUNTEERING",
+] as const
+
 export const STAY_SPOT_TYPE_OPTIONS = Object.entries({
   CAMPING: SPOT_TYPES.CAMPING,
   FREE_CAMPING: SPOT_TYPES.FREE_CAMPING,
