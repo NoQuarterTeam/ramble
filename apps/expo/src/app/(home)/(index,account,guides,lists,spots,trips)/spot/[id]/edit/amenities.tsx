@@ -1,0 +1,53 @@
+import * as React from "react"
+import { ScrollView, View } from "react-native"
+import { useLocalSearchParams, useRouter } from "expo-router"
+
+import { AMENITIES } from "@ramble/shared"
+
+import { type AmenityObject, AmenitySelector } from "~/components/AmenitySelector"
+import { Button } from "~/components/ui/Button"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
+import { AMENITIES_ICONS } from "~/lib/models/amenities"
+
+import { EditSpotModalView } from "./EditSpotModalView"
+
+export default function EditSpotAmenitiesScreen() {
+  const { id, ...params } = useLocalSearchParams<{ id: string; amenities: string }>()
+  const [amenities, setAmenities] = React.useState(
+    params.amenities
+      ? Object.entries(JSON.parse(params.amenities)).reduce(
+          (acc, [key, value]) => ({ ...acc, [key]: value }),
+          {} as AmenityObject,
+        )
+      : Object.keys(AMENITIES).reduce((acc, key) => ({ ...acc, [key]: false }), {} as AmenityObject),
+  )
+  const tab = useTabSegment()
+  const router = useRouter()
+  return (
+    <EditSpotModalView title="what it's got?">
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+        {Object.entries(AMENITIES).map(([key, label]) => (
+          <AmenitySelector
+            key={key}
+            label={label}
+            icon={AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]}
+            isSelected={!!amenities[key as keyof typeof AMENITIES]}
+            onToggle={() => setAmenities((a) => ({ ...a, [key]: !a[key as keyof typeof AMENITIES] }))}
+          />
+        ))}
+      </ScrollView>
+
+      <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
+        <Button
+          className="rounded-full"
+          onPress={() => {
+            const searchParams = new URLSearchParams({ ...params, amenities: JSON.stringify(amenities) })
+            router.push(`/${tab}/spot/${id}/edit/images?${searchParams}`)
+          }}
+        >
+          Next
+        </Button>
+      </View>
+    </EditSpotModalView>
+  )
+}
