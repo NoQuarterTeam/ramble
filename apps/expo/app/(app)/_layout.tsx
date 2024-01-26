@@ -1,6 +1,6 @@
 import { useColorScheme } from "react-native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import { Heart, List, Map, UserCircle, Users } from "lucide-react-native"
+import { Heart, List, Map, Route, UserCircle, Users } from "lucide-react-native"
 
 import { createImageUrl, join } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
@@ -14,6 +14,7 @@ import { GuidesLayout } from "./guides/_layout"
 import { ListsLayout } from "./lists/_layout"
 import { MapLayout } from "./map/_layout"
 import { SpotsLayout } from "./spots/_layout"
+import { TripsLayout } from "./trips/_layout"
 
 const Tab = createBottomTabNavigator()
 
@@ -46,11 +47,18 @@ export function AppLayout() {
           tabBarIcon: (props) => <Icon icon={List} size={22} color={!!props.focused && "primary"} />,
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="ListsLayout"
         component={ListsLayout}
         options={{
           tabBarIcon: (props) => <Icon icon={Heart} size={22} color={!!props.focused && "primary"} />,
+        }}
+      /> */}
+      <Tab.Screen
+        name="TripsLayout"
+        component={TripsLayout}
+        options={{
+          tabBarIcon: (props) => <Icon icon={Route} size={22} color={!!props.focused && "primary"} />,
         }}
       />
       <Tab.Screen

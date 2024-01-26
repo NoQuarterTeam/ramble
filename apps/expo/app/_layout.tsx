@@ -89,6 +89,13 @@ const linking: LinkingOptions<ScreenParamsList> = {
               ListDetailScreen: "lists/:id",
             },
           },
+          TripsLayout: {
+            initialRouteName: "TripsScreen",
+            screens: {
+              TripsScreen: "trips",
+              // TripDetailScreen: "trips/:id",
+            },
+          },
           AccountLayout: {
             initialRouteName: "AccountScreen",
             screens: {
