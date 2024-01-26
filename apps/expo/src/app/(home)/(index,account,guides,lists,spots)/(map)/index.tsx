@@ -205,14 +205,11 @@ export default function MapScreen() {
             avatar: string | null
             avatarBlurHash: string | null
           }
-          const onPress = () => {
-            router.push(`/(home)/(index)/${user.username}/(profile)`)
-          }
           return (
             <MarkerView key={user.id} coordinate={point.geometry.coordinates}>
               <TouchableOpacity
                 activeOpacity={0.7}
-                onPress={onPress}
+                onPress={() => router.push(`/(home)/(index)/${user.username}/(profile)`)}
                 className="sq-8 flex items-center justify-center overflow-hidden rounded-full border border-purple-100 bg-purple-500"
               >
                 {user.avatar ? (

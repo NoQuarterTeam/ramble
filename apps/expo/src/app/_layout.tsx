@@ -84,7 +84,7 @@ export default function RootLayout() {
         <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
           <SafeAreaProvider>
             <PostHogProvider
-              autocapture
+              autocapture={{ captureScreens: false }}
               apiKey="phc_3HuNiIa6zCcsNHFmXst4X0HJjOLq32yRyRPVZQhsD31"
               options={{ host: "https://eu.posthog.com", enable: IS_PRODUCTION }}
             >
