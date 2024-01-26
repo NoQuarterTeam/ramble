@@ -22,7 +22,7 @@ import {
   useFonts,
 } from "@expo-google-fonts/urbanist"
 import * as Sentry from "@sentry/react-native"
-import { Stack } from "expo-router"
+import { Stack, useGlobalSearchParams, usePathname } from "expo-router"
 import * as SplashScreen from "expo-splash-screen"
 import { StatusBar } from "expo-status-bar"
 import { PostHogProvider, usePostHog } from "posthog-react-native"
@@ -88,6 +88,7 @@ export default function RootLayout() {
               apiKey="phc_3HuNiIa6zCcsNHFmXst4X0HJjOLq32yRyRPVZQhsD31"
               options={{ host: "https://eu.posthog.com", enable: IS_PRODUCTION }}
             >
+              <TrackScreens />
               <IdentifyUser />
               <Stack initialRouteName="(home)" screenOptions={{ headerShown: false, contentStyle: { backgroundColor } }}>
                 <Stack.Screen name="(home)" />
@@ -129,5 +130,17 @@ function IdentifyUser() {
     if (posthog) posthog.identify(me.id, { username: me.username, name: me.firstName + " " + me.lastName })
     Sentry.setUser({ id: me.id, username: me.username })
   }, [me, isLoading, posthog])
+  return null
+}
+
+function TrackScreens() {
+  const pathname = usePathname()
+  const params = useGlobalSearchParams()
+  const posthog = usePostHog()
+  React.useEffect(() => {
+    if (!posthog) return
+    posthog.screen(pathname, { params })
+  }, [pathname, params, posthog])
+
   return null
 }
