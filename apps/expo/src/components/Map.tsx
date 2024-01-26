@@ -1,6 +1,7 @@
 import * as React from "react"
-import { useColorScheme } from "react-native"
-import Mapbox, { StyleImport } from "@rnmapbox/maps"
+// import { useColorScheme } from "react-native"
+// import Mapbox, { StyleImport } from "@rnmapbox/maps"
+import Mapbox from "@rnmapbox/maps"
 
 import { merge } from "@ramble/shared"
 
@@ -23,24 +24,24 @@ export const Map = React.forwardRef<Mapbox.MapView, MapViewProps & { children: R
       className={merge("flex-1", props.className)}
     >
       {props.children}
-      <ThemeSwitcher styleUrl={styleURL} />
+      {/* <ThemeSwitcher styleUrl={styleURL} /> */}
     </Mapbox.MapView>
   )
 })
 
-function ThemeSwitcher(props: { styleUrl: string }) {
-  const [isLoaded, setIsLoaded] = React.useState(false)
-  const isDark = useColorScheme() === "dark"
-  const lightPreset = isDark ? "night" : "day"
+// function ThemeSwitcher(props: { styleUrl: string }) {
+//   const [isLoaded, setIsLoaded] = React.useState(false)
+//   const isDark = useColorScheme() === "dark"
+//   const lightPreset = isDark ? "night" : "day"
 
-  React.useEffect(() => {
-    setIsLoaded(false)
-    if (props.styleUrl === "mapbox://styles/mapbox/standard") {
-      new Promise((resolve) => setTimeout(resolve, 100)).then(() => setIsLoaded(true))
-    }
-  }, [props.styleUrl])
+//   React.useEffect(() => {
+//     setIsLoaded(false)
+//     if (props.styleUrl === "mapbox://styles/mapbox/standard") {
+//       new Promise((resolve) => setTimeout(resolve, 100)).then(() => setIsLoaded(true))
+//     }
+//   }, [props.styleUrl])
 
-  if (!isLoaded || props.styleUrl !== "mapbox://styles/mapbox/standard") return null
+//   if (!isLoaded || props.styleUrl !== "mapbox://styles/mapbox/standard") return null
 
-  return <StyleImport id="basemap" existing config={{ lightPreset }} />
-}
+//   return <StyleImport id="basemap" existing config={{ lightPreset }} />
+// }
