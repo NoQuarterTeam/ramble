@@ -3,6 +3,7 @@ import { TouchableOpacity, useColorScheme, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import { useLocalSearchParams } from "expo-router"
 import { Heart, Lock } from "lucide-react-native"
+import { usePostHog } from "posthog-react-native"
 
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
@@ -58,8 +59,14 @@ function SaveableListItem({ list, spotId }: Props) {
     setIsSaved(foundSavedItem)
   }, [foundSavedItem])
 
+  const posthog = usePostHog()
   const { mutate } = api.list.saveToList.useMutation({
     onSuccess: () => {
+      if (foundSavedItem) {
+        posthog?.capture("spot removed from list", { spotId, listId: list.id })
+      } else {
+        posthog?.capture("spot saved to list", { spotId, listId: list.id })
+      }
       void utils.list.allByUserWithSavedSpots.refetch()
       void utils.list.detail.refetch()
       void utils.list.spotClusters.refetch()

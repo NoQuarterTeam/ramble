@@ -49,6 +49,7 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
           <View className="rounded-[24px] bg-gray-50 p-2 dark:bg-gray-900">
             {data.map((item) => (
               <Button
+                ph-label={`map search item: ${item.name}`}
                 onPress={() => {
                   onSearch(item.center)
                   onClear()
@@ -87,6 +88,7 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
       </SafeAreaView>
       <SafeAreaView edges={["top"]} pointerEvents="box-none" className="absolute left-4 top-2">
         <TouchableOpacity
+          ph-label="map search icon"
           activeOpacity={0.8}
           onPress={() => {
             searchWidth.value = width - 32
