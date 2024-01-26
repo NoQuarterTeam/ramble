@@ -1,6 +1,7 @@
 import { FormProvider } from "react-hook-form"
 import { ScrollView, View } from "react-native"
 import { useRouter } from "expo-router"
+import { usePostHog } from "posthog-react-native"
 
 import { Button } from "~/components/ui/Button"
 import { FormError } from "~/components/ui/FormError"
@@ -14,8 +15,10 @@ import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
 export default function RequestAccessScreen() {
   useKeyboardController()
   const navigation = useRouter()
+  const posthog = usePostHog()
   const { mutate, error, isLoading } = api.auth.requestAccess.useMutation({
     onSuccess: async () => {
+      posthog?.capture("user requested access")
       if (navigation.canGoBack()) {
         navigation.back()
       } else {
@@ -25,9 +28,7 @@ export default function RequestAccessScreen() {
       toast({ title: "Thanks! We will get in contact soon!" })
     },
   })
-  const form = useForm({
-    defaultValues: { email: "" },
-  })
+  const form = useForm({ defaultValues: { email: "" } })
 
   const onSubmit = form.handleSubmit((data) => mutate(data))
 

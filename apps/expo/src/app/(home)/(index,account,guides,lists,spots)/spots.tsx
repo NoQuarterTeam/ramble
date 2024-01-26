@@ -56,7 +56,7 @@ export default function SpotsScreen() {
     <TabView
       title={
         isReady ? (
-          <TouchableOpacity onPress={sortProps.onOpen} className="flex flex-row items-center">
+          <TouchableOpacity ph-label="spot list sort" onPress={sortProps.onOpen} className="flex flex-row items-center">
             <BrandHeading className="py-2 text-4xl">{SORT_OPTIONS[sort]}</BrandHeading>
             <Icon icon={ChevronDown} size={20} color="primary" />
           </TouchableOpacity>

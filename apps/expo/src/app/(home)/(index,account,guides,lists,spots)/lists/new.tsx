@@ -1,5 +1,6 @@
 import { ScrollView } from "react-native"
 import { useRouter } from "expo-router"
+import { usePostHog } from "posthog-react-native"
 
 import { ListForm } from "~/components/ListForm"
 import { ModalView } from "~/components/ui/ModalView"
@@ -10,9 +11,11 @@ export default function NewListScreen() {
   const router = useRouter()
   const { me } = useMe()
   const utils = api.useUtils()
+  const posthog = usePostHog()
   const { mutate, error, isLoading } = api.list.create.useMutation({
-    onSuccess: () => {
+    onSuccess: (data) => {
       if (!me) return
+      posthog?.capture("list created", { name: data.name })
       utils.list.allByUser.refetch({ username: me.username })
       router.back()
     },
