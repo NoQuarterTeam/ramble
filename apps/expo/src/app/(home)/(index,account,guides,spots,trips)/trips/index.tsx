@@ -1,6 +1,6 @@
 import { View, Text } from "react-native"
 
-export function TripsScreen() {
+export default function TripsScreen() {
   return (
     <View>
       <Text>Trips</Text>
