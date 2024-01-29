@@ -59,7 +59,7 @@ export function ImageUploader({
         const rejectedFile = rejectedFiles[0]
         if (rejectedFile?.errors[0]?.code.includes("file-too-large")) {
           const description = `File too large, must be under ${
-            (dropzoneOptions?.maxSize && `${dropzoneOptions.maxSize / 1000000}MB`) || "5MB"
+            (dropzoneOptions?.maxSize && `${dropzoneOptions.maxSize / 1000000}MB`) || "20MB"
           }`
           toast.error("Invalid file", { description })
         } else {
@@ -75,7 +75,7 @@ export function ImageUploader({
     [dropzoneOptions, handleSubmitImages],
   )
   const { getRootProps, getInputProps } = useDropzone({
-    maxSize: 5000000, // 5MB
+    maxSize: 20000000, // 20MB
     ...dropzoneOptions,
     onDrop,
     multiple: isMulti,
