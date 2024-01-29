@@ -52,7 +52,7 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
             {data.map((item) => (
               <Button
                 onPress={() => {
-                  posthog?.capture("map search", { search: item.name })
+                  posthog?.capture("map location searched", { search: item.name })
                   onSearch(item.center)
                   onClear()
                 }}
