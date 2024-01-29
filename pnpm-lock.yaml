@@ -400,8 +400,8 @@ importers:
         specifier: 5.2.0
         version: 5.2.0
       lucide-react:
-        specifier: 0.314.0
-        version: 0.314.0(react@18.2.0)
+        specifier: 0.316.0
+        version: 0.316.0(react@18.2.0)
       mapbox-gl:
         specifier: 3.1.2
         version: 3.1.2
@@ -409,8 +409,8 @@ importers:
         specifier: 0.2.0
         version: 0.2.0
       posthog-js:
-        specifier: 1.103.0
-        version: 1.103.0
+        specifier: 1.103.1
+        version: 1.103.1
       pretty-cache-header:
         specifier: 1.0.0
         version: 1.0.0
@@ -436,8 +436,8 @@ importers:
         specifier: 0.32.6
         version: 0.32.6
       sonner:
-        specifier: 1.3.1
-        version: 1.3.1(react-dom@18.2.0)(react@18.2.0)
+        specifier: 1.4.0
+        version: 1.4.0(react-dom@18.2.0)(react@18.2.0)
       supercluster:
         specifier: 8.0.1
         version: 8.0.1
@@ -13131,8 +13131,8 @@ packages:
       react-native-svg: 14.1.0(react-native@0.73.2)(react@18.2.0)
     dev: false
 
-  /lucide-react@0.314.0(react@18.2.0):
-    resolution: {integrity: sha512-c2zOW7TOyKxPCaSs1og2lFdoI3SR4iii3yrZJU2Zpdc78nOw4fUmrcFNultaCiwZcr4CyiKdzjMdvKNlBBk+UQ==}
+  /lucide-react@0.316.0(react@18.2.0):
+    resolution: {integrity: sha512-dTmYX1H4IXsRfVcj/KUxworV6814ApTl7iXaS21AimK2RUEl4j4AfOmqD3VR8phe5V91m4vEJ8tCK4uT1jE5nA==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
@@ -15377,8 +15377,8 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.0.2
 
-  /posthog-js@1.103.0:
-    resolution: {integrity: sha512-NldabkbCB9a/2JLszoB7vk5XZr93iBoGEgEEKn201oDD3QkRn1nC+c+e1HQ3S9oMs5oZIhKmPNBCje1J9prYRg==}
+  /posthog-js@1.103.1:
+    resolution: {integrity: sha512-cFXFU4Z4kl/+RUUV4ju1DlfM7dwCGi6H9xWsfhljIhGcBbT8UfS4JGgZGXl9ABQDdgDPb9xciqnysFSsUQshTA==}
     dependencies:
       fflate: 0.4.8
       preact: 10.19.3
@@ -16949,8 +16949,8 @@ packages:
       smart-buffer: 4.2.0
     dev: true
 
-  /sonner@1.3.1(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-+rOAO56b2eI3q5BtgljERSn2umRk63KFIvgb2ohbZ5X+Eb5u+a/7/0ZgswYqgBMg8dyl7n6OXd9KasA8QF9ToA==}
+  /sonner@1.4.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-nvkTsIuOmi9e5Wz5If8ldasJjZNVfwiXYijBi2dbijvTQnQppvMcXTFNxL/NUFWlI2yJ1JX7TREDsg+gYm9WyA==}
     peerDependencies:
       react: ^18.0.0
       react-dom: ^18.0.0
