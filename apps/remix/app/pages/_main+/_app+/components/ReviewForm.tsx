@@ -11,7 +11,7 @@ import { PageContainer } from "~/components/PageContainer"
 import { IconButton, Textarea } from "~/components/ui"
 import type { SerializeFrom } from "~/lib/vendor/vercel.server"
 
-import { Actions } from "../spots.$id_.reviews.$reviewId"
+import { Actions } from "../spots.$id.reviews.$reviewId"
 
 interface Props {
   spot: SerializeFrom<Pick<Spot, "name"> & { images: Pick<SpotImage, "path" | "blurHash">[] }>

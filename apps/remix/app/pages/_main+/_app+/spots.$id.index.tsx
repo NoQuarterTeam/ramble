@@ -250,6 +250,13 @@ export default function SpotDetail() {
                 )}
               </Await>
             </Suspense>
+            <p>
+              Added by{" "}
+              <Link to={`/${spot.creator.username}`} className="underline hover:opacity-80">
+                {spot.creator.firstName} {spot.creator.lastName}
+              </Link>{" "}
+              on the {dayjs(spot.createdAt).format("DD/MM/YYYY")}
+            </p>
           </div>
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
@@ -277,13 +284,7 @@ export default function SpotDetail() {
                   })}
                 </div>
               )}
-              <p>
-                Added by{" "}
-                <Link to={`/${spot.creator.username}`} className="hover:underline">
-                  {spot.creator.firstName} {spot.creator.lastName}
-                </Link>{" "}
-                on the {dayjs(spot.createdAt).format("DD/MM/YYYY")}
-              </p>
+
               <div className="flex space-x-2">
                 {canManageSpot(spot, user) && (
                   <>

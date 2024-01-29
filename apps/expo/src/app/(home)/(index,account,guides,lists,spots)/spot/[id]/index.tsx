@@ -152,8 +152,10 @@ export default function SpotDetailScreen() {
         </Animated.View>
         <View className="space-y-3 p-4">
           <View className="space-y-2">
-            <SpotTypeBadge spot={spot} />
-            <Heading className="text-2xl leading-7">{spot.name}</Heading>
+            <View className="space-y-2">
+              <SpotTypeBadge spot={spot} />
+              <Heading className="font-600 text-2xl leading-7">{spot.name}</Heading>
+            </View>
             <View className="flex flex-row items-center space-x-2">
               <View className="flex flex-row flex-wrap items-center space-x-1">
                 <Icon icon={Heart} size={16} fill={isDark ? "white" : "black"} />
@@ -163,6 +165,17 @@ export default function SpotDetailScreen() {
                 <Icon icon={Star} size={16} fill={isDark ? "white" : "black"} />
                 <Text className="text-sm">{displayRating(data.rating._avg.rating)}</Text>
               </View>
+            </View>
+            <View className="flex flex-row">
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={me ? () => router.push(`/${tab}/${spot.creator.username}/(profile)`) : () => router.push("/login")}
+              >
+                <Text className="text-sm underline">
+                  {spot.creator.firstName} {spot.creator.lastName}
+                </Text>
+              </TouchableOpacity>
+              <Text className="text-sm"> added on {dayjs(spot.createdAt).format("DD/MM/YYYY")}</Text>
             </View>
           </View>
           <View className="space-y-1">
@@ -192,22 +205,20 @@ export default function SpotDetailScreen() {
                 })}
               </View>
             )}
-            <View className="flex flex-row py-2">
-              <Text className="text-sm">Added by </Text>
-              <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={me ? () => router.push(`/${tab}/${spot.creator.username}/(profile)`) : () => router.push("/login")}
-              >
-                <Text className="text-sm">
-                  {spot.creator.firstName} {spot.creator.lastName}
-                </Text>
-              </TouchableOpacity>
-              <Text className="text-sm"> on the {dayjs(spot.createdAt).format("DD/MM/YYYY")}</Text>
-            </View>
-            <View className="flex flex-row justify-between space-x-2 py-4">
+
+            <View className="space-y-2 py-4">
+              {me && (
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  leftIcon={<Icon icon={Flag} size={16} />}
+                  onPress={() => router.push(`/${tab}/spot/${spot.id}/report`)}
+                >
+                  Report spot
+                </Button>
+              )}
               {canManageSpot(spot, me) && !spot.verifiedAt && (
                 <Button
-                  className="flex-1"
                   size="sm"
                   onPress={() => verifySpot({ id: spot.id })}
                   isLoading={isVerifyingLoading}
@@ -218,7 +229,6 @@ export default function SpotDetailScreen() {
               )}
               {canManageSpot(spot, me) && (
                 <Button
-                  className="flex-1"
                   size="sm"
                   onPress={() => {
                     const searchParams = new URLSearchParams({
@@ -240,29 +250,17 @@ export default function SpotDetailScreen() {
                   Edit
                 </Button>
               )}
-              {me && (
+              {me?.isAdmin && (
                 <Button
                   size="sm"
-                  className="flex-1"
-                  variant="ghost"
-                  leftIcon={<Icon icon={Flag} size={16} />}
-                  onPress={() => router.push(`/${tab}/spot/${spot.id}/report`)}
+                  onPress={() => router.push(`/${tab}/spot/${spot.id}/delete`)}
+                  variant="destructive"
+                  leftIcon={<Trash size={18} className="text-white" />}
                 >
-                  Report spot
+                  Delete
                 </Button>
               )}
             </View>
-            {me?.isAdmin && (
-              <Button
-                className="flex-1"
-                size="sm"
-                onPress={() => router.push(`/${tab}/spot/${spot.id}/delete`)}
-                variant="destructive"
-                leftIcon={<Trash size={18} className="text-white" />}
-              >
-                Delete
-              </Button>
-            )}
           </View>
 
           <View className="h-px w-full bg-gray-200 dark:bg-gray-700" />
@@ -428,7 +426,7 @@ function TranslateSpotDescription(props: DescProps) {
   return (
     <View className="mt-2 space-y-1">
       <View className="flex flex-row items-center justify-between">
-        <Text className="font-600 text-sm">Description</Text>
+        <Text className="font-600">Description</Text>
         <Button
           leftIcon={<Icon icon={Languages} size={16} />}
           rightIcon={<Icon icon={ChevronDown} size={16} />}
