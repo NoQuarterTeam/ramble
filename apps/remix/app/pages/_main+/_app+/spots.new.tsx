@@ -27,7 +27,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const result = await validateFormData(request, spotSchema.and(z.object({ customAddress: NullableFormString })))
   if (!result.success) return formError(result)
 
-  const formData = await request.formData()
+  let amenities: undefined | z.infer<typeof spotAmenitiesSchema>
+  if (doesSpotTypeRequireAmenities(result.data.type)) {
+    const amenitiesResult = await validateFormData(request, spotAmenitiesSchema)
+    if (!amenitiesResult.success) return formError(amenitiesResult)
+    amenities = amenitiesResult.data
+  }
+  const formData = await request.clone().formData()
   const images = (formData.getAll("image") as string[]).filter(Boolean)
   const shouldPublishLater = formData.get("shouldPublishLater") === "on"
   const { customAddress, ...data } = result.data
@@ -37,13 +43,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       return { path: image, blurHash, creator: { connect: { id: user.id } } }
     }),
   )
-
-  let amenities: undefined | z.infer<typeof spotAmenitiesSchema>
-  if (doesSpotTypeRequireAmenities(result.data.type)) {
-    const amenitiesResult = await validateFormData(request, spotAmenitiesSchema)
-    if (!amenitiesResult.success) return formError(amenitiesResult)
-    amenities = amenitiesResult.data
-  }
 
   const spot = await db.spot.create({
     data: {
