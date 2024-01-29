@@ -254,7 +254,7 @@ export const spotRouter = createTRPCRouter({
           amenities: amenities ? { create: amenities } : undefined,
         },
       })
-      void sendSlackMessage(`📍 New spot added by ${ctx.user.username}!`)
+      void sendSlackMessage(`📍 New spot added by @${ctx.user.username}!`)
       return spot
     }),
   update: protectedProcedure
