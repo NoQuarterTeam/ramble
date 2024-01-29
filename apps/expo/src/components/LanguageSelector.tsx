@@ -6,6 +6,7 @@ import { languages, type UseDisclosure } from "@ramble/shared"
 import { Icon } from "./Icon"
 import { ModalView } from "./ui/ModalView"
 import { Text } from "./ui/Text"
+import { usePostHog } from "posthog-react-native"
 
 interface Props {
   modalProps: UseDisclosure
@@ -14,6 +15,8 @@ interface Props {
 }
 
 export function LanguageSelector({ modalProps, ...props }: Props) {
+  const posthog = usePostHog()
+
   return (
     <Modal
       animationType="slide"
@@ -32,6 +35,7 @@ export function LanguageSelector({ modalProps, ...props }: Props) {
             <TouchableOpacity
               key={l.code}
               onPress={() => {
+                posthog?.capture("user select language", { language: l.code })
                 props.setSelectedLang(l.code)
                 modalProps.onClose()
               }}

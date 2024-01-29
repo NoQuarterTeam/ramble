@@ -430,7 +430,6 @@ function TranslateSpotDescription(props: DescProps) {
       <View className="flex flex-row items-center justify-between">
         <Text className="font-600 text-sm">Description</Text>
         <Button
-          ph-label="spot-description-language-selector"
           leftIcon={<Icon icon={Languages} size={16} />}
           rightIcon={<Icon icon={ChevronDown} size={16} />}
           isLoading={isInitialLoading}

@@ -11,6 +11,7 @@ import { Spinner } from "~/components/ui/Spinner"
 import { FULL_WEB_URL } from "~/lib/config"
 import { isAndroid, width } from "~/lib/device"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
+import { usePostHog } from "posthog-react-native"
 
 export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) => void }) {
   const [search, setSearch] = React.useState("")
@@ -38,6 +39,7 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
     Keyboard.dismiss()
     searchWidth.value = 0
   }
+  const posthog = usePostHog()
   useKeyboardController()
   const inputRef = React.useRef<TextInput>(null)
   if (isAndroid) return null
@@ -49,8 +51,8 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
           <View className="rounded-[24px] bg-gray-50 p-2 dark:bg-gray-900">
             {data.map((item) => (
               <Button
-                ph-label="map-search-item"
                 onPress={() => {
+                  posthog?.capture("map search", { search: item.name })
                   onSearch(item.center)
                   onClear()
                 }}
@@ -88,7 +90,6 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
       </SafeAreaView>
       <SafeAreaView edges={["top"]} pointerEvents="box-none" className="absolute left-4 top-2">
         <TouchableOpacity
-          ph-label="map-search-icon"
           activeOpacity={0.8}
           onPress={() => {
             searchWidth.value = width - 32
