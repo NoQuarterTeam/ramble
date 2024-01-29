@@ -10,9 +10,11 @@ import { Button } from "~/components/ui/Button"
 import { toast } from "~/components/ui/Toast"
 
 import { NewSpotModalView } from "./NewSpotModalView"
+import { type SpotType } from "@ramble/database/types"
+import { Text } from "~/components/ui/Text"
 
 export default function NewSpotImagesScreen() {
-  const params = useLocalSearchParams()
+  const params = useLocalSearchParams<{ type: SpotType }>()
   const router = useRouter()
   const [images, setImages] = React.useState<string[]>([])
 
@@ -37,6 +39,9 @@ export default function NewSpotImagesScreen() {
   return (
     <NewSpotModalView title="upload images">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        {(params.type === "CAMPING" || params.type === "FREE_CAMPING") && (
+          <Text>Try and add a photo of your van at the spot, maybe a nice picture of the view!</Text>
+        )}
         <View className="flex flex-row flex-wrap">
           {images.map((image) => (
             <TouchableOpacity key={image} onPress={() => setImages((im) => im.filter((i) => i !== image))} className="w-1/3 p-1">
