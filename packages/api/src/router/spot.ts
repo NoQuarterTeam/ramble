@@ -13,6 +13,7 @@ import {
   geocodeCoords,
   publicSpotWhereClause,
   publicSpotWhereClauseRaw,
+  sendSlackMessage,
   spotItemDistanceFromMeField,
   spotItemSelectFields,
   spotListQuery,
@@ -253,6 +254,7 @@ export const spotRouter = createTRPCRouter({
           amenities: amenities ? { create: amenities } : undefined,
         },
       })
+      void sendSlackMessage(`📍 New spot added by @${ctx.user.username}!`)
       return spot
     }),
   update: protectedProcedure
