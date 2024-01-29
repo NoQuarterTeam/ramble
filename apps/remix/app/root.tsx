@@ -171,7 +171,7 @@ export function ErrorBoundary() {
             <Frown className="sq-20" />
             <h1 className="text-3xl">Oops, there was an error!</h1>
             <p>{error.message}</p>
-            {config.ENV !== "production" && error.stack ? (
+            {config && config.ENV !== "production" && error.stack ? (
               <>
                 <hr />
                 <div className="rounded-xs bg-gray-200 p-4 dark:bg-gray-700 ">
