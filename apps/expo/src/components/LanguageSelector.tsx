@@ -35,7 +35,7 @@ export function LanguageSelector({ modalProps, ...props }: Props) {
             <TouchableOpacity
               key={l.code}
               onPress={() => {
-                posthog?.capture("user select language", { language: l.code })
+                posthog?.capture("user language selected", { language: l.code })
                 props.setSelectedLang(l.code)
                 modalProps.onClose()
               }}
