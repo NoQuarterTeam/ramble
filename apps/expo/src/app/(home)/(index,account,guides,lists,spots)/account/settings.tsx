@@ -60,7 +60,6 @@ export default function AccountSettingsScreen() {
             <Button
               onPress={modalProps.onOpen}
               variant="outline"
-              ph-label="settings-language-selector"
               size="xs"
               rightIcon={<Icon icon={ChevronDown} size={16} />}
               textClassName="pl-1 pr-2 text-left"
