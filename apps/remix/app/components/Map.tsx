@@ -15,16 +15,11 @@ export const Map = React.forwardRef<MapRef, MapViewProps & { children?: React.Re
   const theme = useTheme()
 
   React.useEffect(() => {
-    if (!ref?.current || !!props.mapStyle) return
-    const timeout = setTimeout(() => {
-      // need to wait for map to paint new style
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      ref.current.setConfigProperty("basemap", "lightPreset", theme === "light" ? "day" : "night")
-    }, 500)
-    return () => {
-      clearTimeout(timeout)
-    }
+    if (!ref.current) return
+    if (!!props.mapStyle) return
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    setTimeout(() => ref.current.setConfigProperty("basemap", "lightPreset", theme === "light" ? "day" : "night"), 500)
   }, [theme, ref, props.mapStyle])
 
   return (
@@ -33,29 +28,21 @@ export const Map = React.forwardRef<MapRef, MapViewProps & { children?: React.Re
       ref={ref}
       maxZoom={20}
       attributionControl={false}
-      // mapStyle={
-      //   preferences.mapStyleSatellite
-      //     ? "mapbox://styles/jclackett/clp122bar007z01qu21kc8h4g"
-      //     : theme === "dark"
-      //       ? "mapbox://styles/jclackett/clh82otfi00ay01r5bftedls1"
-      //       : "mapbox://styles/jclackett/clh82jh0q00b601pp2jfl30sh"
-      // }
       {...props}
       mapStyle={props.mapStyle || "mapbox://styles/mapbox/standard"}
       style={{ height: "100%", width: "100%", ...props.style, opacity: isLoaded ? 1 : 0 }}
       onLoad={(e) => {
-        if (!props.mapStyle) {
+        props.onLoad?.(e)
+        if (props.mapStyle) return setIsLoaded(true)
+        new Promise((resolve) => setTimeout(resolve, 200)).then(() => {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           e.target.setConfigProperty("basemap", "lightPreset", theme === "light" ? "day" : "night")
-        }
-        new Promise((resolve) => setTimeout(resolve, 200)).then(() => {
           setIsLoaded(true)
         })
-        props.onLoad?.(e)
       }}
     >
-      {isLoaded && props.children}
+      {props.children}
       <GeolocateControl position="bottom-right" />
       <NavigationControl position="bottom-right" />
     </ReactGLMap>
