@@ -68,7 +68,7 @@ export function useFetcher<T>(
 
   React.useEffect(() => {
     if (!fetcher.data || !props?.onFinish) return
-    if (fetcher.state === "loading" && fetcher.data) {
+    if (fetcher.state !== "idle" && fetcher.data) {
       props.onFinish(fetcher.data as T)
     }
   }, [fetcher.state, props, fetcher.data])
