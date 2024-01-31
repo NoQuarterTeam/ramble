@@ -3,15 +3,16 @@ import { useRouter } from "expo-router"
 
 import { createImageUrl } from "@ramble/shared"
 
-import { api, RouterOutputs } from "~/lib/api"
+import { api } from "~/lib/api"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 import { SpotIcon } from "./SpotIcon"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
+import { Spot, SpotImage } from "@ramble/database/types"
 
 interface Props {
-  spot: RouterOutputs["trip"]["tripItems"][number]["spot"]
+  spot: Pick<Spot, "id" | "name" | "type"> & { images: Pick<SpotImage, "path" | "blurHash">[] }
 }
 
 export function TripSpotItem({ spot }: Props) {

@@ -1,9 +1,8 @@
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
-import { useLocalSearchParams, useRouter } from "expo-router"
+import { Link, useLocalSearchParams, useRouter } from "expo-router"
 
-import { Button } from "~/components/ui/Button"
 import { Map } from "~/components/Map"
 import { ScreenView } from "~/components/ui/ScreenView"
 import { Spinner } from "~/components/ui/Spinner"
@@ -21,7 +20,6 @@ export default function TripDetailScreen() {
   const params = useLocalSearchParams<{ id: string }>()
   const { me } = useMe()
   const { data: trip, isLoading } = api.trip.detail.useQuery({ id: params.id })
-  const { data: tripItems, isLoading: tripItemsLoading } = api.trip.tripItems.useQuery({ id: params.id })
   const router = useRouter()
 
   const camera = React.useRef<Camera>(null)
@@ -43,7 +41,7 @@ export default function TripDetailScreen() {
         )
       }
     >
-      {isLoading || tripItemsLoading ? (
+      {isLoading ? (
         <View className="flex items-center justify-center p-4">
           <Spinner />
         </View>
@@ -82,19 +80,19 @@ export default function TripDetailScreen() {
               showsHorizontalScrollIndicator={false}
               estimatedItemSize={100}
               contentContainerStyle={{ paddingVertical: 8 }}
-              ListEmptyComponent={
-                <View>
-                  <Text className="w-full py-4 text-center text-xl">No spots yet</Text>
-                  <Button variant="outline" onPress={() => router.navigate("/")} className="w-full">
-                    Add a spot to your trip!
-                  </Button>
-                </View>
-              }
-              data={tripItems}
+              // ListEmptyComponent={
+              //   <View>
+              //     <Text className="w-full py-4 text-center text-xl">No spots yet</Text>
+              //     <Button variant="outline" onPress={() => router.navigate("/")} className="w-full">
+              //       Add a spot to your trip!
+              //     </Button>
+              //   </View>
+              // }
+              data={trip.items}
               ListHeaderComponent={() => <ListHeader />}
               renderItem={({ item }) => item.spot && <TripSpotItem spot={item.spot} />}
               ItemSeparatorComponent={() => <ItemSeparator />}
-              ListFooterComponent={() => <ListFooter tripId={trip.id} />}
+              ListFooterComponent={() => <ListFooter />}
             />
           </View>
         </>
@@ -125,18 +123,17 @@ function ItemSeparator() {
   )
 }
 
-function ListFooter({ tripId }: { tripId: string }) {
-  const router = useRouter()
+function ListFooter() {
+  const { id } = useLocalSearchParams<{ id: string }>()
   return (
     <View className="flex h-full flex-row">
       <ItemSeparator />
-      <TouchableOpacity
-        onPress={() => router.push(`/(home)/(trips)/trips/${tripId}/new-stop`)}
-        className="flex w-[150px] items-center justify-center rounded-md border border-dashed border-gray-700"
-      >
-        <Icon icon={Plus} />
-        <Text className="text-center text-xs">Plan your next step</Text>
-      </TouchableOpacity>
+      <Link push href={`/(home)/(trips)/trips/${id}/add`} asChild>
+        <TouchableOpacity className="flex w-[150px] items-center justify-center border border-dashed border-gray-700">
+          <Icon icon={Plus} />
+          <Text className="text-center text-xs">Plan your next step</Text>
+        </TouchableOpacity>
+      </Link>
       <ItemSeparator />
       <View className="flex w-[45px] items-center justify-center space-y-1">
         <Icon icon={Flag} />

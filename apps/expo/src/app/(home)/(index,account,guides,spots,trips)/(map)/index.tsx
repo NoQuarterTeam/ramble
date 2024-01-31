@@ -178,7 +178,7 @@ export default function MapScreen() {
             })
           }
           return (
-            <MarkerView key={i} coordinate={point.geometry.coordinates}>
+            <MarkerView key={i} allowOverlap coordinate={point.geometry.coordinates}>
               <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={onPress}
@@ -206,7 +206,7 @@ export default function MapScreen() {
             avatarBlurHash: string | null
           }
           return (
-            <MarkerView key={user.id} coordinate={point.geometry.coordinates}>
+            <MarkerView key={user.id} allowOverlap coordinate={point.geometry.coordinates}>
               <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={() => router.push(`/(home)/(index)/${user.username}/(profile)`)}
