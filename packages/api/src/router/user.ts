@@ -156,9 +156,4 @@ export const userRouter = createTRPCRouter({
       },
     })
   }),
-  trips: protectedProcedure.query(({ ctx }) => {
-    return ctx.prisma.user.findUniqueOrThrow({ where: { id: ctx.user.id } }).trips({
-      include: { tripItems: true, creator: true },
-    })
-  }),
 })

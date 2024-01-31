@@ -361,8 +361,8 @@ model Trip {
   creator   User   @relation(name: "CreatedTrips", fields: [creatorId], references: [id])
   creatorId String
 
-  users     User[]     @relation(name: "UserTrips")
-  tripItems TripItem[]
+  users User[]     @relation(name: "UserTrips")
+  items TripItem[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -371,17 +371,34 @@ model Trip {
 }
 
 model TripItem {
-  id   String    @id @default(uuid())
-  date DateTime?
+  id    String    @id @default(uuid())
+  date  DateTime?
+  order Int       @default(0)
 
-  creator   User    @relation(fields: [creatorId], references: [id])
+  creator   User      @relation(fields: [creatorId], references: [id])
   creatorId String
-  trip      Trip    @relation(fields: [tripId], references: [id])
+  trip      Trip      @relation(fields: [tripId], references: [id])
   tripId    String
-  spot      Spot?   @relation(fields: [spotId], references: [id])
+  spot      Spot?     @relation(fields: [spotId], references: [id])
   spotId    String?
+  stop      TripStop?
 
   @@index([creatorId])
   @@index([tripId])
   @@index([spotId])
+}
+
+model TripStop {
+  id        String @id @default(uuid())
+  name      String
+  latitude  Float
+  longitude Float
+
+  tripItem   TripItem @relation(fields: [tripItemId], references: [id])
+  tripItemId String   @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([tripItemId])
 }

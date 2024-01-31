@@ -1,6 +1,6 @@
 import { TouchableOpacity, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
-import { useLocalSearchParams, useRouter } from "expo-router"
+import { Link, useLocalSearchParams, useRouter } from "expo-router"
 
 import { Button } from "~/components/ui/Button"
 import { ScreenView } from "~/components/ui/ScreenView"
@@ -15,7 +15,6 @@ export default function TripDetailScreen() {
   const params = useLocalSearchParams<{ id: string }>()
   const { me } = useMe()
   const { data: trip, isLoading } = api.trip.detail.useQuery({ id: params.id })
-  const { data: tripItems, isLoading: tripItemsLoading } = api.trip.tripItems.useQuery({ id: params.id })
   const router = useRouter()
 
   const tab = useTabSegment()
@@ -34,7 +33,12 @@ export default function TripDetailScreen() {
         )
       }
     >
-      {isLoading || tripItemsLoading ? (
+      {trip && (
+        <Link push href={`/(home)/(trips)/trips/${trip.id}/add`} asChild>
+          <Button>Add item</Button>
+        </Link>
+      )}
+      {isLoading ? (
         <View className="flex items-center justify-center p-4">
           <Spinner />
         </View>
@@ -55,7 +59,7 @@ export default function TripDetailScreen() {
               </Button>
             </View>
           }
-          data={tripItems}
+          data={trip.items}
           ItemSeparatorComponent={() => <View className="h-6" />}
           renderItem={({ item }) => item.spot && <TripSpotItem spot={item.spot} />}
         />

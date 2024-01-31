@@ -13,7 +13,7 @@ import { useMe } from "~/lib/hooks/useMe"
 
 export default function TripsScreen() {
   const { me } = useMe()
-  const { data: trips, isLoading } = api.user.trips.useQuery(undefined, { enabled: !!me })
+  const { data: trips, isLoading } = api.trip.mine.useQuery(undefined, { enabled: !!me })
 
   return (
     <TabView

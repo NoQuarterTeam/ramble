@@ -8,7 +8,7 @@ Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZW
 
 type MapViewProps = React.ComponentProps<typeof Mapbox.MapView>
 
-export const Map = React.forwardRef<Mapbox.MapView, MapViewProps & { children: React.ReactNode }>(function _Map(props, mapRef) {
+export const Map = React.forwardRef<Mapbox.MapView, MapViewProps & { children?: React.ReactNode }>(function _Map(props, mapRef) {
   const styleURL = props.styleURL || "mapbox://styles/mapbox/standard"
   return (
     <Mapbox.MapView

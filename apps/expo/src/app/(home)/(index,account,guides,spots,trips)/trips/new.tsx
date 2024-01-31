@@ -11,7 +11,7 @@ export default function NewTripScreen() {
   const utils = api.useUtils()
   const { mutate, error, isLoading } = api.trip.create.useMutation({
     onSuccess: () => {
-      utils.user.trips.refetch()
+      utils.trip.mine.refetch()
       router.back()
     },
   })
