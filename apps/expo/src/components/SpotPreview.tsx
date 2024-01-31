@@ -2,7 +2,7 @@ import * as React from "react"
 import { TouchableOpacity, useColorScheme, View } from "react-native"
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
 import { useRouter } from "expo-router"
-import { Heart, Star, X } from "lucide-react-native"
+import { Heart, Route, Star, X } from "lucide-react-native"
 
 import { displayRating, isPartnerSpot } from "@ramble/shared"
 
@@ -76,20 +76,36 @@ export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }
               </View>
             </View>
 
-            <Button
-              size="xs"
-              variant="outline"
-              onPress={me ? () => router.push(`/(home)/(index)/spot/${spot.id}/save`) : () => router.push("/login")}
-              leftIcon={
-                <Icon
-                  icon={Heart}
-                  size={14}
-                  fill={spot.listSpots && spot.listSpots.length > 0 ? (isDark ? "white" : "black") : undefined}
-                />
-              }
-            >
-              Save
-            </Button>
+            <View className="flex flex-row space-x-2">
+              <Button
+                size="xs"
+                variant="outline"
+                onPress={me ? () => router.push(`/(home)/(index)/spot/${spot.id}/save-to-list`) : () => router.push("/login")}
+                leftIcon={
+                  <Icon
+                    icon={Heart}
+                    size={14}
+                    fill={spot.listSpots && spot.listSpots.length > 0 ? (isDark ? "white" : "black") : undefined}
+                  />
+                }
+              >
+                Save
+              </Button>
+              <Button
+                size="xs"
+                variant="outline"
+                onPress={me ? () => router.push(`/(home)/(index)/spot/${spot.id}/save-to-trip`) : () => router.push("/login")}
+                leftIcon={
+                  <Icon
+                    icon={Route}
+                    size={14}
+                    // fill={spot.listSpots && spot.listSpots.length > 0 ? (isDark ? "white" : "black") : undefined}
+                  />
+                }
+              >
+                Add to Trip
+              </Button>
+            </View>
           </View>
 
           <View className="rounded-xs overflow-hidden">

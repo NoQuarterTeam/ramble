@@ -12,7 +12,7 @@ import { Text } from "~/components/ui/Text"
 import { api, type RouterOutputs } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 
-export default function SaveSpotScreen() {
+export default function SaveSpotToListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
   const { me } = useMe()
   const { data: lists, isLoading } = api.list.allByUserWithSavedSpots.useQuery({ spotId: id }, { enabled: !!me })

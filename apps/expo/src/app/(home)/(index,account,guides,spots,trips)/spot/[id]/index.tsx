@@ -16,7 +16,20 @@ import { LinearGradient } from "expo-linear-gradient"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
-import { Check, ChevronDown, ChevronLeft, Compass, Edit2, Flag, Heart, Languages, Share, Star, Trash } from "lucide-react-native"
+import {
+  Check,
+  ChevronDown,
+  ChevronLeft,
+  Compass,
+  Edit2,
+  Flag,
+  Heart,
+  Languages,
+  Route,
+  Share,
+  Star,
+  Trash,
+} from "lucide-react-native"
 
 import { type Spot } from "@ramble/database/types"
 import {
@@ -354,11 +367,22 @@ export default function SpotDetailScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => router.push(`/${tab}/spot/${spot.id}/save`)}
+            onPress={() => router.push(`/${tab}/spot/${spot.id}/save-to-list`)}
             activeOpacity={0.8}
             className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
           >
             <Icon icon={Heart} size={20} fill={data.isLiked ? (isDark ? "white" : "black") : "transparent"} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => router.push(`/${tab}/spot/${spot.id}/save-to-trip`)}
+            activeOpacity={0.8}
+            className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
+          >
+            <Icon
+              icon={Route}
+              size={20}
+              // fill={data.isLiked ? (isDark ? "white" : "black") : "transparent"}
+            />
           </TouchableOpacity>
         </View>
       </View>
