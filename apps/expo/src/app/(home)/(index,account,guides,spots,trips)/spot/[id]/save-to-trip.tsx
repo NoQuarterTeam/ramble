@@ -19,12 +19,12 @@ export default function SaveSpotToTripScreen() {
   // const { data: lists, isLoading } = api.list.allByUserWithSavedSpots.useQuery({ spotId: id }, { enabled: !!me })
   if (!me)
     return (
-      <ModalView title="Add to trip">
+      <ModalView title="add to trip">
         <LoginPlaceholder text="Log in to start saving spots" />
       </ModalView>
     )
   return (
-    <ModalView title="Add to trip">
+    <ModalView title="add to trip">
       {isLoading ? (
         <View className="flex flex-row items-center justify-center pt-6">
           <Spinner />

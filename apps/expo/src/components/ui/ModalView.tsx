@@ -22,7 +22,7 @@ export function ModalView(props: Props) {
     <SafeAreaProvider>
       <SafeAreaView edges={["top"]} className="bg-background dark:bg-background-dark flex-1 px-4 pt-4">
         <View className="flex flex-row justify-between pb-2">
-          {props.title ? <BrandHeading className="w-11/12 text-3xl">{props.title}</BrandHeading> : <Text />}
+          {props.title ? <BrandHeading className="w-11/12 text-3xl">{props.title.toLowerCase()}</BrandHeading> : <Text />}
           <TouchableOpacity onPress={props.onBack || router.back} className="p-1">
             <Icon icon={X} size={24} />
           </TouchableOpacity>

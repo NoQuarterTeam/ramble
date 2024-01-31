@@ -3,6 +3,7 @@ import { z } from "zod"
 import { tripSchema } from "@ramble/server-schemas"
 
 import { createTRPCRouter, protectedProcedure } from "../trpc"
+import { TRPCError } from "@trpc/server"
 
 export const tripRouter = createTRPCRouter({
   mine: protectedProcedure.query(({ ctx }) => {
@@ -22,10 +23,23 @@ export const tripRouter = createTRPCRouter({
     return ctx.prisma.trip.delete({ where: { id: input.id } })
   }),
   detail: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
-    return ctx.prisma.trip.findUnique({
+    const trip = await ctx.prisma.trip.findUnique({
       where: { id: input.id, users: { some: { id: ctx.user.id } } },
-      include: { items: { include: { spot: { include: { images: { take: 1, orderBy: { createdAt: "desc" } } } }, stop: true } } },
+      select: {
+        name: true,
+        items: {
+          orderBy: { order: "asc" },
+          select: {
+            id: true,
+            order: true,
+            spot: { select: { id: true, name: true, type: true, images: { take: 1, orderBy: { createdAt: "desc" } } } },
+            stop: { select: { id: true, name: true, latitude: true, longitude: true } },
+          },
+        },
+      },
     })
+    if (!trip) throw new TRPCError({ code: "NOT_FOUND", message: "Trip not found" })
+    return trip
   }),
   saveToTrip: protectedProcedure.input(z.object({ spotId: z.string(), tripId: z.string() })).mutation(async ({ ctx, input }) => {
     const tripItems = await ctx.prisma.trip.findUnique({ where: { id: input.tripId } }).items({ where: { spotId: input.spotId } })
