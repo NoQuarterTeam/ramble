@@ -94,7 +94,7 @@ export default function TripDetailScreen() {
               ListHeaderComponent={() => <ListHeader />}
               renderItem={({ item }) => item.spot && <TripSpotItem spot={item.spot} />}
               ItemSeparatorComponent={() => <ItemSeparator />}
-              ListFooterComponent={() => <ListFooter />}
+              ListFooterComponent={() => <ListFooter tripId={trip.id} />}
             />
           </View>
         </>
@@ -125,14 +125,18 @@ function ItemSeparator() {
   )
 }
 
-function ListFooter() {
+function ListFooter({ tripId }: { tripId: string }) {
+  const router = useRouter()
   return (
     <View className="flex h-full flex-row">
       <ItemSeparator />
-      <View className="flex w-[150px] items-center justify-center border border-dashed border-gray-700">
+      <TouchableOpacity
+        onPress={() => router.push(`/(home)/(trips)/trips/${tripId}/new-stop`)}
+        className="flex w-[150px] items-center justify-center rounded-md border border-dashed border-gray-700"
+      >
         <Icon icon={Plus} />
         <Text className="text-center text-xs">Plan your next step</Text>
-      </View>
+      </TouchableOpacity>
       <ItemSeparator />
       <View className="flex w-[45px] items-center justify-center space-y-1">
         <Icon icon={Flag} />
