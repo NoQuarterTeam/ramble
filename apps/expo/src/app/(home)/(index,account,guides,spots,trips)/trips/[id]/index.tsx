@@ -3,7 +3,6 @@ import { TouchableOpacity, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
 
-import { Button } from "~/components/ui/Button"
 import { Map } from "~/components/Map"
 import { ScreenView } from "~/components/ui/ScreenView"
 import { Spinner } from "~/components/ui/Spinner"
@@ -42,11 +41,6 @@ export default function TripDetailScreen() {
         )
       }
     >
-      {trip && (
-        <Link push href={`/(home)/(trips)/trips/${trip.id}/add`} asChild>
-          <Button>Add item</Button>
-        </Link>
-      )}
       {isLoading ? (
         <View className="flex items-center justify-center p-4">
           <Spinner />
@@ -86,14 +80,14 @@ export default function TripDetailScreen() {
               showsHorizontalScrollIndicator={false}
               estimatedItemSize={100}
               contentContainerStyle={{ paddingVertical: 8 }}
-              ListEmptyComponent={
-                <View>
-                  <Text className="w-full py-4 text-center text-xl">No spots yet</Text>
-                  <Button variant="outline" onPress={() => router.navigate("/")} className="w-full">
-                    Add a spot to your trip!
-                  </Button>
-                </View>
-              }
+              // ListEmptyComponent={
+              //   <View>
+              //     <Text className="w-full py-4 text-center text-xl">No spots yet</Text>
+              //     <Button variant="outline" onPress={() => router.navigate("/")} className="w-full">
+              //       Add a spot to your trip!
+              //     </Button>
+              //   </View>
+              // }
               data={trip.items}
               ListHeaderComponent={() => <ListHeader />}
               renderItem={({ item }) => item.spot && <TripSpotItem spot={item.spot} />}
@@ -130,13 +124,16 @@ function ItemSeparator() {
 }
 
 function ListFooter() {
+  const { id } = useLocalSearchParams<{ id: string }>()
   return (
     <View className="flex h-full flex-row">
       <ItemSeparator />
-      <View className="flex w-[150px] items-center justify-center border border-dashed border-gray-700">
-        <Icon icon={Plus} />
-        <Text className="text-center text-xs">Plan your next step</Text>
-      </View>
+      <Link push href={`/(home)/(trips)/trips/${id}/add`} asChild>
+        <TouchableOpacity className="flex w-[150px] items-center justify-center border border-dashed border-gray-700">
+          <Icon icon={Plus} />
+          <Text className="text-center text-xs">Plan your next step</Text>
+        </TouchableOpacity>
+      </Link>
       <ItemSeparator />
       <View className="flex w-[45px] items-center justify-center space-y-1">
         <Icon icon={Flag} />
