@@ -1,18 +1,16 @@
-import { ScrollView, Text } from "react-native"
 import { useRouter } from "expo-router"
+import { ScrollView } from "react-native"
 
+import { TripForm } from "~/components/TripForm"
 import { ModalView } from "~/components/ui/ModalView"
 import { api, type RouterInputs } from "~/lib/api"
-import { useMe } from "~/lib/hooks/useMe"
-import { TripForm } from "~/components/TripForm"
 
 export default function NewTripScreen() {
   const router = useRouter()
-  const { me } = useMe()
+
   const utils = api.useUtils()
   const { mutate, error, isLoading } = api.trip.create.useMutation({
     onSuccess: () => {
-      if (!me) return
       utils.user.trips.refetch()
       router.back()
     },

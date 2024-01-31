@@ -11,7 +11,7 @@ import { Text } from "./ui/Text"
 
 interface Props {
   trip: Pick<Trip, "id" | "name"> & {
-    creator?: Pick<User, "avatar" | "avatarBlurHash" | "firstName" | "lastName">
+    creator: Pick<User, "avatar" | "avatarBlurHash" | "firstName" | "lastName">
   }
 }
 
@@ -27,26 +27,24 @@ export function TripItem({ trip }: Props) {
         <Text className="text-xl">{trip.name}</Text>
       </View>
 
-      {trip.creator && (
-        <View className="flex flex-row justify-end">
-          <View className="flex flex-row items-center space-x-1">
-            {trip.creator.avatar ? (
-              <OptimizedImage
-                width={40}
-                height={40}
-                placeholder={trip.creator.avatarBlurHash}
-                source={{ uri: createImageUrl(trip.creator.avatar) }}
-                className="sq-6 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
-              />
-            ) : (
-              <View className="sq-6 flex items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
-                <Icon icon={User2} size={14} />
-              </View>
-            )}
-            <Text className="text-base">{trip.creator.firstName}</Text>
-          </View>
+      <View className="flex flex-row justify-end">
+        <View className="flex flex-row items-center space-x-1">
+          {trip.creator.avatar ? (
+            <OptimizedImage
+              width={40}
+              height={40}
+              placeholder={trip.creator.avatarBlurHash}
+              source={{ uri: createImageUrl(trip.creator.avatar) }}
+              className="sq-6 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
+            />
+          ) : (
+            <View className="sq-6 flex items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
+              <Icon icon={User2} size={14} />
+            </View>
+          )}
+          <Text className="text-base">{trip.creator.firstName}</Text>
         </View>
-      )}
+      </View>
     </TouchableOpacity>
   )
 }

@@ -156,16 +156,9 @@ export const userRouter = createTRPCRouter({
       },
     })
   }),
-  trips: publicProcedure.query(async ({ ctx }) => {
-    if (!ctx.user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
-    const trips = await ctx.prisma.user.findUnique({ where: { id: ctx.user.id } }).trips({
-      // select: {
-      //   id: true,
-      //   name: true,
-      //   creator: { select: { firstName: true, lastName: true, avatar: true, avatarBlurHash: true } },
-      // },
-      include: { tripItems: true },
+  trips: protectedProcedure.query(({ ctx }) => {
+    return ctx.prisma.user.findUniqueOrThrow({ where: { id: ctx.user.id } }).trips({
+      include: { tripItems: true, creator: true },
     })
-    return trips && trips.length > 0 ? trips : []
   }),
 })

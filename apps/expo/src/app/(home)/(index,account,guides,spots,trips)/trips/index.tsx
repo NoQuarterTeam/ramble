@@ -13,7 +13,7 @@ import { useMe } from "~/lib/hooks/useMe"
 
 export default function TripsScreen() {
   const { me } = useMe()
-  const { data: trips, isLoading, refetch } = api.user.trips.useQuery(undefined, { enabled: !!me })
+  const { data: trips, isLoading } = api.user.trips.useQuery(undefined, { enabled: !!me })
 
   return (
     <TabView
@@ -30,9 +30,6 @@ export default function TripsScreen() {
         </View>
       ) : (
         <>
-          <TouchableOpacity onPress={() => refetch()}>
-            <Text>refetch</Text>
-          </TouchableOpacity>
           <FlashList
             showsVerticalScrollIndicator={false}
             estimatedItemSize={86}
