@@ -24,7 +24,7 @@ export const tripRouter = createTRPCRouter({
   detail: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
     return ctx.prisma.trip.findUnique({
       where: { id: input.id, users: { some: { id: ctx.user.id } } },
-      include: { items: { include: { spot: true, stop: true } } },
+      include: { items: { include: { spot: { include: { images: { take: 1, orderBy: { createdAt: "desc" } } } }, stop: true } } },
     })
   }),
   saveToTrip: protectedProcedure.input(z.object({ spotId: z.string(), tripId: z.string() })).mutation(async ({ ctx, input }) => {

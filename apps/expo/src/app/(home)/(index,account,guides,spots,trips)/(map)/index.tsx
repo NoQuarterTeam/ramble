@@ -219,7 +219,7 @@ export default function MapScreen() {
                     placeholder={user.avatarBlurHash}
                     style={{ width: 32, height: 32 }}
                     source={{ uri: createImageUrl(user.avatar) }}
-                    className=" object-cover"
+                    className="object-cover"
                   />
                 ) : (
                   <Icon icon={User} size={16} color="white" />

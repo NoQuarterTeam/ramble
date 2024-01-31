@@ -2,7 +2,7 @@ import * as React from "react"
 import { TouchableOpacity, useColorScheme, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import { useLocalSearchParams } from "expo-router"
-import { Heart, Lock } from "lucide-react-native"
+import { Heart } from "lucide-react-native"
 
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
@@ -15,7 +15,7 @@ import { useMe } from "~/lib/hooks/useMe"
 export default function SaveSpotToTripScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
   const { me } = useMe()
-  const { data: trips, isLoading, refetch } = api.user.trips.useQuery(undefined, { enabled: !!me })
+  const { data: trips, isLoading } = api.trip.mine.useQuery(undefined, { enabled: !!me })
   // const { data: lists, isLoading } = api.list.allByUserWithSavedSpots.useQuery({ spotId: id }, { enabled: !!me })
   if (!me)
     return (
@@ -46,14 +46,14 @@ export default function SaveSpotToTripScreen() {
 
 interface Props {
   spotId: string
-  trip: RouterOutputs["user"]["trips"][number]
+  trip: RouterOutputs["trip"]["mine"][number]
 }
 
 function SaveableTripItem({ trip, spotId }: Props) {
-  const foundSavedItem = trip.tripItems.some((ti) => ti.spotId === spotId)
+  const foundSavedItem = trip.items.some((ti) => ti.spotId === spotId)
 
   const [isSaved, setIsSaved] = React.useState(foundSavedItem)
-  const utils = api.useUtils()
+  // const utils = api.useUtils()
 
   React.useEffect(() => {
     setIsSaved(foundSavedItem)
