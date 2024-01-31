@@ -54,6 +54,7 @@ type SpotClusterTypes = { [key in SpotType]?: number }
 
 function ClusterMarker({ countAbbr, count, types }: { countAbbr: string | number; count: number; types: SpotClusterTypes }) {
   const outerSize = count > 150 ? 80 : count > 75 ? 64 : count > 10 ? 48 : 32
+  // const outerSize = 32
   const innerSize = outerSize - 8
   return (
     <View className="relative flex items-center justify-center rounded-full border border-white dark:border-black">
@@ -84,8 +85,8 @@ interface SpotClusterMarkerProps {
 }
 export function SpotClusterMarker(props: SpotClusterMarkerProps) {
   return (
-    <MarkerView coordinate={props.point.geometry.coordinates}>
-      <TouchableOpacity activeOpacity={0.7} onPress={props.onPress}>
+    <MarkerView allowOverlap coordinate={props.point.geometry.coordinates}>
+      <TouchableOpacity activeOpacity={0.7} onPress={props.onPress} className="z-10">
         {props.point.properties.cluster ? (
           <ClusterMarker
             types={props.point.properties.types}
