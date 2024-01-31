@@ -30,7 +30,7 @@ import { getCurrentUser } from "~/services/auth/auth.server"
 import { PartnerLink } from "./components/PartnerLink"
 import { ReviewItem } from "./components/ReviewItem"
 import { TranslateSpotDescription } from "./components/TranslateSpotDescription"
-import { NEW_REVIEW_REDIRECTS } from "./spots.$id_.reviews.new"
+import { NEW_REVIEW_REDIRECTS } from "./spots.$id.reviews.new"
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request)

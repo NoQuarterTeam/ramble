@@ -51,7 +51,6 @@ import { getMaybeUser } from "./services/auth/auth.server"
 import { csrf } from "./services/session/csrf.server"
 import { getFlashSession } from "./services/session/flash.server"
 import { getGdprSession } from "./services/session/gdpr.server"
-import { defaultPreferences, type Preferences, preferencesCookies } from "./services/session/preferences.server"
 import { getThemeSession } from "./services/session/theme.server"
 
 export const meta: MetaFunction = () => {
@@ -63,13 +62,11 @@ export const links: LinksFunction = () => {
 }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const cookieHeader = request.headers.get("Cookie")
-  const { flashSession, gdprSession, themeSession, user, preferences } = await promiseHash({
+  const { flashSession, gdprSession, themeSession, user } = await promiseHash({
     flashSession: getFlashSession(request),
     themeSession: getThemeSession(request),
     gdprSession: getGdprSession(request),
     user: getMaybeUser(request),
-    preferences: preferencesCookies.parse(cookieHeader) as Promise<Preferences>,
   })
   const [csrfToken, csrfCookieHeader] = await csrf.commitToken()
 
@@ -79,7 +76,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       gdpr: gdprSession.gdpr,
       csrf: csrfToken,
       flash: flashSession.message,
-      preferences: preferences || defaultPreferences,
       theme: themeSession.theme,
       config: { FULL_WEB_URL, ENV },
     },
@@ -171,7 +167,7 @@ export function ErrorBoundary() {
             <Frown className="sq-20" />
             <h1 className="text-3xl">Oops, there was an error!</h1>
             <p>{error.message}</p>
-            {config.ENV !== "production" && error.stack ? (
+            {config && config.ENV !== "production" && error.stack ? (
               <>
                 <hr />
                 <div className="rounded-xs bg-gray-200 p-4 dark:bg-gray-700 ">

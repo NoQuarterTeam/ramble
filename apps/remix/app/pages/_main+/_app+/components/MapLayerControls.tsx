@@ -1,17 +1,24 @@
-import { CloudRain, Layers, MountainSnow, Thermometer, Users2 } from "lucide-react"
-
+import { CloudRain, Layers, MountainSnow, SunMoon, Thermometer, Users2 } from "lucide-react"
+import * as RadioGroup from "@radix-ui/react-radio-group"
 import { useDisclosure } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
 import { IconButton, Modal, Switch, Tooltip } from "~/components/ui"
-import { usePreferences } from "~/lib/hooks/usePreferences"
+import { useMapLayers } from "~/lib/hooks/useMapLayers"
+import { ActionDataSuccessResponse } from "~/lib/form.server"
 
-export const preferencesUrl = "/api/preferences"
+export const mapLayersUrl = "/api/map-layers"
 
 export function MapLayerControls() {
   const modalProps = useDisclosure()
-  const savePreferencesFetcher = useFetcher({ onFinish: modalProps.onClose })
-  const preferences = usePreferences()
+  const mapLayersFetcher = useFetcher<ActionDataSuccessResponse>({
+    onFinish: (data) => {
+      if (data.success) {
+        modalProps.onClose()
+      }
+    },
+  })
+  const mapLayers = useMapLayers()
 
   return (
     <>
@@ -25,52 +32,100 @@ export function MapLayerControls() {
             aria-label="filters"
           />
         </Tooltip>
-        {(preferences.mapLayerRain || preferences.mapLayerTemp) && (
-          <div className="sq-5 absolute -right-2 -top-2 flex items-center justify-center rounded-full border border-gray-500 bg-white dark:border-white dark:bg-black">
-            <p className="text-xs">{+preferences.mapLayerRain + +preferences.mapLayerTemp}</p>
-          </div>
-        )}
       </div>
 
       <Modal {...modalProps} size="xl" title="Map layers">
-        <savePreferencesFetcher.Form className="space-y-6 px-1" action={preferencesUrl}>
+        <mapLayersFetcher.Form className="space-y-6 px-1" action={mapLayersUrl}>
           <div className="space-y-4">
-            <label htmlFor="mapLayerRain" className="flex items-center justify-between space-x-4">
-              <div className="flex items-center space-x-4">
-                <CloudRain className="sq-6" />
-                <div>
-                  <p>Rain</p>
-                  <p className="text-sm opacity-70">Shows the current rain radar</p>
+            <RadioGroup.Root defaultValue={mapLayers.layer || ""} name="layer" className="space-y-2">
+              <label
+                htmlFor="default"
+                className="flex cursor-pointer items-center justify-between rounded-sm border p-4 hover:opacity-90"
+              >
+                <div className="flex items-center space-x-4">
+                  <SunMoon className="sq-7" />
+                  <div>
+                    <p>Default</p>
+                    <p className="text-sm opacity-70">Shows the default map styling</p>
+                  </div>
                 </div>
-              </div>
-              <Switch name="mapLayerRain" id="mapLayerRain" defaultChecked={preferences.mapLayerRain} className="mt-1" />
-            </label>
-            <label htmlFor="mapLayerTemp" className="flex items-center justify-between space-x-4">
-              <div className="flex items-center space-x-4">
-                <Thermometer className="sq-6" />
-                <div>
-                  <p>Temperature</p>
-                  <p className="text-sm opacity-70">Shows the current temperature</p>
+                <RadioGroup.Item
+                  value=""
+                  id="default"
+                  className="focus-visible:ring-ring sq-5 aspect-square rounded-full border shadow focus:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <RadioGroup.Indicator className="flex items-center justify-center">
+                    <div className="sq-3 bg-primary rounded-full" />
+                  </RadioGroup.Indicator>
+                </RadioGroup.Item>
+              </label>
+              <label
+                htmlFor="rain"
+                className="flex cursor-pointer items-center justify-between rounded-sm border p-4 hover:opacity-90"
+              >
+                <div className="flex items-center space-x-4">
+                  <CloudRain className="sq-7" />
+                  <div>
+                    <p>Rain</p>
+                    <p className="text-sm opacity-70">Shows the current rain radar</p>
+                  </div>
                 </div>
-              </div>
-              <Switch name="mapLayerTemp" id="mapLayerTemp" defaultChecked={preferences.mapLayerTemp} className="mt-1" />
-            </label>
-            <label htmlFor="mapStyleSatellite" className="flex items-center justify-between space-x-4">
-              <div className="flex items-center space-x-4">
-                <MountainSnow className="sq-6" />
-                <div>
-                  <p>Satellite view</p>
-                  <p className="text-sm opacity-70">Changes the map to satellite view</p>
+                <RadioGroup.Item
+                  value="rain"
+                  id="rain"
+                  className="focus-visible:ring-ring sq-5 aspect-square rounded-full border shadow focus:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <RadioGroup.Indicator className="flex items-center justify-center">
+                    <div className="sq-3 bg-primary rounded-full" />
+                  </RadioGroup.Indicator>
+                </RadioGroup.Item>
+              </label>
+              <label
+                htmlFor="temp"
+                className="flex cursor-pointer items-center justify-between rounded-sm border p-4 hover:opacity-90"
+              >
+                <div className="flex items-center space-x-4">
+                  <Thermometer className="sq-7" />
+                  <div>
+                    <p>Temperatue</p>
+                    <p className="text-sm opacity-70">Shows the current temperature</p>
+                  </div>
                 </div>
-              </div>
-              <Switch
-                name="mapStyleSatellite"
-                id="mapStyleSatellite"
-                defaultChecked={preferences.mapStyleSatellite}
-                className="mt-1"
-              />
-            </label>
-            <label htmlFor="mapUsers" className="flex items-center justify-between space-x-4">
+                <RadioGroup.Item
+                  value="temp"
+                  id="temp"
+                  className="focus-visible:ring-ring sq-5 aspect-square rounded-full border shadow focus:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <RadioGroup.Indicator className="flex items-center justify-center">
+                    <div className="sq-3 bg-primary rounded-full" />
+                  </RadioGroup.Indicator>
+                </RadioGroup.Item>
+              </label>
+              <label
+                htmlFor="satellite"
+                className="flex cursor-pointer items-center justify-between rounded-sm border p-4 hover:opacity-90"
+              >
+                <div className="flex items-center space-x-4">
+                  <MountainSnow className="sq-7" />
+                  <div>
+                    <p>Satellite</p>
+                    <p className="text-sm opacity-70">Changes the map to satellite view</p>
+                  </div>
+                </div>
+                <RadioGroup.Item
+                  value="satellite"
+                  id="satellite"
+                  className="focus-visible:ring-ring sq-5 aspect-square rounded-full border shadow focus:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <RadioGroup.Indicator className="flex items-center justify-center">
+                    <div className="sq-3 bg-primary rounded-full" />
+                  </RadioGroup.Indicator>
+                </RadioGroup.Item>
+              </label>
+            </RadioGroup.Root>
+
+            <hr />
+            <label htmlFor="shouldShowUsers" className="flex items-center justify-between space-y-1">
               <div className="flex items-center space-x-4">
                 <Users2 className="sq-6" />
                 <div>
@@ -78,14 +133,14 @@ export function MapLayerControls() {
                   <p className="text-sm opacity-70"> See the approximate location of other Ramble users</p>
                 </div>
               </div>
-              <Switch name="mapUsers" id="mapUsers" defaultChecked={preferences.mapUsers} className="mt-1" />
+              <Switch name="shouldShowUsers" id="shouldShowUsers" defaultChecked={!!mapLayers.shouldShowUsers} className="mt-1" />
             </label>
           </div>
 
           <div className="flex w-full justify-between">
-            <savePreferencesFetcher.FormButton size="lg">Save</savePreferencesFetcher.FormButton>
+            <mapLayersFetcher.FormButton size="lg">Save</mapLayersFetcher.FormButton>
           </div>
-        </savePreferencesFetcher.Form>
+        </mapLayersFetcher.Form>
       </Modal>
     </>
   )

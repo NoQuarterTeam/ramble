@@ -2,6 +2,7 @@ import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
 import { useGlobalSearchParams, useRouter } from "expo-router"
 import { Check, Dog, Lock, MapPin } from "lucide-react-native"
+import { usePostHog } from "posthog-react-native"
 
 import { type SpotType } from "@ramble/database/types"
 import { AMENITIES } from "@ramble/shared"
@@ -40,6 +41,7 @@ export default function NewSpotConfirmScreen() {
   const router = useRouter()
   const [shouldPublishLater, setShouldPublishLater] = React.useState(false)
   const utils = api.useUtils()
+  const posthog = usePostHog()
 
   const {
     mutate,
@@ -47,6 +49,7 @@ export default function NewSpotConfirmScreen() {
     error,
   } = api.spot.create.useMutation({
     onSuccess: async (data) => {
+      posthog?.capture("spot created", { type: data.type })
       await utils.user.hasCreatedSpot.refetch()
       utils.spot.list.refetch({ skip: 0, sort: "latest" })
       if (me?.role === "GUIDE") {

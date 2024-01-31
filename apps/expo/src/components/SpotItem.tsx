@@ -37,11 +37,11 @@ export function SpotItem({ spot }: Props) {
             width={450}
             placeholder={spot.blurHash}
             height={300}
-            className="rounded-xs h-full w-full bg-gray-50 object-cover dark:bg-gray-800"
+            className="h-full w-full rounded-sm bg-gray-50 object-cover dark:bg-gray-800"
             source={{ uri: createImageUrl(spot.image) }}
           />
         ) : (
-          <View className="rounded-xs flex h-full w-full items-center justify-center bg-gray-50 dark:bg-gray-800">
+          <View className="flex h-full w-full items-center justify-center rounded-sm bg-gray-50 dark:bg-gray-800">
             <View className="rounded-full p-4">
               <SpotIcon type={spot.type} size={40} />
             </View>

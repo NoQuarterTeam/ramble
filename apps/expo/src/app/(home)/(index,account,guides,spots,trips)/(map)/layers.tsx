@@ -1,6 +1,7 @@
 import { Switch, TouchableOpacity, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { CloudRain, MountainSnow, SunMoon, Thermometer, Users2 } from "lucide-react-native"
+import { usePostHog } from "posthog-react-native"
 import { z } from "zod"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
@@ -16,9 +17,12 @@ const mapLayersSchema = z.object({
   layer: z.enum(["rain", "temp", "satellite"]).nullable(),
   shouldShowUsers: z.boolean(),
 })
+
+type MapLayers = z.infer<typeof mapLayersSchema>
+
 export const useMapLayers = create<{
-  layers: z.infer<typeof mapLayersSchema>
-  setLayers: (preference: Partial<z.infer<typeof mapLayersSchema>>) => void
+  layers: MapLayers
+  setLayers: (preference: Partial<MapLayers>) => void
 }>()(
   persist(
     (set) => ({
@@ -32,13 +36,19 @@ export const useMapLayers = create<{
 export default function MapLayers() {
   const { layers, setLayers } = useMapLayers()
   const me = useMe()
+  const posthog = usePostHog()
+
+  const onSetMapLayer = (layer: MapLayers["layer"]) => {
+    setLayers({ ...layers, layer })
+    posthog?.capture("map layer changed", { layer })
+  }
 
   return (
     <ModalView title="map layers">
       <View className="space-y-4">
-        <View className="space-y-1">
+        <View ph-no-capture className="space-y-1">
           <TouchableOpacity
-            onPress={() => setLayers({ ...layers, layer: null })}
+            onPress={() => onSetMapLayer(null)}
             className="flex flex-row items-center justify-between space-x-2 rounded border border-gray-200 p-3 dark:border-gray-700"
           >
             <View className="flex flex-row items-center space-x-3">
@@ -55,7 +65,7 @@ export default function MapLayers() {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => setLayers({ ...layers, layer: "rain" })}
+            onPress={() => onSetMapLayer("rain")}
             className="flex flex-row items-center justify-between space-x-2 rounded border border-gray-200 p-3 dark:border-gray-700"
           >
             <View className="flex flex-row items-center space-x-3">
@@ -72,7 +82,7 @@ export default function MapLayers() {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => setLayers({ ...layers, layer: "temp" })}
+            onPress={() => onSetMapLayer("temp")}
             className="flex flex-row items-center justify-between space-x-2 rounded border border-gray-200 p-3 dark:border-gray-700"
           >
             <View className="flex flex-row items-center space-x-3">
@@ -89,7 +99,7 @@ export default function MapLayers() {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => setLayers({ ...layers, layer: "satellite" })}
+            onPress={() => onSetMapLayer("satellite")}
             className="flex flex-row items-center justify-between space-x-2 rounded border border-gray-200 p-3 dark:border-gray-700"
           >
             <View className="flex flex-row items-center space-x-3">
@@ -122,7 +132,10 @@ export default function MapLayers() {
             <Switch
               trackColor={{ true: colors.primary[600] }}
               value={layers.shouldShowUsers}
-              onValueChange={() => setLayers({ ...layers, shouldShowUsers: !layers.shouldShowUsers })}
+              onValueChange={() => {
+                posthog?.capture("map should show users", { shouldShowUsers: !layers.shouldShowUsers })
+                setLayers({ ...layers, shouldShowUsers: !layers.shouldShowUsers })
+              }}
             />
           </View>
         )}

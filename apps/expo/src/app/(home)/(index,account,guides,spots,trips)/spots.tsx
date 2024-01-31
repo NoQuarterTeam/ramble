@@ -17,6 +17,7 @@ import { api } from "~/lib/api"
 import { height, isTablet, width } from "~/lib/device"
 import { useAsyncStorage } from "~/lib/hooks/useAsyncStorage"
 import { useMe } from "~/lib/hooks/useMe"
+import { usePostHog } from "posthog-react-native"
 
 const SORT_OPTIONS: { [key in SpotListSort]: string } = {
   latest: "latest",
@@ -31,7 +32,7 @@ export default function SpotsScreen() {
   const [sort, setSort, isReady] = useAsyncStorage<keyof typeof SORT_OPTIONS>("ramble.spots.sort", "latest")
   const router = useRouter()
   const { data: initialSpots, isLoading } = api.spot.list.useQuery({ skip: 0, sort }, { enabled: isReady })
-
+  const posthog = usePostHog()
   const [spots, setSpots] = React.useState(initialSpots)
   const { me } = useMe()
   React.useEffect(() => {
@@ -113,6 +114,7 @@ export default function SpotsScreen() {
                 <TouchableOpacity
                   key={key}
                   onPress={() => {
+                    posthog?.capture("spots list sorted", { sort: label })
                     setSort(key as keyof typeof SORT_OPTIONS)
                     sortProps.onClose()
                   }}

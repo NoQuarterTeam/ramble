@@ -25,7 +25,7 @@ import { createImageUrl, INITIAL_LATITUDE, INITIAL_LONGITUDE, join } from "@ramb
 import { Map } from "~/components/Map"
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { db } from "~/lib/db.server"
-import { usePreferences } from "~/lib/hooks/usePreferences"
+import { useMapLayers } from "~/lib/hooks/useMapLayers"
 import type { LinksFunction, LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
 import { MapFilters } from "~/pages/_main+/_app+/components/MapFilters"
@@ -36,6 +36,7 @@ import type { clustersLoader } from "../../api+/clusters"
 import { MapLayerControls } from "./components/MapLayerControls"
 import { MapSearch } from "./components/MapSearch"
 import { SpotClusterMarker } from "./components/SpotMarker"
+import { useTheme } from "~/lib/theme"
 
 export const config = {
   // runtime: "edge",
@@ -167,11 +168,11 @@ export default function MapView() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [clusters],
   )
-  const preferences = usePreferences()
+  const mapLayers = useMapLayers()
 
   const userMarkers = React.useMemo(
     () =>
-      preferences.mapUsers &&
+      mapLayers.shouldShowUsers &&
       userClusters?.map((point, i) => (
         <UserClusterMarker
           point={point}
@@ -189,8 +190,10 @@ export default function MapView() {
         />
       )),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [userClusters, preferences.mapUsers],
+    [userClusters, mapLayers.shouldShowUsers],
   )
+
+  const isDark = useTheme() === "dark"
 
   return (
     <div className="h-nav-screen relative w-screen overflow-hidden">
@@ -199,7 +202,13 @@ export default function MapView() {
         onMoveEnd={onMove}
         ref={mapRef}
         initialViewState={initialViewState}
-        mapStyle={!!preferences.mapStyleSatellite ? "mapbox://styles/mapbox/satellite-streets-v12" : undefined}
+        mapStyle={
+          mapLayers.layer === "satellite"
+            ? "mapbox://styles/mapbox/satellite-streets-v12"
+            : mapLayers.layer === "temp" || mapLayers.layer === "rain"
+              ? `mapbox://styles/mapbox/${isDark ? "dark" : "light"}-v11`
+              : undefined
+        }
       >
         <MapLayers />
         {markers}
@@ -286,11 +295,10 @@ export function ErrorBoundary() {
 }
 
 function MapLayers() {
-  const preferences = usePreferences()
-
+  const mapLayers = useMapLayers()
   return (
     <>
-      {preferences.mapLayerTemp && (
+      {mapLayers.layer === "temp" && (
         <>
           <Source
             id="temp"
@@ -299,7 +307,7 @@ function MapLayers() {
             tiles={[`https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63`]}
           />
           <Layer id="tempLayer" source="temp" type="raster" />
-          <div className="bg-background rounded-xs absolute right-20 top-4 flex items-center space-x-4 px-2 py-1 text-xs shadow">
+          <div className="bg-background rounded-xs absolute bottom-2.5 right-12 hidden items-center space-x-4 px-2 py-1 text-xs shadow sm:flex">
             <p>Temperature, °C</p>
             <div>
               <div className="flex w-full justify-between">
@@ -319,7 +327,7 @@ function MapLayers() {
           </div>
         </>
       )}
-      {preferences.mapLayerRain && (
+      {mapLayers.layer === "rain" && (
         <>
           <Source
             id="rain"

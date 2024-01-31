@@ -3,6 +3,7 @@ import { FormProvider } from "react-hook-form"
 import { ScrollView, View } from "react-native"
 import { AvoidSoftInputView } from "react-native-avoid-softinput"
 import { useRouter } from "expo-router"
+import { usePostHog } from "posthog-react-native"
 
 import { SafeAreaView } from "~/components/SafeAreaView"
 import { Button } from "~/components/ui/Button"
@@ -27,12 +28,14 @@ export default function OnboardingStep3Screen() {
   const router = useRouter()
 
   const utils = api.useUtils()
+  const posthog = usePostHog()
   const {
     mutate,
     isLoading: updateLoading,
     error,
   } = api.van.upsert.useMutation({
     onSuccess: async () => {
+      posthog?.capture("user completed onboarding")
       await utils.user.me.refetch()
       router.navigate("/")
       router.navigate("/new")
