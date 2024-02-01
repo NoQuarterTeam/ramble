@@ -32,7 +32,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     return booleanWithin(pointFrom, buffered)
   })
 
-  const foundSpots = await db.spot.findMany({ where: { id: { in: spotsWithinBuffer.map((spot) => spot.id) } } })
+  const foundSpots = await db.spot.findMany({ take: 2000, where: { id: { in: spotsWithinBuffer.map((spot) => spot.id) } } })
 
   const directions = jsonResponse
 
