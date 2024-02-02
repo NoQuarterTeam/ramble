@@ -17,7 +17,6 @@ import { SafeAreaView } from "~/components/SafeAreaView"
 import { SpotIcon } from "~/components/SpotIcon"
 import { BrandHeading } from "~/components/ui/BrandHeading"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
-import colors from "@ramble/tailwind-config/src/colors"
 
 export default function TripDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
@@ -61,7 +60,7 @@ export default function TripDetailScreen() {
 
           <TouchableOpacity
             className="sq-8 flex items-center justify-center"
-            onPress={() => router.push(`/${tab}/list/${id}/edit`)}
+            onPress={() => router.push(`/${tab}/trips/${id}/edit`)}
           >
             <Text className="underline">Edit</Text>
           </TouchableOpacity>
@@ -85,7 +84,7 @@ export default function TripDetailScreen() {
             >
               {data.line && (
                 <ShapeSource id="directions" shape={data.line.geometry}>
-                  <LineLayer id="line" style={{ lineColor: colors.primary[300], lineCap: "round", lineWidth: 4 }} />
+                  <LineLayer id="line" style={{ lineDasharray: [0.5, 2], lineColor: "white", lineCap: "round", lineWidth: 2 }} />
                 </ShapeSource>
               )}
               {spotMarkers}
@@ -114,7 +113,22 @@ export default function TripDetailScreen() {
               />
             </Map>
             <View>
-              <TripList items={trip.items} />
+              <TripList
+                items={trip.items}
+                onScrollEnd={(index) => {
+                  const item = trip.items[index]
+                  if (!item) return
+                  const coords = item.spot
+                    ? [item.spot.longitude, item.spot.latitude]
+                    : [item.stop!.longitude, item.stop!.latitude]
+
+                  camera.current?.setCamera({
+                    animationMode: "linearTo",
+                    animationDuration: 300,
+                    centerCoordinate: coords,
+                  })
+                }}
+              />
             </View>
           </>
         )}
@@ -125,16 +139,17 @@ export default function TripDetailScreen() {
 
 type Item = RouterOutputs["trip"]["detail"]["trip"]["items"][number]
 
-function TripList({ items }: { items: Item[] }) {
+function TripList({ items, onScrollEnd }: { items: Item[]; onScrollEnd: (index: number) => void }) {
   const { id } = useLocalSearchParams<{ id: string }>()
   const [tripItems, setTripItems] = React.useState(items)
-
   const utils = api.useUtils()
   const { mutate } = api.trip.updateOrder.useMutation({
     onSuccess: () => {
       utils.trip.detail.refetch({ id })
     },
   })
+  const [activeItemIndex, setActiveItemIndex] = React.useState<number | null>(null)
+  const activeIndexRef = React.useRef<number | null>(null)
 
   React.useEffect(() => {
     setTripItems(items)
@@ -147,6 +162,18 @@ function TripList({ items }: { items: Item[] }) {
         setTripItems(dragData.data)
         mutate({ id, items: dragData.data.map((i) => i.id) })
       }}
+      scrollEventThrottle={1000}
+      onScrollOffsetChange={(x) => {
+        if (x < 0) return
+        const index = Math.floor(x / ITEM_WIDTH)
+        if (index !== activeItemIndex && index !== activeIndexRef.current) {
+          console.log("the fook", index)
+
+          onScrollEnd(index)
+          setActiveItemIndex(index)
+          activeIndexRef.current = index
+        }
+      }}
       autoscrollThreshold={20}
       ListHeaderComponent={ListHeader}
       ListFooterComponent={ListFooter}
@@ -155,7 +182,7 @@ function TripList({ items }: { items: Item[] }) {
       data={tripItems}
       showsHorizontalScrollIndicator={false}
       keyExtractor={(item) => item.id}
-      renderItem={(props) => <TripItem {...props} />}
+      renderItem={(props) => <TripItem {...props} isFocused={props.getIndex() === activeItemIndex} />}
     />
   )
 }
@@ -165,9 +192,10 @@ const ITEM_WIDTH = 180
 function TripItem({
   item,
   isActive,
+  isFocused,
   drag,
 }: {
-  item: Item
+  isFocused: boolean
 } & RenderItemParams<Item>) {
   const { id } = useLocalSearchParams<{ id: string }>()
   const spot = item.spot
@@ -187,7 +215,7 @@ function TripItem({
           if (spot) void utils.spot.detail.prefetch({ id: spot.id })
         }}
         onLongPress={drag}
-        className=" flex w-full flex-row items-center"
+        className="flex w-full flex-row items-center"
         style={{ width: ITEM_WIDTH }}
       >
         <View style={{ opacity: isActive ? 0 : 1 }}>
@@ -198,7 +226,7 @@ function TripItem({
           </Link>
         </View>
 
-        <View className="bg-background dark:bg-background-dark h-full w-full flex-1">
+        <View className="bg-background dark:bg-background-dark relative h-full w-full flex-1">
           {spot ? (
             <Link href={`/${tab}/spot/${spot.id}`} push asChild>
               <View className="h-full w-full">
@@ -234,6 +262,7 @@ function TripItem({
               <Text>{stop.name}</Text>
             </View>
           ) : null}
+          {isFocused && <View className="bg-primary absolute bottom-0 left-0 right-0 top-0 h-1 rounded-t-sm" />}
         </View>
       </TouchableOpacity>
     </ScaleDecorator>
@@ -256,9 +285,13 @@ function StopItemMarker() {
   )
 }
 
+const HEADER_FOOTER_WIDTH = 100
 function ListHeader() {
   return (
-    <View style={{ width: 100 }} className="flex h-full items-center justify-center space-y-1 rounded-sm border border-gray-100">
+    <View
+      style={{ width: HEADER_FOOTER_WIDTH }}
+      className="flex h-full items-center justify-center space-y-1 rounded-sm border border-gray-100"
+    >
       <Icon icon={Home} />
       <Text className="text-center text-xs">01 Jan 2025</Text>
     </View>
@@ -268,7 +301,7 @@ function ListHeader() {
 function ListFooter() {
   const { id } = useLocalSearchParams<{ id: string }>()
   return (
-    <View style={{ width: 100 }} className="flex h-full flex-row items-center">
+    <View style={{ width: HEADER_FOOTER_WIDTH }} className="flex h-full flex-row items-center">
       <Link push href={`/(home)/(trips)/trips/${id}/add`} asChild>
         <TouchableOpacity className="p-3">
           <Icon icon={PlusCircle} size={16} />

@@ -20,7 +20,7 @@ export function ModalView(props: Props) {
   const router = useRouter()
   return (
     <SafeAreaProvider>
-      <SafeAreaView edges={["top"]} className="bg-background dark:bg-background-dark flex-1 px-4 pt-4">
+      <SafeAreaView edges={["top", "bottom"]} className="bg-background dark:bg-background-dark flex-1 px-4 pt-4">
         <View className="flex flex-row justify-between pb-2">
           {props.title ? <BrandHeading className="w-11/12 text-3xl">{props.title.toLowerCase()}</BrandHeading> : <Text />}
           <TouchableOpacity onPress={props.onBack || router.back} className="p-1">
