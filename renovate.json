@@ -68,6 +68,7 @@
     "sentry-expo",
     "@rnmapbox/maps",
     "tailwindcss",
-    "uuid"
+    "uuid",
+    "loops"
   ]
 }
