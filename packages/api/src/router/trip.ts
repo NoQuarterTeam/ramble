@@ -77,6 +77,7 @@ export const tripRouter = createTRPCRouter({
   saveToTrip: protectedProcedure.input(z.object({ spotId: z.string(), tripId: z.string() })).mutation(async ({ ctx, input }) => {
     const tripItems = await ctx.prisma.trip.findUnique({ where: { id: input.tripId } }).items({ where: { spotId: input.spotId } })
     if (tripItems && tripItems.length > 0) {
+      // TODO: perhaps don't want to deleteMany, as there might be the same spot more than once on this trip but user might only be wanting to remove it once?
       return ctx.prisma.tripItem.deleteMany({ where: { tripId: input.tripId, spotId: input.spotId } })
     } else {
       return ctx.prisma.tripItem.create({
