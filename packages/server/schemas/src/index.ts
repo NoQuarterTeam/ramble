@@ -1,6 +1,7 @@
 export * from "./clusters"
 export * from "./list"
 export * from "./trip"
+export * from "./tripStop"
 export * from "./review"
 export * from "./spot"
 export * from "./spotRevision"

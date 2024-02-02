@@ -1,10 +1,9 @@
 import * as React from "react"
-import { Link, useLocalSearchParams } from "expo-router"
+import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import * as Location from "expo-location"
 
 import { Map } from "~/components/Map"
 
-import { ModalView } from "~/components/ui/ModalView"
 import { Camera, UserLocation, type MapView as MapType, StyleURL, MapState } from "@rnmapbox/maps"
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, join } from "@ramble/shared"
 import { TouchableOpacity, View } from "react-native"
@@ -16,13 +15,16 @@ import { AlertTriangle, CircleDot, MapPinned, Navigation, Settings2 } from "luci
 import { Input } from "~/components/ui/Input"
 import { toast } from "~/components/ui/Toast"
 import { SpotClusterMarker } from "~/components/SpotMarker"
+import { Button } from "~/components/ui/Button"
 import { useMapFilters } from "../../(map)/filters"
 import { AddTripSpotPreview } from "~/components/AddTripSpotPreview"
+import { NewSpotModalView } from "~/app/new/NewSpotModalView"
 
 type Cluster = RouterOutputs["spot"]["clusters"][number]
 
 export default function NewItemScreen() {
   // const { me } = useMe()
+  const router = useRouter()
   const { id } = useLocalSearchParams<{ id: string }>()
   const filters = useMapFilters((s) => s.filters)
 
@@ -135,8 +137,17 @@ export default function NewItemScreen() {
     [clusters],
   )
 
+  const { mutate, isLoading: createLoading } = api.tripStop.create.useMutation({
+    onSuccess: () => void utils.trip.detail.refetch(),
+  })
+
+  const handleCreateTripStop = () => {
+    mutate({ name: address || "oops", latitude: coords?.[1]!, longitude: coords?.[0]!, tripId: id })
+    router.back()
+  }
+
   return (
-    <ModalView title="add item">
+    <NewSpotModalView title="add item">
       <View className="mb-2 flex w-full flex-row items-center space-x-1 overflow-hidden">
         {addressLoading || isFetching ? (
           <Spinner size="small" />
@@ -209,19 +220,19 @@ export default function NewItemScreen() {
                 <Icon icon={Settings2} size={20} />
               </TouchableOpacity>
             </Link>
-            {/* <Button
+            <Button
               className="bg-background rounded-full"
               textClassName="text-black"
               onPress={() => {
-                if (!coords || !me || !address || isUnknownAddress) return
-                if (!me.isVerified) return toast({ title: "Please verify your account" })
+                if (!coords || !address || isUnknownAddress) return
                 if (!coords[0] || !coords[1]) return toast({ title: "Please select a location" })
-                // router.push({ pathname: `/new/type`, params: { longitude: coords[0], latitude: coords[1], address } })
+                handleCreateTripStop()
               }}
               disabled={!coords || (coords && (!coords[0] || !coords[1])) || !address || isUnknownAddress}
+              isLoading={createLoading}
             >
-              Next
-            </Button> */}
+              Add to trip
+            </Button>
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={handleSetUserLocation}
@@ -234,6 +245,6 @@ export default function NewItemScreen() {
           {activeSpotId && <AddTripSpotPreview spotId={activeSpotId} tripId={id} onClose={() => setActiveSpotId(null)} />}
         </View>
       )}
-    </ModalView>
+    </NewSpotModalView>
   )
 }

@@ -75,15 +75,21 @@ export const tripRouter = createTRPCRouter({
     return { trip, bounds, line }
   }),
   saveToTrip: protectedProcedure.input(z.object({ spotId: z.string(), tripId: z.string() })).mutation(async ({ ctx, input }) => {
-    const tripItems = await ctx.prisma.trip.findUnique({ where: { id: input.tripId } }).items({ where: { spotId: input.spotId } })
-    if (tripItems && tripItems.length > 0) {
-      // TODO: perhaps don't want to deleteMany, as there might be the same spot more than once on this trip but user might only be wanting to remove it once?
-      return ctx.prisma.tripItem.deleteMany({ where: { tripId: input.tripId, spotId: input.spotId } })
-    } else {
-      return ctx.prisma.tripItem.create({
-        data: { spotId: input.spotId, tripId: input.tripId, creatorId: ctx.user.id },
-      })
-    }
+    // const tripItems = await ctx.prisma.trip.findUnique({ where: { id: input.tripId } }).items({ where: { spotId: input.spotId } })
+    const tripItems = await ctx.prisma.trip.findUnique({ where: { id: input.tripId } }).items()
+    // if (tripItems && tripItems.length > 0) {
+    //   // TODO: perhaps don't want to deleteMany, as there might be the same spot more than once on this trip but user might only be wanting to remove it once?
+    //   return ctx.prisma.tripItem.deleteMany({ where: { tripId: input.tripId, spotId: input.spotId } })
+    // } else {
+    return ctx.prisma.tripItem.create({
+      data: {
+        spotId: input.spotId,
+        tripId: input.tripId,
+        creatorId: ctx.user.id,
+        order: tripItems?.length || 0, // orders it as last
+      },
+    })
+    // }
   }),
   updateOrder: protectedProcedure
     .input(z.object({ id: z.string(), items: z.array(z.string()) }))

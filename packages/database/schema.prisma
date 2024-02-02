@@ -382,10 +382,12 @@ model TripItem {
   spot      Spot?     @relation(fields: [spotId], references: [id])
   spotId    String?
   stop      TripStop?
+  stopId    String?
 
   @@index([creatorId])
   @@index([tripId])
   @@index([spotId])
+  @@index([stopId])
 }
 
 model TripStop {

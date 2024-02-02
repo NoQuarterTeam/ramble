@@ -35,13 +35,7 @@ export function AddTripSpotPreview({ spotId, tripId, onClose }: { spotId: string
   const backgroundColor = useBackgroundColor()
 
   const { mutate } = api.trip.saveToTrip.useMutation({
-    onSuccess: () => {
-      // void utils.list.allByUserWithSavedSpots.refetch()
-      // void utils.list.detail.refetch()
-      // void utils.list.spotClusters.refetch()
-      // void utils.spot.detail.refetch({ id: spotId })
-      // void utils.spot.mapPreview.refetch({ id: spotId })
-    },
+    onSuccess: () => void utils.trip.detail.refetch(),
   })
 
   const handleAddToTrip = () => {
