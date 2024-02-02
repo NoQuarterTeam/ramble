@@ -113,7 +113,22 @@ export default function TripDetailScreen() {
               />
             </Map>
             <View>
-              <TripList items={trip.items} />
+              <TripList
+                items={trip.items}
+                onScrollEnd={(index) => {
+                  const item = trip.items[index]
+                  if (!item) return
+                  const coords = item.spot
+                    ? [item.spot.longitude, item.spot.latitude]
+                    : [item.stop!.longitude, item.stop!.latitude]
+
+                  camera.current?.setCamera({
+                    animationMode: "linearTo",
+                    animationDuration: 300,
+                    centerCoordinate: coords,
+                  })
+                }}
+              />
             </View>
           </>
         )}
@@ -124,16 +139,17 @@ export default function TripDetailScreen() {
 
 type Item = RouterOutputs["trip"]["detail"]["trip"]["items"][number]
 
-function TripList({ items }: { items: Item[] }) {
+function TripList({ items, onScrollEnd }: { items: Item[]; onScrollEnd: (index: number) => void }) {
   const { id } = useLocalSearchParams<{ id: string }>()
   const [tripItems, setTripItems] = React.useState(items)
-
   const utils = api.useUtils()
   const { mutate } = api.trip.updateOrder.useMutation({
     onSuccess: () => {
       utils.trip.detail.refetch({ id })
     },
   })
+  const [activeItemIndex, setActiveItemIndex] = React.useState<number | null>(null)
+  const activeIndexRef = React.useRef<number | null>(null)
 
   React.useEffect(() => {
     setTripItems(items)
@@ -145,6 +161,15 @@ function TripList({ items }: { items: Item[] }) {
       onDragEnd={(dragData) => {
         setTripItems(dragData.data)
         mutate({ id, items: dragData.data.map((i) => i.id) })
+      }}
+      scrollEventThrottle={1000}
+      onScrollOffsetChange={(x) => {
+        const index = Math.floor(x / ITEM_WIDTH)
+        if (index !== activeItemIndex && index !== activeIndexRef.current) {
+          onScrollEnd(index)
+          setActiveItemIndex(index)
+          activeIndexRef.current = index
+        }
       }}
       autoscrollThreshold={20}
       ListHeaderComponent={ListHeader}
@@ -255,9 +280,13 @@ function StopItemMarker() {
   )
 }
 
+const HEADER_FOOTER_WIDTH = 100
 function ListHeader() {
   return (
-    <View style={{ width: 100 }} className="flex h-full items-center justify-center space-y-1 rounded-sm border border-gray-100">
+    <View
+      style={{ width: HEADER_FOOTER_WIDTH }}
+      className="flex h-full items-center justify-center space-y-1 rounded-sm border border-gray-100"
+    >
       <Icon icon={Home} />
       <Text className="text-center text-xs">01 Jan 2025</Text>
     </View>
@@ -267,7 +296,7 @@ function ListHeader() {
 function ListFooter() {
   const { id } = useLocalSearchParams<{ id: string }>()
   return (
-    <View style={{ width: 100 }} className="flex h-full flex-row items-center">
+    <View style={{ width: HEADER_FOOTER_WIDTH }} className="flex h-full flex-row items-center">
       <Link push href={`/(home)/(trips)/trips/${id}/add`} asChild>
         <TouchableOpacity className="p-3">
           <Icon icon={PlusCircle} size={16} />
