@@ -167,8 +167,6 @@ function TripList({ items, onScrollEnd }: { items: Item[]; onScrollEnd: (index: 
         if (x < 0) return
         const index = Math.floor(x / ITEM_WIDTH)
         if (index !== activeItemIndex && index !== activeIndexRef.current) {
-          console.log("the fook", index)
-
           onScrollEnd(index)
           setActiveItemIndex(index)
           activeIndexRef.current = index
