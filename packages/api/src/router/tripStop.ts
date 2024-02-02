@@ -15,8 +15,7 @@ export const tripStopRouter = createTRPCRouter({
       },
     })
     const { tripId, ...data } = input
-    const tripStop = await ctx.prisma.tripStop.create({ data: { ...data, tripItemId: tripItem.id } })
-    await ctx.prisma.tripItem.update({ where: { id: tripItem.id }, data: { stopId: tripStop.id } })
+    await ctx.prisma.tripStop.create({ data: { ...data, tripItemId: tripItem.id } })
     return true
   }),
 })
