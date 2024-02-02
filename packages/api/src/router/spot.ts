@@ -236,7 +236,7 @@ export const spotRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { shouldPublishLater } = input
       const amenities = input.amenities
-      const address = input.address || (await geocodeCoords({ latitude: input.latitude, longitude: input.longitude }))
+      const geocodeData = await geocodeCoords({ latitude: input.latitude, longitude: input.longitude })
       const imageData = await Promise.all(
         input.images.map(async ({ path }) => {
           const blurHash = await generateBlurHash(path)
@@ -247,7 +247,7 @@ export const spotRouter = createTRPCRouter({
         data: {
           ...input,
           publishedAt: shouldPublishLater ? dayjs().add(2, "weeks").toDate() : undefined,
-          address: address || "Unknown address",
+          address: input.address || geocodeData.address || "Unknown address",
           creator: { connect: { id: ctx.user.id } },
           verifiedAt: ctx.user.role === "GUIDE" ? new Date() : null,
           verifier: ctx.user.role === "GUIDE" ? { connect: { id: ctx.user.id } } : undefined,
@@ -273,7 +273,7 @@ export const spotRouter = createTRPCRouter({
       const spot = await ctx.prisma.spot.findUnique({ where: { id }, include: { images: true, amenities: true } })
       if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
       const amenities = data.amenities
-      const address = await geocodeCoords({ latitude: data.latitude, longitude: data.longitude })
+      const geocodeData = await geocodeCoords({ latitude: data.latitude, longitude: data.longitude })
 
       const imagesToDelete = spot.images.filter((image) => !data.images.find((i) => i.path === image.path))
       const imagesToCreate = data.images.filter((image) => !spot.images.find((i) => i.path === image.path))
@@ -288,7 +288,7 @@ export const spotRouter = createTRPCRouter({
         where: { id },
         data: {
           ...data,
-          address: address || "Unknown address",
+          address: geocodeData.address || "Unknown address",
           images: { create: imageData, delete: imagesToDelete },
           amenities: amenities
             ? { update: spot.amenities ? amenities : undefined, create: spot.amenities ? undefined : amenities }

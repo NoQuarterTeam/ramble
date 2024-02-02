@@ -23,7 +23,6 @@ import { NewSpotModalView } from "~/app/new/NewSpotModalView"
 type Cluster = RouterOutputs["spot"]["clusters"][number]
 
 export default function NewItemScreen() {
-  // const { me } = useMe()
   const router = useRouter()
   const { id } = useLocalSearchParams<{ id: string }>()
   const filters = useMapFilters((s) => s.filters)
@@ -40,14 +39,14 @@ export default function NewItemScreen() {
   const utils = api.useUtils()
 
   const {
-    data: address,
+    data: geocodeData,
     isLoading: addressLoading,
     isFetching,
   } = api.spot.geocodeCoords.useQuery(
     { latitude: coords?.[1]!, longitude: coords?.[0]! },
     { enabled: !!coords?.[0] && !!coords?.[1], keepPreviousData: true },
   )
-  const isUnknownAddress = !!!address
+  const isUnknownAddress = !!!geocodeData?.place
   const { data: geocodedCoords } = api.spot.geocodeAddress.useQuery({ address: search }, { enabled: !!search })
 
   React.useEffect(() => {
@@ -142,7 +141,8 @@ export default function NewItemScreen() {
   })
 
   const handleCreateTripStop = () => {
-    mutate({ name: address || "oops", latitude: coords?.[1]!, longitude: coords?.[0]!, tripId: id })
+    if (!geocodeData?.place) return
+    mutate({ name: geocodeData?.place, latitude: coords?.[1]!, longitude: coords?.[0]!, tripId: id })
     router.back()
   }
 
@@ -160,7 +160,7 @@ export default function NewItemScreen() {
           />
         )}
         <Text numberOfLines={1} className="flex-1 text-sm opacity-70">
-          {addressLoading ? "" : address || "Unknown address - move map to set"}
+          {addressLoading ? "" : geocodeData?.place || "Unknown address - move map to set"}
         </Text>
       </View>
       {!isLoading && (
@@ -224,11 +224,11 @@ export default function NewItemScreen() {
               className="bg-background rounded-full"
               textClassName="text-black"
               onPress={() => {
-                if (!coords || !address || isUnknownAddress) return
+                if (!coords || !geocodeData || isUnknownAddress) return
                 if (!coords[0] || !coords[1]) return toast({ title: "Please select a location" })
                 handleCreateTripStop()
               }}
-              disabled={!coords || (coords && (!coords[0] || !coords[1])) || !address || isUnknownAddress}
+              disabled={!coords || (coords && (!coords[0] || !coords[1])) || !geocodeData || isUnknownAddress}
               isLoading={createLoading}
             >
               Add to trip
