@@ -6,4 +6,5 @@ export const tripStopSchema = z.object({
   name: z.string().min(1),
   latitude: FormNumber,
   longitude: FormNumber,
+  order: FormNumber,
 })
