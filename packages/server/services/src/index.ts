@@ -9,6 +9,7 @@ export * from "./loops.server"
 export * from "./password.server"
 export * from "./s3.server"
 export * from "./slack.server"
+export * from "./directions.server"
 export * from "./spot.server"
 
 export * from "./mailers/access-request.server"

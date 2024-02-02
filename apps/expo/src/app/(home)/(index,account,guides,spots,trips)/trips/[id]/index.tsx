@@ -9,23 +9,42 @@ import { Text } from "~/components/ui/Text"
 import { RouterOutputs, api } from "~/lib/api"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createImageUrl } from "@ramble/shared"
-import { Camera, StyleURL, UserLocation, type MapView as MapType } from "@rnmapbox/maps"
+import { createImageUrl } from "@ramble/shared"
+import { Camera, StyleURL, UserLocation, type MapView as MapType, MarkerView, LineLayer, ShapeSource } from "@rnmapbox/maps"
 import { ChevronLeft, Flag, Home, PlusCircle } from "lucide-react-native"
 import { Icon } from "~/components/Icon"
 import { SafeAreaView } from "~/components/SafeAreaView"
 import { SpotIcon } from "~/components/SpotIcon"
 import { BrandHeading } from "~/components/ui/BrandHeading"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
+import colors from "@ramble/tailwind-config/src/colors"
 
 export default function TripDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
 
-  const { data: trip, isLoading } = api.trip.detail.useQuery({ id })
+  const { data, isLoading } = api.trip.detail.useQuery({ id })
+  const trip = data?.trip
+  const bounds = data?.bounds
+  const center = data?.center
   const router = useRouter()
 
   const camera = React.useRef<Camera>(null)
   const mapRef = React.useRef<MapType>(null)
+
+  const spotMarkers = React.useMemo(
+    () =>
+      trip?.items.map((item) => (
+        <MarkerView
+          allowOverlap
+          key={item.id}
+          coordinate={item.spot ? [item.spot.longitude, item.spot.latitude] : [item.stop!.longitude, item.stop!.latitude]}
+        >
+          <TouchableOpacity>{item.spot ? <SpotItemMarker /> : <StopItemMarker />}</TouchableOpacity>
+        </MarkerView>
+      )),
+
+    [trip?.items],
+  )
 
   const tab = useTabSegment()
   return (
@@ -64,16 +83,34 @@ export default function TripDetailScreen() {
               styleURL={StyleURL.SatelliteStreet}
               compassPosition={{ top: 8, right: 8 }}
             >
+              {data.line && (
+                <ShapeSource id="directions" shape={data.line.geometry}>
+                  <LineLayer id="line" style={{ lineColor: colors.primary[300], lineCap: "round", lineWidth: 4 }} />
+                </ShapeSource>
+              )}
+              {spotMarkers}
               <UserLocation />
               <Camera
                 ref={camera}
                 allowUpdates
-                defaultSettings={{
-                  centerCoordinate: [INITIAL_LONGITUDE, INITIAL_LATITUDE],
-                  zoomLevel: 14,
-                  pitch: 0,
-                  heading: 0,
-                }}
+                defaultSettings={
+                  center
+                    ? { pitch: 0, heading: 0, centerCoordinate: center, zoomLevel: 5 }
+                    : bounds
+                      ? {
+                          pitch: 0,
+                          heading: 0,
+                          bounds: {
+                            paddingBottom: 50,
+                            paddingTop: 50,
+                            paddingLeft: 50,
+                            paddingRight: 50,
+                            sw: [bounds[0]!, bounds[1]!],
+                            ne: [bounds[2]!, bounds[3]!],
+                          },
+                        }
+                      : undefined
+                }
               />
             </Map>
             <View>
@@ -86,11 +123,18 @@ export default function TripDetailScreen() {
   )
 }
 
-function TripList({ items }: { items: RouterOutputs["trip"]["detail"]["items"] }) {
+type Item = RouterOutputs["trip"]["detail"]["trip"]["items"][number]
+
+function TripList({ items }: { items: Item[] }) {
   const { id } = useLocalSearchParams<{ id: string }>()
   const [tripItems, setTripItems] = React.useState(items)
 
-  const { mutate } = api.trip.updateOrder.useMutation()
+  const utils = api.useUtils()
+  const { mutate } = api.trip.updateOrder.useMutation({
+    onSuccess: () => {
+      utils.trip.detail.refetch({ id })
+    },
+  })
 
   React.useEffect(() => {
     setTripItems(items)
@@ -115,8 +159,6 @@ function TripList({ items }: { items: RouterOutputs["trip"]["detail"]["items"] }
     />
   )
 }
-
-type Item = RouterOutputs["trip"]["detail"]["items"][number]
 
 const ITEM_WIDTH = 180
 
@@ -195,6 +237,22 @@ function TripItem({
         </View>
       </TouchableOpacity>
     </ScaleDecorator>
+  )
+}
+
+function SpotItemMarker() {
+  return (
+    <View className="bg-primary-500 sq-7 flex items-center justify-center rounded-full">
+      <Text className="text-xxs">Spot</Text>
+    </View>
+  )
+}
+
+function StopItemMarker() {
+  return (
+    <View className="sq-7 flex items-center justify-center rounded-full bg-green-500">
+      <Text className="text-xxs">Stop</Text>
+    </View>
   )
 }
 

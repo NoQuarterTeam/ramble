@@ -4,6 +4,9 @@ import { tripSchema } from "@ramble/server-schemas"
 
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 import { TRPCError } from "@trpc/server"
+import { lineString } from "@turf/helpers"
+import bbox from "@turf/bbox"
+// import { getDirections } from "@ramble/server-services"
 
 export const tripRouter = createTRPCRouter({
   mine: protectedProcedure.query(({ ctx }) => {
@@ -32,14 +35,44 @@ export const tripRouter = createTRPCRouter({
           select: {
             id: true,
             order: true,
-            spot: { select: { id: true, name: true, type: true, images: { take: 1, orderBy: { createdAt: "desc" } } } },
+            spot: {
+              select: {
+                id: true,
+                name: true,
+                latitude: true,
+                longitude: true,
+                type: true,
+                images: { take: 1, orderBy: { createdAt: "desc" } },
+              },
+            },
             stop: { select: { id: true, name: true, latitude: true, longitude: true } },
           },
         },
       },
     })
     if (!trip) throw new TRPCError({ code: "NOT_FOUND", message: "Trip not found" })
-    return trip
+
+    if (trip.items.length === 0) return { trip }
+
+    if (trip.items.length === 1)
+      return {
+        trip,
+        center: trip.items[0].spot
+          ? [trip.items[0].spot.longitude, trip.items[0].spot.latitude]
+          : ([trip.items[0].stop!.longitude, trip.items[0].stop!.latitude] as [number, number]),
+      }
+
+    const itemCoords = trip.items.map((item) => [
+      item.spot?.longitude || item.stop?.longitude,
+      item.spot?.latitude || item.stop?.latitude,
+    ]) as [number, number][]
+
+    const line = lineString(itemCoords)
+    const bounds = bbox(line) as [number, number, number, number]
+
+    // const directions = await getDirections(itemCoords)
+
+    return { trip, bounds, line }
   }),
   saveToTrip: protectedProcedure.input(z.object({ spotId: z.string(), tripId: z.string() })).mutation(async ({ ctx, input }) => {
     const tripItems = await ctx.prisma.trip.findUnique({ where: { id: input.tripId } }).items({ where: { spotId: input.spotId } })
