@@ -57,9 +57,9 @@ export const tripRouter = createTRPCRouter({
     if (trip.items.length === 1)
       return {
         trip,
-        center: trip.items[0].spot
-          ? [trip.items[0].spot.longitude, trip.items[0].spot.latitude]
-          : ([trip.items[0].stop!.longitude, trip.items[0].stop!.latitude] as [number, number]),
+        center: trip.items[0]?.spot
+          ? [trip.items[0]?.spot.longitude, trip.items[0]?.spot.latitude]
+          : ([trip.items[0]?.stop!.longitude, trip.items[0]?.stop!.latitude] as [number, number]),
       }
 
     const itemCoords = trip.items.map((item) => [
