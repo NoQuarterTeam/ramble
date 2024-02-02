@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { tripSchema } from "@ramble/server-schemas"
+import { tripSchema, tripStopSchema } from "@ramble/server-schemas"
 
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 import { TRPCError } from "@trpc/server"
@@ -74,23 +74,35 @@ export const tripRouter = createTRPCRouter({
 
     return { trip, bounds, line }
   }),
-  saveToTrip: protectedProcedure.input(z.object({ spotId: z.string(), tripId: z.string() })).mutation(async ({ ctx, input }) => {
-    // const tripItems = await ctx.prisma.trip.findUnique({ where: { id: input.tripId } }).items({ where: { spotId: input.spotId } })
-    const tripItems = await ctx.prisma.trip.findUnique({ where: { id: input.tripId } }).items()
-    // if (tripItems && tripItems.length > 0) {
-    //   // TODO: perhaps don't want to deleteMany, as there might be the same spot more than once on this trip but user might only be wanting to remove it once?
-    //   return ctx.prisma.tripItem.deleteMany({ where: { tripId: input.tripId, spotId: input.spotId } })
-    // } else {
-    return ctx.prisma.tripItem.create({
-      data: {
-        spotId: input.spotId,
-        tripId: input.tripId,
-        creatorId: ctx.user.id,
-        order: tripItems?.length || 0, // orders it as last
-      },
-    })
-    // }
-  }),
+  saveSpot: protectedProcedure
+    .input(z.object({ spotId: z.string(), tripId: z.string(), order: z.number().optional() }))
+    .mutation(async ({ ctx, input }) => {
+      let newOrder = input.order
+      if (!input.order) {
+        const tripItems = await ctx.prisma.trip.findUnique({ where: { id: input.tripId } }).items()
+        newOrder = tripItems?.length || 0
+      }
+      return ctx.prisma.tripItem.create({
+        data: {
+          spotId: input.spotId,
+          tripId: input.tripId,
+          creatorId: ctx.user.id,
+          order: newOrder,
+        },
+      })
+    }),
+  saveStop: protectedProcedure
+    .input(z.object({ tripId: z.string(), order: z.number().optional() }).merge(tripStopSchema))
+    .mutation(async ({ ctx, input }) => {
+      const { tripId, order, ...data } = input
+      let newOrder = order
+      if (!order) {
+        const tripItems = await ctx.prisma.trip.findUnique({ where: { id: input.tripId } }).items()
+        newOrder = tripItems?.length || 0
+      }
+      const tripItem = await ctx.prisma.tripItem.create({ data: { tripId, creatorId: ctx.user.id, order: newOrder } })
+      return ctx.prisma.tripStop.create({ data: { ...data, tripItemId: tripItem.id } })
+    }),
   updateOrder: protectedProcedure
     .input(z.object({ id: z.string(), items: z.array(z.string()) }))
     .mutation(async ({ input, ctx }) => {

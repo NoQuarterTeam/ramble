@@ -16,7 +16,6 @@ export default function SaveSpotToTripScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
   const { me } = useMe()
   const { data: trips, isLoading } = api.trip.mine.useQuery(undefined, { enabled: !!me })
-  // const { data: lists, isLoading } = api.list.allByUserWithSavedSpots.useQuery({ spotId: id }, { enabled: !!me })
   if (!me)
     return (
       <ModalView title="add to trip">
@@ -53,19 +52,15 @@ function SaveableTripItem({ trip, spotId }: Props) {
   const foundSavedItem = trip.items.some((ti) => ti.spotId === spotId)
 
   const [isSaved, setIsSaved] = React.useState(foundSavedItem)
-  // const utils = api.useUtils()
+  const utils = api.useUtils()
 
   React.useEffect(() => {
     setIsSaved(foundSavedItem)
   }, [foundSavedItem])
 
-  const { mutate } = api.trip.saveToTrip.useMutation({
+  const { mutate } = api.trip.saveSpot.useMutation({
     onSuccess: () => {
-      // void utils.list.allByUserWithSavedSpots.refetch()
-      // void utils.list.detail.refetch()
-      // void utils.list.spotClusters.refetch()
-      // void utils.spot.detail.refetch({ id: spotId })
-      // void utils.spot.mapPreview.refetch({ id: spotId })
+      void utils.trip.detail.refetch({ id: trip.id })
     },
   })
   const colorScheme = useColorScheme()

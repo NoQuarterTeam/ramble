@@ -7,7 +7,6 @@ import { s3Router } from "./router/s3"
 import { spotRouter } from "./router/spot"
 import { spotRevisionRouter } from "./router/spotRevision"
 import { tripRouter } from "./router/trip"
-import { tripStopRouter } from "./router/tripStop"
 import { userRouter } from "./router/user"
 import { vanRouter } from "./router/van"
 import { createTRPCRouter } from "./trpc"
@@ -18,7 +17,7 @@ export const appRouter = createTRPCRouter({
   inviteCode: inviteCodeRouter,
   list: listRouter,
   trip: tripRouter,
-  tripStop: tripStopRouter,
+
   review: reviewRouter,
   s3: s3Router,
   spot: spotRouter,

@@ -25,7 +25,7 @@ type Cluster = RouterOutputs["spot"]["clusters"][number]
 export default function NewItemScreen() {
   // const { me } = useMe()
   const router = useRouter()
-  const { id, addOrder } = useLocalSearchParams<{ id: string; addOrder: string | undefined }>()
+  const { id, order } = useLocalSearchParams<{ id: string; order: string }>()
   const filters = useMapFilters((s) => s.filters)
 
   const [coords, setCoords] = React.useState<number[] | null>(null)
@@ -137,13 +137,21 @@ export default function NewItemScreen() {
     [clusters],
   )
 
-  const { mutate, isLoading: createLoading } = api.tripStop.create.useMutation({
-    onSuccess: () => void utils.trip.detail.refetch(),
+  const { mutate, isLoading: createLoading } = api.trip.saveStop.useMutation({
+    onSuccess: () => {
+      void utils.trip.detail.refetch()
+      router.back()
+    },
   })
 
   const handleCreateTripStop = () => {
-    mutate({ name: address || "oops", latitude: coords?.[1]!, longitude: coords?.[0]!, tripId: id })
-    router.back()
+    mutate({
+      name: address || "oops",
+      latitude: coords?.[1]!,
+      longitude: coords?.[0]!,
+      tripId: id,
+      order: order ? Number(order) : undefined,
+    })
   }
 
   return (

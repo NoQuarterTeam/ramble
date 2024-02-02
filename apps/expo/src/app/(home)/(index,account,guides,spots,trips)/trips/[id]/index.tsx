@@ -182,14 +182,12 @@ function TripList({ items, onScrollEnd }: { items: Item[]; onScrollEnd: (index: 
       keyExtractor={(item) => item.id}
       renderItem={(props) => {
         const index = props.getIndex() || 0
+        const prevItem = tripItems[index - 1]
         return (
           <TripItem
             {...props}
             isFocused={index === activeItemIndex}
-            addOrder={
-              // half way between current item and previous items order
-              (index > 1 ? (tripItems[index - 1].order + props.item.order) / 2 : props.item.order) / 2
-            }
+            addBeforeOrder={index === 0 ? -1 : prevItem ? (prevItem.order + props.item.order) / 2 : 0}
           />
         )
       }}
@@ -204,8 +202,10 @@ function TripItem({
   isActive,
   isFocused,
   drag,
+  addBeforeOrder,
 }: {
   isFocused: boolean
+  addBeforeOrder: number
 } & RenderItemParams<Item>) {
   const { id } = useLocalSearchParams<{ id: string }>()
   const spot = item.spot
@@ -229,7 +229,7 @@ function TripItem({
         style={{ width: ITEM_WIDTH }}
       >
         <View style={{ opacity: isActive ? 0 : 1 }}>
-          <Link push href={`/(home)/(trips)/trips/${id}/add?order=${0}`} asChild>
+          <Link push href={`/(home)/(trips)/trips/${id}/add?order=${addBeforeOrder}`} asChild>
             <TouchableOpacity className=" p-3">
               <Icon icon={PlusCircle} size={16} />
             </TouchableOpacity>
