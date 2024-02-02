@@ -164,8 +164,11 @@ function TripList({ items, onScrollEnd }: { items: Item[]; onScrollEnd: (index: 
       }}
       scrollEventThrottle={1000}
       onScrollOffsetChange={(x) => {
+        if (x < 0) return
         const index = Math.floor(x / ITEM_WIDTH)
         if (index !== activeItemIndex && index !== activeIndexRef.current) {
+          console.log("the fook", index)
+
           onScrollEnd(index)
           setActiveItemIndex(index)
           activeIndexRef.current = index
@@ -179,7 +182,7 @@ function TripList({ items, onScrollEnd }: { items: Item[]; onScrollEnd: (index: 
       data={tripItems}
       showsHorizontalScrollIndicator={false}
       keyExtractor={(item) => item.id}
-      renderItem={(props) => <TripItem {...props} />}
+      renderItem={(props) => <TripItem {...props} isFocused={props.getIndex() === activeItemIndex} />}
     />
   )
 }
@@ -189,9 +192,10 @@ const ITEM_WIDTH = 180
 function TripItem({
   item,
   isActive,
+  isFocused,
   drag,
 }: {
-  item: Item
+  isFocused: boolean
 } & RenderItemParams<Item>) {
   const { id } = useLocalSearchParams<{ id: string }>()
   const spot = item.spot
@@ -211,7 +215,7 @@ function TripItem({
           if (spot) void utils.spot.detail.prefetch({ id: spot.id })
         }}
         onLongPress={drag}
-        className=" flex w-full flex-row items-center"
+        className="flex w-full flex-row items-center"
         style={{ width: ITEM_WIDTH }}
       >
         <View style={{ opacity: isActive ? 0 : 1 }}>
@@ -222,7 +226,7 @@ function TripItem({
           </Link>
         </View>
 
-        <View className="bg-background dark:bg-background-dark h-full w-full flex-1">
+        <View className="bg-background dark:bg-background-dark relative h-full w-full flex-1">
           {spot ? (
             <Link href={`/${tab}/spot/${spot.id}`} push asChild>
               <View className="h-full w-full">
@@ -258,6 +262,7 @@ function TripItem({
               <Text>{stop.name}</Text>
             </View>
           ) : null}
+          {isFocused && <View className="bg-primary absolute bottom-0 left-0 right-0 top-0 h-1 rounded-t-sm" />}
         </View>
       </TouchableOpacity>
     </ScaleDecorator>
