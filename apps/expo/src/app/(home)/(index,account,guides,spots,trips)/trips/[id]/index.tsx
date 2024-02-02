@@ -180,7 +180,19 @@ function TripList({ items, onScrollEnd }: { items: Item[]; onScrollEnd: (index: 
       data={tripItems}
       showsHorizontalScrollIndicator={false}
       keyExtractor={(item) => item.id}
-      renderItem={(props) => <TripItem {...props} isFocused={props.getIndex() === activeItemIndex} />}
+      renderItem={(props) => {
+        const index = props.getIndex() || 0
+        return (
+          <TripItem
+            {...props}
+            isFocused={index === activeItemIndex}
+            addOrder={
+              // half way between current item and previous items order
+              (index > 1 ? (tripItems[index - 1].order + props.item.order) / 2 : props.item.order) / 2
+            }
+          />
+        )
+      }}
     />
   )
 }

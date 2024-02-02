@@ -25,7 +25,7 @@ type Cluster = RouterOutputs["spot"]["clusters"][number]
 export default function NewItemScreen() {
   // const { me } = useMe()
   const router = useRouter()
-  const { id } = useLocalSearchParams<{ id: string }>()
+  const { id, addOrder } = useLocalSearchParams<{ id: string; addOrder: string | undefined }>()
   const filters = useMapFilters((s) => s.filters)
 
   const [coords, setCoords] = React.useState<number[] | null>(null)
