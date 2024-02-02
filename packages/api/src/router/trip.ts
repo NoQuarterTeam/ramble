@@ -51,4 +51,12 @@ export const tripRouter = createTRPCRouter({
       })
     }
   }),
+  updateOrder: protectedProcedure
+    .input(z.object({ id: z.string(), items: z.array(z.string()) }))
+    .mutation(async ({ input, ctx }) => {
+      await ctx.prisma.$transaction(
+        input.items.map((id, order) => ctx.prisma.tripItem.update({ where: { id }, data: { order } })),
+      )
+      return true
+    }),
 })

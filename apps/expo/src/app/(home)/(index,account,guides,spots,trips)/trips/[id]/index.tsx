@@ -1,7 +1,7 @@
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
-import DraggableFlatList, { RenderItemParams } from "react-native-draggable-flatlist"
+import DraggableFlatList, { RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlist"
 
 import { Map } from "~/components/Map"
 import { Spinner } from "~/components/ui/Spinner"
@@ -77,22 +77,42 @@ export default function TripDetailScreen() {
               />
             </Map>
             <View>
-              <DraggableFlatList
-                horizontal
-                ListHeaderComponent={ListHeader}
-                ListFooterComponent={ListFooter}
-                className="h-[160px] py-3"
-                contentContainerStyle={{ paddingRight: 50, paddingLeft: 12 }}
-                data={trip.items}
-                showsHorizontalScrollIndicator={false}
-                keyExtractor={(item) => item.id}
-                renderItem={(props) => <TripItem {...props} />}
-              />
+              <TripList items={trip.items} />
             </View>
           </>
         )}
       </View>
     </SafeAreaView>
+  )
+}
+
+function TripList({ items }: { items: RouterOutputs["trip"]["detail"]["items"] }) {
+  const { id } = useLocalSearchParams<{ id: string }>()
+  const [tripItems, setTripItems] = React.useState(items)
+
+  const { mutate } = api.trip.updateOrder.useMutation()
+
+  React.useEffect(() => {
+    setTripItems(items)
+  }, [items])
+
+  return (
+    <DraggableFlatList
+      horizontal
+      onDragEnd={(dragData) => {
+        setTripItems(dragData.data)
+        mutate({ id, items: dragData.data.map((i) => i.id) })
+      }}
+      autoscrollThreshold={20}
+      ListHeaderComponent={ListHeader}
+      ListFooterComponent={ListFooter}
+      className="h-[160px] py-3"
+      contentContainerStyle={{ paddingRight: 50, paddingLeft: 12 }}
+      data={tripItems}
+      showsHorizontalScrollIndicator={false}
+      keyExtractor={(item) => item.id}
+      renderItem={(props) => <TripItem {...props} />}
+    />
   )
 }
 
@@ -115,64 +135,66 @@ function TripItem({
   const router = useRouter()
 
   return (
-    <TouchableOpacity
-      activeOpacity={0.8}
-      onPress={() => {
-        if (spot) router.push(`/${tab}/spot/${spot.id}`)
-      }}
-      onPressIn={() => {
-        if (spot) void utils.spot.detail.prefetch({ id: spot.id })
-      }}
-      onLongPress={drag}
-      className=" flex w-full flex-row items-center"
-      style={{ width: ITEM_WIDTH, transform: [{ scale: isActive ? 1.05 : 1 }] }}
-    >
-      <View style={{ opacity: isActive ? 0 : 1 }}>
-        <Link push href={`/(home)/(trips)/trips/${id}/add?order=${0}`} asChild>
-          <TouchableOpacity className=" p-3">
-            <Icon icon={PlusCircle} size={16} />
-          </TouchableOpacity>
-        </Link>
-      </View>
-
-      <View className="bg-background dark:bg-background-dark h-full w-full flex-1">
-        {spot ? (
-          <Link href={`/${tab}/spot/${spot.id}`} push asChild>
-            <View className="h-full w-full">
-              {spot.images && spot.images[0] ? (
-                <OptimizedImage
-                  width={300}
-                  placeholder={spot.images[0].blurHash}
-                  height={150}
-                  className="w-full flex-1 rounded bg-gray-50 object-cover dark:bg-gray-800"
-                  source={{ uri: createImageUrl(spot.images[0].path) }}
-                />
-              ) : (
-                <View className="flex h-full w-full flex-1 items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
-                  <View className="rounded-full p-4">
-                    <SpotIcon type={spot.type} size={30} />
-                  </View>
-                </View>
-              )}
-              {spot.images?.[0] && (
-                <View className="sq-8 bg-background dark:bg-background-dark absolute left-1 top-1 flex items-center justify-center rounded-full">
-                  <SpotIcon type={spot.type} size={16} />
-                </View>
-              )}
-              <View className="flex flex-row items-center py-1">
-                <Text numberOfLines={1} className="font-500 text-xs">
-                  {spot.name}
-                </Text>
-              </View>
-            </View>
+    <ScaleDecorator>
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => {
+          if (spot) router.push(`/${tab}/spot/${spot.id}`)
+        }}
+        onPressIn={() => {
+          if (spot) void utils.spot.detail.prefetch({ id: spot.id })
+        }}
+        onLongPress={drag}
+        className=" flex w-full flex-row items-center"
+        style={{ width: ITEM_WIDTH }}
+      >
+        <View style={{ opacity: isActive ? 0 : 1 }}>
+          <Link push href={`/(home)/(trips)/trips/${id}/add?order=${0}`} asChild>
+            <TouchableOpacity className=" p-3">
+              <Icon icon={PlusCircle} size={16} />
+            </TouchableOpacity>
           </Link>
-        ) : stop ? (
-          <View className="flex h-full w-full flex-row items-center justify-center space-x-2 rounded-sm border border-gray-200 p-2">
-            <Text>{stop.name}</Text>
-          </View>
-        ) : null}
-      </View>
-    </TouchableOpacity>
+        </View>
+
+        <View className="bg-background dark:bg-background-dark h-full w-full flex-1">
+          {spot ? (
+            <Link href={`/${tab}/spot/${spot.id}`} push asChild>
+              <View className="h-full w-full">
+                {spot.images && spot.images[0] ? (
+                  <OptimizedImage
+                    width={300}
+                    placeholder={spot.images[0].blurHash}
+                    height={150}
+                    className="w-full flex-1 rounded bg-gray-50 object-cover dark:bg-gray-800"
+                    source={{ uri: createImageUrl(spot.images[0].path) }}
+                  />
+                ) : (
+                  <View className="flex h-full w-full flex-1 items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
+                    <View className="rounded-full p-4">
+                      <SpotIcon type={spot.type} size={30} />
+                    </View>
+                  </View>
+                )}
+                {spot.images?.[0] && (
+                  <View className="sq-8 bg-background dark:bg-background-dark absolute left-1 top-1 flex items-center justify-center rounded-full">
+                    <SpotIcon type={spot.type} size={16} />
+                  </View>
+                )}
+                <View className="flex flex-row items-center py-1">
+                  <Text numberOfLines={1} className="font-500 text-xs">
+                    {spot.name}
+                  </Text>
+                </View>
+              </View>
+            </Link>
+          ) : stop ? (
+            <View className="flex h-full w-full flex-row items-center justify-center space-x-2 rounded-sm border border-gray-200 p-2">
+              <Text>{stop.name}</Text>
+            </View>
+          ) : null}
+        </View>
+      </TouchableOpacity>
+    </ScaleDecorator>
   )
 }
 
