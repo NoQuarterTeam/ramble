@@ -60,7 +60,7 @@ export default function TripDetailScreen() {
 
           <TouchableOpacity
             className="sq-8 flex items-center justify-center"
-            onPress={() => router.push(`/${tab}/list/${id}/edit`)}
+            onPress={() => router.push(`/${tab}/trips/${id}/edit`)}
           >
             <Text className="underline">Edit</Text>
           </TouchableOpacity>
