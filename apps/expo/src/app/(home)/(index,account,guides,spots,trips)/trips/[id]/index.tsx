@@ -98,18 +98,18 @@ export default function TripDetailScreen() {
 }
 
 type Item = RouterOutputs["trip"]["detail"]["items"][number]
-type Positions = { [key: string]: Item }
+type Positions = { [key: string]: Item & { dragOrder: number } }
 function TripItemsList({ items }: { items: Item[] }) {
   const positions = useSharedValue(
-    items.reduce<Positions>((acc, item) => {
-      acc[item.id] = item
+    items.reduce<Positions>((acc, item, i) => {
+      acc[item.id] = { ...item, dragOrder: i }
       return acc
     }, {}),
   )
 
   React.useEffect(() => {
-    positions.value = items.reduce<Positions>((acc, item) => {
-      acc[item.id] = item
+    positions.value = items.reduce<Positions>((acc, item, i) => {
+      acc[item.id] = { ...item, dragOrder: i }
       return acc
     }, {})
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -172,7 +172,7 @@ function TripItem({
     () => positions.value[item.id]!,
     (newPosition) => {
       // const x = newPosition.order * (isDragging.value ? SMALL_ITEM_WIDTH : ITEM_WIDTH)
-      const x = newPosition.order * ITEM_WIDTH
+      const x = newPosition.dragOrder * ITEM_WIDTH
       translateX.value = withTiming(x)
     },
   )
@@ -213,14 +213,14 @@ function TripItem({
       const newPositions = { ...positions.value }
       const newOrder = Math.floor((translateX.value + ITEM_WIDTH * 0.5) / ITEM_WIDTH)
 
-      const itemsToSwap = Object.values(newPositions).find((t) => t.order === newOrder)
-      if (!itemsToSwap || itemsToSwap.id === currentItem.id) return
-      newPositions[currentItem.id]! = { ...currentItem, order: newOrder }
-      newPositions[itemsToSwap.id]! = { ...itemsToSwap, order: currentItem.order }
+      const itemToSwap = Object.values(newPositions).find((t) => t.dragOrder === newOrder)
+      if (!itemToSwap || itemToSwap.id === currentItem.id) return
+      newPositions[currentItem.id]! = { ...currentItem, dragOrder: newOrder }
+      newPositions[itemToSwap.id]! = { ...itemToSwap, dragOrder: currentItem.dragOrder }
       positions.value = newPositions
     })
     .onEnd(() => {
-      const newOrder = positions.value[item.id]!.order
+      const newOrder = positions.value[item.id]!.dragOrder
       translateX.value = withTiming(newOrder * ITEM_WIDTH)
 
       // runOnJS(handleUpdateOrder)()
