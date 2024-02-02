@@ -18,6 +18,7 @@ module.exports = {
     "axios",
     "decode-uri-component",
     "filter-obj",
+    "loops",
     "kdbush",
     "loops",
     "query-string",

@@ -11,7 +11,7 @@ import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 import { Camera, UserLocation, type MapView as MapType, StyleURL } from "@rnmapbox/maps"
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createImageUrl } from "@ramble/shared"
-import { ChevronLeft, Flag, Home, PlusCircle } from "lucide-react-native"
+import { ChevronLeft, PlusCircle } from "lucide-react-native"
 import { Icon } from "~/components/Icon"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { SpotIcon } from "~/components/SpotIcon"
@@ -19,7 +19,7 @@ import { BrandHeading } from "~/components/ui/BrandHeading"
 import { SafeAreaView } from "~/components/SafeAreaView"
 import Animated, {
   SharedValue,
-  runOnJS,
+  // runOnJS,
   useAnimatedReaction,
   useAnimatedStyle,
   useSharedValue,
@@ -105,18 +105,18 @@ export default function TripDetailScreen() {
 }
 
 type Item = RouterOutputs["trip"]["detail"]["items"][number]
-type Positions = { [key: string]: Item & { dndOrder: number } }
+type Positions = { [key: string]: Item }
 function TripItemsList({ items }: { items: Item[] }) {
   const positions = useSharedValue(
-    items.reduce<Positions>((acc, item, i) => {
-      acc[item.id] = { ...item, dndOrder: i }
+    items.reduce<Positions>((acc, item) => {
+      acc[item.id] = item
       return acc
     }, {}),
   )
 
   React.useEffect(() => {
-    positions.value = items.reduce<Positions>((acc, item, i) => {
-      acc[item.id] = { ...item, dndOrder: i }
+    positions.value = items.reduce<Positions>((acc, item) => {
+      acc[item.id] = item
       return acc
     }, {})
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -141,7 +141,7 @@ function TripItemsList({ items }: { items: Item[] }) {
 }
 
 const ITEM_WIDTH = 180
-const SMALL_ITEM_WIDTH = ITEM_WIDTH * 0.5
+// const SMALL_ITEM_WIDTH = ITEM_WIDTH * 0.5
 
 function TripItem({
   item,
@@ -154,7 +154,7 @@ function TripItem({
   addOrder: number
   item: RouterOutputs["trip"]["detail"]["items"][number]
 }) {
-  const width = useSharedValue(ITEM_WIDTH)
+  // const width = useSharedValue(ITEM_WIDTH)
   const { id } = useLocalSearchParams<{ id: string }>()
   const spot = item.spot
   const stop = item.stop
@@ -162,8 +162,7 @@ function TripItem({
   const tab = useTabSegment()
 
   const translateX = useSharedValue(
-    (positions.value[item.id] ? positions.value[item.id]!.dndOrder : Object.values(positions.value).length) * ITEM_WIDTH,
-    // 0,
+    (positions.value[item.id] ? positions.value[item.id]!.order : Object.keys(positions.value).length) * ITEM_WIDTH,
   )
 
   const offsetX = useSharedValue(translateX.value)
@@ -173,8 +172,8 @@ function TripItem({
   useAnimatedReaction(
     () => positions.value[item.id]!,
     (newPosition) => {
-      // const x = newPosition.dndOrder * (isDragging.value ? SMALL_ITEM_WIDTH : ITEM_WIDTH)
-      const x = newPosition.dndOrder * ITEM_WIDTH
+      // const x = newPosition.order * (isDragging.value ? SMALL_ITEM_WIDTH : ITEM_WIDTH)
+      const x = newPosition.order * ITEM_WIDTH
       translateX.value = withTiming(x)
     },
   )
@@ -183,7 +182,7 @@ function TripItem({
   //   () => isDragging.value,
   //   (newIsDragging) => {
   //     width.value = withTiming(newIsDragging ? SMALL_ITEM_WIDTH : ITEM_WIDTH)
-  //     const x = positions.value[item.id]!.dndOrder * (newIsDragging ? SMALL_ITEM_WIDTH : ITEM_WIDTH)
+  //     const x = positions.value[item.id]!.order * (newIsDragging ? SMALL_ITEM_WIDTH : ITEM_WIDTH)
   //     translateX.value = withTiming(x)
   //   },
   // )
@@ -213,17 +212,17 @@ function TripItem({
 
       const currentItem = positions.value[item.id]!
       const newPositions = { ...positions.value }
-      const newOrder = Math.floor((translateX.value + SMALL_ITEM_WIDTH * 0.5) / SMALL_ITEM_WIDTH)
+      const newOrder = Math.floor((translateX.value + ITEM_WIDTH * 0.5) / ITEM_WIDTH)
 
-      const itemsToSwap = Object.values(newPositions).find((t) => t.dndOrder === newOrder)
+      const itemsToSwap = Object.values(newPositions).find((t) => t.order === newOrder)
       if (!itemsToSwap || itemsToSwap.id === currentItem.id) return
-      newPositions[currentItem.id]! = { ...currentItem, dndOrder: newOrder }
-      newPositions[itemsToSwap.id]! = { ...itemsToSwap, dndOrder: currentItem.dndOrder }
+      newPositions[currentItem.id]! = { ...currentItem, order: newOrder }
+      newPositions[itemsToSwap.id]! = { ...itemsToSwap, order: currentItem.order }
       positions.value = newPositions
     })
     .onEnd(() => {
-      const newOrder = positions.value[item.id]!.dndOrder
-      translateX.value = withTiming(newOrder * SMALL_ITEM_WIDTH)
+      const newOrder = positions.value[item.id]!.order
+      translateX.value = withTiming(newOrder * ITEM_WIDTH)
 
       // runOnJS(handleUpdateOrder)()
     })
@@ -304,29 +303,29 @@ function TripItem({
   )
 }
 
-const HEADER_WIDTH = 100
-function ListHeader() {
-  return (
-    <View style={{ width: 100 }} className="flex h-full items-center justify-center space-y-1 rounded-sm border border-gray-100">
-      <Icon icon={Home} />
-      <Text className="text-center text-xs">01 Jan 2025</Text>
-    </View>
-  )
-}
+// const HEADER_WIDTH = 100
+// function ListHeader() {
+//   return (
+//     <View style={{ width: 100 }} className="flex h-full items-center justify-center space-y-1 rounded-sm border border-gray-100">
+//       <Icon icon={Home} />
+//       <Text className="text-center text-xs">01 Jan 2025</Text>
+//     </View>
+//   )
+// }
 
-function ListFooter() {
-  const { id } = useLocalSearchParams<{ id: string }>()
-  return (
-    <View className="flex flex-row items-center">
-      <Link push href={`/(home)/(trips)/trips/${id}/add`} asChild>
-        <TouchableOpacity className="p-3">
-          <Icon icon={PlusCircle} size={16} />
-        </TouchableOpacity>
-      </Link>
-      <View className="flex h-full w-[100px] items-center justify-center space-y-1 rounded-sm border border-gray-100">
-        <Icon icon={Flag} />
-        <Text className="text-center text-xs">01 Mar 2025</Text>
-      </View>
-    </View>
-  )
-}
+// function ListFooter() {
+//   const { id } = useLocalSearchParams<{ id: string }>()
+//   return (
+//     <View className="flex flex-row items-center">
+//       <Link push href={`/(home)/(trips)/trips/${id}/add`} asChild>
+//         <TouchableOpacity className="p-3">
+//           <Icon icon={PlusCircle} size={16} />
+//         </TouchableOpacity>
+//       </Link>
+//       <View className="flex h-full w-[100px] items-center justify-center space-y-1 rounded-sm border border-gray-100">
+//         <Icon icon={Flag} />
+//         <Text className="text-center text-xs">01 Mar 2025</Text>
+//       </View>
+//     </View>
+//   )
+// }

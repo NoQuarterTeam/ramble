@@ -42,6 +42,9 @@ export async function updateLoopsContact(contact: LoopsContact) {
       accessRequestedAt: contact.accessRequestedAt,
       accessRequestAcceptedAt: contact.accessRequestAcceptedAt,
     } satisfies LoopsContact
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const res = await loops.updateContact(contact.email, formattedData)
     if (!res.success) throw res
   } catch (error) {
