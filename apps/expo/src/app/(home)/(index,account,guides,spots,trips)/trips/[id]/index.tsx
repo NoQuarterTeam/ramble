@@ -1,5 +1,5 @@
 import * as React from "react"
-import { ScrollView, TouchableOpacity, View } from "react-native"
+import { TouchableOpacity, View } from "react-native"
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
 
 import { Map } from "~/components/Map"
@@ -86,16 +86,9 @@ export default function TripDetailScreen() {
               />
             </Map>
             <View>
-              <ScrollView
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{ paddingHorizontal: 12, width: trip.items.length * ITEM_WIDTH }}
-                className="h-[160px] py-3"
-                horizontal
-              >
-                {/* <ListHeader /> */}
-                <TripItemsList items={trip.items} />
-                {/* <ListFooter /> */}
-              </ScrollView>
+              {/* <ListHeader /> */}
+              <TripItemsList items={trip.items} />
+              {/* <ListFooter /> */}
             </View>
           </>
         )}
@@ -125,7 +118,12 @@ function TripItemsList({ items }: { items: Item[] }) {
   const isDragging = useSharedValue(false)
 
   return (
-    <>
+    <Animated.ScrollView
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={{ paddingHorizontal: 12, width: items.length * ITEM_WIDTH }}
+      className="h-[160px] py-3"
+      horizontal
+    >
       {items.map((item, index) => (
         <TripItem
           key={item.id}
@@ -136,7 +134,7 @@ function TripItemsList({ items }: { items: Item[] }) {
           addOrder={items[index - 1] ? (item.order + items[index - 1]!.order) / 2 : 0}
         />
       ))}
-    </>
+    </Animated.ScrollView>
   )
 }
 
@@ -162,7 +160,8 @@ function TripItem({
   const tab = useTabSegment()
 
   const translateX = useSharedValue(
-    (positions.value[item.id] ? positions.value[item.id]!.order : Object.keys(positions.value).length) * ITEM_WIDTH,
+    // (positions.value[item.id] ? positions.value[item.id]!.order : Object.keys(positions.value).length) * ITEM_WIDTH,
+    0,
   )
 
   const offsetX = useSharedValue(translateX.value)
