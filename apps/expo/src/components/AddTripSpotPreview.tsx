@@ -14,14 +14,12 @@ import { SpotImageCarousel } from "~/components/ui/SpotImageCarousel"
 import { Text } from "~/components/ui/Text"
 import { api } from "~/lib/api"
 import { isTablet, width } from "~/lib/device"
-import { useMe } from "~/lib/hooks/useMe"
 import { useBackgroundColor } from "~/lib/tailwind"
 
 const cardHeight = 345
 export function AddTripSpotPreview({ spotId, tripId, onClose }: { spotId: string; tripId: string; onClose: () => void }) {
   const { data: spot, isLoading } = api.spot.mapPreview.useQuery({ id: spotId })
   const router = useRouter()
-  const { me } = useMe()
 
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
