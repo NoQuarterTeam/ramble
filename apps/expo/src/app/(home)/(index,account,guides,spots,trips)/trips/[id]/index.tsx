@@ -17,7 +17,6 @@ import { SafeAreaView } from "~/components/SafeAreaView"
 import { SpotIcon } from "~/components/SpotIcon"
 import { BrandHeading } from "~/components/ui/BrandHeading"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
-import colors from "@ramble/tailwind-config/src/colors"
 
 export default function TripDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
@@ -85,7 +84,7 @@ export default function TripDetailScreen() {
             >
               {data.line && (
                 <ShapeSource id="directions" shape={data.line.geometry}>
-                  <LineLayer id="line" style={{ lineColor: colors.primary[300], lineCap: "round", lineWidth: 4 }} />
+                  <LineLayer id="line" style={{ lineDasharray: [0.5, 2], lineColor: "white", lineCap: "round", lineWidth: 2 }} />
                 </ShapeSource>
               )}
               {spotMarkers}
