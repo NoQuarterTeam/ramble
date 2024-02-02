@@ -1,31 +1,22 @@
+import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
-import { Link, useLocalSearchParams, useRouter } from "expo-router"
+import DraggableFlatList, { RenderItemParams } from "react-native-draggable-flatlist"
 
 import { Map } from "~/components/Map"
 import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
 import { RouterOutputs, api } from "~/lib/api"
-
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
-import { Camera, UserLocation, type MapView as MapType, StyleURL } from "@rnmapbox/maps"
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createImageUrl } from "@ramble/shared"
-import { ChevronLeft, PlusCircle } from "lucide-react-native"
+import { Camera, StyleURL, UserLocation, type MapView as MapType } from "@rnmapbox/maps"
+import { ChevronLeft, Flag, Home, PlusCircle } from "lucide-react-native"
 import { Icon } from "~/components/Icon"
-import { OptimizedImage } from "~/components/ui/OptimisedImage"
+import { SafeAreaView } from "~/components/SafeAreaView"
 import { SpotIcon } from "~/components/SpotIcon"
 import { BrandHeading } from "~/components/ui/BrandHeading"
-import { SafeAreaView } from "~/components/SafeAreaView"
-import Animated, {
-  SharedValue,
-  // runOnJS,
-  useAnimatedReaction,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from "react-native-reanimated"
-import { Gesture, GestureDetector } from "react-native-gesture-handler"
+import { OptimizedImage } from "~/components/ui/OptimisedImage"
 
 export default function TripDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
@@ -86,9 +77,17 @@ export default function TripDetailScreen() {
               />
             </Map>
             <View>
-              {/* <ListHeader /> */}
-              <TripItemsList items={trip.items} />
-              {/* <ListFooter /> */}
+              <DraggableFlatList
+                horizontal
+                ListHeaderComponent={ListHeader}
+                ListFooterComponent={ListFooter}
+                className="h-[160px] py-3"
+                contentContainerStyle={{ paddingRight: 50, paddingLeft: 12 }}
+                data={trip.items}
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={(item) => item.id}
+                renderItem={(props) => <TripItem {...props} />}
+              />
             </View>
           </>
         )}
@@ -98,233 +97,107 @@ export default function TripDetailScreen() {
 }
 
 type Item = RouterOutputs["trip"]["detail"]["items"][number]
-type Positions = { [key: string]: Item & { dragOrder: number } }
-function TripItemsList({ items }: { items: Item[] }) {
-  const positions = useSharedValue(
-    items.reduce<Positions>((acc, item, i) => {
-      acc[item.id] = { ...item, dragOrder: i }
-      return acc
-    }, {}),
-  )
-
-  React.useEffect(() => {
-    positions.value = items.reduce<Positions>((acc, item, i) => {
-      acc[item.id] = { ...item, dragOrder: i }
-      return acc
-    }, {})
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [items])
-
-  const isDragging = useSharedValue(false)
-
-  return (
-    <Animated.ScrollView
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{ paddingHorizontal: 12, width: items.length * ITEM_WIDTH }}
-      className="h-[160px] py-3"
-      horizontal
-    >
-      {items.map((item, index) => (
-        <TripItem
-          key={item.id}
-          positions={positions}
-          item={item}
-          isDragging={isDragging}
-          // each item renders a add button before it, instead of having to reorder every single item in the list when adding a item inbetween the first two, we can just get the number directly inbetween the current order and the previous one, so 1 -> 1.5 -> 2. Means order can be any decimal, will get a bit risky if theres a lot of items as the float might run out of precision maybe?
-          addOrder={items[index - 1] ? (item.order + items[index - 1]!.order) / 2 : 0}
-        />
-      ))}
-    </Animated.ScrollView>
-  )
-}
 
 const ITEM_WIDTH = 180
-// const SMALL_ITEM_WIDTH = ITEM_WIDTH * 0.5
 
 function TripItem({
   item,
-  positions,
-  addOrder,
-  isDragging,
+  isActive,
+  drag,
 }: {
-  isDragging: SharedValue<boolean>
-  positions: SharedValue<Positions>
-  addOrder: number
-  item: RouterOutputs["trip"]["detail"]["items"][number]
-}) {
-  // const width = useSharedValue(ITEM_WIDTH)
+  item: Item
+} & RenderItemParams<Item>) {
   const { id } = useLocalSearchParams<{ id: string }>()
   const spot = item.spot
   const stop = item.stop
   const utils = api.useUtils()
   const tab = useTabSegment()
+  const router = useRouter()
 
-  const translateX = useSharedValue(
-    // (positions.value[item.id] ? positions.value[item.id]!.order : Object.keys(positions.value).length) * ITEM_WIDTH,
-    0,
-  )
-
-  const offsetX = useSharedValue(translateX.value)
-  const scale = useSharedValue(1)
-  const isActive = useSharedValue(false)
-
-  useAnimatedReaction(
-    () => positions.value[item.id]!,
-    (newPosition) => {
-      // const x = newPosition.order * (isDragging.value ? SMALL_ITEM_WIDTH : ITEM_WIDTH)
-      const x = newPosition.dragOrder * ITEM_WIDTH
-      translateX.value = withTiming(x)
-    },
-  )
-
-  // useAnimatedReaction(
-  //   () => isDragging.value,
-  //   (newIsDragging) => {
-  //     width.value = withTiming(newIsDragging ? SMALL_ITEM_WIDTH : ITEM_WIDTH)
-  //     const x = positions.value[item.id]!.order * (newIsDragging ? SMALL_ITEM_WIDTH : ITEM_WIDTH)
-  //     translateX.value = withTiming(x)
-  //   },
-  // )
-
-  const styles = useAnimatedStyle(() => {
-    return {
-      position: "absolute",
-      height: "100%",
-      // width: "100%",
-      zIndex: isActive.value ? 10 : 0,
-      transform: [{ translateX: translateX.value }, { scale: scale.value }],
-    }
-  })
-
-  const pan = Gesture.Pan()
-    .activateAfterLongPress(200)
-    .onStart(() => {
-      offsetX.value = translateX.value
-      scale.value = withTiming(1.05)
-      isActive.value = true
-      isDragging.value = true
-      // runOnJS(setIsDragActive)(true)
-      // runOnJS(Haptics.impactAsync)(Haptics.ImpactFeedbackStyle.Medium)
-    })
-    .onUpdate((event) => {
-      translateX.value = Math.max(offsetX.value + event.translationX, 0)
-
-      const currentItem = positions.value[item.id]!
-      const newPositions = { ...positions.value }
-      const newOrder = Math.floor((translateX.value + ITEM_WIDTH * 0.5) / ITEM_WIDTH)
-
-      const itemToSwap = Object.values(newPositions).find((t) => t.dragOrder === newOrder)
-      if (!itemToSwap || itemToSwap.id === currentItem.id) return
-      newPositions[currentItem.id]! = { ...currentItem, dragOrder: newOrder }
-      newPositions[itemToSwap.id]! = { ...itemToSwap, dragOrder: currentItem.dragOrder }
-      positions.value = newPositions
-    })
-    .onEnd(() => {
-      const newOrder = positions.value[item.id]!.dragOrder
-      translateX.value = withTiming(newOrder * ITEM_WIDTH)
-
-      // runOnJS(handleUpdateOrder)()
-    })
-    .onFinalize(() => {
-      scale.value = withTiming(1, undefined, () => {
-        isActive.value = false
-      })
-      isDragging.value = false
-      // runOnJS(setIsDragActive)(false)
-    })
-
-  // const gesture = Gesture.Race(Gesture.Simultaneous(pan, longPress), tap)
-  const gesture = pan
-
-  const addStyles = useAnimatedStyle(() => {
-    return {
-      opacity: isDragging.value ? 0 : 1,
-    }
-  })
   return (
-    <Animated.View style={styles}>
-      <GestureDetector gesture={gesture}>
-        <View className="flex w-full flex-row items-center" style={{ width: ITEM_WIDTH }}>
-          <Animated.View className="flex" style={addStyles}>
-            <Link push href={`/(home)/(trips)/trips/${id}/add?order=${addOrder}`} asChild>
-              <TouchableOpacity className=" p-3">
-                <Icon icon={PlusCircle} size={16} />
-              </TouchableOpacity>
-            </Link>
-          </Animated.View>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() => {
+        if (spot) router.push(`/${tab}/spot/${spot.id}`)
+      }}
+      onPressIn={() => {
+        if (spot) void utils.spot.detail.prefetch({ id: spot.id })
+      }}
+      onLongPress={drag}
+      className=" flex w-full flex-row items-center"
+      style={{ width: ITEM_WIDTH, transform: [{ scale: isActive ? 1.05 : 1 }] }}
+    >
+      <View style={{ opacity: isActive ? 0 : 1 }}>
+        <Link push href={`/(home)/(trips)/trips/${id}/add?order=${0}`} asChild>
+          <TouchableOpacity className=" p-3">
+            <Icon icon={PlusCircle} size={16} />
+          </TouchableOpacity>
+        </Link>
+      </View>
 
-          <View className="h-full w-full flex-1">
-            {spot ? (
-              <Link href={`/${tab}/spot/${spot.id}`} push asChild>
-                <TouchableOpacity
-                  onPressIn={() => {
-                    void utils.spot.detail.prefetch({ id: spot.id })
-                  }}
-                  className="h-full w-full"
-                  activeOpacity={0.8}
-                >
-                  {spot.images && spot.images[0] ? (
-                    <OptimizedImage
-                      width={300}
-                      placeholder={spot.images[0].blurHash}
-                      height={150}
-                      className="w-full flex-1 rounded bg-gray-50 object-cover dark:bg-gray-800"
-                      source={{ uri: createImageUrl(spot.images[0].path) }}
-                    />
-                  ) : (
-                    <View className="flex h-full w-full flex-1 items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
-                      <View className="rounded-full p-4">
-                        <SpotIcon type={spot.type} size={30} />
-                      </View>
-                    </View>
-                  )}
-                  {spot.images?.[0] && (
-                    <View className="sq-8 bg-background dark:bg-background-dark absolute left-1 top-1 flex items-center justify-center rounded-full">
-                      <SpotIcon type={spot.type} size={16} />
-                    </View>
-                  )}
-                  <View className="flex flex-row items-center py-1">
-                    <Text numberOfLines={1} className="font-500 text-xs">
-                      {spot.name}
-                    </Text>
+      <View className="bg-background dark:bg-background-dark h-full w-full flex-1">
+        {spot ? (
+          <Link href={`/${tab}/spot/${spot.id}`} push asChild>
+            <View className="h-full w-full">
+              {spot.images && spot.images[0] ? (
+                <OptimizedImage
+                  width={300}
+                  placeholder={spot.images[0].blurHash}
+                  height={150}
+                  className="w-full flex-1 rounded bg-gray-50 object-cover dark:bg-gray-800"
+                  source={{ uri: createImageUrl(spot.images[0].path) }}
+                />
+              ) : (
+                <View className="flex h-full w-full flex-1 items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
+                  <View className="rounded-full p-4">
+                    <SpotIcon type={spot.type} size={30} />
                   </View>
-                </TouchableOpacity>
-              </Link>
-            ) : stop ? (
-              <View className="flex h-full w-full flex-row items-center justify-center space-x-2 rounded-sm border border-gray-200 p-2">
-                <Text>{stop.name}</Text>
+                </View>
+              )}
+              {spot.images?.[0] && (
+                <View className="sq-8 bg-background dark:bg-background-dark absolute left-1 top-1 flex items-center justify-center rounded-full">
+                  <SpotIcon type={spot.type} size={16} />
+                </View>
+              )}
+              <View className="flex flex-row items-center py-1">
+                <Text numberOfLines={1} className="font-500 text-xs">
+                  {spot.name}
+                </Text>
               </View>
-            ) : null}
+            </View>
+          </Link>
+        ) : stop ? (
+          <View className="flex h-full w-full flex-row items-center justify-center space-x-2 rounded-sm border border-gray-200 p-2">
+            <Text>{stop.name}</Text>
           </View>
-        </View>
-      </GestureDetector>
-    </Animated.View>
+        ) : null}
+      </View>
+    </TouchableOpacity>
   )
 }
 
-// const HEADER_WIDTH = 100
-// function ListHeader() {
-//   return (
-//     <View style={{ width: 100 }} className="flex h-full items-center justify-center space-y-1 rounded-sm border border-gray-100">
-//       <Icon icon={Home} />
-//       <Text className="text-center text-xs">01 Jan 2025</Text>
-//     </View>
-//   )
-// }
+function ListHeader() {
+  return (
+    <View style={{ width: 100 }} className="flex h-full items-center justify-center space-y-1 rounded-sm border border-gray-100">
+      <Icon icon={Home} />
+      <Text className="text-center text-xs">01 Jan 2025</Text>
+    </View>
+  )
+}
 
-// function ListFooter() {
-//   const { id } = useLocalSearchParams<{ id: string }>()
-//   return (
-//     <View className="flex flex-row items-center">
-//       <Link push href={`/(home)/(trips)/trips/${id}/add`} asChild>
-//         <TouchableOpacity className="p-3">
-//           <Icon icon={PlusCircle} size={16} />
-//         </TouchableOpacity>
-//       </Link>
-//       <View className="flex h-full w-[100px] items-center justify-center space-y-1 rounded-sm border border-gray-100">
-//         <Icon icon={Flag} />
-//         <Text className="text-center text-xs">01 Mar 2025</Text>
-//       </View>
-//     </View>
-//   )
-// }
+function ListFooter() {
+  const { id } = useLocalSearchParams<{ id: string }>()
+  return (
+    <View style={{ width: 100 }} className="flex h-full flex-row items-center">
+      <Link push href={`/(home)/(trips)/trips/${id}/add`} asChild>
+        <TouchableOpacity className="p-3">
+          <Icon icon={PlusCircle} size={16} />
+        </TouchableOpacity>
+      </Link>
+      <View className="flex h-full w-[100px] items-center justify-center space-y-1 rounded-sm border border-gray-100">
+        <Icon icon={Flag} />
+        <Text className="text-center text-xs">01 Mar 2025</Text>
+      </View>
+    </View>
+  )
+}

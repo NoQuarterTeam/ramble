@@ -66,6 +66,7 @@
     "react-hook-form": "7.50.0",
     "react-native": "0.73.2",
     "react-native-avoid-softinput": "4.0.2",
+    "react-native-draggable-flatlist": "^4.0.1",
     "react-native-gesture-handler": "2.14.1",
     "react-native-get-random-values": "1.8.0",
     "react-native-map-link": "2.11.4",
