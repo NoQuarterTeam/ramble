@@ -20,7 +20,7 @@
     "@ramble/server-env": "workspace:*",
     "@ramble/server-services": "workspace:*",
     "@ramble/server-schemas": "workspace:*",
-    "@trpc/server": "10.45.0",
+    "@trpc/server": "10.45.1",
     "@turf/bbox": "6.5.0",
     "@turf/center": "6.5.0",
     "@turf/helpers": "6.5.0",
