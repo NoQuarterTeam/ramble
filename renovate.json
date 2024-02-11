@@ -32,6 +32,7 @@
     }
   ],
   "ignoreDeps": [
+    "loops",
     "@expo/config-plugins",
     "@react-email/components",
     "@react-native-async-storage/async-storage",
