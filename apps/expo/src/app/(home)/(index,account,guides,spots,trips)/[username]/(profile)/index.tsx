@@ -29,7 +29,7 @@ export default function UserSpots() {
   return (
     <View>
       {spots.map((spot) => (
-        <View key={spot.id} className="mb-4">
+        <View key={spot.id} style={{ paddingBottom: 24 }}>
           <SpotItem spot={spot} />
         </View>
       ))}
