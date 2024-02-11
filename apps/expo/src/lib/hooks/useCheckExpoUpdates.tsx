@@ -5,6 +5,7 @@ import * as Updates from "expo-updates"
 
 import { IS_DEV } from "../config"
 
+const TIMEOUT_KEY = "TIMEOUT"
 export function useCheckExpoUpdates() {
   const [isDoneChecking, setIsDoneChecking] = React.useState(false)
   const appState = React.useRef(AppState.currentState)
@@ -14,7 +15,7 @@ export function useCheckExpoUpdates() {
       if (IS_DEV) return setIsDoneChecking(true)
       let timeout
       const timeoutRace: Promise<never> = new Promise((_, reject) => {
-        timeout = setTimeout(() => reject("Expo update timeout of 10s reached"), 10000)
+        timeout = setTimeout(() => reject(new Error(TIMEOUT_KEY)), 10000)
       })
       const { isAvailable } = await Promise.race([Updates.checkForUpdateAsync(), timeoutRace])
       if (timeout) clearTimeout(timeout)
@@ -23,7 +24,8 @@ export function useCheckExpoUpdates() {
         await Updates.reloadAsync()
       }
     } catch (error) {
-      console.log("expo update timeout reached")
+      if (!(error instanceof Error)) return
+      if (error.message === TIMEOUT_KEY) return
       Sentry.captureException(error)
     } finally {
       return setIsDoneChecking(true)
