@@ -6,7 +6,7 @@ import { json } from "~/lib/remix.server"
 import { type ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
 
-import { GuideRequestContent } from "../../../../../../packages/emails/src"
+import { GuideRequestContent } from "@ramble/emails"
 import { type TemplateHandle } from "./_layout"
 
 export const action = async ({ request }: ActionFunctionArgs) => {
