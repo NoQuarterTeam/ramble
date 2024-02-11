@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "private": true,
-  "type": "commonjs",
   "license": "",
   "scripts": {
     "build": "remix build",
