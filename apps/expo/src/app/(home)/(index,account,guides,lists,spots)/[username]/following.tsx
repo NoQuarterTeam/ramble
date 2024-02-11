@@ -28,7 +28,6 @@ export default function UserFollowing() {
           showsVerticalScrollIndicator={false}
           estimatedItemSize={56}
           ItemSeparatorComponent={() => <View className="h-4" />}
-          keyExtractor={(item) => item.id.toString() + Math.random()}
           contentContainerStyle={{ paddingVertical: 10 }}
           ListEmptyComponent={<Text className="text-center">Not following anyone</Text>}
           renderItem={({ item }) => <UserItem user={item} />}
