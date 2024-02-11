@@ -31,7 +31,7 @@ export default function UserLists() {
   return (
     <View>
       {lists.map((list) => (
-        <View key={list.id} className="mb-1">
+        <View key={list.id} className="pb-2">
           <ListItem list={list} />
         </View>
       ))}
