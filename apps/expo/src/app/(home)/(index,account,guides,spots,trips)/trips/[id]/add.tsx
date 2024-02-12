@@ -5,7 +5,7 @@ import * as Location from "expo-location"
 import { Map } from "~/components/Map"
 
 import { Camera, UserLocation, type MapView as MapType, StyleURL, MapState } from "@rnmapbox/maps"
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE, join } from "@ramble/shared"
+import { join } from "@ramble/shared"
 import { TouchableOpacity, View } from "react-native"
 import { RouterOutputs, api } from "~/lib/api"
 import { Spinner } from "~/components/ui/Spinner"
@@ -18,7 +18,7 @@ import { SpotClusterMarker } from "~/components/SpotMarker"
 import { Button } from "~/components/ui/Button"
 import { useMapFilters } from "../../(map)/filters"
 import { AddTripSpotPreview } from "~/components/AddTripSpotPreview"
-import { NewSpotModalView } from "~/app/new/NewSpotModalView"
+import { ModalView } from "~/components/ui/ModalView"
 
 type Cluster = RouterOutputs["spot"]["clusters"][number]
 
@@ -28,9 +28,9 @@ export default function NewItemScreen() {
   const filters = useMapFilters((s) => s.filters)
 
   const [coords, setCoords] = React.useState<number[] | null>(null)
-  const [isLoading, setIsLoading] = React.useState(true)
+  const [isLoading, setIsLoading] = React.useState(false)
   const [search, setSearch] = React.useState("")
-  const [location, setLocation] = React.useState<Location.LocationObjectCoords | null>(null)
+
   const [clusters, setClusters] = React.useState<Cluster[] | null>(null)
   const [activeSpotId, setActiveSpotId] = React.useState<string | null>(null)
 
@@ -59,20 +59,6 @@ export default function NewItemScreen() {
       centerCoordinate: [geocodedCoords[0], geocodedCoords[1]],
     })
   }, [geocodedCoords])
-
-  React.useEffect(() => {
-    ;(async () => {
-      try {
-        const loc = await Location.getLastKnownPositionAsync()
-        if (!loc) return
-        setLocation(loc.coords)
-      } catch {
-        console.log("oops - getting location")
-      } finally {
-        setIsLoading(false)
-      }
-    })()
-  }, [])
 
   const handleSetUserLocation = async () => {
     try {
@@ -156,7 +142,7 @@ export default function NewItemScreen() {
   }
 
   return (
-    <NewSpotModalView title="add item">
+    <ModalView title="add item">
       <View className="mb-2 flex w-full flex-row items-center space-x-1 overflow-hidden">
         {addressLoading || isFetching ? (
           <Spinner size="small" />
@@ -185,16 +171,7 @@ export default function NewItemScreen() {
           >
             <UserLocation />
 
-            <Camera
-              ref={camera}
-              allowUpdates
-              defaultSettings={{
-                centerCoordinate: [location?.longitude || INITIAL_LONGITUDE, location?.latitude || INITIAL_LATITUDE],
-                zoomLevel: 9,
-                pitch: 0,
-                heading: 0,
-              }}
-            />
+            <Camera ref={camera} allowUpdates defaultSettings={{ zoomLevel: 9, pitch: 0, heading: 0 }} />
             {spotMarkers}
           </Map>
 
@@ -254,6 +231,6 @@ export default function NewItemScreen() {
           {activeSpotId && <AddTripSpotPreview spotId={activeSpotId} tripId={id} onClose={() => setActiveSpotId(null)} />}
         </View>
       )}
-    </NewSpotModalView>
+    </ModalView>
   )
 }

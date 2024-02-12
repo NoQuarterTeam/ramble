@@ -4,12 +4,7 @@ import { cva } from "class-variance-authority"
 import { type ClassValue } from "class-variance-authority/types"
 
 import type { SpotType } from "@ramble/database/types"
-import {
-  spotMarkerClusterColorTypes,
-  spotMarkerColorTypes,
-  spotMarkerTextColorTypes,
-  spotMarkerTriangleColorTypes,
-} from "@ramble/shared"
+import { spotMarkerClusterColorTypes, spotMarkerColorTypes, spotMarkerTextColorTypes } from "@ramble/shared"
 
 import { PieChart } from "~/components/PieChart"
 import { SpotIcon } from "~/components/SpotIcon"
@@ -22,11 +17,8 @@ interface MarkerProps {
 
 export function SpotMarker({ isInteractable = true, ...props }: MarkerProps) {
   return (
-    <div className="relative">
-      <div className={spotMarker({ type: props.spot.type, isInteractable })}>
-        <SpotIcon type={props.spot.type} className={spotMarkerIconColors({ type: props.spot.type })} />
-      </div>
-      <div className={spotTriangleColors({ type: props.spot.type })} />
+    <div className={spotMarker({ type: props.spot.type, isInteractable })}>
+      <SpotIcon type={props.spot.type} className={spotMarkerIconColors({ type: props.spot.type })} />
     </div>
   )
 }
@@ -49,15 +41,6 @@ const spotMarkerIconColors = cva<MarkerIconConfig>("sq-4", {
     type: spotMarkerTextColorTypes,
   },
 })
-
-export const spotTriangleColors = cva<MarkerIconConfig>(
-  "sq-3 absolute -bottom-[3px] left-1/2 -z-[1] -translate-x-1/2 rotate-45 shadow",
-  {
-    variants: {
-      type: spotMarkerTriangleColorTypes,
-    },
-  },
-)
 
 function ClusterMarker({ countAbbr, count, types }: { countAbbr: string | number; count: number; types: SpotClusterTypes }) {
   const outerSize = count > 150 ? 80 : count > 75 ? 64 : count > 10 ? 48 : 32

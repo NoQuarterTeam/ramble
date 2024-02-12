@@ -20,7 +20,7 @@ export const Map = React.forwardRef<Mapbox.MapView, MapViewProps & { children?: 
       scaleBarEnabled={false}
       {...props}
       styleURL={styleURL}
-      className={merge("flex-1", props.className)}
+      className={merge("w-full flex-1", props.className)}
     >
       {props.children}
       <ThemeSwitcher styleUrl={styleURL} />

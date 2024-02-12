@@ -10,7 +10,9 @@ import bbox from "@turf/bbox"
 
 export const tripRouter = createTRPCRouter({
   mine: protectedProcedure.query(({ ctx }) => {
-    return ctx.prisma.user.findUniqueOrThrow({ where: { id: ctx.user.id } }).trips({
+    return ctx.prisma.trip.findMany({
+      where: { users: { some: { id: ctx.user.id } } },
+      orderBy: { createdAt: "desc" },
       include: { items: true, creator: true },
     })
   }),
@@ -35,6 +37,7 @@ export const tripRouter = createTRPCRouter({
           select: {
             id: true,
             order: true,
+            stop: { select: { id: true, name: true, latitude: true, longitude: true } },
             spot: {
               select: {
                 id: true,
@@ -45,7 +48,6 @@ export const tripRouter = createTRPCRouter({
                 images: { take: 1, orderBy: { createdAt: "desc" } },
               },
             },
-            stop: { select: { id: true, name: true, latitude: true, longitude: true } },
           },
         },
       },

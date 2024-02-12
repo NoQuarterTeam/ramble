@@ -231,35 +231,6 @@ export const spotMarkerTextColorTypes = {
   REWILDING: "text-black",
 } satisfies Record<SpotType, string>
 
-export const spotMarkerTriangleColorTypes = {
-  // stays
-  CAMPING: "bg-green-600",
-  FREE_CAMPING: "bg-cyan-700",
-  PARKING: "bg-gray-100",
-  // activities
-  SURFING: "bg-blue-600",
-  CLIMBING: "bg-blue-600",
-  MOUNTAIN_BIKING: "bg-blue-600",
-  HIKING_TRAIL: "bg-blue-600",
-  PADDLE_KAYAK: "bg-blue-600",
-  // services
-  GAS_STATION: "bg-gray-100",
-  ELECTRIC_CHARGE_POINT: "bg-gray-100",
-  MECHANIC_PARTS: "bg-gray-100",
-  VET: "bg-gray-100",
-  // hospitality
-  BAR: "bg-gray-100",
-  CAFE: "bg-gray-100",
-  RESTAURANT: "bg-gray-100",
-  SHOP: "bg-gray-100",
-  // other
-  ART_FILM_PHOTOGRAPHY: "bg-gray-100",
-  FESTIVAL: "bg-gray-100",
-  NATURE_EDUCATION: "bg-gray-100",
-  VOLUNTEERING: "bg-gray-100",
-  REWILDING: "bg-gray-100",
-} satisfies Record<SpotType, string>
-
 export const spotMarkerClusterColorTypes = {
   // stays
   CAMPING: colors.green[700],
