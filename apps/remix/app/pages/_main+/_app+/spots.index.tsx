@@ -26,7 +26,7 @@ import { fetchAndJoinSpotImages } from "~/lib/models/spot"
 import { bbox, lineString } from "~/lib/vendor/turf.server"
 import type { LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
-import { getMaybeUser } from "~/services/auth/auth.server"
+import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { PageContainer } from "../../../components/PageContainer"
 import { SpotItem } from "./components/SpotItem"
@@ -48,7 +48,7 @@ const SORT_OPTIONS: { value: SpotListSort; label: string }[] = [
 
 const TAKE = 24
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const user = await getMaybeUser(request, { id: true, latitude: true, longitude: true })
+  const user = await getCurrentUser(request, { id: true, latitude: true, longitude: true })
   const searchParams = new URL(request.url).searchParams
 
   let type = searchParams.get("type") as SpotType | undefined

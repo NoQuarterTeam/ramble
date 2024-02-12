@@ -10,14 +10,14 @@ import { spotPartnerFields } from "@ramble/shared"
 import { db } from "~/lib/db.server"
 import { json, notFound } from "~/lib/remix.server"
 import { reviewItemSelectFields } from "~/pages/_main+/_app+/components/ReviewItem"
-import { getMaybeUser } from "~/services/auth/auth.server"
+import { getCurrentUser } from "~/services/auth/auth.server"
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-  const user = await getMaybeUser(request)
+  const user = await getCurrentUser(request)
   const searchParams = new URLSearchParams(new URL(request.url).search)
-  const language = searchParams.get("lang") || user?.preferredLanguage || "en"
+  const language = searchParams.get("lang") || user.preferredLanguage || "en"
   const initialSpot = await db.spot.findUnique({
-    where: { id: params.id, ...publicSpotWhereClause(user?.id) },
+    where: { id: params.id, ...publicSpotWhereClause(user.id) },
     select: { id: true, latitude: true, longitude: true, description: true },
   })
   if (!initialSpot) throw notFound()
@@ -25,12 +25,12 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
   const data = await promiseHash({
     sameLocationSpots: db.spot.findMany({
-      where: { ...publicSpotWhereClause(user?.id), latitude: initialSpot.latitude, longitude: initialSpot.longitude },
+      where: { ...publicSpotWhereClause(user.id), latitude: initialSpot.latitude, longitude: initialSpot.longitude },
       select: { id: true },
       orderBy: { createdAt: "desc" },
     }),
     spot: db.spot.findUniqueOrThrow({
-      where: { id: initialSpot.id, ...publicSpotWhereClause(user?.id) },
+      where: { id: initialSpot.id, ...publicSpotWhereClause(user.id) },
       select: {
         id: true,
         name: true,

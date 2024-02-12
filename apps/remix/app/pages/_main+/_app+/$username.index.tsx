@@ -13,7 +13,7 @@ import { fetchAndJoinSpotImages } from "~/lib/models/spot"
 import { notFound } from "~/lib/remix.server"
 import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
-import { getMaybeUser } from "~/services/auth/auth.server"
+import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { SpotItem } from "./components/SpotItem"
 
@@ -25,7 +25,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   if (!user) throw notFound()
   const searchParams = new URL(request.url).searchParams
   const skip = parseInt((searchParams.get("skip") as string) || "0")
-  const currentUser = await getMaybeUser(request, { id: true, latitude: true, longitude: true })
+  const currentUser = await getCurrentUser(request, { id: true, latitude: true, longitude: true })
 
   const { spots } = await promiseHash({
     spots: db.$queryRaw<SpotItemType[]>`
@@ -35,7 +35,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       FROM
         Spot
       WHERE
-        Spot.creatorId = ${user.id} AND ${publicSpotWhereClauseRaw(currentUser?.id)} AND Spot.sourceUrl IS NULL
+        Spot.creatorId = ${user.id} AND ${publicSpotWhereClauseRaw(currentUser.id)} AND Spot.sourceUrl IS NULL
       GROUP BY
         Spot.id
       ORDER BY

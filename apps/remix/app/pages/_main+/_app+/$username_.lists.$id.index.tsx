@@ -25,7 +25,7 @@ import { notFound, redirect } from "~/lib/remix.server"
 import { bbox, lineString } from "~/lib/vendor/turf.server"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
-import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
+import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { SpotItem } from "./components/SpotItem"
 import { SpotMarker } from "./components/SpotMarker"
@@ -33,11 +33,11 @@ import { SpotMarker } from "./components/SpotMarker"
 export const headers = useLoaderHeaders
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-  const user = await getMaybeUser(request, { id: true, username: true, latitude: true, longitude: true })
+  const user = await getCurrentUser(request, { id: true, username: true, latitude: true, longitude: true })
 
   const { list, spots } = await promiseHash({
     list: db.list.findFirst({
-      where: { id: params.id, isPrivate: !user || user.username !== params.username ? false : undefined },
+      where: { id: params.id, isPrivate: user.username !== params.username ? false : undefined },
       select: {
         id: true,
         creatorId: true,
