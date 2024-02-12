@@ -46,7 +46,7 @@ import { type ActionFunctionArgs, defer, type LoaderFunctionArgs, type MetaFunct
 import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
 import { type TranslateSpot } from "~/pages/api+/spots+/$id.translate.$lang"
 import type { loader as rootLoader } from "~/root"
-import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
+import { getCurrentUser } from "~/services/auth/auth.server"
 
 import { Actions as SaveActions, SaveToList } from "../../api+/spots+/$id.save-to-list"
 import { PartnerLink } from "./components/PartnerLink"
@@ -67,9 +67,9 @@ export const shouldRevalidate = ({ formData }: ShouldRevalidateFunctionArgs) => 
 }
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-  const user = await getMaybeUser(request)
+  const user = await getCurrentUser(request)
   const spot = await db.spot.findUnique({
-    where: { id: params.id, ...publicSpotWhereClause(user?.id) },
+    where: { id: params.id, ...publicSpotWhereClause(user.id) },
     select: {
       id: true,
       name: true,

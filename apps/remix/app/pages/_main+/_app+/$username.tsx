@@ -21,12 +21,12 @@ import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { interestOptions } from "~/lib/models/user"
 import { badRequest, json, notFound } from "~/lib/remix.server"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
-import { getCurrentUser, getMaybeUser } from "~/services/auth/auth.server"
+import { getCurrentUser } from "~/services/auth/auth.server"
 
 export const headers = useLoaderHeaders
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-  const currentUser = await getMaybeUser(request)
+  const currentUser = await getCurrentUser(request)
   const user = await db.user.findUnique({
     where: { username: params.username?.toLowerCase().trim() },
     select: {
@@ -39,7 +39,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
       instagram: true,
       lastName: true,
       bio: true,
-      followers: currentUser ? { where: { id: currentUser.id } } : undefined,
+      followers: { where: { id: currentUser.id } },
       _count: {
         select: { followers: true, following: true },
       },

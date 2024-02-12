@@ -7,17 +7,17 @@ import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
-import { getMaybeUser } from "~/services/auth/auth.server"
+import { getCurrentUser } from "~/services/auth/auth.server"
 
 export const headers = useLoaderHeaders
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-  const user = await getMaybeUser(request)
+  const user = await getCurrentUser(request)
   const lists = await db.list.findMany({
     orderBy: { createdAt: "desc" },
     where: {
       creator: { username: params.username?.toLowerCase().trim() },
-      isPrivate: !user || user.username !== params.username ? false : undefined,
+      isPrivate: user.username !== params.username ? false : undefined,
     },
   })
   return json(lists)
