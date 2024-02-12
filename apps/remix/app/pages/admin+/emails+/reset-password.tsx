@@ -6,7 +6,7 @@ import { useConfig } from "~/lib/hooks/useConfig"
 import { json } from "~/lib/remix.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
 
-import { ResetPasswordContent } from "../../../../../../packages/emails/src"
+import { ResetPasswordContent } from "@ramble/emails"
 import { type TemplateHandle } from "./_layout"
 
 export const action = async ({ request }: ActionFunctionArgs) => {

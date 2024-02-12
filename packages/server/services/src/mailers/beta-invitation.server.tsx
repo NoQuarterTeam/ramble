@@ -1,4 +1,4 @@
-import { BetaInvitationEmail } from "../../../../emails/src"
+import { BetaInvitationEmail } from "@ramble/emails"
 import { mailer } from "../lib/mailer.server"
 
 export async function sendBetaInvitationEmail(email: string, code: string) {

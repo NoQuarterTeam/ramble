@@ -1,7 +1,7 @@
 import type { User } from "@ramble/database/types"
 import { FULL_WEB_URL } from "@ramble/server-env"
 
-import { ResetPasswordEmail, VerifyAccountEmail } from "../../../../emails/src"
+import { ResetPasswordEmail, VerifyAccountEmail } from "@ramble/emails"
 import { mailer } from "../lib/mailer.server"
 export async function sendResetPasswordEmail(user: Pick<User, "email">, token: string) {
   try {

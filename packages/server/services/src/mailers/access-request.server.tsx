@@ -1,4 +1,4 @@
-import { AccessRequestEmail } from "../../../../emails/src"
+import { AccessRequestEmail } from "@ramble/emails"
 import { mailer } from "../lib/mailer.server"
 
 export async function sendAccessRequestConfirmationEmail(email: string) {
