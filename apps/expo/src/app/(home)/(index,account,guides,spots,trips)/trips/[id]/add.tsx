@@ -51,6 +51,7 @@ export default function NewItemScreen() {
 
   React.useEffect(() => {
     if (!geocodedCoords) return
+    setCoords(geocodedCoords)
     camera.current?.setCamera({
       zoomLevel: 9,
       animationDuration: 1000,

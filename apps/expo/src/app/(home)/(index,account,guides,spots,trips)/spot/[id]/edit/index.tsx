@@ -38,6 +38,7 @@ export default function EditSpotLocationScreen() {
 
   React.useEffect(() => {
     if (!geocodedCoords) return
+    setCoords(geocodedCoords)
     camera.current?.setCamera({
       zoomLevel: 14,
       animationDuration: 1000,

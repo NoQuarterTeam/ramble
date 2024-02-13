@@ -74,7 +74,7 @@ export default function TripDetailScreen() {
     <View className="flex-1">
       <StatusBar style="light" />
       {!isLoading && (
-        <Map ref={mapRef} styleURL={StyleURL.SatelliteStreet} compassPosition={{ top: 8, right: 8 }}>
+        <Map ref={mapRef} styleURL={StyleURL.SatelliteStreet} compassPosition={{ top: 54, right: 12 }}>
           {data?.line && (
             <ShapeSource id="directions" shape={data.line.geometry}>
               <LineLayer id="line" style={{ lineDasharray: [0.5, 2], lineColor: "white", lineCap: "round", lineWidth: 2 }} />
