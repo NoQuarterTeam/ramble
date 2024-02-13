@@ -60,7 +60,7 @@ export default function TripDetailScreen() {
             onPressIn={item.spot ? () => utils.spot.detail.prefetch({ id: item.spot!.id }) : undefined}
             onPress={item.spot ? () => router.push(`/${tab}/spot/${item.spot!.id}`) : undefined}
           >
-            {item.spot ? <SpotMarker spot={item.spot} /> : <Icon icon={MapPin} size={24} fill="white" />}
+            {item.spot ? <SpotMarker spot={item.spot} /> : <Icon icon={MapPin} size={24} fill="white" color="black" />}
           </TouchableOpacity>
         </MarkerView>
       )),
@@ -331,7 +331,7 @@ const TripItem = React.memo(function _TripItem({
                   </View>
                 )}
                 {spot.images?.[0] && (
-                  <View className="sq-8 bg-background dark:bg-background-dark absolute left-2 top-2 flex items-center justify-center rounded-full">
+                  <View className="sq-8 bg-background dark:bg-background-dark absolute left-1 top-1 flex items-center justify-center rounded-full">
                     <SpotIcon type={spot.type} size={16} />
                   </View>
                 )}
@@ -359,7 +359,7 @@ function ListHeader({ trip }: { trip: RouterOutputs["trip"]["detail"]["trip"] })
     <View className="flex h-full items-center justify-center">
       <View
         style={{ width: HEADER_FOOTER_WIDTH, height: HEADER_FOOTER_WIDTH }}
-        className="bg-background dark:bg-background-dark flex items-center justify-center space-y-1 rounded-full border-2 border-green-600 p-2"
+        className="bg-background dark:bg-background-dark flex items-center justify-center space-y-1 rounded-full border-2 border-gray-700 p-2"
       >
         <Icon icon={Home} size={16} />
         <Text className="text-sm" numberOfLines={2}>
@@ -383,7 +383,7 @@ function ListFooter() {
       <View className="flex h-full items-center justify-center">
         <View
           style={{ width: HEADER_FOOTER_WIDTH, height: HEADER_FOOTER_WIDTH }}
-          className="bg-background dark:bg-background-dark flex items-center justify-center space-y-2 rounded-full border-gray-200 p-2 dark:border-gray-700"
+          className="bg-background dark:bg-background-dark flex items-center justify-center space-y-2 rounded-full border-2 border-gray-700 p-2"
         >
           <Icon icon={Flag} />
           <Text className="text-center text-xs">01 Mar 2025</Text>
