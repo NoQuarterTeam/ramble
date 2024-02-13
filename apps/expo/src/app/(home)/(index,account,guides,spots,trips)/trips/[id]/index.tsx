@@ -162,7 +162,7 @@ export default function TripDetailScreen() {
 
 type Item = RouterOutputs["trip"]["detail"]["trip"]["items"][number]
 
-const LIST_HEIGHT = 160
+const LIST_HEIGHT = 130
 
 function TripList({
   trip,
@@ -193,7 +193,6 @@ function TripList({
         setTripItems(dragData.data)
         mutate({ id, items: dragData.data.map((i) => i.id) })
       }}
-      // scrollEventThrottle={1000}
       onScrollOffsetChange={(x) => {
         if (x < 0) return
         const index = Math.floor(x / ITEM_WIDTH)
@@ -203,7 +202,7 @@ function TripList({
           activeIndexRef.current = index
         }
       }}
-      autoscrollThreshold={20}
+      dragItemOverflow
       ListHeaderComponent={<ListHeader trip={trip} />}
       ListFooterComponent={ListFooter}
       className="py-3"
@@ -229,7 +228,7 @@ function TripList({
   )
 }
 
-const ITEM_WIDTH = 190
+const ITEM_WIDTH = 170
 
 const TripItem = React.memo(function _TripItem({
   item,
@@ -336,19 +335,18 @@ const TripItem = React.memo(function _TripItem({
                     <SpotIcon type={spot.type} size={16} />
                   </View>
                 )}
-                <View className="flex flex-row items-center p-1">
-                  <Text numberOfLines={1} className="font-500 text-xs">
-                    {spot.name}
-                  </Text>
-                </View>
+
+                <Text numberOfLines={1} className="font-500 text-xxs pl-1">
+                  {spot.name}
+                </Text>
               </View>
             </Link>
           ) : stop ? (
             <View className="flex h-full w-full flex-row items-center justify-center space-x-2 rounded-sm border border-gray-200 p-2 dark:border-gray-700">
-              <Text>{stop.name}</Text>
+              <Text className="text-center">{stop.name}</Text>
             </View>
           ) : null}
-          {isFocused && <View className="bg-primary absolute bottom-0 left-0 right-0 top-0 h-1 rounded-t-sm" />}
+          {isFocused && <View className="bg-primary absolute bottom-0 left-0 right-0 top-0 h-0.5 rounded-t-sm" />}
         </View>
       </TouchableOpacity>
     </ScaleDecorator>

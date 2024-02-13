@@ -142,7 +142,7 @@ export default function NewItemScreen() {
   }
 
   return (
-    <ModalView title="add item">
+    <ModalView title="add stop">
       <View className="mb-2 flex w-full flex-row items-center space-x-1 overflow-hidden">
         {addressLoading || isFetching ? (
           <Spinner size="small" />

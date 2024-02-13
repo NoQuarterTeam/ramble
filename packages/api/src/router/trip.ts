@@ -27,6 +27,11 @@ export const tripRouter = createTRPCRouter({
   delete: protectedProcedure.input(z.object({ id: z.string() })).mutation(({ ctx, input }) => {
     return ctx.prisma.trip.delete({ where: { id: input.id } })
   }),
+  info: protectedProcedure.input(z.object({ id: z.string() })).query(({ ctx, input }) => {
+    const trip = ctx.prisma.trip.findUnique({ where: { id: input.id, users: { some: { id: ctx.user.id } } } })
+    if (!trip) throw new TRPCError({ code: "NOT_FOUND", message: "Trip not found" })
+    return trip
+  }),
   detail: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
     const trip = await ctx.prisma.trip.findUnique({
       where: { id: input.id, users: { some: { id: ctx.user.id } } },
@@ -53,9 +58,7 @@ export const tripRouter = createTRPCRouter({
       },
     })
     if (!trip) throw new TRPCError({ code: "NOT_FOUND", message: "Trip not found" })
-
     if (trip.items.length === 0) return { trip }
-
     if (trip.items.length === 1)
       return {
         trip,
@@ -63,17 +66,13 @@ export const tripRouter = createTRPCRouter({
           ? [trip.items[0]?.spot.longitude, trip.items[0]?.spot.latitude]
           : ([trip.items[0]?.stop!.longitude, trip.items[0]?.stop!.latitude] as [number, number]),
       }
-
     const itemCoords = trip.items.map((item) => [
       item.spot?.longitude || item.stop?.longitude,
       item.spot?.latitude || item.stop?.latitude,
     ]) as [number, number][]
-
     const line = lineString(itemCoords)
     const bounds = bbox(line) as [number, number, number, number]
-
     // const directions = await getDirections(itemCoords)
-
     return { trip, bounds, line }
   }),
   saveSpot: protectedProcedure
@@ -85,12 +84,7 @@ export const tripRouter = createTRPCRouter({
         newOrder = tripItems?.length || 0
       }
       return ctx.prisma.tripItem.create({
-        data: {
-          spotId: input.spotId,
-          tripId: input.tripId,
-          creatorId: ctx.user.id,
-          order: newOrder,
-        },
+        data: { spotId: input.spotId, tripId: input.tripId, creatorId: ctx.user.id, order: newOrder },
       })
     }),
   saveStop: protectedProcedure
