@@ -96,6 +96,7 @@ export default function RootLayout() {
                   <Stack.Screen name="onboarding" />
                   <Stack.Screen name="(auth)" options={{ presentation: "modal" }} />
                   <Stack.Screen name="new" options={{ presentation: "modal" }} />
+                  <Stack.Screen name="spot" options={{ presentation: "modal" }} />
                 </Stack>
                 <Toast />
                 <StatusBar style={isDark ? "light" : "dark"} />

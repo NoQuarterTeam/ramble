@@ -80,7 +80,7 @@ export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }
               <Button
                 size="xs"
                 variant="outline"
-                onPress={me ? () => router.push(`/(home)/(index)/spot/${spot.id}/save-to-list`) : () => router.push("/login")}
+                onPress={me ? () => router.push(`/spot/${spot.id}/save-to-list`) : () => router.push("/login")}
                 leftIcon={
                   <Icon
                     icon={Heart}
@@ -94,7 +94,7 @@ export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }
               <Button
                 size="xs"
                 variant="outline"
-                onPress={me ? () => router.push(`/(home)/(index)/spot/${spot.id}/save-to-trip`) : () => router.push("/login")}
+                onPress={me ? () => router.push(`/spot/${spot.id}/save-to-trip`) : () => router.push("/login")}
                 leftIcon={
                   <Icon
                     icon={Route}

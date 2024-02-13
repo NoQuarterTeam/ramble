@@ -5,7 +5,7 @@ import * as Location from "expo-location"
 import { useRouter } from "expo-router"
 import { AlertTriangle, CircleDot, MapPinned, Navigation } from "lucide-react-native"
 
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE, join } from "@ramble/shared"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
@@ -40,7 +40,7 @@ export default function NewSpotLocationScreen() {
     { latitude: coords?.[1]!, longitude: coords?.[0]! },
     { enabled: !!coords?.[0] && !!coords?.[1], keepPreviousData: true },
   )
-  const isUnknownAddress = !!!address
+
   const { data: geocodedCoords } = api.spot.geocodeAddress.useQuery({ address: search }, { enabled: !!search })
 
   const { data: hasCreatedSpot, isLoading: spotCheckLoading } = api.user.hasCreatedSpot.useQuery(undefined, {
@@ -97,6 +97,8 @@ export default function NewSpotLocationScreen() {
       </NewSpotModalView>
     )
 
+  const addressToUse = address?.address || address?.place
+
   return (
     <NewSpotModalView shouldRenderToast title={hasCreatedSpot ? "new spot" : "add your first spot"} canGoBack={false}>
       {!hasCreatedSpot && (
@@ -110,14 +112,14 @@ export default function NewSpotLocationScreen() {
           <Spinner size="small" />
         ) : (
           <Icon
-            icon={isUnknownAddress ? AlertTriangle : MapPinned}
+            icon={!addressToUse ? AlertTriangle : MapPinned}
             size={20}
-            color={isUnknownAddress ? "primary" : undefined}
-            className={join(!!!isUnknownAddress && "opacity-80")}
+            color={!addressToUse ? "primary" : undefined}
+            className="opacity-80"
           />
         )}
         <Text numberOfLines={1} className="flex-1 text-sm opacity-70">
-          {addressLoading ? "" : address || "Unknown address - move map to set"}
+          {addressLoading ? "" : addressToUse || "Unknown address - move map to set"}
         </Text>
       </View>
       {!isLoadingLocation && (
@@ -168,12 +170,16 @@ export default function NewSpotLocationScreen() {
               className="bg-background rounded-full"
               textClassName="text-black"
               onPress={() => {
-                if (!coords || !me || !address || isUnknownAddress) return
+                if (!me) return
+                if (!coords || !addressToUse) return toast({ title: "Please select a valid location" })
                 if (!me.isVerified) return toast({ title: "Please verify your account" })
                 if (!coords[0] || !coords[1]) return toast({ title: "Please select a location" })
-                router.push({ pathname: `/new/type`, params: { longitude: coords[0], latitude: coords[1], address } })
+                router.push({
+                  pathname: `/new/type`,
+                  params: { longitude: coords[0], latitude: coords[1], address: addressToUse },
+                })
               }}
-              disabled={!coords || (coords && (!coords[0] || !coords[1])) || !address || isUnknownAddress}
+              disabled={!coords || (coords && (!coords[0] || !coords[1])) || !addressToUse}
             >
               Next
             </Button>

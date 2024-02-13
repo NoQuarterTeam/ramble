@@ -365,14 +365,14 @@ export default function SpotDetailScreen() {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => router.push(`/${tab}/spot/${spot.id}/save-to-list`)}
+            onPress={() => router.push(`/spot/${spot.id}/save-to-list`)}
             activeOpacity={0.8}
             className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
           >
             <Icon icon={Heart} size={20} fill={data.isLiked ? (isDark ? "white" : "black") : "transparent"} />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => router.push(`/${tab}/spot/${spot.id}/save-to-trip`)}
+            onPress={() => router.push(`/spot/${spot.id}/save-to-trip`)}
             activeOpacity={0.8}
             className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
           >

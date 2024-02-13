@@ -9,7 +9,6 @@ import { type SpotImage } from "@ramble/database/types"
 import { createImageUrl, merge } from "@ramble/shared"
 
 import { useMe } from "~/lib/hooks/useMe"
-import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 import { Icon } from "../Icon"
 import { Button } from "./Button"
@@ -49,7 +48,6 @@ export function SpotImageCarousel({
   onPress,
 }: Props & (AddMoreProps | NoAddMoreProps)) {
   const { me } = useMe()
-  const tab = useTabSegment()
   const [imageIndex, setImageIndex] = React.useState(0)
   const router = useRouter()
   const onPickImage = async () => {
@@ -65,7 +63,7 @@ export function SpotImageCarousel({
       const searchParams = new URLSearchParams({
         images: result.assets.map((asset) => asset.uri).join(","),
       })
-      router.push(`/${tab}/spot/${spotId}/save-spot-images?${searchParams}`)
+      router.push(`/spot/${spotId}/save-spot-images?${searchParams}`)
     } catch (error) {
       let message
       if (error instanceof Error) message = error.message
