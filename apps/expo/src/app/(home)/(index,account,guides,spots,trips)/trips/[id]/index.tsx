@@ -1,5 +1,6 @@
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import * as React from "react"
+import * as Haptics from "expo-haptics"
 import { TouchableOpacity, View } from "react-native"
 import DraggableFlatList, { RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlist"
 import * as Location from "expo-location"
@@ -17,6 +18,7 @@ import { Icon } from "~/components/Icon"
 import { SpotIcon } from "~/components/SpotIcon"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { SpotMarker } from "~/components/SpotMarker"
+import { useActionSheet } from "@expo/react-native-action-sheet"
 
 export default function TripDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
@@ -42,26 +44,32 @@ export default function TripDetailScreen() {
         //
       })
   }, [])
+  const tab = useTabSegment()
 
+  const utils = api.useUtils()
   const itemMarkers = React.useMemo(
     () =>
-      trip?.items.map((item, index) => (
+      trip?.items.map((item) => (
         <MarkerView
           allowOverlap
           key={item.id}
           coordinate={item.spot ? [item.spot.longitude, item.spot.latitude] : [item.stop!.longitude, item.stop!.latitude]}
         >
-          <TouchableOpacity activeOpacity={1}>
+          <TouchableOpacity
+            activeOpacity={item.spot ? 0.8 : 1}
+            onPressIn={item.spot ? () => utils.spot.detail.prefetch({ id: item.spot!.id }) : undefined}
+            onPress={item.spot ? () => router.push(`/${tab}/spot/${item.spot!.id}`) : undefined}
+          >
             {item.spot ? <SpotMarker spot={item.spot} /> : <Icon icon={MapPin} size={24} fill="white" />}
           </TouchableOpacity>
         </MarkerView>
       )),
 
-    [trip?.items],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [trip?.items, tab],
   )
 
   const insets = useSafeAreaInsets()
-  const tab = useTabSegment()
   return (
     <View className="flex-1">
       <StatusBar style="light" />
@@ -239,14 +247,56 @@ const TripItem = React.memo(function _TripItem({
   const utils = api.useUtils()
   const tab = useTabSegment()
   const router = useRouter()
+  const { showActionSheetWithOptions } = useActionSheet()
+
+  const { mutate } = api.trip.removeItem.useMutation({
+    onSuccess: () => {
+      utils.trip.detail.refetch({ id })
+    },
+  })
+  const handleOpenMenu = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+    if (item.spot) {
+      const options = ["View", "Remove", "Cancel"]
+      const viewIndex = 0
+      const destructiveButtonIndex = 1
+      const cancelButtonIndex = 2
+      showActionSheetWithOptions({ options, cancelButtonIndex, destructiveButtonIndex }, (selectedIndex) => {
+        switch (selectedIndex) {
+          case viewIndex:
+            // Edit
+            router.push(`/${tab}/spot/${item.spot!.id}`)
+            break
+          case destructiveButtonIndex:
+            mutate({ id: item.id })
+            break
+          case cancelButtonIndex:
+            // Canceled
+            break
+        }
+      })
+    } else {
+      const options = ["Remove", "Cancel"]
+      const destructiveButtonIndex = 0
+      const cancelButtonIndex = 1
+      showActionSheetWithOptions({ options, cancelButtonIndex, destructiveButtonIndex }, (selectedIndex) => {
+        switch (selectedIndex) {
+          case destructiveButtonIndex:
+            mutate({ id: item.id })
+            break
+          case cancelButtonIndex:
+            // Canceled
+            break
+        }
+      })
+    }
+  }
 
   return (
     <ScaleDecorator>
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => {
-          if (spot) router.push(`/${tab}/spot/${spot.id}`)
-        }}
+        onPress={handleOpenMenu}
         onPressIn={() => {
           if (spot) void utils.spot.detail.prefetch({ id: spot.id })
         }}
@@ -311,11 +361,13 @@ function ListHeader({ trip }: { trip: RouterOutputs["trip"]["detail"]["trip"] })
     <View className="flex h-full items-center justify-center">
       <View
         style={{ width: HEADER_FOOTER_WIDTH, height: HEADER_FOOTER_WIDTH }}
-        className="bg-background dark:bg-background-dark flex items-center justify-center space-y-2 rounded-full border border-gray-100 p-2 dark:border-gray-700"
+        className="bg-background dark:bg-background-dark flex items-center justify-center space-y-1 rounded-full border-2 border-green-600 p-2"
       >
-        <Text className="text-center text-xs">{trip.name}</Text>
-        <Icon icon={Home} />
-        <Text className="text-center text-xs">01 Jan 2025</Text>
+        <Icon icon={Home} size={16} />
+        <Text className="text-sm" numberOfLines={2}>
+          {trip.name}
+        </Text>
+        <Text className="text-xs">01 Jan 2025</Text>
       </View>
     </View>
   )

@@ -105,6 +105,17 @@ export const tripRouter = createTRPCRouter({
       const tripItem = await ctx.prisma.tripItem.create({ data: { tripId, creatorId: ctx.user.id, order: newOrder } })
       return ctx.prisma.tripStop.create({ data: { ...data, tripItemId: tripItem.id } })
     }),
+  removeItem: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
+    const item = await ctx.prisma.tripItem.findUniqueOrThrow({ where: { id: input.id }, include: { stop: true } })
+    await ctx.prisma.$transaction(async (tx) => {
+      if (item.stop) {
+        await tx.tripStop.delete({ where: { id: item.stop.id } })
+      }
+      await tx.tripItem.delete({ where: { id: input.id } })
+      return
+    })
+    return true
+  }),
   updateOrder: protectedProcedure
     .input(z.object({ id: z.string(), items: z.array(z.string()) }))
     .mutation(async ({ input, ctx }) => {

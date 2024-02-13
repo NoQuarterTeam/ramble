@@ -4,6 +4,7 @@ import { AvoidSoftInput } from "react-native-avoid-softinput"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { enableScreens } from "react-native-screens"
+import { ActionSheetProvider } from "@expo/react-native-action-sheet"
 import {
   Urbanist_300Light,
   Urbanist_300Light_Italic,
@@ -79,28 +80,30 @@ export default function RootLayout() {
 
   return (
     <TRPCProvider>
-      <PrefetchTabs>
-        <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
-          <SafeAreaProvider>
-            <PostHogProvider
-              autocapture={{ captureScreens: false, captureLifecycleEvents: true, captureTouches: true }}
-              apiKey="phc_3HuNiIa6zCcsNHFmXst4X0HJjOLq32yRyRPVZQhsD31"
-              options={{ host: "https://eu.posthog.com", enable: IS_PRODUCTION }}
-            >
-              <TrackScreens />
-              <IdentifyUser />
-              <Stack initialRouteName="(home)" screenOptions={{ headerShown: false, contentStyle: { backgroundColor } }}>
-                <Stack.Screen name="(home)" />
-                <Stack.Screen name="onboarding" />
-                <Stack.Screen name="(auth)" options={{ presentation: "modal" }} />
-                <Stack.Screen name="new" options={{ presentation: "modal" }} />
-              </Stack>
-            </PostHogProvider>
-            <Toast />
-            <StatusBar style={isDark ? "light" : "dark"} />
-          </SafeAreaProvider>
-        </GestureHandlerRootView>
-      </PrefetchTabs>
+      <PostHogProvider
+        autocapture={{ captureScreens: false, captureLifecycleEvents: true, captureTouches: true }}
+        apiKey="phc_3HuNiIa6zCcsNHFmXst4X0HJjOLq32yRyRPVZQhsD31"
+        options={{ host: "https://eu.posthog.com", enable: IS_PRODUCTION }}
+      >
+        <ActionSheetProvider>
+          <PrefetchTabs>
+            <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
+              <SafeAreaProvider>
+                <TrackScreens />
+                <IdentifyUser />
+                <Stack initialRouteName="(home)" screenOptions={{ headerShown: false, contentStyle: { backgroundColor } }}>
+                  <Stack.Screen name="(home)" />
+                  <Stack.Screen name="onboarding" />
+                  <Stack.Screen name="(auth)" options={{ presentation: "modal" }} />
+                  <Stack.Screen name="new" options={{ presentation: "modal" }} />
+                </Stack>
+                <Toast />
+                <StatusBar style={isDark ? "light" : "dark"} />
+              </SafeAreaProvider>
+            </GestureHandlerRootView>
+          </PrefetchTabs>
+        </ActionSheetProvider>
+      </PostHogProvider>
     </TRPCProvider>
   )
 }
