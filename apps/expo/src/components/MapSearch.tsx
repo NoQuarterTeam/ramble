@@ -2,16 +2,17 @@ import * as React from "react"
 import { Keyboard, TextInput, TouchableOpacity, View } from "react-native"
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { SafeAreaView } from "react-native-safe-area-context"
-import { useQuery } from "@tanstack/react-query"
+
 import { Search, X } from "lucide-react-native"
 
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
 import { Spinner } from "~/components/ui/Spinner"
-import { FULL_WEB_URL } from "~/lib/config"
+
 import { isAndroid, width } from "~/lib/device"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
 import { usePostHog } from "posthog-react-native"
+import { api } from "~/lib/api"
 
 export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) => void }) {
   const [search, setSearch] = React.useState("")
@@ -21,18 +22,7 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
     width: withTiming(searchWidth.value, { duration: 100 }),
   }))
 
-  const { data, isFetching } = useQuery({
-    enabled: !!search,
-    queryKey: ["map-search", { search }],
-    cacheTime: Infinity,
-    staleTime: Infinity,
-    queryFn: async () => {
-      const res = await fetch(`${FULL_WEB_URL}/api/mapbox/location-search?search=${search}`)
-      return res.json() as Promise<{ name: string; center: [number, number] }[]>
-    },
-    keepPreviousData: true,
-  })
-
+  const { data, isFetching } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search })
   const onClear = () => {
     setSearch("")
     inputRef.current?.blur()

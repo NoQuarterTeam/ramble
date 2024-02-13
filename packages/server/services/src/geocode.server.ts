@@ -15,10 +15,25 @@ export async function geocodeAddress({ address }: { address: string }) {
     )}.json?access_token=pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw`,
   )
   const jsonResponse = (await res.json()) as FeatureCollection
-  if (jsonResponse.features.length === 0) return []
+  if (jsonResponse.features.length === 0) return null
   const addressCoords = jsonResponse.features.find((feature) => feature.place_type.includes("address"))?.center
   const placeCoords = jsonResponse.features[0]?.center
   return addressCoords || placeCoords
+}
+
+export async function getPlaces({ search }: { search: string }) {
+  const res = await fetch(
+    `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+      search,
+    )}.json?access_token=pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw`,
+  )
+  const jsonResponse = (await res.json()) as FeatureCollection
+  if (jsonResponse.features.length === 0) return [] as { name: string; center: [number, number] }[]
+
+  return jsonResponse.features.map((place) => ({
+    name: place.place_name,
+    center: place.center,
+  }))
 }
 
 type Context = {

@@ -42,16 +42,15 @@ export default function NewItemScreen() {
     data: geocodeData,
     isLoading: addressLoading,
     isFetching,
-  } = api.spot.geocodeCoords.useQuery(
+  } = api.mapbox.geocodeCoords.useQuery(
     { latitude: coords?.[1]!, longitude: coords?.[0]! },
     { enabled: !!coords?.[0] && !!coords?.[1], keepPreviousData: true },
   )
   const isUnknownAddress = !!!geocodeData?.place
-  const { data: geocodedCoords } = api.spot.geocodeAddress.useQuery({ address: search }, { enabled: !!search })
+  const { data: geocodedCoords } = api.mapbox.geocodeAddress.useQuery({ address: search }, { enabled: !!search })
 
   React.useEffect(() => {
-    if (!geocodedCoords || geocodedCoords.length === 0 || !geocodedCoords[0] || !geocodedCoords[1]) return
-    setCoords(geocodedCoords)
+    if (!geocodedCoords) return
     camera.current?.setCamera({
       zoomLevel: 9,
       animationDuration: 1000,
