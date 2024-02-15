@@ -345,7 +345,7 @@ const TripItem = React.memo(function _TripItem({
                   </View>
                 )}
 
-                <Text numberOfLines={1} className="font-500 pl-1 text-xs">
+                <Text numberOfLines={1} className="font-500 p-1 text-xs">
                   {spot.name}
                 </Text>
               </View>
@@ -353,7 +353,7 @@ const TripItem = React.memo(function _TripItem({
           ) : stop ? (
             stop.image ? (
               <View className="relative h-full w-full overflow-hidden rounded-sm">
-                <Image blurRadius={0} source={{ uri: stop.image }} className="h-full w-full" />
+                <Image source={{ uri: stop.image }} className="h-full w-full" />
                 <View className="absolute bottom-0 left-0 right-0 top-0 items-center justify-center bg-black/40 p-2">
                   <Text className="text-center">{stop.name}</Text>
                 </View>
@@ -383,7 +383,7 @@ function ListHeader({ trip }: { trip: RouterOutputs["trip"]["detail"]["trip"] })
         <Text className="text-sm" numberOfLines={2}>
           {trip.name}
         </Text>
-        <Text className="text-xs">01 Jan 2025</Text>
+        {/* <Text className="text-xs">01 Jan 2025</Text> */}
       </View>
     </View>
   )
@@ -404,7 +404,7 @@ function ListFooter() {
           className="bg-background dark:bg-background-dark flex items-center justify-center space-y-2 rounded-full border-2 border-gray-700 p-2"
         >
           <Icon icon={Flag} />
-          <Text className="text-center text-xs">01 Mar 2025</Text>
+          {/* <Text className="text-center text-xs">01 Mar 2025</Text> */}
         </View>
       </View>
     </View>
