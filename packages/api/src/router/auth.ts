@@ -66,7 +66,7 @@ export const authRouter = createTRPCRouter({
     if (accessRequest && accessRequest.email !== user.email) {
       void deleteLoopsContact({ email: accessRequest.email })
     }
-    void updateLoopsContact({ ...user, signedUpAt: user.createdAt, userGroup: "beta", userId: user.id })
+    void updateLoopsContact({ ...user, signedUpAt: user.createdAt.toISOString(), userGroup: "beta", userId: user.id })
     void sendSlackMessage(`🔥 @${user.username} signed up!`)
     return { user: user, token }
   }),

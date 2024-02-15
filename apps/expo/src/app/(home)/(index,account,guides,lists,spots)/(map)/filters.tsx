@@ -1,8 +1,8 @@
 import * as React from "react"
 import { Switch, View } from "react-native"
-import { ScrollView, useColorScheme } from "react-native"
+import { ScrollView } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { useRouter } from "expo-router"
+import { Link, useRouter } from "expo-router"
 import { BadgeX, Dog } from "lucide-react-native"
 import { usePostHog } from "posthog-react-native"
 import { z } from "zod"
@@ -19,6 +19,7 @@ import { Heading } from "~/components/ui/Heading"
 import { ModalView } from "~/components/ui/ModalView"
 import { Text } from "~/components/ui/Text"
 import { SPOT_TYPE_ICONS } from "~/lib/models/spot"
+import { useMe } from "~/lib/hooks/useMe"
 
 const mapFiltersSchema = z.object({
   types: z.array(z.enum(SPOT_TYPE_NAMES)),
@@ -52,16 +53,31 @@ export default function MapFilters() {
   const [filters, setFilters] = React.useState(initialState.filters)
   const router = useRouter()
   const posthog = usePostHog()
+
+  const { me } = useMe()
   return (
     <ModalView title="map filters">
-      <View className="flex-1 pb-10 pt-4">
-        <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }} className="space-y-5">
+      <View className="flex-1 pb-10">
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}
+          className="space-y-5"
+        >
           <View className="space-y-2">
+            {!!!me && (
+              <View className="flex flex-row space-x-1">
+                <Link href="/login" push asChild>
+                  <Text className="text-base underline">Log in</Text>
+                </Link>
+                <Text className="text-base">to access more filters</Text>
+              </View>
+            )}
             <View>
               <SpotTypeSection {...{ filters, setFilters }} title="Stays" types={["CAMPING", "FREE_CAMPING", "PARKING"]} />
             </View>
             <View>
               <SpotTypeSection
+                isDisabled={!!!me}
                 {...{ filters, setFilters }}
                 title="Activities"
                 types={["CLIMBING", "SURFING", "PADDLE_KAYAK", "HIKING_TRAIL", "MOUNTAIN_BIKING"]}
@@ -69,18 +85,25 @@ export default function MapFilters() {
             </View>
             <View>
               <SpotTypeSection
+                isDisabled={!!!me}
                 {...{ filters, setFilters }}
                 title="Services"
                 types={["GAS_STATION", "ELECTRIC_CHARGE_POINT", "MECHANIC_PARTS", "VET"]}
               />
             </View>
             <View>
-              <SpotTypeSection {...{ filters, setFilters }} title="Hospitality" types={["CAFE", "RESTAURANT", "SHOP", "BAR"]} />
+              <SpotTypeSection
+                isDisabled={!!!me}
+                {...{ filters, setFilters }}
+                title="Hospitality"
+                types={["CAFE", "RESTAURANT", "SHOP", "BAR"]}
+              />
             </View>
             <View>
               <SpotTypeSection
                 {...{ filters, setFilters }}
                 title="Other"
+                isDisabled={!!!me}
                 types={["REWILDING", "NATURE_EDUCATION", "ART_FILM_PHOTOGRAPHY", "VOLUNTEERING"]}
               />
             </View>
@@ -97,6 +120,7 @@ export default function MapFilters() {
                 </View>
               </View>
               <Switch
+                disabled={!!!me}
                 trackColor={{ true: colors.primary[600] }}
                 value={filters.isUnverified}
                 onValueChange={() => setFilters((f) => ({ ...f, isUnverified: !f.isUnverified }))}
@@ -111,6 +135,7 @@ export default function MapFilters() {
                 </View>
               </View>
               <Switch
+                disabled={!!!me}
                 trackColor={{ true: colors.primary[600] }}
                 value={filters.isPetFriendly}
                 onValueChange={() => setFilters((f) => ({ ...f, isPetFriendly: !f.isPetFriendly }))}
@@ -150,11 +175,13 @@ function SpotTypeSection({
   types,
   filters,
   setFilters,
+  isDisabled,
 }: {
   title: string
   types: SpotType[]
   filters: MapFilters
   setFilters: (filters: MapFilters) => void
+  isDisabled?: boolean
 }) {
   return (
     <View>
@@ -167,6 +194,7 @@ function SpotTypeSection({
               <SpotTypeSelector
                 type={SPOT_TYPES[type]}
                 isSelected={isSelected}
+                isDisabled={isDisabled}
                 onPress={() =>
                   setFilters({
                     ...filters,
@@ -182,9 +210,17 @@ function SpotTypeSection({
   )
 }
 
-function SpotTypeSelector({ type, onPress, isSelected }: { type: SpotTypeInfo; isSelected: boolean; onPress: () => void }) {
-  const colorScheme = useColorScheme()
-  const isDark = colorScheme === "dark"
+function SpotTypeSelector({
+  type,
+  onPress,
+  isSelected,
+  isDisabled,
+}: {
+  isDisabled?: boolean
+  type: SpotTypeInfo
+  isSelected: boolean
+  onPress: () => void
+}) {
   return (
     <View className="relative">
       <Button
@@ -198,7 +234,7 @@ function SpotTypeSelector({ type, onPress, isSelected }: { type: SpotTypeInfo; i
           />
         }
         className="min-w-[100px]"
-        disabled={type.isComingSoon}
+        disabled={type.isComingSoon || isDisabled}
         onPress={onPress}
       >
         {type.label}
@@ -206,8 +242,7 @@ function SpotTypeSelector({ type, onPress, isSelected }: { type: SpotTypeInfo; i
       {type.isComingSoon && (
         <View
           className={join(
-            "absolute -right-1 -top-1 flex w-[80px] items-center justify-center rounded-full border border-gray-300 px-1 dark:border-gray-700",
-            isDark ? "bg-background-dark" : "bg-background",
+            "bg-background dark:bg-background-dark absolute -right-1 -top-1 flex h-[18px] w-[70px] items-center justify-center rounded-full border border-gray-300 dark:border-gray-700",
           )}
         >
           <Text className="text-xxs">Coming soon</Text>

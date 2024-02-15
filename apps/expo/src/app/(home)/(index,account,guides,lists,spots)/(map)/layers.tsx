@@ -12,6 +12,8 @@ import { Icon } from "~/components/Icon"
 import { ModalView } from "~/components/ui/ModalView"
 import { Text } from "~/components/ui/Text"
 import { useMe } from "~/lib/hooks/useMe"
+import { join } from "@ramble/shared"
+import { Link } from "expo-router"
 
 const mapLayersSchema = z.object({
   layer: z.enum(["rain", "temp", "satellite"]).nullable(),
@@ -35,7 +37,7 @@ export const useMapLayers = create<{
 
 export default function MapLayers() {
   const { layers, setLayers } = useMapLayers()
-  const me = useMe()
+  const { me } = useMe()
   const posthog = usePostHog()
 
   const onSetMapLayer = (layer: MapLayers["layer"]) => {
@@ -46,10 +48,20 @@ export default function MapLayers() {
   return (
     <ModalView title="map layers">
       <View className="space-y-4">
+        {!!!me && (
+          <View className="flex flex-row space-x-1">
+            <Link href="/login" push asChild>
+              <Text className="text-base underline">Log in</Text>
+            </Link>
+            <Text className="text-base">to access more layers</Text>
+          </View>
+        )}
         <View ph-no-capture className="space-y-1">
           <TouchableOpacity
             onPress={() => onSetMapLayer(null)}
-            className="flex flex-row items-center justify-between space-x-2 rounded border border-gray-200 p-3 dark:border-gray-700"
+            className={join(
+              "flex flex-row items-center justify-between space-x-2 rounded border border-gray-200 p-3 dark:border-gray-700",
+            )}
           >
             <View className="flex flex-row items-center space-x-3">
               <Icon icon={SunMoon} size={24} />
@@ -66,7 +78,11 @@ export default function MapLayers() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => onSetMapLayer("rain")}
-            className="flex flex-row items-center justify-between space-x-2 rounded border border-gray-200 p-3 dark:border-gray-700"
+            disabled={!!!me}
+            className={join(
+              "flex flex-row items-center justify-between space-x-2 rounded border border-gray-200 p-3 dark:border-gray-700",
+              !!!me && "opacity-70",
+            )}
           >
             <View className="flex flex-row items-center space-x-3">
               <Icon icon={CloudRain} size={24} />
@@ -83,7 +99,11 @@ export default function MapLayers() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => onSetMapLayer("temp")}
-            className="flex flex-row items-center justify-between space-x-2 rounded border border-gray-200 p-3 dark:border-gray-700"
+            disabled={!!!me}
+            className={join(
+              "flex flex-row items-center justify-between space-x-2 rounded border border-gray-200 p-3 dark:border-gray-700",
+              !!!me && "opacity-70",
+            )}
           >
             <View className="flex flex-row items-center space-x-3">
               <Icon icon={Thermometer} size={24} />
@@ -100,7 +120,11 @@ export default function MapLayers() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => onSetMapLayer("satellite")}
-            className="flex flex-row items-center justify-between space-x-2 rounded border border-gray-200 p-3 dark:border-gray-700"
+            disabled={!!!me}
+            className={join(
+              "flex flex-row items-center justify-between space-x-2 rounded border border-gray-200 p-3 dark:border-gray-700",
+              !!!me && "opacity-70",
+            )}
           >
             <View className="flex flex-row items-center space-x-3">
               <Icon icon={MountainSnow} size={24} />

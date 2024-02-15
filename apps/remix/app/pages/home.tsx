@@ -36,7 +36,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const codeResult = await createAccessRequest(result.data.email)
   if (!codeResult.success) return formError({ formError: "Error creating request, please try again" })
 
-  void updateLoopsContact({ inviteCode: codeResult.code, email: result.data.email, accessRequestedAt: new Date() })
+  void updateLoopsContact({ inviteCode: codeResult.code, email: result.data.email, accessRequestedAt: new Date().toISOString() })
   void sendSlackMessage("🚀 New access request from " + result.data.email)
   void sendAccessRequestConfirmationEmail(result.data.email)
   track("Access requested", { email: result.data.email })
