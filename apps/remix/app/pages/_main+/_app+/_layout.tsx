@@ -1,6 +1,6 @@
-import { Outlet, ShouldRevalidateFunction } from "@remix-run/react"
+import { Outlet, ShouldRevalidateFunction, redirect } from "@remix-run/react"
 
-import { json, redirect } from "~/lib/remix.server"
+import { json } from "~/lib/remix.server"
 import { type SerializeFrom, type LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { type MapLayers, defaultMapLayers, mapLayersCookies } from "~/pages/api+/map-layers"
 import { getUserSession } from "~/services/session/session.server"
