@@ -1,6 +1,6 @@
-import { type LoaderFunctionArgs } from "@remix-run/node"
+import { redirect, type LoaderFunctionArgs } from "@remix-run/node"
 
-import { json, redirect } from "~/lib/remix.server"
+import { json } from "~/lib/remix.server"
 import { getMaybeUser } from "~/services/auth/auth.server"
 
 import Home from "./home"
