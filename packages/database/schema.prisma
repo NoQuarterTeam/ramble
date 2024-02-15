@@ -392,8 +392,9 @@ model TripItem {
 }
 
 model TripStop {
-  id        String @id @default(uuid())
+  id        String  @id @default(uuid())
   name      String
+  image     String?
   latitude  Float
   longitude Float
 

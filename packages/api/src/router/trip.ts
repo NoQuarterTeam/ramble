@@ -6,6 +6,7 @@ import { createTRPCRouter, protectedProcedure } from "../trpc"
 import { TRPCError } from "@trpc/server"
 import { lineString } from "@turf/helpers"
 import bbox from "@turf/bbox"
+import { getPlaceFlickrImage } from "@ramble/server-services"
 // import { getDirections } from "@ramble/server-services"
 
 export const tripRouter = createTRPCRouter({
@@ -42,7 +43,7 @@ export const tripRouter = createTRPCRouter({
           select: {
             id: true,
             order: true,
-            stop: { select: { id: true, name: true, latitude: true, longitude: true } },
+            stop: { select: { id: true, image: true, name: true, latitude: true, longitude: true } },
             spot: {
               select: {
                 id: true,
@@ -96,8 +97,9 @@ export const tripRouter = createTRPCRouter({
         const tripItems = await ctx.prisma.trip.findUnique({ where: { id: input.tripId } }).items()
         newOrder = tripItems?.length || 0
       }
+      const image = await getPlaceFlickrImage(data.name)
       const tripItem = await ctx.prisma.tripItem.create({ data: { tripId, creatorId: ctx.user.id, order: newOrder } })
-      return ctx.prisma.tripStop.create({ data: { ...data, tripItemId: tripItem.id } })
+      return ctx.prisma.tripStop.create({ data: { ...data, tripItemId: tripItem.id, image: image } })
     }),
   removeItem: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
     const item = await ctx.prisma.tripItem.findUniqueOrThrow({ where: { id: input.id }, include: { stop: true } })

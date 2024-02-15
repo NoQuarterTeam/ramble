@@ -200,6 +200,7 @@ export default function NewItemScreen() {
                     key={i}
                     onPress={() => {
                       setSearch("")
+                      setCoords(place.center)
                       camera.current?.setCamera({
                         zoomLevel: 9,
                         animationDuration: 1000,
@@ -207,7 +208,7 @@ export default function NewItemScreen() {
                         centerCoordinate: place.center,
                       })
                     }}
-                    className=" p-2"
+                    className="p-2"
                   >
                     <Text numberOfLines={1}>{place.name}</Text>
                   </TouchableOpacity>

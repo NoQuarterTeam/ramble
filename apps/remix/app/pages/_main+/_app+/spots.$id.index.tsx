@@ -7,7 +7,7 @@ import { Check, Edit2, Flag, Heart, Star, Trash } from "lucide-react"
 import { promiseHash } from "remix-utils/promise"
 
 import { FULL_WEB_URL } from "@ramble/server-env"
-import { getSpotFlickrImages, publicSpotWhereClause } from "@ramble/server-services"
+import { getActivityFlickrImages, publicSpotWhereClause } from "@ramble/server-services"
 import {
   activitySpotTypes,
   AMENITIES,
@@ -98,7 +98,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     })
     .then((r) => r)
 
-  const flickrImages = await getSpotFlickrImages(spot)
+  const flickrImages = await getActivityFlickrImages(spot)
 
   let translatedDescription
   let descriptionHash

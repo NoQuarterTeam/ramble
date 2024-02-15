@@ -1,5 +1,6 @@
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import * as React from "react"
+import { Image } from "expo-image"
 import * as Haptics from "expo-haptics"
 import { TouchableOpacity, View } from "react-native"
 import DraggableFlatList, { RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlist"
@@ -49,21 +50,24 @@ export default function TripDetailScreen() {
   const utils = api.useUtils()
   const itemMarkers = React.useMemo(
     () =>
-      trip?.items.map((item) => (
-        <MarkerView
-          allowOverlap
-          key={item.id}
-          coordinate={item.spot ? [item.spot.longitude, item.spot.latitude] : [item.stop!.longitude, item.stop!.latitude]}
-        >
-          <TouchableOpacity
-            activeOpacity={item.spot ? 0.8 : 1}
-            onPressIn={item.spot ? () => utils.spot.detail.prefetch({ id: item.spot!.id }) : undefined}
-            onPress={item.spot ? () => router.push(`/${tab}/spot/${item.spot!.id}`) : undefined}
-          >
-            {item.spot ? <SpotMarker spot={item.spot} /> : <Icon icon={MapPin} size={24} fill="white" color="black" />}
-          </TouchableOpacity>
-        </MarkerView>
-      )),
+      trip?.items.map(
+        (item) =>
+          (item.spot || item.stop) && (
+            <MarkerView
+              allowOverlap
+              key={item.id}
+              coordinate={item.spot ? [item.spot.longitude, item.spot.latitude] : [item.stop!.longitude, item.stop!.latitude]}
+            >
+              <TouchableOpacity
+                activeOpacity={item.spot ? 0.8 : 1}
+                onPressIn={item.spot ? () => utils.spot.detail.prefetch({ id: item.spot!.id }) : undefined}
+                onPress={item.spot ? () => router.push(`/${tab}/spot/${item.spot!.id}`) : undefined}
+              >
+                {item.spot ? <SpotMarker spot={item.spot} /> : <Icon icon={MapPin} size={24} fill="white" color="black" />}
+              </TouchableOpacity>
+            </MarkerView>
+          ),
+      ),
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [trip?.items, tab],
@@ -336,15 +340,24 @@ const TripItem = React.memo(function _TripItem({
                   </View>
                 )}
 
-                <Text numberOfLines={1} className="font-500 text-xxs pl-1">
+                <Text numberOfLines={1} className="font-500 pl-1 text-xs">
                   {spot.name}
                 </Text>
               </View>
             </Link>
           ) : stop ? (
-            <View className="flex h-full w-full flex-row items-center justify-center space-x-2 rounded-sm border border-gray-200 p-2 dark:border-gray-700">
-              <Text className="text-center">{stop.name}</Text>
-            </View>
+            stop.image ? (
+              <View className="relative h-full w-full overflow-hidden rounded-sm">
+                <Image blurRadius={5} source={{ uri: stop.image }} className="h-full w-full" />
+                <View className="absolute bottom-0 left-0 right-0 top-0 items-center justify-center bg-black/40">
+                  <Text className="text-center">{stop.name}</Text>
+                </View>
+              </View>
+            ) : (
+              <View className="flex h-full w-full flex-row items-center justify-center space-x-2 rounded-sm border border-gray-200 p-2 dark:border-gray-700">
+                <Text className="text-center">{stop.name}</Text>
+              </View>
+            )
           ) : null}
           {isFocused && <View className="bg-primary absolute bottom-0 left-0 right-0 top-0 h-0.5 rounded-t-sm" />}
         </View>

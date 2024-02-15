@@ -9,7 +9,7 @@ export type FlickrResponse =
   | { photos: { photo: { id: string; secret: string; owner: string; server: string }[] | undefined } | undefined }
   | undefined
 
-export async function getSpotFlickrImages(
+export async function getActivityFlickrImages(
   spot: Pick<Spot, "type" | "latitude" | "longitude"> & { images: Pick<SpotImage, "id">[] },
 ) {
   if (spot.images.length > 0) return null
@@ -31,4 +31,17 @@ export async function getSpotFlickrImages(
     src: `https://live.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_c.jpg`,
     link: `https://flickr.com/photos/${photo.owner}/${photo.id}`,
   }))
+}
+export async function getPlaceFlickrImage(name: string) {
+  const res: FlickrResponse = await flickr("flickr.photos.search", {
+    per_page: "1",
+    text: name,
+    sort: "relevance",
+  }).catch((error) => {
+    console.log(error)
+  })
+  if (!res?.photos?.photo) return null
+  if (res.photos.photo.length === 0) return null
+  const firstFind = res.photos.photo[0]
+  return `https://live.staticflickr.com/${firstFind.server}/${firstFind.id}_${firstFind.secret}_c.jpg`
 }

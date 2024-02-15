@@ -4,7 +4,7 @@ import { cacheHeader } from "pretty-cache-header"
 import { promiseHash } from "remix-utils/promise"
 
 import { FULL_WEB_URL } from "@ramble/server-env"
-import { getSpotFlickrImages, publicSpotWhereClause } from "@ramble/server-services"
+import { getActivityFlickrImages, publicSpotWhereClause } from "@ramble/server-services"
 import { spotPartnerFields } from "@ramble/shared"
 
 import { db } from "~/lib/db.server"
@@ -56,7 +56,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
       ? fetch(FULL_WEB_URL + `/api/spots/${initialSpot.id}/translate/${language}`).then((r) => r.json())
       : (async () => null)(),
   })
-  const flickrImages = await getSpotFlickrImages(data.spot)
+  const flickrImages = await getActivityFlickrImages(data.spot)
 
   return json(
     {

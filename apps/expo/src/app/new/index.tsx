@@ -149,6 +149,7 @@ export default function NewSpotLocationScreen() {
                     key={i}
                     onPress={() => {
                       setSearch("")
+                      setCoords(place.center)
                       camera.current?.setCamera({
                         zoomLevel: 9,
                         animationDuration: 1000,
