@@ -11,6 +11,7 @@ import {
   User,
   User2,
   UserPlus,
+  Heart,
 } from "lucide-react-native"
 
 import { createImageUrl } from "@ramble/shared"
@@ -116,17 +117,17 @@ export default function AccountScreen() {
               <ProfileLink to="info" icon={User}>
                 Info
               </ProfileLink>
-              <ProfileLink to="interests" icon={ToggleRight}>
-                Interests
-              </ProfileLink>
               <ProfileLink to="van" icon={Icons.Van}>
                 Van
               </ProfileLink>
+              <ProfileLink to="lists" icon={Heart}>
+                Lists
+              </ProfileLink>
+              <ProfileLink to="interests" icon={ToggleRight}>
+                Interests
+              </ProfileLink>
               <ProfileLink to="invite" icon={UserPlus}>
                 Invites
-              </ProfileLink>
-              <ProfileLink to="lists" icon={MessageCircle}>
-                Lists
               </ProfileLink>
               <ProfileLink to="settings" icon={Settings}>
                 Settings

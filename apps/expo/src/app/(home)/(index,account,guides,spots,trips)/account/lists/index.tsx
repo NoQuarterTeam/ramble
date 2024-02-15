@@ -42,7 +42,7 @@ export default function ListsScreen() {
       title={
         <TouchableOpacity onPress={sortProps.onOpen} className="flex flex-row items-center">
           <BrandHeading className="text-xl">{SORT_OPTIONS[sort]}</BrandHeading>
-          <Icon icon={ChevronDown} size={20} color="primary" />
+          <Icon className="mt-1" icon={ChevronDown} size={20} color="primary" />
         </TouchableOpacity>
       }
       rightElement={
@@ -55,7 +55,7 @@ export default function ListsScreen() {
         <TouchableOpacity
           activeOpacity={1}
           onPress={sortProps.onClose}
-          className="absolute inset-0 z-10 px-4 pt-[110px]"
+          className="absolute inset-0 z-10 px-4"
           style={{ width, height }}
         >
           <View

@@ -5,20 +5,24 @@ import * as Location from "expo-location"
 import { Map } from "~/components/Map"
 
 import { Camera, UserLocation, type MapView as MapType, StyleURL, MapState } from "@rnmapbox/maps"
-import { join } from "@ramble/shared"
-import { TouchableOpacity, View } from "react-native"
+import { displayRating, join } from "@ramble/shared"
+import { TouchableOpacity, View, useColorScheme } from "react-native"
 import { RouterOutputs, api } from "~/lib/api"
 import { Spinner } from "~/components/ui/Spinner"
 import { Icon } from "~/components/Icon"
 import { Text } from "~/components/ui/Text"
-import { AlertTriangle, CircleDot, MapPinned, Navigation, Settings2 } from "lucide-react-native"
+import { AlertTriangle, CircleDot, Heart, MapPinned, Navigation, Plus, PlusCircle, Settings2, Star, X } from "lucide-react-native"
 import { Input } from "~/components/ui/Input"
 import { toast } from "~/components/ui/Toast"
 import { SpotClusterMarker } from "~/components/SpotMarker"
 import { Button } from "~/components/ui/Button"
 import { useMapFilters } from "../../(map)/filters"
-import { AddTripSpotPreview } from "~/components/AddTripSpotPreview"
-import { ModalView } from "~/components/ui/ModalView"
+
+import { ScreenView } from "~/components/ui/ScreenView"
+import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
+import { SpotTypeBadge } from "~/components/SpotTypeBadge"
+import { SpotImageCarousel } from "~/components/ui/SpotImageCarousel"
+import { width, isTablet } from "~/lib/device"
 
 type Cluster = RouterOutputs["spot"]["clusters"][number]
 
@@ -49,17 +53,6 @@ export default function NewItemScreen() {
   const isUnknownAddress = !!!geocodeData?.place
 
   const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, keepPreviousData: true })
-
-  // React.useEffect(() => {
-  //   if (!geocodedCoords) return
-  //   setCoords(geocodedCoords)
-  //   camera.current?.setCamera({
-  //     zoomLevel: 9,
-  //     animationDuration: 1000,
-  //     animationMode: "flyTo",
-  //     centerCoordinate: [geocodedCoords[0], geocodedCoords[1]],
-  //   })
-  // }, [geocodedCoords])
 
   const handleSetUserLocation = async () => {
     try {
@@ -143,21 +136,36 @@ export default function NewItemScreen() {
   }
 
   return (
-    <ModalView edges={["top", "bottom"]} title="add stop">
-      <View className="mb-2 flex w-full flex-row items-center space-x-1 overflow-hidden">
-        {addressLoading || isFetching ? (
-          <Spinner size="small" />
-        ) : (
-          <Icon
-            icon={isUnknownAddress ? AlertTriangle : MapPinned}
-            size={20}
-            color={isUnknownAddress ? "primary" : undefined}
-            className={join(!!!isUnknownAddress && "opacity-80")}
-          />
-        )}
-        <Text numberOfLines={1} className="flex-1 text-sm opacity-70">
-          {addressLoading ? "" : geocodeData?.place || "Unknown address - move map to set"}
-        </Text>
+    <ScreenView title="add stop" containerClassName="px-0">
+      <View className="flex w-full flex-row items-center justify-between space-x-1 overflow-hidden px-2 pb-2">
+        <View className="flex-1 flex-row items-center space-x-1">
+          {addressLoading || isFetching ? (
+            <Spinner size="small" />
+          ) : (
+            <Icon
+              icon={isUnknownAddress ? AlertTriangle : MapPinned}
+              size={20}
+              color={isUnknownAddress ? "primary" : undefined}
+              className={join(!!!isUnknownAddress && "opacity-80")}
+            />
+          )}
+          <Text numberOfLines={1} className="flex-1 text-sm opacity-70">
+            {addressLoading ? "" : geocodeData?.place || "Unknown address - move map to set"}
+          </Text>
+        </View>
+        <Button
+          size="xs"
+          textClassName="text-black"
+          onPress={() => {
+            if (!coords || !geocodeData || isUnknownAddress) return
+            if (!coords[0] || !coords[1]) return toast({ title: "Please select a location" })
+            handleCreateTripStop()
+          }}
+          disabled={!coords || (coords && (!coords[0] || !coords[1])) || !geocodeData || isUnknownAddress}
+          isLoading={createLoading}
+        >
+          Add to trip
+        </Button>
       </View>
       {!isLoading && (
         <View className="relative flex-1">
@@ -218,7 +226,7 @@ export default function NewItemScreen() {
           )}
           <View
             pointerEvents="box-none"
-            className="absolute bottom-5 left-5 right-5 flex flex-row items-center justify-between space-y-2"
+            className="absolute bottom-3 left-3 right-3 flex flex-row items-end justify-between space-y-2"
           >
             <Link push href={`/filters`} asChild>
               <TouchableOpacity
@@ -228,31 +236,116 @@ export default function NewItemScreen() {
                 <Icon icon={Settings2} size={20} />
               </TouchableOpacity>
             </Link>
-            <Button
-              className="bg-background rounded-full"
-              textClassName="text-black"
-              onPress={() => {
-                if (!coords || !geocodeData || isUnknownAddress) return
-                if (!coords[0] || !coords[1]) return toast({ title: "Please select a location" })
-                handleCreateTripStop()
-              }}
-              disabled={!coords || (coords && (!coords[0] || !coords[1])) || !geocodeData || isUnknownAddress}
-              isLoading={createLoading}
-            >
-              Add to trip
-            </Button>
+            <TouchableOpacity activeOpacity={0.8} onPress={() => router.push("/new/")} className="bg-primary rounded-full p-4">
+              <Icon icon={PlusCircle} size={20} color="white" />
+            </TouchableOpacity>
+
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={handleSetUserLocation}
-              className="sq-12 bg-background flex flex-row items-center justify-center rounded-full"
+              className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"
             >
-              <Navigation size={20} className="text-black" />
+              <Icon icon={Navigation} size={20} />
             </TouchableOpacity>
           </View>
 
           {activeSpotId && <AddTripSpotPreview spotId={activeSpotId} tripId={id} onClose={() => setActiveSpotId(null)} />}
         </View>
       )}
-    </ModalView>
+    </ScreenView>
+  )
+}
+
+export function AddTripSpotPreview({ spotId, tripId, onClose }: { spotId: string; tripId: string; onClose: () => void }) {
+  const { data: spot, isLoading } = api.spot.mapPreview.useQuery({ id: spotId })
+  const router = useRouter()
+
+  const colorScheme = useColorScheme()
+  const isDark = colorScheme === "dark"
+  const utils = api.useUtils()
+  React.useEffect(() => {
+    if (!spot) return
+    void utils.spot.detail.prefetch({ id: spot.id })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [spot])
+
+  const { mutate } = api.trip.saveSpot.useMutation({
+    onSuccess: () => void utils.trip.detail.refetch(),
+  })
+
+  const handleAddToTrip = () => {
+    mutate({ tripId: tripId, spotId })
+    onClose()
+    router.back()
+  }
+
+  return (
+    <Animated.View
+      style={{ width: "100%", position: "absolute", bottom: 0, zIndex: 1 }}
+      entering={SlideInDown.duration(200)}
+      exiting={SlideOutDown.duration(200)}
+      className="rounded-t-xs bg-background dark:bg-background-dark p-4"
+    >
+      {isLoading ? (
+        <View className="flex items-center justify-center p-10">
+          <Spinner />
+        </View>
+      ) : !spot ? (
+        <Text>Spot not found</Text>
+      ) : (
+        <View className="space-y-2">
+          <TouchableOpacity onPress={() => router.push(`/(home)/(trips)/spot/${spot.id}`)} activeOpacity={0.9}>
+            <SpotTypeBadge spot={spot} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => router.push(`/(home)/(trips)/spot/${spot.id}`)}
+            activeOpacity={0.7}
+            className="flex flex-row items-center space-x-2"
+          >
+            <Text numberOfLines={1} className="text-lg leading-6">
+              {spot.name}
+            </Text>
+          </TouchableOpacity>
+          <View className="flex flex-row items-center justify-between">
+            <View className="flex flex-row items-center space-x-2">
+              <View className="flex flex-row flex-wrap items-center space-x-1">
+                <Icon icon={Heart} size={16} fill={isDark ? "white" : "black"} />
+                <Text className="text-sm">{spot._count.listSpots || 0}</Text>
+              </View>
+              <View className="flex flex-row items-center space-x-1">
+                <Icon icon={Star} size={16} fill={isDark ? "white" : "black"} />
+                <Text className="text-sm">{displayRating(spot.rating._avg.rating)}</Text>
+              </View>
+            </View>
+
+            <View className="flex flex-row space-x-2">
+              <Button
+                size="xs"
+                onPress={handleAddToTrip}
+                leftIcon={<Icon icon={Plus} color={{ dark: "black", light: "white" }} size={16} />}
+              >
+                Add to Trip
+              </Button>
+            </View>
+          </View>
+
+          <View className="rounded-xs overflow-hidden">
+            <SpotImageCarousel
+              onPress={() => router.push(`/(home)/(trips)/spot/${spot.id}`)}
+              key={spot.id} // so images reload
+              width={width - 32}
+              height={180}
+              noOfColumns={isTablet ? 2 : 1}
+              images={spot.images}
+            />
+          </View>
+        </View>
+      )}
+
+      <TouchableOpacity onPress={onClose} className="absolute right-2 top-2 flex items-center justify-center p-2">
+        <Icon icon={X} size={20} />
+      </TouchableOpacity>
+    </Animated.View>
   )
 }

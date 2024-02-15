@@ -42,12 +42,6 @@ export default function HomeLayout() {
           tabBarIcon: (props) => <Icon icon={List} size={22} color={!!props.focused && "primary"} />,
         }}
       />
-      {/* <Tabs.Screen
-        name="(lists)"
-        options={{
-          tabBarIcon: (props) => <Icon icon={Heart} size={22} color={!!props.focused && "primary"} />,
-        }}
-      /> */}
       <Tabs.Screen
         name="(trips)"
         options={{

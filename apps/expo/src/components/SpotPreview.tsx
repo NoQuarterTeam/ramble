@@ -18,7 +18,6 @@ import { api } from "~/lib/api"
 import { isTablet, width } from "~/lib/device"
 import { useBackgroundColor } from "~/lib/tailwind"
 
-const cardHeight = 430
 export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }) {
   const { data: spot, isLoading } = api.spot.mapPreview.useQuery({ id })
   const router = useRouter()
@@ -36,7 +35,7 @@ export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }
 
   return (
     <Animated.View
-      style={{ height: cardHeight, width: "100%", position: "absolute", backgroundColor, bottom: 0, zIndex: 1 }}
+      style={{ width: "100%", position: "absolute", backgroundColor, bottom: 0, zIndex: 1 }}
       entering={SlideInDown.duration(200)}
       exiting={SlideOutDown.duration(200)}
       className="rounded-t-xs p-4"

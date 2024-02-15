@@ -97,10 +97,14 @@ export default function UserScreen() {
                   placeholder={user.avatarBlurHash}
                   height={100}
                   source={{ uri: createImageUrl(user.avatar) }}
-                  className="sq-20 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
+                  style={{ height: 100, width: 100 }}
+                  className="rounded-full bg-gray-100 object-cover dark:bg-gray-700"
                 />
               ) : (
-                <View className="sq-20 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
+                <View
+                  style={{ height: 100, width: 100 }}
+                  className="flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700"
+                >
                   <Icon icon={User2} />
                 </View>
               )}
@@ -111,14 +115,20 @@ export default function UserScreen() {
 
                 <View className="flex flex-row items-center space-x-4">
                   <TouchableOpacity
-                    className="flex flex-row space-x-1 pb-1"
+                    onPressIn={() => {
+                      void utils.user.following.prefetch({ username })
+                    }}
+                    className="flex flex-row space-x-1 pb-2"
                     onPress={() => router.push(`/${tab}/${username}/following`)}
                   >
                     <Text className="font-600">{user._count.following}</Text>
                     <Text className="opacity-70">following</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    className="flex flex-row space-x-1 pb-1"
+                    onPressIn={() => {
+                      void utils.user.followers.prefetch({ username })
+                    }}
+                    className="flex flex-row space-x-1 pb-2"
                     onPress={() => router.push(`/${tab}/${username}/followers`)}
                   >
                     <Text className="font-600">{user._count.followers}</Text>
@@ -129,7 +139,7 @@ export default function UserScreen() {
                   {interestOptions
                     .filter((i) => user[i.value as keyof typeof user])
                     .map((interest) => (
-                      <View key={interest.value} className="rounded-xs border border-gray-100 p-2 dark:border-gray-700">
+                      <View key={interest.value} className="rounded-xs border border-gray-100 p-1.5 dark:border-gray-700">
                         <Icon icon={interest.Icon} size={18} />
                       </View>
                     ))}
