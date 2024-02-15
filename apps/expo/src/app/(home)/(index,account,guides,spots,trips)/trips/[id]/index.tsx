@@ -349,7 +349,7 @@ const TripItem = React.memo(function _TripItem({
             stop.image ? (
               <View className="relative h-full w-full overflow-hidden rounded-sm">
                 <Image blurRadius={5} source={{ uri: stop.image }} className="h-full w-full" />
-                <View className="absolute bottom-0 left-0 right-0 top-0 items-center justify-center bg-black/40">
+                <View className="absolute bottom-0 left-0 right-0 top-0 items-center justify-center bg-black/40 p-2">
                   <Text className="text-center">{stop.name}</Text>
                 </View>
               </View>
