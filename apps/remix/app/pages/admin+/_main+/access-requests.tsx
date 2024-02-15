@@ -65,7 +65,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         .handler(async (data) => {
           const request = await db.accessRequest.update({ where: { id: data.id }, data: { acceptedAt: new Date() } })
           await sendBetaInvitationEmail(request.email, request.code)
-          void updateLoopsContact({ email: request.email, accessRequestAcceptedAt: new Date(), inviteCode: request.code })
+          void updateLoopsContact({
+            email: request.email,
+            accessRequestAcceptedAt: new Date().toISOString(),
+            inviteCode: request.code,
+          })
           return json({ success: true })
         }),
     delete: () =>
