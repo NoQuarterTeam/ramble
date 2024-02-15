@@ -18,15 +18,15 @@ export type LoopsContact = {
   isVerified?: boolean
   role?: Role
   isAdmin?: boolean
-  signedUpAt?: Date
-  accessRequestedAt?: Date
-  accessRequestAcceptedAt?: Date
+  signedUpAt?: string
+  accessRequestedAt?: string
+  accessRequestAcceptedAt?: string
 }
 
 // if changing email, make sure to pass userId
 export async function updateLoopsContact(contact: LoopsContact) {
   try {
-    const formattedData = {
+    const formattedData: NonNullable<LoopsContact> = {
       email: contact.email,
       firstName: contact.firstName,
       lastName: contact.lastName,
@@ -41,10 +41,8 @@ export async function updateLoopsContact(contact: LoopsContact) {
       signedUpAt: contact.signedUpAt,
       accessRequestedAt: contact.accessRequestedAt,
       accessRequestAcceptedAt: contact.accessRequestAcceptedAt,
-    } satisfies LoopsContact
+    }
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     const res = await loops.updateContact(contact.email, formattedData)
     if (!res.success) throw res
   } catch (error) {

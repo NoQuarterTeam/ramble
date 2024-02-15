@@ -16,14 +16,12 @@ import { Text } from "~/components/ui/Text"
 import { VerifiedCard } from "~/components/VerifiedCard"
 import { api } from "~/lib/api"
 import { isTablet, width } from "~/lib/device"
-import { useMe } from "~/lib/hooks/useMe"
 import { useBackgroundColor } from "~/lib/tailwind"
 
 const cardHeight = 430
 export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }) {
   const { data: spot, isLoading } = api.spot.mapPreview.useQuery({ id })
   const router = useRouter()
-  const { me } = useMe()
 
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
@@ -80,7 +78,7 @@ export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }
               <Button
                 size="xs"
                 variant="outline"
-                onPress={me ? () => router.push(`/spot/${spot.id}/save-to-list`) : () => router.push("/login")}
+                onPress={() => router.push(`/spot/${spot.id}/save-to-list`)}
                 leftIcon={
                   <Icon
                     icon={Heart}
@@ -94,7 +92,7 @@ export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }
               <Button
                 size="xs"
                 variant="outline"
-                onPress={me ? () => router.push(`/spot/${spot.id}/save-to-trip`) : () => router.push("/login")}
+                onPress={() => router.push(`/spot/${spot.id}/save-to-trip`)}
                 leftIcon={
                   <Icon
                     icon={Route}

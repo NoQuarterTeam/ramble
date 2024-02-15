@@ -79,7 +79,7 @@ export const action = ({ request }: ActionFunctionArgs) =>
           if (accessRequest && accessRequest.email !== user.email) {
             void deleteLoopsContact({ email: accessRequest.email })
           }
-          void updateLoopsContact({ ...user, signedUpAt: user.createdAt, userGroup: "beta", userId: user.id })
+          void updateLoopsContact({ ...user, signedUpAt: user.createdAt.toISOString(), userGroup: "beta", userId: user.id })
           const codes = generateInviteCodes(user.id)
           await db.inviteCode.createMany({ data: codes.map((c) => ({ code: c, ownerId: user.id })) })
           const { setUser } = await getUserSession(request)

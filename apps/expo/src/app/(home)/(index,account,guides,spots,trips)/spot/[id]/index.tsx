@@ -60,6 +60,8 @@ import { height, isAndroid, width } from "~/lib/device"
 import { useMe } from "~/lib/hooks/useMe"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
+import { LoginPlaceholder } from "~/components/LoginPlaceholder"
+import { ScreenView } from "~/components/ui/ScreenView"
 
 export default function SpotDetailScreen() {
   const { me } = useMe()
@@ -149,6 +151,12 @@ export default function SpotDetailScreen() {
         <Text className="text-lg">Spot not found</Text>
         {router.canGoBack() && <Button onPress={router.back}>Back</Button>}
       </View>
+    )
+  if (!me)
+    return (
+      <ScreenView title={spot.name}>
+        <LoginPlaceholder text="Log in to view more information about this spot"></LoginPlaceholder>
+      </ScreenView>
     )
   return (
     <View>
