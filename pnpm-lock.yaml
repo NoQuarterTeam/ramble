@@ -355,8 +355,8 @@ importers:
         specifier: 1.1.1
         version: 1.1.1
       '@vercel/remix':
-        specifier: 2.5.1
-        version: 2.5.1(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
+        specifier: 2.6.0
+        version: 2.6.0(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
       '@vercel/remix-run-dev':
         specifier: 2.5.1
         version: 2.5.1(@remix-run/serve@2.6.0)(typescript@5.3.3)
@@ -8023,15 +8023,15 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@vercel/remix@2.5.1(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3):
-    resolution: {integrity: sha512-b38Av3htXlF5L/Gy0vufWtSPLQOCKTYGLANWIrpLnB2m3Ro8Q56SgkBE1iMqVnHQ6A32fyAXg9y0BrVRRLhy6A==}
+  /@vercel/remix@2.6.0(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-uP9ny5WE/1zELj786PC77DBQsqV1uOC0yF8lxFdJFPbcRn/E3yCQolwheyWP4khj2DTQ6MCCX8mqhkUWaxPkpw==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: '*'
       react-dom: '*'
     dependencies:
-      '@remix-run/node': 2.5.1(typescript@5.3.3)
-      '@remix-run/server-runtime': 2.5.1(typescript@5.3.3)
+      '@remix-run/node': 2.6.0(typescript@5.3.3)
+      '@remix-run/server-runtime': 2.6.0(typescript@5.3.3)
       isbot: 3.7.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
