@@ -25,7 +25,7 @@ model User {
   role                   Role    @default(MEMBER)
   avatar                 String?
   avatarBlurHash         String?
-  bio                    String? @db.LongText
+  bio                    String? @db.Text
   instagram              String?
   isVerified             Boolean @default(false)
   isAdmin                Boolean @default(false)
@@ -92,7 +92,7 @@ model Van {
   name        String
   model       String
   year        Int
-  description String? @db.LongText
+  description String? @db.Text
 
   user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String     @unique
@@ -152,7 +152,7 @@ model Spot {
   id          String    @id @default(uuid())
   name        String
   type        SpotType
-  description String?   @db.LongText
+  description String?   @db.Text
   address     String?
   latitude    Float
   longitude   Float
@@ -273,7 +273,7 @@ model SpotRevision {
 model List {
   id          String  @id @default(uuid())
   name        String
-  description String? @db.LongText
+  description String? @db.Text
   isPrivate   Boolean @default(false)
 
   listSpots ListSpot[]
@@ -303,7 +303,7 @@ model ListSpot {
 model Review {
   id          String  @id @default(uuid())
   rating      Int
-  description String  @db.LongText
+  description String  @db.Text
   language    String?
 
   spotId String
@@ -344,7 +344,7 @@ enum FeedbackType {
 model Feedback {
   id      String       @id @default(uuid())
   type    FeedbackType
-  message String       @db.LongText
+  message String       @db.Text
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
@@ -394,7 +394,7 @@ model TripItem {
 model TripStop {
   id        String  @id @default(uuid())
   name      String
-  image     String?
+  image     String? @db.VarChar(500)
   latitude  Float
   longitude Float
 

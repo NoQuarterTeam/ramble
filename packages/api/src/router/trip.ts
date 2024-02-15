@@ -6,8 +6,7 @@ import { createTRPCRouter, protectedProcedure } from "../trpc"
 import { TRPCError } from "@trpc/server"
 import { lineString } from "@turf/helpers"
 import bbox from "@turf/bbox"
-import { getPlaceFlickrImage } from "@ramble/server-services"
-// import { getDirections } from "@ramble/server-services"
+import { getPlaceUnsplashImage } from "@ramble/server-services"
 
 export const tripRouter = createTRPCRouter({
   mine: protectedProcedure.query(({ ctx }) => {
@@ -73,6 +72,7 @@ export const tripRouter = createTRPCRouter({
     ]) as [number, number][]
     const line = lineString(itemCoords)
     const bounds = bbox(line) as [number, number, number, number]
+    // can be quite slow
     // const directions = await getDirections(itemCoords)
     return { trip, bounds, line }
   }),
@@ -97,9 +97,14 @@ export const tripRouter = createTRPCRouter({
         const tripItems = await ctx.prisma.trip.findUnique({ where: { id: input.tripId } }).items()
         newOrder = tripItems?.length || 0
       }
-      const image = await getPlaceFlickrImage(data.name)
-      const tripItem = await ctx.prisma.tripItem.create({ data: { tripId, creatorId: ctx.user.id, order: newOrder } })
-      return ctx.prisma.tripStop.create({ data: { ...data, tripItemId: tripItem.id, image: image } })
+      const image = await getPlaceUnsplashImage(data.name)
+      console.log(image)
+
+      return ctx.prisma.$transaction(async (tx) => {
+        const tripItem = await tx.tripItem.create({ data: { tripId, creatorId: ctx.user.id, order: newOrder } })
+
+        return tx.tripStop.create({ data: { ...data, tripItemId: tripItem.id, image: image } })
+      })
     }),
   removeItem: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
     const item = await ctx.prisma.tripItem.findUniqueOrThrow({ where: { id: input.id }, include: { stop: true } })

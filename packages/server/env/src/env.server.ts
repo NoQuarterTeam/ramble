@@ -11,6 +11,7 @@ const envSchema = z.object({
   VERCEL_URL: z.string().optional(),
   FLICKR_ACCESS_KEY: z.string(),
   FLICKR_SECRET_KEY: z.string(),
+  UNSPLASH_ACCESS_KEY: z.string(),
   SLACK_TOKEN: z.string(),
   GOOGLE_API_KEY: z.string(),
   NODE_ENV: z.enum(["development", "production"]).optional(),
