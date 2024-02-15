@@ -51,8 +51,8 @@ export default function NewSpotConfirmScreen() {
     onSuccess: async (data) => {
       posthog?.capture("spot created", { type: data.type })
       await utils.user.hasCreatedSpot.refetch()
-      utils.spot.list.refetch({ skip: 0, sort: "latest" })
       if (me?.role === "GUIDE") {
+        void utils.spot.list.refetch({ skip: 0, sort: "latest" })
         router.navigate(`/(home)/(index)/spot/${data.id}`)
         await new Promise((resolve) => setTimeout(resolve, 1000))
         toast({ title: "Spot created", message: "Thank you for contributing to the community!" })

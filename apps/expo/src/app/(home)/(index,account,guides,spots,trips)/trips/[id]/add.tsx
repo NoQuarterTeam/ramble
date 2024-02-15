@@ -11,7 +11,7 @@ import { RouterOutputs, api } from "~/lib/api"
 import { Spinner } from "~/components/ui/Spinner"
 import { Icon } from "~/components/Icon"
 import { Text } from "~/components/ui/Text"
-import { AlertTriangle, CircleDot, Heart, MapPinned, Navigation, Plus, PlusCircle, Settings2, Star, X } from "lucide-react-native"
+import { AlertTriangle, CircleDot, Heart, MapPinned, Navigation, Plus, Settings2, Star, X } from "lucide-react-native"
 import { Input } from "~/components/ui/Input"
 import { toast } from "~/components/ui/Toast"
 import { SpotClusterMarker } from "~/components/SpotMarker"
@@ -236,9 +236,9 @@ export default function NewItemScreen() {
                 <Icon icon={Settings2} size={20} />
               </TouchableOpacity>
             </Link>
-            <TouchableOpacity activeOpacity={0.8} onPress={() => router.push("/new/")} className="bg-primary rounded-full p-4">
+            {/* <TouchableOpacity activeOpacity={0.8} onPress={() => router.push("/new/")} className="bg-primary rounded-full p-4">
               <Icon icon={PlusCircle} size={20} color="white" />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <TouchableOpacity
               activeOpacity={0.8}
@@ -332,6 +332,8 @@ export function AddTripSpotPreview({ spotId, tripId, onClose }: { spotId: string
 
           <View className="rounded-xs overflow-hidden">
             <SpotImageCarousel
+              canAddMore
+              spotId={spot.id}
               onPress={() => router.push(`/(home)/(trips)/spot/${spot.id}`)}
               key={spot.id} // so images reload
               width={width - 32}
