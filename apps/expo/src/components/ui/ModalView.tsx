@@ -24,7 +24,7 @@ export function ModalView(props: Props) {
   return (
     <SafeAreaProvider>
       <SafeAreaView
-        edges={["top", "bottom"]}
+        edges={["top"]}
         {...props}
         className={merge("bg-background dark:bg-background-dark flex-1 px-4 pt-4", props.containerClassName)}
       >

@@ -41,22 +41,11 @@ export default function NewSpotLocationScreen() {
     { enabled: !!coords?.[0] && !!coords?.[1], keepPreviousData: true },
   )
 
-  const { data: geocodedCoords } = api.mapbox.geocodeAddress.useQuery({ address: search }, { enabled: !!search })
+  const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, keepPreviousData: true })
 
   const { data: hasCreatedSpot, isLoading: spotCheckLoading } = api.user.hasCreatedSpot.useQuery(undefined, {
     enabled: !!me,
   })
-
-  React.useEffect(() => {
-    if (!geocodedCoords) return
-    setCoords(geocodedCoords)
-    camera.current?.setCamera({
-      zoomLevel: 14,
-      animationDuration: 1000,
-      animationMode: "flyTo",
-      centerCoordinate: [geocodedCoords[0], geocodedCoords[1]],
-    })
-  }, [geocodedCoords])
 
   React.useEffect(() => {
     ;(async () => {
@@ -148,11 +137,32 @@ export default function NewSpotLocationScreen() {
             <Input
               className="bg-background dark:bg-background-dark rounded-sm"
               placeholder="Search here"
-              onBlur={(e) => setSearch(e.nativeEvent.text)}
-              onSubmitEditing={(e) => setSearch(e.nativeEvent.text)}
+              onChangeText={setSearch}
+              value={search}
               clearButtonMode="while-editing"
-              returnKeyType="search"
+              returnKeyType="done"
             />
+            {search && places && (
+              <View className="bg-background dark:bg-background-dark rounded-b-sm p-2">
+                {places.map((place, i) => (
+                  <TouchableOpacity
+                    key={i}
+                    onPress={() => {
+                      setSearch("")
+                      camera.current?.setCamera({
+                        zoomLevel: 9,
+                        animationDuration: 1000,
+                        animationMode: "flyTo",
+                        centerCoordinate: place.center,
+                      })
+                    }}
+                    className=" p-2"
+                  >
+                    <Text numberOfLines={1}>{place.name}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
           </View>
           <View
             style={{ transform: [{ translateX: -15 }, { translateY: -15 }] }}
