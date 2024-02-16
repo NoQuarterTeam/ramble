@@ -23,6 +23,7 @@ import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
 import { SpotTypeBadge } from "~/components/SpotTypeBadge"
 import { SpotImageCarousel } from "~/components/ui/SpotImageCarousel"
 import { width, isTablet } from "~/lib/device"
+import { StatusBar } from "expo-status-bar"
 
 type Cluster = RouterOutputs["spot"]["clusters"][number]
 
@@ -137,6 +138,7 @@ export default function NewItemScreen() {
 
   return (
     <ScreenView title="add stop" containerClassName="px-0">
+      <StatusBar style="auto" />
       <View className="flex w-full flex-row items-center justify-between space-x-1 overflow-hidden px-2 pb-2">
         <View className="flex-1 flex-row items-center space-x-1">
           {addressLoading || isFetching ? (
@@ -155,7 +157,6 @@ export default function NewItemScreen() {
         </View>
         <Button
           size="xs"
-          textClassName="text-black"
           onPress={() => {
             if (!coords || !geocodeData || isUnknownAddress) return
             if (!coords[0] || !coords[1]) return toast({ title: "Please select a location" })
