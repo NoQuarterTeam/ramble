@@ -19,10 +19,10 @@
     "noUncheckedIndexedAccess": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["src/*"],
-    },
+      "~/*": ["src/*"]
+    }
   },
   "include": ["expo-plugins", "./my-app.d.ts", "./**/*.ts", "./**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"],
   "exclude": ["node_modules", "./expo-plugins/**/*"],
-  "extends": "expo/tsconfig.base",
+  "extends": "expo/tsconfig.base"
 }

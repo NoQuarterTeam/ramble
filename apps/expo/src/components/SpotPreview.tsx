@@ -16,10 +16,12 @@ import { Text } from "~/components/ui/Text"
 import { api } from "~/lib/api"
 import { isTablet, width } from "~/lib/device"
 import { useBackgroundColor } from "~/lib/tailwind"
+
 import { CreatorCard } from "./CreatorCard"
+import { useFeedbackActivity } from "./FeedbackCheck"
 
 const cardHeight = 430
-export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }) {
+export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: string; onClose: () => void }) {
   const { data: spot, isLoading } = api.spot.mapPreview.useQuery({ id })
   const router = useRouter()
 
@@ -33,7 +35,12 @@ export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }
   }, [spot])
 
   const backgroundColor = useBackgroundColor()
-
+  const increment = useFeedbackActivity((s) => s.increment)
+  const handleGoToSpot = () => {
+    if (!spot) return
+    increment()
+    router.push(`/(home)/(index)/spot/${spot.id}`)
+  }
   return (
     <Animated.View
       style={{ height: cardHeight, width: "100%", position: "absolute", backgroundColor, bottom: 0, zIndex: 1 }}
@@ -49,15 +56,11 @@ export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }
         <Text>Spot not found</Text>
       ) : (
         <View className="space-y-2">
-          <TouchableOpacity onPress={() => router.push(`/(home)/(index)/spot/${spot.id}`)} activeOpacity={0.9}>
+          <TouchableOpacity onPress={handleGoToSpot} activeOpacity={0.9}>
             <SpotTypeBadge spot={spot} />
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => router.push(`/(home)/(index)/spot/${spot.id}`)}
-            activeOpacity={0.7}
-            className="flex flex-row items-center space-x-2"
-          >
+          <TouchableOpacity onPress={handleGoToSpot} activeOpacity={0.7} className="flex flex-row items-center space-x-2">
             <Text numberOfLines={1} className="text-lg leading-6">
               {spot.name}
             </Text>
@@ -77,7 +80,10 @@ export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }
             <Button
               size="xs"
               variant="outline"
-              onPress={() => router.push(`/(home)/(index)/spot/${spot.id}/save`)}
+              onPress={() => {
+                router.push(`/(home)/(index)/spot/${spot.id}/save`)
+                increment()
+              }}
               leftIcon={
                 <Icon
                   icon={Heart}
@@ -93,7 +99,7 @@ export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }
           <View className="rounded-xs overflow-hidden">
             <SpotImageCarousel
               canAddMore
-              onPress={() => router.push(`/(home)/(index)/spot/${spot.id}`)}
+              onPress={handleGoToSpot}
               key={spot.id} // so images reload
               spotId={spot.id}
               width={width - 32}
@@ -111,4 +117,4 @@ export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }
       </TouchableOpacity>
     </Animated.View>
   )
-}
+})

@@ -88,17 +88,22 @@ const columns = [
   columnHelper.accessor((row) => row.user, {
     id: "user.firstName",
     size: 120,
-    cell: (info) => (
-      <div className="flex items-center space-x-2">
-        <Avatar
-          className="sq-8"
-          src={createImageUrl(info.getValue().avatar)}
-          placeholder={info.getValue().avatarBlurHash}
-          size={40}
-        />
-        <p>{info.getValue().firstName}</p>
-      </div>
-    ),
+    cell: (info) =>
+      info.getValue() ? (
+        <div className="flex items-center space-x-2">
+          <Avatar
+            className="sq-8"
+            src={createImageUrl(info.getValue()!.avatar)}
+            placeholder={info.getValue()!.avatarBlurHash}
+            size={40}
+          />
+          <p>{info.getValue()!.firstName}</p>
+        </div>
+      ) : (
+        <div>
+          <p>Anonymous</p>
+        </div>
+      ),
     header: () => "User",
   }),
   columnHelper.accessor("createdAt", {

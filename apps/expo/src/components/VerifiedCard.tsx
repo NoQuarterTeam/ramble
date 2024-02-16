@@ -5,9 +5,9 @@ import { BadgeX, User2, Verified } from "lucide-react-native"
 import { type Spot, type User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
-import { useMe } from "~/lib/hooks/useMe"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
+import { useFeedbackActivity } from "./FeedbackCheck"
 import { Icon } from "./Icon"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
@@ -19,15 +19,17 @@ interface Props {
 }
 
 export function VerifiedCard({ spot }: Props) {
-  const { me } = useMe()
   const router = useRouter()
   const tab = useTabSegment()
-
+  const increment = useFeedbackActivity((s) => s.increment)
   return (
     <>
       {spot.verifiedAt && spot.verifier ? (
         <TouchableOpacity
-          onPress={me ? () => router.push(`/${tab}/${spot.verifier!.username}/(profile)`) : () => router.push("/login")}
+          onPress={() => {
+            increment()
+            router.push(`/${tab}/${spot.verifier!.username}/(profile)`)
+          }}
           className="rounded-xs flex flex-row items-center justify-between border border-gray-200 p-1.5 px-2.5 dark:border-gray-700/70"
         >
           <View>

@@ -18,8 +18,8 @@ import { Button } from "~/components/ui/Button"
 import { Heading } from "~/components/ui/Heading"
 import { ModalView } from "~/components/ui/ModalView"
 import { Text } from "~/components/ui/Text"
-import { SPOT_TYPE_ICONS } from "~/lib/models/spot"
 import { useMe } from "~/lib/hooks/useMe"
+import { SPOT_TYPE_ICONS } from "~/lib/models/spot"
 
 const mapFiltersSchema = z.object({
   types: z.array(z.enum(SPOT_TYPE_NAMES)),

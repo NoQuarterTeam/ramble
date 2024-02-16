@@ -5,13 +5,14 @@ import * as ImagePicker from "expo-image-picker"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { Plus, X } from "lucide-react-native"
 
+import { type SpotType } from "@ramble/database/types"
+
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
+import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 
 import { NewSpotModalView } from "./NewSpotModalView"
-import { type SpotType } from "@ramble/database/types"
-import { Text } from "~/components/ui/Text"
 
 export default function NewSpotImagesScreen() {
   const params = useLocalSearchParams<{ type: SpotType }>()

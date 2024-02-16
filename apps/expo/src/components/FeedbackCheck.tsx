@@ -1,8 +1,12 @@
+import * as React from "react"
 import { FormProvider } from "react-hook-form"
 import { Keyboard, Modal, ScrollView, TouchableOpacity, useColorScheme, View } from "react-native"
-import dayjs from "dayjs"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import { StatusBar } from "expo-status-bar"
 import { CheckSquare2, Square, Star } from "lucide-react-native"
+import { create } from "zustand"
+import { createJSONStorage, persist } from "zustand/middleware"
+import { useShallow } from "zustand/react/shallow"
 
 import { api } from "~/lib/api"
 import { useForm } from "~/lib/hooks/useForm"
@@ -17,23 +21,44 @@ import { FormInput, FormInputLabel } from "./ui/FormInput"
 import { Text } from "./ui/Text"
 import { Toast, toast } from "./ui/Toast"
 
-export function FeedbackCheck() {
-  useKeyboardController()
+const FEEDBACK_ACTIVITY_THRESHOLD = 50
 
-  const { me, isLoading } = useMe()
-  const { data: hasSubmittedFeedback, isLoading: feedbackLoading } = api.user.hasSubmittedFeedback.useQuery(undefined, {
-    enabled: !!me && dayjs(me.createdAt).isBefore(dayjs().subtract(1, "week")),
-  })
+export const useFeedbackActivity = create<{
+  count: number
+  isComplete: boolean
+  increment: () => void
+  complete: () => void
+}>()(
+  persist(
+    (set) => ({
+      count: 0,
+      isComplete: false,
+      increment: () => set((state) => ({ count: state.count + (state.isComplete ? 0 : 1) })),
+      complete: () => set({ isComplete: true }),
+    }),
+    { name: "ramble.feedback.activity", storage: createJSONStorage(() => AsyncStorage) },
+  ),
+)
+
+export const FeedbackCheck = React.memo(function _FeedbackCheck() {
+  useKeyboardController()
+  const { count, complete, isComplete } = useFeedbackActivity(
+    useShallow((s) => ({
+      count: s.count,
+      complete: s.complete,
+      isComplete: s.isComplete,
+    })),
+  )
+  const { me } = useMe()
 
   const theme = useColorScheme()
   const isDark = theme === "dark"
-  const utils = api.useUtils()
   const form = useForm({
     defaultValues: { rating: 0, needs: [] as string[], shareable: 0, other: "" },
   })
   const { mutate, isLoading: createLoading } = api.feedback.create.useMutation({
     onSuccess: async () => {
-      await utils.user.hasSubmittedFeedback.refetch()
+      complete()
       await new Promise((r) => setTimeout(r, 1000))
       toast({ title: "Thank you so much for the feedback!" })
     },
@@ -52,7 +77,7 @@ export function FeedbackCheck() {
   const shareable = form.watch("shareable")
   const needs = form.watch("needs")
 
-  if (isLoading || feedbackLoading || hasSubmittedFeedback) return null
+  if (isComplete || count < FEEDBACK_ACTIVITY_THRESHOLD) return null
   return (
     <Modal animationType="slide" presentationStyle="formSheet" visible>
       <View className="flex-1">
@@ -67,8 +92,8 @@ export function FeedbackCheck() {
               <View>
                 <BrandHeading className="w-11/12 pb-2 text-2xl">we'd love your feedback</BrandHeading>
                 <Text>
-                  Hey {me?.firstName}, thanks for using the beta, we hope you're enjoying Ramble. We'd love to hear your feedback
-                  so we can make it even better!
+                  Hey {me?.firstName || "there"}, thanks for using the beta, we hope you're enjoying Ramble. We'd love to hear
+                  your feedback so we can make it even better!
                 </Text>
               </View>
               <View>
@@ -87,14 +112,17 @@ export function FeedbackCheck() {
                 </View>
               </View>
               <View>
-                <FormInputLabel label="2. What could we improve?" />
+                <FormInputLabel label="2. What could we improve/add to Ramble?" />
                 <View className="my-2 space-y-2">
                   {[
-                    "More spots",
+                    "Job board",
+                    "Trip planner/diary",
+                    "Shared accounts with other users",
+                    "More nature information (local species etc)",
                     "More social/community features",
+                    "More spots",
+                    "More map layers (mobile network coverage etc)",
                     "More spot categories (cafe's etc)",
-                    "More smart trip planning features",
-                    "More integrations (weather etc)",
                   ].map((need) => {
                     const isSelected = needs.includes(need)
                     return (
@@ -141,4 +169,4 @@ export function FeedbackCheck() {
       </View>
     </Modal>
   )
-}
+})

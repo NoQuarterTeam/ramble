@@ -5,6 +5,7 @@ import { Link } from "expo-router"
 
 import { createImageUrl } from "@ramble/shared"
 
+import { useFeedbackActivity } from "~/components/FeedbackCheck"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { Spinner } from "~/components/ui/Spinner"
@@ -64,9 +65,14 @@ export default function GuidesScreen() {
 }
 
 function GuideItem(props: { guide: RouterOutputs["user"]["guides"][number] }) {
+  const increment = useFeedbackActivity((s) => s.increment)
   return (
     <Link asChild push href={`/(home)/(guides)/${props.guide.username}/(profile)`}>
-      <TouchableOpacity activeOpacity={0.8} className="rounded-xs space-y-1 border border-gray-200 p-4 dark:border-gray-700">
+      <TouchableOpacity
+        onPress={increment}
+        activeOpacity={0.8}
+        className="rounded-xs space-y-1 border border-gray-200 p-4 dark:border-gray-700"
+      >
         <View className="flex flex-row items-center space-x-2">
           <OptimizedImage
             className="sq-16 rounded-full"

@@ -5,9 +5,9 @@ import { User2 } from "lucide-react-native"
 import { type User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
-import { useMe } from "~/lib/hooks/useMe"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
+import { useFeedbackActivity } from "./FeedbackCheck"
 import { Icon } from "./Icon"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
@@ -17,13 +17,16 @@ interface Props {
 }
 
 export function CreatorCard({ creator }: Props) {
-  const { me } = useMe()
   const router = useRouter()
   const tab = useTabSegment()
+  const increment = useFeedbackActivity((s) => s.increment)
 
   return (
     <TouchableOpacity
-      onPress={me ? () => router.push(`/${tab}/${creator.username}/(profile)`) : () => router.push("/login")}
+      onPress={() => {
+        increment()
+        router.push(`/${tab}/${creator.username}/(profile)`)
+      }}
       className="rounded-xs flex flex-row items-center justify-between border border-gray-200 p-1.5 px-2.5 dark:border-gray-700/70"
     >
       <View>

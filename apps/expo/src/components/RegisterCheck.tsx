@@ -5,7 +5,8 @@ import { useAsyncStorage } from "~/lib/hooks/useAsyncStorage"
 import { useMe } from "~/lib/hooks/useMe"
 
 export const REGISTER_CHECK_KEY = "ramble.register.check"
-export function RegisterCheck() {
+
+export const RegisterCheck = React.memo(function _RegisterCheck() {
   const [isChecked, _, isReady] = useAsyncStorage(REGISTER_CHECK_KEY, false)
   const { me, isLoading } = useMe()
   const router = useRouter()
@@ -16,4 +17,4 @@ export function RegisterCheck() {
   }, [me, isLoading, isChecked, isReady])
 
   return null
-}
+})
