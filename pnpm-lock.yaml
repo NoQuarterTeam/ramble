@@ -358,8 +358,8 @@ importers:
         specifier: 2.6.0
         version: 2.6.0(react-dom@18.2.0)(react@18.2.0)(typescript@5.3.3)
       '@vercel/remix-run-dev':
-        specifier: 2.5.1
-        version: 2.5.1(@remix-run/serve@2.6.0)(typescript@5.3.3)
+        specifier: 2.6.0
+        version: 2.6.0(@remix-run/serve@2.6.0)(typescript@5.3.3)
       axios:
         specifier: 1.6.7
         version: 1.6.7
@@ -1943,13 +1943,6 @@ packages:
       chalk: 2.4.2
       js-tokens: 4.0.0
 
-  /@babel/parser@7.23.6:
-    resolution: {integrity: sha512-Z2uID7YJ7oNvAI20O9X0bblw7Qqs8Q2hFy0R9tAfnfLkp5MW0UH9eUvnDSnFwKZ0AvgS1ucqR4KzvVHgnke1VQ==}
-    engines: {node: '>=6.0.0'}
-    hasBin: true
-    dependencies:
-      '@babel/types': 7.23.9
-
   /@babel/parser@7.23.9:
     resolution: {integrity: sha512-9tcKgqKbs3xGJ+NtKF2ndOBBLVwPjl1SHxPQkd36r3Dlirw3xWUeGaTbqr7uGZcTaxkVNwc+03SVP7aCdWrTlA==}
     engines: {node: '>=6.0.0'}
@@ -3070,7 +3063,7 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/code-frame': 7.23.5
-      '@babel/parser': 7.23.6
+      '@babel/parser': 7.23.9
       '@babel/types': 7.23.9
 
   /@babel/template@7.23.9:
@@ -3080,24 +3073,6 @@ packages:
       '@babel/code-frame': 7.23.5
       '@babel/parser': 7.23.9
       '@babel/types': 7.23.9
-
-  /@babel/traverse@7.23.7:
-    resolution: {integrity: sha512-tY3mM8rH9jM0YHFGyfC0/xf+SB5eKUu7HPj7/k3fpi9dAlsMc5YbQvDi0Sh2QTPXqMhyaAtzAr807TIyfQrmyg==}
-    engines: {node: '>=6.9.0'}
-    dependencies:
-      '@babel/code-frame': 7.23.5
-      '@babel/generator': 7.23.6
-      '@babel/helper-environment-visitor': 7.22.20
-      '@babel/helper-function-name': 7.23.0
-      '@babel/helper-hoist-variables': 7.22.5
-      '@babel/helper-split-export-declaration': 7.22.6
-      '@babel/parser': 7.23.6
-      '@babel/types': 7.23.9
-      debug: 4.3.4
-      globals: 11.12.0
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
 
   /@babel/traverse@7.23.9:
     resolution: {integrity: sha512-I/4UJ9vs90OkBtY6iiiTORVMyIhJ4kAVmsKo9KFc8UOxMeUfi2hvtIBsET5u9GizXE6/GFSuKCTNfgCswuEjRg==}
@@ -5798,7 +5773,7 @@ packages:
     peerDependencies:
       '@babel/preset-env': ^7.1.6
     dependencies:
-      '@babel/parser': 7.23.6
+      '@babel/parser': 7.23.9
       '@babel/preset-env': 7.23.9(@babel/core@7.23.9)
       flow-parser: 0.206.0
       glob: 7.2.3
@@ -6163,26 +6138,6 @@ packages:
       stream-slice: 0.1.2
     dev: false
 
-  /@remix-run/node@2.5.1(typescript@5.3.3):
-    resolution: {integrity: sha512-UI442xzHAiokmsfrYOabMQB024+IizmRhZBGcNa42QjJWsNqogy1bNwYhzEpB6oQEB1wF3vwOKK1AD1/iYA/9A==}
-    engines: {node: '>=18.0.0'}
-    peerDependencies:
-      typescript: ^5.1.0
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      '@remix-run/server-runtime': 2.5.1(typescript@5.3.3)
-      '@remix-run/web-fetch': 4.4.2
-      '@remix-run/web-file': 3.1.0
-      '@remix-run/web-stream': 1.1.0
-      '@web3-storage/multipart-parser': 1.0.0
-      cookie-signature: 1.2.1
-      source-map-support: 0.5.21
-      stream-slice: 0.1.2
-      typescript: 5.3.3
-    dev: false
-
   /@remix-run/node@2.6.0(typescript@5.3.3):
     resolution: {integrity: sha512-bWemy3g258Kdqi+4OxIEZ7QS64T96jNK6a7NdlPXGJZqeLpxM5NmlCl/slSdx52oTi9r5Xoz1Tm4uR37nD1/Xw==}
     engines: {node: '>=18.0.0'}
@@ -6222,11 +6177,6 @@ packages:
       typescript: 5.3.3
     dev: false
 
-  /@remix-run/router@1.14.2:
-    resolution: {integrity: sha512-ACXpdMM9hmKZww21yEqWwiLws/UPLhNKvimN8RrYSqPSvB3ov7sLvAcfvaxePeLvccTQKGdkDIhLYApZVDFuKg==}
-    engines: {node: '>=14.0.0'}
-    dev: false
-
   /@remix-run/router@1.15.0:
     resolution: {integrity: sha512-HOil5aFtme37dVQTB6M34G95kPM3MMuqSmIRVCC52eKV+Y/tGSqw9P3rWhlAx6A+mz+MoX+XxsGsNJbaI5qCgQ==}
     engines: {node: '>=14.0.0'}
@@ -6263,24 +6213,6 @@ packages:
       cookie: 0.4.2
       set-cookie-parser: 2.6.0
       source-map: 0.7.4
-    dev: false
-
-  /@remix-run/server-runtime@2.5.1(typescript@5.3.3):
-    resolution: {integrity: sha512-bP31jrVbYTJ2eP5sxZfDgT1YyXzDlzsfMxGYVzpaoLCYDJAekq1QpHLLXKGOXhmyb46O9rdhlQKfwD6WpAxr3A==}
-    engines: {node: '>=18.0.0'}
-    peerDependencies:
-      typescript: ^5.1.0
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      '@remix-run/router': 1.14.2
-      '@types/cookie': 0.6.0
-      '@web3-storage/multipart-parser': 1.0.0
-      cookie: 0.6.0
-      set-cookie-parser: 2.6.0
-      source-map: 0.7.4
-      typescript: 5.3.3
     dev: false
 
   /@remix-run/server-runtime@2.6.0(typescript@5.3.3):
@@ -7937,14 +7869,15 @@ packages:
     resolution: {integrity: sha512-NtKiIbn9Cq6HWGy+qRudz28mz5nxfOJWls5Pnckjw1yCfSX8rhXdvY/il3Sy3Zd5n/sKCM2h7VSCCpJF/oaDrQ==}
     dev: false
 
-  /@vercel/remix-run-dev@2.5.1(@remix-run/serve@2.6.0)(typescript@5.3.3):
-    resolution: {integrity: sha512-1GyE8L+jGOKGRBvyiQi4b0VnwrhTSf6fS+Tcwt/JqIcudW0ZaQgcDP1x3qkXUR68TPLapk4V5cacde7h57ICCA==}
+  /@vercel/remix-run-dev@2.6.0(@remix-run/serve@2.6.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-rbNKZUvsXYUEQJQBy84oTpdZgH7Hh6M3ahBrcS2gk5/oucvCEbCjWTZEs9D/DE2zaParLq1gjzBzBK98OqsdVQ==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     peerDependencies:
-      '@remix-run/serve': ^2.5.1
+      '@remix-run/serve': ^2.6.0
       typescript: ^5.1.0
       vite: ^5.0.0
+      wrangler: ^3.24.0
     peerDependenciesMeta:
       '@remix-run/serve':
         optional: true
@@ -7952,21 +7885,23 @@ packages:
         optional: true
       vite:
         optional: true
+      wrangler:
+        optional: true
     dependencies:
       '@babel/core': 7.23.9
       '@babel/generator': 7.23.6
-      '@babel/parser': 7.23.6
+      '@babel/parser': 7.23.9
       '@babel/plugin-syntax-decorators': 7.23.3(@babel/core@7.23.9)
       '@babel/plugin-syntax-jsx': 7.23.3(@babel/core@7.23.9)
       '@babel/preset-typescript': 7.23.3(@babel/core@7.23.9)
-      '@babel/traverse': 7.23.7
-      '@babel/types': 7.23.6
+      '@babel/traverse': 7.23.9
+      '@babel/types': 7.23.9
       '@mdx-js/mdx': 2.3.0
       '@npmcli/package-json': 4.0.1
-      '@remix-run/node': 2.5.1(typescript@5.3.3)
-      '@remix-run/router': 1.14.2
+      '@remix-run/node': 2.6.0(typescript@5.3.3)
+      '@remix-run/router': 1.15.0
       '@remix-run/serve': 2.6.0(typescript@5.3.3)
-      '@remix-run/server-runtime': 2.5.1(typescript@5.3.3)
+      '@remix-run/server-runtime': 2.6.0(typescript@5.3.3)
       '@types/mdx': 2.0.10
       '@vanilla-extract/integration': 6.2.4
       arg: 5.0.2
@@ -12784,7 +12719,7 @@ packages:
       '@babel/preset-env': ^7.1.6
     dependencies:
       '@babel/core': 7.23.9
-      '@babel/parser': 7.23.6
+      '@babel/parser': 7.23.9
       '@babel/plugin-proposal-class-properties': 7.18.6(@babel/core@7.23.9)
       '@babel/plugin-proposal-nullish-coalescing-operator': 7.18.6(@babel/core@7.23.9)
       '@babel/plugin-proposal-optional-chaining': 7.21.0(@babel/core@7.23.9)
