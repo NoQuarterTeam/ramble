@@ -16,7 +16,7 @@ import { api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 import { interestOptions } from "~/lib/models/user"
 
-import { useMapFilters } from "../(home)/(index,account,guides,spots,trips)/(map)/filters"
+import { useMapFilters } from "../filters"
 
 export default function OnboardingStep2Screen() {
   const { me } = useMe()

@@ -16,7 +16,7 @@ import { Input } from "~/components/ui/Input"
 import { toast } from "~/components/ui/Toast"
 import { SpotClusterMarker } from "~/components/SpotMarker"
 import { Button } from "~/components/ui/Button"
-import { useMapFilters } from "../../(map)/filters"
+import { useMapFilters } from "../../../../filters"
 
 import { ScreenView } from "~/components/ui/ScreenView"
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
@@ -44,6 +44,7 @@ export default function NewItemScreen() {
   const mapRef = React.useRef<MapType>(null)
   const utils = api.useUtils()
 
+  const [isLoaded, setIsLoaded] = React.useState(false)
   const {
     data: geocodeData,
     isLoading: addressLoading,
@@ -57,6 +58,7 @@ export default function NewItemScreen() {
   const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, keepPreviousData: true })
 
   const handleSetUserLocation = async () => {
+    setIsLoaded(true)
     try {
       const loc = await Location.getLastKnownPositionAsync()
       if (!loc) return
@@ -70,6 +72,34 @@ export default function NewItemScreen() {
       console.log("oops -  setting location")
     }
   }
+
+  React.useEffect(() => {
+    if (!isLoaded) return
+    async function updateMapAfterFiltersChange() {
+      try {
+        if (!mapRef.current) return
+        const properties = await mapRef.current?.getVisibleBounds()
+        const zoom = await mapRef.current?.getZoom()
+        if (!properties) return
+        const input = {
+          ...filters,
+          minLng: properties[1][0],
+          minLat: properties[1][1],
+          maxLng: properties[0][0],
+          maxLat: properties[0][1],
+          zoom: zoom || 13,
+        }
+        const data = await utils.spot.clusters.fetch(input)
+        setClusters(data)
+      } catch {
+        toast({ title: "Error fetching spots", type: "error" })
+        console.log("oops - fetching clusters on filter")
+      }
+    }
+    updateMapAfterFiltersChange()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters, isLoaded])
+
   const onMapMove = ({ properties }: MapState) => {
     try {
       setIsLoading(true)
@@ -234,7 +264,7 @@ export default function NewItemScreen() {
             pointerEvents="box-none"
             className="absolute bottom-3 left-3 right-3 flex flex-row items-end justify-between space-y-2"
           >
-            <Link push href={`/filters`} asChild>
+            <Link push href={`/filters/`} asChild>
               <TouchableOpacity
                 activeOpacity={0.8}
                 className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"

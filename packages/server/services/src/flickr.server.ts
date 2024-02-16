@@ -43,5 +43,6 @@ export async function getPlaceFlickrImage(name: string) {
   if (!res?.photos?.photo) return null
   if (res.photos.photo.length === 0) return null
   const firstFind = res.photos.photo[0]
+  if (!firstFind) return null
   return `https://live.staticflickr.com/${firstFind.server}/${firstFind.id}_${firstFind.secret}_c.jpg`
 }

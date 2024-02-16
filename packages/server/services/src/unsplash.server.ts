@@ -10,7 +10,7 @@ export async function getPlaceUnsplashImage(query: string) {
   const json = (await res.json()) as Res
   if (json.results.length === 0) return null
 
-  return json.results[0].urls.thumb
+  return json.results[0]?.urls.thumb || null
 }
 
 type Res = {

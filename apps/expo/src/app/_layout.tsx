@@ -97,6 +97,7 @@ export default function RootLayout() {
                   <Stack.Screen name="(auth)" options={{ presentation: "modal" }} />
                   <Stack.Screen name="new" options={{ presentation: "modal" }} />
                   <Stack.Screen name="spot" options={{ presentation: "modal" }} />
+                  <Stack.Screen name="filters" options={{ presentation: "modal" }} />
                 </Stack>
                 <Toast />
                 <StatusBar style={isDark ? "light" : "dark"} />
@@ -110,16 +111,17 @@ export default function RootLayout() {
 }
 
 function PrefetchTabs(props: { children: React.ReactNode }) {
-  const { me, isLoading } = useMe()
+  const { me, isLoading, error } = useMe()
   const utils = api.useUtils()
   React.useEffect(() => {
     if (isLoading || !me) return
     utils.spot.list.prefetch({ skip: 0, sort: "latest" })
     utils.user.profile.prefetch({ username: me.username })
-    utils.list.allByUser.prefetch({ username: me.username })
+    utils.trip.mine.prefetch()
     utils.user.guides.prefetch({ skip: 0 })
-  }, [me, isLoading, utils.spot.list, utils.user.profile, utils.list.allByUser, utils.user.guides])
-  if (isLoading) return null
+  }, [me, isLoading, utils.spot.list, utils.user.profile, utils.trip.mine, utils.user.guides])
+
+  if (isLoading && !error) return null
 
   return <>{props.children}</>
 }

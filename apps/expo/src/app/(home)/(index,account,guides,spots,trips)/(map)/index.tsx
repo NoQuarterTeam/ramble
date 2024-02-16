@@ -30,7 +30,7 @@ import { api, type RouterOutputs } from "~/lib/api"
 import { isAndroid } from "~/lib/device"
 import { useMe } from "~/lib/hooks/useMe"
 
-import { useMapFilters } from "./filters"
+import { useMapFilters } from "../../../filters"
 import { useMapLayers } from "./layers"
 
 type Cluster = RouterOutputs["spot"]["clusters"][number]
