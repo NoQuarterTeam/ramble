@@ -115,8 +115,9 @@ export const spotRouter = createTRPCRouter({
         id: true,
         name: true,
         type: true,
-        verifier: true,
-        verifiedAt: true,
+        verifier: true, // deprecated
+        verifiedAt: true, // deprecated
+        creator: true,
         ...spotPartnerFields,
         _count: { select: { listSpots: true, reviews: true } },
         listSpots: ctx.user ? { where: { list: { creatorId: ctx.user.id } } } : undefined,

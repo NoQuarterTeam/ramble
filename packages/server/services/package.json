@@ -14,9 +14,9 @@
     "with-env": "dotenv -e ../../../.env --"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.514.0",
-    "@aws-sdk/lib-storage": "3.514.0",
-    "@aws-sdk/s3-request-presigner": "3.514.0",
+    "@aws-sdk/client-s3": "3.515.0",
+    "@aws-sdk/lib-storage": "3.515.0",
+    "@aws-sdk/s3-request-presigner": "3.515.0",
     "@ramble/database": "workspace:*",
     "@ramble/emails": "workspace:*",
     "@ramble/server-env": "workspace:*",
@@ -37,7 +37,7 @@
     "@ramble/eslint-config": "workspace:*",
     "@types/bcryptjs": "2.4.6",
     "@types/jsonwebtoken": "9.0.5",
-    "@types/node": "18.19.16",
+    "@types/node": "18.19.17",
     "@types/nodemailer": "6.4.14",
     "@typescript-eslint/eslint-plugin": "7.0.1",
     "@typescript-eslint/parser": "7.0.1",
