@@ -3,6 +3,7 @@ import { TouchableOpacity, useColorScheme, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import { useRouter } from "expo-router"
 import { ChevronDown, PlusCircle } from "lucide-react-native"
+import { usePostHog } from "posthog-react-native"
 
 import { join, useDisclosure } from "@ramble/shared"
 
@@ -16,7 +17,6 @@ import { Text } from "~/components/ui/Text"
 import { api } from "~/lib/api"
 import { height, isTablet, width } from "~/lib/device"
 import { useMe } from "~/lib/hooks/useMe"
-import { usePostHog } from "posthog-react-native"
 
 const SORT_OPTIONS = { mine: "my lists", following: "following" } as const
 

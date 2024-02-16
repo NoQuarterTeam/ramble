@@ -1,19 +1,19 @@
 import { Switch, TouchableOpacity, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { Link } from "expo-router"
 import { CloudRain, MountainSnow, SunMoon, Thermometer, Users2 } from "lucide-react-native"
 import { usePostHog } from "posthog-react-native"
 import { z } from "zod"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 
+import { join } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { Icon } from "~/components/Icon"
 import { ModalView } from "~/components/ui/ModalView"
 import { Text } from "~/components/ui/Text"
 import { useMe } from "~/lib/hooks/useMe"
-import { join } from "@ramble/shared"
-import { Link } from "expo-router"
 
 const mapLayersSchema = z.object({
   layer: z.enum(["rain", "temp", "satellite"]).nullable(),

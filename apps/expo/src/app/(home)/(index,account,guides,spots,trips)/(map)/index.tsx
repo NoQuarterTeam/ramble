@@ -15,7 +15,7 @@ import { Layers, Navigation, PlusCircle, Settings2, User } from "lucide-react-na
 
 import { createImageUrl, INITIAL_LATITUDE, INITIAL_LONGITUDE, join } from "@ramble/shared"
 
-import { FeedbackCheck } from "~/components/FeedbackCheck"
+import { FeedbackCheck, useFeedbackActivity } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
 import { Map } from "~/components/Map"
 import { MapSearch } from "~/components/MapSearch"
@@ -38,12 +38,61 @@ type UserCluster = RouterOutputs["user"]["clusters"][number]
 
 export default function MapScreen() {
   const router = useRouter()
+  const increment = useFeedbackActivity((s) => s.increment)
+
+  return (
+    <View className="flex-1">
+      <RegisterCheck />
+      <FeedbackCheck />
+      <MapView />
+
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => {
+          increment()
+          router.push("/new/")
+        }}
+        style={{ transform: [{ translateX: -26 }] }}
+        className="bg-primary absolute bottom-3 left-1/2 rounded-full p-4"
+      >
+        <Icon icon={PlusCircle} size={20} color="white" />
+      </TouchableOpacity>
+
+      <View pointerEvents="box-none" className="absolute bottom-3 left-3 flex space-y-2">
+        <Link push href={`/layers`} asChild>
+          <TouchableOpacity
+            onPress={() => increment()}
+            activeOpacity={0.8}
+            className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"
+          >
+            <Icon icon={Layers} size={20} />
+          </TouchableOpacity>
+        </Link>
+        <Link push href={`/filters`} asChild>
+          <TouchableOpacity
+            onPress={() => increment()}
+            activeOpacity={0.8}
+            className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"
+          >
+            <Icon icon={Settings2} size={20} />
+          </TouchableOpacity>
+        </Link>
+      </View>
+    </View>
+  )
+}
+
+function MapView() {
+  const router = useRouter()
+  const increment = useFeedbackActivity((s) => s.increment)
+  const [activeSpotId, setActiveSpotId] = React.useState<string | null>(null)
+  const handleClosePreview = React.useCallback(() => setActiveSpotId(null), [])
   const { me } = useMe()
+  const { mutate: updateUser } = api.user.update.useMutation()
   const layers = useMapLayers((s) => s.layers)
   const isDark = useColorScheme() === "dark"
   const [clusters, setClusters] = React.useState<Cluster[] | null>(null)
 
-  const [activeSpotId, setActiveSpotId] = React.useState<string | null>(null)
   const filters = useMapFilters((s) => s.filters)
   const camera = React.useRef<Camera>(null)
   const mapRef = React.useRef<MapType>(null)
@@ -52,8 +101,6 @@ export default function MapScreen() {
 
   const [isLoaded, setIsLoaded] = React.useState(false)
   const [users, setUsers] = React.useState<UserCluster[] | null>(null)
-
-  const { mutate: updateUser } = api.user.update.useMutation()
 
   const handleSetUserLocation = async () => {
     try {
@@ -75,7 +122,6 @@ export default function MapScreen() {
       console.log("oops -  setting location")
     }
   }
-
   React.useEffect(() => {
     ;(async () => {
       try {
@@ -154,6 +200,7 @@ export default function MapScreen() {
               padding: { paddingBottom: activeSpotId ? 430 : 0, paddingLeft: 0, paddingRight: 0, paddingTop: 0 },
             })
             if (!point.properties.cluster) {
+              increment()
               setActiveSpotId(point.properties.id)
             }
           }}
@@ -209,7 +256,10 @@ export default function MapScreen() {
             <MarkerView key={user.id} allowOverlap coordinate={point.geometry.coordinates}>
               <TouchableOpacity
                 activeOpacity={0.7}
-                onPress={() => router.push(`/(home)/(index)/${user.username}/(profile)`)}
+                onPress={() => {
+                  increment()
+                  router.push(`/(home)/(index)/${user.username}/(profile)`)
+                }}
                 className="sq-8 flex items-center justify-center overflow-hidden rounded-full border border-purple-100 bg-purple-500"
               >
                 {user.avatar ? (
@@ -232,16 +282,12 @@ export default function MapScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [users, layers.shouldShowUsers],
   )
-  // const filterCount = (filters.isPetFriendly ? 1 : 0) + (filters.isUnverified ? 1 : 0) + (filters.types.length > 0 ? 1 : 0)
-
   return (
-    <View className="flex-1">
-      <RegisterCheck />
-      <FeedbackCheck />
+    <>
       <Map
         onLayout={handleSetUserLocation}
         onMapIdle={onMapMove}
-        onPress={() => setActiveSpotId(null)}
+        onPress={handleClosePreview}
         ref={mapRef}
         styleURL={
           layers.layer === "rain" || layers.layer === "temp"
@@ -278,54 +324,14 @@ export default function MapScreen() {
           camera.current?.setCamera({ animationDuration: 600, zoomLevel: 14, centerCoordinate: center })
         }}
       />
-
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() => router.push("/new/")}
-        style={{ transform: [{ translateX: -26 }] }}
-        className="bg-primary absolute bottom-3 left-1/2 rounded-full p-4 "
-      >
-        <Icon icon={PlusCircle} size={20} color="white" />
-      </TouchableOpacity>
-
-      <View pointerEvents="box-none" className="absolute bottom-3 left-3 flex space-y-2">
-        <Link push href={`/layers`} asChild>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"
-          >
-            <Icon icon={Layers} size={20} />
-            {/* {Object.values(layers).filter(Boolean).length > 0 && (
-              <View className="sq-5 bg-background dark:bg-background-dark absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-700">
-                <Text className="text-xs">{Object.values(layers).filter(Boolean).length}</Text>
-              </View>
-            )} */}
-          </TouchableOpacity>
-        </Link>
-        <Link push href={`/filters`} asChild>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"
-          >
-            <Icon icon={Settings2} size={20} />
-            {/* {filterCount > 0 && (
-              <View className="sq-5 bg-background dark:bg-background-dark absolute -right-1 -top-1 flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-700">
-                <Text className="text-xs ">{filterCount}</Text>
-              </View>
-            )} */}
-          </TouchableOpacity>
-        </Link>
-      </View>
-
       <TouchableOpacity
         onPress={handleSetUserLocation}
         className="sq-12 bg-background dark:bg-background-dark absolute bottom-3 right-3 flex flex-row items-center justify-center rounded-full"
       >
         <Icon icon={Navigation} size={20} />
       </TouchableOpacity>
-
-      {activeSpotId && <SpotPreview id={activeSpotId} onClose={() => setActiveSpotId(null)} />}
-    </View>
+      {activeSpotId && <SpotPreview id={activeSpotId} onClose={handleClosePreview} />}
+    </>
   )
 }
 

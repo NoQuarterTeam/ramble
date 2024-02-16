@@ -3,9 +3,11 @@ import { TouchableOpacity, useColorScheme, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import { useRouter } from "expo-router"
 import { ChevronDown, PlusCircle } from "lucide-react-native"
+import { usePostHog } from "posthog-react-native"
 
 import { join, type SpotListSort, useDisclosure } from "@ramble/shared"
 
+import { useFeedbackActivity } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { SpotItem } from "~/components/SpotItem"
@@ -17,7 +19,6 @@ import { api } from "~/lib/api"
 import { height, isTablet, width } from "~/lib/device"
 import { useAsyncStorage } from "~/lib/hooks/useAsyncStorage"
 import { useMe } from "~/lib/hooks/useMe"
-import { usePostHog } from "posthog-react-native"
 
 const SORT_OPTIONS: { [key in SpotListSort]: string } = {
   latest: "latest",
@@ -39,6 +40,7 @@ export default function SpotsScreen() {
     setSpots(initialSpots)
   }, [initialSpots])
 
+  const increment = useFeedbackActivity((s) => s.increment)
   const utils = api.useUtils()
 
   const handleLoadMore = React.useCallback(async () => {
@@ -57,7 +59,13 @@ export default function SpotsScreen() {
     <TabView
       title={
         isReady ? (
-          <TouchableOpacity onPress={sortProps.onOpen} className="flex flex-row items-center">
+          <TouchableOpacity
+            onPress={() => {
+              sortProps.onOpen()
+              increment()
+            }}
+            className="flex flex-row items-center"
+          >
             <BrandHeading className="py-2 text-4xl">{SORT_OPTIONS[sort]}</BrandHeading>
             <Icon icon={ChevronDown} size={20} color="primary" />
           </TouchableOpacity>
@@ -66,7 +74,12 @@ export default function SpotsScreen() {
         )
       }
       rightElement={
-        <TouchableOpacity onPress={() => router.push(`/new/`)}>
+        <TouchableOpacity
+          onPress={() => {
+            router.push(`/new/`)
+            increment()
+          }}
+        >
           <Icon icon={PlusCircle} />
         </TouchableOpacity>
       }
