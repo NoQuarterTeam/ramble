@@ -13,10 +13,10 @@ import { Button } from "~/components/ui/Button"
 import { Spinner } from "~/components/ui/Spinner"
 import { SpotImageCarousel } from "~/components/ui/SpotImageCarousel"
 import { Text } from "~/components/ui/Text"
-import { VerifiedCard } from "~/components/VerifiedCard"
 import { api } from "~/lib/api"
 import { isTablet, width } from "~/lib/device"
 import { useBackgroundColor } from "~/lib/tailwind"
+import { CreatorCard } from "./CreatorCard"
 
 const cardHeight = 430
 export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }) {
@@ -102,7 +102,7 @@ export function SpotPreview({ id, onClose }: { id: string; onClose: () => void }
               images={spot.images}
             />
           </View>
-          <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}</View>
+          <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <CreatorCard creator={spot.creator} />}</View>
         </View>
       )}
 

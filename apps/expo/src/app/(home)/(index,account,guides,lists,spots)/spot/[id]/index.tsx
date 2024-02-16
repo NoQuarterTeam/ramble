@@ -40,7 +40,6 @@ import { Heading } from "~/components/ui/Heading"
 import { SpotImageCarousel } from "~/components/ui/SpotImageCarousel"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
-import { VerifiedCard } from "~/components/VerifiedCard"
 import { api } from "~/lib/api"
 import { FULL_WEB_URL } from "~/lib/config"
 import { height, isAndroid, width } from "~/lib/device"
@@ -49,6 +48,7 @@ import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { ScreenView } from "~/components/ui/ScreenView"
+import { CreatorCard } from "~/components/CreatorCard"
 
 export default function SpotDetailScreen() {
   const { me } = useMe()
@@ -174,20 +174,9 @@ export default function SpotDetailScreen() {
                 <Text className="text-sm">{displayRating(data.rating._avg.rating)}</Text>
               </View>
             </View>
-            <View className="flex flex-row">
-              <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={me ? () => router.push(`/${tab}/${spot.creator.username}/(profile)`) : () => router.push("/login")}
-              >
-                <Text className="text-sm underline">
-                  {spot.creator.firstName} {spot.creator.lastName}
-                </Text>
-              </TouchableOpacity>
-              <Text className="text-sm"> added on {dayjs(spot.createdAt).format("DD/MM/YYYY")}</Text>
-            </View>
           </View>
           <View className="space-y-1">
-            <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}</View>
+            <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <CreatorCard creator={spot.creator} />}</View>
             <View>
               <TranslateSpotDescription
                 spot={spot}
@@ -195,7 +184,8 @@ export default function SpotDetailScreen() {
                 translatedDescription={data.translatedDescription}
               />
             </View>
-            <Text className="font-400-italic text-sm">{spot.address}</Text>
+            <Text className="text-sm">Added on {dayjs(spot.createdAt).format("DD/MM/YYYY")}</Text>
+            {spot.address && <Text className="font-400-italic text-sm">{spot.address}</Text>}
             {spot.amenities && (
               <View className="flex flex-row flex-wrap gap-2">
                 {Object.entries(AMENITIES).map(([key, value]) => {
