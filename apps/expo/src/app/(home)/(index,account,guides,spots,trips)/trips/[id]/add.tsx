@@ -24,6 +24,7 @@ import { SpotTypeBadge } from "~/components/SpotTypeBadge"
 import { SpotImageCarousel } from "~/components/ui/SpotImageCarousel"
 import { width, isTablet } from "~/lib/device"
 import { StatusBar } from "expo-status-bar"
+import { usePostHog } from "posthog-react-native"
 
 type Cluster = RouterOutputs["spot"]["clusters"][number]
 
@@ -117,8 +118,10 @@ export default function NewItemScreen() {
     [clusters],
   )
 
+  const posthog = usePostHog()
   const { mutate, isLoading: createLoading } = api.trip.saveStop.useMutation({
-    onSuccess: () => {
+    onSuccess: (data) => {
+      posthog?.capture("trip stop created", { place: data.name })
       void utils.trip.detail.refetch()
       router.back()
     },
@@ -272,15 +275,16 @@ export function AddTripSpotPreview({ spotId, tripId, onClose }: { spotId: string
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [spot])
 
+  const posthog = usePostHog()
   const { mutate } = api.trip.saveSpot.useMutation({
-    onSuccess: () => void utils.trip.detail.refetch(),
+    onSuccess: (data) => {
+      posthog?.capture("trip spot created", { spotId: data.spotId })
+      void utils.trip.detail.refetch()
+      router.back()
+    },
   })
 
-  const handleAddToTrip = () => {
-    mutate({ tripId: tripId, spotId })
-    onClose()
-    router.back()
-  }
+  const handleAddToTrip = () => mutate({ tripId: tripId, spotId })
 
   return (
     <Animated.View
