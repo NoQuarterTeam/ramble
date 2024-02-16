@@ -6,7 +6,7 @@ import { Map } from "~/components/Map"
 
 import { Camera, UserLocation, type MapView as MapType, StyleURL, MapState } from "@rnmapbox/maps"
 import { displayRating, join } from "@ramble/shared"
-import { TouchableOpacity, View, useColorScheme } from "react-native"
+import { Keyboard, TouchableOpacity, View, useColorScheme } from "react-native"
 import { RouterOutputs, api } from "~/lib/api"
 import { Spinner } from "~/components/ui/Spinner"
 import { Icon } from "~/components/Icon"
@@ -201,6 +201,7 @@ export default function NewItemScreen() {
                     key={i}
                     onPress={() => {
                       setSearch("")
+                      Keyboard.dismiss()
                       setCoords(place.center)
                       camera.current?.setCamera({
                         zoomLevel: 9,
