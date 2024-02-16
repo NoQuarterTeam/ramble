@@ -7,6 +7,7 @@ import { createImageUrl, displayRating, displaySaved, type SpotItemType } from "
 import { api } from "~/lib/api"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
+import { useFeedbackActivity } from "./FeedbackCheck"
 import { Icon } from "./Icon"
 import { SpotIcon } from "./SpotIcon"
 import { OptimizedImage } from "./ui/OptimisedImage"
@@ -21,14 +22,17 @@ export function SpotItem({ spot }: Props) {
   const router = useRouter()
   const tab = useTabSegment()
   const isDark = useColorScheme() === "dark"
-
+  const increment = useFeedbackActivity((s) => s.increment)
   return (
     <TouchableOpacity
       onPressIn={() => {
         void utils.spot.detail.prefetch({ id: spot.id })
       }}
       className="w-full"
-      onPress={() => router.push(`/${tab}/spot/${spot.id}`)}
+      onPress={() => {
+        increment()
+        router.push(`/${tab}/spot/${spot.id}`)
+      }}
       activeOpacity={0.8}
     >
       <View className="relative h-[250px] w-full">

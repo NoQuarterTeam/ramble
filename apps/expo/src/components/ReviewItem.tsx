@@ -61,7 +61,7 @@ export function ReviewItem({
     <View className="rounded-xs space-y-2 border border-gray-200 p-4 dark:border-gray-700">
       <View className="flex flex-row justify-between">
         <TouchableOpacity
-          onPress={me ? () => router.push(`/${tab}/${review.user.username}/(profile)`) : () => router.push("/login")}
+          onPress={() => router.push(`/${tab}/${review.user.username}/(profile)`)}
           activeOpacity={0.8}
           className="flex flex-row space-x-2"
         >

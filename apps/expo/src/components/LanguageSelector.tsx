@@ -1,12 +1,12 @@
 import { Modal, ScrollView, TouchableOpacity } from "react-native"
 import { Check } from "lucide-react-native"
+import { usePostHog } from "posthog-react-native"
 
 import { languages, type UseDisclosure } from "@ramble/shared"
 
 import { Icon } from "./Icon"
 import { ModalView } from "./ui/ModalView"
 import { Text } from "./ui/Text"
-import { usePostHog } from "posthog-react-native"
 
 interface Props {
   modalProps: UseDisclosure

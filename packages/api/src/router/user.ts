@@ -37,10 +37,12 @@ export const userRouter = createTRPCRouter({
     if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
     return { ...user, isFollowedByMe: user.followers && user.followers.length > 0 }
   }),
-  hasSubmittedFeedback: publicProcedure.query(async ({ ctx }) => {
-    if (!ctx.user) return true
-    const feedback = await ctx.prisma.feedback.findFirst({ where: { userId: ctx.user.id }, select: { id: true } })
-    return !!feedback
+  /**
+   * @deprecated Using local storage to track activity count
+   */
+  hasSubmittedFeedback: publicProcedure.query(() => {
+    // leave until a few versions later
+    return true
   }),
   hasCreatedSpot: protectedProcedure.query(async ({ ctx }) => {
     const spot = await ctx.prisma.spot.findFirst({ where: { creatorId: ctx.user.id }, select: { id: true } })

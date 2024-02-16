@@ -4,6 +4,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-na
 import { SafeAreaView } from "react-native-safe-area-context"
 import { useQuery } from "@tanstack/react-query"
 import { Search, X } from "lucide-react-native"
+import { usePostHog } from "posthog-react-native"
 
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
@@ -11,7 +12,6 @@ import { Spinner } from "~/components/ui/Spinner"
 import { FULL_WEB_URL } from "~/lib/config"
 import { isAndroid, width } from "~/lib/device"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
-import { usePostHog } from "posthog-react-native"
 
 export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) => void }) {
   const [search, setSearch] = React.useState("")
