@@ -2,6 +2,7 @@ import { FlashList } from "@shopify/flash-list"
 import { router } from "expo-router"
 import { PlusCircle } from "lucide-react-native"
 import { TouchableOpacity, View } from "react-native"
+import { useFeedbackActivity } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { TripItem } from "~/components/TripItem"
@@ -15,7 +16,7 @@ import { useMe } from "~/lib/hooks/useMe"
 export default function TripsScreen() {
   const { me } = useMe()
   const { data: trips, isLoading } = api.trip.mine.useQuery(undefined, { enabled: !!me })
-
+  const increment = useFeedbackActivity((s) => s.increment)
   if (!me)
     return (
       <TabView title="trips">
@@ -26,7 +27,12 @@ export default function TripsScreen() {
     <TabView
       title="trips"
       rightElement={
-        <TouchableOpacity onPress={() => router.push("/(home)/(trips)/trips/new")}>
+        <TouchableOpacity
+          onPress={() => {
+            increment()
+            router.push("/(home)/(trips)/trips/new")
+          }}
+        >
           <Icon icon={PlusCircle} />
         </TouchableOpacity>
       }

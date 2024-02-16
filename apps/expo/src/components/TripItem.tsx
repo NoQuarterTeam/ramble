@@ -8,6 +8,7 @@ import { createImageUrl } from "@ramble/shared"
 import { Icon } from "./Icon"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
+import { useFeedbackActivity } from "./FeedbackCheck"
 
 interface Props {
   trip: Pick<Trip, "id" | "name"> & {
@@ -17,9 +18,13 @@ interface Props {
 
 export function TripItem({ trip }: Props) {
   const router = useRouter()
+  const increment = useFeedbackActivity((s) => s.increment)
   return (
     <TouchableOpacity
-      onPress={() => router.push(`/(home)/(trips)/trips/${trip.id}`)}
+      onPress={() => {
+        increment()
+        router.push(`/(home)/(trips)/trips/${trip.id}`)
+      }}
       activeOpacity={0.8}
       className="rounded-xs border border-gray-200 p-4 dark:border-gray-700"
     >
