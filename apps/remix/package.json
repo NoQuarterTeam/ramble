@@ -50,7 +50,7 @@
     "@turf/buffer": "6.5.0",
     "@turf/center": "6.5.0",
     "@turf/helpers": "6.5.0",
-    "@vercel/analytics": "1.2.0",
+    "@vercel/analytics": "1.2.1",
     "@vercel/edge": "1.1.1",
     "@vercel/remix": "2.6.0",
     "@vercel/remix-run-dev": "2.6.0",
