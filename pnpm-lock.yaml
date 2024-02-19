@@ -358,8 +358,8 @@ importers:
         specifier: 6.5.0
         version: 6.5.0(patch_hash=s37llybtaw4egw46iemlnuvpdu)
       '@vercel/analytics':
-        specifier: 1.2.0
-        version: 1.2.0(react@18.2.0)
+        specifier: 1.2.1
+        version: 1.2.1(react@18.2.0)
       '@vercel/edge':
         specifier: 1.1.1
         version: 1.1.1
@@ -7885,8 +7885,8 @@ packages:
   /@vanilla-extract/private@1.0.3:
     resolution: {integrity: sha512-17kVyLq3ePTKOkveHxXuIJZtGYs+cSoev7BlP+Lf4916qfDhk/HBjvlYDe8egrea7LNPHKwSZJK/bzZC+Q6AwQ==}
 
-  /@vercel/analytics@1.2.0(react@18.2.0):
-    resolution: {integrity: sha512-Q9hduY6+i73Is1m57Y3OlawleeYVi4cvuh/0j6IwmSndMOE4+BKkMwjnwz+7xnqfZCanipIG6+q+zHalH9X0Zg==}
+  /@vercel/analytics@1.2.1(react@18.2.0):
+    resolution: {integrity: sha512-ZB5gDPCQvHu0DcBbywIwMm5aY9mTV8mBl7Mmk8QD84JqBnuYbsNCDnnDuzblNjd82tDtRjAqruZ0mzNm6MAWpA==}
     peerDependencies:
       next: '>= 13'
       react: ^18 || ^19
