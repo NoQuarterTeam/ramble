@@ -28,6 +28,7 @@ export function LanguageSelector({ modalProps, ...props }: Props) {
       <ModalView title="select language" onBack={modalProps.onClose}>
         <ScrollView
           keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="interactive"
           contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
         >

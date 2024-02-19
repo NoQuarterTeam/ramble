@@ -24,6 +24,7 @@ export default function SpotReportTypeScreen() {
     <ReportSpotModalView title="Type">
       <ScrollView
         keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive"
         className="space-y-2"
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}

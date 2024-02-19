@@ -83,6 +83,7 @@ export const FeedbackCheck = React.memo(function _FeedbackCheck() {
       <View className="flex-1">
         <ScrollView
           keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="interactive"
           contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}
           showsVerticalScrollIndicator={false}
           className="bg-background dark:bg-background-dark flex-1 flex-grow px-4 pt-4"

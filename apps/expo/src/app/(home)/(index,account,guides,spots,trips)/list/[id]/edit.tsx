@@ -38,6 +38,7 @@ export default function EditListScreen() {
     <ModalView title="edit list">
       <ScrollView
         keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive"
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
       >

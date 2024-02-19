@@ -106,6 +106,7 @@ export default function VanScreen() {
         <AvoidSoftInputView>
           <ScrollView
             keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="interactive"
             contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}
             showsVerticalScrollIndicator={false}
           >

@@ -33,6 +33,7 @@ export default function SpotReportAmenitiesScreen() {
     <ReportSpotModalView title="amenities">
       <ScrollView
         keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive"
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
         className="space-y-2"

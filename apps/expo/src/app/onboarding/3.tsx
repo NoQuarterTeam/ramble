@@ -56,6 +56,7 @@ export default function OnboardingStep3Screen() {
           <AvoidSoftInputView>
             <ScrollView
               keyboardShouldPersistTaps="handled"
+              keyboardDismissMode="interactive"
               contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}
               showsVerticalScrollIndicator={false}
             >

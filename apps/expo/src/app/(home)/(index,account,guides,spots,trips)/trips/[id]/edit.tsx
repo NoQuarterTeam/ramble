@@ -1,4 +1,5 @@
 import { useLocalSearchParams, useRouter } from "expo-router"
+import { ScrollView } from "react-native"
 import { TripForm } from "~/components/TripForm"
 import { ModalView } from "~/components/ui/ModalView"
 import { Text } from "~/components/ui/Text"
@@ -22,11 +23,13 @@ export default function EditTrip() {
 
   return (
     <ModalView title="edit trip">
-      {tripLoading ? null : !data ? (
-        <Text>List not found</Text>
-      ) : (
-        <TripForm trip={data} isLoading={isLoading} error={error} onUpdate={(data) => mutate({ ...data, id })} />
-      )}
+      <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled" keyboardDismissMode="interactive">
+        {tripLoading ? null : !data ? (
+          <Text>List not found</Text>
+        ) : (
+          <TripForm trip={data} isLoading={isLoading} error={error} onUpdate={(data) => mutate({ ...data, id })} />
+        )}
+      </ScrollView>
     </ModalView>
   )
 }

@@ -112,6 +112,7 @@ function ReportFlow({ spot }: Props) {
   return (
     <ScrollView
       keyboardShouldPersistTaps="handled"
+      keyboardDismissMode="interactive"
       className="flex-1 space-y-4"
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ paddingBottom: 400 }}

@@ -35,6 +35,7 @@ export default function OnboardingStep1Screen() {
             <ScrollView
               contentContainerStyle={{ flexGrow: 1 }}
               keyboardShouldPersistTaps="handled"
+              keyboardDismissMode="interactive"
               showsVerticalScrollIndicator={false}
               className="space-y-4"
             >

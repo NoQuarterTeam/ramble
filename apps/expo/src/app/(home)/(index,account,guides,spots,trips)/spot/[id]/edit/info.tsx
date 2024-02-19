@@ -35,6 +35,7 @@ export default function EditSpotOptionsScreen() {
     <EditSpotModalView title="some info">
       <ScrollView
         keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive"
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
       >

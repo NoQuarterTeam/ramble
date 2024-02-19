@@ -25,7 +25,12 @@ export default function NewListScreen() {
 
   return (
     <ModalView title="new list">
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive"
+      >
         <ListForm onCreate={handleSubmit} isLoading={isLoading} error={error} />
       </ScrollView>
     </ModalView>

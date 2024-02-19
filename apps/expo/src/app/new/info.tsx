@@ -28,6 +28,7 @@ export default function NewSpotInfoScreen() {
     <NewSpotModalView title="some info">
       <ScrollView
         keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive"
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
       >

@@ -27,6 +27,7 @@ export default function NewReviewScreen() {
     <ModalView title="new review">
       <ScrollView
         keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive"
         contentContainerStyle={{ flexGrow: 1 }}
         showsVerticalScrollIndicator={false}
       >

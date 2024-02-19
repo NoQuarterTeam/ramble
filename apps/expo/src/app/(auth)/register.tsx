@@ -55,6 +55,7 @@ export default function RegisterScreen() {
       <FormProvider {...form}>
         <ScrollView
           keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="interactive"
           contentContainerStyle={{ flexGrow: 1, paddingBottom: 100, justifyContent: "space-between" }}
           showsVerticalScrollIndicator={false}
         >
