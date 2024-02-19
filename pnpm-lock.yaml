@@ -397,8 +397,8 @@ importers:
         specifier: 5.2.2
         version: 5.2.2
       lucide-react:
-        specifier: 0.325.0
-        version: 0.325.0(react@18.2.0)
+        specifier: 0.331.0
+        version: 0.331.0(react@18.2.0)
       mapbox-gl:
         specifier: 3.1.2
         version: 3.1.2
@@ -13274,8 +13274,8 @@ packages:
       react-native-svg: 14.1.0(react-native@0.73.4)(react@18.2.0)
     dev: false
 
-  /lucide-react@0.325.0(react@18.2.0):
-    resolution: {integrity: sha512-/H6IPtPMQUwXjHTFylCYBq/j8J3AJKG5Uil3mcm1E58wKkCfoKVzJH7toZU3U20wJrL7dP51dNX3yLgAPod+qQ==}
+  /lucide-react@0.331.0(react@18.2.0):
+    resolution: {integrity: sha512-CHFJ0ve9vaZ7bB2VRAl27SlX1ELh6pfNC0jS96qGpPEEzLkLDGq4pDBFU8RhOoRMqsjXqTzLm9U6bZ1OcIHq7Q==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
