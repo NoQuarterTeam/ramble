@@ -71,6 +71,8 @@ export const tripRouter = createTRPCRouter({
       where: { id: input.id, users: { some: { id: ctx.user.id } } },
       select: {
         name: true,
+        startDate: true,
+        endDate: true,
         items: {
           orderBy: { order: "asc" },
           select: {

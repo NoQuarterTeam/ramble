@@ -2,7 +2,7 @@ import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import * as React from "react"
 import { Image } from "expo-image"
 import * as Haptics from "expo-haptics"
-import { TouchableOpacity, View } from "react-native"
+import { ActivityIndicator, TouchableOpacity, View } from "react-native"
 import DraggableFlatList, { RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlist"
 import * as Location from "expo-location"
 import { Map } from "~/components/Map"
@@ -10,7 +10,7 @@ import { Text } from "~/components/ui/Text"
 import { RouterOutputs, api } from "~/lib/api"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createImageUrl } from "@ramble/shared"
+import { createImageUrl } from "@ramble/shared"
 import { Camera, LineLayer, MarkerView, ShapeSource, StyleURL, UserLocation, type MapView as MapType } from "@rnmapbox/maps"
 import { StatusBar } from "expo-status-bar"
 import { ChevronLeft, Edit2, Flag, Home, MapPin, PlusCircle } from "lucide-react-native"
@@ -20,6 +20,7 @@ import { SpotIcon } from "~/components/SpotIcon"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { SpotMarker } from "~/components/SpotMarker"
 import { useActionSheet } from "@expo/react-native-action-sheet"
+import dayjs from "dayjs"
 
 export default function TripDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
@@ -77,28 +78,39 @@ export default function TripDetailScreen() {
   return (
     <View className="flex-1">
       <StatusBar style="light" />
-      {!isLoading && (
-        <Map ref={mapRef} styleURL={StyleURL.SatelliteStreet} compassPosition={{ top: 54, right: 12 }}>
-          {data?.line && (
-            <ShapeSource id="directions" shape={data.line.geometry}>
-              <LineLayer id="line" style={{ lineDasharray: [0.5, 2], lineColor: "white", lineCap: "round", lineWidth: 2 }} />
-            </ShapeSource>
-          )}
-          {/* {data?.directions && (
+
+      <Map ref={mapRef} styleURL={StyleURL.SatelliteStreet} compassPosition={{ top: 54, right: 12 }}>
+        {data?.line && (
+          <ShapeSource id="directions" shape={data.line.geometry}>
+            <LineLayer id="line" style={{ lineDasharray: [0.5, 2], lineColor: "white", lineCap: "round", lineWidth: 2 }} />
+          </ShapeSource>
+        )}
+        {/* {data?.directions && (
             <ShapeSource id="directions" shape={data.directions.geometry}>
               <LineLayer id="line" style={{ lineDasharray: [0.5, 2], lineColor: "white", lineCap: "round", lineWidth: 2 }} />
             </ShapeSource>
           )} */}
-          {itemMarkers}
-          <UserLocation />
+        {itemMarkers}
+        <UserLocation />
 
-          <Camera
-            ref={camera}
-            allowUpdates
-            pitch={0}
-            heading={0}
-            defaultSettings={
-              center
+        <Camera
+          ref={camera}
+          allowUpdates
+          pitch={0}
+          heading={0}
+          defaultSettings={
+            center
+              ? {
+                  padding: {
+                    paddingTop: insets.top + 8 + 32,
+                    paddingBottom: LIST_HEIGHT,
+                    paddingLeft: 50,
+                    paddingRight: 50,
+                  },
+                  centerCoordinate: center,
+                  zoomLevel: 5,
+                }
+              : bounds
                 ? {
                     padding: {
                       paddingTop: insets.top + 8 + 32,
@@ -106,29 +118,17 @@ export default function TripDetailScreen() {
                       paddingLeft: 50,
                       paddingRight: 50,
                     },
-                    centerCoordinate: center,
                     zoomLevel: 5,
+                    bounds: { sw: [bounds[0]!, bounds[1]!], ne: [bounds[2]!, bounds[3]!] },
                   }
-                : bounds
-                  ? {
-                      padding: {
-                        paddingTop: insets.top + 8 + 32,
-                        paddingBottom: LIST_HEIGHT,
-                        paddingLeft: 50,
-                        paddingRight: 50,
-                      },
-                      bounds: { sw: [bounds[0]!, bounds[1]!], ne: [bounds[2]!, bounds[3]!] },
-                    }
-                  : {
-                      zoomLevel: 5,
-                      centerCoordinate: userLocation
-                        ? [userLocation.longitude, userLocation.latitude]
-                        : [INITIAL_LONGITUDE, INITIAL_LATITUDE],
-                    }
-            }
-          />
-        </Map>
-      )}
+                : {
+                    zoomLevel: 5,
+                    centerCoordinate: userLocation ? [userLocation.longitude, userLocation.latitude] : undefined,
+                  }
+          }
+        />
+      </Map>
+
       <View style={{ top: insets.top + 8 }} className="absolute left-0 right-0 flex w-full flex-row justify-between px-4">
         <TouchableOpacity
           onPress={router.back}
@@ -137,6 +137,13 @@ export default function TripDetailScreen() {
         >
           <Icon icon={ChevronLeft} />
         </TouchableOpacity>
+        {isLoading && (
+          <View className="absolute left-0 right-0 top-0 flex items-center justify-center">
+            <View className="bg-background dark:bg-background-dark flex h-10 w-10 items-center justify-center rounded-full">
+              <ActivityIndicator />
+            </View>
+          </View>
+        )}
 
         <Link push href={`/${tab}/trips/${id}/edit`} asChild>
           <TouchableOpacity
@@ -213,7 +220,7 @@ function TripList({
       }}
       dragItemOverflow
       ListHeaderComponent={<ListHeader trip={trip} />}
-      ListFooterComponent={ListFooter}
+      ListFooterComponent={<ListFooter trip={trip} />}
       className="py-3"
       style={{ height: LIST_HEIGHT }}
       contentContainerStyle={{ paddingRight: 60, paddingLeft: 12 }}
@@ -377,19 +384,19 @@ function ListHeader({ trip }: { trip: RouterOutputs["trip"]["detail"]["trip"] })
     <View className="flex h-full items-center justify-center">
       <View
         style={{ width: HEADER_FOOTER_WIDTH, height: HEADER_FOOTER_WIDTH }}
-        className="bg-background dark:bg-background-dark flex items-center justify-center space-y-1 rounded-full border-2 border-gray-700 p-2"
+        className="bg-background dark:bg-background-dark flex items-center justify-center space-y-0 rounded-full border-2 border-gray-700 p-2"
       >
         <Icon icon={Home} size={16} />
-        <Text className="text-sm" numberOfLines={2}>
+        <Text className="text-base" numberOfLines={2}>
           {trip.name}
         </Text>
-        {/* <Text className="text-xs">01 Jan 2025</Text> */}
+        <Text className="text-xxs">{dayjs(trip.startDate).format("D MMM YY")}</Text>
       </View>
     </View>
   )
 }
 
-function ListFooter() {
+function ListFooter({ trip }: { trip: RouterOutputs["trip"]["detail"]["trip"] }) {
   const { id } = useLocalSearchParams<{ id: string }>()
   return (
     <View style={{ width: HEADER_FOOTER_WIDTH }} className="flex h-full flex-row items-center space-x-2 pl-2">
@@ -403,8 +410,8 @@ function ListFooter() {
           style={{ width: HEADER_FOOTER_WIDTH, height: HEADER_FOOTER_WIDTH }}
           className="bg-background dark:bg-background-dark flex items-center justify-center space-y-2 rounded-full border-2 border-gray-700 p-2"
         >
-          <Icon icon={Flag} />
-          {/* <Text className="text-center text-xs">01 Mar 2025</Text> */}
+          <Icon icon={Flag} size={16} />
+          <Text className="text-xxs">{dayjs(trip.endDate).format("D MMM YY")}</Text>
         </View>
       </View>
     </View>
