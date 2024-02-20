@@ -28,7 +28,6 @@ import { toast } from "~/components/ui/Toast"
 import { api, AUTH_TOKEN } from "~/lib/api"
 import { IS_DEV, UPDATE_ID, VERSION } from "~/lib/config"
 import { useMe } from "~/lib/hooks/useMe"
-import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 export default function AccountScreen() {
   const { me } = useMe()
@@ -157,8 +156,8 @@ export default function AccountScreen() {
 
 function ProfileLink({ children, to, icon }: { to: string; children: string; icon: LucideIcon }) {
   const router = useRouter()
-  const tab = useTabSegment()
-  const path = `/${tab}/account/${to}` as Href<AllRoutes>
+
+  const path = `/(home)/(account)/account/${to}` as Href<AllRoutes>
   return (
     <TouchableOpacity
       activeOpacity={0.8}

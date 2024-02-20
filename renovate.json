@@ -36,6 +36,7 @@
     "@expo/config-plugins",
     "@react-email/components",
     "@react-native-async-storage/async-storage",
+    "@react-native-community/datetimepicker",
     "@sentry/react-native",
     "lucide-react-native",
     "@shopify/flash-list",

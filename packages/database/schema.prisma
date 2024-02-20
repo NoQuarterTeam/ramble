@@ -356,9 +356,10 @@ model Feedback {
 }
 
 model Trip {
-  id        String @id @default(uuid())
+  id        String   @id @default(uuid())
   name      String
-  creator   User   @relation(name: "CreatedTrips", fields: [creatorId], references: [id])
+  startDate DateTime @db.Date
+  creator   User     @relation(name: "CreatedTrips", fields: [creatorId], references: [id])
   creatorId String
 
   users User[]     @relation(name: "UserTrips")

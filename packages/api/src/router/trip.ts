@@ -24,8 +24,18 @@ export const tripRouter = createTRPCRouter({
     .mutation(({ ctx, input: { id, ...data } }) => {
       return ctx.prisma.trip.update({ where: { id }, data })
     }),
-  delete: protectedProcedure.input(z.object({ id: z.string() })).mutation(({ ctx, input }) => {
-    return ctx.prisma.trip.delete({ where: { id: input.id } })
+  delete: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
+    await ctx.prisma.$transaction(async (tx) => {
+      const tripItems = await tx.tripItem.findMany({
+        where: { tripId: input.id },
+        select: { id: true, stop: { select: { id: true } } },
+      })
+      const tripStopItemIds = tripItems.filter((i) => !!i.stop).map((item) => item.stop!.id)
+      await tx.tripStop.deleteMany({ where: { id: { in: tripStopItemIds } } })
+      await tx.tripItem.deleteMany({ where: { tripId: input.id } })
+      await tx.trip.delete({ where: { id: input.id, creatorId: { equals: ctx.user.id } } })
+    })
+    return true
   }),
   info: protectedProcedure.input(z.object({ id: z.string() })).query(({ ctx, input }) => {
     const trip = ctx.prisma.trip.findUnique({ where: { id: input.id, users: { some: { id: ctx.user.id } } } })
@@ -98,11 +108,8 @@ export const tripRouter = createTRPCRouter({
         newOrder = tripItems?.length || 0
       }
       const image = await getPlaceUnsplashImage(data.name)
-      console.log(image)
-
       return ctx.prisma.$transaction(async (tx) => {
         const tripItem = await tx.tripItem.create({ data: { tripId, creatorId: ctx.user.id, order: newOrder } })
-
         return tx.tripStop.create({ data: { ...data, tripItemId: tripItem.id, image: image } })
       })
     }),

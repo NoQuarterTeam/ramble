@@ -152,7 +152,7 @@ export default function NewItemScreen() {
   const { mutate, isLoading: createLoading } = api.trip.saveStop.useMutation({
     onSuccess: (data) => {
       posthog?.capture("trip stop created", { place: data.name })
-      void utils.trip.detail.refetch()
+      void utils.trip.detail.refetch({ id })
       router.back()
     },
   })
@@ -295,7 +295,7 @@ export default function NewItemScreen() {
 export function AddTripSpotPreview({ spotId, tripId, onClose }: { spotId: string; tripId: string; onClose: () => void }) {
   const { data: spot, isLoading } = api.spot.mapPreview.useQuery({ id: spotId })
   const router = useRouter()
-
+  const { id } = useLocalSearchParams<{ id: string }>()
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
   const utils = api.useUtils()
@@ -309,7 +309,7 @@ export function AddTripSpotPreview({ spotId, tripId, onClose }: { spotId: string
   const { mutate } = api.trip.saveSpot.useMutation({
     onSuccess: (data) => {
       posthog?.capture("trip spot created", { spotId: data.spotId })
-      void utils.trip.detail.refetch()
+      void utils.trip.detail.refetch({ id })
       router.back()
     },
   })
