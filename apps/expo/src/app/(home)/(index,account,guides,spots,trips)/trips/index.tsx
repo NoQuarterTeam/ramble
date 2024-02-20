@@ -1,18 +1,16 @@
-import { TouchableOpacity, View } from "react-native"
+import { ScrollView, TouchableOpacity, View } from "react-native"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { TripItem } from "~/components/TripItem"
-import { Button } from "~/components/ui/Button"
 import { Spinner } from "~/components/ui/Spinner"
-import { api } from "~/lib/api"
-import { isTablet } from "~/lib/device"
+import { RouterOutputs, api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 
-import { FlashList } from "@shopify/flash-list"
 import { useRouter } from "expo-router"
 import { PlusCircle } from "lucide-react-native"
 import { useFeedbackActivity } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
 import { TabView } from "~/components/ui/TabView"
+import { Text } from "~/components/ui/Text"
 
 export default function TripsLayout() {
   const increment = useFeedbackActivity((s) => s.increment)
@@ -28,6 +26,21 @@ export default function TripsLayout() {
         <LoginPlaceholder text="Log in to create a trip" />
       </TabView>
     )
+
+  const groupedTrips = !!!activeLoading
+    ? data?.reduce<{ upcoming: RouterOutputs["trip"]["mine"]; complete: RouterOutputs["trip"]["mine"] }>(
+        (acc, trip) => {
+          if (trip.id === activeTrip?.id) return acc
+          // group into upcoming and past trips
+          const key = trip.startDate > new Date() ? "upcoming" : "complete"
+          if (!acc[key]) acc[key] = []
+          acc[key].push(trip)
+
+          return acc
+        },
+        { upcoming: [], complete: [] },
+      )
+    : undefined
 
   return (
     <TabView
@@ -46,29 +59,35 @@ export default function TripsLayout() {
       {isLoading || activeLoading ? (
         <Spinner />
       ) : !data ? null : (
-        <FlashList
-          showsVerticalScrollIndicator={false}
-          estimatedItemSize={86}
-          numColumns={isTablet ? 2 : undefined}
-          ListEmptyComponent={
-            <View className="space-y-4">
-              {/* <Text className="text-center">Have a trip coming up? Then starting adding spots to make a plan.</Text>
-              <Text className="text-center">
-                Just finished a trip? Add the spots and locations to keep a diary of where you've been!
-              </Text> */}
-              <Button onPress={() => router.push("/(home)/(trips)/trips/new")}>Create a trip</Button>
-            </View>
-          }
-          ListHeaderComponent={activeTrip ? <TripItem isActive trip={activeTrip} /> : null}
-          ListHeaderComponentStyle={{ paddingBottom: 16 }}
-          data={data.filter((t) => t.id !== activeTrip?.id)}
-          ItemSeparatorComponent={() => <View className="h-4" />}
-          renderItem={({ item }) => (
-            <View style={{ width: "100%", paddingHorizontal: isTablet ? 10 : 0 }}>
-              <TripItem trip={item} />
+        <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+          {activeTrip && <TripItem trip={activeTrip} isActive />}
+          {groupedTrips?.upcoming && groupedTrips.upcoming.length > 0 && (
+            <View>
+              <View className="relative flex items-center justify-center">
+                <View className="absolute h-px w-full bg-gray-200 dark:bg-gray-700" />
+                <View className="bg-background dark:bg-background-dark px-2">
+                  <Text className="text-xxs py-3 text-center">UPCOMING</Text>
+                </View>
+              </View>
+              {groupedTrips.upcoming.map((trip) => (
+                <TripItem key={trip.id} trip={trip} />
+              ))}
             </View>
           )}
-        />
+          {groupedTrips?.complete && groupedTrips.complete.length > 0 && (
+            <View>
+              <View className="relative flex items-center justify-center">
+                <View className="absolute h-px w-full bg-gray-200 dark:bg-gray-700" />
+                <View className="bg-background dark:bg-background-dark px-2">
+                  <Text className="text-xxs py-3 text-center">COMPLETE</Text>
+                </View>
+              </View>
+              {groupedTrips.complete.map((trip) => (
+                <TripItem key={trip.id} trip={trip} />
+              ))}
+            </View>
+          )}
+        </ScrollView>
       )}
     </TabView>
   )

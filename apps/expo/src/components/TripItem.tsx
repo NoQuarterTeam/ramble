@@ -33,7 +33,7 @@ export function TripItem({ trip, isActive }: Props) {
       <View className="flex flex-row items-center space-x-2">
         {isActive && (
           <View className="bg-primary flex items-center justify-center rounded-full px-1 py-0.5">
-            <Text className="text-xxs font-600 text-center text-white">ACTIVE</Text>
+            <Text className="text-xxs font-600 text-center text-white">CURRENT</Text>
           </View>
         )}
         <Text className="text-xl">{trip.name}</Text>
