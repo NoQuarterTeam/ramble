@@ -12,28 +12,14 @@ export const tripRouter = createTRPCRouter({
   mine: protectedProcedure.query(({ ctx }) => {
     return ctx.prisma.trip.findMany({
       where: { users: { some: { id: ctx.user.id } } },
-      orderBy: { createdAt: "desc" },
-      include: { items: true, creator: true },
-    })
-  }),
-  active: protectedProcedure.query(({ ctx }) => {
-    return ctx.prisma.trip.findMany({
-      where: { startDate: { lt: new Date() }, endDate: { gt: new Date() }, users: { some: { id: ctx.user.id } } },
-      orderBy: { createdAt: "desc" },
-      include: { items: true, creator: true },
-    })
-  }),
-  upcoming: protectedProcedure.query(({ ctx }) => {
-    return ctx.prisma.trip.findMany({
-      where: { startDate: { gt: new Date() }, users: { some: { id: ctx.user.id } } },
       orderBy: { startDate: "desc" },
       include: { items: true, creator: true },
     })
   }),
-  complete: protectedProcedure.query(({ ctx }) => {
-    return ctx.prisma.trip.findMany({
-      where: { endDate: { lt: new Date() }, users: { some: { id: ctx.user.id } } },
-      orderBy: { endDate: "desc" },
+  active: protectedProcedure.query(({ ctx }) => {
+    return ctx.prisma.trip.findFirst({
+      where: { startDate: { lt: new Date() }, endDate: { gt: new Date() }, users: { some: { id: ctx.user.id } } },
+      orderBy: { startDate: "desc" },
       include: { items: true, creator: true },
     })
   }),

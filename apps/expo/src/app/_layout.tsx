@@ -118,9 +118,9 @@ function PrefetchTabs(props: { children: React.ReactNode }) {
     utils.spot.list.prefetch({ skip: 0, sort: "latest" })
     utils.user.profile.prefetch({ username: me.username })
     utils.trip.active.prefetch()
-    utils.trip.upcoming.prefetch()
+    utils.trip.mine.prefetch()
     utils.user.guides.prefetch({ skip: 0 })
-  }, [me, isLoading, utils.spot.list, utils.user.profile, utils.trip.active, utils.user.guides, utils.trip.upcoming])
+  }, [me, isLoading, utils.spot.list, utils.user.profile, utils.trip.active, utils.user.guides, utils.trip.mine])
 
   if (isLoading && !error) return null
 

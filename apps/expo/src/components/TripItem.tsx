@@ -3,7 +3,7 @@ import { useRouter } from "expo-router"
 import { User2 } from "lucide-react-native"
 
 import { type Trip, type User } from "@ramble/database/types"
-import { createImageUrl } from "@ramble/shared"
+import { createImageUrl, join } from "@ramble/shared"
 
 import { Icon } from "./Icon"
 import { OptimizedImage } from "./ui/OptimisedImage"
@@ -15,9 +15,10 @@ interface Props {
   trip: Pick<Trip, "id" | "name" | "startDate" | "endDate"> & {
     creator: Pick<User, "avatar" | "avatarBlurHash" | "firstName" | "lastName">
   }
+  isActive?: boolean
 }
 
-export function TripItem({ trip }: Props) {
+export function TripItem({ trip, isActive }: Props) {
   const router = useRouter()
   const increment = useFeedbackActivity((s) => s.increment)
   return (
@@ -27,9 +28,16 @@ export function TripItem({ trip }: Props) {
         router.push(`/(home)/(trips)/trips/${trip.id}`)
       }}
       activeOpacity={0.8}
-      className="rounded-xs border border-gray-200 p-4 dark:border-gray-700"
+      className={join("rounded-xs border border-gray-200 p-4 dark:border-gray-700", isActive && "border-primary-500")}
     >
-      <Text className="text-xl">{trip.name}</Text>
+      <View className="flex flex-row items-center space-x-2">
+        {isActive && (
+          <View className="bg-primary flex items-center justify-center rounded-full px-1 py-0.5">
+            <Text className="text-xxs font-600 text-center text-white">ACTIVE</Text>
+          </View>
+        )}
+        <Text className="text-xl">{trip.name}</Text>
+      </View>
 
       <View className="flex flex-row items-end justify-between">
         <Text className="text-sm">
