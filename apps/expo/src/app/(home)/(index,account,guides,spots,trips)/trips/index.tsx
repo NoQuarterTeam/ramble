@@ -8,7 +8,7 @@ import { TripItem } from "~/components/TripItem"
 import { BrandHeading } from "~/components/ui/BrandHeading"
 import { Button } from "~/components/ui/Button"
 import { Spinner } from "~/components/ui/Spinner"
-import { api } from "~/lib/api"
+import { RouterOutputs, api } from "~/lib/api"
 import { isTablet } from "~/lib/device"
 import { useMe } from "~/lib/hooks/useMe"
 import { useBackgroundColor } from "~/lib/tailwind"
@@ -17,51 +17,66 @@ import { useRouter } from "expo-router"
 import { PlusCircle } from "lucide-react-native"
 import { useFeedbackActivity } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
-import { Text } from "~/components/ui/Text"
 
-export default function TripsLayout() {
+function Header() {
   const increment = useFeedbackActivity((s) => s.increment)
   const router = useRouter()
   const insets = useSafeAreaInsets()
+  return (
+    <View style={{ paddingTop: insets.top }} className="flex flex-row items-center justify-between px-4">
+      <View className="flex flex-row items-center space-x-0.5">
+        <BrandHeading className="py-2 text-4xl">trips</BrandHeading>
+      </View>
+      <TouchableOpacity
+        onPress={() => {
+          increment()
+          router.push("/(home)/(trips)/trips/new")
+        }}
+      >
+        <Icon icon={PlusCircle} />
+      </TouchableOpacity>
+    </View>
+  )
+}
+export default function TripsLayout() {
+  const insets = useSafeAreaInsets()
+  const { me } = useMe()
   const isDark = useColorScheme() === "dark"
   const backgroundColor = useBackgroundColor()
+  const { data, isLoading } = api.trip.active.useQuery(undefined, { enabled: !!me })
+
+  if (isLoading) return <Header />
   return (
     <Tabs.Container
       allowHeaderOverscroll={false}
       headerHeight={insets.top + 56}
-      headerContainerStyle={{ backgroundColor, shadowRadius: 0 }}
-      renderHeader={() => (
-        <View style={{ paddingTop: insets.top }} className="flex flex-row items-center justify-between px-4">
-          <View className="flex flex-row items-center space-x-0.5">
-            <BrandHeading className="py-2 text-4xl">trips</BrandHeading>
-          </View>
-          <TouchableOpacity
-            onPress={() => {
-              increment()
-              router.push("/(home)/(trips)/trips/new")
-            }}
-          >
-            <Icon icon={PlusCircle} />
-          </TouchableOpacity>
-        </View>
-      )}
+      headerContainerStyle={{
+        backgroundColor,
+        shadowRadius: 0,
+        shadowOffset: { width: 0, height: 1 },
+        shadowColor: colors.gray[isDark ? "600" : "400"],
+      }}
+      renderHeader={Header}
       renderTabBar={(tabProps) => (
         <MaterialTabBar
+          {...tabProps}
           activeColor={isDark ? "white" : "black"}
           labelStyle={{ fontFamily: "urbanist600" }}
           inactiveColor={isDark ? "white" : "black"}
           indicatorStyle={{ backgroundColor: colors.primary.DEFAULT }}
-          {...tabProps}
         />
       )}
     >
+      {data && data.length > 0 ? (
+        <Tabs.Tab name="Active">
+          <TripsList trips={data} />
+        </Tabs.Tab>
+      ) : null}
       <Tabs.Tab name="Upcoming">
         <UpcomingTrips />
       </Tabs.Tab>
       <Tabs.Tab name="Complete">
-        <Tabs.ScrollView>
-          <CompleteTrips />
-        </Tabs.ScrollView>
+        <CompleteTrips />
       </Tabs.Tab>
     </Tabs.Container>
   )
@@ -69,16 +84,33 @@ export default function TripsLayout() {
 
 export function UpcomingTrips() {
   const { me } = useMe()
-  const { data: trips, isLoading } = api.trip.mine.useQuery(undefined, { enabled: !!me })
+  const { data, isLoading } = api.trip.upcoming.useQuery(undefined, { enabled: !!me })
 
   if (!me) return <LoginPlaceholder text="Log in to create a trip" />
   if (isLoading)
     <View className="flex items-center justify-center p-4">
       <Spinner />
     </View>
+  if (!data) return null
+  return <TripsList trips={data} />
+}
+
+export function CompleteTrips() {
+  const { me } = useMe()
+  const { data, isLoading } = api.trip.complete.useQuery(undefined, { enabled: !!me })
+
+  if (!me) return <LoginPlaceholder text="Log in to create a trip" />
+  if (isLoading)
+    <View className="flex items-center justify-center p-4">
+      <Spinner />
+    </View>
+  if (!data) return null
+  return <TripsList trips={data} />
+}
+
+function TripsList({ trips }: { trips: RouterOutputs["trip"]["upcoming"] | RouterOutputs["trip"]["complete"] }) {
   return (
     <Tabs.FlashList
-      className="flex-1"
       contentContainerStyle={{ padding: 16 }}
       showsVerticalScrollIndicator={false}
       estimatedItemSize={86}
@@ -100,14 +132,5 @@ export function UpcomingTrips() {
         </View>
       )}
     />
-  )
-}
-
-export function CompleteTrips() {
-  console.log("wow")
-  return (
-    <View>
-      <Text>Complete</Text>
-    </View>
   )
 }

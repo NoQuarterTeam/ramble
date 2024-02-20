@@ -9,9 +9,10 @@ import { Icon } from "./Icon"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
 import { useFeedbackActivity } from "./FeedbackCheck"
+import dayjs from "dayjs"
 
 interface Props {
-  trip: Pick<Trip, "id" | "name"> & {
+  trip: Pick<Trip, "id" | "name" | "startDate" | "endDate"> & {
     creator: Pick<User, "avatar" | "avatarBlurHash" | "firstName" | "lastName">
   }
 }
@@ -28,11 +29,12 @@ export function TripItem({ trip }: Props) {
       activeOpacity={0.8}
       className="rounded-xs border border-gray-200 p-4 dark:border-gray-700"
     >
-      <View className="flex flex-row items-center space-x-2">
-        <Text className="text-xl">{trip.name}</Text>
-      </View>
+      <Text className="text-xl">{trip.name}</Text>
 
-      <View className="flex flex-row justify-end">
+      <View className="flex flex-row items-end justify-between">
+        <Text className="text-sm">
+          {dayjs(trip.startDate).format("D MMM YY")} → {dayjs(trip.endDate).format("D MMM YY")}
+        </Text>
         <View className="flex flex-row items-center space-x-1">
           {trip.creator.avatar ? (
             <OptimizedImage

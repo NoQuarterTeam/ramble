@@ -359,6 +359,7 @@ model Trip {
   id        String   @id @default(uuid())
   name      String
   startDate DateTime @db.Date
+  endDate   DateTime @db.Date
   creator   User     @relation(name: "CreatedTrips", fields: [creatorId], references: [id])
   creatorId String
 

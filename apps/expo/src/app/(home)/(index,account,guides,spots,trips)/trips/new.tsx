@@ -14,7 +14,8 @@ export default function NewTripScreen() {
   const { mutate, error, isLoading } = api.trip.create.useMutation({
     onSuccess: (data) => {
       posthog?.capture("trip created", { name: data.name })
-      utils.trip.mine.refetch()
+      utils.trip.upcoming.refetch()
+      utils.trip.complete.refetch()
       router.back()
       router.push(`/(home)/(trips)/trips/${data.id}`)
     },
@@ -22,8 +23,13 @@ export default function NewTripScreen() {
 
   return (
     <ModalView title="new trip">
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
-        <TripForm onCreate={mutate} isLoading={isLoading} error={error} />
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive"
+        contentContainerStyle={{ flexGrow: 1 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <TripForm onCreate={(data) => mutate(data)} isLoading={isLoading} error={error} />
       </ScrollView>
     </ModalView>
   )

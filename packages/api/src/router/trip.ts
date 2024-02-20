@@ -16,12 +16,36 @@ export const tripRouter = createTRPCRouter({
       include: { items: true, creator: true },
     })
   }),
+  active: protectedProcedure.query(({ ctx }) => {
+    return ctx.prisma.trip.findMany({
+      where: { startDate: { lt: new Date() }, endDate: { gt: new Date() }, users: { some: { id: ctx.user.id } } },
+      orderBy: { createdAt: "desc" },
+      include: { items: true, creator: true },
+    })
+  }),
+  upcoming: protectedProcedure.query(({ ctx }) => {
+    return ctx.prisma.trip.findMany({
+      where: { startDate: { gt: new Date() }, users: { some: { id: ctx.user.id } } },
+      orderBy: { startDate: "desc" },
+      include: { items: true, creator: true },
+    })
+  }),
+  complete: protectedProcedure.query(({ ctx }) => {
+    return ctx.prisma.trip.findMany({
+      where: { endDate: { lt: new Date() }, users: { some: { id: ctx.user.id } } },
+      orderBy: { endDate: "desc" },
+      include: { items: true, creator: true },
+    })
+  }),
   create: protectedProcedure.input(tripSchema).mutation(({ ctx, input }) => {
     return ctx.prisma.trip.create({ data: { ...input, creatorId: ctx.user.id, users: { connect: { id: ctx.user.id } } } })
   }),
   update: protectedProcedure
     .input(tripSchema.partial().extend({ id: z.string() }))
     .mutation(({ ctx, input: { id, ...data } }) => {
+      console.log(data)
+      const trip = ctx.prisma.trip.findFirst({ where: { id, users: { some: { id: { equals: ctx.user.id } } } } })
+      if (!trip) throw new TRPCError({ code: "NOT_FOUND", message: "Trip not found" })
       return ctx.prisma.trip.update({ where: { id }, data })
     }),
   delete: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
