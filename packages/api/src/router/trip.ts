@@ -47,7 +47,6 @@ export const tripRouter = createTRPCRouter({
   update: protectedProcedure
     .input(tripSchema.partial().extend({ id: z.string() }))
     .mutation(({ ctx, input: { id, ...data } }) => {
-      console.log(data)
       const trip = ctx.prisma.trip.findFirst({ where: { id, users: { some: { id: { equals: ctx.user.id } } } } })
       if (!trip) throw new TRPCError({ code: "NOT_FOUND", message: "Trip not found" })
       return ctx.prisma.trip.update({ where: { id }, data })
