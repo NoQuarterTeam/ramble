@@ -1,17 +1,19 @@
-import { FormProvider } from "react-hook-form"
-import DateTimePicker from "@react-native-community/datetimepicker"
 import { type Trip } from "@ramble/database/types"
+import DateTimePicker from "@react-native-community/datetimepicker"
+import { FormProvider } from "react-hook-form"
 
+import dayjs from "dayjs"
+import { TouchableOpacity, View } from "react-native"
 import { Button } from "~/components/ui/Button"
 import { FormError } from "~/components/ui/FormError"
 import { FormInput, FormInputLabel } from "~/components/ui/FormInput"
 import { type RouterInputs } from "~/lib/api"
-import { type ApiError, useForm } from "~/lib/hooks/useForm"
-import dayjs from "dayjs"
-import { View } from "react-native"
+import { useForm, type ApiError } from "~/lib/hooks/useForm"
 import { toast } from "./ui/Toast"
-import { isAndroid } from "~/lib/device"
+
+import { useDisclosure } from "@ramble/shared"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
+import { Text } from "./ui/Text"
 
 type UpdateSubmit = {
   trip: Pick<Trip, "name" | "startDate" | "endDate">
@@ -36,6 +38,8 @@ export function TripForm(props: Props & (UpdateSubmit | CreateSubmit)) {
     },
   })
 
+  const startDateProps = useDisclosure()
+  const endDateProps = useDisclosure()
   const startDate = form.watch("startDate")
   const endDate = form.watch("endDate")
 
@@ -53,36 +57,42 @@ export function TripForm(props: Props & (UpdateSubmit | CreateSubmit)) {
     <FormProvider {...form}>
       <View className="space-y-2">
         <FormInput name="name" label="Name" error={props.error} />
-        <View className="flex flex-row items-center justify-between">
-          <FormInputLabel label="From" />
-          {isAndroid ? (
-            <View></View>
-          ) : (
+        <View>
+          <View className="flex flex-row items-center justify-between">
+            <FormInputLabel label="From" />
+            <TouchableOpacity onPress={startDateProps.onToggle} className="rounded bg-gray-100 px-4 py-1 dark:bg-gray-800">
+              <Text className="font-500 text-base">{dayjs(startDate).format("DD MMM YYYY")}</Text>
+            </TouchableOpacity>
+          </View>
+          {startDateProps.isOpen && (
             <DateTimePicker
               value={startDate}
               mode="date"
-              // style={{ width: 130 }}
-              display="compact"
+              display="inline"
               onChange={(_, selectedDate) => {
                 if (!selectedDate) return
                 form.setValue("startDate", dayjs(selectedDate).toDate())
+                startDateProps.onClose()
               }}
             />
           )}
         </View>
-        <View className="flex flex-row items-center justify-between">
-          <FormInputLabel label="To" />
-          {isAndroid ? (
-            <View></View>
-          ) : (
+        <View>
+          <View className="flex flex-row items-center justify-between">
+            <FormInputLabel label="To" />
+            <TouchableOpacity onPress={endDateProps.onToggle} className="rounded bg-gray-100 px-4 py-1 dark:bg-gray-800">
+              <Text className="font-500 text-base">{dayjs(endDate).format("DD MMM YYYY")}</Text>
+            </TouchableOpacity>
+          </View>
+          {endDateProps.isOpen && (
             <DateTimePicker
               value={endDate}
               mode="date"
-              // style={{ width: 130 }}
-              display="compact"
+              display="inline"
               onChange={(_, selectedDate) => {
                 if (!selectedDate) return
                 form.setValue("endDate", dayjs(selectedDate).toDate())
+                endDateProps.onClose()
               }}
             />
           )}

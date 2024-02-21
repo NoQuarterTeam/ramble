@@ -26,7 +26,7 @@ export default function NewTripScreen() {
       <ScrollView
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="interactive"
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}
         showsVerticalScrollIndicator={false}
       >
         <TripForm onCreate={(data) => mutate(data)} isLoading={isLoading} error={error} />
