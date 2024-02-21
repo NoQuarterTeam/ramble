@@ -59,10 +59,10 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
         ))}
       </View>
       {props.error?.data?.zodError?.fieldErrors.rating?.map((error) => <FormInputError key={error} error={error} />)}
-      <FormError className="mb-1" error={props.error} />
       <Button isLoading={props.isLoading} onPress={form.handleSubmit(props.review ? props.onUpdate : props.onCreate)}>
         Save
       </Button>
+      <FormError className="mb-1" error={props.error} />
     </FormProvider>
   )
 }

@@ -1,6 +1,8 @@
 import { TouchableOpacity, View } from "react-native"
 import { useRouter } from "expo-router"
 import { User2 } from "lucide-react-native"
+import isBetween from "dayjs/plugin/isBetween"
+dayjs.extend(isBetween)
 
 import { type Trip, type User } from "@ramble/database/types"
 import { createImageUrl, join } from "@ramble/shared"
@@ -15,12 +17,13 @@ interface Props {
   trip: Pick<Trip, "id" | "name" | "startDate" | "endDate"> & {
     creator: Pick<User, "avatar" | "avatarBlurHash" | "firstName" | "lastName">
   }
-  isActive?: boolean
 }
+const today = dayjs()
 
-export function TripItem({ trip, isActive }: Props) {
+export function TripItem({ trip }: Props) {
   const router = useRouter()
   const increment = useFeedbackActivity((s) => s.increment)
+  const isActive = today.isBetween(trip.startDate, trip.endDate)
   return (
     <TouchableOpacity
       onPress={() => {
@@ -28,15 +31,23 @@ export function TripItem({ trip, isActive }: Props) {
         router.push(`/(home)/(trips)/trips/${trip.id}`)
       }}
       activeOpacity={0.8}
-      className={join("rounded-xs border border-gray-200 p-4 dark:border-gray-700", isActive && "border-primary-500")}
+      className={join("rounded-xs space-y-4 border border-gray-200 p-4 dark:border-gray-700", isActive && "border-primary-500")}
     >
-      <View className="flex flex-row items-center space-x-2">
-        {isActive && (
-          <View className="bg-primary flex items-center justify-center rounded-full px-1 py-0.5">
-            <Text className="text-xxs font-600 text-center text-white">CURRENT</Text>
+      <View className="flex flex-row items-center justify-between">
+        <View className="flex flex-row items-center space-x-2">
+          <Text className="text-xl">{trip.name}</Text>
+        </View>
+        {today.isBefore(trip.startDate) ? (
+          <View className="flex items-center justify-center rounded-full bg-green-800 px-2 py-0.5">
+            <Text className="font-600 text-center text-xs text-white">
+              {dayjs(trip.startDate).diff(today, "days")} days to go
+            </Text>
+          </View>
+        ) : today.isAfter(trip.endDate) ? null : (
+          <View className="bg-primary flex items-center justify-center rounded-full px-2 py-0.5">
+            <Text className="font-600 text-center text-xs text-white">CURRENT</Text>
           </View>
         )}
-        <Text className="text-xl">{trip.name}</Text>
       </View>
 
       <View className="flex flex-row items-end justify-between">

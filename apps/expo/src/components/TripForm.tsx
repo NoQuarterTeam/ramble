@@ -9,6 +9,9 @@ import { type RouterInputs } from "~/lib/api"
 import { type ApiError, useForm } from "~/lib/hooks/useForm"
 import dayjs from "dayjs"
 import { View } from "react-native"
+import { toast } from "./ui/Toast"
+import { isAndroid } from "~/lib/device"
+import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
 
 type UpdateSubmit = {
   trip: Pick<Trip, "name" | "startDate" | "endDate">
@@ -24,6 +27,7 @@ interface Props {
 }
 
 export function TripForm(props: Props & (UpdateSubmit | CreateSubmit)) {
+  useKeyboardController()
   const form = useForm({
     defaultValues: {
       name: props.trip?.name || "",
@@ -35,40 +39,58 @@ export function TripForm(props: Props & (UpdateSubmit | CreateSubmit)) {
   const startDate = form.watch("startDate")
   const endDate = form.watch("endDate")
 
+  const handleSubmit = () => {
+    return form.handleSubmit((data) => {
+      if (dayjs(data.startDate).isAfter(data.endDate)) {
+        return toast({ type: "error", title: "Start date must be before end date" })
+      }
+      if (props.trip) props.onUpdate(data)
+      else props.onCreate(data)
+    })
+  }
+
   return (
     <FormProvider {...form}>
       <View className="space-y-2">
         <FormInput name="name" label="Name" error={props.error} />
         <View className="flex flex-row items-center justify-between">
           <FormInputLabel label="From" />
-          <DateTimePicker
-            value={startDate}
-            mode="date"
-            // style={{ width: 330 }}
-            display="compact"
-            onChange={(_, selectedDate) => {
-              if (!selectedDate) return
-              form.setValue("startDate", dayjs(selectedDate).toDate())
-            }}
-          />
+          {isAndroid ? (
+            <View></View>
+          ) : (
+            <DateTimePicker
+              value={startDate}
+              mode="date"
+              // style={{ width: 130 }}
+              display="compact"
+              onChange={(_, selectedDate) => {
+                if (!selectedDate) return
+                form.setValue("startDate", dayjs(selectedDate).toDate())
+              }}
+            />
+          )}
         </View>
         <View className="flex flex-row items-center justify-between">
           <FormInputLabel label="To" />
-          <DateTimePicker
-            value={endDate}
-            mode="date"
-            // style={{ width: 130 }}
-            display="compact"
-            onChange={(_, selectedDate) => {
-              if (!selectedDate) return
-              form.setValue("endDate", dayjs(selectedDate).toDate())
-            }}
-          />
+          {isAndroid ? (
+            <View></View>
+          ) : (
+            <DateTimePicker
+              value={endDate}
+              mode="date"
+              // style={{ width: 130 }}
+              display="compact"
+              onChange={(_, selectedDate) => {
+                if (!selectedDate) return
+                form.setValue("endDate", dayjs(selectedDate).toDate())
+              }}
+            />
+          )}
         </View>
-        <FormError className="mb-1" error={props.error} />
-        <Button isLoading={props.isLoading} onPress={form.handleSubmit(props.trip ? props.onUpdate : props.onCreate)}>
+        <Button isLoading={props.isLoading} onPress={handleSubmit()}>
           Save
         </Button>
+        <FormError error={props.error} />
       </View>
     </FormProvider>
   )

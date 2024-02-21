@@ -35,10 +35,10 @@ export function ListForm(props: Props & (UpdateSubmit | CreateSubmit)) {
       <FormInput name="name" label="Name" error={props.error} />
       <FormInput name="description" label="Description" multiline error={props.error} />
       <FormSwitchInput name="isPrivate" label="Should list be private?" />
-      <FormError className="mb-1" error={props.error} />
       <Button isLoading={props.isLoading} onPress={form.handleSubmit(props.list ? props.onUpdate : props.onCreate)}>
         Save
       </Button>
+      <FormError className="mb-1" error={props.error} />
     </FormProvider>
   )
 }

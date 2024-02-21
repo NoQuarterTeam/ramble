@@ -6,12 +6,13 @@ import { RouterOutputs, api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 
 import { useRouter } from "expo-router"
-import { PlusCircle } from "lucide-react-native"
+import { Plus, PlusCircle } from "lucide-react-native"
 import { useFeedbackActivity } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
 import { TabView } from "~/components/ui/TabView"
 import { Text } from "~/components/ui/Text"
 import { LinkButton } from "~/components/LinkButton"
+import dayjs from "dayjs"
 
 export default function TripsLayout() {
   const increment = useFeedbackActivity((s) => s.increment)
@@ -61,34 +62,49 @@ export default function TripsLayout() {
         <Spinner />
       ) : !data ? null : (
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-          {data.length === 0 && <LinkButton href="/(home)/(trips)/trips/new">Create a current, upcoming or past trip</LinkButton>}
-          {activeTrip && <TripItem trip={activeTrip} isActive />}
-          {groupedTrips?.upcoming && groupedTrips.upcoming.length > 0 && (
-            <View>
-              <View className="relative flex items-center justify-center">
-                <View className="absolute h-px w-full bg-gray-200 dark:bg-gray-700" />
-                <View className="bg-background dark:bg-background-dark px-2">
-                  <Text className="text-xxs py-3 text-center">UPCOMING</Text>
+          <View className="space-y-2">
+            {activeTrip && <TripItem trip={activeTrip} />}
+            {groupedTrips?.upcoming && groupedTrips.upcoming.length > 0 && (
+              <View className="space-y-2">
+                <View className="relative flex items-center justify-center">
+                  <View className="absolute h-px w-full bg-gray-200 dark:bg-gray-700" />
+                  <View className="bg-background dark:bg-background-dark px-2">
+                    <Text className="text-xxs text-center">UPCOMING</Text>
+                  </View>
                 </View>
+                {groupedTrips.upcoming
+                  .sort((a, b) => dayjs(a.startDate).unix() - dayjs(b.startDate).unix())
+                  .map((trip) => (
+                    <View key={trip.id}>
+                      <TripItem trip={trip} />
+                    </View>
+                  ))}
               </View>
-              {groupedTrips.upcoming.map((trip) => (
-                <TripItem key={trip.id} trip={trip} />
-              ))}
-            </View>
-          )}
-          {groupedTrips?.complete && groupedTrips.complete.length > 0 && (
-            <View>
-              <View className="relative flex items-center justify-center">
-                <View className="absolute h-px w-full bg-gray-200 dark:bg-gray-700" />
-                <View className="bg-background dark:bg-background-dark px-2">
-                  <Text className="text-xxs py-3 text-center">COMPLETE</Text>
+            )}
+            {groupedTrips?.complete && groupedTrips.complete.length > 0 && (
+              <View className="space-y-2">
+                <View className="relative flex items-center justify-center">
+                  <View className="absolute h-px w-full bg-gray-200 dark:bg-gray-700" />
+                  <View className="bg-background dark:bg-background-dark px-2">
+                    <Text className="text-xxs text-center">COMPLETE</Text>
+                  </View>
                 </View>
+                {groupedTrips.complete.map((trip) => (
+                  <View key={trip.id}>
+                    <TripItem trip={trip} />
+                  </View>
+                ))}
               </View>
-              {groupedTrips.complete.map((trip) => (
-                <TripItem key={trip.id} trip={trip} />
-              ))}
+            )}
+            <View>
+              <LinkButton
+                leftIcon={<Icon icon={Plus} size={18} color={{ dark: "black", light: "white" }} />}
+                href="/(home)/(trips)/trips/new"
+              >
+                Add a current, upcoming or past trip
+              </LinkButton>
             </View>
-          )}
+          </View>
         </ScrollView>
       )}
     </TabView>

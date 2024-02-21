@@ -33,7 +33,7 @@ export default function RequestAccessScreen() {
   const onSubmit = form.handleSubmit((data) => mutate(data))
 
   return (
-    <ModalView title="request access" onBack={() => navigation.back()}>
+    <ModalView shouldRenderToast title="request access" onBack={() => navigation.back()}>
       <FormProvider {...form}>
         <ScrollView
           keyboardShouldPersistTaps="handled"

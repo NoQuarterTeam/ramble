@@ -5,6 +5,8 @@ import { merge } from "@ramble/shared"
 import { type ApiError } from "~/lib/hooks/useForm"
 
 import { Text } from "./Text"
+import { Icon } from "../Icon"
+import { AlertTriangle } from "lucide-react-native"
 
 interface Props extends ViewProps {
   error?: ApiError
@@ -12,10 +14,19 @@ interface Props extends ViewProps {
 export function FormError({ error, ...props }: Props) {
   if (!error || !error.data?.formError) return null
   return (
-    <View {...props} className={merge("border border-gray-100 p-2 dark:border-gray-700", props.className)}>
-      <Text className="text-center text-red-500 dark:text-red-300">
-        {typeof error === "string" ? error : error.data?.formError}
-      </Text>
+    <View className="items-center justify-center">
+      <View
+        {...props}
+        className={merge(
+          "flex flex-row items-center justify-center space-x-1 rounded-sm border border-red-600 bg-red-500 p-1.5 px-4 dark:border-red-700 dark:bg-red-800",
+          props.className,
+        )}
+      >
+        <Icon icon={AlertTriangle} color="white" size={16} />
+        <Text className="font-600 text-center text-sm text-white">
+          {typeof error === "string" ? error : error.data?.formError}
+        </Text>
+      </View>
     </View>
   )
 }

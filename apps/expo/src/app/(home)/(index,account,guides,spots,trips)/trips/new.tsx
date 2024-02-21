@@ -22,7 +22,7 @@ export default function NewTripScreen() {
   })
 
   return (
-    <ModalView title="new trip">
+    <ModalView title="new trip" shouldRenderToast>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="interactive"

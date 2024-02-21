@@ -100,7 +100,7 @@ export default function AccountSettingsScreen() {
             onRequestClose={deleteAccountModalProps.onClose}
             onDismiss={deleteAccountModalProps.onClose}
           >
-            <ModalView title="are you sure?" onBack={deleteAccountModalProps.onClose}>
+            <ModalView shouldRenderToast title="are you sure?" onBack={deleteAccountModalProps.onClose}>
               <View className="space-y-2 pt-4">
                 <Text>This can't be undone!</Text>
                 <Button isLoading={isLoading} onPress={() => deleteAccount()} variant="destructive">

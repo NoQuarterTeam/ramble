@@ -51,7 +51,7 @@ export default function RegisterScreen() {
   })
 
   return (
-    <ModalView title="register" onBack={() => navigation.back()}>
+    <ModalView shouldRenderToast title="register" onBack={() => navigation.back()}>
       <FormProvider {...form}>
         <ScrollView
           keyboardShouldPersistTaps="handled"

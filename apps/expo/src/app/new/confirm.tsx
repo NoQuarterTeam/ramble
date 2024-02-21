@@ -160,7 +160,6 @@ export default function NewSpotConfirmScreen() {
       </ScrollView>
 
       <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
-        <FormError error={error} />
         <Button
           isLoading={createLoading || isLoading}
           leftIcon={<Icon icon={Check} size={20} color={{ light: "white", dark: "black" }} />}
@@ -169,6 +168,7 @@ export default function NewSpotConfirmScreen() {
         >
           Create
         </Button>
+        <FormError error={error} />
       </View>
     </NewSpotModalView>
   )

@@ -14,6 +14,7 @@ export const tripRouter = createTRPCRouter({
       where: { users: { some: { id: ctx.user.id } } },
       orderBy: { startDate: "desc" },
       include: { items: true, creator: true },
+      take: 20, // TODO pagination
     })
   }),
   active: protectedProcedure.query(({ ctx }) => {
@@ -23,7 +24,24 @@ export const tripRouter = createTRPCRouter({
       include: { items: true, creator: true },
     })
   }),
-  create: protectedProcedure.input(tripSchema).mutation(({ ctx, input }) => {
+  create: protectedProcedure.input(tripSchema).mutation(async ({ ctx, input }) => {
+    // check if start date is before end date
+    if (input.startDate > input.endDate) {
+      throw new TRPCError({ code: "BAD_REQUEST", message: "Start date must be before end date" })
+    }
+    // check if any trips overlap with the new trip
+    const overlappingTrip = await ctx.prisma.trip.findFirst({
+      where: {
+        users: { some: { id: ctx.user.id } },
+        OR: [
+          { startDate: { lte: input.startDate }, endDate: { gte: input.startDate } },
+          { startDate: { lte: input.endDate }, endDate: { gte: input.endDate } },
+        ],
+      },
+    })
+    if (overlappingTrip) {
+      throw new TRPCError({ code: "BAD_REQUEST", message: `Trip dates overlaps with "${overlappingTrip.name}"` })
+    }
     return ctx.prisma.trip.create({ data: { ...input, creatorId: ctx.user.id, users: { connect: { id: ctx.user.id } } } })
   }),
   update: protectedProcedure
