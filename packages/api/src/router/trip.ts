@@ -46,9 +46,30 @@ export const tripRouter = createTRPCRouter({
   }),
   update: protectedProcedure
     .input(tripSchema.partial().extend({ id: z.string() }))
-    .mutation(({ ctx, input: { id, ...data } }) => {
-      const trip = ctx.prisma.trip.findFirst({ where: { id, users: { some: { id: { equals: ctx.user.id } } } } })
+    .mutation(async ({ ctx, input: { id, ...data } }) => {
+      const trip = await ctx.prisma.trip.findFirst({ where: { id, users: { some: { id: { equals: ctx.user.id } } } } })
       if (!trip) throw new TRPCError({ code: "NOT_FOUND", message: "Trip not found" })
+      if (data.startDate || data.endDate) {
+        const startDate = data.startDate || trip.startDate
+        const endDate = data.endDate || trip.endDate
+        // check if start date is before end date
+        if (startDate > endDate) {
+          throw new TRPCError({ code: "BAD_REQUEST", message: "Start date must be before end date" })
+        }
+        // check if any trips overlap with the new trip
+        const overlappingTrip = await ctx.prisma.trip.findFirst({
+          where: {
+            users: { some: { id: ctx.user.id } },
+            OR: [
+              { startDate: { lte: startDate }, endDate: { gte: startDate } },
+              { startDate: { lte: endDate }, endDate: { gte: endDate } },
+            ],
+          },
+        })
+        if (overlappingTrip) {
+          throw new TRPCError({ code: "BAD_REQUEST", message: `Trip dates overlaps with "${overlappingTrip.name}"` })
+        }
+      }
       return ctx.prisma.trip.update({ where: { id }, data })
     }),
   delete: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
