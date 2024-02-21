@@ -10,7 +10,7 @@ import { Text } from "~/components/ui/Text"
 import { RouterOutputs, api } from "~/lib/api"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
-import { createImageUrl } from "@ramble/shared"
+import { createImageUrl, join } from "@ramble/shared"
 import { Camera, LineLayer, MarkerView, ShapeSource, StyleURL, UserLocation, type MapView as MapType } from "@rnmapbox/maps"
 import { StatusBar } from "expo-status-bar"
 import { ChevronLeft, Edit2, Flag, Home, MapPin, PlusCircle } from "lucide-react-native"
@@ -129,7 +129,11 @@ export default function TripDetailScreen() {
         />
       </Map>
 
-      <View style={{ top: insets.top + 8 }} className="absolute left-0 right-0 flex w-full flex-row justify-between px-4">
+      <View
+        style={{ top: insets.top + 8 }}
+        pointerEvents="box-none"
+        className="absolute left-0 right-0 flex w-full flex-row items-center justify-between px-4"
+      >
         <TouchableOpacity
           onPress={router.back}
           activeOpacity={0.8}
@@ -137,13 +141,17 @@ export default function TripDetailScreen() {
         >
           <Icon icon={ChevronLeft} />
         </TouchableOpacity>
-        {isLoading && (
-          <View className="absolute left-0 right-0 top-0 flex items-center justify-center">
+        <View className="flex items-center justify-center">
+          {isLoading ? (
             <View className="bg-background dark:bg-background-dark flex h-10 w-10 items-center justify-center rounded-full">
               <ActivityIndicator />
             </View>
-          </View>
-        )}
+          ) : (
+            <View className="bg-background dark:bg-background-dark flex h-10 items-center justify-center rounded-full px-5">
+              <Text className="text-base">{trip?.name}</Text>
+            </View>
+          )}
+        </View>
 
         <Link push href={`/${tab}/trips/${id}/edit`} asChild>
           <TouchableOpacity
@@ -220,7 +228,7 @@ function TripList({
       }}
       dragItemOverflow
       ListHeaderComponent={<ListHeader trip={trip} />}
-      ListFooterComponent={<ListFooter trip={trip} />}
+      ListFooterComponent={<ListFooter trip={trip} hasNoItems={trip.items.length === 0} />}
       className="py-3"
       style={{ height: LIST_HEIGHT }}
       contentContainerStyle={{ paddingRight: 60, paddingLeft: 12 }}
@@ -378,31 +386,34 @@ const TripItem = React.memo(function _TripItem({
   )
 })
 
-const HEADER_FOOTER_WIDTH = 100
+const HEADER_FOOTER_WIDTH = 80
 function ListHeader({ trip }: { trip: RouterOutputs["trip"]["detail"]["trip"] }) {
   return (
     <View className="flex h-full items-center justify-center">
       <View
         style={{ width: HEADER_FOOTER_WIDTH, height: HEADER_FOOTER_WIDTH }}
-        className="bg-background dark:bg-background-dark flex items-center justify-center space-y-0 rounded-full border-2 border-gray-700 p-2"
+        className="bg-background dark:bg-background-dark flex items-center justify-center space-y-2 rounded-full border-2 border-gray-700 p-2"
       >
         <Icon icon={Home} size={16} />
-        <Text className="text-base" numberOfLines={2}>
-          {trip.name}
-        </Text>
         <Text className="text-xxs">{dayjs(trip.startDate).format("D MMM YY")}</Text>
       </View>
     </View>
   )
 }
 
-function ListFooter({ trip }: { trip: RouterOutputs["trip"]["detail"]["trip"] }) {
+function ListFooter({ trip, hasNoItems }: { hasNoItems: boolean; trip: RouterOutputs["trip"]["detail"]["trip"] }) {
   const { id } = useLocalSearchParams<{ id: string }>()
   return (
-    <View style={{ width: HEADER_FOOTER_WIDTH }} className="flex h-full flex-row items-center space-x-2 pl-2">
+    <View className="flex h-full flex-row items-center space-x-2 pl-2">
       <Link push href={`/(home)/(trips)/trips/${id}/add`} asChild>
-        <TouchableOpacity className="bg-background dark:bg-background-dark rounded-full p-2">
-          <Icon icon={PlusCircle} size={16} />
+        <TouchableOpacity
+          className={join(
+            "bg-background dark:bg-background-dark flex flex-row items-center space-x-2 rounded-full p-2",
+            hasNoItems && "bg-primary p-5",
+          )}
+        >
+          <Icon icon={PlusCircle} size={16} color={hasNoItems ? "white" : undefined} />
+          {hasNoItems && <Text className="font-600 text-sm text-white">Add you first stop</Text>}
         </TouchableOpacity>
       </Link>
       <View className="flex h-full items-center justify-center">

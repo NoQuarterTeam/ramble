@@ -11,6 +11,7 @@ import { useFeedbackActivity } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
 import { TabView } from "~/components/ui/TabView"
 import { Text } from "~/components/ui/Text"
+import { LinkButton } from "~/components/LinkButton"
 
 export default function TripsLayout() {
   const increment = useFeedbackActivity((s) => s.increment)
@@ -60,6 +61,7 @@ export default function TripsLayout() {
         <Spinner />
       ) : !data ? null : (
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+          {data.length === 0 && <LinkButton href="/(home)/(trips)/trips/new">Create a current, upcoming or past trip</LinkButton>}
           {activeTrip && <TripItem trip={activeTrip} isActive />}
           {groupedTrips?.upcoming && groupedTrips.upcoming.length > 0 && (
             <View>
