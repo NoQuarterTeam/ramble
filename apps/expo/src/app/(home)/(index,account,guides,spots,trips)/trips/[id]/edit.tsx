@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from "expo-router"
-import { Alert, ScrollView, View } from "react-native"
+import { ActivityIndicator, Alert, ScrollView, View } from "react-native"
 import { TripForm } from "~/components/TripForm"
 import { DeleteButton } from "~/components/ui/DeleteButton"
 import { ModalView } from "~/components/ui/ModalView"
@@ -53,7 +53,11 @@ export default function EditTrip() {
         keyboardDismissMode="interactive"
         className="flex-1"
       >
-        {tripLoading ? null : !data ? (
+        {tripLoading ? (
+          <View className="flex items-center justify-center pt-8">
+            <ActivityIndicator />
+          </View>
+        ) : !data ? (
           <Text>List not found</Text>
         ) : (
           <TripForm trip={data} isLoading={isLoading} error={error} onUpdate={(data) => mutate({ ...data, id })} />

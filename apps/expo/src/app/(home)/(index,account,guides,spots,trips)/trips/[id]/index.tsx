@@ -132,36 +132,52 @@ export default function TripDetailScreen() {
       <View
         style={{ top: insets.top + 8 }}
         pointerEvents="box-none"
-        className="absolute left-0 right-0 flex w-full flex-row items-center justify-between px-4"
+        className="absolute left-0 right-0 flex flex-row items-center justify-between px-4"
       >
-        <TouchableOpacity
-          onPress={router.back}
-          activeOpacity={0.8}
-          className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
-        >
-          <Icon icon={ChevronLeft} />
-        </TouchableOpacity>
-        <View className="flex items-center justify-center">
-          {isLoading ? (
-            <View className="bg-background dark:bg-background-dark flex h-10 w-10 items-center justify-center rounded-full">
-              <ActivityIndicator />
-            </View>
-          ) : (
-            <View className="bg-background dark:bg-background-dark flex h-10 items-center justify-center rounded-full px-5">
-              <Text className="text-base">{trip?.name}</Text>
-            </View>
-          )}
+        <View className="flex flex-row items-center space-x-2">
+          <TouchableOpacity
+            onPress={router.back}
+            activeOpacity={0.5}
+            className="sq-8 bg-background dark:bg-background-dark just flex  h-10 w-10 flex-row items-center justify-center rounded-full"
+          >
+            <Icon icon={ChevronLeft} />
+          </TouchableOpacity>
+
+          <View className="bg-background dark:bg-background-dark flex h-10 flex-row items-center rounded-full">
+            {isLoading ? (
+              <View className="flex w-10 items-center justify-center">
+                <ActivityIndicator />
+              </View>
+            ) : (
+              <View className="flex items-center justify-center px-4">
+                <Text className="text-base" numberOfLines={1}>
+                  {trip?.name}
+                </Text>
+              </View>
+            )}
+          </View>
         </View>
 
-        <Link push href={`/${tab}/trips/${id}/edit`} asChild>
-          <TouchableOpacity
-            className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
-            activeOpacity={0.8}
-          >
-            <Icon icon={Edit2} size={16} />
-          </TouchableOpacity>
-        </Link>
+        <View className="flex flex-row items-center space-x-1">
+          {/* <Link push href={`/${tab}/trips/${id}/edit`} asChild>
+            <TouchableOpacity
+              className="sq-10 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
+              activeOpacity={0.8}
+            >
+              <Icon icon={Users} size={16} />
+            </TouchableOpacity>
+          </Link> */}
+          <Link push href={`/${tab}/trips/${id}/edit`} asChild>
+            <TouchableOpacity
+              className="sq-10 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
+              activeOpacity={0.8}
+            >
+              <Icon icon={Edit2} size={16} />
+            </TouchableOpacity>
+          </Link>
+        </View>
       </View>
+
       <View className="absolute bottom-0 left-0 right-0">
         {trip && (
           <TripList
