@@ -455,7 +455,7 @@ importers:
         version: 3.22.4
       zodix:
         specifier: 0.4.4
-        version: 0.4.4(@remix-run/server-runtime@2.6.0)(zod@3.22.4)
+        version: 0.4.4(@remix-run/server-runtime@2.7.0)(zod@3.22.4)
       zustand:
         specifier: ^4.4.7
         version: 4.4.7(@types/react@18.2.57)(react@18.2.0)
@@ -467,8 +467,8 @@ importers:
         specifier: 2.7.0
         version: 2.7.0(@remix-run/serve@2.7.0)(typescript@5.3.3)
       '@remix-run/eslint-config':
-        specifier: 2.7.0
-        version: 2.7.0(eslint@8.56.0)(react@18.2.0)(typescript@5.3.3)
+        specifier: 2.7.1
+        version: 2.7.1(eslint@8.56.0)(react@18.2.0)(typescript@5.3.3)
       '@tailwindcss/forms':
         specifier: 0.5.7
         version: 0.5.7(tailwindcss@3.3.2)
@@ -776,7 +776,7 @@ importers:
         version: 3.22.4
       zodix:
         specifier: 0.4.4
-        version: 0.4.4(@remix-run/server-runtime@2.6.0)(zod@3.22.4)
+        version: 0.4.4(@remix-run/server-runtime@2.7.0)(zod@3.22.4)
     devDependencies:
       '@ramble/eslint-config':
         specifier: workspace:*
@@ -6007,8 +6007,8 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@remix-run/eslint-config@2.7.0(eslint@8.56.0)(react@18.2.0)(typescript@5.3.3):
-    resolution: {integrity: sha512-nLK+K9g5bTokyPt0MCe2fQ7mVFQJg70rLdwPHNo2ueCfPRYQvfHsiHDDQGLxjjYzHH4Yqr2HszPnrrvD3Z9zww==}
+  /@remix-run/eslint-config@2.7.1(eslint@8.56.0)(react@18.2.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-LYNg75f6i6R0Zmqsb7edt4EorGQnsO0tFvAUS/23wacn3txt6sCsxsVVdFCiIn9ZTf5NPAuoF22mv1am6MvRJA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       eslint: ^8.0.0
@@ -18819,13 +18819,13 @@ packages:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
     dev: false
 
-  /zodix@0.4.4(@remix-run/server-runtime@2.6.0)(zod@3.22.4):
+  /zodix@0.4.4(@remix-run/server-runtime@2.7.0)(zod@3.22.4):
     resolution: {integrity: sha512-msoW2RM8t0ktSKmQYT7/AjsGTqzWHeEwY+U/6w7Jzd29yoeh/QceseQG8PBb5lpY4KUUowMsYRWm926vGrwrdQ==}
     peerDependencies:
       '@remix-run/server-runtime': 1.x || 2.x
       zod: 3.x
     dependencies:
-      '@remix-run/server-runtime': 2.6.0(typescript@5.3.3)
+      '@remix-run/server-runtime': 2.7.0(typescript@5.3.3)
       zod: 3.22.4
     dev: false
 
