@@ -86,10 +86,10 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
       "expo-build-properties",
       {
         android: {
-          compileSdkVersion: 33,
-          targetSdkVersion: 33,
+          compileSdkVersion: 34,
+          targetSdkVersion: 34,
           minSdkVersion: 23,
-          buildToolsVersion: "33.0.0",
+          buildToolsVersion: "34.0.0",
           kotlinVersion: "1.6.20",
         },
       },
