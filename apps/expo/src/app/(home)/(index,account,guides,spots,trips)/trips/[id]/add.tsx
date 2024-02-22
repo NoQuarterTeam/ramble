@@ -170,7 +170,7 @@ export default function NewItemScreen() {
 
   return (
     <ScreenView title="add to trip" containerClassName="px-0">
-      <Text className="px-4 text-center">Add a location, an existing spot, or create a new spot to save to your trip</Text>
+      {/* <Text className="px-2">Add a location, an existing spot, or create a new one to save to your trip</Text> */}
       <StatusBar style="auto" />
       <View className="flex w-full flex-row items-center justify-between space-x-1 overflow-hidden px-2 pb-2">
         <View className="flex-1 flex-row items-center space-x-1">
