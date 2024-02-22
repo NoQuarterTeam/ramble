@@ -58,7 +58,7 @@ export function SpotImageCarousel({
       <FlashList
         ref={ref}
         pagingEnabled
-        scrollEnabled
+        scrollEnabled={images.length > 1}
         horizontal
         onMomentumScrollEnd={(e) => {
           const { x } = e.nativeEvent.contentOffset
@@ -96,11 +96,13 @@ export function SpotImageCarousel({
           </TouchableOpacity>
         )}
       />
-      <View className="rounded-xs absolute bottom-2 right-2 bg-gray-800/70 p-1">
-        <Text className="text-xs text-white">{`${imageIndex + 1}/${
-          images.length / (noOfColumns || 1) + (canAddMore ? 1 : 0)
-        }`}</Text>
-      </View>
+      {images.length > 1 && (
+        <View className="rounded-xs absolute bottom-2 right-2 bg-gray-800/70 p-1">
+          <Text className="text-xs text-white">{`${imageIndex + 1}/${
+            images.length / (noOfColumns || 1) + (canAddMore ? 1 : 0)
+          }`}</Text>
+        </View>
+      )}
     </View>
   )
 }
