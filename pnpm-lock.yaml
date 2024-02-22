@@ -896,8 +896,8 @@ importers:
         specifier: 9.0.2
         version: 9.0.2
       loops:
-        specifier: 0.2.1
-        version: 0.2.1
+        specifier: 0.3.0
+        version: 0.3.0
       nodemailer:
         specifier: 6.9.10
         version: 6.9.10
@@ -13137,9 +13137,9 @@ packages:
   /longest-streak@3.1.0:
     resolution: {integrity: sha512-9Ri+o0JYgehTaVBBDoMqIl8GXtbWg711O3srftcHhZ0dqnETqLaoIK0x17fUw9rFSlK/0NlsKe0Ahhyl5pXE2g==}
 
-  /loops@0.2.1:
-    resolution: {integrity: sha512-rqBfI9vvmtP4OJrUS+7CiZg2NW+nr7oAhUof1/czuzD/ShHPM8om7fdAYf90JFTAEumNrIVL+0cMl7WlTxcCtQ==}
-    engines: {node: '>=16'}
+  /loops@0.3.0:
+    resolution: {integrity: sha512-XBB5dKQHFn+liHRVNNLHTcwYRIyUGccfy3ZM0l7NclRDHf3J0hbRchIPus8q2tqFE5SQYnil959kPtQOLUgRcg==}
+    engines: {node: '>=18'}
     dev: false
 
   /loose-envify@1.4.0:
