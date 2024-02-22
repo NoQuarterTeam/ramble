@@ -16,9 +16,16 @@ import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 import { EditSpotModalView } from "./EditSpotModalView"
+import Animated, { useAnimatedKeyboard, useAnimatedStyle } from "react-native-reanimated"
 
 export default function EditSpotOptionsScreen() {
   useKeyboardController()
+  const keyboard = useAnimatedKeyboard()
+  const translateStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: -keyboard.height.value }],
+    }
+  })
   const { id, ...params } = useLocalSearchParams<{
     id: string
     type: SpotType
@@ -56,7 +63,10 @@ export default function EditSpotOptionsScreen() {
         <Input value={description || ""} onChangeText={setDescription} multiline numberOfLines={4} />
       </ScrollView>
 
-      <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
+      <Animated.View
+        style={[translateStyle]}
+        className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2"
+      >
         <Button
           className="rounded-full"
           disabled={!description || !name}
@@ -78,7 +88,7 @@ export default function EditSpotOptionsScreen() {
         >
           Next
         </Button>
-      </View>
+      </Animated.View>
     </EditSpotModalView>
   )
 }

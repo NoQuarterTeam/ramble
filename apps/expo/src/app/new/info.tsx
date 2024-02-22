@@ -15,9 +15,17 @@ import { Text } from "~/components/ui/Text"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
 
 import { NewSpotModalView } from "./NewSpotModalView"
+import Animated, { useAnimatedKeyboard, useAnimatedStyle } from "react-native-reanimated"
 
 export default function NewSpotInfoScreen() {
   useKeyboardController()
+  const keyboard = useAnimatedKeyboard()
+  const translateStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: -keyboard.height.value }],
+    }
+  })
+
   const params = useLocalSearchParams<{ type: SpotType }>()
   const router = useRouter()
   const [name, setName] = React.useState<string>()
@@ -49,7 +57,10 @@ export default function NewSpotInfoScreen() {
         <Input nativeID="description" value={description} onChangeText={setDescription} multiline numberOfLines={4} />
       </ScrollView>
 
-      <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
+      <Animated.View
+        style={[translateStyle]}
+        className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2"
+      >
         <Button
           className="rounded-full"
           disabled={!description || !name}
@@ -70,7 +81,7 @@ export default function NewSpotInfoScreen() {
         >
           Next
         </Button>
-      </View>
+      </Animated.View>
     </NewSpotModalView>
   )
 }
