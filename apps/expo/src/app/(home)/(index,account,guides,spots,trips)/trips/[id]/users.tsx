@@ -18,7 +18,7 @@ export default function TripUsers() {
 
   return (
     <ModalView title="users on trip">
-      <ScrollView className="flex-1 space-y-2">
+      <ScrollView className="flex-1 space-y-2" keyboardShouldPersistTaps="handled" keyboardDismissMode="interactive">
         {isLoading ? (
           <View className="flex items-center justify-center p-4">
             <ActivityIndicator />

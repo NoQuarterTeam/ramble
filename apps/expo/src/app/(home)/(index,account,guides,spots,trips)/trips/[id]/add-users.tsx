@@ -24,7 +24,13 @@ export default function AddTripUsers() {
 
   return (
     <ModalView title="add users" shouldRenderToast>
-      <ScrollView className="flex-1 space-y-2" showsVerticalScrollIndicator={false} stickyHeaderIndices={[0]}>
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive"
+        className="flex-1 space-y-2"
+        showsVerticalScrollIndicator={false}
+        stickyHeaderIndices={[0]}
+      >
         <View className="bg-background dark:bg-background-dark pb-2">
           <Input value={search} onChangeText={setSearch} placeholder="Search " />
         </View>
