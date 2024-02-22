@@ -48,28 +48,29 @@ export default function NewSpotInfoScreen() {
         <FormInputLabel label="Describe the spot" name="description" />
         <Input nativeID="description" value={description} onChangeText={setDescription} multiline numberOfLines={4} />
       </ScrollView>
-      {description && name && (
-        <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
-          <Button
-            className="rounded-full"
-            onPress={() => {
-              const searchParams = new URLSearchParams({
-                ...params,
-                name,
-                description: description || "",
-                isPetFriendly: String(isPetFriendly),
-              })
-              router.push(
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                doesSpotTypeRequireAmenities(params.type) ? `/new/amenities?${searchParams}` : `/new/images?${searchParams}`,
-              )
-            }}
-          >
-            Next
-          </Button>
-        </View>
-      )}
+
+      <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
+        <Button
+          className="rounded-full"
+          disabled={!description || !name}
+          onPress={() => {
+            if (!name || !description) return
+            const searchParams = new URLSearchParams({
+              ...params,
+              name,
+              description: description || "",
+              isPetFriendly: String(isPetFriendly),
+            })
+            router.push(
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              doesSpotTypeRequireAmenities(params.type) ? `/new/amenities?${searchParams}` : `/new/images?${searchParams}`,
+            )
+          }}
+        >
+          Next
+        </Button>
+      </View>
     </NewSpotModalView>
   )
 }

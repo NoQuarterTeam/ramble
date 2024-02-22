@@ -55,29 +55,30 @@ export default function EditSpotOptionsScreen() {
         <FormInputLabel label="Describe the spot" />
         <Input value={description || ""} onChangeText={setDescription} multiline numberOfLines={4} />
       </ScrollView>
-      {(doesSpotTypeRequireAmenities(params.type) ? !!description && !!name : !!name) && (
-        <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
-          <Button
-            className="rounded-full"
-            onPress={() => {
-              const searchParams = new URLSearchParams({
-                ...params,
-                name,
-                description,
-                isPetFriendly: isPetFriendly.toString(),
-              })
 
-              router.push(
-                doesSpotTypeRequireAmenities(params.type)
-                  ? `/${tab}/spot/${id}/edit/amenities?${searchParams}`
-                  : `/${tab}/spot/${id}/edit/images?${searchParams}`,
-              )
-            }}
-          >
-            Next
-          </Button>
-        </View>
-      )}
+      <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
+        <Button
+          className="rounded-full"
+          disabled={!description || !name}
+          onPress={() => {
+            if (!name || !description) return
+            const searchParams = new URLSearchParams({
+              ...params,
+              name,
+              description,
+              isPetFriendly: isPetFriendly.toString(),
+            })
+
+            router.push(
+              doesSpotTypeRequireAmenities(params.type)
+                ? `/${tab}/spot/${id}/edit/amenities?${searchParams}`
+                : `/${tab}/spot/${id}/edit/images?${searchParams}`,
+            )
+          }}
+        >
+          Next
+        </Button>
+      </View>
     </EditSpotModalView>
   )
 }
