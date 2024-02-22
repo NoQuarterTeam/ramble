@@ -1,26 +1,28 @@
-import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import * as React from "react"
-import { Image } from "expo-image"
-import * as Haptics from "expo-haptics"
 import { ActivityIndicator, TouchableOpacity, View } from "react-native"
-import DraggableFlatList, { RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlist"
+import DraggableFlatList, { type RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlist"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { useActionSheet } from "@expo/react-native-action-sheet"
+import { Camera, LineLayer, type MapView as MapType, MarkerView, ShapeSource, StyleURL, UserLocation } from "@rnmapbox/maps"
+import dayjs from "dayjs"
+import * as Haptics from "expo-haptics"
+import { Image } from "expo-image"
 import * as Location from "expo-location"
-import { Map } from "~/components/Map"
-import { Text } from "~/components/ui/Text"
-import { RouterOutputs, api } from "~/lib/api"
-import { useTabSegment } from "~/lib/hooks/useTabSegment"
-
-import { createImageUrl, join } from "@ramble/shared"
-import { Camera, LineLayer, MarkerView, ShapeSource, StyleURL, UserLocation, type MapView as MapType } from "@rnmapbox/maps"
+import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { ChevronLeft, Edit2, Flag, Home, MapPin, PlusCircle } from "lucide-react-native"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
+
+import { createImageUrl, join } from "@ramble/shared"
+
 import { Icon } from "~/components/Icon"
+import { Map } from "~/components/Map"
 import { SpotIcon } from "~/components/SpotIcon"
-import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { SpotMarker } from "~/components/SpotMarker"
-import { useActionSheet } from "@expo/react-native-action-sheet"
-import dayjs from "dayjs"
+import { OptimizedImage } from "~/components/ui/OptimisedImage"
+import { Text } from "~/components/ui/Text"
+import { api, type RouterOutputs } from "~/lib/api"
+import { useMapCoords } from "~/lib/hooks/useMapCoords"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 export default function TripDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
@@ -74,12 +76,21 @@ export default function TripDetailScreen() {
     [trip?.items, tab],
   )
 
+  const setCoords = useMapCoords((s) => s.setCoords)
+
   const insets = useSafeAreaInsets()
   return (
     <View className="flex-1">
       <StatusBar style="light" />
 
-      <Map ref={mapRef} styleURL={StyleURL.SatelliteStreet} compassPosition={{ top: 54, right: 12 }}>
+      <Map
+        ref={mapRef}
+        styleURL={StyleURL.SatelliteStreet}
+        compassPosition={{ top: 54, right: 12 }}
+        onMapIdle={({ properties }) => {
+          setCoords(properties.center)
+        }}
+      >
         {data?.line && (
           <ShapeSource id="directions" shape={data.line.geometry}>
             <LineLayer id="line" style={{ lineDasharray: [0.5, 2], lineColor: "white", lineCap: "round", lineWidth: 2 }} />
@@ -213,12 +224,7 @@ function TripList({
 }) {
   const { id } = useLocalSearchParams<{ id: string }>()
   const [tripItems, setTripItems] = React.useState(trip.items)
-  const utils = api.useUtils()
-  const { mutate } = api.trip.updateOrder.useMutation({
-    onSuccess: () => {
-      utils.trip.detail.refetch({ id })
-    },
-  })
+  const { mutate } = api.trip.updateOrder.useMutation()
   const [activeItemIndex, setActiveItemIndex] = React.useState<number | null>(null)
   const activeIndexRef = React.useRef<number | null>(null)
 

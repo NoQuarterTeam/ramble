@@ -1,6 +1,6 @@
-import { AllRoutes, Link, LinkProps } from "expo-router"
+import { type AllRoutes, Link, type LinkProps } from "expo-router"
 
-import { Button, ButtonProps } from "./ui/Button"
+import { Button, type ButtonProps } from "./ui/Button"
 
 type Props = ButtonProps & LinkProps<AllRoutes>
 

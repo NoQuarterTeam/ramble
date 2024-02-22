@@ -2,7 +2,7 @@ import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
 import { Camera, type MapState, type MapView as MapType, StyleURL, UserLocation } from "@rnmapbox/maps"
 import * as Location from "expo-location"
-import { useRouter } from "expo-router"
+import { useLocalSearchParams, useRouter } from "expo-router"
 import { AlertTriangle, CircleDot, MapPinned, Navigation } from "lucide-react-native"
 
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
@@ -21,6 +21,11 @@ import { useMe } from "~/lib/hooks/useMe"
 import { NewSpotModalView } from "./NewSpotModalView"
 
 export default function NewSpotLocationScreen() {
+  const params = useLocalSearchParams<{ redirect?: string; initialLat?: string; initialLng?: string }>()
+
+  const initialLat = params.initialLat && parseFloat(params.initialLat)
+  const initialLng = params.initialLng && parseFloat(params.initialLng)
+
   const [coords, setCoords] = React.useState<number[] | null>(null)
   const [isLoadingLocation, setIsLoadingLocation] = React.useState(true)
   const [search, setSearch] = React.useState("")
@@ -126,7 +131,10 @@ export default function NewSpotLocationScreen() {
               ref={camera}
               allowUpdates
               defaultSettings={{
-                centerCoordinate: [location?.longitude || INITIAL_LONGITUDE, location?.latitude || INITIAL_LATITUDE],
+                centerCoordinate: [
+                  initialLng || location?.longitude || INITIAL_LONGITUDE,
+                  initialLat || location?.latitude || INITIAL_LATITUDE,
+                ],
                 zoomLevel: 14,
                 pitch: 0,
                 heading: 0,
@@ -185,10 +193,11 @@ export default function NewSpotLocationScreen() {
                 if (!coords || !addressToUse) return toast({ title: "Please select a valid location" })
                 if (!me.isVerified) return toast({ title: "Please verify your account" })
                 if (!coords[0] || !coords[1]) return toast({ title: "Please select a location" })
-                router.push({
-                  pathname: `/new/type`,
-                  params: { longitude: coords[0], latitude: coords[1], address: addressToUse },
-                })
+                router.push(
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  `/new/type?${new URLSearchParams({ ...params, longitude: coords[0], latitude: coords[1], address: addressToUse })}`,
+                )
               }}
               disabled={!coords || (coords && (!coords[0] || !coords[1])) || !addressToUse}
             >

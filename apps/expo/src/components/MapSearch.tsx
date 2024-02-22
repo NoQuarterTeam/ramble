@@ -2,17 +2,15 @@ import * as React from "react"
 import { Keyboard, TextInput, TouchableOpacity, View } from "react-native"
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { SafeAreaView } from "react-native-safe-area-context"
-
 import { Search, X } from "lucide-react-native"
 import { usePostHog } from "posthog-react-native"
 
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
 import { Spinner } from "~/components/ui/Spinner"
-
+import { api } from "~/lib/api"
 import { isAndroid, width } from "~/lib/device"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
-import { api } from "~/lib/api"
 
 export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) => void }) {
   const [search, setSearch] = React.useState("")

@@ -15,6 +15,7 @@ import {
   spotItemDistanceFromMeField,
   spotItemSelectFields,
   spotListQuery,
+  verifiedSpotWhereClause,
 } from "@ramble/server-services"
 import { amenitiesFields, promiseHash, spotPartnerFields } from "@ramble/shared"
 import { type SpotItemType } from "@ramble/shared"
@@ -43,7 +44,8 @@ export const spotRouter = createTRPCRouter({
         where: {
           latitude: { gt: coords.minLat, lt: coords.maxLat },
           longitude: { gt: coords.minLng, lt: coords.maxLng },
-          verifiedAt: isUnverified ? undefined : { not: { equals: null } },
+          // if isUnverified is pass return all spots, if not, return all spots that are verified or ones created by me
+          ...verifiedSpotWhereClause(ctx.user?.id, isUnverified),
           type: typeof types === "string" ? { equals: types } : { in: types },
           ...publicSpotWhereClause(ctx.user?.id),
           isPetFriendly: isPetFriendly ? { equals: true } : undefined,
@@ -224,26 +226,28 @@ export const spotRouter = createTRPCRouter({
   create: protectedProcedure
     .input(
       spotSchema.and(
-        z.object({
-          type: z.nativeEnum(SpotType),
-          images: z.array(z.object({ path: z.string() })),
-          amenities: spotAmenitiesSchema.partial().nullish(),
-          shouldPublishLater: z.boolean().optional(),
-        }),
+        z
+          .object({
+            type: z.nativeEnum(SpotType),
+            images: z.array(z.object({ path: z.string() })),
+            amenities: spotAmenitiesSchema.partial().nullish(),
+            shouldPublishLater: z.boolean().optional(),
+          })
+          .and(z.object({ tripId: z.string(), order: z.number().optional() }).partial()),
       ),
     )
     .mutation(async ({ ctx, input }) => {
-      const { shouldPublishLater } = input
-      const amenities = input.amenities
+      const { shouldPublishLater, tripId, order, amenities, images, ...data } = input
+
       const imageData = await Promise.all(
-        input.images.map(async ({ path }) => {
+        images.map(async ({ path }) => {
           const blurHash = await generateBlurHash(path)
           return { path, blurHash, creator: { connect: { id: ctx.user.id } } }
         }),
       )
       const spot = await ctx.prisma.spot.create({
         data: {
-          ...input,
+          ...data,
           publishedAt: shouldPublishLater ? dayjs().add(2, "weeks").toDate() : undefined,
           creator: { connect: { id: ctx.user.id } },
           verifiedAt: ctx.user.role === "GUIDE" ? new Date() : null,
@@ -252,6 +256,21 @@ export const spotRouter = createTRPCRouter({
           amenities: amenities ? { create: amenities } : undefined,
         },
       })
+      if (tripId) {
+        let newOrder = order
+        if (!order) {
+          const tripItems = await ctx.prisma.trip.findUnique({ where: { id: tripId } }).items()
+          newOrder = tripItems?.length || 0
+        }
+        await ctx.prisma.tripItem.create({
+          data: {
+            creator: { connect: { id: ctx.user.id } },
+            spot: { connect: { id: spot.id } },
+            trip: { connect: { id: tripId } },
+            order: newOrder,
+          },
+        })
+      }
       void sendSlackMessage(`📍 New spot added by @${ctx.user.username}!`)
       return spot
     }),

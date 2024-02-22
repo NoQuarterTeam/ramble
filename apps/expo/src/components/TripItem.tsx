@@ -1,17 +1,18 @@
 import { TouchableOpacity, View } from "react-native"
+import isBetween from "dayjs/plugin/isBetween"
 import { useRouter } from "expo-router"
 import { User2 } from "lucide-react-native"
-import isBetween from "dayjs/plugin/isBetween"
 dayjs.extend(isBetween)
+
+import dayjs from "dayjs"
 
 import { type Trip, type User } from "@ramble/database/types"
 import { createImageUrl, join } from "@ramble/shared"
 
+import { useFeedbackActivity } from "./FeedbackCheck"
 import { Icon } from "./Icon"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
-import { useFeedbackActivity } from "./FeedbackCheck"
-import dayjs from "dayjs"
 
 interface Props {
   trip: Pick<Trip, "id" | "name" | "startDate" | "endDate"> & {

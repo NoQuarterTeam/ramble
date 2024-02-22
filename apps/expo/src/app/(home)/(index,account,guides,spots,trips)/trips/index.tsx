@@ -1,18 +1,18 @@
 import { ScrollView, TouchableOpacity, View } from "react-native"
+import dayjs from "dayjs"
+import { useRouter } from "expo-router"
+import { Plus, PlusCircle } from "lucide-react-native"
+
+import { useFeedbackActivity } from "~/components/FeedbackCheck"
+import { Icon } from "~/components/Icon"
+import { LinkButton } from "~/components/LinkButton"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { TripItem } from "~/components/TripItem"
 import { Spinner } from "~/components/ui/Spinner"
-import { RouterOutputs, api } from "~/lib/api"
-import { useMe } from "~/lib/hooks/useMe"
-
-import { useRouter } from "expo-router"
-import { Plus, PlusCircle } from "lucide-react-native"
-import { useFeedbackActivity } from "~/components/FeedbackCheck"
-import { Icon } from "~/components/Icon"
 import { TabView } from "~/components/ui/TabView"
 import { Text } from "~/components/ui/Text"
-import { LinkButton } from "~/components/LinkButton"
-import dayjs from "dayjs"
+import { api, type RouterOutputs } from "~/lib/api"
+import { useMe } from "~/lib/hooks/useMe"
 
 export default function TripsLayout() {
   const increment = useFeedbackActivity((s) => s.increment)

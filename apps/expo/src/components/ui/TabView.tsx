@@ -1,11 +1,11 @@
 import type * as React from "react"
 import { View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { StatusBar } from "expo-status-bar"
 
 import { join } from "@ramble/shared"
 
 import { BrandHeading } from "./BrandHeading"
-import { StatusBar } from "expo-status-bar"
 
 interface Props {
   title: string | React.ReactNode

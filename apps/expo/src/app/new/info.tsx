@@ -52,17 +52,19 @@ export default function NewSpotInfoScreen() {
         <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
           <Button
             className="rounded-full"
-            onPress={() =>
-              router.push({
-                pathname: doesSpotTypeRequireAmenities(params.type) ? `/new/amenities` : `/new/images`,
-                params: {
-                  ...params,
-                  name,
-                  description: description || "",
-                  isPetFriendly: String(isPetFriendly),
-                },
+            onPress={() => {
+              const searchParams = new URLSearchParams({
+                ...params,
+                name,
+                description: description || "",
+                isPetFriendly: String(isPetFriendly),
               })
-            }
+              router.push(
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                doesSpotTypeRequireAmenities(params.type) ? `/new/amenities?${searchParams}` : `/new/images?${searchParams}`,
+              )
+            }}
           >
             Next
           </Button>

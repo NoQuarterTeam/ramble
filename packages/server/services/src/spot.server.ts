@@ -9,10 +9,26 @@ export const publicSpotWhereClause = (userId?: string | null) => {
       : { OR: [{ publishedAt: null }, { publishedAt: { lt: new Date() } }] },
   } satisfies Omit<Prisma.SpotWhereUniqueInput, "id">
 }
+
 export const publicSpotWhereClauseRaw = (userId?: string | null) => {
   return userId
     ? Prisma.sql`Spot.deletedAt IS NULL AND (Spot.creatorId = ${userId} OR (Spot.publishedAt IS NULL OR Spot.publishedAt < NOW()))`
     : Prisma.sql`Spot.deletedAt IS NULL AND (Spot.publishedAt IS NULL OR Spot.publishedAt < NOW())`
+}
+
+export const verifiedSpotWhereClause = (userId?: string | null, showUnverified?: boolean | null | undefined) => {
+  if (showUnverified) return {}
+  if (!userId) return { verifiedAt: { not: { equals: null } } } satisfies Omit<Prisma.SpotWhereUniqueInput, "id">
+  return {
+    OR: [{ creatorId: { equals: userId }, verifiedAt: { equals: null } }, { verifiedAt: { not: { equals: null } } }],
+  } satisfies Omit<Prisma.SpotWhereUniqueInput, "id">
+}
+
+export const verifiedSpotWhereClauseRaw = (userId?: string | null, showUnverified?: boolean | null | undefined) => {
+  if (showUnverified) return Prisma.sql``
+  return userId
+    ? Prisma.sql`Spot.verifiedAt IS NOT NULL OR (Spot.creatorId = ${userId} AND Spot.verifiedAt IS NULL)`
+    : Prisma.sql`Spot.verifiedAt IS NOT NULL`
 }
 
 export type LatestSpotImages = Array<Pick<SpotImage, "path" | "blurHash" | "spotId">>

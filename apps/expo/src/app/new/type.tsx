@@ -45,7 +45,14 @@ export default function NewSpotTypeScreen() {
       </ScrollView>
       {type && (
         <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
-          <Button className="rounded-full" onPress={() => router.push({ pathname: `/new/info`, params: { ...params, type } })}>
+          <Button
+            className="rounded-full"
+            onPress={() =>
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              router.push(`/new/info?${new URLSearchParams({ ...params, type })}`)
+            }
+          >
             Next
           </Button>
         </View>

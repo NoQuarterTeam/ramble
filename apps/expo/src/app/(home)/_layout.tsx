@@ -5,10 +5,11 @@ import { List, Map, Route, UserCircle, Users } from "lucide-react-native"
 import { createImageUrl, join } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
-import { useBackgroundColor } from "../../lib/tailwind"
 import { Icon } from "~/components/Icon"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { useMe } from "~/lib/hooks/useMe"
+
+import { useBackgroundColor } from "../../lib/tailwind"
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.

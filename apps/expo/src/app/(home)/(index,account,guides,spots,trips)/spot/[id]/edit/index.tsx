@@ -8,15 +8,15 @@ import { AlertTriangle, CircleDot, MapPinned, Navigation } from "lucide-react-na
 import { Icon } from "~/components/Icon"
 import { Map } from "~/components/Map"
 import { Button } from "~/components/ui/Button"
+import { Input } from "~/components/ui/Input"
+import { Spinner } from "~/components/ui/Spinner"
+import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
+import { api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 import { EditSpotModalView } from "./EditSpotModalView"
-import { Spinner } from "~/components/ui/Spinner"
-import { api } from "~/lib/api"
-import { Text } from "~/components/ui/Text"
-import { Input } from "~/components/ui/Input"
 
 export default function EditSpotLocationScreen() {
   const { id, ...params } = useLocalSearchParams<{ id: string; longitude: string; latitude: string }>()

@@ -1,6 +1,6 @@
 import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
-import { useGlobalSearchParams, useRouter } from "expo-router"
+import { useLocalSearchParams, useRouter } from "expo-router"
 
 import { AMENITIES } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
@@ -14,7 +14,7 @@ import { AMENITIES_ICONS } from "~/lib/models/amenities"
 import { NewSpotModalView } from "./NewSpotModalView"
 
 export default function NewSpotAmenitiesScreen() {
-  const params = useGlobalSearchParams()
+  const params = useLocalSearchParams()
   const [amenities, setAmenities] = React.useState(
     Object.keys(AMENITIES).reduce((acc, key) => ({ ...acc, [key]: false }), {} as { [key in keyof typeof AMENITIES]: boolean }),
   )
@@ -37,7 +37,12 @@ export default function NewSpotAmenitiesScreen() {
       <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
         <Button
           className="rounded-full"
-          onPress={() => router.push({ pathname: `/new/images`, params: { ...params, amenities: JSON.stringify(amenities) } })}
+          onPress={() => {
+            const searchParams = new URLSearchParams({ ...params, amenities: JSON.stringify(amenities) })
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            router.push(`/new/images?${searchParams}`)
+          }}
         >
           Next
         </Button>

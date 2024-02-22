@@ -1,6 +1,6 @@
 import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
-import { useGlobalSearchParams, useRouter } from "expo-router"
+import { useLocalSearchParams, useRouter } from "expo-router"
 import { Check, Dog, Lock, MapPin } from "lucide-react-native"
 import { usePostHog } from "posthog-react-native"
 
@@ -33,11 +33,13 @@ type Params = {
   isPetFriendly?: string
   images?: string
   amenities?: string
+  tripId?: string
+  order?: string
 }
 
 export default function NewSpotConfirmScreen() {
   const { me } = useMe()
-  const params = useGlobalSearchParams<Params>()
+  const params = useLocalSearchParams<Params>()
   const router = useRouter()
   const [shouldPublishLater, setShouldPublishLater] = React.useState(false)
   const utils = api.useUtils()
@@ -51,15 +53,22 @@ export default function NewSpotConfirmScreen() {
     onSuccess: async (data) => {
       posthog?.capture("spot created", { type: data.type })
       await utils.user.hasCreatedSpot.refetch()
-      if (me?.role === "GUIDE") {
-        void utils.spot.list.refetch({ skip: 0, sort: "latest" })
-        router.navigate(`/(home)/(index)/spot/${data.id}`)
+      if (params.tripId) {
+        await utils.trip.detail.refetch({ id: params.tripId })
+        router.navigate(`/(home)/(trips)/trips/${params.tripId}`)
         await new Promise((resolve) => setTimeout(resolve, 1000))
         toast({ title: "Spot created", message: "Thank you for contributing to the community!" })
       } else {
-        router.navigate("/")
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        toast({ title: "A guide will review your spot", message: "Thank you for contributing to the community!" })
+        if (me?.role === "GUIDE") {
+          void utils.spot.list.refetch({ skip: 0, sort: "latest" })
+          router.navigate(`/(home)/(index)/spot/${data.id}`)
+          await new Promise((resolve) => setTimeout(resolve, 1000))
+          toast({ title: "Spot created", message: "Thank you for contributing to the community!" })
+        } else {
+          router.navigate("/")
+          await new Promise((resolve) => setTimeout(resolve, 1000))
+          toast({ title: "A guide will review your spot", message: "Thank you for contributing to the community!" })
+        }
       }
     },
     onError: () => {
@@ -90,6 +99,8 @@ export default function NewSpotConfirmScreen() {
       type: params.type,
       images: images ? images.map((i) => ({ path: i })) : [],
       amenities: parsedAmenities || undefined,
+      tripId: params.tripId,
+      order: params.order ? Number(params.order) : undefined,
     })
   }
 

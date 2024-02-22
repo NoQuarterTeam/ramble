@@ -1,5 +1,6 @@
-import { useLocalSearchParams, useRouter } from "expo-router"
 import { ActivityIndicator, Alert, ScrollView, View } from "react-native"
+import { useLocalSearchParams, useRouter } from "expo-router"
+
 import { TripForm } from "~/components/TripForm"
 import { DeleteButton } from "~/components/ui/DeleteButton"
 import { ModalView } from "~/components/ui/ModalView"

@@ -5,10 +5,11 @@ import { useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { X } from "lucide-react-native"
 
+import { merge } from "@ramble/shared"
+
 import { Icon } from "../Icon"
 import { BrandHeading } from "./BrandHeading"
 import { Toast } from "./Toast"
-import { merge } from "@ramble/shared"
 
 interface Props {
   title?: string

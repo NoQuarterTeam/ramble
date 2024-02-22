@@ -63,12 +63,12 @@ export default function NewSpotImagesScreen() {
       <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
         <Button
           className="rounded-full"
-          onPress={() =>
-            router.push({
-              pathname: `/new/confirm`,
-              params: { ...params, images: images.join(",") },
-            })
-          }
+          onPress={() => {
+            const searchParams = new URLSearchParams({ ...params, images: images.join(",") })
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            router.push(`/new/confirm?${searchParams}`)
+          }}
         >
           Next
         </Button>

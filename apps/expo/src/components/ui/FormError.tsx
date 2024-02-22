@@ -1,12 +1,12 @@
 import { View, type ViewProps } from "react-native"
+import { AlertTriangle } from "lucide-react-native"
 
 import { merge } from "@ramble/shared"
 
 import { type ApiError } from "~/lib/hooks/useForm"
 
-import { Text } from "./Text"
 import { Icon } from "../Icon"
-import { AlertTriangle } from "lucide-react-native"
+import { Text } from "./Text"
 
 interface Props extends ViewProps {
   error?: ApiError

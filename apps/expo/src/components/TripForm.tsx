@@ -1,19 +1,20 @@
-import { type Trip } from "@ramble/database/types"
-import DateTimePicker from "@react-native-community/datetimepicker"
 import { FormProvider } from "react-hook-form"
-
-import dayjs from "dayjs"
 import { TouchableOpacity, View } from "react-native"
+import DateTimePicker from "@react-native-community/datetimepicker"
+import dayjs from "dayjs"
+
+import { type Trip } from "@ramble/database/types"
+import { useDisclosure } from "@ramble/shared"
+
 import { Button } from "~/components/ui/Button"
 import { FormError } from "~/components/ui/FormError"
 import { FormInput, FormInputLabel } from "~/components/ui/FormInput"
 import { type RouterInputs } from "~/lib/api"
-import { useForm, type ApiError } from "~/lib/hooks/useForm"
-import { toast } from "./ui/Toast"
-
-import { useDisclosure } from "@ramble/shared"
+import { type ApiError, useForm } from "~/lib/hooks/useForm"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
+
 import { Text } from "./ui/Text"
+import { toast } from "./ui/Toast"
 
 type UpdateSubmit = {
   trip: Pick<Trip, "name" | "startDate" | "endDate">

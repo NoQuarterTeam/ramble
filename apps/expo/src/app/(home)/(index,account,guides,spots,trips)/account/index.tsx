@@ -4,6 +4,7 @@ import { type AllRoutes, type Href, Link, useRouter } from "expo-router"
 import {
   AlertCircle,
   ChevronRight,
+  Heart,
   type LucideIcon,
   MessageCircle,
   Settings,
@@ -11,7 +12,6 @@ import {
   User,
   User2,
   UserPlus,
-  Heart,
 } from "lucide-react-native"
 
 import { createImageUrl } from "@ramble/shared"

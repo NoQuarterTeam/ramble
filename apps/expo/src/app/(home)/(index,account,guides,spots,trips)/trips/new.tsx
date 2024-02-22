@@ -1,6 +1,6 @@
+import { ScrollView } from "react-native"
 import { useRouter } from "expo-router"
 import { usePostHog } from "posthog-react-native"
-import { ScrollView } from "react-native"
 
 import { TripForm } from "~/components/TripForm"
 import { ModalView } from "~/components/ui/ModalView"

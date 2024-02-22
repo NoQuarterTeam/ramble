@@ -3,11 +3,12 @@ import { TouchableOpacity, View } from "react-native"
 import { useRouter } from "expo-router"
 import { ChevronLeft } from "lucide-react-native"
 
+import { merge } from "@ramble/shared"
+
 import { SafeAreaView } from "~/components/SafeAreaView"
 
 import { Icon } from "../Icon"
 import { BrandHeading } from "./BrandHeading"
-import { merge } from "@ramble/shared"
 
 interface Props {
   title: string | React.ReactNode
