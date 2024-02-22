@@ -18,6 +18,7 @@ import { api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { interestOptions } from "~/lib/models/user"
+import { ScreenView } from "~/components/ui/ScreenView"
 
 export default function UserScreen() {
   const colorScheme = useColorScheme()
@@ -77,21 +78,12 @@ export default function UserScreen() {
     )
 
   return (
-    <SafeAreaView>
-      <View className="flex flex-row items-center justify-between px-4 py-2">
-        <View className="flex flex-row items-center">
-          {router.canGoBack() && (
-            <TouchableOpacity className="sq-8 flex items-center justify-center" onPress={router.back} activeOpacity={0.8}>
-              <ChevronLeft className="text-primary mt-2" />
-            </TouchableOpacity>
-          )}
-          <View>
-            <BrandHeading style={{ paddingLeft: 6 }} className="text-3xl">
-              {username}
-            </BrandHeading>
-          </View>
-        </View>
-        {user && me && me.username !== username && (
+    <ScreenView
+      title={username}
+      rightElement={
+        user &&
+        me &&
+        me.username !== username && (
           <TouchableOpacity
             onPress={onToggleFollow}
             activeOpacity={0.8}
@@ -99,8 +91,9 @@ export default function UserScreen() {
           >
             <Icon icon={Heart} size={20} fill={isFollowedByMe ? (isDark ? "white" : "black") : "transparent"} />
           </TouchableOpacity>
-        )}
-      </View>
+        )
+      }
+    >
       {isLoading ? (
         <View className="flex items-center justify-center p-4">
           <Spinner />
@@ -111,7 +104,7 @@ export default function UserScreen() {
         </View>
       ) : (
         <ScrollView className="min-h-full" stickyHeaderIndices={[1]} showsVerticalScrollIndicator={false}>
-          <View className="space-y-2 px-4 py-2">
+          <View className="space-y-2 py-2">
             <View className="flex flex-row items-center space-x-3">
               {user.avatar ? (
                 <OptimizedImage
@@ -206,12 +199,12 @@ export default function UserScreen() {
               Lists
             </Button>
           </View>
-          <View className="flex-1 p-2 pb-20">
+          <View className="flex-1 py-2 pb-20">
             <Slot />
           </View>
         </ScrollView>
       )}
       <StatusBar style="auto" />
-    </SafeAreaView>
+    </ScreenView>
   )
 }

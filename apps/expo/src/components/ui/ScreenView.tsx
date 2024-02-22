@@ -23,18 +23,22 @@ export function ScreenView(props: Props) {
   return (
     <SafeAreaView>
       <View className="flex-1">
-        <View className="flex flex-row items-center justify-between px-4 py-2">
-          <View className="flex h-[40px] flex-row items-center space-x-0.5">
+        <View className="flex h-12 flex-row items-center justify-between px-4">
+          <View className="flex-1">
             <TouchableOpacity onPress={props.onBack || router.back} className="sq-8 flex items-center justify-center pt-0.5">
               <Icon icon={ChevronLeft} color="primary" />
             </TouchableOpacity>
+          </View>
+          <View className="flex-2 flex items-center justify-center">
             {typeof props.title === "string" ? (
-              <BrandHeading className="text-xl">{props.title.toLowerCase()}</BrandHeading>
+              <BrandHeading className="text-xl" style={{ paddingHorizontal: 3 }}>
+                {props.title.toLowerCase()}
+              </BrandHeading>
             ) : (
               props.title
             )}
           </View>
-          {props.rightElement}
+          <View className="flex flex-1 flex-row justify-end">{props.rightElement}</View>
         </View>
         <View className={merge("flex-1 px-4", props.containerClassName)}>{props.children}</View>
       </View>

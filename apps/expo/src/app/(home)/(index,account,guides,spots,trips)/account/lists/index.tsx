@@ -65,7 +65,7 @@ export default function ListsScreen() {
               shadowColor: isDark ? "black" : "gray",
               shadowOpacity: isDark ? 0.7 : 0.5,
             }}
-            className="bg-background dark:bg-background-dark w-[200px] rounded-sm px-4 py-2"
+            className="bg-background dark:bg-background-dark w-[200px] rounded px-4 py-2"
           >
             {Object.entries(SORT_OPTIONS).map(([key, label]) => (
               <TouchableOpacity
