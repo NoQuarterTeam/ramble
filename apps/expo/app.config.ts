@@ -82,6 +82,18 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
         organization: "noquarter",
       },
     ],
+    [
+      "expo-build-properties",
+      {
+        android: {
+          compileSdkVersion: 33,
+          targetSdkVersion: 33,
+          minSdkVersion: 23,
+          buildToolsVersion: "33.0.0",
+          kotlinVersion: "1.6.20",
+        },
+      },
+    ],
     "./expo-plugins/with-modify-gradle.js",
     "./expo-plugins/android-manifest.plugin.js",
     [

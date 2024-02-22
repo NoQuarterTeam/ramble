@@ -46,6 +46,7 @@
     "expo-file-system",
     "expo-font",
     "expo-image-picker",
+    "expo-build-properties",
     "expo-image",
     "expo-linking",
     "expo-localization",
