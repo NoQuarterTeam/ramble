@@ -1,14 +1,15 @@
-import { createImageUrl, join } from "@ramble/shared"
+import { ActivityIndicator, Alert, ScrollView, TouchableOpacity, View } from "react-native"
 import { Link, useLocalSearchParams } from "expo-router"
 import { Trash, User2 } from "lucide-react-native"
-import { ActivityIndicator, Alert, ScrollView, TouchableOpacity, View } from "react-native"
-import { Icon } from "~/components/Icon"
 
+import { createImageUrl, join } from "@ramble/shared"
+
+import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
 import { ModalView } from "~/components/ui/ModalView"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { Text } from "~/components/ui/Text"
-import { RouterOutputs, api } from "~/lib/api"
+import { api, type RouterOutputs } from "~/lib/api"
 
 export default function TripUsers() {
   const { id } = useLocalSearchParams<{ id: string }>()

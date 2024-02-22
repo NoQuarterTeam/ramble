@@ -15,17 +15,17 @@ import { ChevronLeft, Edit2, Flag, Home, MapPin, PlusCircle, Users } from "lucid
 import { createImageUrl, join } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
+import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { Map } from "~/components/Map"
 import { SpotIcon } from "~/components/SpotIcon"
 import { SpotMarker } from "~/components/SpotMarker"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
+import { ScreenView } from "~/components/ui/ScreenView"
 import { Text } from "~/components/ui/Text"
 import { api, type RouterOutputs } from "~/lib/api"
 import { useMapCoords } from "~/lib/hooks/useMapCoords"
-import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { useMe } from "~/lib/hooks/useMe"
-import { ScreenView } from "~/components/ui/ScreenView"
-import { LoginPlaceholder } from "~/components/LoginPlaceholder"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 export default function TripDetailScreen() {
   const { me } = useMe()

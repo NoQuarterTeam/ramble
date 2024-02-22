@@ -1,16 +1,17 @@
 import * as React from "react"
-import { useLocalSearchParams } from "expo-router"
 import { ActivityIndicator, ScrollView, TouchableOpacity, View } from "react-native"
-
-import { ModalView } from "~/components/ui/ModalView"
-import { Text } from "~/components/ui/Text"
-import { RouterOutputs, api } from "~/lib/api"
-import { Input } from "~/components/ui/Input"
-import { OptimizedImage } from "~/components/ui/OptimisedImage"
-import { createImageUrl, join } from "@ramble/shared"
-import { Icon } from "~/components/Icon"
+import { useLocalSearchParams } from "expo-router"
 import { User2 } from "lucide-react-native"
+
+import { createImageUrl, join } from "@ramble/shared"
+
+import { Icon } from "~/components/Icon"
+import { Input } from "~/components/ui/Input"
+import { ModalView } from "~/components/ui/ModalView"
+import { OptimizedImage } from "~/components/ui/OptimisedImage"
+import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
+import { api, type RouterOutputs } from "~/lib/api"
 
 export default function AddTripUsers() {
   const { id } = useLocalSearchParams<{ id: string }>()

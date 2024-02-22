@@ -1,5 +1,6 @@
 import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
+import Animated, { useAnimatedKeyboard, useAnimatedStyle } from "react-native-reanimated"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { Dog } from "lucide-react-native"
 
@@ -16,7 +17,6 @@ import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 import { EditSpotModalView } from "./EditSpotModalView"
-import Animated, { useAnimatedKeyboard, useAnimatedStyle } from "react-native-reanimated"
 
 export default function EditSpotOptionsScreen() {
   useKeyboardController()

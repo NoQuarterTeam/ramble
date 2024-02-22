@@ -12,13 +12,13 @@ import { SafeAreaView } from "~/components/SafeAreaView"
 import { BrandHeading } from "~/components/ui/BrandHeading"
 import { Button } from "~/components/ui/Button"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
+import { ScreenView } from "~/components/ui/ScreenView"
 import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
 import { api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { interestOptions } from "~/lib/models/user"
-import { ScreenView } from "~/components/ui/ScreenView"
 
 export default function UserScreen() {
   const colorScheme = useColorScheme()
