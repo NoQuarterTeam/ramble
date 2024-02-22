@@ -24,6 +24,8 @@ import { api, type RouterOutputs } from "~/lib/api"
 import { useMapCoords } from "~/lib/hooks/useMapCoords"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { useMe } from "~/lib/hooks/useMe"
+import { ScreenView } from "~/components/ui/ScreenView"
+import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 
 export default function TripDetailScreen() {
   const { me } = useMe()
@@ -81,6 +83,13 @@ export default function TripDetailScreen() {
   const setCoords = useMapCoords((s) => s.setCoords)
 
   const insets = useSafeAreaInsets()
+
+  if (!me)
+    return (
+      <ScreenView title={trip?.name}>
+        <LoginPlaceholder text="Log in to view this trip" />
+      </ScreenView>
+    )
   return (
     <View className="flex-1">
       <StatusBar style="light" />
