@@ -10,7 +10,7 @@ import { Image } from "expo-image"
 import * as Location from "expo-location"
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
-import { ChevronLeft, Edit2, Flag, Home, MapPin, PlusCircle } from "lucide-react-native"
+import { ChevronLeft, Edit2, Flag, Home, MapPin, PlusCircle, Users } from "lucide-react-native"
 
 import { createImageUrl, join } from "@ramble/shared"
 
@@ -23,8 +23,10 @@ import { Text } from "~/components/ui/Text"
 import { api, type RouterOutputs } from "~/lib/api"
 import { useMapCoords } from "~/lib/hooks/useMapCoords"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
+import { useMe } from "~/lib/hooks/useMe"
 
 export default function TripDetailScreen() {
+  const { me } = useMe()
   const { id } = useLocalSearchParams<{ id: string }>()
 
   const { data, isLoading } = api.trip.detail.useQuery({ id })
@@ -169,24 +171,28 @@ export default function TripDetailScreen() {
           </View>
         </View>
 
-        <View className="flex flex-row items-center space-x-1">
-          {/* <Link push href={`/${tab}/trips/${id}/edit`} asChild>
-            <TouchableOpacity
-              className="sq-10 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
-              activeOpacity={0.8}
-            >
-              <Icon icon={Users} size={16} />
-            </TouchableOpacity>
-          </Link> */}
-          <Link push href={`/${tab}/trips/${id}/edit`} asChild>
-            <TouchableOpacity
-              className="sq-10 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
-              activeOpacity={0.8}
-            >
-              <Icon icon={Edit2} size={16} />
-            </TouchableOpacity>
-          </Link>
-        </View>
+        {trip && (
+          <View className="flex flex-row items-center space-x-1">
+            {trip.creatorId === me?.id && (
+              <Link push href={`/${tab}/trips/${id}/users`} asChild>
+                <TouchableOpacity
+                  className="sq-10 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
+                  activeOpacity={0.8}
+                >
+                  <Icon icon={Users} size={16} />
+                </TouchableOpacity>
+              </Link>
+            )}
+            <Link push href={`/${tab}/trips/${id}/edit`} asChild>
+              <TouchableOpacity
+                className="sq-10 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
+                activeOpacity={0.8}
+              >
+                <Icon icon={Edit2} size={16} />
+              </TouchableOpacity>
+            </Link>
+          </View>
+        )}
       </View>
 
       <View className="absolute bottom-0 left-0 right-0">
