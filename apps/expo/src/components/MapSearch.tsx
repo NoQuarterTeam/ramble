@@ -10,7 +10,6 @@ import { Button } from "~/components/ui/Button"
 import { Spinner } from "~/components/ui/Spinner"
 import { api } from "~/lib/api"
 import { width } from "~/lib/device"
-import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
 
 export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) => void }) {
   const [search, setSearch] = React.useState("")
@@ -28,9 +27,8 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
     searchWidth.value = 0
   }
   const posthog = usePostHog()
-  useKeyboardController()
+
   const inputRef = React.useRef<TextInput>(null)
-  // if (isAndroid) return null
 
   return (
     <>
