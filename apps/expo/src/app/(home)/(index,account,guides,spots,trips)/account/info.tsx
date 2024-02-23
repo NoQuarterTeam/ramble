@@ -98,7 +98,12 @@ export default function AccountInfoScreen() {
           ) : undefined
         }
       >
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="interactive"
+        >
           <View className="flex w-full items-center justify-center pt-2">
             <TouchableOpacity onPress={onPickImage}>
               {isUploadLoading || isAvatarSavingLoading ? (

@@ -38,7 +38,12 @@ export default function InterestsScreen() {
 
   return (
     <ScreenView title="Interests">
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive"
+      >
         {interestOptions.map((interest) => (
           <InterestSelector
             key={interest.value}

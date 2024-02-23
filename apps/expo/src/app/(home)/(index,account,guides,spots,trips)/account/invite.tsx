@@ -23,7 +23,12 @@ export default function AccountInviteScreen() {
 
   return (
     <ScreenView title="invite codes">
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive"
+      >
         {isLoading ? (
           <View className="flex items-center justify-center pt-4">
             <Spinner />

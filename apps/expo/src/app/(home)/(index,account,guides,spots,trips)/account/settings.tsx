@@ -45,7 +45,12 @@ export default function AccountSettingsScreen() {
   if (!me) return null
   return (
     <ScreenView title="Settings">
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive"
+      >
         <View className="flex-1 space-y-4">
           <View className="flex flex-row items-center justify-between space-x-2">
             <View className="flex flex-row items-center space-x-3">
