@@ -10,9 +10,20 @@ import { Button } from "~/components/ui/Button"
 import { Spinner } from "~/components/ui/Spinner"
 import { api } from "~/lib/api"
 import { width } from "~/lib/device"
+import { AvoidSoftInput } from "react-native-avoid-softinput"
+import { useFocusEffect } from "expo-router"
 
 export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) => void }) {
   const [search, setSearch] = React.useState("")
+
+  const onFocusEffect = React.useCallback(() => {
+    AvoidSoftInput.setEnabled(true)
+    return () => {
+      AvoidSoftInput.setEnabled(false)
+    }
+  }, [])
+
+  useFocusEffect(onFocusEffect)
 
   const searchWidth = useSharedValue(0)
   const animatedStyles = useAnimatedStyle(() => ({
