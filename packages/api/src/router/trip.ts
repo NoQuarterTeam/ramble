@@ -13,7 +13,7 @@ export const tripRouter = createTRPCRouter({
     return ctx.prisma.trip.findMany({
       where: { users: { some: { id: ctx.user.id } } },
       orderBy: { startDate: "desc" },
-      include: { items: true, creator: true },
+      include: { items: true, creator: true, users: true },
       take: 20, // TODO pagination
     })
   }),
@@ -21,7 +21,7 @@ export const tripRouter = createTRPCRouter({
     return ctx.prisma.trip.findFirst({
       where: { startDate: { lt: new Date() }, endDate: { gt: new Date() }, users: { some: { id: ctx.user.id } } },
       orderBy: { startDate: "desc" },
-      include: { items: true, creator: true },
+      include: { items: true, creator: true, users: true },
     })
   }),
   create: protectedProcedure.input(tripSchema).mutation(async ({ ctx, input }) => {
