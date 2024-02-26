@@ -68,7 +68,7 @@
     "nprogress": "0.2.0",
     "posthog-js": "1.108.3",
     "pretty-cache-header": "1.0.0",
-    "query-string": "8.2.0",
+    "query-string": "9.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-dropzone": "14.2.3",
