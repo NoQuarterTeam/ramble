@@ -76,7 +76,9 @@ export default function TripDetailScreen() {
   }, [me?.tripSyncEnabled, permissionResponse?.granted, permissionResponse?.canAskAgain])
 
   React.useEffect(() => {
-    if (!permissionResponse || permissionResponse?.granted || !me?.tripSyncEnabled) return
+    if (!permissionResponse || permissionResponse?.granted || !me?.tripSyncEnabled || !trip) return
+    const isTripActive = dayjs(trip.startDate).isBefore(dayjs()) && dayjs(trip.endDate).isAfter(dayjs())
+    if (!isTripActive) return
     async function loadImages() {
       try {
         const images = await getAssetsAsync({
