@@ -1,5 +1,5 @@
 import { router } from "expo-router"
-import { AlertCircle, ChevronDown, Languages, MapPinOff } from "lucide-react-native"
+import { AlertCircle, ChevronDown, Image, Languages, MapPinOff } from "lucide-react-native"
 import { Modal, ScrollView, Switch, View } from "react-native"
 
 import { languages, useDisclosure } from "@ramble/shared"
@@ -38,6 +38,7 @@ export default function AccountSettingsScreen() {
         ...me,
         preferredLanguage: data.preferredLanguage === undefined ? me.preferredLanguage : data.preferredLanguage,
         isLocationPrivate: data.isLocationPrivate === undefined ? me.isLocationPrivate : Boolean(data.isLocationPrivate),
+        tripSyncEnabled: data.tripSyncEnabled === undefined ? me.tripSyncEnabled : Boolean(data.tripSyncEnabled),
       })
     },
   })
@@ -91,6 +92,22 @@ export default function AccountSettingsScreen() {
               trackColor={{ true: colors.primary[600] }}
               value={me?.isLocationPrivate}
               onValueChange={() => updateUser({ isLocationPrivate: !me?.isLocationPrivate })}
+            />
+          </View>
+          <View className="flex flex-row items-center justify-between space-x-2">
+            <View className="flex flex-row items-center space-x-3">
+              <Icon icon={Image} size={30} />
+              <View>
+                <Text className="h-[22px] text-base">Trip image sync</Text>
+                <Text style={{ lineHeight: 16 }} numberOfLines={3} className="max-w-[220px] text-sm opacity-75">
+                  We will automatically sync your images to your current trip
+                </Text>
+              </View>
+            </View>
+            <Switch
+              trackColor={{ true: colors.primary[600] }}
+              value={me?.tripSyncEnabled}
+              onValueChange={() => updateUser({ tripSyncEnabled: !me?.tripSyncEnabled })}
             />
           </View>
         </View>

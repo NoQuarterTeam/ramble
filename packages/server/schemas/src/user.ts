@@ -29,6 +29,7 @@ export const userSchema = z.object({
   isMountainBiker: FormBoolean,
   latitude: NullableFormNumber,
   longitude: NullableFormNumber,
+  tripSyncEnabled: FormBoolean,
 })
 export const updateUserSchema = userSchema.partial()
 export const loginSchema = userSchema.pick({ email: true, password: true })
