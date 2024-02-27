@@ -28,3 +28,39 @@ export function useS3Upload(): [(fileUrl: string) => Promise<string>, { isLoadin
 
   return [upload, { isLoading }]
 }
+
+type File = {
+  url: string
+  key: string | undefined
+  [key: string]: string | number | undefined
+}
+
+export function useS3BulkUpload(): [(files: File[]) => Promise<NonNullable<File>[]>, { isLoading: boolean }] {
+  const [isLoading, setIsLoading] = React.useState(false)
+  const { mutateAsync } = api.s3.createSignedUrl.useMutation()
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: allow dat
+  const upload = React.useCallback(async (files: File[]) => {
+    try {
+      console.log("what the fuckkkk")
+
+      setIsLoading(true)
+      for (const file of files) {
+        const key = v4()
+        const res = await mutateAsync({ key: assetPrefix + key })
+        const resp = await fetch(file.url)
+        const imageBody = await resp.blob()
+        await fetch(res, { method: "PUT", body: imageBody })
+        file.key = key
+      }
+
+      setIsLoading(false)
+      return files
+    } catch (error) {
+      setIsLoading(false)
+      throw error
+    }
+  }, [])
+
+  return [upload, { isLoading }]
+}

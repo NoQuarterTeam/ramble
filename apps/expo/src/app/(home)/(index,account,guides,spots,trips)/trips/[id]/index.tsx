@@ -24,9 +24,11 @@ import { SpotMarker } from "~/components/SpotMarker"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { ScreenView } from "~/components/ui/ScreenView"
 import { Text } from "~/components/ui/Text"
+import { toast } from "~/components/ui/Toast"
 import { type RouterOutputs, api } from "~/lib/api"
 import { useMapCoords } from "~/lib/hooks/useMapCoords"
 import { useMe } from "~/lib/hooks/useMe"
+import { useS3BulkUpload } from "~/lib/hooks/useS3"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 export default function TripDetailScreen() {
@@ -75,6 +77,10 @@ export default function TripDetailScreen() {
     }
   }, [me?.tripSyncEnabled, permissionResponse?.granted, permissionResponse?.canAskAgain])
 
+  const [bulkUpload, { isLoading: isUploading }] = useS3BulkUpload()
+
+  // if is uploading render a View under the name
+
   React.useEffect(() => {
     if (!permissionResponse || permissionResponse?.granted || !me?.tripSyncEnabled || !trip) return
     const isTripActive = dayjs(trip.startDate).isBefore(dayjs()) && dayjs(trip.endDate).isAfter(dayjs())
@@ -87,13 +93,20 @@ export default function TripDetailScreen() {
           mediaType: MediaType.photo,
           sortBy: "creationTime",
         })
-        console.log(images)
+        const imagesToUpload = images.assets.map((image) => {
+          // todo get other metadata like asset location etc
+          return { url: image.uri, key: undefined }
+        })
+        if (imagesToUpload.length === 0) return
+        const imagesWithKeys = await bulkUpload(imagesToUpload)
+        console.log(imagesWithKeys[0])
       } catch (error) {
         console.log(error)
+        toast({ title: "Error syncing images", type: "error" })
       }
     }
     loadImages()
-  }, [permissionResponse, trip, data, me])
+  }, [permissionResponse, trip, data, me, bulkUpload])
 
   const utils = api.useUtils()
 
@@ -134,7 +147,6 @@ export default function TripDetailScreen() {
   return (
     <View className="flex-1">
       <StatusBar style="light" />
-
       <MapView
         ref={mapRef}
         styleURL={StyleURL.SatelliteStreet}
@@ -192,55 +204,59 @@ export default function TripDetailScreen() {
         />
       </MapView>
 
-      <View
-        style={{ top: insets.top + 8 }}
-        pointerEvents="box-none"
-        className="absolute left-0 right-0 flex flex-row items-center justify-between px-4"
-      >
-        <View className="flex flex-row items-center space-x-2">
-          <TouchableOpacity
-            onPress={router.back}
-            activeOpacity={0.5}
-            className="sq-8 bg-background dark:bg-background-dark just flex  h-10 w-10 flex-row items-center justify-center rounded-full"
-          >
-            <Icon icon={ChevronLeft} />
-          </TouchableOpacity>
-
-          <View className="bg-background dark:bg-background-dark flex h-10 flex-row items-center rounded-full">
-            {isLoading ? (
-              <View className="flex w-10 items-center justify-center">
-                <ActivityIndicator />
-              </View>
-            ) : (
-              <View className="flex items-center justify-center px-4">
-                <Text className="text-base" numberOfLines={1}>
-                  {trip?.name}
-                </Text>
-              </View>
-            )}
+      <View style={{ top: insets.top + 8 }} pointerEvents="box-none" className="absolute flex left-0 right-0">
+        <View className="flex flex-row items-center justify-between px-4">
+          <View className="flex flex-row items-center space-x-2">
+            <TouchableOpacity
+              onPress={router.back}
+              activeOpacity={0.5}
+              className="sq-8 bg-background dark:bg-background-dark just flex  h-10 w-10 flex-row items-center justify-center rounded-full"
+            >
+              <Icon icon={ChevronLeft} />
+            </TouchableOpacity>
+            <View className="bg-background dark:bg-background-dark flex h-10 flex-row items-center rounded-full">
+              {isLoading ? (
+                <View className="flex w-10 items-center justify-center">
+                  <ActivityIndicator />
+                </View>
+              ) : (
+                <View className="flex items-center justify-center px-4">
+                  <Text className="text-base" numberOfLines={1}>
+                    {trip?.name}
+                  </Text>
+                </View>
+              )}
+            </View>
           </View>
-        </View>
-
-        {trip && (
-          <View className="flex flex-row items-center space-x-1">
-            {trip.creatorId === me?.id && (
-              <Link push href={`/${tab}/trips/${id}/users`} asChild>
+          {trip && (
+            <View className="flex flex-row items-center space-x-1">
+              {trip.creatorId === me?.id && (
+                <Link push href={`/${tab}/trips/${id}/users`} asChild>
+                  <TouchableOpacity
+                    className="sq-10 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
+                    activeOpacity={0.8}
+                  >
+                    <Icon icon={Users} size={16} />
+                  </TouchableOpacity>
+                </Link>
+              )}
+              <Link push href={`/${tab}/trips/${id}/edit`} asChild>
                 <TouchableOpacity
                   className="sq-10 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
                   activeOpacity={0.8}
                 >
-                  <Icon icon={Users} size={16} />
+                  <Icon icon={Edit2} size={16} />
                 </TouchableOpacity>
               </Link>
-            )}
-            <Link push href={`/${tab}/trips/${id}/edit`} asChild>
-              <TouchableOpacity
-                className="sq-10 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
-                activeOpacity={0.8}
-              >
-                <Icon icon={Edit2} size={16} />
-              </TouchableOpacity>
-            </Link>
+            </View>
+          )}
+        </View>
+        {isUploading && (
+          <View className="flex items-center justify-center pt-2">
+            <View className="flex items-center bg-primary px-4 py-2 rounded-full flex-row space-x-2">
+              <ActivityIndicator size="small" color="white" />
+              <Text className="text-white">Syncing photos</Text>
+            </View>
           </View>
         )}
       </View>
