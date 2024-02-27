@@ -28,6 +28,7 @@ const userSelectFields = {
   longitude: true,
   role: true,
   createdAt: true,
+  tripSyncEnabled: true,
   ...userInterestFields,
 } satisfies Prisma.UserSelect
 

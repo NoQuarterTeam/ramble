@@ -44,6 +44,7 @@ model User {
   // Settings
   isLocationPrivate Boolean @default(false)
   preferredLanguage String  @default("en")
+  tripSyncEnabled   Boolean @default(true)
 
   // Relations
   followers             User[]         @relation("UserFollows")
@@ -357,13 +358,12 @@ model Feedback {
 }
 
 model Trip {
-  id          String   @id @default(uuid())
-  name        String
-  startDate   DateTime @db.Date
-  endDate     DateTime @db.Date
-  syncEnabled Boolean  @default(true)
-  creator     User     @relation(name: "CreatedTrips", fields: [creatorId], references: [id])
-  creatorId   String
+  id        String   @id @default(uuid())
+  name      String
+  startDate DateTime @db.Date
+  endDate   DateTime @db.Date
+  creator   User     @relation(name: "CreatedTrips", fields: [creatorId], references: [id])
+  creatorId String
 
   users  User[]      @relation(name: "UserTrips")
   items  TripItem[]

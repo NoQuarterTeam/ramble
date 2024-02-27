@@ -11,6 +11,7 @@ import * as Location from "expo-location"
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { ChevronLeft, Edit2, Flag, Home, MapPin, PlusCircle, Users } from "lucide-react-native"
+import { getAssetsAsync, MediaType } from "expo-media-library"
 
 import { createImageUrl, join } from "@ramble/shared"
 
@@ -83,6 +84,24 @@ export default function TripDetailScreen() {
   const setCoords = useMapCoords((s) => s.setCoords)
 
   const insets = useSafeAreaInsets()
+
+  React.useEffect(() => {
+    if (!me?.tripSyncEnabled) return
+    ;(async () => {
+      try {
+        const onions = await getAssetsAsync({
+          createdAfter: data?.latestMediaSyncedAt || trip?.startDate,
+          createdBefore: trip?.endDate,
+          mediaType: MediaType.photo,
+          sortBy: "creationTime",
+        })
+        console.log(onions)
+      } catch (e) {
+        // catch error
+        console.log("oops - getting media library assets")
+      }
+    })()
+  }, [trip, data, me])
 
   if (!me)
     return (

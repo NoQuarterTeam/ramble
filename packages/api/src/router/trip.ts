@@ -117,6 +117,12 @@ export const tripRouter = createTRPCRouter({
             },
           },
         },
+        medias: {
+          orderBy: { timestamp: "desc" },
+          select: {
+            timestamp: true,
+          },
+        },
       },
     })
     if (!trip) throw new TRPCError({ code: "NOT_FOUND", message: "Trip not found" })
@@ -134,9 +140,12 @@ export const tripRouter = createTRPCRouter({
     ]) as [number, number][]
     const line = lineString(itemCoords)
     const bounds = bbox(line) as [number, number, number, number]
+
+    const latestMediaSyncedAt = trip.medias[0]?.timestamp
+
     // can be quite slow
     // const directions = await getDirections(itemCoords)
-    return { trip, bounds, line }
+    return { trip, bounds, line, latestMediaSyncedAt }
   }),
   saveSpot: protectedProcedure
     .input(z.object({ spotId: z.string(), tripId: z.string(), order: z.number().optional() }))

@@ -30,6 +30,7 @@ const userSelectFields = {
   latitude: true,
   longitude: true,
   createdAt: true,
+  tripSyncEnabled: true,
 } satisfies Prisma.UserSelect
 
 export async function getCurrentUser<T extends Prisma.UserSelect>(request: Request, select?: T) {
