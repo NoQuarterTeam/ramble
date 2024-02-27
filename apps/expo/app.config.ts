@@ -1,7 +1,7 @@
 import { ConfigContext, ExpoConfig } from "expo/config"
 
-const VERSION = "1.3.0"
-const BUILD = 45
+const VERSION = "1.4.0"
+const BUILD = 46
 
 const splash: ExpoConfig["splash"] = {
   image: "./assets/splash.png",
@@ -110,6 +110,13 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
         RNMapboxMapsImpl: "mapbox",
         RNMapboxMapsDownloadToken: "sk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNsaHVvaXZ4bDAxdjMzY2xiNnE3OHp0dnMifQ.nwE8EhfOoonpunlKdGikiA",
         RNMapboxMapsVersion: "11.0.0",
+      },
+    ],
+    [
+      "expo-media-library",
+      {
+        photosPermission: "Allow Ramble to access your photos to add them to your trips.",
+        isAccessMediaLocationEnabled: true,
       },
     ],
   ],

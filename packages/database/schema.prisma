@@ -57,6 +57,7 @@ model User {
   trips                 Trip[]         @relation(name: "UserTrips")
   createdTrips          Trip[]         @relation(name: "CreatedTrips")
   tripItems             TripItem[]
+  tripMedias            TripMedia[]
   van                   Van?
   feedback              Feedback[]
   myInviteCodes         InviteCode[]   @relation(name: "MyInviteCodes")
@@ -356,20 +357,41 @@ model Feedback {
 }
 
 model Trip {
-  id        String   @id @default(uuid())
-  name      String
-  startDate DateTime @db.Date
-  endDate   DateTime @db.Date
-  creator   User     @relation(name: "CreatedTrips", fields: [creatorId], references: [id])
-  creatorId String
+  id          String   @id @default(uuid())
+  name        String
+  startDate   DateTime @db.Date
+  endDate     DateTime @db.Date
+  syncEnabled Boolean  @default(true)
+  creator     User     @relation(name: "CreatedTrips", fields: [creatorId], references: [id])
+  creatorId   String
 
-  users User[]     @relation(name: "UserTrips")
-  items TripItem[]
+  users  User[]      @relation(name: "UserTrips")
+  items  TripItem[]
+  medias TripMedia[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
   @@index([creatorId])
+}
+
+model TripMedia {
+  id        String   @id @default(uuid())
+  path      String
+  latitude  Float
+  longitude Float
+  assetId   String   @unique()
+  timestamp DateTime
+  creator   User     @relation(fields: [creatorId], references: [id])
+  creatorId String
+  trip      Trip     @relation(fields: [tripId], references: [id])
+  tripId    String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([creatorId])
+  @@index([tripId])
 }
 
 model TripItem {

@@ -237,4 +237,22 @@ export const tripRouter = createTRPCRouter({
       )
       return true
     }),
+  uploadMedia: protectedProcedure
+    .input(
+      z.object({
+        tripId: z.string(),
+        images: z.array(
+          z.object({ path: z.string(), latitude: z.number(), longitude: z.number(), assetId: z.string(), timestamp: z.date() }),
+        ),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      // WIP
+      const tripMedias = await ctx.prisma.tripMedia.createMany({
+        data: input.images.map((image) => ({ tripId: input.tripId, ...image, creatorId: ctx.user.id })),
+        skipDuplicates: true,
+      })
+      console.log(tripMedias)
+      return true
+    }),
 })
