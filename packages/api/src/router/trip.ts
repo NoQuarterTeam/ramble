@@ -120,10 +120,12 @@ export const tripRouter = createTRPCRouter({
       },
     })
     if (!trip) throw new TRPCError({ code: "NOT_FOUND", message: "Trip not found" })
-    if (trip.items.length === 0) return { trip }
+    const latestMediaSyncedAt = trip.media[0]?.timestamp
+    if (trip.items.length === 0) return { trip, latestMediaSyncedAt }
     if (trip.items.length === 1)
       return {
         trip,
+        latestMediaSyncedAt,
         center: trip.items[0]?.spot
           ? [trip.items[0]?.spot.longitude, trip.items[0]?.spot.latitude]
           : ([trip.items[0]?.stop!.longitude, trip.items[0]?.stop!.latitude] as [number, number]),
@@ -135,10 +137,9 @@ export const tripRouter = createTRPCRouter({
     const line = lineString(itemCoords)
     const bounds = bbox(line) as [number, number, number, number]
 
-    const latestMediaSyncedAt = trip.media[0]?.timestamp
-
     // can be quite slow
     // const directions = await getDirections(itemCoords)
+
     return { trip, bounds, line, latestMediaSyncedAt }
   }),
   saveSpot: protectedProcedure
