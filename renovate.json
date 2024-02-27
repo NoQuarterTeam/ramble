@@ -48,6 +48,7 @@
     "expo-image-picker",
     "expo-build-properties",
     "expo-image",
+    "expo-media-library",
     "expo-linking",
     "expo-localization",
     "expo-location",

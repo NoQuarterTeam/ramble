@@ -365,9 +365,9 @@ model Trip {
   creator   User     @relation(name: "CreatedTrips", fields: [creatorId], references: [id])
   creatorId String
 
-  users  User[]      @relation(name: "UserTrips")
-  items  TripItem[]
-  medias TripMedia[]
+  users User[]      @relation(name: "UserTrips")
+  items TripItem[]
+  media TripMedia[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
