@@ -10,7 +10,6 @@ import { type Trip, type User } from "@ramble/database/types"
 import { createImageUrl, join } from "@ramble/shared"
 
 import { useFeedbackActivity } from "./FeedbackCheck"
-
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
 
