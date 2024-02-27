@@ -16,7 +16,13 @@ import { NewSpotModalView } from "./NewSpotModalView"
 export default function NewSpotAmenitiesScreen() {
   const params = useLocalSearchParams()
   const [amenities, setAmenities] = React.useState(
-    Object.keys(AMENITIES).reduce((acc, key) => ({ ...acc, [key]: false }), {} as { [key in keyof typeof AMENITIES]: boolean }),
+    Object.keys(AMENITIES).reduce(
+      (acc, key) => {
+        acc[key as keyof typeof AMENITIES] = false
+        return acc
+      },
+      {} as { [key in keyof typeof AMENITIES]: boolean },
+    ),
   )
 
   const router = useRouter()
