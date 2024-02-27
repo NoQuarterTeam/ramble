@@ -117,12 +117,7 @@ export const tripRouter = createTRPCRouter({
             },
           },
         },
-        media: {
-          orderBy: { timestamp: "desc" },
-          select: {
-            timestamp: true,
-          },
-        },
+        media: { take: 1, orderBy: { timestamp: "desc" }, select: { timestamp: true } },
       },
     })
     if (!trip) throw new TRPCError({ code: "NOT_FOUND", message: "Trip not found" })
