@@ -62,7 +62,7 @@ export default function TripDetailScreen() {
     if (!me?.tripSyncEnabled || !permissionResponse) return
     if (permissionResponse?.granted) return
     if (permissionResponse?.canAskAgain) {
-      requestPermission()
+      requestPermission().catch()
     } else {
       Alert.alert(
         "Photo library permissions required for syncing",
