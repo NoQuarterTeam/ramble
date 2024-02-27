@@ -1,6 +1,3 @@
-import * as React from "react"
-import { Keyboard, TouchableOpacity, useColorScheme, View } from "react-native"
-import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
 import { Camera, type MapState, type MapView as MapType, StyleURL, UserLocation } from "@rnmapbox/maps"
 import { type Position } from "@rnmapbox/maps/lib/typescript/src/types/Position"
 import * as Location from "expo-location"
@@ -8,11 +5,14 @@ import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { AlertTriangle, CircleDot, Heart, MapPinned, Navigation, Plus, PlusCircle, Settings2, Star, X } from "lucide-react-native"
 import { usePostHog } from "posthog-react-native"
+import * as React from "react"
+import { Keyboard, TouchableOpacity, View, useColorScheme } from "react-native"
+import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
 
 import { displayRating, join } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
-import { Map } from "~/components/Map"
+import { MapView } from "~/components/Map"
 import { SpotClusterMarker } from "~/components/SpotMarker"
 import { SpotTypeBadge } from "~/components/SpotTypeBadge"
 import { Button } from "~/components/ui/Button"
@@ -22,7 +22,7 @@ import { Spinner } from "~/components/ui/Spinner"
 import { SpotImageCarousel } from "~/components/ui/SpotImageCarousel"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
-import { api, type RouterOutputs } from "~/lib/api"
+import { type RouterOutputs, api } from "~/lib/api"
 import { isTablet, width } from "~/lib/device"
 import { useMapCoords } from "~/lib/hooks/useMapCoords"
 
@@ -56,7 +56,7 @@ export default function NewItemScreen() {
     { latitude: coords?.[1]!, longitude: coords?.[0]! },
     { enabled: !!coords?.[0] && !!coords?.[1], keepPreviousData: true },
   )
-  const isUnknownAddress = !!!geocodeData?.place
+  const isUnknownAddress = !geocodeData?.place
 
   const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, keepPreviousData: true })
 
@@ -76,6 +76,7 @@ export default function NewItemScreen() {
     }
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: dont need to rerender
   React.useEffect(() => {
     if (!isLoaded) return
     async function updateMapAfterFiltersChange() {
@@ -100,7 +101,6 @@ export default function NewItemScreen() {
       }
     }
     updateMapAfterFiltersChange()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, isLoaded])
 
   const onMapMove = ({ properties }: MapState) => {
@@ -122,12 +122,13 @@ export default function NewItemScreen() {
     }
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: dont use activeSpotId
   const spotMarkers = React.useMemo(
     () =>
       clusters?.map((point, i) => (
         <SpotClusterMarker
           point={point}
-          key={i}
+          key={`${point.id || 0}${i}`}
           onPress={() => {
             camera.current?.setCamera({
               zoomLevel: (point.properties.cluster && point.properties.zoomLevel) || undefined,
@@ -142,8 +143,6 @@ export default function NewItemScreen() {
           }}
         />
       )),
-    // dont add activeSpotId here
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [clusters],
   )
 
@@ -181,7 +180,7 @@ export default function NewItemScreen() {
               icon={isUnknownAddress ? AlertTriangle : MapPinned}
               size={20}
               color={isUnknownAddress ? "primary" : undefined}
-              className={join(!!!isUnknownAddress && "opacity-80")}
+              className={join(!isUnknownAddress && "opacity-80")}
             />
           )}
           <Text numberOfLines={1} className="flex-1 text-sm opacity-70">
@@ -203,7 +202,7 @@ export default function NewItemScreen() {
       </View>
 
       <View className="relative flex-1">
-        <Map
+        <MapView
           className="rounded-xs overflow-hidden"
           onMapIdle={onMapMove}
           ref={mapRef}
@@ -219,7 +218,7 @@ export default function NewItemScreen() {
             defaultSettings={{ zoomLevel: 7, pitch: 0, heading: 0, centerCoordinate: initialCoords }}
           />
           {spotMarkers}
-        </Map>
+        </MapView>
 
         <View className="absolute left-2 right-2 top-2">
           <Input
@@ -234,7 +233,7 @@ export default function NewItemScreen() {
             <View className="bg-background dark:bg-background-dark rounded-b-sm p-2">
               {places.map((place, i) => (
                 <TouchableOpacity
-                  key={i}
+                  key={`${place.name}-${i}`}
                   onPress={() => {
                     setSearch("")
                     Keyboard.dismiss()
@@ -255,7 +254,7 @@ export default function NewItemScreen() {
           )}
         </View>
 
-        {!!!activeSpotId && (
+        {!activeSpotId && (
           <View
             style={{ transform: [{ translateX: -15 }, { translateY: -15 }] }}
             className="absolute left-1/2 top-1/2 flex items-center justify-center"
@@ -267,7 +266,7 @@ export default function NewItemScreen() {
           pointerEvents="box-none"
           className="absolute bottom-3 left-3 right-3 flex flex-row items-end justify-between space-y-2"
         >
-          <Link push href={`/filters/`} asChild>
+          <Link push href={"/filters/"} asChild>
             <TouchableOpacity
               activeOpacity={0.8}
               className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"
@@ -316,8 +315,7 @@ export function AddTripSpotPreview({ spotId, tripId, onClose }: { spotId: string
   React.useEffect(() => {
     if (!spot) return
     void utils.spot.detail.prefetch({ id: spot.id })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [spot])
+  }, [spot, utils.spot.detail.prefetch])
 
   const posthog = usePostHog()
   const { mutate } = api.trip.saveSpot.useMutation({

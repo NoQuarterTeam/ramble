@@ -1,5 +1,5 @@
-import { ScrollView, View } from "react-native"
 import { useLocalSearchParams, useRouter } from "expo-router"
+import { ScrollView, View } from "react-native"
 
 import { ListForm } from "~/components/ListForm"
 import { DeleteButton } from "~/components/ui/DeleteButton"

@@ -1,8 +1,8 @@
-import * as React from "react"
-import { TouchableOpacity, useColorScheme, View } from "react-native"
-import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
 import { useRouter } from "expo-router"
 import { Heart, Route, Star, X } from "lucide-react-native"
+import * as React from "react"
+import { TouchableOpacity, View, useColorScheme } from "react-native"
+import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
 
 import { displayRating, isPartnerSpot } from "@ramble/shared"
 
@@ -27,10 +27,10 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
   const utils = api.useUtils()
+  // biome-ignore lint/correctness/useExhaustiveDependencies: dont rerender based on utils
   React.useEffect(() => {
     if (!spot) return
     void utils.spot.detail.prefetch({ id: spot.id })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [spot])
 
   const backgroundColor = useBackgroundColor()

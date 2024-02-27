@@ -1,8 +1,8 @@
-import { TouchableOpacity, useColorScheme } from "react-native"
 import { Image } from "expo-image"
 import * as WebBrowser from "expo-web-browser"
+import { TouchableOpacity, useColorScheme } from "react-native"
 
-import { isPartnerSpot, partners, type SpotPartnerFields } from "@ramble/shared"
+import { type SpotPartnerFields, isPartnerSpot, partners } from "@ramble/shared"
 
 import { FULL_WEB_URL } from "~/lib/config"
 

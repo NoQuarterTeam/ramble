@@ -1,7 +1,7 @@
+import { StatusBar } from "expo-status-bar"
 import type * as React from "react"
 import { View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { StatusBar } from "expo-status-bar"
 
 import { join } from "@ramble/shared"
 

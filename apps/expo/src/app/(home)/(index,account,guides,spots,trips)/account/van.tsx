@@ -1,9 +1,9 @@
+import * as ImagePicker from "expo-image-picker"
+import { Plus, X } from "lucide-react-native"
 import * as React from "react"
 import { FormProvider } from "react-hook-form"
 import { Keyboard, ScrollView, TouchableOpacity, View } from "react-native"
 import { AvoidSoftInputView } from "react-native-avoid-softinput"
-import * as ImagePicker from "expo-image-picker"
-import { Plus, X } from "lucide-react-native"
 
 import { createImageUrl } from "@ramble/shared"
 
@@ -82,7 +82,7 @@ export default function VanScreen() {
       const paths = await Promise.all(result.assets.map((asset) => upload(asset.uri)))
       saveImages({ paths })
     } catch (error) {
-      let message
+      let message: string
       if (error instanceof Error) message = error.message
       else message = String(error)
       toast({ title: "Error selecting image", message, type: "error" })

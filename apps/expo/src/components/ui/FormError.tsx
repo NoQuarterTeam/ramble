@@ -1,5 +1,5 @@
-import { View, type ViewProps } from "react-native"
 import { AlertTriangle } from "lucide-react-native"
+import { View, type ViewProps } from "react-native"
 
 import { merge } from "@ramble/shared"
 

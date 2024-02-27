@@ -1,7 +1,7 @@
-import { FormProvider } from "react-hook-form"
-import { Keyboard, ScrollView, TouchableOpacity, View } from "react-native"
 import * as ImagePicker from "expo-image-picker"
 import { Edit2, User2 } from "lucide-react-native"
+import { FormProvider } from "react-hook-form"
+import { Keyboard, ScrollView, TouchableOpacity, View } from "react-native"
 
 import { createImageUrl } from "@ramble/shared"
 
@@ -78,7 +78,7 @@ export default function AccountInfoScreen() {
       const key = await upload(result.assets[0].uri)
       saveAvatar({ avatar: key })
     } catch (error) {
-      let message
+      let message: string
       if (error instanceof Error) message = error.message
       else message = String(error)
       toast({ title: "Error selecting image", message, type: "error" })

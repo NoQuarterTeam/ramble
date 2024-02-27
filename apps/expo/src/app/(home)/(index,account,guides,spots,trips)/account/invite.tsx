@@ -1,6 +1,6 @@
-import { ScrollView, TouchableOpacity, View } from "react-native"
 import * as Clipboard from "expo-clipboard"
 import { Copy, User2 } from "lucide-react-native"
+import { ScrollView, TouchableOpacity, View } from "react-native"
 
 import { createImageUrl } from "@ramble/shared"
 
@@ -42,7 +42,7 @@ export default function AccountInviteScreen() {
             <TouchableOpacity
               key={inviteCode.id}
               onPress={
-                !!inviteCode.user
+                inviteCode.user
                   ? // eslint-disable-next-line
                     // () => router.push("UserScreen", { username: inviteCode.user!.username })
                     () => {
@@ -53,7 +53,7 @@ export default function AccountInviteScreen() {
               activeOpacity={0.8}
               className="rounded-xs mb-1 flex flex-row items-center justify-between border border-gray-200 px-3 py-2 dark:border-gray-700"
             >
-              <Text style={{ textDecorationLine: !!inviteCode.user ? "line-through" : undefined, textDecorationStyle: "solid" }}>
+              <Text style={{ textDecorationLine: inviteCode.user ? "line-through" : undefined, textDecorationStyle: "solid" }}>
                 {inviteCode.code}
               </Text>
               {inviteCode.user ? (

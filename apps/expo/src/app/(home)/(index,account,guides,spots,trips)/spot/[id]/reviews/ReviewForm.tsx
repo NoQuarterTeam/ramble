@@ -1,6 +1,6 @@
-import { FormProvider, useForm } from "react-hook-form"
-import { TouchableOpacity, useColorScheme, View } from "react-native"
 import { Star } from "lucide-react-native"
+import { FormProvider, useForm } from "react-hook-form"
+import { TouchableOpacity, View, useColorScheme } from "react-native"
 
 import { type Review } from "@ramble/database/types"
 
@@ -47,18 +47,20 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
       />
 
       <View className="mb-4 flex flex-row items-center justify-center space-x-2">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <TouchableOpacity key={i} onPress={() => form.setValue("rating", i + 1)}>
+        {[1, 2, 3, 4, 5].map((val) => (
+          <TouchableOpacity key={val} onPress={() => form.setValue("rating", val)}>
             <Icon
               icon={Star}
               strokeWidth={1}
               size={50}
-              fill={rating > i ? (isDark ? backgroundLight : backgroundDark) : "transparent"}
+              fill={rating > val ? (isDark ? backgroundLight : backgroundDark) : "transparent"}
             />
           </TouchableOpacity>
         ))}
       </View>
-      {props.error?.data?.zodError?.fieldErrors.rating?.map((error) => <FormInputError key={error} error={error} />)}
+      {props.error?.data?.zodError?.fieldErrors.rating?.map((error) => (
+        <FormInputError key={error} error={error} />
+      ))}
       <Button isLoading={props.isLoading} onPress={form.handleSubmit(props.review ? props.onUpdate : props.onCreate)}>
         Save
       </Button>

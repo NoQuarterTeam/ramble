@@ -1,7 +1,7 @@
-import * as React from "react"
-import { AppState, type AppStateStatus } from "react-native"
 import * as Sentry from "@sentry/react-native"
 import * as Updates from "expo-updates"
+import * as React from "react"
+import { AppState, type AppStateStatus } from "react-native"
 
 import { IS_DEV } from "../config"
 
@@ -13,7 +13,7 @@ export function useCheckExpoUpdates() {
   const checkForExpoUpdates = async () => {
     try {
       if (IS_DEV) return setIsDoneChecking(true)
-      let timeout
+      let timeout: NodeJS.Timeout | undefined
       const timeoutRace: Promise<never> = new Promise((_, reject) => {
         timeout = setTimeout(() => reject(new Error(TIMEOUT_KEY)), 10000)
       })
@@ -28,19 +28,22 @@ export function useCheckExpoUpdates() {
       if (error.message === TIMEOUT_KEY) return
       Sentry.captureException(error)
     } finally {
-      return setIsDoneChecking(true)
+      setIsDoneChecking(true)
     }
   }
 
-  const handleAppStateChange = React.useCallback((nextAppState: AppStateStatus) => {
-    const isBackground = appState.current === "background"
-    if (isBackground && nextAppState === "active") {
-      void checkForExpoUpdates()
-    } else {
-      setIsDoneChecking(true)
-    }
-    appState.current = nextAppState
-  }, [])
+  const handleAppStateChange = React.useCallback(
+    (nextAppState: AppStateStatus) => {
+      const isBackground = appState.current === "background"
+      if (isBackground && nextAppState === "active") {
+        void checkForExpoUpdates()
+      } else {
+        setIsDoneChecking(true)
+      }
+      appState.current = nextAppState
+    },
+    [checkForExpoUpdates],
+  )
 
   React.useEffect(() => {
     checkForExpoUpdates()
@@ -48,7 +51,7 @@ export function useCheckExpoUpdates() {
     return () => {
       subscription.remove()
     }
-  }, [handleAppStateChange])
+  }, [handleAppStateChange, checkForExpoUpdates])
 
   return { isDoneChecking }
 }

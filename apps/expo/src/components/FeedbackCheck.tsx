@@ -1,9 +1,9 @@
-import * as React from "react"
-import { FormProvider } from "react-hook-form"
-import { Keyboard, Modal, ScrollView, TouchableOpacity, useColorScheme, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { StatusBar } from "expo-status-bar"
 import { CheckSquare2, Square, Star } from "lucide-react-native"
+import * as React from "react"
+import { FormProvider } from "react-hook-form"
+import { Keyboard, Modal, ScrollView, TouchableOpacity, View, useColorScheme } from "react-native"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 import { useShallow } from "zustand/react/shallow"
@@ -100,13 +100,13 @@ export const FeedbackCheck = React.memo(function _FeedbackCheck() {
               <View>
                 <FormInputLabel label="1. How are you enjoying the app so far?" />
                 <View className="my-4 flex flex-row items-center justify-center space-x-6">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <TouchableOpacity key={i} onPress={() => form.setValue("rating", i + 1)}>
+                  {[1, 2, 3, 4, 5].map((val) => (
+                    <TouchableOpacity key={val} onPress={() => form.setValue("rating", val)}>
                       <Icon
                         icon={Star}
                         strokeWidth={1}
                         size={40}
-                        fill={rating > i ? (isDark ? backgroundLight : backgroundDark) : "transparent"}
+                        fill={rating > val ? (isDark ? backgroundLight : backgroundDark) : "transparent"}
                       />
                     </TouchableOpacity>
                   ))}
@@ -142,13 +142,13 @@ export const FeedbackCheck = React.memo(function _FeedbackCheck() {
               <View>
                 <FormInputLabel label="3. How likely are you to share Ramble with a friend?" />
                 <View className="my-4 flex flex-row items-center justify-center space-x-6">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <TouchableOpacity key={i} onPress={() => form.setValue("shareable", i + 1)}>
+                  {[1, 2, 3, 4, 5].map((val) => (
+                    <TouchableOpacity key={val} onPress={() => form.setValue("shareable", val)}>
                       <Icon
                         icon={Star}
                         strokeWidth={1}
                         size={40}
-                        fill={shareable > i ? (isDark ? backgroundLight : backgroundDark) : "transparent"}
+                        fill={shareable > val ? (isDark ? backgroundLight : backgroundDark) : "transparent"}
                       />
                     </TouchableOpacity>
                   ))}

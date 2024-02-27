@@ -1,15 +1,15 @@
-import * as React from "react"
-import { TouchableOpacity, View } from "react-native"
 import { Camera, type MapState, type MapView as MapType, StyleURL, UserLocation } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { AlertTriangle, CircleDot, MapPinned, Navigation } from "lucide-react-native"
+import * as React from "react"
+import { TouchableOpacity, View } from "react-native"
 
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
-import { Map } from "~/components/Map"
+import { MapView } from "~/components/Map"
 import { Button } from "~/components/ui/Button"
 import { Input } from "~/components/ui/Input"
 import { Spinner } from "~/components/ui/Spinner"
@@ -118,7 +118,7 @@ export default function NewSpotLocationScreen() {
       </View>
       {!isLoadingLocation && (
         <View className="relative flex-1">
-          <Map
+          <MapView
             className="rounded-xs overflow-hidden"
             onMapIdle={onMapMove}
             ref={mapRef}
@@ -140,7 +140,7 @@ export default function NewSpotLocationScreen() {
                 heading: 0,
               }}
             />
-          </Map>
+          </MapView>
           <View className="absolute left-2 right-2 top-2">
             <Input
               className="bg-background dark:bg-background-dark rounded-sm"
@@ -154,7 +154,7 @@ export default function NewSpotLocationScreen() {
               <View className="bg-background dark:bg-background-dark rounded-b-sm p-2">
                 {places.map((place, i) => (
                   <TouchableOpacity
-                    key={i}
+                    key={`${place.name}-${i}`}
                     onPress={() => {
                       setSearch("")
                       setCoords(place.center)
@@ -196,7 +196,12 @@ export default function NewSpotLocationScreen() {
                 router.push(
                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   // @ts-ignore
-                  `/new/type?${new URLSearchParams({ ...params, longitude: coords[0], latitude: coords[1], address: addressToUse })}`,
+                  `/new/type?${new URLSearchParams({
+                    ...params,
+                    longitude: coords[0],
+                    latitude: coords[1],
+                    address: addressToUse,
+                  })}`,
                 )
               }}
               disabled={!coords || (coords && (!coords[0] || !coords[1])) || !addressToUse}

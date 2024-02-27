@@ -1,5 +1,5 @@
-import { G, Path, Svg } from "react-native-svg"
 import * as d3 from "d3-shape"
+import { G, Path, Svg } from "react-native-svg"
 
 interface Props {
   size: number

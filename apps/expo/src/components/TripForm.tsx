@@ -1,7 +1,7 @@
-import { FormProvider } from "react-hook-form"
-import { TouchableOpacity, View } from "react-native"
 import DateTimePicker from "@react-native-community/datetimepicker"
 import dayjs from "dayjs"
+import { FormProvider } from "react-hook-form"
+import { TouchableOpacity, View } from "react-native"
 
 import { type Trip } from "@ramble/database/types"
 import { useDisclosure } from "@ramble/shared"

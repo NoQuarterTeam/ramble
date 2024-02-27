@@ -1,18 +1,18 @@
-import * as React from "react"
-import { TouchableOpacity, View } from "react-native"
 import { Camera, type MapState, type MapView as MapType, UserLocation } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { Navigation } from "lucide-react-native"
+import * as React from "react"
+import { TouchableOpacity, View } from "react-native"
 
 import { Icon } from "~/components/Icon"
-import { Map } from "~/components/Map"
+import { MapView } from "~/components/Map"
 import { SpotClusterMarker } from "~/components/SpotMarker"
 import { SpotPreview } from "~/components/SpotPreview"
 import { Button } from "~/components/ui/Button"
 import { Spinner } from "~/components/ui/Spinner"
 import { toast } from "~/components/ui/Toast"
-import { api, type RouterOutputs } from "~/lib/api"
+import { type RouterOutputs, api } from "~/lib/api"
 import { isAndroid } from "~/lib/device"
 
 type Cluster = RouterOutputs["list"]["spotClusters"][number]
@@ -79,7 +79,7 @@ export default function ListDetailMapScreen() {
       clusters?.map((point, i) => (
         <SpotClusterMarker
           point={point}
-          key={i}
+          key={`${point.id || 0}${i}`}
           onPress={() => {
             camera.current?.setCamera({
               zoomLevel: (point.properties.cluster && point.properties.zoomLevel) || undefined,
@@ -102,7 +102,7 @@ export default function ListDetailMapScreen() {
 
   return (
     <View className="relative flex-1">
-      <Map onMapIdle={onMapMove} onPress={() => setActiveSpotId(null)} ref={mapRef}>
+      <MapView onMapIdle={onMapMove} onPress={() => setActiveSpotId(null)} ref={mapRef}>
         <UserLocation />
         {spotMarkers}
 
@@ -128,7 +128,7 @@ export default function ListDetailMapScreen() {
                 : undefined
           }
         />
-      </Map>
+      </MapView>
       {activeSpotId && <SpotPreview id={activeSpotId} onClose={() => setActiveSpotId(null)} />}
       <View pointerEvents="box-none" className="absolute bottom-4 flex w-full flex-row items-center justify-center">
         <Button onPress={router.back} className="rounded-full" size="sm">

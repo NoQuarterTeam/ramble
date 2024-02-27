@@ -1,9 +1,9 @@
+import { useRouter } from "expo-router"
+import { usePostHog } from "posthog-react-native"
 import * as React from "react"
 import { FormProvider } from "react-hook-form"
 import { ScrollView, View } from "react-native"
 import { AvoidSoftInputView } from "react-native-avoid-softinput"
-import { useRouter } from "expo-router"
-import { usePostHog } from "posthog-react-native"
 
 import { SafeAreaView } from "~/components/SafeAreaView"
 import { Button } from "~/components/ui/Button"

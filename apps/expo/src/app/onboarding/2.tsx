@@ -1,6 +1,6 @@
+import { useRouter } from "expo-router"
 import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
-import { useRouter } from "expo-router"
 
 import { type SpotType } from "@ramble/database/types"
 import colors from "@ramble/tailwind-config/src/colors"

@@ -1,9 +1,9 @@
-import * as React from "react"
-import { TouchableOpacity, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import * as ImagePicker from "expo-image-picker"
 import { useRouter } from "expo-router"
 import { Image } from "lucide-react-native"
+import * as React from "react"
+import { TouchableOpacity, View } from "react-native"
 
 import { type SpotImage } from "@ramble/database/types"
 import { createImageUrl, merge } from "@ramble/shared"
@@ -131,7 +131,7 @@ function Footer({
       })
       router.push(`/spot/${spotId}/save-spot-images?${searchParams}`)
     } catch (error) {
-      let message
+      let message: string
       if (error instanceof Error) message = error.message
       else message = String(error)
       toast({ title: "Error selecting image", message, type: "error" })

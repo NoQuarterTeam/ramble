@@ -1,7 +1,5 @@
-import { Image, type ImageProps } from "expo-image"
-
 import { defaultBlurHash, srcWhitelist } from "@ramble/shared"
-
+import { Image, type ImageProps } from "expo-image"
 import { FULL_WEB_URL } from "~/lib/config"
 
 type Fit = "cover" | "contain" | "fill" | "inside" | "outside"
@@ -32,8 +30,8 @@ export function transformImageSrc(
   if (!srcWhitelist.some((s) => src.startsWith(s))) return src
   const optionsString = Object.entries(options).reduce((acc, [key, value]) => {
     if (value === undefined) return acc
-    return acc + `&${key}=${value}`
+    return `${acc}&${key}=${value}`
   }, "")
 
-  return FULL_WEB_URL + "/api/image?src=" + encodeURIComponent(src) + optionsString
+  return `${FULL_WEB_URL}/api/image?src=${encodeURIComponent(src)}${optionsString}`
 }

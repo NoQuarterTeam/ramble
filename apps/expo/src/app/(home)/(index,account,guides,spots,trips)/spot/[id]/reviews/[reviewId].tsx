@@ -1,5 +1,5 @@
-import { ScrollView } from "react-native"
 import { useLocalSearchParams, useRouter } from "expo-router"
+import { ScrollView } from "react-native"
 
 import { ModalView } from "~/components/ui/ModalView"
 import { Text } from "~/components/ui/Text"

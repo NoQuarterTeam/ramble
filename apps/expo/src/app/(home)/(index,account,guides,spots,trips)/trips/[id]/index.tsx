@@ -1,7 +1,3 @@
-import * as React from "react"
-import { ActivityIndicator, TouchableOpacity, View } from "react-native"
-import DraggableFlatList, { type RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlist"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useActionSheet } from "@expo/react-native-action-sheet"
 import { Camera, LineLayer, type MapView as MapType, MarkerView, ShapeSource, StyleURL, UserLocation } from "@rnmapbox/maps"
 import dayjs from "dayjs"
@@ -11,18 +7,22 @@ import * as Location from "expo-location"
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { ChevronLeft, Edit2, Flag, Home, MapPin, PlusCircle, Users } from "lucide-react-native"
+import * as React from "react"
+import { ActivityIndicator, TouchableOpacity, View } from "react-native"
+import DraggableFlatList, { type RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlist"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { createImageUrl, join } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
-import { Map } from "~/components/Map"
+import { MapView } from "~/components/Map"
 import { SpotIcon } from "~/components/SpotIcon"
 import { SpotMarker } from "~/components/SpotMarker"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { ScreenView } from "~/components/ui/ScreenView"
 import { Text } from "~/components/ui/Text"
-import { api, type RouterOutputs } from "~/lib/api"
+import { type RouterOutputs, api } from "~/lib/api"
 import { useMapCoords } from "~/lib/hooks/useMapCoords"
 import { useMe } from "~/lib/hooks/useMe"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
@@ -55,6 +55,7 @@ export default function TripDetailScreen() {
   const tab = useTabSegment()
 
   const utils = api.useUtils()
+  // biome-ignore lint/correctness/useExhaustiveDependencies: dont rerender
   const itemMarkers = React.useMemo(
     () =>
       trip?.items.map(
@@ -67,8 +68,8 @@ export default function TripDetailScreen() {
             >
               <TouchableOpacity
                 activeOpacity={item.spot ? 0.8 : 1}
-                onPressIn={item.spot ? () => utils.spot.detail.prefetch({ id: item.spot!.id }) : undefined}
-                onPress={item.spot ? () => router.push(`/${tab}/spot/${item.spot!.id}`) : undefined}
+                onPressIn={item.spot?.id ? () => utils.spot.detail.prefetch({ id: item.spot!.id }) : undefined}
+                onPress={item.spot ? () => router.push(`/${tab}/spot/${item.spot?.id}`) : undefined}
               >
                 {item.spot ? <SpotMarker spot={item.spot} /> : <Icon icon={MapPin} size={24} fill="white" color="black" />}
               </TouchableOpacity>
@@ -94,7 +95,7 @@ export default function TripDetailScreen() {
     <View className="flex-1">
       <StatusBar style="light" />
 
-      <Map
+      <MapView
         ref={mapRef}
         styleURL={StyleURL.SatelliteStreet}
         compassPosition={{ top: 54, right: 12 }}
@@ -149,7 +150,7 @@ export default function TripDetailScreen() {
                   }
           }
         />
-      </Map>
+      </MapView>
 
       <View
         style={{ top: insets.top + 8 }}
@@ -211,7 +212,12 @@ export default function TripDetailScreen() {
             onScrollEnd={(index) => {
               const item = trip.items[index]
               if (!item) return
-              const coords = item.spot ? [item.spot.longitude, item.spot.latitude] : [item.stop!.longitude, item.stop!.latitude]
+              const coords = item.spot
+                ? [item.spot.longitude, item.spot.latitude]
+                : item.stop
+                  ? [item.stop.longitude, item.stop.latitude]
+                  : undefined
+              if (!coords) return
               camera.current?.setCamera({
                 animationMode: "linearTo",
                 animationDuration: 300,
@@ -325,7 +331,7 @@ const TripItem = React.memo(function _TripItem({
         switch (selectedIndex) {
           case viewIndex:
             // Edit
-            router.push(`/${tab}/spot/${item.spot!.id}`)
+            router.push(`/${tab}/spot/${item.spot?.id}`)
             break
           case destructiveButtonIndex:
             mutate({ id: item.id })
@@ -376,7 +382,7 @@ const TripItem = React.memo(function _TripItem({
           {spot ? (
             <Link href={`/${tab}/spot/${spot.id}`} push asChild>
               <View className="h-full w-full">
-                {spot.images && spot.images[0] ? (
+                {spot.images?.[0] ? (
                   <OptimizedImage
                     width={300}
                     placeholder={spot.images[0].blurHash}

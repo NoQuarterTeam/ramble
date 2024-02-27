@@ -1,5 +1,5 @@
-import * as React from "react"
 import { useRouter } from "expo-router"
+import * as React from "react"
 
 import { useAsyncStorage } from "~/lib/hooks/useAsyncStorage"
 import { useMe } from "~/lib/hooks/useMe"
@@ -13,8 +13,7 @@ export const RegisterCheck = React.memo(function _RegisterCheck() {
   React.useEffect(() => {
     if (isLoading || !isReady) return
     if (!me && !isChecked) router.push("/register")
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [me, isLoading, isChecked, isReady])
+  }, [me, isLoading, isChecked, isReady, router.push])
 
   return null
 })

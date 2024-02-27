@@ -1,10 +1,10 @@
-import { ScrollView } from "react-native"
 import { useRouter } from "expo-router"
 import { usePostHog } from "posthog-react-native"
+import { ScrollView } from "react-native"
 
 import { ListForm } from "~/components/ListForm"
 import { ModalView } from "~/components/ui/ModalView"
-import { api, type RouterInputs } from "~/lib/api"
+import { type RouterInputs, api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 
 export default function NewListScreen() {

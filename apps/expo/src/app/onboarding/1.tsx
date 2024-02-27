@@ -1,7 +1,7 @@
+import { Link, useRouter } from "expo-router"
 import { FormProvider } from "react-hook-form"
 import { ScrollView, View } from "react-native"
 import { AvoidSoftInputView } from "react-native-avoid-softinput"
-import { Link, useRouter } from "expo-router"
 
 import { SafeAreaView } from "~/components/SafeAreaView"
 import { Button } from "~/components/ui/Button"

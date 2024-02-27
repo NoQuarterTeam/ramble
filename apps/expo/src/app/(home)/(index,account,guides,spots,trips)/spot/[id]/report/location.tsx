@@ -1,12 +1,12 @@
-import * as React from "react"
-import { TouchableOpacity, View } from "react-native"
 import { Camera, type MapState, type MapView as MapType, UserLocation } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { CircleDot, Navigation } from "lucide-react-native"
+import * as React from "react"
+import { TouchableOpacity, View } from "react-native"
 
 import { Icon } from "~/components/Icon"
-import { Map } from "~/components/Map"
+import { MapView } from "~/components/Map"
 import { Button } from "~/components/ui/Button"
 import { Text } from "~/components/ui/Text"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
@@ -65,7 +65,7 @@ export default function SpotReportLocationScreen() {
             Not sure?
           </Button>
         </View>
-        <Map
+        <MapView
           className="rounded-xs mb-10 mt-4 flex-1 overflow-hidden"
           onMapIdle={onMapMove}
           ref={mapRef}
@@ -73,7 +73,7 @@ export default function SpotReportLocationScreen() {
         >
           <UserLocation />
           <Camera ref={camera} allowUpdates defaultSettings={{ centerCoordinate: [longitude, latitude], zoomLevel: 14 }} />
-        </Map>
+        </MapView>
         <View
           style={{ transform: [{ translateX: -15 }, { translateY: -15 }] }}
           className="absolute left-1/2 top-1/2 flex items-center justify-center"

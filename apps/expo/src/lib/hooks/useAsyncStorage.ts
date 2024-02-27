@@ -1,5 +1,5 @@
-import * as React from "react"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import * as React from "react"
 
 export function useAsyncStorage<T>(key: string, initialValue: T) {
   const [isReady, setIsReady] = React.useState(false)

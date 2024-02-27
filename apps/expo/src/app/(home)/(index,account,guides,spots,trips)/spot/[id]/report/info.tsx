@@ -1,7 +1,7 @@
-import * as React from "react"
-import { ScrollView, Switch, View } from "react-native"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { Dog } from "lucide-react-native"
+import * as React from "react"
+import { ScrollView, Switch, View } from "react-native"
 
 import colors from "@ramble/tailwind-config/src/colors"
 

@@ -1,4 +1,3 @@
-import { ScrollView, TouchableOpacity, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { type AllRoutes, type Href, Link, useRouter } from "expo-router"
 import {
@@ -13,6 +12,7 @@ import {
   User2,
   UserPlus,
 } from "lucide-react-native"
+import { ScrollView, TouchableOpacity, View } from "react-native"
 
 import { createImageUrl } from "@ramble/shared"
 
@@ -25,7 +25,7 @@ import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { TabView } from "~/components/ui/TabView"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
-import { api, AUTH_TOKEN } from "~/lib/api"
+import { AUTH_TOKEN, api } from "~/lib/api"
 import { IS_DEV, UPDATE_ID, VERSION } from "~/lib/config"
 import { useMe } from "~/lib/hooks/useMe"
 

@@ -1,9 +1,9 @@
-import * as React from "react"
-import { ScrollView, TouchableOpacity, View } from "react-native"
 import { Image } from "expo-image"
 import * as ImagePicker from "expo-image-picker"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { Plus, X } from "lucide-react-native"
+import * as React from "react"
+import { ScrollView, TouchableOpacity, View } from "react-native"
 
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
@@ -48,7 +48,7 @@ export default function SaveSpotImagesScreen() {
       setImages((i) => [...i, ...result.assets.map((asset) => asset.uri)])
     } catch (error) {
       console.log(error)
-      let message
+      let message: string
       if (error instanceof Error) message = error.message
       else message = String(error)
       toast({ title: "Error selecting image", message, type: "error" })

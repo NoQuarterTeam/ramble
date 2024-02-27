@@ -1,7 +1,7 @@
-import * as React from "react"
-import { ScrollView, TouchableOpacity, View } from "react-native"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { ChevronRight } from "lucide-react-native"
+import * as React from "react"
+import { ScrollView, TouchableOpacity, View } from "react-native"
 
 import { type SpotType } from "@ramble/database/types"
 import { doesSpotTypeRequireAmenities } from "@ramble/shared"
@@ -14,7 +14,7 @@ import { ModalView } from "~/components/ui/ModalView"
 import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
-import { api, type RouterOutputs } from "~/lib/api"
+import { type RouterOutputs, api } from "~/lib/api"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 export default function SpotReportScreen() {
@@ -149,7 +149,8 @@ function ReportFlow({ spot }: Props) {
               data.amenities && spot.amenities
                 ? !!Object.keys(data.amenities).find(
                     (key) =>
-                      data.amenities![key as keyof typeof data.amenities] !== spot.amenities![key as keyof typeof spot.amenities],
+                      data.amenities?.[key as keyof typeof data.amenities] !==
+                      spot.amenities?.[key as keyof typeof spot.amenities],
                   )
                 : false
             }
