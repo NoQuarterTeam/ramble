@@ -15,11 +15,14 @@ export default function SpotReportAmenitiesScreen() {
   const { id, ...params } = useLocalSearchParams<{ id: string; amenities: string }>()
   const [amenities, setAmenities] = React.useState(
     params.amenities
-      ? Object.entries(JSON.parse(params.amenities)).reduce(
-          (acc, [key, value]) => ({ ...acc, [key]: value }),
-          {} as AmenityObject,
-        )
-      : Object.keys(AMENITIES).reduce((acc, key) => ({ ...acc, [key]: false }), {} as AmenityObject),
+      ? Object.entries(JSON.parse(params.amenities)).reduce((acc, [key, value]) => {
+          acc[key as keyof typeof AMENITIES] = value as boolean
+          return acc
+        }, {} as AmenityObject)
+      : Object.keys(AMENITIES).reduce((acc, key) => {
+          acc[key as keyof typeof AMENITIES] = false
+          return acc
+        }, {} as AmenityObject),
   )
 
   const router = useRouter()
