@@ -59,6 +59,7 @@ export const tripRouter = createTRPCRouter({
         // check if any trips overlap with the new trip
         const overlappingTrip = await ctx.prisma.trip.findFirst({
           where: {
+            id: { not: id },
             users: { some: { id: ctx.user.id } },
             OR: [
               { startDate: { lte: startDate }, endDate: { gte: startDate } },
