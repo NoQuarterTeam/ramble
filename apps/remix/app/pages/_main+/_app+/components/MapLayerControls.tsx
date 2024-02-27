@@ -1,11 +1,11 @@
-import { CloudRain, Layers, MountainSnow, SunMoon, Thermometer, Users2 } from "lucide-react"
 import * as RadioGroup from "@radix-ui/react-radio-group"
 import { useDisclosure } from "@ramble/shared"
+import { CloudRain, Layers, MountainSnow, SunMoon, Thermometer, Users2 } from "lucide-react"
 
 import { useFetcher } from "~/components/Form"
 import { IconButton, Modal, Switch, Tooltip } from "~/components/ui"
-import { useMapLayers } from "~/lib/hooks/useMapLayers"
 import { ActionDataSuccessResponse } from "~/lib/form.server"
+import { useMapLayers } from "~/lib/hooks/useMapLayers"
 
 export const mapLayersUrl = "/api/map-layers"
 

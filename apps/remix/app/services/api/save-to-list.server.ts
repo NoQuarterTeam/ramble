@@ -31,12 +31,11 @@ export const saveToListActions = async ({ request, params }: ActionFunctionArgs)
             await db.listSpot.create({ data: { listId, spotId } })
             track("Saved to list", { listId, spotId })
             return json({ success: true })
-          } else {
-            if (!listSpot) return badRequest("Not saved to list")
-            await db.listSpot.delete({ where: { id: listSpot.id } })
-            track("Removed from list", { listId, spotId })
-            return json({ success: true })
           }
+          if (!listSpot) return badRequest("Not saved to list")
+          await db.listSpot.delete({ where: { id: listSpot.id } })
+          track("Removed from list", { listId, spotId })
+          return json({ success: true })
         }),
     "create-and-save-to-list": () =>
       createAction(request)

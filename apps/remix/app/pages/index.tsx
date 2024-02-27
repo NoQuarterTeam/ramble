@@ -1,4 +1,4 @@
-import { redirect, type LoaderFunctionArgs } from "@remix-run/node"
+import { type LoaderFunctionArgs, redirect } from "@remix-run/node"
 
 import { json } from "~/lib/remix.server"
 import { getMaybeUser } from "~/services/auth/auth.server"

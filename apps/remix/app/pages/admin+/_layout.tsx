@@ -8,7 +8,7 @@ import { useFetcher } from "~/components/Form"
 import { type RambleIcon } from "~/components/ui"
 import { buttonSizeStyles, buttonStyles } from "~/components/ui/Button"
 import { useTheme } from "~/lib/theme"
-import { json, type LoaderFunctionArgs, redirect } from "~/lib/vendor/vercel.server"
+import { type LoaderFunctionArgs, json, redirect } from "~/lib/vendor/vercel.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
 export const shouldRevalidate = () => false

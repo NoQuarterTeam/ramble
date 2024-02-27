@@ -1,6 +1,6 @@
-import * as React from "react"
 import { decode } from "blurhash"
 import queryString from "query-string"
+import * as React from "react"
 
 import { defaultBlurHash, merge, srcWhitelist } from "@ramble/shared"
 
@@ -13,11 +13,10 @@ export interface OptimizedImageProps extends Omit<React.ComponentPropsWithoutRef
   quality?: number
   fit?: Fit
   placeholder?: string | null
-  srcSet?: number[]
 }
 
 export const OptimizedImage = React.forwardRef<HTMLImageElement, OptimizedImageProps>(function _OptimizedImage(
-  { src, quality, srcSet, placeholder, fit, ...props }: OptimizedImageProps,
+  { src, quality, placeholder, fit, ...props }: OptimizedImageProps,
   ref,
 ) {
   // increase the width and height so quality is higher
@@ -38,7 +37,7 @@ export function transformImageSrc(
 
   if (!srcWhitelist.some((s) => src.startsWith(s))) return src
   const searchParams = queryString.stringify({ src, ...options })
-  return "/api/image?" + searchParams
+  return `/api/image?${searchParams}`
 }
 
 interface BlurCanvasProps {

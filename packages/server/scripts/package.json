@@ -15,7 +15,6 @@
     "@inquirer/prompts": "4.1.0",
     "@ramble/api": "workspace:*",
     "@ramble/database": "workspace:*",
-    "@ramble/eslint-config": "workspace:*",
     "@ramble/shared": "workspace:*",
     "@ramble/server-services": "workspace:*",
     "@types/html-to-text": "9.0.4",

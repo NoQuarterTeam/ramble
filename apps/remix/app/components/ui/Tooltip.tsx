@@ -1,6 +1,6 @@
 "use client"
-import type * as React from "react"
 import * as RTooltip from "@radix-ui/react-tooltip"
+import type * as React from "react"
 
 interface Props {
   children: React.ReactNode

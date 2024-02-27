@@ -106,7 +106,7 @@ export const FeedbackCheck = React.memo(function _FeedbackCheck() {
                         icon={Star}
                         strokeWidth={1}
                         size={40}
-                        fill={rating > val ? (isDark ? backgroundLight : backgroundDark) : "transparent"}
+                        fill={rating >= val ? (isDark ? backgroundLight : backgroundDark) : "transparent"}
                       />
                     </TouchableOpacity>
                   ))}
@@ -148,7 +148,7 @@ export const FeedbackCheck = React.memo(function _FeedbackCheck() {
                         icon={Star}
                         strokeWidth={1}
                         size={40}
-                        fill={shareable > val ? (isDark ? backgroundLight : backgroundDark) : "transparent"}
+                        fill={shareable >= val ? (isDark ? backgroundLight : backgroundDark) : "transparent"}
                       />
                     </TouchableOpacity>
                   ))}

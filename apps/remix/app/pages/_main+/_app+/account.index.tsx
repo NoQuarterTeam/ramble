@@ -6,7 +6,7 @@ import { generateBlurHash, updateLoopsContact } from "@ramble/server-services"
 import { join } from "@ramble/shared"
 
 import { Form, FormButton, FormError, FormField, ImageField } from "~/components/Form"
-import { Input, inputStyles, Textarea } from "~/components/ui"
+import { Input, Textarea, inputStyles } from "~/components/ui"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form.server"

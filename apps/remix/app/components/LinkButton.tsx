@@ -1,9 +1,9 @@
-import * as React from "react"
 import { Link, type LinkProps } from "@remix-run/react"
+import * as React from "react"
 
 import { merge } from "@ramble/shared"
 
-import { buttonSizeStyles, type ButtonStyleProps, buttonStyles, Spinner } from "~/components/ui"
+import { type ButtonStyleProps, Spinner, buttonSizeStyles, buttonStyles } from "~/components/ui"
 
 interface LinkButtonProps extends ButtonStyleProps, LinkProps {
   isLoading?: boolean

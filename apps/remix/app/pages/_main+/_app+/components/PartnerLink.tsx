@@ -1,4 +1,4 @@
-import { isPartnerSpot, partners, type SpotPartnerFields } from "@ramble/shared"
+import { type SpotPartnerFields, isPartnerSpot, partners } from "@ramble/shared"
 
 import { useTheme } from "~/lib/theme"
 
@@ -49,7 +49,7 @@ export function PartnerLink(props: Props) {
       className="border-hover rounded-xs flex cursor-pointer flex-row items-center justify-between gap-6 border px-6 py-2"
     >
       <p className="text-lg">Provided by</p>
-      <img className="h-[40px] w-[150px] bg-right object-contain" src={partner.logo[theme]} />
+      <img alt="partner" className="h-[40px] w-[150px] bg-right object-contain" src={partner.logo[theme]} />
     </a>
   )
 }

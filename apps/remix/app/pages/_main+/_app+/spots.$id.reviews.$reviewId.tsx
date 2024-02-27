@@ -54,7 +54,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
               data: { description: data.description, rating: data.rating },
             })
             track("Review updated", { reviewId: review.id, userId: user.id })
-            return redirect("/spots/" + spot.id, request, { flash: { title: "Review updated!", description: "Thank you!" } })
+            return redirect(`/spots/${spot.id}`, request, { flash: { title: "Review updated!", description: "Thank you!" } })
           } catch {
             return badRequest(null, request, { flash: { title: "Error editing review" } })
           }
@@ -64,7 +64,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         const review = await db.review.findUnique({ where: { id: params.reviewId } })
         if (!review || review.userId !== user.id) throw notFound()
         await db.review.delete({ where: { id: review.id } })
-        return redirect("/spots/" + params.id, request, { flash: { title: "Review deleted" } })
+        return redirect(`/spots/${params.id}`, request, { flash: { title: "Review deleted" } })
       }),
   })
 }

@@ -7,16 +7,16 @@ import { useTheme } from "~/lib/theme"
 
 type MapViewProps = React.ComponentProps<typeof ReactGLMap>
 
-export const Map = React.forwardRef<MapRef, MapViewProps & { children?: React.ReactNode }>(function _Map(props, mapRef) {
+export const MapView = React.forwardRef<MapRef, MapViewProps & { children?: React.ReactNode }>(function _Map(props, mapRef) {
   const internalMapRef = React.useRef<MapRef>(null)
-  const ref = React.useMemo(() => mapRef || internalMapRef, [mapRef, internalMapRef]) as React.MutableRefObject<MapRef>
+  const ref = React.useMemo(() => mapRef || internalMapRef, [mapRef]) as React.MutableRefObject<MapRef>
 
   const [isLoaded, setIsLoaded] = React.useState(false)
   const theme = useTheme()
 
   React.useEffect(() => {
     if (!ref.current) return
-    if (!!props.mapStyle) return
+    if (props.mapStyle) return
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     setTimeout(() => ref.current.setConfigProperty("basemap", "lightPreset", theme === "light" ? "day" : "night"), 500)

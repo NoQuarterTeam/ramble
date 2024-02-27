@@ -1,5 +1,5 @@
-import * as React from "react"
 import { Bug, Lightbulb, MessageCircle } from "lucide-react"
+import * as React from "react"
 
 import { type FeedbackType } from "@ramble/database/types"
 import { useDisclosure } from "@ramble/shared"

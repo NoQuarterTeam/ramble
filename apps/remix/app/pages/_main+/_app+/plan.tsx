@@ -1,11 +1,11 @@
-import * as React from "react"
-import type { LngLatLike, MapRef } from "react-map-gl"
-import { Layer, Map, Marker, Source } from "react-map-gl"
-import { type MarkerEvent, type MarkerInstance } from "react-map-gl/dist/esm/types"
 import { useFetcher } from "@remix-run/react"
 import bbox from "@turf/bbox"
 import { lineString } from "@turf/helpers"
 import { CircleDot, MapPin } from "lucide-react"
+import * as React from "react"
+import type { LngLatLike, MapRef } from "react-map-gl"
+import { Layer, Map as MapView, Marker, Source } from "react-map-gl"
+import { type MarkerEvent, type MarkerInstance } from "react-map-gl/dist/esm/types"
 import useOnClickOutside from "use-onclickoutside"
 
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, useDisclosure } from "@ramble/shared"
@@ -55,6 +55,7 @@ export default function PlanTrip() {
   const directionsFetcher = useFetcher<typeof directionsLoader>()
   const directions = directionsFetcher.data?.directions
   const spots = directionsFetcher?.data?.foundSpots
+  // biome-ignore lint/correctness/useExhaustiveDependencies: allow
   React.useEffect(() => {
     if (startCoords && !endCoords) {
       mapRef.current?.flyTo({ center: startCoords, duration: 1000, padding: 50 })
@@ -68,16 +69,15 @@ export default function PlanTrip() {
         `/api/mapbox/directions?startLng=${startCoords[0]}&startLat=${startCoords[1]}&endLng=${endCoords[0]}&endLat=${endCoords[1]}&`,
       )
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startCoords, endCoords])
 
   const markers = React.useMemo(
     () =>
-      spots?.map((spot, i) => (
+      spots?.map((spot) => (
         <SpotMarker
           spot={spot}
-          key={i}
-          onClick={(e) => {
+          key={spot.id}
+          onClick={(_e) => {
             // e.originalEvent.stopPropagation()
             // if (!point.properties.cluster && point.properties.id) {
             //   navigate(`/map/${point.properties.id}${window.location.search}`)
@@ -126,14 +126,14 @@ export default function PlanTrip() {
                   <p className="p-4 opacity-70">No results found</p>
                 ) : (
                   <div>
-                    {startingPointFetcher.data.map((location, i) => (
+                    {startingPointFetcher.data.map((location) => (
                       <Button
                         onClick={() => {
                           setStartingPointQuery(location.name)
                           setStartCoords(location.center)
                           startingPointMenu.onClose()
                         }}
-                        key={i}
+                        key={location.name}
                         variant="ghost"
                         className="h-auto w-full justify-start py-2 text-left"
                       >
@@ -169,14 +169,14 @@ export default function PlanTrip() {
                   <p className="p-4 opacity-70">No results found</p>
                 ) : (
                   <div>
-                    {destinationFetcher.data.map((location, i) => (
+                    {destinationFetcher.data.map((location) => (
                       <Button
                         onClick={() => {
                           setDestinationQuery(location.name)
                           setEndCoords(location.center)
                           destinationMenu.onClose()
                         }}
-                        key={i}
+                        key={location.name}
                         variant="ghost"
                         className="h-auto w-full justify-start py-2 text-left"
                       >
@@ -193,7 +193,7 @@ export default function PlanTrip() {
           </div>
         </div>
         <div className="relative h-[500px] w-full">
-          <Map
+          <MapView
             mapboxAccessToken="pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw"
             // onLoad={onMove}
             // onMoveEnd={onMove}
@@ -227,7 +227,7 @@ export default function PlanTrip() {
               </Marker>
             )}
             {markers}
-          </Map>
+          </MapView>
           {directionsFetcher.state === "loading" && (
             <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center">
               <div className="sq-10 rounded-xs flex items-center justify-center bg-white dark:bg-gray-700">

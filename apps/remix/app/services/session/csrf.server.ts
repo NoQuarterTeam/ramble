@@ -1,6 +1,6 @@
 import { CSRF } from "remix-utils/csrf/server"
 
-import { env, IS_PRODUCTION } from "@ramble/server-env"
+import { IS_PRODUCTION, env } from "@ramble/server-env"
 
 import { createCookie } from "~/lib/vendor/vercel.server"
 

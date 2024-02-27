@@ -15,7 +15,7 @@ function handleRequest(args: LoaderFunctionArgs | ActionFunctionArgs) {
     createContext,
     onError: ({ error, path }) => {
       if (IS_PRODUCTION && !ACCEPTABLE_ERROR_CODES.includes(error.code)) {
-        console.error(path + " : " + error.message)
+        console.error(`${path} : ${error.message}`)
         // TODO: send to sentry or something
       }
     },

@@ -32,7 +32,13 @@ export function AmenitySelector({
       >
         {label}
       </Button>
-      {errors && <ul id="type-error">{errors?.map((error, i) => <FormFieldError key={i}>{error}</FormFieldError>)}</ul>}
+      {errors && (
+        <ul id="type-error">
+          {errors?.map((error) => (
+            <FormFieldError key={error}>{error}</FormFieldError>
+          ))}
+        </ul>
+      )}
       <input type="hidden" name={value} value={String(isSelected)} />
     </div>
   )

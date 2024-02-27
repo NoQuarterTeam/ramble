@@ -1,6 +1,6 @@
-import type * as React from "react"
 import { Link, useNavigate, useParams } from "@remix-run/react"
 import { ArrowLeft, ArrowRight, Flag, Frown, Heart, Image, Star } from "lucide-react"
+import type * as React from "react"
 import { useAuthenticityToken } from "remix-utils/csrf/react"
 import { z } from "zod"
 
@@ -124,8 +124,14 @@ export default function SpotPreview() {
                     rel="noreferrer noopener"
                     className="relative hover:opacity-80"
                   >
-                    <img src={photo.src} width={350} height={225} className="rounded-xs h-[225px] max-w-[350px] object-cover" />
-                    <img src="/flickr.svg" className="absolute bottom-1 left-1 object-contain" width={100} />
+                    <img
+                      alt="spot"
+                      src={photo.src}
+                      width={350}
+                      height={225}
+                      className="rounded-xs h-[225px] max-w-[350px] object-cover"
+                    />
+                    <img alt="flickr logo" src="/flickr.svg" className="absolute bottom-1 left-1 object-contain" width={100} />
                   </a>
                 ))
               : spot.images.map((image) => (
@@ -194,7 +200,11 @@ export default function SpotPreview() {
               </LinkButton>
             )}
           </div>
-          <div className="space-y-6">{spot.reviews?.map((review) => <ReviewItem key={review.id} review={review} />)}</div>
+          <div className="space-y-6">
+            {spot.reviews?.map((review) => (
+              <ReviewItem key={review.id} review={review} />
+            ))}
+          </div>
         </div>
       </div>
     </SpotContainer>

@@ -1,9 +1,9 @@
 "use client"
-import * as React from "react"
 import * as ModalPrimitive from "@radix-ui/react-dialog"
 import { X } from "lucide-react"
+import * as React from "react"
 
-import { join, merge, type UseDisclosure } from "@ramble/shared"
+import { type UseDisclosure, join, merge } from "@ramble/shared"
 
 const ModalRoot = ModalPrimitive.Root
 
@@ -21,7 +21,7 @@ ModalPortal.displayName = ModalPrimitive.Portal.displayName
 const ModalOverlay = React.forwardRef<
   React.ElementRef<typeof ModalPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof ModalPrimitive.Overlay>
->(({ className, children, ...props }, ref) => (
+>(({ className, ...props }, ref) => (
   <ModalPrimitive.Overlay
     className={merge(
       "data-[state=closed]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out fixed inset-0 z-50 bg-black/50 transition-all duration-100",

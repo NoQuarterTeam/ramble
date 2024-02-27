@@ -1,5 +1,5 @@
-import * as React from "react"
 import { useLoaderData } from "@remix-run/react"
+import * as React from "react"
 
 import { userSchema } from "@ramble/server-schemas"
 import { userInterestFields } from "@ramble/shared"

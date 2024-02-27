@@ -1,5 +1,5 @@
-import { createTRPCRouter, protectedProcedure } from "../trpc"
 import { z } from "zod"
+import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const spotRevisionRouter = createTRPCRouter({
   create: protectedProcedure.input(z.object({ spotId: z.string(), notes: z.string() })).mutation(async ({ ctx, input }) => {

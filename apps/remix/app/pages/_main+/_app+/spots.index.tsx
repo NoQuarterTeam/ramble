@@ -1,8 +1,8 @@
-import * as React from "react"
-import { type LngLatLike, type MapRef, Marker } from "react-map-gl"
 import { Form, useLoaderData, useSearchParams } from "@remix-run/react"
 import { MapIcon } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
+import * as React from "react"
+import { type LngLatLike, type MapRef, Marker } from "react-map-gl"
 import { ExistingSearchParams } from "remix-utils/existing-search-params"
 
 import { SpotType } from "@ramble/database/types"
@@ -10,13 +10,13 @@ import { spotListQuery } from "@ramble/server-services"
 import {
   INITIAL_LATITUDE,
   INITIAL_LONGITUDE,
-  join,
+  STAY_SPOT_TYPE_OPTIONS,
   type SpotItemType,
   type SpotListSort,
-  STAY_SPOT_TYPE_OPTIONS,
+  join,
 } from "@ramble/shared"
 
-import { Map } from "~/components/Map"
+import { MapView } from "~/components/Map"
 import { SpotIcon } from "~/components/SpotIcon"
 import { Button, IconButton, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
@@ -194,6 +194,7 @@ export default function Latest() {
 function SpotsMap({ spots, bounds, onClick }: SerializeFrom<typeof loader> & { onClick: (index: number) => void }) {
   const mapRef = React.useRef<MapRef>(null)
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: allow it
   const markers = React.useMemo(
     () =>
       spots.map((spot, i) => {
@@ -203,7 +204,7 @@ function SpotsMap({ spots, bounds, onClick }: SerializeFrom<typeof loader> & { o
           </Marker>
         )
       }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [spots],
   )
   React.useEffect(() => {
@@ -213,7 +214,7 @@ function SpotsMap({ spots, bounds, onClick }: SerializeFrom<typeof loader> & { o
   }, [bounds])
   return (
     <div className="rounded-xs col-span-1 hidden overflow-hidden md:block lg:col-span-2">
-      <Map
+      <MapView
         ref={mapRef}
         initialViewState={
           bounds
@@ -226,7 +227,7 @@ function SpotsMap({ spots, bounds, onClick }: SerializeFrom<typeof loader> & { o
         }
       >
         {markers}
-      </Map>
+      </MapView>
     </div>
   )
 }

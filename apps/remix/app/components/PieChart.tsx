@@ -12,6 +12,7 @@ export function PieChart({ size, series, sliceColor }: Props) {
   const arcs = pieGenerator(series)
   return (
     <svg width={size} height={size}>
+      <title>pie char</title>
       <g transform={`translate(${size / 2}, ${size / 2})`}>
         {arcs.map((arc, i) => {
           const arcGenerator = d3.arc().outerRadius(radius).startAngle(arc.startAngle).endAngle(arc.endAngle).innerRadius(0)
@@ -19,7 +20,6 @@ export function PieChart({ size, series, sliceColor }: Props) {
             <path
               key={arc.index}
               fill={sliceColor[i]}
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               d={arcGenerator()}
             />

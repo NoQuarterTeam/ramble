@@ -1,27 +1,27 @@
-import * as React from "react"
-import type { ViewStateChangeEvent } from "react-map-gl"
 import { useFetcher, useLocation, useNavigate, useSearchParams } from "@remix-run/react"
 import turfCenter from "@turf/center"
 import * as turf from "@turf/helpers"
 import { CircleDot, Lock, Plus } from "lucide-react"
 import queryString from "query-string"
+import * as React from "react"
+import type { ViewStateChangeEvent } from "react-map-gl"
 
 import type { Spot, SpotAmenities, SpotImage } from "@ramble/database/types"
 import { type SpotType } from "@ramble/database/types"
 import { type spotSchema } from "@ramble/server-schemas"
 import {
   AMENITIES,
-  doesSpotTypeRequireAmenities,
-  doesSpotTypeRequireDescription,
   INITIAL_LATITUDE,
   INITIAL_LONGITUDE,
   SPOT_TYPE_OPTIONS,
+  doesSpotTypeRequireAmenities,
+  doesSpotTypeRequireDescription,
 } from "@ramble/shared"
 
 import { AmenitySelector } from "~/components/AmenitySelector"
 import { Form, FormButton, FormError, FormField, FormFieldError, FormFieldLabel, ImageField } from "~/components/Form"
 import { ImageUploader } from "~/components/ImageUploader"
-import { Map } from "~/components/Map"
+import { MapView } from "~/components/Map"
 import { SpotIcon } from "~/components/SpotIcon"
 import { Button, Checkbox, CloseButton, IconButton, Spinner, Textarea, Tooltip } from "~/components/ui"
 import { useFormErrors } from "~/lib/form"
@@ -34,13 +34,15 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
   // const ipInfo = useRouteLoaderData("pages/_app") as IpInfo
   const errors = useFormErrors<typeof spotSchema>()
   const [searchParams] = useSearchParams()
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: allow
   const initialViewState = React.useMemo(() => {
     const zoom = searchParams.get("zoom")
     const minLat = searchParams.get("minLat")
     const maxLat = searchParams.get("maxLat")
     const minLng = searchParams.get("minLng")
     const maxLng = searchParams.get("maxLng")
-    let centerFromParams
+    let centerFromParams: turf.Feature<turf.Point> | undefined
     if (minLat && maxLat && minLng && maxLng) {
       centerFromParams = turfCenter(
         turf.points([
@@ -144,7 +146,9 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
               ))}
               {errors?.fieldErrors?.type && (
                 <ul id="type-error">
-                  {errors?.fieldErrors?.type?.map((error, i) => <FormFieldError key={i}>{error}</FormFieldError>)}
+                  {errors?.fieldErrors?.type?.map((error) => (
+                    <FormFieldError key={error}>{error}</FormFieldError>
+                  ))}
                 </ul>
               )}
             </div>
@@ -204,7 +208,13 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
       </Form>
 
       <div className="h-nav-screen relative w-full">
-        <Map onLoad={onMove} onMoveEnd={onMove} doubleClickZoom={true} scrollZoom={false} initialViewState={initialViewState} />
+        <MapView
+          onLoad={onMove}
+          onMoveEnd={onMove}
+          doubleClickZoom={true}
+          scrollZoom={false}
+          initialViewState={initialViewState}
+        />
 
         <CircleDot className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
       </div>

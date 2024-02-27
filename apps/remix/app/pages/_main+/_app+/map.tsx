@@ -1,10 +1,7 @@
-import * as React from "react"
-import { Layer, type LngLatLike, type MapRef, Marker, Source, type ViewStateChangeEvent } from "react-map-gl"
-import { type MarkerEvent, type MarkerInstance } from "react-map-gl/dist/esm/types"
 import { cssBundleHref } from "@remix-run/css-bundle"
 import {
-  isRouteErrorResponse,
   Outlet,
+  isRouteErrorResponse,
   useFetcher,
   useLoaderData,
   useNavigate,
@@ -12,17 +9,20 @@ import {
   useSearchParams,
 } from "@remix-run/react"
 import center from "@turf/center"
-import { points } from "@turf/helpers"
+import { type Feature, type Point, points } from "@turf/helpers"
 import type { Geo } from "@vercel/edge"
 import { geolocation } from "@vercel/edge"
 import { User } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
+import * as React from "react"
+import { Layer, type LngLatLike, type MapRef, Marker, Source, type ViewStateChangeEvent } from "react-map-gl"
+import { type MarkerEvent, type MarkerInstance } from "react-map-gl/dist/esm/types"
 import { ClientOnly } from "remix-utils/client-only"
 
-import { createImageUrl, INITIAL_LATITUDE, INITIAL_LONGITUDE, join } from "@ramble/shared"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createImageUrl, join } from "@ramble/shared"
 
-import { Map } from "~/components/Map"
+import { MapView } from "~/components/Map"
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { db } from "~/lib/db.server"
 import { useMapLayers } from "~/lib/hooks/useMapLayers"
@@ -32,11 +32,11 @@ import { MapFilters } from "~/pages/_main+/_app+/components/MapFilters"
 import { type UserCluster, type userClustersLoader } from "~/pages/api+/user-clusters"
 import { getUserSession } from "~/services/session/session.server"
 
+import { useTheme } from "~/lib/theme"
 import type { clustersLoader } from "../../api+/clusters"
 import { MapLayerControls } from "./components/MapLayerControls"
 import { MapSearch } from "./components/MapSearch"
 import { SpotClusterMarker } from "./components/SpotMarker"
-import { useTheme } from "~/lib/theme"
 
 export const config = {
   // runtime: "edge",
@@ -71,7 +71,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export type IpInfo = SerializeFrom<typeof loader> | undefined
 export const shouldRevalidate = () => false
 
-export default function MapView() {
+export default function MapRouter() {
   const clustersFetcher = useFetcher<typeof clustersLoader>()
   const userClustersFetcher = useFetcher<typeof userClustersLoader>()
   const ipInfo = useLoaderData<typeof loader>()
@@ -81,13 +81,14 @@ export default function MapView() {
   const mapRef = React.useRef<MapRef>(null)
 
   const [searchParams] = useSearchParams()
+  // biome-ignore lint/correctness/useExhaustiveDependencies: allow
   const initialViewState = React.useMemo(() => {
     const zoom = searchParams.get("zoom")
     const minLat = searchParams.get("minLat")
     const maxLat = searchParams.get("maxLat")
     const minLng = searchParams.get("minLng")
     const maxLng = searchParams.get("maxLng")
-    let centerFromParams
+    let centerFromParams: Feature<Point> | undefined
     if (minLat && maxLat && minLng && maxLng) {
       centerFromParams = center(
         points([
@@ -102,8 +103,7 @@ export default function MapView() {
       longitude: centerFromParams?.geometry.coordinates[0] || ipInfo?.longitude || INITIAL_LONGITUDE,
       latitude: centerFromParams?.geometry.coordinates[1] || ipInfo?.latitude || INITIAL_LATITUDE,
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [ipInfo])
 
   const onParamsChange = (params: string) => {
     const parsed = queryString.parse(params, { arrayFormat: "bracket" })
@@ -142,12 +142,13 @@ export default function MapView() {
   }
   const navigate = useNavigate()
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: allow
   const markers = React.useMemo(
     () =>
       clusters?.map((point, i) => (
         <SpotClusterMarker
           point={point}
-          key={i}
+          key={`${point.id || 0}-${i}`}
           onClick={(e) => {
             e.originalEvent.stopPropagation()
             if (!point.properties.cluster && point.properties.id) {
@@ -165,18 +166,19 @@ export default function MapView() {
           }}
         />
       )),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
     [clusters],
   )
   const mapLayers = useMapLayers()
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: allow
   const userMarkers = React.useMemo(
     () =>
       mapLayers.shouldShowUsers &&
       userClusters?.map((point, i) => (
         <UserClusterMarker
           point={point}
-          key={i}
+          key={`${point.id || 0}-${i}`}
           onClick={(e) => {
             e.originalEvent.stopPropagation()
             if (!point.properties.cluster) {
@@ -189,7 +191,6 @@ export default function MapView() {
           }}
         />
       )),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [userClusters, mapLayers.shouldShowUsers],
   )
 
@@ -197,7 +198,7 @@ export default function MapView() {
 
   return (
     <div className="h-nav-screen relative w-screen overflow-hidden">
-      <Map
+      <MapView
         onLoad={onMove}
         onMoveEnd={onMove}
         ref={mapRef}
@@ -213,7 +214,7 @@ export default function MapView() {
         <MapLayers />
         {markers}
         {userMarkers}
-      </Map>
+      </MapView>
 
       <ClientOnly>{() => <MapFilters onChange={onParamsChange} />}</ClientOnly>
       <MapLayerControls />
@@ -304,7 +305,7 @@ function MapLayers() {
             id="temp"
             type="raster"
             tileSize={256}
-            tiles={[`https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63`]}
+            tiles={["https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63"]}
           />
           <Layer id="tempLayer" source="temp" type="raster" />
           <div className="bg-background rounded-xs absolute bottom-2.5 right-12 hidden items-center space-x-4 px-2 py-1 text-xs shadow sm:flex">
@@ -320,9 +321,10 @@ function MapLayers() {
               <div
                 className="rounded-xs h-[4px] w-[260px]"
                 style={{
-                  backgroundImage: `linear-gradient(to right, rgb(159, 85, 181) 0%, rgb(44, 106, 187) 8.75%, rgb(82, 139, 213) 12.5%, rgb(103, 163, 222) 18.75%, rgb(142, 202, 240) 25%, rgb(155, 213, 244) 31.25%, rgb(172, 225, 253) 37.5%, rgb(194, 234, 255) 43.75%, rgb(255, 255, 208) 50%, rgb(254, 248, 174) 56.25%, rgb(254, 232, 146) 62.5%, rgb(254, 226, 112) 68.75%, rgb(253, 212, 97) 75%, rgb(244, 168, 94) 82.5%, rgb(244, 129, 89) 87.5%, rgb(244, 104, 89) 93.75%, rgb(244, 76, 73) 100%)`,
+                  backgroundImage:
+                    "linear-gradient(to right, rgb(159, 85, 181) 0%, rgb(44, 106, 187) 8.75%, rgb(82, 139, 213) 12.5%, rgb(103, 163, 222) 18.75%, rgb(142, 202, 240) 25%, rgb(155, 213, 244) 31.25%, rgb(172, 225, 253) 37.5%, rgb(194, 234, 255) 43.75%, rgb(255, 255, 208) 50%, rgb(254, 248, 174) 56.25%, rgb(254, 232, 146) 62.5%, rgb(254, 226, 112) 68.75%, rgb(253, 212, 97) 75%, rgb(244, 168, 94) 82.5%, rgb(244, 129, 89) 87.5%, rgb(244, 104, 89) 93.75%, rgb(244, 76, 73) 100%)",
                 }}
-              ></div>
+              />
             </div>
           </div>
         </>
@@ -334,7 +336,7 @@ function MapLayers() {
             type="raster"
             tileSize={256}
             tiles={[
-              `https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63`,
+              "https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63",
             ]}
           />
           <Layer id="rainLayer" source="rain" type="raster" />

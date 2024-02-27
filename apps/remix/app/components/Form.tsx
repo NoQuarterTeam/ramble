@@ -1,8 +1,8 @@
-import * as React from "react"
 import { type SerializeFrom } from "@remix-run/node"
 import type { Fetcher, FetcherWithComponents, FormProps as RemixFormProps } from "@remix-run/react"
 import { Form as RemixForm, useFetcher as useRemixFetcher, useFetchers, useNavigation } from "@remix-run/react"
 import { X } from "lucide-react"
+import * as React from "react"
 import { AuthenticityTokenInput } from "remix-utils/csrf/react"
 import { type z } from "zod"
 
@@ -131,7 +131,7 @@ export const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(func
 
   const sharedProps = {
     "aria-invalid": fieldErrors || fieldErrors?.length ? true : undefined,
-    "aria-errormessage": props.name + "-error",
+    "aria-errormessage": `${props.name}-error`,
     id: props.name,
     ...props,
     ref,
@@ -152,7 +152,11 @@ export const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(func
       {typeof fieldErrors === "string" ? (
         <FormFieldError>{fieldErrors}</FormFieldError>
       ) : fieldErrors?.length ? (
-        <ul id={props.name + "-error"}>{fieldErrors?.map((error, i) => <FormFieldError key={i}>{error}</FormFieldError>)}</ul>
+        <ul id={`${props.name}-error`}>
+          {fieldErrors?.map((err) => (
+            <FormFieldError key={err}>{err}</FormFieldError>
+          ))}
+        </ul>
       ) : null}
     </div>
   )
@@ -222,7 +226,11 @@ export function ImageField(props: ImageFieldProps) {
       {typeof fieldErrors === "string" ? (
         <FormFieldError>{fieldErrors}</FormFieldError>
       ) : fieldErrors?.length ? (
-        <ul id={props.name + "-error"}>{fieldErrors?.map((error, i) => <FormFieldError key={i}>{error}</FormFieldError>)}</ul>
+        <ul id={`${props.name}-error`}>
+          {fieldErrors?.map((error) => (
+            <FormFieldError key={error}>{error}</FormFieldError>
+          ))}
+        </ul>
       ) : null}
     </div>
   )

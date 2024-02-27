@@ -1,5 +1,5 @@
-import * as React from "react"
 import { useFetcher } from "@remix-run/react"
+import * as React from "react"
 
 export function useFetcherQuery<T>(
   url: string,
@@ -11,8 +11,7 @@ export function useFetcherQuery<T>(
   React.useEffect(() => {
     if (opts && !opts.isEnabled) return
     fetcher.load(url)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url, opts?.isEnabled])
+  }, [url, opts, fetcher.load])
 
   return fetcher
 }

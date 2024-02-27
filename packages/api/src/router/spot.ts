@@ -1,5 +1,5 @@
-import { TRPCError } from "@trpc/server"
 import crypto from "crypto"
+import { TRPCError } from "@trpc/server"
 import dayjs from "dayjs"
 import Supercluster from "supercluster"
 import { z } from "zod"
@@ -184,7 +184,7 @@ export const spotRouter = createTRPCRouter({
     if (ctx.user && spot.description) {
       descriptionHash = crypto.createHash("sha1").update(spot.description).digest("hex") as string
       translatedDescription = await fetch(
-        FULL_WEB_URL + `/api/spots/${spot.id}/translate/${ctx.user.preferredLanguage}?hash=${descriptionHash}`,
+        `${FULL_WEB_URL}/api/spots/${spot.id}/translate/${ctx.user.preferredLanguage}?hash=${descriptionHash}`,
       )
         .then((r) => r.json() as Promise<string | null>)
         .catch((error) => {
@@ -213,9 +213,7 @@ export const spotRouter = createTRPCRouter({
       FROM
         Spot
       WHERE
-        Spot.creatorId = ${user.id} AND Spot.verifiedAt IS NOT NULL AND ${publicSpotWhereClauseRaw(
-          user.id,
-        )} AND Spot.sourceUrl IS NULL
+        Spot.creatorId = ${user.id} AND Spot.verifiedAt IS NOT NULL AND ${publicSpotWhereClauseRaw(user.id)} AND Spot.sourceUrl IS NULL
       GROUP BY
         Spot.id
       ORDER BY

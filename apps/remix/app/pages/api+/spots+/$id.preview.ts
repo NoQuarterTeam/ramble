@@ -1,5 +1,5 @@
-import { type LoaderFunctionArgs, type SerializeFrom } from "@vercel/remix"
 import crypto from "crypto"
+import { type LoaderFunctionArgs, type SerializeFrom } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import { promiseHash } from "remix-utils/promise"
 
@@ -53,7 +53,7 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     }),
     rating: db.review.aggregate({ where: { spotId: initialSpot.id }, _avg: { rating: true } }),
     translatedDescription: descriptionHash
-      ? fetch(FULL_WEB_URL + `/api/spots/${initialSpot.id}/translate/${language}`).then((r) => r.json())
+      ? fetch(`${FULL_WEB_URL}/api/spots/${initialSpot.id}/translate/${language}`).then((r) => r.json())
       : (async () => null)(),
   })
   const flickrImages = await getActivityFlickrImages(data.spot)

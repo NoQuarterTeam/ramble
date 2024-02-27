@@ -137,9 +137,8 @@ export const listRouter = createTRPCRouter({
     })
     if (listSpot) {
       return ctx.prisma.listSpot.delete({ where: { id: listSpot.id } })
-    } else {
-      return ctx.prisma.listSpot.create({ data: { spotId: input.spotId, listId: input.listId } })
     }
+    return ctx.prisma.listSpot.create({ data: { spotId: input.spotId, listId: input.listId } })
   }),
   create: protectedProcedure.input(listSchema).mutation(({ ctx, input }) => {
     return ctx.prisma.list.create({ data: { ...input, creatorId: ctx.user.id } })

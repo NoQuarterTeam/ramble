@@ -10,12 +10,12 @@ import queryString from "query-string"
 import type { Spot, SpotAmenities, SpotImage, SpotType } from "@ramble/database/types"
 import {
   AMENITIES,
-  createImageUrl,
-  doesSpotTypeRequireAmenities,
   INITIAL_LATITUDE,
   INITIAL_LONGITUDE,
-  merge,
   SPOT_TYPE_OPTIONS,
+  createImageUrl,
+  doesSpotTypeRequireAmenities,
+  merge,
 } from "@ramble/shared"
 
 import { AmenitySelector } from "~/components/AmenitySelector"
@@ -24,9 +24,9 @@ import { SpotIcon } from "~/components/SpotIcon"
 import { Button, CloseButton, IconButton, Spinner, Textarea } from "~/components/ui"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 
+import { MapView } from "~/components/Map"
 import type { SerializeFrom } from "~/lib/vendor/vercel.server"
 import { type geocodeLoader } from "~/pages/api+/mapbox+/geocode"
-import { Map } from "~/components/Map"
 
 export function SpotReportForm({
   spot,
@@ -36,13 +36,15 @@ export function SpotReportForm({
   // const ipInfo = useRouteLoaderData("pages/_app") as IpInfo
   // const errors = useFormErrors<typeof spotRevisionSchema>()
   const [searchParams] = useSearchParams()
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: allow
   const initialViewState = React.useMemo(() => {
     const zoom = searchParams.get("zoom")
     const minLat = searchParams.get("minLat")
     const maxLat = searchParams.get("maxLat")
     const minLng = searchParams.get("minLng")
     const maxLng = searchParams.get("maxLng")
-    let centerFromParams
+    let centerFromParams: turf.Feature<turf.Point> | undefined
     if (minLat && maxLat && minLng && maxLng) {
       centerFromParams = turfCenter(
         turf.points([
@@ -58,7 +60,6 @@ export function SpotReportForm({
       // longitude: spot.longitude || centerFromParams?.geometry.coordinates[0] || ipInfo?.longitude || INITIAL_LONGITUDE,
       // latitude: spot.latitude || centerFromParams?.geometry.coordinates[1] || ipInfo?.latitude || INITIAL_LATITUDE,
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const [latitude, setLatitude] = React.useState<number | null>(spot.latitude || initialViewState.latitude)
@@ -222,19 +223,23 @@ export function SpotReportForm({
 
             {spot.images.map(({ id, path }) => {
               return (
-                <div key={path} className="relative" onClick={() => handleClickImage(id)}>
+                <div key={path} className="relative">
                   <div className="absolute left-2 top-2 z-10">
-                    <Button variant={isFlagged(id) ? "destructive" : "secondary"} leftIcon={<Flag className="sq-4" />}>
+                    <Button
+                      onClick={() => handleClickImage(id)}
+                      variant={isFlagged(id) ? "destructive" : "secondary"}
+                      leftIcon={<Flag className="sq-4" />}
+                    >
                       {isFlagged(id) ? "Flagged" : "Flag"}
                     </Button>
                   </div>
                   <img
                     src={createImageUrl(path)}
                     className={merge(
-                      "h-[300px] w-full cursor-pointer overflow-hidden rounded object-cover hover:opacity-80",
+                      "h-[300px] w-full overflow-hidden rounded object-cover hover:opacity-80",
                       isFlagged(id) && "outline-solid opacity-80 outline outline-red-500",
                     )}
-                    alt="spot image"
+                    alt="spot cover"
                   />
                 </div>
               )
@@ -257,7 +262,13 @@ export function SpotReportForm({
       </Form>
 
       <div className="h-nav-screen relative w-full">
-        <Map onLoad={onMove} onMoveEnd={onMove} doubleClickZoom={true} scrollZoom={false} initialViewState={initialViewState} />
+        <MapView
+          onLoad={onMove}
+          onMoveEnd={onMove}
+          doubleClickZoom={true}
+          scrollZoom={false}
+          initialViewState={initialViewState}
+        />
 
         <CircleDot className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
       </div>

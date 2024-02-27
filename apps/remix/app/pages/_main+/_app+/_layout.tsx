@@ -1,11 +1,11 @@
 import { Outlet, ShouldRevalidateFunction } from "@remix-run/react"
 
 import { json } from "~/lib/remix.server"
-import { type SerializeFrom, type LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import { type LoaderFunctionArgs, type SerializeFrom } from "~/lib/vendor/vercel.server"
 import { type MapLayers, defaultMapLayers, mapLayersCookies } from "~/pages/api+/map-layers"
 
-import { mapLayersUrl } from "./components/MapLayerControls"
 import { requireUser } from "~/services/auth/auth.server"
+import { mapLayersUrl } from "./components/MapLayerControls"
 
 export const shouldRevalidate: ShouldRevalidateFunction = ({ formAction }) => {
   return formAction === mapLayersUrl

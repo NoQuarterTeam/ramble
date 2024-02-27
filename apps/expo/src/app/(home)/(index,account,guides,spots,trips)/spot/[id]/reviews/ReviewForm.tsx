@@ -53,7 +53,7 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
               icon={Star}
               strokeWidth={1}
               size={50}
-              fill={rating > val ? (isDark ? backgroundLight : backgroundDark) : "transparent"}
+              fill={rating >= val ? (isDark ? backgroundLight : backgroundDark) : "transparent"}
             />
           </TouchableOpacity>
         ))}

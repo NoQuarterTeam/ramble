@@ -1,6 +1,6 @@
-import * as React from "react"
 import { Await, useFetcher } from "@remix-run/react"
 import { Languages } from "lucide-react"
+import * as React from "react"
 
 import { type Spot } from "@ramble/database/types"
 import { join, languages } from "@ramble/shared"
@@ -33,7 +33,7 @@ export function TranslateSpotDescription(props: Props) {
               key={user?.preferredLanguage || "en"}
               defaultValue={user?.preferredLanguage || "en"}
               size="sm"
-              disabled={!!!user}
+              disabled={!user}
               onChange={(e) => {
                 descriptionFetcher.load(`/api/spots/${props.spot.id}/translate/${e.target.value}?hash=${props.hash}`)
               }}

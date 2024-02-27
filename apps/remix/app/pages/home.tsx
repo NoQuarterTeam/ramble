@@ -37,7 +37,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (!codeResult.success) return formError({ formError: "Error creating request, please try again" })
 
   void updateLoopsContact({ inviteCode: codeResult.code, email: result.data.email, accessRequestedAt: new Date().toISOString() })
-  void sendSlackMessage("🚀 New access request from " + result.data.email)
+  void sendSlackMessage(`🚀 New access request from ${result.data.email}`)
   void sendAccessRequestConfirmationEmail(result.data.email)
   track("Access requested", { email: result.data.email })
   return json({ success: true })
@@ -139,7 +139,7 @@ export default function Home() {
         </div>
         {FEATURES.map((feature, i) => (
           <div
-            key={i}
+            key={feature.slice(0, 10)}
             className={join(
               "flex flex-col items-center justify-between gap-10 md:flex-row md:gap-40",
               i % 2 && "md:flex-row-reverse",
@@ -237,6 +237,7 @@ function RequestAccessForm({ mode }: { mode?: "light" | "dark" }) {
 
       <div>
         <button
+          type="submit"
           disabled={accessFetcher.state === "submitting"}
           className={merge(
             "border-xs rounded-xs flex h-10 w-[100px] items-center justify-center whitespace-nowrap bg-black px-4 text-center text-white hover:opacity-80 disabled:opacity-70",

@@ -1,16 +1,16 @@
-import { Suspense } from "react"
-import { Marker } from "react-map-gl"
-import { Await, Link, type ShouldRevalidateFunctionArgs, useLoaderData } from "@remix-run/react"
 import crypto from "crypto"
+import { Await, Link, type ShouldRevalidateFunctionArgs, useLoaderData } from "@remix-run/react"
 import dayjs from "dayjs"
 import { Check, Edit2, Flag, Heart, Star, Trash } from "lucide-react"
+import { Suspense } from "react"
+import { Marker } from "react-map-gl"
 import { promiseHash } from "remix-utils/promise"
 
 import { FULL_WEB_URL } from "@ramble/server-env"
 import { getActivityFlickrImages, publicSpotWhereClause } from "@ramble/server-services"
 import {
-  activitySpotTypes,
   AMENITIES,
+  activitySpotTypes,
   amenitiesFields,
   canManageSpot,
   createImageUrl,
@@ -21,7 +21,7 @@ import {
 
 import { Form, FormButton } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
-import { Map } from "~/components/Map"
+import { MapView } from "~/components/Map"
 import { OptimizedImage, transformImageSrc } from "~/components/OptimisedImage"
 import { PageContainer } from "~/components/PageContainer"
 import { SpotTypeBadge } from "~/components/SpotTypeBadge"
@@ -42,7 +42,7 @@ import { createAction, createActions } from "~/lib/form.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 import { badRequest, json, notFound, redirect } from "~/lib/remix.server"
-import { type ActionFunctionArgs, defer, type LoaderFunctionArgs, type MetaFunction } from "~/lib/vendor/vercel.server"
+import { type ActionFunctionArgs, type LoaderFunctionArgs, type MetaFunction, defer } from "~/lib/vendor/vercel.server"
 import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
 import { type TranslateSpot } from "~/pages/api+/spots+/$id.translate.$lang"
 import type { loader as rootLoader } from "~/root"
@@ -100,13 +100,13 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
   const flickrImages = await getActivityFlickrImages(spot)
 
-  let translatedDescription
-  let descriptionHash
+  let translatedDescription: Promise<TranslateSpot> | null = null
+  let descriptionHash: string | undefined
   if (user && spot.description) {
     const language = user.preferredLanguage
     descriptionHash = spot.description ? crypto.createHash("sha1").update(spot.description).digest("hex") : ""
     translatedDescription = descriptionHash
-      ? (fetch(FULL_WEB_URL + `/api/spots/${spot.id}/translate/${language}?hash=${descriptionHash}`).then((r) =>
+      ? (fetch(`${FULL_WEB_URL}/api/spots/${spot.id}/translate/${language}?hash=${descriptionHash}`).then((r) =>
           r.json(),
         ) as Promise<TranslateSpot>)
       : null
@@ -172,7 +172,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
           })
           track("Spot verified", { spotId: spot.id, userId: user.id })
           return json({ success: true }, request, { flash: { title: "Spot verified!" } })
-        } catch (error) {
+        } catch (_error) {
           return badRequest("Error verifying spot", request, { flash: { title: "Error verifying spot" } })
         }
       }),
@@ -183,7 +183,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
           await db.spot.update({ where: { id: params.id }, data: { deletedAt: new Date() } })
           track("Spot deleted", { spotId: params.id || "", userId: user.id })
           return redirect("/spots", request, { flash: { title: "Spot deleted!" } })
-        } catch (error) {
+        } catch (_error) {
           return badRequest("Error deleting spot your account", request, { flash: { title: "Error deleting spot" } })
         }
       }),
@@ -208,8 +208,14 @@ export default function SpotDetail() {
                   rel="noreferrer noopener"
                   className="relative hover:opacity-80"
                 >
-                  <img src={photo.src} width={400} height={300} className="rounded-xs h-[300px] max-w-[400px] object-cover" />
-                  <img src="/flickr.svg" className="absolute bottom-1 left-1 object-contain" width={100} />
+                  <img
+                    alt="flicker"
+                    src={photo.src}
+                    width={400}
+                    height={300}
+                    className="rounded-xs h-[300px] max-w-[400px] object-cover"
+                  />
+                  <img alt="flicker logo" src="/flickr.svg" className="absolute bottom-1 left-1 object-contain" width={100} />
                 </a>
               ))
             : spot.images.map((image) => (
@@ -328,7 +334,7 @@ export default function SpotDetail() {
             </div>
 
             <div className="rounded-xs h-[400px] w-full overflow-hidden">
-              <Map initialViewState={{ latitude: spot.latitude, longitude: spot.longitude, zoom: 10 }}>
+              <MapView initialViewState={{ latitude: spot.latitude, longitude: spot.longitude, zoom: 10 }}>
                 <Marker anchor="bottom" longitude={spot.longitude} latitude={spot.latitude}>
                   <SpotMarker spot={spot} isInteractable={false} />
                 </Marker>
@@ -350,7 +356,7 @@ export default function SpotDetail() {
                     }
                   </Await>
                 </Suspense>
-              </Map>
+              </MapView>
             </div>
           </div>
         </div>

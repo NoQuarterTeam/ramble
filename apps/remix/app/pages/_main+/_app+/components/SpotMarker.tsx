@@ -1,7 +1,7 @@
-import { Marker } from "react-map-gl"
-import { type MarkerEvent, type MarkerInstance } from "react-map-gl/dist/esm/types"
 import { cva } from "class-variance-authority"
 import { type ClassValue } from "class-variance-authority/types"
+import { Marker } from "react-map-gl"
+import { type MarkerEvent, type MarkerInstance } from "react-map-gl/dist/esm/types"
 
 import type { SpotType } from "@ramble/database/types"
 import { spotMarkerClusterColorTypes, spotMarkerColorTypes, spotMarkerTextColorTypes } from "@ramble/shared"
