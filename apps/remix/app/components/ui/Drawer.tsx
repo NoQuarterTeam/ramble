@@ -1,11 +1,11 @@
 "use client"
 
-import * as React from "react"
 import * as DrawerPrimitive from "@radix-ui/react-dialog"
-import { cva, type VariantProps } from "class-variance-authority"
+import { type VariantProps, cva } from "class-variance-authority"
 import { X } from "lucide-react"
+import * as React from "react"
 
-import { merge, type UseDisclosure } from "@ramble/shared"
+import { type UseDisclosure, merge } from "@ramble/shared"
 
 const DrawerRoot = DrawerPrimitive.Root
 
@@ -37,7 +37,7 @@ DrawerPortal.displayName = DrawerPrimitive.Portal.displayName
 const DrawerOverlay = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Overlay>
->(({ className, children, ...props }, ref) => (
+>(({ className, ...props }, ref) => (
   <DrawerPrimitive.Overlay
     className={merge(
       "data-[state=closed]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out fixed inset-0 z-50 bg-black/50 backdrop-blur-sm transition-all duration-100",

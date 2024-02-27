@@ -1,5 +1,3 @@
-import * as React from "react"
-import { TouchableOpacity, useColorScheme, View } from "react-native"
 import {
   Camera,
   type MapState,
@@ -12,12 +10,14 @@ import {
 import * as Location from "expo-location"
 import { Link, useRouter } from "expo-router"
 import { Layers, Navigation, PlusCircle, Settings2, User } from "lucide-react-native"
+import * as React from "react"
+import { TouchableOpacity, View, useColorScheme } from "react-native"
 
-import { createImageUrl, INITIAL_LATITUDE, INITIAL_LONGITUDE, join } from "@ramble/shared"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createImageUrl, join } from "@ramble/shared"
 
 import { FeedbackCheck, useFeedbackActivity } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
-import { Map } from "~/components/Map"
+import { MapView } from "~/components/Map"
 import { MapSearch } from "~/components/MapSearch"
 import { RegisterCheck } from "~/components/RegisterCheck"
 import { SpotClusterMarker } from "~/components/SpotMarker"
@@ -26,7 +26,7 @@ import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
-import { api, type RouterOutputs } from "~/lib/api"
+import { type RouterOutputs, api } from "~/lib/api"
 import { isAndroid } from "~/lib/device"
 import { useMe } from "~/lib/hooks/useMe"
 
@@ -44,7 +44,7 @@ export default function MapScreen() {
     <View className="flex-1">
       <RegisterCheck />
       <FeedbackCheck />
-      <MapView />
+      <MapContainer />
 
       <TouchableOpacity
         activeOpacity={0.8}
@@ -59,7 +59,7 @@ export default function MapScreen() {
       </TouchableOpacity>
 
       <View pointerEvents="box-none" className="absolute bottom-3 left-3 flex space-y-2">
-        <Link push href={`/layers`} asChild>
+        <Link push href={"/layers"} asChild>
           <TouchableOpacity
             onPress={() => increment()}
             activeOpacity={0.8}
@@ -68,7 +68,7 @@ export default function MapScreen() {
             <Icon icon={Layers} size={20} />
           </TouchableOpacity>
         </Link>
-        <Link push href={`/filters`} asChild>
+        <Link push href={"/filters"} asChild>
           <TouchableOpacity
             onPress={() => increment()}
             activeOpacity={0.8}
@@ -82,7 +82,7 @@ export default function MapScreen() {
   )
 }
 
-function MapView() {
+function MapContainer() {
   const router = useRouter()
   const increment = useFeedbackActivity((s) => s.increment)
   const [activeSpotId, setActiveSpotId] = React.useState<string | null>(null)
@@ -133,6 +133,7 @@ function MapView() {
     })()
   }, [])
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: dont need to re-render
   React.useEffect(() => {
     if (!isLoaded) return
     async function updateMapAfterFiltersChange() {
@@ -157,7 +158,6 @@ function MapView() {
       }
     }
     updateMapAfterFiltersChange()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, isLoaded])
 
   const onMapMove = async ({ properties }: MapState) => {
@@ -185,12 +185,13 @@ function MapView() {
     }
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: dont add activeSpotId here
   const spotMarkers = React.useMemo(
     () =>
       clusters?.map((point, i) => (
         <SpotClusterMarker
           point={point}
-          key={i}
+          key={`${point.id || 0}${i}`}
           onPress={() => {
             camera.current?.setCamera({
               zoomLevel: (point.properties.cluster && point.properties.zoomLevel) || undefined,
@@ -206,10 +207,9 @@ function MapView() {
           }}
         />
       )),
-    // dont add activeSpotId here
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [clusters],
   )
+  // biome-ignore lint/correctness/useExhaustiveDependencies: dont need to re-render
   const userMarkers = React.useMemo(
     () =>
       layers.shouldShowUsers &&
@@ -225,7 +225,7 @@ function MapView() {
             })
           }
           return (
-            <MarkerView key={i} allowOverlap coordinate={point.geometry.coordinates}>
+            <MarkerView key={`${point.id || 0}${i}`} allowOverlap coordinate={point.geometry.coordinates}>
               <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={onPress}
@@ -244,47 +244,46 @@ function MapView() {
               </TouchableOpacity>
             </MarkerView>
           )
-        } else {
-          const user = point.properties as {
-            cluster: false
-            username: string
-            id: string
-            avatar: string | null
-            avatarBlurHash: string | null
-          }
-          return (
-            <MarkerView key={user.id} allowOverlap coordinate={point.geometry.coordinates}>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => {
-                  increment()
-                  router.push(`/(home)/(index)/${user.username}/(profile)`)
-                }}
-                className="sq-8 flex items-center justify-center overflow-hidden rounded-full border border-purple-100 bg-purple-500"
-              >
-                {user.avatar ? (
-                  <OptimizedImage
-                    width={50}
-                    height={50}
-                    placeholder={user.avatarBlurHash}
-                    style={{ width: 32, height: 32 }}
-                    source={{ uri: createImageUrl(user.avatar) }}
-                    className="object-cover"
-                  />
-                ) : (
-                  <Icon icon={User} size={16} color="white" />
-                )}
-              </TouchableOpacity>
-            </MarkerView>
-          )
         }
+        const user = point.properties as {
+          cluster: false
+          username: string
+          id: string
+          avatar: string | null
+          avatarBlurHash: string | null
+        }
+        return (
+          <MarkerView key={user.id} allowOverlap coordinate={point.geometry.coordinates}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => {
+                increment()
+                router.push(`/(home)/(index)/${user.username}/(profile)`)
+              }}
+              className="sq-8 flex items-center justify-center overflow-hidden rounded-full border border-purple-100 bg-purple-500"
+            >
+              {user.avatar ? (
+                <OptimizedImage
+                  width={50}
+                  height={50}
+                  placeholder={user.avatarBlurHash}
+                  style={{ width: 32, height: 32 }}
+                  source={{ uri: createImageUrl(user.avatar) }}
+                  className="object-cover"
+                />
+              ) : (
+                <Icon icon={User} size={16} color="white" />
+              )}
+            </TouchableOpacity>
+          </MarkerView>
+        )
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [users, layers.shouldShowUsers],
   )
   return (
     <>
-      <Map
+      <MapView
         onLayout={handleSetUserLocation}
         onMapIdle={onMapMove}
         onPress={handleClosePreview}
@@ -308,9 +307,9 @@ function MapView() {
 
         {spotMarkers}
         {userMarkers}
-      </Map>
+      </MapView>
 
-      {((isAndroid && isFetching) || (!isAndroid && isFetching && !!!clusters)) && (
+      {((isAndroid && isFetching) || (!isAndroid && isFetching && !clusters)) && (
         <View
           pointerEvents="none"
           className="absolute right-4 top-14 flex flex-col items-center justify-center rounded-full bg-white p-2 dark:bg-gray-800"
@@ -343,7 +342,7 @@ function MapLayers() {
       <RasterSource
         id="temp"
         tileSize={256}
-        tileUrlTemplates={[`https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63`]}
+        tileUrlTemplates={["https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63"]}
       />
       {layers.layer === "temp" && <RasterLayer id="tempLayer" sourceID="temp" style={{ rasterOpacity: 1 }} />}
 
@@ -351,7 +350,7 @@ function MapLayers() {
         id="rain"
         tileSize={256}
         tileUrlTemplates={[
-          `https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63`,
+          "https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63",
         ]}
       />
       {layers.layer === "rain" && <RasterLayer id="rainLayer" sourceID="rain" style={{ rasterOpacity: 1 }} />}

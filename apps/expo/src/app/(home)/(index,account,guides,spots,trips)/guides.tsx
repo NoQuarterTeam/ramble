@@ -1,7 +1,7 @@
-import * as React from "react"
-import { TouchableOpacity, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import { Link } from "expo-router"
+import * as React from "react"
+import { TouchableOpacity, View } from "react-native"
 
 import { createImageUrl } from "@ramble/shared"
 
@@ -11,7 +11,7 @@ import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { Spinner } from "~/components/ui/Spinner"
 import { TabView } from "~/components/ui/TabView"
 import { Text } from "~/components/ui/Text"
-import { api, type RouterOutputs } from "~/lib/api"
+import { type RouterOutputs, api } from "~/lib/api"
 import { isTablet } from "~/lib/device"
 import { useMe } from "~/lib/hooks/useMe"
 

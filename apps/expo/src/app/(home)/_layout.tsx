@@ -1,6 +1,6 @@
-import { useColorScheme } from "react-native"
 import { Tabs } from "expo-router"
-import { List, Map, Route, UserCircle, Users } from "lucide-react-native"
+import { List, Map as MapIcon, Route, UserCircle, Users } from "lucide-react-native"
+import { useColorScheme } from "react-native"
 
 import { createImageUrl, join } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
@@ -34,7 +34,7 @@ export default function HomeLayout() {
       <Tabs.Screen
         name="(index)"
         options={{
-          tabBarIcon: (props) => <Icon icon={Map} size={22} color={!!props.focused && "primary"} />,
+          tabBarIcon: (props) => <Icon icon={MapIcon} size={22} color={!!props.focused && "primary"} />,
         }}
       />
       <Tabs.Screen

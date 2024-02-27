@@ -46,11 +46,11 @@ export const spotImagesRawQuery = (ids: string[]) => {
 }
 
 export const joinSpotImages = (spots: Array<SpotItemType>, images: Array<Pick<SpotImage, "spotId" | "path" | "blurHash">>) => {
-  spots.forEach((spot) => {
+  for (const spot of spots) {
     const image = images.find((i) => i.spotId === spot.id)
     spot.blurHash = image?.blurHash || null
     spot.image = image?.path || null
-  })
+  }
 }
 
 export const spotItemSelectFields = Prisma.sql`

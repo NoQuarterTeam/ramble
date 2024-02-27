@@ -1,6 +1,6 @@
+import { SpotType } from "@ramble/database/types"
 import { z } from "zod"
 import { FormBoolean, FormNumber, NullableFormString } from "./utils/form"
-import { SpotType } from "@ramble/database/types"
 
 export const spotRevisionSchema = z.object({
   name: z.string().min(1),

@@ -1,14 +1,14 @@
-import { FormProvider } from "react-hook-form"
-import { ScrollView, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { useRouter } from "expo-router"
+import { FormProvider } from "react-hook-form"
+import { ScrollView, View } from "react-native"
 
 import { Button } from "~/components/ui/Button"
 import { FormError } from "~/components/ui/FormError"
 import { FormInput } from "~/components/ui/FormInput"
 import { ModalView } from "~/components/ui/ModalView"
 import { Text } from "~/components/ui/Text"
-import { api, AUTH_TOKEN } from "~/lib/api"
+import { AUTH_TOKEN, api } from "~/lib/api"
 import { useForm } from "~/lib/hooks/useForm"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
 

@@ -1,6 +1,6 @@
-import * as React from "react"
 import { BadgeX, Dog, Settings2 } from "lucide-react"
 import queryString from "query-string"
+import * as React from "react"
 
 import { SpotType } from "@ramble/database/types"
 import { SPOT_TYPES, type SpotTypeInfo, useDisclosure } from "@ramble/shared"

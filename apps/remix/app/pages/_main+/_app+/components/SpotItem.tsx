@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from "@remix-run/react"
 import { Heart, Star } from "lucide-react"
 
-import { displaySaved, type SpotItemType } from "@ramble/shared"
+import { type SpotItemType, displaySaved } from "@ramble/shared"
 import { createImageUrl, displayRating } from "@ramble/shared"
 
 import { OptimizedImage } from "~/components/OptimisedImage"
@@ -83,7 +83,7 @@ export function SpotItem({ spot }: Props) {
           <IconButton
             className="bg-background hover:bg-background rounded-full hover:opacity-90 dark:hover:opacity-80"
             aria-label="save to list"
-            onClick={() => navigate("/login?redirectTo=" + pathname)}
+            onClick={() => navigate(`/login?redirectTo=${pathname}`)}
             icon={<Heart size={16} />}
           />
         )}

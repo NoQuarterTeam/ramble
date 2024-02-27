@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react"
 import copy from "copy-to-clipboard"
+import { useEffect, useState } from "react"
 
 interface IOptions {
   /**
@@ -11,7 +11,7 @@ interface IOptions {
 
 export function useClipboard(text: string, options?: IOptions): [boolean, () => void] {
   const [isCopied, setIsCopied] = useState(false)
-  const successDuration = options && options.successDuration
+  const successDuration = options?.successDuration
 
   useEffect(() => {
     if (isCopied) {

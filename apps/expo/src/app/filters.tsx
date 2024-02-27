@@ -1,16 +1,16 @@
-import * as React from "react"
-import { Switch, View } from "react-native"
-import { ScrollView } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Link, useRouter } from "expo-router"
 import { BadgeX, Dog } from "lucide-react-native"
 import { usePostHog } from "posthog-react-native"
+import * as React from "react"
+import { Switch, View } from "react-native"
+import { ScrollView } from "react-native"
 import { z } from "zod"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 
 import { type SpotType } from "@ramble/database/types"
-import { join, SPOT_TYPE_NAMES, SPOT_TYPES, type SpotTypeInfo } from "@ramble/shared"
+import { SPOT_TYPES, SPOT_TYPE_NAMES, type SpotTypeInfo, join } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { Icon } from "~/components/Icon"
@@ -27,17 +27,17 @@ const mapFiltersSchema = z.object({
   isUnverified: z.boolean(),
 })
 
-export type MapFilters = z.infer<typeof mapFiltersSchema>
+export type MapFiltersOptions = z.infer<typeof mapFiltersSchema>
 
 export const initialFilters = {
   isPetFriendly: false,
   isUnverified: false,
   types: ["CAMPING", "FREE_CAMPING", "REWILDING"],
-} satisfies MapFilters
+} satisfies MapFiltersOptions
 
 export const useMapFilters = create<{
-  filters: MapFilters
-  setFilters: (filter: Partial<MapFilters>) => void
+  filters: MapFiltersOptions
+  setFilters: (filter: Partial<MapFiltersOptions>) => void
 }>()(
   persist(
     (set) => ({
@@ -64,7 +64,7 @@ export default function MapFilters() {
           className="space-y-5"
         >
           <View className="space-y-2">
-            {!!!me && (
+            {!me && (
               <View className="flex flex-row space-x-1">
                 <Link href="/login" push asChild>
                   <Text className="text-base underline">Log in</Text>
@@ -77,7 +77,7 @@ export default function MapFilters() {
             </View>
             <View>
               <SpotTypeSection
-                isDisabled={!!!me}
+                isDisabled={!me}
                 {...{ filters, setFilters }}
                 title="Activities"
                 types={["CLIMBING", "SURFING", "PADDLE_KAYAK", "HIKING_TRAIL", "MOUNTAIN_BIKING"]}
@@ -85,7 +85,7 @@ export default function MapFilters() {
             </View>
             <View>
               <SpotTypeSection
-                isDisabled={!!!me}
+                isDisabled={!me}
                 {...{ filters, setFilters }}
                 title="Services"
                 types={["GAS_STATION", "ELECTRIC_CHARGE_POINT", "MECHANIC_PARTS", "VET"]}
@@ -93,7 +93,7 @@ export default function MapFilters() {
             </View>
             <View>
               <SpotTypeSection
-                isDisabled={!!!me}
+                isDisabled={!me}
                 {...{ filters, setFilters }}
                 title="Hospitality"
                 types={["CAFE", "RESTAURANT", "SHOP", "BAR"]}
@@ -103,7 +103,7 @@ export default function MapFilters() {
               <SpotTypeSection
                 {...{ filters, setFilters }}
                 title="Other"
-                isDisabled={!!!me}
+                isDisabled={!me}
                 types={["REWILDING", "NATURE_EDUCATION", "ART_FILM_PHOTOGRAPHY", "VOLUNTEERING"]}
               />
             </View>
@@ -120,7 +120,7 @@ export default function MapFilters() {
                 </View>
               </View>
               <Switch
-                disabled={!!!me}
+                disabled={!me}
                 trackColor={{ true: colors.primary[600] }}
                 value={filters.isUnverified}
                 onValueChange={() => setFilters((f) => ({ ...f, isUnverified: !f.isUnverified }))}
@@ -135,7 +135,7 @@ export default function MapFilters() {
                 </View>
               </View>
               <Switch
-                disabled={!!!me}
+                disabled={!me}
                 trackColor={{ true: colors.primary[600] }}
                 value={filters.isPetFriendly}
                 onValueChange={() => setFilters((f) => ({ ...f, isPetFriendly: !f.isPetFriendly }))}
@@ -179,8 +179,8 @@ function SpotTypeSection({
 }: {
   title: string
   types: SpotType[]
-  filters: MapFilters
-  setFilters: (filters: MapFilters) => void
+  filters: MapFiltersOptions
+  setFilters: (filters: MapFiltersOptions) => void
   isDisabled?: boolean
 }) {
   return (

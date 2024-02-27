@@ -1,6 +1,6 @@
+import { type VariantProps, cva } from "class-variance-authority"
 import * as React from "react"
-import { TouchableOpacity, type TouchableOpacityProps, useColorScheme, View } from "react-native"
-import { cva, type VariantProps } from "class-variance-authority"
+import { TouchableOpacity, type TouchableOpacityProps, View, useColorScheme } from "react-native"
 
 import { join, merge } from "@ramble/shared"
 

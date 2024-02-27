@@ -1,6 +1,6 @@
+import { useLocalSearchParams, useRouter } from "expo-router"
 import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
-import { useLocalSearchParams, useRouter } from "expo-router"
 
 import { AMENITIES } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"

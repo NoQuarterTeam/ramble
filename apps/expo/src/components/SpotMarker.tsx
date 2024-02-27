@@ -1,7 +1,7 @@
-import { TouchableOpacity, View } from "react-native"
 import { MarkerView } from "@rnmapbox/maps"
 import { cva } from "class-variance-authority"
 import { type ClassValue } from "class-variance-authority/dist/types"
+import { TouchableOpacity, View } from "react-native"
 
 import type { SpotType } from "@ramble/database/types"
 import { spotMarkerClusterColorTypes, spotMarkerColorTypes, spotMarkerTextColorTypes } from "@ramble/shared"

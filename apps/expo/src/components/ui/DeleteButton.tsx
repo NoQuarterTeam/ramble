@@ -1,5 +1,5 @@
-import { TouchableOpacity, type TouchableOpacityProps } from "react-native"
 import { Trash2 } from "lucide-react-native"
+import { TouchableOpacity, type TouchableOpacityProps } from "react-native"
 
 import { merge } from "@ramble/shared"
 

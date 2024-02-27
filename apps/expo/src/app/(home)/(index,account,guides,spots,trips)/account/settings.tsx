@@ -1,6 +1,6 @@
-import { Modal, ScrollView, Switch, View } from "react-native"
 import { router } from "expo-router"
 import { AlertCircle, ChevronDown, Languages, MapPinOff } from "lucide-react-native"
+import { Modal, ScrollView, Switch, View } from "react-native"
 
 import { languages, useDisclosure } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"

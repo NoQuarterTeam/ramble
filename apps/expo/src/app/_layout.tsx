@@ -1,10 +1,3 @@
-import * as React from "react"
-import { useColorScheme } from "react-native"
-import { AvoidSoftInput } from "react-native-avoid-softinput"
-import { GestureHandlerRootView } from "react-native-gesture-handler"
-import { SafeAreaProvider } from "react-native-safe-area-context"
-import { enableScreens } from "react-native-screens"
-import { ActionSheetProvider } from "@expo/react-native-action-sheet"
 import {
   Urbanist_300Light,
   Urbanist_300Light_Italic,
@@ -22,14 +15,21 @@ import {
   Urbanist_900Black_Italic,
   useFonts,
 } from "@expo-google-fonts/urbanist"
+import { ActionSheetProvider } from "@expo/react-native-action-sheet"
 import * as Sentry from "@sentry/react-native"
 import { Stack, useGlobalSearchParams, usePathname } from "expo-router"
 import * as SplashScreen from "expo-splash-screen"
 import { StatusBar } from "expo-status-bar"
 import { PostHogProvider, usePostHog } from "posthog-react-native"
+import * as React from "react"
+import { useColorScheme } from "react-native"
+import { AvoidSoftInput } from "react-native-avoid-softinput"
+import { GestureHandlerRootView } from "react-native-gesture-handler"
+import { SafeAreaProvider } from "react-native-safe-area-context"
+import { enableScreens } from "react-native-screens"
 
 import { Toast } from "~/components/ui/Toast"
-import { api, TRPCProvider } from "~/lib/api"
+import { TRPCProvider, api } from "~/lib/api"
 import { IS_DEV, IS_PRODUCTION } from "~/lib/config"
 import { useCheckExpoUpdates } from "~/lib/hooks/useCheckExpoUpdates"
 import { useMe } from "~/lib/hooks/useMe"
@@ -132,7 +132,7 @@ function IdentifyUser() {
   const posthog = usePostHog()
   React.useEffect(() => {
     if (isLoading || !me) return
-    if (posthog) posthog.identify(me.id, { username: me.username, name: me.firstName + " " + me.lastName })
+    if (posthog) posthog.identify(me.id, { username: me.username, name: `${me.firstName} ${me.lastName}` })
     Sentry.setUser({ id: me.id, username: me.username })
   }, [me, isLoading, posthog])
   return null
@@ -144,7 +144,7 @@ function TrackScreens() {
   const posthog = usePostHog()
   React.useEffect(() => {
     if (!posthog) return
-    if (params.params) delete params.params
+    if (params.params) params.params = undefined
     posthog.screen(pathname, { params })
   }, [pathname, params, posthog])
 

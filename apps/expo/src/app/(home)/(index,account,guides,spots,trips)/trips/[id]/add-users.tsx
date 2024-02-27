@@ -1,7 +1,7 @@
-import * as React from "react"
-import { ActivityIndicator, ScrollView, TouchableOpacity, View } from "react-native"
 import { useLocalSearchParams } from "expo-router"
 import { User2 } from "lucide-react-native"
+import * as React from "react"
+import { ActivityIndicator, ScrollView, TouchableOpacity, View } from "react-native"
 
 import { createImageUrl, join } from "@ramble/shared"
 
@@ -11,7 +11,7 @@ import { ModalView } from "~/components/ui/ModalView"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
-import { api, type RouterOutputs } from "~/lib/api"
+import { type RouterOutputs, api } from "~/lib/api"
 
 export default function AddTripUsers() {
   const { id } = useLocalSearchParams<{ id: string }>()
@@ -38,7 +38,7 @@ export default function AddTripUsers() {
           <View className="flex items-center justify-center p-4">
             <ActivityIndicator />
           </View>
-        ) : !users || !!!search ? null : users.length === 0 ? (
+        ) : !users || !search ? null : users.length === 0 ? (
           <Text>No users found</Text>
         ) : (
           <>

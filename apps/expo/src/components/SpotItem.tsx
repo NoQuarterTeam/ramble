@@ -1,8 +1,8 @@
-import { TouchableOpacity, useColorScheme, View } from "react-native"
 import { useRouter } from "expo-router"
 import { Heart, Star } from "lucide-react-native"
+import { TouchableOpacity, View, useColorScheme } from "react-native"
 
-import { createImageUrl, displayRating, displaySaved, type SpotItemType } from "@ramble/shared"
+import { type SpotItemType, createImageUrl, displayRating, displaySaved } from "@ramble/shared"
 
 import { api } from "~/lib/api"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"

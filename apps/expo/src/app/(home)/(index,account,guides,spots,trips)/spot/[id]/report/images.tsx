@@ -1,8 +1,8 @@
-import * as React from "react"
-import { ScrollView, TouchableOpacity, View } from "react-native"
 import { Image } from "expo-image"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { Flag } from "lucide-react-native"
+import * as React from "react"
+import { ScrollView, TouchableOpacity, View } from "react-native"
 
 import { createImageUrl, join } from "@ramble/shared"
 

@@ -7,17 +7,16 @@ import "@fontsource/urbanist/800.css"
 import "@fontsource/urbanist/900.css"
 import "~/styles/app.css"
 
-import * as React from "react"
 import * as Tooltip from "@radix-ui/react-tooltip"
 import { cssBundleHref } from "@remix-run/css-bundle"
 import {
-  isRouteErrorResponse,
   Links,
   LiveReload,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  isRouteErrorResponse,
   useFetchers,
   useLoaderData,
   useLocation,
@@ -28,6 +27,7 @@ import { Analytics } from "@vercel/analytics/react"
 import { Frown } from "lucide-react"
 import NProgress from "nprogress"
 import posthog from "posthog-js"
+import * as React from "react"
 import { AuthenticityTokenProvider } from "remix-utils/csrf/react"
 import { promiseHash } from "remix-utils/promise"
 
@@ -36,11 +36,11 @@ import { join } from "@ramble/shared"
 
 import { Toaster } from "~/components/ui"
 import {
-  json,
   type LinksFunction,
   type LoaderFunctionArgs,
   type MetaFunction,
   type SerializeFrom,
+  json,
 } from "~/lib/vendor/vercel.server"
 
 import { LinkButton } from "./components/LinkButton"
@@ -105,7 +105,7 @@ export default function App() {
   React.useEffect(() => {
     if (state === "loading") NProgress.start()
     if (state === "idle") NProgress.done()
-  }, [transition.state, state])
+  }, [state])
 
   const location = useLocation()
   const [isHogLoaded, setIsHogLoaded] = React.useState(false)

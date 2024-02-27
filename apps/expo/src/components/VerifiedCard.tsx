@@ -1,6 +1,6 @@
-import { TouchableOpacity, View } from "react-native"
 import { useRouter } from "expo-router"
 import { BadgeX, User2, Verified } from "lucide-react-native"
+import { TouchableOpacity, View } from "react-native"
 
 import { type Spot, type User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
@@ -28,7 +28,7 @@ export function VerifiedCard({ spot }: Props) {
         <TouchableOpacity
           onPress={() => {
             increment()
-            router.push(`/${tab}/${spot.verifier!.username}/(profile)`)
+            router.push(`/${tab}/${spot.verifier?.username}/(profile)`)
           }}
           className="rounded-xs flex flex-row items-center justify-between border border-gray-200 p-1.5 px-2.5 dark:border-gray-700/70"
         >

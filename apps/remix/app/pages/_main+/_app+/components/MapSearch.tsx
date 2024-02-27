@@ -32,13 +32,13 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
               <p className="p-4 opacity-70">No results found</p>
             ) : (
               <>
-                {locationFetcher.data.map((location, i) => (
+                {locationFetcher.data.map((location) => (
                   <Button
                     onClick={() => {
                       onSearch(location.center)
                       setSearch("")
                     }}
-                    key={i}
+                    key={location.name}
                     variant="ghost"
                     className="h-auto w-full justify-start py-2 text-left"
                   >

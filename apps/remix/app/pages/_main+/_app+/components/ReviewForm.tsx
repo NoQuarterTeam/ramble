@@ -1,5 +1,5 @@
-import * as React from "react"
 import { Star } from "lucide-react"
+import * as React from "react"
 
 import type { Review, Spot, SpotImage } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
@@ -35,13 +35,13 @@ export function ReviewForm({ spot, review }: Props) {
             input={<Textarea rows={5} />}
           />
           <div className="flex space-x-1">
-            {Array.from({ length: 5 }).map((_, i) => (
+            {[1, 2, 3, 4, 5].map((val) => (
               <IconButton
                 variant="ghost"
-                aria-label={`star ${i + 1}`}
-                key={i}
-                onClick={() => setRating(i + 1)}
-                icon={<Star className={rating > i ? "fill-black dark:fill-white" : ""} />}
+                aria-label={`star ${val}`}
+                key={val}
+                onClick={() => setRating(val)}
+                icon={<Star className={rating >= val ? "fill-black dark:fill-white" : ""} />}
               />
             ))}
           </div>

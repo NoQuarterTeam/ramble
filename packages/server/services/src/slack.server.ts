@@ -1,6 +1,6 @@
 import { type KnownBlock, WebClient } from "@slack/web-api"
 
-import { env, IS_PRODUCTION } from "@ramble/server-env"
+import { IS_PRODUCTION, env } from "@ramble/server-env"
 
 export const slack = new WebClient(env.SLACK_TOKEN)
 

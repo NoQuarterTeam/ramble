@@ -1,8 +1,8 @@
-import * as React from "react"
-import { ScrollView, Switch, View } from "react-native"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { Check, Dog, Lock, MapPin } from "lucide-react-native"
 import { usePostHog } from "posthog-react-native"
+import * as React from "react"
+import { ScrollView, Switch, View } from "react-native"
 
 import { type SpotType } from "@ramble/database/types"
 import { AMENITIES } from "@ramble/shared"

@@ -1,9 +1,9 @@
-import * as React from "react"
-import type { LngLatLike } from "react-map-gl"
-import { Marker } from "react-map-gl"
 import { Link, useLoaderData, useNavigate } from "@remix-run/react"
 import { ChevronLeft, Copy } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
+import * as React from "react"
+import type { LngLatLike } from "react-map-gl"
+import { Marker } from "react-map-gl"
 import { ClientOnly } from "remix-utils/client-only"
 import { promiseHash } from "remix-utils/promise"
 
@@ -13,7 +13,7 @@ import { type SpotItemType } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
-import { Map } from "~/components/Map"
+import { MapView } from "~/components/Map"
 import { PageContainer } from "~/components/PageContainer"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
@@ -122,6 +122,7 @@ export default function ListDetail() {
   const navigate = useNavigate()
   const deleteFetcher = useFetcher()
   const copyFetcher = useFetcher()
+  // biome-ignore lint/correctness/useExhaustiveDependencies: allow it
   const markers = React.useMemo(
     () =>
       spots.map((spot) => {
@@ -137,7 +138,6 @@ export default function ListDetail() {
           </Marker>
         )
       }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [spots],
   )
   return (
@@ -201,7 +201,7 @@ export default function ListDetail() {
         <div className="rounded-xs col-span-12 h-[80vh] w-full overflow-hidden pb-4 md:col-span-8 md:pb-0">
           <ClientOnly>
             {() => (
-              <Map
+              <MapView
                 doubleClickZoom={true}
                 scrollZoom={false}
                 initialViewState={
@@ -215,7 +215,7 @@ export default function ListDetail() {
                 }
               >
                 {markers}
-              </Map>
+              </MapView>
             )}
           </ClientOnly>
         </div>

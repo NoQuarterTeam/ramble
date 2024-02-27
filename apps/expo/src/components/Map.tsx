@@ -1,6 +1,6 @@
+import Mapbox, { StyleImport } from "@rnmapbox/maps"
 import * as React from "react"
 import { useColorScheme } from "react-native"
-import Mapbox, { StyleImport } from "@rnmapbox/maps"
 
 import { merge } from "@ramble/shared"
 
@@ -8,25 +8,27 @@ Mapbox.setAccessToken("pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZW
 
 type MapViewProps = React.ComponentProps<typeof Mapbox.MapView>
 
-export const Map = React.forwardRef<Mapbox.MapView, MapViewProps & { children?: React.ReactNode }>(function _Map(props, mapRef) {
-  const styleURL = props.styleURL || "mapbox://styles/mapbox/standard"
-  return (
-    <Mapbox.MapView
-      logoEnabled={false}
-      compassEnabled
-      // pitchEnabled={false}
-      ref={mapRef}
-      compassFadeWhenNorth
-      scaleBarEnabled={false}
-      {...props}
-      styleURL={styleURL}
-      className={merge("w-full flex-1", props.className)}
-    >
-      {props.children}
-      <ThemeSwitcher styleUrl={styleURL} />
-    </Mapbox.MapView>
-  )
-})
+export const MapView = React.forwardRef<Mapbox.MapView, MapViewProps & { children?: React.ReactNode }>(
+  function _Map(props, mapRef) {
+    const styleURL = props.styleURL || "mapbox://styles/mapbox/standard"
+    return (
+      <Mapbox.MapView
+        logoEnabled={false}
+        compassEnabled
+        // pitchEnabled={false}
+        ref={mapRef}
+        compassFadeWhenNorth
+        scaleBarEnabled={false}
+        {...props}
+        styleURL={styleURL}
+        className={merge("w-full flex-1", props.className)}
+      >
+        {props.children}
+        <ThemeSwitcher styleUrl={styleURL} />
+      </Mapbox.MapView>
+    )
+  },
+)
 
 function ThemeSwitcher(props: { styleUrl: string }) {
   const [isLoaded, setIsLoaded] = React.useState(false)
@@ -38,7 +40,7 @@ function ThemeSwitcher(props: { styleUrl: string }) {
     if (props.styleUrl === "mapbox://styles/mapbox/standard") {
       new Promise((resolve) => setTimeout(resolve, 1000)).then(() => setIsLoaded(true))
     }
-  }, [props.styleUrl, isDark])
+  }, [props.styleUrl])
 
   if (!isLoaded || props.styleUrl !== "mapbox://styles/mapbox/standard") return null
 

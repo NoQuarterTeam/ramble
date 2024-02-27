@@ -1,15 +1,3 @@
-import * as React from "react"
-import { Alert, Share as RNShare, TouchableOpacity, useColorScheme, View, type ViewProps } from "react-native"
-import { showLocation } from "react-native-map-link"
-import Animated, {
-  Extrapolation,
-  interpolate,
-  runOnJS,
-  useAnimatedScrollHandler,
-  useAnimatedStyle,
-  useSharedValue,
-} from "react-native-reanimated"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useQuery } from "@tanstack/react-query"
 import dayjs from "dayjs"
 import { LinearGradient } from "expo-linear-gradient"
@@ -30,6 +18,18 @@ import {
   Star,
   Trash,
 } from "lucide-react-native"
+import * as React from "react"
+import { Alert, Share as RNShare, TouchableOpacity, View, type ViewProps, useColorScheme } from "react-native"
+import { showLocation } from "react-native-map-link"
+import Animated, {
+  Extrapolation,
+  interpolate,
+  runOnJS,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
+} from "react-native-reanimated"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { type Spot } from "@ramble/database/types"
 import {
@@ -125,7 +125,7 @@ export default function SpotDetailScreen() {
         alwaysIncludeGoogle: true,
         directionsMode: "car",
       })
-    } catch (error) {}
+    } catch (_error) {}
   }
   const utils = api.useUtils()
   const { mutate: verifySpot, isLoading: isVerifyingLoading } = api.spot.verify.useMutation({
@@ -155,7 +155,7 @@ export default function SpotDetailScreen() {
   if (!me)
     return (
       <ScreenView title={spot.name}>
-        <LoginPlaceholder text="Log in to view more information about this spot"></LoginPlaceholder>
+        <LoginPlaceholder text="Log in to view more information about this spot" />
       </ScreenView>
     )
   return (
@@ -347,8 +347,8 @@ export default function SpotDetailScreen() {
               try {
                 await RNShare.share({
                   title: spot.name,
-                  message: isAndroid ? FULL_WEB_URL + `/spots/${spot.id}` : spot.name,
-                  url: FULL_WEB_URL + `/spots/${spot.id}`,
+                  message: isAndroid ? `${FULL_WEB_URL}/spots/${spot.id}` : spot.name,
+                  url: `${FULL_WEB_URL}/spots/${spot.id}`,
                 })
               } catch (error: unknown) {
                 if (error instanceof Error) {
@@ -433,7 +433,7 @@ interface DescProps {
 type TranslateInput = { id: string; lang: string; hash: string }
 async function getTranslation({ id, lang, hash }: TranslateInput) {
   try {
-    const res = await fetch(FULL_WEB_URL + `/api/spots/${id}/translate/${lang}?hash=${hash}`)
+    const res = await fetch(`${FULL_WEB_URL}/api/spots/${id}/translate/${lang}?hash=${hash}`)
     return await res.json()
   } catch {
     return "Error translating description"
@@ -461,7 +461,7 @@ function TranslateSpotDescription(props: DescProps) {
           rightIcon={<Icon icon={ChevronDown} size={16} />}
           isLoading={isInitialLoading}
           variant="outline"
-          disabled={!!!me}
+          disabled={!me}
           size="xs"
           onPress={modalProps.onOpen}
         >

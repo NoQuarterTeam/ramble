@@ -6,7 +6,7 @@ export async function sendAccessRequestConfirmationEmail(email: string) {
     await mailer.send({
       react: <AccessRequestEmail />,
       to: email,
-      text: `Request confirmation for Ramble`,
+      text: "Request confirmation for Ramble",
       subject: "Request confirmation for Ramble",
     })
   } catch (error) {

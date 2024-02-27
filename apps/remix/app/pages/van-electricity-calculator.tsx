@@ -1,10 +1,10 @@
 import { Link } from "@remix-run/react"
+import { Trash } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
+import { ClientOnly } from "remix-utils/client-only"
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 import { Button, IconButton, Input, Select } from "~/components/ui"
-import { Trash } from "lucide-react"
-import { ClientOnly } from "remix-utils/client-only"
 
 export const headers = () => {
   return {
@@ -52,7 +52,7 @@ export function VanElectricityCalculator() {
                   <th className="h-12 px-3 text-left align-middle font-medium">Hours per day</th>
                   <th className="h-12 px-3 text-left align-middle font-medium">Wattage</th>
                   <th className="h-12 whitespace-nowrap px-3 text-left align-middle font-medium">Fuse size required</th>
-                  <th className="h-12 px-3 align-middle"></th>
+                  <th className="h-12 px-3 align-middle" />
                 </tr>
               </thead>
               <tbody>

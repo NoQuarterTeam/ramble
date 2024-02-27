@@ -1,6 +1,6 @@
+import { useLocalSearchParams, useRouter } from "expo-router"
 import * as React from "react"
 import { ScrollView, View } from "react-native"
-import { useLocalSearchParams, useRouter } from "expo-router"
 
 import { type SpotType } from "@ramble/database/types"
 import { SPOT_TYPE_OPTIONS } from "@ramble/shared"
@@ -48,7 +48,6 @@ export default function NewSpotTypeScreen() {
           <Button
             className="rounded-full"
             onPress={() =>
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               router.push(`/new/info?${new URLSearchParams({ ...params, type })}`)
             }

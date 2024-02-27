@@ -1,5 +1,5 @@
-import { View } from "react-native"
 import { useLocalSearchParams } from "expo-router"
+import { View } from "react-native"
 
 import { SpotItem } from "~/components/SpotItem"
 import { Spinner } from "~/components/ui/Spinner"

@@ -1,12 +1,12 @@
-import { ScrollView } from "react-native"
+import * as MediaLibrary from "expo-media-library"
 import { useRouter } from "expo-router"
 import { usePostHog } from "posthog-react-native"
-import * as MediaLibrary from "expo-media-library"
+import { ScrollView } from "react-native"
 
 import { TripForm } from "~/components/TripForm"
 import { ModalView } from "~/components/ui/ModalView"
-import { api } from "~/lib/api"
 import { toast } from "~/components/ui/Toast"
+import { api } from "~/lib/api"
 
 export default function NewTripScreen() {
   const router = useRouter()

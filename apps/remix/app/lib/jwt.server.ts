@@ -1,4 +1,4 @@
-import { jwtVerify, SignJWT } from "jose"
+import { SignJWT, jwtVerify } from "jose"
 
 import { env } from "@ramble/server-env"
 
@@ -17,6 +17,7 @@ export const createToken = async (payload: Payload) => {
     return token
   } catch (error) {
     // Oops
+    console.log(error)
     throw error
   }
 }
@@ -27,6 +28,7 @@ export async function decryptToken<T>(token: string) {
     return payload
   } catch (error) {
     // Oops
+    console.log(error)
     throw error
   }
 }

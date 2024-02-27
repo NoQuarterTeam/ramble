@@ -1,5 +1,5 @@
-import { useColorScheme } from "react-native"
 import { type LucideIcon, type LucideProps } from "lucide-react-native"
+import { useColorScheme } from "react-native"
 
 import { colorGray, colorPrimary, colorRed } from "~/lib/tailwind"
 
@@ -23,7 +23,7 @@ const colorMap: Record<IconColors, string> = {
 export function Icon({ icon: Comp, ...props }: Props) {
   const colorScheme = useColorScheme()
 
-  const color = !!props.color
+  const color = props.color
     ? typeof props.color === "object"
       ? props.color[colorScheme === "dark" ? "dark" : "light"]
       : colorMap[props.color] || props.color

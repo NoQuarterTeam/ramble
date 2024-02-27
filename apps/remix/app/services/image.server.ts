@@ -1,6 +1,6 @@
+import * as crypto from "crypto"
 import { NotFound } from "@aws-sdk/client-s3"
 import axios from "axios"
-import * as crypto from "crypto"
 import { cacheHeader } from "pretty-cache-header"
 import sharp from "sharp"
 
@@ -50,7 +50,7 @@ export async function generateImage({ request }: LoaderFunctionArgs) {
 
     const shouldPurge = url.searchParams.get("purge") === "true"
 
-    const key = "transforms/" + hash.digest("hex")
+    const key = `transforms/${hash.digest("hex")}`
 
     const isInCache = await getHead(key)
       .then(() => true)

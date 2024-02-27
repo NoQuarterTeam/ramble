@@ -1,6 +1,6 @@
-import { TouchableOpacity, View } from "react-native"
 import { FlashList } from "@shopify/flash-list"
 import { useLocalSearchParams, useRouter } from "expo-router"
+import { TouchableOpacity, View } from "react-native"
 
 import { SpotItem } from "~/components/SpotItem"
 import { Button } from "~/components/ui/Button"

@@ -1,7 +1,7 @@
-import { FormProvider } from "react-hook-form"
-import { ScrollView, View } from "react-native"
 import { useRouter } from "expo-router"
 import { usePostHog } from "posthog-react-native"
+import { FormProvider } from "react-hook-form"
+import { ScrollView, View } from "react-native"
 
 import { Button } from "~/components/ui/Button"
 import { FormError } from "~/components/ui/FormError"

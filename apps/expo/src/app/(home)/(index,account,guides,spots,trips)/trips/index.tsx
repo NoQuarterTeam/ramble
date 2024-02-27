@@ -1,7 +1,7 @@
-import { ScrollView, TouchableOpacity, View } from "react-native"
 import dayjs from "dayjs"
 import { useRouter } from "expo-router"
 import { Plus, PlusCircle } from "lucide-react-native"
+import { ScrollView, TouchableOpacity, View } from "react-native"
 
 import { useFeedbackActivity } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
@@ -11,7 +11,7 @@ import { TripItem } from "~/components/TripItem"
 import { Spinner } from "~/components/ui/Spinner"
 import { TabView } from "~/components/ui/TabView"
 import { Text } from "~/components/ui/Text"
-import { api, type RouterOutputs } from "~/lib/api"
+import { type RouterOutputs, api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 
 export default function TripsLayout() {
@@ -29,7 +29,7 @@ export default function TripsLayout() {
       </TabView>
     )
 
-  const groupedTrips = !!!activeLoading
+  const groupedTrips = !activeLoading
     ? data?.reduce<{ upcoming: RouterOutputs["trip"]["mine"]; complete: RouterOutputs["trip"]["mine"] }>(
         (acc, trip) => {
           if (trip.id === activeTrip?.id) return acc

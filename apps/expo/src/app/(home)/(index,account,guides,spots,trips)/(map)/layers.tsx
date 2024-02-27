@@ -1,8 +1,8 @@
-import { Switch, TouchableOpacity, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Link } from "expo-router"
 import { CloudRain, MountainSnow, SunMoon, Thermometer, Users2 } from "lucide-react-native"
 import { usePostHog } from "posthog-react-native"
+import { Switch, TouchableOpacity, View } from "react-native"
 import { z } from "zod"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
@@ -20,11 +20,11 @@ const mapLayersSchema = z.object({
   shouldShowUsers: z.boolean(),
 })
 
-type MapLayers = z.infer<typeof mapLayersSchema>
+type MapLayerOptions = z.infer<typeof mapLayersSchema>
 
 export const useMapLayers = create<{
-  layers: MapLayers
-  setLayers: (preference: Partial<MapLayers>) => void
+  layers: MapLayerOptions
+  setLayers: (preference: Partial<MapLayerOptions>) => void
 }>()(
   persist(
     (set) => ({
@@ -40,7 +40,7 @@ export default function MapLayers() {
   const { me } = useMe()
   const posthog = usePostHog()
 
-  const onSetMapLayer = (layer: MapLayers["layer"]) => {
+  const onSetMapLayer = (layer: MapLayerOptions["layer"]) => {
     setLayers({ ...layers, layer })
     posthog?.capture("map layer changed", { layer })
   }
@@ -48,7 +48,7 @@ export default function MapLayers() {
   return (
     <ModalView title="map layers">
       <View className="space-y-4">
-        {!!!me && (
+        {!me && (
           <View className="flex flex-row space-x-1">
             <Link href="/login" push asChild>
               <Text className="text-base underline">Log in</Text>
@@ -78,10 +78,10 @@ export default function MapLayers() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => onSetMapLayer("rain")}
-            disabled={!!!me}
+            disabled={!me}
             className={join(
               "flex flex-row items-center justify-between space-x-2 rounded border border-gray-200 p-3 dark:border-gray-700",
-              !!!me && "opacity-70",
+              !me && "opacity-70",
             )}
           >
             <View className="flex flex-row items-center space-x-3">
@@ -99,10 +99,10 @@ export default function MapLayers() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => onSetMapLayer("temp")}
-            disabled={!!!me}
+            disabled={!me}
             className={join(
               "flex flex-row items-center justify-between space-x-2 rounded border border-gray-200 p-3 dark:border-gray-700",
-              !!!me && "opacity-70",
+              !me && "opacity-70",
             )}
           >
             <View className="flex flex-row items-center space-x-3">
@@ -120,10 +120,10 @@ export default function MapLayers() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => onSetMapLayer("satellite")}
-            disabled={!!!me}
+            disabled={!me}
             className={join(
               "flex flex-row items-center justify-between space-x-2 rounded border border-gray-200 p-3 dark:border-gray-700",
-              !!!me && "opacity-70",
+              !me && "opacity-70",
             )}
           >
             <View className="flex flex-row items-center space-x-3">

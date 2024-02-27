@@ -9,7 +9,7 @@ export async function sendGuideRequestSentToAdminsEmail(adminEmails: string[], u
     await mailer.send({
       react: <GuideRequestEmail link={link} user={user} />,
       to: adminEmails,
-      text: `Guide request for Ramble`,
+      text: "Guide request for Ramble",
       subject: "Guide request for Ramble",
     })
   } catch (error) {

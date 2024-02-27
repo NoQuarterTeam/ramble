@@ -1,15 +1,15 @@
-import { FormProvider } from "react-hook-form"
-import { ScrollView, View } from "react-native"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { useRouter } from "expo-router"
 import { usePostHog } from "posthog-react-native"
+import { FormProvider } from "react-hook-form"
+import { ScrollView, View } from "react-native"
 
 import { Button } from "~/components/ui/Button"
 import { FormError } from "~/components/ui/FormError"
 import { FormInput } from "~/components/ui/FormInput"
 import { ModalView } from "~/components/ui/ModalView"
 import { toast } from "~/components/ui/Toast"
-import { api, AUTH_TOKEN } from "~/lib/api"
+import { AUTH_TOKEN, api } from "~/lib/api"
 import { IS_DEV } from "~/lib/config"
 import { useForm } from "~/lib/hooks/useForm"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
@@ -38,11 +38,11 @@ export default function RegisterScreen() {
       const randomInt = Math.floor(Math.random() * 1000)
       parsedData = {
         username: randomString,
-        email: randomString + "@noquarter.co",
+        email: `${randomString}@noquarter.co`,
         code: "DEV",
         password: "password",
         firstName: "Test",
-        lastName: "User" + randomInt,
+        lastName: `User${randomInt}`,
       }
     }
     if (parsedData.username.trim().includes(" ")) return toast({ title: "Username can not contain empty spaces" })

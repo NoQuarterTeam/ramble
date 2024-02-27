@@ -6,7 +6,7 @@ export async function sendBetaInvitationEmail(email: string, code: string) {
     await mailer.send({
       react: <BetaInvitationEmail code={code} />,
       to: email,
-      text: `Invitation to the Ramble beta`,
+      text: "Invitation to the Ramble beta",
       subject: "Invitation to the Ramble beta",
     })
   } catch (error) {

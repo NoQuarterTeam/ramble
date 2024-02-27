@@ -2,11 +2,11 @@ import { z } from "zod"
 
 import { tripSchema, tripStopSchema } from "@ramble/server-schemas"
 
-import { createTRPCRouter, protectedProcedure } from "../trpc"
-import { TRPCError } from "@trpc/server"
-import { lineString } from "@turf/helpers"
-import bbox from "@turf/bbox"
 import { getPlaceUnsplashImage } from "@ramble/server-services"
+import { TRPCError } from "@trpc/server"
+import bbox from "@turf/bbox"
+import { lineString } from "@turf/helpers"
+import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const tripRouter = createTRPCRouter({
   mine: protectedProcedure.query(({ ctx }) => {
@@ -117,7 +117,7 @@ export const tripRouter = createTRPCRouter({
             },
           },
         },
-        medias: {
+        media: {
           orderBy: { timestamp: "desc" },
           select: {
             timestamp: true,
@@ -141,7 +141,7 @@ export const tripRouter = createTRPCRouter({
     const line = lineString(itemCoords)
     const bounds = bbox(line) as [number, number, number, number]
 
-    const latestMediaSyncedAt = trip.medias[0]?.timestamp
+    const latestMediaSyncedAt = trip.media[0]?.timestamp
 
     // can be quite slow
     // const directions = await getDirections(itemCoords)

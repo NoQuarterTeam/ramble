@@ -1,9 +1,9 @@
-import * as React from "react"
 import { Form, useSearchParams } from "@remix-run/react"
 import type { ColumnDef, Row } from "@tanstack/react-table"
 import { flexRender, getCoreRowModel, getExpandedRowModel, useReactTable } from "@tanstack/react-table"
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, MoveDown, MoveUp } from "lucide-react"
 import queryString from "query-string"
+import * as React from "react"
 import { ExistingSearchParams } from "remix-utils/existing-search-params"
 
 import { join } from "@ramble/shared"
@@ -19,8 +19,7 @@ export function Table<T>({
   ExpandComponent,
 }: {
   data: T[]
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  columns: ColumnDef<T, any>[]
+  columns: ColumnDef<T, unknown>[]
   count: number
   ExpandComponent?: React.ComponentType<{ row: Row<T> }>
 }) {
@@ -45,45 +44,49 @@ export function Table<T>({
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    colSpan={header.colSpan}
-                    style={{ width: header.getSize() }}
-                    onClick={
-                      header.column.getCanSort()
-                        ? () => {
-                            const newSearchParams = queryString.stringify({
-                              ...queryString.parse(searchParams.toString()),
-                              orderBy: header.column.id,
-                              order:
-                                orderBy && orderBy !== header.column.id
-                                  ? order || "desc"
-                                  : order === "asc" || !order
-                                    ? "desc"
-                                    : "asc",
-                            })
-                            setSearchParams(newSearchParams)
-                          }
-                        : undefined
-                    }
-                  >
-                    <div
-                      className={join(
-                        "mb-1 flex items-center justify-between whitespace-nowrap px-2 py-1 text-left font-medium",
-                        header.column.getCanSort() &&
-                          "rounded-xs cursor-pointer select-none hover:bg-gray-100 dark:hover:bg-gray-700",
-                      )}
+                {headerGroup.headers.map((header) => {
+                  const handleClick = () => {
+                    header.column.getCanSort()
+                      ? () => {
+                          const newSearchParams = queryString.stringify({
+                            ...queryString.parse(searchParams.toString()),
+                            orderBy: header.column.id,
+                            order:
+                              orderBy && orderBy !== header.column.id
+                                ? order || "desc"
+                                : order === "asc" || !order
+                                  ? "desc"
+                                  : "asc",
+                          })
+                          setSearchParams(newSearchParams)
+                        }
+                      : undefined
+                  }
+                  return (
+                    <th
+                      key={header.id}
+                      colSpan={header.colSpan}
+                      style={{ width: header.getSize() }}
+                      onKeyUp={handleClick}
+                      onClick={handleClick}
                     >
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                      {orderBy && order && header.column.getCanSort() && header.column.id === orderBy ? (
-                        <span className="w-4">{order === "asc" ? <MoveUp size={16} /> : <MoveDown size={16} />}</span>
-                      ) : (
-                        <span className="w-4" />
-                      )}
-                    </div>
-                  </th>
-                ))}
+                      <div
+                        className={join(
+                          "mb-1 flex items-center justify-between whitespace-nowrap px-2 py-1 text-left font-medium",
+                          header.column.getCanSort() &&
+                            "rounded-xs cursor-pointer select-none hover:bg-gray-100 dark:hover:bg-gray-700",
+                        )}
+                      >
+                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                        {orderBy && order && header.column.getCanSort() && header.column.id === orderBy ? (
+                          <span className="w-4">{order === "asc" ? <MoveUp size={16} /> : <MoveDown size={16} />}</span>
+                        ) : (
+                          <span className="w-4" />
+                        )}
+                      </div>
+                    </th>
+                  )
+                })}
               </tr>
             ))}
           </thead>

@@ -1,12 +1,12 @@
-import * as React from "react"
-import { TouchableOpacity, View } from "react-native"
 import { Camera, type MapState, type MapView as MapType, StyleURL, UserLocation } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { AlertTriangle, CircleDot, MapPinned, Navigation } from "lucide-react-native"
+import * as React from "react"
+import { TouchableOpacity, View } from "react-native"
 
 import { Icon } from "~/components/Icon"
-import { Map } from "~/components/Map"
+import { MapView } from "~/components/Map"
 import { Button } from "~/components/ui/Button"
 import { Input } from "~/components/ui/Input"
 import { Spinner } from "~/components/ui/Spinner"
@@ -74,7 +74,7 @@ export default function EditSpotLocationScreen() {
         </Text>
       </View>
       <View className="relative flex-1">
-        <Map
+        <MapView
           className="rounded-xs overflow-hidden"
           onMapIdle={onMapMove}
           ref={mapRef}
@@ -83,7 +83,7 @@ export default function EditSpotLocationScreen() {
         >
           <UserLocation />
           <Camera ref={camera} allowUpdates defaultSettings={{ centerCoordinate: coords, zoomLevel: 14, pitch: 0, heading: 0 }} />
-        </Map>
+        </MapView>
         <View className="absolute left-2 right-2 top-2">
           <Input
             className="bg-background dark:bg-background-dark rounded-sm"
@@ -97,7 +97,7 @@ export default function EditSpotLocationScreen() {
             <View className="bg-background dark:bg-background-dark rounded-b-sm p-2">
               {places.map((place, i) => (
                 <TouchableOpacity
-                  key={i}
+                  key={`${place.name}-${i}`}
                   onPress={() => {
                     setSearch("")
                     setCoords(place.center)

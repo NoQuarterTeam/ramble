@@ -1,8 +1,8 @@
-import * as React from "react"
-import { Linking, ScrollView, TouchableOpacity, useColorScheme, View } from "react-native"
 import { Slot, useLocalSearchParams, useRouter, useSegments } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { ChevronLeft, Heart, Instagram, User2 } from "lucide-react-native"
+import * as React from "react"
+import { Linking, ScrollView, TouchableOpacity, View, useColorScheme } from "react-native"
 
 import { createImageUrl } from "@ramble/shared"
 
@@ -72,7 +72,7 @@ export default function UserScreen() {
               </BrandHeading>
             </View>
           </View>
-          <LoginPlaceholder text="log in to view other profiles"></LoginPlaceholder>
+          <LoginPlaceholder text="log in to view other profiles" />
         </View>
       </SafeAreaView>
     )

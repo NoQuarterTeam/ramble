@@ -1,9 +1,9 @@
-import * as React from "react"
-import { TouchableOpacity, useColorScheme, View } from "react-native"
 import { useQuery } from "@tanstack/react-query"
 import dayjs from "dayjs"
 import { useRouter } from "expo-router"
 import { Star, User2 } from "lucide-react-native"
+import * as React from "react"
+import { TouchableOpacity, View, useColorScheme } from "react-native"
 
 import { type Review, type User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
@@ -21,7 +21,7 @@ import { Text } from "./ui/Text"
 type TranslateInput = { id: string; lang: string }
 async function getTranslation({ id, lang }: TranslateInput) {
   try {
-    const res = await fetch(FULL_WEB_URL + `/api/reviews/${id}/translate/${lang}`)
+    const res = await fetch(`${FULL_WEB_URL}/api/reviews/${id}/translate/${lang}`)
     return await res.json()
   } catch {
     return "Error translating description"

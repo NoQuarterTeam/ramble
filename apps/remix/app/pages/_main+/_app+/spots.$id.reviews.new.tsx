@@ -38,7 +38,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   const userId = await requireUser(request)
   const url = new URL(request.url)
   const redirectVal = url.searchParams.get("redirect") as NEW_REVIEW_REDIRECTS
-  const redirectLocation = redirectVal === NEW_REVIEW_REDIRECTS.Map ? "/map/" + params.id : "/spots/" + params.id
+  const redirectLocation = redirectVal === NEW_REVIEW_REDIRECTS.Map ? `/map/${params.id}` : `/spots/${params.id}`
 
   const result = await validateFormData(request, reviewDataSchema)
   if (!result.success) return formError(result)

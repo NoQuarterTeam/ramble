@@ -1,7 +1,7 @@
-import * as React from "react"
 import { Link } from "@remix-run/react"
 import dayjs from "dayjs"
 import { Star } from "lucide-react"
+import * as React from "react"
 
 import type { Prisma } from "@ramble/database/types"
 import { createImageUrl, join } from "@ramble/shared"

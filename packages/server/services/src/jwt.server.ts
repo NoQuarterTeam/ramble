@@ -14,6 +14,7 @@ export const createAuthToken = (payload: { id: string }) => {
     return token
   } catch (error) {
     // Oops
+    console.log(error)
     throw error
   }
 }
