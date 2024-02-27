@@ -4,12 +4,13 @@ import dayjs from "dayjs"
 import * as Haptics from "expo-haptics"
 import { Image } from "expo-image"
 import * as Location from "expo-location"
+import * as MediaLibrary from "expo-media-library"
 import { MediaType, getAssetsAsync } from "expo-media-library"
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { ChevronLeft, Edit2, Flag, Home, MapPin, PlusCircle, Users } from "lucide-react-native"
 import * as React from "react"
-import { ActivityIndicator, TouchableOpacity, View } from "react-native"
+import { ActivityIndicator, Alert, Linking, TouchableOpacity, View } from "react-native"
 import DraggableFlatList, { type RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlist"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
@@ -54,6 +55,43 @@ export default function TripDetailScreen() {
       })
   }, [])
   const tab = useTabSegment()
+  const [permissionResponse, requestPermission] = MediaLibrary.usePermissions()
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: allow dat
+  React.useEffect(() => {
+    if (!me?.tripSyncEnabled || !permissionResponse) return
+    if (permissionResponse?.granted) return
+    if (permissionResponse?.canAskAgain) {
+      requestPermission()
+    } else {
+      Alert.alert(
+        "Photo library permissions required for syncing",
+        "Please go to your phone's settings to grant media library permissions for Ramble",
+        [
+          { text: "Cancel", style: "cancel" },
+          { text: "Open settings", onPress: Linking.openSettings },
+        ],
+      )
+    }
+  }, [me?.tripSyncEnabled, permissionResponse?.granted, permissionResponse?.canAskAgain])
+
+  React.useEffect(() => {
+    if (!permissionResponse || permissionResponse?.granted || !me?.tripSyncEnabled) return
+    async function loadImages() {
+      try {
+        const images = await getAssetsAsync({
+          createdAfter: data?.latestMediaSyncedAt || trip?.startDate,
+          createdBefore: trip?.endDate,
+          mediaType: MediaType.photo,
+          sortBy: "creationTime",
+        })
+        console.log(images)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    loadImages()
+  }, [permissionResponse, trip, data, me])
 
   const utils = api.useUtils()
 
@@ -84,26 +122,6 @@ export default function TripDetailScreen() {
   const setCoords = useMapCoords((s) => s.setCoords)
 
   const insets = useSafeAreaInsets()
-
-  React.useEffect(() => {
-    if (!me?.tripSyncEnabled) return
-    ;(async () => {
-      try {
-        const onions = await getAssetsAsync({
-          createdAfter: data?.latestMediaSyncedAt || trip?.startDate,
-          createdBefore: trip?.endDate,
-          mediaType: MediaType.photo,
-          sortBy: "creationTime",
-        })
-        console.log(onions)
-      } catch (error) {
-        // catch error
-        console.log(error)
-
-        console.log("oops - getting media library assets")
-      }
-    })()
-  }, [trip, data, me])
 
   if (!me)
     return (
