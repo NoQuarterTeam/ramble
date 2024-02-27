@@ -5,7 +5,17 @@
       "developmentClient": true,
       "distribution": "internal",
       "channel": "development",
-      "pnpm": "8.11.0",
+      "pnpm": "8.15.4",
+      "env": {
+        "APP_VARIANT": "development"
+      }
+    },
+    "development:device": {
+      "channel": "development",
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": { "simulator": false },
+      "pnpm": "8.15.4",
       "env": {
         "APP_VARIANT": "development"
       }
@@ -13,7 +23,7 @@
     "preview": {
       "channel": "preview",
       "distribution": "internal",
-      "pnpm": "8.11.0",
+      "pnpm": "8.15.4",
       "env": {
         "APP_VARIANT": "development"
       }
@@ -21,7 +31,7 @@
     "production": {
       "channel": "production",
       "distribution": "store",
-      "pnpm": "8.11.0",
+      "pnpm": "8.15.4",
       "env": {
         "SENTRY_AUTH_TOKEN": "private"
       }
