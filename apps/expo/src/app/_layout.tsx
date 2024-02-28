@@ -144,6 +144,7 @@ function TrackScreens() {
   const posthog = usePostHog()
   React.useEffect(() => {
     if (!posthog) return
+    // @ts-ignore
     if (params.params) params.params = undefined
     posthog.screen(pathname, { params })
   }, [pathname, params, posthog])

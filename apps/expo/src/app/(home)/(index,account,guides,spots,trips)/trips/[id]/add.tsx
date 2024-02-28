@@ -1,4 +1,4 @@
-import { Camera, type MapState, type MapView as MapType, StyleURL, UserLocation } from "@rnmapbox/maps"
+import { Camera, LocationPuck, type MapState, type MapView as MapType, StyleURL } from "@rnmapbox/maps"
 import { type Position } from "@rnmapbox/maps/lib/typescript/src/types/Position"
 import * as Location from "expo-location"
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
@@ -210,11 +210,12 @@ export default function NewItemScreen() {
           compassPosition={{ top: 54, right: 8 }}
           onPress={() => setActiveSpotId(null)}
         >
-          <UserLocation />
+          <LocationPuck />
 
           <Camera
             ref={camera}
             allowUpdates
+            followUserLocation={false}
             defaultSettings={{ zoomLevel: 7, pitch: 0, heading: 0, centerCoordinate: initialCoords }}
           />
           {spotMarkers}

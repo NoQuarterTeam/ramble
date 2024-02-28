@@ -1,5 +1,5 @@
 import { useActionSheet } from "@expo/react-native-action-sheet"
-import { Camera, LineLayer, type MapView as MapType, MarkerView, ShapeSource, StyleURL, UserLocation } from "@rnmapbox/maps"
+import { Camera, LineLayer, LocationPuck, type MapView as MapType, MarkerView, ShapeSource, StyleURL } from "@rnmapbox/maps"
 import dayjs from "dayjs"
 import * as Haptics from "expo-haptics"
 import { Image } from "expo-image"
@@ -114,13 +114,14 @@ export default function TripDetailScreen() {
             </ShapeSource>
           )} */}
         {itemMarkers}
-        <UserLocation />
+        <LocationPuck />
 
         <Camera
           ref={camera}
           allowUpdates
           pitch={0}
           heading={0}
+          followUserLocation={false}
           defaultSettings={
             center
               ? {

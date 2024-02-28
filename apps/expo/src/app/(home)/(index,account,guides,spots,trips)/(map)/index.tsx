@@ -1,11 +1,11 @@
 import {
   Camera,
+  LocationPuck,
   type MapState,
   type MapView as MapType,
   MarkerView,
   RasterLayer,
   RasterSource,
-  UserLocation,
 } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { Link, useRouter } from "expo-router"
@@ -296,12 +296,13 @@ function MapContainer() {
               : undefined
         }
       >
-        <UserLocation />
+        <LocationPuck />
 
         <MapLayers />
         <Camera
           ref={camera}
           allowUpdates
+          followUserLocation={false}
           defaultSettings={{ centerCoordinate: [INITIAL_LONGITUDE, INITIAL_LATITUDE], zoomLevel: 8, pitch: 0, heading: 0 }}
         />
 

@@ -1,4 +1,4 @@
-import { Camera, type MapState, type MapView as MapType, UserLocation } from "@rnmapbox/maps"
+import { Camera, LocationPuck, type MapState, type MapView as MapType } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { Navigation } from "lucide-react-native"
@@ -103,12 +103,13 @@ export default function ListDetailMapScreen() {
   return (
     <View className="relative flex-1">
       <MapView onMapIdle={onMapMove} onPress={() => setActiveSpotId(null)} ref={mapRef}>
-        <UserLocation />
+        <LocationPuck />
         {spotMarkers}
 
         <Camera
           ref={camera}
           allowUpdates
+          followUserLocation={false}
           defaultSettings={
             initialCenter
               ? { pitch: 0, heading: 0, centerCoordinate: initialCenter, zoomLevel: 5 }
