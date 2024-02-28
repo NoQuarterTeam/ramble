@@ -28,7 +28,7 @@ import { toast } from "~/components/ui/Toast"
 import { type RouterOutputs, api } from "~/lib/api"
 import { useMapCoords } from "~/lib/hooks/useMapCoords"
 import { useMe } from "~/lib/hooks/useMe"
-import { useS3BulkUpload } from "~/lib/hooks/useS3"
+// import { useS3BulkUpload } from "~/lib/hooks/useS3"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 export default function TripDetailScreen() {
@@ -39,6 +39,7 @@ export default function TripDetailScreen() {
   const trip = data?.trip
   const bounds = data?.bounds
   const center = data?.center
+  const { mutate } = api.trip.uploadMedia.useMutation()
 
   const router = useRouter()
 
@@ -77,12 +78,12 @@ export default function TripDetailScreen() {
     }
   }, [me?.tripSyncEnabled, permissionResponse?.granted, permissionResponse?.canAskAgain])
 
-  const [bulkUpload, { isLoading: isUploading }] = useS3BulkUpload()
+  // const [bulkUpload, { isLoading: isUploading }] = useS3BulkUpload()w
 
   // if is uploading render a View under the name
 
   React.useEffect(() => {
-    if (!permissionResponse || permissionResponse?.granted || !me?.tripSyncEnabled || !trip) return
+    if (!permissionResponse || !permissionResponse?.granted || !me?.tripSyncEnabled || !trip) return
     const isTripActive = dayjs(trip.startDate).isBefore(dayjs()) && dayjs(trip.endDate).isAfter(dayjs())
     if (!isTripActive) return
     async function loadImages() {
@@ -93,20 +94,43 @@ export default function TripDetailScreen() {
           mediaType: MediaType.photo,
           sortBy: "creationTime",
         })
-        const imagesToUpload = images.assets.map((image) => {
-          // todo get other metadata like asset location etc
-          return { url: image.uri, key: undefined }
-        })
+        const imagesToUpload = await Promise.all(
+          images.assets.map(async (asset) => {
+            const info = await MediaLibrary.getAssetInfoAsync(asset)
+            if (!info.location) return undefined
+            return {
+              url: asset.uri,
+              key: undefined,
+              latitude: info.location.latitude,
+              longitude: info.location.longitude,
+              assetId: info.filename,
+              timestamp: dayjs(info.creationTime).toDate(),
+            }
+          }),
+        )
         if (imagesToUpload.length === 0) return
-        const imagesWithKeys = await bulkUpload(imagesToUpload)
-        console.log(imagesWithKeys[0])
+        // const imagesWithKeys = await bulkUpload(imagesToUpload)
+        // console.log(imagesWithKeys[0])
+
+        mutate({
+          tripId: id,
+          images: imagesToUpload
+            .flatMap((i) => (i ? [i] : [])) // to get rid of undefined's
+            .map((data) => ({
+              path: "test", // TODO build read path based off result from bulk upload
+              latitude: data.latitude,
+              longitude: data.longitude,
+              assetId: data.assetId,
+              timestamp: data.timestamp,
+            })),
+        })
       } catch (error) {
         console.log(error)
         toast({ title: "Error syncing images", type: "error" })
       }
     }
     loadImages()
-  }, [permissionResponse, trip, data, me, bulkUpload])
+  }, [permissionResponse, trip, data, me, id, mutate])
 
   const utils = api.useUtils()
 
@@ -251,14 +275,14 @@ export default function TripDetailScreen() {
             </View>
           )}
         </View>
-        {isUploading && (
+        {/* {isUploading && (
           <View className="flex items-center justify-center pt-2">
             <View className="flex items-center bg-primary px-4 py-2 rounded-full flex-row space-x-2">
               <ActivityIndicator size="small" color="white" />
               <Text className="text-white">Syncing photos</Text>
             </View>
           </View>
-        )}
+        )} */}
       </View>
 
       <View className="absolute bottom-0 left-0 right-0">
