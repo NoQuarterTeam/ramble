@@ -303,6 +303,7 @@ function MapView() {
         <Camera
           ref={camera}
           allowUpdates
+          followUserLocation={false}
           defaultSettings={{ centerCoordinate: [INITIAL_LONGITUDE, INITIAL_LATITUDE], zoomLevel: 8, pitch: 0, heading: 0 }}
         />
 

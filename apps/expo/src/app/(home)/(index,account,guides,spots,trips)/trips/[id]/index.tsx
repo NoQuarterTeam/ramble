@@ -120,6 +120,7 @@ export default function TripDetailScreen() {
           allowUpdates
           pitch={0}
           heading={0}
+          followUserLocation={false}
           defaultSettings={
             center
               ? {

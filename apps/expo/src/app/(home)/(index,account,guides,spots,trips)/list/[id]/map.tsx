@@ -109,6 +109,7 @@ export default function ListDetailMapScreen() {
         <Camera
           ref={camera}
           allowUpdates
+          followUserLocation={false}
           defaultSettings={
             initialCenter
               ? { pitch: 0, heading: 0, centerCoordinate: initialCenter, zoomLevel: 5 }

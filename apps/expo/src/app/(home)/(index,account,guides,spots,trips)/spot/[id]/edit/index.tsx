@@ -82,7 +82,12 @@ export default function EditSpotLocationScreen() {
           styleURL={StyleURL.SatelliteStreet}
         >
           <LocationPuck />
-          <Camera ref={camera} allowUpdates defaultSettings={{ centerCoordinate: coords, zoomLevel: 14, pitch: 0, heading: 0 }} />
+          <Camera
+            ref={camera}
+            allowUpdates
+            followUserLocation={false}
+            defaultSettings={{ centerCoordinate: coords, zoomLevel: 14, pitch: 0, heading: 0 }}
+          />
         </Map>
         <View className="absolute left-2 right-2 top-2">
           <Input

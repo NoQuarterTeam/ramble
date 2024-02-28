@@ -130,6 +130,7 @@ export default function NewSpotLocationScreen() {
             <Camera
               ref={camera}
               allowUpdates
+              followUserLocation={false}
               defaultSettings={{
                 centerCoordinate: [
                   initialLng || location?.longitude || INITIAL_LONGITUDE,

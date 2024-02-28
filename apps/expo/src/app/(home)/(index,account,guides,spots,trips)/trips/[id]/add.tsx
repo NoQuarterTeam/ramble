@@ -216,6 +216,7 @@ export default function NewItemScreen() {
           <Camera
             ref={camera}
             allowUpdates
+            followUserLocation={false}
             defaultSettings={{ zoomLevel: 7, pitch: 0, heading: 0, centerCoordinate: initialCoords }}
           />
           {spotMarkers}

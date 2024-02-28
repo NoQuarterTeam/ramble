@@ -72,7 +72,12 @@ export default function SpotReportLocationScreen() {
           styleURL="mapbox://styles/jclackett/clp122bar007z01qu21kc8h4g"
         >
           <LocationPuck />
-          <Camera ref={camera} allowUpdates defaultSettings={{ centerCoordinate: [longitude, latitude], zoomLevel: 14 }} />
+          <Camera
+            ref={camera}
+            allowUpdates
+            followUserLocation={false}
+            defaultSettings={{ centerCoordinate: [longitude, latitude], zoomLevel: 14 }}
+          />
         </Map>
         <View
           style={{ transform: [{ translateX: -15 }, { translateY: -15 }] }}
