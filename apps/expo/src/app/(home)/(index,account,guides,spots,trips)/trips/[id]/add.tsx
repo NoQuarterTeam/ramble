@@ -89,6 +89,7 @@ export default function NewItemScreen() {
         const properties = await mapRef.current?.getVisibleBounds()
         const zoom = await mapRef.current?.getZoom()
         if (!properties) return
+        setCoords(await mapRef.current.getCenter())
         setMapSettings({
           minLng: properties[1][0],
           minLat: properties[1][1],
@@ -106,6 +107,7 @@ export default function NewItemScreen() {
 
   const onMapMove = ({ properties }: MapState) => {
     if (!properties.bounds) return
+    setCoords(properties.center)
     setMapSettings({
       minLng: properties.bounds.sw[0] || 0,
       minLat: properties.bounds.sw[1] || 0,
