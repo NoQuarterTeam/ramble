@@ -357,14 +357,14 @@ export default function TripDetailScreen() {
             </View>
           )}
         </View>
-        {/* {isUploading && (
+        {isUploading && (
           <View className="flex items-center justify-center pt-2">
             <View className="flex items-center bg-primary px-4 py-2 rounded-full flex-row space-x-2">
               <ActivityIndicator size="small" color="white" />
               <Text className="text-white">Syncing photos</Text>
             </View>
           </View>
-        )} */}
+        )}
       </View>
 
       <View className="absolute bottom-0 left-0 right-0">
