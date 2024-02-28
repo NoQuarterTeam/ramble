@@ -36,11 +36,10 @@ import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { type RouterOutputs, api } from "~/lib/api"
 import { useMapCoords } from "~/lib/hooks/useMapCoords"
+import { useMapSettings } from "~/lib/hooks/useMapSettings"
 import { useMe } from "~/lib/hooks/useMe"
 import { useS3BulkUpload } from "~/lib/hooks/useS3"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
-
-type MediaCluster = RouterOutputs["trip"]["mediaClusters"][number]
 
 export default function TripDetailScreen() {
   const { me } = useMe()
@@ -174,49 +173,41 @@ export default function TripDetailScreen() {
   )
   const setCoords = useMapCoords((s) => s.setCoords)
 
-  const [mediaClusters, setMediaClusters] = React.useState<MediaCluster[]>([])
+  const [mapSettings, setMapSettings] = useMapSettings()
+  const { data: mediaClusters } = api.trip.mediaClusters.useQuery(mapSettings ? { ...mapSettings, tripId: id } : undefined, {
+    enabled: !!mapSettings,
+  })
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: allow it
-  const onMapMove = React.useCallback(
-    async ({ properties }: MapState) => {
-      try {
-        setCoords(properties.center)
-        if (!properties.bounds) return
-        const input = {
-          tripId: id,
-          minLng: properties.bounds.sw[0] || 0,
-          minLat: properties.bounds.sw[1] || 0,
-          maxLng: properties.bounds.ne[0] || 0,
-          maxLat: properties.bounds.ne[1] || 0,
-          zoom: properties.zoom,
-        }
-        void utils.trip.mediaClusters.fetch(input).then(setMediaClusters)
-      } catch {
-        console.log("oops - fetching clusters on map move")
-      }
-    },
-    [id],
-  )
+  const onMapMove = ({ properties }: MapState) => {
+    if (!properties.bounds) return
+    setCoords(properties.center)
+    setMapSettings({
+      minLng: properties.bounds.sw[0] || 0,
+      minLat: properties.bounds.sw[1] || 0,
+      maxLng: properties.bounds.ne[0] || 0,
+      maxLat: properties.bounds.ne[1] || 0,
+      zoom: properties.zoom,
+    })
+  }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: allow dat
   const mediaMarkers = React.useMemo(
     () =>
       mediaClusters?.map((point, i) => {
         if (point.properties.cluster) {
-          const onPress = async () => {
-            // navigate to image list
-          }
+          const images = point.properties.media.join(",")
           return (
             <MarkerView key={`${point.id || 0}${i}`} allowOverlap allowOverlapWithPuck coordinate={point.geometry.coordinates}>
               <TouchableOpacity
                 activeOpacity={0.7}
-                onPress={onPress}
+                onPress={() => router.push(`/(home)/(trips)/trips/${id}/images?images=${images}`)}
                 className={join(
                   "flex items-center justify-center relative rounded-md border-2 border-purple-200",
                   point.properties.point_count > 150 ? "sq-20" : point.properties.point_count > 75 ? "sq-16" : "sq-12",
                 )}
               >
-                <Image source={{ uri: createImageUrl(point.properties.preview) }} style={{ width: 40, height: 40 }} />
-                <View className="absolute bg-black/20 inset-0 flex items-center justify-center">
+                <Image source={{ uri: createImageUrl(point.properties.media[0]) }} style={{ width: 40, height: 40 }} />
+                <View className="absolute bg-black/50 inset-0 flex items-center justify-center">
                   <Text className="text-center text-sm text-white">{point.properties.point_count_abbreviated}</Text>
                 </View>
               </TouchableOpacity>
@@ -232,11 +223,7 @@ export default function TripDetailScreen() {
           <MarkerView key={media.id} allowOverlap coordinate={point.geometry.coordinates}>
             <TouchableOpacity
               activeOpacity={0.7}
-              onPress={() => {
-                // navigate to image detail
-                // increment()
-                // router.push(`/(home)/(index)/${user.username}/(profile)`)
-              }}
+              onPress={() => router.push(`/(home)/(trips)/trips/${id}/images/${media.path}`)}
               className="sq-12 flex items-center justify-center overflow-hidden rounded-sm border-2 border-purple-200"
             >
               <Image source={{ uri: createImageUrl(media.path) }} style={{ width: 40, height: 40 }} />
@@ -244,7 +231,7 @@ export default function TripDetailScreen() {
           </MarkerView>
         )
       }),
-    [mediaClusters],
+    [mediaClusters, id],
   )
 
   const insets = useSafeAreaInsets()
