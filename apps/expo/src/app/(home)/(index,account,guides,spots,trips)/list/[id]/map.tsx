@@ -11,19 +11,22 @@ import { SpotClusterMarker } from "~/components/SpotMarker"
 import { SpotPreview } from "~/components/SpotPreview"
 import { Button } from "~/components/ui/Button"
 import { Spinner } from "~/components/ui/Spinner"
-import { toast } from "~/components/ui/Toast"
-import { type RouterOutputs, api } from "~/lib/api"
-import { isAndroid } from "~/lib/device"
 
-type Cluster = RouterOutputs["list"]["spotClusters"][number]
+import { api } from "~/lib/api"
+
+import { useMapSettings } from "~/lib/hooks/useMapSettings"
 
 export default function ListDetailMapScreen() {
   const params = useLocalSearchParams<{ id: string; initialBounds?: string; initialCenter?: string }>()
-  const [clusters, setClusters] = React.useState<Cluster[] | null>(null)
-  const [isFetching, setIsFetching] = React.useState(true)
   const camera = React.useRef<Camera>(null)
   const mapRef = React.useRef<MapType>(null)
 
+  const [mapSettings, setMapSettings] = useMapSettings()
+
+  const { data: clusters, isLoading: spotsLoading } = api.list.spotClusters.useQuery(
+    mapSettings ? { ...mapSettings, id: params.id } : undefined,
+    { enabled: !!mapSettings, keepPreviousData: true },
+  )
   const router = useRouter()
 
   const handleSetUserLocation = async () => {
@@ -52,26 +55,15 @@ export default function ListDetailMapScreen() {
 
   const [activeSpotId, setActiveSpotId] = React.useState<string | null>(null)
 
-  const utils = api.useUtils()
   const onMapMove = async ({ properties }: MapState) => {
-    try {
-      setIsFetching(true)
-      if (!properties.bounds) return
-      const input = {
-        minLng: properties.bounds.sw[0] || 0,
-        minLat: properties.bounds.sw[1] || 0,
-        maxLng: properties.bounds.ne[0] || 0,
-        maxLat: properties.bounds.ne[1] || 0,
-        zoom: properties.zoom,
-      }
-      const data = await utils.list.spotClusters.fetch({ id: params.id, ...input })
-      setClusters(data)
-    } catch {
-      toast({ title: "Error fetching spots", type: "error" })
-      console.log("oops - fetching clusters on map move")
-    } finally {
-      setIsFetching(false)
-    }
+    if (!properties.bounds) return
+    setMapSettings({
+      minLng: properties.bounds.sw[0] || 0,
+      minLat: properties.bounds.sw[1] || 0,
+      maxLng: properties.bounds.ne[0] || 0,
+      maxLat: properties.bounds.ne[1] || 0,
+      zoom: properties.zoom,
+    })
   }
 
   const spotMarkers = React.useMemo(
@@ -136,7 +128,7 @@ export default function ListDetailMapScreen() {
           View list
         </Button>
       </View>
-      {!!isAndroid && isFetching && (
+      {spotsLoading && (
         <View
           pointerEvents="none"
           className="absolute left-4 top-10 flex flex-col items-center justify-center rounded-full bg-white p-2 dark:bg-gray-800"

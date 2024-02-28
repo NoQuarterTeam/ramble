@@ -36,9 +36,11 @@ export const spotRouter = createTRPCRouter({
           isPetFriendly: z.boolean().nullish(),
           isUnverified: z.boolean().nullish(),
         })
-        .and(clusterSchema),
+        .and(clusterSchema)
+        .optional(),
     )
     .query(async ({ ctx, input }) => {
+      if (!input) return []
       const { zoom, types, isUnverified, isPetFriendly, ...coords } = input
       if (!types || types.length === 0) return []
       const spots = await ctx.prisma.spot.findMany({

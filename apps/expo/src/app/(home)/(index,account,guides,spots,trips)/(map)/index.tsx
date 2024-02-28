@@ -26,15 +26,12 @@ import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
-import { type RouterOutputs, api } from "~/lib/api"
-import { isAndroid } from "~/lib/device"
+import { api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 
 import { useMapFilters } from "../../../filters"
 import { useMapLayers } from "./layers"
-
-type Cluster = RouterOutputs["spot"]["clusters"][number]
-type UserCluster = RouterOutputs["user"]["clusters"][number]
+import { useMapSettings } from "~/lib/hooks/useMapSettings"
 
 export default function MapScreen() {
   const router = useRouter()
@@ -91,16 +88,22 @@ function MapContainer() {
   const { mutate: updateUser } = api.user.update.useMutation()
   const layers = useMapLayers((s) => s.layers)
   const isDark = useColorScheme() === "dark"
-  const [clusters, setClusters] = React.useState<Cluster[] | null>(null)
+  const [isLoaded, setIsLoaded] = React.useState(false)
+
+  const [mapSettings, setMapSettings] = useMapSettings()
 
   const filters = useMapFilters((s) => s.filters)
   const camera = React.useRef<Camera>(null)
   const mapRef = React.useRef<MapType>(null)
-  const [isFetching, setIsFetching] = React.useState(false)
-  const utils = api.useUtils()
 
-  const [isLoaded, setIsLoaded] = React.useState(false)
-  const [users, setUsers] = React.useState<UserCluster[] | null>(null)
+  const { data: clusters, isLoading: spotsLoading } = api.spot.clusters.useQuery(
+    mapSettings ? { ...mapSettings, ...filters } : undefined,
+    { enabled: !!mapSettings, keepPreviousData: true },
+  )
+  const { data: users } = api.user.clusters.useQuery(mapSettings ? mapSettings : undefined, {
+    enabled: !!mapSettings && !!me && layers.shouldShowUsers,
+    keepPreviousData: true,
+  })
 
   const handleSetUserLocation = async () => {
     try {
@@ -133,7 +136,6 @@ function MapContainer() {
     })()
   }, [])
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: dont need to re-render
   React.useEffect(() => {
     if (!isLoaded) return
     async function updateMapAfterFiltersChange() {
@@ -142,47 +144,30 @@ function MapContainer() {
         const properties = await mapRef.current?.getVisibleBounds()
         const zoom = await mapRef.current?.getZoom()
         if (!properties) return
-        const input = {
-          ...filters,
+        setMapSettings({
           minLng: properties[1][0],
           minLat: properties[1][1],
           maxLng: properties[0][0],
           maxLat: properties[0][1],
           zoom: zoom || 13,
-        }
-        const data = await utils.spot.clusters.fetch(input)
-        setClusters(data)
+        })
       } catch {
         toast({ title: "Error fetching spots", type: "error" })
         console.log("oops - fetching clusters on filter")
       }
     }
     updateMapAfterFiltersChange()
-  }, [filters, isLoaded])
+  }, [isLoaded, setMapSettings])
 
   const onMapMove = async ({ properties }: MapState) => {
-    try {
-      setIsFetching(true)
-      if (!properties.bounds) return
-      const input = {
-        ...filters,
-        minLng: properties.bounds.sw[0] || 0,
-        minLat: properties.bounds.sw[1] || 0,
-        maxLng: properties.bounds.ne[0] || 0,
-        maxLat: properties.bounds.ne[1] || 0,
-        zoom: properties.zoom,
-      }
-
-      void utils.spot.clusters.fetch(input).then(setClusters)
-      if (layers.shouldShowUsers && me) {
-        void utils.user.clusters.fetch(input).then(setUsers)
-      }
-    } catch {
-      toast({ title: "Error fetching spots", type: "error" })
-      console.log("oops - fetching clusters on map move")
-    } finally {
-      setIsFetching(false)
-    }
+    if (!properties.bounds) return
+    setMapSettings({
+      minLng: properties.bounds.sw[0] || 0,
+      minLat: properties.bounds.sw[1] || 0,
+      maxLng: properties.bounds.ne[0] || 0,
+      maxLat: properties.bounds.ne[1] || 0,
+      zoom: properties.zoom,
+    })
   }
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: dont add activeSpotId here
@@ -225,7 +210,7 @@ function MapContainer() {
             })
           }
           return (
-            <MarkerView key={`${point.id || 0}${i}`} allowOverlap coordinate={point.geometry.coordinates}>
+            <MarkerView key={`${point.id || 0}${i}`} allowOverlap allowOverlapWithPuck coordinate={point.geometry.coordinates}>
               <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={onPress}
@@ -253,7 +238,7 @@ function MapContainer() {
           avatarBlurHash: string | null
         }
         return (
-          <MarkerView key={user.id} allowOverlap coordinate={point.geometry.coordinates}>
+          <MarkerView key={user.id} allowOverlap allowOverlapWithPuck coordinate={point.geometry.coordinates}>
             <TouchableOpacity
               activeOpacity={0.7}
               onPress={() => {
@@ -305,11 +290,11 @@ function MapContainer() {
           defaultSettings={{ centerCoordinate: [INITIAL_LONGITUDE, INITIAL_LATITUDE], zoomLevel: 8, pitch: 0, heading: 0 }}
         />
 
-        {spotMarkers}
         {userMarkers}
+        {spotMarkers}
       </MapView>
 
-      {((isAndroid && isFetching) || (!isAndroid && isFetching && !clusters)) && (
+      {spotsLoading && (
         <View
           pointerEvents="none"
           className="absolute right-4 top-14 flex flex-col items-center justify-center rounded-full bg-white p-2 dark:bg-gray-800"
