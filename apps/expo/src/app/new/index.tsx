@@ -1,6 +1,6 @@
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
-import { Camera, type MapState, type MapView as MapType, StyleURL, UserLocation } from "@rnmapbox/maps"
+import { Camera, type MapState, type MapView as MapType, StyleURL, LocationPuck } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { AlertTriangle, CircleDot, MapPinned, Navigation } from "lucide-react-native"
@@ -125,7 +125,7 @@ export default function NewSpotLocationScreen() {
             styleURL={StyleURL.SatelliteStreet}
             compassPosition={{ top: 54, right: 8 }}
           >
-            <UserLocation />
+            <LocationPuck />
 
             <Camera
               ref={camera}
@@ -196,7 +196,12 @@ export default function NewSpotLocationScreen() {
                 router.push(
                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   // @ts-ignore
-                  `/new/type?${new URLSearchParams({ ...params, longitude: coords[0], latitude: coords[1], address: addressToUse })}`,
+                  `/new/type?${new URLSearchParams({
+                    ...params,
+                    longitude: coords[0],
+                    latitude: coords[1],
+                    address: addressToUse,
+                  })}`,
                 )
               }}
               disabled={!coords || (coords && (!coords[0] || !coords[1])) || !addressToUse}

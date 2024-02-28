@@ -7,7 +7,7 @@ import {
   MarkerView,
   RasterLayer,
   RasterSource,
-  UserLocation,
+  LocationPuck,
 } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { Link, useRouter } from "expo-router"
@@ -297,7 +297,7 @@ function MapView() {
               : undefined
         }
       >
-        <UserLocation />
+        <LocationPuck />
 
         <MapLayers />
         <Camera

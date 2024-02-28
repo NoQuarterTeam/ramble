@@ -1,6 +1,6 @@
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
-import { Camera, type MapState, type MapView as MapType, UserLocation } from "@rnmapbox/maps"
+import { Camera, type MapState, type MapView as MapType, LocationPuck } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { Navigation } from "lucide-react-native"
@@ -103,7 +103,7 @@ export default function ListDetailMapScreen() {
   return (
     <View className="relative flex-1">
       <Map onMapIdle={onMapMove} onPress={() => setActiveSpotId(null)} ref={mapRef}>
-        <UserLocation />
+        <LocationPuck />
         {spotMarkers}
 
         <Camera

@@ -1,6 +1,6 @@
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
-import { Camera, type MapState, type MapView as MapType, StyleURL, UserLocation } from "@rnmapbox/maps"
+import { Camera, type MapState, type MapView as MapType, StyleURL, LocationPuck } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { AlertTriangle, CircleDot, MapPinned, Navigation } from "lucide-react-native"
@@ -81,7 +81,7 @@ export default function EditSpotLocationScreen() {
           compassPosition={{ top: 54, right: 8 }}
           styleURL={StyleURL.SatelliteStreet}
         >
-          <UserLocation />
+          <LocationPuck />
           <Camera ref={camera} allowUpdates defaultSettings={{ centerCoordinate: coords, zoomLevel: 14, pitch: 0, heading: 0 }} />
         </Map>
         <View className="absolute left-2 right-2 top-2">

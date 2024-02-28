@@ -3,7 +3,7 @@ import { ActivityIndicator, TouchableOpacity, View } from "react-native"
 import DraggableFlatList, { type RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlist"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useActionSheet } from "@expo/react-native-action-sheet"
-import { Camera, LineLayer, type MapView as MapType, MarkerView, ShapeSource, StyleURL, UserLocation } from "@rnmapbox/maps"
+import { Camera, LineLayer, type MapView as MapType, MarkerView, ShapeSource, StyleURL, LocationPuck } from "@rnmapbox/maps"
 import dayjs from "dayjs"
 import * as Haptics from "expo-haptics"
 import { Image } from "expo-image"
@@ -113,7 +113,7 @@ export default function TripDetailScreen() {
             </ShapeSource>
           )} */}
         {itemMarkers}
-        <UserLocation />
+        <LocationPuck />
 
         <Camera
           ref={camera}

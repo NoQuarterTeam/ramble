@@ -1,6 +1,6 @@
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
-import { Camera, type MapState, type MapView as MapType, UserLocation } from "@rnmapbox/maps"
+import { Camera, type MapState, type MapView as MapType, LocationPuck } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { CircleDot, Navigation } from "lucide-react-native"
@@ -71,7 +71,7 @@ export default function SpotReportLocationScreen() {
           ref={mapRef}
           styleURL="mapbox://styles/jclackett/clp122bar007z01qu21kc8h4g"
         >
-          <UserLocation />
+          <LocationPuck />
           <Camera ref={camera} allowUpdates defaultSettings={{ centerCoordinate: [longitude, latitude], zoomLevel: 14 }} />
         </Map>
         <View

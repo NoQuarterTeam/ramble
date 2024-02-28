@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Keyboard, TouchableOpacity, useColorScheme, View } from "react-native"
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
-import { Camera, type MapState, type MapView as MapType, StyleURL, UserLocation } from "@rnmapbox/maps"
+import { Camera, type MapState, type MapView as MapType, StyleURL, LocationPuck } from "@rnmapbox/maps"
 import { type Position } from "@rnmapbox/maps/lib/typescript/src/types/Position"
 import * as Location from "expo-location"
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
@@ -211,7 +211,7 @@ export default function NewItemScreen() {
           compassPosition={{ top: 54, right: 8 }}
           onPress={() => setActiveSpotId(null)}
         >
-          <UserLocation />
+          <LocationPuck />
 
           <Camera
             ref={camera}
