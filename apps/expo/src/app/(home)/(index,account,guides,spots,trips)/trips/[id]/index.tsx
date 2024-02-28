@@ -37,11 +37,19 @@ import { toast } from "~/components/ui/Toast"
 import { type RouterOutputs, api } from "~/lib/api"
 import { useMapCoords } from "~/lib/hooks/useMapCoords"
 import { useMe } from "~/lib/hooks/useMe"
-import { useS3BulkUpload } from "~/lib/hooks/useS3"
+import { BulkFile, useS3BulkUpload } from "~/lib/hooks/useS3"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 type MediaCluster = RouterOutputs["trip"]["mediaClusters"][number]
 
+type MediaFile = {
+  assetId: string
+  key: string
+  url: string
+  latitude: number
+  longitude: number
+  timestamp: Date
+}
 export default function TripDetailScreen() {
   const { me } = useMe()
   const { id } = useLocalSearchParams<{ id: string }>()
@@ -91,32 +99,67 @@ export default function TripDetailScreen() {
 
   const [bulkUpload, { isLoading: isUploading }] = useS3BulkUpload()
 
+  const { mutate: uploadMedia } = api.trip.uploadMedia.useMutation({
+    onSuccess: () => {},
+  })
+
+  const isSyncing = React.useRef(false)
   React.useEffect(() => {
-    if (!permissionResponse || permissionResponse?.granted || !me?.tripSyncEnabled || !trip) return
-    const isTripActive = dayjs(trip.startDate).isBefore(dayjs()) && dayjs(trip.endDate).isAfter(dayjs())
-    if (!isTripActive) return
+    return
+    if (isSyncing.current) return
     async function loadImages() {
+      if (!permissionResponse || !permissionResponse?.granted || !me?.tripSyncEnabled || !trip) return
+      const isTripActive = dayjs(trip.startDate).isBefore(dayjs()) && dayjs(trip.endDate).isAfter(dayjs())
+      if (!isTripActive) return
       try {
+        console.log("LOADDDDDD")
+        isSyncing.current = true
         const images = await getAssetsAsync({
           createdAfter: data?.latestMediaSyncedAt || trip?.startDate,
           createdBefore: trip?.endDate,
           mediaType: MediaType.photo,
           sortBy: "creationTime",
         })
-        const imagesToUpload = images.assets.map((image) => {
-          // todo get other metadata like asset location etc
-          return { url: image.uri, key: undefined }
-        })
+        const imagesToUpload: (MediaFile | undefined)[] = await Promise.all(
+          images.assets.map(async (image) => {
+            try {
+              // todo get other metadata like asset location etc
+              const info = await MediaLibrary.getAssetInfoAsync(image)
+              if (!info.location) return
+              return {
+                assetId: image.id,
+                url: info.localUri || image.uri,
+                key: "",
+                timestamp: dayjs(info.creationTime).toDate(),
+                latitude: info.location.latitude,
+                longitude: info.location.longitude,
+              }
+            } catch {
+              return
+            }
+          }),
+        )
+
         if (imagesToUpload.length === 0) return
-        const imagesWithKeys = await bulkUpload(imagesToUpload)
-        console.log(imagesWithKeys[0])
+        const imagesWithKeys = (await bulkUpload(imagesToUpload.filter(Boolean) as BulkFile[])) as MediaFile[]
+        uploadMedia({
+          tripId: trip.id,
+          images: imagesWithKeys.map((image) => ({
+            assetId: image.assetId,
+            path: image.key,
+            url: image.url,
+            latitude: image.latitude,
+            longitude: image.longitude,
+            timestamp: image.timestamp,
+          })),
+        })
       } catch (error) {
         console.log(error)
         toast({ title: "Error syncing images", type: "error" })
       }
     }
     loadImages()
-  }, [permissionResponse, trip, data, me, bulkUpload])
+  }, [permissionResponse, trip, data, me, bulkUpload, uploadMedia])
 
   const utils = api.useUtils()
 
@@ -146,25 +189,28 @@ export default function TripDetailScreen() {
   const setCoords = useMapCoords((s) => s.setCoords)
 
   const [mediaClusters, setMediaClusters] = React.useState<MediaCluster[]>([])
-  const onMapMove = async ({ properties }: MapState) => {
-    try {
-      setCoords(properties.center)
 
-      if (!properties.bounds) return
-      const input = {
-        tripId: id,
-        minLng: properties.bounds.sw[0] || 0,
-        minLat: properties.bounds.sw[1] || 0,
-        maxLng: properties.bounds.ne[0] || 0,
-        maxLat: properties.bounds.ne[1] || 0,
-        zoom: properties.zoom,
+  // biome-ignore lint/correctness/useExhaustiveDependencies: allow it
+  const onMapMove = React.useCallback(
+    async ({ properties }: MapState) => {
+      try {
+        setCoords(properties.center)
+        if (!properties.bounds) return
+        const input = {
+          tripId: id,
+          minLng: properties.bounds.sw[0] || 0,
+          minLat: properties.bounds.sw[1] || 0,
+          maxLng: properties.bounds.ne[0] || 0,
+          maxLat: properties.bounds.ne[1] || 0,
+          zoom: properties.zoom,
+        }
+        void utils.trip.mediaClusters.fetch(input).then(setMediaClusters)
+      } catch {
+        console.log("oops - fetching clusters on map move")
       }
-
-      void utils.trip.mediaClusters.fetch(input).then(setMediaClusters)
-    } catch {
-      console.log("oops - fetching clusters on map move")
-    }
-  }
+    },
+    [id],
+  )
 
   const mediaMarkers = React.useMemo(
     () =>

@@ -95,6 +95,7 @@ export const tripRouter = createTRPCRouter({
     const trip = await ctx.prisma.trip.findUnique({
       where: { id: input.id, users: { some: { id: ctx.user.id } } },
       select: {
+        id: true,
         name: true,
         creatorId: true,
         startDate: true,

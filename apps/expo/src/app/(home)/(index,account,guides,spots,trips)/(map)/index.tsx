@@ -278,7 +278,6 @@ function MapContainer() {
           </MarkerView>
         )
       }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [users, layers.shouldShowUsers],
   )
   return (
