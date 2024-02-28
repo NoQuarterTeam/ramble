@@ -265,7 +265,7 @@ export const tripRouter = createTRPCRouter({
       return clusters.map((c) => ({
         ...c,
         properties: c.properties.cluster
-          ? { ...c.properties, preview: !supercluster.getLeaves(c.properties.cluster_id).slice(-1)[0].properties.path }
+          ? { ...c.properties, preview: supercluster.getLeaves(c.properties.cluster_id).slice(-1)[0].properties.path }
           : c.properties,
       }))
     }),
