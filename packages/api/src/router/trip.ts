@@ -3,8 +3,9 @@ import bbox from "@turf/bbox"
 import { lineString } from "@turf/helpers"
 import { z } from "zod"
 
-import { tripSchema, tripStopSchema } from "@ramble/server-schemas"
+import { clusterSchema, tripSchema, tripStopSchema } from "@ramble/server-schemas"
 import { getPlaceUnsplashImage } from "@ramble/server-services"
+import Supercluster from "supercluster"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const tripRouter = createTRPCRouter({
@@ -240,6 +241,33 @@ export const tripRouter = createTRPCRouter({
         input.items.map((id, order) => ctx.prisma.tripItem.update({ where: { id }, data: { order } })),
       )
       return true
+    }),
+  mediaClusters: protectedProcedure
+    .input(clusterSchema.and(z.object({ tripId: z.string() })))
+    .query(async ({ ctx, input: { tripId, ...coords } }) => {
+      const media = await ctx.prisma.tripMedia.findMany({
+        where: { tripId },
+        orderBy: { timestamp: "desc" },
+        select: { id: true, path: true, longitude: true, latitude: true },
+      })
+      const supercluster = new Supercluster<{ id: string; cluster: false; path: string }, { cluster: true }>({
+        maxZoom: 16,
+        radius: 50,
+      })
+      const clustersData = supercluster.load(
+        media.map((media) => ({
+          type: "Feature",
+          geometry: { type: "Point", coordinates: [media.longitude!, media.latitude!] },
+          properties: { cluster: false, id: media.id, path: media.path },
+        })),
+      )
+      const clusters = clustersData.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], coords.zoom || 5)
+      return clusters.map((c) => ({
+        ...c,
+        properties: c.properties.cluster
+          ? { ...c.properties, preview: !supercluster.getLeaves(c.properties.cluster_id).slice(-1)[0].properties.path }
+          : c.properties,
+      }))
     }),
   uploadMedia: protectedProcedure
     .input(
