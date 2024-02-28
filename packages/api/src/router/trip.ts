@@ -244,11 +244,17 @@ export const tripRouter = createTRPCRouter({
       return true
     }),
   mediaClusters: protectedProcedure
-    .input(clusterSchema.and(z.object({ tripId: z.string() })))
-    .query(async ({ ctx, input: { tripId, ...coords } }) => {
+    .input(clusterSchema.and(z.object({ tripId: z.string() })).optional())
+    .query(async ({ ctx, input }) => {
+      if (!input) return []
+      const { tripId, ...coords } = input
       const media = await ctx.prisma.tripMedia.findMany({
-        where: { tripId },
-        orderBy: { timestamp: "desc" },
+        where: {
+          tripId,
+          latitude: { gt: coords.minLat, lt: coords.maxLat },
+          longitude: { gt: coords.minLng, lt: coords.maxLng },
+        },
+        orderBy: { timestamp: "asc" },
         select: { id: true, path: true, longitude: true, latitude: true },
       })
       const supercluster = new Supercluster<{ id: string; cluster: false; path: string }, { cluster: true }>({
@@ -266,7 +272,7 @@ export const tripRouter = createTRPCRouter({
       return clusters.map((c) => ({
         ...c,
         properties: c.properties.cluster
-          ? { ...c.properties, preview: supercluster.getLeaves(c.properties.cluster_id).slice(-1)[0].properties.path }
+          ? { ...c.properties, media: supercluster.getLeaves(c.properties.cluster_id).map((c) => c.properties.path) }
           : c.properties,
       }))
     }),

@@ -8,7 +8,7 @@ export default function Layout() {
   return (
     <Stack initialRouteName="index" screenOptions={{ contentStyle: { backgroundColor }, headerShown: false }}>
       <Stack.Screen name="index" />
-      <Stack.Screen name="[id]" />
+      <Stack.Screen name="[path]" />
     </Stack>
   )
 }

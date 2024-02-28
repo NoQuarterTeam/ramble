@@ -9821,7 +9821,7 @@ packages:
     peerDependencies:
       expo: '*'
     dependencies:
-      expo: 50.0.7(@babel/core@7.23.9)(@react-native/babel-preset@0.73.21)
+      expo: 50.0.7(@babel/core@7.24.0)(@react-native/babel-preset@0.73.21)
     dev: false
 
   /expo-modules-autolinking@1.10.3:
