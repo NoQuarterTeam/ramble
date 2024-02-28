@@ -1,4 +1,4 @@
-import { Camera, type MapState, type MapView as MapType, StyleURL, UserLocation } from "@rnmapbox/maps"
+import { Camera, LocationPuck, type MapState, type MapView as MapType, StyleURL } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { AlertTriangle, CircleDot, MapPinned, Navigation } from "lucide-react-native"
@@ -125,11 +125,12 @@ export default function NewSpotLocationScreen() {
             styleURL={StyleURL.SatelliteStreet}
             compassPosition={{ top: 54, right: 8 }}
           >
-            <UserLocation />
+            <LocationPuck />
 
             <Camera
               ref={camera}
               allowUpdates
+              followUserLocation={false}
               defaultSettings={{
                 centerCoordinate: [
                   initialLng || location?.longitude || INITIAL_LONGITUDE,

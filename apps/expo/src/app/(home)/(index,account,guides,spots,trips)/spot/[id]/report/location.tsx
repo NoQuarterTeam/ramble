@@ -1,4 +1,4 @@
-import { Camera, type MapState, type MapView as MapType, UserLocation } from "@rnmapbox/maps"
+import { Camera, LocationPuck, type MapState, type MapView as MapType } from "@rnmapbox/maps"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { CircleDot, Navigation } from "lucide-react-native"
@@ -65,14 +65,14 @@ export default function SpotReportLocationScreen() {
             Not sure?
           </Button>
         </View>
-        <MapView
-          className="rounded-xs mb-10 mt-4 flex-1 overflow-hidden"
-          onMapIdle={onMapMove}
-          ref={mapRef}
-          styleURL="mapbox://styles/jclackett/clp122bar007z01qu21kc8h4g"
-        >
-          <UserLocation />
-          <Camera ref={camera} allowUpdates defaultSettings={{ centerCoordinate: [longitude, latitude], zoomLevel: 14 }} />
+        <MapView className="rounded-xs mb-10 mt-4 flex-1 overflow-hidden" onMapIdle={onMapMove} ref={mapRef}>
+          <LocationPuck />
+          <Camera
+            ref={camera}
+            allowUpdates
+            followUserLocation={false}
+            defaultSettings={{ centerCoordinate: [longitude, latitude], zoomLevel: 14 }}
+          />
         </MapView>
         <View
           style={{ transform: [{ translateX: -15 }, { translateY: -15 }] }}
