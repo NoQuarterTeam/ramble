@@ -122,12 +122,12 @@ export const tripRouter = createTRPCRouter({
       },
     })
     if (!trip) throw new TRPCError({ code: "NOT_FOUND", message: "Trip not found" })
-    const latestMediaSyncedAt = trip.media[0]?.timestamp
-    if (trip.items.length === 0) return { trip, latestMediaSyncedAt }
+    const latestMediaTimestamp = trip.media[0]?.timestamp
+    if (trip.items.length === 0) return { trip, latestMediaTimestamp }
     if (trip.items.length === 1)
       return {
         trip,
-        latestMediaSyncedAt,
+        latestMediaTimestamp,
         center: trip.items[0]?.spot
           ? [trip.items[0]?.spot.longitude, trip.items[0]?.spot.latitude]
           : ([trip.items[0]?.stop!.longitude, trip.items[0]?.stop!.latitude] as [number, number]),
@@ -142,7 +142,7 @@ export const tripRouter = createTRPCRouter({
     // can be quite slow
     // const directions = await getDirections(itemCoords)
 
-    return { trip, bounds, line, latestMediaSyncedAt }
+    return { trip, bounds, line, latestMediaTimestamp }
   }),
   saveSpot: protectedProcedure
     .input(z.object({ spotId: z.string(), tripId: z.string(), order: z.number().optional() }))
@@ -280,9 +280,14 @@ export const tripRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.prisma.tripMedia.createMany({
+      await ctx.prisma.tripMedia.createMany({
         data: input.images.map((image) => ({ tripId: input.tripId, ...image, creatorId: ctx.user.id })),
         skipDuplicates: true,
       })
+      const trip = await ctx.prisma.trip.findUnique({
+        where: { id: input.tripId },
+        select: { media: { select: { timestamp: true } } },
+      })
+      return trip?.media[0]?.timestamp
     }),
 })

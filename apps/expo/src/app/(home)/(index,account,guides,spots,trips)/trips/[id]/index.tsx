@@ -50,7 +50,7 @@ export default function TripDetailScreen() {
   const trip = data?.trip
   const bounds = data?.bounds
   const center = data?.center
-  const { mutate } = api.trip.uploadMedia.useMutation()
+  const utils = api.useUtils()
 
   const router = useRouter()
 
@@ -93,7 +93,9 @@ export default function TripDetailScreen() {
   const [bulkUpload, { isLoading: isUploading }] = useS3BulkUpload()
 
   const { mutate: uploadMedia } = api.trip.uploadMedia.useMutation({
-    onSuccess: () => {},
+    onSuccess: (data) => {
+      utils.trip.detail.setData({ id }, (prev) => (prev ? { ...prev, latestMediaTimestamp: data } : prev))
+    },
   })
 
   const isSyncing = React.useRef(false)
@@ -103,32 +105,32 @@ export default function TripDetailScreen() {
       const isTripActive = dayjs(trip.startDate).isBefore(dayjs()) && dayjs(trip.endDate).isAfter(dayjs())
       if (!isTripActive) return
       if (isSyncing.current) return
+      isSyncing.current = true
       try {
-        isSyncing.current = true
-        const images = await getAssetsAsync({
-          createdAfter: data?.latestMediaSyncedAt || trip?.startDate,
-          createdBefore: trip?.endDate,
-          mediaType: MediaType.photo,
-          sortBy: "creationTime",
-        })
-        const imagesToUpload = await Promise.all(
-          images.assets.map(async (asset) => {
-            const info = await MediaLibrary.getAssetInfoAsync(asset)
-            if (!info.location) return undefined
-            return {
-              url: info.localUri || asset.uri,
-              key: undefined,
-              latitude: info.location.latitude,
-              longitude: info.location.longitude,
-              assetId: info.filename,
-              timestamp: dayjs(info.creationTime).toDate(),
-            }
-          }),
-        )
+        const createdAfter = data?.latestMediaTimestamp || dayjs(trip.startDate).startOf("day").toDate()
+        const createdBefore = dayjs(trip.endDate).endOf("day").toDate()
+        const images = await getAssetsAsync({ createdAfter, createdBefore, mediaType: MediaType.photo, sortBy: "creationTime" })
+        const imagesToUpload = (
+          await Promise.all(
+            images.assets.map(async (asset) => {
+              const info = await MediaLibrary.getAssetInfoAsync(asset)
+              console.log(asset.filename, info.location)
+              if (!info.location) return undefined
+              return {
+                url: info.localUri || asset.uri,
+                key: undefined,
+                latitude: info.location.latitude,
+                longitude: info.location.longitude,
+                assetId: asset.id,
+                timestamp: dayjs(info.creationTime).toDate(),
+              }
+            }),
+          )
+        ).filter(Boolean)
         if (imagesToUpload.length === 0) return
         const imagesWithKeys = await bulkUpload(imagesToUpload)
 
-        mutate({
+        uploadMedia({
           tripId: id,
           images: imagesWithKeys.filter(Boolean).map((data) => ({
             path: data!.key!,
@@ -144,9 +146,7 @@ export default function TripDetailScreen() {
       }
     }
     loadImages()
-  }, [permissionResponse, trip, data, me, id])
-
-  const utils = api.useUtils()
+  }, [permissionResponse, trip, data, me, id, uploadMedia])
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: dont rerender
   const itemMarkers = React.useMemo(
@@ -357,14 +357,23 @@ export default function TripDetailScreen() {
             </View>
           )}
         </View>
-        {/* {isUploading && (
+        {isUploading && (
           <View className="flex items-center justify-center pt-2">
             <View className="flex items-center bg-primary px-4 py-2 rounded-full flex-row space-x-2">
               <ActivityIndicator size="small" color="white" />
               <Text className="text-white">Syncing photos</Text>
             </View>
           </View>
-        )} */}
+        )}
+        {data?.latestMediaTimestamp && (
+          <View className="flex items-center justify-center pt-2">
+            <View className="flex items-center bg-primary px-4 py-2 rounded-full flex-row space-x-2">
+              <Text className="text-white">
+                latest media timestamp: {dayjs(data?.latestMediaTimestamp).format("DD/MM/YYYY HH:mm:ss")}
+              </Text>
+            </View>
+          </View>
+        )}
       </View>
 
       <View className="absolute bottom-0 left-0 right-0">
