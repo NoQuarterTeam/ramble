@@ -1,5 +1,14 @@
 import { useActionSheet } from "@expo/react-native-action-sheet"
-import { Camera, LineLayer, type MapView as MapType, MarkerView, ShapeSource, StyleURL, UserLocation } from "@rnmapbox/maps"
+import {
+  Camera,
+  LineLayer,
+  MapState,
+  type MapView as MapType,
+  MarkerView,
+  ShapeSource,
+  StyleURL,
+  UserLocation,
+} from "@rnmapbox/maps"
 import dayjs from "dayjs"
 import * as Haptics from "expo-haptics"
 import { Image } from "expo-image"
@@ -31,6 +40,8 @@ import { useMe } from "~/lib/hooks/useMe"
 // import { useS3BulkUpload } from "~/lib/hooks/useS3"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
+type MediaCluster = RouterOutputs["trip"]["mediaClusters"][number]
+
 export default function TripDetailScreen() {
   const { me } = useMe()
   const { id } = useLocalSearchParams<{ id: string }>()
@@ -60,9 +71,10 @@ export default function TripDetailScreen() {
   const tab = useTabSegment()
   const [permissionResponse, requestPermission] = MediaLibrary.usePermissions()
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: allow dat
   React.useEffect(() => {
-    if (!me?.tripSyncEnabled || !permissionResponse) return
+    if (!me?.tripSyncEnabled || !permissionResponse || !trip) return
+    const isTripActive = dayjs(trip.startDate).isBefore(dayjs()) && dayjs(trip.endDate).isAfter(dayjs())
+    if (!isTripActive) return
     if (permissionResponse?.granted) return
     if (permissionResponse?.canAskAgain) {
       requestPermission().catch()
@@ -76,11 +88,9 @@ export default function TripDetailScreen() {
         ],
       )
     }
-  }, [me?.tripSyncEnabled, permissionResponse?.granted, permissionResponse?.canAskAgain])
+  }, [trip, me?.tripSyncEnabled, permissionResponse, requestPermission])
 
   // const [bulkUpload, { isLoading: isUploading }] = useS3BulkUpload()w
-
-  // if is uploading render a View under the name
 
   React.useEffect(() => {
     if (!permissionResponse || !permissionResponse?.granted || !me?.tripSyncEnabled || !trip) return
@@ -157,8 +167,77 @@ export default function TripDetailScreen() {
       ),
     [trip?.items, tab],
   )
-
   const setCoords = useMapCoords((s) => s.setCoords)
+
+  const [mediaClusters, setMediaClusters] = React.useState<MediaCluster[]>([])
+  const onMapMove = async ({ properties }: MapState) => {
+    try {
+      setCoords(properties.center)
+
+      if (!properties.bounds) return
+      const input = {
+        tripId: id,
+        minLng: properties.bounds.sw[0] || 0,
+        minLat: properties.bounds.sw[1] || 0,
+        maxLng: properties.bounds.ne[0] || 0,
+        maxLat: properties.bounds.ne[1] || 0,
+        zoom: properties.zoom,
+      }
+
+      void utils.trip.mediaClusters.fetch(input).then(setMediaClusters)
+    } catch {
+      console.log("oops - fetching clusters on map move")
+    }
+  }
+
+  const mediaMarkers = React.useMemo(
+    () =>
+      mediaClusters?.map((point, i) => {
+        if (point.properties.cluster) {
+          const onPress = async () => {
+            // navigate to image list
+          }
+          return (
+            <MarkerView key={`${point.id || 0}${i}`} allowOverlap coordinate={point.geometry.coordinates}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={onPress}
+                className={join(
+                  "flex items-center justify-center relative rounded-md border-2 border-purple-200",
+                  point.properties.point_count > 150 ? "sq-20" : point.properties.point_count > 75 ? "sq-16" : "sq-12",
+                )}
+              >
+                <Image source={{ uri: createImageUrl(point.properties.preview) }} style={{ width: 40, height: 40 }} />
+                <View className="absolute bg-black/20 inset-0 flex items-center justify-center">
+                  <Text className="text-center text-sm text-white">{point.properties.point_count_abbreviated}</Text>
+                </View>
+              </TouchableOpacity>
+            </MarkerView>
+          )
+        }
+        const media = point.properties as {
+          cluster: false
+          path: string
+          id: string
+        }
+        return (
+          <MarkerView key={media.id} allowOverlap coordinate={point.geometry.coordinates}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => {
+                // navigate to image detail
+                // increment()
+                // router.push(`/(home)/(index)/${user.username}/(profile)`)
+              }}
+              className="sq-12 flex items-center justify-center overflow-hidden rounded-sm border-2 border-purple-200"
+            >
+              <Image source={{ uri: createImageUrl(media.path) }} style={{ width: 40, height: 40 }} />
+            </TouchableOpacity>
+          </MarkerView>
+        )
+      }),
+    [mediaClusters],
+  )
 
   const insets = useSafeAreaInsets()
 
@@ -171,14 +250,7 @@ export default function TripDetailScreen() {
   return (
     <View className="flex-1">
       <StatusBar style="light" />
-      <MapView
-        ref={mapRef}
-        styleURL={StyleURL.SatelliteStreet}
-        compassPosition={{ top: 54, right: 12 }}
-        onMapIdle={({ properties }) => {
-          setCoords(properties.center)
-        }}
-      >
+      <MapView ref={mapRef} styleURL={StyleURL.SatelliteStreet} compassPosition={{ top: 54, right: 12 }} onMapIdle={onMapMove}>
         {data?.line && (
           <ShapeSource id="directions" shape={data.line.geometry}>
             <LineLayer id="line" style={{ lineDasharray: [0.5, 2], lineColor: "white", lineCap: "round", lineWidth: 2 }} />
@@ -190,6 +262,7 @@ export default function TripDetailScreen() {
             </ShapeSource>
           )} */}
         {itemMarkers}
+        {mediaMarkers}
         <UserLocation />
 
         <Camera
