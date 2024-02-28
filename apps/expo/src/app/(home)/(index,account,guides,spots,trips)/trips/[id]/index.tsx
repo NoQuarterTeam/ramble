@@ -222,7 +222,7 @@ export default function TripDetailScreen() {
           id: string
         }
         return (
-          <MarkerView key={media.id} allowOverlap coordinate={point.geometry.coordinates}>
+          <MarkerView key={media.id} allowOverlap allowOverlapWithPuck coordinate={point.geometry.coordinates}>
             <TouchableOpacity
               activeOpacity={0.7}
               onPress={() => router.push(`/(home)/(trips)/trips/${id}/images/${media.path}`)}
