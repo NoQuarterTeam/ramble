@@ -63,6 +63,7 @@ export default function TripDetailScreen() {
           (item.spot || item.stop) && (
             <MarkerView
               allowOverlap
+              allowOverlapWithPuck
               key={item.id}
               coordinate={item.spot ? [item.spot.longitude, item.spot.latitude] : [item.stop!.longitude, item.stop!.latitude]}
             >

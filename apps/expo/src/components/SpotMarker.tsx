@@ -72,7 +72,7 @@ interface SpotClusterMarkerProps {
 }
 export function SpotClusterMarker(props: SpotClusterMarkerProps) {
   return (
-    <MarkerView allowOverlap coordinate={props.point.geometry.coordinates}>
+    <MarkerView allowOverlap allowOverlapWithPuck coordinate={props.point.geometry.coordinates}>
       <TouchableOpacity activeOpacity={0.7} onPress={props.onPress} className="z-10">
         {props.point.properties.cluster ? (
           <ClusterMarker

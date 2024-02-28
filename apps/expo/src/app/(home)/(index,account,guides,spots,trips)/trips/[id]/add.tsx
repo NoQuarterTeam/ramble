@@ -22,13 +22,12 @@ import { Spinner } from "~/components/ui/Spinner"
 import { SpotImageCarousel } from "~/components/ui/SpotImageCarousel"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
-import { type RouterOutputs, api } from "~/lib/api"
+import { api } from "~/lib/api"
 import { isTablet, width } from "~/lib/device"
 import { useMapCoords } from "~/lib/hooks/useMapCoords"
 
 import { useMapFilters } from "../../../../filters"
-
-type Cluster = RouterOutputs["spot"]["clusters"][number]
+import { useMapSettings } from "~/lib/hooks/useMapSettings"
 
 export default function NewItemScreen() {
   const router = useRouter()
@@ -40,7 +39,12 @@ export default function NewItemScreen() {
 
   const [search, setSearch] = React.useState("")
 
-  const [clusters, setClusters] = React.useState<Cluster[] | null>(null)
+  const [mapSettings, setMapSettings] = useMapSettings()
+  const { data: clusters } = api.spot.clusters.useQuery(mapSettings ? { ...mapSettings, ...filters } : undefined, {
+    enabled: !!mapSettings,
+    keepPreviousData: true,
+  })
+
   const [activeSpotId, setActiveSpotId] = React.useState<string | null>(null)
 
   const camera = React.useRef<Camera>(null)
@@ -85,16 +89,13 @@ export default function NewItemScreen() {
         const properties = await mapRef.current?.getVisibleBounds()
         const zoom = await mapRef.current?.getZoom()
         if (!properties) return
-        const input = {
-          ...filters,
+        setMapSettings({
           minLng: properties[1][0],
           minLat: properties[1][1],
           maxLng: properties[0][0],
           maxLat: properties[0][1],
           zoom: zoom || 13,
-        }
-        const data = await utils.spot.clusters.fetch(input)
-        setClusters(data)
+        })
       } catch {
         toast({ title: "Error fetching spots", type: "error" })
         console.log("oops - fetching clusters on filter")
@@ -104,22 +105,14 @@ export default function NewItemScreen() {
   }, [filters, isLoaded])
 
   const onMapMove = ({ properties }: MapState) => {
-    try {
-      if (!properties.bounds) return
-      const input = {
-        ...filters,
-        minLng: properties.bounds.sw[0] || 0,
-        minLat: properties.bounds.sw[1] || 0,
-        maxLng: properties.bounds.ne[0] || 0,
-        maxLat: properties.bounds.ne[1] || 0,
-        zoom: properties.zoom,
-      }
-      void utils.spot.clusters.fetch(input).then(setClusters)
-      setCoords(properties.center)
-    } catch {
-      toast({ title: "Error fetching spots", type: "error" })
-      console.log("oops - fetching clusters on map move")
-    }
+    if (!properties.bounds) return
+    setMapSettings({
+      minLng: properties.bounds.sw[0] || 0,
+      minLat: properties.bounds.sw[1] || 0,
+      maxLng: properties.bounds.ne[0] || 0,
+      maxLat: properties.bounds.ne[1] || 0,
+      zoom: properties.zoom,
+    })
   }
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: dont use activeSpotId
