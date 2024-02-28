@@ -37,7 +37,7 @@ import { toast } from "~/components/ui/Toast"
 import { type RouterOutputs, api } from "~/lib/api"
 import { useMapCoords } from "~/lib/hooks/useMapCoords"
 import { useMe } from "~/lib/hooks/useMe"
-// import { useS3BulkUpload } from "~/lib/hooks/useS3"
+import { useS3BulkUpload } from "~/lib/hooks/useS3"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 type MediaCluster = RouterOutputs["trip"]["mediaClusters"][number]
@@ -90,9 +90,9 @@ export default function TripDetailScreen() {
     }
   }, [trip, me?.tripSyncEnabled, permissionResponse, requestPermission])
 
-  // const [bulkUpload, { isLoading: isUploading }] = useS3BulkUpload()w
+  const [bulkUpload, { isLoading: isUploading }] = useS3BulkUpload()
 
-  const { mutate: _uploadMedia } = api.trip.uploadMedia.useMutation({
+  const { mutate: uploadMedia } = api.trip.uploadMedia.useMutation({
     onSuccess: () => {},
   })
 
@@ -126,13 +126,12 @@ export default function TripDetailScreen() {
           }),
         )
         if (imagesToUpload.length === 0) return
-        // const imagesWithKeys = await bulkUpload(imagesToUpload)
-        // console.log(imagesWithKeys[0])
+        const imagesWithKeys = await bulkUpload(imagesToUpload)
 
         mutate({
           tripId: id,
-          images: imagesToUpload.filter(Boolean).map((data) => ({
-            path: "test", // TODO build read path based off result from bulk upload
+          images: imagesWithKeys.filter(Boolean).map((data) => ({
+            path: data!.key!,
             latitude: data!.latitude,
             longitude: data!.longitude,
             assetId: data!.assetId,
@@ -145,7 +144,7 @@ export default function TripDetailScreen() {
       }
     }
     loadImages()
-  }, [permissionResponse, trip, data, me, id, mutate])
+  }, [permissionResponse, trip, data, me, id])
 
   const utils = api.useUtils()
 
