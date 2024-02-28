@@ -75,7 +75,8 @@ export const userRouter = createTRPCRouter({
       select: { id: true, username: true, firstName: true, lastName: true, avatar: true, avatarBlurHash: true },
     })
   }),
-  clusters: protectedProcedure.input(clusterSchema).query(async ({ ctx, input: coords }) => {
+  clusters: protectedProcedure.input(clusterSchema.optional()).query(async ({ ctx, input: coords }) => {
+    if (!coords) return []
     const users = await ctx.prisma.user.findMany({
       where: { isLocationPrivate: false, longitude: { not: null }, latitude: { not: null } },
       select: { id: true, username: true, avatar: true, avatarBlurHash: true, longitude: true, latitude: true },

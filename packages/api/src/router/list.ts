@@ -79,8 +79,10 @@ export const listRouter = createTRPCRouter({
     return { list, spots, bounds }
   }),
   spotClusters: publicProcedure
-    .input(z.object({ id: z.string() }).and(clusterSchema))
-    .query(async ({ ctx, input: { id, zoom, ...coords } }) => {
+    .input(z.object({ id: z.string() }).and(clusterSchema).optional())
+    .query(async ({ ctx, input }) => {
+      if (!input) return []
+      const { id, zoom, ...coords } = input
       const currentUser = ctx.user?.username
 
       const list = await ctx.prisma.list.findFirst({
