@@ -206,7 +206,7 @@ export default function TripDetailScreen() {
             // navigate to image list
           }
           return (
-            <MarkerView key={`${point.id || 0}${i}`} allowOverlap coordinate={point.geometry.coordinates}>
+            <MarkerView key={`${point.id || 0}${i}`} allowOverlap allowOverlapWithPuck coordinate={point.geometry.coordinates}>
               <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={onPress}
