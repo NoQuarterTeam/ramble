@@ -280,12 +280,9 @@ export const tripRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      // WIP
-      const tripMedias = await ctx.prisma.tripMedia.createMany({
+      return ctx.prisma.tripMedia.createMany({
         data: input.images.map((image) => ({ tripId: input.tripId, ...image, creatorId: ctx.user.id })),
         skipDuplicates: true,
       })
-      console.log(tripMedias)
-      return true
     }),
 })

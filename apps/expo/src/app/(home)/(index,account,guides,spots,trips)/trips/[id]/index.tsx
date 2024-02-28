@@ -37,19 +37,11 @@ import { toast } from "~/components/ui/Toast"
 import { type RouterOutputs, api } from "~/lib/api"
 import { useMapCoords } from "~/lib/hooks/useMapCoords"
 import { useMe } from "~/lib/hooks/useMe"
-import { BulkFile, useS3BulkUpload } from "~/lib/hooks/useS3"
+// import { useS3BulkUpload } from "~/lib/hooks/useS3"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 type MediaCluster = RouterOutputs["trip"]["mediaClusters"][number]
 
-type MediaFile = {
-  assetId: string
-  key: string
-  url: string
-  latitude: number
-  longitude: number
-  timestamp: Date
-}
 export default function TripDetailScreen() {
   const { me } = useMe()
   const { id } = useLocalSearchParams<{ id: string }>()
@@ -58,6 +50,7 @@ export default function TripDetailScreen() {
   const trip = data?.trip
   const bounds = data?.bounds
   const center = data?.center
+  const { mutate } = api.trip.uploadMedia.useMutation()
 
   const router = useRouter()
 
@@ -97,22 +90,20 @@ export default function TripDetailScreen() {
     }
   }, [trip, me?.tripSyncEnabled, permissionResponse, requestPermission])
 
-  const [bulkUpload, { isLoading: isUploading }] = useS3BulkUpload()
+  // const [bulkUpload, { isLoading: isUploading }] = useS3BulkUpload()w
 
-  const { mutate: uploadMedia } = api.trip.uploadMedia.useMutation({
+  const { mutate: _uploadMedia } = api.trip.uploadMedia.useMutation({
     onSuccess: () => {},
   })
 
   const isSyncing = React.useRef(false)
   React.useEffect(() => {
-    return
-    if (isSyncing.current) return
     async function loadImages() {
       if (!permissionResponse || !permissionResponse?.granted || !me?.tripSyncEnabled || !trip) return
       const isTripActive = dayjs(trip.startDate).isBefore(dayjs()) && dayjs(trip.endDate).isAfter(dayjs())
       if (!isTripActive) return
+      if (isSyncing.current) return
       try {
-        console.log("LOADDDDDD")
         isSyncing.current = true
         const images = await getAssetsAsync({
           createdAfter: data?.latestMediaSyncedAt || trip?.startDate,
@@ -120,37 +111,32 @@ export default function TripDetailScreen() {
           mediaType: MediaType.photo,
           sortBy: "creationTime",
         })
-        const imagesToUpload: (MediaFile | undefined)[] = await Promise.all(
-          images.assets.map(async (image) => {
-            try {
-              // todo get other metadata like asset location etc
-              const info = await MediaLibrary.getAssetInfoAsync(image)
-              if (!info.location) return
-              return {
-                assetId: image.id,
-                url: info.localUri || image.uri,
-                key: "",
-                timestamp: dayjs(info.creationTime).toDate(),
-                latitude: info.location.latitude,
-                longitude: info.location.longitude,
-              }
-            } catch {
-              return
+        const imagesToUpload = await Promise.all(
+          images.assets.map(async (asset) => {
+            const info = await MediaLibrary.getAssetInfoAsync(asset)
+            if (!info.location) return undefined
+            return {
+              url: asset.uri,
+              key: undefined,
+              latitude: info.location.latitude,
+              longitude: info.location.longitude,
+              assetId: info.filename,
+              timestamp: dayjs(info.creationTime).toDate(),
             }
           }),
         )
-
         if (imagesToUpload.length === 0) return
-        const imagesWithKeys = (await bulkUpload(imagesToUpload.filter(Boolean) as BulkFile[])) as MediaFile[]
-        uploadMedia({
-          tripId: trip.id,
-          images: imagesWithKeys.map((image) => ({
-            assetId: image.assetId,
-            path: image.key,
-            url: image.url,
-            latitude: image.latitude,
-            longitude: image.longitude,
-            timestamp: image.timestamp,
+        // const imagesWithKeys = await bulkUpload(imagesToUpload)
+        // console.log(imagesWithKeys[0])
+
+        mutate({
+          tripId: id,
+          images: imagesToUpload.filter(Boolean).map((data) => ({
+            path: "test", // TODO build read path based off result from bulk upload
+            latitude: data!.latitude,
+            longitude: data!.longitude,
+            assetId: data!.assetId,
+            timestamp: data!.timestamp,
           })),
         })
       } catch (error) {
@@ -159,7 +145,7 @@ export default function TripDetailScreen() {
       }
     }
     loadImages()
-  }, [permissionResponse, trip, data, me, bulkUpload, uploadMedia])
+  }, [permissionResponse, trip, data, me, id, mutate])
 
   const utils = api.useUtils()
 
@@ -370,14 +356,14 @@ export default function TripDetailScreen() {
             </View>
           )}
         </View>
-        {isUploading && (
+        {/* {isUploading && (
           <View className="flex items-center justify-center pt-2">
             <View className="flex items-center bg-primary px-4 py-2 rounded-full flex-row space-x-2">
               <ActivityIndicator size="small" color="white" />
               <Text className="text-white">Syncing photos</Text>
             </View>
           </View>
-        )}
+        )} */}
       </View>
 
       <View className="absolute bottom-0 left-0 right-0">
