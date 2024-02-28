@@ -202,13 +202,15 @@ export default function TripDetailScreen() {
                 activeOpacity={0.7}
                 onPress={() => router.push(`/(home)/(trips)/trips/${id}/images?images=${images}`)}
                 className={join(
-                  "flex items-center justify-center relative rounded-md border-2 border-purple-200",
-                  point.properties.point_count > 150 ? "sq-20" : point.properties.point_count > 75 ? "sq-16" : "sq-12",
+                  "flex items-center justify-center relative",
+                  point.properties.point_count > 150 ? "sq-20" : point.properties.point_count > 75 ? "sq-16" : "sq-14",
                 )}
               >
-                <Image source={{ uri: createImageUrl(point.properties.media[0]) }} style={{ width: 40, height: 40 }} />
-                <View className="absolute bg-black/50 inset-0 flex items-center justify-center">
-                  <Text className="text-center text-sm text-white">{point.properties.point_count_abbreviated}</Text>
+                <View className="rounded-sm border-2 border-white h-full w-full">
+                  <Image source={{ uri: createImageUrl(point.properties.media[0]) }} style={{ width: "100%", height: "100%" }} />
+                </View>
+                <View className="absolute bg-blue-500 rounded-full sq-5 -top-1 -right-1 flex items-center justify-center">
+                  <Text className="text-center font-600 text-white">{point.properties.point_count_abbreviated}</Text>
                 </View>
               </TouchableOpacity>
             </MarkerView>
@@ -224,9 +226,9 @@ export default function TripDetailScreen() {
             <TouchableOpacity
               activeOpacity={0.7}
               onPress={() => router.push(`/(home)/(trips)/trips/${id}/images/${media.path}`)}
-              className="sq-12 flex items-center justify-center overflow-hidden rounded-sm border-2 border-purple-200"
+              className="sq-12 flex items-center justify-center rounded-md overflow-hidden border-2 border-white"
             >
-              <Image source={{ uri: createImageUrl(media.path) }} style={{ width: 40, height: 40 }} />
+              <Image source={{ uri: createImageUrl(media.path) }} style={{ width: "100%", height: "100%" }} />
             </TouchableOpacity>
           </MarkerView>
         )
