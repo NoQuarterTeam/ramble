@@ -116,7 +116,7 @@ export default function TripDetailScreen() {
             const info = await MediaLibrary.getAssetInfoAsync(asset)
             if (!info.location) return undefined
             return {
-              url: asset.uri,
+              url: info.localUri || asset.uri,
               key: undefined,
               latitude: info.location.latitude,
               longitude: info.location.longitude,
