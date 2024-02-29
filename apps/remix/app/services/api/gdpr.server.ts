@@ -3,7 +3,7 @@ import { CheckboxAsString } from "zodix"
 
 import { track } from "~/lib/analytics.server"
 import { createAction, createActions } from "~/lib/form.server"
-import { json } from "~/lib/remix.server"
+import { redirect } from "~/lib/remix.server"
 import { type ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 import { type Actions } from "~/pages/api+/gdpr"
 
@@ -20,6 +20,6 @@ export const gdprActions = ({ request }: ActionFunctionArgs) =>
           const gdprSession = await getGdprSession(request)
           gdprSession.setGdpr(data)
           track("GDPR set", { userId, ...data })
-          return json({ success: true }, request, { headers: { "set-cookie": await gdprSession.commit() } })
+          return redirect("/", request, { headers: { "set-cookie": await gdprSession.commit() } })
         }),
   })

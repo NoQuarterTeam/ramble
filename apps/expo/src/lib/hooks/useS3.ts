@@ -45,10 +45,10 @@ export function useS3BulkUpload(): [(files: BulkFile[]) => Promise<NonNullable<B
       setIsLoading(true)
       for (const file of files) {
         const key = v4()
-        const res = await mutateAsync({ key: assetPrefix + key })
-        const resp = await fetch(file.url)
-        const imageBody = await resp.blob()
-        await fetch(res, { method: "PUT", body: imageBody })
+        // const res = await mutateAsync({ key: assetPrefix + key })
+        // const resp = await fetch(file.url)
+        // const imageBody = await resp.blob()
+        // await fetch(res, { method: "PUT", body: imageBody })
         file.key = key
       }
 

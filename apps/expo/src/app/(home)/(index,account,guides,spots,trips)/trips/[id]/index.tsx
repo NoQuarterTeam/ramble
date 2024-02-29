@@ -108,37 +108,41 @@ export default function TripDetailScreen() {
       try {
         const createdAfter = data?.latestMediaTimestamp || dayjs(trip.startDate).startOf("day").toDate()
         const createdBefore = dayjs(trip.endDate).endOf("day").toDate()
-        const images = await getAssetsAsync({ createdAfter, createdBefore, mediaType: MediaType.photo, sortBy: "creationTime" })
-        const imagesToUpload = (
-          await Promise.all(
-            images.assets.map(async (asset) => {
-              const info = await MediaLibrary.getAssetInfoAsync(asset)
-              console.log(asset.filename, info.location)
-              if (!info.location) return undefined
-              return {
-                url: info.localUri || asset.uri,
-                key: undefined,
-                latitude: info.location.latitude,
-                longitude: info.location.longitude,
-                assetId: asset.id,
-                timestamp: dayjs(info.creationTime).toDate(),
-              }
-            }),
-          )
-        ).filter(Boolean)
-        if (imagesToUpload.length === 0) return
-        const imagesWithKeys = await bulkUpload(imagesToUpload)
+        const pages = await getAssetsAsync({ createdAfter, createdBefore, mediaType: MediaType.photo, sortBy: "creationTime" })
+        if (pages.totalCount === 0) return
+        // create images array of all paginated assets using end cursor to loop through all pages
 
-        uploadMedia({
-          tripId: id,
-          images: imagesWithKeys.filter(Boolean).map((data) => ({
-            path: data!.key!,
-            latitude: data!.latitude,
-            longitude: data!.longitude,
-            assetId: data!.assetId,
-            timestamp: data!.timestamp,
-          })),
-        })
+        let images = []
+
+        // const imagesToUpload = (
+        //   await Promise.all(
+        //     pages.assets.map(async (asset) => {
+        //       const info = await MediaLibrary.getAssetInfoAsync(asset)
+        //       if (!info.location) return undefined
+        //       return {
+        //         url: info.localUri || asset.uri,
+        //         key: undefined,
+        //         latitude: info.location.latitude,
+        //         longitude: info.location.longitude,
+        //         assetId: asset.id,
+        //         timestamp: dayjs(info.creationTime).toDate(),
+        //       }
+        //     }),
+        //   )
+        // ).filter(Boolean)
+        // if (imagesToUpload.length === 0) return
+        // const imagesWithKeys = await bulkUpload(imagesToUpload)
+
+        // uploadMedia({
+        //   tripId: id,
+        //   images: imagesWithKeys.filter(Boolean).map((data) => ({
+        //     path: data!.key!,
+        //     latitude: data!.latitude,
+        //     longitude: data!.longitude,
+        //     assetId: data!.assetId,
+        //     timestamp: data!.timestamp,
+        //   })),
+        // })
       } catch (error) {
         console.log(error)
         toast({ title: "Error syncing images", type: "error" })
