@@ -376,10 +376,12 @@ model Trip {
 }
 
 model TripMedia {
-  id        String   @id @default(uuid())
+  id        String  @id @default(uuid())
   path      String
   latitude  Float
   longitude Float
+  note      String? @db.Text
+
   assetId   String   @unique()
   timestamp DateTime
   creator   User     @relation(fields: [creatorId], references: [id])
@@ -387,11 +389,15 @@ model TripMedia {
   trip      Trip     @relation(fields: [tripId], references: [id])
   tripId    String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+  deletedAt DateTime?
 
-  @@index([creatorId])
   @@index([tripId])
+  @@index([latitude])
+  @@index([longitude])
+  @@index([creatorId])
+  @@index([deletedAt])
 }
 
 model TripItem {

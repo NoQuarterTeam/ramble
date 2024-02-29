@@ -1,6 +1,5 @@
-import "react-native-get-random-values"
-
 import * as React from "react"
+import "react-native-get-random-values"
 import { v4 } from "uuid"
 
 import { assetPrefix } from "@ramble/shared"

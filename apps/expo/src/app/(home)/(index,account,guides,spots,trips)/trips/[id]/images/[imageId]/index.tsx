@@ -1,12 +1,19 @@
-import { useLocalSearchParams } from "expo-router"
+import { useLocalSearchParams, useRouter } from "expo-router"
+import { Trash } from "lucide-react-native"
 import * as React from "react"
-import { LayoutChangeEvent, View } from "react-native"
+import { Alert, LayoutChangeEvent, TouchableOpacity, View } from "react-native"
 
 import { createImageUrl } from "@ramble/shared"
+import dayjs from "dayjs"
 import { Image } from "expo-image"
+
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
+import { Icon } from "~/components/Icon"
 import { ScreenView } from "~/components/ui/ScreenView"
+import { Text } from "~/components/ui/Text"
+import { toast } from "~/components/ui/Toast"
+import { api } from "~/lib/api"
 import { height, width } from "~/lib/device"
 
 const clamp = (value: number, min: number, max: number): number => {
@@ -17,6 +24,50 @@ const clamp = (value: number, min: number, max: number): number => {
 const DOUBLE_ZOOM = 3
 
 export default function TripImage() {
+  const { imageId, bounds } = useLocalSearchParams<{ id: string; imageId?: string; bounds?: string }>()
+
+  const parsedBounds = bounds?.split(",").map(Number)
+
+  const { data, isLoading } = api.trip.media.byId.useQuery(
+    { id: imageId! },
+    { enabled: !!imageId, staleTime: Infinity, cacheTime: Infinity },
+  )
+
+  const router = useRouter()
+  const utils = api.useUtils()
+  const { mutate, isLoading: removeLoading } = api.trip.media.remove.useMutation({
+    onSuccess: () => {
+      if (parsedBounds && imageId) {
+        utils.trip.media.byBounds.setData({ bounds: parsedBounds }, (prev) =>
+          prev ? prev.filter((media) => media.id !== imageId) : prev,
+        )
+      }
+      router.back()
+    },
+    onError: () => {
+      toast({ title: "Failed to remove image", type: "error" })
+    },
+  })
+
+  const handleRemove = async () => {
+    if (!imageId) return
+    Alert.alert("Are you sure?", "This action cannot be undone.", [
+      { text: "Cancel", style: "cancel" },
+      { text: "Remove", style: "destructive", onPress: () => mutate({ id: imageId }) },
+    ])
+  }
+
+  // const handleDownload = async () => {
+  //   try {
+  //     if (!data) return
+  //     // const file = await FileSystem.downloadAsync(createImageUrl(data.path), FileSystem.documentDirectory + data.path)
+  //     // await MediaLibrary.saveToLibraryAsync(file.uri)
+  //   } catch (error) {
+  //     console.log(error)
+  //     toast({ title: "Failed to download image", type: "error" })
+  //   }
+  // }
+
   const centerX = useSharedValue(0)
   const centerY = useSharedValue(0)
   const onImageLayout = (event: LayoutChangeEvent) => {
@@ -24,7 +75,6 @@ export default function TripImage() {
     centerX.value = x + width / 2
     centerY.value = y + height / 2
   }
-  const { path } = useLocalSearchParams<{ path: string }>()
 
   const prevScale = useSharedValue(1)
   const scale = useSharedValue(1)
@@ -90,7 +140,7 @@ export default function TripImage() {
       initialFocal.y.value = event.focalY
     })
     .onUpdate((event) => {
-      scale.value = clamp(prevScale.value * event.scale, 1, 5)
+      scale.value = clamp(prevScale.value * event.scale, 1, 10)
       focal.x.value = prevFocal.x.value + (centerX.value - initialFocal.x.value) * (scale.value - prevScale.value)
       focal.y.value = prevFocal.y.value + (centerY.value - initialFocal.y.value) * (scale.value - prevScale.value)
     })
@@ -138,14 +188,38 @@ export default function TripImage() {
   const gestures = Gesture.Race(doubleTapGesture, simultaneousGestures)
 
   return (
-    <ScreenView title="" containerClassName="px-0">
-      <View className="pb-2 flex-1">
-        <GestureDetector gesture={gestures}>
-          <Animated.View style={[styles, { flex: 1 }]} onLayout={onImageLayout}>
-            <Image source={{ uri: createImageUrl(path) }} className="flex-1 h-full" contentFit="contain" />
-          </Animated.View>
-        </GestureDetector>
-      </View>
+    <ScreenView
+      title={data ? <Text className="opacity-70">{dayjs(data.timestamp).format("DD MMM YYYY HH:MM")}</Text> : ""}
+      containerClassName="px-0"
+      rightElement={
+        imageId && (
+          <View className="space-x-4 flex flex-row">
+            {/* {data && me?.id === data?.creatorId && (
+            <TouchableOpacity className="px-1" onPress={handleDownload}>
+              <Icon icon={Download} size={18} />
+            </TouchableOpacity>
+          )} */}
+            {/* <Link asChild push href={`/(home)/(trips)/trips/${id}/images/${imageId || ""}/edit`}>
+              <TouchableOpacity className="px-1">
+                <Icon icon={MessageCircleHeart} size={18} />
+              </TouchableOpacity>
+            </Link> */}
+            <TouchableOpacity className="px-1" onPress={handleRemove} disabled={removeLoading}>
+              <Icon icon={Trash} size={18} />
+            </TouchableOpacity>
+          </View>
+        )
+      }
+    >
+      {isLoading || !data ? null : (
+        <View className="pb-2 flex-1">
+          <GestureDetector gesture={gestures}>
+            <Animated.View style={[styles, { flex: 1 }]} onLayout={onImageLayout}>
+              <Image source={{ uri: createImageUrl(data.path) }} className="flex-1 h-full" contentFit="contain" />
+            </Animated.View>
+          </GestureDetector>
+        </View>
+      )}
     </ScreenView>
   )
 }

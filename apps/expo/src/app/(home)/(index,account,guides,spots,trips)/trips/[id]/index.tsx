@@ -39,6 +39,7 @@ import { useMapCoords } from "~/lib/hooks/useMapCoords"
 import { useMapSettings } from "~/lib/hooks/useMapSettings"
 import { useMe } from "~/lib/hooks/useMe"
 import { useS3QuickUpload } from "~/lib/hooks/useS3"
+
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 export default function TripDetailScreen() {
@@ -94,92 +95,11 @@ export default function TripDetailScreen() {
 
   const upload = useS3QuickUpload()
 
-  const { mutate: uploadMedia } = api.trip.uploadMedia.useMutation({
+  const { mutate: uploadMedia } = api.trip.media.upload.useMutation({
     onSuccess: (timestamp) => {
       utils.trip.detail.setData({ id }, (prev) => (prev ? { ...prev, latestMediaTimestamp: timestamp } : prev))
     },
   })
-
-  const [isSyncing, setIsSyncing] = React.useState(false)
-  const hasStartedSyncing = React.useRef(false)
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: allow it
-  React.useEffect(() => {
-    async function loadImages() {
-      if (!permissionResponse?.granted || !me?.tripSyncEnabled || !startDate || !endDate || hasStartedSyncing.current) return
-
-      const isTripActive = dayjs(startDate).isBefore(dayjs()) && dayjs(endDate).isAfter(dayjs())
-      if (!isTripActive) return
-      hasStartedSyncing.current = true
-      try {
-        const createdAfter = latestMediaTimestamp || dayjs(startDate).startOf("day").toDate()
-        const createdBefore = dayjs(endDate).endOf("day").toDate()
-        const pages = await getAssetsAsync({ createdAfter, createdBefore, mediaType: MediaType.photo, sortBy: "creationTime" })
-        if (pages.totalCount === 0) return
-        // console.log({ totalImagesFound: pages.totalCount })
-        let images: MediaLibrary.Asset[] = pages.assets
-        let endCursor = pages.endCursor
-        while (true) {
-          try {
-            const newPages = await getAssetsAsync({
-              after: endCursor,
-              createdAfter,
-              createdBefore,
-              mediaType: MediaType.photo,
-              sortBy: "creationTime",
-            })
-            images = images.concat(newPages.assets)
-            endCursor = newPages.endCursor
-            if (!newPages.hasNextPage) break
-          } catch {
-            console.log("Ooops")
-            break
-          }
-        }
-        const imagesToSync: (MediaLibrary.Asset & { latitude: number; longitude: number; url: string })[] = []
-        for (const image of images) {
-          try {
-            const info = await MediaLibrary.getAssetInfoAsync(image)
-            if (!info.location) continue
-            const imageWithData = {
-              ...image,
-              url: info.localUri || image.uri,
-              latitude: info.location.latitude,
-              longitude: info.location.longitude,
-            }
-            imagesToSync.push(imageWithData)
-          } catch (error) {
-            console.log(error)
-          }
-        }
-        // console.log({ imagesToSync: imagesToSync.length })
-        if (imagesToSync.length === 0) return
-        setIsSyncing(true)
-        for (const image of imagesToSync) {
-          try {
-            const key = await upload(image.url)
-            const payload = {
-              path: key,
-              url: image.url,
-              latitude: image.latitude,
-              longitude: image.longitude,
-              assetId: image.id,
-              timestamp: dayjs(image.creationTime).toDate(),
-            }
-            uploadMedia({ tripId: id, image: payload })
-          } catch (error) {
-            console.log(error)
-          }
-        }
-      } catch (error) {
-        console.log(error)
-        toast({ title: "Error syncing images", type: "error" })
-      } finally {
-        setIsSyncing(false)
-      }
-    }
-    loadImages()
-  }, [permissionResponse?.granted, startDate, endDate, latestMediaTimestamp, me, id])
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: dont rerender
   const itemMarkers = React.useMemo(
@@ -208,10 +128,89 @@ export default function TripDetailScreen() {
   const setCoords = useMapCoords((s) => s.setCoords)
 
   const [mapSettings, setMapSettings] = useMapSettings()
-  const { data: mediaClusters } = api.trip.mediaClusters.useQuery(mapSettings ? { ...mapSettings, tripId: id } : undefined, {
-    enabled: !!mapSettings,
-    keepPreviousData: true,
-  })
+  const { data: mediaClusters, refetch } = api.trip.media.clusters.useQuery(
+    mapSettings ? { ...mapSettings, tripId: id } : undefined,
+    { enabled: !!mapSettings, keepPreviousData: true },
+  )
+
+  const [isSyncing, setIsSyncing] = React.useState(false)
+  const hasStartedSyncing = React.useRef(false)
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: allow it
+  React.useEffect(() => {
+    async function loadImages() {
+      if (!permissionResponse?.granted || !me?.tripSyncEnabled || !startDate || !endDate || hasStartedSyncing.current) return
+
+      const isTripActive = dayjs(startDate).isBefore(dayjs()) && dayjs(endDate).isAfter(dayjs())
+      if (!isTripActive) return
+      hasStartedSyncing.current = true
+      try {
+        setIsSyncing(true)
+        const createdAfter = latestMediaTimestamp
+          ? dayjs(latestMediaTimestamp)
+              .add(1, "millisecond") // need this to make query exlcude latest
+              .toDate()
+          : dayjs(startDate).startOf("day").toDate()
+        const createdBefore = dayjs(endDate).endOf("day").toDate()
+        const pages = await getAssetsAsync({ createdAfter, createdBefore, mediaType: MediaType.photo, sortBy: "creationTime" })
+        if (pages.totalCount === 0) return
+        let images: MediaLibrary.Asset[] = pages.assets
+        let endCursor = pages.endCursor
+        while (true) {
+          const newPages = await getAssetsAsync({
+            after: endCursor,
+            createdAfter,
+            createdBefore,
+            mediaType: MediaType.photo,
+            sortBy: "creationTime",
+          })
+          images = images.concat(newPages.assets)
+          endCursor = newPages.endCursor
+          if (!newPages.hasNextPage) break
+        }
+        const imagesToSync: (MediaLibrary.Asset & { latitude: number; longitude: number; url: string })[] = []
+        for (const image of images) {
+          try {
+            const info = await MediaLibrary.getAssetInfoAsync(image)
+            if (!info.location) continue
+            const imageWithData = {
+              ...image,
+              url: info.localUri || image.uri,
+              latitude: info.location.latitude,
+              longitude: info.location.longitude,
+            }
+            imagesToSync.push(imageWithData)
+          } catch (error) {
+            console.log(error)
+          }
+        }
+        if (imagesToSync.length === 0) return
+        for (const image of imagesToSync) {
+          try {
+            const key = await upload(image.url)
+            const payload = {
+              path: key,
+              url: image.url,
+              latitude: image.latitude,
+              longitude: image.longitude,
+              assetId: image.id,
+              timestamp: dayjs(image.creationTime).toDate(),
+            }
+            uploadMedia({ tripId: id, image: payload })
+          } catch (error) {
+            console.log(error)
+          }
+        }
+        refetch()
+      } catch (error) {
+        console.log(error)
+        toast({ title: "Error syncing images", type: "error" })
+      } finally {
+        setIsSyncing(false)
+      }
+    }
+    loadImages()
+  }, [permissionResponse?.granted, startDate, endDate, latestMediaTimestamp, me, id])
 
   const onMapMove = ({ properties }: MapState) => {
     if (!properties.bounds) return
@@ -230,19 +229,22 @@ export default function TripDetailScreen() {
     () =>
       mediaClusters?.map((point, i) => {
         if (point.properties.cluster) {
-          const images = point.properties.media.join(",")
+          const bounds = point.properties.bounds
           return (
             <MarkerView key={`${point.id || 0}${i}`} allowOverlap allowOverlapWithPuck coordinate={point.geometry.coordinates}>
               <TouchableOpacity
                 activeOpacity={0.7}
-                onPress={() => router.push(`/(home)/(trips)/trips/${id}/images?images=${images}`)}
+                onPress={() => router.push(`/(home)/(trips)/trips/${id}/images?bounds=${bounds.join(",")}`)}
                 className={join(
                   "flex items-center justify-center relative",
                   point.properties.point_count > 150 ? "sq-20" : point.properties.point_count > 75 ? "sq-16" : "sq-14",
                 )}
               >
                 <View className="rounded-sm border-2 border-white bg-background dark:bg-background-dark h-full w-full">
-                  <Image source={{ uri: createImageUrl(point.properties.media[0]) }} style={{ width: "100%", height: "100%" }} />
+                  <Image
+                    source={{ uri: createImageUrl(point.properties.media[0]?.properties.path) }}
+                    style={{ width: "100%", height: "100%" }}
+                  />
                 </View>
                 <View className="absolute bg-blue-500 rounded-full sq-5 -top-1 -right-1 flex items-center justify-center">
                   <Text className="text-center font-600 text-white">{point.properties.point_count_abbreviated}</Text>
@@ -260,7 +262,7 @@ export default function TripDetailScreen() {
           <MarkerView key={media.id} allowOverlap allowOverlapWithPuck coordinate={point.geometry.coordinates}>
             <TouchableOpacity
               activeOpacity={0.7}
-              onPress={() => router.push(`/(home)/(trips)/trips/${id}/images/${media.path}`)}
+              onPress={() => router.push(`/(home)/(trips)/trips/${id}/images/${media.id}`)}
               className="sq-12 flex items-center justify-center rounded-md overflow-hidden border-2 border-white"
             >
               <Image source={{ uri: createImageUrl(media.path) }} style={{ width: "100%", height: "100%" }} />

@@ -3,10 +3,11 @@ import bbox from "@turf/bbox"
 import { lineString } from "@turf/helpers"
 import { z } from "zod"
 
-import { clusterSchema, tripSchema, tripStopSchema } from "@ramble/server-schemas"
+import { tripSchema, tripStopSchema } from "@ramble/server-schemas"
 import { getPlaceUnsplashImage } from "@ramble/server-services"
-import Supercluster from "supercluster"
-import { createTRPCRouter, protectedProcedure } from "../trpc"
+import { createTRPCRouter, protectedProcedure } from "../../trpc"
+import { mediaRouter } from "./media"
+import { tripUsersRouter } from "./users"
 
 export const tripRouter = createTRPCRouter({
   mine: protectedProcedure.query(({ ctx }) => {
@@ -100,7 +101,7 @@ export const tripRouter = createTRPCRouter({
         creatorId: true,
         startDate: true,
         endDate: true,
-        media: { take: 1, orderBy: { timestamp: "desc" }, select: { timestamp: true } },
+        media: { where: { creatorId: ctx.user.id }, take: 1, orderBy: { timestamp: "desc" }, select: { timestamp: true } },
         items: {
           orderBy: { order: "asc" },
           select: {
@@ -182,59 +183,6 @@ export const tripRouter = createTRPCRouter({
     })
     return true
   }),
-  users: protectedProcedure.input(z.object({ id: z.string() })).query(({ ctx, input }) => {
-    return ctx.prisma.trip.findUniqueOrThrow({
-      where: { id: input.id },
-      select: {
-        id: true,
-        name: true,
-        users: {
-          where: { id: { not: { equals: ctx.user.id } } },
-          select: { id: true, username: true, firstName: true, lastName: true, avatar: true, avatarBlurHash: true },
-        },
-      },
-    })
-  }),
-  searchForUsers: protectedProcedure
-    .input(z.object({ tripId: z.string(), skip: z.number(), search: z.string().optional() }))
-    .query(({ ctx, input }) => {
-      return ctx.prisma.user.findMany({
-        skip: input.skip,
-        take: 12,
-        where: {
-          id: { not: ctx.user.id },
-          trips: { none: { id: input.tripId } },
-          OR: input.search
-            ? [
-                { username: { contains: input.search } },
-                { firstName: { contains: input.search } },
-                { lastName: { contains: input.search } },
-              ]
-            : undefined,
-        },
-        orderBy: { createdAt: "desc" },
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-          username: true,
-          avatar: true,
-          avatarBlurHash: true,
-        },
-      })
-    }),
-  addUser: protectedProcedure.input(z.object({ tripId: z.string(), userId: z.string() })).mutation(({ ctx, input }) => {
-    return ctx.prisma.trip.update({
-      where: { id: input.tripId },
-      data: { users: { connect: { id: input.userId } } },
-    })
-  }),
-  removeUser: protectedProcedure.input(z.object({ tripId: z.string(), userId: z.string() })).mutation(({ ctx, input }) => {
-    return ctx.prisma.trip.update({
-      where: { id: input.tripId },
-      data: { users: { disconnect: { id: input.userId } } },
-    })
-  }),
   updateOrder: protectedProcedure
     .input(z.object({ id: z.string(), items: z.array(z.string()) }))
     .mutation(async ({ input, ctx }) => {
@@ -243,53 +191,6 @@ export const tripRouter = createTRPCRouter({
       )
       return true
     }),
-  mediaClusters: protectedProcedure
-    .input(clusterSchema.and(z.object({ tripId: z.string() })).optional())
-    .query(async ({ ctx, input }) => {
-      if (!input) return []
-      const { tripId, ...coords } = input
-      const media = await ctx.prisma.tripMedia.findMany({
-        where: {
-          tripId,
-          latitude: { gt: coords.minLat, lt: coords.maxLat },
-          longitude: { gt: coords.minLng, lt: coords.maxLng },
-        },
-        orderBy: { createdAt: "desc" },
-        select: { id: true, path: true, longitude: true, latitude: true },
-      })
-      const supercluster = new Supercluster<{ id: string; cluster: false; path: string }, { cluster: true }>({ maxZoom: 22 })
-      const clustersData = supercluster.load(
-        media.map((media) => ({
-          type: "Feature",
-          geometry: { type: "Point", coordinates: [media.longitude!, media.latitude!] },
-          properties: { cluster: false, id: media.id, path: media.path },
-        })),
-      )
-      const clusters = clustersData.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], coords.zoom || 5)
-      return clusters.map((c) => ({
-        ...c,
-        properties: c.properties.cluster
-          ? { ...c.properties, media: supercluster.getLeaves(c.properties.cluster_id).map((c) => c.properties.path) }
-          : c.properties,
-      }))
-    }),
-  uploadMedia: protectedProcedure
-    .input(
-      z.object({
-        tripId: z.string(),
-        image: z.object({
-          path: z.string(),
-          latitude: z.number(),
-          longitude: z.number(),
-          assetId: z.string(),
-          timestamp: z.date(),
-        }),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      await ctx.prisma.tripMedia.create({
-        data: { tripId: input.tripId, ...input.image, creatorId: ctx.user.id },
-      })
-      return input.image.timestamp
-    }),
+  users: tripUsersRouter,
+  media: mediaRouter,
 })

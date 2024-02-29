@@ -1,4 +1,5 @@
 {
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "organizeImports": { "enabled": true },
   "formatter": {
     "enabled": true,
@@ -8,6 +9,9 @@
     "lineWidth": 130,
     "lineEnding": "lf",
     "ignore": []
+  },
+  "files": {
+    "ignore": ["node_modules", ".turbo", ".expo"]
   },
   "javascript": {
     "formatter": {

@@ -14,7 +14,7 @@ import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
 
 export default function LoginScreen() {
   useKeyboardController()
-  const queryClient = api.useUtils()
+  const utils = api.useUtils()
   const navigation = useRouter()
 
   const form = useForm({ defaultValues: { email: "", password: "" } })
@@ -22,7 +22,7 @@ export default function LoginScreen() {
   const { mutate, isLoading, error } = api.auth.login.useMutation({
     onSuccess: async (data) => {
       await AsyncStorage.setItem(AUTH_TOKEN, data.token)
-      queryClient.user.me.setData(undefined, data.user)
+      utils.user.me.setData(undefined, data.user)
       if (navigation.canGoBack()) {
         navigation.back()
       } else {
