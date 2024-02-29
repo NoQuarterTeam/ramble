@@ -34,7 +34,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 16.x
+          node-version: 18.x
           cache: pnpm
 
       - name: Setup EAS
@@ -50,4 +50,4 @@ jobs:
         uses: expo/expo-github-action/preview@v8
         with:
           working-directory: apps/expo
-          command: eas update --branch production --message "${{ github.event.head_commit.message }}"
+          command: eas update --branch production --message "${{ github.event.head_commit.message }}" && npx sentry-expo-upload-sourcemaps dist
