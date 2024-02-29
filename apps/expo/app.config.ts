@@ -73,15 +73,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   plugins: [
     "expo-router",
     "expo-font",
-    [
-      "@sentry/react-native/expo",
-      {
-        url: "https://sentry.io/",
-        authToken: process.env.SENTRY_AUTH_TOKEN,
-        project: "ramble-app",
-        organization: "noquarter",
-      },
-    ],
+    ["@sentry/react-native/expo", { project: "ramble-app", organization: "noquarter" }],
     [
       "expo-build-properties",
       {
