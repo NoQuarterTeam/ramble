@@ -257,10 +257,7 @@ export const tripRouter = createTRPCRouter({
         orderBy: { createdAt: "desc" },
         select: { id: true, path: true, longitude: true, latitude: true },
       })
-      const supercluster = new Supercluster<{ id: string; cluster: false; path: string }, { cluster: true }>({
-        maxZoom: 16,
-        radius: 50,
-      })
+      const supercluster = new Supercluster<{ id: string; cluster: false; path: string }, { cluster: true }>({ maxZoom: 22 })
       const clustersData = supercluster.load(
         media.map((media) => ({
           type: "Feature",
