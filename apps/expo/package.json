@@ -4,6 +4,7 @@
   "main": "expo-router/entry",
   "scripts": {
     "dev": "APP_VARIANT=development expo start --ios --dev-client",
+    "start": "APP_VARIANT=development expo start --dev-client",
     "build:all": "pnpm run build:production && pnpm run build:development && pnpm run build:preview",
     "build:production": "eas build --profile production --platform all --auto-submit",
     "build:preview": "eas build --profile preview --platform all",

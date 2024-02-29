@@ -1,16 +1,150 @@
+import { useLocalSearchParams } from "expo-router"
+import * as React from "react"
+import { LayoutChangeEvent, View } from "react-native"
+
 import { createImageUrl } from "@ramble/shared"
 import { Image } from "expo-image"
-import { useLocalSearchParams } from "expo-router"
-import { View } from "react-native"
+import { Gesture, GestureDetector } from "react-native-gesture-handler"
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { ScreenView } from "~/components/ui/ScreenView"
+import { height, width } from "~/lib/device"
+
+const clamp = (value: number, min: number, max: number): number => {
+  "worklet"
+  return Math.min(Math.max(min, value), max)
+}
+
+const DOUBLE_ZOOM = 3
 
 export default function TripImage() {
+  const centerX = useSharedValue(0)
+  const centerY = useSharedValue(0)
+  const onImageLayout = (event: LayoutChangeEvent) => {
+    const { x, y, width, height } = event.nativeEvent.layout
+    centerX.value = x + width / 2
+    centerY.value = y + height / 2
+  }
   const { path } = useLocalSearchParams<{ path: string }>()
+
+  const prevScale = useSharedValue(1)
+  const scale = useSharedValue(1)
+  const initialFocal = { x: useSharedValue(0), y: useSharedValue(0) }
+  const prevFocal = { x: useSharedValue(0), y: useSharedValue(0) }
+  const focal = { x: useSharedValue(0), y: useSharedValue(0) }
+  const prevTranslate = { x: useSharedValue(0), y: useSharedValue(0) }
+  const translate = { x: useSharedValue(0), y: useSharedValue(0) }
+
+  const moveIntoView = () => {
+    "worklet"
+    if (scale.value > 1) {
+      const rightLimit = (width * (scale.value - 1)) / 2
+      const leftLimit = -rightLimit
+      const totalTranslateX = translate.x.value + focal.x.value
+
+      const bottomLimit = (height * (scale.value - 1)) / 2
+      const topLimit = -bottomLimit
+      const totalTranslateY = translate.y.value + focal.y.value
+
+      if (totalTranslateX > rightLimit) {
+        translate.x.value = withTiming(rightLimit)
+        focal.x.value = withTiming(0)
+      } else if (totalTranslateX < leftLimit) {
+        translate.x.value = withTiming(leftLimit)
+        focal.x.value = withTiming(0)
+      }
+
+      if (totalTranslateY > bottomLimit) {
+        translate.y.value = withTiming(bottomLimit)
+        focal.y.value = withTiming(0)
+      } else if (totalTranslateY < topLimit) {
+        translate.y.value = withTiming(topLimit)
+        focal.y.value = withTiming(0)
+      }
+    } else {
+      translate.x.value = withTiming(0)
+      focal.x.value = withTiming(0)
+      translate.y.value = withTiming(0)
+      focal.y.value = withTiming(0)
+    }
+  }
+
+  const panGesture = Gesture.Pan()
+    .onStart(() => {
+      prevTranslate.x.value = translate.x.value
+      prevTranslate.y.value = translate.y.value
+    })
+    .onUpdate((event) => {
+      translate.x.value = prevTranslate.x.value + event.translationX
+      translate.y.value = prevTranslate.y.value + event.translationY
+    })
+    .onEnd(() => {
+      moveIntoView()
+    })
+
+  const pinchGesture = Gesture.Pinch()
+    .onStart((event) => {
+      prevScale.value = scale.value
+      prevFocal.x.value = focal.x.value
+      prevFocal.y.value = focal.y.value
+      initialFocal.x.value = event.focalX
+      initialFocal.y.value = event.focalY
+    })
+    .onUpdate((event) => {
+      scale.value = clamp(prevScale.value * event.scale, 1, 5)
+      focal.x.value = prevFocal.x.value + (centerX.value - initialFocal.x.value) * (scale.value - prevScale.value)
+      focal.y.value = prevFocal.y.value + (centerY.value - initialFocal.y.value) * (scale.value - prevScale.value)
+    })
+    .onEnd(() => {
+      moveIntoView()
+    })
+
+  const doubleTapGesture = Gesture.Tap()
+    .numberOfTaps(2)
+    .maxDuration(250)
+    .onStart((event) => {
+      if (scale.value === 1) {
+        scale.value = withTiming(DOUBLE_ZOOM)
+        focal.x.value = withTiming((centerX.value - event.x) * (DOUBLE_ZOOM - 1))
+        focal.y.value = withTiming((centerY.value - event.y) * (DOUBLE_ZOOM - 1))
+      } else {
+        prevScale.value = 1
+        scale.value = withTiming(1)
+        initialFocal.x.value = 0
+        initialFocal.y.value = 0
+        prevFocal.x.value = 0
+        prevFocal.y.value = 0
+        focal.x.value = withTiming(0)
+        focal.y.value = withTiming(0)
+        prevTranslate.x.value = 0
+        prevTranslate.y.value = 0
+        translate.x.value = withTiming(0)
+        translate.y.value = withTiming(0)
+      }
+    })
+
+  const styles = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateX: translate.x.value },
+        { translateY: translate.y.value },
+        { translateX: focal.x.value },
+        { translateY: focal.y.value },
+        { scale: scale.value },
+      ],
+    }
+  })
+
+  const simultaneousGestures = Gesture.Simultaneous(pinchGesture, panGesture)
+  const gestures = Gesture.Race(doubleTapGesture, simultaneousGestures)
 
   return (
     <ScreenView title="" containerClassName="px-0">
       <View className="pb-2 flex-1">
-        <Image source={{ uri: createImageUrl(path) }} className="flex-1 h-full" contentFit="contain" />
+        <GestureDetector gesture={gestures}>
+          <Animated.View style={[styles, { flex: 1 }]} onLayout={onImageLayout}>
+            <Image source={{ uri: createImageUrl(path) }} className="flex-1 h-full" contentFit="contain" />
+          </Animated.View>
+        </GestureDetector>
       </View>
     </ScreenView>
   )
