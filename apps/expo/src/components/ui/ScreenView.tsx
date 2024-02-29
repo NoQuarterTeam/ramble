@@ -7,6 +7,7 @@ import { merge } from "@ramble/shared"
 
 import { SafeAreaView } from "~/components/SafeAreaView"
 
+import { StatusBar } from "expo-status-bar"
 import { Icon } from "../Icon"
 import { BrandHeading } from "./BrandHeading"
 
@@ -22,6 +23,7 @@ export function ScreenView(props: Props) {
   const router = useRouter()
   return (
     <SafeAreaView>
+      <StatusBar style="auto" />
       <View className="flex-1">
         <View className="flex h-12 flex-row items-center justify-between px-4">
           <View className="flex-1">

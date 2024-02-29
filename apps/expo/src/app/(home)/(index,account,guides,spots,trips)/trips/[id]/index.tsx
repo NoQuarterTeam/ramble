@@ -23,7 +23,7 @@ import { ActivityIndicator, Alert, Linking, TouchableOpacity, View } from "react
 import DraggableFlatList, { type RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlist"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { createImageUrl, join } from "@ramble/shared"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createImageUrl, join } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
@@ -38,7 +38,7 @@ import { type RouterOutputs, api } from "~/lib/api"
 import { useMapCoords } from "~/lib/hooks/useMapCoords"
 import { useMapSettings } from "~/lib/hooks/useMapSettings"
 import { useMe } from "~/lib/hooks/useMe"
-import { useS3BulkUpload } from "~/lib/hooks/useS3"
+import { useS3QuickUpload } from "~/lib/hooks/useS3"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 export default function TripDetailScreen() {
@@ -47,6 +47,9 @@ export default function TripDetailScreen() {
 
   const { data, isLoading } = api.trip.detail.useQuery({ id })
   const trip = data?.trip
+  const startDate = trip?.startDate
+  const endDate = trip?.endDate
+  const latestMediaTimestamp = data?.latestMediaTimestamp
   const bounds = data?.bounds
   const center = data?.center
   const utils = api.useUtils()
@@ -89,67 +92,94 @@ export default function TripDetailScreen() {
     }
   }, [trip, me?.tripSyncEnabled, permissionResponse, requestPermission])
 
-  const [bulkUpload, { isLoading: isUploading }] = useS3BulkUpload()
+  const upload = useS3QuickUpload()
 
   const { mutate: uploadMedia } = api.trip.uploadMedia.useMutation({
-    onSuccess: (data) => {
-      utils.trip.detail.setData({ id }, (prev) => (prev ? { ...prev, latestMediaTimestamp: data } : prev))
+    onSuccess: (timestamp) => {
+      utils.trip.detail.setData({ id }, (prev) => (prev ? { ...prev, latestMediaTimestamp: timestamp } : prev))
     },
   })
 
-  const isSyncing = React.useRef(false)
+  const [isSyncing, setIsSyncing] = React.useState(false)
+  const hasStartedSyncing = React.useRef(false)
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: allow it
   React.useEffect(() => {
     async function loadImages() {
-      if (!permissionResponse || !permissionResponse?.granted || !me?.tripSyncEnabled || !trip) return
-      const isTripActive = dayjs(trip.startDate).isBefore(dayjs()) && dayjs(trip.endDate).isAfter(dayjs())
+      if (!permissionResponse?.granted || !me?.tripSyncEnabled || !startDate || !endDate || hasStartedSyncing.current) return
+
+      const isTripActive = dayjs(startDate).isBefore(dayjs()) && dayjs(endDate).isAfter(dayjs())
       if (!isTripActive) return
-      if (isSyncing.current) return
-      isSyncing.current = true
+      hasStartedSyncing.current = true
       try {
-        const createdAfter = data?.latestMediaTimestamp || dayjs(trip.startDate).startOf("day").toDate()
-        const createdBefore = dayjs(trip.endDate).endOf("day").toDate()
+        const createdAfter = latestMediaTimestamp || dayjs(startDate).startOf("day").toDate()
+        const createdBefore = dayjs(endDate).endOf("day").toDate()
         const pages = await getAssetsAsync({ createdAfter, createdBefore, mediaType: MediaType.photo, sortBy: "creationTime" })
         if (pages.totalCount === 0) return
-        // create images array of all paginated assets using end cursor to loop through all pages
-
-        let images = []
-
-        // const imagesToUpload = (
-        //   await Promise.all(
-        //     pages.assets.map(async (asset) => {
-        //       const info = await MediaLibrary.getAssetInfoAsync(asset)
-        //       if (!info.location) return undefined
-        //       return {
-        //         url: info.localUri || asset.uri,
-        //         key: undefined,
-        //         latitude: info.location.latitude,
-        //         longitude: info.location.longitude,
-        //         assetId: asset.id,
-        //         timestamp: dayjs(info.creationTime).toDate(),
-        //       }
-        //     }),
-        //   )
-        // ).filter(Boolean)
-        // if (imagesToUpload.length === 0) return
-        // const imagesWithKeys = await bulkUpload(imagesToUpload)
-
-        // uploadMedia({
-        //   tripId: id,
-        //   images: imagesWithKeys.filter(Boolean).map((data) => ({
-        //     path: data!.key!,
-        //     latitude: data!.latitude,
-        //     longitude: data!.longitude,
-        //     assetId: data!.assetId,
-        //     timestamp: data!.timestamp,
-        //   })),
-        // })
+        // console.log({ totalImagesFound: pages.totalCount })
+        let images: MediaLibrary.Asset[] = pages.assets
+        let endCursor = pages.endCursor
+        while (true) {
+          try {
+            const newPages = await getAssetsAsync({
+              after: endCursor,
+              createdAfter,
+              createdBefore,
+              mediaType: MediaType.photo,
+              sortBy: "creationTime",
+            })
+            images = images.concat(newPages.assets)
+            endCursor = newPages.endCursor
+            if (!newPages.hasNextPage) break
+          } catch {
+            console.log("Ooops")
+            break
+          }
+        }
+        const imagesToSync: (MediaLibrary.Asset & { latitude: number; longitude: number; url: string })[] = []
+        for (const image of images) {
+          try {
+            const info = await MediaLibrary.getAssetInfoAsync(image)
+            if (!info.location) continue
+            const imageWithData = {
+              ...image,
+              url: info.localUri || image.uri,
+              latitude: info.location.latitude,
+              longitude: info.location.longitude,
+            }
+            imagesToSync.push(imageWithData)
+          } catch (error) {
+            console.log(error)
+          }
+        }
+        // console.log({ imagesToSync: imagesToSync.length })
+        if (imagesToSync.length === 0) return
+        setIsSyncing(true)
+        for (const image of imagesToSync) {
+          try {
+            const key = await upload(image.url)
+            const payload = {
+              path: key,
+              url: image.url,
+              latitude: image.latitude,
+              longitude: image.longitude,
+              assetId: image.id,
+              timestamp: dayjs(image.creationTime).toDate(),
+            }
+            uploadMedia({ tripId: id, image: payload })
+          } catch (error) {
+            console.log(error)
+          }
+        }
       } catch (error) {
         console.log(error)
         toast({ title: "Error syncing images", type: "error" })
+      } finally {
+        setIsSyncing(false)
       }
     }
     loadImages()
-  }, [permissionResponse, trip, data, me, id, uploadMedia])
+  }, [permissionResponse?.granted, startDate, endDate, latestMediaTimestamp, me, id])
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: dont rerender
   const itemMarkers = React.useMemo(
@@ -180,6 +210,7 @@ export default function TripDetailScreen() {
   const [mapSettings, setMapSettings] = useMapSettings()
   const { data: mediaClusters } = api.trip.mediaClusters.useQuery(mapSettings ? { ...mapSettings, tripId: id } : undefined, {
     enabled: !!mapSettings,
+    keepPreviousData: true,
   })
 
   const onMapMove = ({ properties }: MapState) => {
@@ -210,7 +241,7 @@ export default function TripDetailScreen() {
                   point.properties.point_count > 150 ? "sq-20" : point.properties.point_count > 75 ? "sq-16" : "sq-14",
                 )}
               >
-                <View className="rounded-sm border-2 border-white h-full w-full">
+                <View className="rounded-sm border-2 border-white bg-background dark:bg-background-dark h-full w-full">
                   <Image source={{ uri: createImageUrl(point.properties.media[0]) }} style={{ width: "100%", height: "100%" }} />
                 </View>
                 <View className="absolute bg-blue-500 rounded-full sq-5 -top-1 -right-1 flex items-center justify-center">
@@ -297,7 +328,9 @@ export default function TripDetailScreen() {
                   }
                 : {
                     zoomLevel: 5,
-                    centerCoordinate: userLocation ? [userLocation.longitude, userLocation.latitude] : undefined,
+                    centerCoordinate: userLocation
+                      ? [userLocation.longitude, userLocation.latitude]
+                      : [INITIAL_LONGITUDE, INITIAL_LATITUDE],
                   }
           }
         />
@@ -350,20 +383,11 @@ export default function TripDetailScreen() {
             </View>
           )}
         </View>
-        {isUploading && (
+        {isSyncing && (
           <View className="flex items-center justify-center pt-2">
             <View className="flex items-center bg-primary px-4 py-2 rounded-full flex-row space-x-2">
               <ActivityIndicator size="small" color="white" />
               <Text className="text-white">Syncing photos</Text>
-            </View>
-          </View>
-        )}
-        {data?.latestMediaTimestamp && (
-          <View className="flex items-center justify-center pt-2">
-            <View className="flex items-center bg-primary px-4 py-2 rounded-full flex-row space-x-2">
-              <Text className="text-white">
-                latest media timestamp: {dayjs(data?.latestMediaTimestamp).format("DD/MM/YYYY HH:mm:ss")}
-              </Text>
             </View>
           </View>
         )}

@@ -254,7 +254,7 @@ export const tripRouter = createTRPCRouter({
           latitude: { gt: coords.minLat, lt: coords.maxLat },
           longitude: { gt: coords.minLng, lt: coords.maxLng },
         },
-        orderBy: { timestamp: "asc" },
+        orderBy: { createdAt: "desc" },
         select: { id: true, path: true, longitude: true, latitude: true },
       })
       const supercluster = new Supercluster<{ id: string; cluster: false; path: string }, { cluster: true }>({
@@ -280,20 +280,19 @@ export const tripRouter = createTRPCRouter({
     .input(
       z.object({
         tripId: z.string(),
-        images: z.array(
-          z.object({ path: z.string(), latitude: z.number(), longitude: z.number(), assetId: z.string(), timestamp: z.date() }),
-        ),
+        image: z.object({
+          path: z.string(),
+          latitude: z.number(),
+          longitude: z.number(),
+          assetId: z.string(),
+          timestamp: z.date(),
+        }),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      await ctx.prisma.tripMedia.createMany({
-        data: input.images.map((image) => ({ tripId: input.tripId, ...image, creatorId: ctx.user.id })),
-        skipDuplicates: true,
+      await ctx.prisma.tripMedia.create({
+        data: { tripId: input.tripId, ...input.image, creatorId: ctx.user.id },
       })
-      const trip = await ctx.prisma.trip.findUnique({
-        where: { id: input.tripId },
-        select: { media: { select: { timestamp: true } } },
-      })
-      return trip?.media[0]?.timestamp
+      return input.image.timestamp
     }),
 })
