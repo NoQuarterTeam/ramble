@@ -12,7 +12,7 @@ export function useS3Upload(): [(fileUrl: string) => Promise<string>, { isLoadin
   async function upload(fileUrl: string) {
     try {
       setIsLoading(true)
-      const type = fileUrl.split(".").pop()
+      const type = fileUrl.split(".").pop()?.toLowerCase()
       const key = `${assetPrefix}${v4()}.${type}`
       const res = await mutateAsync({ key })
       const resp = await fetch(fileUrl)
