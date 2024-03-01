@@ -247,7 +247,12 @@ function TripList({
 }) {
   const { id } = useLocalSearchParams<{ id: string }>()
   const [tripItems, setTripItems] = React.useState(trip.items)
-  const { mutate } = api.trip.updateOrder.useMutation()
+  const utils = api.useUtils()
+  const { mutate } = api.trip.updateOrder.useMutation({
+    onSuccess: () => {
+      utils.trip.detail.refetch({ id })
+    },
+  })
   const [activeItemIndex, setActiveItemIndex] = React.useState<number | null>(null)
   const activeIndexRef = React.useRef<number | null>(null)
 
