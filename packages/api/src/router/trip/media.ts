@@ -65,6 +65,7 @@ export const tripMediaRouter = createTRPCRouter({
     return ctx.prisma.tripMedia.findMany({
       take: 30,
       skip: input.skip,
+      orderBy: { timestamp: "desc" },
       select: { id: true, path: true, latitude: true, longitude: true },
       where: { deletedAt: null, tripId: input.tripId, trip: { users: { some: { id: ctx.user.id } } } },
     })
