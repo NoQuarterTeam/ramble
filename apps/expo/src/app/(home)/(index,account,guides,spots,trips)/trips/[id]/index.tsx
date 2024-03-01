@@ -144,7 +144,7 @@ export default function TripDetailScreen() {
             <MarkerView key={`${point.id || 0}${i}`} allowOverlap allowOverlapWithPuck coordinate={point.geometry.coordinates}>
               <TouchableOpacity
                 activeOpacity={0.7}
-                onPress={() => router.push(`/(home)/(trips)/trips/${id}/images?bounds=${bounds.join(",")}`)}
+                onPress={() => router.push(`/(home)/(trips)/trips/${id}/images/cluster?bounds=${bounds.join(",")}`)}
                 className={join(
                   "flex items-center justify-center relative",
                   point.properties.point_count > 150 ? "sq-20" : point.properties.point_count > 75 ? "sq-16" : "sq-14",

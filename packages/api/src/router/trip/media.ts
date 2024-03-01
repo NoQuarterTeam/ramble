@@ -56,6 +56,12 @@ export const mediaRouter = createTRPCRouter({
       },
     })
   }),
+  all: protectedProcedure.input(z.object({ tripId: z.string() })).query(({ ctx, input }) => {
+    return ctx.prisma.tripMedia.findMany({
+      take: 30,
+      where: { tripId: input.tripId, trip: { users: { some: { id: ctx.user.id } } } },
+    })
+  }),
   byId: protectedProcedure.input(z.object({ id: z.string() })).query(({ ctx, input }) => {
     return ctx.prisma.tripMedia.findUnique({ where: { id: input.id, trip: { users: { some: { id: ctx.user.id } } } } })
   }),
