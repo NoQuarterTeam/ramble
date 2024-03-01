@@ -53,7 +53,64 @@ export default function TripImages() {
   const [_status, requestPermission] = ImagePicker.useCameraPermissions()
 
   const [isUploading, setIsUploading] = React.useState(false)
+
+  const uploadAssets = async (assets: ImagePicker.ImagePickerResult["assets"]) => {
+    if (!assets) return
+    setIsUploading(true)
+    for (const asset of assets) {
+      if (!asset.assetId) continue // TODO: need to do somit here, as all camera images dont have asset id, guessing coz its not yet saved to local phone
+      const info = await MediaLibrary.getAssetInfoAsync(asset.assetId)
+      const image = {
+        ...asset,
+        id: info.id,
+        creationTime: info.creationTime,
+        url: info.localUri || asset.uri,
+        latitude: info.location?.latitude,
+        longitude: info.location?.longitude,
+      }
+      const key = await upload(image.url)
+      const payload = {
+        path: key,
+        url: image.url,
+        latitude: image.latitude || null,
+        longitude: image.longitude || null,
+        assetId: image.id,
+        timestamp: dayjs(image.creationTime).toDate(),
+      }
+      uploadMedia({ tripId: id, image: payload })
+    }
+    refetch()
+  }
   const handleOpenImageLibrary = async () => {
+    const perm = await requestPermission()
+    if (!perm.granted) {
+      return Alert.alert(
+        "Camera library permissions required",
+        "Please go to your phone's settings to grant camera permissions for Ramble",
+        [
+          { text: "Cancel", style: "cancel" },
+          { text: "Open settings", onPress: Linking.openSettings },
+        ],
+      )
+    }
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: false,
+        allowsMultipleSelection: true,
+        selectionLimit: 0,
+        quality: 0.2,
+      })
+      if (result.canceled || result.assets.length === 0) return
+      await uploadAssets(result.assets)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsUploading(false)
+    }
+  }
+
+  const handleOpenCamera = async () => {
     const perm = await requestPermission()
     if (!perm.granted) {
       return Alert.alert(
@@ -65,53 +122,19 @@ export default function TripImages() {
         ],
       )
     }
-
     try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: false,
+      const result = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
         allowsMultipleSelection: true,
-        selectionLimit: 0,
-        quality: 0.2,
+        exif: true,
       })
-      if (result.canceled || result.assets.length === 0) return
-
-      setIsUploading(true)
-      for (const asset of result.assets) {
-        if (!asset.assetId) continue
-        const info = await MediaLibrary.getAssetInfoAsync(asset.assetId)
-        const image = {
-          ...asset,
-          id: info.id,
-          creationTime: info.creationTime,
-          url: info.localUri || asset.uri,
-          latitude: info.location?.latitude,
-          longitude: info.location?.longitude,
-        }
-        const key = await upload(image.url)
-        const payload = {
-          path: key,
-          url: image.url,
-          latitude: image.latitude || null,
-          longitude: image.longitude || null,
-          assetId: image.id,
-          timestamp: dayjs(image.creationTime).toDate(),
-        }
-        uploadMedia({ tripId: id, image: payload })
-      }
-      refetch()
+      if (!result.assets || result.assets.length === 0) return
+      await uploadAssets(result.assets)
     } catch (error) {
       console.log(error)
     } finally {
       setIsUploading(false)
     }
-  }
-
-  const handleOpenCamera = async () => {
-    await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      exif: true,
-    })
   }
 
   return (
@@ -143,7 +166,7 @@ export default function TripImages() {
         <View className="p-4 flex items-center justify-center">
           <ActivityIndicator />
         </View>
-      ) : (
+      ) : !images ? null : (
         <View className="flex-1 relative">
           <FlashList
             showsVerticalScrollIndicator={false}
