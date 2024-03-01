@@ -1,20 +1,23 @@
+import dayjs from "dayjs"
+import * as FileSystem from "expo-file-system"
+import { Image } from "expo-image"
+import * as MediaLibrary from "expo-media-library"
 import { useLocalSearchParams, useRouter } from "expo-router"
-import { Trash } from "lucide-react-native"
+import { Download, Trash } from "lucide-react-native"
 import * as React from "react"
 import { Alert, LayoutChangeEvent, TouchableOpacity, View } from "react-native"
-
-import { createImageUrl } from "@ramble/shared"
-import dayjs from "dayjs"
-import { Image } from "expo-image"
-
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
+
+import { createImageUrl } from "@ramble/shared"
+
 import { Icon } from "~/components/Icon"
 import { ScreenView } from "~/components/ui/ScreenView"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
 import { height, width } from "~/lib/device"
+import { useMe } from "~/lib/hooks/useMe"
 
 const clamp = (value: number, min: number, max: number): number => {
   "worklet"
@@ -24,6 +27,7 @@ const clamp = (value: number, min: number, max: number): number => {
 const DOUBLE_ZOOM = 3
 
 export default function TripImage() {
+  const { me } = useMe()
   const { imageId, bounds } = useLocalSearchParams<{ id: string; imageId?: string; bounds?: string }>()
 
   const parsedBounds = bounds?.split(",").map(Number)
@@ -57,16 +61,16 @@ export default function TripImage() {
     ])
   }
 
-  // const handleDownload = async () => {
-  //   try {
-  //     if (!data) return
-  //     // const file = await FileSystem.downloadAsync(createImageUrl(data.path), FileSystem.documentDirectory + data.path)
-  //     // await MediaLibrary.saveToLibraryAsync(file.uri)
-  //   } catch (error) {
-  //     console.log(error)
-  //     toast({ title: "Failed to download image", type: "error" })
-  //   }
-  // }
+  const handleDownload = async () => {
+    try {
+      if (!data) return
+      const file = await FileSystem.downloadAsync(createImageUrl(data.path), FileSystem.documentDirectory + data.path)
+      await MediaLibrary.saveToLibraryAsync(file.uri)
+    } catch (error) {
+      console.log(error)
+      toast({ title: "Failed to download image", type: "error" })
+    }
+  }
 
   const centerX = useSharedValue(0)
   const centerY = useSharedValue(0)
@@ -194,18 +198,18 @@ export default function TripImage() {
       containerClassName="px-0"
       rightElement={
         imageId && (
-          <View className="space-x-4 flex flex-row">
-            {/* {data && me?.id === data?.creatorId && (
-            <TouchableOpacity className="px-1" onPress={handleDownload}>
-              <Icon icon={Download} size={18} />
-            </TouchableOpacity>
-          )} */}
+          <View className="space-x-3 flex flex-row">
+            {data && me?.id !== data?.creatorId && (
+              <TouchableOpacity className="p-1" onPress={handleDownload}>
+                <Icon icon={Download} size={18} />
+              </TouchableOpacity>
+            )}
             {/* <Link asChild push href={`/(home)/(trips)/trips/${id}/images/${imageId || ""}/edit`}>
               <TouchableOpacity className="px-1">
                 <Icon icon={MessageCircleHeart} size={18} />
               </TouchableOpacity>
             </Link> */}
-            <TouchableOpacity className="px-1" onPress={handleRemove} disabled={removeLoading}>
+            <TouchableOpacity className="p-1" onPress={handleRemove} disabled={removeLoading}>
               <Icon icon={Trash} size={18} />
             </TouchableOpacity>
           </View>

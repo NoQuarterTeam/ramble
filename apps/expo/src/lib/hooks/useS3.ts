@@ -12,8 +12,9 @@ export function useS3Upload(): [(fileUrl: string) => Promise<string>, { isLoadin
   async function upload(fileUrl: string) {
     try {
       setIsLoading(true)
-      const key = v4()
-      const res = await mutateAsync({ key: assetPrefix + key })
+      const type = fileUrl.split(".").pop()
+      const key = `${v4()}.${type}`
+      const res = await mutateAsync({ key: `${assetPrefix}${key}` })
       const resp = await fetch(fileUrl)
       const imageBody = await resp.blob()
       await fetch(res, { method: "PUT", body: imageBody })
@@ -31,8 +32,9 @@ export function useS3Upload(): [(fileUrl: string) => Promise<string>, { isLoadin
 export function useS3QuickUpload() {
   const { mutateAsync } = api.s3.createSignedUrl.useMutation()
   async function upload(fileUrl: string) {
-    const key = v4()
-    const res = await mutateAsync({ key: assetPrefix + key })
+    const type = fileUrl.split(".").pop()
+    const key = `${v4()}.${type}`
+    const res = await mutateAsync({ key: `${assetPrefix}${key}` })
     const resp = await fetch(fileUrl)
     const imageBody = await resp.blob()
     await fetch(res, { method: "PUT", body: imageBody })
