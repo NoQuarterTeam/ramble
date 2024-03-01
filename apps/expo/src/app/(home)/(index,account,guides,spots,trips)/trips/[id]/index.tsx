@@ -651,7 +651,7 @@ function ListFooter({ trip, hasNoItems }: { hasNoItems: boolean; trip: RouterOut
           )}
         >
           <Icon icon={PlusCircle} size={16} color={hasNoItems ? "white" : undefined} />
-          {hasNoItems && <Text className="font-600 text-sm text-white">Add you first stop</Text>}
+          {hasNoItems && <Text className="font-600 text-sm text-white">Add your first stop</Text>}
         </TouchableOpacity>
       </Link>
       <View className="flex h-full items-center justify-center">
