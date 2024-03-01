@@ -48,9 +48,6 @@ export default function TripDetailScreen() {
 
   const { data, isLoading } = api.trip.detail.useQuery({ id })
   const trip = data?.trip
-  const startDate = trip?.startDate
-  const endDate = trip?.endDate
-  const latestMediaTimestamp = data?.latestMediaTimestamp
   const bounds = data?.bounds
   const center = data?.center
   const utils = api.useUtils()
@@ -93,14 +90,6 @@ export default function TripDetailScreen() {
     }
   }, [trip, me?.tripSyncEnabled, permissionResponse, requestPermission])
 
-  const upload = useS3QuickUpload()
-
-  const { mutate: uploadMedia } = api.trip.media.upload.useMutation({
-    onSuccess: (timestamp) => {
-      utils.trip.detail.setData({ id }, (prev) => (prev ? { ...prev, latestMediaTimestamp: timestamp } : prev))
-    },
-  })
-
   // biome-ignore lint/correctness/useExhaustiveDependencies: dont rerender
   const itemMarkers = React.useMemo(
     () =>
@@ -132,85 +121,6 @@ export default function TripDetailScreen() {
     mapSettings ? { ...mapSettings, tripId: id } : undefined,
     { enabled: !!mapSettings, keepPreviousData: true },
   )
-
-  const [isSyncing, setIsSyncing] = React.useState(false)
-  const hasStartedSyncing = React.useRef(false)
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: allow it
-  React.useEffect(() => {
-    async function loadImages() {
-      if (!permissionResponse?.granted || !me?.tripSyncEnabled || !startDate || !endDate || hasStartedSyncing.current) return
-
-      const isTripActive = dayjs(startDate).isBefore(dayjs()) && dayjs(endDate).isAfter(dayjs())
-      if (!isTripActive) return
-      hasStartedSyncing.current = true
-      try {
-        setIsSyncing(true)
-        const createdAfter = latestMediaTimestamp
-          ? dayjs(latestMediaTimestamp)
-              .add(1, "millisecond") // need this to make query exlcude latest
-              .toDate()
-          : dayjs(startDate).startOf("day").toDate()
-        const createdBefore = dayjs(endDate).endOf("day").toDate()
-        const pages = await getAssetsAsync({ createdAfter, createdBefore, mediaType: MediaType.photo, sortBy: "creationTime" })
-        if (pages.totalCount === 0) return
-        let images: MediaLibrary.Asset[] = pages.assets
-        let endCursor = pages.endCursor
-        while (true) {
-          const newPages = await getAssetsAsync({
-            after: endCursor,
-            createdAfter,
-            createdBefore,
-            mediaType: MediaType.photo,
-            sortBy: "creationTime",
-          })
-          images = images.concat(newPages.assets)
-          endCursor = newPages.endCursor
-          if (!newPages.hasNextPage) break
-        }
-        const imagesToSync: (MediaLibrary.Asset & { latitude: number; longitude: number; url: string })[] = []
-        for (const image of images) {
-          try {
-            const info = await MediaLibrary.getAssetInfoAsync(image)
-            if (!info.location) continue
-            const imageWithData = {
-              ...image,
-              url: info.localUri || image.uri,
-              latitude: info.location.latitude,
-              longitude: info.location.longitude,
-            }
-            imagesToSync.push(imageWithData)
-          } catch (error) {
-            console.log(error)
-          }
-        }
-        if (imagesToSync.length === 0) return
-        for (const image of imagesToSync) {
-          try {
-            const key = await upload(image.url)
-            const payload = {
-              path: key,
-              url: image.url,
-              latitude: image.latitude,
-              longitude: image.longitude,
-              assetId: image.id,
-              timestamp: dayjs(image.creationTime).toDate(),
-            }
-            uploadMedia({ tripId: id, image: payload })
-          } catch (error) {
-            console.log(error)
-          }
-        }
-        refetch()
-      } catch (error) {
-        console.log(error)
-        toast({ title: "Error syncing images", type: "error" })
-      } finally {
-        setIsSyncing(false)
-      }
-    }
-    loadImages()
-  }, [permissionResponse?.granted, startDate, endDate, latestMediaTimestamp, me, id])
 
   const onMapMove = ({ properties }: MapState) => {
     if (!properties.bounds) return
@@ -385,13 +295,13 @@ export default function TripDetailScreen() {
             </View>
           )}
         </View>
-        {isSyncing && (
-          <View className="flex items-center justify-center pt-2">
-            <View className="flex items-center bg-primary px-4 py-2 rounded-full flex-row space-x-2">
-              <ActivityIndicator size="small" color="white" />
-              <Text className="text-white">Syncing photos</Text>
-            </View>
-          </View>
+        {me.tripSyncEnabled && permissionResponse?.granted && data && (
+          <TripImageSync
+            startDate={data.trip.startDate}
+            endDate={data.trip.endDate}
+            latestMediaTimestamp={data.latestMediaTimestamp}
+            onDone={refetch}
+          />
         )}
       </View>
 
@@ -417,6 +327,109 @@ export default function TripDetailScreen() {
             }}
           />
         )}
+      </View>
+    </View>
+  )
+}
+
+function TripImageSync({
+  startDate,
+  endDate,
+  latestMediaTimestamp,
+  onDone,
+}: { startDate: Date; endDate: Date; latestMediaTimestamp: Date | undefined; onDone: () => void }) {
+  const { id } = useLocalSearchParams<{ id: string }>()
+  const utils = api.useUtils()
+
+  const upload = useS3QuickUpload()
+
+  const { mutate: uploadMedia } = api.trip.media.upload.useMutation({
+    onSuccess: (timestamp) => {
+      utils.trip.detail.setData({ id }, (prev) => (prev ? { ...prev, latestMediaTimestamp: timestamp } : prev))
+    },
+  })
+  const [isSyncing, setIsSyncing] = React.useState(false)
+  const hasStartedSyncing = React.useRef(false)
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: allow it
+  React.useEffect(() => {
+    async function loadImages() {
+      const isTripActive = dayjs(startDate).isBefore(dayjs()) && dayjs(endDate).isAfter(dayjs())
+      if (!isTripActive) return
+      hasStartedSyncing.current = true
+      try {
+        setIsSyncing(true)
+        const createdAfter = latestMediaTimestamp
+          ? dayjs(latestMediaTimestamp)
+              .add(1, "millisecond") // need this to make query exlcude latest
+              .toDate()
+          : dayjs(startDate).startOf("day").toDate()
+        const createdBefore = dayjs(endDate).endOf("day").toDate()
+        const pages = await getAssetsAsync({ createdAfter, createdBefore, mediaType: MediaType.photo, sortBy: "creationTime" })
+        if (pages.totalCount === 0) return
+        let images: MediaLibrary.Asset[] = pages.assets
+        let endCursor = pages.endCursor
+        while (true) {
+          const newPages = await getAssetsAsync({
+            after: endCursor,
+            createdAfter,
+            createdBefore,
+            mediaType: MediaType.photo,
+            sortBy: "creationTime",
+          })
+          images = images.concat(newPages.assets)
+          endCursor = newPages.endCursor
+          if (!newPages.hasNextPage) break
+        }
+        const imagesToSync: (MediaLibrary.Asset & { latitude: number; longitude: number; url: string })[] = []
+        for (const image of images) {
+          try {
+            const info = await MediaLibrary.getAssetInfoAsync(image)
+            if (!info.location) continue
+            const imageWithData = {
+              ...image,
+              url: info.localUri || image.uri,
+              latitude: info.location.latitude,
+              longitude: info.location.longitude,
+            }
+            imagesToSync.push(imageWithData)
+          } catch (error) {
+            console.log(error)
+          }
+        }
+        if (imagesToSync.length === 0) return
+        for (const image of imagesToSync) {
+          try {
+            const key = await upload(image.url)
+            const payload = {
+              path: key,
+              url: image.url,
+              latitude: image.latitude,
+              longitude: image.longitude,
+              assetId: image.id,
+              timestamp: dayjs(image.creationTime).toDate(),
+            }
+            uploadMedia({ tripId: id, image: payload })
+          } catch (error) {
+            console.log(error)
+          }
+        }
+        onDone()
+      } catch (error) {
+        console.log(error)
+        toast({ title: "Error syncing images", type: "error" })
+      } finally {
+        setIsSyncing(false)
+      }
+    }
+    loadImages()
+  }, [startDate, endDate, latestMediaTimestamp, id])
+  if (!isSyncing) return null
+  return (
+    <View className="flex items-center justify-center pt-2">
+      <View className="flex items-center bg-primary px-4 py-2 rounded-full flex-row space-x-2">
+        <ActivityIndicator size="small" color="white" />
+        <Text className="text-white">Syncing photos</Text>
       </View>
     </View>
   )
