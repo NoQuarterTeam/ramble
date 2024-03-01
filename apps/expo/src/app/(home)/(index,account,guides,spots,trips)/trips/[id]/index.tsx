@@ -417,8 +417,6 @@ function TripImageSync({
               assetId: image.id,
               timestamp: dayjs(image.creationTime).toDate(),
             }
-            console.log("are we syncing????")
-
             uploadMedia({ tripId: id, image: payload })
           } catch (error) {
             console.log(error)

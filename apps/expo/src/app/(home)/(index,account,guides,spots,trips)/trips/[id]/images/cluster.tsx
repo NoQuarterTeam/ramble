@@ -3,14 +3,14 @@ import { FlashList } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import { Link, useLocalSearchParams } from "expo-router"
 import * as React from "react"
-import { TouchableOpacity, View } from "react-native"
+import { TouchableOpacity } from "react-native"
 import { ScreenView } from "~/components/ui/ScreenView"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
 import { width } from "~/lib/device"
 
-const size = (width - 16) / 3
+const size = width / 3
 
 export default function TripImagesCluster() {
   const { id, bounds } = useLocalSearchParams<{ id: string; bounds?: string }>()
@@ -41,20 +41,15 @@ export default function TripImagesCluster() {
     <ScreenView title="" containerClassName="px-0">
       <FlashList
         showsVerticalScrollIndicator={false}
-        estimatedItemSize={142}
+        estimatedItemSize={size}
         onEndReached={handleLoadMore}
         numColumns={3}
         ListEmptyComponent={<Text className="text-center">No images yet</Text>}
         data={images}
-        ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
         renderItem={({ item }) => (
           <Link href={`/(home)/(trips)/trips/${id}/images/${item.id}?bounds=${bounds}`} asChild>
-            <TouchableOpacity>
-              <Image
-                className="bg-gray-200 dark:bg-gray-700"
-                source={{ uri: createImageUrl(item.path) }}
-                style={{ width: size, height: size }}
-              />
+            <TouchableOpacity style={{ width: size, height: size }}>
+              <Image className="bg-gray-200 dark:bg-gray-700 h-full w-full" source={{ uri: createImageUrl(item.path) }} />
             </TouchableOpacity>
           </Link>
         )}

@@ -18,7 +18,7 @@ import { api } from "~/lib/api"
 import { width } from "~/lib/device"
 import { useS3QuickUpload } from "~/lib/hooks/useS3"
 
-const size = (width - 16) / 3
+const size = width / 3
 
 export default function TripImages() {
   const { id } = useLocalSearchParams<{ id: string }>()
@@ -52,6 +52,7 @@ export default function TripImages() {
   })
   const [_status, requestPermission] = ImagePicker.useCameraPermissions()
 
+  const [isUploading, setIsUploading] = React.useState(false)
   const handleOpenImageLibrary = async () => {
     const perm = await requestPermission()
     if (!perm.granted) {
@@ -75,6 +76,7 @@ export default function TripImages() {
       })
       if (result.canceled || result.assets.length === 0) return
 
+      setIsUploading(true)
       for (const asset of result.assets) {
         if (!asset.assetId) continue
         const info = await MediaLibrary.getAssetInfoAsync(asset.assetId)
@@ -95,13 +97,13 @@ export default function TripImages() {
           assetId: image.id,
           timestamp: dayjs(image.creationTime).toDate(),
         }
-        console.log("(----------IS THIS HAPPENING MULTIPLE TIMESS???? ------------")
-
         uploadMedia({ tripId: id, image: payload })
       }
       refetch()
     } catch (error) {
       console.log(error)
+    } finally {
+      setIsUploading(false)
     }
   }
 
@@ -142,31 +144,36 @@ export default function TripImages() {
           <ActivityIndicator />
         </View>
       ) : (
-        <FlashList
-          showsVerticalScrollIndicator={false}
-          estimatedItemSize={142}
-          onEndReached={handleLoadMore}
-          numColumns={3}
-          ListEmptyComponent={<Text className="text-center">No images yet</Text>}
-          data={images}
-          ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
-          renderItem={({ item }) => (
-            <Link href={`/(home)/(trips)/trips/${id}/images/${item.id}`} asChild>
-              <TouchableOpacity className="relative">
-                <Image
-                  className="bg-gray-200 dark:bg-gray-700"
-                  source={{ uri: createImageUrl(item.path) }}
-                  style={{ width: size, height: size }}
-                />
-                {(!item.latitude || !item.longitude) && (
-                  <View className="absolute bottom-1 left-1 flex items-center justify-center bg-background sq-6 rounded-full dark:bg-background-dark">
-                    <Icon icon={MapPinOff} size={16} />
-                  </View>
-                )}
-              </TouchableOpacity>
-            </Link>
+        <View className="flex-1 relative">
+          <FlashList
+            showsVerticalScrollIndicator={false}
+            estimatedItemSize={size}
+            onEndReached={handleLoadMore}
+            numColumns={3}
+            ListEmptyComponent={<Text className="text-center">No images yet</Text>}
+            data={images}
+            renderItem={({ item }) => (
+              <Link href={`/(home)/(trips)/trips/${id}/images/${item.id}`} asChild>
+                <TouchableOpacity style={{ width: size, height: size }} className="relative">
+                  <Image className="bg-gray-200 dark:bg-gray-700 w-full h-full" source={{ uri: createImageUrl(item.path) }} />
+                  {(!item.latitude || !item.longitude) && (
+                    <View className="absolute bottom-1 left-1 flex items-center justify-center bg-background sq-6 rounded-full dark:bg-background-dark">
+                      <Icon icon={MapPinOff} size={16} />
+                    </View>
+                  )}
+                </TouchableOpacity>
+              </Link>
+            )}
+          />
+          {isUploading && (
+            <View className="absolute top-2 left-0 right-0 flex items-center justify-center">
+              <View className="flex items-center bg-primary px-4 py-2 rounded-full flex-row space-x-2">
+                <ActivityIndicator size="small" color="white" />
+                <Text className="text-white">Uploading</Text>
+              </View>
+            </View>
           )}
-        />
+        </View>
       )}
     </ScreenView>
   )
