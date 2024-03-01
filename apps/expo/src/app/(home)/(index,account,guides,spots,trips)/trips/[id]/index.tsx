@@ -17,11 +17,12 @@ import * as MediaLibrary from "expo-media-library"
 import { MediaType, getAssetsAsync } from "expo-media-library"
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
-import { BookImage, ChevronLeft, Edit2, Flag, Home, MapPin, PlusCircle, Users } from "lucide-react-native"
+import { ChevronLeft, Edit2, Flag, Home, Image as ImageIcon, MapPin, PlusCircle, Users } from "lucide-react-native"
 import * as React from "react"
 import { ActivityIndicator, Alert, Linking, TouchableOpacity, View } from "react-native"
 import DraggableFlatList, { type RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlist"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import * as DropdownMenu from "zeego/dropdown-menu"
 
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createImageUrl, join } from "@ramble/shared"
 
@@ -39,7 +40,6 @@ import { useMapCoords } from "~/lib/hooks/useMapCoords"
 import { useMapSettings } from "~/lib/hooks/useMapSettings"
 import { useMe } from "~/lib/hooks/useMe"
 import { useS3QuickUpload } from "~/lib/hooks/useS3"
-
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 export default function TripDetailScreen() {
@@ -272,17 +272,17 @@ export default function TripDetailScreen() {
               )}
             </View>
           </View>
-          {trip && (
+          {trip && me && (
             <View className="flex flex-row items-center space-x-1">
               <Link push href={`/${tab}/trips/${id}/images`} asChild>
                 <TouchableOpacity
                   className="sq-10 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
                   activeOpacity={0.8}
                 >
-                  <Icon icon={BookImage} size={16} />
+                  <Icon icon={ImageIcon} size={16} />
                 </TouchableOpacity>
               </Link>
-              {trip.creatorId === me?.id && (
+              {trip.creatorId === me.id && (
                 <Link push href={`/${tab}/trips/${id}/users`} asChild>
                   <TouchableOpacity
                     className="sq-10 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
@@ -587,11 +587,11 @@ const TripItem = React.memo(function _TripItem({
         style={{ width: ITEM_WIDTH }}
       >
         <View style={{ opacity: isActive ? 0 : 1 }}>
-          <Link push href={`/(home)/(trips)/trips/${id}/add?order=${addBeforeOrder}`} asChild>
+          <AddTripItemMenu order={addBeforeOrder}>
             <TouchableOpacity className="bg-background dark:bg-background-dark rounded-full p-2">
               <Icon icon={PlusCircle} size={16} />
             </TouchableOpacity>
-          </Link>
+          </AddTripItemMenu>
         </View>
 
         <View className="bg-background dark:bg-background-dark relative h-full w-full flex-1 rounded">
@@ -661,10 +661,9 @@ function ListHeader({ trip }: { trip: RouterOutputs["trip"]["detail"]["trip"] })
 }
 
 function ListFooter({ trip, hasNoItems }: { hasNoItems: boolean; trip: RouterOutputs["trip"]["detail"]["trip"] }) {
-  const { id } = useLocalSearchParams<{ id: string }>()
   return (
     <View className="flex h-full flex-row items-center space-x-2 pl-2">
-      <Link push href={`/(home)/(trips)/trips/${id}/add`} asChild>
+      <AddTripItemMenu>
         <TouchableOpacity
           className={join(
             "bg-background dark:bg-background-dark flex flex-row items-center space-x-2 rounded-full p-2",
@@ -674,7 +673,7 @@ function ListFooter({ trip, hasNoItems }: { hasNoItems: boolean; trip: RouterOut
           <Icon icon={PlusCircle} size={16} color={hasNoItems ? "white" : undefined} />
           {hasNoItems && <Text className="font-600 text-sm text-white">Add your first stop</Text>}
         </TouchableOpacity>
-      </Link>
+      </AddTripItemMenu>
       <View className="flex h-full items-center justify-center">
         <View
           style={{ width: HEADER_FOOTER_WIDTH, height: HEADER_FOOTER_WIDTH }}
@@ -685,5 +684,44 @@ function ListFooter({ trip, hasNoItems }: { hasNoItems: boolean; trip: RouterOut
         </View>
       </View>
     </View>
+  )
+}
+
+function AddTripItemMenu({ order, children }: { order?: number; children: React.ReactElement }) {
+  const { id } = useLocalSearchParams<{ id: string }>()
+  const coords = useMapCoords((s) => s.coords)
+  const router = useRouter()
+
+  return (
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger asChild>{children}</DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Item key="add-stop" onSelect={() => router.push(`/(home)/(trips)/trips/${id}/add-location?order=${order}`)}>
+          <DropdownMenu.ItemIcon ios={{ name: "mappin.and.ellipse", pointSize: 10, scale: "large" }} />
+          <DropdownMenu.ItemTitle>Add location</DropdownMenu.ItemTitle>
+        </DropdownMenu.Item>
+        <DropdownMenu.Item
+          key="new-spot"
+          onSelect={() => {
+            const searchParams = new URLSearchParams({
+              initialLng: coords[0].toString(),
+              initialLat: coords[1].toString(),
+              tripId: id,
+              order: order?.toString() || "",
+            })
+            router.push(`/new/?${searchParams}`)
+          }}
+        >
+          <DropdownMenu.ItemIcon ios={{ name: "plus.circle", pointSize: 10, scale: "large" }} />
+          <DropdownMenu.ItemTitle>Add a new spot</DropdownMenu.ItemTitle>
+        </DropdownMenu.Item>
+        <DropdownMenu.Item key="find-spot" onSelect={() => router.push(`/(home)/(trips)/trips/${id}/find-spot?order=${order}`)}>
+          <DropdownMenu.ItemIcon ios={{ name: "magnifyingglass", pointSize: 10, scale: "large" }} />
+          <DropdownMenu.ItemTitle>Find an existing spot</DropdownMenu.ItemTitle>
+        </DropdownMenu.Item>
+
+        <DropdownMenu.Arrow />
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
   )
 }

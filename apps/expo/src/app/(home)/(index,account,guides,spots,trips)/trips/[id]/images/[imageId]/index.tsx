@@ -2,8 +2,8 @@ import dayjs from "dayjs"
 import * as FileSystem from "expo-file-system"
 import { Image } from "expo-image"
 import * as MediaLibrary from "expo-media-library"
-import { useLocalSearchParams, useRouter } from "expo-router"
-import { Download, Trash } from "lucide-react-native"
+import { Link, useLocalSearchParams, useRouter } from "expo-router"
+import { Download, MapPin, Trash } from "lucide-react-native"
 import * as React from "react"
 import { Alert, LayoutChangeEvent, TouchableOpacity, View } from "react-native"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
@@ -12,6 +12,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-na
 import { createImageUrl } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
+import { Button } from "~/components/ui/Button"
 import { ScreenView } from "~/components/ui/ScreenView"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
@@ -28,7 +29,7 @@ const DOUBLE_ZOOM = 3
 
 export default function TripImage() {
   const { me } = useMe()
-  const { imageId, bounds } = useLocalSearchParams<{ id: string; imageId?: string; bounds?: string }>()
+  const { id, imageId, bounds } = useLocalSearchParams<{ id: string; imageId?: string; bounds?: string }>()
 
   const parsedBounds = bounds?.split(",").map(Number)
 
@@ -38,11 +39,17 @@ export default function TripImage() {
   )
 
   const router = useRouter()
+
   const utils = api.useUtils()
   const { mutate, isLoading: removeLoading } = api.trip.media.remove.useMutation({
     onSuccess: () => {
-      if (parsedBounds && imageId) {
-        utils.trip.media.byBounds.setData({ bounds: parsedBounds }, (prev) =>
+      if (!imageId) return
+      if (parsedBounds) {
+        utils.trip.media.byBounds.setData({ tripId: id, skip: 0, bounds: parsedBounds }, (prev) =>
+          prev ? prev.filter((media) => media.id !== imageId) : prev,
+        )
+      } else {
+        utils.trip.media.all.setData({ tripId: id, skip: 0 }, (prev) =>
           prev ? prev.filter((media) => media.id !== imageId) : prev,
         )
       }
@@ -88,6 +95,7 @@ export default function TripImage() {
   const prevTranslate = { x: useSharedValue(0), y: useSharedValue(0) }
   const translate = { x: useSharedValue(0), y: useSharedValue(0) }
 
+  const isActive = useSharedValue(false)
   const moveIntoView = () => {
     "worklet"
     if (scale.value > 1) {
@@ -115,7 +123,9 @@ export default function TripImage() {
         focal.y.value = withTiming(0)
       }
     } else {
-      scale.value = withTiming(1)
+      scale.value = withTiming(1, undefined, () => {
+        isActive.value = false
+      })
       translate.x.value = withTiming(0)
       focal.x.value = withTiming(0)
       translate.y.value = withTiming(0)
@@ -125,6 +135,7 @@ export default function TripImage() {
 
   const panGesture = Gesture.Pan()
     .onStart(() => {
+      isActive.value = true
       prevTranslate.x.value = translate.x.value
       prevTranslate.y.value = translate.y.value
     })
@@ -138,6 +149,7 @@ export default function TripImage() {
 
   const pinchGesture = Gesture.Pinch()
     .onStart((event) => {
+      isActive.value = true
       prevScale.value = scale.value
       prevFocal.x.value = focal.x.value
       prevFocal.y.value = focal.y.value
@@ -158,12 +170,15 @@ export default function TripImage() {
     .maxDuration(250)
     .onStart((event) => {
       if (scale.value === 1) {
+        isActive.value = true
         scale.value = withTiming(DOUBLE_ZOOM)
         focal.x.value = withTiming((centerX.value - event.x) * (DOUBLE_ZOOM - 1))
         focal.y.value = withTiming((centerY.value - event.y) * (DOUBLE_ZOOM - 1))
       } else {
         prevScale.value = 1
-        scale.value = withTiming(1)
+        scale.value = withTiming(1, undefined, () => {
+          isActive.value = false
+        })
         initialFocal.x.value = 0
         initialFocal.y.value = 0
         prevFocal.x.value = 0
@@ -179,6 +194,7 @@ export default function TripImage() {
 
   const styles = useAnimatedStyle(() => {
     return {
+      zIndex: isActive.value ? 10 : 0,
       transform: [
         { translateX: translate.x.value },
         { translateY: translate.y.value },
@@ -189,8 +205,12 @@ export default function TripImage() {
     }
   })
 
-  const simultaneousGestures = Gesture.Simultaneous(pinchGesture, panGesture)
-  const gestures = Gesture.Race(doubleTapGesture, simultaneousGestures)
+  const buttonStyles = useAnimatedStyle(() => {
+    return {
+      opacity: isActive.value ? 0 : 1,
+    }
+  })
+  const gestures = Gesture.Race(doubleTapGesture, pinchGesture, panGesture)
 
   return (
     <ScreenView
@@ -217,12 +237,29 @@ export default function TripImage() {
       }
     >
       {isLoading || !data ? null : (
-        <View className="pb-2 flex-1">
+        <View className="relative pb-2 flex-1">
           <GestureDetector gesture={gestures}>
             <Animated.View style={[styles, { flex: 1 }]} onLayout={onImageLayout}>
               <Image source={{ uri: createImageUrl(data.path) }} className="flex-1 h-full" contentFit="contain" />
             </Animated.View>
           </GestureDetector>
+          {(!data.latitude || !data.longitude) && (
+            <Animated.View
+              style={buttonStyles}
+              className="absolute top-4 left-0 right-0 flex items-center justify-center"
+              pointerEvents="box-none"
+            >
+              <Link push href={`/(home)/(trips)/trips/${id}/images/${imageId}/add-location`} asChild>
+                <Button
+                  size="xs"
+                  leftIcon={<Icon icon={MapPin} size={16} color={{ dark: "black", light: "white" }} />}
+                  className="rounded-full"
+                >
+                  Add to map
+                </Button>
+              </Link>
+            </Animated.View>
+          )}
         </View>
       )}
     </ScreenView>

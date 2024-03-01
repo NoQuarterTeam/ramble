@@ -191,6 +191,12 @@ export function ImageField(props: ImageFieldProps) {
       <div className="relative">
         <ImageUploader
           onSubmit={setImage}
+          dropzoneOptions={{
+            maxFiles: 1,
+            accept: {
+              "image/*": [".jpg", ".jpeg", ".png", ".gif", ".avif", ".webp", ".heic"],
+            },
+          }}
           className={
             hasChildren
               ? ""

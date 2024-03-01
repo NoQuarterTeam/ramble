@@ -6,9 +6,12 @@ export default function Layout() {
   const backgroundColor = useBackgroundColor()
 
   return (
-    <Stack initialRouteName="index" screenOptions={{ contentStyle: { backgroundColor }, headerShown: false }}>
+    <Stack
+      initialRouteName="index"
+      screenOptions={{ presentation: "modal", contentStyle: { backgroundColor }, headerShown: false }}
+    >
       <Stack.Screen name="index" />
-      <Stack.Screen name="add-location" options={{ presentation: "modal" }} />
+      <Stack.Screen name="add" />
     </Stack>
   )
 }

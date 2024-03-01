@@ -102,11 +102,20 @@ export const tripRouter = createTRPCRouter({
         creatorId: true,
         startDate: true,
         endDate: true,
-        media: { where: { creatorId: ctx.user.id }, take: 1, orderBy: { timestamp: "desc" }, select: { timestamp: true } },
+        media: {
+          where: {
+            deletedAt: null,
+            latitude: { not: null },
+            longitude: { not: null },
+          },
+          orderBy: { timestamp: "desc" },
+          select: { timestamp: true, latitude: true, longitude: true },
+        },
         items: {
           orderBy: { order: "asc" },
           select: {
             id: true,
+            date: true,
             order: true,
             stop: { select: { id: true, image: true, name: true, latitude: true, longitude: true } },
             spot: {
@@ -124,7 +133,14 @@ export const tripRouter = createTRPCRouter({
       },
     })
     if (!trip) throw new TRPCError({ code: "NOT_FOUND", message: "Trip not found" })
-    const latestMediaTimestamp = trip.media[0]?.timestamp
+    const latestMedia = await ctx.prisma.tripMedia.findFirst({
+      where: { tripId: input.id, trip: { users: { some: { id: ctx.user.id } } } },
+      orderBy: { timestamp: "desc" },
+      select: { timestamp: true },
+    })
+    const media = trip.media.map((m) => ({ timestamp: m.timestamp, latitude: m.latitude, longitude: m.longitude }))
+
+    const latestMediaTimestamp = latestMedia?.timestamp
     if (trip.items.length === 0) return { trip, latestMediaTimestamp }
     if (trip.items.length === 1)
       return {
@@ -134,10 +150,17 @@ export const tripRouter = createTRPCRouter({
           ? [trip.items[0]?.spot.longitude, trip.items[0]?.spot.latitude]
           : ([trip.items[0]?.stop!.longitude, trip.items[0]?.stop!.latitude] as [number, number]),
       }
-    const itemCoords = trip.items.map((item) => [
-      item.spot?.longitude || item.stop?.longitude,
-      item.spot?.latitude || item.stop?.latitude,
-    ]) as [number, number][]
+    const itemCoords = trip.items.flatMap((item, i) => {
+      const nextItem = trip.items[i + 1]
+      let coords = [[item.spot?.longitude || item.stop?.longitude, item.spot?.latitude || item.stop?.latitude]]
+      if (!item.date || !nextItem || !nextItem.date) return coords
+      const mediaBetween = media.filter((m) => m.timestamp >= item.date! && m.timestamp <= nextItem.date!)
+      if (mediaBetween.length > 0) {
+        coords = coords.concat(mediaBetween.map((m) => [m.longitude!, m.latitude!]))
+      }
+      return coords
+    }) as [number, number][]
+
     const line = lineString(itemCoords)
     const bounds = bbox(line) as [number, number, number, number]
 

@@ -67,7 +67,7 @@ function UserItem({
       onSelect()
       void utils.trip.active.refetch()
       void utils.trip.mine.refetch()
-      await utils.trip.users.all.refetch({ id })
+      await utils.trip.users.all.refetch({ tripId: id })
       toast({ title: "User added", type: "success" })
     },
   })

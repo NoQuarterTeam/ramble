@@ -3,9 +3,9 @@ import { z } from "zod"
 import { createTRPCRouter, protectedProcedure } from "../../trpc"
 
 export const tripUsersRouter = createTRPCRouter({
-  all: protectedProcedure.input(z.object({ id: z.string() })).query(({ ctx, input }) => {
+  all: protectedProcedure.input(z.object({ tripId: z.string() })).query(({ ctx, input }) => {
     return ctx.prisma.trip.findUniqueOrThrow({
-      where: { id: input.id },
+      where: { id: input.tripId },
       select: {
         id: true,
         name: true,

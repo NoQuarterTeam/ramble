@@ -16,7 +16,8 @@ export function useS3Upload(): [(file: File) => Promise<string>, { isLoading: bo
   async function upload(file: File) {
     try {
       setIsLoading(true)
-      const key = crypto.randomUUID()
+      const type = file.type.split("/")[1]?.toLocaleLowerCase()
+      const key = `${crypto.randomUUID()}.${type}`
       const formData = new FormData()
       formData.append("key", assetPrefix + key)
       formData.append("csrf", csrf)

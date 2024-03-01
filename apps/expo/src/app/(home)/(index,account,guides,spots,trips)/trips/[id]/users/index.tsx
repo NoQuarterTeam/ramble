@@ -13,7 +13,7 @@ import { type RouterOutputs, api } from "~/lib/api"
 
 export default function TripUsers() {
   const { id } = useLocalSearchParams<{ id: string }>()
-  const { data, isLoading } = api.trip.users.all.useQuery({ id })
+  const { data, isLoading } = api.trip.users.all.useQuery({ tripId: id }, { enabled: !!id })
   const users = data?.users
 
   return (
@@ -32,7 +32,7 @@ export default function TripUsers() {
             ))}
           </>
         )}
-        <Link asChild push href={`/(home)/(trips)/trips/${id}/add-users`}>
+        <Link asChild push href={`/(home)/(trips)/trips/${id}/users/add`}>
           <Button size="sm" variant="secondary">
             Add users
           </Button>
@@ -47,13 +47,13 @@ function UserItem({ user }: { user: RouterOutputs["trip"]["users"]["all"]["users
   const utils = api.useUtils()
   const { mutate, isLoading } = api.trip.users.remove.useMutation({
     onMutate: () => {
-      utils.trip.users.all.setData({ id }, (prev) => {
+      utils.trip.users.all.setData({ tripId: id }, (prev) => {
         if (!prev) return prev
         return { ...prev, users: prev.users.filter((u) => u.id !== user.id) }
       })
     },
     onSuccess: () => {
-      void utils.trip.users.all.refetch({ id })
+      void utils.trip.users.all.refetch({ tripId: id })
     },
   })
 

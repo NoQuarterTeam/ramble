@@ -15,8 +15,8 @@ export const mediaRouter = createTRPCRouter({
       const media = await ctx.prisma.tripMedia.findMany({
         where: {
           tripId,
-          latitude: { gt: coords.minLat, lt: coords.maxLat },
-          longitude: { gt: coords.minLng, lt: coords.maxLng },
+          latitude: { not: null, gt: coords.minLat, lt: coords.maxLat },
+          longitude: { not: null, gt: coords.minLng, lt: coords.maxLng },
           deletedAt: null,
         },
         orderBy: { createdAt: "desc" },
@@ -30,7 +30,7 @@ export const mediaRouter = createTRPCRouter({
         media.map((media) => ({
           type: "Feature",
           geometry: { type: "Point", coordinates: [media.longitude!, media.latitude!] },
-          properties: { cluster: false, id: media.id, path: media.path, latitude: media.latitude, longitude: media.longitude },
+          properties: { cluster: false, id: media.id, path: media.path, latitude: media.latitude!, longitude: media.longitude! },
         })),
       )
       const clusters = clustersData.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], coords.zoom || 5)
@@ -45,28 +45,35 @@ export const mediaRouter = createTRPCRouter({
         }
       })
     }),
-  byBounds: protectedProcedure.input(z.object({ bounds: z.array(z.number()) })).query(({ ctx, input }) => {
-    const [minLng, minLat, maxLng, maxLat] = input.bounds
-    return ctx.prisma.tripMedia.findMany({
-      orderBy: { timestamp: "desc" },
-      where: {
-        latitude: { gte: minLat, lte: maxLat },
-        longitude: { gte: minLng, lte: maxLng },
-        deletedAt: null,
-      },
-    })
-  }),
-  all: protectedProcedure.input(z.object({ tripId: z.string() })).query(({ ctx, input }) => {
+  byBounds: protectedProcedure
+    .input(z.object({ tripId: z.string(), bounds: z.array(z.number()) }).and(z.object({ skip: z.number() })))
+    .query(({ ctx, input }) => {
+      const [minLng, minLat, maxLng, maxLat] = input.bounds
+      return ctx.prisma.tripMedia.findMany({
+        orderBy: { timestamp: "desc" },
+        take: 30,
+        skip: input.skip,
+        where: {
+          tripId: input.tripId,
+          latitude: { gte: minLat, lte: maxLat },
+          longitude: { gte: minLng, lte: maxLng },
+          deletedAt: null,
+        },
+      })
+    }),
+  all: protectedProcedure.input(z.object({ tripId: z.string() }).and(z.object({ skip: z.number() }))).query(({ ctx, input }) => {
     return ctx.prisma.tripMedia.findMany({
       take: 30,
-      where: { tripId: input.tripId, trip: { users: { some: { id: ctx.user.id } } } },
+      skip: input.skip,
+      select: { id: true, path: true, latitude: true, longitude: true },
+      where: { deletedAt: null, tripId: input.tripId, trip: { users: { some: { id: ctx.user.id } } } },
     })
   }),
   byId: protectedProcedure.input(z.object({ id: z.string() })).query(({ ctx, input }) => {
     return ctx.prisma.tripMedia.findUnique({ where: { id: input.id, trip: { users: { some: { id: ctx.user.id } } } } })
   }),
   update: protectedProcedure
-    .input(z.object({ id: z.string(), note: z.string().optional() }))
+    .input(z.object({ latitude: z.number(), longitude: z.number() }).and(z.object({ id: z.string() })))
     .mutation(({ ctx, input: { id, ...data } }) => {
       return ctx.prisma.tripMedia.update({ where: { id, trip: { users: { some: { id: ctx.user.id } } } }, data })
     }),

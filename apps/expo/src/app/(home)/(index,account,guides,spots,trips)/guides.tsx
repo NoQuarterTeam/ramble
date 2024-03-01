@@ -18,18 +18,18 @@ import { useMe } from "~/lib/hooks/useMe"
 export default function GuidesScreen() {
   const { me } = useMe()
 
-  const { data: initialGuides, isLoading } = api.user.guides.useQuery({ skip: 0 }, { enabled: !!me })
+  const { data, isLoading } = api.user.guides.useQuery({ skip: 0 }, { enabled: !!me })
 
-  const [guides, setGuides] = React.useState(initialGuides)
+  const [guides, setGuides] = React.useState(data)
 
   React.useEffect(() => {
-    setGuides(initialGuides)
-  }, [initialGuides])
+    setGuides(guides)
+  }, [guides])
 
   const utils = api.useUtils()
   const handleLoadMore = React.useCallback(async () => {
-    const newSpots = await utils.user.guides.fetch({ skip: guides?.length || 0 })
-    setGuides([...(guides || []), ...newSpots])
+    const newGuides = await utils.user.guides.fetch({ skip: guides?.length || 0 })
+    setGuides([...(guides || []), ...newGuides])
   }, [guides, utils.user.guides])
 
   if (!me)
