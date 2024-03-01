@@ -17,7 +17,7 @@ import * as MediaLibrary from "expo-media-library"
 import { MediaType, getAssetsAsync } from "expo-media-library"
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
-import { ChevronLeft, Edit2, Flag, Home, MapPin, PlusCircle, Users } from "lucide-react-native"
+import { ChevronLeft, Edit2, Flag, Home, Image as ImageIcon, MapPin, PlusCircle, Users } from "lucide-react-native"
 import * as React from "react"
 import { ActivityIndicator, Alert, Linking, TouchableOpacity, View } from "react-native"
 import DraggableFlatList, { type RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlist"
@@ -40,7 +40,6 @@ import { useMapCoords } from "~/lib/hooks/useMapCoords"
 import { useMapSettings } from "~/lib/hooks/useMapSettings"
 import { useMe } from "~/lib/hooks/useMe"
 import { useS3QuickUpload } from "~/lib/hooks/useS3"
-
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 export default function TripDetailScreen() {
@@ -273,9 +272,17 @@ export default function TripDetailScreen() {
               )}
             </View>
           </View>
-          {trip && (
+          {trip && me && (
             <View className="flex flex-row items-center space-x-1">
-              {trip.creatorId === me?.id && (
+              <Link push href={`/${tab}/trips/${id}/images`} asChild>
+                <TouchableOpacity
+                  className="sq-10 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
+                  activeOpacity={0.8}
+                >
+                  <Icon icon={ImageIcon} size={16} />
+                </TouchableOpacity>
+              </Link>
+              {trip.creatorId === me.id && (
                 <Link push href={`/${tab}/trips/${id}/users`} asChild>
                   <TouchableOpacity
                     className="sq-10 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
