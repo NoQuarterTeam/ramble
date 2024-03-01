@@ -46,7 +46,7 @@ export const mediaRouter = createTRPCRouter({
       })
     }),
   byBounds: protectedProcedure
-    .input(z.object({ bounds: z.array(z.number()) }).and(z.object({ skip: z.number() })))
+    .input(z.object({ tripId: z.string(), bounds: z.array(z.number()) }).and(z.object({ skip: z.number() })))
     .query(({ ctx, input }) => {
       const [minLng, minLat, maxLng, maxLat] = input.bounds
       return ctx.prisma.tripMedia.findMany({
@@ -54,16 +54,18 @@ export const mediaRouter = createTRPCRouter({
         take: 30,
         skip: input.skip,
         where: {
+          tripId: input.tripId,
           latitude: { gte: minLat, lte: maxLat },
           longitude: { gte: minLng, lte: maxLng },
           deletedAt: null,
         },
       })
     }),
-  all: protectedProcedure.input(z.object({ tripId: z.string() })).query(({ ctx, input }) => {
+  all: protectedProcedure.input(z.object({ tripId: z.string() }).and(z.object({ skip: z.number() }))).query(({ ctx, input }) => {
     return ctx.prisma.tripMedia.findMany({
       take: 30,
-      where: { tripId: input.tripId, trip: { users: { some: { id: ctx.user.id } } } },
+      skip: input.skip,
+      where: { deletedAt: null, tripId: input.tripId, trip: { users: { some: { id: ctx.user.id } } } },
     })
   }),
   byId: protectedProcedure.input(z.object({ id: z.string() })).query(({ ctx, input }) => {

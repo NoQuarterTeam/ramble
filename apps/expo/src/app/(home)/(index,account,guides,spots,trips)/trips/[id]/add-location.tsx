@@ -47,7 +47,6 @@ export default function NewItemScreen() {
   )
 
   const address = geocodeData?.place || geocodeData?.address
-  console.log(address)
 
   const isUnknownAddress = !address
 

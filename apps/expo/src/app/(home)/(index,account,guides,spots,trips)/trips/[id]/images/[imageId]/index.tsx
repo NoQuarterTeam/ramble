@@ -28,7 +28,7 @@ const DOUBLE_ZOOM = 3
 
 export default function TripImage() {
   const { me } = useMe()
-  const { imageId, bounds } = useLocalSearchParams<{ id: string; imageId?: string; bounds?: string }>()
+  const { id, imageId, bounds } = useLocalSearchParams<{ id: string; imageId?: string; bounds?: string }>()
 
   const parsedBounds = bounds?.split(",").map(Number)
 
@@ -38,11 +38,17 @@ export default function TripImage() {
   )
 
   const router = useRouter()
+
   const utils = api.useUtils()
   const { mutate, isLoading: removeLoading } = api.trip.media.remove.useMutation({
     onSuccess: () => {
-      if (parsedBounds && imageId) {
-        utils.trip.media.byBounds.setData({ bounds: parsedBounds }, (prev) =>
+      if (!imageId) return
+      if (parsedBounds) {
+        utils.trip.media.byBounds.setData({ tripId: id, skip: 0, bounds: parsedBounds }, (prev) =>
+          prev ? prev.filter((media) => media.id !== imageId) : prev,
+        )
+      } else {
+        utils.trip.media.all.setData({ tripId: id, skip: 0 }, (prev) =>
           prev ? prev.filter((media) => media.id !== imageId) : prev,
         )
       }
