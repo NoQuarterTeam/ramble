@@ -60,7 +60,7 @@
     "isbot": "latest",
     "jose": "5.2.2",
     "lucide-react": "0.340.0",
-    "mapbox-gl": "3.1.2",
+    "mapbox-gl": "3.2.0",
     "nprogress": "0.2.0",
     "posthog-js": "1.110.0",
     "pretty-cache-header": "1.0.0",
