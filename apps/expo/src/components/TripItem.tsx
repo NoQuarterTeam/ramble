@@ -27,6 +27,7 @@ export function TripItem({ trip }: Props) {
   const increment = useFeedbackActivity((s) => s.increment)
   const isActive = today.isBetween(trip.startDate, trip.endDate)
 
+  const daysToGo = dayjs(trip.startDate).diff(today, "days")
   return (
     <TouchableOpacity
       onPress={() => {
@@ -44,7 +45,7 @@ export function TripItem({ trip }: Props) {
           {today.isBefore(trip.startDate) ? (
             <View className="flex items-center justify-center rounded-full bg-green-800 px-2 py-0.5">
               <Text className="font-600 text-center text-xs text-white">
-                {dayjs(trip.startDate).diff(today, "days")} days to go
+                {daysToGo} day{daysToGo === 1 ? "" : "s"} to go
               </Text>
             </View>
           ) : today.isAfter(trip.endDate) ? null : (
