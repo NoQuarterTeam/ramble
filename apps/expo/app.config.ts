@@ -115,6 +115,12 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
         isAccessMediaLocationEnabled: true,
       },
     ],
+    [
+      "expo-image-picker",
+      {
+        cameraPermission: "Allow Ramble to access your camera to add photos to a trip",
+      },
+    ],
   ],
 })
 

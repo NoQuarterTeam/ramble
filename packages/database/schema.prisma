@@ -364,10 +364,11 @@ model Trip {
 }
 
 model TripMedia {
-  id        String @id @default(uuid())
+  id        String  @id @default(uuid())
   path      String
   latitude  Float?
   longitude Float?
+  note      String? @db.Text
 
   assetId   String   @unique()
   timestamp DateTime

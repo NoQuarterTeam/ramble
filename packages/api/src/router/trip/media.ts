@@ -83,8 +83,8 @@ export const tripMediaRouter = createTRPCRouter({
         tripId: z.string(),
         image: z.object({
           path: z.string(),
-          latitude: z.number(),
-          longitude: z.number(),
+          latitude: z.number().nullable(),
+          longitude: z.number().nullable(),
           assetId: z.string(),
           timestamp: z.date(),
         }),
