@@ -91,10 +91,13 @@ export const tripMediaRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      await ctx.prisma.tripMedia.create({
-        data: { tripId: input.tripId, ...input.image, creatorId: ctx.user.id },
+      await ctx.prisma.tripMedia.create({ data: { tripId: input.tripId, ...input.image, creatorId: ctx.user.id } })
+      const latestTimestamp = await ctx.prisma.tripMedia.findFirst({
+        where: { tripId: input.tripId, deletedAt: null },
+        orderBy: { timestamp: "desc" },
+        select: { timestamp: true },
       })
-      return input.image.timestamp
+      return latestTimestamp?.timestamp
     }),
   remove: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
     await ctx.prisma.tripMedia.update({ where: { id: input.id }, data: { deletedAt: new Date() } })

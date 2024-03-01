@@ -8,7 +8,7 @@ import { Link, useLocalSearchParams } from "expo-router"
 import { PlusCircle } from "lucide-react-native"
 import { MapPinOff } from "lucide-react-native"
 import * as React from "react"
-import { Alert, Linking, TouchableOpacity, View } from "react-native"
+import { ActivityIndicator, Alert, Linking, TouchableOpacity, View } from "react-native"
 import * as DropdownMenu from "zeego/dropdown-menu"
 import { Icon } from "~/components/Icon"
 import { ScreenView } from "~/components/ui/ScreenView"
@@ -23,7 +23,7 @@ const size = (width - 16) / 3
 export default function TripImages() {
   const { id } = useLocalSearchParams<{ id: string }>()
 
-  const { data, refetch } = api.trip.media.all.useQuery({ tripId: id, skip: 0 })
+  const { data, refetch, isLoading } = api.trip.media.all.useQuery({ tripId: id, skip: 0 })
 
   const [images, setImages] = React.useState(data)
 
@@ -50,35 +50,35 @@ export default function TripImages() {
       utils.trip.detail.setData({ id }, (prev) => (prev ? { ...prev, latestMediaTimestamp: timestamp } : prev))
     },
   })
-  const [status, requestPermission] = ImagePicker.useCameraPermissions()
-
-  React.useEffect(() => {
-    if (!status || status?.granted) return
-    if (status?.canAskAgain) {
-      requestPermission().catch()
-    } else {
-      Alert.alert("Camera permissions required", "Please go to your phone's settings to grant camera permissions for Ramble", [
-        { text: "Cancel", style: "cancel" },
-        { text: "Open settings", onPress: Linking.openSettings },
-      ])
-    }
-  }, [status, requestPermission])
+  const [_status, requestPermission] = ImagePicker.useCameraPermissions()
 
   const handleOpenImageLibrary = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: false,
-      allowsMultipleSelection: true,
-      selectionLimit: 0,
-      quality: 0.2,
-    })
-    if (result.canceled || result.assets.length === 0) return
-    const images = []
-    for (const asset of result.assets) {
-      try {
+    const perm = await requestPermission()
+    if (!perm.granted) {
+      return Alert.alert(
+        "Camera permissions required",
+        "Please go to your phone's settings to grant camera permissions for Ramble",
+        [
+          { text: "Cancel", style: "cancel" },
+          { text: "Open settings", onPress: Linking.openSettings },
+        ],
+      )
+    }
+
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: false,
+        allowsMultipleSelection: true,
+        selectionLimit: 0,
+        quality: 0.2,
+      })
+      if (result.canceled || result.assets.length === 0) return
+
+      for (const asset of result.assets) {
         if (!asset.assetId) continue
         const info = await MediaLibrary.getAssetInfoAsync(asset.assetId)
-        const imageWithData = {
+        const image = {
           ...asset,
           id: info.id,
           creationTime: info.creationTime,
@@ -86,14 +86,6 @@ export default function TripImages() {
           latitude: info.location?.latitude,
           longitude: info.location?.longitude,
         }
-        images.push(imageWithData)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    if (images.length === 0) return
-    for (const image of images) {
-      try {
         const key = await upload(image.url)
         const payload = {
           path: key,
@@ -106,19 +98,18 @@ export default function TripImages() {
         console.log("(----------IS THIS HAPPENING MULTIPLE TIMESS???? ------------")
 
         uploadMedia({ tripId: id, image: payload })
-      } catch (error) {
-        console.log(error)
       }
+      refetch()
+    } catch (error) {
+      console.log(error)
     }
-    refetch()
   }
 
   const handleOpenCamera = async () => {
-    const result = await ImagePicker.launchCameraAsync({
+    await ImagePicker.launchCameraAsync({
       allowsEditing: true,
       exif: true,
     })
-    console.log(result)
   }
 
   return (
@@ -146,31 +137,37 @@ export default function TripImages() {
         </DropdownMenu.Root>
       }
     >
-      <FlashList
-        showsVerticalScrollIndicator={false}
-        estimatedItemSize={142}
-        onEndReached={handleLoadMore}
-        numColumns={3}
-        ListEmptyComponent={<Text className="text-center">No images yet</Text>}
-        data={images}
-        ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
-        renderItem={({ item }) => (
-          <Link href={`/(home)/(trips)/trips/${id}/images/${item.id}`} asChild>
-            <TouchableOpacity className="relative">
-              <Image
-                className="bg-gray-200 dark:bg-gray-700"
-                source={{ uri: createImageUrl(item.path) }}
-                style={{ width: size, height: size }}
-              />
-              {(!item.latitude || !item.longitude) && (
-                <View className="absolute bottom-1 left-1 flex items-center justify-center bg-background sq-6 rounded-full dark:bg-background-dark">
-                  <Icon icon={MapPinOff} size={16} />
-                </View>
-              )}
-            </TouchableOpacity>
-          </Link>
-        )}
-      />
+      {isLoading ? (
+        <View className="p-4 flex items-center justify-center">
+          <ActivityIndicator />
+        </View>
+      ) : (
+        <FlashList
+          showsVerticalScrollIndicator={false}
+          estimatedItemSize={142}
+          onEndReached={handleLoadMore}
+          numColumns={3}
+          ListEmptyComponent={<Text className="text-center">No images yet</Text>}
+          data={images}
+          ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
+          renderItem={({ item }) => (
+            <Link href={`/(home)/(trips)/trips/${id}/images/${item.id}`} asChild>
+              <TouchableOpacity className="relative">
+                <Image
+                  className="bg-gray-200 dark:bg-gray-700"
+                  source={{ uri: createImageUrl(item.path) }}
+                  style={{ width: size, height: size }}
+                />
+                {(!item.latitude || !item.longitude) && (
+                  <View className="absolute bottom-1 left-1 flex items-center justify-center bg-background sq-6 rounded-full dark:bg-background-dark">
+                    <Icon icon={MapPinOff} size={16} />
+                  </View>
+                )}
+              </TouchableOpacity>
+            </Link>
+          )}
+        />
+      )}
     </ScreenView>
   )
 }
