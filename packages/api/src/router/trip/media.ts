@@ -6,7 +6,7 @@ import { lineString } from "@turf/helpers"
 import Supercluster from "supercluster"
 import { createTRPCRouter, protectedProcedure } from "../../trpc"
 
-export const mediaRouter = createTRPCRouter({
+export const tripMediaRouter = createTRPCRouter({
   clusters: protectedProcedure
     .input(clusterSchema.and(z.object({ tripId: z.string() })).optional())
     .query(async ({ ctx, input }) => {

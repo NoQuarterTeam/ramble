@@ -10,6 +10,7 @@ export default function Layout() {
       <Stack.Screen name="index" />
       <Stack.Screen name="images" />
       <Stack.Screen name="find-spot" />
+      <Stack.Screen name="items" options={{ presentation: "modal" }} />
       <Stack.Screen name="add-location" options={{ presentation: "modal" }} />
       <Stack.Screen name="edit" options={{ presentation: "modal" }} />
       <Stack.Screen name="users" options={{ presentation: "modal" }} />

@@ -6,7 +6,8 @@ import { z } from "zod"
 import { tripSchema, tripStopSchema } from "@ramble/server-schemas"
 import { getPlaceUnsplashImage } from "@ramble/server-services"
 import { createTRPCRouter, protectedProcedure } from "../../trpc"
-import { mediaRouter } from "./media"
+import { tripItemsRouter } from "./items"
+import { tripMediaRouter } from "./media"
 import { tripUsersRouter } from "./users"
 
 export const tripRouter = createTRPCRouter({
@@ -216,5 +217,6 @@ export const tripRouter = createTRPCRouter({
       return true
     }),
   users: tripUsersRouter,
-  media: mediaRouter,
+  media: tripMediaRouter,
+  items: tripItemsRouter,
 })

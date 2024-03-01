@@ -539,15 +539,18 @@ const TripItem = React.memo(function _TripItem({
   const handleOpenMenu = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
     if (item.spot) {
-      const options = ["View", "Remove", "Cancel"]
+      const options = ["View", "Edit date", "Remove", "Cancel"]
       const viewIndex = 0
-      const destructiveButtonIndex = 1
-      const cancelButtonIndex = 2
+      const editIndex = 1
+      const destructiveButtonIndex = 2
+      const cancelButtonIndex = 3
       showActionSheetWithOptions({ options, cancelButtonIndex, destructiveButtonIndex }, (selectedIndex) => {
         switch (selectedIndex) {
           case viewIndex:
-            // Edit
-            router.push(`/${tab}/spot/${item.spot?.id}`)
+            router.push(`/${tab}/spot/${item.spot!.id}`)
+            break
+          case editIndex:
+            router.push(`/${tab}/trips/${id}/items/${item.id}?date=${item.date?.toISOString() || ""}`)
             break
           case destructiveButtonIndex:
             mutate({ id: item.id })
@@ -558,11 +561,15 @@ const TripItem = React.memo(function _TripItem({
         }
       })
     } else {
-      const options = ["Remove", "Cancel"]
-      const destructiveButtonIndex = 0
-      const cancelButtonIndex = 1
+      const options = ["Edit date", "Remove", "Cancel"]
+      const editIndex = 0
+      const destructiveButtonIndex = 2
+      const cancelButtonIndex = 3
       showActionSheetWithOptions({ options, cancelButtonIndex, destructiveButtonIndex }, (selectedIndex) => {
         switch (selectedIndex) {
+          case editIndex:
+            router.push(`/${tab}/trips/${id}/items/${item.id}?date=${item.date?.toISOString() || ""}`)
+            break
           case destructiveButtonIndex:
             mutate({ id: item.id })
             break
@@ -639,6 +646,12 @@ const TripItem = React.memo(function _TripItem({
             )
           ) : null}
           {isFocused && <View className="bg-primary absolute bottom-0 left-0 right-0 top-0 h-0.5 rounded-t-sm" />}
+
+          {item.date && (
+            <View className="absolute top-1 right-1 flex items-center justify-center px-2 py-1 rounded-full bg-blue-500">
+              <Text className="text-xxs font-600 text-white">{dayjs(item.date).format("DD MMM YY")}</Text>
+            </View>
+          )}
         </View>
       </TouchableOpacity>
     </ScaleDecorator>
