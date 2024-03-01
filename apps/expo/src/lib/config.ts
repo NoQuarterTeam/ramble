@@ -1,8 +1,12 @@
 import * as Application from "expo-application"
+import Constants from "expo-constants"
 import * as Updates from "expo-updates"
 
+const debuggerHost = Constants.debuggerHost ?? Constants.manifest2?.extra?.expoGo?.debuggerHost
+const localhost = debuggerHost?.split(":")[0]
+
 const config = {
-  WEB_URL: "http://localhost:3000",
+  WEB_URL: `http://${localhost || "localhost"}:3000`,
   ENV: "development",
   UPDATE_ID: Updates.updateId?.split("-")[0] || "dev",
 }

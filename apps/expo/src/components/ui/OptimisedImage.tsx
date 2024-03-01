@@ -22,16 +22,15 @@ export function OptimizedImage({ source, height, width, quality, fit, ...props }
   return <Image {...props} placeholder={props.placeholder || defaultBlurHash} source={{ uri: newSrc }} />
 }
 
-export function transformImageSrc(
-  src: string | undefined | null,
-  options: { width: number; height?: number; quality?: number; fit?: Fit },
-) {
+export function transformImageSrc(src: string | undefined | null, options: Options) {
   if (!src) return undefined
   if (!srcWhitelist.some((s) => src.startsWith(s))) return src
-  const optionsString = Object.entries(options).reduce((acc, [key, value]) => {
-    if (value === undefined) return acc
-    return `${acc}&${key}=${value}`
-  }, "")
-
-  return `${FULL_WEB_URL}/api/image?src=${encodeURIComponent(src)}${optionsString}`
+  const params = new URLSearchParams({
+    src,
+    width: options.width.toString(),
+    height: options.height?.toString() || "",
+    quality: options.quality?.toString() || "",
+    fit: options.fit || "",
+  })
+  return `${FULL_WEB_URL}/api/image?${params}`
 }
