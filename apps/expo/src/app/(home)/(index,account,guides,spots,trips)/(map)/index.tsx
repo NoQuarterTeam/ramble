@@ -29,9 +29,9 @@ import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 
+import { useMapSettings } from "~/lib/hooks/useMapSettings"
 import { useMapFilters } from "../../../filters"
 import { useMapLayers } from "./layers"
-import { useMapSettings } from "~/lib/hooks/useMapSettings"
 
 export default function MapScreen() {
   const router = useRouter()
@@ -88,7 +88,7 @@ function MapContainer() {
   const { mutate: updateUser } = api.user.update.useMutation()
   const layers = useMapLayers((s) => s.layers)
   const isDark = useColorScheme() === "dark"
-  const [isLoaded, setIsLoaded] = React.useState(false)
+  const [isMapLoaded, setIsMapLoaded] = React.useState(false)
 
   const [mapSettings, setMapSettings] = useMapSettings()
 
@@ -107,7 +107,7 @@ function MapContainer() {
 
   const handleSetUserLocation = async () => {
     try {
-      setIsLoaded(true)
+      setIsMapLoaded(true)
       const loc = await Location.getLastKnownPositionAsync()
       if (!loc) return
       camera.current?.setCamera({
@@ -137,7 +137,7 @@ function MapContainer() {
   }, [])
 
   React.useEffect(() => {
-    if (!isLoaded) return
+    if (!isMapLoaded) return
     async function updateMapAfterFiltersChange() {
       try {
         if (!mapRef.current) return
@@ -157,7 +157,7 @@ function MapContainer() {
       }
     }
     updateMapAfterFiltersChange()
-  }, [isLoaded, setMapSettings])
+  }, [isMapLoaded, setMapSettings])
 
   const onMapMove = async ({ properties }: MapState) => {
     if (!properties.bounds) return
@@ -268,7 +268,7 @@ function MapContainer() {
   return (
     <>
       <MapView
-        onLayout={handleSetUserLocation}
+        onDidFinishLoadingMap={handleSetUserLocation}
         onMapIdle={onMapMove}
         onPress={handleClosePreview}
         ref={mapRef}

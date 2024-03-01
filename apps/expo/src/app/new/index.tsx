@@ -27,6 +27,7 @@ export default function NewSpotLocationScreen() {
   const initialLng = params.initialLng && parseFloat(params.initialLng)
 
   const [coords, setCoords] = React.useState<number[] | null>(null)
+
   const [isLoadingLocation, setIsLoadingLocation] = React.useState(true)
   const [search, setSearch] = React.useState("")
   const [location, setLocation] = React.useState<Location.LocationObjectCoords | null>(null)

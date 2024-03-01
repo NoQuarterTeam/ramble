@@ -1,15 +1,14 @@
 import { Camera, LocationPuck, type MapState, type MapView as MapType, StyleURL } from "@rnmapbox/maps"
-import { type Position } from "@rnmapbox/maps/lib/typescript/src/types/Position"
 import * as Location from "expo-location"
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
-import { AlertTriangle, CircleDot, Heart, MapPinned, Navigation, Plus, PlusCircle, Settings2, Star, X } from "lucide-react-native"
+import { Heart, Navigation, Plus, Settings2, Star, X } from "lucide-react-native"
 import { usePostHog } from "posthog-react-native"
 import * as React from "react"
 import { Keyboard, TouchableOpacity, View, useColorScheme } from "react-native"
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
 
-import { displayRating, join } from "@ramble/shared"
+import { displayRating } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { MapView } from "~/components/Map"
@@ -29,13 +28,11 @@ import { useMapCoords } from "~/lib/hooks/useMapCoords"
 import { useMapSettings } from "~/lib/hooks/useMapSettings"
 import { useMapFilters } from "../../../../filters"
 
-export default function NewItemScreen() {
-  const router = useRouter()
-  const { id, order } = useLocalSearchParams<{ id: string; order?: string }>()
+export default function FindSpotScreen() {
+  const { id } = useLocalSearchParams<{ id: string }>()
   const filters = useMapFilters((s) => s.filters)
 
   const initialCoords = useMapCoords((s) => s.coords)
-  const [coords, setCoords] = React.useState<Position | undefined>(initialCoords)
 
   const [search, setSearch] = React.useState("")
 
@@ -44,28 +41,16 @@ export default function NewItemScreen() {
     enabled: !!mapSettings,
     keepPreviousData: true,
   })
+  const [isMapLoaded, setIsMapLoaded] = React.useState(false)
 
   const [activeSpotId, setActiveSpotId] = React.useState<string | null>(null)
 
   const camera = React.useRef<Camera>(null)
   const mapRef = React.useRef<MapType>(null)
-  const utils = api.useUtils()
-
-  const [isLoaded, setIsLoaded] = React.useState(false)
-  const {
-    data: geocodeData,
-    isLoading: addressLoading,
-    isFetching,
-  } = api.mapbox.geocodeCoords.useQuery(
-    { latitude: coords?.[1]!, longitude: coords?.[0]! },
-    { enabled: !!coords?.[0] && !!coords?.[1], keepPreviousData: true },
-  )
-  const isUnknownAddress = !geocodeData?.place
 
   const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, keepPreviousData: true })
 
   const handleSetUserLocation = async () => {
-    setIsLoaded(true)
     try {
       const loc = await Location.getLastKnownPositionAsync()
       if (!loc) return
@@ -82,14 +67,13 @@ export default function NewItemScreen() {
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: dont need to rerender
   React.useEffect(() => {
-    if (!isLoaded) return
+    if (!isMapLoaded) return
     async function updateMapAfterFiltersChange() {
       try {
         if (!mapRef.current) return
         const properties = await mapRef.current?.getVisibleBounds()
         const zoom = await mapRef.current?.getZoom()
         if (!properties) return
-        setCoords(await mapRef.current.getCenter())
         setMapSettings({
           minLng: properties[1][0],
           minLat: properties[1][1],
@@ -103,11 +87,10 @@ export default function NewItemScreen() {
       }
     }
     updateMapAfterFiltersChange()
-  }, [filters, isLoaded])
+  }, [filters, isMapLoaded])
 
   const onMapMove = ({ properties }: MapState) => {
     if (!properties.bounds) return
-    setCoords(properties.center)
     setMapSettings({
       minLng: properties.bounds.sw[0] || 0,
       minLat: properties.bounds.sw[1] || 0,
@@ -141,65 +124,15 @@ export default function NewItemScreen() {
     [clusters],
   )
 
-  const posthog = usePostHog()
-  const { mutate, isLoading: createLoading } = api.trip.saveStop.useMutation({
-    onSuccess: (data) => {
-      posthog?.capture("trip stop created", { place: data.name })
-      void utils.trip.detail.refetch({ id })
-      router.back()
-    },
-  })
-
-  const handleCreateTripStop = () => {
-    if (!geocodeData?.place) return
-    if (!coords) return toast({ title: "Please select a location" })
-    mutate({
-      tripId: id,
-      name: geocodeData.place,
-      latitude: coords[1]!,
-      longitude: coords[0]!,
-      order: order ? Number(order) : undefined,
-    })
-  }
-
   return (
     <ScreenView title="add to trip" containerClassName="px-0">
-      {/* <Text className="px-2">Add a location, an existing spot, or create a new one to save to your trip</Text> */}
       <StatusBar style="auto" />
-      <View className="flex w-full flex-row items-center justify-between space-x-1 overflow-hidden px-2 pb-2">
-        <View className="flex-1 flex-row items-center space-x-1">
-          {addressLoading || isFetching ? (
-            <Spinner size="small" />
-          ) : (
-            <Icon
-              icon={isUnknownAddress ? AlertTriangle : MapPinned}
-              size={20}
-              color={isUnknownAddress ? "primary" : undefined}
-              className={join(!isUnknownAddress && "opacity-80")}
-            />
-          )}
-          <Text numberOfLines={1} className="flex-1 text-sm opacity-70">
-            {addressLoading ? "" : geocodeData?.place || "Unknown address - move map to set"}
-          </Text>
-        </View>
-        <Button
-          size="xs"
-          onPress={() => {
-            if (!coords || !geocodeData || isUnknownAddress) return
-            if (!coords[0] || !coords[1]) return toast({ title: "Please select a location" })
-            handleCreateTripStop()
-          }}
-          disabled={!coords || (coords && (!coords[0] || !coords[1])) || !geocodeData || isUnknownAddress}
-          isLoading={createLoading}
-        >
-          Add to trip
-        </Button>
-      </View>
 
       <View className="relative flex-1">
         <MapView
           className="rounded-xs overflow-hidden"
           onMapIdle={onMapMove}
+          onDidFinishLoadingMap={() => setIsMapLoaded(true)}
           ref={mapRef}
           styleURL={StyleURL.SatelliteStreet}
           compassPosition={{ top: 54, right: 8 }}
@@ -233,7 +166,6 @@ export default function NewItemScreen() {
                   onPress={() => {
                     setSearch("")
                     Keyboard.dismiss()
-                    setCoords(place.center)
                     camera.current?.setCamera({
                       zoomLevel: 9,
                       animationDuration: 1000,
@@ -250,14 +182,6 @@ export default function NewItemScreen() {
           )}
         </View>
 
-        {!activeSpotId && (
-          <View
-            style={{ transform: [{ translateX: -15 }, { translateY: -15 }] }}
-            className="absolute left-1/2 top-1/2 flex items-center justify-center"
-          >
-            <Icon icon={CircleDot} size={30} color="white" />
-          </View>
-        )}
         <View
           pointerEvents="box-none"
           className="absolute bottom-3 left-3 right-3 flex flex-row items-end justify-between space-y-2"
@@ -270,21 +194,6 @@ export default function NewItemScreen() {
               <Icon icon={Settings2} size={20} />
             </TouchableOpacity>
           </Link>
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => {
-              const searchParams = new URLSearchParams({
-                initialLat: coords?.[1]?.toString() || "",
-                initialLng: coords?.[0]?.toString() || "",
-                tripId: id,
-                order: order || "",
-              })
-              router.push(`/new/?${searchParams}`)
-            }}
-            className="bg-primary rounded-full p-4"
-          >
-            <Icon icon={PlusCircle} size={20} color="white" />
-          </TouchableOpacity>
 
           <TouchableOpacity
             activeOpacity={0.8}
@@ -304,7 +213,7 @@ export default function NewItemScreen() {
 export function AddTripSpotPreview({ spotId, tripId, onClose }: { spotId: string; tripId: string; onClose: () => void }) {
   const { data: spot, isLoading } = api.spot.mapPreview.useQuery({ id: spotId })
   const router = useRouter()
-  const { id } = useLocalSearchParams<{ id: string }>()
+  const { id, order } = useLocalSearchParams<{ id: string; order?: string }>()
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
   const utils = api.useUtils()
@@ -322,7 +231,7 @@ export function AddTripSpotPreview({ spotId, tripId, onClose }: { spotId: string
     },
   })
 
-  const handleAddToTrip = () => mutate({ tripId: tripId, spotId })
+  const handleAddToTrip = () => mutate({ tripId: tripId, spotId, order: order ? parseInt(order) : undefined })
 
   return (
     <Animated.View
