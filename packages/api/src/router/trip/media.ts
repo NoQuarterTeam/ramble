@@ -45,17 +45,21 @@ export const mediaRouter = createTRPCRouter({
         }
       })
     }),
-  byBounds: protectedProcedure.input(z.object({ bounds: z.array(z.number()) })).query(({ ctx, input }) => {
-    const [minLng, minLat, maxLng, maxLat] = input.bounds
-    return ctx.prisma.tripMedia.findMany({
-      orderBy: { timestamp: "desc" },
-      where: {
-        latitude: { gte: minLat, lte: maxLat },
-        longitude: { gte: minLng, lte: maxLng },
-        deletedAt: null,
-      },
-    })
-  }),
+  byBounds: protectedProcedure
+    .input(z.object({ bounds: z.array(z.number()) }).and(z.object({ skip: z.number() })))
+    .query(({ ctx, input }) => {
+      const [minLng, minLat, maxLng, maxLat] = input.bounds
+      return ctx.prisma.tripMedia.findMany({
+        orderBy: { timestamp: "desc" },
+        take: 30,
+        skip: input.skip,
+        where: {
+          latitude: { gte: minLat, lte: maxLat },
+          longitude: { gte: minLng, lte: maxLng },
+          deletedAt: null,
+        },
+      })
+    }),
   all: protectedProcedure.input(z.object({ tripId: z.string() })).query(({ ctx, input }) => {
     return ctx.prisma.tripMedia.findMany({
       take: 30,
