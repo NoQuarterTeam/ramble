@@ -24,7 +24,11 @@ export default function TripImages() {
           {data?.map((image) => (
             <Link key={image.id} href={`/(home)/(trips)/trips/${id}/images/${image.id}?bounds=${bounds}`} asChild>
               <TouchableOpacity>
-                <Image source={{ uri: createImageUrl(image.path) }} style={{ width: size, height: size }} />
+                <Image
+                  className="bg-gray-200 dark:bg-gray-700"
+                  source={{ uri: createImageUrl(image.path) }}
+                  style={{ width: size, height: size }}
+                />
               </TouchableOpacity>
             </Link>
           ))}

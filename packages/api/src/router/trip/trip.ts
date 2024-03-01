@@ -80,6 +80,7 @@ export const tripRouter = createTRPCRouter({
         where: { tripId: input.id },
         select: { id: true, stop: { select: { id: true } } },
       })
+      await tx.tripMedia.deleteMany({ where: { tripId: input.id } })
       const tripStopItemIds = tripItems.filter((i) => !!i.stop).map((item) => item.stop!.id)
       await tx.tripStop.deleteMany({ where: { id: { in: tripStopItemIds } } })
       await tx.tripItem.deleteMany({ where: { tripId: input.id } })

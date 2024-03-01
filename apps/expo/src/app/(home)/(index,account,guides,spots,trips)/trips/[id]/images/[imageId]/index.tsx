@@ -111,6 +111,7 @@ export default function TripImage() {
         focal.y.value = withTiming(0)
       }
     } else {
+      scale.value = withTiming(1)
       translate.x.value = withTiming(0)
       focal.x.value = withTiming(0)
       translate.y.value = withTiming(0)
@@ -140,7 +141,7 @@ export default function TripImage() {
       initialFocal.y.value = event.focalY
     })
     .onUpdate((event) => {
-      scale.value = clamp(prevScale.value * event.scale, 1, 10)
+      scale.value = clamp(prevScale.value * event.scale, 0.05, 10)
       focal.x.value = prevFocal.x.value + (centerX.value - initialFocal.x.value) * (scale.value - prevScale.value)
       focal.y.value = prevFocal.y.value + (centerY.value - initialFocal.y.value) * (scale.value - prevScale.value)
     })
