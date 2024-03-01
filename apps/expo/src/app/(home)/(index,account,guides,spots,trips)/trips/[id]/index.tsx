@@ -12,7 +12,7 @@ import { ActivityIndicator, TouchableOpacity, View } from "react-native"
 import DraggableFlatList, { type RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlist"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { createImageUrl, join } from "@ramble/shared"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createImageUrl, join } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
@@ -147,8 +147,10 @@ export default function TripDetailScreen() {
                     bounds: { sw: [bounds[0]!, bounds[1]!], ne: [bounds[2]!, bounds[3]!] },
                   }
                 : {
-                    zoomLevel: 5,
-                    centerCoordinate: userLocation ? [userLocation.longitude, userLocation.latitude] : undefined,
+                    zoomLevel: 3,
+                    centerCoordinate: userLocation
+                      ? [userLocation.longitude, userLocation.latitude]
+                      : [INITIAL_LONGITUDE, INITIAL_LATITUDE],
                   }
           }
         />
