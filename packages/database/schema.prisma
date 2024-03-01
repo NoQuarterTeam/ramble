@@ -70,8 +70,6 @@ model User {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @default(now()) @updatedAt
   accessRequest AccessRequest?
-
-  @@index([username])
 }
 
 model InviteCode {
@@ -85,7 +83,6 @@ model InviteCode {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  @@index([code])
   @@index([ownerId])
 }
 
@@ -102,8 +99,6 @@ model Van {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-
-  @@index([userId])
 }
 
 model VanImage {
@@ -118,7 +113,6 @@ model VanImage {
   updatedAt DateTime @default(now()) @updatedAt
 
   @@unique([vanId, path])
-  @@index([vanId])
 }
 
 enum SpotType {
@@ -201,13 +195,11 @@ model Spot {
   rewildingEuropeId        String? @unique
   polskiCaravaningId       String? @unique
 
-  @@index([verifiedAt])
   @@index([publishedAt])
   @@index([type])
   @@index([ownerId])
   @@index([verifierId])
   @@index([creatorId])
-  @@index([latitude])
   @@index([longitude])
   @@index([verifiedAt, type, deletedAt, creatorId, publishedAt])
   @@index([latitude, longitude, verifiedAt, type, deletedAt, creatorId, publishedAt])
@@ -248,7 +240,6 @@ model SpotImage {
   updatedAt DateTime @default(now()) @updatedAt
 
   @@unique([spotId, path])
-  @@index([spotId])
   @@index([creatorId])
 }
 
@@ -332,9 +323,6 @@ model AccessRequest {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-
-  @@index([userId])
-  @@index([code])
 }
 
 enum FeedbackType {
@@ -433,6 +421,4 @@ model TripStop {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-
-  @@index([tripItemId])
 }
