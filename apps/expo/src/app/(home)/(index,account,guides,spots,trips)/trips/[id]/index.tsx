@@ -329,7 +329,7 @@ export default function TripDetailScreen() {
                     bounds: { sw: [bounds[0]!, bounds[1]!], ne: [bounds[2]!, bounds[3]!] },
                   }
                 : {
-                    zoomLevel: 5,
+                    zoomLevel: 3,
                     centerCoordinate: userLocation
                       ? [userLocation.longitude, userLocation.latitude]
                       : [INITIAL_LONGITUDE, INITIAL_LATITUDE],
