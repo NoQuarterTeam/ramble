@@ -28,7 +28,7 @@ export default function TripImagesCluster() {
 
   const utils = api.useUtils()
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  // biome-ignore lint/correctness/useExhaustiveDependencies: allow dat
   const handleLoadMore = React.useCallback(async () => {
     if (!parsedBounds) return
     const newImages = await utils.trip.media.byBounds.fetch({ bounds: parsedBounds, skip: images?.length || 0 })

@@ -102,7 +102,7 @@ export const tripRouter = createTRPCRouter({
         creatorId: true,
         startDate: true,
         endDate: true,
-        media: { where: { creatorId: ctx.user.id }, take: 1, orderBy: { timestamp: "desc" }, select: { timestamp: true } },
+        // media: { orderBy: { timestamp: "desc" }, select: {timestamp: true, latitude: true, longitude: true } },
         items: {
           orderBy: { order: "asc" },
           select: {
@@ -124,7 +124,12 @@ export const tripRouter = createTRPCRouter({
       },
     })
     if (!trip) throw new TRPCError({ code: "NOT_FOUND", message: "Trip not found" })
-    const latestMediaTimestamp = trip.media[0]?.timestamp
+    const latestMedia = await ctx.prisma.tripMedia.findFirst({
+      where: { tripId: input.id, trip: { users: { some: { id: ctx.user.id } } } },
+      orderBy: { timestamp: "desc" },
+      select: { timestamp: true },
+    })
+    const latestMediaTimestamp = latestMedia?.timestamp
     if (trip.items.length === 0) return { trip, latestMediaTimestamp }
     if (trip.items.length === 1)
       return {
