@@ -15,8 +15,8 @@ export const mediaRouter = createTRPCRouter({
       const media = await ctx.prisma.tripMedia.findMany({
         where: {
           tripId,
-          latitude: { gt: coords.minLat, lt: coords.maxLat },
-          longitude: { gt: coords.minLng, lt: coords.maxLng },
+          latitude: { not: null, gt: coords.minLat, lt: coords.maxLat },
+          longitude: { not: null, gt: coords.minLng, lt: coords.maxLng },
           deletedAt: null,
         },
         orderBy: { createdAt: "desc" },
@@ -30,7 +30,7 @@ export const mediaRouter = createTRPCRouter({
         media.map((media) => ({
           type: "Feature",
           geometry: { type: "Point", coordinates: [media.longitude!, media.latitude!] },
-          properties: { cluster: false, id: media.id, path: media.path, latitude: media.latitude, longitude: media.longitude },
+          properties: { cluster: false, id: media.id, path: media.path, latitude: media.latitude!, longitude: media.longitude! },
         })),
       )
       const clusters = clustersData.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], coords.zoom || 5)
@@ -65,6 +65,7 @@ export const mediaRouter = createTRPCRouter({
     return ctx.prisma.tripMedia.findMany({
       take: 30,
       skip: input.skip,
+      select: { id: true, path: true, latitude: true, longitude: true },
       where: { deletedAt: null, tripId: input.tripId, trip: { users: { some: { id: ctx.user.id } } } },
     })
   }),
@@ -72,7 +73,7 @@ export const mediaRouter = createTRPCRouter({
     return ctx.prisma.tripMedia.findUnique({ where: { id: input.id, trip: { users: { some: { id: ctx.user.id } } } } })
   }),
   update: protectedProcedure
-    .input(z.object({ id: z.string(), note: z.string().optional() }))
+    .input(z.object({ latitude: z.number(), longitude: z.number() }).and(z.object({ id: z.string() })))
     .mutation(({ ctx, input: { id, ...data } }) => {
       return ctx.prisma.tripMedia.update({ where: { id, trip: { users: { some: { id: ctx.user.id } } } }, data })
     }),

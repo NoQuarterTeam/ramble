@@ -2,8 +2,10 @@ import { createImageUrl } from "@ramble/shared"
 import { FlashList } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import { Link, useLocalSearchParams } from "expo-router"
+import { MapPinOff } from "lucide-react-native"
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
+import { Icon } from "~/components/Icon"
 import { ScreenView } from "~/components/ui/ScreenView"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
@@ -47,12 +49,17 @@ export default function TripImages() {
         ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
         renderItem={({ item }) => (
           <Link href={`/(home)/(trips)/trips/${id}/images/${item.id}`} asChild>
-            <TouchableOpacity>
+            <TouchableOpacity className="relative">
               <Image
                 className="bg-gray-200 dark:bg-gray-700"
                 source={{ uri: createImageUrl(item.path) }}
                 style={{ width: size, height: size }}
               />
+              {(!item.latitude || !item.longitude) && (
+                <View className="absolute bottom-1 left-1 flex items-center justify-center bg-background sq-6 rounded-full dark:bg-background-dark">
+                  <Icon icon={MapPinOff} size={16} />
+                </View>
+              )}
             </TouchableOpacity>
           </Link>
         )}
