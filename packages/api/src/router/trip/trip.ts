@@ -154,7 +154,16 @@ export const tripRouter = createTRPCRouter({
     const itemCoords = trip.items.flatMap((item, i) => {
       const nextItem = trip.items[i + 1]
       let coords = [[item.spot?.longitude || item.stop?.longitude, item.spot?.latitude || item.stop?.latitude]]
-      if (!item.date || !nextItem || !nextItem.date) return coords
+      if (!item.date) return coords
+      if (!nextItem || !nextItem.date) {
+        // put all remaining media after this item
+        const mediaBetween = media.filter((m) => m.timestamp >= item.date!)
+        if (mediaBetween.length > 0) {
+          coords = coords.concat(mediaBetween.map((m) => [m.longitude!, m.latitude!]))
+        }
+        return coords
+      }
+      // put all media between this item and the next
       const mediaBetween = media.filter((m) => m.timestamp >= item.date! && m.timestamp <= nextItem.date!)
       if (mediaBetween.length > 0) {
         coords = coords.concat(mediaBetween.map((m) => [m.longitude!, m.latitude!]))
