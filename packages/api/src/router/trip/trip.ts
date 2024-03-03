@@ -206,6 +206,9 @@ export const tripRouter = createTRPCRouter({
         return tx.tripStop.create({ data: { ...data, tripItemId: tripItem.id, image: image } })
       })
     }),
+  /**
+   * @deprecated Use items router
+   */
   removeItem: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
     const item = await ctx.prisma.tripItem.findUniqueOrThrow({ where: { id: input.id }, include: { stop: true } })
     await ctx.prisma.$transaction(async (tx) => {
@@ -225,8 +228,7 @@ export const tripRouter = createTRPCRouter({
       )
       return true
     }),
-  // temp v2 name until we can move to "users" key, will need to keep v2 for a while too
-  usersV2: tripUsersRouter,
+  usersV2: tripUsersRouter, // temp v2 name until we can move to "users" key, will need to keep v2 for a while too
   media: tripMediaRouter,
   items: tripItemsRouter,
   /**

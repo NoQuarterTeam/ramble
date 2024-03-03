@@ -531,9 +531,9 @@ const TripItem = React.memo(function _TripItem({
   const router = useRouter()
   const { showActionSheetWithOptions } = useActionSheet()
 
-  const { mutate } = api.trip.removeItem.useMutation({
+  const { mutate } = api.trip.items.remove.useMutation({
     onSuccess: () => {
-      utils.trip.detail.refetch({ id })
+      void utils.trip.detail.refetch({ id })
     },
   })
   const handleOpenMenu = () => {
