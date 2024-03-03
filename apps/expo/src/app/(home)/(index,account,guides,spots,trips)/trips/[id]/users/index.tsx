@@ -13,7 +13,7 @@ import { type RouterOutputs, api } from "~/lib/api"
 
 export default function TripUsers() {
   const { id } = useLocalSearchParams<{ id: string }>()
-  const { data, isLoading } = api.trip.users.all.useQuery({ tripId: id }, { enabled: !!id })
+  const { data, isLoading } = api.trip.usersV2.all.useQuery({ tripId: id }, { enabled: !!id })
   const users = data?.users
 
   return (
@@ -42,18 +42,18 @@ export default function TripUsers() {
   )
 }
 
-function UserItem({ user }: { user: RouterOutputs["trip"]["users"]["all"]["users"][number] }) {
+function UserItem({ user }: { user: RouterOutputs["trip"]["usersV2"]["all"]["users"][number] }) {
   const { id } = useLocalSearchParams<{ id: string }>()
   const utils = api.useUtils()
-  const { mutate, isLoading } = api.trip.users.remove.useMutation({
+  const { mutate, isLoading } = api.trip.usersV2.remove.useMutation({
     onMutate: () => {
-      utils.trip.users.all.setData({ tripId: id }, (prev) => {
+      utils.trip.usersV2.all.setData({ tripId: id }, (prev) => {
         if (!prev) return prev
         return { ...prev, users: prev.users.filter((u) => u.id !== user.id) }
       })
     },
     onSuccess: () => {
-      void utils.trip.users.all.refetch({ tripId: id })
+      void utils.trip.usersV2.all.refetch({ tripId: id })
     },
   })
 

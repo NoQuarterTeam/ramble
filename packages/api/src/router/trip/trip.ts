@@ -216,7 +216,73 @@ export const tripRouter = createTRPCRouter({
       )
       return true
     }),
-  users: tripUsersRouter,
+  // temp v2 name until we can move to "users" key, will need to keep v2 for a while too
+  usersV2: tripUsersRouter,
   media: tripMediaRouter,
   items: tripItemsRouter,
+  /**
+   * @deprecated Use users router
+   */
+  users: protectedProcedure.input(z.object({ id: z.string() })).query(({ ctx, input }) => {
+    return ctx.prisma.trip.findUniqueOrThrow({
+      where: { id: input.id },
+      select: {
+        id: true,
+        name: true,
+        users: {
+          where: { id: { not: { equals: ctx.user.id } } },
+          select: { id: true, username: true, firstName: true, lastName: true, avatar: true, avatarBlurHash: true },
+        },
+      },
+    })
+  }),
+  /**
+   * @deprecated Use users router
+   */
+  searchForUsers: protectedProcedure
+    .input(z.object({ tripId: z.string(), skip: z.number(), search: z.string().optional() }))
+    .query(({ ctx, input }) => {
+      return ctx.prisma.user.findMany({
+        skip: input.skip,
+        take: 12,
+        where: {
+          id: { not: ctx.user.id },
+          trips: { none: { id: input.tripId } },
+          OR: input.search
+            ? [
+                { username: { contains: input.search } },
+                { firstName: { contains: input.search } },
+                { lastName: { contains: input.search } },
+              ]
+            : undefined,
+        },
+        orderBy: { createdAt: "desc" },
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          username: true,
+          avatar: true,
+          avatarBlurHash: true,
+        },
+      })
+    }),
+  /**
+   * @deprecated Use users router
+   */
+  addUser: protectedProcedure.input(z.object({ tripId: z.string(), userId: z.string() })).mutation(({ ctx, input }) => {
+    return ctx.prisma.trip.update({
+      where: { id: input.tripId },
+      data: { users: { connect: { id: input.userId } } },
+    })
+  }),
+  /**
+   * @deprecated Use users router
+   */
+  removeUser: protectedProcedure.input(z.object({ tripId: z.string(), userId: z.string() })).mutation(({ ctx, input }) => {
+    return ctx.prisma.trip.update({
+      where: { id: input.tripId },
+      data: { users: { disconnect: { id: input.userId } } },
+    })
+  }),
 })

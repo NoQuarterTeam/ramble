@@ -16,7 +16,7 @@ import { type RouterOutputs, api } from "~/lib/api"
 export default function AddTripUsers() {
   const { id } = useLocalSearchParams<{ id: string }>()
   const [search, setSearch] = React.useState("")
-  const { data, isLoading, refetch } = api.trip.users.search.useQuery(
+  const { data, isLoading, refetch } = api.trip.usersV2.search.useQuery(
     { tripId: id, search, skip: 0 },
     { enabled: !!search, keepPreviousData: true },
   )
@@ -58,16 +58,16 @@ function UserItem({
   onSelect,
 }: {
   onSelect: () => void
-  user: RouterOutputs["trip"]["users"]["search"][number]
+  user: RouterOutputs["trip"]["usersV2"]["search"][number]
 }) {
   const { id } = useLocalSearchParams<{ id: string }>()
   const utils = api.useUtils()
-  const { mutate, isLoading } = api.trip.users.add.useMutation({
+  const { mutate, isLoading } = api.trip.usersV2.add.useMutation({
     onSuccess: async () => {
       onSelect()
       void utils.trip.active.refetch()
       void utils.trip.mine.refetch()
-      await utils.trip.users.all.refetch({ tripId: id })
+      await utils.trip.usersV2.all.refetch({ tripId: id })
       toast({ title: "User added", type: "success" })
     },
   })
