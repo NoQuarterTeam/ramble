@@ -389,16 +389,17 @@ function TripImageSync({
           endCursor = newPages.endCursor
           if (!newPages.hasNextPage) break
         }
-        const imagesToSync: (MediaLibrary.Asset & { latitude: number; longitude: number; url: string })[] = []
+        const imagesToSync = []
         for (const image of images) {
           try {
             const info = await MediaLibrary.getAssetInfoAsync(image)
             if (!info.location) continue
             const imageWithData = {
-              ...image,
+              assetId: image.id,
               url: info.localUri || image.uri,
               latitude: info.location.latitude,
               longitude: info.location.longitude,
+              timestamp: dayjs(image.creationTime).toDate(),
             }
             imagesToSync.push(imageWithData)
           } catch (error) {
@@ -409,14 +410,7 @@ function TripImageSync({
         for (const image of imagesToSync) {
           try {
             const key = await upload(image.url)
-            const payload = {
-              path: key,
-              url: image.url,
-              latitude: image.latitude,
-              longitude: image.longitude,
-              assetId: image.id,
-              timestamp: dayjs(image.creationTime).toDate(),
-            }
+            const payload = { path: key, ...image }
             uploadMedia({ tripId: id, image: payload })
           } catch (error) {
             console.log(error)
