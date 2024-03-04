@@ -24,23 +24,23 @@ export default function TripImages() {
   const { id } = useLocalSearchParams<{ id: string }>()
 
   const { data, refetch, isLoading } = api.trip.media.all.useQuery({ tripId: id, skip: 0 })
-
-  const [images, setImages] = React.useState(data)
+  const total = data?.total || 0
+  const [images, setImages] = React.useState(data?.items || [])
 
   React.useEffect(() => {
-    setImages(data)
-  }, [data])
+    setImages(data?.items || [])
+  }, [data?.items])
 
   const utils = api.useUtils()
 
   const [isRefetching, setIsRefetching] = React.useState(false)
   // biome-ignore lint/correctness/useExhaustiveDependencies: allow dat
   const handleLoadMore = React.useCallback(async () => {
-    if (isRefetching) return
+    if (isRefetching || total === images.length) return
     try {
       setIsRefetching(true)
       const newImages = await utils.trip.media.all.fetch({ tripId: id, skip: images?.length || 0 })
-      setImages([...(images || []), ...newImages])
+      setImages([...(images || []), ...newImages.items])
     } catch {
       toast({ title: "Failed to load more images", type: "error" })
     } finally {

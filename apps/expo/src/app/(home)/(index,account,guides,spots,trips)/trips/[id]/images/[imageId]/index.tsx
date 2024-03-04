@@ -47,11 +47,11 @@ export default function TripImage() {
       void utils.trip.detail.refetch({ id })
       if (parsedBounds) {
         utils.trip.media.byBounds.setData({ tripId: id, skip: 0, bounds: parsedBounds }, (prev) =>
-          prev ? prev.filter((media) => media.id !== imageId) : prev,
+          prev ? { total: prev.total - 1, items: prev.items.filter((media) => media.id !== imageId) } : prev,
         )
       } else {
         utils.trip.media.all.setData({ tripId: id, skip: 0 }, (prev) =>
-          prev ? prev.filter((media) => media.id !== imageId) : prev,
+          prev ? { total: prev.total - 1, items: prev.items.filter((media) => media.id !== imageId) } : prev,
         )
       }
       router.back()
