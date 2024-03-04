@@ -103,12 +103,8 @@ export default function TripImages() {
       title=""
       containerClassName="px-0"
       rightElement={
-        <TouchableOpacity
-          onPress={handleOpenImageLibrary}
-          className="sq-10 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
-          activeOpacity={0.8}
-        >
-          <Icon icon={PlusCircle} size={24} color="primary" />
+        <TouchableOpacity onPress={handleOpenImageLibrary} activeOpacity={0.8}>
+          <Icon icon={PlusCircle} />
         </TouchableOpacity>
       }
     >
