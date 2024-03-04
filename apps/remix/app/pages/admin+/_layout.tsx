@@ -1,6 +1,6 @@
 import type { NavLinkProps } from "@remix-run/react"
 import { Link, NavLink, Outlet } from "@remix-run/react"
-import { Flag, GaugeCircle, HelpingHand, Mail, MapPin, MessageCircle, Moon, Sun, User } from "lucide-react"
+import { Flag, GaugeCircle, HelpingHand, Mail, MapPin, MessageCircle, Moon, Route, Sun, User } from "lucide-react"
 
 import { merge } from "@ramble/shared"
 
@@ -38,6 +38,9 @@ export default function AdminLayout() {
           </AdminLink>
           <AdminLink Icon={MapPin} to="spots">
             Spots
+          </AdminLink>
+          <AdminLink Icon={Route} to="trips">
+            Trips
           </AdminLink>
           <AdminLink Icon={Flag} to="spot-reports">
             Spot reports
