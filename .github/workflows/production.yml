@@ -50,4 +50,6 @@ jobs:
         uses: expo/expo-github-action/preview@v8
         with:
           working-directory: apps/expo
-          command: eas update --branch production --message "${{ github.event.head_commit.message }}" && npx sentry-expo-upload-sourcemaps dist
+          command: 
+            eas update --branch production --message "${{ github.event.head_commit.message }}"
+            npx sentry-expo-upload-sourcemaps dist
