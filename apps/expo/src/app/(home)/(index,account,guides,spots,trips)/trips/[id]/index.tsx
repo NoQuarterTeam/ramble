@@ -357,19 +357,17 @@ function TripImageSync({
     },
   })
   const [isSyncing, setIsSyncing] = React.useState(false)
-  const hasStartedSyncing = React.useRef(false)
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: allow it
   React.useEffect(() => {
     async function loadImages() {
       const isTripActive = dayjs(startDate).isBefore(dayjs()) && dayjs(endDate).isAfter(dayjs())
       if (!isTripActive) return
-      hasStartedSyncing.current = true
       try {
         setIsSyncing(true)
         const createdAfter = latestMediaTimestamp
           ? dayjs(latestMediaTimestamp)
-              .add(1, "millisecond") // need this to make query exlcude latest
+              .add(1, "millisecond") // need this to make query exclude latest
               .toDate()
           : dayjs(startDate).startOf("day").toDate()
         const createdBefore = dayjs(endDate).endOf("day").toDate()
