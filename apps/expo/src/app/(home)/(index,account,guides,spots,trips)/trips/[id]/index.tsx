@@ -17,7 +17,7 @@ import * as MediaLibrary from "expo-media-library"
 import { MediaType, getAssetsAsync } from "expo-media-library"
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
-import { ChevronLeft, Edit2, Flag, Home, Image as ImageIcon, MapPin, PlusCircle, Users } from "lucide-react-native"
+import { ChevronLeft, Edit2, Flag, Home, Image as ImageIcon, MapPin, Plus, Users } from "lucide-react-native"
 import * as React from "react"
 import { ActivityIndicator, Alert, Linking, TouchableOpacity, View } from "react-native"
 import DraggableFlatList, { type RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlist"
@@ -454,6 +454,7 @@ function TripList({
       void utils.trip.detail.refetch({ id })
     },
   })
+
   const [activeItemIndex, setActiveItemIndex] = React.useState<number | null>(null)
   const activeIndexRef = React.useRef<number | null>(null)
 
@@ -464,9 +465,20 @@ function TripList({
   return (
     <DraggableFlatList
       horizontal
-      onDragEnd={(dragData) => {
-        setTripItems(dragData.data)
-        mutate({ id, items: dragData.data.map((i) => i.id) })
+      onDragEnd={async ({ to, data }) => {
+        const movedItem = data[to]
+        let isOutOfOrder = false
+        if (movedItem?.date) {
+          // checks if dates are in order
+          const itemDates = data.map((item) => item.date).filter(Boolean) as Date[]
+          const isSorted = itemDates.every((date, i) => i === 0 || dayjs(date).isAfter(itemDates[i - 1]))
+          if (!isSorted) {
+            toast({ title: "Dates are not in order", message: "We have removed the date of this item" })
+            isOutOfOrder = true
+          }
+        }
+        setTripItems(data.map((item, i) => (i === to ? { ...item, date: null } : item)))
+        mutate({ id, items: data.map((i) => i.id), itemDateResetId: isOutOfOrder && movedItem ? movedItem.id : undefined })
       }}
       onScrollOffsetChange={(x) => {
         if (x < 0) return
@@ -484,6 +496,8 @@ function TripList({
       style={{ height: LIST_HEIGHT }}
       contentContainerStyle={{ paddingRight: 60, paddingLeft: 12 }}
       data={tripItems}
+      autoscrollThreshold={1}
+      autoscrollSpeed={100}
       showsHorizontalScrollIndicator={false}
       keyExtractor={(item) => item.id}
       renderItem={(props) => {
@@ -531,7 +545,7 @@ const TripItem = React.memo(function _TripItem({
   const handleOpenMenu = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
     if (item.spot) {
-      const options = ["View", "Edit date", "Remove", "Cancel"]
+      const options = ["View", "Set date", "Remove", "Cancel"]
       const viewIndex = 0
       const editIndex = 1
       const destructiveButtonIndex = 2
@@ -553,7 +567,7 @@ const TripItem = React.memo(function _TripItem({
         }
       })
     } else {
-      const options = ["Edit date", "Remove", "Cancel"]
+      const options = ["Set date", "Remove", "Cancel"]
       const editIndex = 0
       const destructiveButtonIndex = 2
       const cancelButtonIndex = 3
@@ -582,13 +596,13 @@ const TripItem = React.memo(function _TripItem({
           if (spot) void utils.spot.detail.prefetch({ id: spot.id })
         }}
         onLongPress={drag}
-        className="flex w-full flex-row items-center space-x-2 pl-2"
+        className="flex flex-row items-center space-x-2 pl-2"
         style={{ width: ITEM_WIDTH }}
       >
         <View style={{ opacity: isActive ? 0 : 1 }}>
           <AddTripItemMenu order={addBeforeOrder}>
-            <TouchableOpacity className="bg-background dark:bg-background-dark rounded-full p-2">
-              <Icon icon={PlusCircle} size={16} />
+            <TouchableOpacity className="bg-primary rounded-full p-1">
+              <Icon icon={Plus} size={16} color="white" />
             </TouchableOpacity>
           </AddTripItemMenu>
         </View>
@@ -656,7 +670,7 @@ function ListHeader({ trip }: { trip: RouterOutputs["trip"]["detail"]["trip"] })
     <View className="flex h-full items-center justify-center">
       <View
         style={{ width: HEADER_FOOTER_WIDTH, height: HEADER_FOOTER_WIDTH }}
-        className="bg-background dark:bg-background-dark flex items-center justify-center space-y-2 rounded-full border-2 border-gray-300 dark:border-gray-700 p-2"
+        className="bg-background dark:bg-background-dark flex items-center justify-center space-y-2 rounded-full border border-primary p-2"
       >
         <Icon icon={Home} size={16} />
         <Text className="text-xxs">{dayjs(trip.startDate).format("D MMM YY")}</Text>
@@ -671,19 +685,16 @@ function ListFooter({ trip }: { trip: RouterOutputs["trip"]["detail"]["trip"] })
     <View className="flex h-full flex-row items-center space-x-2 pl-2">
       <AddTripItemMenu>
         <TouchableOpacity
-          className={join(
-            "bg-background dark:bg-background-dark flex flex-row items-center space-x-2 rounded-full p-2",
-            hasNoItems && "bg-primary p-5",
-          )}
+          className={join("bg-primary flex flex-row items-center space-x-2 rounded-full p-1", hasNoItems && "p-5")}
         >
-          <Icon icon={PlusCircle} size={16} color={hasNoItems ? "white" : undefined} />
+          <Icon icon={Plus} size={16} color="white" />
           {hasNoItems && <Text className="font-600 text-sm text-white">Add your first stop</Text>}
         </TouchableOpacity>
       </AddTripItemMenu>
       <View className="flex h-full items-center justify-center">
         <View
           style={{ width: HEADER_FOOTER_WIDTH, height: HEADER_FOOTER_WIDTH }}
-          className="bg-background dark:bg-background-dark flex items-center justify-center space-y-2 rounded-full border-2 border-gray-300 dark:border-gray-700 p-2"
+          className="bg-background dark:bg-background-dark flex items-center justify-center space-y-2 rounded-full border border-primary p-2"
         >
           <Icon icon={Flag} size={16} />
           <Text className="text-xxs">{dayjs(trip.endDate).format("D MMM YY")}</Text>

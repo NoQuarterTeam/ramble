@@ -10,9 +10,11 @@ import { spotRevisionRouter } from "./router/spotRevision"
 import { tripRouter } from "./router/trip/trip"
 import { userRouter } from "./router/user"
 import { vanRouter } from "./router/van"
+import { versionRouter } from "./router/version"
 import { createTRPCRouter } from "./trpc"
 
 export const appRouter = createTRPCRouter({
+  version: versionRouter,
   auth: authRouter,
   feedback: feedbackRouter,
   inviteCode: inviteCodeRouter,

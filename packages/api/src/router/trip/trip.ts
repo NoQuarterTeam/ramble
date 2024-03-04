@@ -155,14 +155,16 @@ export const tripRouter = createTRPCRouter({
       const nextItem = trip.items[i + 1]
       let coords = [[item.spot?.longitude || item.stop?.longitude, item.spot?.latitude || item.stop?.latitude]]
       if (!item.date) return coords
-      if (!nextItem || !nextItem.date) {
-        // put all remaining media after this item
-        const mediaBetween = media.filter((m) => m.timestamp >= item.date!)
-        if (mediaBetween.length > 0) {
-          coords = coords.concat(mediaBetween.map((m) => [m.longitude!, m.latitude!]))
-        }
-        return coords
-      }
+      if (!nextItem || !nextItem.date) return coords
+      // TODO: what do we actually do here? if there's no date on next item, we can't really do anything, just dont include in route for now
+      // if (!nextItem || !nextItem.date) {
+      //   // put all remaining media after this item
+      //   const mediaBetween = media.filter((m) => m.timestamp >= item.date!) // this makes no sense as it would add all media after every item in the loop, dumb.
+      //   if (mediaBetween.length > 0) {
+      //     coords = coords.concat(mediaBetween.map((m) => [m.longitude!, m.latitude!]))
+      //   }
+      //   return coords
+      // }
       // put all media between this item and the next
       const mediaBetween = media.filter((m) => m.timestamp >= item.date! && m.timestamp <= nextItem.date!)
       if (mediaBetween.length > 0) {
@@ -221,12 +223,15 @@ export const tripRouter = createTRPCRouter({
     return true
   }),
   updateOrder: protectedProcedure
-    .input(z.object({ id: z.string(), items: z.array(z.string()) }))
-    .mutation(async ({ input, ctx }) => {
-      await ctx.prisma.$transaction(
-        input.items.map((id, order) => ctx.prisma.tripItem.update({ where: { id }, data: { order } })),
-      )
-      return true
+    .input(z.object({ id: z.string(), items: z.array(z.string()), itemDateResetId: z.string().optional() }))
+    .mutation(({ input, ctx }) => {
+      return ctx.prisma.$transaction(async (tx) => {
+        if (input.itemDateResetId) {
+          await tx.tripItem.update({ where: { id: input.itemDateResetId }, data: { date: null } })
+        }
+        await Promise.all(input.items.map((id, order) => tx.tripItem.update({ where: { id }, data: { order } })))
+        return true
+      })
     }),
   usersV2: tripUsersRouter, // temp v2 name until we can move to "users" key, will need to keep v2 for a while too
   media: tripMediaRouter,

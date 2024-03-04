@@ -21,7 +21,7 @@ export default function EditTripItem() {
   })
 
   return (
-    <ModalView title="edit date">
+    <ModalView title="set date">
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <DateTimePicker
           value={date}
