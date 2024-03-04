@@ -50,8 +50,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       publishedAt: shouldPublishLater ? dayjs().add(2, "weeks").toDate() : undefined,
       address: customAddress || result.data.address,
       creator: { connect: { id: user.id } },
-      verifiedAt: user.role === "GUIDE" ? new Date() : undefined,
-      verifier: user.role === "GUIDE" ? { connect: { id: user.id } } : undefined,
       amenities: amenities ? { create: amenities } : undefined,
       images: { create: imageData },
     },
