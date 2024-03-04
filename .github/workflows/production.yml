@@ -52,4 +52,3 @@ jobs:
           working-directory: apps/expo
           command: 
             eas update --branch production --message "${{ github.event.head_commit.message }}"
-            npx sentry-expo-upload-sourcemaps dist

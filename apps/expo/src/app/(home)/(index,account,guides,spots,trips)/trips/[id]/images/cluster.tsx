@@ -20,7 +20,6 @@ export default function TripImagesCluster() {
     { bounds: parsedBounds!, skip: 0, tripId: id },
     { enabled: !!parsedBounds },
   )
-
   const total = data?.total || 0
 
   const [images, setImages] = React.useState(data?.items || [])
