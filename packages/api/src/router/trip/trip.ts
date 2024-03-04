@@ -109,7 +109,7 @@ export const tripRouter = createTRPCRouter({
             latitude: { not: null },
             longitude: { not: null },
           },
-          orderBy: { timestamp: "desc" },
+          orderBy: { timestamp: "asc" },
           select: { timestamp: true, latitude: true, longitude: true },
         },
         items: {
@@ -151,6 +151,7 @@ export const tripRouter = createTRPCRouter({
           ? [trip.items[0]?.spot.longitude, trip.items[0]?.spot.latitude]
           : ([trip.items[0]?.stop!.longitude, trip.items[0]?.stop!.latitude] as [number, number]),
       }
+
     const itemCoords = trip.items.flatMap((item, i) => {
       const nextItem = trip.items[i + 1]
       let coords = [[item.spot?.longitude || item.stop?.longitude, item.spot?.latitude || item.stop?.latitude]]
