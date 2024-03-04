@@ -252,8 +252,6 @@ export const spotRouter = createTRPCRouter({
           ...data,
           publishedAt: shouldPublishLater ? dayjs().add(2, "weeks").toDate() : undefined,
           creator: { connect: { id: ctx.user.id } },
-          verifiedAt: ctx.user.role === "GUIDE" ? new Date() : null,
-          verifier: ctx.user.role === "GUIDE" ? { connect: { id: ctx.user.id } } : undefined,
           images: { create: imageData },
           amenities: amenities ? { create: amenities } : undefined,
         },
