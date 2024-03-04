@@ -569,8 +569,8 @@ const TripItem = React.memo(function _TripItem({
     } else {
       const options = ["Set date", "Remove", "Cancel"]
       const editIndex = 0
-      const destructiveButtonIndex = 2
-      const cancelButtonIndex = 3
+      const destructiveButtonIndex = 1
+      const cancelButtonIndex = 2
       showActionSheetWithOptions({ options, cancelButtonIndex, destructiveButtonIndex }, (selectedIndex) => {
         switch (selectedIndex) {
           case editIndex:
