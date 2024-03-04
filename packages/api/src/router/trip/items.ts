@@ -12,22 +12,28 @@ export const tripItemsRouter = createTRPCRouter({
     const newItem = await ctx.prisma.tripItem.update({ where: { id: input.id }, data: { date: input.date } })
 
     // move item to new position if date changed
-    if (input.date && oldItem.date && oldItem.date !== input.date) {
+    if (input.date && oldItem.date !== input.date) {
       // only reorder if dates changed
       const tripItems = await ctx.prisma.tripItem.findMany({
         where: { tripId: oldItem.tripId },
         orderBy: { order: "asc" },
       })
       const itemsWithDates = tripItems.filter((item) => !!item.date)
-      const isSorted = itemsWithDates.every((item, i) => i === 0 || dayjs(item.date!).isAfter(itemsWithDates[i - 1].date!))
+      const isSorted = itemsWithDates.every(
+        (item, i) =>
+          i === 0 ||
+          dayjs(item.date!).isSame(itemsWithDates[i - 1].date!) ||
+          dayjs(item.date!).isAfter(itemsWithDates[i - 1].date!),
+      )
       // dont need to do anything if already sorted
       if (isSorted) return newItem
       // find new order
-      let newOrder = 0
+      let newOrder = -1
       for (const item of tripItems) {
-        if (item.id === input.id) continue
-        if (item.date && dayjs(item.date).isAfter(input.date)) {
-          newOrder = item.order - 1
+        if (item.id === input.id || !item.date) continue
+        if (dayjs(item.date).isBefore(input.date)) {
+          newOrder = item.order + 0.5
+        } else {
           break
         }
       }

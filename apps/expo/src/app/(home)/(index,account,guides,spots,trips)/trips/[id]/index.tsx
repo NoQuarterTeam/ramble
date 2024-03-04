@@ -471,7 +471,9 @@ function TripList({
         if (movedItem?.date) {
           // checks if dates are in order
           const itemDates = data.map((item) => item.date).filter(Boolean) as Date[]
-          const isSorted = itemDates.every((date, i) => i === 0 || dayjs(date).isAfter(itemDates[i - 1]))
+          const isSorted = itemDates.every(
+            (date, i) => i === 0 || dayjs(date).isSame(itemDates[i - 1]) || dayjs(date).isAfter(itemDates[i - 1]),
+          )
           if (!isSorted) {
             toast({ title: "Dates are not in order", message: "We have removed the date of this item" })
             isOutOfOrder = true
