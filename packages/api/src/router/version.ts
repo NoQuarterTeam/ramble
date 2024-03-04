@@ -2,6 +2,6 @@ import { createTRPCRouter, publicProcedure } from "../trpc"
 
 export const versionRouter = createTRPCRouter({
   latest: publicProcedure.query(() => {
-    return 1
+    return "1.4.0"
   }),
 })

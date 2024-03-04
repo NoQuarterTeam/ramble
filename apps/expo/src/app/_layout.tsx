@@ -110,6 +110,34 @@ export default function RootLayout() {
   )
 }
 
+// function CheckAPIVersion(props: { children: React.ReactNode }) {
+//   const { data, isLoading } = api.version.latest.useQuery()
+
+//   if (isLoading) return null
+//   if (data !== VERSION)
+//     return (
+//       <View className="flex-1 bg-background dark:bg-background-dark p-6 flex items-center justify-center">
+//         <Image source={require("../../assets/adaptive-icon.png")} style={{ width: 100, height: 100 }} />
+//         <Text className="text-center pb-4 text-xl">
+//           You are using an outdated version of Ramble. Please update to the latest version to get the best experience.
+//         </Text>
+//         <Button
+//           size="sm"
+//           onPress={() =>
+//             Linking.openURL(
+//               isAndroid
+//                 ? "https://play.google.com/store/apps/details?id=co.noquarter.ramble"
+//                 : "https://apps.apple.com/app/ramble-van-travel-app/id6468265289?l=en-GB",
+//             )
+//           }
+//         >
+//           Update now
+//         </Button>
+//       </View>
+//     )
+//   return <>{props.children}</>
+// }
+
 function PrefetchTabs(props: { children: React.ReactNode }) {
   const { me, isLoading, error } = useMe()
   const utils = api.useUtils()

@@ -26,7 +26,7 @@ export function BetaInvitationContent(props: Props) {
         </div>
       </Container>
       <div className="flex items-center justify-center space-x-4">
-        <Link href="https://apps.apple.com/us/app/ramble-van-travel-app/id6468265289?itsct=apps_box_badge&amp;itscg=30200">
+        <Link href="https://apps.apple.com/app/ramble-van-travel-app/id6468265289?itsct=apps_box_badge&amp;itscg=30200">
           <Img
             src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1595289600"
             alt="Download on the App Store"
