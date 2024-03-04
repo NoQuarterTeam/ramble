@@ -55,7 +55,6 @@ export default function TripImages() {
 
   const uploadAssets = async (assets: ImagePicker.ImagePickerResult["assets"]) => {
     if (!assets) return
-    setIsUploading(true)
     for (const asset of assets) {
       if (!asset.assetId) continue // TODO: need to do somit here, as all camera images dont have asset id, guessing coz its not yet saved to local phone
       const info = await MediaLibrary.getAssetInfoAsync(asset.assetId)
@@ -103,6 +102,7 @@ export default function TripImages() {
         quality: 0.2,
       })
       if (result.canceled || result.assets.length === 0) return
+      setIsUploading(true)
       await uploadAssets(result.assets)
     } catch (error) {
       console.log(error)
@@ -131,6 +131,7 @@ export default function TripImages() {
         exif: true,
       })
       if (!result.assets || result.assets.length === 0) return
+      setIsUploading(true)
       await uploadAssets(result.assets)
     } catch (error) {
       console.log(error)
