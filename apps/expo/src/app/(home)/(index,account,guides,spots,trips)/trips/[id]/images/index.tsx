@@ -33,15 +33,20 @@ export default function TripImages() {
 
   const utils = api.useUtils()
 
+  const [isRefetching, setIsRefetching] = React.useState(false)
   // biome-ignore lint/correctness/useExhaustiveDependencies: allow dat
   const handleLoadMore = React.useCallback(async () => {
+    if (isRefetching) return
     try {
+      setIsRefetching(true)
       const newImages = await utils.trip.media.all.fetch({ tripId: id, skip: images?.length || 0 })
       setImages([...(images || []), ...newImages])
     } catch {
       toast({ title: "Failed to load more images", type: "error" })
+    } finally {
+      setIsRefetching(false)
     }
-  }, [images, id])
+  }, [isRefetching, images, id])
 
   const upload = useS3QuickUpload()
 
@@ -118,6 +123,7 @@ export default function TripImages() {
             showsVerticalScrollIndicator={false}
             estimatedItemSize={size}
             onEndReached={handleLoadMore}
+            onEndReachedThreshold={0.5}
             numColumns={3}
             ListEmptyComponent={<Text className="text-center">No images yet</Text>}
             data={images}
