@@ -451,7 +451,7 @@ function TripList({
   const utils = api.useUtils()
   const { mutate } = api.trip.updateOrder.useMutation({
     onSuccess: () => {
-      utils.trip.detail.refetch({ id })
+      void utils.trip.detail.refetch({ id })
     },
   })
   const [activeItemIndex, setActiveItemIndex] = React.useState<number | null>(null)
@@ -479,7 +479,7 @@ function TripList({
       }}
       dragItemOverflow
       ListHeaderComponent={<ListHeader trip={trip} />}
-      ListFooterComponent={<ListFooter trip={trip} hasNoItems={trip.items.length === 0} />}
+      ListFooterComponent={<ListFooter trip={trip} />}
       className="py-3"
       style={{ height: LIST_HEIGHT }}
       contentContainerStyle={{ paddingRight: 60, paddingLeft: 12 }}
@@ -665,7 +665,8 @@ function ListHeader({ trip }: { trip: RouterOutputs["trip"]["detail"]["trip"] })
   )
 }
 
-function ListFooter({ trip, hasNoItems }: { hasNoItems: boolean; trip: RouterOutputs["trip"]["detail"]["trip"] }) {
+function ListFooter({ trip }: { trip: RouterOutputs["trip"]["detail"]["trip"] }) {
+  const hasNoItems = trip.items.length === 0
   return (
     <View className="flex h-full flex-row items-center space-x-2 pl-2">
       <AddTripItemMenu>
