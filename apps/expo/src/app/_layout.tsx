@@ -40,6 +40,7 @@ Sentry.init({
   debug: true,
   enabled: !IS_DEV,
 })
+
 AvoidSoftInput.setShouldMimicIOSBehavior(true)
 
 SplashScreen.preventAutoHideAsync()
