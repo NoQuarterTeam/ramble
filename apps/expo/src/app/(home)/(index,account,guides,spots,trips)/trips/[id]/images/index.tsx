@@ -50,7 +50,6 @@ export default function TripImages() {
       utils.trip.detail.setData({ id }, (prev) => (prev ? { ...prev, latestMediaTimestamp: timestamp } : prev))
     },
   })
-  const [_status, requestPermission] = ImagePicker.useCameraPermissions()
 
   const [isUploading, setIsUploading] = React.useState(false)
 
@@ -81,12 +80,14 @@ export default function TripImages() {
     }
     refetch()
   }
+
+  const [_mediaStatus, requestMediaLibrary] = ImagePicker.useMediaLibraryPermissions()
   const handleOpenImageLibrary = async () => {
-    const perm = await requestPermission()
+    const perm = await requestMediaLibrary()
     if (!perm.granted) {
       return Alert.alert(
-        "Camera library permissions required",
-        "Please go to your phone's settings to grant camera permissions for Ramble",
+        "Media library permissions required",
+        "Please go to your phone's settings to grant media library permissions for Ramble",
         [
           { text: "Cancel", style: "cancel" },
           { text: "Open settings", onPress: Linking.openSettings },
@@ -110,6 +111,7 @@ export default function TripImages() {
     }
   }
 
+  const [_status, requestPermission] = ImagePicker.useCameraPermissions()
   const handleOpenCamera = async () => {
     const perm = await requestPermission()
     if (!perm.granted) {
