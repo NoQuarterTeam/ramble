@@ -71,7 +71,7 @@ export default function TripImages() {
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: false,
         allowsMultipleSelection: true,
-        selectionLimit: 20,
+        selectionLimit: 40,
         quality: 0.5,
       })
       if (result.canceled || result.assets.length === 0) return
