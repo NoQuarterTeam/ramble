@@ -18,6 +18,7 @@ export const loader = async () => {
       listCount: db.list.count().then((r) => r),
       privateListCount: db.list.count({ where: { isPrivate: true } }).then((r) => r),
       publicListCount: db.list.count({ where: { isPrivate: false } }).then((r) => r),
+      tripCount: db.trip.count().then((r) => r),
     },
     {
       headers: {
@@ -124,6 +125,20 @@ export default function AdminHome() {
                 </React.Suspense>
               </div>
             </div>
+          </div>
+        </TileBody>
+      </Tile>
+      <Tile>
+        <TileHeader>
+          <h2 className="font-normal">Trips</h2>
+        </TileHeader>
+        <TileBody>
+          <div className="space-y-4">
+            <React.Suspense fallback={<Spinner />}>
+              <p className="text-3xl">
+                <Await resolve={promise.tripCount}>{(data) => data.toLocaleString()}</Await>
+              </p>
+            </React.Suspense>
           </div>
         </TileBody>
       </Tile>

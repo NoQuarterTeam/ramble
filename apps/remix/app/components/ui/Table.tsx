@@ -19,7 +19,8 @@ export function Table<T>({
   ExpandComponent,
 }: {
   data: T[]
-  columns: ColumnDef<T, unknown>[]
+  // biome-ignore lint/suspicious/noExplicitAny: thats what react table does
+  columns: ColumnDef<T, any>[]
   count: number
   ExpandComponent?: React.ComponentType<{ row: Row<T> }>
 }) {
