@@ -9,7 +9,7 @@ import { PlusCircle } from "lucide-react-native"
 import { MapPinOff } from "lucide-react-native"
 import * as React from "react"
 import { ActivityIndicator, Alert, Linking, TouchableOpacity, View } from "react-native"
-import * as DropdownMenu from "zeego/dropdown-menu"
+
 import { Icon } from "~/components/Icon"
 import { ScreenView } from "~/components/ui/ScreenView"
 import { Text } from "~/components/ui/Text"
@@ -53,33 +53,6 @@ export default function TripImages() {
 
   const [isUploading, setIsUploading] = React.useState(false)
 
-  const uploadAssets = async (assets: ImagePicker.ImagePickerResult["assets"]) => {
-    if (!assets) return
-    for (const asset of assets) {
-      if (!asset.assetId) continue // TODO: need to do somit here, as all camera images dont have asset id, guessing coz its not yet saved to local phone
-      const info = await MediaLibrary.getAssetInfoAsync(asset.assetId)
-      const image = {
-        ...asset,
-        id: info.id,
-        creationTime: info.creationTime,
-        url: info.localUri || asset.uri,
-        latitude: info.location?.latitude,
-        longitude: info.location?.longitude,
-      }
-      const key = await upload(image.url)
-      const payload = {
-        path: key,
-        url: image.url,
-        latitude: image.latitude || null,
-        longitude: image.longitude || null,
-        assetId: image.id,
-        timestamp: dayjs(image.creationTime).toDate(),
-      }
-      uploadMedia({ tripId: id, image: payload })
-    }
-    refetch()
-  }
-
   const [_mediaStatus, requestMediaLibrary] = ImagePicker.useMediaLibraryPermissions()
   const handleOpenImageLibrary = async () => {
     const perm = await requestMediaLibrary()
@@ -98,41 +71,26 @@ export default function TripImages() {
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: false,
         allowsMultipleSelection: true,
-        selectionLimit: 0,
-        quality: 0.2,
+        selectionLimit: 20,
+        quality: 0.5,
       })
       if (result.canceled || result.assets.length === 0) return
       setIsUploading(true)
-      await uploadAssets(result.assets)
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setIsUploading(false)
-    }
-  }
-
-  const [_status, requestPermission] = ImagePicker.useCameraPermissions()
-  const handleOpenCamera = async () => {
-    const perm = await requestPermission()
-    if (!perm.granted) {
-      return Alert.alert(
-        "Camera permissions required",
-        "Please go to your phone's settings to grant camera permissions for Ramble",
-        [
-          { text: "Cancel", style: "cancel" },
-          { text: "Open settings", onPress: Linking.openSettings },
-        ],
-      )
-    }
-    try {
-      const result = await ImagePicker.launchCameraAsync({
-        allowsEditing: true,
-        allowsMultipleSelection: true,
-        exif: true,
-      })
-      if (!result.assets || result.assets.length === 0) return
-      setIsUploading(true)
-      await uploadAssets(result.assets)
+      for (const asset of result.assets) {
+        if (!asset.assetId) continue // ??
+        const info = await MediaLibrary.getAssetInfoAsync(asset.assetId)
+        const image = {
+          assetId: info.id,
+          timestamp: dayjs(info.creationTime).toDate(),
+          url: info.localUri || asset.uri,
+          latitude: info.location?.latitude || null,
+          longitude: info.location?.longitude || null,
+        }
+        const key = await upload(image.url)
+        const payload = { path: key, ...image }
+        uploadMedia({ tripId: id, image: payload })
+      }
+      refetch()
     } catch (error) {
       console.log(error)
     } finally {
@@ -145,24 +103,13 @@ export default function TripImages() {
       title=""
       containerClassName="px-0"
       rightElement={
-        <DropdownMenu.Root>
-          <DropdownMenu.Trigger asChild>
-            <TouchableOpacity
-              className="sq-10 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
-              activeOpacity={0.8}
-            >
-              <Icon icon={PlusCircle} size={24} color="primary" />
-            </TouchableOpacity>
-          </DropdownMenu.Trigger>
-          <DropdownMenu.Content>
-            <DropdownMenu.Item key="camera" onSelect={handleOpenCamera}>
-              Camera
-            </DropdownMenu.Item>
-            <DropdownMenu.Item key="library" onSelect={handleOpenImageLibrary}>
-              Photo Library
-            </DropdownMenu.Item>
-          </DropdownMenu.Content>
-        </DropdownMenu.Root>
+        <TouchableOpacity
+          onPress={handleOpenImageLibrary}
+          className="sq-10 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
+          activeOpacity={0.8}
+        >
+          <Icon icon={PlusCircle} size={24} color="primary" />
+        </TouchableOpacity>
       }
     >
       {isLoading ? (
