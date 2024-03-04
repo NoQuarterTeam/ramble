@@ -21,24 +21,26 @@ export default function TripImagesCluster() {
     { enabled: !!parsedBounds },
   )
 
-  const [images, setImages] = React.useState(data)
+  const total = data?.total || 0
+
+  const [images, setImages] = React.useState(data?.items || [])
 
   React.useEffect(() => {
-    setImages(data)
-  }, [data])
+    setImages(data?.items || [])
+  }, [data?.items])
 
   const utils = api.useUtils()
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: allow dat
   const handleLoadMore = React.useCallback(async () => {
-    if (!parsedBounds) return
+    if (!parsedBounds || total === images.length) return
     try {
       const newImages = await utils.trip.media.byBounds.fetch({ tripId: id, bounds: parsedBounds, skip: images?.length || 0 })
-      setImages([...(images || []), ...newImages])
+      setImages([...(images || []), ...newImages.items])
     } catch {
       toast({ title: "Failed to load more images", type: "error" })
     }
-  }, [images, parsedBounds, id])
+  }, [images, total, parsedBounds, id])
 
   return (
     <ScreenView title="" containerClassName="px-0">
@@ -51,6 +53,7 @@ export default function TripImagesCluster() {
           showsVerticalScrollIndicator={false}
           estimatedItemSize={size}
           onEndReached={handleLoadMore}
+          onEndReachedThreshold={0.5}
           numColumns={3}
           ListEmptyComponent={<Text className="text-center">No images yet</Text>}
           data={images}

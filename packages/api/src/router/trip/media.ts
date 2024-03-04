@@ -1,6 +1,7 @@
 import { z } from "zod"
 
 import { clusterSchema } from "@ramble/server-schemas"
+import { promiseHash } from "@ramble/shared"
 import bbox from "@turf/bbox"
 import { lineString } from "@turf/helpers"
 import Supercluster from "supercluster"
@@ -49,25 +50,40 @@ export const tripMediaRouter = createTRPCRouter({
     .input(z.object({ tripId: z.string(), bounds: z.array(z.number()) }).and(z.object({ skip: z.number() })))
     .query(({ ctx, input }) => {
       const [minLng, minLat, maxLng, maxLat] = input.bounds
-      return ctx.prisma.tripMedia.findMany({
-        orderBy: { timestamp: "desc" },
-        take: 30,
-        skip: input.skip,
-        where: {
-          tripId: input.tripId,
-          latitude: { gte: minLat, lte: maxLat },
-          longitude: { gte: minLng, lte: maxLng },
-          deletedAt: null,
-        },
+      return promiseHash({
+        total: ctx.prisma.tripMedia.count({
+          where: {
+            tripId: input.tripId,
+            latitude: { gte: minLat, lte: maxLat },
+            longitude: { gte: minLng, lte: maxLng },
+            deletedAt: null,
+          },
+        }),
+        items: ctx.prisma.tripMedia.findMany({
+          orderBy: { timestamp: "desc" },
+          take: 30,
+          skip: input.skip,
+          where: {
+            tripId: input.tripId,
+            latitude: { gte: minLat, lte: maxLat },
+            longitude: { gte: minLng, lte: maxLng },
+            deletedAt: null,
+          },
+        }),
       })
     }),
   all: protectedProcedure.input(z.object({ tripId: z.string() }).and(z.object({ skip: z.number() }))).query(({ ctx, input }) => {
-    return ctx.prisma.tripMedia.findMany({
-      take: 30,
-      skip: input.skip,
-      orderBy: { timestamp: "desc" },
-      select: { id: true, path: true, latitude: true, longitude: true },
-      where: { deletedAt: null, tripId: input.tripId, trip: { users: { some: { id: ctx.user.id } } } },
+    return promiseHash({
+      total: ctx.prisma.tripMedia.count({
+        where: { tripId: input.tripId, deletedAt: null, trip: { users: { some: { id: ctx.user.id } } } },
+      }),
+      items: ctx.prisma.tripMedia.findMany({
+        take: 30,
+        skip: input.skip,
+        orderBy: { timestamp: "desc" },
+        select: { id: true, path: true, latitude: true, longitude: true },
+        where: { deletedAt: null, tripId: input.tripId, trip: { users: { some: { id: ctx.user.id } } } },
+      }),
     })
   }),
   byId: protectedProcedure.input(z.object({ id: z.string() })).query(({ ctx, input }) => {

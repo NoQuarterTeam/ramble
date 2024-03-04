@@ -56,8 +56,16 @@ export default function AddImageLocation() {
       if (!coords) return
       void utils.trip.media.byId.refetch({ id: imageId })
       utils.trip.media.all.setData({ skip: 0, tripId: id }, (prev) =>
-        prev?.map((media) => (media.id === imageId ? { ...media, latitude: coords[1]!, longitude: coords[0]! } : media)),
+        prev
+          ? {
+              total: prev.total,
+              items: prev.items.map((media) =>
+                media.id === imageId ? { ...media, latitude: coords[1]!, longitude: coords[0]! } : media,
+              ),
+            }
+          : prev,
       )
+
       router.back()
     },
   })
