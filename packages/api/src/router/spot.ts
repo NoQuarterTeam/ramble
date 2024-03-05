@@ -46,11 +46,11 @@ export const spotRouter = createTRPCRouter({
       const spots = await ctx.prisma.spot.findMany({
         select: { id: true, latitude: true, longitude: true, type: true },
         where: {
+          type: typeof types === "string" ? { equals: types } : { in: types },
+          ...verifiedSpotWhereClause(ctx.user?.id, isUnverified),
           latitude: { gt: coords.minLat, lt: coords.maxLat },
           longitude: { gt: coords.minLng, lt: coords.maxLng },
           // if isUnverified is pass return all spots, if not, return all spots that are verified or ones created by me
-          ...verifiedSpotWhereClause(ctx.user?.id, isUnverified),
-          type: typeof types === "string" ? { equals: types } : { in: types },
           ...publicSpotWhereClause(ctx.user?.id),
           isPetFriendly: isPetFriendly ? { equals: true } : undefined,
         },
@@ -195,9 +195,6 @@ export const spotRouter = createTRPCRouter({
         })
     }
     return {
-      // --- remove ...spot after new deploys
-      ...spot,
-      // ---
       spot,
       translatedDescription,
       descriptionHash,

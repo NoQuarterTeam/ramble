@@ -96,10 +96,14 @@ function MapContainer() {
   const camera = React.useRef<Camera>(null)
   const mapRef = React.useRef<MapType>(null)
 
-  const { data: clusters, isLoading: spotsLoading } = api.spot.clusters.useQuery(
-    mapSettings ? { ...mapSettings, ...filters } : undefined,
-    { enabled: !!mapSettings, keepPreviousData: true },
-  )
+  const {
+    data: clusters,
+    isLoading: spotsLoading,
+    isRefetching,
+  } = api.spot.clusters.useQuery(mapSettings ? { ...mapSettings, ...filters } : undefined, {
+    enabled: !!mapSettings,
+    keepPreviousData: true,
+  })
   const { data: users } = api.user.clusters.useQuery(mapSettings ? mapSettings : undefined, {
     enabled: !!mapSettings && !!me && layers.shouldShowUsers,
     keepPreviousData: true,
@@ -294,7 +298,7 @@ function MapContainer() {
         {spotMarkers}
       </MapView>
 
-      {spotsLoading && (
+      {(spotsLoading || isRefetching) && (
         <View
           pointerEvents="none"
           className="absolute right-4 top-14 flex flex-col items-center justify-center rounded-full bg-white p-2 dark:bg-gray-800"

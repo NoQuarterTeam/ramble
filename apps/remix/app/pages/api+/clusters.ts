@@ -35,10 +35,10 @@ async function getMapClusters(request: Request) {
   const spots = await db.spot.findMany({
     select: { id: true, latitude: true, longitude: true, type: true },
     where: {
+      type: typeof type === "string" ? { equals: type } : { in: type },
+      verifiedAt: isUnverified ? undefined : { not: { equals: null } },
       latitude: { gt: coords.minLat, lt: coords.maxLat },
       longitude: { gt: coords.minLng, lt: coords.maxLng },
-      verifiedAt: isUnverified ? undefined : { not: { equals: null } },
-      type: typeof type === "string" ? { equals: type } : { in: type },
       ...publicSpotWhereClause(userId),
       isPetFriendly: isPetFriendly ? { equals: true } : undefined,
     },
