@@ -66,10 +66,12 @@ model User {
   usedInviteCodeId      String?        @unique
   createdSpotRevisions  SpotRevision[] @relation(name: "Creator")
   approvedSpotRevisions SpotRevision[] @relation(name: "Approver")
+  accessRequest         AccessRequest?
 
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @default(now()) @updatedAt
-  accessRequest AccessRequest?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([latitude])
 }
 
 model InviteCode {
