@@ -20,7 +20,7 @@ export const verifiedSpotWhereClause = (userId?: string | null, showUnverified?:
   if (showUnverified) return {}
   if (!userId) return { verifiedAt: { not: { equals: null } } } satisfies Omit<Prisma.SpotWhereUniqueInput, "id">
   return {
-    OR: [{ creatorId: { equals: userId }, verifiedAt: { equals: null } }, { verifiedAt: { not: { equals: null } } }],
+    OR: [{ verifiedAt: { equals: null }, creatorId: { equals: userId } }, { verifiedAt: { not: { equals: null } } }],
   } satisfies Omit<Prisma.SpotWhereUniqueInput, "id">
 }
 

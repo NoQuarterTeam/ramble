@@ -202,7 +202,7 @@ model Spot {
   @@index([creatorId])
   @@index([longitude])
   @@index([verifiedAt, type, deletedAt, creatorId, publishedAt])
-  @@index([latitude, longitude, verifiedAt, type, deletedAt, creatorId, publishedAt])
+  @@index([type, verifiedAt, latitude, longitude, deletedAt, creatorId, publishedAt])
 }
 
 model SpotAmenities {
