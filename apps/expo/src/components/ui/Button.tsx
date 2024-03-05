@@ -73,13 +73,18 @@ export const Button = React.forwardRef(function _Button(
       className={merge(
         buttonStyles({ variant, size }),
         isLoading && "opacity-70",
-        props.disabled && "opacity-60",
         size === "sm" || size === "xs" ? "space-x-1" : "space-x-2",
         props.className,
       )}
     >
       {leftIcon && <View className={join(isLoading && "opacity-0")}>{leftIcon}</View>}
-      <Text className={buttonTextStyles({ variant, size, className: join(props.textClassName, isLoading && "opacity-0") })}>
+      <Text
+        className={buttonTextStyles({
+          variant,
+          size,
+          className: join(props.textClassName, isLoading && "opacity-0", props.disabled && "opacity-40"),
+        })}
+      >
         {props.children}
       </Text>
 

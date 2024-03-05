@@ -7,7 +7,7 @@ export type IconColors = "primary" | "red" | "white" | "black" | "gray"
 
 export type IconColorProp = IconColors | { dark: IconColors; light: IconColors } | false
 
-interface Props extends Omit<LucideProps, "color"> {
+export interface IconProps extends Omit<LucideProps, "color"> {
   icon: LucideIcon
   color?: IconColorProp
 }
@@ -20,7 +20,7 @@ const colorMap: Record<IconColors, string> = {
   black: "black",
 }
 
-export function Icon({ icon: Comp, ...props }: Props) {
+export function Icon({ icon: Comp, ...props }: IconProps) {
   const colorScheme = useColorScheme()
 
   const color = props.color

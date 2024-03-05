@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { clusterSchema } from "@ramble/server-schemas"
+import { clusterSchema, tripMediaSchema } from "@ramble/server-schemas"
 import { promiseHash } from "@ramble/shared"
 import bbox from "@turf/bbox"
 import { lineString } from "@turf/helpers"
@@ -90,34 +90,34 @@ export const tripMediaRouter = createTRPCRouter({
     return ctx.prisma.tripMedia.findUnique({ where: { id: input.id, trip: { users: { some: { id: ctx.user.id } } } } })
   }),
   update: protectedProcedure
-    .input(z.object({ latitude: z.number(), longitude: z.number() }).and(z.object({ id: z.string() })))
+    .input(tripMediaSchema.partial().and(z.object({ id: z.string() })))
     .mutation(({ ctx, input: { id, ...data } }) => {
       return ctx.prisma.tripMedia.update({ where: { id, trip: { users: { some: { id: ctx.user.id } } } }, data })
     }),
-  upload: protectedProcedure
-    .input(
-      z.object({
-        tripId: z.string(),
-        image: z.object({
-          path: z.string(),
-          latitude: z.number().nullable(),
-          longitude: z.number().nullable(),
-          assetId: z.string(),
-          timestamp: z.date(),
-        }),
-      }),
-    )
+  updateMany: protectedProcedure
+    .input(z.object({ tripId: z.string(), ids: z.array(z.string()), data: tripMediaSchema.partial() }))
     .mutation(async ({ ctx, input }) => {
-      await ctx.prisma.tripMedia.create({ data: { tripId: input.tripId, ...input.image, creatorId: ctx.user.id } })
-      const latestTimestamp = await ctx.prisma.tripMedia.findFirst({
-        where: { tripId: input.tripId, deletedAt: null },
-        orderBy: { timestamp: "desc" },
-        select: { timestamp: true },
+      await ctx.prisma.tripMedia.updateMany({
+        where: { id: { in: input.ids }, trip: { users: { some: { id: ctx.user.id } } } },
+        data: input.data,
       })
-      return latestTimestamp?.timestamp
+      return true
     }),
+  upload: protectedProcedure.input(z.object({ tripId: z.string(), image: tripMediaSchema })).mutation(async ({ ctx, input }) => {
+    await ctx.prisma.tripMedia.create({ data: { tripId: input.tripId, ...input.image, creatorId: ctx.user.id } })
+    const latestTimestamp = await ctx.prisma.tripMedia.findFirst({
+      where: { tripId: input.tripId, deletedAt: null },
+      orderBy: { timestamp: "desc" },
+      select: { timestamp: true },
+    })
+    return latestTimestamp?.timestamp
+  }),
   remove: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
     await ctx.prisma.tripMedia.update({ where: { id: input.id }, data: { deletedAt: new Date() } })
+    return true
+  }),
+  deleteMany: protectedProcedure.input(z.array(z.string())).mutation(async ({ ctx, input }) => {
+    await ctx.prisma.tripMedia.updateMany({ where: { id: { in: input } }, data: { deletedAt: new Date() } })
     return true
   }),
 })

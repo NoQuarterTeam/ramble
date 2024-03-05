@@ -11,20 +11,37 @@ import { tripMediaRouter } from "./media"
 import { tripUsersRouter } from "./users"
 
 export const tripRouter = createTRPCRouter({
-  mine: protectedProcedure.query(({ ctx }) => {
+  mine: protectedProcedure.input(z.object({ skip: z.number().optional() }).optional()).query(async ({ ctx, input }) => {
     return ctx.prisma.trip.findMany({
       where: { users: { some: { id: ctx.user.id } } },
       orderBy: { startDate: "desc" },
-      include: { items: true, creator: true, users: true },
-      take: 20, // TODO pagination
+      include: {
+        items: true, // TODO: <-- remove later
+        creator: true,
+        users: true,
+        media: { where: { deletedAt: null }, orderBy: { timestamp: "desc" }, take: 3, select: { id: true, path: true } },
+      },
+      take: 50, // TODO pagination
+      skip: input?.skip || 0,
     })
   }),
+  /*
+   * @deprecated Use "mine" and filter on frontend
+   */
   active: protectedProcedure.query(({ ctx }) => {
     return ctx.prisma.trip.findFirst({
       where: { startDate: { lt: new Date() }, endDate: { gt: new Date() }, users: { some: { id: ctx.user.id } } },
       orderBy: { startDate: "desc" },
-      include: { items: true, creator: true, users: true },
+      include: { creator: true, users: true },
     })
+  }),
+  allWithSavedSpot: protectedProcedure.input(z.object({ spotId: z.string() })).query(async ({ ctx, input }) => {
+    const trips = await ctx.prisma.trip.findMany({
+      where: { users: { some: { id: ctx.user.id } } },
+      orderBy: { startDate: "desc" },
+      include: { items: { where: { spotId: { equals: input.spotId } } } },
+    })
+    return trips.map(({ items, ...trip }) => ({ ...trip, isSaved: items.length > 0 }))
   }),
   create: protectedProcedure.input(tripSchema).mutation(async ({ ctx, input }) => {
     // check if start date is before end date

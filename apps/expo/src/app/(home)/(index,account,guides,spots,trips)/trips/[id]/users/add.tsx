@@ -65,7 +65,6 @@ function UserItem({
   const { mutate, isLoading } = api.trip.usersV2.add.useMutation({
     onSuccess: async () => {
       onSelect()
-      void utils.trip.active.refetch()
       void utils.trip.mine.refetch()
       await utils.trip.usersV2.all.refetch({ tripId: id })
       toast({ title: "User added", type: "success" })

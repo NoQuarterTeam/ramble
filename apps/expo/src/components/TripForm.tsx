@@ -35,7 +35,7 @@ export function TripForm(props: Props & (UpdateSubmit | CreateSubmit)) {
     defaultValues: {
       name: props.trip?.name || "",
       startDate: props.trip ? dayjs(props.trip.startDate).toDate() : new Date(),
-      endDate: props.trip ? dayjs(props.trip.endDate).toDate() : new Date(),
+      endDate: props.trip ? dayjs(props.trip.endDate).toDate() : dayjs().add(1, "month").toDate(),
     },
   })
 
