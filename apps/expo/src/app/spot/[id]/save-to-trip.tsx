@@ -15,7 +15,7 @@ import { useMe } from "~/lib/hooks/useMe"
 export default function SaveSpotToTripScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
   const { me } = useMe()
-  const { data: trips, isLoading } = api.trip.mine.useQuery(undefined, { enabled: !!me })
+  const { data: trips, isLoading } = api.trip.allWithSavedSpot.useQuery({ spotId: id }, { enabled: !!me && !!id })
   if (!me)
     return (
       <ModalView title="add to trip">
@@ -45,22 +45,21 @@ export default function SaveSpotToTripScreen() {
 
 interface Props {
   spotId: string
-  trip: RouterOutputs["trip"]["mine"][number]
+  trip: RouterOutputs["trip"]["allWithSavedSpot"][number]
 }
 
 function SaveableTripItem({ trip, spotId }: Props) {
-  const foundSavedItem = trip.items.some((ti) => ti.spotId === spotId)
-
-  const [isSaved, setIsSaved] = React.useState(foundSavedItem)
+  const [isSaved, setIsSaved] = React.useState(trip.isSaved)
   const utils = api.useUtils()
 
   React.useEffect(() => {
-    setIsSaved(foundSavedItem)
-  }, [foundSavedItem])
+    setIsSaved(trip.isSaved)
+  }, [trip.isSaved])
 
   const { mutate } = api.trip.saveSpot.useMutation({
     onSuccess: () => {
       void utils.trip.detail.refetch({ id: trip.id })
+      void utils.trip.allWithSavedSpot.refetch({ spotId })
     },
   })
   const colorScheme = useColorScheme()
@@ -79,10 +78,8 @@ function SaveableTripItem({ trip, spotId }: Props) {
     >
       <View>
         <View className="flex flex-row items-center space-x-2">
-          {/* {list.isPrivate && <Icon icon={Lock} size={20} />} */}
           <Text className="text-xl">{trip.name}</Text>
         </View>
-        {/* <Text className="text-base">{trip.description}</Text> */}
       </View>
       <Icon icon={Heart} size={20} fill={isSaved ? (isDark ? "white" : "black") : "transparent"} />
     </TouchableOpacity>

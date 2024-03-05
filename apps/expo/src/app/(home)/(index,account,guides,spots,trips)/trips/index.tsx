@@ -19,7 +19,6 @@ export default function TripsLayout() {
   const router = useRouter()
   const { me } = useMe()
 
-  const { data: activeTrip, isLoading: activeLoading } = api.trip.active.useQuery(undefined, { enabled: !!me })
   const { data, isLoading } = api.trip.mine.useQuery(undefined, { enabled: !!me })
 
   if (!me)
@@ -29,20 +28,21 @@ export default function TripsLayout() {
       </TabView>
     )
 
-  const groupedTrips = !activeLoading
-    ? data?.reduce<{ upcoming: RouterOutputs["trip"]["mine"]; complete: RouterOutputs["trip"]["mine"] }>(
-        (acc, trip) => {
-          if (trip.id === activeTrip?.id) return acc
-          // group into upcoming and past trips
-          const key = trip.startDate > new Date() ? "upcoming" : "complete"
-          if (!acc[key]) acc[key] = []
-          acc[key].push(trip)
+  const groupedTrips = data?.reduce<{ upcoming: RouterOutputs["trip"]["mine"]; complete: RouterOutputs["trip"]["mine"] }>(
+    (acc, trip) => {
+      // skip active trip
+      if (trip.startDate < new Date() && trip.endDate > new Date()) return acc
+      // group into upcoming and past trips
+      const key = trip.startDate > new Date() ? "upcoming" : "complete"
+      if (!acc[key]) acc[key] = []
+      acc[key].push(trip)
 
-          return acc
-        },
-        { upcoming: [], complete: [] },
-      )
-    : undefined
+      return acc
+    },
+    { upcoming: [], complete: [] },
+  )
+
+  const activeTrip = data?.find((trip) => dayjs().isBetween(trip.startDate, trip.endDate))
 
   return (
     <TabView
@@ -58,7 +58,7 @@ export default function TripsLayout() {
         </TouchableOpacity>
       }
     >
-      {isLoading || activeLoading ? (
+      {isLoading ? (
         <Spinner />
       ) : !data ? null : (
         <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>

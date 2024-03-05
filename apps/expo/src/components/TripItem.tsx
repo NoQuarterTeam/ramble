@@ -6,9 +6,10 @@ dayjs.extend(isBetween)
 
 import dayjs from "dayjs"
 
-import { type Trip, type User } from "@ramble/database/types"
+import { type Trip, type TripMedia, type User } from "@ramble/database/types"
 import { createImageUrl, join } from "@ramble/shared"
 
+import { Image } from "expo-image"
 import { useFeedbackActivity } from "./FeedbackCheck"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
@@ -18,6 +19,8 @@ interface Props {
     creator: Pick<User, "id" | "avatar" | "avatarBlurHash" | "firstName" | "lastName">
   } & {
     users: Pick<User, "id" | "firstName" | "lastName" | "avatar" | "avatarBlurHash">[]
+  } & {
+    media: Pick<TripMedia, "id" | "path">[]
   }
 }
 const today = dayjs()
@@ -40,6 +43,25 @@ export function TripItem({ trip }: Props) {
       <View className="flex flex-row justify-between">
         <View className="">
           <Text className="text-xl">{trip.name}</Text>
+          {trip.media.length > 0 && (
+            <View className="relative mt-2" style={{ height: 40 }}>
+              {trip.media.map((media, i) => (
+                <Image
+                  className="absolute top-0 bg-gray-200 dark:bg-gray-700 rounded border-background"
+                  key={media.id}
+                  source={{ uri: createImageUrl(media.path) }}
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderWidth: 1.5,
+                    zIndex: -1 * i,
+                    left: i * 25,
+                    transform: [{ scale: 1 - i * 0.1 }, { rotate: `${i === 0 ? -4 : i * 10}deg` }],
+                  }}
+                />
+              ))}
+            </View>
+          )}
         </View>
         <View>
           {today.isBefore(trip.startDate) ? (

@@ -1,21 +1,29 @@
-import { createImageUrl } from "@ramble/shared"
+import { createImageUrl, useDisclosure } from "@ramble/shared"
+import { Camera, LocationPuck, MapState, type MapView as MapType, StyleURL } from "@rnmapbox/maps"
+import { Position } from "@rnmapbox/maps/lib/typescript/src/types/Position"
 import { FlashList } from "@shopify/flash-list"
 import dayjs from "dayjs"
 import { Image } from "expo-image"
 import * as ImagePicker from "expo-image-picker"
+import * as Location from "expo-location"
 import * as MediaLibrary from "expo-media-library"
-import { Link, useLocalSearchParams } from "expo-router"
-import { PlusCircle } from "lucide-react-native"
-import { MapPinOff } from "lucide-react-native"
+import { useLocalSearchParams, useRouter } from "expo-router"
+import { Check, CircleDot, MapPin, MapPinOff, Navigation, PlusCircle, Trash } from "lucide-react-native"
 import * as React from "react"
-import { ActivityIndicator, Alert, Linking, TouchableOpacity, View } from "react-native"
+import { ActivityIndicator, Alert, Linking, Modal, TouchableOpacity, View } from "react-native"
 
 import { Icon } from "~/components/Icon"
+import { MapView } from "~/components/Map"
+import { Button } from "~/components/ui/Button"
+import { IconButton } from "~/components/ui/IconButton"
+import { Input } from "~/components/ui/Input"
+import { ModalView } from "~/components/ui/ModalView"
 import { ScreenView } from "~/components/ui/ScreenView"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
-import { api } from "~/lib/api"
+import { RouterOutputs, api } from "~/lib/api"
 import { width } from "~/lib/device"
+import { useMapCoords } from "~/lib/hooks/useMapCoords"
 import { useS3QuickUpload } from "~/lib/hooks/useS3"
 
 const size = width / 3
@@ -103,14 +111,50 @@ export default function TripImages() {
     }
   }
 
+  const selectProps = useDisclosure()
+  const setMapProps = useDisclosure()
+  const [selectedImages, setSelectedImages] = React.useState<RouterOutputs["trip"]["media"]["all"]["items"]>([])
+  const router = useRouter()
+  const isSelectedWithLocation = selectedImages.some((i) => i.latitude && i.longitude)
+
+  const { mutate } = api.trip.media.deleteMany.useMutation({
+    onSuccess: () => {
+      refetch()
+      void utils.trip.detail.refetch({ id })
+      setSelectedImages([])
+      selectProps.onToggle()
+    },
+  })
+
+  const handleDeleteMany = () => {
+    Alert.alert("Are you sure?", "This can't be undone", [
+      { text: "Cancel", style: "cancel" },
+      { text: "Delete", style: "destructive", onPress: () => mutate(selectedImages.map((i) => i.id)) },
+    ])
+  }
   return (
     <ScreenView
-      title=""
       containerClassName="px-0"
       rightElement={
-        <TouchableOpacity onPress={handleOpenImageLibrary} activeOpacity={0.8}>
-          <Icon icon={PlusCircle} />
-        </TouchableOpacity>
+        <View className="flex flex-row items-center space-x-3">
+          <Button
+            onPress={() => {
+              selectProps.onToggle()
+              if (selectProps.isOpen) setSelectedImages([])
+            }}
+            size="xs"
+            variant="secondary"
+            className="rounded-full px-4"
+          >
+            {selectProps.isOpen ? "Cancel" : "Select"}
+          </Button>
+
+          {!selectProps.isOpen && (
+            <TouchableOpacity onPress={handleOpenImageLibrary} activeOpacity={0.8}>
+              <Icon icon={PlusCircle} />
+            </TouchableOpacity>
+          )}
+        </View>
       }
     >
       {isLoading ? (
@@ -123,21 +167,37 @@ export default function TripImages() {
             showsVerticalScrollIndicator={false}
             estimatedItemSize={size}
             onEndReached={handleLoadMore}
+            ListFooterComponent={<View style={{ height: selectProps.isOpen ? 50 : 0 }} />}
             onEndReachedThreshold={0.5}
             numColumns={3}
             ListEmptyComponent={<Text className="text-center">No images yet</Text>}
             data={images}
+            extraData={{ isOpen: selectProps.isOpen, selectedImages }}
             renderItem={({ item }) => (
-              <Link href={`/(home)/(trips)/trips/${id}/images/${item.id}`} asChild>
-                <TouchableOpacity style={{ width: size, height: size }} className="relative">
-                  <Image className="bg-gray-200 dark:bg-gray-700 w-full h-full" source={{ uri: createImageUrl(item.path) }} />
-                  {(!item.latitude || !item.longitude) && (
-                    <View className="absolute bottom-1 left-1 flex items-center justify-center bg-background sq-6 rounded-full dark:bg-background-dark">
-                      <Icon icon={MapPinOff} size={16} />
-                    </View>
-                  )}
-                </TouchableOpacity>
-              </Link>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => {
+                  if (selectProps.isOpen) {
+                    setSelectedImages((s) => (s.find((i) => i.id === item.id) ? s.filter((i) => i.id !== item.id) : [...s, item]))
+                  } else {
+                    return router.push(`/(home)/(trips)/trips/${id}/images/${item.id}`)
+                  }
+                }}
+                style={{ width: size, height: size }}
+                className="relative"
+              >
+                <Image className="bg-gray-200 dark:bg-gray-700 w-full h-full" source={{ uri: createImageUrl(item.path) }} />
+                {(!item.latitude || !item.longitude) && (
+                  <View className="absolute bottom-1 left-1 flex items-center justify-center bg-background sq-6 rounded-full dark:bg-background-dark">
+                    <Icon icon={MapPinOff} size={16} />
+                  </View>
+                )}
+                {selectProps.isOpen && selectedImages.find((i) => i.id === item.id) && (
+                  <View className="absolute bottom-1 right-1 flex items-center justify-center bg-blue-500 sq-5 rounded-full">
+                    <Icon icon={Check} size={14} color="white" />
+                  </View>
+                )}
+              </TouchableOpacity>
             )}
           />
           {isUploading && (
@@ -148,8 +208,187 @@ export default function TripImages() {
               </View>
             </View>
           )}
+          {selectProps.isOpen && (
+            <View className="absolute bottom-0 left-0 px-4 bg-background dark:bg-background-dark right-0 flex items-center justify-between flex-row h-12">
+              {selectedImages.length > 0 ? <Text>{selectedImages.length} selected</Text> : <Text>Select images</Text>}
+              <View className="flex flex-row space-x-3 items-center justify-end">
+                {!isSelectedWithLocation && (
+                  <>
+                    <IconButton onPress={setMapProps.onOpen} size="xs" disabled={selectedImages.length === 0} icon={MapPin} />
+                    <Modal
+                      animationType="slide"
+                      presentationStyle="formSheet"
+                      visible={setMapProps.isOpen}
+                      onRequestClose={setMapProps.onClose}
+                      onDismiss={setMapProps.onClose}
+                    >
+                      <AddImagesLocation
+                        ids={selectedImages.map((i) => i.id)}
+                        onClose={setMapProps.onClose}
+                        onSave={() => {
+                          refetch()
+                          setMapProps.onClose()
+                          setSelectedImages([])
+                          selectProps.onClose()
+                          void utils.trip.detail.refetch({ id })
+                        }}
+                      />
+                    </Modal>
+                  </>
+                )}
+
+                <IconButton
+                  onPress={handleDeleteMany}
+                  size="xs"
+                  variant="ghost"
+                  icon={Trash}
+                  disabled={selectedImages.length === 0}
+                />
+              </View>
+            </View>
+          )}
         </View>
       )}
     </ScreenView>
+  )
+}
+
+function AddImagesLocation({ ids, onClose, onSave }: { ids: string[]; onClose: () => void; onSave: () => void }) {
+  const { id } = useLocalSearchParams<{ id: string }>()
+
+  const initialCoords = useMapCoords((s) => s.coords)
+  const [coords, setCoords] = React.useState<Position | undefined>(initialCoords)
+
+  const [search, setSearch] = React.useState("")
+
+  const camera = React.useRef<Camera>(null)
+  const mapRef = React.useRef<MapType>(null)
+
+  const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, keepPreviousData: true })
+
+  const handleSetUserLocation = async () => {
+    try {
+      const loc = await Location.getLastKnownPositionAsync()
+      if (!loc) return
+      camera.current?.setCamera({
+        zoomLevel: 9,
+        animationDuration: 0,
+        animationMode: "none",
+        centerCoordinate: [loc.coords.longitude, loc.coords.latitude],
+      })
+    } catch {
+      console.log("oops -  setting location")
+    }
+  }
+
+  const onMapMove = ({ properties }: MapState) => {
+    if (!properties.bounds) return
+    setCoords(properties.center)
+  }
+
+  const { mutate, isLoading: saveLoading } = api.trip.media.updateMany.useMutation({
+    onSuccess: () => {
+      if (!coords) return
+      onSave()
+    },
+  })
+
+  const handleSelectLocation = () => {
+    if (!coords) return toast({ title: "Please select a location" })
+    mutate({
+      tripId: id,
+      ids,
+      data: { longitude: coords[0]!, latitude: coords[1]! },
+    })
+  }
+
+  return (
+    <ModalView edges={["top", "bottom"]} title="choose a location" onBack={onClose}>
+      <View className="relative flex-1">
+        <MapView
+          className="rounded-xs overflow-hidden"
+          onMapIdle={onMapMove}
+          ref={mapRef}
+          styleURL={StyleURL.SatelliteStreet}
+          compassPosition={{ top: 54, right: 8 }}
+        >
+          <LocationPuck />
+
+          <Camera
+            ref={camera}
+            allowUpdates
+            followUserLocation={false}
+            defaultSettings={{
+              centerCoordinate: [initialCoords[0], initialCoords[1]],
+              zoomLevel: 5,
+              pitch: 0,
+              heading: 0,
+            }}
+          />
+        </MapView>
+        <View className="absolute left-2 right-2 top-2">
+          <Input
+            className="bg-background dark:bg-background-dark rounded-sm"
+            placeholder="Search here"
+            onChangeText={setSearch}
+            value={search}
+            clearButtonMode="while-editing"
+            returnKeyType="done"
+          />
+          {search && places && (
+            <View className="bg-background dark:bg-background-dark rounded-b-sm p-2">
+              {places.map((place, i) => (
+                <TouchableOpacity
+                  key={`${place.name}-${i}`}
+                  className="p-2"
+                  onPress={() => {
+                    setSearch("")
+                    setCoords(place.center)
+                    camera.current?.setCamera({
+                      zoomLevel: 9,
+                      animationDuration: 1000,
+                      animationMode: "flyTo",
+                      centerCoordinate: place.center,
+                    })
+                  }}
+                >
+                  <Text numberOfLines={1}>{place.name}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          )}
+        </View>
+        <View
+          style={{ transform: [{ translateX: -15 }, { translateY: -15 }] }}
+          className="absolute left-1/2 top-1/2 flex items-center justify-center"
+        >
+          <Icon icon={CircleDot} size={30} color="white" />
+        </View>
+
+        <View
+          pointerEvents="box-none"
+          className="absolute bottom-5 left-5 right-5 flex flex-row items-center justify-between space-y-2"
+        >
+          <View className="w-12" />
+          <Button
+            className="bg-background rounded-full"
+            textClassName="text-black"
+            onPress={handleSelectLocation}
+            isLoading={saveLoading}
+            disabled={!coords || (coords && (!coords[0] || !coords[1])) || saveLoading}
+          >
+            Save
+          </Button>
+
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={handleSetUserLocation}
+            className="sq-12 bg-background flex flex-row items-center justify-center rounded-full"
+          >
+            <Navigation size={20} className="text-black" />
+          </TouchableOpacity>
+        </View>
+      </View>
+    </ModalView>
   )
 }

@@ -15,7 +15,6 @@ export default function NewTripScreen() {
   const { mutate, error, isLoading } = api.trip.create.useMutation({
     onSuccess: (data) => {
       posthog?.capture("trip created", { name: data.name })
-      utils.trip.active.refetch()
       utils.trip.mine.refetch()
       router.back()
       router.push(`/(home)/(trips)/trips/${data.id}`)

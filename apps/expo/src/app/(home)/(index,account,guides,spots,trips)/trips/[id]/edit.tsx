@@ -21,7 +21,6 @@ export default function EditTrip() {
     onSuccess: async (data) => {
       utils.trip.info.refetch({ id })
       utils.trip.detail.setData({ id }, (prev) => (prev ? { ...prev, trip: { ...prev.trip, ...data } } : prev))
-      void utils.trip.active.refetch()
       void utils.trip.mine.refetch()
       router.back()
     },
@@ -30,7 +29,6 @@ export default function EditTrip() {
   const { mutate: deleteTrip, isLoading: deleteLoading } = api.trip.delete.useMutation({
     onSuccess: async () => {
       void utils.trip.mine.refetch()
-      void utils.trip.active.refetch()
       router.navigate("/(home)/(trips)/trips")
     },
   })
