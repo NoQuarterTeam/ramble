@@ -1,6 +1,6 @@
 import { router } from "expo-router"
 import { AlertCircle, ChevronDown, Image, Languages, MapPinOff } from "lucide-react-native"
-import { Modal, ScrollView, Switch, View } from "react-native"
+import { Alert, ScrollView, Switch, View } from "react-native"
 
 import { languages, useDisclosure } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
@@ -8,7 +8,6 @@ import colors from "@ramble/tailwind-config/src/colors"
 import { Icon } from "~/components/Icon"
 import { LanguageSelector } from "~/components/LanguageSelector"
 import { Button } from "~/components/ui/Button"
-import { ModalView } from "~/components/ui/ModalView"
 import { ScreenView } from "~/components/ui/ScreenView"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
@@ -17,7 +16,6 @@ import { useMe } from "~/lib/hooks/useMe"
 
 export default function AccountSettingsScreen() {
   const modalProps = useDisclosure()
-  const deleteAccountModalProps = useDisclosure()
 
   const utils = api.useUtils()
 
@@ -31,6 +29,13 @@ export default function AccountSettingsScreen() {
       toast({ title: "Account deleted." })
     },
   })
+  const handleDeleteAccount = () => {
+    Alert.alert("Are you sure?", "This can't be undone. We will delete all of your data associated with this account.", [
+      { text: "Cancel", style: "cancel" },
+      { text: "Delete", style: "destructive", onPress: () => deleteAccount() },
+    ])
+  }
+
   const { mutate: updateUser } = api.user.update.useMutation({
     onMutate: (data) => {
       if (!me) return
@@ -112,25 +117,14 @@ export default function AccountSettingsScreen() {
           </View>
         </View>
         <View className="pb-8">
-          <Button leftIcon={<Icon icon={AlertCircle} size={16} />} variant="ghost" onPress={deleteAccountModalProps.onOpen}>
+          <Button
+            isLoading={isLoading}
+            leftIcon={<Icon icon={AlertCircle} size={16} />}
+            variant="ghost"
+            onPress={handleDeleteAccount}
+          >
             Delete account
           </Button>
-          <Modal
-            animationType="slide"
-            presentationStyle="formSheet"
-            visible={deleteAccountModalProps.isOpen}
-            onRequestClose={deleteAccountModalProps.onClose}
-            onDismiss={deleteAccountModalProps.onClose}
-          >
-            <ModalView shouldRenderToast title="are you sure?" onBack={deleteAccountModalProps.onClose}>
-              <View className="space-y-2 pt-4">
-                <Text>This can't be undone!</Text>
-                <Button isLoading={isLoading} onPress={() => deleteAccount()} variant="destructive">
-                  Confirm
-                </Button>
-              </View>
-            </ModalView>
-          </Modal>
         </View>
       </ScrollView>
     </ScreenView>
