@@ -198,7 +198,6 @@ model Spot {
   polskiCaravaningId       String? @unique
 
   @@index([publishedAt])
-  @@index([type])
   @@index([ownerId])
   @@index([verifierId])
   @@index([creatorId])
