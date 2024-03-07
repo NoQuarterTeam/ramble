@@ -58,7 +58,7 @@
     "d3-shape": "3.2.0",
     "dayjs": "1.11.10",
     "isbot": "latest",
-    "jose": "5.2.2",
+    "jose": "5.2.3",
     "lucide-react": "0.344.0",
     "mapbox-gl": "3.2.0",
     "nprogress": "0.2.0",
