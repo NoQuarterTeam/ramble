@@ -1,7 +1,7 @@
 import LoopsClient from "loops"
 
 import { type Role } from "@ramble/database/types"
-import { env } from "@ramble/server-env"
+import { IS_PRODUCTION, env } from "@ramble/server-env"
 
 const loops = new LoopsClient(env.LOOPS_API_KEY)
 
@@ -25,6 +25,7 @@ export type LoopsContact = {
 
 // if changing email, make sure to pass userId
 export async function updateLoopsContact(contact: LoopsContact) {
+  if (!IS_PRODUCTION) return
   try {
     const formattedData: NonNullable<LoopsContact> = {
       email: contact.email,
@@ -51,6 +52,7 @@ export async function updateLoopsContact(contact: LoopsContact) {
 }
 
 export async function deleteLoopsContact(contact: Partial<Pick<LoopsContact, "email" | "userId">>) {
+  if (!IS_PRODUCTION) return
   try {
     const res = await loops.deleteContact(contact)
     if (!res.success) throw res
