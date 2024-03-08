@@ -15,7 +15,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export default function OnboardingLayout() {
   return (
-    <PageContainer className="min-h-screen pb-32 pt-10">
+    <PageContainer className="min-h-screen pt-10 pb-32">
       <div className="flex items-center justify-between">
         <h2 className="font-normal">Account setup</h2>
         <LinkButton to="/map" variant="ghost" rightIcon={<ArrowRight className="sq-4" />}>

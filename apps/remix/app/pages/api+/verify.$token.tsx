@@ -3,7 +3,7 @@ import { updateLoopsContact } from "@ramble/server-services"
 import { db } from "~/lib/db.server"
 import { decryptToken } from "~/lib/jwt.server"
 import { redirect } from "~/lib/remix.server"
-import { type LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
+import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 
 export const config = {
   // runtime: "edge",

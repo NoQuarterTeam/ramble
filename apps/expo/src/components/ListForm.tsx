@@ -1,11 +1,11 @@
 import { FormProvider } from "react-hook-form"
 
-import { type List } from "@ramble/database/types"
+import type { List } from "@ramble/database/types"
 
 import { Button } from "~/components/ui/Button"
 import { FormError } from "~/components/ui/FormError"
 import { FormInput, FormSwitchInput } from "~/components/ui/FormInput"
-import { type RouterInputs } from "~/lib/api"
+import type { RouterInputs } from "~/lib/api"
 import { type ApiError, useForm } from "~/lib/hooks/useForm"
 
 type UpdateSubmit = {

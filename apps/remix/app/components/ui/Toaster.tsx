@@ -2,7 +2,7 @@
 import * as React from "react"
 import { Toaster as SToaster, toast } from "sonner"
 
-import { type RootLoader } from "~/root"
+import type { RootLoader } from "~/root"
 
 interface Props {
   flash: RootLoader["flash"]
@@ -17,7 +17,6 @@ export function Toaster({ flash }: Props) {
 }
 
 function ShowToast({ flash }: Props) {
-  // biome-ignore lint/correctness/useExhaustiveDependencies: not sure why its complaining
   React.useEffect(() => {
     if (!flash) return
     // timeout used to prevent reacts double render causing two flashes in dev

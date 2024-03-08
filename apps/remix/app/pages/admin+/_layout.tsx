@@ -5,7 +5,7 @@ import { Flag, GaugeCircle, HelpingHand, Mail, MapPin, MessageCircle, Moon, Rout
 import { merge } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
-import { type RambleIcon } from "~/components/ui"
+import type { RambleIcon } from "~/components/ui"
 import { buttonSizeStyles, buttonStyles } from "~/components/ui/Button"
 import { useTheme } from "~/lib/theme"
 import { type LoaderFunctionArgs, json, redirect } from "~/lib/vendor/vercel.server"
@@ -24,7 +24,7 @@ export default function AdminLayout() {
   const isDark = useTheme() === "dark"
   return (
     <div className="flex">
-      <div className="bg-background fixed left-0 top-0 flex h-screen w-[50px] flex-col justify-between border-r px-0 pb-10 md:w-[200px] md:px-4">
+      <div className="fixed top-0 left-0 flex h-screen w-[50px] flex-col justify-between border-r bg-background px-0 pb-10 md:w-[200px] md:px-4">
         <div className="flex flex-col space-y-2 py-8">
           <Link to="/" className="brand-header w-full pl-0 text-center text-lg md:pl-3 md:text-left">
             <span className="hidden md:block">ramble</span>

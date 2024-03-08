@@ -2,7 +2,7 @@ import { useLocalSearchParams, useRouter } from "expo-router"
 import * as React from "react"
 import { ScrollView, View } from "react-native"
 
-import { type SpotType } from "@ramble/database/types"
+import type { SpotType } from "@ramble/database/types"
 import { SPOT_TYPE_OPTIONS } from "@ramble/shared"
 
 import { SpotIcon } from "~/components/SpotIcon"

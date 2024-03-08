@@ -19,7 +19,7 @@ import { db } from "~/lib/db.server"
 import { type ActionDataErrorResponse, formError, validateFormData } from "~/lib/form.server"
 // import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { json } from "~/lib/remix.server"
-import { type ActionFunctionArgs } from "~/lib/vendor/vercel.server"
+import type { ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 
 export const config = {
   // runtime: "edge",
@@ -46,19 +46,19 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 export default function Home() {
   const randomPerson = PEOPLE[Math.floor(Math.random() * PEOPLE.length)]
   return (
-    <div className="bg-background dark font-serif text-white">
-      <div className="h-[94vh] w-screen space-y-20 bg-[url('/landing/hero.avif')] bg-cover bg-center px-2 pt-10">
+    <div className="dark bg-background font-serif text-white">
+      <div className="h-[94vh] w-screen space-y-20 bg-[url('/landing/hero.avif')] bg-center bg-cover px-2 pt-10">
         <div className="mx-auto flex max-w-7xl flex-col items-start space-y-8">
           <div className="flex flex-col items-center">
             <p className="brand-header text-5xl">ramble</p>
-            <p className="text-lg font-semibold text-black">VAN TRAVEL APP</p>
+            <p className="font-semibold text-black text-lg">VAN TRAVEL APP</p>
           </div>
           <div className="max-w-3xl space-y-2">
-            <h1 className="max-w-4xl text-2xl font-bold text-black md:text-5xl">
+            <h1 className="max-w-4xl font-bold text-2xl text-black md:text-5xl">
               Everything you need for van life <br />
               in Europe.
             </h1>
-            <h2 className="text-lg text-black md:text-xl">
+            <h2 className="text-black text-lg md:text-xl">
               For a new generation of remote working, digitally connected and eco-conscious travellers.
             </h2>
           </div>
@@ -74,8 +74,8 @@ export default function Home() {
       <div className="mx-auto max-w-5xl px-6 py-20 text-center">
         <p className="text-2xl">
           Built for a new generation of{" "}
-          <span className="text-primary font-semibold">remote working, digitally connected travelers</span> looking for{" "}
-          <span className="text-primary font-semibold">authentic</span> nature, genuine connection and a more sustainable way to
+          <span className="font-semibold text-primary">remote working, digitally connected travelers</span> looking for{" "}
+          <span className="font-semibold text-primary">authentic</span> nature, genuine connection and a more sustainable way to
           travel.
           <br />
           <br />
@@ -112,7 +112,7 @@ export default function Home() {
             height={800}
             alt="mission"
             src="/landing/mission.avif"
-            className="rounded-xs min-w-full object-cover md:min-w-[40%]"
+            className="min-w-full rounded-xs object-cover md:min-w-[40%]"
           />
           <div className="flex justify-end px-2">
             <a href="https://unsplash.com/@danieljschwarz" target="_blank" rel="noreferrer noopener" className="hover:opacity-80">
@@ -174,7 +174,7 @@ export default function Home() {
                 src={randomPerson?.image}
                 className="sq-24 rounded-full object-cover"
               />
-              <i className="pt-4 text-xl font-bold">{randomPerson?.name}</i>
+              <i className="pt-4 font-bold text-xl">{randomPerson?.name}</i>
               <i>@{randomPerson?.handle}</i>
             </a>
           </div>
@@ -226,7 +226,7 @@ function RequestAccessForm({ mode }: { mode?: "light" | "dark" }) {
   return (
     <Form fetcherKey={formKey} action="/home" className="flex flex-col gap-2 sm:flex-row">
       <div>
-        <input required name="email" placeholder="Email" className="rounded-xs h-10 border px-4 text-black focus:bg-white" />
+        <input required name="email" placeholder="Email" className="h-10 rounded-xs border px-4 text-black focus:bg-white" />
         {accessFetcher.data?.fieldErrors?.email && (
           <p className={join("text-black", mode === "dark" && "text-white")}>{accessFetcher.data.fieldErrors.email}</p>
         )}
@@ -240,7 +240,7 @@ function RequestAccessForm({ mode }: { mode?: "light" | "dark" }) {
           type="submit"
           disabled={accessFetcher.state === "submitting"}
           className={merge(
-            "border-xs rounded-xs flex h-10 w-[100px] items-center justify-center whitespace-nowrap bg-black px-4 text-center text-white hover:opacity-80 disabled:opacity-70",
+            "flex h-10 w-[100px] items-center justify-center whitespace-nowrap rounded-xs border-xs bg-black px-4 text-center text-white disabled:opacity-70 hover:opacity-80",
             mode === "dark" && "bg-white text-black",
           )}
         >

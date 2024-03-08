@@ -4,7 +4,7 @@ import type * as React from "react"
 import { useAuthenticityToken } from "remix-utils/csrf/react"
 import { z } from "zod"
 
-import { type SpotType } from "@ramble/database/types"
+import type { SpotType } from "@ramble/database/types"
 import { generateBlurHash } from "@ramble/server-services"
 import { createImageUrl, displayRating, isPartnerSpot, join } from "@ramble/shared"
 
@@ -23,7 +23,7 @@ import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { json, notFound } from "~/lib/remix.server"
 import type { ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
-import { type SpotPreviewData } from "~/pages/api+/spots+/$id.preview"
+import type { SpotPreviewData } from "~/pages/api+/spots+/$id.preview"
 import { SaveToList } from "~/pages/api+/spots+/$id.save-to-list"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
@@ -113,7 +113,7 @@ export default function SpotPreview() {
             {user && <SaveToList spotId={spot.id} />}
           </div>
         </div>
-        <div className="rounded-xs w-full overflow-x-scroll">
+        <div className="w-full overflow-x-scroll rounded-xs">
           <div className="relative flex h-[225px] w-max space-x-2">
             {data.flickrImages
               ? data.flickrImages.map((photo) => (
@@ -129,7 +129,7 @@ export default function SpotPreview() {
                       src={photo.src}
                       width={350}
                       height={225}
-                      className="rounded-xs h-[225px] max-w-[350px] object-cover"
+                      className="h-[225px] max-w-[350px] rounded-xs object-cover"
                     />
                     <img alt="flickr logo" src="/flickr.svg" className="absolute bottom-1 left-1 object-contain" width={100} />
                   </a>
@@ -140,12 +140,12 @@ export default function SpotPreview() {
                     width={350}
                     placeholder={image.blurHash}
                     height={225}
-                    className="rounded-xs h-[225px] max-w-[350px] object-cover"
+                    className="h-[225px] max-w-[350px] rounded-xs object-cover"
                     key={image.id}
                     src={createImageUrl(image.path)}
                   />
                 ))}
-            <div className="center rounded-xs h-full w-[350px] flex-col gap-2 border bg-gray-50 dark:bg-gray-800">
+            <div className="center h-full w-[350px] flex-col gap-2 rounded-xs border bg-gray-50 dark:bg-gray-800">
               <Image size={40} strokeWidth={1} />
               {user && (
                 <>
@@ -222,7 +222,7 @@ function SpotFallback() {
           <Skeleton className="h-8 w-20" />
         </div>
       </div>
-      <div className="rounded-xs flex h-[225px] w-full space-x-2 overflow-hidden">
+      <div className="flex h-[225px] w-full space-x-2 overflow-hidden rounded-xs">
         <Skeleton className="h-[225px] min-w-[350px]" />
         <Skeleton className="h-[225px] min-w-[100px]" />
       </div>
@@ -246,8 +246,8 @@ function SpotFallback() {
 function SpotContainer(props: { children: React.ReactNode }) {
   const navigate = useNavigate()
   return (
-    <div className="bg-background absolute bottom-0 left-0 top-0 z-10 w-full max-w-lg overflow-scroll border-r p-4 pb-20 md:px-8">
-      <CloseButton className="absolute right-2 top-2 z-10" onClick={() => navigate(`..${window.location.search}`)} />
+    <div className="absolute top-0 bottom-0 left-0 z-10 w-full max-w-lg overflow-scroll border-r bg-background p-4 pb-20 md:px-8">
+      <CloseButton className="absolute top-2 right-2 z-10" onClick={() => navigate(`..${window.location.search}`)} />
       {props.children}
     </div>
   )

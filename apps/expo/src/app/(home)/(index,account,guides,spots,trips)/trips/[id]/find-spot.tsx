@@ -129,7 +129,7 @@ export default function FindSpotScreen() {
 
       <View className="relative flex-1">
         <MapView
-          className="rounded-xs overflow-hidden"
+          className="overflow-hidden rounded-xs"
           onMapIdle={onMapMove}
           onDidFinishLoadingMap={() => setIsMapLoaded(true)}
           ref={mapRef}
@@ -148,9 +148,9 @@ export default function FindSpotScreen() {
           {spotMarkers}
         </MapView>
 
-        <View className="absolute left-2 right-2 top-2">
+        <View className="absolute top-2 right-2 left-2">
           <Input
-            className="bg-background dark:bg-background-dark rounded-sm"
+            className="rounded-sm bg-background dark:bg-background-dark"
             placeholder="Search here"
             onChangeText={setSearch}
             value={search}
@@ -158,7 +158,7 @@ export default function FindSpotScreen() {
             returnKeyType="done"
           />
           {search && places && (
-            <View className="bg-background dark:bg-background-dark rounded-b-sm p-2">
+            <View className="rounded-b-sm bg-background p-2 dark:bg-background-dark">
               {places.map((place, i) => (
                 <TouchableOpacity
                   key={`${place.name}-${i}`}
@@ -183,12 +183,12 @@ export default function FindSpotScreen() {
 
         <View
           pointerEvents="box-none"
-          className="absolute bottom-3 left-3 right-3 flex flex-row items-end justify-between space-y-2"
+          className="absolute right-3 bottom-3 left-3 flex flex-row items-end justify-between space-y-2"
         >
           <Link push href={"/filters/"} asChild>
             <TouchableOpacity
               activeOpacity={0.8}
-              className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"
+              className="sq-12 flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
             >
               <Icon icon={Settings2} size={20} />
             </TouchableOpacity>
@@ -197,7 +197,7 @@ export default function FindSpotScreen() {
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={handleSetUserLocation}
-            className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"
+            className="sq-12 flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
           >
             <Icon icon={Navigation} size={20} />
           </TouchableOpacity>
@@ -231,7 +231,7 @@ export function AddTripSpotPreview({ spotId, onClose }: { spotId: string; onClos
   })
 
   const handleAddToTrip = () => {
-    let parsedOrder = order ? parseInt(order) : undefined
+    let parsedOrder = order ? Number.parseInt(order) : undefined
     if (!parsedOrder || Number.isNaN(parsedOrder)) parsedOrder = undefined
 
     mutate({ tripId: id, spotId, order: parsedOrder })
@@ -242,7 +242,7 @@ export function AddTripSpotPreview({ spotId, onClose }: { spotId: string; onClos
       style={{ width: "100%", position: "absolute", bottom: 0, zIndex: 1 }}
       entering={SlideInDown.duration(200)}
       exiting={SlideOutDown.duration(200)}
-      className="rounded-t-xs bg-background dark:bg-background-dark p-4"
+      className="rounded-t-xs bg-background p-4 dark:bg-background-dark"
     >
       {isLoading ? (
         <View className="flex items-center justify-center p-10">
@@ -288,7 +288,7 @@ export function AddTripSpotPreview({ spotId, onClose }: { spotId: string; onClos
             </View>
           </View>
 
-          <View className="rounded-xs overflow-hidden">
+          <View className="overflow-hidden rounded-xs">
             <SpotImageCarousel
               canAddMore
               spotId={spot.id}
@@ -303,7 +303,7 @@ export function AddTripSpotPreview({ spotId, onClose }: { spotId: string; onClos
         </View>
       )}
 
-      <TouchableOpacity onPress={onClose} className="absolute right-2 top-2 flex items-center justify-center p-2">
+      <TouchableOpacity onPress={onClose} className="absolute top-2 right-2 flex items-center justify-center p-2">
         <Icon icon={X} size={20} />
       </TouchableOpacity>
     </Animated.View>

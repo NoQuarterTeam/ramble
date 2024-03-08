@@ -1,5 +1,5 @@
 import { useActionData } from "@remix-run/react"
-import { type z } from "zod"
+import type { z } from "zod"
 
 import type { ActionDataErrorResponse } from "./form.server"
 

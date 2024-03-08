@@ -31,7 +31,7 @@ export function Nav() {
   const theme = useTheme()
   const isDark = theme === "dark"
   return (
-    <div className="h-nav bg-background fixed left-0 top-0 z-10 flex w-full items-center justify-between border-b px-4 align-middle xl:px-12">
+    <div className="fixed top-0 left-0 z-10 flex h-nav w-full items-center justify-between border-b bg-background px-4 align-middle xl:px-12">
       <div className="flex items-center space-x-4">
         <Link to="/map" className="brand-header font flex w-[100px] items-center space-x-1 text-2xl">
           ramble

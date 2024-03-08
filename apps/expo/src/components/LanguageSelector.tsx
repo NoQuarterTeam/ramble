@@ -41,7 +41,7 @@ export function LanguageSelector({ modalProps, ...props }: Props) {
                 modalProps.onClose()
               }}
               activeOpacity={0.8}
-              className="flex flex-row items-center justify-between border-b border-gray-200 p-4 dark:border-gray-700"
+              className="flex flex-row items-center justify-between border-gray-200 border-b p-4 dark:border-gray-700"
             >
               <Text>{l.name}</Text>
               {l.code === props.selectedLanguage && <Icon icon={Check} size={18} />}

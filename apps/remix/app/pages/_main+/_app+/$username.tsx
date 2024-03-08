@@ -101,8 +101,8 @@ export default function ProfileLists() {
     <div className="mx-auto px-4 pb-20 lg:px-12">
       <div className="grid grid-cols-10 gap-6">
         <div className="col-span-10 lg:col-span-4 xl:col-span-3">
-          <div className="md:top-nav relative pt-4 md:sticky">
-            <div className="rounded-xs flex flex-col gap-4 border p-4">
+          <div className="relative pt-4 md:sticky md:top-nav">
+            <div className="flex flex-col gap-4 rounded-xs border p-4">
               <div className="flex items-center space-x-3">
                 <ImageUploader onSubmit={handleImageUpload} dropzoneOptions={{ disabled: !isCurrentUser }}>
                   <div className="group relative">
@@ -121,7 +121,7 @@ export default function ProfileLists() {
                 </ImageUploader>
                 <div className="space-y-1">
                   {user.role === "GUIDE" && <Badge colorScheme="green">Guide</Badge>}
-                  <h1 className="text-2xl md:text-xl lg:text-3xl">{user.username}</h1>
+                  <h1 className="text-2xl lg:text-3xl md:text-xl">{user.username}</h1>
                   <p>
                     {user.firstName} {user.lastName}
                   </p>
@@ -179,7 +179,7 @@ export default function ProfileLists() {
         </div>
 
         <div className="col-span-10 space-y-4 lg:col-span-6 xl:col-span-7">
-          <div className="top-nav bg-background sticky z-[1] mx-auto flex w-full items-center justify-center space-x-1 py-4">
+          <div className="sticky top-nav z-[1] mx-auto flex w-full items-center justify-center space-x-1 bg-background py-4">
             <div>
               <ProfileLink to={`/${user.username}`} end>
                 Spots

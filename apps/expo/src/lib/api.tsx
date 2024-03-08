@@ -2,12 +2,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { httpBatchLink } from "@trpc/client"
 import { createTRPCReact } from "@trpc/react-query"
-import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server"
+import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server"
 import Constants from "expo-constants"
 import * as React from "react"
 import superjson from "superjson"
 
-import { type AppRouter } from "@ramble/api"
+import type { AppRouter } from "@ramble/api"
 
 import { FULL_WEB_URL } from "./config"
 

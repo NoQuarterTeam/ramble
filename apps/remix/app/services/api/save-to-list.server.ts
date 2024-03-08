@@ -7,8 +7,8 @@ import { listSchema } from "@ramble/server-schemas"
 import { db } from "~/lib/db.server"
 import { createAction, createActions } from "~/lib/form.server"
 import { badRequest, json } from "~/lib/remix.server"
-import { type ActionFunctionArgs } from "~/lib/vendor/vercel.server"
-import { type Actions } from "~/pages/api+/spots+/$id.save-to-list"
+import type { ActionFunctionArgs } from "~/lib/vendor/vercel.server"
+import type { Actions } from "~/pages/api+/spots+/$id.save-to-list"
 
 import { requireUser } from "../auth/auth.server"
 

@@ -45,10 +45,10 @@ export default function EditSpotImagesScreen() {
           {images.map((image) => (
             <TouchableOpacity key={image} onPress={() => setImages((im) => im.filter((i) => i !== image))} className="w-1/3 p-1">
               <Image
-                className="rounded-xs h-[100px] w-full bg-gray-50 object-cover dark:bg-gray-700"
+                className="h-[100px] w-full rounded-xs bg-gray-50 object-cover dark:bg-gray-700"
                 source={{ uri: image.startsWith("file://") ? image : createImageUrl(image) }}
               />
-              <View className="absolute -right-1 -top-1 rounded-full bg-gray-100 p-1 dark:bg-gray-900">
+              <View className="-right-1 -top-1 absolute rounded-full bg-gray-100 p-1 dark:bg-gray-900">
                 <Icon icon={X} size={16} />
               </View>
             </TouchableOpacity>
@@ -62,7 +62,7 @@ export default function EditSpotImagesScreen() {
       </ScrollView>
 
       {images.length > 0 && (
-        <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
+        <View className="absolute right-4 bottom-12 left-4 flex items-center justify-center space-y-2">
           <Button
             className="rounded-full"
             onPress={() => {

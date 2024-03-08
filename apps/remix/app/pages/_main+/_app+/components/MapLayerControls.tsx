@@ -4,7 +4,7 @@ import { CloudRain, Layers, MountainSnow, SunMoon, Thermometer, Users2 } from "l
 
 import { useFetcher } from "~/components/Form"
 import { IconButton, Modal, Switch, Tooltip } from "~/components/ui"
-import { ActionDataSuccessResponse } from "~/lib/form.server"
+import type { ActionDataSuccessResponse } from "~/lib/form.server"
 import { useMapLayers } from "~/lib/hooks/useMapLayers"
 
 export const mapLayersUrl = "/api/map-layers"
@@ -22,7 +22,7 @@ export function MapLayerControls() {
 
   return (
     <>
-      <div className="rounded-xs bg-background absolute right-2 top-2 shadow md:right-4 md:top-4">
+      <div className="absolute top-2 right-2 rounded-xs bg-background shadow md:top-4 md:right-4">
         <Tooltip label="Map layers" side="left">
           <IconButton
             onClick={modalProps.onOpen}
@@ -52,10 +52,10 @@ export function MapLayerControls() {
                 <RadioGroup.Item
                   value=""
                   id="default"
-                  className="focus-visible:ring-ring sq-5 aspect-square rounded-full border shadow focus:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="sq-5 aspect-square rounded-full border shadow disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 >
                   <RadioGroup.Indicator className="flex items-center justify-center">
-                    <div className="sq-3 bg-primary rounded-full" />
+                    <div className="sq-3 rounded-full bg-primary" />
                   </RadioGroup.Indicator>
                 </RadioGroup.Item>
               </label>
@@ -73,10 +73,10 @@ export function MapLayerControls() {
                 <RadioGroup.Item
                   value="rain"
                   id="rain"
-                  className="focus-visible:ring-ring sq-5 aspect-square rounded-full border shadow focus:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="sq-5 aspect-square rounded-full border shadow disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 >
                   <RadioGroup.Indicator className="flex items-center justify-center">
-                    <div className="sq-3 bg-primary rounded-full" />
+                    <div className="sq-3 rounded-full bg-primary" />
                   </RadioGroup.Indicator>
                 </RadioGroup.Item>
               </label>
@@ -94,10 +94,10 @@ export function MapLayerControls() {
                 <RadioGroup.Item
                   value="temp"
                   id="temp"
-                  className="focus-visible:ring-ring sq-5 aspect-square rounded-full border shadow focus:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="sq-5 aspect-square rounded-full border shadow disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 >
                   <RadioGroup.Indicator className="flex items-center justify-center">
-                    <div className="sq-3 bg-primary rounded-full" />
+                    <div className="sq-3 rounded-full bg-primary" />
                   </RadioGroup.Indicator>
                 </RadioGroup.Item>
               </label>
@@ -115,10 +115,10 @@ export function MapLayerControls() {
                 <RadioGroup.Item
                   value="satellite"
                   id="satellite"
-                  className="focus-visible:ring-ring sq-5 aspect-square rounded-full border shadow focus:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="sq-5 aspect-square rounded-full border shadow disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 >
                   <RadioGroup.Indicator className="flex items-center justify-center">
-                    <div className="sq-3 bg-primary rounded-full" />
+                    <div className="sq-3 rounded-full bg-primary" />
                   </RadioGroup.Indicator>
                 </RadioGroup.Item>
               </label>

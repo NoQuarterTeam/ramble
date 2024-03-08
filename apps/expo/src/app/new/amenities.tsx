@@ -7,7 +7,7 @@ import colors from "@ramble/tailwind-config/src/colors"
 
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
-import { type RambleIcon } from "~/components/ui/Icons"
+import type { RambleIcon } from "~/components/ui/Icons"
 import { Text } from "~/components/ui/Text"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 
@@ -40,7 +40,7 @@ export default function NewSpotAmenitiesScreen() {
         ))}
       </ScrollView>
 
-      <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
+      <View className="absolute right-4 bottom-12 left-4 flex items-center justify-center space-y-2">
         <Button
           className="rounded-full"
           onPress={() => {

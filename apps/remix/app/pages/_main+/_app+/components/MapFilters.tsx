@@ -46,7 +46,7 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
 
   return (
     <>
-      <div className="bg-background rounded-xs absolute left-1/2 top-4 hidden -translate-x-1/2 md:block">
+      <div className="-translate-x-1/2 absolute top-4 left-1/2 hidden rounded-xs bg-background md:block">
         <Button
           onClick={modalProps.onOpen}
           className="border-none"
@@ -56,7 +56,7 @@ export function MapFilters({ onChange }: { onChange: (params: string) => void })
           Filters
         </Button>
       </div>
-      <div className="bg-background rounded-xs absolute right-2 top-12 block md:hidden">
+      <div className="absolute top-12 right-2 block rounded-xs bg-background md:hidden">
         <Tooltip label="Filters" side="left">
           <IconButton
             variant="ghost"
@@ -174,7 +174,7 @@ function SpotTypeSelector({ type, defaultValue }: { type: SpotTypeInfo; defaultV
         {type.label}
       </Button>
       {type.isComingSoon && (
-        <p className="bg-background text-xxs absolute -right-1 -top-1 flex items-center justify-center rounded-full border px-1 shadow">
+        <p className="-right-1 -top-1 absolute flex items-center justify-center rounded-full border bg-background px-1 text-xxs shadow">
           Coming soon
         </p>
       )}

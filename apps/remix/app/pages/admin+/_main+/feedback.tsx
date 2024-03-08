@@ -6,7 +6,7 @@ import { ExistingSearchParams } from "remix-utils/existing-search-params"
 import { promiseHash } from "remix-utils/promise"
 import { z } from "zod"
 
-import { type FeedbackType, type Prisma } from "@ramble/database/types"
+import type { FeedbackType, Prisma } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
@@ -19,7 +19,7 @@ import { formError, getFormAction, validateFormData } from "~/lib/form.server"
 import { FEEDBACKS, FeedbackIcon } from "~/lib/models/feedback"
 import { badRequest, json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"
-import { type ActionFunctionArgs, type LoaderFunctionArgs, type SerializeFrom } from "~/lib/vendor/vercel.server"
+import type { ActionFunctionArgs, LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -131,7 +131,7 @@ export default function Feedbacks() {
         </div>
         <Form>
           <ExistingSearchParams exclude={["type"]} />
-          <p className="text-sm font-medium">Type</p>
+          <p className="font-medium text-sm">Type</p>
           <Select
             defaultValue={searchParams.get("type") || ""}
             onChange={(e) => e.currentTarget.form?.dispatchEvent(new Event("submit", { bubbles: true }))}

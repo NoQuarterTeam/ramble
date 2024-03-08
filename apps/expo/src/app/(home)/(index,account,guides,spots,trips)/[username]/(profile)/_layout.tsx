@@ -63,7 +63,7 @@ export default function UserScreen() {
           <View className="flex flex-row items-center">
             {router.canGoBack() && (
               <TouchableOpacity className="sq-8 flex items-center justify-center" onPress={router.back} activeOpacity={0.8}>
-                <ChevronLeft className="text-primary mt-2" />
+                <ChevronLeft className="mt-2 text-primary" />
               </TouchableOpacity>
             )}
             <View>
@@ -87,7 +87,7 @@ export default function UserScreen() {
           <TouchableOpacity
             onPress={onToggleFollow}
             activeOpacity={0.8}
-            className="sq-8 bg-background flex items-center justify-center rounded-full dark:bg-gray-800"
+            className="sq-8 flex items-center justify-center rounded-full bg-background dark:bg-gray-800"
           >
             <Icon icon={Heart} size={20} fill={isFollowedByMe ? (isDark ? "white" : "black") : "transparent"} />
           </TouchableOpacity>
@@ -174,7 +174,7 @@ export default function UserScreen() {
             <Text>{user.bio}</Text>
           </View>
 
-          <View className="bg-background dark:bg-background-dark flex flex-row items-center justify-center space-x-2 border-b border-gray-100 py-2 dark:border-gray-800">
+          <View className="flex flex-row items-center justify-center space-x-2 border-gray-100 border-b bg-background py-2 dark:border-gray-800 dark:bg-background-dark">
             <Button
               variant={segments[segments.length - 1] === "(profile)" ? "secondary" : "ghost"}
               size="sm"

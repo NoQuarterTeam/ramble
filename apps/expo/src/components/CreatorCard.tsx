@@ -2,7 +2,7 @@ import { useRouter } from "expo-router"
 import { User2 } from "lucide-react-native"
 import { TouchableOpacity, View } from "react-native"
 
-import { type User } from "@ramble/database/types"
+import type { User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
@@ -27,13 +27,13 @@ export function CreatorCard({ creator }: Props) {
         increment()
         router.push(`/${tab}/${creator.username}/(profile)`)
       }}
-      className="rounded-xs flex flex-row items-center justify-between border border-gray-200 p-1.5 px-2.5 dark:border-gray-700/70"
+      className="flex flex-row items-center justify-between rounded-xs border border-gray-200 p-1.5 px-2.5 dark:border-gray-700/70"
     >
       <View>
         <View className="flex flex-row items-center space-x-1">
           <Text>
             Added by{" "}
-            <Text className="font-500 ">
+            <Text className="font-500">
               {creator.firstName} {creator.lastName}
             </Text>
           </Text>

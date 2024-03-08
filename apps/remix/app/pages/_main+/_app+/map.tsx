@@ -17,7 +17,7 @@ import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 import * as React from "react"
 import { Layer, type LngLatLike, type MapRef, Marker, Source, type ViewStateChangeEvent } from "react-map-gl"
-import { type MarkerEvent, type MarkerInstance } from "react-map-gl/dist/esm/types"
+import type { MarkerEvent, MarkerInstance } from "react-map-gl/dist/esm/types"
 import { ClientOnly } from "remix-utils/client-only"
 
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createImageUrl, join } from "@ramble/shared"
@@ -29,7 +29,7 @@ import { useMapLayers } from "~/lib/hooks/useMapLayers"
 import type { LinksFunction, LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
 import { MapFilters } from "~/pages/_main+/_app+/components/MapFilters"
-import { type UserCluster, type userClustersLoader } from "~/pages/api+/user-clusters"
+import type { UserCluster, userClustersLoader } from "~/pages/api+/user-clusters"
 import { getUserSession } from "~/services/session/session.server"
 
 import { useTheme } from "~/lib/theme"
@@ -60,8 +60,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
   return json(
     {
-      latitude: geo.latitude ? parseFloat(geo.latitude) : null,
-      longitude: geo.longitude ? parseFloat(geo.longitude) : null,
+      latitude: geo.latitude ? Number.parseFloat(geo.latitude) : null,
+      longitude: geo.longitude ? Number.parseFloat(geo.longitude) : null,
       city: geo.city,
       country: geo.country,
     },
@@ -92,14 +92,14 @@ export default function MapRouter() {
     if (minLat && maxLat && minLng && maxLng) {
       centerFromParams = center(
         points([
-          [parseFloat(minLng), parseFloat(minLat)],
-          [parseFloat(maxLng), parseFloat(maxLat)],
+          [Number.parseFloat(minLng), Number.parseFloat(minLat)],
+          [Number.parseFloat(maxLng), Number.parseFloat(maxLat)],
         ]),
       )
     }
 
     return {
-      zoom: zoom ? parseInt(zoom) : ipInfo ? 6 : 5,
+      zoom: zoom ? Number.parseInt(zoom) : ipInfo ? 6 : 5,
       longitude: centerFromParams?.geometry.coordinates[0] || ipInfo?.longitude || INITIAL_LONGITUDE,
       latitude: centerFromParams?.geometry.coordinates[1] || ipInfo?.latitude || INITIAL_LATITUDE,
     }
@@ -197,7 +197,7 @@ export default function MapRouter() {
   const isDark = useTheme() === "dark"
 
   return (
-    <div className="h-nav-screen relative w-screen overflow-hidden">
+    <div className="relative h-nav-screen w-screen overflow-hidden">
       <MapView
         onLoad={onMove}
         onMoveEnd={onMove}
@@ -265,7 +265,7 @@ function UserClusterMarker(props: UserMarkerProps) {
           ) : (
             <User size={18} className="text-white" />
           )}
-          <div className="bg-background rounded-xs absolute -bottom-5 left-1/2 hidden -translate-x-1/2 px-2 py-1 group-hover:block">
+          <div className="-bottom-5 -translate-x-1/2 absolute left-1/2 hidden rounded-xs bg-background px-2 py-1 group-hover:block">
             <p className="text-xs">{props.point.properties.username}</p>
           </div>
         </div>
@@ -286,7 +286,7 @@ export function ErrorBoundary() {
         </p>
       </div>
       {isCatchError ? null : error instanceof Error ? (
-        <div className="rounded-xs max-w-4xl space-y-4 bg-gray-200 p-4 dark:bg-gray-700 ">
+        <div className="max-w-4xl space-y-4 rounded-xs bg-gray-200 p-4 dark:bg-gray-700">
           <p>{error.message}</p>
           <pre className="overflow-scroll text-sm">{error.stack}</pre>
         </div>
@@ -308,7 +308,7 @@ function MapLayers() {
             tiles={["https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63"]}
           />
           <Layer id="tempLayer" source="temp" type="raster" />
-          <div className="bg-background rounded-xs absolute bottom-2.5 right-12 hidden items-center space-x-4 px-2 py-1 text-xs shadow sm:flex">
+          <div className="absolute right-12 bottom-2.5 hidden items-center space-x-4 rounded-xs bg-background px-2 py-1 text-xs shadow sm:flex">
             <p>Temperature, °C</p>
             <div>
               <div className="flex w-full justify-between">
@@ -319,7 +319,7 @@ function MapLayers() {
                 <p>40</p>
               </div>
               <div
-                className="rounded-xs h-[4px] w-[260px]"
+                className="h-[4px] w-[260px] rounded-xs"
                 style={{
                   backgroundImage:
                     "linear-gradient(to right, rgb(159, 85, 181) 0%, rgb(44, 106, 187) 8.75%, rgb(82, 139, 213) 12.5%, rgb(103, 163, 222) 18.75%, rgb(142, 202, 240) 25%, rgb(155, 213, 244) 31.25%, rgb(172, 225, 253) 37.5%, rgb(194, 234, 255) 43.75%, rgb(255, 255, 208) 50%, rgb(254, 248, 174) 56.25%, rgb(254, 232, 146) 62.5%, rgb(254, 226, 112) 68.75%, rgb(253, 212, 97) 75%, rgb(244, 168, 94) 82.5%, rgb(244, 129, 89) 87.5%, rgb(244, 104, 89) 93.75%, rgb(244, 76, 73) 100%)",

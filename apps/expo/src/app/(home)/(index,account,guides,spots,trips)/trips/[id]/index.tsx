@@ -3,7 +3,7 @@ import {
   Camera,
   LineLayer,
   LocationPuck,
-  MapState,
+  type MapState,
   type MapView as MapType,
   MarkerView,
   ShapeSource,
@@ -146,17 +146,17 @@ export default function TripDetailScreen() {
                 activeOpacity={0.7}
                 onPress={() => router.push(`/(home)/(trips)/trips/${id}/images/cluster?bounds=${bounds.join(",")}`)}
                 className={join(
-                  "flex items-center justify-center relative",
+                  "relative flex items-center justify-center",
                   point.properties.point_count > 150 ? "sq-20" : point.properties.point_count > 75 ? "sq-16" : "sq-14",
                 )}
               >
-                <View className="rounded-sm border-2 border-white bg-background dark:bg-background-dark h-full w-full">
+                <View className="h-full w-full rounded-sm border-2 border-white bg-background dark:bg-background-dark">
                   <Image
                     source={{ uri: createImageUrl(point.properties.media[0]?.properties.path) }}
                     style={{ width: "100%", height: "100%" }}
                   />
                 </View>
-                <View className="absolute bg-blue-500 rounded-full sq-5 -top-1 -right-1 flex items-center justify-center">
+                <View className="sq-5 -top-1 -right-1 absolute flex items-center justify-center rounded-full bg-blue-500">
                   <Text className="text-center font-600 text-white">{point.properties.point_count_abbreviated}</Text>
                 </View>
               </TouchableOpacity>
@@ -173,7 +173,7 @@ export default function TripDetailScreen() {
             <TouchableOpacity
               activeOpacity={0.7}
               onPress={() => router.push(`/(home)/(trips)/trips/${id}/images/${media.id}`)}
-              className="sq-12 flex items-center justify-center rounded-md overflow-hidden border-2 border-white"
+              className="sq-12 flex items-center justify-center overflow-hidden rounded-md border-2 border-white"
             >
               <Image source={{ uri: createImageUrl(media.path) }} style={{ width: "100%", height: "100%" }} />
             </TouchableOpacity>
@@ -248,17 +248,17 @@ export default function TripDetailScreen() {
         />
       </MapView>
 
-      <View style={{ top: insets.top + 8 }} pointerEvents="box-none" className="absolute flex left-0 right-0">
+      <View style={{ top: insets.top + 8 }} pointerEvents="box-none" className="absolute right-0 left-0 flex">
         <View className="flex flex-row items-center justify-between px-4">
           <View className="flex flex-row items-center space-x-2">
             <TouchableOpacity
               onPress={router.back}
               activeOpacity={0.5}
-              className="sq-8 bg-background dark:bg-background-dark just flex  h-10 w-10 flex-row items-center justify-center rounded-full"
+              className="sq-8 just flex h-10 w-10 flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
             >
               <Icon icon={ChevronLeft} />
             </TouchableOpacity>
-            <View className="bg-background dark:bg-background-dark flex h-10 flex-row items-center rounded-full">
+            <View className="flex h-10 flex-row items-center rounded-full bg-background dark:bg-background-dark">
               {isLoading ? (
                 <View className="flex w-10 items-center justify-center">
                   <ActivityIndicator />
@@ -276,7 +276,7 @@ export default function TripDetailScreen() {
             <View className="flex flex-row items-center space-x-1">
               <Link push href={`/${tab}/trips/${id}/images`} asChild>
                 <TouchableOpacity
-                  className="sq-10 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
+                  className="sq-10 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
                   activeOpacity={0.8}
                 >
                   <Icon icon={ImageIcon} size={16} />
@@ -285,7 +285,7 @@ export default function TripDetailScreen() {
               {trip.creatorId === me.id && (
                 <Link push href={`/${tab}/trips/${id}/users`} asChild>
                   <TouchableOpacity
-                    className="sq-10 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
+                    className="sq-10 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
                     activeOpacity={0.8}
                   >
                     <Icon icon={Users} size={16} />
@@ -294,7 +294,7 @@ export default function TripDetailScreen() {
               )}
               <Link push href={`/${tab}/trips/${id}/edit`} asChild>
                 <TouchableOpacity
-                  className="sq-10 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
+                  className="sq-10 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
                   activeOpacity={0.8}
                 >
                   <Icon icon={Edit2} size={16} />
@@ -313,7 +313,7 @@ export default function TripDetailScreen() {
         )}
       </View>
 
-      <View className="absolute bottom-0 left-0 right-0">
+      <View className="absolute right-0 bottom-0 left-0">
         {trip && (
           <TripList
             trip={trip}
@@ -427,7 +427,7 @@ function TripImageSync({
   if (!isSyncing) return null
   return (
     <View className="flex items-center justify-center pt-2">
-      <View className="flex items-center bg-primary px-4 py-2 rounded-full flex-row space-x-2">
+      <View className="flex flex-row items-center space-x-2 rounded-full bg-primary px-4 py-2">
         <ActivityIndicator size="small" color="white" />
         <Text className="text-white">Syncing photos</Text>
       </View>
@@ -603,13 +603,13 @@ const TripItem = React.memo(function _TripItem({
       >
         <View style={{ opacity: isActive ? 0 : 1 }}>
           <AddTripItemMenu order={addBeforeOrder}>
-            <TouchableOpacity className="bg-primary rounded-full p-1">
+            <TouchableOpacity className="rounded-full bg-primary p-1">
               <Icon icon={Plus} size={16} color="white" />
             </TouchableOpacity>
           </AddTripItemMenu>
         </View>
 
-        <View className="bg-background dark:bg-background-dark relative h-full w-full flex-1 rounded">
+        <View className="relative h-full w-full flex-1 rounded bg-background dark:bg-background-dark">
           {spot ? (
             <Link href={`/${tab}/spot/${spot.id}`} push asChild>
               <View className="h-full w-full">
@@ -629,12 +629,12 @@ const TripItem = React.memo(function _TripItem({
                   </View>
                 )}
                 {spot.images?.[0] && (
-                  <View className="sq-8 bg-background dark:bg-background-dark absolute left-1 top-1 flex items-center justify-center rounded-full">
+                  <View className="sq-8 absolute top-1 left-1 flex items-center justify-center rounded-full bg-background dark:bg-background-dark">
                     <SpotIcon type={spot.type} size={16} />
                   </View>
                 )}
 
-                <Text numberOfLines={1} className="font-500 p-1 text-xs">
+                <Text numberOfLines={1} className="p-1 font-500 text-xs">
                   {spot.name}
                 </Text>
               </View>
@@ -643,7 +643,7 @@ const TripItem = React.memo(function _TripItem({
             stop.image ? (
               <View className="relative h-full w-full overflow-hidden rounded-sm">
                 <Image source={{ uri: stop.image }} className="h-full w-full" />
-                <View className="absolute bottom-0 left-0 right-0 top-0 items-center justify-center bg-black/40 p-2">
+                <View className="absolute top-0 right-0 bottom-0 left-0 items-center justify-center bg-black/40 p-2">
                   <Text className="text-center text-white">{stop.name}</Text>
                 </View>
               </View>
@@ -653,11 +653,11 @@ const TripItem = React.memo(function _TripItem({
               </View>
             )
           ) : null}
-          {isFocused && <View className="bg-primary absolute bottom-0 left-0 right-0 top-0 h-0.5 rounded-t-sm" />}
+          {isFocused && <View className="absolute top-0 right-0 bottom-0 left-0 h-0.5 rounded-t-sm bg-primary" />}
 
           {item.date && (
-            <View className="absolute top-1 right-1 flex items-center justify-center px-2 py-1 rounded-full bg-blue-500">
-              <Text className="text-xxs font-600 text-white">{dayjs(item.date).format("DD MMM YY")}</Text>
+            <View className="absolute top-1 right-1 flex items-center justify-center rounded-full bg-blue-500 px-2 py-1">
+              <Text className="font-600 text-white text-xxs">{dayjs(item.date).format("DD MMM YY")}</Text>
             </View>
           )}
         </View>
@@ -672,7 +672,7 @@ function ListHeader({ trip }: { trip: RouterOutputs["trip"]["detail"]["trip"] })
     <View className="flex h-full items-center justify-center">
       <View
         style={{ width: HEADER_FOOTER_WIDTH, height: HEADER_FOOTER_WIDTH }}
-        className="bg-background dark:bg-background-dark flex items-center justify-center space-y-2 rounded-full border border-primary p-2"
+        className="flex items-center justify-center space-y-2 rounded-full border border-primary bg-background p-2 dark:bg-background-dark"
       >
         <Icon icon={Home} size={16} />
         <Text className="text-xxs">{dayjs(trip.startDate).format("D MMM YY")}</Text>
@@ -687,7 +687,7 @@ function ListFooter({ trip }: { trip: RouterOutputs["trip"]["detail"]["trip"] })
     <View className="flex h-full flex-row items-center space-x-2 pl-2">
       <AddTripItemMenu>
         <TouchableOpacity
-          className={join("bg-primary flex flex-row items-center space-x-2 rounded-full p-1", hasNoItems && "p-5")}
+          className={join("flex flex-row items-center space-x-2 rounded-full bg-primary p-1", hasNoItems && "p-5")}
         >
           <Icon icon={Plus} size={16} color="white" />
           {hasNoItems && <Text className="font-600 text-sm text-white">Add your first stop</Text>}
@@ -696,7 +696,7 @@ function ListFooter({ trip }: { trip: RouterOutputs["trip"]["detail"]["trip"] })
       <View className="flex h-full items-center justify-center">
         <View
           style={{ width: HEADER_FOOTER_WIDTH, height: HEADER_FOOTER_WIDTH }}
-          className="bg-background dark:bg-background-dark flex items-center justify-center space-y-2 rounded-full border border-primary p-2"
+          className="flex items-center justify-center space-y-2 rounded-full border border-primary bg-background p-2 dark:bg-background-dark"
         >
           <Icon icon={Flag} size={16} />
           <Text className="text-xxs">{dayjs(trip.endDate).format("D MMM YY")}</Text>

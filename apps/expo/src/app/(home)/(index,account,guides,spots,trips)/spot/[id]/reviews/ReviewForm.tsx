@@ -2,14 +2,14 @@ import { Star } from "lucide-react-native"
 import { FormProvider, useForm } from "react-hook-form"
 import { TouchableOpacity, View, useColorScheme } from "react-native"
 
-import { type Review } from "@ramble/database/types"
+import type { Review } from "@ramble/database/types"
 
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
 import { FormError } from "~/components/ui/FormError"
 import { FormInput, FormInputError } from "~/components/ui/FormInput"
-import { type RouterInputs } from "~/lib/api"
-import { type ApiError } from "~/lib/hooks/useForm"
+import type { RouterInputs } from "~/lib/api"
+import type { ApiError } from "~/lib/hooks/useForm"
 import { backgroundDark, backgroundLight } from "~/lib/tailwind"
 
 type UpdateSubmit = {

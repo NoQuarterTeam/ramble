@@ -18,7 +18,7 @@ import {
   Wrench,
 } from "lucide-react-native"
 
-import { type SpotType } from "@ramble/database/types"
+import type { SpotType } from "@ramble/database/types"
 
 import { Icons, type RambleIcon } from "~/components/ui/Icons"
 

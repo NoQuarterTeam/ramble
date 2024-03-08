@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { SpotType } from "@ramble/database/types"
+import type { SpotType } from "@ramble/database/types"
 import { geocodeAddress, geocodeCoords, getPlaces } from "@ramble/server-services"
 
 import { createTRPCRouter, publicProcedure } from "../trpc"

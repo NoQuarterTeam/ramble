@@ -70,7 +70,7 @@ export default function AccountScreen() {
     <TabView title="account">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false} className="flex-1 space-y-4">
         {!me.isVerified && (
-          <View className="rounded-xs flex flex-col space-y-3 border border-gray-200 p-2 pl-4 dark:border-gray-700">
+          <View className="flex flex-col space-y-3 rounded-xs border border-gray-200 p-2 pl-4 dark:border-gray-700">
             <View className="flex flex-row items-center space-x-2">
               <Icon icon={AlertCircle} size={20} />
               <Text className="text-lg">Your account is not yet verified</Text>
@@ -84,7 +84,7 @@ export default function AccountScreen() {
         <View>
           <View className="space-y-4">
             <Link push asChild href={`/(home)/(account)/${me.username}/(profile)`}>
-              <TouchableOpacity className="rounded-xs flex flex-row items-center justify-between border border-gray-200 p-4 dark:border-gray-700">
+              <TouchableOpacity className="flex flex-row items-center justify-between rounded-xs border border-gray-200 p-4 dark:border-gray-700">
                 <View className="flex flex-row items-center space-x-4">
                   {me.avatar ? (
                     <OptimizedImage
@@ -161,7 +161,7 @@ function ProfileLink({ children, to, icon }: { to: string; children: string; ico
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      className="rounded-xs mb-1 flex flex-row items-center justify-between border border-gray-200 px-4 py-3 dark:border-gray-700"
+      className="mb-1 flex flex-row items-center justify-between rounded-xs border border-gray-200 px-4 py-3 dark:border-gray-700"
       onPress={() => router.push(path)}
     >
       <View className="flex flex-row items-center space-x-2">

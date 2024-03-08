@@ -5,7 +5,7 @@ import { Image } from "lucide-react-native"
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
 
-import { type SpotImage } from "@ramble/database/types"
+import type { SpotImage } from "@ramble/database/types"
 import { createImageUrl, merge } from "@ramble/shared"
 
 import { useMe } from "~/lib/hooks/useMe"
@@ -97,8 +97,8 @@ export function SpotImageCarousel({
         )}
       />
       {images.length > 1 && (
-        <View className="rounded-xs absolute bottom-2 right-2 bg-gray-800/70 p-1">
-          <Text className="text-xs text-white">{`${imageIndex + 1}/${
+        <View className="absolute right-2 bottom-2 rounded-xs bg-gray-800/70 p-1">
+          <Text className="text-white text-xs">{`${imageIndex + 1}/${
             images.length / (noOfColumns || 1) + (canAddMore ? 1 : 0)
           }`}</Text>
         </View>
@@ -141,7 +141,7 @@ function Footer({
   return (
     <View
       style={{ width, height, paddingTop: placeholderPaddingTop }}
-      className="rounded-xs flex items-center justify-center bg-gray-50 dark:bg-gray-800"
+      className="flex items-center justify-center rounded-xs bg-gray-50 dark:bg-gray-800"
     >
       <Icon icon={Image} size={40} strokeWidth={1} className="mb-2" />
       {me && canAddMore ? (
@@ -162,7 +162,7 @@ function Empty({ width, height, placeholderPaddingTop = 0 }: Pick<Props, "placeh
   return (
     <View
       style={{ width, height, paddingTop: placeholderPaddingTop }}
-      className="rounded-xs flex items-center justify-center bg-gray-50 dark:bg-gray-800"
+      className="flex items-center justify-center rounded-xs bg-gray-50 dark:bg-gray-800"
     >
       <Icon icon={Image} size={40} strokeWidth={1} className="mb-2" />
       <Text className="my-2 text-sm">No images yet</Text>

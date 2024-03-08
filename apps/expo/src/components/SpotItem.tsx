@@ -52,7 +52,7 @@ export function SpotItem({ spot }: Props) {
           </View>
         )}
         {spot.image && (
-          <View className="sq-10 bg-background dark:bg-background-dark absolute left-2 top-2 flex items-center justify-center rounded-full">
+          <View className="sq-10 absolute top-2 left-2 flex items-center justify-center rounded-full bg-background dark:bg-background-dark">
             <SpotIcon type={spot.type} size={20} />
           </View>
         )}
@@ -60,7 +60,7 @@ export function SpotItem({ spot }: Props) {
 
       <View className="pt-1">
         <View className="flex w-full flex-row items-center justify-between">
-          <Text numberOfLines={1} className="font-500 flex-1 text-lg">
+          <Text numberOfLines={1} className="flex-1 font-500 text-lg">
             {spot.name}
           </Text>
           <View className="flex flex-row items-center justify-end space-x-1.5 pl-1">
@@ -79,11 +79,11 @@ export function SpotItem({ spot }: Props) {
           </View>
         </View>
         {spot.address && (
-          <Text numberOfLines={1} className="font-400 pb-0.5 text-sm opacity-80">
+          <Text numberOfLines={1} className="pb-0.5 font-400 text-sm opacity-80">
             {spot.address}
           </Text>
         )}
-        {spot.distanceFromMe && <Text className="font-400 pb-0.5 text-sm opacity-80">{Math.round(spot.distanceFromMe)} km</Text>}
+        {spot.distanceFromMe && <Text className="pb-0.5 font-400 text-sm opacity-80">{Math.round(spot.distanceFromMe)} km</Text>}
       </View>
     </TouchableOpacity>
   )

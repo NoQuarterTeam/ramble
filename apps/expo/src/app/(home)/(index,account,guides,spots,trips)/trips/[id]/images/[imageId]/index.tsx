@@ -5,7 +5,7 @@ import * as MediaLibrary from "expo-media-library"
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import { Download, MapPin, Trash } from "lucide-react-native"
 import * as React from "react"
-import { Alert, LayoutChangeEvent, TouchableOpacity, View } from "react-native"
+import { Alert, type LayoutChangeEvent, TouchableOpacity, View } from "react-native"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 
@@ -35,7 +35,7 @@ export default function TripImage() {
 
   const { data, isLoading } = api.trip.media.byId.useQuery(
     { id: imageId! },
-    { enabled: !!imageId, staleTime: Infinity, cacheTime: Infinity },
+    { enabled: !!imageId, staleTime: Number.POSITIVE_INFINITY, cacheTime: Number.POSITIVE_INFINITY },
   )
 
   const router = useRouter()
@@ -219,7 +219,7 @@ export default function TripImage() {
       containerClassName="px-0"
       rightElement={
         imageId && (
-          <View className="space-x-3 flex flex-row">
+          <View className="flex flex-row space-x-3">
             {data && me?.id !== data?.creatorId && (
               <TouchableOpacity className="p-1" onPress={handleDownload}>
                 <Icon icon={Download} size={18} />
@@ -238,16 +238,16 @@ export default function TripImage() {
       }
     >
       {isLoading || !data ? null : (
-        <View className="relative pb-2 flex-1">
+        <View className="relative flex-1 pb-2">
           <GestureDetector gesture={gestures}>
             <Animated.View style={[styles, { flex: 1 }]} onLayout={onImageLayout}>
-              <Image source={{ uri: createImageUrl(data.path) }} className="flex-1 h-full" contentFit="contain" />
+              <Image source={{ uri: createImageUrl(data.path) }} className="h-full flex-1" contentFit="contain" />
             </Animated.View>
           </GestureDetector>
           {(!data.latitude || !data.longitude) && (
             <Animated.View
               style={buttonStyles}
-              className="absolute top-4 left-0 right-0 flex items-center justify-center"
+              className="absolute top-4 right-0 left-0 flex items-center justify-center"
               pointerEvents="box-none"
             >
               <Link push href={`/(home)/(trips)/trips/${id}/images/${imageId}/add-location`} asChild>

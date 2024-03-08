@@ -1,4 +1,4 @@
-import { type Config } from "tailwindcss"
+import type { Config } from "tailwindcss"
 
 import colors from "@ramble/tailwind-config/src/colors"
 

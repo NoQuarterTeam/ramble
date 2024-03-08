@@ -49,7 +49,7 @@ export default function UserVan() {
             width={500}
             placeholder={image.blurHash}
             style={{ width: isTablet ? "48%" : "100%", marginHorizontal: isTablet ? 10 : 0, marginBottom: 10 }}
-            className="rounded-xs min-h-[300px] object-contain"
+            className="min-h-[300px] rounded-xs object-contain"
             source={{ uri: createImageUrl(image.path) }}
           />
         ))}

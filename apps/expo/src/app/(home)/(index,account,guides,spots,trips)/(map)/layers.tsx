@@ -73,7 +73,7 @@ export default function MapLayers() {
               </View>
             </View>
             <View className="sq-6 flex items-center justify-center rounded-full border border-gray-200 dark:border-gray-700">
-              {layers.layer === null && <View className="sq-4 bg-primary rounded-full" />}
+              {layers.layer === null && <View className="sq-4 rounded-full bg-primary" />}
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -94,7 +94,7 @@ export default function MapLayers() {
               </View>
             </View>
             <View className="sq-6 flex items-center justify-center rounded-full border border-gray-200 dark:border-gray-700">
-              {layers.layer === "rain" && <View className="sq-4 bg-primary rounded-full" />}
+              {layers.layer === "rain" && <View className="sq-4 rounded-full bg-primary" />}
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -115,7 +115,7 @@ export default function MapLayers() {
               </View>
             </View>
             <View className="sq-6 flex items-center justify-center rounded-full border border-gray-200 dark:border-gray-700">
-              {layers.layer === "temp" && <View className="sq-4 bg-primary rounded-full" />}
+              {layers.layer === "temp" && <View className="sq-4 rounded-full bg-primary" />}
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -136,11 +136,11 @@ export default function MapLayers() {
               </View>
             </View>
             <View className="sq-6 flex items-center justify-center rounded-full border border-gray-200 dark:border-gray-700">
-              {layers.layer === "satellite" && <View className="sq-4 bg-primary rounded-full" />}
+              {layers.layer === "satellite" && <View className="sq-4 rounded-full bg-primary" />}
             </View>
           </TouchableOpacity>
         </View>
-        <View className="h-1 border-t border-gray-200 dark:border-gray-700" />
+        <View className="h-1 border-gray-200 border-t dark:border-gray-700" />
 
         {me && (
           <View className="flex flex-row items-center justify-between space-x-2 p-3">

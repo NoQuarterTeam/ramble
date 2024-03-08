@@ -2,11 +2,11 @@ import { sendAccountVerificationEmail } from "@ramble/server-services"
 
 import { useConfig } from "~/lib/hooks/useConfig"
 import { json } from "~/lib/remix.server"
-import { type ActionFunctionArgs } from "~/lib/vendor/vercel.server"
+import type { ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
 
 import { VerifyAccountContent } from "@ramble/emails"
-import { type TemplateHandle } from "./_layout"
+import type { TemplateHandle } from "./_layout"
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await getCurrentAdmin(request)

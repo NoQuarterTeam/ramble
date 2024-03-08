@@ -9,7 +9,7 @@ import { z } from "zod"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 
-import { type SpotType } from "@ramble/database/types"
+import type { SpotType } from "@ramble/database/types"
 import { SPOT_TYPES, SPOT_TYPE_NAMES, type SpotTypeInfo, join } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
@@ -242,7 +242,7 @@ function SpotTypeSelector({
       {type.isComingSoon && (
         <View
           className={join(
-            "bg-background dark:bg-background-dark absolute -right-1 -top-1 flex h-[18px] w-[70px] items-center justify-center rounded-full border border-gray-300 dark:border-gray-700",
+            "-right-1 -top-1 absolute flex h-[18px] w-[70px] items-center justify-center rounded-full border border-gray-300 bg-background dark:border-gray-700 dark:bg-background-dark",
           )}
         >
           <Text className="text-xxs">Coming soon</Text>

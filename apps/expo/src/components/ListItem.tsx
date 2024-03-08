@@ -2,7 +2,7 @@ import { useRouter } from "expo-router"
 import { Lock, User2 } from "lucide-react-native"
 import { TouchableOpacity, View } from "react-native"
 
-import { type List, type User } from "@ramble/database/types"
+import type { List, User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
 import { useTabSegment } from "~/lib/hooks/useTabSegment"

@@ -7,8 +7,8 @@ import * as React from "react"
 import type { ViewStateChangeEvent } from "react-map-gl"
 
 import type { Spot, SpotAmenities, SpotImage } from "@ramble/database/types"
-import { type SpotType } from "@ramble/database/types"
-import { type spotSchema } from "@ramble/server-schemas"
+import type { SpotType } from "@ramble/database/types"
+import type { spotSchema } from "@ramble/server-schemas"
 import {
   AMENITIES,
   INITIAL_LATITUDE,
@@ -46,13 +46,13 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
     if (minLat && maxLat && minLng && maxLng) {
       centerFromParams = turfCenter(
         turf.points([
-          [parseFloat(minLng), parseFloat(minLat)],
-          [parseFloat(maxLng), parseFloat(maxLat)],
+          [Number.parseFloat(minLng), Number.parseFloat(minLat)],
+          [Number.parseFloat(maxLng), Number.parseFloat(maxLat)],
         ]),
       )
     }
     return {
-      zoom: zoom ? parseInt(zoom) : 5,
+      zoom: zoom ? Number.parseInt(zoom) : 5,
       longitude: spot?.longitude || centerFromParams?.geometry.coordinates[0] || INITIAL_LONGITUDE,
       latitude: spot?.latitude || centerFromParams?.geometry.coordinates[1] || INITIAL_LATITUDE,
       // longitude: spot?.longitude || centerFromParams?.geometry.coordinates[0] || ipInfo?.longitude || INITIAL_LONGITUDE,
@@ -91,7 +91,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
   const user = useMaybeUser()
   return (
     <div className="grid grid-cols-1 md:grid-cols-2">
-      <Form className="md:h-nav-screen relative h-auto space-y-4 overflow-scroll p-4 pb-40 md:p-6 md:pb-40">
+      <Form className="relative h-auto space-y-4 overflow-scroll p-4 pb-40 md:h-nav-screen md:p-6 md:pb-40">
         <div>
           <div className="flex justify-between">
             <h1 className="text-3xl">{spot ? "Edit spot" : "Add a new spot"}</h1>
@@ -116,13 +116,13 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
               <FormFieldLabel name="address">Address - move map to set</FormFieldLabel>
               <div className="relative">
                 <FormField
-                  className="hover:border-gray-200 dark:hover:border-gray-700"
+                  className="dark:hover:border-gray-700 hover:border-gray-200"
                   // disabled
                   readOnly
                   name="address"
                   value={address || ""}
                 />
-                {geocodeFetcher.state === "loading" && <Spinner size="xs" className="absolute -left-5 top-2" />}
+                {geocodeFetcher.state === "loading" && <Spinner size="xs" className="-left-5 absolute top-2" />}
               </div>
             </div>
             <FormField name="customAddress" defaultValue={spot?.address || ""} label="Or write a custom address" />
@@ -191,7 +191,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
 
           <FormError />
         </div>
-        <div className="bg-background fixed bottom-0 left-0 z-10 flex w-full justify-end space-x-4 border-t px-6 py-4 md:w-1/2">
+        <div className="fixed bottom-0 left-0 z-10 flex w-full justify-end space-x-4 border-t bg-background px-6 py-4 md:w-1/2">
           {!spot && (
             <Tooltip label="The spot will be made public in 2 weeks">
               <label htmlFor="shouldPublishLater" className="hstack">
@@ -207,7 +207,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
         </div>
       </Form>
 
-      <div className="h-nav-screen relative w-full">
+      <div className="relative h-nav-screen w-full">
         <MapView
           onLoad={onMove}
           onMoveEnd={onMove}
@@ -216,7 +216,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
           initialViewState={initialViewState}
         />
 
-        <CircleDot className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+        <CircleDot className="-translate-x-1/2 -translate-y-1/2 pointer-events-none absolute top-1/2 left-1/2" />
       </div>
     </div>
   )

@@ -1,6 +1,6 @@
 import { createImageUrl, useDisclosure } from "@ramble/shared"
-import { Camera, LocationPuck, MapState, type MapView as MapType, StyleURL } from "@rnmapbox/maps"
-import { Position } from "@rnmapbox/maps/lib/typescript/src/types/Position"
+import { Camera, LocationPuck, type MapState, type MapView as MapType, StyleURL } from "@rnmapbox/maps"
+import type { Position } from "@rnmapbox/maps/lib/typescript/src/types/Position"
 import { FlashList } from "@shopify/flash-list"
 import dayjs from "dayjs"
 import { Image } from "expo-image"
@@ -21,7 +21,7 @@ import { ModalView } from "~/components/ui/ModalView"
 import { ScreenView } from "~/components/ui/ScreenView"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
-import { RouterOutputs, api } from "~/lib/api"
+import { type RouterOutputs, api } from "~/lib/api"
 import { width } from "~/lib/device"
 import { useMapCoords } from "~/lib/hooks/useMapCoords"
 import { useS3QuickUpload } from "~/lib/hooks/useS3"
@@ -158,11 +158,11 @@ export default function TripImages() {
       }
     >
       {isLoading ? (
-        <View className="p-4 flex items-center justify-center">
+        <View className="flex items-center justify-center p-4">
           <ActivityIndicator />
         </View>
       ) : !images ? null : (
-        <View className="flex-1 relative">
+        <View className="relative flex-1">
           <FlashList
             showsVerticalScrollIndicator={false}
             estimatedItemSize={size}
@@ -186,14 +186,14 @@ export default function TripImages() {
                 style={{ width: size, height: size }}
                 className="relative"
               >
-                <Image className="bg-gray-200 dark:bg-gray-700 w-full h-full" source={{ uri: createImageUrl(item.path) }} />
+                <Image className="h-full w-full bg-gray-200 dark:bg-gray-700" source={{ uri: createImageUrl(item.path) }} />
                 {(!item.latitude || !item.longitude) && (
-                  <View className="absolute bottom-1 left-1 flex items-center justify-center bg-background sq-6 rounded-full dark:bg-background-dark">
+                  <View className="sq-6 absolute bottom-1 left-1 flex items-center justify-center rounded-full bg-background dark:bg-background-dark">
                     <Icon icon={MapPinOff} size={16} />
                   </View>
                 )}
                 {selectProps.isOpen && selectedImages.find((i) => i.id === item.id) && (
-                  <View className="absolute bottom-1 right-1 flex items-center justify-center bg-blue-500 sq-5 rounded-full">
+                  <View className="sq-5 absolute right-1 bottom-1 flex items-center justify-center rounded-full bg-blue-500">
                     <Icon icon={Check} size={14} color="white" />
                   </View>
                 )}
@@ -201,17 +201,17 @@ export default function TripImages() {
             )}
           />
           {isUploading && (
-            <View className="absolute top-2 left-0 right-0 flex items-center justify-center">
-              <View className="flex items-center bg-primary px-4 py-2 rounded-full flex-row space-x-2">
+            <View className="absolute top-2 right-0 left-0 flex items-center justify-center">
+              <View className="flex flex-row items-center space-x-2 rounded-full bg-primary px-4 py-2">
                 <ActivityIndicator size="small" color="white" />
                 <Text className="text-white">Uploading</Text>
               </View>
             </View>
           )}
           {selectProps.isOpen && (
-            <View className="absolute bottom-0 left-0 px-4 bg-background dark:bg-background-dark right-0 flex items-center justify-between flex-row h-12">
+            <View className="absolute right-0 bottom-0 left-0 flex h-12 flex-row items-center justify-between bg-background px-4 dark:bg-background-dark">
               {selectedImages.length > 0 ? <Text>{selectedImages.length} selected</Text> : <Text>Select images</Text>}
-              <View className="flex flex-row space-x-3 items-center justify-end">
+              <View className="flex flex-row items-center justify-end space-x-3">
                 {!isSelectedWithLocation && (
                   <>
                     <IconButton onPress={setMapProps.onOpen} size="xs" disabled={selectedImages.length === 0} icon={MapPin} />
@@ -306,7 +306,7 @@ function AddImagesLocation({ ids, onClose, onSave }: { ids: string[]; onClose: (
     <ModalView edges={["top", "bottom"]} title="choose a location" onBack={onClose}>
       <View className="relative flex-1">
         <MapView
-          className="rounded-xs overflow-hidden"
+          className="overflow-hidden rounded-xs"
           onMapIdle={onMapMove}
           ref={mapRef}
           styleURL={StyleURL.SatelliteStreet}
@@ -326,9 +326,9 @@ function AddImagesLocation({ ids, onClose, onSave }: { ids: string[]; onClose: (
             }}
           />
         </MapView>
-        <View className="absolute left-2 right-2 top-2">
+        <View className="absolute top-2 right-2 left-2">
           <Input
-            className="bg-background dark:bg-background-dark rounded-sm"
+            className="rounded-sm bg-background dark:bg-background-dark"
             placeholder="Search here"
             onChangeText={setSearch}
             value={search}
@@ -336,7 +336,7 @@ function AddImagesLocation({ ids, onClose, onSave }: { ids: string[]; onClose: (
             returnKeyType="done"
           />
           {search && places && (
-            <View className="bg-background dark:bg-background-dark rounded-b-sm p-2">
+            <View className="rounded-b-sm bg-background p-2 dark:bg-background-dark">
               {places.map((place, i) => (
                 <TouchableOpacity
                   key={`${place.name}-${i}`}
@@ -360,18 +360,18 @@ function AddImagesLocation({ ids, onClose, onSave }: { ids: string[]; onClose: (
         </View>
         <View
           style={{ transform: [{ translateX: -15 }, { translateY: -15 }] }}
-          className="absolute left-1/2 top-1/2 flex items-center justify-center"
+          className="absolute top-1/2 left-1/2 flex items-center justify-center"
         >
           <Icon icon={CircleDot} size={30} color="white" />
         </View>
 
         <View
           pointerEvents="box-none"
-          className="absolute bottom-5 left-5 right-5 flex flex-row items-center justify-between space-y-2"
+          className="absolute right-5 bottom-5 left-5 flex flex-row items-center justify-between space-y-2"
         >
           <View className="w-12" />
           <Button
-            className="bg-background rounded-full"
+            className="rounded-full bg-background"
             textClassName="text-black"
             onPress={handleSelectLocation}
             isLoading={saveLoading}
@@ -383,7 +383,7 @@ function AddImagesLocation({ ids, onClose, onSave }: { ids: string[]; onClose: (
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={handleSetUserLocation}
-            className="sq-12 bg-background flex flex-row items-center justify-center rounded-full"
+            className="sq-12 flex flex-row items-center justify-center rounded-full bg-background"
           >
             <Navigation size={20} className="text-black" />
           </TouchableOpacity>

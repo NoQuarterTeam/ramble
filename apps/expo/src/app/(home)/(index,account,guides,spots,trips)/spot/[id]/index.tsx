@@ -31,7 +31,7 @@ import Animated, {
 } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-import { type Spot } from "@ramble/database/types"
+import type { Spot } from "@ramble/database/types"
 import {
   AMENITIES,
   canManageSpot,
@@ -68,7 +68,7 @@ export default function SpotDetailScreen() {
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
   const params = useLocalSearchParams<{ id: string }>()
-  const { data, isLoading } = api.spot.detail.useQuery({ id: params.id }, { cacheTime: Infinity })
+  const { data, isLoading } = api.spot.detail.useQuery({ id: params.id }, { cacheTime: Number.POSITIVE_INFINITY })
   const spot = data?.spot
   const translationY = useSharedValue(0)
   const [isScrolledPassedThreshold, setIsScrolledPassedThreshold] = React.useState(false)
@@ -214,7 +214,7 @@ export default function SpotDetailScreen() {
                   return (
                     <View
                       key={key}
-                      className="rounded-xs flex flex-row space-x-1 border border-gray-200 p-2 dark:border-gray-700"
+                      className="flex flex-row space-x-1 rounded-xs border border-gray-200 p-2 dark:border-gray-700"
                     >
                       {icon && <Icon icon={icon} size={20} />}
                       <Text className="text-sm">{value}</Text>
@@ -314,28 +314,28 @@ export default function SpotDetailScreen() {
       {!isScrolledPassedThreshold && (
         <LinearGradient
           style={{ height: insets.top + 5 }}
-          className="absolute left-0 right-0 top-0"
+          className="absolute top-0 right-0 left-0"
           colors={["#231C18", "transparent"]}
         />
       )}
 
       <Animated.View
-        className="bg-background dark:bg-background-dark absolute left-0 right-0 top-0 border border-b border-gray-200 dark:border-gray-800"
+        className="absolute top-0 right-0 left-0 border border-gray-200 border-b bg-background dark:border-gray-800 dark:bg-background-dark"
         style={[topBarStyle, { height: 50 + insets.top }]}
       />
 
-      <View style={{ top: insets.top + 8 }} className="absolute left-0 right-0 flex w-full flex-row justify-between px-4">
+      <View style={{ top: insets.top + 8 }} className="absolute right-0 left-0 flex w-full flex-row justify-between px-4">
         <View className="flex w-full flex-1 flex-row items-center space-x-0.5">
           <TouchableOpacity
             onPress={router.canGoBack() ? router.back : () => router.navigate("/")}
             activeOpacity={0.8}
-            className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
+            className="sq-8 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
           >
             {router.canGoBack() ? <Icon icon={ChevronLeft} className="pr-1" /> : <Icon icon={ChevronDown} className="pr-1" />}
           </TouchableOpacity>
           <Animated.Text
             style={[nameStyle, { maxWidth: width - 175 }]}
-            className="font-400 pr-4 text-lg text-black dark:text-white"
+            className="pr-4 font-400 text-black text-lg dark:text-white"
             numberOfLines={1}
           >
             {spot.name}
@@ -357,14 +357,14 @@ export default function SpotDetailScreen() {
               }
             }}
             activeOpacity={0.8}
-            className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
+            className="sq-8 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
           >
             <Icon icon={Share} size={20} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={handleGetDirections}
             activeOpacity={0.8}
-            className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
+            className="sq-8 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
           >
             <Icon icon={Compass} size={20} />
           </TouchableOpacity>
@@ -372,14 +372,14 @@ export default function SpotDetailScreen() {
           <TouchableOpacity
             onPress={() => router.push(`/spot/${spot.id}/save-to-list`)}
             activeOpacity={0.8}
-            className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
+            className="sq-8 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
           >
             <Icon icon={Heart} size={20} fill={data.isLiked ? (isDark ? "white" : "black") : "transparent"} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => router.push(`/spot/${spot.id}/save-to-trip`)}
             activeOpacity={0.8}
-            className="sq-8 bg-background dark:bg-background-dark flex items-center justify-center rounded-full"
+            className="sq-8 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
           >
             <Icon
               icon={Route}
@@ -447,7 +447,7 @@ function TranslateSpotDescription(props: DescProps) {
   const { data, error, isInitialLoading } = useQuery<TranslateInput, string, string>({
     queryKey: ["spot-translation", { id: props.spot.id, lang, hash: props.hash || "" }],
     queryFn: () => getTranslation({ id: props.spot.id, lang, hash: props.hash || "" }),
-    cacheTime: Infinity,
+    cacheTime: Number.POSITIVE_INFINITY,
     enabled: !!me && lang !== me.preferredLanguage,
   })
 

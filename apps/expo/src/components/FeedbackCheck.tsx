@@ -86,7 +86,7 @@ export const FeedbackCheck = React.memo(function _FeedbackCheck() {
           keyboardDismissMode="interactive"
           contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}
           showsVerticalScrollIndicator={false}
-          className="bg-background dark:bg-background-dark flex-1 flex-grow px-4 pt-4"
+          className="flex-1 flex-grow bg-background px-4 pt-4 dark:bg-background-dark"
         >
           <FormProvider {...form}>
             <View className="space-y-2">

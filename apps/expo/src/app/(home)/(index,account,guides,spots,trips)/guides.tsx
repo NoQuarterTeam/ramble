@@ -71,7 +71,7 @@ function GuideItem(props: { guide: RouterOutputs["user"]["guides"][number] }) {
       <TouchableOpacity
         onPress={increment}
         activeOpacity={0.8}
-        className="rounded-xs space-y-1 border border-gray-200 p-4 dark:border-gray-700"
+        className="space-y-1 rounded-xs border border-gray-200 p-4 dark:border-gray-700"
       >
         <View className="flex flex-row items-center space-x-2">
           <OptimizedImage

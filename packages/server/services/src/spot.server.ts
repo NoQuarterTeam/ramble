@@ -1,5 +1,5 @@
 import { Prisma, type SpotImage, SpotType, type User } from "@ramble/database/types"
-import { type SpotItemType, type SpotListSort } from "@ramble/shared"
+import type { SpotItemType, SpotListSort } from "@ramble/shared"
 
 export const publicSpotWhereClause = (userId?: string | null) => {
   return {

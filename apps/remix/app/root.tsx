@@ -45,7 +45,7 @@ import {
 
 import { LinkButton } from "./components/LinkButton"
 import { useConfig } from "./lib/hooks/useConfig"
-import { type Theme } from "./lib/theme"
+import type { Theme } from "./lib/theme"
 import { GDPR } from "./pages/api+/gdpr"
 import { getMaybeUser } from "./services/auth/auth.server"
 import { csrf } from "./services/session/csrf.server"
@@ -170,7 +170,7 @@ export function ErrorBoundary() {
             {config && config.ENV !== "production" && error.stack ? (
               <>
                 <hr />
-                <div className="rounded-xs bg-gray-200 p-4 dark:bg-gray-700 ">
+                <div className="rounded-xs bg-gray-200 p-4 dark:bg-gray-700">
                   <pre className="overflow-scroll text-sm">{error.stack}</pre>
                 </div>
               </>

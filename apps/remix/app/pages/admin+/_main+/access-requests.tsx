@@ -8,7 +8,7 @@ import { promiseHash } from "remix-utils/promise"
 import { z } from "zod"
 import { zx } from "zodix"
 
-import { type Prisma } from "@ramble/database/types"
+import type { Prisma } from "@ramble/database/types"
 import { sendBetaInvitationEmail, updateLoopsContact } from "@ramble/server-services"
 
 import { useFetcher } from "~/components/Form"
@@ -21,7 +21,7 @@ import { FormActionInput } from "~/lib/form"
 import { createAction, createActions } from "~/lib/form.server"
 import { badRequest, json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"
-import { type ActionFunctionArgs, type LoaderFunctionArgs, type SerializeFrom } from "~/lib/vendor/vercel.server"
+import type { ActionFunctionArgs, LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {

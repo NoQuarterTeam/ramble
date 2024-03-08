@@ -1,4 +1,4 @@
-import { type Prisma, type Spot, type SpotImage, type SpotType, type User } from "@ramble/database/types"
+import type { Prisma, Spot, SpotImage, SpotType, User } from "@ramble/database/types"
 import colors from "@ramble/tailwind-config/src/colors"
 
 export type SpotTypeInfo = {
@@ -158,7 +158,7 @@ export function displayRating(rating: number | string | null | undefined) {
 }
 export function displaySaved(saved: number | string | null | undefined) {
   if (!saved) return null
-  if (typeof saved === "string" && parseInt(saved) > 50) return "50+"
+  if (typeof saved === "string" && Number.parseInt(saved) > 50) return "50+"
   return saved
 }
 

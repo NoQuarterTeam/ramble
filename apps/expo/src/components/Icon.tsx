@@ -1,4 +1,4 @@
-import { type LucideIcon, type LucideProps } from "lucide-react-native"
+import type { LucideIcon, LucideProps } from "lucide-react-native"
 import { useColorScheme } from "react-native"
 
 import { colorGray, colorPrimary, colorRed } from "~/lib/tailwind"

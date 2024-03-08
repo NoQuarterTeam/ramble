@@ -1,4 +1,4 @@
-import { type ActionFunctionArgs } from "@remix-run/node"
+import type { ActionFunctionArgs } from "@remix-run/node"
 import { z } from "zod"
 
 import { FeedbackType } from "@ramble/database/types"
@@ -8,7 +8,7 @@ import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { createAction, createActions } from "~/lib/form.server"
 import { badRequest, json } from "~/lib/remix.server"
-import { type Actions } from "~/pages/api+/feedback"
+import type { Actions } from "~/pages/api+/feedback"
 
 import { getCurrentUser } from "../auth/auth.server"
 

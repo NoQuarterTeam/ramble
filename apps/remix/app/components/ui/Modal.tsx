@@ -24,7 +24,7 @@ const ModalOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <ModalPrimitive.Overlay
     className={merge(
-      "data-[state=closed]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out fixed inset-0 z-50 bg-black/50 transition-all duration-100",
+      "data-[state=open]:fade-in data-[state=closed]:fade-out fixed inset-0 z-50 bg-black/50 transition-all duration-100 data-[state=closed]:animate-out",
       className,
     )}
     {...props}
@@ -42,13 +42,13 @@ const ModalContent = React.forwardRef<
     <ModalPrimitive.Content
       ref={ref}
       className={merge(
-        "animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 sm:zoom-in-90 data-[state=open]:sm:slide-in-from-bottom-0 bg-background rounded-xs fixed z-50 grid w-full gap-4 p-6",
+        "data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 sm:zoom-in-90 data-[state=open]:sm:slide-in-from-bottom-0 fixed z-50 grid w-full animate-in gap-4 rounded-xs bg-background p-6",
         className,
       )}
       {...props}
     >
       {children}
-      <ModalPrimitive.Close className="rounded-xs absolute right-4 top-4 opacity-70 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none">
+      <ModalPrimitive.Close className="absolute top-4 right-4 rounded-xs opacity-70 transition-opacity disabled:pointer-events-none hover:opacity-100 focus:outline-none">
         <X className="sq-4" />
         <span className="sr-only">Close</span>
       </ModalPrimitive.Close>
@@ -73,7 +73,7 @@ const ModalTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <ModalPrimitive.Title
     ref={ref}
-    className={merge("text-lg font-semibold text-gray-900", "dark:text-gray-50", className)}
+    className={merge("font-semibold text-gray-900 text-lg", "dark:text-gray-50", className)}
     {...props}
   />
 ))
@@ -83,7 +83,7 @@ const ModalDescription = React.forwardRef<
   React.ElementRef<typeof ModalPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof ModalPrimitive.Description>
 >(({ className, ...props }, ref) => (
-  <ModalPrimitive.Description ref={ref} className={merge("text-sm text-gray-500", "dark:text-gray-400", className)} {...props} />
+  <ModalPrimitive.Description ref={ref} className={merge("text-gray-500 text-sm", "dark:text-gray-400", className)} {...props} />
 ))
 ModalDescription.displayName = ModalPrimitive.Description.displayName
 

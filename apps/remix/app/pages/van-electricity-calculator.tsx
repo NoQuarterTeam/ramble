@@ -31,11 +31,11 @@ export function VanElectricityCalculator() {
   const totalAmpHours = items.reduce((acc, item) => acc + Math.ceil(((item.watts || 0) * (item.hours || 0)) / 12), 0)
   const solarAmpHours = !!sunHours && !!panelWattage && Math.floor((sunHours * panelWattage) / 12)
   return (
-    <div className="bg-background dark min-h-screen px-3 pt-10 font-serif text-white">
+    <div className="dark min-h-screen bg-background px-3 pt-10 font-serif text-white">
       <div className="mx-auto max-w-7xl space-y-8">
         <Link to="/" className="inline-block text-center">
           <p className="brand-header text-5xl">ramble</p>
-          <p className="text-lg font-semibold">VAN TRAVEL APP</p>
+          <p className="font-semibold text-lg">VAN TRAVEL APP</p>
         </Link>
 
         <div>

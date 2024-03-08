@@ -4,7 +4,7 @@ import { usePostHog } from "posthog-react-native"
 import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
 
-import { type SpotType } from "@ramble/database/types"
+import type { SpotType } from "@ramble/database/types"
 import { AMENITIES } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
@@ -119,7 +119,7 @@ export default function NewSpotConfirmScreen() {
             </Text>
           </View>
           {params.images && params.images.length > 0 && (
-            <View className="rounded-xs overflow-hidden">
+            <View className="overflow-hidden rounded-xs">
               <SpotImageCarousel
                 width={width - 32}
                 height={200}
@@ -145,7 +145,7 @@ export default function NewSpotConfirmScreen() {
                 if (!parsedAmenities?.[key as keyof typeof AMENITIES]) return null
                 const icon = AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]
                 return (
-                  <View key={key} className="rounded-xs flex flex-row space-x-1 border border-gray-200 p-2 dark:border-gray-700">
+                  <View key={key} className="flex flex-row space-x-1 rounded-xs border border-gray-200 p-2 dark:border-gray-700">
                     {icon && <Icon icon={icon} size={20} />}
                     <Text className="text-sm">{value}</Text>
                   </View>
@@ -170,7 +170,7 @@ export default function NewSpotConfirmScreen() {
         </View>
       </ScrollView>
 
-      <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
+      <View className="absolute right-4 bottom-12 left-4 flex items-center justify-center space-y-2">
         <Button
           isLoading={createLoading || isLoading}
           leftIcon={<Icon icon={Check} size={20} color={{ light: "white", dark: "black" }} />}

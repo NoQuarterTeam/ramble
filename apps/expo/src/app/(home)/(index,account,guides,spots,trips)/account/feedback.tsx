@@ -4,7 +4,7 @@ import * as React from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { Keyboard, ScrollView, TouchableOpacity, View } from "react-native"
 
-import { type FeedbackType } from "@ramble/database/types"
+import type { FeedbackType } from "@ramble/database/types"
 import { join } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
@@ -72,7 +72,7 @@ export default function AccountFeedbackScreen() {
                 onPress={() => setType(feedbackType.value as FeedbackType)}
                 key={feedbackType.value}
                 className={join(
-                  "rounded-xs flex flex-grow items-center space-y-2 border border-gray-200 p-4 dark:border-gray-700",
+                  "flex flex-grow items-center space-y-2 rounded-xs border border-gray-200 p-4 dark:border-gray-700",
                   type === feedbackType.value && "border-primary",
                 )}
               >

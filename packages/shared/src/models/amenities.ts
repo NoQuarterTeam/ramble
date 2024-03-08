@@ -1,4 +1,4 @@
-import { type Prisma, type SpotAmenities } from "@ramble/database/types"
+import type { Prisma, SpotAmenities } from "@ramble/database/types"
 
 export const AMENITIES = {
   bbq: "BBQ",

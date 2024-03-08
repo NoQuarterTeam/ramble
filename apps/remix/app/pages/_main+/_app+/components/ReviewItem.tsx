@@ -21,7 +21,7 @@ import {
 } from "~/components/ui"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import type { SerializeFrom } from "~/lib/vendor/vercel.server"
-import { type TranslateReview } from "~/pages/api+/reviews+/$id.translate.$lang"
+import type { TranslateReview } from "~/pages/api+/reviews+/$id.translate.$lang"
 
 import { Actions } from "../spots.$id.reviews.$reviewId"
 
@@ -54,7 +54,7 @@ export function ReviewItem({ review }: Props) {
   const translateFetcher = useFetcher<TranslateReview>()
 
   return (
-    <div className="rounded-xs space-y-2 border px-4 py-3">
+    <div className="space-y-2 rounded-xs border px-4 py-3">
       <div className="flex justify-between">
         <div className="hstack">
           <Avatar size={40} className="sq-10 rounded-full" src={createImageUrl(review.user.avatar)} />

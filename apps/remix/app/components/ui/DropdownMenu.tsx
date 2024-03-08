@@ -28,7 +28,7 @@ const DropdownMenuSubTrigger = React.forwardRef<
   <DropdownMenuPrimitive.SubTrigger
     ref={ref}
     className={merge(
-      "rounded-xs flex cursor-default select-none items-center px-2 py-1.5 text-sm font-medium outline-none focus:bg-gray-100 data-[state=open]:bg-gray-100 dark:focus:bg-gray-700 dark:data-[state=open]:bg-gray-700",
+      "flex cursor-default select-none items-center rounded-xs px-2 py-1.5 font-medium text-sm outline-none dark:data-[state=open]:bg-gray-700 dark:focus:bg-gray-700 data-[state=open]:bg-gray-100 focus:bg-gray-100",
       inset && "pl-8",
       className,
     )}
@@ -47,7 +47,7 @@ const DropdownMenuSubContent = React.forwardRef<
   <DropdownMenuPrimitive.SubContent
     ref={ref}
     className={merge(
-      "animate-in slide-in-from-left-1 bg-background rounded-xs z-50 min-w-[8rem] overflow-hidden border border-gray-100 p-1 text-gray-700 shadow-md dark:border-gray-800 dark:text-gray-400",
+      "slide-in-from-left-1 z-50 min-w-[8rem] animate-in overflow-hidden rounded-xs border border-gray-100 bg-background p-1 text-gray-700 shadow-md dark:border-gray-800 dark:text-gray-400",
       className,
     )}
     {...props}
@@ -64,7 +64,7 @@ const DropdownMenuContent = React.forwardRef<
       ref={ref}
       sideOffset={sideOffset}
       className={merge(
-        "animate-in data-[side=right]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 bg-background rounded-xs z-50 min-w-[8rem] overflow-hidden border border-gray-100 p-1 text-gray-700 shadow-xl dark:border-gray-700 dark:text-gray-400",
+        "data-[side=right]:slide-in-from-left-2 data-[side=left]:slide-in-from-right-2 data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 z-50 min-w-[8rem] animate-in overflow-hidden rounded-xs border border-gray-100 bg-background p-1 text-gray-700 shadow-xl dark:border-gray-700 dark:text-gray-400",
         className,
       )}
       {...props}
@@ -144,7 +144,7 @@ const DropdownMenuLabel = React.forwardRef<
 >(({ className, inset, ...props }, ref) => (
   <DropdownMenuPrimitive.Label
     ref={ref}
-    className={merge("px-2 py-1.5 text-sm font-semibold text-gray-900 dark:text-gray-300", inset && "pl-8", className)}
+    className={merge("px-2 py-1.5 font-semibold text-gray-900 text-sm dark:text-gray-300", inset && "pl-8", className)}
     {...props}
   />
 ))
@@ -163,7 +163,7 @@ const DropdownMenuSeparator = React.forwardRef<
 DropdownMenuSeparator.displayName = DropdownMenuPrimitive.Separator.displayName
 
 function DropdownMenuShortcut({ className, ...props }: React.HTMLAttributes<HTMLSpanElement>) {
-  return <span className={merge("ml-auto text-xs tracking-widest text-gray-500", className)} {...props} />
+  return <span className={merge("ml-auto text-gray-500 text-xs tracking-widest", className)} {...props} />
 }
 DropdownMenuShortcut.displayName = "DropdownMenuShortcut"
 

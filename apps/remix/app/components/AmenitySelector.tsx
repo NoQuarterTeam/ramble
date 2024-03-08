@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { type spotAmenitiesSchema } from "@ramble/server-schemas"
+import type { spotAmenitiesSchema } from "@ramble/server-schemas"
 
 import { useFormErrors } from "~/lib/form"
 

@@ -26,7 +26,7 @@ import { AMENITIES_ICONS } from "~/lib/models/amenities"
 
 import { MapView } from "~/components/Map"
 import type { SerializeFrom } from "~/lib/vendor/vercel.server"
-import { type geocodeLoader } from "~/pages/api+/mapbox+/geocode"
+import type { geocodeLoader } from "~/pages/api+/mapbox+/geocode"
 
 export function SpotReportForm({
   spot,
@@ -48,13 +48,13 @@ export function SpotReportForm({
     if (minLat && maxLat && minLng && maxLng) {
       centerFromParams = turfCenter(
         turf.points([
-          [parseFloat(minLng), parseFloat(minLat)],
-          [parseFloat(maxLng), parseFloat(maxLat)],
+          [Number.parseFloat(minLng), Number.parseFloat(minLat)],
+          [Number.parseFloat(maxLng), Number.parseFloat(maxLat)],
         ]),
       )
     }
     return {
-      zoom: zoom ? parseInt(zoom) : 5,
+      zoom: zoom ? Number.parseInt(zoom) : 5,
       longitude: spot.longitude || centerFromParams?.geometry.coordinates[0] || INITIAL_LONGITUDE,
       latitude: spot.latitude || centerFromParams?.geometry.coordinates[1] || INITIAL_LATITUDE,
       // longitude: spot.longitude || centerFromParams?.geometry.coordinates[0] || ipInfo?.longitude || INITIAL_LONGITUDE,
@@ -106,7 +106,7 @@ export function SpotReportForm({
   // const user = useMaybeUser()
   return (
     <div className="grid grid-cols-1 md:grid-cols-2">
-      <Form className="md:h-nav-screen relative h-auto space-y-4 overflow-scroll p-4 pb-40 md:p-6 md:pb-60">
+      <Form className="relative h-auto space-y-4 overflow-scroll p-4 pb-40 md:h-nav-screen md:p-6 md:pb-60">
         <div>
           <div className="flex justify-between">
             <h1 className="text-3xl">Report incorrect data</h1>
@@ -138,13 +138,13 @@ export function SpotReportForm({
                   <FormFieldLabel name="address">Corrected address - move map to set</FormFieldLabel>
                   <div className="relative">
                     <FormField
-                      className="hover:border-gray-200 dark:hover:border-gray-700"
+                      className="dark:hover:border-gray-700 hover:border-gray-200"
                       // disabled
                       readOnly
                       name="address"
                       value={address || ""}
                     />
-                    {geocodeFetcher.state === "loading" && <Spinner size="xs" className="absolute -left-5 top-2" />}
+                    {geocodeFetcher.state === "loading" && <Spinner size="xs" className="-left-5 absolute top-2" />}
                   </div>
                 </div>
                 <FormField name="customAddress" defaultValue={spot.address || ""} label="Or write a custom address" />
@@ -224,7 +224,7 @@ export function SpotReportForm({
             {spot.images.map(({ id, path }) => {
               return (
                 <div key={path} className="relative">
-                  <div className="absolute left-2 top-2 z-10">
+                  <div className="absolute top-2 left-2 z-10">
                     <Button
                       onClick={() => handleClickImage(id)}
                       variant={isFlagged(id) ? "destructive" : "secondary"}
@@ -237,7 +237,7 @@ export function SpotReportForm({
                     src={createImageUrl(path)}
                     className={merge(
                       "h-[300px] w-full overflow-hidden rounded object-cover hover:opacity-80",
-                      isFlagged(id) && "outline-solid opacity-80 outline outline-red-500",
+                      isFlagged(id) && "opacity-80 outline outline-red-500 outline-solid",
                     )}
                     alt="spot cover"
                   />
@@ -248,7 +248,7 @@ export function SpotReportForm({
 
           <FormError />
         </div>
-        <div className="bg-background fixed bottom-0 left-0 z-10 w-full space-x-4 border-t px-6 py-4 md:w-1/2">
+        <div className="fixed bottom-0 left-0 z-10 w-full space-x-4 border-t bg-background px-6 py-4 md:w-1/2">
           <div className="flex-col">
             <div>
               <FormField required name="notes" label="Notes" input={<Textarea rows={3} />} />
@@ -261,7 +261,7 @@ export function SpotReportForm({
         </div>
       </Form>
 
-      <div className="h-nav-screen relative w-full">
+      <div className="relative h-nav-screen w-full">
         <MapView
           onLoad={onMove}
           onMoveEnd={onMove}
@@ -270,7 +270,7 @@ export function SpotReportForm({
           initialViewState={initialViewState}
         />
 
-        <CircleDot className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+        <CircleDot className="-translate-x-1/2 -translate-y-1/2 pointer-events-none absolute top-1/2 left-1/2" />
       </div>
     </div>
   )

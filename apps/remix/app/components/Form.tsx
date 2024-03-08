@@ -1,17 +1,17 @@
-import { type SerializeFrom } from "@remix-run/node"
+import type { SerializeFrom } from "@remix-run/node"
 import type { Fetcher, FetcherWithComponents, FormProps as RemixFormProps } from "@remix-run/react"
-import { Form as RemixForm, useFetcher as useRemixFetcher, useFetchers, useNavigation } from "@remix-run/react"
+import { Form as RemixForm, useFetchers, useNavigation, useFetcher as useRemixFetcher } from "@remix-run/react"
 import { X } from "lucide-react"
 import * as React from "react"
 import { AuthenticityTokenInput } from "remix-utils/csrf/react"
-import { type z } from "zod"
+import type { z } from "zod"
 
 import { createImageUrl, merge } from "@ramble/shared"
 
-import { type ButtonProps, type InputProps, type InputStyleProps } from "~/components/ui"
+import type { ButtonProps, InputProps, InputStyleProps } from "~/components/ui"
 import { Button, IconButton, Input, inputStyles } from "~/components/ui"
 import { FORM_ACTION, useFormErrors } from "~/lib/form"
-import { type ActionDataErrorResponse } from "~/lib/form.server"
+import type { ActionDataErrorResponse } from "~/lib/form.server"
 
 import { ImageUploader } from "./ImageUploader"
 // import { ActionDataErrorResponse } from "~/lib/form.server"
@@ -221,7 +221,7 @@ export function ImageField(props: ImageFieldProps) {
           <IconButton
             variant="secondary"
             size="xs"
-            className="absolute right-1 top-1"
+            className="absolute top-1 right-1"
             aria-label="remove image"
             icon={<X className="sq-3" />}
             onClick={props.onRemove}

@@ -50,7 +50,7 @@ export default function MapScreen() {
           router.push("/new/")
         }}
         style={{ transform: [{ translateX: -26 }] }}
-        className="bg-primary absolute bottom-3 left-1/2 rounded-full p-4"
+        className="absolute bottom-3 left-1/2 rounded-full bg-primary p-4"
       >
         <Icon icon={PlusCircle} size={20} color="white" />
       </TouchableOpacity>
@@ -60,7 +60,7 @@ export default function MapScreen() {
           <TouchableOpacity
             onPress={() => increment()}
             activeOpacity={0.8}
-            className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"
+            className="sq-12 flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
           >
             <Icon icon={Layers} size={20} />
           </TouchableOpacity>
@@ -69,7 +69,7 @@ export default function MapScreen() {
           <TouchableOpacity
             onPress={() => increment()}
             activeOpacity={0.8}
-            className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"
+            className="sq-12 flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
           >
             <Icon icon={Settings2} size={20} />
           </TouchableOpacity>
@@ -301,7 +301,7 @@ function MapContainer() {
       {(spotsLoading || isRefetching) && (
         <View
           pointerEvents="none"
-          className="absolute right-4 top-14 flex flex-col items-center justify-center rounded-full bg-white p-2 dark:bg-gray-800"
+          className="absolute top-14 right-4 flex flex-col items-center justify-center rounded-full bg-white p-2 dark:bg-gray-800"
         >
           <Spinner />
         </View>
@@ -314,7 +314,7 @@ function MapContainer() {
       />
       <TouchableOpacity
         onPress={handleSetUserLocation}
-        className="sq-12 bg-background dark:bg-background-dark absolute bottom-3 right-3 flex flex-row items-center justify-center rounded-full"
+        className="sq-12 absolute right-3 bottom-3 flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
       >
         <Icon icon={Navigation} size={20} />
       </TouchableOpacity>

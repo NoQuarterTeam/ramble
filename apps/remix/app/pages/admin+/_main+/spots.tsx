@@ -207,7 +207,7 @@ export default function Spots() {
       <div className="flex items-end gap-2">
         <Form>
           <ExistingSearchParams exclude={["type"]} />
-          <p className="text-sm font-medium">Type</p>
+          <p className="font-medium text-sm">Type</p>
           <Select
             defaultValue={searchParams.get("type") || ""}
             onChange={(e) => e.currentTarget.form?.dispatchEvent(new Event("submit", { bubbles: true }))}

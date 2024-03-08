@@ -3,7 +3,7 @@ import { createColumnHelper } from "@tanstack/react-table"
 import dayjs from "dayjs"
 import { promiseHash } from "remix-utils/promise"
 
-import { type Prisma } from "@ramble/database/types"
+import type { Prisma } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
 import { Avatar } from "~/components/ui"
@@ -11,7 +11,7 @@ import { Table } from "~/components/ui/Table"
 import { db } from "~/lib/db.server"
 import { json } from "~/lib/remix.server"
 import { getTableParams } from "~/lib/table"
-import { type LoaderFunctionArgs, type SerializeFrom } from "~/lib/vendor/vercel.server"
+import type { LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { orderBy, skip, take } = getTableParams(request)

@@ -1,4 +1,4 @@
-import crypto from "crypto"
+import crypto from "node:crypto"
 import { TRPCError } from "@trpc/server"
 import dayjs from "dayjs"
 import Supercluster from "supercluster"
@@ -21,7 +21,7 @@ import {
   verifiedSpotWhereClause,
 } from "@ramble/server-services"
 import { amenitiesFields, promiseHash, spotPartnerFields } from "@ramble/shared"
-import { type SpotItemType } from "@ramble/shared"
+import type { SpotItemType } from "@ramble/shared"
 
 import { fetchAndJoinSpotImages } from "../lib/spot"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"

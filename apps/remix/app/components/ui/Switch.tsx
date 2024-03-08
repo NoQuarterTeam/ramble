@@ -12,10 +12,10 @@ export const Switch = React.forwardRef<HTMLButtonElement, RSwitch.SwitchProps>(f
       className={merge(
         "group",
         "radix-state-checked:bg-primary-600",
-        "radix-state-unchecked:bg-gray-200 dark:radix-state-unchecked:bg-gray-700",
+        "dark:radix-state-unchecked:bg-gray-700 radix-state-unchecked:bg-gray-200",
         "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out",
         "disabled:cursor-not-allowed",
-        "focus-visible:ring-primary-500 focus:outline-none focus-visible:ring focus-visible:ring-opacity-100",
+        "focus:outline-none focus-visible:ring focus-visible:ring-primary-500 focus-visible:ring-opacity-100",
         props.className,
       )}
     >

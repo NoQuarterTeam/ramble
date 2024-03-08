@@ -75,7 +75,7 @@ export function Table<T>({
                         className={join(
                           "mb-1 flex items-center justify-between whitespace-nowrap px-2 py-1 text-left font-medium",
                           header.column.getCanSort() &&
-                            "rounded-xs cursor-pointer select-none hover:bg-gray-100 dark:hover:bg-gray-700",
+                            "cursor-pointer select-none rounded-xs dark:hover:bg-gray-700 hover:bg-gray-100",
                         )}
                       >
                         {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}

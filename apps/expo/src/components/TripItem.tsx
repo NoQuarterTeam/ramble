@@ -6,7 +6,7 @@ dayjs.extend(isBetween)
 
 import dayjs from "dayjs"
 
-import { type Trip, type TripMedia, type User } from "@ramble/database/types"
+import type { Trip, TripMedia, User } from "@ramble/database/types"
 import { createImageUrl, join } from "@ramble/shared"
 
 import { Image } from "expo-image"
@@ -38,7 +38,7 @@ export function TripItem({ trip }: Props) {
         router.push(`/(home)/(trips)/trips/${trip.id}`)
       }}
       activeOpacity={0.8}
-      className={join("rounded-xs space-y-4 border border-gray-200 p-4 dark:border-gray-700", isActive && "border-primary-500")}
+      className={join("space-y-4 rounded-xs border border-gray-200 p-4 dark:border-gray-700", isActive && "border-primary-500")}
     >
       <View className="flex flex-row justify-between">
         <View className="">
@@ -47,7 +47,7 @@ export function TripItem({ trip }: Props) {
             <View className="relative mt-2" style={{ height: 40 }}>
               {trip.media.map((media, i) => (
                 <Image
-                  className="absolute top-0 bg-gray-200 dark:bg-gray-700 rounded border-background"
+                  className="absolute top-0 rounded border-background bg-gray-200 dark:bg-gray-700"
                   key={media.id}
                   source={{ uri: createImageUrl(media.path) }}
                   style={{
@@ -66,13 +66,13 @@ export function TripItem({ trip }: Props) {
         <View>
           {today.isBefore(trip.startDate) ? (
             <View className="flex items-center justify-center rounded-full bg-green-800 px-2 py-0.5">
-              <Text className="font-600 text-center text-xs text-white">
+              <Text className="text-center font-600 text-white text-xs">
                 {daysToGo} day{daysToGo === 1 ? "" : "s"} to go
               </Text>
             </View>
           ) : today.isAfter(trip.endDate) ? null : (
-            <View className="bg-primary flex items-center justify-center rounded-full px-2 py-0.5">
-              <Text className="font-600 text-center text-xs text-white">CURRENT</Text>
+            <View className="flex items-center justify-center rounded-full bg-primary px-2 py-0.5">
+              <Text className="text-center font-600 text-white text-xs">CURRENT</Text>
             </View>
           )}
         </View>
@@ -103,12 +103,12 @@ function TripUsers({ trip }: Props) {
               style={{ zIndex: 1 }}
               placeholder={trip.creator.avatarBlurHash}
               source={{ uri: createImageUrl(trip.creator.avatar) }}
-              className="sq-7 border-background dark:border-background-dark rounded-full border object-cover"
+              className="sq-7 rounded-full border border-background object-cover dark:border-background-dark"
             />
           ) : (
             <View
               style={{ zIndex: 1 }}
-              className="sq-7 border-background dark:border-background-dark flex items-center justify-center rounded-full border bg-gray-100 dark:bg-gray-500"
+              className="sq-7 flex items-center justify-center rounded-full border border-background bg-gray-100 dark:border-background-dark dark:bg-gray-500"
             >
               <Text className="font-600 text-xs">
                 {trip.creator.firstName[0]}
@@ -127,15 +127,15 @@ function TripUsers({ trip }: Props) {
                   placeholder={user.avatarBlurHash}
                   source={{ uri: createImageUrl(user.avatar) }}
                   style={{ zIndex: i * -1 }}
-                  className="sq-6 border-background dark:border-background-dark -ml-1.5 rounded-full border object-cover"
+                  className="sq-6 -ml-1.5 rounded-full border border-background object-cover dark:border-background-dark"
                 />
               ) : (
                 <View
                   key={user.id}
                   style={{ zIndex: i * -1 }}
-                  className="sq-6 border-background dark:border-background-dark -ml-1.5 flex items-center justify-center rounded-full border bg-gray-200 object-cover dark:bg-gray-700"
+                  className="sq-6 -ml-1.5 flex items-center justify-center rounded-full border border-background bg-gray-200 object-cover dark:border-background-dark dark:bg-gray-700"
                 >
-                  <Text className="text-xxs font-600">
+                  <Text className="font-600 text-xxs">
                     {user.firstName[0]}
                     {user.lastName[0]}
                   </Text>
@@ -145,9 +145,9 @@ function TripUsers({ trip }: Props) {
             {remainingUsers > 0 && (
               <View
                 style={{ zIndex: -5 }}
-                className="sq-6 border-background dark:border-background-dark -ml-1.5 flex items-center justify-center rounded-full border bg-gray-200 dark:bg-gray-700"
+                className="sq-6 -ml-1.5 flex items-center justify-center rounded-full border border-background bg-gray-200 dark:border-background-dark dark:bg-gray-700"
               >
-                <Text className="text-xxs font-600">+{remainingUsers}</Text>
+                <Text className="font-600 text-xxs">+{remainingUsers}</Text>
               </View>
             )}
           </View>

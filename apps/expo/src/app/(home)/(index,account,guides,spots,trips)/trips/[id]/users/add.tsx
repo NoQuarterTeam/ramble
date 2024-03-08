@@ -31,7 +31,7 @@ export default function AddTripUsers() {
         showsVerticalScrollIndicator={false}
         stickyHeaderIndices={[0]}
       >
-        <View className="bg-background dark:bg-background-dark pb-2">
+        <View className="bg-background pb-2 dark:bg-background-dark">
           <Input value={search} onChangeText={setSearch} placeholder="Search " />
         </View>
         {search && isLoading ? (
