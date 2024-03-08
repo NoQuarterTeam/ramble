@@ -230,7 +230,12 @@ export function AddTripSpotPreview({ spotId, onClose }: { spotId: string; onClos
     },
   })
 
-  const handleAddToTrip = () => mutate({ tripId: id, spotId, order: order ? parseInt(order) : undefined })
+  const handleAddToTrip = () => {
+    let parsedOrder = order ? parseInt(order) : undefined
+    if (!parsedOrder || Number.isNaN(parsedOrder)) parsedOrder = undefined
+
+    mutate({ tripId: id, spotId, order: parsedOrder })
+  }
 
   return (
     <Animated.View
