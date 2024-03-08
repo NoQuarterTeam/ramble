@@ -29,7 +29,6 @@ import { useMapSettings } from "~/lib/hooks/useMapSettings"
 import { useMapFilters } from "../../../../filters"
 
 export default function FindSpotScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>()
   const filters = useMapFilters((s) => s.filters)
 
   const initialCoords = useMapCoords((s) => s.coords)
@@ -204,13 +203,13 @@ export default function FindSpotScreen() {
           </TouchableOpacity>
         </View>
 
-        {activeSpotId && <AddTripSpotPreview spotId={activeSpotId} tripId={id} onClose={() => setActiveSpotId(null)} />}
+        {activeSpotId && <AddTripSpotPreview spotId={activeSpotId} onClose={() => setActiveSpotId(null)} />}
       </View>
     </ScreenView>
   )
 }
 
-export function AddTripSpotPreview({ spotId, tripId, onClose }: { spotId: string; tripId: string; onClose: () => void }) {
+export function AddTripSpotPreview({ spotId, onClose }: { spotId: string; onClose: () => void }) {
   const { data: spot, isLoading } = api.spot.mapPreview.useQuery({ id: spotId })
   const router = useRouter()
   const { id, order } = useLocalSearchParams<{ id: string; order?: string }>()
@@ -231,7 +230,7 @@ export function AddTripSpotPreview({ spotId, tripId, onClose }: { spotId: string
     },
   })
 
-  const handleAddToTrip = () => mutate({ tripId: tripId, spotId, order: order ? parseInt(order) : undefined })
+  const handleAddToTrip = () => mutate({ tripId: id, spotId, order: order ? parseInt(order) : undefined })
 
   return (
     <Animated.View

@@ -14,6 +14,8 @@ function handleRequest(args: LoaderFunctionArgs | ActionFunctionArgs) {
     router: appRouter,
     createContext,
     onError: ({ error, path }) => {
+      console.log(error)
+
       if (IS_PRODUCTION && !ACCEPTABLE_ERROR_CODES.includes(error.code)) {
         console.error(`${path} : ${error.message}`)
         // TODO: send to sentry or something
