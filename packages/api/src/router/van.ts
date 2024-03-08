@@ -2,7 +2,7 @@ import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
 import { vanSchema } from "@ramble/server-schemas"
-import { generateBlurHash } from "@ramble/server-services"
+import { deleteObject, generateBlurHash } from "@ramble/server-services"
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
@@ -36,10 +36,10 @@ export const vanRouter = createTRPCRouter({
     return ctx.prisma.van.update({ where: { id: van.id }, data: { images: { create: imageData } } })
   }),
   removeImage: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
-    const van = await ctx.prisma.van.findUnique({ where: { userId: ctx.user.id } })
-    if (!van) throw new TRPCError({ code: "NOT_FOUND" })
-    if (van.userId !== ctx.user.id) throw new TRPCError({ code: "UNAUTHORIZED" })
-    return ctx.prisma.van.update({ where: { id: van.id }, data: { images: { delete: { id: input.id } } } })
+    const vanImage = await ctx.prisma.vanImage.findUnique({ where: { id: input.id, van: { userId: ctx.user.id } } })
+    if (!vanImage) throw new TRPCError({ code: "NOT_FOUND" })
+    await deleteObject(vanImage.path)
+    return ctx.prisma.vanImage.delete({ where: { id: input.id } })
   }),
   upsert: protectedProcedure
     .input(vanSchema.extend({ id: z.string().nullish() }))

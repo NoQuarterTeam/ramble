@@ -25,7 +25,7 @@ export const tripRouter = createTRPCRouter({
       skip: input?.skip || 0,
     })
   }),
-  /*
+  /**
    * @deprecated Use "mine" and filter on frontend
    */
   active: protectedProcedure.query(({ ctx }) => {
