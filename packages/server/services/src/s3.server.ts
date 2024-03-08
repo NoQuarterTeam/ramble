@@ -1,4 +1,11 @@
-import { DeleteObjectCommand, GetObjectCommand, HeadObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
+import {
+  DeleteObjectCommand,
+  DeleteObjectsCommand,
+  GetObjectCommand,
+  HeadObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3"
 import { Upload } from "@aws-sdk/lib-storage"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 
@@ -21,6 +28,10 @@ export function getObject(key: string) {
 }
 export function deleteObject(key: string) {
   const command = new DeleteObjectCommand({ Bucket: s3Bucket, Key: key })
+  return client.send(command)
+}
+export function deleteManyObjects(keys: string[]) {
+  const command = new DeleteObjectsCommand({ Bucket: s3Bucket, Delete: { Objects: keys.map((Key) => ({ Key })) } })
   return client.send(command)
 }
 

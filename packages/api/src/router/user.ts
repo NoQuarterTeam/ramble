@@ -5,6 +5,7 @@ import { z } from "zod"
 import { clusterSchema, updateUserSchema, userSchema } from "@ramble/server-schemas"
 import {
   createAuthToken,
+  deleteObject,
   generateBlurHash,
   sendAccountVerificationEmail,
   sendSlackMessage,
@@ -55,10 +56,11 @@ export const userRouter = createTRPCRouter({
     }
     let avatarBlurHash = ctx.user.avatarBlurHash
     if (input.avatar && input.avatar !== ctx.user.avatar) {
+      if (ctx.user.avatar) await deleteObject(ctx.user.avatar)
       avatarBlurHash = await generateBlurHash(input.avatar)
     }
     const user = await ctx.prisma.user.update({ where: { id: ctx.user.id }, data: { ...input, avatarBlurHash } })
-    void updateLoopsContact({ userId: user.id, email: user.email, ...input })
+    await updateLoopsContact({ userId: user.id, email: user.email, ...input })
     return user
   }),
   followers: publicProcedure.input(userSchema.pick({ username: true })).query(async ({ ctx, input }) => {
