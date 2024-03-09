@@ -26,7 +26,7 @@ const AlertDialogOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Overlay
     className={merge(
-      "animate-in fade-in fixed inset-0 z-50 bg-white/50 backdrop-blur-sm transition-opacity dark:bg-black/50",
+      "fade-in fixed inset-0 z-50 animate-in bg-white/50 backdrop-blur-sm transition-opacity dark:bg-black/50",
       className,
     )}
     {...props}
@@ -44,7 +44,7 @@ const AlertDialogContent = React.forwardRef<
     <AlertDialogPrimitive.Content
       ref={ref}
       className={merge(
-        "animate-in fade-in-90 slide-in-from-bottom-10 sm:zoom-in-90 sm:slide-in-from-bottom-0 bg-background sm:rounded-xs fixed z-50 grid w-full max-w-lg scale-100 gap-4 border border-gray-100 p-6 opacity-100 shadow-lg dark:border-gray-700 md:w-full",
+        "fade-in-90 slide-in-from-bottom-10 sm:zoom-in-90 sm:slide-in-from-bottom-0 fixed z-50 grid w-full max-w-lg scale-100 animate-in gap-4 border border-gray-100 bg-background p-6 opacity-100 shadow-lg md:w-full sm:rounded-xs dark:border-gray-700",
         className,
       )}
       {...props}
@@ -67,7 +67,7 @@ const AlertDialogTitle = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Title>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title>
 >(({ className, ...props }, ref) => (
-  <AlertDialogPrimitive.Title ref={ref} className={merge("text-lg font-semibold", className)} {...props} />
+  <AlertDialogPrimitive.Title ref={ref} className={merge("font-semibold text-lg", className)} {...props} />
 ))
 AlertDialogTitle.displayName = AlertDialogPrimitive.Title.displayName
 

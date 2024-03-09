@@ -44,7 +44,7 @@ export default function TripImagesCluster() {
   return (
     <ScreenView title="" containerClassName="px-0">
       {isLoading ? (
-        <View className="p-4 flex items-center justify-center">
+        <View className="flex items-center justify-center p-4">
           <ActivityIndicator />
         </View>
       ) : !images ? null : (
@@ -59,7 +59,7 @@ export default function TripImagesCluster() {
           renderItem={({ item }) => (
             <Link href={`/(home)/(trips)/trips/${id}/images/${item.id}?bounds=${bounds}`} asChild>
               <TouchableOpacity style={{ width: size, height: size }}>
-                <Image className="bg-gray-200 dark:bg-gray-700 h-full w-full" source={{ uri: createImageUrl(item.path) }} />
+                <Image className="h-full w-full bg-gray-200 dark:bg-gray-700" source={{ uri: createImageUrl(item.path) }} />
               </TouchableOpacity>
             </Link>
           )}

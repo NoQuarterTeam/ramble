@@ -61,7 +61,7 @@ export function PartnerLink(props: Props) {
   return (
     <TouchableOpacity
       onPress={handleOpen}
-      className="rounded-xs flex flex-row items-center justify-between border border-gray-200 p-1.5 px-2.5 dark:border-gray-700/70"
+      className="flex flex-row items-center justify-between rounded-xs border border-gray-200 p-1.5 px-2.5 dark:border-gray-700/70"
     >
       <Text className="text-base">Provided by</Text>
       <Image

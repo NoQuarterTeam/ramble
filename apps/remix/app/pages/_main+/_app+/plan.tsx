@@ -5,7 +5,7 @@ import { CircleDot, MapPin } from "lucide-react"
 import * as React from "react"
 import type { LngLatLike, MapRef } from "react-map-gl"
 import { Layer, Map as MapView, Marker, Source } from "react-map-gl"
-import { type MarkerEvent, type MarkerInstance } from "react-map-gl/dist/esm/types"
+import type { MarkerEvent, MarkerInstance } from "react-map-gl/dist/esm/types"
 import useOnClickOutside from "use-onclickoutside"
 
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, useDisclosure } from "@ramble/shared"
@@ -14,7 +14,7 @@ import colors from "@ramble/tailwind-config/src/colors"
 import { SpotIcon } from "~/components/SpotIcon"
 import { Button, Input, Spinner } from "~/components/ui"
 import { useTheme } from "~/lib/theme"
-import { type SerializeFrom } from "~/lib/vendor/vercel.server"
+import type { SerializeFrom } from "~/lib/vendor/vercel.server"
 
 import { PageContainer } from "../../../components/PageContainer"
 import type { directionsLoader } from "../../api+/mapbox+/directions"
@@ -117,7 +117,7 @@ export default function PlanTrip() {
               onChange={onStartPointQuery}
             />
             {startingPointQuery && startingPointMenu.isOpen && (
-              <div className="bg-background rounded-xs absolute left-0 top-full z-10 mt-1 w-full border p-2 shadow-lg">
+              <div className="absolute top-full left-0 z-10 mt-1 w-full rounded-xs border bg-background p-2 shadow-lg">
                 {startingPointFetcher.state === "loading" ? (
                   <Spinner />
                 ) : !startingPointFetcher.data ? (
@@ -160,7 +160,7 @@ export default function PlanTrip() {
               onChange={onDestinationQuery}
             />
             {destinationQuery && destinationMenu.isOpen && (
-              <div className="bg-background rounded-xs absolute left-0 top-full z-10 mt-1 w-full border p-2 shadow-lg">
+              <div className="absolute top-full left-0 z-10 mt-1 w-full rounded-xs border bg-background p-2 shadow-lg">
                 {destinationFetcher.state === "loading" ? (
                   <Spinner />
                 ) : !destinationFetcher.data ? (
@@ -214,14 +214,14 @@ export default function PlanTrip() {
             )}
             {startCoords && (
               <Marker longitude={startCoords[0]} latitude={startCoords[1]}>
-                <div className="sq-5 flex items-center  justify-center rounded-full bg-green-500">
+                <div className="sq-5 flex items-center justify-center rounded-full bg-green-500">
                   <p>A</p>
                 </div>
               </Marker>
             )}
             {endCoords && (
               <Marker longitude={endCoords[0]} latitude={endCoords[1]}>
-                <div className="sq-5 flex items-center  justify-center rounded-full bg-green-500">
+                <div className="sq-5 flex items-center justify-center rounded-full bg-green-500">
                   <p>B</p>
                 </div>
               </Marker>
@@ -229,8 +229,8 @@ export default function PlanTrip() {
             {markers}
           </MapView>
           {directionsFetcher.state === "loading" && (
-            <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center">
-              <div className="sq-10 rounded-xs flex items-center justify-center bg-white dark:bg-gray-700">
+            <div className="absolute top-0 left-0 flex h-full w-full items-center justify-center">
+              <div className="sq-10 flex items-center justify-center rounded-xs bg-white dark:bg-gray-700">
                 <Spinner />
               </div>
             </div>
@@ -249,10 +249,10 @@ function SpotMarker(props: MarkerProps) {
   return (
     <Marker onClick={props.onClick} anchor="bottom" longitude={props.spot.longitude} latitude={props.spot.latitude}>
       <div className="relative">
-        <div className="sq-8 bg-primary-600 dark:bg-primary-700 border-primary-100 dark:border-primary-600 flex cursor-pointer items-center justify-center rounded-full border shadow-md transition-transform hover:scale-110">
+        <div className="sq-8 flex cursor-pointer items-center justify-center rounded-full border border-primary-100 bg-primary-600 shadow-md transition-transform hover:scale-110 dark:border-primary-600 dark:bg-primary-700">
           <SpotIcon type={props.spot.type} className="sq-4 text-white" />
         </div>
-        <div className="sq-3 bg-primary-600 dark:bg-primary-700 absolute -bottom-[3px] left-1/2 -z-[1] -translate-x-1/2 rotate-45 shadow" />
+        <div className="sq-3 -bottom-[3px] -z-[1] -translate-x-1/2 absolute left-1/2 rotate-45 bg-primary-600 shadow dark:bg-primary-700" />
       </div>
     </Marker>
   )

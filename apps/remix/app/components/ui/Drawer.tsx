@@ -40,7 +40,7 @@ const DrawerOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DrawerPrimitive.Overlay
     className={merge(
-      "data-[state=closed]:animate-out data-[state=open]:fade-in data-[state=closed]:fade-out fixed inset-0 z-50 bg-black/50 backdrop-blur-sm transition-all duration-100",
+      "data-[state=open]:fade-in data-[state=closed]:fade-out fixed inset-0 z-50 bg-black/50 backdrop-blur-sm transition-all duration-100 data-[state=closed]:animate-out",
       className,
     )}
     {...props}
@@ -144,7 +144,7 @@ const DrawerContent = React.forwardRef<React.ElementRef<typeof DrawerPrimitive.C
       <DrawerOverlay />
       <DrawerPrimitive.Content ref={ref} className={merge(sheetVariants({ position, size }), className)} {...props}>
         {children}
-        <DrawerPrimitive.Close className="rounded-xs absolute right-4 top-4 opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-gray-100 dark:focus:ring-gray-400 dark:focus:ring-offset-gray-900 dark:data-[state=open]:bg-gray-800">
+        <DrawerPrimitive.Close className="absolute top-4 right-4 rounded-xs opacity-70 transition-opacity disabled:pointer-events-none dark:data-[state=open]:bg-gray-800 data-[state=open]:bg-gray-100 hover:opacity-100 focus:outline-none dark:focus:ring-gray-400 focus:ring-2 focus:ring-gray-400 dark:focus:ring-offset-gray-900 focus:ring-offset-2">
           <X className="sq-4" />
           <span className="sr-only">Close</span>
         </DrawerPrimitive.Close>
@@ -170,7 +170,7 @@ const DrawerTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DrawerPrimitive.Title
     ref={ref}
-    className={merge("text-lg font-semibold text-gray-900", "dark:text-gray-50", className)}
+    className={merge("font-semibold text-gray-900 text-lg", "dark:text-gray-50", className)}
     {...props}
   />
 ))
@@ -180,7 +180,7 @@ const DrawerDescription = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Description>
 >(({ className, ...props }, ref) => (
-  <DrawerPrimitive.Description ref={ref} className={merge("text-sm text-gray-500", "dark:text-gray-400", className)} {...props} />
+  <DrawerPrimitive.Description ref={ref} className={merge("text-gray-500 text-sm", "dark:text-gray-400", className)} {...props} />
 ))
 DrawerDescription.displayName = DrawerPrimitive.Description.displayName
 

@@ -1,4 +1,4 @@
-import { type ActivityIndicatorProps } from "react-native"
+import type { ActivityIndicatorProps } from "react-native"
 import { ActivityIndicator, useColorScheme } from "react-native"
 
 export function Spinner({ color, ...props }: ActivityIndicatorProps) {

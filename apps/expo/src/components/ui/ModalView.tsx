@@ -27,7 +27,7 @@ export function ModalView(props: Props) {
       <SafeAreaView
         edges={["top"]}
         {...props}
-        className={merge("bg-background dark:bg-background-dark flex-1 px-4 pt-4", props.containerClassName)}
+        className={merge("flex-1 bg-background px-4 pt-4 dark:bg-background-dark", props.containerClassName)}
       >
         <View className="flex flex-row justify-between pb-2">
           {props.title ? <BrandHeading className="w-11/12 text-3xl">{props.title.toLowerCase()}</BrandHeading> : <Text />}

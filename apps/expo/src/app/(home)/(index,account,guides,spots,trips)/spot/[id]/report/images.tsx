@@ -47,13 +47,13 @@ export default function SpotReportImagesScreen() {
                 <TouchableOpacity onPress={() => handleClickImage(id)}>
                   <Image
                     className={join(
-                      "rounded-xs h-[200px] w-full bg-gray-50 object-cover dark:bg-gray-700",
-                      isFlagged(id) && "outline-solid opacity-80 outline outline-red-500",
+                      "h-[200px] w-full rounded-xs bg-gray-50 object-cover dark:bg-gray-700",
+                      isFlagged(id) && "opacity-80 outline outline-red-500 outline-solid",
                     )}
                     source={{ uri: createImageUrl(path) }}
                   />
                 </TouchableOpacity>
-                <View className="absolute left-2 top-2 z-10">
+                <View className="absolute top-2 left-2 z-10">
                   <Button
                     onPress={() => handleClickImage(id)}
                     size="sm"
@@ -68,7 +68,7 @@ export default function SpotReportImagesScreen() {
           </View>
         </View>
       </ScrollView>
-      <View pointerEvents="box-none" className="bg-background dark:bg-background-dark absolute bottom-0 left-0 right-0 p-4 pb-10">
+      <View pointerEvents="box-none" className="absolute right-0 bottom-0 left-0 bg-background p-4 pb-10 dark:bg-background-dark">
         <Button className="w-full" onPress={handleClose}>
           Done
         </Button>

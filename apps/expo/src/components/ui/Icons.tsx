@@ -1,4 +1,4 @@
-import { type LucideIcon, type LucideProps } from "lucide-react-native"
+import type { LucideIcon, LucideProps } from "lucide-react-native"
 import { Path, Svg } from "react-native-svg"
 
 export type RambleIcon = LucideIcon | ((props: LucideProps) => JSX.Element)

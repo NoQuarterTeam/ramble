@@ -18,9 +18,9 @@ import {
   Wrench,
 } from "lucide-react"
 
-import { type SpotType } from "@ramble/database/types"
+import type { SpotType } from "@ramble/database/types"
 import { type LatestSpotImages, joinSpotImages, spotImagesRawQuery } from "@ramble/server-services"
-import { type SpotItemType } from "@ramble/shared"
+import type { SpotItemType } from "@ramble/shared"
 
 import type { RambleIcon } from "~/components/ui"
 import { Icons } from "~/components/ui"

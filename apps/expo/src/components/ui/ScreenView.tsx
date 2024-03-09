@@ -31,7 +31,7 @@ export function ScreenView(props: Props) {
               <Icon icon={ChevronLeft} color="primary" />
             </TouchableOpacity>
           </View>
-          <View className="flex-2 flex items-center justify-center">
+          <View className="flex flex-2 items-center justify-center">
             {typeof props.title === "string" ? (
               <BrandHeading className="text-xl" style={{ paddingHorizontal: 3 }}>
                 {props.title.toLowerCase()}

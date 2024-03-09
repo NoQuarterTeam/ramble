@@ -2,12 +2,12 @@ import { Await, useFetcher } from "@remix-run/react"
 import { Languages } from "lucide-react"
 import * as React from "react"
 
-import { type Spot } from "@ramble/database/types"
+import type { Spot } from "@ramble/database/types"
 import { join, languages } from "@ramble/shared"
 
 import { Select, Tooltip } from "~/components/ui"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
-import { type TranslateSpot } from "~/pages/api+/spots+/$id.translate.$lang"
+import type { TranslateSpot } from "~/pages/api+/spots+/$id.translate.$lang"
 
 interface Props {
   spot: Pick<Spot, "id" | "description">
@@ -22,7 +22,7 @@ export function TranslateSpotDescription(props: Props) {
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-medium">Description</h3>
+        <h3 className="font-medium text-lg">Description</h3>
 
         <div className="flex items-center gap-2">
           <Tooltip label="Default language can be changed in your settings">

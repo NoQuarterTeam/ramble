@@ -1,6 +1,6 @@
 import { createFlickr } from "flickr-sdk"
 
-import { type Spot, type SpotImage } from "@ramble/database/types"
+import type { Spot, SpotImage } from "@ramble/database/types"
 import { env } from "@ramble/server-env"
 
 export const { flickr } = createFlickr(env.FLICKR_ACCESS_KEY)

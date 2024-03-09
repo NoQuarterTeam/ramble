@@ -9,7 +9,7 @@ import { promiseHash } from "remix-utils/promise"
 
 import { publicSpotWhereClauseRaw, spotItemDistanceFromMeField, spotItemSelectFields } from "@ramble/server-services"
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
-import { type SpotItemType } from "@ramble/shared"
+import type { SpotItemType } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -141,8 +141,8 @@ export default function ListDetail() {
     [spots],
   )
   return (
-    <PageContainer className="space-y-0 pb-0 pt-0">
-      <div className="top-nav bg-background sticky z-[1] flex flex-col items-start justify-between py-4 md:flex-row">
+    <PageContainer className="space-y-0 pt-0 pb-0">
+      <div className="sticky top-nav z-[1] flex flex-col items-start justify-between bg-background py-4 md:flex-row">
         <div className="space-y-1">
           <div className="flex flex-col items-start md:flex-row md:items-end md:space-x-2">
             <div className="flex flex-col md:flex-row md:space-x-2">
@@ -198,7 +198,7 @@ export default function ListDetail() {
             spots.map((spot) => <SpotItem key={spot.id} spot={spot} />)
           )}
         </div>
-        <div className="rounded-xs col-span-12 h-[80vh] w-full overflow-hidden pb-4 md:col-span-8 md:pb-0">
+        <div className="col-span-12 h-[80vh] w-full overflow-hidden rounded-xs pb-4 md:col-span-8 md:pb-0">
           <ClientOnly>
             {() => (
               <MapView

@@ -55,5 +55,5 @@ function BlurCanvas(props: BlurCanvasProps) {
     ctx.putImageData(imageData, 0, 0)
   }, [props.blurHash])
 
-  return <canvas ref={ref} width={32} height={32} className="absolute -z-[1] h-full w-full rounded-[inherit]" />
+  return <canvas ref={ref} width={32} height={32} className="-z-[1] absolute h-full w-full rounded-[inherit]" />
 }

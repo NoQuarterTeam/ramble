@@ -3,7 +3,7 @@ import { ChevronRight } from "lucide-react-native"
 import * as React from "react"
 import { ScrollView, TouchableOpacity, View } from "react-native"
 
-import { type SpotType } from "@ramble/database/types"
+import type { SpotType } from "@ramble/database/types"
 import { doesSpotTypeRequireAmenities } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"

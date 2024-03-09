@@ -2,7 +2,7 @@ import { cacheHeader } from "pretty-cache-header"
 import queryString from "query-string"
 import Supercluster from "supercluster"
 
-import { type User } from "@ramble/database/types"
+import type { User } from "@ramble/database/types"
 import { clusterSchema } from "@ramble/server-schemas"
 
 import { db } from "~/lib/db.server"

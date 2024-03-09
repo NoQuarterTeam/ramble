@@ -2,7 +2,7 @@ import { useLoaderData } from "@remix-run/react"
 import { Plus } from "lucide-react"
 import * as React from "react"
 
-import { type VanImage } from "@ramble/database/types"
+import type { VanImage } from "@ramble/database/types"
 import { vanSchema } from "@ramble/server-schemas"
 import { generateBlurHash } from "@ramble/server-services"
 

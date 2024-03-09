@@ -1,4 +1,4 @@
-import { type LoaderFunctionArgs, type SerializeFrom } from "@vercel/remix"
+import type { LoaderFunctionArgs, SerializeFrom } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 
 import { db } from "~/lib/db.server"

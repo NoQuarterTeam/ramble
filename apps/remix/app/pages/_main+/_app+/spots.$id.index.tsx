@@ -1,4 +1,4 @@
-import crypto from "crypto"
+import crypto from "node:crypto"
 import { Await, Link, type ShouldRevalidateFunctionArgs, useLoaderData } from "@remix-run/react"
 import dayjs from "dayjs"
 import { Check, Edit2, Flag, Heart, Star, Trash } from "lucide-react"
@@ -44,7 +44,7 @@ import { AMENITIES_ICONS } from "~/lib/models/amenities"
 import { badRequest, json, notFound, redirect } from "~/lib/remix.server"
 import { type ActionFunctionArgs, type LoaderFunctionArgs, type MetaFunction, defer } from "~/lib/vendor/vercel.server"
 import { VerifiedCard } from "~/pages/_main+/_app+/components/VerifiedCard"
-import { type TranslateSpot } from "~/pages/api+/spots+/$id.translate.$lang"
+import type { TranslateSpot } from "~/pages/api+/spots+/$id.translate.$lang"
 import type { loader as rootLoader } from "~/root"
 import { getCurrentUser } from "~/services/auth/auth.server"
 
@@ -213,7 +213,7 @@ export default function SpotDetail() {
                     src={photo.src}
                     width={400}
                     height={300}
-                    className="rounded-xs h-[300px] max-w-[400px] object-cover"
+                    className="h-[300px] max-w-[400px] rounded-xs object-cover"
                   />
                   <img alt="flicker logo" src="/flickr.svg" className="absolute bottom-1 left-1 object-contain" width={100} />
                 </a>
@@ -224,21 +224,21 @@ export default function SpotDetail() {
                   key={image.id}
                   placeholder={image.blurHash}
                   src={createImageUrl(image.path)}
-                  className="rounded-xs h-[300px] max-w-[400px]"
+                  className="h-[300px] max-w-[400px] rounded-xs"
                   height={400}
                   width={600}
                 />
               ))}
         </div>
       </div>
-      <PageContainer className="space-y-10 pb-40 pt-4 lg:pt-8">
+      <PageContainer className="space-y-10 pt-4 pb-40 lg:pt-8">
         <div className="space-y-4">
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <SpotTypeBadge spot={spot} />
               <div className="flex items-center space-x-1">{user && <SaveToList spotId={spot.id} />}</div>
             </div>
-            <h1 className="text-lg md:text-2xl lg:text-3xl">{spot.name}</h1>
+            <h1 className="text-lg lg:text-3xl md:text-2xl">{spot.name}</h1>
 
             <Suspense fallback={<div className="h-6" />}>
               <Await resolve={stats}>
@@ -282,7 +282,7 @@ export default function SpotDetail() {
                     if (!spot.amenities?.[key as keyof typeof AMENITIES]) return null
                     const Icon = AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]
                     return (
-                      <div key={key} className="rounded-xs flex space-x-1 border border-gray-200 p-2 dark:border-gray-700">
+                      <div key={key} className="flex space-x-1 rounded-xs border border-gray-200 p-2 dark:border-gray-700">
                         {Icon && <Icon size={20} />}
                         <p className="text-sm">{value}</p>
                       </div>
@@ -333,7 +333,7 @@ export default function SpotDetail() {
               </div>
             </div>
 
-            <div className="rounded-xs h-[400px] w-full overflow-hidden">
+            <div className="h-[400px] w-full overflow-hidden rounded-xs">
               <MapView initialViewState={{ latitude: spot.latitude, longitude: spot.longitude, zoom: 10 }}>
                 <Marker anchor="bottom" longitude={spot.longitude} latitude={spot.latitude}>
                   <SpotMarker spot={spot} isInteractable={false} />
@@ -389,7 +389,7 @@ export default function SpotDetail() {
               </LinkButton>
             )}
           </div>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 md:grid-cols-2">
             <Suspense>
               <Await resolve={reviews}>{(val) => val.map((review) => <ReviewItem key={review.id} review={review} />)}</Await>
             </Suspense>

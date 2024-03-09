@@ -1,4 +1,4 @@
-import * as crypto from "crypto"
+import * as crypto from "node:crypto"
 import { NotFound } from "@aws-sdk/client-s3"
 import axios from "axios"
 import { cacheHeader } from "pretty-cache-header"

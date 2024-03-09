@@ -1,7 +1,7 @@
 import { Link } from "@remix-run/react"
 import { BadgeX, Verified } from "lucide-react"
 
-import { type User } from "@ramble/database/types"
+import type { User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
 import { Avatar } from "../../../../components/ui/Avatar"
@@ -15,7 +15,7 @@ interface Props {
 export function VerifiedCard({ spot }: Props) {
   return (
     <div className="@container">
-      <div className="@lg:h-16 rounded-xs flex h-12 items-center border border-gray-200 dark:border-gray-700">
+      <div className="flex h-12 items-center rounded-xs border border-gray-200 @lg:h-16 dark:border-gray-700">
         {spot.verifiedAt && spot.verifier ? (
           <Link
             to={`/${spot.verifier.username}`}
@@ -24,7 +24,7 @@ export function VerifiedCard({ spot }: Props) {
             <div>
               <div className="flex items-center space-x-1">
                 <Verified className="sq-5" />
-                <p className="@lg:text-lg @md:text-base text-sm">
+                <p className="text-sm @lg:text-lg @md:text-base">
                   Verified by{" "}
                   <span className="font-medium">
                     {spot.verifier.firstName} {spot.verifier.lastName}
@@ -43,7 +43,7 @@ export function VerifiedCard({ spot }: Props) {
             </div>
           </Link>
         ) : (
-          <div className="@lg:text-lg flex items-center space-x-1 px-4 text-base">
+          <div className="flex items-center space-x-1 px-4 text-base @lg:text-lg">
             <BadgeX className="sq-5" />
             <p>Unverified</p>
           </div>

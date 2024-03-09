@@ -48,7 +48,7 @@ export default function EditListScreen() {
           <ListForm list={list} isLoading={isLoading} error={error} onUpdate={(data) => mutate({ ...data, id })} />
         )}
       </ScrollView>
-      <View className="absolute bottom-10 left-0 right-0 flex items-center justify-center">
+      <View className="absolute right-0 bottom-10 left-0 flex items-center justify-center">
         <DeleteButton isLoading={deleteLoading} onPress={() => deleteList({ id })} />
       </View>
     </ModalView>

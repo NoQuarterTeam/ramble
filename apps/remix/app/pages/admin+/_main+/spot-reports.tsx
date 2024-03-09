@@ -1,5 +1,5 @@
 import { Link, useLoaderData } from "@remix-run/react"
-import { Row, createColumnHelper } from "@tanstack/react-table"
+import { type Row, createColumnHelper } from "@tanstack/react-table"
 import dayjs from "dayjs"
 import { Check, Eye, EyeOff, Trash } from "lucide-react"
 import { promiseHash } from "remix-utils/promise"

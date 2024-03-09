@@ -1,4 +1,4 @@
-import { type Prisma } from "@ramble/database/types"
+import type { Prisma } from "@ramble/database/types"
 
 import { db } from "~/lib/db.server"
 import type { Await } from "~/lib/helpers/types"

@@ -75,7 +75,7 @@ export default function EditSpotLocationScreen() {
       </View>
       <View className="relative flex-1">
         <MapView
-          className="rounded-xs overflow-hidden"
+          className="overflow-hidden rounded-xs"
           onMapIdle={onMapMove}
           ref={mapRef}
           compassPosition={{ top: 54, right: 8 }}
@@ -89,9 +89,9 @@ export default function EditSpotLocationScreen() {
             defaultSettings={{ centerCoordinate: coords, zoomLevel: 14, pitch: 0, heading: 0 }}
           />
         </MapView>
-        <View className="absolute left-2 right-2 top-2">
+        <View className="absolute top-2 right-2 left-2">
           <Input
-            className="bg-background dark:bg-background-dark rounded-sm"
+            className="rounded-sm bg-background dark:bg-background-dark"
             placeholder="Search here"
             onChangeText={setSearch}
             value={search}
@@ -99,7 +99,7 @@ export default function EditSpotLocationScreen() {
             returnKeyType="done"
           />
           {search && places && (
-            <View className="bg-background dark:bg-background-dark rounded-b-sm p-2">
+            <View className="rounded-b-sm bg-background p-2 dark:bg-background-dark">
               {places.map((place, i) => (
                 <TouchableOpacity
                   key={`${place.name}-${i}`}
@@ -113,7 +113,7 @@ export default function EditSpotLocationScreen() {
                       centerCoordinate: place.center,
                     })
                   }}
-                  className=" p-2"
+                  className="p-2"
                 >
                   <Text numberOfLines={1}>{place.name}</Text>
                 </TouchableOpacity>
@@ -123,16 +123,16 @@ export default function EditSpotLocationScreen() {
         </View>
         <View
           style={{ transform: [{ translateX: -15 }, { translateY: -15 }] }}
-          className="absolute left-1/2 top-1/2 flex items-center justify-center"
+          className="absolute top-1/2 left-1/2 flex items-center justify-center"
         >
           <Icon icon={CircleDot} size={30} color="white" />
         </View>
 
-        <View className="absolute bottom-12 left-5 right-5 flex flex-row items-center justify-between space-y-2">
+        <View className="absolute right-5 bottom-12 left-5 flex flex-row items-center justify-between space-y-2">
           <View className="w-12" />
 
           <Button
-            className="bg-background rounded-full"
+            className="rounded-full bg-background"
             textClassName="text-black"
             onPress={() => {
               if (!me) return
@@ -153,7 +153,7 @@ export default function EditSpotLocationScreen() {
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={handleSetUserLocation}
-            className="sq-12 bg-background flex flex-row items-center justify-center rounded-full"
+            className="sq-12 flex flex-row items-center justify-center rounded-full bg-background"
           >
             <Icon icon={Navigation} size={20} color="black" />
           </TouchableOpacity>

@@ -1,5 +1,5 @@
 import { Camera, LocationPuck, type MapState, type MapView as MapType, StyleURL } from "@rnmapbox/maps"
-import { type Position } from "@rnmapbox/maps/lib/typescript/src/types/Position"
+import type { Position } from "@rnmapbox/maps/lib/typescript/src/types/Position"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { CircleDot, Navigation } from "lucide-react-native"
@@ -79,7 +79,7 @@ export default function AddImageLocation() {
     <ModalView edges={["top", "bottom"]} title="choose a location">
       <View className="relative flex-1">
         <MapView
-          className="rounded-xs overflow-hidden"
+          className="overflow-hidden rounded-xs"
           onMapIdle={onMapMove}
           ref={mapRef}
           styleURL={StyleURL.SatelliteStreet}
@@ -99,9 +99,9 @@ export default function AddImageLocation() {
             }}
           />
         </MapView>
-        <View className="absolute left-2 right-2 top-2">
+        <View className="absolute top-2 right-2 left-2">
           <Input
-            className="bg-background dark:bg-background-dark rounded-sm"
+            className="rounded-sm bg-background dark:bg-background-dark"
             placeholder="Search here"
             onChangeText={setSearch}
             value={search}
@@ -109,7 +109,7 @@ export default function AddImageLocation() {
             returnKeyType="done"
           />
           {search && places && (
-            <View className="bg-background dark:bg-background-dark rounded-b-sm p-2">
+            <View className="rounded-b-sm bg-background p-2 dark:bg-background-dark">
               {places.map((place, i) => (
                 <TouchableOpacity
                   key={`${place.name}-${i}`}
@@ -123,7 +123,7 @@ export default function AddImageLocation() {
                       centerCoordinate: place.center,
                     })
                   }}
-                  className=" p-2"
+                  className="p-2"
                 >
                   <Text numberOfLines={1}>{place.name}</Text>
                 </TouchableOpacity>
@@ -133,18 +133,18 @@ export default function AddImageLocation() {
         </View>
         <View
           style={{ transform: [{ translateX: -15 }, { translateY: -15 }] }}
-          className="absolute left-1/2 top-1/2 flex items-center justify-center"
+          className="absolute top-1/2 left-1/2 flex items-center justify-center"
         >
           <Icon icon={CircleDot} size={30} color="white" />
         </View>
 
         <View
           pointerEvents="box-none"
-          className="absolute bottom-5 left-5 right-5 flex flex-row items-center justify-between space-y-2"
+          className="absolute right-5 bottom-5 left-5 flex flex-row items-center justify-between space-y-2"
         >
           <View className="w-12" />
           <Button
-            className="bg-background rounded-full"
+            className="rounded-full bg-background"
             textClassName="text-black"
             onPress={handleSelectLocation}
             isLoading={saveLoading}
@@ -156,7 +156,7 @@ export default function AddImageLocation() {
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={handleSetUserLocation}
-            className="sq-12 bg-background flex flex-row items-center justify-center rounded-full"
+            className="sq-12 flex flex-row items-center justify-center rounded-full bg-background"
           >
             <Navigation size={20} className="text-black" />
           </TouchableOpacity>

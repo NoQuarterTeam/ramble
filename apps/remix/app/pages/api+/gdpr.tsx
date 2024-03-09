@@ -3,7 +3,7 @@ import { useRouteLoaderData } from "@remix-run/react"
 import { useDisclosure } from "@ramble/shared"
 
 import { Button, Modal, Switch } from "~/components/ui"
-import { type RootLoader } from "~/root"
+import type { RootLoader } from "~/root"
 import { gdprActions } from "~/services/api/gdpr.server"
 
 import { useFetcher } from "../../components/Form"
@@ -21,8 +21,8 @@ export function GDPR() {
   const modalProps = useDisclosure()
   if (gdpr) return null
   return (
-    <div className="bg-background z-100 fixed bottom-0 left-0 right-0 flex flex-col items-center justify-between gap-2 border-t px-10 py-6 md:flex-row">
-      <p className="max-w-4xl text-sm font-light opacity-70">
+    <div className="fixed right-0 bottom-0 left-0 z-100 flex flex-col items-center justify-between gap-2 border-t bg-background px-10 py-6 md:flex-row">
+      <p className="max-w-4xl font-light text-sm opacity-70">
         We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. By clicking
         "Accept All", you consent to our use of cookies.
       </p>

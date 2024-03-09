@@ -44,7 +44,7 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
   return (
     <>
       {data && !!search && (
-        <SafeAreaView edges={["top"]} className="absolute left-4 right-4 top-2">
+        <SafeAreaView edges={["top"]} className="absolute top-2 right-4 left-4">
           <View className="rounded-[24px] bg-gray-50 p-2 dark:bg-gray-900">
             {data.map((item) => (
               <Button
@@ -63,10 +63,10 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
           </View>
         </SafeAreaView>
       )}
-      <SafeAreaView edges={["top"]} pointerEvents="box-none" className="absolute left-4 top-2">
+      <SafeAreaView edges={["top"]} pointerEvents="box-none" className="absolute top-2 left-4">
         <Animated.View
           style={[animatedStyles]}
-          className="bg-background dark:bg-background-dark flex h-12 flex-row items-center justify-between overflow-hidden rounded-full pl-12 shadow-lg"
+          className="flex h-12 flex-row items-center justify-between overflow-hidden rounded-full bg-background pl-12 shadow-lg dark:bg-background-dark"
         >
           <TextInput
             value={search}
@@ -79,20 +79,20 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={onClear}
-            className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"
+            className="sq-12 flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
           >
             <Icon icon={X} size={22} />
           </TouchableOpacity>
         </Animated.View>
       </SafeAreaView>
-      <SafeAreaView edges={["top"]} pointerEvents="box-none" className="absolute left-4 top-2">
+      <SafeAreaView edges={["top"]} pointerEvents="box-none" className="absolute top-2 left-4">
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => {
             searchWidth.value = width - 32
             inputRef.current?.focus()
           }}
-          className="sq-12 bg-background dark:bg-background-dark flex flex-row items-center justify-center rounded-full"
+          className="sq-12 flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
         >
           {isFetching ? <Spinner /> : <Icon icon={Search} size={22} />}
         </TouchableOpacity>

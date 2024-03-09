@@ -131,7 +131,7 @@ export default function ListDetailMapScreen() {
       {spotsLoading && (
         <View
           pointerEvents="none"
-          className="absolute left-4 top-10 flex flex-col items-center justify-center rounded-full bg-white p-2 dark:bg-gray-800"
+          className="absolute top-10 left-4 flex flex-col items-center justify-center rounded-full bg-white p-2 dark:bg-gray-800"
         >
           <Spinner />
         </View>
@@ -139,7 +139,7 @@ export default function ListDetailMapScreen() {
 
       <TouchableOpacity
         onPress={handleSetUserLocation}
-        className="sq-12 bg-background absolute bottom-3 right-3 flex flex-row items-center justify-center rounded-full"
+        className="sq-12 absolute right-3 bottom-3 flex flex-row items-center justify-center rounded-full bg-background"
       >
         <Icon icon={Navigation} size={20} color="black" />
       </TouchableOpacity>

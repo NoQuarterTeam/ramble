@@ -1,4 +1,4 @@
-import { type ActionFunctionArgs } from "@remix-run/node"
+import type { ActionFunctionArgs } from "@remix-run/node"
 
 import { sendResetPasswordEmail } from "@ramble/server-services"
 
@@ -7,7 +7,7 @@ import { json } from "~/lib/remix.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
 
 import { ResetPasswordContent } from "@ramble/emails"
-import { type TemplateHandle } from "./_layout"
+import type { TemplateHandle } from "./_layout"
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await getCurrentAdmin(request)

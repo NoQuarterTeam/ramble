@@ -68,8 +68,8 @@ export default function TripsLayout() {
               <View className="space-y-2">
                 <View className="relative flex items-center justify-center">
                   <View className="absolute h-px w-full bg-gray-200 dark:bg-gray-700" />
-                  <View className="bg-background dark:bg-background-dark px-2">
-                    <Text className="text-xxs text-center">UPCOMING</Text>
+                  <View className="bg-background px-2 dark:bg-background-dark">
+                    <Text className="text-center text-xxs">UPCOMING</Text>
                   </View>
                 </View>
                 {groupedTrips.upcoming
@@ -85,8 +85,8 @@ export default function TripsLayout() {
               <View className="space-y-2">
                 <View className="relative flex items-center justify-center">
                   <View className="absolute h-px w-full bg-gray-200 dark:bg-gray-700" />
-                  <View className="bg-background dark:bg-background-dark px-2">
-                    <Text className="text-xxs text-center">COMPLETE</Text>
+                  <View className="bg-background px-2 dark:bg-background-dark">
+                    <Text className="text-center text-xxs">COMPLETE</Text>
                   </View>
                 </View>
                 {groupedTrips.complete.map((trip) => (

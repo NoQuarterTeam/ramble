@@ -65,7 +65,7 @@ export default function SpotReportLocationScreen() {
             Not sure?
           </Button>
         </View>
-        <MapView className="rounded-xs mb-10 mt-4 flex-1 overflow-hidden" onMapIdle={onMapMove} ref={mapRef}>
+        <MapView className="mt-4 mb-10 flex-1 overflow-hidden rounded-xs" onMapIdle={onMapMove} ref={mapRef}>
           <LocationPuck />
           <Camera
             ref={camera}
@@ -76,17 +76,17 @@ export default function SpotReportLocationScreen() {
         </MapView>
         <View
           style={{ transform: [{ translateX: -15 }, { translateY: -15 }] }}
-          className="absolute left-1/2 top-1/2 flex items-center justify-center"
+          className="absolute top-1/2 left-1/2 flex items-center justify-center"
         >
           <Icon icon={CircleDot} size={30} color="white" />
         </View>
         <View
           pointerEvents="box-none"
-          className="absolute bottom-12 left-2 right-2 flex flex-row items-center justify-between space-y-2"
+          className="absolute right-2 bottom-12 left-2 flex flex-row items-center justify-between space-y-2"
         >
           <View className="flex-1" pointerEvents="box-none" />
           <View className="flex-1 items-center justify-center">
-            <Button className="bg-background rounded-full" textClassName="text-black" onPress={onClose}>
+            <Button className="rounded-full bg-background" textClassName="text-black" onPress={onClose}>
               Done
             </Button>
           </View>
@@ -94,7 +94,7 @@ export default function SpotReportLocationScreen() {
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={handleSetUserLocation}
-              className="sq-12 bg-background flex flex-row items-center justify-center rounded-full"
+              className="sq-12 flex flex-row items-center justify-center rounded-full bg-background"
             >
               <Icon icon={Navigation} size={20} color="black" />
             </TouchableOpacity>

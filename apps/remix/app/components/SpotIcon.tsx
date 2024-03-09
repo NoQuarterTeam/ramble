@@ -1,6 +1,6 @@
-import { type LucideProps } from "lucide-react"
+import type { LucideProps } from "lucide-react"
 
-import { type SpotType } from "@ramble/database/types"
+import type { SpotType } from "@ramble/database/types"
 
 import { SPOT_TYPE_ICONS } from "~/lib/models/spot"
 

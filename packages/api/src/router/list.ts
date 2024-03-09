@@ -4,14 +4,14 @@ import { lineString } from "@turf/helpers"
 import Supercluster from "supercluster"
 import { z } from "zod"
 
-import { type SpotType } from "@ramble/database/types"
+import type { SpotType } from "@ramble/database/types"
 import { clusterSchema, listSchema, userSchema } from "@ramble/server-schemas"
 import { publicSpotWhereClauseRaw, spotItemDistanceFromMeField, spotItemSelectFields } from "@ramble/server-services"
-import { type SpotItemType } from "@ramble/shared"
+import type { SpotItemType } from "@ramble/shared"
 
 import { fetchAndJoinSpotImages } from "../lib/spot"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
-import { type SpotClusterTypes } from "./spot"
+import type { SpotClusterTypes } from "./spot"
 
 export const listRouter = createTRPCRouter({
   allByUser: publicProcedure

@@ -4,7 +4,7 @@ import * as React from "react"
 import { promiseHash } from "remix-utils/promise"
 
 import { publicSpotWhereClauseRaw, spotItemDistanceFromMeField, spotItemSelectFields } from "@ramble/server-services"
-import { type SpotItemType } from "@ramble/shared"
+import type { SpotItemType } from "@ramble/shared"
 
 import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
@@ -24,7 +24,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const user = await db.user.findUnique({ where: { username: params.username?.toLowerCase().trim() } })
   if (!user) throw notFound()
   const searchParams = new URL(request.url).searchParams
-  const skip = parseInt((searchParams.get("skip") as string) || "0")
+  const skip = Number.parseInt((searchParams.get("skip") as string) || "0")
   const currentUser = await getCurrentUser(request, { id: true, latitude: true, longitude: true })
 
   const { spots } = await promiseHash({

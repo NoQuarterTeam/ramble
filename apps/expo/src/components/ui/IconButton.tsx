@@ -5,9 +5,9 @@ import { join, merge } from "@ramble/shared"
 
 import { Spinner } from "./Spinner"
 
-import { VariantProps, cva } from "class-variance-authority"
-import { Icon, IconProps } from "../Icon"
-import { RambleIcon } from "./Icons"
+import { type VariantProps, cva } from "class-variance-authority"
+import { Icon, type IconProps } from "../Icon"
+import type { RambleIcon } from "./Icons"
 
 export const iconButtonStyles = cva("rounded-full flex flex-row items-center justify-center border", {
   variants: {

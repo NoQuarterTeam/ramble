@@ -5,7 +5,7 @@ import colors from "@ramble/tailwind-config/src/colors"
 
 import { Icon } from "~/components/Icon"
 import { FormError } from "~/components/ui/FormError"
-import { type IconProps } from "~/components/ui/Icons"
+import type { IconProps } from "~/components/ui/Icons"
 import { ScreenView } from "~/components/ui/ScreenView"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"

@@ -1,4 +1,4 @@
-import crypto from "crypto"
+import crypto from "node:crypto"
 
 const NUMBER_TO_GENERATE = 10
 export function generateInviteCodes(userId: string) {

@@ -3,7 +3,7 @@ import useOnClickOutside from "use-onclickoutside"
 
 import { useFetcher } from "~/components/Form"
 import { Button, Input, Spinner } from "~/components/ui"
-import { type locationSearchLoader } from "~/pages/api+/mapbox+/location-search"
+import type { locationSearchLoader } from "~/pages/api+/mapbox+/location-search"
 
 export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) => void }) {
   const [search, setSearch] = React.useState("")
@@ -20,12 +20,12 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
 
   return (
     <>
-      <div ref={ref} className="absolute left-2 top-2 space-y-2 md:left-4 md:top-4">
-        <div className="bg-background rounded-xs w-[220px] overflow-hidden shadow-lg md:w-[250px]">
+      <div ref={ref} className="absolute top-2 left-2 space-y-2 md:top-4 md:left-4">
+        <div className="w-[220px] overflow-hidden rounded-xs bg-background shadow-lg md:w-[250px]">
           <Input placeholder="Search location" value={search} onChange={onStartPointQuery} />
         </div>
         {search && (
-          <div className="bg-background rounded-xs w-[calc(100vw-theme(spacing.4))] space-y-2 border p-2 shadow-lg md:w-full md:max-w-xl">
+          <div className="w-[calc(100vw-theme(spacing.4))] space-y-2 rounded-xs border bg-background p-2 shadow-lg md:w-full md:max-w-xl">
             {locationFetcher.state === "loading" && !locationFetcher.data ? (
               <Spinner />
             ) : !locationFetcher.data || locationFetcher.data.length === 0 ? (

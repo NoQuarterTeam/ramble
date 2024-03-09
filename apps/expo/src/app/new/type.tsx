@@ -2,7 +2,7 @@ import { useLocalSearchParams, useRouter } from "expo-router"
 import * as React from "react"
 import { ScrollView, View } from "react-native"
 
-import { type SpotType } from "@ramble/database/types"
+import type { SpotType } from "@ramble/database/types"
 import { SPOT_TYPE_OPTIONS } from "@ramble/shared"
 
 import { SpotIcon } from "~/components/SpotIcon"
@@ -44,7 +44,7 @@ export default function NewSpotTypeScreen() {
         <Text className="text-center text-sm opacity-80">More options coming soon</Text>
       </ScrollView>
       {type && (
-        <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
+        <View className="absolute right-4 bottom-12 left-4 flex items-center justify-center space-y-2">
           <Button
             className="rounded-full"
             onPress={() =>

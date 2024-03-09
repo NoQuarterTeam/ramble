@@ -114,7 +114,7 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
             </View>
           </View>
 
-          <View className="rounded-xs overflow-hidden">
+          <View className="overflow-hidden rounded-xs">
             <SpotImageCarousel
               canAddMore
               onPress={handleGoToSpot}
@@ -130,7 +130,7 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
         </View>
       )}
 
-      <TouchableOpacity onPress={onClose} className="absolute right-2 top-2 flex items-center justify-center p-2">
+      <TouchableOpacity onPress={onClose} className="absolute top-2 right-2 flex items-center justify-center p-2">
         <X size={24} color={colorScheme === "dark" ? "white" : "black"} />
       </TouchableOpacity>
     </Animated.View>

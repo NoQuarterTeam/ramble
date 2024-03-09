@@ -22,7 +22,7 @@ export const headers = useLoaderHeaders
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const searchParams = new URL(request.url).searchParams
-  const skip = parseInt((searchParams.get("skip") as string) || "0")
+  const skip = Number.parseInt((searchParams.get("skip") as string) || "0")
 
   const vans = await db.van.findMany({
     take: 16,
@@ -70,7 +70,7 @@ export default function Vans() {
   return (
     <PageContainer className="space-y-2">
       <h1 className="text-3xl">Latest vans</h1>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 md:grid-cols-2 xl:grid-cols-4">
         {vans.map((van) => (
           <VanItem key={van.id} van={van} />
         ))}
@@ -90,7 +90,7 @@ function VanItem(props: { van: SerializeFrom<LoaderData>["vans"][number] }) {
   return (
     <Link
       to={`/${props.van.user.username}/van`}
-      className="rounded-xs space-y-2 overflow-hidden border transition-colors hover:opacity-75"
+      className="space-y-2 overflow-hidden rounded-xs border transition-colors hover:opacity-75"
     >
       <div className="relative h-[200px]">
         {props.van.images[0] ? (
@@ -108,7 +108,7 @@ function VanItem(props: { van: SerializeFrom<LoaderData>["vans"][number] }) {
           </div>
         )}
         {dayjs(props.van.createdAt).isAfter(dayjs().subtract(3, "days")) && (
-          <Badge size="sm" colorScheme="green" className="absolute right-2 top-2 bg-green-100 text-xs dark:bg-green-900">
+          <Badge size="sm" colorScheme="green" className="absolute top-2 right-2 bg-green-100 text-xs dark:bg-green-900">
             New
           </Badge>
         )}

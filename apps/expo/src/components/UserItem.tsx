@@ -2,7 +2,7 @@ import { useRouter } from "expo-router"
 import { User2 } from "lucide-react-native"
 import { TouchableOpacity, View } from "react-native"
 
-import { type User } from "@ramble/database/types"
+import type { User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"

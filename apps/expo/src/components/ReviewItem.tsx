@@ -5,7 +5,7 @@ import { Star, User2 } from "lucide-react-native"
 import * as React from "react"
 import { TouchableOpacity, View, useColorScheme } from "react-native"
 
-import { type Review, type User } from "@ramble/database/types"
+import type { Review, User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
 import { api } from "~/lib/api"
@@ -51,14 +51,14 @@ export function ReviewItem({
   const { data, error, isInitialLoading } = useQuery<TranslateInput, string, string>({
     queryKey: ["review-translation", { id: review.id, lang: me?.preferredLanguage || "en" }],
     queryFn: () => getTranslation({ id: review.id, lang: me?.preferredLanguage || "en" }),
-    cacheTime: Infinity,
+    cacheTime: Number.POSITIVE_INFINITY,
     enabled: isTranslated && !!me && !!me?.preferredLanguage,
   })
 
   const tab = useTabSegment()
   const isDark = useColorScheme() === "dark"
   return (
-    <View className="rounded-xs space-y-2 border border-gray-200 p-4 dark:border-gray-700">
+    <View className="space-y-2 rounded-xs border border-gray-200 p-4 dark:border-gray-700">
       <View className="flex flex-row justify-between">
         <TouchableOpacity
           onPress={() => router.push(`/${tab}/${review.user.username}/(profile)`)}

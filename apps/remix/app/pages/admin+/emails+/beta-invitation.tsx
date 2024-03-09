@@ -2,11 +2,11 @@ import { sendBetaInvitationEmail } from "@ramble/server-services"
 
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 import { json } from "~/lib/remix.server"
-import { type ActionFunctionArgs } from "~/lib/vendor/vercel.server"
+import type { ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 import { getCurrentAdmin } from "~/services/auth/auth.server"
 
 import { BetaInvitationContent } from "@ramble/emails"
-import { type TemplateHandle } from "./_layout"
+import type { TemplateHandle } from "./_layout"
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await getCurrentAdmin(request)

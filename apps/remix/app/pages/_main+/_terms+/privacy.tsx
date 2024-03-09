@@ -4,7 +4,7 @@ export default function Privacy() {
       <h1 className="brand-header text-3xl">privacy policy</h1>
 
       <div className="space-y-2">
-        <h2 className="text-lg font-semibold">Introduction:</h2>
+        <h2 className="font-semibold text-lg">Introduction:</h2>
         <p>
           Thank you for choosing our platform. This Privacy Policy outlines how we collect, use, and protect your personal
           information when you use our platform. It is important to us that you understand what information we collect and how we
@@ -13,7 +13,7 @@ export default function Privacy() {
       </div>
 
       <div className="space-y-2">
-        <h2 className="text-lg font-semibold">1. Information we collect:</h2>
+        <h2 className="font-semibold text-lg">1. Information we collect:</h2>
         <p>We collect the following information from you:</p>
         <ul>
           <li>
@@ -33,7 +33,7 @@ export default function Privacy() {
         </ul>
       </div>
       <div className="space-y-2">
-        <h2 className="text-lg font-semibold">2. Use of collected information:</h2>
+        <h2 className="font-semibold text-lg">2. Use of collected information:</h2>
         <p>We use the collected information for the following purposes:</p>
         <ul>
           <li>
@@ -52,7 +52,7 @@ export default function Privacy() {
       </div>
 
       <div className="space-y-2">
-        <h2 className="text-lg font-semibold">3. Sharing of information:</h2>
+        <h2 className="font-semibold text-lg">3. Sharing of information:</h2>
         <p>We may share your information in the following circumstances:</p>
         <ul>
           <li>
@@ -67,7 +67,7 @@ export default function Privacy() {
       </div>
 
       <div className="space-y-2">
-        <h2 className="text-lg font-semibold">4. Data security and retention:</h2>
+        <h2 className="font-semibold text-lg">4. Data security and retention:</h2>
         <p>
           We employ industry-standard security measures to protect your personal information from unauthorized access, disclosure,
           or alteration. However, no method of transmission over the internet or method of electronic storage is 100% secure. We
@@ -77,7 +77,7 @@ export default function Privacy() {
       </div>
 
       <div className="space-y-2">
-        <h2 className="text-lg font-semibold">5. Third-party services:</h2>
+        <h2 className="font-semibold text-lg">5. Third-party services:</h2>
         <p>
           Our platform may include links to third-party websites or services. Please note that this Privacy Policy does not cover
           the practices of these third parties. We encourage you to review the privacy policies of those third parties before
@@ -86,7 +86,7 @@ export default function Privacy() {
       </div>
 
       <div className="space-y-2">
-        <h2 className="text-lg font-semibold">6. Children's information:</h2>
+        <h2 className="font-semibold text-lg">6. Children's information:</h2>
         <p>
           Our platform is not intended for use by individuals under the age of 13. We do not knowingly collect personal
           information from children. If you are a parent or legal guardian and believe that your child has provided personal
@@ -95,7 +95,7 @@ export default function Privacy() {
       </div>
 
       <div className="space-y-2">
-        <h2 className="text-lg font-semibold">7. Your choices:</h2>
+        <h2 className="font-semibold text-lg">7. Your choices:</h2>
         <p>
           You have the right to access, correct, update, or delete your personal information. You can manage your account settings
           within the platform or contact us for assistance.
@@ -103,7 +103,7 @@ export default function Privacy() {
       </div>
 
       <div className="space-y-2">
-        <h2 className="text-lg font-semibold">8. Changes to this Privacy Policy:</h2>
+        <h2 className="font-semibold text-lg">8. Changes to this Privacy Policy:</h2>
         <p>
           We may update this Privacy Policy from time to time to reflect changes in our practices or legal requirements. We will
           notify you of any significant changes by posting a prominent notice on our platform or by sending you an email.
@@ -111,14 +111,14 @@ export default function Privacy() {
       </div>
 
       <div className="space-y-2">
-        <h2 className="text-lg font-semibold">9. Contact us:</h2>
+        <h2 className="font-semibold text-lg">9. Contact us:</h2>
         <p>
           If you have any questions, concerns, or requests regarding this Privacy Policy or our privacy practices, please contact
           us at <a href="mailto:info@noquarter.co">info@noquarter.co</a>.
         </p>
       </div>
       <div className="space-y-2">
-        <h2 className="text-lg font-semibold">Conclusion:</h2>
+        <h2 className="font-semibold text-lg">Conclusion:</h2>
         <p>
           Protecting your privacy is important to us. By using our platform, you agree to the terms of this Privacy Policy and
           consent to the collection, use, and sharing of your personal information as described above. We appreciate your trust in

@@ -4,7 +4,7 @@ import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
 import Animated, { useAnimatedKeyboard, useAnimatedStyle } from "react-native-reanimated"
 
-import { type SpotType } from "@ramble/database/types"
+import type { SpotType } from "@ramble/database/types"
 import { doesSpotTypeRequireAmenities } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
@@ -65,7 +65,7 @@ export default function EditSpotOptionsScreen() {
 
       <Animated.View
         style={[translateStyle]}
-        className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2"
+        className="absolute right-4 bottom-12 left-4 flex items-center justify-center space-y-2"
       >
         <Button
           className="rounded-full"

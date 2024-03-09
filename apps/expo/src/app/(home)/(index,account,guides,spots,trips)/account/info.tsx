@@ -123,7 +123,7 @@ export default function AccountInfoScreen() {
                   <Icon icon={User2} />
                 </View>
               )}
-              <View className="sq-8 absolute -right-1 -top-1 flex items-center justify-center rounded-full bg-gray-50 dark:bg-gray-700">
+              <View className="sq-8 -right-1 -top-1 absolute flex items-center justify-center rounded-full bg-gray-50 dark:bg-gray-700">
                 <Icon icon={Edit2} size={12} />
               </View>
             </TouchableOpacity>

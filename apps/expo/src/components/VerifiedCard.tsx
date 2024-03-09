@@ -2,7 +2,7 @@ import { useRouter } from "expo-router"
 import { BadgeX, User2, Verified } from "lucide-react-native"
 import { TouchableOpacity, View } from "react-native"
 
-import { type Spot, type User } from "@ramble/database/types"
+import type { Spot, User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
@@ -30,14 +30,14 @@ export function VerifiedCard({ spot }: Props) {
             increment()
             router.push(`/${tab}/${spot.verifier?.username}/(profile)`)
           }}
-          className="rounded-xs flex flex-row items-center justify-between border border-gray-200 p-1.5 px-2.5 dark:border-gray-700/70"
+          className="flex flex-row items-center justify-between rounded-xs border border-gray-200 p-1.5 px-2.5 dark:border-gray-700/70"
         >
           <View>
             <View className="flex flex-row items-center space-x-1">
               <Icon icon={Verified} />
               <Text>
                 Verified by{" "}
-                <Text className="font-500 ">
+                <Text className="font-500">
                   {spot.verifier.firstName} {spot.verifier.lastName}
                 </Text>
               </Text>

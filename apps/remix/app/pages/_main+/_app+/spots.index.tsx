@@ -86,7 +86,7 @@ export default function Latest() {
 
   return (
     <PageContainer className="pt-0">
-      <div className="top-nav bg-background sticky z-[1] py-4">
+      <div className="sticky top-nav z-[1] bg-background py-4">
         <div className="flex w-full items-center justify-between gap-2">
           <div className="flex gap-1">
             <Form>
@@ -161,7 +161,7 @@ export default function Latest() {
         <div
           ref={scrollRef}
           key={sort + type}
-          className={join("space-y-10", isMapVisible ? "scrollbar-hide col-span-2 overflow-y-scroll md:col-span-1" : " pb-20")}
+          className={join("space-y-10", isMapVisible ? "scrollbar-hide col-span-2 overflow-y-scroll md:col-span-1" : "pb-20")}
         >
           {spots.length === 0 ? (
             <div className="flex flex-col items-center justify-center gap-4 p-10">
@@ -176,7 +176,7 @@ export default function Latest() {
               )}
             </div>
           ) : (
-            <div className={join("grid grid-cols-1 gap-4", !isMapVisible && "md:grid-cols-2 lg:grid-cols-3")}>
+            <div className={join("grid grid-cols-1 gap-4", !isMapVisible && "lg:grid-cols-3 md:grid-cols-2")}>
               {spots.map((spot) => (
                 <SpotItem key={spot.id} spot={spot} />
               ))}
@@ -213,7 +213,7 @@ function SpotsMap({ spots, bounds, onClick }: SerializeFrom<typeof loader> & { o
     mapRef.current.fitBounds(bounds, { padding: 50 })
   }, [bounds])
   return (
-    <div className="rounded-xs col-span-1 hidden overflow-hidden md:block lg:col-span-2">
+    <div className="col-span-1 hidden overflow-hidden rounded-xs lg:col-span-2 md:block">
       <MapView
         ref={mapRef}
         initialViewState={

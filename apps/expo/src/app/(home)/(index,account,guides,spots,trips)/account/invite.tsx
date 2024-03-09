@@ -51,7 +51,7 @@ export default function AccountInviteScreen() {
                   : () => handleCopy(inviteCode.code)
               }
               activeOpacity={0.8}
-              className="rounded-xs mb-1 flex flex-row items-center justify-between border border-gray-200 px-3 py-2 dark:border-gray-700"
+              className="mb-1 flex flex-row items-center justify-between rounded-xs border border-gray-200 px-3 py-2 dark:border-gray-700"
             >
               <Text style={{ textDecorationLine: inviteCode.user ? "line-through" : undefined, textDecorationStyle: "solid" }}>
                 {inviteCode.code}
@@ -71,7 +71,7 @@ export default function AccountInviteScreen() {
                   </View>
                 )
               ) : (
-                <View className="sq-8 flex items-center justify-center ">
+                <View className="sq-8 flex items-center justify-center">
                   <Icon icon={Copy} size={20} />
                 </View>
               )}

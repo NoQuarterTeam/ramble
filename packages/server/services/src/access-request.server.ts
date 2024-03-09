@@ -1,4 +1,4 @@
-import crypto from "crypto"
+import crypto from "node:crypto"
 
 import { prisma } from "@ramble/database"
 import { Prisma } from "@ramble/database/types"

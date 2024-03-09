@@ -23,7 +23,7 @@ export const headers = useLoaderHeaders
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const searchParams = new URL(request.url).searchParams
-  const skip = parseInt((searchParams.get("skip") as string) || "0")
+  const skip = Number.parseInt((searchParams.get("skip") as string) || "0")
 
   const data = await promiseHash({
     guides: db.user.findMany({
@@ -81,7 +81,7 @@ export default function Guides() {
         </div>
         {user && user.role === "MEMBER" && !user.isPendingGuideApproval && <GuideRequestForm />}
       </div>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 md:grid-cols-2">
         {guides.map((guide) => (
           <GuideItem key={guide.id} guide={guide} />
         ))}
@@ -99,7 +99,7 @@ export default function Guides() {
 
 function GuideItem(props: { guide: SerializeFrom<typeof loader>["guides"][number] }) {
   return (
-    <Link to={`/${props.guide.username}`} className="border-hover rounded-xs flex flex-col gap-6 border p-4 transition-colors">
+    <Link to={`/${props.guide.username}`} className="flex flex-col gap-6 rounded-xs border border-hover p-4 transition-colors">
       <div className="flex items-center space-x-2">
         <Avatar
           className="sq-20 flex-shrink-0"
@@ -108,7 +108,7 @@ function GuideItem(props: { guide: SerializeFrom<typeof loader>["guides"][number
           src={createImageUrl(props.guide.avatar)}
         />
         <div>
-          <p className="text-lg leading-3 md:text-xl lg:text-2xl">
+          <p className="text-lg leading-3 lg:text-2xl md:text-xl">
             {props.guide.firstName} {props.guide.lastName}
           </p>
           <p>{props.guide.username}</p>
@@ -116,15 +116,15 @@ function GuideItem(props: { guide: SerializeFrom<typeof loader>["guides"][number
       </div>
       <div className="grid grid-cols-3 gap-4">
         <div className="text-center text-sm">
-          <p className="text-xl font-semibold leading-tight">{props.guide._count?.verifiedSpots.toLocaleString()}</p>
+          <p className="font-semibold text-xl leading-tight">{props.guide._count?.verifiedSpots.toLocaleString()}</p>
           <p>spots</p>
         </div>
         <div className="text-center text-sm">
-          <p className="text-xl font-semibold leading-tight">{props.guide._count?.followers.toLocaleString()}</p>
+          <p className="font-semibold text-xl leading-tight">{props.guide._count?.followers.toLocaleString()}</p>
           <p>followers</p>
         </div>
         <div className="text-center text-sm">
-          <p className="text-xl font-semibold leading-tight">{props.guide._count?.lists.toLocaleString()}</p>
+          <p className="font-semibold text-xl leading-tight">{props.guide._count?.lists.toLocaleString()}</p>
           <p>lists</p>
         </div>
       </div>

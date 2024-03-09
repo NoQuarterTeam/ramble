@@ -1,5 +1,5 @@
-import crypto from "crypto"
-import { type LoaderFunctionArgs, type SerializeFrom } from "@vercel/remix"
+import crypto from "node:crypto"
+import type { LoaderFunctionArgs, SerializeFrom } from "@vercel/remix"
 import { cacheHeader } from "pretty-cache-header"
 import { promiseHash } from "remix-utils/promise"
 

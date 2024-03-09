@@ -24,7 +24,7 @@ export default function Layout() {
       </div>
       <div className="w-full">
         {sendTemplateUrl && (
-          <div className="bg-background flex justify-end border-b p-4">
+          <div className="flex justify-end border-b bg-background p-4">
             <Form action={sendTemplateUrl?.url}>
               <FormButton>Send test email</FormButton>
             </Form>

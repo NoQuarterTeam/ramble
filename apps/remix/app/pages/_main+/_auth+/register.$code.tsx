@@ -98,7 +98,7 @@ export default function Register() {
 
   return (
     <Form className="space-y-2">
-      <h1 className="text-4xl font-bold">Register</h1>
+      <h1 className="font-bold text-4xl">Register</h1>
       <p>For now we are invite only!</p>
       <FormField
         autoCapitalize="none"

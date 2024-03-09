@@ -28,18 +28,18 @@ export function SpotItem({ spot }: Props) {
               placeholder={spot.blurHash}
               width={450}
               height={300}
-              className="rounded-xs h-full w-full"
+              className="h-full w-full rounded-xs"
               src={createImageUrl(spot.image)}
             />
           ) : (
-            <div className="rounded-xs flex h-full w-full items-center justify-center bg-gray-50 dark:bg-gray-800">
+            <div className="flex h-full w-full items-center justify-center rounded-xs bg-gray-50 dark:bg-gray-800">
               <div className="rounded-full p-4">
                 <SpotIcon type={spot.type} size={40} />
               </div>
             </div>
           )}
           {spot.image && (
-            <div className="sq-10 bg-background absolute left-2 top-2 flex items-center justify-center rounded-full shadow">
+            <div className="sq-10 absolute top-2 left-2 flex items-center justify-center rounded-full bg-background shadow">
               <SpotIcon type={spot.type} size={20} />
             </div>
           )}
@@ -47,33 +47,33 @@ export function SpotItem({ spot }: Props) {
 
         <div className="space-y-0.5">
           <div className="flex items-center justify-between gap-2">
-            <p className="truncate text-lg font-medium leading-tight">{spot.name}</p>
+            <p className="truncate font-medium text-lg leading-tight">{spot.name}</p>
             <div className="flex items-center space-x-1.5">
               {spot.savedCount && spot.savedCount !== "0" && (
                 <div className="flex items-center space-x-1">
                   <Heart className="sq-3 fill-black dark:fill-white" />
-                  <p className="h-[18px] text-sm font-light">{displaySaved(spot.savedCount)}</p>
+                  <p className="h-[18px] font-light text-sm">{displaySaved(spot.savedCount)}</p>
                 </div>
               )}
               {spot.rating && spot.rating !== "0" && (
                 <div className="flex items-center space-x-1">
                   <Star className="sq-3.5 fill-black dark:fill-white" />
-                  <p className="h-[18px] text-sm font-light">{displayRating(spot.rating)}</p>
+                  <p className="h-[18px] font-light text-sm">{displayRating(spot.rating)}</p>
                 </div>
               )}
             </div>
           </div>
-          {spot.address && <p className="line-clamp-1 text-sm font-thin opacity-70">{spot.address}</p>}
-          {spot.distanceFromMe && <p className="text-sm font-thin opacity-70">{Math.round(spot.distanceFromMe)} km away</p>}
+          {spot.address && <p className="line-clamp-1 font-thin text-sm opacity-70">{spot.address}</p>}
+          {spot.distanceFromMe && <p className="font-thin text-sm opacity-70">{Math.round(spot.distanceFromMe)} km away</p>}
         </div>
       </Link>
-      <div className="absolute right-2 top-2">
+      <div className="absolute top-2 right-2">
         {currentUser ? (
           <SaveToList
             spotId={spot.id}
             trigger={
               <IconButton
-                className="bg-background hover:bg-background rounded-full hover:opacity-90 dark:hover:opacity-80"
+                className="rounded-full bg-background hover:bg-background dark:hover:opacity-80 hover:opacity-90"
                 aria-label="save to list"
                 icon={<Heart size={16} />}
               />
@@ -81,7 +81,7 @@ export function SpotItem({ spot }: Props) {
           />
         ) : (
           <IconButton
-            className="bg-background hover:bg-background rounded-full hover:opacity-90 dark:hover:opacity-80"
+            className="rounded-full bg-background hover:bg-background dark:hover:opacity-80 hover:opacity-90"
             aria-label="save to list"
             onClick={() => navigate(`/login?redirectTo=${pathname}`)}
             icon={<Heart size={16} />}

@@ -1,7 +1,7 @@
 import { Bug, Lightbulb, MessageCircle } from "lucide-react"
 import * as React from "react"
 
-import { type FeedbackType } from "@ramble/database/types"
+import type { FeedbackType } from "@ramble/database/types"
 import { useDisclosure } from "@ramble/shared"
 
 import { Form, FormError, FormField, useFetcher } from "~/components/Form"
@@ -16,7 +16,7 @@ import {
   PopoverTrigger,
   Textarea,
 } from "~/components/ui"
-import { type ActionDataErrorResponse } from "~/lib/form.server"
+import type { ActionDataErrorResponse } from "~/lib/form.server"
 import { type CreateSchema, feedbackActions } from "~/services/api/feedback.server"
 
 const actionUrl = "/api/feedback"
@@ -86,11 +86,11 @@ function FeedbackForm({ onClose }: { onClose: () => void }) {
             <label
               key={type.value}
               htmlFor={type.value}
-              className="rounded-xs flex w-full cursor-pointer items-center space-x-3 border border-gray-200 p-2 hover:opacity-70 dark:border-gray-700"
+              className="flex w-full cursor-pointer items-center space-x-3 rounded-xs border border-gray-200 p-2 dark:border-gray-700 hover:opacity-70"
             >
               <input
                 required
-                className="text-primary bg-transparent"
+                className="bg-transparent text-primary"
                 id={type.value}
                 name="type"
                 type="radio"

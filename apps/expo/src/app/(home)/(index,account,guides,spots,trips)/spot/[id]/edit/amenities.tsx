@@ -40,7 +40,7 @@ export default function EditSpotAmenitiesScreen() {
         ))}
       </ScrollView>
 
-      <View className="absolute bottom-12 left-4 right-4 flex items-center justify-center space-y-2">
+      <View className="absolute right-4 bottom-12 left-4 flex items-center justify-center space-y-2">
         <Button
           className="rounded-full"
           onPress={() => {

@@ -23,7 +23,7 @@ export function EditSpotModalView({ canGoBack = true, ...props }: Props) {
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView edges={["top", "bottom"]} className="bg-background dark:bg-background-dark flex-1 px-4 pt-4">
+      <SafeAreaView edges={["top", "bottom"]} className="flex-1 bg-background px-4 pt-4 dark:bg-background-dark">
         <View className="flex flex-row justify-between pb-2">
           <View className={join("flex flex-row items-center space-x-0.5")}>
             {canGoBack && (

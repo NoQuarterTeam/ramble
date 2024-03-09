@@ -6,7 +6,7 @@ import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
 import * as DropdownMenu from "zeego/dropdown-menu"
 
-import { type SpotListSort } from "@ramble/shared"
+import type { SpotListSort } from "@ramble/shared"
 
 import { useFeedbackActivity } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"

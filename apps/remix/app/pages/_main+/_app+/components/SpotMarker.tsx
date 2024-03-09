@@ -1,14 +1,14 @@
 import { cva } from "class-variance-authority"
-import { type ClassValue } from "class-variance-authority/types"
+import type { ClassValue } from "class-variance-authority/types"
 import { Marker } from "react-map-gl"
-import { type MarkerEvent, type MarkerInstance } from "react-map-gl/dist/esm/types"
+import type { MarkerEvent, MarkerInstance } from "react-map-gl/dist/esm/types"
 
 import type { SpotType } from "@ramble/database/types"
 import { spotMarkerClusterColorTypes, spotMarkerColorTypes, spotMarkerTextColorTypes } from "@ramble/shared"
 
 import { PieChart } from "~/components/PieChart"
 import { SpotIcon } from "~/components/SpotIcon"
-import { type SpotCluster, type SpotClusterTypes } from "~/pages/api+/clusters"
+import type { SpotCluster, SpotClusterTypes } from "~/pages/api+/clusters"
 
 interface MarkerProps {
   spot: { type: SpotType }
@@ -55,7 +55,7 @@ function ClusterMarker({ countAbbr, count, types }: { countAbbr: string | number
       <div className="center absolute inset-0">
         <p
           style={{ width: innerSize, height: innerSize, lineHeight: innerSize }}
-          className="center bg-background rounded-full text-sm text-black shadow dark:text-white"
+          className="center rounded-full bg-background text-black text-sm shadow dark:text-white"
         >
           {countAbbr}
         </p>
