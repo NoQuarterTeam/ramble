@@ -60,6 +60,8 @@
     "expo-web-browser",
     "react-native-gesture-handler",
     "react-native-progress",
+    "react-native-ios-context-menu",
+    "react-native-ios-utilities",
     "react-native-reanimated",
     "react-native-safe-area-context",
     "react-native-screens",
