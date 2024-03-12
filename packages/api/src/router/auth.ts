@@ -83,7 +83,7 @@ export const authRouter = createTRPCRouter({
       if (accessRequest) throw new TRPCError({ code: "BAD_REQUEST", message: "Email already requested access" })
       const success = await createAccessRequest(input.email)
       if (!success) throw new TRPCError({ code: "BAD_REQUEST", message: "Error creating request, please try again" })
-      sendSlackMessage(`🚀 New access request from ${input.email}`)
+      sendSlackMessage(`🚀 New in-app access request from ${input.email}`)
       void sendAccessRequestConfirmationEmail(input.email)
       return true
     }),
