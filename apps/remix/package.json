@@ -62,7 +62,7 @@
     "lucide-react": "0.354.0",
     "mapbox-gl": "3.2.0",
     "nprogress": "0.2.0",
-    "posthog-js": "1.113.2",
+    "posthog-js": "1.113.4",
     "pretty-cache-header": "1.0.0",
     "query-string": "9.0.0",
     "react": "18.2.0",
