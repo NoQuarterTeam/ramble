@@ -19,7 +19,7 @@ import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { type ActionDataErrorResponse, formError, validateFormData } from "~/lib/form.server"
 // import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
-import { json } from "~/lib/remix.server"
+import { badRequest, json } from "~/lib/remix.server"
 import type { ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 import { honeypot } from "~/services/honeypot.server"
 
@@ -50,7 +50,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return json({ success: true })
   } catch (error) {
     if (error instanceof SpamError) {
-      return json({ success: true })
+      return badRequest("Error")
     }
     return json({ success: false }, request, { flash: { type: "error", title: "Error creating request" } })
   }
