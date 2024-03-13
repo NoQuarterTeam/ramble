@@ -199,7 +199,7 @@ importers:
         version: 1.8.0(react-native@0.73.4)
       react-native-ios-context-menu:
         specifier: ^2.4.3
-        version: 2.4.4(expo@50.0.8)(react-native-ios-utilities@4.3.2)(react-native@0.73.4)(react@18.2.0)
+        version: 2.5.0(expo@50.0.8)(react-native-ios-utilities@4.3.2)(react-native@0.73.4)(react@18.2.0)
       react-native-ios-utilities:
         specifier: ^4.3.2
         version: 4.3.2(expo@50.0.8)(react-native@0.73.4)(react@18.2.0)
@@ -232,7 +232,7 @@ importers:
         version: 3.4.0
       zeego:
         specifier: ^1.9.1
-        version: 1.9.1(@react-native-menu/menu@0.9.1)(@types/react@18.2.65)(react-dom@18.2.0)(react-native-ios-context-menu@2.4.4)(react-native@0.73.4)(react@18.2.0)
+        version: 1.9.1(@react-native-menu/menu@0.9.1)(@types/react@18.2.65)(react-dom@18.2.0)(react-native-ios-context-menu@2.5.0)(react-native@0.73.4)(react@18.2.0)
       zod:
         specifier: 3.22.4
         version: 3.22.4
@@ -8037,8 +8037,8 @@ packages:
     dev: true
     optional: true
 
-  /bare-fs@2.2.1:
-    resolution: {integrity: sha512-+CjmZANQDFZWy4PGbVdmALIwmt33aJg8qTkVjClU6X4WmZkTPBDxRHiBn7fpqEWEfF3AC2io++erpViAIQbSjg==}
+  /bare-fs@2.2.2:
+    resolution: {integrity: sha512-X9IqgvyB0/VA5OZJyb5ZstoN62AzD7YxVGog13kkfYWYqJYcK0kcqLZ6TrmH5qr4/8//ejVcX4x/a0UvaogXmA==}
     requiresBuild: true
     dependencies:
       bare-events: 2.2.0
@@ -14498,13 +14498,13 @@ packages:
       react-native: 0.73.4(@babel/core@7.24.0)(@babel/preset-env@7.24.0)(react@18.2.0)
     dev: false
 
-  /react-native-ios-context-menu@2.4.4(expo@50.0.8)(react-native-ios-utilities@4.3.2)(react-native@0.73.4)(react@18.2.0):
-    resolution: {integrity: sha512-+W1whM7UqSH1xVPRnuH1hjKldlP9PhrTR2b1ynZmHlkd2u0SHzUouTnIeTN4msnN/XUf7iTi75FPNhr9rdDUHw==}
+  /react-native-ios-context-menu@2.5.0(expo@50.0.8)(react-native-ios-utilities@4.3.2)(react-native@0.73.4)(react@18.2.0):
+    resolution: {integrity: sha512-YadkLCFA/6qSy9Uba7lO+NkYX0ps5DhtlvrfPBKKO8zUcSSwoUKwklFVw83zuS+lRmrGzHHOGF3jArIuWipvxQ==}
     peerDependencies:
       expo: '*'
       react: '*'
       react-native: '*'
-      react-native-ios-utilities: 4.3.x
+      react-native-ios-utilities: 4.4.x
     dependencies:
       '@dominicstop/ts-event-emitter': 1.1.0
       expo: 50.0.8(@babel/core@7.24.0)(@react-native/babel-preset@0.73.21)
@@ -15940,7 +15940,7 @@ packages:
       pump: 3.0.0
       tar-stream: 3.1.6
     optionalDependencies:
-      bare-fs: 2.2.1
+      bare-fs: 2.2.2
       bare-path: 2.1.0
     dev: true
 
@@ -17016,7 +17016,7 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
-  /zeego@1.9.1(@react-native-menu/menu@0.9.1)(@types/react@18.2.65)(react-dom@18.2.0)(react-native-ios-context-menu@2.4.4)(react-native@0.73.4)(react@18.2.0):
+  /zeego@1.9.1(@react-native-menu/menu@0.9.1)(@types/react@18.2.65)(react-dom@18.2.0)(react-native-ios-context-menu@2.5.0)(react-native@0.73.4)(react@18.2.0):
     resolution: {integrity: sha512-KtntfWXS81CRwehvkOIhybhX7sKtrrlg2zOaSP6tzlMwDfvl9SGNYZf2zBkO+CGFlqvrhdAuP7boQEXwFtYEXg==}
     peerDependencies:
       '@react-native-menu/menu': '*'
@@ -17029,7 +17029,7 @@ packages:
       '@react-native-menu/menu': 0.9.1(react-native@0.73.4)(react@18.2.0)
       react: 18.2.0
       react-native: 0.73.4(@babel/core@7.24.0)(@babel/preset-env@7.24.0)(react@18.2.0)
-      react-native-ios-context-menu: 2.4.4(expo@50.0.8)(react-native-ios-utilities@4.3.2)(react-native@0.73.4)(react@18.2.0)
+      react-native-ios-context-menu: 2.5.0(expo@50.0.8)(react-native-ios-utilities@4.3.2)(react-native@0.73.4)(react@18.2.0)
       sf-symbols-typescript: 2.0.0
     transitivePeerDependencies:
       - '@types/react'
