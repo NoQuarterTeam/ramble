@@ -199,10 +199,10 @@ importers:
         version: 1.8.0(react-native@0.73.4)
       react-native-ios-context-menu:
         specifier: ^2.4.3
-        version: 2.5.0(expo@50.0.8)(react-native-ios-utilities@4.3.2)(react-native@0.73.4)(react@18.2.0)
+        version: 2.5.0(expo@50.0.8)(react-native-ios-utilities@4.4.0)(react-native@0.73.4)(react@18.2.0)
       react-native-ios-utilities:
         specifier: ^4.3.2
-        version: 4.3.2(expo@50.0.8)(react-native@0.73.4)(react@18.2.0)
+        version: 4.4.0(expo@50.0.8)(react-native@0.73.4)(react@18.2.0)
       react-native-map-link:
         specifier: 2.11.4
         version: 2.11.4(react-native@0.73.4)(react@18.2.0)
@@ -14498,7 +14498,7 @@ packages:
       react-native: 0.73.4(@babel/core@7.24.0)(@babel/preset-env@7.24.0)(react@18.2.0)
     dev: false
 
-  /react-native-ios-context-menu@2.5.0(expo@50.0.8)(react-native-ios-utilities@4.3.2)(react-native@0.73.4)(react@18.2.0):
+  /react-native-ios-context-menu@2.5.0(expo@50.0.8)(react-native-ios-utilities@4.4.0)(react-native@0.73.4)(react@18.2.0):
     resolution: {integrity: sha512-YadkLCFA/6qSy9Uba7lO+NkYX0ps5DhtlvrfPBKKO8zUcSSwoUKwklFVw83zuS+lRmrGzHHOGF3jArIuWipvxQ==}
     peerDependencies:
       expo: '*'
@@ -14510,11 +14510,11 @@ packages:
       expo: 50.0.8(@babel/core@7.24.0)(@react-native/babel-preset@0.73.21)
       react: 18.2.0
       react-native: 0.73.4(@babel/core@7.24.0)(@babel/preset-env@7.24.0)(react@18.2.0)
-      react-native-ios-utilities: 4.3.2(expo@50.0.8)(react-native@0.73.4)(react@18.2.0)
+      react-native-ios-utilities: 4.4.0(expo@50.0.8)(react-native@0.73.4)(react@18.2.0)
     dev: false
 
-  /react-native-ios-utilities@4.3.2(expo@50.0.8)(react-native@0.73.4)(react@18.2.0):
-    resolution: {integrity: sha512-pcQoix3ILMmHQkxkwBVVCWU0+q7BbVKCqJ5O/fLxe+PQQnJUCyZLFW7im9J4oUGYfxL7xAXal081lSBP9mWA4w==}
+  /react-native-ios-utilities@4.4.0(expo@50.0.8)(react-native@0.73.4)(react@18.2.0):
+    resolution: {integrity: sha512-4dH7U27a+MJvPJtU1+SvwUlFl+shs47VtPct/L/UJzB1JBzZ/N50ZhX68OCy7gZsCQ1b3ytoHHSB1kVz3/X6rA==}
     peerDependencies:
       expo: '*'
       react: '*'
@@ -17029,7 +17029,7 @@ packages:
       '@react-native-menu/menu': 0.9.1(react-native@0.73.4)(react@18.2.0)
       react: 18.2.0
       react-native: 0.73.4(@babel/core@7.24.0)(@babel/preset-env@7.24.0)(react@18.2.0)
-      react-native-ios-context-menu: 2.5.0(expo@50.0.8)(react-native-ios-utilities@4.3.2)(react-native@0.73.4)(react@18.2.0)
+      react-native-ios-context-menu: 2.5.0(expo@50.0.8)(react-native-ios-utilities@4.4.0)(react-native@0.73.4)(react@18.2.0)
       sf-symbols-typescript: 2.0.0
     transitivePeerDependencies:
       - '@types/react'
