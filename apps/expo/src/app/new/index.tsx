@@ -366,7 +366,6 @@ function GooglePlacePreview({ place, setActiveGooglePlace, addressToUse, coords 
             if (!me.isVerified) return toast({ title: "Please verify your account" })
             if (!coords[0] || !coords[1]) return toast({ title: "Please select a location" })
             router.push(
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               `/new/type?${new URLSearchParams({
                 ...params,
