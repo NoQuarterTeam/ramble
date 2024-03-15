@@ -85,10 +85,31 @@ export default function NewSpotConfirmScreen() {
   const [upload] = useS3Upload()
 
   const handleCreateSpot = async () => {
-    // upload images
+    // upload images, but only the ones uploading from local library
     setLoading(true)
-    const images = params.images && (await Promise.all(params.images.split(",").map((i) => upload(i))))
+    const allImages: string[] = []
+    const uploadedImages =
+      params.images &&
+      params.images.split(",")?.length > 0 &&
+      (await Promise.all(
+        params.images
+          .split(",")
+          .filter((image) => image.startsWith("file://"))
+          .map((i) => upload(i)),
+      ))
+    if (typeof uploadedImages === "object") {
+      uploadedImages?.map((i) => {
+        allImages.push(i)
+      })
+    }
+
+    const googleImages = params.images?.split(",").filter((image) => !image.startsWith("file://"))
+    googleImages?.map((i) => {
+      allImages.push(i)
+    })
+
     if (!params.name || !params.type) return toast({ title: "Name is required", type: "error" })
+
     mutate({
       description: params.description,
       name: params.name,
@@ -97,7 +118,7 @@ export default function NewSpotConfirmScreen() {
       address: params.address,
       isPetFriendly: params.isPetFriendly === "true",
       type: params.type,
-      images: images ? images.map((i) => ({ path: i })) : [],
+      images: allImages.length > 0 ? allImages.map((i) => ({ path: i })) : [],
       amenities: parsedAmenities || undefined,
       tripId: params.tripId,
       order: params.order ? Number(params.order) : undefined,

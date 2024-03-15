@@ -1,11 +1,12 @@
-import { Camera, LocationPuck, type MapState, type MapView as MapType, StyleURL } from "@rnmapbox/maps"
+import { Camera, LocationPuck, type MapState, type MapView as MapType, MarkerView, StyleURL } from "@rnmapbox/maps"
+import { Image } from "expo-image"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
-import { AlertTriangle, CircleDot, MapPinned, Navigation } from "lucide-react-native"
+import { AlertTriangle, CircleDot, MapPinned, Navigation, X } from "lucide-react-native"
 import * as React from "react"
-import { TouchableOpacity, View } from "react-native"
+import { TouchableOpacity, View, useColorScheme } from "react-native"
 
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE, merge } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
@@ -18,7 +19,20 @@ import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 
+import type { GooglePlace } from "@ramble/api/src/router/google"
+import { FlashList } from "@shopify/flash-list"
+import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
+import { SpotMarker } from "~/components/SpotMarker"
+import { SpotTypeBadge } from "~/components/SpotTypeBadge"
+import { Empty } from "~/components/ui/SpotImageCarousel"
+import { isTablet, width } from "~/lib/device"
+import { useBackgroundColor } from "~/lib/tailwind"
 import { NewSpotModalView } from "./NewSpotModalView"
+
+type Bounds = {
+  ne: number[]
+  sw: number[]
+}
 
 export default function NewSpotLocationScreen() {
   const params = useLocalSearchParams<{ redirect?: string; initialLat?: string; initialLng?: string }>()
@@ -27,6 +41,8 @@ export default function NewSpotLocationScreen() {
   const initialLng = params.initialLng && Number.parseFloat(params.initialLng)
 
   const [coords, setCoords] = React.useState<number[] | null>(null)
+  const [bounds, setBounds] = React.useState<Bounds>({ ne: [], sw: [] })
+  const [activeGooglePlace, setActiveGooglePlace] = React.useState<GooglePlace>()
 
   const [isLoadingLocation, setIsLoadingLocation] = React.useState(true)
   const [search, setSearch] = React.useState("")
@@ -48,6 +64,11 @@ export default function NewSpotLocationScreen() {
   )
 
   const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, keepPreviousData: true })
+  const { data: googleData } = api.google.getPlacesInBounds.useQuery(
+    { ne: bounds.ne, sw: bounds.sw },
+    { enabled: bounds.ne.length > 0 && bounds.sw.length > 0, keepPreviousData: true },
+  )
+  const googlePlaces = googleData || []
 
   const { data: hasCreatedSpot, isLoading: spotCheckLoading } = api.user.hasCreatedSpot.useQuery(undefined, {
     enabled: !!me,
@@ -81,7 +102,13 @@ export default function NewSpotLocationScreen() {
       console.log("oops -  setting location")
     }
   }
-  const onMapMove = ({ properties }: MapState) => setCoords(properties.center)
+  const onMapMove = ({ properties }: MapState) => {
+    setCoords(properties.center)
+    setBounds({
+      ne: properties.bounds.ne,
+      sw: properties.bounds.sw,
+    })
+  }
 
   if (me && spotCheckLoading) return null
 
@@ -142,7 +169,38 @@ export default function NewSpotLocationScreen() {
                 heading: 0,
               }}
             />
+            {googlePlaces.map((data) => (
+              <MarkerView
+                allowOverlap
+                allowOverlapWithPuck
+                key={data.displayName.text}
+                coordinate={[data.location.longitude, data.location.latitude]}
+              >
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={() => {
+                    setActiveGooglePlace(data)
+                    camera.current?.setCamera({
+                      centerCoordinate: [data.location.longitude, data.location.latitude],
+                      animationMode: "linearTo",
+                      animationDuration: 300,
+                      padding: { paddingBottom: 250, paddingLeft: 0, paddingRight: 0, paddingTop: 0 },
+                    })
+                  }}
+                >
+                  <SpotMarker spot={{ type: "CAMPING" }} />
+                </TouchableOpacity>
+              </MarkerView>
+            ))}
           </MapView>
+          {activeGooglePlace && (
+            <GooglePlacePreview
+              place={activeGooglePlace}
+              setActiveGooglePlace={setActiveGooglePlace}
+              addressToUse={addressToUse}
+              coords={coords}
+            />
+          )}
           <View className="absolute top-2 right-2 left-2">
             <Input
               className="rounded-sm bg-background dark:bg-background-dark"
@@ -222,5 +280,117 @@ export default function NewSpotLocationScreen() {
         </View>
       )}
     </NewSpotModalView>
+  )
+}
+
+interface Props {
+  place: GooglePlace
+  setActiveGooglePlace: React.Dispatch<React.SetStateAction<GooglePlace | undefined>>
+  addressToUse?: string
+  coords: number[] | null
+}
+
+function GooglePlacePreview({ place, setActiveGooglePlace, addressToUse, coords }: Props) {
+  const { me } = useMe()
+  const router = useRouter()
+  const params = useLocalSearchParams<{ redirect?: string; initialLat?: string; initialLng?: string }>()
+
+  const { data, isLoading } = api.google.getPlacePhotos.useQuery(
+    { names: place.photos.map((photo) => photo.name) },
+    { enabled: place.photos.length > 0, keepPreviousData: true },
+  )
+  const images = data || []
+
+  const backgroundColor = useBackgroundColor()
+  const colorScheme = useColorScheme()
+  const ref = React.useRef<FlashList<string>>(null)
+  const [imageIndex, setImageIndex] = React.useState(0)
+  const noOfColumns = isTablet ? 2 : 1
+  const itemWidth = (width - 32) / (noOfColumns || 1) - (noOfColumns && noOfColumns > 1 ? 10 : 0)
+  return (
+    <Animated.View
+      style={{ width: "100%", height: 400, position: "absolute", backgroundColor, bottom: 0, zIndex: 1 }}
+      entering={SlideInDown.duration(200)}
+      exiting={SlideOutDown.duration(200)}
+      className="rounded-t-xs p-4"
+    >
+      <View className="space-y-2">
+        <SpotTypeBadge spot={{ type: "CAMPING" }} />
+        <Text numberOfLines={1} className="text-lg leading-6">
+          {place.displayName.text}
+        </Text>
+        <View className="overflow-hidden rounded-xs">
+          <View style={{ width: width - 32, height: 235 }} className="bg-background dark:bg-background-dark">
+            {isLoading ? (
+              <Spinner style={{ width: width - 64, height: 235 }} />
+            ) : (
+              <>
+                <FlashList
+                  ref={ref}
+                  pagingEnabled
+                  scrollEnabled={place.photos.length > 1}
+                  horizontal
+                  onMomentumScrollEnd={(e) => {
+                    const { x } = e.nativeEvent.contentOffset
+                    const index = Math.round(x / width)
+                    setImageIndex(index)
+                  }}
+                  estimatedItemSize={width - 32}
+                  showsHorizontalScrollIndicator={false}
+                  data={images}
+                  ListEmptyComponent={<Empty width={itemWidth} height={235} />}
+                  renderItem={({ item: image }) => (
+                    <Image
+                      source={{ uri: image }}
+                      style={{ width: itemWidth, height: 235, marginHorizontal: noOfColumns && noOfColumns > 1 ? 5 : 0 }}
+                      className="rounded-xs object-cover"
+                    />
+                  )}
+                />
+                {images.length > 1 && (
+                  <View className="absolute right-2 bottom-2 rounded-xs bg-gray-800/70 p-1">
+                    <Text className="text-white text-xs">{`${imageIndex + 1}/${images.length / (noOfColumns || 1)}`}</Text>
+                  </View>
+                )}
+              </>
+            )}
+          </View>
+        </View>
+        <Button
+          className="rounded-full bg-background"
+          textClassName="text-black"
+          variant="outline"
+          onPress={() => {
+            if (!me) return
+            if (!coords || !addressToUse) return toast({ title: "Please select a valid location" })
+            if (!me.isVerified) return toast({ title: "Please verify your account" })
+            if (!coords[0] || !coords[1]) return toast({ title: "Please select a location" })
+            router.push(
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              `/new/type?${new URLSearchParams({
+                ...params,
+                type: "CAMPING",
+                name: place.displayName.text,
+                images: images.join(","),
+                longitude: coords[0],
+                latitude: coords[1],
+                address: addressToUse,
+              })}`,
+            )
+          }}
+          disabled={!coords || (coords && (!coords[0] || !coords[1])) || !addressToUse}
+        >
+          Next
+        </Button>
+      </View>
+
+      <TouchableOpacity
+        onPress={() => setActiveGooglePlace(undefined)}
+        className="absolute top-2 right-2 flex items-center justify-center p-2"
+      >
+        <X size={24} color={colorScheme === "dark" ? "white" : "black"} />
+      </TouchableOpacity>
+    </Animated.View>
   )
 }

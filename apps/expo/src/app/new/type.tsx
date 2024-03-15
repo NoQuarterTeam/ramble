@@ -15,7 +15,7 @@ export default function NewSpotTypeScreen() {
   const params = useLocalSearchParams()
   const router = useRouter()
 
-  const [type, setType] = React.useState<SpotType>()
+  const [type, setType] = React.useState<SpotType>((params.type as SpotType) || undefined)
   return (
     <NewSpotModalView title="what type?">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>

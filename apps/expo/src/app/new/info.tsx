@@ -26,9 +26,9 @@ export default function NewSpotInfoScreen() {
     }
   })
 
-  const params = useLocalSearchParams<{ type: SpotType }>()
+  const params = useLocalSearchParams<{ type: SpotType; name?: string; images: string }>()
   const router = useRouter()
-  const [name, setName] = React.useState<string>()
+  const [name, setName] = React.useState<string>(params.name || "")
   const [description, setDescription] = React.useState<string>()
   const [isPetFriendly, setIsPetFriendly] = React.useState(false)
 
