@@ -2,7 +2,7 @@ import { Camera, LocationPuck, type MapState, type MapView as MapType, MarkerVie
 import { Image } from "expo-image"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
-import { AlertTriangle, CircleDot, MapPinned, Navigation, Search, X } from "lucide-react-native"
+import { AlertTriangle, ArrowRight, CircleDot, MapPinned, Navigation, Search, X } from "lucide-react-native"
 import * as React from "react"
 import { TouchableOpacity, View, useColorScheme } from "react-native"
 
@@ -16,16 +16,15 @@ import { Input } from "~/components/ui/Input"
 import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
-import { api } from "~/lib/api"
+import { type RouterOutputs, api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 
-import type { GooglePlace } from "@ramble/api/src/router/google"
 import { FlashList } from "@shopify/flash-list"
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
 import { SpotMarker } from "~/components/SpotMarker"
 import { SpotTypeBadge } from "~/components/SpotTypeBadge"
 import { Empty } from "~/components/ui/SpotImageCarousel"
-import { isTablet, width } from "~/lib/device"
+import { width } from "~/lib/device"
 import { useBackgroundColor } from "~/lib/tailwind"
 import { NewSpotModalView } from "./NewSpotModalView"
 
@@ -43,7 +42,7 @@ export default function NewSpotLocationScreen() {
   const [coords, setCoords] = React.useState<number[] | null>(null)
   const [coordsForPlaces, setCoordsForPlaces] = React.useState<number[] | null>(null)
   // const [bounds, setBounds] = React.useState<Bounds>({ ne: [], sw: [] })
-  const [activeGooglePlace, setActiveGooglePlace] = React.useState<GooglePlace>()
+  const [activeGooglePlace, setActiveGooglePlace] = React.useState<RouterOutputs["google"]["getPlacesInArea"][number]>()
 
   const [isLoadingLocation, setIsLoadingLocation] = React.useState(true)
   const [search, setSearch] = React.useState("")
@@ -60,8 +59,8 @@ export default function NewSpotLocationScreen() {
     isLoading: addressLoading,
     isFetching,
   } = api.mapbox.geocodeCoords.useQuery(
-    { latitude: coords?.[1]!, longitude: coords?.[0]! },
-    { enabled: !!coords?.[0] && !!coords?.[1], keepPreviousData: true },
+    { longitude: coords?.[0]!, latitude: coords?.[1]! },
+    { enabled: !!coords, keepPreviousData: true },
   )
 
   const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, keepPreviousData: true })
@@ -208,7 +207,7 @@ export default function NewSpotLocationScreen() {
           {activeGooglePlace && (
             <GooglePlacePreview
               place={activeGooglePlace}
-              setActiveGooglePlace={setActiveGooglePlace}
+              onClose={() => setActiveGooglePlace(undefined)}
               addressToUse={addressToUse}
               coords={coords}
             />
@@ -307,19 +306,19 @@ export default function NewSpotLocationScreen() {
 }
 
 interface Props {
-  place: GooglePlace
-  setActiveGooglePlace: React.Dispatch<React.SetStateAction<GooglePlace | undefined>>
+  place: RouterOutputs["google"]["getPlacesInArea"][number]
+  onClose: () => void
   addressToUse?: string
   coords: number[] | null
 }
 
-function GooglePlacePreview({ place, setActiveGooglePlace, addressToUse, coords }: Props) {
+function GooglePlacePreview({ place, onClose, addressToUse, coords }: Props) {
   const { me } = useMe()
   const router = useRouter()
   const params = useLocalSearchParams<{ redirect?: string; initialLat?: string; initialLng?: string }>()
 
   const { data, isLoading } = api.google.getPlacePhotos.useQuery(
-    { names: place.photos.map((photo) => photo.name) },
+    { names: place.photos },
     { enabled: place.photos.length > 0, keepPreviousData: true },
   )
   const images = data || []
@@ -328,51 +327,52 @@ function GooglePlacePreview({ place, setActiveGooglePlace, addressToUse, coords 
   const colorScheme = useColorScheme()
   const ref = React.useRef<FlashList<string>>(null)
   const [imageIndex, setImageIndex] = React.useState(0)
-  const noOfColumns = isTablet ? 2 : 1
-  const itemWidth = (width - 32) / (noOfColumns || 1) - (noOfColumns && noOfColumns > 1 ? 10 : 0)
+  const itemWidth = width - 80
+
   return (
     <Animated.View
-      style={{ width: "100%", height: 400, position: "absolute", backgroundColor, bottom: 0, zIndex: 1 }}
+      style={{ width: "100%", position: "absolute", bottom: 0, zIndex: 1 }}
       entering={SlideInDown.duration(200)}
       exiting={SlideOutDown.duration(200)}
-      className="rounded-t-xs p-4"
+      className="px-3 pb-3"
     >
-      <View className="space-y-2">
+      <View className="space-y-2 p-3 rounded" style={{ backgroundColor }}>
         <SpotTypeBadge spot={{ type: "CAMPING" }} />
         <Text numberOfLines={1} className="text-lg leading-6">
-          {place.displayName.text}
+          {place.name}
         </Text>
         <View className="overflow-hidden rounded-xs">
-          <View style={{ width: width - 32, height: 235 }} className="bg-background dark:bg-background-dark">
+          <View style={{ width: itemWidth, height: 210 }} className="bg-background dark:bg-background-dark">
             {isLoading ? (
-              <Spinner style={{ width: width - 64, height: 235 }} />
+              <Spinner style={{ width: "100%", height: "100%" }} />
             ) : (
               <>
                 <FlashList
+                  key={place.id}
                   ref={ref}
                   pagingEnabled
                   scrollEnabled={place.photos.length > 1}
                   horizontal
                   onMomentumScrollEnd={(e) => {
                     const { x } = e.nativeEvent.contentOffset
-                    const index = Math.round(x / width)
+                    const index = Math.round(x / itemWidth)
                     setImageIndex(index)
                   }}
-                  estimatedItemSize={width - 32}
+                  estimatedItemSize={itemWidth}
                   showsHorizontalScrollIndicator={false}
                   data={images}
-                  ListEmptyComponent={<Empty width={itemWidth} height={235} />}
+                  ListEmptyComponent={<Empty width={itemWidth} height={210} />}
                   renderItem={({ item: image }) => (
                     <Image
                       source={{ uri: image }}
-                      style={{ width: itemWidth, height: 235, marginHorizontal: noOfColumns && noOfColumns > 1 ? 5 : 0 }}
+                      style={{ width: itemWidth, height: 210 }}
                       className="rounded-xs object-cover"
                     />
                   )}
                 />
                 {images.length > 1 && (
                   <View className="absolute right-2 bottom-2 rounded-xs bg-gray-800/70 p-1">
-                    <Text className="text-white text-xs">{`${imageIndex + 1}/${images.length / (noOfColumns || 1)}`}</Text>
+                    <Text className="text-white text-xs">{`${imageIndex + 1}/${images.length}`}</Text>
                   </View>
                 )}
               </>
@@ -380,9 +380,10 @@ function GooglePlacePreview({ place, setActiveGooglePlace, addressToUse, coords 
           </View>
         </View>
         <Button
-          className="rounded-full bg-background"
-          textClassName="text-black"
+          className="rounded-full"
           variant="outline"
+          size="sm"
+          rightIcon={<Icon icon={ArrowRight} size={12} />}
           onPress={() => {
             if (!me) return
             if (!coords || !addressToUse) return toast({ title: "Please select a valid location" })
@@ -393,7 +394,7 @@ function GooglePlacePreview({ place, setActiveGooglePlace, addressToUse, coords 
               `/new/type?${new URLSearchParams({
                 ...params,
                 type: "CAMPING",
-                name: place.displayName.text,
+                name: place.name,
                 images: images.join(","),
                 longitude: coords[0],
                 latitude: coords[1],
@@ -407,10 +408,7 @@ function GooglePlacePreview({ place, setActiveGooglePlace, addressToUse, coords 
         </Button>
       </View>
 
-      <TouchableOpacity
-        onPress={() => setActiveGooglePlace(undefined)}
-        className="absolute top-2 right-2 flex items-center justify-center p-2"
-      >
+      <TouchableOpacity onPress={onClose} className="absolute top-1 right-4 flex items-center justify-center p-2">
         <X size={24} color={colorScheme === "dark" ? "white" : "black"} />
       </TouchableOpacity>
     </Animated.View>

@@ -1,13 +1,13 @@
 import { z } from "zod"
 
 import { env } from "@ramble/server-env"
-import { createTRPCRouter, publicProcedure } from "../trpc"
+import { createTRPCRouter, protectedProcedure } from "../trpc"
 
-export type GooglePlacePhoto = {
+type GooglePlacePhoto = {
   name: string
 }
 
-export type GooglePlace = {
+type GooglePlace = {
   id: string
   displayName: { text: string; languageCode: string }
   location: { latitude: number; longitude: number }
@@ -19,7 +19,7 @@ type GooglePlacesResponse = {
 }
 
 export const googleRouter = createTRPCRouter({
-  getPlacesInArea: publicProcedure
+  getPlacesInArea: protectedProcedure
     // .input(z.object({ ne: z.array(z.number()), sw: z.array(z.number()) }))
     .input(z.object({ center: z.array(z.number()) }))
     .query(async ({ input }) => {
@@ -58,15 +58,19 @@ export const googleRouter = createTRPCRouter({
         body: JSON.stringify(data),
       })
       const json: GooglePlacesResponse = await res.json()
-      return json.places || []
+      return (json.places || []).map((place) => ({
+        id: place.id,
+        name: place.displayName.text,
+        location: place.location,
+        photos: place.photos.map((photo) => photo.name),
+      }))
     }),
-
-  getPlacePhotos: publicProcedure.input(z.object({ names: z.array(z.string()) })).query(async ({ input }) => {
+  getPlacePhotos: protectedProcedure.input(z.object({ names: z.array(z.string()) })).query(async ({ input }) => {
     const photoUrls: string[] = []
     await Promise.all(
       input.names.map(async (name) => {
         const res = await fetch(
-          `https://places.googleapis.com/v1/${name}/media?maxHeightPx=400&maxWidthPx=400&key=${env.GOOGLE_API_KEY}`,
+          `https://places.googleapis.com/v1/${name}/media?maxHeightPx=400&maxWidthPx=600&key=${env.GOOGLE_API_KEY}`,
         )
         photoUrls.push(res.url)
       }),
