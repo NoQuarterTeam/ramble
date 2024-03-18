@@ -112,8 +112,10 @@ export default function NewSpotLocationScreen() {
   }
 
   const handleFindPlaces = async () => {
-    setCoordsForPlaces(coords)
     // const bounds = await mapRef.current?.getVisibleBounds()
+    const center = await mapRef.current?.getCenter()
+    if (!center) return
+    setCoordsForPlaces(center)
     // if (!bounds) return
     // setBounds({
     //   ne: bounds[0],
