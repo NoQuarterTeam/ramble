@@ -147,7 +147,7 @@ export default function MapFilters() {
           <Button
             variant="link"
             onPress={() => {
-              posthog?.capture("map filters reset")
+              posthog.capture("map filters reset")
               initialState.setFilters(initialFilters)
               router.back()
             }}
@@ -157,7 +157,7 @@ export default function MapFilters() {
           <Button
             className="w-[120px]"
             onPress={() => {
-              posthog?.capture("map filters changed", { ...filters, types: filters.types.join(", ") })
+              posthog.capture("map filters changed", { ...filters, types: filters.types.join(", ") })
               initialState.setFilters(filters)
               router.back()
             }}

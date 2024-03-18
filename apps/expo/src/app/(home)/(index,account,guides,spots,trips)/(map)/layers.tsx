@@ -42,7 +42,7 @@ export default function MapLayers() {
 
   const onSetMapLayer = (layer: MapLayerOptions["layer"]) => {
     setLayers({ ...layers, layer })
-    posthog?.capture("map layer changed", { layer })
+    posthog.capture("map layer changed", { layer })
   }
 
   return (
@@ -157,7 +157,7 @@ export default function MapLayers() {
               trackColor={{ true: colors.primary[600] }}
               value={layers.shouldShowUsers}
               onValueChange={() => {
-                posthog?.capture("map should show users", { shouldShowUsers: !layers.shouldShowUsers })
+                posthog.capture("map should show users", { shouldShowUsers: !layers.shouldShowUsers })
                 setLayers({ ...layers, shouldShowUsers: !layers.shouldShowUsers })
               }}
             />

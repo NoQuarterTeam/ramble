@@ -51,7 +51,7 @@ export default function NewSpotConfirmScreen() {
     error,
   } = api.spot.create.useMutation({
     onSuccess: async (data) => {
-      posthog?.capture("spot created", { type: data.type })
+      posthog.capture("spot created", { type: data.type })
       await utils.user.hasCreatedSpot.refetch()
       if (params.tripId) {
         await utils.trip.detail.refetch({ id: params.tripId })

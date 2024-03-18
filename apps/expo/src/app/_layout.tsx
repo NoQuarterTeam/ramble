@@ -84,7 +84,7 @@ export default function RootLayout() {
       <PostHogProvider
         autocapture={{ captureScreens: false, captureLifecycleEvents: true, captureTouches: true }}
         apiKey="phc_3HuNiIa6zCcsNHFmXst4X0HJjOLq32yRyRPVZQhsD31"
-        options={{ host: "https://eu.posthog.com", enable: IS_PRODUCTION }}
+        options={{ host: "https://eu.posthog.com", disabled: !IS_PRODUCTION }}
       >
         <ActionSheetProvider>
           <PrefetchTabs>
@@ -160,7 +160,7 @@ function IdentifyUser() {
   const posthog = usePostHog()
   React.useEffect(() => {
     if (isLoading || !me) return
-    if (posthog) posthog.identify(me.id, { username: me.username, name: `${me.firstName} ${me.lastName}` })
+    posthog.identify(me.id, { username: me.username, name: `${me.firstName} ${me.lastName}` })
     Sentry.setUser({ id: me.id, username: me.username })
   }, [me, isLoading, posthog])
   return null
@@ -171,7 +171,6 @@ function TrackScreens() {
   const params = useGlobalSearchParams()
   const posthog = usePostHog()
   React.useEffect(() => {
-    if (!posthog) return
     // @ts-ignore
     if (params.params) params.params = undefined
     posthog.screen(pathname, { params })

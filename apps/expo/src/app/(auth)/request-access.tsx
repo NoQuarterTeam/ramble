@@ -18,7 +18,7 @@ export default function RequestAccessScreen() {
   const posthog = usePostHog()
   const { mutate, error, isLoading } = api.auth.requestAccess.useMutation({
     onSuccess: async () => {
-      posthog?.capture("user requested access")
+      posthog.capture("user requested access")
       if (navigation.canGoBack()) {
         navigation.back()
       } else {
