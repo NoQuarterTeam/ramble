@@ -277,7 +277,7 @@ export const spotRouter = createTRPCRouter({
       spotSchema.and(
         z.object({
           id: z.string().uuid(),
-          images: z.array(z.object({ path: z.string() })),
+          images: z.array(z.object({ path: z.string() })).optional(),
           amenities: spotAmenitiesSchema.partial().optional(),
         }),
       ),
@@ -287,16 +287,21 @@ export const spotRouter = createTRPCRouter({
       const spot = await ctx.prisma.spot.findUnique({ where: { id }, include: { images: true, amenities: true } })
       if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
       const amenities = data.amenities
-      const imagesToDelete = spot.images.filter((image) => !data.images.find((i) => i.path === image.path))
-      const imagesToCreate = data.images.filter((image) => !spot.images.find((i) => i.path === image.path))
 
-      const imageData = await Promise.all(
-        imagesToCreate.map(async ({ path }) => {
-          const blurHash = await generateBlurHash(path)
-          return { path, blurHash, creator: { connect: { id: ctx.user.id } } }
-        }),
-      )
-      await deleteManyObjects(imagesToDelete.map((i) => i.path))
+      let imagesToDelete = undefined
+      let imageData = undefined
+      if (data.images) {
+        imagesToDelete = spot.images.filter((image) => !data.images!.find((i) => i.path === image.path))
+        const imagesToCreate = data.images.filter((image) => !spot.images.find((i) => i.path === image.path))
+
+        imageData = await Promise.all(
+          imagesToCreate.map(async ({ path }) => {
+            const blurHash = await generateBlurHash(path)
+            return { path, blurHash, creator: { connect: { id: ctx.user.id } } }
+          }),
+        )
+      }
+      // await deleteManyObjects(imagesToDelete.map((i) => i.path))
 
       return ctx.prisma.spot.update({
         where: { id },
