@@ -87,11 +87,11 @@ export default function NewSpotConfirmScreen() {
   const handleCreateSpot = async () => {
     // upload images, but only the ones uploading from local library
     setLoading(true)
+    if (!params.name || !params.type) return toast({ title: "Name is required", type: "error" })
     const images = params.images?.split(",") || []
     const userImages = images.filter((image) => !image.startsWith("http"))
     const googleImages = images.filter((image) => image.startsWith("http"))
     const uploadedImages = await Promise.all(userImages.map(upload))
-    if (!params.name || !params.type) return toast({ title: "Name is required", type: "error" })
 
     mutate({
       description: params.description,
