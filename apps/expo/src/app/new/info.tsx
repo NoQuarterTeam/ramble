@@ -73,7 +73,6 @@ export default function NewSpotInfoScreen() {
               isPetFriendly: String(isPetFriendly),
             })
             router.push(
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               doesSpotTypeRequireAmenities(params.type) ? `/new/amenities?${searchParams}` : `/new/images?${searchParams}`,
             )

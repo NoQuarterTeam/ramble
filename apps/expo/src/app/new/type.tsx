@@ -12,10 +12,9 @@ import { Text } from "~/components/ui/Text"
 import { NewSpotModalView } from "./NewSpotModalView"
 
 export default function NewSpotTypeScreen() {
-  const params = useLocalSearchParams()
+  const params = useLocalSearchParams<{ type?: SpotType }>()
   const router = useRouter()
-
-  const [type, setType] = React.useState<SpotType>((params.type as SpotType) || undefined)
+  const [type, setType] = React.useState(params.type)
   return (
     <NewSpotModalView title="what type?">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
