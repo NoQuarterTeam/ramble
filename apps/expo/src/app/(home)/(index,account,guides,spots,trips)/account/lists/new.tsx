@@ -15,7 +15,7 @@ export default function NewListScreen() {
   const { mutate, error, isLoading } = api.list.create.useMutation({
     onSuccess: (data) => {
       if (!me) return
-      posthog?.capture("list created", { name: data.name })
+      posthog.capture("list created", { name: data.name })
       utils.list.allByUser.refetch({ username: me.username })
       router.back()
     },

@@ -72,7 +72,7 @@ export default function SpotsScreen() {
                   <DropdownMenu.Item
                     onSelect={() => {
                       increment()
-                      posthog?.capture("spots list sorted", { sort: label })
+                      posthog.capture("spots list sorted", { sort: label })
                       setSort(key as keyof typeof SORT_OPTIONS)
                     }}
                     key={key}

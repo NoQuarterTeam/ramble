@@ -49,7 +49,7 @@ export default function ListsScreen() {
             {Object.entries(SORT_OPTIONS).map(([key, label]) => (
               <DropdownMenu.Item
                 onSelect={() => {
-                  posthog?.capture("lists list sorted", { sort: label })
+                  posthog.capture("lists list sorted", { sort: label })
                   setSort(key as keyof typeof SORT_OPTIONS)
                 }}
                 key={key}

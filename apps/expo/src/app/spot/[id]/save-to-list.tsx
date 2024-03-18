@@ -63,9 +63,9 @@ function SaveableListItem({ list, spotId }: Props) {
   const { mutate } = api.list.saveToList.useMutation({
     onSuccess: () => {
       if (foundSavedItem) {
-        posthog?.capture("spot removed from list", { spotId, listId: list.id })
+        posthog.capture("spot removed from list", { spotId, listId: list.id })
       } else {
-        posthog?.capture("spot saved to list", { spotId, listId: list.id })
+        posthog.capture("spot saved to list", { spotId, listId: list.id })
       }
       void utils.list.allByUserWithSavedSpots.refetch()
       void utils.list.detail.refetch()

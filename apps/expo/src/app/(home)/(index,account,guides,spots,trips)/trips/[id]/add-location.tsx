@@ -75,7 +75,7 @@ export default function NewItemScreen() {
   const posthog = usePostHog()
   const { mutate, isLoading: createLoading } = api.trip.saveStop.useMutation({
     onSuccess: (data) => {
-      posthog?.capture("trip stop created", { place: data.name })
+      posthog.capture("trip stop created", { place: data.name })
       void utils.trip.detail.refetch({ id })
       router.back()
     },

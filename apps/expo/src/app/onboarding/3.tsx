@@ -35,7 +35,7 @@ export default function OnboardingStep3Screen() {
     error,
   } = api.van.upsert.useMutation({
     onSuccess: async () => {
-      posthog?.capture("user completed onboarding")
+      posthog.capture("user completed onboarding")
       await utils.user.me.refetch()
       router.navigate("/")
       router.navigate("/new")

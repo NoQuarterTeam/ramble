@@ -21,7 +21,7 @@ export default function RegisterScreen() {
   const posthog = usePostHog()
   const { mutate, error, isLoading } = api.auth.register.useMutation({
     onSuccess: async (data) => {
-      posthog?.capture("user registered")
+      posthog.capture("user registered")
       await AsyncStorage.setItem(AUTH_TOKEN, data.token)
       queryClient.user.me.setData(undefined, data.user)
       navigation.replace("/onboarding/1")

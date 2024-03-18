@@ -224,7 +224,7 @@ export function AddTripSpotPreview({ spotId, onClose }: { spotId: string; onClos
   const posthog = usePostHog()
   const { mutate } = api.trip.saveSpot.useMutation({
     onSuccess: (data) => {
-      posthog?.capture("trip spot created", { spotId: data.spotId })
+      posthog.capture("trip spot created", { spotId: data.spotId })
       void utils.trip.detail.refetch({ id })
       router.back()
     },
