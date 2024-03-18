@@ -85,9 +85,9 @@ export default function NewSpotConfirmScreen() {
   const [upload] = useS3Upload()
 
   const handleCreateSpot = async () => {
-    // upload images, but only the ones uploading from local library
     setLoading(true)
     if (!params.name || !params.type) return toast({ title: "Name is required", type: "error" })
+    // upload images, but only the ones uploading from local library
     const images = params.images?.split(",") || []
     const userImages = images.filter((image) => !image.startsWith("http"))
     const googleImages = images.filter((image) => image.startsWith("http"))
