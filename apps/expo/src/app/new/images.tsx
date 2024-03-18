@@ -15,9 +15,9 @@ import { toast } from "~/components/ui/Toast"
 import { NewSpotModalView } from "./NewSpotModalView"
 
 export default function NewSpotImagesScreen() {
-  const params = useLocalSearchParams<{ type: SpotType; images?: string }>()
+  const params = useLocalSearchParams<{ type: SpotType }>()
   const router = useRouter()
-  const [images, setImages] = React.useState<string[]>(params.images?.split(",") || [])
+  const [images, setImages] = React.useState<string[]>([])
 
   const onPickImage = async () => {
     try {

@@ -22,7 +22,7 @@ export const googleRouter = createTRPCRouter({
   getPlacesInArea: protectedProcedure
     // .input(z.object({ ne: z.array(z.number()), sw: z.array(z.number()) }))
     .input(z.object({ center: z.array(z.number()) }))
-    .query(async ({ input }) => {
+    .query(async ({ ctx, input }) => {
       const data = {
         textQuery: "nature camping",
         includedType: "campground",
@@ -58,23 +58,27 @@ export const googleRouter = createTRPCRouter({
         body: JSON.stringify(data),
       })
       const json: GooglePlacesResponse = await res.json()
-      return (json.places || [])?.map((place) => ({
+      if (!json.places || json.places.length === 0) return []
+      const existingGoogleSpots = await ctx.prisma.spot.findMany({ where: { googlePlaceId: { not: { equals: null } } } })
+      const existingGooglePlaceIds = existingGoogleSpots.map((spot) => spot.googlePlaceId)
+      const places = json.places.filter((place) => !existingGooglePlaceIds.includes(place.id))
+      return places.map((place) => ({
         id: place.id,
         name: place.displayName.text,
         location: place.location,
-        photos: place.photos?.map((photo) => photo.name) || [],
+        // photos: place.photos?.map((photo) => photo.name) || [],
       }))
     }),
-  getPlacePhotos: protectedProcedure.input(z.object({ names: z.array(z.string()) })).query(async ({ input }) => {
-    const photoUrls: string[] = []
-    await Promise.all(
-      input.names.map(async (name) => {
-        const res = await fetch(
-          `https://places.googleapis.com/v1/${name}/media?maxHeightPx=400&maxWidthPx=600&key=${env.GOOGLE_API_KEY}`,
-        )
-        photoUrls.push(res.url)
-      }),
-    )
-    return photoUrls
-  }),
+  // getPlacePhotos: protectedProcedure.input(z.object({ names: z.array(z.string()) })).query(async ({ input }) => {
+  //   const photoUrls: string[] = []
+  //   await Promise.all(
+  //     input.names.map(async (name) => {
+  //       const res = await fetch(
+  //         `https://places.googleapis.com/v1/${name}/media?maxHeightPx=400&maxWidthPx=600&key=${env.GOOGLE_API_KEY}`,
+  //       )
+  //       photoUrls.push(res.url)
+  //     }),
+  //   )
+  //   return photoUrls
+  // }),
 })

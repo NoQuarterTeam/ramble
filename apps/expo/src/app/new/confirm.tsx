@@ -35,6 +35,7 @@ type Params = {
   amenities?: string
   tripId?: string
   order?: string
+  googlePlaceId?: string
 }
 
 export default function NewSpotConfirmScreen() {
@@ -88,7 +89,7 @@ export default function NewSpotConfirmScreen() {
     setLoading(true)
     if (!params.name || !params.type) return toast({ title: "Name is required", type: "error" })
     // upload images, but only the ones uploading from local library
-    const images = params.images?.split(",") || []
+    const images = params.images ? params.images.split(",") : []
     const userImages = images.filter((image) => !image.startsWith("http"))
     const googleImages = images.filter((image) => image.startsWith("http"))
     const uploadedImages = await Promise.all(userImages.map(upload))
@@ -105,6 +106,7 @@ export default function NewSpotConfirmScreen() {
       amenities: parsedAmenities || undefined,
       tripId: params.tripId,
       order: params.order ? Number(params.order) : undefined,
+      googlePlaceId: params.googlePlaceId,
     })
   }
 

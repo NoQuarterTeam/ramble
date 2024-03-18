@@ -232,6 +232,7 @@ export const spotRouter = createTRPCRouter({
             images: z.array(z.object({ path: z.string() })),
             amenities: spotAmenitiesSchema.partial().nullish(),
             shouldPublishLater: z.boolean().optional(),
+            googlePlaceId: z.string().optional(),
           })
           .and(z.object({ tripId: z.string(), order: z.number().optional() }).partial()),
       ),

@@ -321,17 +321,17 @@ function GooglePlacePreview({ place, onClose, addressToUse, coords }: Props) {
   const router = useRouter()
   const params = useLocalSearchParams<{ redirect?: string; initialLat?: string; initialLng?: string }>()
 
-  const { data, isLoading } = api.google.getPlacePhotos.useQuery(
-    { names: place.photos || [] },
-    { enabled: place.photos && place.photos.length > 0, keepPreviousData: true },
-  )
-  const images = data || []
+  // const { data, isLoading } = api.google.getPlacePhotos.useQuery(
+  //   { names: place.photos || [] },
+  //   { enabled: place.photos && place.photos.length > 0, keepPreviousData: true },
+  // )
+  // const images = data || []
 
   const backgroundColor = useBackgroundColor()
   const colorScheme = useColorScheme()
-  const ref = React.useRef<FlashList<string>>(null)
-  const [imageIndex, setImageIndex] = React.useState(0)
-  const itemWidth = width - 80
+  // const ref = React.useRef<FlashList<string>>(null)
+  // const [imageIndex, setImageIndex] = React.useState(0)
+  // const itemWidth = width - 80
 
   return (
     <Animated.View
@@ -345,7 +345,7 @@ function GooglePlacePreview({ place, onClose, addressToUse, coords }: Props) {
         <Text numberOfLines={1} className="text-lg leading-6">
           {place.name}
         </Text>
-        <View className="overflow-hidden rounded-xs">
+        {/* <View className="overflow-hidden rounded-xs">
           <View style={{ width: itemWidth, height: 210 }} className="bg-background dark:bg-background-dark">
             {isLoading ? (
               <Spinner style={{ width: "100%", height: "100%" }} />
@@ -382,7 +382,7 @@ function GooglePlacePreview({ place, onClose, addressToUse, coords }: Props) {
               </>
             )}
           </View>
-        </View>
+        </View> */}
         <Button
           className="rounded-full"
           variant="outline"
@@ -399,7 +399,7 @@ function GooglePlacePreview({ place, onClose, addressToUse, coords }: Props) {
                 ...params,
                 type: "CAMPING",
                 name: place.name,
-                images: images.join(","),
+                googlePlaceId: place.id,
                 longitude: coords[0],
                 latitude: coords[1],
                 address: addressToUse,
