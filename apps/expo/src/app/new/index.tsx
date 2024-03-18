@@ -2,7 +2,7 @@ import { Camera, LocationPuck, type MapState, type MapView as MapType, MarkerVie
 import { Image } from "expo-image"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
-import { AlertTriangle, CircleDot, MapPinned, Navigation, X } from "lucide-react-native"
+import { AlertTriangle, CircleDot, MapPinned, Navigation, Search, X } from "lucide-react-native"
 import * as React from "react"
 import { TouchableOpacity, View, useColorScheme } from "react-native"
 
@@ -64,10 +64,10 @@ export default function NewSpotLocationScreen() {
   )
 
   const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, keepPreviousData: true })
-  const { data: googleData } = api.google.getPlacesInBounds.useQuery(
-    { ne: bounds.ne, sw: bounds.sw },
-    { enabled: bounds.ne.length > 0 && bounds.sw.length > 0, keepPreviousData: true },
-  )
+  const { data: googleData, isLoading: googleDataLoading } = api.google.getPlacesInBounds.useQuery({
+    ne: bounds.ne,
+    sw: bounds.sw,
+  })
   const googlePlaces = googleData || []
 
   const { data: hasCreatedSpot, isLoading: spotCheckLoading } = api.user.hasCreatedSpot.useQuery(undefined, {
@@ -104,9 +104,14 @@ export default function NewSpotLocationScreen() {
   }
   const onMapMove = ({ properties }: MapState) => {
     setCoords(properties.center)
+  }
+
+  const handleSetBounds = async () => {
+    const bounds = await mapRef.current?.getVisibleBounds()
+    if (!bounds) return
     setBounds({
-      ne: properties.bounds.ne,
-      sw: properties.bounds.sw,
+      ne: bounds[0],
+      sw: bounds[1],
     })
   }
 
@@ -210,6 +215,19 @@ export default function NewSpotLocationScreen() {
               clearButtonMode="while-editing"
               returnKeyType="done"
             />
+            <View className="items-center absolute top-10 left-10 right-10 mt-2 flex">
+              <Button
+                onPress={handleSetBounds}
+                isLoading={googleDataLoading}
+                className="w-[230px] rounded-full bg-background"
+                textClassName="text-black"
+                variant="secondary"
+                leftIcon={<Search size={16} />}
+                size="sm"
+              >
+                Find campgrounds in this area
+              </Button>
+            </View>
             {search && places && (
               <View className="rounded-b-sm bg-background p-2 dark:bg-background-dark">
                 {places.map((place, i) => (
@@ -254,7 +272,6 @@ export default function NewSpotLocationScreen() {
                 if (!me.isVerified) return toast({ title: "Please verify your account" })
                 if (!coords[0] || !coords[1]) return toast({ title: "Please select a location" })
                 router.push(
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   // @ts-ignore
                   `/new/type?${new URLSearchParams({
                     ...params,
