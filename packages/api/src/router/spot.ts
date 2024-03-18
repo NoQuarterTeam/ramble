@@ -296,7 +296,7 @@ export const spotRouter = createTRPCRouter({
           return { path, blurHash, creator: { connect: { id: ctx.user.id } } }
         }),
       )
-      await deleteManyObjects(imagesToDelete.map((i) => i.path))
+      // await deleteManyObjects(imagesToDelete.map((i) => i.path))
 
       return ctx.prisma.spot.update({
         where: { id },
