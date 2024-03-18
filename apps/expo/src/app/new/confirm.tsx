@@ -87,27 +87,10 @@ export default function NewSpotConfirmScreen() {
   const handleCreateSpot = async () => {
     // upload images, but only the ones uploading from local library
     setLoading(true)
-    const allImages: string[] = []
-    const uploadedImages =
-      params.images &&
-      params.images.split(",")?.length > 0 &&
-      (await Promise.all(
-        params.images
-          .split(",")
-          .filter((image) => image.startsWith("file://"))
-          .map((i) => upload(i)),
-      ))
-    if (typeof uploadedImages === "object") {
-      uploadedImages?.map((i) => {
-        allImages.push(i)
-      })
-    }
-
-    const googleImages = params.images?.split(",").filter((image) => !image.startsWith("file://"))
-    googleImages?.map((i) => {
-      allImages.push(i)
-    })
-
+    const images = params.images?.split(",") || []
+    const userImages = images.filter((image) => !image.startsWith("http"))
+    const googleImages = images.filter((image) => image.startsWith("http"))
+    const uploadedImages = await Promise.all(userImages.map(upload))
     if (!params.name || !params.type) return toast({ title: "Name is required", type: "error" })
 
     mutate({
@@ -118,7 +101,7 @@ export default function NewSpotConfirmScreen() {
       address: params.address,
       isPetFriendly: params.isPetFriendly === "true",
       type: params.type,
-      images: allImages.length > 0 ? allImages.map((i) => ({ path: i })) : [],
+      images: [...uploadedImages, ...googleImages].map((i) => ({ path: i })),
       amenities: parsedAmenities || undefined,
       tripId: params.tripId,
       order: params.order ? Number(params.order) : undefined,
