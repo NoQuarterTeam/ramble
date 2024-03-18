@@ -37,7 +37,6 @@
     "react-native-get-random-values",
     "react-native",
     "sharp",
-    "sentry-expo",
     "tailwindcss",
     "uuid"
   ]
