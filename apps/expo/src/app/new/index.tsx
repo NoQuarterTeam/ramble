@@ -2,7 +2,7 @@ import { Camera, LocationPuck, type MapState, type MapView as MapType, MarkerVie
 import { Image } from "expo-image"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
-import { AlertTriangle, CircleDot, MapPinned, Navigation, Search, X } from "lucide-react-native"
+import { AlertTriangle, ArrowRight, CircleDot, MapPinned, Navigation, Search, X } from "lucide-react-native"
 import * as React from "react"
 import { TouchableOpacity, View, useColorScheme } from "react-native"
 
@@ -326,12 +326,12 @@ function GooglePlacePreview({ place, setActiveGooglePlace, addressToUse, coords 
   const itemWidth = (width - 32) / (noOfColumns || 1) - (noOfColumns && noOfColumns > 1 ? 10 : 0)
   return (
     <Animated.View
-      style={{ width: "100%", height: 400, position: "absolute", backgroundColor, bottom: 0, zIndex: 1 }}
+      style={{ width: "100%", position: "absolute", bottom: 0, zIndex: 1 }}
       entering={SlideInDown.duration(200)}
       exiting={SlideOutDown.duration(200)}
-      className="rounded-t-xs p-4"
+      className="px-3 pb-3"
     >
-      <View className="space-y-2">
+      <View className="space-y-2 p-3 rounded" style={{ backgroundColor }}>
         <SpotTypeBadge spot={{ type: "CAMPING" }} />
         <Text numberOfLines={1} className="text-lg leading-6">
           {place.displayName.text}
@@ -374,9 +374,10 @@ function GooglePlacePreview({ place, setActiveGooglePlace, addressToUse, coords 
           </View>
         </View>
         <Button
-          className="rounded-full bg-background"
-          textClassName="text-black"
+          className="rounded-full"
           variant="outline"
+          size="sm"
+          rightIcon={<Icon icon={ArrowRight} size={12} />}
           onPress={() => {
             if (!me) return
             if (!coords || !addressToUse) return toast({ title: "Please select a valid location" })
@@ -403,7 +404,7 @@ function GooglePlacePreview({ place, setActiveGooglePlace, addressToUse, coords 
 
       <TouchableOpacity
         onPress={() => setActiveGooglePlace(undefined)}
-        className="absolute top-2 right-2 flex items-center justify-center p-2"
+        className="absolute top-1 right-4 flex items-center justify-center p-2"
       >
         <X size={24} color={colorScheme === "dark" ? "white" : "black"} />
       </TouchableOpacity>
