@@ -9,7 +9,6 @@ import type { SpotItemType } from "@ramble/shared"
 import { Button } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
-import { fetchAndJoinSpotImages } from "~/lib/models/spot"
 import { notFound } from "~/lib/remix.server"
 import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
@@ -34,6 +33,8 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
         ${spotItemSelectFields}
       FROM
         Spot
+      LEFT JOIN
+        SpotImage ON Spot.coverId = SpotImage.id
       WHERE
         Spot.creatorId = ${user.id} AND ${publicSpotWhereClauseRaw(currentUser.id)} AND Spot.sourceUrl IS NULL
       GROUP BY
@@ -44,8 +45,6 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       OFFSET ${skip};
     `,
   })
-
-  await fetchAndJoinSpotImages(spots)
 
   return json(
     { spots },

@@ -9,7 +9,6 @@ import { clusterSchema, listSchema, userSchema } from "@ramble/server-schemas"
 import { publicSpotWhereClauseRaw, spotItemDistanceFromMeField, spotItemSelectFields } from "@ramble/server-services"
 import type { SpotItemType } from "@ramble/shared"
 
-import { fetchAndJoinSpotImages } from "../lib/spot"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 import type { SpotClusterTypes } from "./spot"
 
@@ -56,6 +55,8 @@ export const listRouter = createTRPCRouter({
           Spot
         LEFT JOIN
           ListSpot ON Spot.id = ListSpot.spotId
+        LEFT JOIN
+          SpotImage ON Spot.coverId = SpotImage.id
         WHERE
           ListSpot.listId = ${input.id} AND ${publicSpotWhereClauseRaw(ctx.user?.id)}
         GROUP BY
@@ -64,9 +65,9 @@ export const listRouter = createTRPCRouter({
           Spot.id
       `,
     ])
-    if (!list || (list.isPrivate && (!currentUser || currentUser !== list.creator.username)))
+    if (!list || (list.isPrivate && (!currentUser || currentUser !== list.creator.username))) {
       throw new TRPCError({ code: "NOT_FOUND" })
-    await fetchAndJoinSpotImages(ctx.prisma, spots)
+    }
 
     if (spots.length === 0) return { list, spots }
 

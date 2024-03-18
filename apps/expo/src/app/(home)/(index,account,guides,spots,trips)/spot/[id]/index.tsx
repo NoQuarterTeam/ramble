@@ -175,7 +175,7 @@ export default function SpotDetailScreen() {
             width={width}
             height={height * 0.37}
             images={spot.images}
-            spotId={spot.id}
+            spot={spot}
           />
         </Animated.View>
         <View className="space-y-3 p-4">
@@ -268,6 +268,7 @@ export default function SpotDetailScreen() {
                   Edit
                 </Button>
               )}
+
               {me?.isAdmin && (
                 <Button
                   size="sm"

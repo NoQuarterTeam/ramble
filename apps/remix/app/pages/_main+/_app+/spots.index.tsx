@@ -22,7 +22,6 @@ import { Button, IconButton, Select } from "~/components/ui"
 import { db } from "~/lib/db.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
-import { fetchAndJoinSpotImages } from "~/lib/models/spot"
 import { bbox, lineString } from "~/lib/vendor/turf.server"
 import type { LoaderFunctionArgs, SerializeFrom } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"
@@ -57,7 +56,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   if (!SORT_OPTIONS.find((o) => o.value === sort)) sort = "latest"
 
   const spots = await db.$queryRaw<Array<SpotItemType>>`${spotListQuery({ user, type, sort, take: TAKE })}`
-  await fetchAndJoinSpotImages(spots)
 
   const coords = spots.length > 1 ? spots.map((spot) => [spot.longitude, spot.latitude]) : null
   let bounds: LngLatLike | undefined = undefined
