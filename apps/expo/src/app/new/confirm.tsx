@@ -35,6 +35,7 @@ type Params = {
   amenities?: string
   tripId?: string
   order?: string
+  coverIndex?: string
 }
 
 export default function NewSpotConfirmScreen() {
@@ -87,13 +88,15 @@ export default function NewSpotConfirmScreen() {
   const handleCreateSpot = async () => {
     // upload images
     setLoading(true)
-    const images = params.images && (await Promise.all(params.images.split(",").map((i) => upload(i))))
+    const images = params.images ? await Promise.all(params.images.split(",").map((i) => upload(i))) : undefined
     if (!params.name || !params.type) return toast({ title: "Name is required", type: "error" })
+    const coverImage = images?.[Number(params.coverIndex)]
     mutate({
       description: params.description,
       name: params.name,
       latitude: Number(params.latitude),
       longitude: Number(params.longitude),
+      coverImage,
       address: params.address,
       isPetFriendly: params.isPetFriendly === "true",
       type: params.type,

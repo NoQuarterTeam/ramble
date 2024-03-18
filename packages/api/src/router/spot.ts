@@ -23,7 +23,6 @@ import {
 import { amenitiesFields, promiseHash, spotPartnerFields } from "@ramble/shared"
 import type { SpotItemType } from "@ramble/shared"
 
-import { fetchAndJoinSpotImages } from "../lib/spot"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export type SpotClusterTypes = { [key in SpotType]?: number }
@@ -108,7 +107,6 @@ export const spotRouter = createTRPCRouter({
         const spots = await ctx.prisma.$queryRaw<Array<SpotItemType>>`
           ${spotListQuery({ user: ctx.user, sort, take: 20, skip: input.skip })}
         `
-        await fetchAndJoinSpotImages(ctx.prisma, spots)
         return spots
       } catch (error) {
         console.log(error)
@@ -122,17 +120,20 @@ export const spotRouter = createTRPCRouter({
         id: true,
         name: true,
         type: true,
+        ownerId: true,
         verifier: true, // deprecated
         verifiedAt: true, // deprecated
         creator: true,
         ...spotPartnerFields,
         _count: { select: { listSpots: true, reviews: true } },
         listSpots: ctx.user ? { where: { list: { creatorId: ctx.user.id } } } : undefined,
+        coverId: true,
         images: true,
       },
     })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
     const rating = await ctx.prisma.review.aggregate({ where: { spotId: input.id }, _avg: { rating: true } })
+    spot.images = spot.images.sort((a, b) => (a.id === spot.coverId ? -1 : b.id === spot.coverId ? 1 : 0))
     return { ...spot, rating }
   }),
   report: publicProcedure.input(z.object({ id: z.string().uuid() })).query(async ({ ctx, input }) => {
@@ -163,6 +164,7 @@ export const spotRouter = createTRPCRouter({
           description: true,
           latitude: true,
           longitude: true,
+          coverId: true,
           createdAt: true,
           verifiedAt: true,
           type: true,
@@ -195,6 +197,7 @@ export const spotRouter = createTRPCRouter({
           return null
         })
     }
+    spot.images = spot.images.sort((a, b) => (a.id === spot.coverId ? -1 : b.id === spot.coverId ? 1 : 0))
     return {
       spot,
       translatedDescription,
@@ -212,6 +215,8 @@ export const spotRouter = createTRPCRouter({
         ${spotItemSelectFields}
       FROM
         Spot
+      LEFT JOIN
+        SpotImage ON Spot.coverId = SpotImage.id
       WHERE
         Spot.creatorId = ${user.id} AND Spot.verifiedAt IS NOT NULL AND ${publicSpotWhereClauseRaw(user.id)} AND Spot.sourceUrl IS NULL
       GROUP BY
@@ -220,7 +225,6 @@ export const spotRouter = createTRPCRouter({
         Spot.createdAt DESC, Spot.id
       LIMIT 20
     `
-    await fetchAndJoinSpotImages(ctx.prisma, spots)
     return spots
   }),
   create: protectedProcedure
@@ -231,13 +235,14 @@ export const spotRouter = createTRPCRouter({
             type: z.nativeEnum(SpotType),
             images: z.array(z.object({ path: z.string() })),
             amenities: spotAmenitiesSchema.partial().nullish(),
+            coverImage: z.string().optional(),
             shouldPublishLater: z.boolean().optional(),
           })
           .and(z.object({ tripId: z.string(), order: z.number().optional() }).partial()),
       ),
     )
     .mutation(async ({ ctx, input }) => {
-      const { shouldPublishLater, tripId, order, amenities, images, ...data } = input
+      const { shouldPublishLater, tripId, order, amenities, coverImage, images, ...data } = input
 
       const imageData = await Promise.all(
         images.map(async ({ path }) => {
@@ -254,6 +259,12 @@ export const spotRouter = createTRPCRouter({
           amenities: amenities ? { create: amenities } : undefined,
         },
       })
+      if (coverImage) {
+        await ctx.prisma.spot.update({
+          where: { id: spot.id },
+          data: { cover: { connect: { spotId_path: { spotId: spot.id, path: coverImage } } } },
+        })
+      }
       if (tripId) {
         let newOrder = order
         if (!order) {
@@ -272,30 +283,45 @@ export const spotRouter = createTRPCRouter({
       void sendSlackMessage(`📍 New spot added by @${ctx.user.username}!`)
       return spot
     }),
+  images: protectedProcedure.input(z.object({ id: z.string().uuid() })).query(async ({ ctx, input }) => {
+    const spot = await ctx.prisma.spot.findUnique({ where: { id: input.id }, select: { id: true, coverId: true, images: true } })
+    if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
+    return spot
+  }),
   update: protectedProcedure
     .input(
-      spotSchema.and(
-        z.object({
-          id: z.string().uuid(),
-          images: z.array(z.object({ path: z.string() })),
-          amenities: spotAmenitiesSchema.partial().optional(),
-        }),
-      ),
+      z
+        .object({ id: z.string().uuid() })
+        .and(spotSchema.partial())
+        .and(
+          z
+            .object({
+              coverId: z.string(),
+              images: z.array(z.object({ path: z.string() })),
+              amenities: spotAmenitiesSchema.partial(),
+            })
+            .partial(),
+        ),
     )
     .mutation(async ({ ctx, input }) => {
       const { id, ...data } = input
       const spot = await ctx.prisma.spot.findUnique({ where: { id }, include: { images: true, amenities: true } })
       if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
       const amenities = data.amenities
-      const imagesToDelete = spot.images.filter((image) => !data.images.find((i) => i.path === image.path))
-      const imagesToCreate = data.images.filter((image) => !spot.images.find((i) => i.path === image.path))
 
-      const imageData = await Promise.all(
-        imagesToCreate.map(async ({ path }) => {
-          const blurHash = await generateBlurHash(path)
-          return { path, blurHash, creator: { connect: { id: ctx.user.id } } }
-        }),
-      )
+      let imagesToDelete = undefined
+      let imageData = undefined
+      if (data.images) {
+        imagesToDelete = spot.images.filter((image) => !data.images!.find((i) => i.path === image.path))
+        const imagesToCreate = data.images.filter((image) => !spot.images.find((i) => i.path === image.path))
+
+        imageData = await Promise.all(
+          imagesToCreate.map(async ({ path }) => {
+            const blurHash = await generateBlurHash(path)
+            return { path, blurHash, creator: { connect: { id: ctx.user.id } } }
+          }),
+        )
+      }
       // await deleteManyObjects(imagesToDelete.map((i) => i.path))
 
       return ctx.prisma.spot.update({

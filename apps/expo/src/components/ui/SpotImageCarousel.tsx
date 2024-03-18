@@ -1,12 +1,12 @@
 import { FlashList } from "@shopify/flash-list"
 import * as ImagePicker from "expo-image-picker"
-import { useRouter } from "expo-router"
-import { Image } from "lucide-react-native"
+import { router, useRouter } from "expo-router"
+import { Heart, Image, ImagePlus } from "lucide-react-native"
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
 
-import type { SpotImage } from "@ramble/database/types"
-import { createImageUrl, merge } from "@ramble/shared"
+import type { Spot, SpotImage } from "@ramble/database/types"
+import { canManageSpot, createImageUrl, merge } from "@ramble/shared"
 
 import { useMe } from "~/lib/hooks/useMe"
 
@@ -20,12 +20,12 @@ type SpotImageType = Pick<SpotImage, "path" | "blurHash">
 
 type AddMoreProps = {
   canAddMore: true
-  spotId: string
+  spot: Pick<Spot, "id" | "ownerId">
 }
 
 type NoAddMoreProps = {
   canAddMore?: false
-  spotId?: undefined
+  spot?: Pick<Spot, "id" | "ownerId">
 }
 
 type Props = {
@@ -44,11 +44,12 @@ export function SpotImageCarousel({
   width,
   height,
   noOfColumns,
-  spotId,
+  spot,
   imageClassName,
   canAddMore,
   onPress,
 }: Props) {
+  const { me } = useMe()
   const [imageIndex, setImageIndex] = React.useState(0)
 
   const ref = React.useRef<FlashList<SpotImageType>>(null)
@@ -79,23 +80,36 @@ export function SpotImageCarousel({
               height={height}
               images={images}
               canAddMore={canAddMore}
-              spotId={spotId}
+              spot={spot}
             />
           ) : undefined
         }
         renderItem={({ item: image }) => (
-          <TouchableOpacity onPress={onPress} activeOpacity={1}>
-            <OptimizedImage
-              width={itemWidth}
-              height={height}
-              placeholder={image.blurHash}
-              source={{ uri: createImageUrl(image.path) }}
-              style={{ width: itemWidth, height, marginHorizontal: noOfColumns && noOfColumns > 1 ? 5 : 0 }}
-              className={merge("rounded-xs object-cover", imageClassName)}
-            />
-          </TouchableOpacity>
+          <View className="relative">
+            <TouchableOpacity onPress={onPress} activeOpacity={1}>
+              <OptimizedImage
+                width={itemWidth}
+                height={height}
+                placeholder={image.blurHash}
+                source={{ uri: createImageUrl(image.path) }}
+                style={{ width: itemWidth, height, marginHorizontal: noOfColumns && noOfColumns > 1 ? 5 : 0 }}
+                className={merge("rounded-xs object-cover", imageClassName)}
+              />
+            </TouchableOpacity>
+          </View>
         )}
       />
+      {spot && canManageSpot(spot, me) && (
+        <View className="absolute bottom-2 left-2">
+          <Button
+            size="xs"
+            onPress={() => router.push(`/spot/${spot.id}/choose-cover`)}
+            leftIcon={<Icon icon={ImagePlus} color={{ dark: "black", light: "white" }} size={12} />}
+          >
+            Choose cover
+          </Button>
+        </View>
+      )}
       {images.length > 1 && (
         <View className="absolute right-2 bottom-2 rounded-xs bg-gray-800/70 p-1">
           <Text className="text-white text-xs">{`${imageIndex + 1}/${
@@ -112,13 +126,13 @@ function Footer({
   height,
   images,
   canAddMore,
-  spotId,
+  spot,
   placeholderPaddingTop = 0,
-}: Pick<Props, "placeholderPaddingTop" | "width" | "height" | "images" | "canAddMore" | "spotId">) {
+}: Pick<Props, "placeholderPaddingTop" | "width" | "height" | "images" | "canAddMore" | "spot">) {
   const { me } = useMe()
   const router = useRouter()
   const onPickImage = async () => {
-    if (!canAddMore) return
+    if (!canAddMore || !spot) return
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -129,7 +143,7 @@ function Footer({
       const searchParams = new URLSearchParams({
         images: result.assets.map((asset) => asset.uri).join(","),
       })
-      router.push(`/spot/${spotId}/save-spot-images?${searchParams}`)
+      router.push(`/spot/${spot.id}/save-spot-images?${searchParams}`)
     } catch (error) {
       let message: string
       if (error instanceof Error) message = error.message

@@ -119,7 +119,7 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
               canAddMore
               onPress={handleGoToSpot}
               key={spot.id} // so images reload
-              spotId={spot.id}
+              spot={spot}
               width={width - 32}
               height={235}
               noOfColumns={isTablet ? 2 : 1}

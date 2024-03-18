@@ -22,8 +22,8 @@ export const tripItemsRouter = createTRPCRouter({
       const isSorted = itemsWithDates.every(
         (item, i) =>
           i === 0 ||
-          dayjs(item.date!).isSame(itemsWithDates[i - 1].date!) ||
-          dayjs(item.date!).isAfter(itemsWithDates[i - 1].date!),
+          dayjs(item.date!).isSame(itemsWithDates[i - 1]!.date!) ||
+          dayjs(item.date!).isAfter(itemsWithDates[i - 1]!.date!),
       )
       // dont need to do anything if already sorted
       if (isSorted) return newItem
