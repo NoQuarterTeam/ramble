@@ -101,7 +101,7 @@ export default function NewSpotConfirmScreen() {
       address: params.address,
       isPetFriendly: params.isPetFriendly === "true",
       type: params.type,
-      images: [...uploadedImages, ...googleImages].map((i) => ({ path: i })),
+      images: [...googleImages, ...uploadedImages].map((i) => ({ path: i })),
       amenities: parsedAmenities || undefined,
       tripId: params.tripId,
       order: params.order ? Number(params.order) : undefined,
