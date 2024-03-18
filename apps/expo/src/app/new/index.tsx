@@ -64,7 +64,7 @@ export default function NewSpotLocationScreen() {
   )
 
   const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, keepPreviousData: true })
-  const { data: googleData } = api.google.getPlacesInArea.useQuery(
+  const { data: googleData, isFetching: isFetchingPlaces } = api.google.getPlacesInArea.useQuery(
     {
       // ne: bounds.ne,
       // sw: bounds.sw,
@@ -217,24 +217,26 @@ export default function NewSpotLocationScreen() {
           <View className="absolute top-2 right-2 left-2">
             <Input
               className="rounded-sm bg-background dark:bg-background-dark"
-              placeholder="Search here"
+              placeholder="Search location"
               onChangeText={setSearch}
               value={search}
               clearButtonMode="while-editing"
               returnKeyType="done"
             />
-            <View className="items-center absolute top-10 left-10 right-10 mt-2 flex">
-              <Button
-                onPress={handleFindPlaces}
-                className="w-[230px] rounded-full bg-background"
-                textClassName="text-black"
-                variant="secondary"
-                leftIcon={<Search size={16} />}
-                size="sm"
-              >
-                Find campgrounds in this area
-              </Button>
-            </View>
+            {(isFetchingPlaces || coords?.[0] !== coordsForPlaces?.[0] || coords?.[1] !== coordsForPlaces?.[1]) && (
+              <View className="items-center absolute top-10 left-10 right-10 mt-2 flex">
+                <Button
+                  isLoading={isFetchingPlaces}
+                  onPress={handleFindPlaces}
+                  className="rounded-full bg-background"
+                  variant="secondary"
+                  leftIcon={<Icon icon={Search} size={12} />}
+                  size="xs"
+                >
+                  Find campgrounds in this area
+                </Button>
+              </View>
+            )}
             {search && places && (
               <View className="rounded-b-sm bg-background p-2 dark:bg-background-dark">
                 {places.map((place, i) => (
