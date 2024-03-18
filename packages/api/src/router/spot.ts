@@ -259,10 +259,10 @@ export const spotRouter = createTRPCRouter({
           amenities: amenities ? { create: amenities } : undefined,
         },
       })
-      if (coverImage) {
+      if (coverImage || imageData?.[0]?.path) {
         await ctx.prisma.spot.update({
           where: { id: spot.id },
-          data: { cover: { connect: { spotId_path: { spotId: spot.id, path: coverImage } } } },
+          data: { cover: { connect: { spotId_path: { spotId: spot.id, path: coverImage || imageData[0]?.path! } } } },
         })
       }
       if (tripId) {
