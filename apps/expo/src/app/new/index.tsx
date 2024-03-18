@@ -64,7 +64,7 @@ export default function NewSpotLocationScreen() {
   )
 
   const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, keepPreviousData: true })
-  const { data: googleData } = api.google.getPlacesInArea.useQuery(
+  const { data: googleData, isFetching: googleLoading } = api.google.getPlacesInArea.useQuery(
     {
       // ne: bounds.ne,
       // sw: bounds.sw,
@@ -224,6 +224,7 @@ export default function NewSpotLocationScreen() {
             <View className="items-center absolute top-10 left-10 right-10 mt-2 flex">
               <Button
                 onPress={handleFindPlaces}
+                isLoading={googleLoading}
                 className="w-[230px] rounded-full bg-background"
                 textClassName="text-black"
                 variant="secondary"
@@ -318,8 +319,8 @@ function GooglePlacePreview({ place, onClose, addressToUse, coords }: Props) {
   const params = useLocalSearchParams<{ redirect?: string; initialLat?: string; initialLng?: string }>()
 
   const { data, isLoading } = api.google.getPlacePhotos.useQuery(
-    { names: place.photos },
-    { enabled: place.photos.length > 0, keepPreviousData: true },
+    { names: place.photos || [] },
+    { enabled: place.photos && place.photos.length > 0, keepPreviousData: true },
   )
   const images = data || []
 
@@ -351,7 +352,7 @@ function GooglePlacePreview({ place, onClose, addressToUse, coords }: Props) {
                   key={place.id}
                   ref={ref}
                   pagingEnabled
-                  scrollEnabled={place.photos.length > 1}
+                  scrollEnabled={place.photos && place.photos.length > 1}
                   horizontal
                   onMomentumScrollEnd={(e) => {
                     const { x } = e.nativeEvent.contentOffset

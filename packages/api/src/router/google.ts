@@ -11,7 +11,7 @@ type GooglePlace = {
   id: string
   displayName: { text: string; languageCode: string }
   location: { latitude: number; longitude: number }
-  photos: GooglePlacePhoto[]
+  photos?: GooglePlacePhoto[]
 }
 
 type GooglePlacesResponse = {
@@ -62,7 +62,7 @@ export const googleRouter = createTRPCRouter({
         id: place.id,
         name: place.displayName.text,
         location: place.location,
-        photos: place.photos.map((photo) => photo.name),
+        photos: place.photos?.map((photo) => photo.name),
       }))
     }),
   getPlacePhotos: protectedProcedure.input(z.object({ names: z.array(z.string()) })).query(async ({ input }) => {
