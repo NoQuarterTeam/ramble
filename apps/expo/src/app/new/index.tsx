@@ -29,10 +29,10 @@ import { isTablet, width } from "~/lib/device"
 import { useBackgroundColor } from "~/lib/tailwind"
 import { NewSpotModalView } from "./NewSpotModalView"
 
-type Bounds = {
-  ne: number[]
-  sw: number[]
-}
+// type Bounds = {
+//   ne: number[]
+//   sw: number[]
+// }
 
 export default function NewSpotLocationScreen() {
   const params = useLocalSearchParams<{ redirect?: string; initialLat?: string; initialLng?: string }>()
@@ -41,7 +41,8 @@ export default function NewSpotLocationScreen() {
   const initialLng = params.initialLng && Number.parseFloat(params.initialLng)
 
   const [coords, setCoords] = React.useState<number[] | null>(null)
-  const [bounds, setBounds] = React.useState<Bounds>({ ne: [], sw: [] })
+  const [coordsForPlaces, setCoordsForPlaces] = React.useState<number[] | null>(null)
+  // const [bounds, setBounds] = React.useState<Bounds>({ ne: [], sw: [] })
   const [activeGooglePlace, setActiveGooglePlace] = React.useState<GooglePlace>()
 
   const [isLoadingLocation, setIsLoadingLocation] = React.useState(true)
@@ -64,10 +65,15 @@ export default function NewSpotLocationScreen() {
   )
 
   const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, keepPreviousData: true })
-  const { data: googleData, isLoading: googleDataLoading } = api.google.getPlacesInBounds.useQuery({
-    ne: bounds.ne,
-    sw: bounds.sw,
-  })
+  const { data: googleData } = api.google.getPlacesInArea.useQuery(
+    {
+      // ne: bounds.ne,
+      // sw: bounds.sw,
+      center: coordsForPlaces || [],
+    },
+    { enabled: !!coordsForPlaces, keepPreviousData: true },
+  )
+
   const googlePlaces = googleData || []
 
   const { data: hasCreatedSpot, isLoading: spotCheckLoading } = api.user.hasCreatedSpot.useQuery(undefined, {
@@ -106,13 +112,14 @@ export default function NewSpotLocationScreen() {
     setCoords(properties.center)
   }
 
-  const handleSetBounds = async () => {
-    const bounds = await mapRef.current?.getVisibleBounds()
-    if (!bounds) return
-    setBounds({
-      ne: bounds[0],
-      sw: bounds[1],
-    })
+  const handleFindPlaces = async () => {
+    setCoordsForPlaces(coords)
+    // const bounds = await mapRef.current?.getVisibleBounds()
+    // if (!bounds) return
+    // setBounds({
+    //   ne: bounds[0],
+    //   sw: bounds[1],
+    // })
   }
 
   if (me && spotCheckLoading) return null
@@ -178,7 +185,7 @@ export default function NewSpotLocationScreen() {
               <MarkerView
                 allowOverlap
                 allowOverlapWithPuck
-                key={data.displayName.text}
+                key={data.id}
                 coordinate={[data.location.longitude, data.location.latitude]}
               >
                 <TouchableOpacity
@@ -217,8 +224,7 @@ export default function NewSpotLocationScreen() {
             />
             <View className="items-center absolute top-10 left-10 right-10 mt-2 flex">
               <Button
-                onPress={handleSetBounds}
-                isLoading={googleDataLoading}
+                onPress={handleFindPlaces}
                 className="w-[230px] rounded-full bg-background"
                 textClassName="text-black"
                 variant="secondary"

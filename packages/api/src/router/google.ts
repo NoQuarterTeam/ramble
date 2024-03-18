@@ -8,6 +8,7 @@ export type GooglePlacePhoto = {
 }
 
 export type GooglePlace = {
+  id: string
   displayName: { text: string; languageCode: string }
   location: { latitude: number; longitude: number }
   photos: GooglePlacePhoto[]
@@ -18,31 +19,41 @@ type GooglePlacesResponse = {
 }
 
 export const googleRouter = createTRPCRouter({
-  getPlacesInBounds: publicProcedure
-    .input(z.object({ ne: z.array(z.number()), sw: z.array(z.number()) }))
+  getPlacesInArea: publicProcedure
+    // .input(z.object({ ne: z.array(z.number()), sw: z.array(z.number()) }))
+    .input(z.object({ center: z.array(z.number()) }))
     .query(async ({ input }) => {
       const data = {
         textQuery: "nature camping",
         includedType: "campground",
-        locationRestriction: {
-          rectangle: {
-            high: {
-              latitude: input.ne[1],
-              longitude: input.ne[0],
+        locationBias: {
+          circle: {
+            center: {
+              latitude: input.center[1],
+              longitude: input.center[0],
             },
-            low: {
-              latitude: input.sw[1],
-              longitude: input.sw[0],
-            },
+            radius: 50000,
           },
         },
+        // locationRestriction: {
+        //   rectangle: {
+        //     high: {
+        //       latitude: input.ne[1],
+        //       longitude: input.ne[0],
+        //     },
+        //     low: {
+        //       latitude: input.sw[1],
+        //       longitude: input.sw[0],
+        //     },
+        //   },
+        // },
       }
       const res = await fetch("https://places.googleapis.com/v1/places:searchText", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "X-Goog-Api-Key": env.GOOGLE_API_KEY,
-          "X-Goog-FieldMask": "places.displayName,places.location,places.photos",
+          "X-Goog-FieldMask": "places.id,places.displayName,places.location,places.photos",
         },
         body: JSON.stringify(data),
       })
