@@ -30,7 +30,7 @@ type Params = {
   longitude?: string
   address?: string
   type?: SpotType
-  isPetFriendly?: string
+  isPetFriendly?: "true" | "false"
   images?: string
   amenities?: string
   tripId?: string
@@ -137,7 +137,7 @@ export default function NewSpotConfirmScreen() {
             <Icon icon={MapPin} size={20} />
             <Text>{params.address}</Text>
           </View>
-          {params.isPetFriendly && (
+          {params.isPetFriendly === "true" && (
             <View className="flex flex-row items-center space-x-2">
               <Icon icon={Dog} size={20} />
               <Text>Pet friendly</Text>

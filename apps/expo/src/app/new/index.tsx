@@ -2,11 +2,11 @@ import { Camera, LocationPuck, type MapState, type MapView as MapType, MarkerVie
 import { Image } from "expo-image"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
-import { AlertTriangle, ArrowRight, CircleDot, MapPinned, Navigation, Search, X } from "lucide-react-native"
+import { ArrowRight, CircleDot, Navigation, TentTree, X } from "lucide-react-native"
 import * as React from "react"
 import { TouchableOpacity, View, useColorScheme } from "react-native"
 
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE, merge } from "@ramble/shared"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
@@ -21,8 +21,8 @@ import { useMe } from "~/lib/hooks/useMe"
 
 import { FlashList } from "@shopify/flash-list"
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
-import { SpotMarker } from "~/components/SpotMarker"
 import { SpotTypeBadge } from "~/components/SpotTypeBadge"
+import { Icons } from "~/components/ui/Icons"
 import { Empty } from "~/components/ui/SpotImageCarousel"
 import { width } from "~/lib/device"
 import { useBackgroundColor } from "~/lib/tailwind"
@@ -54,11 +54,7 @@ export default function NewSpotLocationScreen() {
 
   const router = useRouter()
 
-  const {
-    data: address,
-    isLoading: addressLoading,
-    isFetching,
-  } = api.mapbox.geocodeCoords.useQuery(
+  const { data: address } = api.mapbox.geocodeCoords.useQuery(
     { longitude: coords?.[0]!, latitude: coords?.[1]! },
     { enabled: !!coords, keepPreviousData: true },
   )
@@ -142,7 +138,7 @@ export default function NewSpotLocationScreen() {
           everyone!
         </Text>
       )}
-      <View className="mb-2 flex w-full flex-row items-center space-x-1 overflow-hidden">
+      {/* <View className="mb-2 flex w-full flex-row items-center space-x-1 overflow-hidden">
         {addressLoading || isFetching ? (
           <Spinner size="small" />
         ) : (
@@ -156,7 +152,7 @@ export default function NewSpotLocationScreen() {
         <Text numberOfLines={1} className="flex-1 text-sm opacity-70">
           {addressLoading ? "" : addressToUse || "Unknown address - move map to set"}
         </Text>
-      </View>
+      </View> */}
       {!isLoadingLocation && (
         <View className="relative flex-1">
           <MapView
@@ -201,7 +197,9 @@ export default function NewSpotLocationScreen() {
                     })
                   }}
                 >
-                  <SpotMarker spot={{ type: "CAMPING" }} />
+                  <View className="bg-white border-black border-2 rounded-full p-2">
+                    <TentTree size={20} color="black" />
+                  </View>
                 </TouchableOpacity>
               </MarkerView>
             ))}
@@ -230,7 +228,7 @@ export default function NewSpotLocationScreen() {
                   onPress={handleFindPlaces}
                   className="rounded-full bg-background"
                   variant="secondary"
-                  leftIcon={<Icon icon={Search} size={12} />}
+                  leftIcon={<Icon icon={Icons.GoogleColor} size={14} />}
                   size="xs"
                 >
                   Find campgrounds in this area
@@ -321,17 +319,17 @@ function GooglePlacePreview({ place, onClose, addressToUse, coords }: Props) {
   const router = useRouter()
   const params = useLocalSearchParams<{ redirect?: string; initialLat?: string; initialLng?: string }>()
 
-  // const { data, isLoading } = api.google.getPlacePhotos.useQuery(
-  //   { names: place.photos || [] },
-  //   { enabled: place.photos && place.photos.length > 0, keepPreviousData: true },
-  // )
-  // const images = data || []
+  const { data, isLoading } = api.google.getPlacePhotos.useQuery(
+    { names: place.photos || [] },
+    { enabled: place.photos && place.photos.length > 0, keepPreviousData: true },
+  )
+  const images = data || []
 
   const backgroundColor = useBackgroundColor()
   const colorScheme = useColorScheme()
-  // const ref = React.useRef<FlashList<string>>(null)
-  // const [imageIndex, setImageIndex] = React.useState(0)
-  // const itemWidth = width - 80
+  const ref = React.useRef<FlashList<string>>(null)
+  const [imageIndex, setImageIndex] = React.useState(0)
+  const itemWidth = width - 80
 
   return (
     <Animated.View
@@ -341,11 +339,20 @@ function GooglePlacePreview({ place, onClose, addressToUse, coords }: Props) {
       className="px-3 pb-3"
     >
       <View className="space-y-2 p-3 rounded" style={{ backgroundColor }}>
-        <SpotTypeBadge spot={{ type: "CAMPING" }} />
+        <View className="flex flex-row space-x-2">
+          <SpotTypeBadge spot={{ type: "CAMPING" }} />
+          <View className="flex flex-row justify-between">
+            <View className="flex flex-row items-center space-x-1 rounded-full border border-gray-200 px-3 py-1.5 dark:border-gray-600">
+              <Icon icon={Icons.GoogleColor} size={14} />
+              <Text className="text-xs">Google Places</Text>
+            </View>
+            <View />
+          </View>
+        </View>
         <Text numberOfLines={1} className="text-lg leading-6">
           {place.name}
         </Text>
-        {/* <View className="overflow-hidden rounded-xs">
+        <View className="overflow-hidden rounded-xs">
           <View style={{ width: itemWidth, height: 210 }} className="bg-background dark:bg-background-dark">
             {isLoading ? (
               <Spinner style={{ width: "100%", height: "100%" }} />
@@ -382,7 +389,7 @@ function GooglePlacePreview({ place, onClose, addressToUse, coords }: Props) {
               </>
             )}
           </View>
-        </View> */}
+        </View>
         <Button
           className="rounded-full"
           variant="outline"
@@ -399,6 +406,8 @@ function GooglePlacePreview({ place, onClose, addressToUse, coords }: Props) {
                 ...params,
                 type: "CAMPING",
                 name: place.name,
+                isPetFriendly: place.isPetFriendly.toString(),
+                toilet: place.toilet.toString(),
                 googlePlaceId: place.id,
                 longitude: coords[0],
                 latitude: coords[1],

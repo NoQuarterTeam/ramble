@@ -18,7 +18,8 @@ export default function NewSpotAmenitiesScreen() {
   const [amenities, setAmenities] = React.useState(
     Object.keys(AMENITIES).reduce(
       (acc, key) => {
-        acc[key as keyof typeof AMENITIES] = false
+        const value = (key as keyof typeof AMENITIES) === "toilet" && params.toilet === "true" ? true : false
+        acc[key as keyof typeof AMENITIES] = value
         return acc
       },
       {} as { [key in keyof typeof AMENITIES]: boolean },
@@ -45,7 +46,6 @@ export default function NewSpotAmenitiesScreen() {
           className="rounded-full"
           onPress={() => {
             const searchParams = new URLSearchParams({ ...params, amenities: JSON.stringify(amenities) })
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             router.push(`/new/images?${searchParams}`)
           }}

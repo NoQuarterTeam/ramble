@@ -26,11 +26,17 @@ export default function NewSpotInfoScreen() {
     }
   })
 
-  const params = useLocalSearchParams<{ type: SpotType; name?: string; images: string }>()
+  const { isPetFriendly: allowsDogs, ...params } = useLocalSearchParams<{
+    type: SpotType
+    name?: string
+    images: string
+    isPetFriendly?: "true" | "false"
+  }>()
+
   const router = useRouter()
   const [name, setName] = React.useState<string>(params.name || "")
   const [description, setDescription] = React.useState<string>()
-  const [isPetFriendly, setIsPetFriendly] = React.useState(false)
+  const [isPetFriendly, setIsPetFriendly] = React.useState(allowsDogs === "true")
 
   return (
     <NewSpotModalView title="some info">
