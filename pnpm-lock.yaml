@@ -75,8 +75,8 @@ importers:
         specifier: 5.19.1
         version: 5.19.1(expo@50.0.13)(react-native@0.73.5)(react@18.2.0)
       '@shopify/flash-list':
-        specifier: 1.6.3
-        version: 1.6.3(@babel/runtime@7.24.1)(react-native@0.73.5)(react@18.2.0)
+        specifier: 1.6.4
+        version: 1.6.4(@babel/runtime@7.24.1)(react-native@0.73.5)(react@18.2.0)
       '@tanstack/react-query':
         specifier: 4.36.1
         version: 4.36.1(react-dom@18.2.0)(react-native@0.73.5)(react@18.2.0)
@@ -6650,8 +6650,8 @@ packages:
       '@sentry/types': 7.100.1
     dev: false
 
-  /@shopify/flash-list@1.6.3(@babel/runtime@7.24.1)(react-native@0.73.5)(react@18.2.0):
-    resolution: {integrity: sha512-XM2iu4CeD9SOEUxaGG3UkxfUxGPWG9yacga1yQSgskAjUsRDFTsD3y4Dyon9n8MfDwgrRpEwuijd+7NeQQoWaQ==}
+  /@shopify/flash-list@1.6.4(@babel/runtime@7.24.1)(react-native@0.73.5)(react@18.2.0):
+    resolution: {integrity: sha512-M2momcnY7swsvmpHIFDVbdOaFw4aQocJXA/lFP0Gpz+alQjFylqVKvszxl4atYO2SNbjxlb2L6hEP9WEcAknGQ==}
     peerDependencies:
       '@babel/runtime': '*'
       react: '*'

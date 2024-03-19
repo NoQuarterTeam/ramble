@@ -27,7 +27,7 @@
     "@react-native-menu/menu": "^0.9.1",
     "@rnmapbox/maps": "10.1.19",
     "@sentry/react-native": "5.19.1",
-    "@shopify/flash-list": "1.6.3",
+    "@shopify/flash-list": "1.6.4",
     "@tanstack/react-query": "4.36.1",
     "@trpc/client": "10.45.2",
     "@trpc/react-query": "10.45.2",
