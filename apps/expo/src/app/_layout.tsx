@@ -140,7 +140,7 @@ export default function RootLayout() {
 // }
 
 function PrefetchTabs(props: { children: React.ReactNode }) {
-  const { me, isLoading, error } = useMe()
+  const { me, isLoading } = useMe()
   const utils = api.useUtils()
   React.useEffect(() => {
     if (isLoading || !me) return
@@ -150,7 +150,7 @@ function PrefetchTabs(props: { children: React.ReactNode }) {
     utils.user.guides.prefetch({ skip: 0 })
   }, [me, isLoading, utils.spot.list, utils.user.profile, utils.trip.mine, utils.user.guides])
 
-  if (isLoading && !error) return null
+  if (isLoading) return null
 
   return <>{props.children}</>
 }

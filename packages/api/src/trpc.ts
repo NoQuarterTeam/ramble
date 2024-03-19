@@ -16,6 +16,7 @@ const userSelectFields = {
   firstName: true,
   lastName: true,
   preferredLanguage: true,
+  stripeSubscriptionId: true,
   avatar: true,
   isAdmin: true,
   isPendingGuideApproval: true,

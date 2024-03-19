@@ -3,7 +3,9 @@ import { type AllRoutes, type Href, Link, useRouter } from "expo-router"
 import {
   AlertCircle,
   ChevronRight,
+  Crown,
   Heart,
+  Leaf,
   type LucideIcon,
   MessageCircle,
   Settings,
@@ -113,6 +115,17 @@ export default function AccountScreen() {
             </Link>
 
             <View>
+              <Link push href="/(home)/(account)/account/membership" asChild>
+                <TouchableOpacity className="mb-2 flex flex-row items-center justify-between rounded-xs bg-primary p-4">
+                  <View className="flex flex-row items-center space-x-2">
+                    <Icon icon={Leaf} size={18} color="white" />
+                    <Text className="font-600 text-lg text-white">Membership</Text>
+                  </View>
+                  <View className="rounded-full bg-background px-2 py-1 dark:bg-background-dark">
+                    <Text className="font-500 text-xs">Manage</Text>
+                  </View>
+                </TouchableOpacity>
+              </Link>
               <ProfileLink to="info" icon={User}>
                 Info
               </ProfileLink>

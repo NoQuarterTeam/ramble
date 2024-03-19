@@ -9,6 +9,7 @@ import {
   generateBlurHash,
   sendAccountVerificationEmail,
   sendSlackMessage,
+  stripe,
   updateLoopsContact,
 } from "@ramble/server-services"
 import { userInterestFields } from "@ramble/shared"
@@ -37,6 +38,24 @@ export const userRouter = createTRPCRouter({
     })
     if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
     return { ...user, isFollowedByMe: user.followers && user.followers.length > 0 }
+  }),
+  membership: protectedProcedure.query(async ({ ctx }) => {
+    const user = await ctx.prisma.user.findUnique({
+      where: { id: ctx.user.id },
+      select: { id: true, stripeSubscriptionId: true, stripeCustomerId: true },
+    })
+    if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
+    if (!user.stripeSubscriptionId) return null
+    const subscription = await stripe.subscriptions.retrieve(user.stripeSubscriptionId)
+
+    return {
+      id: subscription.id,
+      discountPercent: subscription.discount?.coupon.percent_off,
+      items: subscription.items.data,
+      isCancelled: subscription.cancel_at_period_end,
+      endDate: subscription.current_period_end || 0,
+      status: subscription.status,
+    }
   }),
   /**
    * @deprecated Using local storage to track activity count
