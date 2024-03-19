@@ -319,12 +319,10 @@ export default function SpotDetailScreen() {
           colors={["#231C18", "transparent"]}
         />
       )}
-
       <Animated.View
         className="absolute top-0 right-0 left-0 border-gray-200 border-b bg-background dark:border-gray-800 dark:bg-background-dark"
         style={[topBarStyle, { height: 50 + insets.top }]}
       />
-
       <View style={{ top: insets.top + 8 }} className="absolute right-0 left-0 flex w-full flex-row justify-between px-4">
         <View className="flex w-full flex-1 flex-row items-center space-x-0.5">
           <TouchableOpacity
