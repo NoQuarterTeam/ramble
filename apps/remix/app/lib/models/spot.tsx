@@ -19,13 +19,9 @@ import {
 } from "lucide-react"
 
 import type { SpotType } from "@ramble/database/types"
-import { type LatestSpotImages, joinSpotImages, spotImagesRawQuery } from "@ramble/server-services"
-import type { SpotItemType } from "@ramble/shared"
 
 import type { RambleIcon } from "~/components/ui"
 import { Icons } from "~/components/ui"
-
-import { db } from "../db.server"
 
 export type SpotTypeIconInfo = {
   Icon: RambleIcon
@@ -58,9 +54,3 @@ export const SPOT_TYPE_ICONS = {
   ART_FILM_PHOTOGRAPHY: Camera,
   VOLUNTEERING: HeartHandshake,
 } satisfies Record<SpotType, RambleIcon>
-
-export const fetchAndJoinSpotImages = async (spots: SpotItemType[]) => {
-  // get spot images and join to original spot payload
-  const images = spots.length > 0 && (await db.$queryRaw<LatestSpotImages>(spotImagesRawQuery(spots.map((s) => s.id))))
-  images && joinSpotImages(spots, images)
-}

@@ -1,5 +1,5 @@
-import { Prisma, type SpotImage, SpotType, type User } from "@ramble/database/types"
-import type { SpotItemType, SpotListSort } from "@ramble/shared"
+import { Prisma, SpotType, type User } from "@ramble/database/types"
+import type { SpotListSort } from "@ramble/shared"
 
 export const publicSpotWhereClause = (userId?: string | null) => {
   return {
@@ -31,31 +31,10 @@ export const verifiedSpotWhereClauseRaw = (userId?: string | null, showUnverifie
     : Prisma.sql`Spot.verifiedAt IS NOT NULL`
 }
 
-export type LatestSpotImages = Array<Pick<SpotImage, "path" | "blurHash" | "spotId">>
-export const spotImagesRawQuery = (ids: string[]) => {
-  return Prisma.sql`
-    SELECT
-      Spot.id as spotId,
-      (SELECT path FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY SpotImage.createdAt DESC LIMIT 1) AS path,
-      (SELECT blurHash FROM SpotImage WHERE SpotImage.spotId = Spot.id ORDER BY SpotImage.createdAt DESC LIMIT 1) AS blurHash
-    FROM
-      Spot
-    WHERE
-      Spot.id IN (${Prisma.join(ids)})
-  `
-}
-
-export const joinSpotImages = (spots: Array<SpotItemType>, images: Array<Pick<SpotImage, "spotId" | "path" | "blurHash">>) => {
-  for (const spot of spots) {
-    const image = images.find((i) => i.spotId === spot.id)
-    spot.blurHash = image?.blurHash || null
-    spot.image = image?.path || null
-  }
-}
-
 export const spotItemSelectFields = Prisma.sql`
-  Spot.id, Spot.name, Spot.type, Spot.address, null as image, null as blurHash,
+  Spot.id, Spot.name, Spot.type, Spot.address,
   Spot.latitude, Spot.longitude,
+  SpotImage.path AS image, SpotImage.blurHash AS blurHash,
   (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
   CAST((SELECT COUNT(ListSpot.spotId) FROM ListSpot WHERE ListSpot.spotId = Spot.id) AS CHAR(32)) AS savedCount
 `
@@ -111,6 +90,8 @@ export const spotListQuery = ({
       ${spotItemSelectFields}
     FROM
       Spot
+    LEFT JOIN
+      SpotImage ON Spot.coverId = SpotImage.id
     WHERE
       ${whereClause}
       ${whereWithDistanceSort}

@@ -175,6 +175,8 @@ model Spot {
   reviews       Review[]
   spotRevisions SpotRevision[]
   tripItems     TripItem[]
+  cover         SpotImage?     @relation(fields: [coverId], references: [id], name: "SpotCover", onDelete: NoAction, onUpdate: NoAction)
+  coverId       String?        @unique
 
   deletedAt DateTime?
   createdAt DateTime  @default(now())
@@ -200,6 +202,7 @@ model Spot {
 
   @@index([publishedAt])
   @@index([ownerId])
+  @@index([coverId])
   @@index([verifierId])
   @@index([creatorId])
   @@index([longitude])
@@ -237,6 +240,7 @@ model SpotImage {
   spot      Spot   @relation(fields: [spotId], references: [id], onDelete: Cascade)
   creatorId String
   creator   User   @relation(fields: [creatorId], references: [id])
+  coverSpot Spot?  @relation(name: "SpotCover")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
