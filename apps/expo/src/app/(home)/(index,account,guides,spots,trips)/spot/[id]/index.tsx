@@ -321,7 +321,7 @@ export default function SpotDetailScreen() {
       )}
 
       <Animated.View
-        className="absolute top-0 right-0 left-0 border border-gray-200 border-b bg-background dark:border-gray-800 dark:bg-background-dark"
+        className="absolute top-0 right-0 left-0 border-gray-200 border-b bg-background dark:border-gray-800 dark:bg-background-dark"
         style={[topBarStyle, { height: 50 + insets.top }]}
       />
 
