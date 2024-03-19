@@ -9,11 +9,15 @@ const config = {
   WEB_URL: `http://${localhost || "localhost"}:3000`,
   ENV: "development",
   UPDATE_ID: Updates.updateId?.split("-")[0] || "dev",
+  STRIPE_PUBLIC_KEY:
+    "pk_test_51Ow2sHJ4RkWCle62YTaQGEawPAPY0BP7xtnHJTmiRrmlrKWWfPZv4ggmj0rYkz8qFSQuVAwfxoj6vROFhA4JISkf00JRb2QUTQ",
 }
 
 if (Updates.channel === "production") {
   config.WEB_URL = "https://ramble.guide"
   config.ENV = "production"
+  config.STRIPE_PUBLIC_KEY =
+    "pk_live_51Ow2sHJ4RkWCle62G72BGhXVHUTUzu3WQX5IFWEfJ8UwWUL9P6KqOEZLynfHy40f8N0NTFs6JnAXOehUAtc2P5Vd00JL43qa3F"
 } else if (Updates.channel === "preview") {
   config.WEB_URL = "https://dev.ramble.guide"
   config.ENV = "preview"
