@@ -60,8 +60,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/config/tailwind
       '@react-native-async-storage/async-storage':
-        specifier: 1.23.1
-        version: 1.23.1(react-native@0.73.5)
+        specifier: 1.21.0
+        version: 1.21.0(react-native@0.73.5)
       '@react-native-community/datetimepicker':
         specifier: ^7.6.1
         version: 7.6.1
@@ -114,8 +114,8 @@ importers:
         specifier: 15.4.5
         version: 15.4.5(expo@50.0.13)
       expo-dev-client:
-        specifier: 3.3.10
-        version: 3.3.10(expo@50.0.13)
+        specifier: 3.3.11
+        version: 3.3.11(expo@50.0.13)
       expo-device:
         specifier: 5.9.3
         version: 5.9.3(expo@50.0.13)
@@ -172,7 +172,7 @@ importers:
         version: 2.0.11(react@18.2.0)(tailwindcss@3.3.2)
       posthog-react-native:
         specifier: 3.0.0
-        version: 3.0.0(@react-native-async-storage/async-storage@1.23.1)(@react-navigation/native@6.1.10)(expo-application@5.8.3)(expo-device@5.9.3)(expo-file-system@16.0.8)
+        version: 3.0.0(@react-native-async-storage/async-storage@1.21.0)(@react-navigation/native@6.1.10)(expo-application@5.8.3)(expo-device@5.9.3)(expo-file-system@16.0.8)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -5438,8 +5438,8 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@react-native-async-storage/async-storage@1.23.1(react-native@0.73.5):
-    resolution: {integrity: sha512-Qd2kQ3yi6Y3+AcUlrHxSLlnBvpdCEMVGFlVBneVOjaFaPU61g1huc38g339ysXspwY1QZA2aNhrk/KlHGO+ewA==}
+  /@react-native-async-storage/async-storage@1.21.0(react-native@0.73.5):
+    resolution: {integrity: sha512-JL0w36KuFHFCvnbOXRekqVAUplmOyT/OuCQkogo6X98MtpSaJOKEAeZnYO8JB0U/RIEixZaGI5px73YbRm/oag==}
     peerDependencies:
       react-native: ^0.0.0-0 || >=0.60 <1.0
     dependencies:
@@ -9749,14 +9749,14 @@ packages:
       - supports-color
     dev: false
 
-  /expo-dev-client@3.3.10(expo@50.0.13):
-    resolution: {integrity: sha512-UhZOJ+O90dRo7S/rmFmVIWwa/HxOqoQ4ySCqvWh87O3pFQuluPfVI9PdKicF4djYrNHZZmE8UXqBDN41hiYtAA==}
+  /expo-dev-client@3.3.11(expo@50.0.13):
+    resolution: {integrity: sha512-9nhhbfbskfmjp/tlRS5KvDpCoW0BREJBxpu2GyjKu7nDB33W8fJLL0wXgNhP+QEb93r37o3uezKmUm2kibOvTw==}
     peerDependencies:
       expo: '*'
     dependencies:
       expo: 50.0.13(@babel/core@7.24.3)(@react-native/babel-preset@0.73.21)
-      expo-dev-launcher: 3.6.8(expo@50.0.13)
-      expo-dev-menu: 4.5.7(expo@50.0.13)
+      expo-dev-launcher: 3.6.9(expo@50.0.13)
+      expo-dev-menu: 4.5.8(expo@50.0.13)
       expo-dev-menu-interface: 1.7.2(expo@50.0.13)
       expo-manifests: 0.13.2(expo@50.0.13)
       expo-updates-interface: 0.15.3(expo@50.0.13)
@@ -9764,14 +9764,14 @@ packages:
       - supports-color
     dev: false
 
-  /expo-dev-launcher@3.6.8(expo@50.0.13):
-    resolution: {integrity: sha512-lFyxRXpUk0z7V7BDd1tFg/M9eFPzo+WRq7kQBA4F8bFPX6drYuTjPqs/bEF/6A5S38oA1wcA34bY9TNgkiKf5w==}
+  /expo-dev-launcher@3.6.9(expo@50.0.13):
+    resolution: {integrity: sha512-MBDMAqjCMVYt1Zv47u2dJTp4d8gCZMfM4GWAFhfQy3G6XzkUlFtewaQefAqy93FcYOv6BYdC9yZOLOb06tqTfA==}
     peerDependencies:
       expo: '*'
     dependencies:
       ajv: 8.11.0
       expo: 50.0.13(@babel/core@7.24.3)(@react-native/babel-preset@0.73.21)
-      expo-dev-menu: 4.5.7(expo@50.0.13)
+      expo-dev-menu: 4.5.8(expo@50.0.13)
       expo-manifests: 0.13.2(expo@50.0.13)
       resolve-from: 5.0.0
       semver: 7.6.0
@@ -9787,8 +9787,8 @@ packages:
       expo: 50.0.13(@babel/core@7.24.3)(@react-native/babel-preset@0.73.21)
     dev: false
 
-  /expo-dev-menu@4.5.7(expo@50.0.13):
-    resolution: {integrity: sha512-yIAsiKIhxvAmzd6x25HTvANeengGg2Uax6JnKy7+YfxgynKtqmWUlGCyc9EECoQI4+ItxbfjU4fSTxTiQYGFug==}
+  /expo-dev-menu@4.5.8(expo@50.0.13):
+    resolution: {integrity: sha512-GXfI0CmYlqjOqyFjtplXO9PSoJQoy89+50lbUSNZykDsGyvzCPzl4txdQcdHHSglKYr7lWV7aeMVeehuSct60w==}
     peerDependencies:
       expo: '*'
     dependencies:
@@ -14036,7 +14036,7 @@ packages:
       preact: 10.19.3
     dev: false
 
-  /posthog-react-native@3.0.0(@react-native-async-storage/async-storage@1.23.1)(@react-navigation/native@6.1.10)(expo-application@5.8.3)(expo-device@5.9.3)(expo-file-system@16.0.8):
+  /posthog-react-native@3.0.0(@react-native-async-storage/async-storage@1.21.0)(@react-navigation/native@6.1.10)(expo-application@5.8.3)(expo-device@5.9.3)(expo-file-system@16.0.8):
     resolution: {integrity: sha512-WkI5+GwXiDHAp6/v5gh/w8Pj0fEFs9U34B3TsvjGMkeciW1Za8zllKeDVmnG6c3wGpEJRwESDvAC9hGm30qXzQ==}
     peerDependencies:
       '@react-native-async-storage/async-storage': '>=1.0.0'
@@ -14065,7 +14065,7 @@ packages:
       react-native-navigation:
         optional: true
     dependencies:
-      '@react-native-async-storage/async-storage': 1.23.1(react-native@0.73.5)
+      '@react-native-async-storage/async-storage': 1.21.0(react-native@0.73.5)
       '@react-navigation/native': 6.1.10(react-native@0.73.5)(react@18.2.0)
       expo-application: 5.8.3(expo@50.0.13)
       expo-device: 5.9.3(expo@50.0.13)
