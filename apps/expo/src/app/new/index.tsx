@@ -34,7 +34,7 @@ export default function NewSpotLocationScreen() {
 
   const [coords, setCoords] = React.useState<number[] | null>(null)
   const [coordsForPlaces, setCoordsForPlaces] = React.useState<number[] | null>(null)
-  // const [bounds, setBounds] = React.useState<Bounds>({ ne: [], sw: [] })
+
   const [activeGooglePlace, setActiveGooglePlace] = React.useState<RouterOutputs["google"]["getPlacesInArea"][number]>()
 
   const [isLoadingLocation, setIsLoadingLocation] = React.useState(true)
@@ -54,11 +54,7 @@ export default function NewSpotLocationScreen() {
 
   const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, keepPreviousData: true })
   const { data: googleData, isFetching: isFetchingPlaces } = api.google.getPlacesInArea.useQuery(
-    {
-      // ne: bounds.ne,
-      // sw: bounds.sw,
-      center: coordsForPlaces || [],
-    },
+    { center: coordsForPlaces || [] },
     { enabled: !!coordsForPlaces, keepPreviousData: true },
   )
 
@@ -101,15 +97,9 @@ export default function NewSpotLocationScreen() {
   }
 
   const handleFindPlaces = async () => {
-    // const bounds = await mapRef.current?.getVisibleBounds()
     const center = await mapRef.current?.getCenter()
     if (!center) return
     setCoordsForPlaces(center)
-    // if (!bounds) return
-    // setBounds({
-    //   ne: bounds[0],
-    //   sw: bounds[1],
-    // })
   }
 
   if (me && spotCheckLoading) return null
@@ -265,9 +255,9 @@ export default function NewSpotLocationScreen() {
                   })}`,
                 )
               }}
-              disabled={!coords || (coords && (!coords[0] || !coords[1])) || !addressToUse}
+              disabled={!coords || !addressToUse}
             >
-              Next
+              Confirm location
             </Button>
 
             <TouchableOpacity
