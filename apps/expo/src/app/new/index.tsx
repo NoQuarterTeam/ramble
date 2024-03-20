@@ -1,37 +1,30 @@
 import { Camera, LocationPuck, type MapState, type MapView as MapType, MarkerView, StyleURL } from "@rnmapbox/maps"
+import { FlashList } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
-import { ArrowRight, CircleDot, Navigation, Star, TentTree, X } from "lucide-react-native"
+import { ArrowRight, CircleDot, Navigation, Star, X } from "lucide-react-native"
 import * as React from "react"
 import { TouchableOpacity, View, useColorScheme } from "react-native"
 
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, displayRating } from "@ramble/shared"
-
+import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { MapView } from "~/components/Map"
+import { SpotTypeBadge } from "~/components/SpotTypeBadge"
 import { Button } from "~/components/ui/Button"
+import { Icons } from "~/components/ui/Icons"
 import { Input } from "~/components/ui/Input"
 import { Spinner } from "~/components/ui/Spinner"
+import { Empty } from "~/components/ui/SpotImageCarousel"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { type RouterOutputs, api } from "~/lib/api"
-import { useMe } from "~/lib/hooks/useMe"
-
-import { FlashList } from "@shopify/flash-list"
-import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
-import { SpotTypeBadge } from "~/components/SpotTypeBadge"
-import { Icons } from "~/components/ui/Icons"
-import { Empty } from "~/components/ui/SpotImageCarousel"
 import { width } from "~/lib/device"
+import { useMe } from "~/lib/hooks/useMe"
 import { useBackgroundColor } from "~/lib/tailwind"
 import { NewSpotModalView } from "./NewSpotModalView"
-
-// type Bounds = {
-//   ne: number[]
-//   sw: number[]
-// }
 
 export default function NewSpotLocationScreen() {
   const params = useLocalSearchParams<{ redirect?: string; initialLat?: string; initialLng?: string }>()

@@ -54,9 +54,6 @@ export const googleRouter = createTRPCRouter({
       where: { googlePlaceId: { in: googleIds } },
     })
     const newPlaces = json.places.filter((place) => !existingGoogleSpots.find((s) => s.googlePlaceId === place.id))
-
-    console.log(newPlaces[0])
-
     return newPlaces.map((place) => ({
       id: place.id,
       name: place.displayName.text,
