@@ -11,19 +11,21 @@ import type { RambleIcon } from "~/components/ui/Icons"
 import { Text } from "~/components/ui/Text"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 
+import type { AmenityObject } from "~/components/AmenitySelector"
 import { NewSpotModalView } from "./NewSpotModalView"
 
 export default function NewSpotAmenitiesScreen() {
-  const params = useLocalSearchParams()
+  const params = useLocalSearchParams<{ amenities?: string }>()
   const [amenities, setAmenities] = React.useState(
-    Object.keys(AMENITIES).reduce(
-      (acc, key) => {
-        const value = (key as keyof typeof AMENITIES) === "toilet" && params.toilet === "true" ? true : false
-        acc[key as keyof typeof AMENITIES] = value
-        return acc
-      },
-      {} as { [key in keyof typeof AMENITIES]: boolean },
-    ),
+    params.amenities
+      ? Object.entries(JSON.parse(params.amenities)).reduce((acc, [key, value]) => {
+          acc[key as keyof typeof AMENITIES] = value as boolean
+          return acc
+        }, {} as AmenityObject)
+      : Object.keys(AMENITIES).reduce((acc, key) => {
+          acc[key as keyof typeof AMENITIES] = false
+          return acc
+        }, {} as AmenityObject),
   )
 
   const router = useRouter()

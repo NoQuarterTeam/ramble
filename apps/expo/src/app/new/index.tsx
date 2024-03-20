@@ -377,7 +377,7 @@ function GooglePlacePreview({ place, onClose, addressToUse, coords }: Props) {
                 type: "CAMPING",
                 name: place.name,
                 isPetFriendly: place.isPetFriendly.toString(),
-                toilet: place.toilet.toString(),
+                amenities: JSON.stringify({ toilet: place.toilet }),
                 googlePlaceId: place.id,
                 longitude: coords[0],
                 latitude: coords[1],

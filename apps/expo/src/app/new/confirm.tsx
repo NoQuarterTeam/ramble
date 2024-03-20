@@ -78,7 +78,7 @@ export default function NewSpotConfirmScreen() {
     },
   })
 
-  const parsedAmenities = React.useMemo(() => {
+  const parsedAmenities: Record<string, boolean> = React.useMemo(() => {
     if (!params.amenities) return null
     return JSON.parse(params.amenities)
   }, [params.amenities])
