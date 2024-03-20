@@ -64,16 +64,20 @@ export const googleRouter = createTRPCRouter({
       photos: place.photos?.map((photo) => photo.name) || [],
     }))
   }),
-  getPlacePhotos: protectedProcedure.input(z.object({ names: z.array(z.string()) })).query(async ({ input }) => {
-    const photoUrls: string[] = []
-    await Promise.all(
-      input.names.map(async (name) => {
-        const res = await fetch(
-          `https://places.googleapis.com/v1/${name}/media?maxHeightPx=400&maxWidthPx=600&key=${env.GOOGLE_API_KEY}`,
-        )
-        photoUrls.push(res.url)
-      }),
+  getPlacePhotos: protectedProcedure.input(z.object({ names: z.array(z.string()) })).query(({ input }) => {
+    return Promise.all(
+      input.names
+        .map(async (name) => {
+          try {
+            const res = await fetch(
+              `https://places.googleapis.com/v1/${name}/media?maxHeightPx=400&maxWidthPx=600&key=${env.GOOGLE_API_KEY}`,
+            )
+            return res.url
+          } catch {
+            return null
+          }
+        })
+        .filter(Boolean),
     )
-    return photoUrls
   }),
 })
