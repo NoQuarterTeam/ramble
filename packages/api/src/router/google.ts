@@ -77,7 +77,7 @@ export const googleRouter = createTRPCRouter({
             return null
           }
         })
-        .filter(Boolean),
+        .filter(Boolean) as Promise<string>[],
     )
   }),
 })
