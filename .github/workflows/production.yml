@@ -6,7 +6,7 @@ on:
       - "packages/shared/**"
       - "packages/database/**"
       - "packages/config/**"
-    branches: [ main, "release/**" ]
+    branches: [ "release/**" ]
 permissions:
   actions: write
   contents: read
