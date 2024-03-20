@@ -166,7 +166,7 @@ importers:
         version: 12.8.2(expo@50.0.13)
       lucide-react-native:
         specifier: 0.303.0
-        version: 0.303.0(prop-types@15.8.1)(react-native-svg@14.1.0)(react-native@0.73.5)(react@18.2.0)
+        version: 0.303.0(prop-types@15.8.1)(react-native-svg@15.1.0)(react-native@0.73.5)(react@18.2.0)
       nativewind:
         specifier: 2.0.11
         version: 2.0.11(react@18.2.0)(tailwindcss@3.3.2)
@@ -216,8 +216,8 @@ importers:
         specifier: 3.29.0
         version: 3.29.0(react-native@0.73.5)(react@18.2.0)
       react-native-svg:
-        specifier: 14.1.0
-        version: 14.1.0(react-native@0.73.5)(react@18.2.0)
+        specifier: 15.1.0
+        version: 15.1.0(react-native@0.73.5)(react@18.2.0)
       react-native-toast-message:
         specifier: 2.2.0
         version: 2.2.0(react-native@0.73.5)(react@18.2.0)
@@ -11884,7 +11884,7 @@ packages:
     resolution: {integrity: sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==}
     engines: {node: '>=12'}
 
-  /lucide-react-native@0.303.0(prop-types@15.8.1)(react-native-svg@14.1.0)(react-native@0.73.5)(react@18.2.0):
+  /lucide-react-native@0.303.0(prop-types@15.8.1)(react-native-svg@15.1.0)(react-native@0.73.5)(react@18.2.0):
     resolution: {integrity: sha512-DtvQ4mR+3pXMiQyfB/txO3mKla2IEhLjoZuMILXLyUjijFKAbg4n9UNTrqoLr3ncq7z4qd9mkIrWNOiUkW+NYQ==}
     peerDependencies:
       prop-types: ^15.7.2
@@ -11895,7 +11895,7 @@ packages:
       prop-types: 15.8.1
       react: 18.2.0
       react-native: 0.73.5(@babel/core@7.24.3)(@babel/preset-env@7.24.3)(react@18.2.0)
-      react-native-svg: 14.1.0(react-native@0.73.5)(react@18.2.0)
+      react-native-svg: 15.1.0(react-native@0.73.5)(react@18.2.0)
     dev: false
 
   /lucide-react@0.358.0(react@18.2.0):
@@ -14667,8 +14667,8 @@ packages:
       warn-once: 0.1.1
     dev: false
 
-  /react-native-svg@14.1.0(react-native@0.73.5)(react@18.2.0):
-    resolution: {integrity: sha512-HeseElmEk+AXGwFZl3h56s0LtYD9HyGdrpg8yd9QM26X+d7kjETrRQ9vCjtxuT5dCZEIQ5uggU1dQhzasnsCWA==}
+  /react-native-svg@15.1.0(react-native@0.73.5)(react@18.2.0):
+    resolution: {integrity: sha512-p0Sx0EpQNk1nu6UcMEiB8K9P04n3J7s+pNYUwf1d/Yz+v4hk961VjuVqjyndgiEbHZyWiKWLZRVNuvLpwjPY2A==}
     peerDependencies:
       react: '*'
       react-native: '*'
