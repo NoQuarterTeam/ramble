@@ -202,7 +202,6 @@ model Spot {
 
   @@index([publishedAt])
   @@index([ownerId])
-  @@index([coverId])
   @@index([verifierId])
   @@index([creatorId])
   @@index([longitude])
