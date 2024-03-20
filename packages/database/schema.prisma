@@ -368,18 +368,26 @@ model Trip {
   @@index([creatorId])
 }
 
-model TripMedia {
-  id        String  @id @default(uuid())
-  path      String
-  latitude  Float?
-  longitude Float?
-  note      String? @db.Text
+enum MediaType {
+  IMAGE
+  VIDEO
+}
 
-  assetId   String   @unique()
-  timestamp DateTime
-  creator   User     @relation(fields: [creatorId], references: [id])
+model TripMedia {
+  id            String     @id @default(uuid())
+  path          String
+  latitude      Float?
+  longitude     Float?
+  note          String?    @db.Text
+  mediaType     MediaType?
+  duration      Int?
+  thumbnailPath String?
+  assetId       String     @unique()
+  timestamp     DateTime
+
+  creator   User   @relation(fields: [creatorId], references: [id])
   creatorId String
-  trip      Trip     @relation(fields: [tripId], references: [id])
+  trip      Trip   @relation(fields: [tripId], references: [id])
   tripId    String
 
   createdAt DateTime  @default(now())

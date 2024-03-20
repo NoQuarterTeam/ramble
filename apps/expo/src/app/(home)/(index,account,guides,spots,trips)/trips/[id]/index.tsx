@@ -1,4 +1,5 @@
 import { useActionSheet } from "@expo/react-native-action-sheet"
+import type { MediaType } from "@ramble/database/types"
 import {
   Camera,
   LineLayer,
@@ -14,7 +15,7 @@ import * as Haptics from "expo-haptics"
 import { Image } from "expo-image"
 import * as Location from "expo-location"
 import * as MediaLibrary from "expo-media-library"
-import { MediaType, getAssetsAsync } from "expo-media-library"
+import { MediaType as ExpoMediaType, getAssetsAsync } from "expo-media-library"
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { ChevronLeft, Edit2, Flag, Home, Image as ImageIcon, MapPin, Plus, Users } from "lucide-react-native"
@@ -371,7 +372,12 @@ function TripImageSync({
               .toDate()
           : dayjs(startDate).startOf("day").toDate()
         const createdBefore = dayjs(endDate).endOf("day").toDate()
-        const pages = await getAssetsAsync({ createdAfter, createdBefore, mediaType: MediaType.photo, sortBy: "creationTime" })
+        const pages = await getAssetsAsync({
+          createdAfter,
+          createdBefore,
+          mediaType: ExpoMediaType.photo,
+          sortBy: "creationTime",
+        })
         if (pages.totalCount === 0) return
         let images: MediaLibrary.Asset[] = pages.assets
         let endCursor = pages.endCursor
@@ -380,7 +386,7 @@ function TripImageSync({
             after: endCursor,
             createdAfter,
             createdBefore,
-            mediaType: MediaType.photo,
+            mediaType: ExpoMediaType.photo,
             sortBy: "creationTime",
           })
           images = images.concat(newPages.assets)
@@ -392,12 +398,15 @@ function TripImageSync({
           try {
             const info = await MediaLibrary.getAssetInfoAsync(image)
             if (!info.location) continue
+            const mediaType: MediaType = info.mediaType === ExpoMediaType.photo ? "IMAGE" : "VIDEO"
             const imageWithData = {
               assetId: image.id,
               url: info.localUri || image.uri,
               latitude: info.location.latitude,
               longitude: info.location.longitude,
               timestamp: dayjs(image.creationTime).toDate(),
+              mediaType,
+              duration: info.duration || null,
             }
             imagesToSync.push(imageWithData)
           } catch (error) {
@@ -405,11 +414,12 @@ function TripImageSync({
           }
         }
         if (imagesToSync.length === 0) return
+        // TODO check if video and generate thumbnail
         for (const image of imagesToSync) {
           try {
             const key = await upload(image.url)
-            const payload = { path: key, ...image }
-            uploadMedia({ tripId: id, image: payload })
+            const payload = { path: key, thumbnailPath: null, ...image }
+            uploadMedia({ tripId: id, data: payload })
           } catch (error) {
             console.log(error)
           }

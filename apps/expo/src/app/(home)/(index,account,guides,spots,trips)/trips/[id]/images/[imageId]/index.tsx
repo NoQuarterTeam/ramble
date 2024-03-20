@@ -1,12 +1,14 @@
 import dayjs from "dayjs"
+import { ResizeMode, Video } from "expo-av"
+import type { AVPlaybackStatus } from "expo-av"
 import * as FileSystem from "expo-file-system"
 import { Image } from "expo-image"
 import * as MediaLibrary from "expo-media-library"
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
-import { Download, MapPin, Trash } from "lucide-react-native"
+import { Download, MapPin, Play, Trash } from "lucide-react-native"
 import * as React from "react"
 import { Alert, type LayoutChangeEvent, TouchableOpacity, View } from "react-native"
-import { Gesture, GestureDetector } from "react-native-gesture-handler"
+import { Gesture, GestureDetector, TouchableWithoutFeedback } from "react-native-gesture-handler"
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 
 import { createImageUrl } from "@ramble/shared"
@@ -14,6 +16,7 @@ import { createImageUrl } from "@ramble/shared"
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
 import { ScreenView } from "~/components/ui/ScreenView"
+import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
@@ -30,6 +33,9 @@ const DOUBLE_ZOOM = 3
 export default function TripImage() {
   const { me } = useMe()
   const { id, imageId, bounds } = useLocalSearchParams<{ id: string; imageId?: string; bounds?: string }>()
+
+  const video = React.useRef(null) // TODO types
+  const [status, setStatus] = React.useState<AVPlaybackStatus | undefined>()
 
   const parsedBounds = bounds?.split(",").map(Number)
 
@@ -239,11 +245,46 @@ export default function TripImage() {
     >
       {isLoading || !data ? null : (
         <View className="relative flex-1 pb-2">
-          <GestureDetector gesture={gestures}>
-            <Animated.View style={[styles, { flex: 1 }]} onLayout={onImageLayout}>
-              <Image source={{ uri: createImageUrl(data.path) }} className="h-full flex-1" contentFit="contain" />
-            </Animated.View>
-          </GestureDetector>
+          {data.mediaType === "VIDEO" ? (
+            <View>
+              <TouchableWithoutFeedback
+                onPress={() =>
+                  // @ts-ignore
+                  status?.isPlaying ? video.current?.pauseAsync() : video.current?.playAsync()
+                }
+              >
+                <Video
+                  ref={video}
+                  style={{ height: "100%", width: "100%" }}
+                  source={{ uri: createImageUrl(data.path) }}
+                  resizeMode={ResizeMode.COVER}
+                  isLooping
+                  onPlaybackStatusUpdate={(status) => setStatus(status)}
+                />
+                <View className="absolute w-full h-full flex items-center justify-center">
+                  {
+                    // @ts-ignore
+                    status?.isBuffering ? (
+                      <Spinner />
+                    ) : (
+                      status?.isLoaded &&
+                      !status?.isPlaying && (
+                        <View className="rounded-full h-[60px] w-[60px] flex items-center justify-center bg-gray-600">
+                          <Icon icon={Play} size={24} fill="white" stroke="white" className="ml-1" />
+                        </View>
+                      )
+                    )
+                  }
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
+          ) : (
+            <GestureDetector gesture={gestures}>
+              <Animated.View style={[styles, { flex: 1 }]} onLayout={onImageLayout}>
+                <Image source={{ uri: createImageUrl(data.path) }} className="h-full flex-1" contentFit="contain" />
+              </Animated.View>
+            </GestureDetector>
+          )}
           {(!data.latitude || !data.longitude) && (
             <Animated.View
               style={buttonStyles}

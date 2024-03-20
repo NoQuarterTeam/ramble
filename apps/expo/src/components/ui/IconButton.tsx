@@ -61,7 +61,7 @@ export const IconButton = React.forwardRef(function _Button(
         }}
         {...iconProps}
         icon={icon}
-        className={join(isLoading && "opacity-0")}
+        className={merge(iconProps?.className, isLoading && "opacity-0")}
       />
 
       {isLoading && (

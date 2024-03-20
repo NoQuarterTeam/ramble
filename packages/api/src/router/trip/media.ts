@@ -81,7 +81,7 @@ export const tripMediaRouter = createTRPCRouter({
         take: 30,
         skip: input.skip,
         orderBy: { timestamp: "desc" },
-        select: { id: true, path: true, latitude: true, longitude: true },
+        select: { id: true, path: true, latitude: true, longitude: true, mediaType: true, duration: true, thumbnailPath: true },
         where: { deletedAt: null, tripId: input.tripId, trip: { users: { some: { id: ctx.user.id } } } },
       }),
     })
@@ -103,8 +103,8 @@ export const tripMediaRouter = createTRPCRouter({
       })
       return true
     }),
-  upload: protectedProcedure.input(z.object({ tripId: z.string(), image: tripMediaSchema })).mutation(async ({ ctx, input }) => {
-    await ctx.prisma.tripMedia.create({ data: { tripId: input.tripId, ...input.image, creatorId: ctx.user.id } })
+  upload: protectedProcedure.input(z.object({ tripId: z.string(), data: tripMediaSchema })).mutation(async ({ ctx, input }) => {
+    await ctx.prisma.tripMedia.create({ data: { tripId: input.tripId, ...input.data, creatorId: ctx.user.id } })
     const latestTimestamp = await ctx.prisma.tripMedia.findFirst({
       where: { tripId: input.tripId, deletedAt: null },
       orderBy: { timestamp: "desc" },
