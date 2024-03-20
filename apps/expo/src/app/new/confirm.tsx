@@ -30,11 +30,12 @@ type Params = {
   longitude?: string
   address?: string
   type?: SpotType
-  isPetFriendly?: string
+  isPetFriendly?: "true" | "false"
   images?: string
   amenities?: string
   tripId?: string
   order?: string
+  googlePlaceId?: string
   coverIndex?: string
 }
 
@@ -77,7 +78,7 @@ export default function NewSpotConfirmScreen() {
     },
   })
 
-  const parsedAmenities = React.useMemo(() => {
+  const parsedAmenities: Record<string, boolean> = React.useMemo(() => {
     if (!params.amenities) return null
     return JSON.parse(params.amenities)
   }, [params.amenities])
@@ -86,7 +87,6 @@ export default function NewSpotConfirmScreen() {
   const [upload] = useS3Upload()
 
   const handleCreateSpot = async () => {
-    // upload images
     setLoading(true)
     const images = params.images ? await Promise.all(params.images.split(",").map((i) => upload(i))) : undefined
     if (!params.name || !params.type) return toast({ title: "Name is required", type: "error" })
@@ -100,10 +100,11 @@ export default function NewSpotConfirmScreen() {
       address: params.address,
       isPetFriendly: params.isPetFriendly === "true",
       type: params.type,
-      images: images ? images.map((i) => ({ path: i })) : [],
+      images: images?.map((i) => ({ path: i })) || [],
       amenities: parsedAmenities || undefined,
       tripId: params.tripId,
       order: params.order ? Number(params.order) : undefined,
+      googlePlaceId: params.googlePlaceId,
     })
   }
 
@@ -136,7 +137,7 @@ export default function NewSpotConfirmScreen() {
             <Icon icon={MapPin} size={20} />
             <Text>{params.address}</Text>
           </View>
-          {params.isPetFriendly && (
+          {params.isPetFriendly === "true" && (
             <View className="flex flex-row items-center space-x-2">
               <Icon icon={Dog} size={20} />
               <Text>Pet friendly</Text>

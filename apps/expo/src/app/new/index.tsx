@@ -1,23 +1,29 @@
-import { Camera, LocationPuck, type MapState, type MapView as MapType, StyleURL } from "@rnmapbox/maps"
+import { Camera, LocationPuck, type MapState, type MapView as MapType, MarkerView, StyleURL } from "@rnmapbox/maps"
+import { FlashList } from "@shopify/flash-list"
+import { Image } from "expo-image"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
-import { AlertTriangle, CircleDot, MapPinned, Navigation } from "lucide-react-native"
+import { ArrowRight, CircleDot, Navigation, Star, X } from "lucide-react-native"
 import * as React from "react"
-import { TouchableOpacity, View } from "react-native"
+import { TouchableOpacity, View, useColorScheme } from "react-native"
 
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
-
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE, displayRating } from "@ramble/shared"
+import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { MapView } from "~/components/Map"
+import { SpotTypeBadge } from "~/components/SpotTypeBadge"
 import { Button } from "~/components/ui/Button"
+import { Icons } from "~/components/ui/Icons"
 import { Input } from "~/components/ui/Input"
 import { Spinner } from "~/components/ui/Spinner"
+import { Empty } from "~/components/ui/SpotImageCarousel"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
-import { api } from "~/lib/api"
+import { type RouterOutputs, api } from "~/lib/api"
+import { width } from "~/lib/device"
 import { useMe } from "~/lib/hooks/useMe"
-
+import { useBackgroundColor } from "~/lib/tailwind"
 import { NewSpotModalView } from "./NewSpotModalView"
 
 export default function NewSpotLocationScreen() {
@@ -27,6 +33,9 @@ export default function NewSpotLocationScreen() {
   const initialLng = params.initialLng && Number.parseFloat(params.initialLng)
 
   const [coords, setCoords] = React.useState<number[] | null>(null)
+  const [coordsForPlaces, setCoordsForPlaces] = React.useState<number[] | null>(null)
+
+  const [activeGooglePlace, setActiveGooglePlace] = React.useState<RouterOutputs["google"]["getPlacesInArea"][number]>()
 
   const [isLoadingLocation, setIsLoadingLocation] = React.useState(true)
   const [search, setSearch] = React.useState("")
@@ -38,16 +47,18 @@ export default function NewSpotLocationScreen() {
 
   const router = useRouter()
 
-  const {
-    data: address,
-    isLoading: addressLoading,
-    isFetching,
-  } = api.mapbox.geocodeCoords.useQuery(
-    { latitude: coords?.[1]!, longitude: coords?.[0]! },
-    { enabled: !!coords?.[0] && !!coords?.[1], keepPreviousData: true },
+  const { data: address } = api.mapbox.geocodeCoords.useQuery(
+    { longitude: coords?.[0]!, latitude: coords?.[1]! },
+    { enabled: !!coords, keepPreviousData: true },
   )
 
   const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, keepPreviousData: true })
+  const { data: googleData, isFetching: isFetchingPlaces } = api.google.getPlacesInArea.useQuery(
+    { center: coordsForPlaces || [] },
+    { enabled: !!coordsForPlaces, keepPreviousData: true },
+  )
+
+  const googlePlaces = googleData || []
 
   const { data: hasCreatedSpot, isLoading: spotCheckLoading } = api.user.hasCreatedSpot.useQuery(undefined, {
     enabled: !!me,
@@ -72,7 +83,7 @@ export default function NewSpotLocationScreen() {
       const loc = await Location.getLastKnownPositionAsync()
       if (!loc) return
       camera.current?.setCamera({
-        zoomLevel: 14,
+        zoomLevel: 8,
         animationDuration: 0,
         animationMode: "none",
         centerCoordinate: [loc.coords.longitude, loc.coords.latitude],
@@ -81,7 +92,15 @@ export default function NewSpotLocationScreen() {
       console.log("oops -  setting location")
     }
   }
-  const onMapMove = ({ properties }: MapState) => setCoords(properties.center)
+  const onMapMove = ({ properties }: MapState) => {
+    setCoords(properties.center)
+  }
+
+  const handleFindPlaces = async () => {
+    const center = await mapRef.current?.getCenter()
+    if (!center) return
+    setCoordsForPlaces(center)
+  }
 
   if (me && spotCheckLoading) return null
 
@@ -102,21 +121,6 @@ export default function NewSpotLocationScreen() {
           everyone!
         </Text>
       )}
-      <View className="mb-2 flex w-full flex-row items-center space-x-1 overflow-hidden">
-        {addressLoading || isFetching ? (
-          <Spinner size="small" />
-        ) : (
-          <Icon
-            icon={!addressToUse ? AlertTriangle : MapPinned}
-            size={20}
-            color={!addressToUse ? "primary" : undefined}
-            className="opacity-80"
-          />
-        )}
-        <Text numberOfLines={1} className="flex-1 text-sm opacity-70">
-          {addressLoading ? "" : addressToUse || "Unknown address - move map to set"}
-        </Text>
-      </View>
       {!isLoadingLocation && (
         <View className="relative flex-1">
           <MapView
@@ -137,21 +141,67 @@ export default function NewSpotLocationScreen() {
                   initialLng || location?.longitude || INITIAL_LONGITUDE,
                   initialLat || location?.latitude || INITIAL_LATITUDE,
                 ],
-                zoomLevel: 14,
+                zoomLevel: 10,
                 pitch: 0,
                 heading: 0,
               }}
             />
+            {googlePlaces.map((data) => (
+              <MarkerView
+                allowOverlap
+                allowOverlapWithPuck
+                key={data.id}
+                coordinate={[data.location.longitude, data.location.latitude]}
+              >
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={() => {
+                    setActiveGooglePlace(data)
+                    camera.current?.setCamera({
+                      centerCoordinate: [data.location.longitude, data.location.latitude],
+                      animationMode: "linearTo",
+                      animationDuration: 300,
+                      padding: { paddingBottom: 250, paddingLeft: 0, paddingRight: 0, paddingTop: 0 },
+                    })
+                  }}
+                >
+                  <View className="bg-white rounded-full p-1.5">
+                    <Icon icon={Icons.GoogleColor} size={14} />
+                  </View>
+                </TouchableOpacity>
+              </MarkerView>
+            ))}
           </MapView>
+          {activeGooglePlace && (
+            <GooglePlacePreview
+              place={activeGooglePlace}
+              onClose={() => setActiveGooglePlace(undefined)}
+              addressToUse={addressToUse}
+              coords={coords}
+            />
+          )}
           <View className="absolute top-2 right-2 left-2">
             <Input
               className="rounded-sm bg-background dark:bg-background-dark"
-              placeholder="Search here"
+              placeholder="Search location"
               onChangeText={setSearch}
               value={search}
               clearButtonMode="while-editing"
               returnKeyType="done"
             />
+            {(isFetchingPlaces || coords?.[0] !== coordsForPlaces?.[0] || coords?.[1] !== coordsForPlaces?.[1]) && (
+              <View className="items-center absolute top-10 left-10 right-10 mt-2 flex">
+                <Button
+                  isLoading={isFetchingPlaces}
+                  onPress={handleFindPlaces}
+                  className="rounded-full"
+                  leftIcon={<Icon icon={Icons.GoogleColor} size={14} />}
+                  size="xs"
+                >
+                  Find campgrounds in this area
+                </Button>
+              </View>
+            )}
             {search && places && (
               <View className="rounded-b-sm bg-background p-2 dark:bg-background-dark">
                 {places.map((place, i) => (
@@ -196,7 +246,6 @@ export default function NewSpotLocationScreen() {
                 if (!me.isVerified) return toast({ title: "Please verify your account" })
                 if (!coords[0] || !coords[1]) return toast({ title: "Please select a location" })
                 router.push(
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   // @ts-ignore
                   `/new/type?${new URLSearchParams({
                     ...params,
@@ -206,9 +255,9 @@ export default function NewSpotLocationScreen() {
                   })}`,
                 )
               }}
-              disabled={!coords || (coords && (!coords[0] || !coords[1])) || !addressToUse}
+              disabled={!coords || !addressToUse}
             >
-              Next
+              Confirm location
             </Button>
 
             <TouchableOpacity
@@ -222,5 +271,129 @@ export default function NewSpotLocationScreen() {
         </View>
       )}
     </NewSpotModalView>
+  )
+}
+
+interface Props {
+  place: RouterOutputs["google"]["getPlacesInArea"][number]
+  onClose: () => void
+  addressToUse?: string
+  coords: number[] | null
+}
+
+function GooglePlacePreview({ place, onClose, addressToUse, coords }: Props) {
+  const { me } = useMe()
+  const router = useRouter()
+  const params = useLocalSearchParams<{ redirect?: string; initialLat?: string; initialLng?: string }>()
+
+  const { data, isLoading } = api.google.getPlacePhotos.useQuery(
+    { names: place.photos || [] },
+    { enabled: place.photos && place.photos.length > 0, keepPreviousData: true },
+  )
+  const images = data || []
+
+  const backgroundColor = useBackgroundColor()
+  const isDark = useColorScheme() === "dark"
+  const ref = React.useRef<FlashList<string>>(null)
+  const [imageIndex, setImageIndex] = React.useState(0)
+  const itemWidth = width - 80
+
+  return (
+    <Animated.View
+      style={{ width: "100%", position: "absolute", bottom: 0, zIndex: 1 }}
+      entering={SlideInDown.duration(200)}
+      exiting={SlideOutDown.duration(200)}
+      className="px-2 pb-2"
+    >
+      <View className="space-y-2 p-4 rounded-2xl" style={{ backgroundColor }}>
+        <View className="space-y-1">
+          <View className="flex flex-row items-center space-x-1">
+            <SpotTypeBadge spot={{ type: "CAMPING" }} />
+            <View className="p-1.5 border border-gray-200 dark:border-gray-600 rounded-full">
+              <Icon icon={Icons.GoogleColor} size={14} />
+            </View>
+          </View>
+          <Text numberOfLines={1} className="text-lg leading-6">
+            {place.name}
+          </Text>
+          <View className="flex flex-row justify-between">
+            <View className="flex flex-row items-center space-x-1">
+              <Icon icon={Star} size={16} fill={isDark ? "white" : "black"} />
+              <Text className="text-sm">{displayRating(place.rating)}</Text>
+            </View>
+          </View>
+        </View>
+        <View className="overflow-hidden rounded-xs">
+          <View style={{ width: itemWidth, height: 210 }} className="bg-background dark:bg-background-dark">
+            {isLoading ? (
+              <Spinner style={{ width: "100%", height: "100%" }} />
+            ) : (
+              <>
+                <FlashList
+                  key={place.id}
+                  ref={ref}
+                  pagingEnabled
+                  scrollEnabled={place.photos && place.photos.length > 1}
+                  horizontal
+                  onMomentumScrollEnd={(e) => {
+                    const { x } = e.nativeEvent.contentOffset
+                    const index = Math.round(x / itemWidth)
+                    setImageIndex(index)
+                  }}
+                  estimatedItemSize={itemWidth}
+                  showsHorizontalScrollIndicator={false}
+                  data={images}
+                  ListEmptyComponent={<Empty width={itemWidth} height={210} />}
+                  renderItem={({ item: image }) => (
+                    <Image
+                      source={{ uri: image }}
+                      style={{ width: itemWidth, height: 210 }}
+                      className="rounded-xs object-cover"
+                    />
+                  )}
+                />
+                {images.length > 1 && (
+                  <View className="absolute right-2 bottom-2 rounded-xs bg-gray-800/70 p-1">
+                    <Text className="text-white text-xs">{`${imageIndex + 1}/${images.length}`}</Text>
+                  </View>
+                )}
+              </>
+            )}
+          </View>
+        </View>
+        <Button
+          className="rounded-full"
+          size="sm"
+          rightIcon={<Icon icon={ArrowRight} size={12} color={{ dark: "black", light: "white" }} />}
+          onPress={() => {
+            if (!me) return
+            if (!coords || !addressToUse) return toast({ title: "Please select a valid location" })
+            if (!me.isVerified) return toast({ title: "Please verify your account" })
+            if (!coords[0] || !coords[1]) return toast({ title: "Please select a location" })
+            router.push(
+              // @ts-ignore
+              `/new/type?${new URLSearchParams({
+                ...params,
+                type: "CAMPING",
+                name: place.name,
+                isPetFriendly: place.isPetFriendly.toString(),
+                amenities: JSON.stringify({ toilet: place.toilet }),
+                googlePlaceId: place.id,
+                longitude: coords[0],
+                latitude: coords[1],
+                address: addressToUse,
+              })}`,
+            )
+          }}
+          disabled={!coords || (coords && (!coords[0] || !coords[1])) || !addressToUse}
+        >
+          Next
+        </Button>
+      </View>
+
+      <TouchableOpacity onPress={onClose} className="absolute top-1 right-3 flex items-center justify-center p-2">
+        <Icon icon={X} size={20} />
+      </TouchableOpacity>
+    </Animated.View>
   )
 }

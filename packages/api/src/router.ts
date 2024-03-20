@@ -1,5 +1,6 @@
 import { authRouter } from "./router/auth"
 import { feedbackRouter } from "./router/feedback"
+import { googleRouter } from "./router/google"
 import { inviteCodeRouter } from "./router/inviteCode"
 import { listRouter } from "./router/list"
 import { mapboxRouter } from "./router/mapbox"
@@ -27,6 +28,7 @@ export const appRouter = createTRPCRouter({
   spotRevision: spotRevisionRouter,
   user: userRouter,
   van: vanRouter,
+  google: googleRouter,
 })
 
 // export type definition of API
