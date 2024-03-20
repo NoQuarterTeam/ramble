@@ -2,11 +2,11 @@ import { Camera, LocationPuck, type MapState, type MapView as MapType, MarkerVie
 import { Image } from "expo-image"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
-import { ArrowRight, CircleDot, Navigation, TentTree, X } from "lucide-react-native"
+import { ArrowRight, CircleDot, Navigation, Star, TentTree, X } from "lucide-react-native"
 import * as React from "react"
 import { TouchableOpacity, View, useColorScheme } from "react-native"
 
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE, displayRating } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
@@ -94,7 +94,7 @@ export default function NewSpotLocationScreen() {
       const loc = await Location.getLastKnownPositionAsync()
       if (!loc) return
       camera.current?.setCamera({
-        zoomLevel: 14,
+        zoomLevel: 8,
         animationDuration: 0,
         animationMode: "none",
         centerCoordinate: [loc.coords.longitude, loc.coords.latitude],
@@ -138,21 +138,6 @@ export default function NewSpotLocationScreen() {
           everyone!
         </Text>
       )}
-      {/* <View className="mb-2 flex w-full flex-row items-center space-x-1 overflow-hidden">
-        {addressLoading || isFetching ? (
-          <Spinner size="small" />
-        ) : (
-          <Icon
-            icon={!addressToUse ? AlertTriangle : MapPinned}
-            size={20}
-            color={!addressToUse ? "primary" : undefined}
-            className="opacity-80"
-          />
-        )}
-        <Text numberOfLines={1} className="flex-1 text-sm opacity-70">
-          {addressLoading ? "" : addressToUse || "Unknown address - move map to set"}
-        </Text>
-      </View> */}
       {!isLoadingLocation && (
         <View className="relative flex-1">
           <MapView
@@ -173,7 +158,7 @@ export default function NewSpotLocationScreen() {
                   initialLng || location?.longitude || INITIAL_LONGITUDE,
                   initialLat || location?.latitude || INITIAL_LATITUDE,
                 ],
-                zoomLevel: 14,
+                zoomLevel: 10,
                 pitch: 0,
                 heading: 0,
               }}
@@ -197,8 +182,8 @@ export default function NewSpotLocationScreen() {
                     })
                   }}
                 >
-                  <View className="bg-white border-black border-2 rounded-full p-2">
-                    <TentTree size={20} color="black" />
+                  <View className="bg-white rounded-full p-1.5">
+                    <Icon icon={Icons.GoogleColor} size={14} />
                   </View>
                 </TouchableOpacity>
               </MarkerView>
@@ -226,8 +211,7 @@ export default function NewSpotLocationScreen() {
                 <Button
                   isLoading={isFetchingPlaces}
                   onPress={handleFindPlaces}
-                  className="rounded-full bg-background"
-                  variant="secondary"
+                  className="rounded-full"
                   leftIcon={<Icon icon={Icons.GoogleColor} size={14} />}
                   size="xs"
                 >
@@ -326,7 +310,7 @@ function GooglePlacePreview({ place, onClose, addressToUse, coords }: Props) {
   const images = data || []
 
   const backgroundColor = useBackgroundColor()
-  const colorScheme = useColorScheme()
+  const isDark = useColorScheme() === "dark"
   const ref = React.useRef<FlashList<string>>(null)
   const [imageIndex, setImageIndex] = React.useState(0)
   const itemWidth = width - 80
@@ -336,22 +320,26 @@ function GooglePlacePreview({ place, onClose, addressToUse, coords }: Props) {
       style={{ width: "100%", position: "absolute", bottom: 0, zIndex: 1 }}
       entering={SlideInDown.duration(200)}
       exiting={SlideOutDown.duration(200)}
-      className="px-3 pb-3"
+      className="px-2 pb-2"
     >
-      <View className="space-y-2 p-3 rounded" style={{ backgroundColor }}>
-        <View className="flex flex-row space-x-2">
-          <SpotTypeBadge spot={{ type: "CAMPING" }} />
-          <View className="flex flex-row justify-between">
-            <View className="flex flex-row items-center space-x-1 rounded-full border border-gray-200 px-3 py-1.5 dark:border-gray-600">
+      <View className="space-y-2 p-4 rounded-2xl" style={{ backgroundColor }}>
+        <View className="space-y-1">
+          <View className="flex flex-row items-center space-x-1">
+            <SpotTypeBadge spot={{ type: "CAMPING" }} />
+            <View className="p-1.5 border border-gray-200 dark:border-gray-600 rounded-full">
               <Icon icon={Icons.GoogleColor} size={14} />
-              <Text className="text-xs">Google Places</Text>
             </View>
-            <View />
+          </View>
+          <Text numberOfLines={1} className="text-lg leading-6">
+            {place.name}
+          </Text>
+          <View className="flex flex-row justify-between">
+            <View className="flex flex-row items-center space-x-1">
+              <Icon icon={Star} size={16} fill={isDark ? "white" : "black"} />
+              <Text className="text-sm">{displayRating(place.rating)}</Text>
+            </View>
           </View>
         </View>
-        <Text numberOfLines={1} className="text-lg leading-6">
-          {place.name}
-        </Text>
         <View className="overflow-hidden rounded-xs">
           <View style={{ width: itemWidth, height: 210 }} className="bg-background dark:bg-background-dark">
             {isLoading ? (
@@ -392,9 +380,8 @@ function GooglePlacePreview({ place, onClose, addressToUse, coords }: Props) {
         </View>
         <Button
           className="rounded-full"
-          variant="outline"
           size="sm"
-          rightIcon={<Icon icon={ArrowRight} size={12} />}
+          rightIcon={<Icon icon={ArrowRight} size={12} color={{ dark: "black", light: "white" }} />}
           onPress={() => {
             if (!me) return
             if (!coords || !addressToUse) return toast({ title: "Please select a valid location" })
@@ -421,8 +408,8 @@ function GooglePlacePreview({ place, onClose, addressToUse, coords }: Props) {
         </Button>
       </View>
 
-      <TouchableOpacity onPress={onClose} className="absolute top-1 right-4 flex items-center justify-center p-2">
-        <X size={24} color={colorScheme === "dark" ? "white" : "black"} />
+      <TouchableOpacity onPress={onClose} className="absolute top-1 right-3 flex items-center justify-center p-2">
+        <Icon icon={X} size={20} />
       </TouchableOpacity>
     </Animated.View>
   )
