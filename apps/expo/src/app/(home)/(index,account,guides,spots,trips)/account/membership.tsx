@@ -1,6 +1,6 @@
-import { StripeProvider } from "@stripe/stripe-react-native"
-import { ScrollView, View } from "react-native"
-import { Button } from "~/components/ui/Button"
+import { PlatformPay, PlatformPayButton, StripeProvider, createPlatformPayPaymentMethod } from "@stripe/stripe-react-native"
+
+import { Alert, ScrollView, View } from "react-native"
 
 import { ScreenView } from "~/components/ui/ScreenView"
 import { Spinner } from "~/components/ui/Spinner"
@@ -28,7 +28,43 @@ export default function Screen() {
         ) : error ? null : !data ? (
           <View className="space-y-2">
             <Text className="text-lg">No membership</Text>
-            <Button>Join for just €5</Button>
+            <PlatformPayButton
+              style={{
+                width: "65%",
+                height: 50,
+                marginTop: 20,
+                alignSelf: "center",
+              }}
+              type={PlatformPay.ButtonType.Subscribe}
+              appearance={PlatformPay.ButtonStyle.Black}
+              borderRadius={4}
+              onPress={async () => {
+                const { error } = await createPlatformPayPaymentMethod({
+                  applePay: {
+                    cartItems: [
+                      {
+                        amount: "5",
+                        label: "Thing",
+                        paymentType: PlatformPay.PaymentType.Recurring,
+                        intervalCount: 1,
+                        intervalUnit: PlatformPay.IntervalUnit.Month,
+                      },
+                    ],
+                    merchantCountryCode: "NL",
+                    currencyCode: "EUR",
+                  },
+                  googlePay: {
+                    currencyCode: "EUR",
+                    amount: 5,
+                    merchantCountryCode: "NL",
+                    testEnv: !IS_PRODUCTION,
+                  },
+                })
+                if (error) {
+                  Alert.alert(error.code, error.localizedMessage)
+                }
+              }}
+            />
           </View>
         ) : (
           <ScrollView
