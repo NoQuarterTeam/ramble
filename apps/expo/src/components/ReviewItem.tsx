@@ -9,7 +9,7 @@ import type { Review, User } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 
 import { api } from "~/lib/api"
-import { FULL_WEB_URL } from "~/lib/config"
+import { config } from "~/lib/config"
 import { useMe } from "~/lib/hooks/useMe"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
@@ -21,7 +21,7 @@ import { Text } from "./ui/Text"
 type TranslateInput = { id: string; lang: string }
 async function getTranslation({ id, lang }: TranslateInput) {
   try {
-    const res = await fetch(`${FULL_WEB_URL}/api/reviews/${id}/translate/${lang}`)
+    const res = await fetch(`${config.WEB_URL}/api/reviews/${id}/translate/${lang}`)
     return await res.json()
   } catch {
     return "Error translating description"

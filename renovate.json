@@ -39,6 +39,7 @@
     "@react-native-community/datetimepicker",
     "@sentry/react-native",
     "@shopify/flash-list",
+    "@stripe/stripe-react-native",
     "expo-application",
     "expo-build-properties",
     "expo-constants",

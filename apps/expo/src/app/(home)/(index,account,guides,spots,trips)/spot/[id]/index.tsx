@@ -57,7 +57,7 @@ import { SpotImageCarousel } from "~/components/ui/SpotImageCarousel"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
-import { FULL_WEB_URL } from "~/lib/config"
+import { config } from "~/lib/config"
 import { height, isAndroid, width } from "~/lib/device"
 import { useMe } from "~/lib/hooks/useMe"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
@@ -346,8 +346,8 @@ export default function SpotDetailScreen() {
               try {
                 await RNShare.share({
                   title: spot.name,
-                  message: isAndroid ? `${FULL_WEB_URL}/spots/${spot.id}` : spot.name,
-                  url: `${FULL_WEB_URL}/spots/${spot.id}`,
+                  message: isAndroid ? `${config.WEB_URL}/spots/${spot.id}` : spot.name,
+                  url: `${config.WEB_URL}/spots/${spot.id}`,
                 })
               } catch (error: unknown) {
                 if (error instanceof Error) {
@@ -432,7 +432,7 @@ interface DescProps {
 type TranslateInput = { id: string; lang: string; hash: string }
 async function getTranslation({ id, lang, hash }: TranslateInput) {
   try {
-    const res = await fetch(`${FULL_WEB_URL}/api/spots/${id}/translate/${lang}?hash=${hash}`)
+    const res = await fetch(`${config.WEB_URL}/api/spots/${id}/translate/${lang}?hash=${hash}`)
     return await res.json()
   } catch {
     return "Error translating description"

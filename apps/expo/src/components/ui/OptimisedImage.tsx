@@ -1,6 +1,6 @@
 import { defaultBlurHash, srcWhitelist } from "@ramble/shared"
 import { Image, type ImageProps } from "expo-image"
-import { FULL_WEB_URL } from "~/lib/config"
+import { config } from "~/lib/config"
 
 type Fit = "cover" | "contain" | "fill" | "inside" | "outside"
 
@@ -32,5 +32,5 @@ export function transformImageSrc(src: string | undefined | null, options: Optio
     quality: options.quality?.toString() || "",
     fit: options.fit || "",
   })
-  return `${FULL_WEB_URL}/api/image?${params}`
+  return `${config.WEB_URL}/api/image?${params}`
 }

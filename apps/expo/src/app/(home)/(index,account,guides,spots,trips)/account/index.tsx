@@ -28,7 +28,7 @@ import { TabView } from "~/components/ui/TabView"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { AUTH_TOKEN, api } from "~/lib/api"
-import { IS_DEV, UPDATE_ID, VERSION } from "~/lib/config"
+import { IS_DEV, VERSION, config } from "~/lib/config"
 import { useMe } from "~/lib/hooks/useMe"
 
 export default function AccountScreen() {
@@ -62,7 +62,7 @@ export default function AccountScreen() {
 
             <View className="pt-10">
               <Text className="text-center">v{VERSION}</Text>
-              <Text className="text-center opacity-60">{UPDATE_ID}</Text>
+              <Text className="text-center opacity-60">{config.UPDATE_ID}</Text>
             </View>
           </View>
         </LoginPlaceholder>
@@ -155,7 +155,7 @@ export default function AccountScreen() {
             Log out
           </Button>
           <Text className="text-center">v{VERSION}</Text>
-          <Text className="text-center opacity-60">{UPDATE_ID}</Text>
+          <Text className="text-center opacity-60">{config.UPDATE_ID}</Text>
         </View>
         {IS_DEV && (
           <Button className="mb-10" onPress={() => router.replace("/onboarding/1")} variant="outline">

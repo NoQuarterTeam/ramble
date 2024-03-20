@@ -78,8 +78,8 @@ importers:
         specifier: 1.6.3
         version: 1.6.3(@babel/runtime@7.24.1)(react-native@0.73.5)(react@18.2.0)
       '@stripe/stripe-react-native':
-        specifier: ^0.37.1
-        version: 0.37.1(expo@50.0.13)(react-native@0.73.5)(react@18.2.0)
+        specifier: ^0.35.1
+        version: 0.35.1(expo@50.0.13)(react-native@0.73.5)(react@18.2.0)
       '@tanstack/react-query':
         specifier: 4.36.1
         version: 4.36.1(react-dom@18.2.0)(react-native@0.73.5)(react@18.2.0)
@@ -7187,8 +7187,8 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@stripe/stripe-react-native@0.37.1(expo@50.0.13)(react-native@0.73.5)(react@18.2.0):
-    resolution: {integrity: sha512-ABXsSCdPh3kXMZS5PhNdLpWNs9eyKLKTFR4OUk7xo5pq7waLv8iTUpG88Hm+8DmHRrK7k6ojRrwEKbfFm09dXQ==}
+  /@stripe/stripe-react-native@0.35.1(expo@50.0.13)(react-native@0.73.5)(react@18.2.0):
+    resolution: {integrity: sha512-F6sewQYO0/wS1LDsjH9mE6qvyhfU3BAfz81oBSzntH8HdGon/TablGYsGTXrpmok+c4qzbXCQcPmVOdisZMQ0A==}
     peerDependencies:
       expo: '>=46.0.9'
       react: '*'

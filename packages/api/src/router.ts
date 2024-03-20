@@ -7,6 +7,7 @@ import { reviewRouter } from "./router/review"
 import { s3Router } from "./router/s3"
 import { spotRouter } from "./router/spot"
 import { spotRevisionRouter } from "./router/spotRevision"
+import { stripeRouter } from "./router/stripe"
 import { tripRouter } from "./router/trip/trip"
 import { userRouter } from "./router/user"
 import { vanRouter } from "./router/van"
@@ -14,19 +15,20 @@ import { versionRouter } from "./router/version"
 import { createTRPCRouter } from "./trpc"
 
 export const appRouter = createTRPCRouter({
-  version: versionRouter,
   auth: authRouter,
   feedback: feedbackRouter,
   inviteCode: inviteCodeRouter,
   list: listRouter,
-  trip: tripRouter,
+  mapbox: mapboxRouter,
   review: reviewRouter,
   s3: s3Router,
   spot: spotRouter,
-  mapbox: mapboxRouter,
   spotRevision: spotRevisionRouter,
+  stripe: stripeRouter,
+  trip: tripRouter,
   user: userRouter,
   van: vanRouter,
+  version: versionRouter,
 })
 
 // export type definition of API

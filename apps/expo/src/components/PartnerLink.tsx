@@ -4,7 +4,7 @@ import { TouchableOpacity, useColorScheme } from "react-native"
 
 import { type SpotPartnerFields, isPartnerSpot, partners } from "@ramble/shared"
 
-import { FULL_WEB_URL } from "~/lib/config"
+import { config } from "~/lib/config"
 
 import { Text } from "./ui/Text"
 import { toast } from "./ui/Toast"
@@ -67,7 +67,7 @@ export function PartnerLink(props: Props) {
       <Image
         contentFit="contain"
         className="h-[40px] w-[120px] bg-right object-contain"
-        source={{ uri: FULL_WEB_URL + partner.logo[theme] }}
+        source={{ uri: config.WEB_URL + partner.logo[theme] }}
       />
     </TouchableOpacity>
   )
