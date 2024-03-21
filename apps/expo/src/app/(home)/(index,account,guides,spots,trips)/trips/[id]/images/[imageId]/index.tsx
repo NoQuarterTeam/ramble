@@ -5,7 +5,7 @@ import * as FileSystem from "expo-file-system"
 import { Image } from "expo-image"
 import * as MediaLibrary from "expo-media-library"
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
-import { Download, MapPin, Play, Trash } from "lucide-react-native"
+import { Download, MapPin, Play, Trash, Volume2, VolumeX } from "lucide-react-native"
 import * as React from "react"
 import { Alert, type LayoutChangeEvent, TouchableOpacity, View } from "react-native"
 import { Gesture, GestureDetector, TouchableWithoutFeedback } from "react-native-gesture-handler"
@@ -37,6 +37,7 @@ export default function TripImage() {
 
   const video = React.useRef<Video>(null)
   const [status, setStatus] = React.useState<AVPlaybackStatus | undefined>()
+  const [isMuted, setIsMuted] = React.useState(false)
 
   const parsedBounds = bounds?.split(",").map(Number)
 
@@ -271,6 +272,7 @@ export default function TripImage() {
                   resizeMode={ResizeMode.COVER}
                   isLooping
                   onPlaybackStatusUpdate={(status) => setStatus(status)}
+                  isMuted={isMuted}
                 />
                 <View className="absolute w-full h-full flex items-center justify-center">
                   {!status?.isLoaded ? null : status.isBuffering ? (
@@ -285,6 +287,13 @@ export default function TripImage() {
                   )}
                 </View>
               </TouchableWithoutFeedback>
+              {status?.isLoaded && (
+                <View className="absolute top-4 right-5">
+                  <TouchableWithoutFeedback onPress={() => setIsMuted((isMuted) => !isMuted)}>
+                    <Icon icon={status.isMuted ? VolumeX : Volume2} size={30} />
+                  </TouchableWithoutFeedback>
+                </View>
+              )}
             </View>
           ) : (
             <GestureDetector gesture={gestures}>
