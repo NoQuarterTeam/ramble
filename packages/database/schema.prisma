@@ -179,8 +179,10 @@ model Spot {
   coverId       String?        @unique
 
   deletedAt DateTime?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now()) @updatedAt
+  closedAt  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   sourceUrl                String? @db.VarChar(500)
   campspaceId              Int?    @unique
@@ -205,7 +207,7 @@ model Spot {
   @@index([verifierId])
   @@index([creatorId])
   @@index([longitude])
-  @@index([verifiedAt, type, deletedAt, creatorId, publishedAt])
+  @@index([verifiedAt, type, deletedAt, creatorId, publishedAt, closedAt])
   @@index([type, verifiedAt, latitude, longitude, deletedAt, creatorId, publishedAt])
 }
 

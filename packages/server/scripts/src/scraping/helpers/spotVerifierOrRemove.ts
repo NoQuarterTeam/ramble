@@ -14,10 +14,10 @@ export async function spotVerifyOrRemove(spots: { sourceUrl: string }[]) {
     
       if (!res1.ok || res1.status === 301 || res1.redirected || (spot.sourceUrl.includes("camperspace") && !res1.url.includes("/s/")) || (spot.sourceUrl.includes("hipcamp") && res1.url.includes("/d/"))) {
         console.log("Removing spot: " + spotId)
-        // await prisma.spot.delete({ where: { id: spotId } })
+        await prisma.spot.update({ where: { id: spotId }, data: { closedAt: new Date() } })
       } else if (res1.ok && !res1.redirected) {
         console.log("Update sourceUrl for spot: " + spotId)
-        // await prisma.spot.update({ where: { id: spotId }, data: { sourceUrl: res1.url } })
+        await prisma.spot.update({ where: { id: spotId }, data: { sourceUrl: res1.url } })
       }
 
     }
