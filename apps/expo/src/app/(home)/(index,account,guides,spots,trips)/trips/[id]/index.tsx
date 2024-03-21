@@ -147,7 +147,7 @@ export default function TripDetailScreen() {
             <MarkerView key={`${point.id || 0}${i}`} allowOverlap allowOverlapWithPuck coordinate={point.geometry.coordinates}>
               <TouchableOpacity
                 activeOpacity={0.7}
-                onPress={() => router.push(`/(home)/(trips)/trips/${id}/images/cluster?bounds=${bounds.join(",")}`)}
+                onPress={() => router.push(`/(home)/(trips)/trips/${id}/media/cluster?bounds=${bounds.join(",")}`)}
                 className={join(
                   "relative flex items-center justify-center",
                   point.properties.point_count > 150 ? "sq-20" : point.properties.point_count > 75 ? "sq-16" : "sq-14",
@@ -174,7 +174,7 @@ export default function TripDetailScreen() {
           <MarkerView key={media.id} allowOverlap allowOverlapWithPuck coordinate={point.geometry.coordinates}>
             <TouchableOpacity
               activeOpacity={0.7}
-              onPress={() => router.push(`/(home)/(trips)/trips/${id}/images/${media.id}`)}
+              onPress={() => router.push(`/(home)/(trips)/trips/${id}/media/${media.id}`)}
               className="sq-12 flex items-center justify-center overflow-hidden rounded-md border-2 border-white"
             >
               <Image source={{ uri: createS3Url(itemImagePath) }} style={{ width: "100%", height: "100%" }} />
@@ -276,7 +276,7 @@ export default function TripDetailScreen() {
           </View>
           {trip && me && (
             <View className="flex flex-row items-center space-x-1">
-              <Link push href={`/${tab}/trips/${id}/images`} asChild>
+              <Link push href={`/${tab}/trips/${id}/media`} asChild>
                 <TouchableOpacity
                   className="sq-10 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
                   activeOpacity={0.8}
