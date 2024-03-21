@@ -95,7 +95,7 @@ export const tripMediaRouter = createTRPCRouter({
         take: 30,
         skip: input.skip,
         orderBy: { timestamp: "desc" },
-        select: { id: true, path: true, latitude: true, longitude: true, type: true, duration: true, thumbnailPath: true },
+        select: { id: true, path: true, latitude: true, longitude: true, duration: true, thumbnailPath: true },
         where: { deletedAt: null, tripId: input.tripId, trip: { users: { some: { id: ctx.user.id } } } },
       }),
     })

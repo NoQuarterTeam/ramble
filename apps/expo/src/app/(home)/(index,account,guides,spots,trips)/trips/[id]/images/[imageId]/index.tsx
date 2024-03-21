@@ -1,5 +1,5 @@
 import dayjs from "dayjs"
-import { Audio, ExponentVideoComponent, ResizeMode, Video } from "expo-av"
+import { Audio, ResizeMode, Video } from "expo-av"
 import type { AVPlaybackStatus } from "expo-av"
 import * as FileSystem from "expo-file-system"
 import { Image } from "expo-image"
@@ -21,7 +21,7 @@ import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
-import { height, width } from "~/lib/device"
+import { height, isAndroid, width } from "~/lib/device"
 import { useMe } from "~/lib/hooks/useMe"
 
 const clamp = (value: number, min: number, max: number): number => {
@@ -37,7 +37,6 @@ export default function TripImage() {
 
   const video = React.useRef<Video>(null)
   const [status, setStatus] = React.useState<AVPlaybackStatus | undefined>()
-  const [sound, setSound] = React.useState<Audio.Sound>()
 
   const parsedBounds = bounds?.split(",").map(Number)
 
@@ -222,25 +221,17 @@ export default function TripImage() {
   const gestures = Gesture.Race(doubleTapGesture, pinchGesture, panGesture)
 
   React.useEffect(() => {
-    if (data?.type !== MediaType.VIDEO) return
-    ;(async () => {
-      const { sound } = await Audio.Sound.createAsync({ uri: createS3Url(data.path) })
-      setSound(sound)
-    })()
+    if (data?.type === MediaType.VIDEO && !isAndroid) {
+      Audio.setAudioModeAsync({ playsInSilentModeIOS: true })
+    }
   }, [data])
 
   const handleVideoPlayPause = async () => {
-    console.log("------------ WOUND --------------")
-    console.log(sound)
-    // @ts-ignore
+    if (!status?.isLoaded) return
     if (status?.isPlaying) {
-      // @ts-ignore
       video.current?.pauseAsync()
-      await sound?.pauseAsync()
     } else {
-      // @ts-ignore
       video.current?.playAsync()
-      await sound?.playAsync()
     }
   }
 
@@ -280,14 +271,13 @@ export default function TripImage() {
                   resizeMode={ResizeMode.COVER}
                   isLooping
                   onPlaybackStatusUpdate={(status) => setStatus(status)}
-                  volume={1}
                 />
                 <View className="absolute w-full h-full flex items-center justify-center">
                   {!status?.isLoaded ? null : status.isBuffering ? (
                     <Spinner />
                   ) : (
-                    status?.isLoaded &&
-                    !status?.isPlaying && (
+                    status.isLoaded &&
+                    !status.isPlaying && (
                       <View className="rounded-full h-[60px] w-[60px] flex items-center justify-center bg-gray-600">
                         <Icon icon={Play} size={24} fill="white" stroke="white" className="ml-1" />
                       </View>

@@ -205,7 +205,7 @@ export default function TripImages() {
                   style={{ width: size, height: size }}
                   className="relative"
                 >
-                  {item.type === MediaType.VIDEO ? (
+                  {item.thumbnailPath ? (
                     <>
                       <View className="w-full h-full flex items-center justify-center">
                         {item.thumbnailPath ? (

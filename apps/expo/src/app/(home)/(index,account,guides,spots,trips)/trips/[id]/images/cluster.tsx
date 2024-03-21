@@ -1,4 +1,3 @@
-import { MediaType } from "@ramble/database/types"
 import { createS3Url } from "@ramble/shared"
 import { FlashList } from "@shopify/flash-list"
 import { Image } from "expo-image"
@@ -63,7 +62,7 @@ export default function TripImagesCluster() {
           renderItem={({ item }) => (
             <Link href={`/(home)/(trips)/trips/${id}/images/${item.id}?bounds=${bounds}`} asChild>
               <TouchableOpacity style={{ width: size, height: size }}>
-                {item.type === MediaType.VIDEO ? (
+                {item.thumbnailPath ? (
                   <View className="w-full h-full flex items-center justify-center">
                     {item.thumbnailPath ? (
                       <Image
