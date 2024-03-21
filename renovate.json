@@ -70,7 +70,6 @@
     "react-native-web",
     "react-native",
     "sharp",
-    "tailwindcss",
-    "uuid"
+    "tailwindcss"
   ]
 }

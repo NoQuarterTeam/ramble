@@ -194,9 +194,6 @@ importers:
       react-native-gesture-handler:
         specifier: 2.14.1
         version: 2.14.1(react-native@0.73.5)(react@18.2.0)
-      react-native-get-random-values:
-        specifier: 1.8.0
-        version: 1.8.0(react-native@0.73.5)
       react-native-ios-context-menu:
         specifier: ^2.4.3
         version: 2.5.1(expo@50.0.13)(react-native-ios-utilities@4.4.4)(react-native@0.73.5)(react@18.2.0)
@@ -227,9 +224,6 @@ importers:
       superjson:
         specifier: 1.13.3
         version: 1.13.3
-      uuid:
-        specifier: 3.4.0
-        version: 3.4.0
       zeego:
         specifier: ^1.9.1
         version: 1.10.0(@react-native-menu/menu@0.9.1)(@types/react@18.2.67)(react-dom@18.2.0)(react-native-ios-context-menu@2.5.1)(react-native@0.73.5)(react@18.2.0)
@@ -255,9 +249,6 @@ importers:
       '@types/react':
         specifier: 18.2.67
         version: 18.2.67
-      '@types/uuid':
-        specifier: 3.4.13
-        version: 3.4.13
       tailwindcss:
         specifier: 3.3.2
         version: 3.3.2
@@ -7402,10 +7393,6 @@ packages:
   /@types/unist@2.0.10:
     resolution: {integrity: sha512-IfYcSBWE3hLpBg8+X2SEa8LVkJdJEkT2Ese2aaLs3ptGdVtABxndrMaxuFlQ1qdFf9Q5rDvDpxI3WwgvKFAsQA==}
 
-  /@types/uuid@3.4.13:
-    resolution: {integrity: sha512-pAeZeUbLE4Z9Vi9wsWV2bYPTweEHeJJy0G4pEjOA/FSvy1Ad5U5Km8iDV6TKre1mjBiVNfAdVHKruP8bAh4Q5A==}
-    dev: true
-
   /@types/wrap-ansi@3.0.0:
     resolution: {integrity: sha512-ltIpx+kM7g/MLRZfkbL7EsCEjfzCcScLpkg37eXEtx5kmrAKBkTJwd1GIAjDSL8wTpM6Hzn5YO4pSb91BEwu1g==}
     dev: true
@@ -10177,10 +10164,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
-
-  /fast-base64-decode@1.0.0:
-    resolution: {integrity: sha512-qwaScUgUGBYeDNRnbc/KyllVU88Jk1pRHPStuF/lO7B0/RTRLj7U0lkdTAutlBblY08rwZDff6tNU9cjv6j//Q==}
-    dev: false
 
   /fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
@@ -14571,15 +14554,6 @@ packages:
       react-native: 0.73.5(@babel/core@7.24.3)(@babel/preset-env@7.24.3)(react@18.2.0)
     dev: false
 
-  /react-native-get-random-values@1.8.0(react-native@0.73.5):
-    resolution: {integrity: sha512-H/zghhun0T+UIJLmig3+ZuBCvF66rdbiWUfRSNS6kv5oDSpa1ZiVyvRWtuPesQpT8dXj+Bv7WJRQOUP+5TB1sA==}
-    peerDependencies:
-      react-native: '>=0.56'
-    dependencies:
-      fast-base64-decode: 1.0.0
-      react-native: 0.73.5(@babel/core@7.24.3)(@babel/preset-env@7.24.3)(react@18.2.0)
-    dev: false
-
   /react-native-ios-context-menu@2.5.1(expo@50.0.13)(react-native-ios-utilities@4.4.4)(react-native@0.73.5)(react@18.2.0):
     resolution: {integrity: sha512-Qt+0qeW/2x2Dc6aNUwsUR6BV0EozT5n2VNYIDKjdEQMF0xrN/o37p2+Oz6xhvWcA+15gAXqCbGq6omjPHLowRw==}
     peerDependencies:
@@ -16689,12 +16663,6 @@ packages:
   /utils-merge@1.0.1:
     resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
-
-  /uuid@3.4.0:
-    resolution: {integrity: sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==}
-    deprecated: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
-    hasBin: true
-    dev: false
 
   /uuid@7.0.3:
     resolution: {integrity: sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==}
