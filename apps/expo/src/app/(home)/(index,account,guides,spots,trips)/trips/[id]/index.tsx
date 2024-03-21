@@ -1,5 +1,5 @@
 import { useActionSheet } from "@expo/react-native-action-sheet"
-import type { MediaType } from "@ramble/database/types"
+import { MediaType } from "@ramble/database/types"
 import {
   Camera,
   LineLayer,
@@ -15,9 +15,9 @@ import * as Haptics from "expo-haptics"
 import { Image } from "expo-image"
 import * as Location from "expo-location"
 import * as MediaLibrary from "expo-media-library"
-import { MediaType as ExpoMediaType, getAssetsAsync } from "expo-media-library"
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
+import * as VideoThumbnails from "expo-video-thumbnails"
 import { ChevronLeft, Edit2, Flag, Home, Image as ImageIcon, MapPin, Plus, Users } from "lucide-react-native"
 import * as React from "react"
 import { ActivityIndicator, Alert, Linking, TouchableOpacity, View } from "react-native"
@@ -141,6 +141,8 @@ export default function TripDetailScreen() {
       mediaClusters?.map((point, i) => {
         if (point.properties.cluster) {
           const bounds = point.properties.bounds
+          const properties = point.properties.media[0]?.properties
+          const clusterImagePath = properties?.thumbnailPath || properties?.path
           return (
             <MarkerView key={`${point.id || 0}${i}`} allowOverlap allowOverlapWithPuck coordinate={point.geometry.coordinates}>
               <TouchableOpacity
@@ -152,10 +154,7 @@ export default function TripDetailScreen() {
                 )}
               >
                 <View className="h-full w-full rounded-sm border-2 border-white bg-background dark:bg-background-dark">
-                  <Image
-                    source={{ uri: createImageUrl(point.properties.media[0]?.properties.path) }}
-                    style={{ width: "100%", height: "100%" }}
-                  />
+                  <Image source={{ uri: createImageUrl(clusterImagePath) }} style={{ width: "100%", height: "100%" }} />
                 </View>
                 <View className="sq-5 -top-1 -right-1 absolute flex items-center justify-center rounded-full bg-blue-500">
                   <Text className="text-center font-600 text-white">{point.properties.point_count_abbreviated}</Text>
@@ -167,8 +166,10 @@ export default function TripDetailScreen() {
         const media = point.properties as {
           cluster: false
           path: string
+          thumbnailPath: string | null
           id: string
         }
+        const itemImagePath = media.thumbnailPath || media.path
         return (
           <MarkerView key={media.id} allowOverlap allowOverlapWithPuck coordinate={point.geometry.coordinates}>
             <TouchableOpacity
@@ -176,7 +177,7 @@ export default function TripDetailScreen() {
               onPress={() => router.push(`/(home)/(trips)/trips/${id}/images/${media.id}`)}
               className="sq-12 flex items-center justify-center overflow-hidden rounded-md border-2 border-white"
             >
-              <Image source={{ uri: createImageUrl(media.path) }} style={{ width: "100%", height: "100%" }} />
+              <Image source={{ uri: createImageUrl(itemImagePath) }} style={{ width: "100%", height: "100%" }} />
             </TouchableOpacity>
           </MarkerView>
         )
@@ -372,54 +373,58 @@ function TripImageSync({
               .toDate()
           : dayjs(startDate).startOf("day").toDate()
         const createdBefore = dayjs(endDate).endOf("day").toDate()
-        const pages = await getAssetsAsync({
+        const pages = await MediaLibrary.getAssetsAsync({
           createdAfter,
           createdBefore,
-          mediaType: ExpoMediaType.photo,
+          mediaType: [MediaLibrary.MediaType.photo, MediaLibrary.MediaType.video],
           sortBy: "creationTime",
         })
         if (pages.totalCount === 0) return
-        let images: MediaLibrary.Asset[] = pages.assets
+        let assets: MediaLibrary.Asset[] = pages.assets
         let endCursor = pages.endCursor
         while (true) {
-          const newPages = await getAssetsAsync({
+          const newPages = await MediaLibrary.getAssetsAsync({
             after: endCursor,
             createdAfter,
             createdBefore,
-            mediaType: ExpoMediaType.photo,
+            mediaType: [MediaLibrary.MediaType.photo, MediaLibrary.MediaType.video],
             sortBy: "creationTime",
           })
-          images = images.concat(newPages.assets)
+          assets = assets.concat(newPages.assets)
           endCursor = newPages.endCursor
           if (!newPages.hasNextPage) break
         }
-        const imagesToSync = []
-        for (const image of images) {
+        const mediaToSync = []
+        for (const asset of assets) {
           try {
-            const info = await MediaLibrary.getAssetInfoAsync(image)
+            const info = await MediaLibrary.getAssetInfoAsync(asset)
             if (!info.location) continue
-            const mediaType: MediaType = info.mediaType === ExpoMediaType.photo ? "IMAGE" : "VIDEO"
-            const imageWithData = {
-              assetId: image.id,
-              url: info.localUri || image.uri,
+            const mediaType = info.mediaType === MediaLibrary.MediaType.photo ? MediaType.IMAGE : MediaType.VIDEO
+            const mediaWithData = {
+              assetId: asset.id,
+              url: info.localUri || asset.uri,
               latitude: info.location.latitude,
               longitude: info.location.longitude,
-              timestamp: dayjs(image.creationTime).toDate(),
+              timestamp: dayjs(asset.creationTime).toDate(),
               mediaType,
               duration: info.duration || null,
             }
-            imagesToSync.push(imageWithData)
+            mediaToSync.push(mediaWithData)
           } catch (error) {
             console.log(error)
           }
         }
-        if (imagesToSync.length === 0) return
-        // TODO check if video and generate thumbnail
-        for (const image of imagesToSync) {
+        if (mediaToSync.length === 0) return
+        for (const media of mediaToSync) {
           try {
-            const key = await upload(image.url)
-            const payload = { path: key, thumbnailPath: null, ...image }
-            uploadMedia({ tripId: id, data: payload })
+            let thumbnailPath: string | null = null
+            if (media.mediaType === MediaType.VIDEO) {
+              const { uri } = await VideoThumbnails.getThumbnailAsync(media.url, { time: 0 })
+              thumbnailPath = await upload(uri)
+            }
+            const path = await upload(media.url)
+            const payload = { path, thumbnailPath, ...media }
+            uploadMedia({ tripId: id, image: payload })
           } catch (error) {
             console.log(error)
           }

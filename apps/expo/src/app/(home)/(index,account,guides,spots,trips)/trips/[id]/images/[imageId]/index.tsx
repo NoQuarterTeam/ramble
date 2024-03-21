@@ -1,5 +1,5 @@
 import dayjs from "dayjs"
-import { ResizeMode, Video } from "expo-av"
+import { Audio, ExponentVideoComponent, ResizeMode, Video } from "expo-av"
 import type { AVPlaybackStatus } from "expo-av"
 import * as FileSystem from "expo-file-system"
 import { Image } from "expo-image"
@@ -13,6 +13,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-na
 
 import { createImageUrl } from "@ramble/shared"
 
+import { MediaType } from "@ramble/database/types"
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
 import { ScreenView } from "~/components/ui/ScreenView"
@@ -36,6 +37,7 @@ export default function TripImage() {
 
   const video = React.useRef(null) // TODO types
   const [status, setStatus] = React.useState<AVPlaybackStatus | undefined>()
+  const [sound, setSound] = React.useState<Audio.Sound>()
 
   const parsedBounds = bounds?.split(",").map(Number)
 
@@ -219,6 +221,29 @@ export default function TripImage() {
   })
   const gestures = Gesture.Race(doubleTapGesture, pinchGesture, panGesture)
 
+  React.useEffect(() => {
+    if (data?.mediaType !== MediaType.VIDEO) return
+    ;(async () => {
+      const { sound } = await Audio.Sound.createAsync({ uri: createImageUrl(data.path) })
+      setSound(sound)
+    })()
+  }, [data])
+
+  const handleVideoPlayPause = async () => {
+    console.log("------------ WOUND --------------")
+    console.log(sound)
+    // @ts-ignore
+    if (status?.isPlaying) {
+      // @ts-ignore
+      video.current?.pauseAsync()
+      await sound?.pauseAsync()
+    } else {
+      // @ts-ignore
+      video.current?.playAsync()
+      await sound?.playAsync()
+    }
+  }
+
   return (
     <ScreenView
       title={data ? <Text className="opacity-70">{dayjs(data.timestamp).format("DD MMM YYYY HH:MM")}</Text> : ""}
@@ -245,14 +270,9 @@ export default function TripImage() {
     >
       {isLoading || !data ? null : (
         <View className="relative flex-1 pb-2">
-          {data.mediaType === "VIDEO" ? (
+          {data.mediaType === MediaType.VIDEO ? (
             <View>
-              <TouchableWithoutFeedback
-                onPress={() =>
-                  // @ts-ignore
-                  status?.isPlaying ? video.current?.pauseAsync() : video.current?.playAsync()
-                }
-              >
+              <TouchableWithoutFeedback onPress={handleVideoPlayPause}>
                 <Video
                   ref={video}
                   style={{ height: "100%", width: "100%" }}
@@ -260,6 +280,7 @@ export default function TripImage() {
                   resizeMode={ResizeMode.COVER}
                   isLooping
                   onPlaybackStatusUpdate={(status) => setStatus(status)}
+                  volume={1}
                 />
                 <View className="absolute w-full h-full flex items-center justify-center">
                   {

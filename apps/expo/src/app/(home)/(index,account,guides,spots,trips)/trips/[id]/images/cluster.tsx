@@ -1,14 +1,18 @@
+import { MediaType } from "@ramble/database/types"
 import { createImageUrl } from "@ramble/shared"
 import { FlashList } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import { Link, useLocalSearchParams } from "expo-router"
+import { ImageOff } from "lucide-react-native"
 import * as React from "react"
 import { ActivityIndicator, TouchableOpacity, View } from "react-native"
+import { Icon } from "~/components/Icon"
 import { ScreenView } from "~/components/ui/ScreenView"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
 import { width } from "~/lib/device"
+import { formatVideoDuration } from "~/lib/utils"
 
 const size = width / 3
 
@@ -59,7 +63,26 @@ export default function TripImagesCluster() {
           renderItem={({ item }) => (
             <Link href={`/(home)/(trips)/trips/${id}/images/${item.id}?bounds=${bounds}`} asChild>
               <TouchableOpacity style={{ width: size, height: size }}>
-                <Image className="h-full w-full bg-gray-200 dark:bg-gray-700" source={{ uri: createImageUrl(item.path) }} />
+                {item.mediaType === MediaType.VIDEO ? (
+                  <View className="w-full h-full flex items-center justify-center">
+                    {item.thumbnailPath ? (
+                      <Image
+                        className="h-full w-full bg-gray-200 dark:bg-gray-700"
+                        source={{ uri: createImageUrl(item.thumbnailPath) }}
+                      />
+                    ) : (
+                      <View className="flex space-y-1 px-4 items-center">
+                        <Icon icon={ImageOff} />
+                        <Text className="text-xs text-center">Preview unavailable</Text>
+                      </View>
+                    )}
+                    {item.duration && (
+                      <Text className="absolute bottom-1 right-1 font-600">{formatVideoDuration(item.duration)}</Text>
+                    )}
+                  </View>
+                ) : (
+                  <Image className="h-full w-full bg-gray-200 dark:bg-gray-700" source={{ uri: createImageUrl(item.path) }} />
+                )}
               </TouchableOpacity>
             </Link>
           )}

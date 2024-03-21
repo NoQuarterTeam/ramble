@@ -20,7 +20,7 @@ interface Props {
   } & {
     users: Pick<User, "id" | "firstName" | "lastName" | "avatar" | "avatarBlurHash">[]
   } & {
-    media: Pick<TripMedia, "id" | "path">[]
+    media: Pick<TripMedia, "id" | "path" | "thumbnailPath">[]
   }
 }
 const today = dayjs()
@@ -49,7 +49,7 @@ export function TripItem({ trip }: Props) {
                 <Image
                   className="absolute top-0 rounded border-background bg-gray-200 dark:bg-gray-700"
                   key={media.id}
-                  source={{ uri: createImageUrl(media.path) }}
+                  source={{ uri: createImageUrl(media.thumbnailPath || media.path) }}
                   style={{
                     width: 40,
                     height: 40,

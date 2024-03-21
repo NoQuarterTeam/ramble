@@ -21,17 +21,31 @@ export const tripMediaRouter = createTRPCRouter({
           deletedAt: null,
         },
         orderBy: { createdAt: "desc" },
-        select: { id: true, path: true, longitude: true, latitude: true },
+        select: { id: true, path: true, thumbnailPath: true, longitude: true, latitude: true },
       })
       const supercluster = new Supercluster<
-        { id: string; cluster: false; path: string; latitude: number; longitude: number },
+        {
+          id: string
+          cluster: false
+          path: string
+          thumbnailPath: string | null
+          latitude: number
+          longitude: number
+        },
         { cluster: true }
       >({ maxZoom: 22 })
       const clustersData = supercluster.load(
         media.map((media) => ({
           type: "Feature",
           geometry: { type: "Point", coordinates: [media.longitude!, media.latitude!] },
-          properties: { cluster: false, id: media.id, path: media.path, latitude: media.latitude!, longitude: media.longitude! },
+          properties: {
+            cluster: false,
+            id: media.id,
+            path: media.path,
+            thumbnailPath: media.thumbnailPath,
+            latitude: media.latitude!,
+            longitude: media.longitude!,
+          },
         })),
       )
       const clusters = clustersData.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], coords.zoom || 5)
@@ -103,8 +117,8 @@ export const tripMediaRouter = createTRPCRouter({
       })
       return true
     }),
-  upload: protectedProcedure.input(z.object({ tripId: z.string(), data: tripMediaSchema })).mutation(async ({ ctx, input }) => {
-    await ctx.prisma.tripMedia.create({ data: { tripId: input.tripId, ...input.data, creatorId: ctx.user.id } })
+  upload: protectedProcedure.input(z.object({ tripId: z.string(), image: tripMediaSchema })).mutation(async ({ ctx, input }) => {
+    await ctx.prisma.tripMedia.create({ data: { tripId: input.tripId, ...input.image, creatorId: ctx.user.id } })
     const latestTimestamp = await ctx.prisma.tripMedia.findFirst({
       where: { tripId: input.tripId, deletedAt: null },
       orderBy: { timestamp: "desc" },

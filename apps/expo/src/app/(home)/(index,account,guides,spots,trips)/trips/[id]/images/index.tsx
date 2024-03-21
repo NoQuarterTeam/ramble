@@ -1,4 +1,4 @@
-import type { MediaType } from "@ramble/database/types"
+import { MediaType } from "@ramble/database/types"
 import { createImageUrl, useDisclosure } from "@ramble/shared"
 import { Camera, LocationPuck, type MapState, type MapView as MapType, StyleURL } from "@rnmapbox/maps"
 import type { Position } from "@rnmapbox/maps/lib/typescript/src/types/Position"
@@ -10,7 +10,7 @@ import * as Location from "expo-location"
 import * as MediaLibrary from "expo-media-library"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import * as VideoThumbnails from "expo-video-thumbnails"
-import { Check, CircleDot, MapPin, MapPinOff, Navigation, PlusCircle, Trash } from "lucide-react-native"
+import { Check, CircleDot, ImageOff, MapPin, MapPinOff, Navigation, PlusCircle, Trash } from "lucide-react-native"
 import * as React from "react"
 import { ActivityIndicator, Alert, Linking, Modal, TouchableOpacity, View } from "react-native"
 
@@ -27,6 +27,7 @@ import { type RouterOutputs, api } from "~/lib/api"
 import { width } from "~/lib/device"
 import { useMapCoords } from "~/lib/hooks/useMapCoords"
 import { useS3QuickUpload } from "~/lib/hooks/useS3"
+import { formatVideoDuration } from "~/lib/utils"
 
 const size = width / 3
 
@@ -96,9 +97,9 @@ export default function TripImages() {
       for (const asset of result.assets) {
         if (!asset.assetId) continue // ??
         const info = await MediaLibrary.getAssetInfoAsync(asset.assetId)
-        if (info.mediaType !== "photo" && info.mediaType !== "video")
+        if (info.mediaType !== MediaLibrary.MediaType.photo && info.mediaType !== MediaLibrary.MediaType.video)
           return toast({ title: "Please upload an image or a video", type: "error" })
-        const mediaType: MediaType = info.mediaType === "photo" ? "IMAGE" : "VIDEO"
+        const mediaType = info.mediaType === MediaLibrary.MediaType.photo ? MediaType.IMAGE : MediaType.VIDEO
         const media = {
           assetId: info.id,
           timestamp: dayjs(info.creationTime).toDate(),
@@ -109,13 +110,13 @@ export default function TripImages() {
           duration: info.duration || null,
         }
         let thumbnailPath: string | null = null
-        if (mediaType === "VIDEO") {
+        if (mediaType === MediaType.VIDEO) {
           const { uri } = await VideoThumbnails.getThumbnailAsync(asset.uri, { time: 0 })
           thumbnailPath = await upload(uri)
         }
         const path = await upload(media.url)
         const data = { path, thumbnailPath, ...media }
-        uploadMedia({ tripId: id, data })
+        uploadMedia({ tripId: id, image: data })
       }
     } catch (error) {
       console.log(error)
@@ -190,77 +191,65 @@ export default function TripImages() {
             extraData={{ isOpen: selectProps.isOpen, selectedImages }}
             renderItem={({ item }) => (
               <>
-                {item.mediaType === "VIDEO" ? (
-                  <TouchableOpacity
-                    activeOpacity={0.8}
-                    onPress={() => {
-                      if (selectProps.isOpen) {
-                        setSelectedImages((s) =>
-                          s.find((i) => i.id === item.id) ? s.filter((i) => i.id !== item.id) : [...s, item],
-                        )
-                      } else {
-                        return router.push(`/(home)/(trips)/trips/${id}/images/${item.id}`)
-                      }
-                    }}
-                    style={{ width: size, height: size }}
-                    className="relative"
-                  >
-                    <View className="w-full h-full flex items-center justify-center">
-                      {item.thumbnailPath ? (
-                        <Image
-                          className="h-full w-full bg-gray-200 dark:bg-gray-700"
-                          source={{ uri: createImageUrl(item.thumbnailPath) }}
-                        />
-                      ) : (
-                        <Text>no thumbnail</Text>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={() => {
+                    if (selectProps.isOpen) {
+                      setSelectedImages((s) =>
+                        s.find((i) => i.id === item.id) ? s.filter((i) => i.id !== item.id) : [...s, item],
+                      )
+                    } else {
+                      return router.push(`/(home)/(trips)/trips/${id}/images/${item.id}`)
+                    }
+                  }}
+                  style={{ width: size, height: size }}
+                  className="relative"
+                >
+                  {item.mediaType === MediaType.VIDEO ? (
+                    <>
+                      <View className="w-full h-full flex items-center justify-center">
+                        {item.thumbnailPath ? (
+                          <Image
+                            className="h-full w-full bg-gray-200 dark:bg-gray-700"
+                            source={{ uri: createImageUrl(item.thumbnailPath) }}
+                          />
+                        ) : (
+                          <View className="flex space-y-1 px-4 items-center">
+                            <Icon icon={ImageOff} />
+                            <Text className="text-xs text-center">Preview unavailable</Text>
+                          </View>
+                        )}
+                        {item.duration && !selectedImages.find((i) => i.id === item.id) && (
+                          <Text className="absolute bottom-1 right-1 font-600">{formatVideoDuration(item.duration)}</Text>
+                        )}
+                      </View>
+                      {(!item.latitude || !item.longitude) && (
+                        <View className="sq-6 absolute bottom-1 left-1 flex items-center justify-center rounded-full bg-background dark:bg-background-dark">
+                          <Icon icon={MapPinOff} size={16} />
+                        </View>
                       )}
-                      {item.duration && !selectedImages.find((i) => i.id === item.id) && (
-                        <Text className="absolute bottom-1 right-1 font-600">
-                          {new Date(item.duration * 1000)
-                            .toISOString()
-                            .slice(item.duration > 3599 ? 12 : item.duration > 599 ? 14 : 15, 19)}
-                        </Text>
+                      {selectProps.isOpen && selectedImages.find((i) => i.id === item.id) && (
+                        <View className="sq-5 absolute right-1 bottom-1 flex items-center justify-center rounded-full bg-blue-500">
+                          <Icon icon={Check} size={14} color="white" />
+                        </View>
                       )}
-                    </View>
-                    {(!item.latitude || !item.longitude) && (
-                      <View className="sq-6 absolute bottom-1 left-1 flex items-center justify-center rounded-full bg-background dark:bg-background-dark">
-                        <Icon icon={MapPinOff} size={16} />
-                      </View>
-                    )}
-                    {selectProps.isOpen && selectedImages.find((i) => i.id === item.id) && (
-                      <View className="sq-5 absolute right-1 bottom-1 flex items-center justify-center rounded-full bg-blue-500">
-                        <Icon icon={Check} size={14} color="white" />
-                      </View>
-                    )}
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity
-                    activeOpacity={0.8}
-                    onPress={() => {
-                      if (selectProps.isOpen) {
-                        setSelectedImages((s) =>
-                          s.find((i) => i.id === item.id) ? s.filter((i) => i.id !== item.id) : [...s, item],
-                        )
-                      } else {
-                        return router.push(`/(home)/(trips)/trips/${id}/images/${item.id}`)
-                      }
-                    }}
-                    style={{ width: size, height: size }}
-                    className="relative"
-                  >
-                    <Image className="h-full w-full bg-gray-200 dark:bg-gray-700" source={{ uri: createImageUrl(item.path) }} />
-                    {(!item.latitude || !item.longitude) && (
-                      <View className="sq-6 absolute bottom-1 left-1 flex items-center justify-center rounded-full bg-background dark:bg-background-dark">
-                        <Icon icon={MapPinOff} size={16} />
-                      </View>
-                    )}
-                    {selectProps.isOpen && selectedImages.find((i) => i.id === item.id) && (
-                      <View className="sq-5 absolute right-1 bottom-1 flex items-center justify-center rounded-full bg-blue-500">
-                        <Icon icon={Check} size={14} color="white" />
-                      </View>
-                    )}
-                  </TouchableOpacity>
-                )}
+                    </>
+                  ) : (
+                    <>
+                      <Image className="h-full w-full bg-gray-200 dark:bg-gray-700" source={{ uri: createImageUrl(item.path) }} />
+                      {(!item.latitude || !item.longitude) && (
+                        <View className="sq-6 absolute bottom-1 left-1 flex items-center justify-center rounded-full bg-background dark:bg-background-dark">
+                          <Icon icon={MapPinOff} size={16} />
+                        </View>
+                      )}
+                      {selectProps.isOpen && selectedImages.find((i) => i.id === item.id) && (
+                        <View className="sq-5 absolute right-1 bottom-1 flex items-center justify-center rounded-full bg-blue-500">
+                          <Icon icon={Check} size={14} color="white" />
+                        </View>
+                      )}
+                    </>
+                  )}
+                </TouchableOpacity>
               </>
             )}
           />
