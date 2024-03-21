@@ -1,11 +1,12 @@
 import * as cheerio from "cheerio"
 
-const url = `https://campspace.com/en/campsites?viewport=-41.48437500000001%2C34.74161249883172%2C85.078125%2C67.33986082559097&location=Map+area&startDate=&endDate=&numberOfAdults=2&numberOfChildren=0&filter%5Baccommodations%5D%5B%5D=bring_motorhome&filter%5Baccommodations%5D%5B%5D=bring_minivan&page=`
+const url = `https://campspace.com/en/campsites?viewport=-52.03125%2C34.30714385628804%2C80.85937500000001%2C68.49604022839505&location=Map+area&startDate=&endDate=&numberOfAdults=2&numberOfChildren=0&filter%5Baccommodations%5D%5B%5D=bring_motorhome&filter%5Baccommodations%5D%5B%5D=bring_minivan&page=`
 
 const pageCount = 50
 
 import { prisma } from "@ramble/database"
 import { convert } from "html-to-text"
+import { spotVerifyOrRemove } from './helpers/spotVerifierOrRemove'
 
 export type CampspaceSpot = {
   id: number
@@ -43,6 +44,8 @@ async function getPageCards(currentPage: number) {
     where: { campspaceId: { in: spots.map((s) => s.id) } },
   })
 
+  
+
   for (let index = 0; index < spots.length; index++) {
     const spot = spots[index]
 
@@ -51,7 +54,8 @@ async function getPageCards(currentPage: number) {
       const exists = currentData.find((s) => s.campspaceId === spot.id)
       console.log(exists && "Spot exists: " + spot.id)
       if (exists) continue
-      console.log("Adding spot: " + index + " out of " + spots.length + "page: " + currentPage)
+
+      console.log("Adding spot: " + index + " out of " + spots.length + " / page: " + currentPage)
 
       const spotDetail = await fetch(spot.link)
 
@@ -116,6 +120,13 @@ async function getPageCards(currentPage: number) {
 
 async function main() {
   try {
+    const spots = await prisma.spot.findMany({
+      where: { sourceUrl: { not: null }, campspaceId: { not: null } },
+      select: { sourceUrl: true },
+    }) as { sourceUrl: string }[]
+
+    await spotVerifyOrRemove(spots)
+
     // loop over each page
     for (let currentPage = 1; currentPage < pageCount + 1; currentPage++) {
       await getPageCards(currentPage)

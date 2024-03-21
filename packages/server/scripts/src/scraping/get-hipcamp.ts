@@ -1,5 +1,6 @@
 import { prisma } from "@ramble/database"
 import { gql, GraphQLClient } from "graphql-request"
+import { spotVerifyOrRemove } from './helpers/spotVerifierOrRemove'
 
 const LIMIT = 100
 
@@ -28,34 +29,6 @@ const headers = {
 
 const search = new GraphQLClient(searchEndpoint, { headers })
 const camper = new GraphQLClient(camperEndpoint, { headers })
-
-// const ukBbox = {
-//   southwestLatitude: 49.15437455073152,
-//   southwestLongitude: -14.155521505444824,
-//   northeastLatitude: 59.064346051468334,
-//   northeastLongitude: 1.9696403331486465,
-// }
-// const franceSpainPortugalBBox = {
-//   southwestLatitude: 34.26465635258491,
-//   southwestLongitude: -13.909058402557605,
-//   northeastLatitude: 51.24275392456704,
-//   northeastLongitude: 8.235671705008116,
-// }
-const restOfEuropeBBox = {
-  southwestLatitude: 32.51242431674814,
-  southwestLongitude: 6.64222969997283,
-  northeastLatitude: 59.8403587102855,
-  northeastLongitude: 45.25582584298422,
-}
-
-const searchVariables = {
-  landFilter: {
-    accommodations: ["rv-motorhomes", "vehicles"],
-    boundingBox: restOfEuropeBBox,
-  },
-  privateOffset: 0,
-  privateLimit: LIMIT,
-}
 
 const searchQuery = gql`
   query Lands($landFilter: LandFilterInput!, $privateOffset: Int, $privateLimit: Int) {
@@ -163,10 +136,19 @@ interface SearchRes {
   }
 }
 
-async function run() {
+async function run(bbox: {southwestLatitude: number, southwestLongitude: number, northeastLatitude: number, northeastLongitude: number}) {
   const errors: unknown[] = []
   let count = 0
   try {
+    const searchVariables = {
+      landFilter: {
+        accommodations: ["rv-motorhomes", "vehicles"],
+        boundingBox: bbox,
+      },
+      privateOffset: 0,
+      privateLimit: LIMIT,
+    }
+
     const searchRes: SearchRes = await search.request(searchQuery, searchVariables)
 
     const total = searchRes.lands.privateLands.total
@@ -271,7 +253,41 @@ async function run() {
 
 async function main() {
   try {
-    await run()
+    const spots = await prisma.spot.findMany({
+      where: { sourceUrl: { not: null }, hipcampId: { not: null } },
+      select: { sourceUrl: true },
+    }) as { sourceUrl: string }[]
+
+    await spotVerifyOrRemove(spots)
+
+    const bboxs = [
+      // uk
+      {
+        southwestLatitude: 49.15437455073152,
+        southwestLongitude: -14.155521505444824,
+        northeastLatitude: 59.064346051468334,
+        northeastLongitude: 1.9696403331486465,
+      },
+      // france, spain, portugal
+      {
+        southwestLatitude: 34.26465635258491,
+        southwestLongitude: -13.909058402557605,
+        northeastLatitude: 51.24275392456704,
+        northeastLongitude: 8.235671705008116,
+      },
+      // rest of europe
+      {
+        southwestLatitude: 32.51242431674814,
+        southwestLongitude: 6.64222969997283,
+        northeastLatitude: 59.8403587102855,
+        northeastLongitude: 45.25582584298422,
+      }
+    ]
+
+    bboxs.forEach(async bbox => {
+      await run(bbox)
+    });
+    
   } catch (error) {
     console.log(error)
     process.exit(1)
