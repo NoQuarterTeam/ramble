@@ -1,5 +1,5 @@
 import { MediaType } from "@ramble/database/types"
-import { createImageUrl, useDisclosure } from "@ramble/shared"
+import { createS3Url, useDisclosure } from "@ramble/shared"
 import { Camera, LocationPuck, type MapState, type MapView as MapType, StyleURL } from "@rnmapbox/maps"
 import type { Position } from "@rnmapbox/maps/lib/typescript/src/types/Position"
 import { FlashList } from "@shopify/flash-list"
@@ -99,18 +99,18 @@ export default function TripImages() {
         const info = await MediaLibrary.getAssetInfoAsync(asset.assetId)
         if (info.mediaType !== MediaLibrary.MediaType.photo && info.mediaType !== MediaLibrary.MediaType.video)
           return toast({ title: "Please upload an image or a video", type: "error" })
-        const mediaType = info.mediaType === MediaLibrary.MediaType.photo ? MediaType.IMAGE : MediaType.VIDEO
+        const type = info.mediaType === MediaLibrary.MediaType.photo ? MediaType.IMAGE : MediaType.VIDEO
         const media = {
           assetId: info.id,
           timestamp: dayjs(info.creationTime).toDate(),
           url: info.localUri || asset.uri,
           latitude: info.location?.latitude || null,
           longitude: info.location?.longitude || null,
-          mediaType,
+          type,
           duration: info.duration || null,
         }
-        let thumbnailPath: string | null = null
-        if (mediaType === MediaType.VIDEO) {
+        let thumbnailPath = null
+        if (type === MediaType.VIDEO) {
           const { uri } = await VideoThumbnails.getThumbnailAsync(asset.uri, { time: 0 })
           thumbnailPath = await upload(uri)
         }
@@ -205,13 +205,13 @@ export default function TripImages() {
                   style={{ width: size, height: size }}
                   className="relative"
                 >
-                  {item.mediaType === MediaType.VIDEO ? (
+                  {item.type === MediaType.VIDEO ? (
                     <>
                       <View className="w-full h-full flex items-center justify-center">
                         {item.thumbnailPath ? (
                           <Image
                             className="h-full w-full bg-gray-200 dark:bg-gray-700"
-                            source={{ uri: createImageUrl(item.thumbnailPath) }}
+                            source={{ uri: createS3Url(item.thumbnailPath) }}
                           />
                         ) : (
                           <View className="flex space-y-1 px-4 items-center">
@@ -236,7 +236,7 @@ export default function TripImages() {
                     </>
                   ) : (
                     <>
-                      <Image className="h-full w-full bg-gray-200 dark:bg-gray-700" source={{ uri: createImageUrl(item.path) }} />
+                      <Image className="h-full w-full bg-gray-200 dark:bg-gray-700" source={{ uri: createS3Url(item.path) }} />
                       {(!item.latitude || !item.longitude) && (
                         <View className="sq-6 absolute bottom-1 left-1 flex items-center justify-center rounded-full bg-background dark:bg-background-dark">
                           <Icon icon={MapPinOff} size={16} />

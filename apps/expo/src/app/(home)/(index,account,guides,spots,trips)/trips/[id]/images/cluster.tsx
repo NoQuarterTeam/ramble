@@ -1,5 +1,5 @@
 import { MediaType } from "@ramble/database/types"
-import { createImageUrl } from "@ramble/shared"
+import { createS3Url } from "@ramble/shared"
 import { FlashList } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import { Link, useLocalSearchParams } from "expo-router"
@@ -63,12 +63,12 @@ export default function TripImagesCluster() {
           renderItem={({ item }) => (
             <Link href={`/(home)/(trips)/trips/${id}/images/${item.id}?bounds=${bounds}`} asChild>
               <TouchableOpacity style={{ width: size, height: size }}>
-                {item.mediaType === MediaType.VIDEO ? (
+                {item.type === MediaType.VIDEO ? (
                   <View className="w-full h-full flex items-center justify-center">
                     {item.thumbnailPath ? (
                       <Image
                         className="h-full w-full bg-gray-200 dark:bg-gray-700"
-                        source={{ uri: createImageUrl(item.thumbnailPath) }}
+                        source={{ uri: createS3Url(item.thumbnailPath) }}
                       />
                     ) : (
                       <View className="flex space-y-1 px-4 items-center">
@@ -81,7 +81,7 @@ export default function TripImagesCluster() {
                     )}
                   </View>
                 ) : (
-                  <Image className="h-full w-full bg-gray-200 dark:bg-gray-700" source={{ uri: createImageUrl(item.path) }} />
+                  <Image className="h-full w-full bg-gray-200 dark:bg-gray-700" source={{ uri: createS3Url(item.path) }} />
                 )}
               </TouchableOpacity>
             </Link>

@@ -11,7 +11,7 @@ import { z } from "zod"
 import { zx } from "zodix"
 
 import type { Prisma, SpotType } from "@ramble/database/types"
-import { SPOT_TYPE_OPTIONS, createImageUrl, merge } from "@ramble/shared"
+import { SPOT_TYPE_OPTIONS, createS3Url, merge } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -133,7 +133,7 @@ const columns = [
       <div className="flex items-center space-x-2">
         <Avatar
           className="sq-8"
-          src={createImageUrl(info.getValue().avatar)}
+          src={createS3Url(info.getValue().avatar)}
           placeholder={info.getValue().avatarBlurHash}
           size={40}
         />
@@ -151,7 +151,7 @@ const columns = [
         <div className="flex items-center space-x-2">
           <Avatar
             className="sq-8"
-            src={createImageUrl(row.original.verifier.avatar)}
+            src={createS3Url(row.original.verifier.avatar)}
             placeholder={row.original.verifier.avatarBlurHash}
             size={40}
           />
@@ -268,7 +268,7 @@ function RenderSubComponent({ row }: { row: Row<Spot> }) {
             fit="cover"
             className="h-[200px] w-[300px] rounded"
             alt="spot"
-            src={createImageUrl(image.path)}
+            src={createS3Url(image.path)}
           />
         </div>
       ))}

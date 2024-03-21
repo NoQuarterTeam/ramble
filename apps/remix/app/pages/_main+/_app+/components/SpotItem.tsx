@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate } from "@remix-run/react"
 import { Heart, Star } from "lucide-react"
 
 import { type SpotItemType, displaySaved } from "@ramble/shared"
-import { createImageUrl, displayRating } from "@ramble/shared"
+import { createS3Url, displayRating } from "@ramble/shared"
 
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { SpotIcon } from "~/components/SpotIcon"
@@ -29,7 +29,7 @@ export function SpotItem({ spot }: Props) {
               width={450}
               height={300}
               className="h-full w-full rounded-xs"
-              src={createImageUrl(spot.image)}
+              src={createS3Url(spot.image)}
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center rounded-xs bg-gray-50 dark:bg-gray-800">

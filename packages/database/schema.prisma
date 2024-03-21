@@ -379,7 +379,7 @@ model TripMedia {
   latitude      Float?
   longitude     Float?
   note          String?    @db.Text
-  mediaType     MediaType?
+  type          MediaType? @default(IMAGE)
   duration      Int?
   thumbnailPath String?
   assetId       String     @unique()

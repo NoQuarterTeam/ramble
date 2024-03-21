@@ -4,7 +4,7 @@ import { ChevronLeft, Heart, Instagram, User2 } from "lucide-react-native"
 import * as React from "react"
 import { Linking, ScrollView, TouchableOpacity, View, useColorScheme } from "react-native"
 
-import { createImageUrl } from "@ramble/shared"
+import { createS3Url } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
@@ -111,7 +111,7 @@ export default function UserScreen() {
                   width={100}
                   placeholder={user.avatarBlurHash}
                   height={100}
-                  source={{ uri: createImageUrl(user.avatar) }}
+                  source={{ uri: createS3Url(user.avatar) }}
                   style={{ height: 100, width: 100 }}
                   className="rounded-full bg-gray-100 object-cover dark:bg-gray-700"
                 />

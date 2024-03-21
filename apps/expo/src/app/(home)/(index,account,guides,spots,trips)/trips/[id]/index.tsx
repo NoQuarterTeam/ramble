@@ -25,7 +25,7 @@ import DraggableFlatList, { type RenderItemParams, ScaleDecorator } from "react-
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import * as DropdownMenu from "zeego/dropdown-menu"
 
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createImageUrl, join } from "@ramble/shared"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createS3Url, join } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
@@ -154,7 +154,7 @@ export default function TripDetailScreen() {
                 )}
               >
                 <View className="h-full w-full rounded-sm border-2 border-white bg-background dark:bg-background-dark">
-                  <Image source={{ uri: createImageUrl(clusterImagePath) }} style={{ width: "100%", height: "100%" }} />
+                  <Image source={{ uri: createS3Url(clusterImagePath) }} style={{ width: "100%", height: "100%" }} />
                 </View>
                 <View className="sq-5 -top-1 -right-1 absolute flex items-center justify-center rounded-full bg-blue-500">
                   <Text className="text-center font-600 text-white">{point.properties.point_count_abbreviated}</Text>
@@ -177,7 +177,7 @@ export default function TripDetailScreen() {
               onPress={() => router.push(`/(home)/(trips)/trips/${id}/images/${media.id}`)}
               className="sq-12 flex items-center justify-center overflow-hidden rounded-md border-2 border-white"
             >
-              <Image source={{ uri: createImageUrl(itemImagePath) }} style={{ width: "100%", height: "100%" }} />
+              <Image source={{ uri: createS3Url(itemImagePath) }} style={{ width: "100%", height: "100%" }} />
             </TouchableOpacity>
           </MarkerView>
         )
@@ -399,14 +399,14 @@ function TripImageSync({
           try {
             const info = await MediaLibrary.getAssetInfoAsync(asset)
             if (!info.location) continue
-            const mediaType = info.mediaType === MediaLibrary.MediaType.photo ? MediaType.IMAGE : MediaType.VIDEO
+            const type = info.mediaType === MediaLibrary.MediaType.photo ? MediaType.IMAGE : MediaType.VIDEO
             const mediaWithData = {
               assetId: asset.id,
               url: info.localUri || asset.uri,
               latitude: info.location.latitude,
               longitude: info.location.longitude,
               timestamp: dayjs(asset.creationTime).toDate(),
-              mediaType,
+              type,
               duration: info.duration || null,
             }
             mediaToSync.push(mediaWithData)
@@ -418,7 +418,7 @@ function TripImageSync({
         for (const media of mediaToSync) {
           try {
             let thumbnailPath: string | null = null
-            if (media.mediaType === MediaType.VIDEO) {
+            if (media.type === MediaType.VIDEO) {
               const { uri } = await VideoThumbnails.getThumbnailAsync(media.url, { time: 0 })
               thumbnailPath = await upload(uri)
             }
@@ -634,7 +634,7 @@ const TripItem = React.memo(function _TripItem({
                     placeholder={spot.images[0].blurHash}
                     height={150}
                     className="w-full flex-1 rounded-t bg-gray-50 object-cover dark:bg-gray-800"
-                    source={{ uri: createImageUrl(spot.images[0].path) }}
+                    source={{ uri: createS3Url(spot.images[0].path) }}
                   />
                 ) : (
                   <View className="flex h-full w-full flex-1 items-center justify-center rounded bg-gray-50 dark:bg-gray-800">
