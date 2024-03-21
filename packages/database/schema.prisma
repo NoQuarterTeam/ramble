@@ -198,10 +198,10 @@ model Spot {
   mossyEarthId             String? @unique
   rewildingEuropeId        String? @unique
   polskiCaravaningId       String? @unique
+  googlePlaceId            String? @unique
 
   @@index([publishedAt])
   @@index([ownerId])
-  @@index([coverId])
   @@index([verifierId])
   @@index([creatorId])
   @@index([longitude])

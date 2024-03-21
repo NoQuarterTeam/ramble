@@ -26,11 +26,16 @@ export default function NewSpotInfoScreen() {
     }
   })
 
-  const params = useLocalSearchParams<{ type: SpotType }>()
+  const params = useLocalSearchParams<{
+    type: SpotType
+    name?: string
+    isPetFriendly?: "true" | "false"
+  }>()
+
   const router = useRouter()
-  const [name, setName] = React.useState<string>()
+  const [name, setName] = React.useState<string>(params.name || "")
   const [description, setDescription] = React.useState<string>()
-  const [isPetFriendly, setIsPetFriendly] = React.useState(false)
+  const [isPetFriendly, setIsPetFriendly] = React.useState(params.isPetFriendly === "true")
 
   return (
     <NewSpotModalView title="some info">
@@ -73,7 +78,6 @@ export default function NewSpotInfoScreen() {
               isPetFriendly: String(isPetFriendly),
             })
             router.push(
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               doesSpotTypeRequireAmenities(params.type) ? `/new/amenities?${searchParams}` : `/new/images?${searchParams}`,
             )

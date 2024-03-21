@@ -2,8 +2,6 @@
 import * as React from "react"
 import { useAuthenticityToken } from "remix-utils/csrf/react"
 
-import { assetPrefix } from "@ramble/shared"
-
 export type UploadFile = {
   fileUrl: string
   fileKey: string
@@ -16,14 +14,14 @@ export function useS3Upload(): [(file: File) => Promise<string>, { isLoading: bo
   async function upload(file: File) {
     try {
       setIsLoading(true)
-      const key = `${assetPrefix}${crypto.randomUUID()}.${file.type.split("/").pop()}`
+
       const formData = new FormData()
-      formData.append("key", assetPrefix + key)
+      formData.append("type", file.type.split("/").pop()!)
       formData.append("csrf", csrf)
       const res = await fetch("/api/s3/createSignedUrl", { method: "POST", body: formData })
-      const signedUrl = (await res.json()) as string
-      if (!signedUrl) throw new Error("Error fetching signed url")
-      await fetch(signedUrl, { method: "PUT", headers: { "Content-Type": file.type }, body: file })
+      const { url, key } = (await res.json()) as { key: string; url: string }
+      if (!url) throw new Error("Error fetching signed url")
+      await fetch(url, { method: "PUT", headers: { "Content-Type": file.type }, body: file })
       setIsLoading(false)
       return key
     } catch (error) {

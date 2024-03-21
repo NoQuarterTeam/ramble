@@ -59,7 +59,6 @@
     "expo-web-browser",
     "lucide-react-native",
     "react-native-gesture-handler",
-    "react-native-get-random-values",
     "react-native-ios-context-menu",
     "react-native-ios-utilities",
     "react-native-progress",
@@ -70,7 +69,6 @@
     "react-native-web",
     "react-native",
     "sharp",
-    "tailwindcss",
-    "uuid"
+    "tailwindcss"
   ]
 }
