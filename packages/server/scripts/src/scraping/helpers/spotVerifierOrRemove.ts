@@ -16,10 +16,10 @@ export async function spotVerifyOrRemove(spots: { sourceUrl: string }[]) {
         (spot.sourceUrl.includes("camperspace") && !res1.url.includes("/s/")) ||
         (spot.sourceUrl.includes("hipcamp") && res1.url.includes("/d/"))
       ) {
-        console.log("Removing spot: " + spotId)
+        console.log(`Removing spot: ${spotId}`)
         await prisma.spot.update({ where: { id: spotId }, data: { closedAt: new Date() } })
       } else if (res1.ok && !res1.redirected) {
-        console.log("Update sourceUrl for spot: " + spotId)
+        console.log(`Update sourceUrl for spot: ${spotId}`)
         await prisma.spot.update({ where: { id: spotId }, data: { sourceUrl: res1.url } })
       }
     }
