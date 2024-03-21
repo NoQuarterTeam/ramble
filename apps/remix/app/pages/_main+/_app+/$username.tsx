@@ -6,7 +6,7 @@ import { zx } from "zodix"
 
 import { userSchema } from "@ramble/server-schemas"
 import { generateBlurHash } from "@ramble/server-services"
-import { createImageUrl, merge, userInterestFields } from "@ramble/shared"
+import { createS3Url, merge, userInterestFields } from "@ramble/shared"
 
 import { Form, FormButton, useFetcher } from "~/components/Form"
 import { ImageUploader } from "~/components/ImageUploader"
@@ -110,7 +110,7 @@ export default function ProfileLists() {
                       size={200}
                       placeholder={user.avatarBlurHash}
                       className="sq-28 md:sq-20 xl:sq-32"
-                      src={createImageUrl(user.avatar)}
+                      src={createS3Url(user.avatar)}
                     />
                     {isCurrentUser && (
                       <div className="absolute inset-0 hidden cursor-pointer items-center justify-center rounded-full bg-gray-800/40 group-hover:flex">

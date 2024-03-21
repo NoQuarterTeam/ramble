@@ -3,7 +3,7 @@ import { User2 } from "lucide-react-native"
 import { TouchableOpacity, View } from "react-native"
 
 import type { User } from "@ramble/database/types"
-import { createImageUrl } from "@ramble/shared"
+import { createS3Url } from "@ramble/shared"
 
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
@@ -46,7 +46,7 @@ export function CreatorCard({ creator }: Props) {
             height={36}
             width={36}
             placeholder={creator.avatarBlurHash}
-            source={{ uri: createImageUrl(creator.avatar) }}
+            source={{ uri: createS3Url(creator.avatar) }}
             className="sq-9 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
           />
         ) : (

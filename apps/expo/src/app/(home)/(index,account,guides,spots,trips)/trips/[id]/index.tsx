@@ -25,7 +25,7 @@ import DraggableFlatList, { type RenderItemParams, ScaleDecorator } from "react-
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import * as DropdownMenu from "zeego/dropdown-menu"
 
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createImageUrl, join } from "@ramble/shared"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createS3Url, join } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
@@ -153,7 +153,7 @@ export default function TripDetailScreen() {
               >
                 <View className="h-full w-full rounded-sm border-2 border-white bg-background dark:bg-background-dark">
                   <Image
-                    source={{ uri: createImageUrl(point.properties.media[0]?.properties.path) }}
+                    source={{ uri: createS3Url(point.properties.media[0]?.properties.path) }}
                     style={{ width: "100%", height: "100%" }}
                   />
                 </View>
@@ -176,7 +176,7 @@ export default function TripDetailScreen() {
               onPress={() => router.push(`/(home)/(trips)/trips/${id}/images/${media.id}`)}
               className="sq-12 flex items-center justify-center overflow-hidden rounded-md border-2 border-white"
             >
-              <Image source={{ uri: createImageUrl(media.path) }} style={{ width: "100%", height: "100%" }} />
+              <Image source={{ uri: createS3Url(media.path) }} style={{ width: "100%", height: "100%" }} />
             </TouchableOpacity>
           </MarkerView>
         )
@@ -398,14 +398,14 @@ function TripImageSync({
           try {
             const info = await MediaLibrary.getAssetInfoAsync(image)
             if (!info.location) continue
-            const mediaType: MediaType = info.mediaType === ExpoMediaType.photo ? "IMAGE" : "VIDEO"
+            const type: MediaType = info.mediaType === ExpoMediaType.photo ? "IMAGE" : "VIDEO"
             const imageWithData = {
               assetId: image.id,
               url: info.localUri || image.uri,
               latitude: info.location.latitude,
               longitude: info.location.longitude,
               timestamp: dayjs(image.creationTime).toDate(),
-              mediaType,
+              type,
               duration: info.duration || null,
             }
             imagesToSync.push(imageWithData)
@@ -629,7 +629,7 @@ const TripItem = React.memo(function _TripItem({
                     placeholder={spot.images[0].blurHash}
                     height={150}
                     className="w-full flex-1 rounded-t bg-gray-50 object-cover dark:bg-gray-800"
-                    source={{ uri: createImageUrl(spot.images[0].path) }}
+                    source={{ uri: createS3Url(spot.images[0].path) }}
                   />
                 ) : (
                   <View className="flex h-full w-full flex-1 items-center justify-center rounded bg-gray-50 dark:bg-gray-800">

@@ -2,7 +2,7 @@ import { Link } from "@remix-run/react"
 import { BadgeX, Verified } from "lucide-react"
 
 import type { User } from "@ramble/database/types"
-import { createImageUrl } from "@ramble/shared"
+import { createS3Url } from "@ramble/shared"
 
 import { Avatar } from "../../../../components/ui/Avatar"
 
@@ -38,7 +38,7 @@ export function VerifiedCard({ spot }: Props) {
                 className="sq-8 @lg:sq-10"
                 size={40}
                 placeholder={spot.verifier.avatarBlurHash}
-                src={createImageUrl(spot.verifier.avatar)}
+                src={createS3Url(spot.verifier.avatar)}
               />
             </div>
           </Link>

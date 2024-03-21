@@ -1,4 +1,4 @@
-import { createImageUrl } from "@ramble/shared"
+import { createS3Url } from "@ramble/shared"
 import { FlashList } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import { Link, useLocalSearchParams } from "expo-router"
@@ -59,7 +59,7 @@ export default function TripImagesCluster() {
           renderItem={({ item }) => (
             <Link href={`/(home)/(trips)/trips/${id}/images/${item.id}?bounds=${bounds}`} asChild>
               <TouchableOpacity style={{ width: size, height: size }}>
-                <Image className="h-full w-full bg-gray-200 dark:bg-gray-700" source={{ uri: createImageUrl(item.path) }} />
+                <Image className="h-full w-full bg-gray-200 dark:bg-gray-700" source={{ uri: createS3Url(item.path) }} />
               </TouchableOpacity>
             </Link>
           )}

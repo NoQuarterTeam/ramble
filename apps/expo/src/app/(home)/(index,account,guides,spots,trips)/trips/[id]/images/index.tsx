@@ -1,5 +1,5 @@
 import type { MediaType } from "@ramble/database/types"
-import { createImageUrl, useDisclosure } from "@ramble/shared"
+import { createS3Url, useDisclosure } from "@ramble/shared"
 import { Camera, LocationPuck, type MapState, type MapView as MapType, StyleURL } from "@rnmapbox/maps"
 import type { Position } from "@rnmapbox/maps/lib/typescript/src/types/Position"
 import { FlashList } from "@shopify/flash-list"
@@ -98,18 +98,18 @@ export default function TripImages() {
         const info = await MediaLibrary.getAssetInfoAsync(asset.assetId)
         if (info.mediaType !== "photo" && info.mediaType !== "video")
           return toast({ title: "Please upload an image or a video", type: "error" })
-        const mediaType: MediaType = info.mediaType === "photo" ? "IMAGE" : "VIDEO"
+        const type: MediaType = info.mediaType === "photo" ? "IMAGE" : "VIDEO"
         const media = {
           assetId: info.id,
           timestamp: dayjs(info.creationTime).toDate(),
           url: info.localUri || asset.uri,
           latitude: info.location?.latitude || null,
           longitude: info.location?.longitude || null,
-          mediaType,
+          type,
           duration: info.duration || null,
         }
-        let thumbnailPath: string | null = null
-        if (mediaType === "VIDEO") {
+        let thumbnailPath = null
+        if (type === "VIDEO") {
           const { uri } = await VideoThumbnails.getThumbnailAsync(asset.uri, { time: 0 })
           thumbnailPath = await upload(uri)
         }
@@ -190,7 +190,7 @@ export default function TripImages() {
             extraData={{ isOpen: selectProps.isOpen, selectedImages }}
             renderItem={({ item }) => (
               <>
-                {item.mediaType === "VIDEO" ? (
+                {item.type === "VIDEO" ? (
                   <TouchableOpacity
                     activeOpacity={0.8}
                     onPress={() => {
@@ -209,7 +209,7 @@ export default function TripImages() {
                       {item.thumbnailPath ? (
                         <Image
                           className="h-full w-full bg-gray-200 dark:bg-gray-700"
-                          source={{ uri: createImageUrl(item.thumbnailPath) }}
+                          source={{ uri: createS3Url(item.thumbnailPath) }}
                         />
                       ) : (
                         <Text>no thumbnail</Text>
@@ -248,7 +248,7 @@ export default function TripImages() {
                     style={{ width: size, height: size }}
                     className="relative"
                   >
-                    <Image className="h-full w-full bg-gray-200 dark:bg-gray-700" source={{ uri: createImageUrl(item.path) }} />
+                    <Image className="h-full w-full bg-gray-200 dark:bg-gray-700" source={{ uri: createS3Url(item.path) }} />
                     {(!item.latitude || !item.longitude) && (
                       <View className="sq-6 absolute bottom-1 left-1 flex items-center justify-center rounded-full bg-background dark:bg-background-dark">
                         <Icon icon={MapPinOff} size={16} />

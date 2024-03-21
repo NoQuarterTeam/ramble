@@ -11,7 +11,7 @@ import { Alert, type LayoutChangeEvent, TouchableOpacity, View } from "react-nat
 import { Gesture, GestureDetector, TouchableWithoutFeedback } from "react-native-gesture-handler"
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 
-import { createImageUrl } from "@ramble/shared"
+import { createS3Url } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
@@ -34,7 +34,7 @@ export default function TripImage() {
   const { me } = useMe()
   const { id, imageId, bounds } = useLocalSearchParams<{ id: string; imageId?: string; bounds?: string }>()
 
-  const video = React.useRef(null) // TODO types
+  const video = React.useRef<Video>(null)
   const [status, setStatus] = React.useState<AVPlaybackStatus | undefined>()
 
   const parsedBounds = bounds?.split(",").map(Number)
@@ -78,7 +78,7 @@ export default function TripImage() {
   const handleDownload = async () => {
     try {
       if (!data) return
-      const file = await FileSystem.downloadAsync(createImageUrl(data.path), FileSystem.documentDirectory + data.path)
+      const file = await FileSystem.downloadAsync(createS3Url(data.path), FileSystem.documentDirectory + data.path)
       await MediaLibrary.saveToLibraryAsync(file.uri)
     } catch (error) {
       console.log(error)
@@ -245,43 +245,41 @@ export default function TripImage() {
     >
       {isLoading || !data ? null : (
         <View className="relative flex-1 pb-2">
-          {data.mediaType === "VIDEO" ? (
+          {data.type === "VIDEO" ? (
             <View>
               <TouchableWithoutFeedback
-                onPress={() =>
-                  // @ts-ignore
-                  status?.isPlaying ? video.current?.pauseAsync() : video.current?.playAsync()
+                onPress={
+                  status?.isLoaded
+                    ? () => (status?.isPlaying ? video.current?.pauseAsync() : video.current?.playAsync())
+                    : undefined
                 }
               >
                 <Video
                   ref={video}
                   style={{ height: "100%", width: "100%" }}
-                  source={{ uri: createImageUrl(data.path) }}
+                  source={{ uri: createS3Url(data.path) }}
                   resizeMode={ResizeMode.COVER}
                   isLooping
-                  onPlaybackStatusUpdate={(status) => setStatus(status)}
+                  onPlaybackStatusUpdate={(status: AVPlaybackStatus) => setStatus(status)}
                 />
                 <View className="absolute w-full h-full flex items-center justify-center">
-                  {
-                    // @ts-ignore
-                    status?.isBuffering ? (
-                      <Spinner />
-                    ) : (
-                      status?.isLoaded &&
-                      !status?.isPlaying && (
-                        <View className="rounded-full h-[60px] w-[60px] flex items-center justify-center bg-gray-600">
-                          <Icon icon={Play} size={24} fill="white" stroke="white" className="ml-1" />
-                        </View>
-                      )
+                  {!status?.isLoaded ? null : status.isBuffering ? (
+                    <Spinner />
+                  ) : (
+                    status?.isLoaded &&
+                    !status?.isPlaying && (
+                      <View className="rounded-full h-[60px] w-[60px] flex items-center justify-center bg-gray-600">
+                        <Icon icon={Play} size={24} fill="white" stroke="white" className="ml-1" />
+                      </View>
                     )
-                  }
+                  )}
                 </View>
               </TouchableWithoutFeedback>
             </View>
           ) : (
             <GestureDetector gesture={gestures}>
               <Animated.View style={[styles, { flex: 1 }]} onLayout={onImageLayout}>
-                <Image source={{ uri: createImageUrl(data.path) }} className="h-full flex-1" contentFit="contain" />
+                <Image source={{ uri: createS3Url(data.path) }} className="h-full flex-1" contentFit="contain" />
               </Animated.View>
             </GestureDetector>
           )}
