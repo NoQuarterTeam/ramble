@@ -291,7 +291,7 @@ export function AddTripSpotPreview({ spotId, onClose }: { spotId: string; onClos
           <View className="overflow-hidden rounded-xs">
             <SpotImageCarousel
               canAddMore
-              spotId={spot.id}
+              spot={spot}
               onPress={() => router.push(`/(home)/(trips)/spot/${spot.id}`)}
               key={spot.id} // so images reload
               width={width - 32}

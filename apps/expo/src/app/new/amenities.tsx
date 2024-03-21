@@ -11,18 +11,21 @@ import type { RambleIcon } from "~/components/ui/Icons"
 import { Text } from "~/components/ui/Text"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 
+import type { AmenityObject } from "~/components/AmenitySelector"
 import { NewSpotModalView } from "./NewSpotModalView"
 
 export default function NewSpotAmenitiesScreen() {
-  const params = useLocalSearchParams()
+  const params = useLocalSearchParams<{ amenities?: string }>()
   const [amenities, setAmenities] = React.useState(
-    Object.keys(AMENITIES).reduce(
-      (acc, key) => {
-        acc[key as keyof typeof AMENITIES] = false
-        return acc
-      },
-      {} as { [key in keyof typeof AMENITIES]: boolean },
-    ),
+    params.amenities
+      ? Object.entries(JSON.parse(params.amenities)).reduce((acc, [key, value]) => {
+          acc[key as keyof typeof AMENITIES] = value as boolean
+          return acc
+        }, {} as AmenityObject)
+      : Object.keys(AMENITIES).reduce((acc, key) => {
+          acc[key as keyof typeof AMENITIES] = false
+          return acc
+        }, {} as AmenityObject),
   )
 
   const router = useRouter()
@@ -45,7 +48,6 @@ export default function NewSpotAmenitiesScreen() {
           className="rounded-full"
           onPress={() => {
             const searchParams = new URLSearchParams({ ...params, amenities: JSON.stringify(amenities) })
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             router.push(`/new/images?${searchParams}`)
           }}

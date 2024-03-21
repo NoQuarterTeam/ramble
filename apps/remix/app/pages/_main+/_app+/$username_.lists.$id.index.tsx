@@ -20,7 +20,6 @@ import { db } from "~/lib/db.server"
 import { createAction, createActions } from "~/lib/form.server"
 import { useLoaderHeaders } from "~/lib/headers.server"
 import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
-import { fetchAndJoinSpotImages } from "~/lib/models/spot"
 import { notFound, redirect } from "~/lib/remix.server"
 import { bbox, lineString } from "~/lib/vendor/turf.server"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
@@ -54,6 +53,8 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
         Spot
       LEFT JOIN
         ListSpot ON Spot.id = ListSpot.spotId
+      LEFT JOIN
+        SpotImage ON Spot.coverId = SpotImage.id
       WHERE
         ListSpot.listId = ${params.id} AND ${publicSpotWhereClauseRaw(user?.id)}
       GROUP BY
@@ -63,8 +64,6 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
     `,
   })
   if (!list) throw notFound()
-
-  await fetchAndJoinSpotImages(spots)
 
   const coords = spots.length > 1 ? spots.map((spot) => [spot.longitude, spot.latitude]) : null
 
