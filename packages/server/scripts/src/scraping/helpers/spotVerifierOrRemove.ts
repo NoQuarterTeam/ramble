@@ -5,7 +5,6 @@ export async function spotVerifyOrRemove(spots: { sourceUrl: string }[]) {
   await Promise.all(spots.map(async (spot) => {
 
     const res = await fetch(spot.sourceUrl)
-    console.log(res.ok, res.status, res.redirected, res.url, spot.sourceUrl)
 
     if (!res.ok || res.status === 301 || res.redirected) {
       const res1 = await fetch(res.url)
