@@ -6,7 +6,7 @@
   },
   "type": "commonjs",
   "devDependencies": {
-    "@biomejs/biome": "1.6.1",
+    "@biomejs/biome": "1.6.2",
     "typescript": "5.4.3"
   },
   "scripts": {
