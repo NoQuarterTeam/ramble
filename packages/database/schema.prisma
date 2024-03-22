@@ -207,8 +207,9 @@ model Spot {
   @@index([verifierId])
   @@index([creatorId])
   @@index([longitude])
-  @@index([verifiedAt, type, deletedAt, creatorId, publishedAt, closedAt])
+  @@index([verifiedAt, type, deletedAt, creatorId, publishedAt])
   @@index([type, verifiedAt, latitude, longitude, deletedAt, creatorId, publishedAt])
+  @@index([deletedAt])
 }
 
 model SpotAmenities {
