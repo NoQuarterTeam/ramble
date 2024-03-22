@@ -52,6 +52,7 @@
     "expo-localization",
     "expo-location",
     "expo-media-library",
+    "expo-network",
     "expo-splash-screen",
     "expo-status-bar",
     "expo-system-ui",
