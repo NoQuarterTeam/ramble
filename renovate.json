@@ -53,6 +53,8 @@
     "expo-location",
     "expo-media-library",
     "expo-network",
+    "expo-av",
+    "expo-video-thumbnails",
     "expo-splash-screen",
     "expo-status-bar",
     "expo-system-ui",
