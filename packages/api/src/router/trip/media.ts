@@ -119,21 +119,32 @@ export const tripMediaRouter = createTRPCRouter({
       })
       return true
     }),
-  upload: protectedProcedure.input(z.object({ tripId: z.string(), image: tripMediaSchema })).mutation(async ({ ctx, input }) => {
-    await ctx.prisma.tripMedia
-      .create({ data: { tripId: input.tripId, ...input.image, creatorId: ctx.user.id } })
-      .catch((error) => {
+  upload: protectedProcedure
+    .input(
+      z.object({
+        tripId: z.string(),
+        /**
+         * @deprecated
+         */
+        image: tripMediaSchema.optional(),
+        media: tripMediaSchema.optional(), // make required at some point,
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (!input.image && !input.media) throw new TRPCError({ code: "BAD_REQUEST", message: "Media required" })
+      const data = input.image || input.media!
+      await ctx.prisma.tripMedia.create({ data: { tripId: input.tripId, ...data, creatorId: ctx.user.id } }).catch((error) => {
         if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
           throw new TRPCError({ code: "BAD_REQUEST", message: "Media already exists" })
         }
       })
-    const latestTimestamp = await ctx.prisma.tripMedia.findFirst({
-      where: { tripId: input.tripId, deletedAt: null },
-      orderBy: { timestamp: "desc" },
-      select: { timestamp: true },
-    })
-    return latestTimestamp?.timestamp
-  }),
+      const latestTimestamp = await ctx.prisma.tripMedia.findFirst({
+        where: { tripId: input.tripId, deletedAt: null },
+        orderBy: { timestamp: "desc" },
+        select: { timestamp: true },
+      })
+      return latestTimestamp?.timestamp
+    }),
   remove: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
     await ctx.prisma.tripMedia.update({ where: { id: input.id }, data: { deletedAt: new Date() } })
     return true

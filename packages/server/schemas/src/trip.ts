@@ -14,6 +14,6 @@ export const tripMediaSchema = z.object({
   assetId: z.string(),
   timestamp: z.date(),
   type: z.nativeEnum(MediaType),
-  duration: z.number().nullable(),
-  thumbnailPath: z.string().nullable(),
+  duration: z.number().nullish(),
+  thumbnailPath: z.string().nullish(),
 })

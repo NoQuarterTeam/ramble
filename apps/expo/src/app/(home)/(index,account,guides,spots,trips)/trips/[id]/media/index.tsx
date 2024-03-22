@@ -123,7 +123,7 @@ export default function TripMedia() {
         }
         const path = await upload(media.url)
         const data = { path, thumbnailPath, ...media }
-        uploadMedia({ tripId: id, image: data })
+        uploadMedia({ tripId: id, media: data })
       }
     } catch (error) {
       console.log(error)
