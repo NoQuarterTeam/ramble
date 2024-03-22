@@ -377,12 +377,12 @@ enum MediaType {
 }
 
 model TripMedia {
-  id            String     @id @default(uuid())
+  id            String    @id @default(uuid())
   path          String
   latitude      Float?
   longitude     Float?
-  note          String?    @db.Text
-  type          MediaType? @default(IMAGE)
+  note          String?   @db.Text
+  type          MediaType @default(IMAGE)
   duration      Int?
   thumbnailPath String?
   assetId       String
