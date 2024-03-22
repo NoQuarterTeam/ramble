@@ -13,7 +13,7 @@ export const tripMediaSchema = z.object({
   longitude: z.number().nullable(),
   assetId: z.string(),
   timestamp: z.date(),
-  type: z.nativeEnum(MediaType),
+  type: z.nativeEnum(MediaType).optional(), // todo: remove optional eventually
   duration: z.number().nullish(),
   thumbnailPath: z.string().nullish(),
 })
