@@ -1,5 +1,5 @@
 import { useActionSheet } from "@expo/react-native-action-sheet"
-import { MediaType } from "@ramble/database/types"
+import type { MediaType } from "@ramble/database/types"
 import {
   Camera,
   LineLayer,
@@ -15,6 +15,7 @@ import * as Haptics from "expo-haptics"
 import { Image } from "expo-image"
 import * as Location from "expo-location"
 import * as MediaLibrary from "expo-media-library"
+import * as Network from "expo-network"
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import * as VideoThumbnails from "expo-video-thumbnails"
@@ -362,7 +363,10 @@ function TripImageSync({
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: allow it
   React.useEffect(() => {
-    async function loadImages() {
+    async function loadMedia() {
+      const networkState = await Network.getNetworkStateAsync()
+      if (!networkState.isConnected) return toast({ title: "Syncing disabled", message: "No internet connection" })
+      if (networkState.type !== Network.NetworkStateType.WIFI) return toast({ title: "Syncing disabled", message: "Not on wifi" })
       const isTripActive = dayjs(startDate).isBefore(dayjs()) && dayjs(endDate).isAfter(dayjs())
       if (!isTripActive) return
       try {
@@ -399,7 +403,7 @@ function TripImageSync({
           try {
             const info = await MediaLibrary.getAssetInfoAsync(asset)
             if (!info.location) continue
-            const type = info.mediaType === MediaLibrary.MediaType.photo ? MediaType.IMAGE : MediaType.VIDEO
+            const type: MediaType = info.mediaType === MediaLibrary.MediaType.photo ? "IMAGE" : "VIDEO"
             const mediaWithData = {
               assetId: asset.id,
               url: info.localUri || asset.uri,
@@ -418,7 +422,7 @@ function TripImageSync({
         for (const media of mediaToSync) {
           try {
             let thumbnailPath = null
-            if (media.type === MediaType.VIDEO) {
+            if (media.type === "VIDEO") {
               const { uri } = await VideoThumbnails.getThumbnailAsync(media.url, { time: 0 })
               thumbnailPath = await upload(uri)
             }
@@ -437,7 +441,7 @@ function TripImageSync({
         setIsSyncing(false)
       }
     }
-    loadImages()
+    loadMedia()
   }, [startDate, endDate, latestMediaTimestamp, id])
   if (!isSyncing) return null
   return (
