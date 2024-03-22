@@ -31,33 +31,34 @@ import { formatVideoDuration } from "~/lib/utils"
 
 const size = width / 3
 
-export default function TripImages() {
+export default function TripMedia() {
   const { id } = useLocalSearchParams<{ id: string }>()
 
   const { data, refetch, isLoading } = api.trip.media.all.useQuery({ tripId: id, skip: 0 })
   const total = data?.total || 0
-  const [images, setImages] = React.useState(data?.items || [])
+  const [media, setMedia] = React.useState(data?.items || [])
 
   React.useEffect(() => {
-    setImages(data?.items || [])
+    setMedia(data?.items || [])
   }, [data?.items])
 
   const utils = api.useUtils()
 
   const [isRefetching, setIsRefetching] = React.useState(false)
-  // biome-ignore lint/correctness/useExhaustiveDependencies: allow dat
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: naa
   const handleLoadMore = React.useCallback(async () => {
-    if (isRefetching || total === images.length) return
+    if (isRefetching || total === media.length) return
     try {
       setIsRefetching(true)
-      const newImages = await utils.trip.media.all.fetch({ tripId: id, skip: images?.length || 0 })
-      setImages([...(images || []), ...newImages.items])
+      const newMedia = await utils.trip.media.all.fetch({ tripId: id, skip: media?.length || 0 })
+      setMedia([...(media || []), ...newMedia.items])
     } catch {
-      toast({ title: "Failed to load more images", type: "error" })
+      toast({ title: "Failed to load more", type: "error" })
     } finally {
       setIsRefetching(false)
     }
-  }, [isRefetching, images, id])
+  }, [isRefetching, media, id, total])
 
   const upload = useS3QuickUpload()
 
@@ -84,6 +85,7 @@ export default function TripImages() {
       )
     }
     try {
+      setIsUploading(true)
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: false,
@@ -91,8 +93,7 @@ export default function TripImages() {
         selectionLimit: 40,
         quality: 0.5,
       })
-      if (result.canceled || result.assets.length === 0) return
-      setIsUploading(true)
+      if (result.canceled || result.assets.length === 0) return setIsUploading(false)
 
       for (const asset of result.assets) {
         if (!asset.assetId) continue // ??
@@ -128,15 +129,15 @@ export default function TripImages() {
 
   const selectProps = useDisclosure()
   const setMapProps = useDisclosure()
-  const [selectedImages, setSelectedImages] = React.useState<RouterOutputs["trip"]["media"]["all"]["items"]>([])
+  const [selectedMedia, setSelectedMedia] = React.useState<RouterOutputs["trip"]["media"]["all"]["items"]>([])
   const router = useRouter()
-  const isSelectedWithLocation = selectedImages.some((i) => i.latitude && i.longitude)
+  const isSelectedWithLocation = selectedMedia.some((i) => i.latitude && i.longitude)
 
   const { mutate } = api.trip.media.deleteMany.useMutation({
     onSuccess: () => {
       refetch()
       void utils.trip.detail.refetch({ id })
-      setSelectedImages([])
+      setSelectedMedia([])
       selectProps.onToggle()
     },
   })
@@ -144,7 +145,7 @@ export default function TripImages() {
   const handleDeleteMany = () => {
     Alert.alert("Are you sure?", "This can't be undone", [
       { text: "Cancel", style: "cancel" },
-      { text: "Delete", style: "destructive", onPress: () => mutate(selectedImages.map((i) => i.id)) },
+      { text: "Delete", style: "destructive", onPress: () => mutate(selectedMedia.map((i) => i.id)) },
     ])
   }
 
@@ -153,17 +154,19 @@ export default function TripImages() {
       containerClassName="px-0"
       rightElement={
         <View className="flex flex-row items-center space-x-3">
-          <Button
-            onPress={() => {
-              selectProps.onToggle()
-              if (selectProps.isOpen) setSelectedImages([])
-            }}
-            size="xs"
-            variant="secondary"
-            className="rounded-full px-4"
-          >
-            {selectProps.isOpen ? "Cancel" : "Select"}
-          </Button>
+          {media.length > 0 && (
+            <Button
+              onPress={() => {
+                selectProps.onToggle()
+                if (selectProps.isOpen) setSelectedMedia([])
+              }}
+              size="xs"
+              variant="secondary"
+              className="rounded-full px-4"
+            >
+              {selectProps.isOpen ? "Cancel" : "Select"}
+            </Button>
+          )}
 
           {!selectProps.isOpen && (
             <TouchableOpacity onPress={handleOpenImageLibrary} activeOpacity={0.8}>
@@ -177,7 +180,7 @@ export default function TripImages() {
         <View className="flex items-center justify-center p-4">
           <ActivityIndicator />
         </View>
-      ) : !images ? null : (
+      ) : !media ? null : (
         <View className="relative flex-1">
           <FlashList
             showsVerticalScrollIndicator={false}
@@ -186,68 +189,56 @@ export default function TripImages() {
             ListFooterComponent={<View style={{ height: selectProps.isOpen ? 50 : 0 }} />}
             onEndReachedThreshold={0.5}
             numColumns={3}
-            ListEmptyComponent={<Text className="text-center">No images yet</Text>}
-            data={images}
-            extraData={{ isOpen: selectProps.isOpen, selectedImages }}
+            ListEmptyComponent={<Text className="text-center">Nothing here yet</Text>}
+            data={media}
+            extraData={{ isOpen: selectProps.isOpen, selectedMedia }}
             renderItem={({ item }) => (
               <>
                 <TouchableOpacity
                   activeOpacity={0.8}
+                  style={{ width: size, height: size }}
+                  className="relative"
                   onPress={() => {
                     if (selectProps.isOpen) {
-                      setSelectedImages((s) =>
+                      setSelectedMedia((s) =>
                         s.find((i) => i.id === item.id) ? s.filter((i) => i.id !== item.id) : [...s, item],
                       )
                     } else {
-                      return router.push(`/(home)/(trips)/trips/${id}/images/${item.id}`)
+                      return router.push(`/(home)/(trips)/trips/${id}/media/${item.id}`)
                     }
                   }}
-                  style={{ width: size, height: size }}
-                  className="relative"
                 >
-                  {item.thumbnailPath ? (
-                    <>
-                      <View className="w-full h-full flex items-center justify-center">
-                        {item.thumbnailPath ? (
-                          <Image
-                            className="h-full w-full bg-gray-200 dark:bg-gray-700"
-                            source={{ uri: createS3Url(item.thumbnailPath) }}
-                          />
-                        ) : (
-                          <View className="flex space-y-1 px-4 items-center">
-                            <Icon icon={ImageOff} />
-                            <Text className="text-xs text-center">Preview unavailable</Text>
-                          </View>
-                        )}
-                        {item.duration && !selectedImages.find((i) => i.id === item.id) && (
-                          <Text className="absolute bottom-1 right-1 font-600">{formatVideoDuration(item.duration)}</Text>
-                        )}
-                      </View>
-                      {(!item.latitude || !item.longitude) && (
-                        <View className="sq-6 absolute bottom-1 left-1 flex items-center justify-center rounded-full bg-background dark:bg-background-dark">
-                          <Icon icon={MapPinOff} size={16} />
+                  {item.type === "VIDEO" ? (
+                    <View className="w-full h-full flex items-center justify-center">
+                      {item.thumbnailPath ? (
+                        <Image
+                          className="h-full w-full bg-gray-200 dark:bg-gray-700"
+                          source={{ uri: createS3Url(item.thumbnailPath) }}
+                        />
+                      ) : (
+                        <View className="flex space-y-1 px-4 items-center">
+                          <Icon icon={ImageOff} />
+                          <Text className="text-xs text-center">Preview unavailable</Text>
                         </View>
                       )}
-                      {selectProps.isOpen && selectedImages.find((i) => i.id === item.id) && (
-                        <View className="sq-5 absolute right-1 bottom-1 flex items-center justify-center rounded-full bg-blue-500">
-                          <Icon icon={Check} size={14} color="white" />
-                        </View>
+                      {item.duration && (
+                        <Text className="absolute bottom-1 text-white text-xs right-1 font-700">
+                          {formatVideoDuration(item.duration)}
+                        </Text>
                       )}
-                    </>
+                    </View>
                   ) : (
-                    <>
-                      <Image className="h-full w-full bg-gray-200 dark:bg-gray-700" source={{ uri: createS3Url(item.path) }} />
-                      {(!item.latitude || !item.longitude) && (
-                        <View className="sq-6 absolute bottom-1 left-1 flex items-center justify-center rounded-full bg-background dark:bg-background-dark">
-                          <Icon icon={MapPinOff} size={16} />
-                        </View>
-                      )}
-                      {selectProps.isOpen && selectedImages.find((i) => i.id === item.id) && (
-                        <View className="sq-5 absolute right-1 bottom-1 flex items-center justify-center rounded-full bg-blue-500">
-                          <Icon icon={Check} size={14} color="white" />
-                        </View>
-                      )}
-                    </>
+                    <Image className="h-full w-full bg-gray-200 dark:bg-gray-700" source={{ uri: createS3Url(item.path) }} />
+                  )}
+                  {(!item.latitude || !item.longitude) && (
+                    <View className="sq-6 absolute bottom-1 left-1 flex items-center justify-center rounded-full bg-background dark:bg-background-dark">
+                      <Icon icon={MapPinOff} size={16} />
+                    </View>
+                  )}
+                  {selectProps.isOpen && selectedMedia.find((i) => i.id === item.id) && (
+                    <View className="sq-5 absolute right-1 top-1 flex items-center justify-center rounded-full bg-blue-500">
+                      <Icon icon={Check} size={14} color="white" />
+                    </View>
                   )}
                 </TouchableOpacity>
               </>
@@ -262,12 +253,12 @@ export default function TripImages() {
             </View>
           )}
           {selectProps.isOpen && (
-            <View className="absolute right-0 bottom-0 left-0 flex h-12 flex-row items-center justify-between bg-background px-4 dark:bg-background-dark">
-              {selectedImages.length > 0 ? <Text>{selectedImages.length} selected</Text> : <Text>Select images</Text>}
+            <View className="absolute right-0 bottom-0 left-0 flex h-12 flex-row items-center justify-between bg-background px-4 dark:bg-background-dark border-t border-gray-100 dark:border-gray-800">
+              {selectedMedia.length > 0 ? <Text>{selectedMedia.length} selected</Text> : <Text>Select images</Text>}
               <View className="flex flex-row items-center justify-end space-x-3">
                 {!isSelectedWithLocation && (
                   <>
-                    <IconButton onPress={setMapProps.onOpen} size="xs" disabled={selectedImages.length === 0} icon={MapPin} />
+                    <IconButton onPress={setMapProps.onOpen} size="xs" disabled={selectedMedia.length === 0} icon={MapPin} />
                     <Modal
                       animationType="slide"
                       presentationStyle="formSheet"
@@ -275,13 +266,16 @@ export default function TripImages() {
                       onRequestClose={setMapProps.onClose}
                       onDismiss={setMapProps.onClose}
                     >
-                      <AddImagesLocation
-                        ids={selectedImages.map((i) => i.id)}
+                      <AddMediaLocation
+                        ids={selectedMedia.map((i) => i.id)}
                         onClose={setMapProps.onClose}
                         onSave={() => {
                           refetch()
                           setMapProps.onClose()
-                          setSelectedImages([])
+                          for (const { id } of selectedMedia) {
+                            void utils.trip.media.byId.invalidate({ id })
+                          }
+                          setSelectedMedia([])
                           selectProps.onClose()
                           void utils.trip.detail.refetch({ id })
                         }}
@@ -295,7 +289,7 @@ export default function TripImages() {
                   size="xs"
                   variant="ghost"
                   icon={Trash}
-                  disabled={selectedImages.length === 0}
+                  disabled={selectedMedia.length === 0}
                 />
               </View>
             </View>
@@ -306,7 +300,7 @@ export default function TripImages() {
   )
 }
 
-function AddImagesLocation({ ids, onClose, onSave }: { ids: string[]; onClose: () => void; onSave: () => void }) {
+function AddMediaLocation({ ids, onClose, onSave }: { ids: string[]; onClose: () => void; onSave: () => void }) {
   const { id } = useLocalSearchParams<{ id: string }>()
 
   const initialCoords = useMapCoords((s) => s.coords)
@@ -342,6 +336,7 @@ function AddImagesLocation({ ids, onClose, onSave }: { ids: string[]; onClose: (
   const { mutate, isLoading: saveLoading } = api.trip.media.updateMany.useMutation({
     onSuccess: () => {
       if (!coords) return
+
       onSave()
     },
   })

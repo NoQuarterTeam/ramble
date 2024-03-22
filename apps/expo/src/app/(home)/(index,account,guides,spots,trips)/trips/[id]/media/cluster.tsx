@@ -25,24 +25,24 @@ export default function TripImagesCluster() {
   )
   const total = data?.total || 0
 
-  const [images, setImages] = React.useState(data?.items || [])
+  const [media, setMedia] = React.useState(data?.items || [])
 
   React.useEffect(() => {
-    setImages(data?.items || [])
+    setMedia(data?.items || [])
   }, [data?.items])
 
   const utils = api.useUtils()
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: allow dat
   const handleLoadMore = React.useCallback(async () => {
-    if (!parsedBounds || total === images.length) return
+    if (!parsedBounds || total === media.length) return
     try {
-      const newImages = await utils.trip.media.byBounds.fetch({ tripId: id, bounds: parsedBounds, skip: images?.length || 0 })
-      setImages([...(images || []), ...newImages.items])
+      const newMedia = await utils.trip.media.byBounds.fetch({ tripId: id, bounds: parsedBounds, skip: media?.length || 0 })
+      setMedia([...(media || []), ...newMedia.items])
     } catch {
-      toast({ title: "Failed to load more images", type: "error" })
+      toast({ title: "Failed to load more", type: "error" })
     }
-  }, [images, total, parsedBounds, id])
+  }, [media, total, parsedBounds, id])
 
   return (
     <ScreenView title="" containerClassName="px-0">
@@ -50,19 +50,19 @@ export default function TripImagesCluster() {
         <View className="flex items-center justify-center p-4">
           <ActivityIndicator />
         </View>
-      ) : !images ? null : (
+      ) : !media ? null : (
         <FlashList
           showsVerticalScrollIndicator={false}
           estimatedItemSize={size}
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.5}
           numColumns={3}
-          ListEmptyComponent={<Text className="text-center">No images yet</Text>}
-          data={images}
+          ListEmptyComponent={<Text className="text-center">Nothing here yet</Text>}
+          data={media}
           renderItem={({ item }) => (
-            <Link href={`/(home)/(trips)/trips/${id}/images/${item.id}?bounds=${bounds}`} asChild>
+            <Link href={`/(home)/(trips)/trips/${id}/media/${item.id}?bounds=${bounds}`} asChild>
               <TouchableOpacity style={{ width: size, height: size }}>
-                {item.thumbnailPath ? (
+                {item.type === "VIDEO" ? (
                   <View className="w-full h-full flex items-center justify-center">
                     {item.thumbnailPath ? (
                       <Image
@@ -76,7 +76,9 @@ export default function TripImagesCluster() {
                       </View>
                     )}
                     {item.duration && (
-                      <Text className="absolute bottom-1 right-1 font-600">{formatVideoDuration(item.duration)}</Text>
+                      <Text className="absolute text-xs bottom-1 right-1 text-white font-700">
+                        {formatVideoDuration(item.duration)}
+                      </Text>
                     )}
                   </View>
                 ) : (

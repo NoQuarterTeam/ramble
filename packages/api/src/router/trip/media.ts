@@ -1,7 +1,9 @@
 import { z } from "zod"
 
+import { Prisma } from "@ramble/database/types"
 import { clusterSchema, tripMediaSchema } from "@ramble/server-schemas"
 import { promiseHash } from "@ramble/shared"
+import { TRPCError } from "@trpc/server"
 import bbox from "@turf/bbox"
 import { lineString } from "@turf/helpers"
 import Supercluster from "supercluster"
@@ -95,7 +97,7 @@ export const tripMediaRouter = createTRPCRouter({
         take: 30,
         skip: input.skip,
         orderBy: { timestamp: "desc" },
-        select: { id: true, path: true, latitude: true, longitude: true, duration: true, thumbnailPath: true },
+        select: { id: true, type: true, path: true, latitude: true, longitude: true, duration: true, thumbnailPath: true },
         where: { deletedAt: null, tripId: input.tripId, trip: { users: { some: { id: ctx.user.id } } } },
       }),
     })
@@ -118,7 +120,13 @@ export const tripMediaRouter = createTRPCRouter({
       return true
     }),
   upload: protectedProcedure.input(z.object({ tripId: z.string(), image: tripMediaSchema })).mutation(async ({ ctx, input }) => {
-    await ctx.prisma.tripMedia.create({ data: { tripId: input.tripId, ...input.image, creatorId: ctx.user.id } })
+    await ctx.prisma.tripMedia
+      .create({ data: { tripId: input.tripId, ...input.image, creatorId: ctx.user.id } })
+      .catch((error) => {
+        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+          throw new TRPCError({ code: "BAD_REQUEST", message: "Media already exists" })
+        }
+      })
     const latestTimestamp = await ctx.prisma.tripMedia.findFirst({
       where: { tripId: input.tripId, deletedAt: null },
       orderBy: { timestamp: "desc" },

@@ -5,7 +5,7 @@ import * as FileSystem from "expo-file-system"
 import { Image } from "expo-image"
 import * as MediaLibrary from "expo-media-library"
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
-import { Download, MapPin, Play, Trash, Volume2, VolumeX } from "lucide-react-native"
+import { Download, MapPin, Pause, Play, Trash, Volume2, VolumeX } from "lucide-react-native"
 import * as React from "react"
 import { Alert, type LayoutChangeEvent, TouchableOpacity, View } from "react-native"
 import { Gesture, GestureDetector, TouchableWithoutFeedback } from "react-native-gesture-handler"
@@ -13,7 +13,6 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-na
 
 import { createS3Url } from "@ramble/shared"
 
-import { MediaType } from "@ramble/database/types"
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
 import { ScreenView } from "~/components/ui/ScreenView"
@@ -33,7 +32,7 @@ const DOUBLE_ZOOM = 3
 
 export default function TripImage() {
   const { me } = useMe()
-  const { id, imageId, bounds } = useLocalSearchParams<{ id: string; imageId?: string; bounds?: string }>()
+  const { id, mediaId, bounds } = useLocalSearchParams<{ id: string; mediaId?: string; bounds?: string }>()
 
   const video = React.useRef<Video>(null)
   const [status, setStatus] = React.useState<AVPlaybackStatus | undefined>()
@@ -42,8 +41,8 @@ export default function TripImage() {
   const parsedBounds = bounds?.split(",").map(Number)
 
   const { data, isLoading } = api.trip.media.byId.useQuery(
-    { id: imageId! },
-    { enabled: !!imageId, staleTime: Number.POSITIVE_INFINITY, cacheTime: Number.POSITIVE_INFINITY },
+    { id: mediaId! },
+    { enabled: !!mediaId, staleTime: Number.POSITIVE_INFINITY, cacheTime: Number.POSITIVE_INFINITY },
   )
 
   const router = useRouter()
@@ -51,15 +50,15 @@ export default function TripImage() {
   const utils = api.useUtils()
   const { mutate, isLoading: removeLoading } = api.trip.media.remove.useMutation({
     onSuccess: () => {
-      if (!imageId) return
+      if (!mediaId) return
       void utils.trip.detail.refetch({ id })
       if (parsedBounds) {
         utils.trip.media.byBounds.setData({ tripId: id, skip: 0, bounds: parsedBounds }, (prev) =>
-          prev ? { total: prev.total - 1, items: prev.items.filter((media) => media.id !== imageId) } : prev,
+          prev ? { total: prev.total - 1, items: prev.items.filter((media) => media.id !== mediaId) } : prev,
         )
       } else {
         utils.trip.media.all.setData({ tripId: id, skip: 0 }, (prev) =>
-          prev ? { total: prev.total - 1, items: prev.items.filter((media) => media.id !== imageId) } : prev,
+          prev ? { total: prev.total - 1, items: prev.items.filter((media) => media.id !== mediaId) } : prev,
         )
       }
       router.back()
@@ -70,10 +69,10 @@ export default function TripImage() {
   })
 
   const handleRemove = async () => {
-    if (!imageId) return
+    if (!mediaId) return
     Alert.alert("Are you sure?", "This action cannot be undone.", [
       { text: "Cancel", style: "cancel" },
-      { text: "Remove", style: "destructive", onPress: () => mutate({ id: imageId }) },
+      { text: "Remove", style: "destructive", onPress: () => mutate({ id: mediaId }) },
     ])
   }
 
@@ -200,6 +199,11 @@ export default function TripImage() {
         translate.y.value = withTiming(0)
       }
     })
+  const pressGesture = Gesture.Tap()
+    .maxDuration(250)
+    .onStart(() => {
+      isActive.value = !isActive.value
+    })
 
   const styles = useAnimatedStyle(() => {
     return {
@@ -216,13 +220,13 @@ export default function TripImage() {
 
   const buttonStyles = useAnimatedStyle(() => {
     return {
-      opacity: isActive.value ? 0 : 1,
+      opacity: withTiming(isActive.value ? 0 : 1),
     }
   })
-  const gestures = Gesture.Race(doubleTapGesture, pinchGesture, panGesture)
+  const gestures = Gesture.Race(Gesture.Exclusive(doubleTapGesture, pressGesture), pinchGesture, panGesture)
 
   React.useEffect(() => {
-    if (data?.type === MediaType.VIDEO && !isAndroid) {
+    if (data?.type === "VIDEO" && !isAndroid) {
       Audio.setAudioModeAsync({ playsInSilentModeIOS: true })
     }
   }, [data])
@@ -238,87 +242,64 @@ export default function TripImage() {
 
   return (
     <ScreenView
-      title={data ? <Text className="opacity-70">{dayjs(data.timestamp).format("DD MMM YYYY HH:MM")}</Text> : ""}
+      title={data ? <Text className="text-sm">{dayjs(data.timestamp).format("DD MMM YYYY HH:MM")}</Text> : ""}
       containerClassName="px-0"
-      rightElement={
-        imageId && (
-          <View className="flex flex-row space-x-3">
-            {data && me?.id !== data?.creatorId && (
-              <TouchableOpacity className="p-1" onPress={handleDownload}>
-                <Icon icon={Download} size={18} />
-              </TouchableOpacity>
-            )}
-            {/* <Link asChild push href={`/(home)/(trips)/trips/${id}/images/${imageId || ""}/edit`}>
-              <TouchableOpacity className="px-1">
-                <Icon icon={MessageCircleHeart} size={18} />
-              </TouchableOpacity>
-            </Link> */}
-            <TouchableOpacity className="p-1" onPress={handleRemove} disabled={removeLoading}>
-              <Icon icon={Trash} size={18} />
-            </TouchableOpacity>
-          </View>
-        )
-      }
     >
       {isLoading || !data ? null : (
-        <View className="relative flex-1 pb-2">
-          {data.type === MediaType.VIDEO ? (
-            <View>
-              <TouchableWithoutFeedback onPress={handleVideoPlayPause}>
+        <View className="relative flex-1">
+          <GestureDetector gesture={gestures}>
+            <Animated.View style={[styles, { flex: 1 }]} onLayout={onImageLayout}>
+              {data.type === "VIDEO" ? (
                 <Video
                   ref={video}
-                  style={{ height: "100%", width: "100%" }}
+                  style={{ width: "100%", minHeight: "100%" }}
                   source={{ uri: createS3Url(data.path) }}
-                  resizeMode={ResizeMode.COVER}
+                  resizeMode={ResizeMode.CONTAIN}
                   isLooping
-                  onPlaybackStatusUpdate={(status) => setStatus(status)}
+                  onPlaybackStatusUpdate={setStatus}
                   isMuted={isMuted}
                 />
-                <View className="absolute w-full h-full flex items-center justify-center">
-                  {!status?.isLoaded ? null : status.isBuffering ? (
-                    <Spinner />
-                  ) : (
-                    status.isLoaded &&
-                    !status.isPlaying && (
-                      <View className="rounded-full h-[60px] w-[60px] flex items-center justify-center bg-gray-600">
-                        <Icon icon={Play} size={24} fill="white" stroke="white" className="ml-1" />
-                      </View>
-                    )
-                  )}
-                </View>
-              </TouchableWithoutFeedback>
-              {status?.isLoaded && (
-                <View className="absolute top-4 right-5">
-                  <TouchableWithoutFeedback onPress={() => setIsMuted((isMuted) => !isMuted)}>
-                    <Icon icon={status.isMuted ? VolumeX : Volume2} size={30} />
-                  </TouchableWithoutFeedback>
-                </View>
+              ) : (
+                <Image source={{ uri: createS3Url(data.path) }} className="h-full flex-1" contentFit="contain" />
+              )}
+            </Animated.View>
+          </GestureDetector>
+          <Animated.View
+            style={buttonStyles}
+            className="flex flex-row border-t border-gray-100 dark:border-gray-800 justify-between items-center px-4 py-2 bg-background dark:bg-background-dark"
+          >
+            <View className="flex-1">
+              {(!data.latitude || !data.longitude) && (
+                <Link push href={`/(home)/(trips)/trips/${id}/media/${mediaId}/add-location`} asChild>
+                  <Icon icon={MapPin} size={20} />
+                </Link>
               )}
             </View>
-          ) : (
-            <GestureDetector gesture={gestures}>
-              <Animated.View style={[styles, { flex: 1 }]} onLayout={onImageLayout}>
-                <Image source={{ uri: createS3Url(data.path) }} className="h-full flex-1" contentFit="contain" />
-              </Animated.View>
-            </GestureDetector>
-          )}
-          {(!data.latitude || !data.longitude) && (
-            <Animated.View
-              style={buttonStyles}
-              className="absolute top-4 right-0 left-0 flex items-center justify-center"
-              pointerEvents="box-none"
-            >
-              <Link push href={`/(home)/(trips)/trips/${id}/images/${imageId}/add-location`} asChild>
-                <Button
-                  size="xs"
-                  leftIcon={<Icon icon={MapPin} size={16} color={{ dark: "black", light: "white" }} />}
-                  className="rounded-full"
-                >
-                  Add to map
-                </Button>
-              </Link>
-            </Animated.View>
-          )}
+            {data.type === "VIDEO" && (
+              <View className="flex-1 justify-center flex items-center flex-row space-x-6">
+                {status?.isLoaded && (
+                  <TouchableWithoutFeedback onPress={handleVideoPlayPause}>
+                    <Icon icon={status.isPlaying ? Pause : Play} size={18} />
+                  </TouchableWithoutFeedback>
+                )}
+                {status?.isLoaded && (
+                  <TouchableWithoutFeedback onPress={() => setIsMuted((isMuted) => !isMuted)}>
+                    <Icon icon={status.isMuted ? VolumeX : Volume2} size={22} />
+                  </TouchableWithoutFeedback>
+                )}
+              </View>
+            )}
+            <View className="flex-1 flex items-center justify-end flex-row space-x-3">
+              {data && me?.id !== data?.creatorId && (
+                <TouchableOpacity className="p-1" onPress={handleDownload}>
+                  <Icon icon={Download} size={18} />
+                </TouchableOpacity>
+              )}
+              <TouchableOpacity className="p-1" onPress={handleRemove} disabled={removeLoading}>
+                <Icon icon={Trash} size={18} />
+              </TouchableOpacity>
+            </View>
+          </Animated.View>
         </View>
       )}
     </ScreenView>

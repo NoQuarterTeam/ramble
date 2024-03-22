@@ -417,7 +417,7 @@ function TripImageSync({
         if (mediaToSync.length === 0) return
         for (const media of mediaToSync) {
           try {
-            let thumbnailPath: string | null = null
+            let thumbnailPath = null
             if (media.type === MediaType.VIDEO) {
               const { uri } = await VideoThumbnails.getThumbnailAsync(media.url, { time: 0 })
               thumbnailPath = await upload(uri)
