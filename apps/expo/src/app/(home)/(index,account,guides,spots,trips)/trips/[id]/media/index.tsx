@@ -21,6 +21,7 @@ import { IconButton } from "~/components/ui/IconButton"
 import { Input } from "~/components/ui/Input"
 import { ModalView } from "~/components/ui/ModalView"
 import { ScreenView } from "~/components/ui/ScreenView"
+import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { type RouterOutputs, api } from "~/lib/api"
@@ -70,22 +71,24 @@ export default function TripMedia() {
   })
 
   const [isUploading, setIsUploading] = React.useState(false)
+  const [isLoadingLibrary, setIsLoadingLibrary] = React.useState(false)
 
   const [_mediaStatus, requestMediaLibrary] = ImagePicker.useMediaLibraryPermissions()
   const handleOpenImageLibrary = async () => {
-    const perm = await requestMediaLibrary()
-    if (!perm.granted) {
-      return Alert.alert(
-        "Media library permissions required",
-        "Please go to your phone's settings to grant media library permissions for Ramble",
-        [
-          { text: "Cancel", style: "cancel" },
-          { text: "Open settings", onPress: Linking.openSettings },
-        ],
-      )
-    }
     try {
-      setIsUploading(true)
+      setIsLoadingLibrary(true)
+      const perm = await requestMediaLibrary()
+      if (!perm.granted) {
+        setIsLoadingLibrary(false)
+        return Alert.alert(
+          "Media library permissions required",
+          "Please go to your phone's settings to grant media library permissions for Ramble",
+          [
+            { text: "Cancel", style: "cancel" },
+            { text: "Open settings", onPress: Linking.openSettings },
+          ],
+        )
+      }
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: false,
@@ -93,7 +96,10 @@ export default function TripMedia() {
         selectionLimit: 40,
         quality: 0.5,
       })
-      if (result.canceled || result.assets.length === 0) return setIsUploading(false)
+      setIsLoadingLibrary(false)
+      if (result.canceled || result.assets.length === 0) return
+
+      setIsUploading(true)
 
       for (const asset of result.assets) {
         if (!asset.assetId) continue // ??
@@ -123,6 +129,7 @@ export default function TripMedia() {
       console.log(error)
       refetch()
     } finally {
+      setIsLoadingLibrary(false)
       setIsUploading(false)
     }
   }
@@ -169,8 +176,8 @@ export default function TripMedia() {
           )}
 
           {!selectProps.isOpen && (
-            <TouchableOpacity onPress={handleOpenImageLibrary} activeOpacity={0.8}>
-              <Icon icon={PlusCircle} />
+            <TouchableOpacity onPress={handleOpenImageLibrary} activeOpacity={0.8} className="w-[24px]">
+              {isLoadingLibrary ? <Spinner /> : <Icon icon={PlusCircle} />}
             </TouchableOpacity>
           )}
         </View>
