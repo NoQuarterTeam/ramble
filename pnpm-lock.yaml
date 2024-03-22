@@ -104,6 +104,9 @@ importers:
       expo-application:
         specifier: 5.8.3
         version: 5.8.3(expo@50.0.13)
+      expo-av:
+        specifier: ~13.10.5
+        version: 13.10.5(expo@50.0.13)
       expo-build-properties:
         specifier: ~0.11.1
         version: 0.11.1(expo@50.0.13)
@@ -146,6 +149,9 @@ importers:
       expo-media-library:
         specifier: ~15.9.1
         version: 15.9.1(expo@50.0.13)
+      expo-network:
+        specifier: ~5.8.0
+        version: 5.8.0(expo@50.0.13)
       expo-router:
         specifier: 3.4.8
         version: 3.4.8(expo-constants@15.4.5)(expo-linking@6.2.2)(expo-modules-autolinking@1.10.3)(expo-status-bar@1.11.1)(expo@50.0.13)(react-dom@18.2.0)(react-native-reanimated@3.6.3)(react-native-safe-area-context@4.8.2)(react-native-screens@3.29.0)(react-native@0.73.5)(react@18.2.0)
@@ -161,6 +167,9 @@ importers:
       expo-updates:
         specifier: 0.24.12
         version: 0.24.12(expo@50.0.13)
+      expo-video-thumbnails:
+        specifier: ~7.9.0
+        version: 7.9.0(expo@50.0.13)
       expo-web-browser:
         specifier: 12.8.2
         version: 12.8.2(expo@50.0.13)
@@ -9711,6 +9720,14 @@ packages:
       - supports-color
     dev: false
 
+  /expo-av@13.10.5(expo@50.0.13):
+    resolution: {integrity: sha512-w45oCoe+8PunDeM0rh/Ut6UaGh7OjEJOCjAiQy3nCxpA8FaXB17KaqpsvkAXIMvceHYWndH8+D29esUTS6wEsA==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      expo: 50.0.13(@babel/core@7.24.3)(@react-native/babel-preset@0.73.21)
+    dev: false
+
   /expo-build-properties@0.11.1(expo@50.0.13):
     resolution: {integrity: sha512-m4j4aEjFaDuBE6KWYMxDhWgLzzSmpE7uHKAwtvXyNmRK+6JKF0gjiXi0sXgI5ngNppDQpsyPFMvqG7uQpRuCuw==}
     peerDependencies:
@@ -9938,6 +9955,14 @@ packages:
       invariant: 2.2.4
     dev: false
 
+  /expo-network@5.8.0(expo@50.0.13):
+    resolution: {integrity: sha512-mTtyqRgLKvXWB+xCoY5WMtRrpVqYmcXWz3YbyN+X0HRGqXg7a+UYOXeKlxrkwBiadsElhmfMeaj1UpmW79Zw/w==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      expo: 50.0.13(@babel/core@7.24.3)(@react-native/babel-preset@0.73.21)
+    dev: false
+
   /expo-router@3.4.8(expo-constants@15.4.5)(expo-linking@6.2.2)(expo-modules-autolinking@1.10.3)(expo-status-bar@1.11.1)(expo@50.0.13)(react-dom@18.2.0)(react-native-reanimated@3.6.3)(react-native-safe-area-context@4.8.2)(react-native-screens@3.29.0)(react-native@0.73.5)(react@18.2.0):
     resolution: {integrity: sha512-fOOAWHH4LSPjPFtIZbApxdTNU8xSS8qKvhZ7PfWNMfx9510J1R1Ce/nwENPzcRLHRuVofDsSAEBfi4kV03fJwg==}
     peerDependencies:
@@ -10045,6 +10070,14 @@ packages:
     transitivePeerDependencies:
       - encoding
       - supports-color
+    dev: false
+
+  /expo-video-thumbnails@7.9.0(expo@50.0.13):
+    resolution: {integrity: sha512-KP7ZlIu83xXXIFx24bzjScwLns6b93f3eHPDUOnT5UtOScbIV3guXA6P9pRBnyxJe0K5+NhR11wX1wf+QCk9+g==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      expo: 50.0.13(@babel/core@7.24.3)(@react-native/babel-preset@0.73.21)
     dev: false
 
   /expo-web-browser@12.8.2(expo@50.0.13):

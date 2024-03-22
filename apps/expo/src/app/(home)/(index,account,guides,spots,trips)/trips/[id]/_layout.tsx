@@ -8,7 +8,7 @@ export default function Layout() {
   return (
     <Stack initialRouteName="index" screenOptions={{ contentStyle: { backgroundColor }, headerShown: false }}>
       <Stack.Screen name="index" />
-      <Stack.Screen name="images" />
+      <Stack.Screen name="media" />
       <Stack.Screen name="find-spot" />
       <Stack.Screen name="items" options={{ presentation: "modal" }} />
       <Stack.Screen name="add-location" options={{ presentation: "modal" }} />

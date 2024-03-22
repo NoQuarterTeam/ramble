@@ -2,7 +2,7 @@ import { Star } from "lucide-react"
 import * as React from "react"
 
 import type { Review, Spot, SpotImage } from "@ramble/database/types"
-import { createImageUrl } from "@ramble/shared"
+import { createS3Url } from "@ramble/shared"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -67,7 +67,7 @@ export function ReviewForm({ spot, review }: Props) {
               width={600}
               placeholder={spot.images[0].blurHash}
               alt="spot 1"
-              src={createImageUrl(spot.images[0].path)}
+              src={createS3Url(spot.images[0].path)}
             />
           )}
           {spot.images[1] && (
@@ -77,7 +77,7 @@ export function ReviewForm({ spot, review }: Props) {
               height={200}
               width={400}
               alt="spot 2"
-              src={createImageUrl(spot.images[1].path)}
+              src={createS3Url(spot.images[1].path)}
             />
           )}
           {spot.images[2] && (
@@ -87,7 +87,7 @@ export function ReviewForm({ spot, review }: Props) {
               height={200}
               width={400}
               alt="spot 3"
-              src={createImageUrl(spot.images[2].path)}
+              src={createS3Url(spot.images[2].path)}
             />
           )}
         </div>

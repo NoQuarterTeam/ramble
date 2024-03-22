@@ -3,7 +3,7 @@ import { BadgeX, User2, Verified } from "lucide-react-native"
 import { TouchableOpacity, View } from "react-native"
 
 import type { Spot, User } from "@ramble/database/types"
-import { createImageUrl } from "@ramble/shared"
+import { createS3Url } from "@ramble/shared"
 
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
@@ -50,7 +50,7 @@ export function VerifiedCard({ spot }: Props) {
                 height={36}
                 width={36}
                 placeholder={spot.verifier.avatarBlurHash}
-                source={{ uri: createImageUrl(spot.verifier.avatar) }}
+                source={{ uri: createS3Url(spot.verifier.avatar) }}
                 className="sq-9 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
               />
             ) : (

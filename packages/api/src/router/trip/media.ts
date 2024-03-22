@@ -1,7 +1,9 @@
 import { z } from "zod"
 
+import { Prisma } from "@ramble/database/types"
 import { clusterSchema, tripMediaSchema } from "@ramble/server-schemas"
 import { promiseHash } from "@ramble/shared"
+import { TRPCError } from "@trpc/server"
 import bbox from "@turf/bbox"
 import { lineString } from "@turf/helpers"
 import Supercluster from "supercluster"
@@ -21,17 +23,31 @@ export const tripMediaRouter = createTRPCRouter({
           deletedAt: null,
         },
         orderBy: { createdAt: "desc" },
-        select: { id: true, path: true, longitude: true, latitude: true },
+        select: { id: true, path: true, thumbnailPath: true, longitude: true, latitude: true },
       })
       const supercluster = new Supercluster<
-        { id: string; cluster: false; path: string; latitude: number; longitude: number },
+        {
+          id: string
+          cluster: false
+          path: string
+          thumbnailPath: string | null
+          latitude: number
+          longitude: number
+        },
         { cluster: true }
       >({ maxZoom: 22 })
       const clustersData = supercluster.load(
         media.map((media) => ({
           type: "Feature",
           geometry: { type: "Point", coordinates: [media.longitude!, media.latitude!] },
-          properties: { cluster: false, id: media.id, path: media.path, latitude: media.latitude!, longitude: media.longitude! },
+          properties: {
+            cluster: false,
+            id: media.id,
+            path: media.path,
+            thumbnailPath: media.thumbnailPath,
+            latitude: media.latitude!,
+            longitude: media.longitude!,
+          },
         })),
       )
       const clusters = clustersData.getClusters([coords.minLng, coords.minLat, coords.maxLng, coords.maxLat], coords.zoom || 5)
@@ -81,7 +97,7 @@ export const tripMediaRouter = createTRPCRouter({
         take: 30,
         skip: input.skip,
         orderBy: { timestamp: "desc" },
-        select: { id: true, path: true, latitude: true, longitude: true },
+        select: { id: true, type: true, path: true, latitude: true, longitude: true, duration: true, thumbnailPath: true },
         where: { deletedAt: null, tripId: input.tripId, trip: { users: { some: { id: ctx.user.id } } } },
       }),
     })
@@ -103,15 +119,32 @@ export const tripMediaRouter = createTRPCRouter({
       })
       return true
     }),
-  upload: protectedProcedure.input(z.object({ tripId: z.string(), image: tripMediaSchema })).mutation(async ({ ctx, input }) => {
-    await ctx.prisma.tripMedia.create({ data: { tripId: input.tripId, ...input.image, creatorId: ctx.user.id } })
-    const latestTimestamp = await ctx.prisma.tripMedia.findFirst({
-      where: { tripId: input.tripId, deletedAt: null },
-      orderBy: { timestamp: "desc" },
-      select: { timestamp: true },
-    })
-    return latestTimestamp?.timestamp
-  }),
+  upload: protectedProcedure
+    .input(
+      z.object({
+        tripId: z.string(),
+        /**
+         * @deprecated
+         */
+        image: tripMediaSchema.optional(),
+        media: tripMediaSchema.optional(), // make required at some point,
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (!input.image && !input.media) throw new TRPCError({ code: "BAD_REQUEST", message: "Media required" })
+      const data = input.image || input.media!
+      await ctx.prisma.tripMedia.create({ data: { tripId: input.tripId, ...data, creatorId: ctx.user.id } }).catch((error) => {
+        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+          throw new TRPCError({ code: "BAD_REQUEST", message: "Media already exists" })
+        }
+      })
+      const latestTimestamp = await ctx.prisma.tripMedia.findFirst({
+        where: { tripId: input.tripId, deletedAt: null },
+        orderBy: { timestamp: "desc" },
+        select: { timestamp: true },
+      })
+      return latestTimestamp?.timestamp
+    }),
   remove: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
     await ctx.prisma.tripMedia.update({ where: { id: input.id }, data: { deletedAt: new Date() } })
     return true

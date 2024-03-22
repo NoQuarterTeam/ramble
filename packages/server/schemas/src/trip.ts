@@ -1,3 +1,4 @@
+import { MediaType } from "@ramble/database/types"
 import { z } from "zod"
 
 export const tripSchema = z.object({
@@ -12,4 +13,7 @@ export const tripMediaSchema = z.object({
   longitude: z.number().nullable(),
   assetId: z.string(),
   timestamp: z.date(),
+  type: z.nativeEnum(MediaType),
+  duration: z.number().nullish(),
+  thumbnailPath: z.string().nullish(),
 })

@@ -20,7 +20,7 @@ import { Layer, type LngLatLike, type MapRef, Marker, Source, type ViewStateChan
 import type { MarkerEvent, MarkerInstance } from "react-map-gl/dist/esm/types"
 import { ClientOnly } from "remix-utils/client-only"
 
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createImageUrl, join } from "@ramble/shared"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createS3Url, join } from "@ramble/shared"
 
 import { MapView } from "~/components/Map"
 import { OptimizedImage } from "~/components/OptimisedImage"
@@ -259,7 +259,7 @@ function UserClusterMarker(props: UserMarkerProps) {
               alt="user location"
               height={50}
               placeholder={props.point.properties.avatarBlurHash}
-              src={createImageUrl(props.point.properties.avatar)}
+              src={createS3Url(props.point.properties.avatar)}
               className="sq-10 rounded-full object-cover"
             />
           ) : (

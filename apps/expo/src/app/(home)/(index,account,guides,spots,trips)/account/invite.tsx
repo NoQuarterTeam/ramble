@@ -2,7 +2,7 @@ import * as Clipboard from "expo-clipboard"
 import { Copy, User2 } from "lucide-react-native"
 import { ScrollView, TouchableOpacity, View } from "react-native"
 
-import { createImageUrl } from "@ramble/shared"
+import { createS3Url } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
@@ -62,7 +62,7 @@ export default function AccountInviteScreen() {
                     width={40}
                     placeholder={inviteCode.user.avatarBlurHash}
                     height={40}
-                    source={{ uri: createImageUrl(inviteCode.user.avatar) }}
+                    source={{ uri: createS3Url(inviteCode.user.avatar) }}
                     className="sq-8 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
                   />
                 ) : (

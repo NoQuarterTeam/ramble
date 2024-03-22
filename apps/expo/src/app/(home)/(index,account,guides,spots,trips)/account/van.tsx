@@ -5,7 +5,7 @@ import { FormProvider } from "react-hook-form"
 import { Keyboard, ScrollView, TouchableOpacity, View } from "react-native"
 import { AvoidSoftInputView } from "react-native-avoid-softinput"
 
-import { createImageUrl } from "@ramble/shared"
+import { createS3Url } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
@@ -126,7 +126,7 @@ export default function VanScreen() {
                         placeholder={image.blurHash}
                         width={300}
                         className="h-[100px] w-full rounded-xs bg-gray-50 object-cover dark:bg-gray-700"
-                        source={{ uri: createImageUrl(image.path) }}
+                        source={{ uri: createS3Url(image.path) }}
                       />
                       <View className="-right-1 -top-1 absolute rounded-full bg-gray-100 p-1 dark:bg-gray-900">
                         <Icon icon={X} size={16} />
