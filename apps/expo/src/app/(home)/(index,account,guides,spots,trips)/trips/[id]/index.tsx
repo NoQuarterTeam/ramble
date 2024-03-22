@@ -432,7 +432,7 @@ function TripImageSync({
         onDone()
       } catch (error) {
         console.log(error)
-        toast({ title: "Error syncing images", type: "error" })
+        toast({ title: "Error syncing media", type: "error" })
       } finally {
         setIsSyncing(false)
       }
@@ -444,7 +444,7 @@ function TripImageSync({
     <View className="flex items-center justify-center pt-2">
       <View className="flex flex-row items-center space-x-2 rounded-full bg-primary px-4 py-2">
         <ActivityIndicator size="small" color="white" />
-        <Text className="text-white">Syncing photos</Text>
+        <Text className="text-white">Syncing media</Text>
       </View>
     </View>
   )

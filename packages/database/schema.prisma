@@ -385,7 +385,7 @@ model TripMedia {
   type          MediaType? @default(IMAGE)
   duration      Int?
   thumbnailPath String?
-  assetId       String     @unique()
+  assetId       String
   timestamp     DateTime
 
   creator   User   @relation(fields: [creatorId], references: [id])
@@ -397,6 +397,7 @@ model TripMedia {
   updatedAt DateTime  @default(now()) @updatedAt
   deletedAt DateTime?
 
+  @@unique([tripId, assetId])
   @@index([tripId])
   @@index([latitude])
   @@index([longitude])
