@@ -364,11 +364,11 @@ function TripImageSync({
   // biome-ignore lint/correctness/useExhaustiveDependencies: allow it
   React.useEffect(() => {
     async function loadMedia() {
+      const isTripActive = dayjs(startDate).isBefore(dayjs()) && dayjs(endDate).isAfter(dayjs())
+      if (!isTripActive) return
       const networkState = await Network.getNetworkStateAsync()
       if (!networkState.isConnected) return toast({ title: "Syncing disabled", message: "No internet connection" })
       if (networkState.type !== Network.NetworkStateType.WIFI) return toast({ title: "Syncing disabled", message: "Not on wifi" })
-      const isTripActive = dayjs(startDate).isBefore(dayjs()) && dayjs(endDate).isAfter(dayjs())
-      if (!isTripActive) return
       try {
         setIsSyncing(true)
         const createdAfter = latestMediaTimestamp
