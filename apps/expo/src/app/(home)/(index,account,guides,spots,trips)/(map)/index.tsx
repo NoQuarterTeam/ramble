@@ -13,7 +13,7 @@ import { Layers, Navigation, PlusCircle, Settings2, User } from "lucide-react-na
 import * as React from "react"
 import { TouchableOpacity, View, useColorScheme } from "react-native"
 
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createS3Url, join } from "@ramble/shared"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createAssetUrl, join } from "@ramble/shared"
 
 import { FeedbackCheck, useFeedbackActivity } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
@@ -257,7 +257,7 @@ function MapContainer() {
                   height={50}
                   placeholder={user.avatarBlurHash}
                   style={{ width: 32, height: 32 }}
-                  source={{ uri: createS3Url(user.avatar) }}
+                  source={{ uri: createAssetUrl(user.avatar) }}
                   className="object-cover"
                 />
               ) : (

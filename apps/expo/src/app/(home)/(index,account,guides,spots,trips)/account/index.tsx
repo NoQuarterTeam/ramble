@@ -14,7 +14,7 @@ import {
 } from "lucide-react-native"
 import { ScrollView, TouchableOpacity, View } from "react-native"
 
-import { createS3Url } from "@ramble/shared"
+import { createAssetUrl } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
@@ -91,7 +91,7 @@ export default function AccountScreen() {
                       width={64}
                       height={64}
                       placeholder={me.avatarBlurHash}
-                      source={{ uri: createS3Url(me.avatar) }}
+                      source={{ uri: createAssetUrl(me.avatar) }}
                       className="sq-16 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
                     />
                   ) : (

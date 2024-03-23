@@ -3,7 +3,7 @@ import { Link } from "expo-router"
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
 
-import { createS3Url } from "@ramble/shared"
+import { createAssetUrl } from "@ramble/shared"
 
 import { useFeedbackActivity } from "~/components/FeedbackCheck"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
@@ -79,7 +79,7 @@ function GuideItem(props: { guide: RouterOutputs["user"]["guides"][number] }) {
             width={80}
             height={80}
             placeholder={props.guide.avatarBlurHash}
-            source={{ uri: createS3Url(props.guide.avatar) }}
+            source={{ uri: createAssetUrl(props.guide.avatar) }}
           />
           <View>
             <Text className="text-xl">

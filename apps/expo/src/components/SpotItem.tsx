@@ -2,7 +2,7 @@ import { useRouter } from "expo-router"
 import { Heart, Star } from "lucide-react-native"
 import { TouchableOpacity, View, useColorScheme } from "react-native"
 
-import { type SpotItemType, createS3Url, displayRating, displaySaved } from "@ramble/shared"
+import { type SpotItemType, createAssetUrl, displayRating, displaySaved } from "@ramble/shared"
 
 import { api } from "~/lib/api"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
@@ -42,7 +42,7 @@ export function SpotItem({ spot }: Props) {
             placeholder={spot.blurHash}
             height={300}
             className="h-full w-full rounded-sm bg-gray-50 object-cover dark:bg-gray-800"
-            source={{ uri: createS3Url(spot.image) }}
+            source={{ uri: createAssetUrl(spot.image) }}
           />
         ) : (
           <View className="flex h-full w-full items-center justify-center rounded-sm bg-gray-50 dark:bg-gray-800">

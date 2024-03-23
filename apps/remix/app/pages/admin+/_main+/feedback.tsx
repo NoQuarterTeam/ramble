@@ -7,7 +7,7 @@ import { promiseHash } from "remix-utils/promise"
 import { z } from "zod"
 
 import type { FeedbackType, Prisma } from "@ramble/database/types"
-import { createS3Url } from "@ramble/shared"
+import { createAssetUrl } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
 import { Search } from "~/components/Search"
@@ -93,7 +93,7 @@ const columns = [
         <div className="flex items-center space-x-2">
           <Avatar
             className="sq-8"
-            src={createS3Url(info.getValue()!.avatar)}
+            src={createAssetUrl(info.getValue()!.avatar)}
             placeholder={info.getValue()!.avatarBlurHash}
             size={40}
           />

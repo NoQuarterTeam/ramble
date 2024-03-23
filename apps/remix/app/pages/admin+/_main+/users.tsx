@@ -4,7 +4,7 @@ import dayjs from "dayjs"
 import { promiseHash } from "remix-utils/promise"
 
 import type { Prisma } from "@ramble/database/types"
-import { createS3Url } from "@ramble/shared"
+import { createAssetUrl } from "@ramble/shared"
 
 import { Search } from "~/components/Search"
 import { Avatar } from "~/components/ui"
@@ -40,7 +40,7 @@ const columns = [
       <Link to={`/${info.row.original.username}`} className="flex items-center space-x-2">
         <Avatar
           className="sq-10"
-          src={createS3Url(info.row.original.avatar)}
+          src={createAssetUrl(info.row.original.avatar)}
           placeholder={info.row.original.avatarBlurHash}
           size={60}
         />

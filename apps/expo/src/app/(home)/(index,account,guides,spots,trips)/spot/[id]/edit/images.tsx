@@ -5,7 +5,7 @@ import { Plus, X } from "lucide-react-native"
 import * as React from "react"
 import { ScrollView, TouchableOpacity, View } from "react-native"
 
-import { createS3Url } from "@ramble/shared"
+import { createAssetUrl } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
@@ -46,7 +46,7 @@ export default function EditSpotImagesScreen() {
             <TouchableOpacity key={image} onPress={() => setImages((im) => im.filter((i) => i !== image))} className="w-1/3 p-1">
               <Image
                 className="h-[100px] w-full rounded-xs bg-gray-50 object-cover dark:bg-gray-700"
-                source={{ uri: image.startsWith("file://") ? image : createS3Url(image) }}
+                source={{ uri: image.startsWith("file://") ? image : createAssetUrl(image) }}
               />
               <View className="-right-1 -top-1 absolute rounded-full bg-gray-100 p-1 dark:bg-gray-900">
                 <Icon icon={X} size={16} />

@@ -2,7 +2,7 @@ import { decode } from "blurhash"
 import queryString from "query-string"
 import * as React from "react"
 
-import { defaultBlurHash, merge, srcWhitelist } from "@ramble/shared"
+import { assetUrl, defaultBlurHash, merge } from "@ramble/shared"
 
 type Fit = "cover" | "contain" | "fill" | "inside" | "outside"
 
@@ -34,8 +34,7 @@ export function transformImageSrc(
   options: { width: number; height?: number; quality?: number; fit?: Fit },
 ) {
   if (!src) return undefined
-
-  if (!srcWhitelist.some((s) => src.startsWith(s))) return src
+  if (!src.startsWith(assetUrl)) return src
   const searchParams = queryString.stringify({ src, ...options })
   return `/api/image?${searchParams}`
 }

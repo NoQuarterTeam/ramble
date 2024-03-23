@@ -6,7 +6,7 @@ import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
 
 import type { Spot, SpotImage } from "@ramble/database/types"
-import { canManageSpot, createS3Url, merge } from "@ramble/shared"
+import { canManageSpot, createAssetUrl, merge } from "@ramble/shared"
 
 import { useMe } from "~/lib/hooks/useMe"
 
@@ -91,7 +91,7 @@ export function SpotImageCarousel({
                 width={itemWidth}
                 height={height}
                 placeholder={image.blurHash}
-                source={{ uri: createS3Url(image.path) }}
+                source={{ uri: createAssetUrl(image.path) }}
                 style={{ width: itemWidth, height, marginHorizontal: noOfColumns && noOfColumns > 1 ? 5 : 0 }}
                 className={merge("rounded-xs object-cover", imageClassName)}
               />

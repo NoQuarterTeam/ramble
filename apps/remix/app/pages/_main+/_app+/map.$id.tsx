@@ -6,7 +6,7 @@ import { z } from "zod"
 
 import type { SpotType } from "@ramble/database/types"
 import { generateBlurHash } from "@ramble/server-services"
-import { createS3Url, displayRating, isPartnerSpot, join } from "@ramble/shared"
+import { createAssetUrl, displayRating, isPartnerSpot, join } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
 import { ImageUploader } from "~/components/ImageUploader"
@@ -142,7 +142,7 @@ export default function SpotPreview() {
                     height={225}
                     className="h-[225px] max-w-[350px] rounded-xs object-cover"
                     key={image.id}
-                    src={createS3Url(image.path)}
+                    src={createAssetUrl(image.path)}
                   />
                 ))}
             <div className="center h-full w-[350px] flex-col gap-2 rounded-xs border bg-gray-50 dark:bg-gray-800">

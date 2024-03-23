@@ -2,7 +2,7 @@ import { Link, useLoaderData } from "@remix-run/react"
 import { ChevronLeft } from "lucide-react"
 import { cacheHeader } from "pretty-cache-header"
 
-import { createS3Url } from "@ramble/shared"
+import { createAssetUrl } from "@ramble/shared"
 
 import { LinkButton } from "~/components/LinkButton"
 import { PageContainer } from "~/components/PageContainer"
@@ -51,7 +51,7 @@ export default function ProfileFollowers() {
               key={user.id}
               className="flex items-center space-x-2 rounded-xs border border-hover p-4"
             >
-              <Avatar size={100} className="sq-16" src={createS3Url(user.avatar)} placeholder={user.avatarBlurHash} />
+              <Avatar size={100} className="sq-16" src={createAssetUrl(user.avatar)} placeholder={user.avatarBlurHash} />
               <p className="text-2xl">{user.firstName}</p>
             </Link>
           ))}

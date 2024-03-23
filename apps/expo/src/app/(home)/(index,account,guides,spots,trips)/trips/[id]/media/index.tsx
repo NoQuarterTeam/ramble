@@ -1,5 +1,5 @@
 import { MediaType } from "@ramble/database/types"
-import { createS3Url, useDisclosure } from "@ramble/shared"
+import { createAssetUrl, useDisclosure } from "@ramble/shared"
 import { Camera, LocationPuck, type MapState, type MapView as MapType, StyleURL } from "@rnmapbox/maps"
 import type { Position } from "@rnmapbox/maps/lib/typescript/src/types/Position"
 import { FlashList } from "@shopify/flash-list"
@@ -220,7 +220,7 @@ export default function TripMedia() {
                       {item.thumbnailPath ? (
                         <Image
                           className="h-full w-full bg-gray-200 dark:bg-gray-700"
-                          source={{ uri: createS3Url(item.thumbnailPath) }}
+                          source={{ uri: createAssetUrl(item.thumbnailPath) }}
                         />
                       ) : (
                         <View className="flex space-y-1 px-4 items-center">
@@ -235,7 +235,7 @@ export default function TripMedia() {
                       )}
                     </View>
                   ) : (
-                    <Image className="h-full w-full bg-gray-200 dark:bg-gray-700" source={{ uri: createS3Url(item.path) }} />
+                    <Image className="h-full w-full bg-gray-200 dark:bg-gray-700" source={{ uri: createAssetUrl(item.path) }} />
                   )}
                   {(!item.latitude || !item.longitude) && (
                     <View className="sq-6 absolute bottom-1 left-1 flex items-center justify-center rounded-full bg-background dark:bg-background-dark">
