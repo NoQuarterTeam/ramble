@@ -2,7 +2,7 @@ import { Tabs } from "expo-router"
 import { List, Map as MapIcon, Route, UserCircle, Users } from "lucide-react-native"
 import { useColorScheme } from "react-native"
 
-import { createS3Url, join } from "@ramble/shared"
+import { createAssetUrl, join } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { Icon } from "~/components/Icon"
@@ -65,7 +65,7 @@ export default function HomeLayout() {
                 height={40}
                 placeholder={me.avatarBlurHash}
                 style={{ width: 26, height: 26 }}
-                source={{ uri: createS3Url(me.avatar) }}
+                source={{ uri: createAssetUrl(me.avatar) }}
                 className={join(
                   "rounded-full border-2 border-transparent bg-gray-100 object-cover",
                   props.focused && "border-primary-500",

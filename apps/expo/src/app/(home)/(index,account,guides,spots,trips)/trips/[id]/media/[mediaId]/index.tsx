@@ -11,7 +11,7 @@ import { Alert, type LayoutChangeEvent, TouchableOpacity, View } from "react-nat
 import { Gesture, GestureDetector, TouchableWithoutFeedback } from "react-native-gesture-handler"
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 
-import { createS3Url } from "@ramble/shared"
+import { createAssetUrl } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
@@ -79,7 +79,7 @@ export default function TripImage() {
   const handleDownload = async () => {
     try {
       if (!data) return
-      const file = await FileSystem.downloadAsync(createS3Url(data.path), FileSystem.documentDirectory + data.path)
+      const file = await FileSystem.downloadAsync(createAssetUrl(data.path), FileSystem.documentDirectory + data.path)
       await MediaLibrary.saveToLibraryAsync(file.uri)
     } catch (error) {
       console.log(error)
@@ -253,14 +253,14 @@ export default function TripImage() {
                 <Video
                   ref={video}
                   style={{ width: "100%", minHeight: "100%" }}
-                  source={{ uri: createS3Url(data.path) }}
+                  source={{ uri: createAssetUrl(data.path) }}
                   resizeMode={ResizeMode.CONTAIN}
                   isLooping
                   onPlaybackStatusUpdate={setStatus}
                   isMuted={isMuted}
                 />
               ) : (
-                <Image source={{ uri: createS3Url(data.path) }} className="h-full flex-1" contentFit="contain" />
+                <Image source={{ uri: createAssetUrl(data.path) }} className="h-full flex-1" contentFit="contain" />
               )}
             </Animated.View>
           </GestureDetector>

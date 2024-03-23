@@ -4,7 +4,7 @@ import { Flag } from "lucide-react-native"
 import * as React from "react"
 import { ScrollView, TouchableOpacity, View } from "react-native"
 
-import { createS3Url, join } from "@ramble/shared"
+import { createAssetUrl, join } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
@@ -50,7 +50,7 @@ export default function SpotReportImagesScreen() {
                       "h-[200px] w-full rounded-xs bg-gray-50 object-cover dark:bg-gray-700",
                       isFlagged(id) && "opacity-80 outline outline-red-500 outline-solid",
                     )}
-                    source={{ uri: createS3Url(path) }}
+                    source={{ uri: createAssetUrl(path) }}
                   />
                 </TouchableOpacity>
                 <View className="absolute top-2 left-2 z-10">

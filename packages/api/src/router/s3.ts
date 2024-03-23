@@ -1,9 +1,8 @@
 import { randomUUID } from "node:crypto"
 import { z } from "zod"
 
-import { createSignedUrl } from "@ramble/server-services"
+import { assetPrefix, createSignedUrl } from "@ramble/server-services"
 
-import { assetPrefix } from "@ramble/shared"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const s3Router = createTRPCRouter({

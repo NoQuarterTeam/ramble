@@ -1,9 +1,8 @@
 import { randomUUID } from "node:crypto"
 import { z } from "zod"
 
-import { createSignedUrl } from "@ramble/server-services"
+import { assetPrefix, createSignedUrl } from "@ramble/server-services"
 
-import { assetPrefix } from "@ramble/shared"
 import { formError, validateFormData } from "~/lib/form.server"
 import type { ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 import { json } from "~/lib/vendor/vercel.server"

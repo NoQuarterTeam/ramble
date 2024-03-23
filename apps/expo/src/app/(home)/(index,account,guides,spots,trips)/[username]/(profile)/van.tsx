@@ -1,7 +1,7 @@
 import { useLocalSearchParams } from "expo-router"
 import { View } from "react-native"
 
-import { createS3Url } from "@ramble/shared"
+import { createAssetUrl } from "@ramble/shared"
 
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { Spinner } from "~/components/ui/Spinner"
@@ -50,7 +50,7 @@ export default function UserVan() {
             placeholder={image.blurHash}
             style={{ width: isTablet ? "48%" : "100%", marginHorizontal: isTablet ? 10 : 0, marginBottom: 10 }}
             className="min-h-[300px] rounded-xs object-contain"
-            source={{ uri: createS3Url(image.path) }}
+            source={{ uri: createAssetUrl(image.path) }}
           />
         ))}
       </View>

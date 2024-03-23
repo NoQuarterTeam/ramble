@@ -3,7 +3,7 @@ import { Lock, User2 } from "lucide-react-native"
 import { TouchableOpacity, View } from "react-native"
 
 import type { List, User } from "@ramble/database/types"
-import { createS3Url } from "@ramble/shared"
+import { createAssetUrl } from "@ramble/shared"
 
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
@@ -40,7 +40,7 @@ export function ListItem({ list }: Props) {
                 width={40}
                 height={40}
                 placeholder={list.creator.avatarBlurHash}
-                source={{ uri: createS3Url(list.creator.avatar) }}
+                source={{ uri: createAssetUrl(list.creator.avatar) }}
                 className="sq-6 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
               />
             ) : (
