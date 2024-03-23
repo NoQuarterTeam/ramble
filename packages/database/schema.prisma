@@ -398,7 +398,6 @@ model TripMedia {
   deletedAt DateTime?
 
   @@unique([tripId, assetId])
-  @@index([tripId])
   @@index([latitude])
   @@index([longitude])
   @@index([creatorId])
