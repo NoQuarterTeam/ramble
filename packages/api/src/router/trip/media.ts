@@ -133,11 +133,7 @@ export const tripMediaRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       if (!input.image && !input.media) throw new TRPCError({ code: "BAD_REQUEST", message: "Media required" })
       const data = input.image || input.media!
-      await ctx.prisma.tripMedia.create({ data: { tripId: input.tripId, ...data, creatorId: ctx.user.id } }).catch((error) => {
-        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
-          throw new TRPCError({ code: "BAD_REQUEST", message: "Media already exists" })
-        }
-      })
+      await ctx.prisma.tripMedia.create({ data: { tripId: input.tripId, ...data, creatorId: ctx.user.id } })
       const latestTimestamp = await ctx.prisma.tripMedia.findFirst({
         where: { tripId: input.tripId, deletedAt: null },
         orderBy: { timestamp: "desc" },
