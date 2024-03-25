@@ -42,20 +42,21 @@ export const userRouter = createTRPCRouter({
   membership: protectedProcedure.query(async ({ ctx }) => {
     const user = await ctx.prisma.user.findUnique({
       where: { id: ctx.user.id },
-      select: { id: true, stripeSubscriptionId: true, stripeCustomerId: true },
+      select: { id: true },
     })
     if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
-    if (!user.stripeSubscriptionId) return null
-    const subscription = await stripe.subscriptions.retrieve(user.stripeSubscriptionId)
+    return user
+    // if (!user.stripeSubscriptionId) return null
+    // const subscription = await stripe.subscriptions.retrieve(user.stripeSubscriptionId)
 
-    return {
-      id: subscription.id,
-      discountPercent: subscription.discount?.coupon.percent_off,
-      items: subscription.items.data,
-      isCancelled: subscription.cancel_at_period_end,
-      endDate: subscription.current_period_end || 0,
-      status: subscription.status,
-    }
+    // return {
+    //   id: subscription.id,
+    //   discountPercent: subscription.discount?.coupon.percent_off,
+    //   items: subscription.items.data,
+    //   isCancelled: subscription.cancel_at_period_end,
+    //   endDate: subscription.current_period_end || 0,
+    //   status: subscription.status,
+    // }
   }),
   /**
    * @deprecated Using local storage to track activity count

@@ -32,8 +32,6 @@ model User {
   isPendingGuideApproval Boolean @default(false)
   latitude               Float?
   longitude              Float?
-  stripeCustomerId       String?
-  stripeSubscriptionId   String?
 
   // Spot preferences
   isPetOwner      Boolean @default(false)

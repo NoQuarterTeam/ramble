@@ -121,13 +121,6 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
         cameraPermission: "Allow Ramble to access your camera to add photos to a trip",
       },
     ],
-    [
-      "@stripe/stripe-react-native",
-      {
-        merchantIdentifier: ["merchant.co.noquarter.ramble", "merchant.co.noquarter.ramble.dev"],
-        enableGooglePay: true,
-      },
-    ],
   ],
 })
 
