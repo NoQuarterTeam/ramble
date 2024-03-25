@@ -7,7 +7,7 @@ dayjs.extend(isBetween)
 import dayjs from "dayjs"
 
 import type { Trip, TripMedia, User } from "@ramble/database/types"
-import { createImageUrl, join } from "@ramble/shared"
+import { createAssetUrl, join } from "@ramble/shared"
 
 import { Image } from "expo-image"
 import { useFeedbackActivity } from "./FeedbackCheck"
@@ -20,7 +20,7 @@ interface Props {
   } & {
     users: Pick<User, "id" | "firstName" | "lastName" | "avatar" | "avatarBlurHash">[]
   } & {
-    media: Pick<TripMedia, "id" | "path">[]
+    media: Pick<TripMedia, "id" | "path" | "thumbnailPath">[]
   }
 }
 const today = dayjs()
@@ -49,7 +49,7 @@ export function TripItem({ trip }: Props) {
                 <Image
                   className="absolute top-0 rounded border-background bg-gray-200 dark:bg-gray-700"
                   key={media.id}
-                  source={{ uri: createImageUrl(media.path) }}
+                  source={{ uri: createAssetUrl(media.thumbnailPath || media.path) }}
                   style={{
                     width: 40,
                     height: 40,
@@ -102,7 +102,7 @@ function TripUsers({ trip }: Props) {
               height={40}
               style={{ zIndex: 1 }}
               placeholder={trip.creator.avatarBlurHash}
-              source={{ uri: createImageUrl(trip.creator.avatar) }}
+              source={{ uri: createAssetUrl(trip.creator.avatar) }}
               className="sq-7 rounded-full border border-background object-cover dark:border-background-dark"
             />
           ) : (
@@ -125,7 +125,7 @@ function TripUsers({ trip }: Props) {
                   height={30}
                   key={user.id}
                   placeholder={user.avatarBlurHash}
-                  source={{ uri: createImageUrl(user.avatar) }}
+                  source={{ uri: createAssetUrl(user.avatar) }}
                   style={{ zIndex: i * -1 }}
                   className="sq-6 -ml-1.5 rounded-full border border-background object-cover dark:border-background-dark"
                 />

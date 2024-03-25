@@ -53,6 +53,9 @@
     "expo-localization",
     "expo-location",
     "expo-media-library",
+    "expo-network",
+    "expo-av",
+    "expo-video-thumbnails",
     "expo-splash-screen",
     "expo-status-bar",
     "expo-system-ui",
@@ -60,7 +63,6 @@
     "expo-web-browser",
     "lucide-react-native",
     "react-native-gesture-handler",
-    "react-native-get-random-values",
     "react-native-ios-context-menu",
     "react-native-ios-utilities",
     "react-native-progress",
@@ -71,7 +73,6 @@
     "react-native-web",
     "react-native",
     "sharp",
-    "tailwindcss",
-    "uuid"
+    "tailwindcss"
   ]
 }

@@ -1,4 +1,4 @@
-import { defaultBlurHash, srcWhitelist } from "@ramble/shared"
+import { assetUrl, defaultBlurHash } from "@ramble/shared"
 import { Image, type ImageProps } from "expo-image"
 import { config } from "~/lib/config"
 
@@ -24,7 +24,7 @@ export function OptimizedImage({ source, height, width, quality, fit, ...props }
 
 export function transformImageSrc(src: string | undefined | null, options: Options) {
   if (!src) return undefined
-  if (!srcWhitelist.some((s) => src.startsWith(s))) return src
+  if (!src.startsWith(assetUrl)) return src
   const params = new URLSearchParams({
     src,
     width: options.width.toString(),

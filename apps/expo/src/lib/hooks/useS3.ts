@@ -1,23 +1,17 @@
 import * as React from "react"
-import "react-native-get-random-values"
-import { v4 } from "uuid"
-
-import { assetPrefix } from "@ramble/shared"
-
 import { api } from "../api"
 
 export function useS3Upload(): [(fileUrl: string) => Promise<string>, { isLoading: boolean }] {
   const [isLoading, setIsLoading] = React.useState(false)
-  const { mutateAsync } = api.s3.createSignedUrl.useMutation()
+  const { mutateAsync } = api.s3.createSignedUrlNew.useMutation()
   async function upload(fileUrl: string) {
     try {
       setIsLoading(true)
-      const type = fileUrl.split(".").pop()
-      const key = `${assetPrefix}${v4()}.${type}`
-      const res = await mutateAsync({ key })
+      const type = fileUrl.split(".").pop()!
+      const { url, key } = await mutateAsync({ type })
       const resp = await fetch(fileUrl)
       const imageBody = await resp.blob()
-      await fetch(res, { method: "PUT", body: imageBody })
+      await fetch(url, { method: "PUT", body: imageBody })
       setIsLoading(false)
       return key
     } catch (error) {
@@ -30,14 +24,13 @@ export function useS3Upload(): [(fileUrl: string) => Promise<string>, { isLoadin
 }
 
 export function useS3QuickUpload() {
-  const { mutateAsync } = api.s3.createSignedUrl.useMutation()
+  const { mutateAsync } = api.s3.createSignedUrlNew.useMutation()
   async function upload(fileUrl: string) {
-    const type = fileUrl.split(".").pop()
-    const key = `${assetPrefix}${v4()}.${type}`
-    const res = await mutateAsync({ key })
+    const type = fileUrl.split(".").pop()!
+    const { url, key } = await mutateAsync({ type })
     const resp = await fetch(fileUrl)
     const imageBody = await resp.blob()
-    await fetch(res, { method: "PUT", body: imageBody })
+    await fetch(url, { method: "PUT", body: imageBody })
     return key
   }
   return upload

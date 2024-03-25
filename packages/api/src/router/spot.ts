@@ -8,7 +8,6 @@ import { SpotType } from "@ramble/database/types"
 import { FULL_WEB_URL } from "@ramble/server-env"
 import { clusterSchema, spotAmenitiesSchema, spotSchema, userSchema } from "@ramble/server-schemas"
 import {
-  deleteManyObjects,
   generateBlurHash,
   geocodeAddress,
   geocodeCoords,
@@ -237,6 +236,7 @@ export const spotRouter = createTRPCRouter({
             amenities: spotAmenitiesSchema.partial().nullish(),
             coverImage: z.string().optional(),
             shouldPublishLater: z.boolean().optional(),
+            googlePlaceId: z.string().optional(),
           })
           .and(z.object({ tripId: z.string(), order: z.number().optional() }).partial()),
       ),

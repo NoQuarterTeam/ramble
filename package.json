@@ -2,12 +2,12 @@
   "name": "@ramble/root",
   "private": true,
   "dependencies": {
-    "turbo": "1.12.5"
+    "turbo": "1.13.0"
   },
   "type": "commonjs",
   "devDependencies": {
-    "@biomejs/biome": "1.6.1",
-    "typescript": "5.4.2"
+    "@biomejs/biome": "1.6.2",
+    "typescript": "5.4.3"
   },
   "scripts": {
     "build": "turbo run build",

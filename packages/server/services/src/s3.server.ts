@@ -10,7 +10,11 @@ import { Upload } from "@aws-sdk/lib-storage"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 
 import { env } from "@ramble/server-env"
-import { s3Bucket, s3Region } from "@ramble/shared"
+
+export const assetPrefix = "assets/"
+
+const s3Region = "eu-central-1"
+const s3Bucket = "ramble"
 
 const client = new S3Client({
   region: s3Region,

@@ -7,7 +7,7 @@
     "crag": "pnpm with-env ts-node ./src/scraping/get-thecrag.ts",
     "gpt": "pnpm with-env ts-node ./src/export/ramble-gpt.ts",
     "users": "pnpm with-env ts-node ./src/export/initial-users.ts",
-    "with-env": "dotenv -e ../../../../.env --"
+    "with-env": "dotenv -e ../../../.env --"
   },
   "sideEffects": false,
   "devDependencies": {
@@ -25,8 +25,8 @@
     "graphql-request": "6.1.0",
     "graphql": "16.8.1",
     "html-to-text": "9.0.5",
-    "puppeteer": "22.5.0",
+    "puppeteer": "22.6.0",
     "ts-node": "10.9.2",
-    "typescript": "5.4.2"
+    "typescript": "5.4.3"
   }
 }

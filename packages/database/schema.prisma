@@ -181,8 +181,10 @@ model Spot {
   coverId       String?        @unique
 
   deletedAt DateTime?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now()) @updatedAt
+  closedAt  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   sourceUrl                String? @db.VarChar(500)
   campspaceId              Int?    @unique
@@ -200,15 +202,16 @@ model Spot {
   mossyEarthId             String? @unique
   rewildingEuropeId        String? @unique
   polskiCaravaningId       String? @unique
+  googlePlaceId            String? @unique
 
   @@index([publishedAt])
   @@index([ownerId])
-  @@index([coverId])
   @@index([verifierId])
   @@index([creatorId])
   @@index([longitude])
   @@index([verifiedAt, type, deletedAt, creatorId, publishedAt])
   @@index([type, verifiedAt, latitude, longitude, deletedAt, creatorId, publishedAt])
+  @@index([deletedAt])
 }
 
 model SpotAmenities {
@@ -370,18 +373,26 @@ model Trip {
   @@index([creatorId])
 }
 
-model TripMedia {
-  id        String  @id @default(uuid())
-  path      String
-  latitude  Float?
-  longitude Float?
-  note      String? @db.Text
+enum MediaType {
+  IMAGE
+  VIDEO
+}
 
-  assetId   String   @unique()
-  timestamp DateTime
-  creator   User     @relation(fields: [creatorId], references: [id])
+model TripMedia {
+  id            String    @id @default(uuid())
+  path          String
+  latitude      Float?
+  longitude     Float?
+  note          String?   @db.Text
+  type          MediaType @default(IMAGE)
+  duration      Int?
+  thumbnailPath String?
+  assetId       String
+  timestamp     DateTime
+
+  creator   User   @relation(fields: [creatorId], references: [id])
   creatorId String
-  trip      Trip     @relation(fields: [tripId], references: [id])
+  trip      Trip   @relation(fields: [tripId], references: [id])
   tripId    String
 
   createdAt DateTime  @default(now())

@@ -6,7 +6,7 @@ import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
 
 import type { Spot, SpotImage } from "@ramble/database/types"
-import { canManageSpot, createImageUrl, merge } from "@ramble/shared"
+import { canManageSpot, createAssetUrl, merge } from "@ramble/shared"
 
 import { useMe } from "~/lib/hooks/useMe"
 
@@ -74,14 +74,7 @@ export function SpotImageCarousel({
         }
         ListFooterComponent={
           canAddMore ? (
-            <Footer
-              placeholderPaddingTop={placeholderPaddingTop}
-              width={itemWidth}
-              height={height}
-              images={images}
-              canAddMore={canAddMore}
-              spot={spot}
-            />
+            <Footer placeholderPaddingTop={placeholderPaddingTop} width={itemWidth} height={height} images={images} spot={spot} />
           ) : undefined
         }
         renderItem={({ item: image }) => (
@@ -91,7 +84,7 @@ export function SpotImageCarousel({
                 width={itemWidth}
                 height={height}
                 placeholder={image.blurHash}
-                source={{ uri: createImageUrl(image.path) }}
+                source={{ uri: createAssetUrl(image.path) }}
                 style={{ width: itemWidth, height, marginHorizontal: noOfColumns && noOfColumns > 1 ? 5 : 0 }}
                 className={merge("rounded-xs object-cover", imageClassName)}
               />
@@ -125,14 +118,13 @@ function Footer({
   width,
   height,
   images,
-  canAddMore,
   spot,
   placeholderPaddingTop = 0,
 }: Pick<Props, "placeholderPaddingTop" | "width" | "height" | "images" | "canAddMore" | "spot">) {
   const { me } = useMe()
   const router = useRouter()
   const onPickImage = async () => {
-    if (!canAddMore || !spot) return
+    if (!spot) return
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -151,14 +143,14 @@ function Footer({
       toast({ title: "Error selecting image", message, type: "error" })
     }
   }
-  if (!canAddMore && images.length === 0) return null
+  if (images.length === 0) return null
   return (
     <View
       style={{ width, height, paddingTop: placeholderPaddingTop }}
       className="flex items-center justify-center rounded-xs bg-gray-50 dark:bg-gray-800"
     >
       <Icon icon={Image} size={40} strokeWidth={1} className="mb-2" />
-      {me && canAddMore ? (
+      {me ? (
         <>
           {images.length === 0 && <Text className="my-2 text-sm">Be the first to add an image</Text>}
           <Button size="sm" variant="outline" onPress={onPickImage}>
@@ -172,7 +164,7 @@ function Footer({
   )
 }
 
-function Empty({ width, height, placeholderPaddingTop = 0 }: Pick<Props, "placeholderPaddingTop" | "width" | "height">) {
+export function Empty({ width, height, placeholderPaddingTop = 0 }: Pick<Props, "placeholderPaddingTop" | "width" | "height">) {
   return (
     <View
       style={{ width, height, paddingTop: placeholderPaddingTop }}

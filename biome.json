@@ -25,7 +25,7 @@
     "enabled": true,
     "rules": {
       "nursery": {
-        "useSortedClasses": "error"
+        "useSortedClasses": "off"
       },
       "recommended": true,
       "correctness": {

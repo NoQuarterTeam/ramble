@@ -4,7 +4,7 @@ import { Star } from "lucide-react"
 import * as React from "react"
 
 import type { Prisma } from "@ramble/database/types"
-import { createImageUrl, join } from "@ramble/shared"
+import { createAssetUrl, join } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -57,7 +57,7 @@ export function ReviewItem({ review }: Props) {
     <div className="space-y-2 rounded-xs border px-4 py-3">
       <div className="flex justify-between">
         <div className="hstack">
-          <Avatar size={40} className="sq-10 rounded-full" src={createImageUrl(review.user.avatar)} />
+          <Avatar size={40} className="sq-10 rounded-full" src={createAssetUrl(review.user.avatar)} />
           <div>
             <Link to={`/${review.user.username}`} className="text-md hover:underline">
               {review.user.firstName} {review.user.lastName}

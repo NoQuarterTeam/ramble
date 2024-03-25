@@ -19,7 +19,12 @@ export const tripRouter = createTRPCRouter({
         items: true, // TODO: <-- remove later
         creator: true,
         users: true,
-        media: { where: { deletedAt: null }, orderBy: { timestamp: "desc" }, take: 3, select: { id: true, path: true } },
+        media: {
+          where: { deletedAt: null },
+          orderBy: { timestamp: "desc" },
+          take: 3,
+          select: { id: true, path: true, thumbnailPath: true },
+        },
       },
       take: 50, // TODO pagination
       skip: input?.skip || 0,

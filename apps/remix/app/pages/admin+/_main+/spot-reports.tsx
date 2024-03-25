@@ -6,7 +6,7 @@ import { promiseHash } from "remix-utils/promise"
 import { z } from "zod"
 
 import type { Prisma } from "@ramble/database/types"
-import { createImageUrl } from "@ramble/shared"
+import { createAssetUrl } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
 import { Search } from "~/components/Search"
@@ -108,7 +108,7 @@ const columns = [
       <div className="flex items-center space-x-2">
         <Avatar
           className="sq-8"
-          src={createImageUrl(info.getValue().avatar)}
+          src={createAssetUrl(info.getValue().avatar)}
           placeholder={info.getValue().avatarBlurHash}
           size={40}
         />
@@ -126,7 +126,7 @@ const columns = [
         <div className="flex items-center space-x-2">
           <Avatar
             className="sq-8"
-            src={createImageUrl(row.original.approver.avatar)}
+            src={createAssetUrl(row.original.approver.avatar)}
             placeholder={row.original.approver.avatarBlurHash}
             size={40}
           />

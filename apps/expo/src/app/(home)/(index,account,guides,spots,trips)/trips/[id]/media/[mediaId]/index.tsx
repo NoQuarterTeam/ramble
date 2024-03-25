@@ -1,23 +1,26 @@
 import dayjs from "dayjs"
+import { Audio, ResizeMode, Video } from "expo-av"
+import type { AVPlaybackStatus } from "expo-av"
 import * as FileSystem from "expo-file-system"
 import { Image } from "expo-image"
 import * as MediaLibrary from "expo-media-library"
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
-import { Download, MapPin, Trash } from "lucide-react-native"
+import { Download, MapPin, Pause, Play, Trash, Volume2, VolumeX } from "lucide-react-native"
 import * as React from "react"
 import { Alert, type LayoutChangeEvent, TouchableOpacity, View } from "react-native"
-import { Gesture, GestureDetector } from "react-native-gesture-handler"
+import { Gesture, GestureDetector, TouchableWithoutFeedback } from "react-native-gesture-handler"
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 
-import { createImageUrl } from "@ramble/shared"
+import { createAssetUrl } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
 import { ScreenView } from "~/components/ui/ScreenView"
+import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
-import { height, width } from "~/lib/device"
+import { height, isAndroid, width } from "~/lib/device"
 import { useMe } from "~/lib/hooks/useMe"
 
 const clamp = (value: number, min: number, max: number): number => {
@@ -29,13 +32,17 @@ const DOUBLE_ZOOM = 3
 
 export default function TripImage() {
   const { me } = useMe()
-  const { id, imageId, bounds } = useLocalSearchParams<{ id: string; imageId?: string; bounds?: string }>()
+  const { id, mediaId, bounds } = useLocalSearchParams<{ id: string; mediaId?: string; bounds?: string }>()
+
+  const video = React.useRef<Video>(null)
+  const [status, setStatus] = React.useState<AVPlaybackStatus | undefined>()
+  const [isMuted, setIsMuted] = React.useState(false)
 
   const parsedBounds = bounds?.split(",").map(Number)
 
   const { data, isLoading } = api.trip.media.byId.useQuery(
-    { id: imageId! },
-    { enabled: !!imageId, staleTime: Number.POSITIVE_INFINITY, cacheTime: Number.POSITIVE_INFINITY },
+    { id: mediaId! },
+    { enabled: !!mediaId, staleTime: Number.POSITIVE_INFINITY, cacheTime: Number.POSITIVE_INFINITY },
   )
 
   const router = useRouter()
@@ -43,15 +50,15 @@ export default function TripImage() {
   const utils = api.useUtils()
   const { mutate, isLoading: removeLoading } = api.trip.media.remove.useMutation({
     onSuccess: () => {
-      if (!imageId) return
+      if (!mediaId) return
       void utils.trip.detail.refetch({ id })
       if (parsedBounds) {
         utils.trip.media.byBounds.setData({ tripId: id, skip: 0, bounds: parsedBounds }, (prev) =>
-          prev ? { total: prev.total - 1, items: prev.items.filter((media) => media.id !== imageId) } : prev,
+          prev ? { total: prev.total - 1, items: prev.items.filter((media) => media.id !== mediaId) } : prev,
         )
       } else {
         utils.trip.media.all.setData({ tripId: id, skip: 0 }, (prev) =>
-          prev ? { total: prev.total - 1, items: prev.items.filter((media) => media.id !== imageId) } : prev,
+          prev ? { total: prev.total - 1, items: prev.items.filter((media) => media.id !== mediaId) } : prev,
         )
       }
       router.back()
@@ -62,17 +69,17 @@ export default function TripImage() {
   })
 
   const handleRemove = async () => {
-    if (!imageId) return
+    if (!mediaId) return
     Alert.alert("Are you sure?", "This action cannot be undone.", [
       { text: "Cancel", style: "cancel" },
-      { text: "Remove", style: "destructive", onPress: () => mutate({ id: imageId }) },
+      { text: "Remove", style: "destructive", onPress: () => mutate({ id: mediaId }) },
     ])
   }
 
   const handleDownload = async () => {
     try {
       if (!data) return
-      const file = await FileSystem.downloadAsync(createImageUrl(data.path), FileSystem.documentDirectory + data.path)
+      const file = await FileSystem.downloadAsync(createAssetUrl(data.path), FileSystem.documentDirectory + data.path)
       await MediaLibrary.saveToLibraryAsync(file.uri)
     } catch (error) {
       console.log(error)
@@ -192,6 +199,11 @@ export default function TripImage() {
         translate.y.value = withTiming(0)
       }
     })
+  const pressGesture = Gesture.Tap()
+    .maxDuration(250)
+    .onStart(() => {
+      isActive.value = !isActive.value
+    })
 
   const styles = useAnimatedStyle(() => {
     return {
@@ -208,59 +220,86 @@ export default function TripImage() {
 
   const buttonStyles = useAnimatedStyle(() => {
     return {
-      opacity: isActive.value ? 0 : 1,
+      opacity: withTiming(isActive.value ? 0 : 1),
     }
   })
-  const gestures = Gesture.Race(doubleTapGesture, pinchGesture, panGesture)
+  const gestures = Gesture.Race(Gesture.Exclusive(doubleTapGesture, pressGesture), pinchGesture, panGesture)
+
+  React.useEffect(() => {
+    if (data?.type === "VIDEO" && !isAndroid) {
+      Audio.setAudioModeAsync({ playsInSilentModeIOS: true })
+    }
+  }, [data])
+
+  const handleVideoPlayPause = async () => {
+    if (!status?.isLoaded) return
+    if (status?.isPlaying) {
+      video.current?.pauseAsync()
+    } else {
+      video.current?.playAsync()
+    }
+  }
 
   return (
     <ScreenView
-      title={data ? <Text className="opacity-70">{dayjs(data.timestamp).format("DD MMM YYYY HH:MM")}</Text> : ""}
+      title={data ? <Text className="text-sm">{dayjs(data.timestamp).format("DD MMM YYYY HH:MM")}</Text> : ""}
       containerClassName="px-0"
-      rightElement={
-        imageId && (
-          <View className="flex flex-row space-x-3">
-            {data && me?.id !== data?.creatorId && (
-              <TouchableOpacity className="p-1" onPress={handleDownload}>
-                <Icon icon={Download} size={18} />
-              </TouchableOpacity>
-            )}
-            {/* <Link asChild push href={`/(home)/(trips)/trips/${id}/images/${imageId || ""}/edit`}>
-              <TouchableOpacity className="px-1">
-                <Icon icon={MessageCircleHeart} size={18} />
-              </TouchableOpacity>
-            </Link> */}
-            <TouchableOpacity className="p-1" onPress={handleRemove} disabled={removeLoading}>
-              <Icon icon={Trash} size={18} />
-            </TouchableOpacity>
-          </View>
-        )
-      }
     >
       {isLoading || !data ? null : (
-        <View className="relative flex-1 pb-2">
+        <View className="relative flex-1">
           <GestureDetector gesture={gestures}>
             <Animated.View style={[styles, { flex: 1 }]} onLayout={onImageLayout}>
-              <Image source={{ uri: createImageUrl(data.path) }} className="h-full flex-1" contentFit="contain" />
+              {data.type === "VIDEO" ? (
+                <Video
+                  ref={video}
+                  style={{ width: "100%", minHeight: "100%" }}
+                  source={{ uri: createAssetUrl(data.path) }}
+                  resizeMode={ResizeMode.CONTAIN}
+                  isLooping
+                  onPlaybackStatusUpdate={setStatus}
+                  isMuted={isMuted}
+                />
+              ) : (
+                <Image source={{ uri: createAssetUrl(data.path) }} className="h-full flex-1" contentFit="contain" />
+              )}
             </Animated.View>
           </GestureDetector>
-          {(!data.latitude || !data.longitude) && (
-            <Animated.View
-              style={buttonStyles}
-              className="absolute top-4 right-0 left-0 flex items-center justify-center"
-              pointerEvents="box-none"
-            >
-              <Link push href={`/(home)/(trips)/trips/${id}/images/${imageId}/add-location`} asChild>
-                <Button
-                  size="xs"
-                  leftIcon={<Icon icon={MapPin} size={16} color={{ dark: "black", light: "white" }} />}
-                  className="rounded-full"
-                >
-                  Add to map
-                </Button>
-              </Link>
-            </Animated.View>
-          )}
+          <Animated.View
+            style={buttonStyles}
+            className="flex flex-row border-t border-gray-100 dark:border-gray-800 justify-between items-center px-4 py-2 bg-background dark:bg-background-dark"
+          >
+            <View className="flex-1">
+              {(!data.latitude || !data.longitude) && (
+                <Link push href={`/(home)/(trips)/trips/${id}/media/${mediaId}/add-location`} asChild>
+                  <Icon icon={MapPin} size={20} />
+                </Link>
+              )}
+            </View>
+            {data.type === "VIDEO" && (
+              <View className="flex-1 justify-center flex items-center flex-row space-x-6">
+                {status?.isLoaded && (
+                  <TouchableWithoutFeedback onPress={handleVideoPlayPause}>
+                    <Icon icon={status.isPlaying ? Pause : Play} size={18} />
+                  </TouchableWithoutFeedback>
+                )}
+                {status?.isLoaded && (
+                  <TouchableWithoutFeedback onPress={() => setIsMuted((isMuted) => !isMuted)}>
+                    <Icon icon={status.isMuted ? VolumeX : Volume2} size={22} />
+                  </TouchableWithoutFeedback>
+                )}
+              </View>
+            )}
+            <View className="flex-1 flex items-center justify-end flex-row space-x-3">
+              {data && me?.id !== data?.creatorId && (
+                <TouchableOpacity className="p-1" onPress={handleDownload}>
+                  <Icon icon={Download} size={18} />
+                </TouchableOpacity>
+              )}
+              <TouchableOpacity className="p-1" onPress={handleRemove} disabled={removeLoading}>
+                <Icon icon={Trash} size={18} />
+              </TouchableOpacity>
+            </View>
+          </Animated.View>
         </View>
       )}
     </ScreenView>

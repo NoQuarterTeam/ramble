@@ -1,5 +1,6 @@
 import { authRouter } from "./router/auth"
 import { feedbackRouter } from "./router/feedback"
+import { googleRouter } from "./router/google"
 import { inviteCodeRouter } from "./router/inviteCode"
 import { listRouter } from "./router/list"
 import { mapboxRouter } from "./router/mapbox"
@@ -11,7 +12,6 @@ import { stripeRouter } from "./router/stripe"
 import { tripRouter } from "./router/trip/trip"
 import { userRouter } from "./router/user"
 import { vanRouter } from "./router/van"
-import { versionRouter } from "./router/version"
 import { createTRPCRouter } from "./trpc"
 
 export const appRouter = createTRPCRouter({
@@ -28,7 +28,7 @@ export const appRouter = createTRPCRouter({
   trip: tripRouter,
   user: userRouter,
   van: vanRouter,
-  version: versionRouter,
+  google: googleRouter,
 })
 
 // export type definition of API

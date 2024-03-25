@@ -3,7 +3,7 @@ import { User2 } from "lucide-react-native"
 import { TouchableOpacity, View } from "react-native"
 
 import type { User } from "@ramble/database/types"
-import { createImageUrl } from "@ramble/shared"
+import { createAssetUrl } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
@@ -28,7 +28,7 @@ export function UserItem(props: Props) {
           height={60}
           width={60}
           placeholder={props.user.avatarBlurHash}
-          source={{ uri: createImageUrl(props.user.avatar) }}
+          source={{ uri: createAssetUrl(props.user.avatar) }}
           className="sq-14 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
         />
       ) : (

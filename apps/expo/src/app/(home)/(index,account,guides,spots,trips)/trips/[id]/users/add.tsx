@@ -3,7 +3,7 @@ import { User2 } from "lucide-react-native"
 import * as React from "react"
 import { ActivityIndicator, ScrollView, TouchableOpacity, View } from "react-native"
 
-import { createImageUrl, join } from "@ramble/shared"
+import { createAssetUrl, join } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { Input } from "~/components/ui/Input"
@@ -83,7 +83,7 @@ function UserItem({
             height={50}
             width={50}
             placeholder={user.avatarBlurHash}
-            source={{ uri: createImageUrl(user.avatar) }}
+            source={{ uri: createAssetUrl(user.avatar) }}
             className="sq-12 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
           />
         ) : (
