@@ -397,7 +397,7 @@ model TripMedia {
   updatedAt DateTime  @default(now()) @updatedAt
   deletedAt DateTime?
 
-  @@unique([tripId, assetId])
+  @@index([tripId])
   @@index([latitude])
   @@index([longitude])
   @@index([creatorId])
