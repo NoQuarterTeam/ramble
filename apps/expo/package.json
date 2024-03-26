@@ -65,7 +65,7 @@
     "posthog-react-native": "3.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-hook-form": "7.51.1",
+    "react-hook-form": "7.51.2",
     "react-native": "0.73.5",
     "react-native-avoid-softinput": "4.0.2",
     "react-native-draggable-flatlist": "^4.0.1",
