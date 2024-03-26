@@ -14,10 +14,26 @@ import {
 } from "@ramble/server-services"
 import { userInterestFields } from "@ramble/shared"
 
+import { env } from "@ramble/server-env"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const userRouter = createTRPCRouter({
-  me: publicProcedure.query(({ ctx }) => ctx.user),
+  me: publicProcedure.query(async ({ ctx }) => {
+    if (!ctx.user) return null
+    // const res = await fetch(
+    //   `https://api.revenuecat.com/v2/projects/${env.REVENUE_CAT_PROJECT_ID}/customers/${ctx.user.id}/subscriptions`,
+    //   {
+    //     method: "post",
+    //     headers: new Headers({
+    //       Authorization: `Bearer ${env.REVENUE_CAT_API_KEY}`,
+    //       "Content-Type": "application/json",
+    //     }),
+    //   },
+    // ).catch()
+    // const json = await res.json()
+    // console.log(json)
+    return ctx.user
+  }),
   profile: publicProcedure.input(userSchema.pick({ username: true })).query(async ({ ctx, input }) => {
     const user = await ctx.prisma.user.findUnique({
       where: { username: input.username },
@@ -45,6 +61,7 @@ export const userRouter = createTRPCRouter({
       select: { id: true },
     })
     if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
+
     return user
     // if (!user.stripeSubscriptionId) return null
     // const subscription = await stripe.subscriptions.retrieve(user.stripeSubscriptionId)
