@@ -29,6 +29,11 @@ const userSelectFields = {
   role: true,
   createdAt: true,
   tripSyncEnabled: true,
+  planCancelledAt: true,
+  planExpiry: true,
+  planId: true,
+  planType: true,
+  hasBillingIssue: true,
   ...userInterestFields,
 } satisfies Prisma.UserSelect
 

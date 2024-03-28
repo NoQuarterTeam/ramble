@@ -5,12 +5,14 @@ import * as React from "react"
 import { Platform, ScrollView, TouchableOpacity, View } from "react-native"
 
 import Purchases, { type PurchasesPackage } from "react-native-purchases"
+import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { Button } from "~/components/ui/Button"
 import { Heading } from "~/components/ui/Heading"
 import { ModalView } from "~/components/ui/ModalView"
 
 import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
+import { api } from "~/lib/api"
 
 import { isAndroid } from "~/lib/device"
 import { useCustomer } from "~/lib/hooks/useCustomer"
@@ -34,8 +36,8 @@ const titleConversion = {
 }
 
 export default function Screen() {
-  const { me } = useMe()
-  const { isLoading: isCustomerLoading, customer } = useCustomer()
+  const { data: me } = api.user.me.useQuery(undefined, { staleTime: 0, cacheTime: 0 })
+
   const [selectedPackage, setSelectedPackage] = React.useState<PurchasesPackage>()
   const [isLoading, setIsLoading] = React.useState(true)
 
@@ -57,11 +59,7 @@ export default function Screen() {
   const getOfferings = async () => {
     try {
       const off = await Purchases.getOfferings()
-      if (me?.isAdmin) {
-        setOfferings(off.all?.beta?.availablePackages)
-      } else {
-        setOfferings(off.all.default?.availablePackages)
-      }
+      setOfferings(off.all.default?.availablePackages)
     } catch (e) {
       console.log(e)
     } finally {
@@ -69,22 +67,46 @@ export default function Screen() {
     }
   }
 
+  const utils = api.useUtils()
+  const { mutate } = api.user.updateMembership.useMutation({
+    onMutate: async (input) => {
+      utils.user.me.setData(undefined, (prev) => (prev ? { ...prev, ...input } : prev))
+    },
+  })
   const router = useRouter()
+  const [isPurchasing, setIsPurchasing] = React.useState(false)
   const handlePurchase = async () => {
     try {
-      if (!selectedPackage) return
+      if (!selectedPackage || !me) return
+      setIsPurchasing(true)
       const result = await Purchases.purchasePackage(selectedPackage)
-      console.log({ result })
+      if (!me.planType) {
+        mutate({
+          planId: result.productIdentifier,
+          planExpiry: result.customerInfo.latestExpirationDate
+            ? new Date(result.customerInfo.latestExpirationDate)
+            : dayjs().add(1, "month").toDate(),
+          planType: "TRIAL",
+        })
+      }
       router.back()
-      // todo: save stuff?
     } catch (error) {
       console.log(error)
+    } finally {
+      setIsPurchasing(false)
     }
   }
 
+  if (!me)
+    return (
+      <ModalView title="membership">
+        <LoginPlaceholder text="Log in to join" />
+      </ModalView>
+    )
+
   return (
     <ModalView>
-      {isCustomerLoading || isLoading ? (
+      {isLoading ? (
         <Spinner />
       ) : !offerings ? (
         <Text>There was an issue finding the memberships, please come back later!</Text>
@@ -98,51 +120,51 @@ export default function Screen() {
           >
             <View className="space-y-6">
               <View>
-                <Heading className="text-3xl">{customer?.isSubscribed ? "Membership" : "Become an Explorer"}</Heading>
+                <Heading className="text-3xl">{me.planType ? "Explorer" : "Become an Explorer"}</Heading>
                 <Text className="text-base">
                   Unlimited access to all features on Ramble, create trips, save spots to lists, follow other Ramble users and
-                  much more. Ready to start?
+                  much more. {me.planType ? "" : "Ready to start?"}
                 </Text>
               </View>
-              <View className="space-y-2">
+              <View className="space-y-4">
                 {offerings.map((pkg) => (
                   <TouchableOpacity
-                    onPress={() => setSelectedPackage(pkg)}
                     key={pkg.identifier}
+                    onPress={() => setSelectedPackage(selectedPackage?.identifier === pkg.identifier ? undefined : pkg)}
                     activeOpacity={0.8}
-                    disabled={customer?.activeSubscriptions.includes(pkg.product.identifier)}
+                    disabled={me.planId === pkg.product.identifier}
                     className={join(
                       "flex flex-row p-6 border border-gray-200 dark:border-gray-700 rounded-sm justify-between items-center",
                       selectedPackage?.identifier === pkg.identifier && "border-primary",
+                      me.planId === pkg.product.identifier && "bg-primary",
                     )}
                   >
                     <View>
-                      <Text className="text-2xl">
+                      <Text className={join("text-2xl", me.planId === pkg.product.identifier && "text-white")}>
                         {pkg.product.subscriptionPeriod
                           ? titleConversion[pkg.product.subscriptionPeriod as keyof typeof titleConversion]
                           : pkg.product.title}
                       </Text>
-
-                      {customer?.activeSubscriptions.includes(pkg.product.identifier) && (
-                        <View className="bg-gray-200 dark:bg-gray-700 rounded-full px-2 py-0.5">
+                      {me.planId === pkg.product.identifier && (
+                        <View className="bg-background dark:bg-background-dark rounded-full px-2 py-0.5">
                           <Text className="text-xs">
-                            {`${customer.entitlements.active["Ramble membership"]?.willRenew ? "Renews" : "Cancels"} ${dayjs(
-                              customer.entitlements.active["Ramble membership"]?.expirationDate,
-                            ).format("DD/MM/YYYY")}`}
+                            {`${!me.planCancelledAt ? "Until" : "Cancels"} ${dayjs(me.planCancelledAt || me.planExpiry!).format(
+                              "DD/MM/YYYY",
+                            )}`}
                           </Text>
                         </View>
                       )}
                     </View>
                     <View className="flex items-end">
-                      <Text className="text-xl">
+                      <Text className={join("text-xl", me.planId === pkg.product.identifier && "text-white")}>
                         {pkg.product.priceString}
-                        <Text className="text-sm">
+                        <Text className={join("text-sm", me.planId === pkg.product.identifier && "text-white")}>
                           {pkg.product.subscriptionPeriod
                             ? ` / ${periodConversion[pkg.product.subscriptionPeriod as keyof typeof periodConversion]}`
                             : ""}
                         </Text>
                       </Text>
-                      {pkg.product.introPrice && (
+                      {pkg.product.introPrice && !me.planType && (
                         <View className="bg-primary rounded-full px-2 py-0.5">
                           <Text className="text-xs text-white">
                             {pkg.product.introPrice.periodNumberOfUnits}{" "}
@@ -159,17 +181,12 @@ export default function Screen() {
                 {isAndroid ? "Play Store" : "App Store"} account settings after purchase. If you've used the trial before you will
                 be charged immediately.
               </Text>
-
-              <View className="pt-20" />
-              <Text>{JSON.stringify(customer, null, 2)}</Text>
-              <View className="pt-20" />
-              <Text>{JSON.stringify(offerings, null, 2)}</Text>
             </View>
           </ScrollView>
 
           <View className="absolute bottom-12 left-0 right-0 flex items-center justify-center">
-            <Button className="bg-primary w-full" disabled={!selectedPackage} onPress={handlePurchase}>
-              Continue
+            <Button isLoading={isPurchasing} className="w-full" disabled={!selectedPackage} onPress={handlePurchase}>
+              {me.planType ? "Switch" : "Continue"}
             </Button>
           </View>
         </View>

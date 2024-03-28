@@ -9,29 +9,16 @@ import {
   generateBlurHash,
   sendAccountVerificationEmail,
   sendSlackMessage,
-  stripe,
   updateLoopsContact,
 } from "@ramble/server-services"
 import { userInterestFields } from "@ramble/shared"
 
-import { env } from "@ramble/server-env"
+import { PlanType } from "@ramble/database/types"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const userRouter = createTRPCRouter({
   me: publicProcedure.query(async ({ ctx }) => {
     if (!ctx.user) return null
-    // const res = await fetch(
-    //   `https://api.revenuecat.com/v2/projects/${env.REVENUE_CAT_PROJECT_ID}/customers/${ctx.user.id}/subscriptions`,
-    //   {
-    //     method: "post",
-    //     headers: new Headers({
-    //       Authorization: `Bearer ${env.REVENUE_CAT_API_KEY}`,
-    //       "Content-Type": "application/json",
-    //     }),
-    //   },
-    // ).catch()
-    // const json = await res.json()
-    // console.log(json)
     return ctx.user
   }),
   profile: publicProcedure.input(userSchema.pick({ username: true })).query(async ({ ctx, input }) => {
@@ -55,26 +42,16 @@ export const userRouter = createTRPCRouter({
     if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
     return { ...user, isFollowedByMe: user.followers && user.followers.length > 0 }
   }),
-  membership: protectedProcedure.query(async ({ ctx }) => {
-    const user = await ctx.prisma.user.findUnique({
-      where: { id: ctx.user.id },
-      select: { id: true },
-    })
-    if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
-
-    return user
-    // if (!user.stripeSubscriptionId) return null
-    // const subscription = await stripe.subscriptions.retrieve(user.stripeSubscriptionId)
-
-    // return {
-    //   id: subscription.id,
-    //   discountPercent: subscription.discount?.coupon.percent_off,
-    //   items: subscription.items.data,
-    //   isCancelled: subscription.cancel_at_period_end,
-    //   endDate: subscription.current_period_end || 0,
-    //   status: subscription.status,
-    // }
-  }),
+  updateMembership: protectedProcedure
+    .input(z.object({ planId: z.string(), planExpiry: z.date(), planType: z.nativeEnum(PlanType).optional() }))
+    .mutation(async ({ ctx, input }) => {
+      const user = await ctx.prisma.user.findUnique({ where: { id: ctx.user.id }, select: { id: true } })
+      if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
+      return ctx.prisma.user.update({
+        where: { id: ctx.user.id },
+        data: { planId: input.planId, planExpiry: input.planExpiry, planType: input.planType },
+      })
+    }),
   /**
    * @deprecated Using local storage to track activity count
    */
