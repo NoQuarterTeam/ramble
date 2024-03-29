@@ -15,11 +15,6 @@ enum Role {
   MEMBER
 }
 
-enum PlanType {
-  TRIAL
-  NORMAL
-}
-
 model User {
   id                     String  @id @default(uuid())
   email                  String  @unique
@@ -52,11 +47,10 @@ model User {
   tripSyncEnabled   Boolean @default(true)
 
   // plan info
-  trialExpiresAt  DateTime?
+  trialExpiresAt  DateTime  @default(now())
   planExpiry      DateTime?
   planCancelledAt DateTime?
   hasBillingIssue Boolean   @default(false)
-  planType        PlanType?
   planId          String?
 
   // Relations

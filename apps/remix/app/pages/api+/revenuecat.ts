@@ -1,4 +1,3 @@
-import type { PlanType } from "@ramble/database/types"
 import { env } from "@ramble/server-env"
 import { type ActionFunctionArgs, json } from "@remix-run/node"
 import { db } from "~/lib/db.server"
@@ -37,7 +36,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       where: { id: user.id },
       data: {
         planExpiry: entitlement ? entitlement.expires_date : null,
-        planType: payload.event.period_type,
         planCancelledAt: currentSubscription ? currentSubscription.unsubscribe_detected_at : null,
         planId: entitlement ? entitlement.product_identifier : null,
         hasBillingIssue: currentSubscription ? currentSubscription.billing_issues_detected_at !== null : false,

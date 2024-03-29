@@ -73,13 +73,12 @@ export default function Screen() {
       if (!selectedPackage || !me) return
       setIsPurchasing(true)
       const result = await Purchases.purchasePackage(selectedPackage)
-      if (!me.planType) {
+      if (!me.planId) {
         mutate({
           planId: result.productIdentifier,
           planExpiry: result.customerInfo.latestExpirationDate
             ? new Date(result.customerInfo.latestExpirationDate)
             : dayjs().add(1, "month").toDate(),
-          planType: "TRIAL",
         })
       }
       router.back()
@@ -113,10 +112,10 @@ export default function Screen() {
           >
             <View className="space-y-6">
               <View>
-                <Heading className="text-3xl">{me.planType ? "Explorer" : "Become an Explorer"}</Heading>
+                <Heading className="text-3xl">{me.planId ? "Explorer" : "Become an Explorer"}</Heading>
                 <Text className="text-base">
                   Unlimited access to all features on Ramble, create trips, save spots to lists, follow other Ramble users and
-                  much more. {me.planType ? "" : "Ready to start?"}
+                  much more. {me.planId ? "" : "Ready to start?"}
                 </Text>
               </View>
               <View className="space-y-3">
@@ -189,7 +188,7 @@ export default function Screen() {
 
           <View className="absolute bottom-12 left-0 right-0 flex items-center justify-center">
             <Button isLoading={isPurchasing} className="w-full" disabled={!selectedPackage} onPress={handlePurchase}>
-              {me.planType ? "Switch" : "Continue"}
+              {me.planId ? "Switch" : "Continue"}
             </Button>
           </View>
         </View>

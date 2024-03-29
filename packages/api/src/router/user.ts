@@ -13,7 +13,6 @@ import {
 } from "@ramble/server-services"
 import { userInterestFields } from "@ramble/shared"
 
-import { PlanType } from "@ramble/database/types"
 import dayjs from "dayjs"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
@@ -47,13 +46,13 @@ export const userRouter = createTRPCRouter({
     return { ...user, isFollowedByMe: user.followers && user.followers.length > 0 }
   }),
   updateMembership: protectedProcedure
-    .input(z.object({ planId: z.string(), planExpiry: z.date(), planType: z.nativeEnum(PlanType).optional() }))
+    .input(z.object({ planId: z.string(), planExpiry: z.date() }))
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.prisma.user.findUnique({ where: { id: ctx.user.id }, select: { id: true } })
       if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
       return ctx.prisma.user.update({
         where: { id: ctx.user.id },
-        data: { planId: input.planId, planExpiry: input.planExpiry, planType: input.planType },
+        data: { planId: input.planId, planExpiry: input.planExpiry },
       })
     }),
   /**

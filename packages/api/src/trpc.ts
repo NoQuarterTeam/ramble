@@ -33,7 +33,6 @@ const userSelectFields = {
   planCancelledAt: true,
   planExpiry: true,
   planId: true,
-  planType: true,
   hasBillingIssue: true,
   ...userInterestFields,
 } satisfies Prisma.UserSelect
