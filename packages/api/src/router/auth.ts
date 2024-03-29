@@ -1,15 +1,12 @@
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
-import { IS_DEV } from "@ramble/server-env"
 import { loginSchema, registerSchema } from "@ramble/server-schemas"
 import {
   comparePasswords,
   createAccessRequest,
   createAuthToken,
   createToken,
-  deleteLoopsContact,
-  generateInviteCodes,
   hashPassword,
   sendAccessRequestConfirmationEmail,
   sendAccountVerificationEmail,
@@ -27,13 +24,7 @@ export const authRouter = createTRPCRouter({
     const isSamePassword = comparePasswords(input.password, user.password)
     if (!isSamePassword) throw new TRPCError({ code: "BAD_REQUEST", message: "Incorrect email or password" })
     const token = createAuthToken({ id: user.id })
-    return {
-      user: {
-        ...user,
-        trialExpiresAt: !user.trialExpiresAt ? dayjs(user.createdAt).add(1, "month").toDate() : user.trialExpiresAt,
-      },
-      token,
-    }
+    return { user, token }
   }),
   register: publicProcedure.input(registerSchema).mutation(async ({ ctx, input }) => {
     const existingEmail = await ctx.prisma.user.findUnique({ where: { email: input.email } })
@@ -54,13 +45,7 @@ export const authRouter = createTRPCRouter({
     const token = createAuthToken({ id: user.id })
     void updateLoopsContact({ ...user, signedUpAt: user.createdAt.toISOString(), userId: user.id })
     void sendSlackMessage(`🔥 @${user.username} signed up!`)
-    return {
-      user: {
-        ...user,
-        trialExpiresAt: !user.trialExpiresAt ? dayjs(user.createdAt).add(1, "month").toDate() : user.trialExpiresAt,
-      },
-      token,
-    }
+    return { user, token }
   }),
   requestAccess: publicProcedure
     .input(

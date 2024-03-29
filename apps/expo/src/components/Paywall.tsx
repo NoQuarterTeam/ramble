@@ -23,7 +23,7 @@ interface Props {
 export function Paywall(props: Props) {
   const router = useRouter()
   const { me } = useMe()
-  const isTrialExpired = me?.trialExpiresAt && new Date(me.trialExpiresAt) < new Date()
+  const isTrialExpired = me && new Date(me.trialExpiresAt) < new Date()
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <View className="space-y-4">
