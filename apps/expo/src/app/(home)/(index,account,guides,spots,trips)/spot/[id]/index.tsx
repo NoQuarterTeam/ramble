@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import dayjs from "dayjs"
+import { Image } from "expo-image"
 import { LinearGradient } from "expo-linear-gradient"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
@@ -19,7 +20,7 @@ import {
   Trash,
 } from "lucide-react-native"
 import * as React from "react"
-import { Alert, Share as RNShare, TouchableOpacity, View, type ViewProps, useColorScheme } from "react-native"
+import { Alert, Share as RNShare, ScrollView, TouchableOpacity, View, type ViewProps, useColorScheme } from "react-native"
 import { showLocation } from "react-native-map-link"
 import Animated, {
   Extrapolation,
@@ -53,6 +54,7 @@ import { SpotTypeBadge } from "~/components/SpotTypeBadge"
 import { Button } from "~/components/ui/Button"
 import { Heading } from "~/components/ui/Heading"
 import { ScreenView } from "~/components/ui/ScreenView"
+import { Spinner } from "~/components/ui/Spinner"
 import { SpotImageCarousel } from "~/components/ui/SpotImageCarousel"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
@@ -70,6 +72,9 @@ export default function SpotDetailScreen() {
   const params = useLocalSearchParams<{ id: string }>()
   const { data, isLoading } = api.spot.detail.useQuery({ id: params.id }, { cacheTime: Number.POSITIVE_INFINITY })
   const spot = data?.spot
+
+  const { data: forecastData, isLoading: forecastLoading } = api.weather.getSpotDetailForecast.useQuery({ spotId: params.id })
+
   const translationY = useSharedValue(0)
   const [isScrolledPassedThreshold, setIsScrolledPassedThreshold] = React.useState(false)
 
@@ -223,6 +228,29 @@ export default function SpotDetailScreen() {
                 })}
               </View>
             )}
+
+            <View className="pt-4">
+              {forecastLoading ? (
+                <Spinner />
+              ) : (
+                forecastData && (
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    {forecastData.map((forecast) => (
+                      <View className="flex items-center">
+                        <Text>{dayjs.unix(forecast.dt).format("ddd")}</Text>
+                        <Text>{dayjs.unix(forecast.dt).format("ha")}</Text>
+
+                        <Image
+                          style={{ width: 45, height: 45 }}
+                          source={{ uri: `https://openweathermap.org/img/wn/${forecast.weather[0]?.icon}@2x.png` }}
+                        />
+                        <Text>{Math.round(forecast.main.temp)}°C</Text>
+                      </View>
+                    ))}
+                  </ScrollView>
+                )
+              )}
+            </View>
 
             <View className="space-y-2 py-4">
               {me && (

@@ -1,3 +1,4 @@
+import { Image } from "expo-image"
 import { useRouter } from "expo-router"
 import { Heart, Route, Star, X } from "lucide-react-native"
 import * as React from "react"
@@ -23,6 +24,8 @@ import { useFeedbackActivity } from "./FeedbackCheck"
 export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: string; onClose: () => void }) {
   const { data: spot, isLoading } = api.spot.mapPreview.useQuery({ id })
   const router = useRouter()
+
+  const { data: weatherData, isLoading: weatherLoading } = api.weather.getSpotPreviewForecast.useQuery({ spotId: id })
 
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
@@ -60,9 +63,26 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
           </TouchableOpacity>
 
           <TouchableOpacity onPress={handleGoToSpot} activeOpacity={0.7} className="flex flex-row items-center space-x-2">
-            <Text numberOfLines={1} className="text-lg leading-6">
-              {spot.name}
-            </Text>
+            <View className="flex flex-row justify-between w-full items-start">
+              <Text numberOfLines={1} className="text-lg leading-6">
+                {spot.name}
+              </Text>
+              {weatherLoading ? (
+                <Spinner />
+              ) : (
+                weatherData && (
+                  <View className="flex items-end">
+                    <Image
+                      style={{ width: 35, height: 35 }}
+                      source={{ uri: `https://openweathermap.org/img/wn/${weatherData.weather[0]?.icon}@2x.png` }}
+                    />
+                    <Text>
+                      {weatherData.weather[0]?.description} · {Math.round(weatherData.main.temp)}°C
+                    </Text>
+                  </View>
+                )
+              )}
+            </View>
           </TouchableOpacity>
           <View className="flex flex-row items-center justify-between">
             <View className="flex flex-row items-center space-x-2">

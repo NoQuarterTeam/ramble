@@ -12,6 +12,7 @@ export * from "./s3.server"
 export * from "./slack.server"
 export * from "./directions.server"
 export * from "./spot.server"
+export * from "./weather.server"
 
 export * from "./mailers/access-request.server"
 export * from "./mailers/beta-invitation.server"
