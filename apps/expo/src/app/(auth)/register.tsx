@@ -8,6 +8,7 @@ import { Button } from "~/components/ui/Button"
 import { FormError } from "~/components/ui/FormError"
 import { FormInput } from "~/components/ui/FormInput"
 import { ModalView } from "~/components/ui/ModalView"
+import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { AUTH_TOKEN, api } from "~/lib/api"
 import { IS_DEV } from "~/lib/config"
@@ -28,18 +29,17 @@ export default function RegisterScreen() {
     },
   })
   const form = useForm({
-    defaultValues: { code: "", email: "", password: "", username: "", firstName: "", lastName: "" },
+    defaultValues: { email: "", password: "", username: "", firstName: "", lastName: "" },
   })
 
   const onSubmit = form.handleSubmit(async (data) => {
     let parsedData = data
-    if (IS_DEV && !data.code) {
+    if (IS_DEV) {
       const randomString = Math.random().toString(36).substring(7)
       const randomInt = Math.floor(Math.random() * 1000)
       parsedData = {
         username: randomString,
         email: `${randomString}@noquarter.co`,
-        code: "DEV",
         password: "password",
         firstName: "Test",
         lastName: `User${randomInt}`,
@@ -60,7 +60,14 @@ export default function RegisterScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View>
-            <FormInput name="code" label="Invite code" autoCapitalize="characters" error={error} />
+            <Text className="text-lg pb-4">Sign up now and start your 1 month trial.</Text>
+
+            <FormInput name="firstName" label="First name" autoComplete="nickname" error={error} />
+
+            <FormInput name="lastName" label="Last name" autoComplete="family-name" error={error} />
+
+            <FormInput autoCapitalize="none" name="username" autoComplete="username" label="Username" error={error} />
+
             <FormInput
               autoCapitalize="none"
               keyboardType="email-address"
@@ -77,16 +84,9 @@ export default function RegisterScreen() {
               label="Password"
               error={error}
             />
-            <FormInput autoCapitalize="none" name="username" autoComplete="username" label="Username" error={error} />
-            <FormInput name="firstName" label="First name" autoComplete="nickname" error={error} />
-            <FormInput name="lastName" label="Last name" autoComplete="family-name" error={error} />
             <Button className="mb-1" isLoading={isLoading} onPress={onSubmit}>
               Register
             </Button>
-            <Button className="mb-1" variant="link" onPress={() => navigation.replace("/request-access")}>
-              No code? Request access
-            </Button>
-
             <FormError className="mb-1" error={error} />
           </View>
 

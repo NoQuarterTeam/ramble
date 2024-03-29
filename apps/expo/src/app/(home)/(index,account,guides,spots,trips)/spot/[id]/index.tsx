@@ -46,8 +46,8 @@ import {
 import { CreatorCard } from "~/components/CreatorCard"
 import { Icon } from "~/components/Icon"
 import { LanguageSelector } from "~/components/LanguageSelector"
-import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { PartnerLink } from "~/components/PartnerLink"
+import { Paywall, requiresPaywall } from "~/components/Paywall"
 import { ReviewItem } from "~/components/ReviewItem"
 import { SpotTypeBadge } from "~/components/SpotTypeBadge"
 import { Button } from "~/components/ui/Button"
@@ -61,6 +61,7 @@ import { config } from "~/lib/config"
 import { height, isAndroid, width } from "~/lib/device"
 import { useMe } from "~/lib/hooks/useMe"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
+
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 
 export default function SpotDetailScreen() {
@@ -152,10 +153,10 @@ export default function SpotDetailScreen() {
         {router.canGoBack() && <Button onPress={router.back}>Back</Button>}
       </View>
     )
-  if (!me)
+  if (!me || requiresPaywall(me))
     return (
       <ScreenView title={spot.name}>
-        <LoginPlaceholder text="Log in to view more information about this spot" />
+        <Paywall action="view more information about this spot" />
       </ScreenView>
     )
   return (

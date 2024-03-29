@@ -1,22 +1,18 @@
-import { updateLoopsContact } from "@ramble/server-services"
+import { decodeToken, updateLoopsContact } from "@ramble/server-services"
+import type { LoaderFunctionArgs } from "@remix-run/node"
 
 import { db } from "~/lib/db.server"
-import { decryptToken } from "~/lib/jwt.server"
 import { redirect } from "~/lib/remix.server"
-import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
-
-export const config = {
-  // runtime: "edge",
-  // regions: ["fra1", "cdg1", "dub1", "arn1", "lhr1"],
-}
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const token = params.token
   if (!token) return redirect("/")
-  const { id } = await decryptToken<{ id: string }>(token)
+  const res = decodeToken<{ id: string }>(token)
+  if (!res) return redirect("/")
+  const id = res.id
   const user = await db.user.findUnique({ where: { id } })
   if (!user) return redirect("/")
   await db.user.update({ where: { id }, data: { isVerified: true } })
   void updateLoopsContact({ email: user.email, isVerified: true })
-  return redirect("/map/verified")
+  return redirect("/account/verified")
 }

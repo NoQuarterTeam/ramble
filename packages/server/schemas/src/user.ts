@@ -33,6 +33,4 @@ export const userSchema = z.object({
 })
 export const updateUserSchema = userSchema.partial()
 export const loginSchema = userSchema.pick({ email: true, password: true })
-export const registerSchema = userSchema
-  .pick({ email: true, password: true, username: true, firstName: true, lastName: true })
-  .extend({ code: z.string().transform((e) => e.toUpperCase().trim()) })
+export const registerSchema = userSchema.pick({ email: true, password: true, username: true, firstName: true, lastName: true })

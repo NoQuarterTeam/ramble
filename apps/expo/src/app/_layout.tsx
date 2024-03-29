@@ -100,6 +100,7 @@ export default function RootLayout() {
                   <Stack.Screen name="new" options={{ presentation: "modal" }} />
                   <Stack.Screen name="spot" options={{ presentation: "modal" }} />
                   <Stack.Screen name="filters" options={{ presentation: "modal" }} />
+                  <Stack.Screen name="membership" options={{ presentation: "modal" }} />
                 </Stack>
                 <Toast />
                 <StatusBar style={isDark ? "light" : "dark"} />

@@ -94,6 +94,7 @@ export const spotRouter = createTRPCRouter({
     })
   }),
   delete: protectedProcedure.input(z.object({ id: z.string().uuid() })).mutation(async ({ ctx, input }) => {
+    if (!ctx.user.isAdmin) throw new TRPCError({ code: "UNAUTHORIZED" })
     const spot = await ctx.prisma.spot.findUnique({ where: { id: input.id } })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
     return ctx.prisma.spot.update({ where: { id: input.id }, data: { deletedAt: new Date() } })

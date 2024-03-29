@@ -5,7 +5,7 @@ import * as React from "react"
 import { Platform, ScrollView, TouchableOpacity, View } from "react-native"
 
 import Purchases, { type PurchasesPackage } from "react-native-purchases"
-import { LoginPlaceholder } from "~/components/LoginPlaceholder"
+import { Paywall } from "~/components/Paywall"
 import { Button } from "~/components/ui/Button"
 import { Heading } from "~/components/ui/Heading"
 import { ModalView } from "~/components/ui/ModalView"
@@ -15,15 +15,8 @@ import { Text } from "~/components/ui/Text"
 import { api } from "~/lib/api"
 
 import { isAndroid } from "~/lib/device"
-import { useCustomer } from "~/lib/hooks/useCustomer"
-import { useMe } from "~/lib/hooks/useMe"
 import { revenueCatKey } from "~/lib/revenue-cat"
 
-const trialConversion = {
-  WEEK: "week",
-  MONTH: "month",
-  ANNUAL: "year",
-}
 const periodConversion = {
   P1W: "week",
   P1M: "month",
@@ -100,7 +93,7 @@ export default function Screen() {
   if (!me)
     return (
       <ModalView title="membership">
-        <LoginPlaceholder text="Log in to join" />
+        <Paywall action="get unlimited access" />
       </ModalView>
     )
 
@@ -126,7 +119,16 @@ export default function Screen() {
                   much more. {me.planType ? "" : "Ready to start?"}
                 </Text>
               </View>
-              <View className="space-y-4">
+              <View className="space-y-3">
+                {!me.planId && (
+                  <View className="bg-gray-200 dark:bg-gray-700 rounded-sm p-4">
+                    {dayjs(me.trialExpiresAt).isAfter(dayjs()) ? (
+                      <Text>Your trial expires on {dayjs(me.trialExpiresAt).format("DD/MM/YYYY")}</Text>
+                    ) : (
+                      <Text>Trial expired</Text>
+                    )}
+                  </View>
+                )}
                 {offerings.map((pkg) => (
                   <TouchableOpacity
                     key={pkg.identifier}
@@ -164,14 +166,6 @@ export default function Screen() {
                             : ""}
                         </Text>
                       </Text>
-                      {pkg.product.introPrice && !me.planType && (
-                        <View className="bg-primary rounded-full px-2 py-0.5">
-                          <Text className="text-xs text-white">
-                            {pkg.product.introPrice.periodNumberOfUnits}{" "}
-                            {trialConversion[pkg.product.introPrice.periodUnit as keyof typeof trialConversion]} free
-                          </Text>
-                        </View>
-                      )}
                     </View>
                   </TouchableOpacity>
                 ))}
@@ -181,6 +175,15 @@ export default function Screen() {
                 {isAndroid ? "Play Store" : "App Store"} account settings after purchase. If you've used the trial before you will
                 be charged immediately.
               </Text>
+              {/* <Button
+                variant="link"
+                onPress={async () => {
+                  const res = await Purchases.restorePurchases()
+                  console.log(res)
+                }}
+              >
+                Restore purchases
+              </Button> */}
             </View>
           </ScrollView>
 

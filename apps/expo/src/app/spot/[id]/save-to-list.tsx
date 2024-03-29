@@ -6,7 +6,7 @@ import * as React from "react"
 import { TouchableOpacity, View, useColorScheme } from "react-native"
 
 import { Icon } from "~/components/Icon"
-import { LoginPlaceholder } from "~/components/LoginPlaceholder"
+import { Paywall, requiresPaywall } from "~/components/Paywall"
 import { ModalView } from "~/components/ui/ModalView"
 import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
@@ -17,10 +17,10 @@ export default function SaveSpotToListScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
   const { me } = useMe()
   const { data: lists, isLoading } = api.list.allByUserWithSavedSpots.useQuery({ spotId: id }, { enabled: !!me })
-  if (!me)
+  if (!me || requiresPaywall(me))
     return (
       <ModalView title="save to list">
-        <LoginPlaceholder text="Log in to start saving spots" />
+        <Paywall action="start saving spots" />
       </ModalView>
     )
   return (

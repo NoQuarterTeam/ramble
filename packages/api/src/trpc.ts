@@ -25,6 +25,7 @@ const userSelectFields = {
   instagram: true,
   bio: true,
   latitude: true,
+  trialExpiresAt: true,
   longitude: true,
   role: true,
   createdAt: true,

@@ -52,6 +52,7 @@ model User {
   tripSyncEnabled   Boolean @default(true)
 
   // plan info
+  trialExpiresAt  DateTime?
   planExpiry      DateTime?
   planCancelledAt DateTime?
   hasBillingIssue Boolean   @default(false)

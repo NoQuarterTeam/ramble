@@ -2,13 +2,13 @@ import { Link, useParams } from "@remix-run/react"
 import { cacheHeader } from "pretty-cache-header"
 import { z } from "zod"
 
-import { hashPassword } from "@ramble/server-services"
+import { decodeToken, hashPassword } from "@ramble/server-services"
 
 import { Form, FormButton, FormError, FormField } from "~/components/Form"
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
 import { formError, validateFormData } from "~/lib/form.server"
-import { decryptToken } from "~/lib/jwt.server"
+
 import { redirect } from "~/lib/remix.server"
 import type { ActionFunctionArgs } from "~/lib/vendor/vercel.server"
 
@@ -31,8 +31,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const result = await validateFormData(request, resetPasswordSchema)
   if (!result.success) return formError(result)
   const data = result.data
-  const payload = await decryptToken<{ id: string }>(data.token)
-  const hashedPassword = await hashPassword(data.password)
+  const payload = decodeToken<{ id: string }>(data.token)
+  if (!payload) return redirect("/login", request, { flash: { title: "Invalid token" } })
+  const hashedPassword = hashPassword(data.password)
   const user = await db.user.update({ where: { id: payload.id }, data: { password: hashedPassword } })
   track("Password updated", { userId: user.id })
   return redirect("/login", request, {

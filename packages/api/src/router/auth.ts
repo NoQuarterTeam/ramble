@@ -7,14 +7,17 @@ import {
   comparePasswords,
   createAccessRequest,
   createAuthToken,
+  createToken,
   deleteLoopsContact,
   generateInviteCodes,
   hashPassword,
   sendAccessRequestConfirmationEmail,
+  sendAccountVerificationEmail,
   sendSlackMessage,
   updateLoopsContact,
 } from "@ramble/server-services"
 
+import dayjs from "dayjs"
 import { createTRPCRouter, publicProcedure } from "../trpc"
 
 export const authRouter = createTRPCRouter({
@@ -24,50 +27,40 @@ export const authRouter = createTRPCRouter({
     const isSamePassword = comparePasswords(input.password, user.password)
     if (!isSamePassword) throw new TRPCError({ code: "BAD_REQUEST", message: "Incorrect email or password" })
     const token = createAuthToken({ id: user.id })
-    return { user, token }
+    return {
+      user: {
+        ...user,
+        trialExpiresAt: !user.trialExpiresAt ? dayjs(user.createdAt).add(1, "month").toDate() : user.trialExpiresAt,
+      },
+      token,
+    }
   }),
-  register: publicProcedure.input(registerSchema).mutation(async ({ ctx, input: { code, ...input } }) => {
+  register: publicProcedure.input(registerSchema).mutation(async ({ ctx, input }) => {
     const existingEmail = await ctx.prisma.user.findUnique({ where: { email: input.email } })
     if (existingEmail) throw new TRPCError({ code: "BAD_REQUEST", message: "Email already in use" })
-
-    const accessRequest = await ctx.prisma.accessRequest.findFirst({ where: { code, user: null } })
-    const inviteCode = await ctx.prisma.inviteCode.findFirst({ where: { code, acceptedAt: null } })
-    if (!IS_DEV) {
-      if (!accessRequest && !inviteCode) throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid code" })
-    }
-
     const existingUsername = await ctx.prisma.user.findUnique({ where: { username: input.username } })
     if (existingUsername) throw new TRPCError({ code: "BAD_REQUEST", message: "User with this username already exists" })
     const hashedPassword = hashPassword(input.password)
     const user = await ctx.prisma.user.create({
       data: {
         ...input,
-        isVerified: true, // temp
         lists: { create: { name: "Favourites", description: "All my favourite spots" } },
         password: hashedPassword,
+        trialExpiresAt: dayjs().add(1, "month").toDate(),
       },
     })
-    if (accessRequest) {
-      await ctx.prisma.accessRequest.update({
-        where: { id: accessRequest.id },
-        data: { acceptedAt: new Date(), user: { connect: { id: user.id } } },
-      })
-    }
-    if (inviteCode) {
-      await ctx.prisma.inviteCode.update({
-        where: { id: inviteCode.id },
-        data: { acceptedAt: new Date(), user: { connect: { id: user.id } } },
-      })
-    }
-    const codes = generateInviteCodes(user.id)
-    await ctx.prisma.inviteCode.createMany({ data: codes.map((c) => ({ code: c, ownerId: user.id })) })
+    const verifyToken = createToken({ id: user.id })
+    await sendAccountVerificationEmail(user, verifyToken)
     const token = createAuthToken({ id: user.id })
-    if (accessRequest && accessRequest.email !== user.email) {
-      void deleteLoopsContact({ email: accessRequest.email })
-    }
-    void updateLoopsContact({ ...user, signedUpAt: user.createdAt.toISOString(), userGroup: "beta", userId: user.id })
+    void updateLoopsContact({ ...user, signedUpAt: user.createdAt.toISOString(), userId: user.id })
     void sendSlackMessage(`🔥 @${user.username} signed up!`)
-    return { user: user, token }
+    return {
+      user: {
+        ...user,
+        trialExpiresAt: !user.trialExpiresAt ? dayjs(user.createdAt).add(1, "month").toDate() : user.trialExpiresAt,
+      },
+      token,
+    }
   }),
   requestAccess: publicProcedure
     .input(

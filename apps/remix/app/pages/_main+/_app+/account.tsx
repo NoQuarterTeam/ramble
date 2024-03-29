@@ -2,7 +2,7 @@ import type { NavLinkProps } from "@remix-run/react"
 import { Outlet, useActionData, useLoaderData } from "@remix-run/react"
 import { AlertCircle, Settings, ToggleRight, User, UserPlus } from "lucide-react"
 
-import { sendAccountVerificationEmail } from "@ramble/server-services"
+import { createToken, sendAccountVerificationEmail } from "@ramble/server-services"
 import { createAssetUrl, merge } from "@ramble/shared"
 
 import { Form, FormButton } from "~/components/Form"
@@ -11,7 +11,7 @@ import { NavLink } from "~/components/NavLink"
 import type { RambleIcon } from "~/components/ui"
 import { Avatar, Badge, Icons, buttonSizeStyles, buttonStyles } from "~/components/ui"
 import { track } from "~/lib/analytics.server"
-import { createToken } from "~/lib/jwt.server"
+
 import { json } from "~/lib/remix.server"
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 import { getCurrentUser } from "~/services/auth/auth.server"
@@ -33,7 +33,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await getCurrentUser(request, { email: true, id: true })
-  const token = await createToken({ id: user.id })
+  const token = createToken({ id: user.id })
   await sendAccountVerificationEmail(user, token)
   track("Account verification requested", { userId: user.id })
   return json({ success: true }, request, {

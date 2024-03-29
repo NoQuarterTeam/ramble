@@ -29,7 +29,7 @@ export default function OnboardingStep1Screen() {
 
   return (
     <SafeAreaView>
-      <View className="flex-1 px-4">
+      <View className="flex-1 px-4 pt-4">
         <FormProvider {...form}>
           <AvoidSoftInputView>
             <ScrollView

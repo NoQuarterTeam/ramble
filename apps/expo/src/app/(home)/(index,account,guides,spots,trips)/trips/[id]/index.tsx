@@ -29,8 +29,8 @@ import * as DropdownMenu from "zeego/dropdown-menu"
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createAssetUrl, join } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
-import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { MapView } from "~/components/Map"
+import { Paywall, requiresPaywall } from "~/components/Paywall"
 import { SpotIcon } from "~/components/SpotIcon"
 import { SpotMarker } from "~/components/SpotMarker"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
@@ -188,10 +188,10 @@ export default function TripDetailScreen() {
 
   const insets = useSafeAreaInsets()
 
-  if (!me)
+  if (!me || requiresPaywall(me))
     return (
       <ScreenView title={trip?.name}>
-        <LoginPlaceholder text="Log in to view this trip" />
+        <Paywall action="view this trip" />
       </ScreenView>
     )
   return (

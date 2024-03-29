@@ -13,7 +13,6 @@ export default function Layout() {
       <Stack.Screen name="invite" />
       <Stack.Screen name="settings" />
       <Stack.Screen name="van" />
-      <Stack.Screen name="membership" options={{ presentation: "modal" }} />
     </Stack>
   )
 }

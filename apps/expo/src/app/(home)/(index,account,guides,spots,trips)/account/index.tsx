@@ -19,7 +19,7 @@ import { ScrollView, TouchableOpacity, View } from "react-native"
 import { createAssetUrl } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
-import { LoginPlaceholder } from "~/components/LoginPlaceholder"
+import { Paywall, requiresPaywall } from "~/components/Paywall"
 import { Button } from "~/components/ui/Button"
 import { Heading } from "~/components/ui/Heading"
 import { Icons } from "~/components/ui/Icons"
@@ -50,12 +50,12 @@ export default function AccountScreen() {
   if (!me)
     return (
       <TabView title="account">
-        <LoginPlaceholder text="Log in to create your profile">
+        <Paywall action="create your profile">
           <View className="space-y-4">
-            <Link push href="/(auth)/register" asChild>
+            <Link push href="/(auth)/login" asChild>
               <TouchableOpacity>
                 <Text className="text-lg">
-                  Don't have an account yet? <Text className="text-lg underline">Sign up</Text>
+                  Already have an account yet? <Text className="text-lg underline">Log in</Text>
                 </Text>
               </TouchableOpacity>
             </Link>
@@ -65,7 +65,7 @@ export default function AccountScreen() {
               <Text className="text-center opacity-60">{config.UPDATE_ID}</Text>
             </View>
           </View>
-        </LoginPlaceholder>
+        </Paywall>
       </TabView>
     )
   return (
@@ -115,7 +115,7 @@ export default function AccountScreen() {
             </Link>
 
             <View>
-              <Link push href="/(home)/(account)/account/membership" asChild>
+              <Link push href="/membership" asChild>
                 <TouchableOpacity className="mb-2 flex flex-row items-center justify-between rounded-xs bg-primary p-4">
                   <View className="flex flex-row items-center space-x-2">
                     <Icon icon={Leaf} size={18} color="white" />

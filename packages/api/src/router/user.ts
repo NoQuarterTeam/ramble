@@ -4,7 +4,7 @@ import { z } from "zod"
 
 import { clusterSchema, updateUserSchema, userSchema } from "@ramble/server-schemas"
 import {
-  createAuthToken,
+  createToken,
   deleteObject,
   generateBlurHash,
   sendAccountVerificationEmail,
@@ -14,12 +14,16 @@ import {
 import { userInterestFields } from "@ramble/shared"
 
 import { PlanType } from "@ramble/database/types"
+import dayjs from "dayjs"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const userRouter = createTRPCRouter({
   me: publicProcedure.query(async ({ ctx }) => {
     if (!ctx.user) return null
-    return ctx.user
+    return {
+      ...ctx.user,
+      trialExpiresAt: !ctx.user.trialExpiresAt ? dayjs(ctx.user.createdAt).add(1, "month").toDate() : ctx.user.trialExpiresAt,
+    }
   }),
   profile: publicProcedure.input(userSchema.pick({ username: true })).query(async ({ ctx, input }) => {
     const user = await ctx.prisma.user.findUnique({
@@ -127,7 +131,7 @@ export const userRouter = createTRPCRouter({
     }))
   }),
   sendVerificationEmail: protectedProcedure.mutation(async ({ ctx }) => {
-    const token = createAuthToken({ id: ctx.user.id })
+    const token = createToken({ id: ctx.user.id })
     await sendAccountVerificationEmail(ctx.user, token)
     return true
   }),

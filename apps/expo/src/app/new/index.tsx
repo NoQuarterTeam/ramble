@@ -10,8 +10,8 @@ import { TouchableOpacity, View, useColorScheme } from "react-native"
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, displayRating } from "@ramble/shared"
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
 import { Icon } from "~/components/Icon"
-import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { MapView } from "~/components/Map"
+import { Paywall, requiresPaywall } from "~/components/Paywall"
 import { SpotTypeBadge } from "~/components/SpotTypeBadge"
 import { Button } from "~/components/ui/Button"
 import { Icons } from "~/components/ui/Icons"
@@ -104,10 +104,10 @@ export default function NewSpotLocationScreen() {
 
   if (me && spotCheckLoading) return null
 
-  if (!me)
+  if (!me || requiresPaywall(me))
     return (
       <NewSpotModalView title="new spot" canGoBack={false}>
-        <LoginPlaceholder text="Log in to start creating spots" />
+        <Paywall action="start creating spots" />
       </NewSpotModalView>
     )
 
@@ -242,8 +242,8 @@ export default function NewSpotLocationScreen() {
               textClassName="text-black"
               onPress={() => {
                 if (!me) return
-                if (!coords || !addressToUse) return toast({ title: "Please select a valid location" })
                 if (!me.isVerified) return toast({ title: "Please verify your account" })
+                if (!coords || !addressToUse) return toast({ title: "Please select a valid location" })
                 if (!coords[0] || !coords[1]) return toast({ title: "Please select a location" })
                 router.push(
                   // @ts-ignore
@@ -367,8 +367,8 @@ function GooglePlacePreview({ place, onClose, addressToUse, coords }: Props) {
           rightIcon={<Icon icon={ArrowRight} size={12} color={{ dark: "black", light: "white" }} />}
           onPress={() => {
             if (!me) return
-            if (!coords || !addressToUse) return toast({ title: "Please select a valid location" })
             if (!me.isVerified) return toast({ title: "Please verify your account" })
+            if (!coords || !addressToUse) return toast({ title: "Please select a valid location" })
             if (!coords[0] || !coords[1]) return toast({ title: "Please select a location" })
             router.push(
               // @ts-ignore

@@ -6,7 +6,7 @@ import { TouchableOpacity, View } from "react-native"
 import { createAssetUrl } from "@ramble/shared"
 
 import { useFeedbackActivity } from "~/components/FeedbackCheck"
-import { LoginPlaceholder } from "~/components/LoginPlaceholder"
+import { Paywall, requiresPaywall } from "~/components/Paywall"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { Spinner } from "~/components/ui/Spinner"
 import { TabView } from "~/components/ui/TabView"
@@ -32,10 +32,10 @@ export default function GuidesScreen() {
     setGuides([...(guides || []), ...newGuides])
   }, [guides, utils.user.guides])
 
-  if (!me)
+  if (!me || requiresPaywall(me))
     return (
       <TabView title="guides">
-        <LoginPlaceholder text="Log in to view guides" />
+        <Paywall action="view guides" />
       </TabView>
     )
   return (

@@ -7,9 +7,7 @@ import { Linking, ScrollView, TouchableOpacity, View, useColorScheme } from "rea
 import { createAssetUrl } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
-import { LoginPlaceholder } from "~/components/LoginPlaceholder"
-import { SafeAreaView } from "~/components/SafeAreaView"
-import { BrandHeading } from "~/components/ui/BrandHeading"
+import { Paywall, requiresPaywall } from "~/components/Paywall"
 import { Button } from "~/components/ui/Button"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { ScreenView } from "~/components/ui/ScreenView"
@@ -18,6 +16,7 @@ import { Text } from "~/components/ui/Text"
 import { api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
+
 import { interestOptions } from "~/lib/models/user"
 
 export default function UserScreen() {
@@ -56,10 +55,10 @@ export default function UserScreen() {
   const tab = useTabSegment()
   const segments = useSegments()
 
-  if (!me)
+  if (!me || requiresPaywall(me))
     return (
       <ScreenView title={username}>
-        <LoginPlaceholder text="log in to view other profiles" />
+        <Paywall action="view other profiles" />
       </ScreenView>
     )
 
