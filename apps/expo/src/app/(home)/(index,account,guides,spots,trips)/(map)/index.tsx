@@ -280,7 +280,7 @@ function MapContainer() {
       />
       <TouchableOpacity
         onPress={handleSetUserLocation}
-        className="sq-12 absolute right-3 bottom-3 flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
+        className="sq-12 absolute right-3 shadow bottom-3 flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
       >
         <Icon icon={Navigation} size={20} />
       </TouchableOpacity>
@@ -291,7 +291,7 @@ function MapContainer() {
           router.push("/new/")
         }}
         style={{ transform: [{ translateX: -26 }] }}
-        className="absolute bottom-3 left-1/2 rounded-full bg-primary p-4"
+        className="absolute bottom-3 left-1/2 shadow rounded-full bg-primary p-4"
       >
         <Icon icon={PlusCircle} size={20} color="white" />
       </TouchableOpacity>
@@ -301,7 +301,7 @@ function MapContainer() {
           <TouchableOpacity
             onPress={() => increment()}
             activeOpacity={0.8}
-            className="sq-12 flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
+            className="sq-12 flex flex-row items-center shadow justify-center rounded-full bg-background dark:bg-background-dark"
           >
             <Icon icon={Layers} size={20} />
           </TouchableOpacity>
@@ -310,7 +310,7 @@ function MapContainer() {
           <TouchableOpacity
             onPress={() => increment()}
             activeOpacity={0.8}
-            className="sq-12 flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
+            className="sq-12 flex flex-row items-center shadow justify-center rounded-full bg-background dark:bg-background-dark"
           >
             <Icon icon={Settings2} size={20} />
           </TouchableOpacity>
