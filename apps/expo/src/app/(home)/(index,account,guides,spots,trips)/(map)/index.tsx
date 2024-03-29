@@ -34,47 +34,11 @@ import { useMapFilters } from "../../../filters"
 import { useMapLayers } from "./layers"
 
 export default function MapScreen() {
-  const router = useRouter()
-  const increment = useFeedbackActivity((s) => s.increment)
-
   return (
     <View className="flex-1">
       <RegisterCheck />
       <FeedbackCheck />
       <MapContainer />
-
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() => {
-          increment()
-          router.push("/new/")
-        }}
-        style={{ transform: [{ translateX: -26 }] }}
-        className="absolute bottom-3 left-1/2 rounded-full bg-primary p-4"
-      >
-        <Icon icon={PlusCircle} size={20} color="white" />
-      </TouchableOpacity>
-
-      <View pointerEvents="box-none" className="absolute bottom-3 left-3 flex space-y-2">
-        <Link push href={"/layers"} asChild>
-          <TouchableOpacity
-            onPress={() => increment()}
-            activeOpacity={0.8}
-            className="sq-12 flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
-          >
-            <Icon icon={Layers} size={20} />
-          </TouchableOpacity>
-        </Link>
-        <Link push href={"/filters"} asChild>
-          <TouchableOpacity
-            onPress={() => increment()}
-            activeOpacity={0.8}
-            className="sq-12 flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
-          >
-            <Icon icon={Settings2} size={20} />
-          </TouchableOpacity>
-        </Link>
-      </View>
     </View>
   )
 }
@@ -312,6 +276,38 @@ function MapContainer() {
           camera.current?.setCamera({ animationDuration: 600, zoomLevel: 14, centerCoordinate: center })
         }}
       />
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => {
+          increment()
+          router.push("/new/")
+        }}
+        style={{ transform: [{ translateX: -26 }] }}
+        className="absolute bottom-3 left-1/2 rounded-full bg-primary p-4"
+      >
+        <Icon icon={PlusCircle} size={20} color="white" />
+      </TouchableOpacity>
+
+      <View pointerEvents="box-none" className="absolute bottom-3 left-3 flex space-y-2">
+        <Link push href={"/layers"} asChild>
+          <TouchableOpacity
+            onPress={() => increment()}
+            activeOpacity={0.8}
+            className="sq-12 flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
+          >
+            <Icon icon={Layers} size={20} />
+          </TouchableOpacity>
+        </Link>
+        <Link push href={"/filters"} asChild>
+          <TouchableOpacity
+            onPress={() => increment()}
+            activeOpacity={0.8}
+            className="sq-12 flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
+          >
+            <Icon icon={Settings2} size={20} />
+          </TouchableOpacity>
+        </Link>
+      </View>
       <TouchableOpacity
         onPress={handleSetUserLocation}
         className="sq-12 absolute right-3 bottom-3 flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
