@@ -1,4 +1,4 @@
-import { MediaType } from "@ramble/database/types"
+import type { MediaType } from "@ramble/database/types"
 import { createAssetUrl, useDisclosure } from "@ramble/shared"
 import { Camera, LocationPuck, type MapState, type MapView as MapType, StyleURL } from "@rnmapbox/maps"
 import type { Position } from "@rnmapbox/maps/lib/typescript/src/types/Position"
@@ -106,18 +106,18 @@ export default function TripMedia() {
         const info = await MediaLibrary.getAssetInfoAsync(asset.assetId)
         if (info.mediaType !== MediaLibrary.MediaType.photo && info.mediaType !== MediaLibrary.MediaType.video)
           return toast({ title: "Please upload an image or a video", type: "error" })
-        const type = info.mediaType === MediaLibrary.MediaType.photo ? MediaType.IMAGE : MediaType.VIDEO
+        const type = info.mediaType === MediaLibrary.MediaType.photo ? "IMAGE" : "VIDEO"
         const media = {
           assetId: info.id,
           timestamp: dayjs(info.creationTime).toDate(),
           url: info.localUri || asset.uri,
           latitude: info.location?.latitude || null,
           longitude: info.location?.longitude || null,
-          type,
+          type: type as MediaType,
           duration: info.duration || null,
         }
         let thumbnailPath = null
-        if (type === MediaType.VIDEO) {
+        if (type === "VIDEO") {
           const { uri } = await VideoThumbnails.getThumbnailAsync(asset.uri, { time: 0 })
           thumbnailPath = await upload(uri)
         }
