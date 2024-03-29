@@ -92,7 +92,7 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
             searchWidth.value = width - 32
             inputRef.current?.focus()
           }}
-          className="sq-12 flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
+          className="sq-12 shadow flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
         >
           {isFetching ? <Spinner /> : <Icon icon={Search} size={22} />}
         </TouchableOpacity>

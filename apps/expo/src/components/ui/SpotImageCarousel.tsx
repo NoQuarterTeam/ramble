@@ -1,7 +1,7 @@
 import { FlashList } from "@shopify/flash-list"
 import * as ImagePicker from "expo-image-picker"
 import { router, useRouter } from "expo-router"
-import { Heart, Image, ImagePlus } from "lucide-react-native"
+import { Image, ImagePlus } from "lucide-react-native"
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
 
