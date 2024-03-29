@@ -101,7 +101,6 @@ interface CustomerData {
 type Event = {
   event_timestamp_ms: number
   product_id: string
-  period_type: PlanType
   purchased_at_ms: number
   expiration_at_ms: number
   environment: string
