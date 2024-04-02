@@ -28,8 +28,17 @@
         "APP_VARIANT": "development"
       }
     },
+    "production:test": {
+      "channel": "production-test",
+      "distribution": "store",
+      "pnpm": "8.15.4",
+      "env": {
+        "APP_VARIANT": "development",
+        "SENTRY_AUTH_TOKEN": "private"
+      }
+    },
     "production": {
-      "channel": "production",
+      "channel": "production-test",
       "distribution": "store",
       "pnpm": "8.15.4",
       "env": {
@@ -39,6 +48,13 @@
   },
   "submit": {
     "production": {
+      "android": {
+        "releaseStatus": "draft",
+        "track": "internal",
+        "changesNotSentForReview": true
+      }
+    },
+    "production:test": {
       "android": {
         "releaseStatus": "draft",
         "track": "internal",
