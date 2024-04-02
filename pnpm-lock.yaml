@@ -15794,7 +15794,7 @@ packages:
     resolution: {integrity: sha512-PFmpl35Myn6UDdVLTHcuppdbkPVvlQfkMHOmgGZh5QOdSUxVmvz090Z4obLg8ta1MNs1PNpzr9i7E39iAIv07A==}
     engines: {node: '>=12.*'}
     dependencies:
-      '@types/node': 18.19.26
+      '@types/node': 18.19.28
       qs: 6.11.2
     dev: false
 
