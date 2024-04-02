@@ -22,10 +22,10 @@ import * as SplashScreen from "expo-splash-screen"
 import { StatusBar } from "expo-status-bar"
 import { PostHogProvider, usePostHog } from "posthog-react-native"
 import * as React from "react"
-import { Platform, useColorScheme } from "react-native"
+import { useColorScheme } from "react-native"
 import { AvoidSoftInput } from "react-native-avoid-softinput"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
-import Purchases from "react-native-purchases"
+
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { enableScreens } from "react-native-screens"
 

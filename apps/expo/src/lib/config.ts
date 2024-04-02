@@ -17,6 +17,9 @@ if (Updates.channel === "production") {
 } else if (Updates.channel === "preview") {
   config.WEB_URL = "https://dev.ramble.guide"
   config.ENV = "preview"
+} else if (Updates.channel === "production-test") {
+  config.WEB_URL = "https://test.ramble.guide"
+  config.ENV = "preview"
 }
 
 export { config }
