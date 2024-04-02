@@ -55,12 +55,18 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     }),
   )
 
+  let newCoverId = undefined
+  if (imagesToDelete.find((i) => i.id === spot.coverId)) {
+    newCoverId = spot.images.find((i) => i.id !== spot.coverId)?.id
+  }
+
   const { customAddress, ...data } = result.data
   await db.spot.update({
     where: { id: spot.id },
     data: {
       ...data,
       address: customAddress || result.data.address,
+      coverId: newCoverId || undefined,
       amenities: amenities
         ? { update: spot.amenities ? amenities : undefined, create: spot.amenities ? undefined : amenities }
         : { delete: spot.amenities ? true : undefined },
