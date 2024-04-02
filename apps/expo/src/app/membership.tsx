@@ -186,11 +186,13 @@ export default function Screen() {
             </View>
           </ScrollView>
 
-          <View className="absolute bottom-12 left-0 right-0 flex items-center justify-center">
-            <Button isLoading={isPurchasing} className="w-full" disabled={!selectedPackage} onPress={handlePurchase}>
-              {me.planId ? "Switch" : "Continue"}
-            </Button>
-          </View>
+          {me.planId && (
+            <View className="absolute bottom-16 left-0 right-0 flex items-center justify-center">
+              <Button isLoading={isPurchasing} className="w-full" disabled={!selectedPackage} onPress={handlePurchase}>
+                Continue
+              </Button>
+            </View>
+          )}
         </View>
       )}
     </ModalView>
