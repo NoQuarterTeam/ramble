@@ -180,8 +180,8 @@ importers:
         specifier: 2.0.11
         version: 2.0.11(react@18.2.0)(tailwindcss@3.3.2)
       posthog-react-native:
-        specifier: 3.0.0
-        version: 3.0.0(@react-native-async-storage/async-storage@1.21.0)(@react-navigation/native@6.1.10)(expo-application@5.8.3)(expo-device@5.9.3)(expo-file-system@16.0.8)
+        specifier: 3.1.0
+        version: 3.1.0(@react-native-async-storage/async-storage@1.21.0)(@react-navigation/native@6.1.10)(expo-application@5.8.3)(expo-device@5.9.3)(expo-file-system@16.0.8)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -14024,8 +14024,8 @@ packages:
       preact: 10.19.3
     dev: false
 
-  /posthog-react-native@3.0.0(@react-native-async-storage/async-storage@1.21.0)(@react-navigation/native@6.1.10)(expo-application@5.8.3)(expo-device@5.9.3)(expo-file-system@16.0.8):
-    resolution: {integrity: sha512-WkI5+GwXiDHAp6/v5gh/w8Pj0fEFs9U34B3TsvjGMkeciW1Za8zllKeDVmnG6c3wGpEJRwESDvAC9hGm30qXzQ==}
+  /posthog-react-native@3.1.0(@react-native-async-storage/async-storage@1.21.0)(@react-navigation/native@6.1.10)(expo-application@5.8.3)(expo-device@5.9.3)(expo-file-system@16.0.8):
+    resolution: {integrity: sha512-InSgVqvNn+QR9XhG7IdfsqtwgqoCP2Q0zKt6J4kC++Yzsr7lEvFQu9A7pXtPHuSEsIolqrk/9cuRZguBoE19KQ==}
     peerDependencies:
       '@react-native-async-storage/async-storage': '>=1.0.0'
       '@react-navigation/native': '>= 5.0.10'
