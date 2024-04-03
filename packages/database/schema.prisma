@@ -42,9 +42,10 @@ model User {
   isSurfer        Boolean @default(false)
 
   // Settings
-  isLocationPrivate Boolean @default(false)
-  preferredLanguage String  @default("en")
-  tripSyncEnabled   Boolean @default(true)
+  isLocationPrivate        Boolean @default(false)
+  preferredLanguage        String  @default("en")
+  tripSyncEnabled          Boolean @default(true)
+  tripSyncOnNetworkEnabled Boolean @default(false)
 
   // Relations
   followers             User[]         @relation("UserFollows")

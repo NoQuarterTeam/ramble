@@ -1,5 +1,5 @@
 import { router } from "expo-router"
-import { AlertCircle, ChevronDown, Image, Languages, MapPinOff } from "lucide-react-native"
+import { AlertCircle, ChevronDown, Image, Languages, MapPinOff, Wifi } from "lucide-react-native"
 import { Alert, ScrollView, Switch, View } from "react-native"
 
 import { languages, useDisclosure } from "@ramble/shared"
@@ -44,6 +44,8 @@ export default function AccountSettingsScreen() {
         preferredLanguage: data.preferredLanguage === undefined ? me.preferredLanguage : data.preferredLanguage,
         isLocationPrivate: data.isLocationPrivate === undefined ? me.isLocationPrivate : Boolean(data.isLocationPrivate),
         tripSyncEnabled: data.tripSyncEnabled === undefined ? me.tripSyncEnabled : Boolean(data.tripSyncEnabled),
+        tripSyncOnNetworkEnabled:
+          data.tripSyncOnNetworkEnabled === undefined ? me.tripSyncOnNetworkEnabled : Boolean(data.tripSyncOnNetworkEnabled),
       })
     },
   })
@@ -103,9 +105,9 @@ export default function AccountSettingsScreen() {
             <View className="flex flex-row items-center space-x-3">
               <Icon icon={Image} size={30} />
               <View>
-                <Text className="h-[22px] text-base">Trip image sync</Text>
+                <Text className="h-[22px] text-base">Trip media sync</Text>
                 <Text style={{ lineHeight: 16 }} numberOfLines={3} className="max-w-[220px] text-sm opacity-75">
-                  We will automatically sync your images to your current trip
+                  Enable automatic media sync for your current trip
                 </Text>
               </View>
             </View>
@@ -116,6 +118,23 @@ export default function AccountSettingsScreen() {
             />
           </View>
         </View>
+        <View className="flex flex-row items-center justify-between space-x-2">
+          <View className="flex flex-row items-center space-x-3">
+            <Icon icon={Wifi} size={30} />
+            <View>
+              <Text className="h-[22px] text-base">Trip sync on network</Text>
+              <Text style={{ lineHeight: 16 }} numberOfLines={3} className="max-w-[220px] text-sm opacity-75">
+                Enable trip media sync when not connected to wifi
+              </Text>
+            </View>
+          </View>
+          <Switch
+            trackColor={{ true: colors.primary[600] }}
+            value={me?.tripSyncOnNetworkEnabled}
+            onValueChange={() => updateUser({ tripSyncOnNetworkEnabled: !me?.tripSyncOnNetworkEnabled })}
+          />
+        </View>
+
         <View className="pb-8">
           <Button
             isLoading={isLoading}
