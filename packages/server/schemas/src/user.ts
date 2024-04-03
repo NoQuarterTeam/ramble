@@ -30,6 +30,7 @@ export const userSchema = z.object({
   latitude: NullableFormNumber,
   longitude: NullableFormNumber,
   tripSyncEnabled: FormBoolean,
+  tripSyncOnNetworkEnabled: FormBoolean,
 })
 export const updateUserSchema = userSchema.partial()
 export const loginSchema = userSchema.pick({ email: true, password: true })
