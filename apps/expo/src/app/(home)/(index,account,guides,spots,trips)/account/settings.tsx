@@ -117,22 +117,22 @@ export default function AccountSettingsScreen() {
               onValueChange={() => updateUser({ tripSyncEnabled: !me?.tripSyncEnabled })}
             />
           </View>
-        </View>
-        <View className="flex flex-row items-center justify-between space-x-2">
-          <View className="flex flex-row items-center space-x-3">
-            <Icon icon={Wifi} size={30} />
-            <View>
-              <Text className="h-[22px] text-base">Trip sync on network</Text>
-              <Text style={{ lineHeight: 16 }} numberOfLines={3} className="max-w-[220px] text-sm opacity-75">
-                Enable trip media sync when not connected to wifi
-              </Text>
+          <View className="flex flex-row items-center justify-between space-x-2">
+            <View className="flex flex-row items-center space-x-3">
+              <Icon icon={Wifi} size={30} />
+              <View>
+                <Text className="h-[22px] text-base">Trip sync on network</Text>
+                <Text style={{ lineHeight: 16 }} numberOfLines={3} className="max-w-[220px] text-sm opacity-75">
+                  Enable trip media sync when not connected to wifi
+                </Text>
+              </View>
             </View>
+            <Switch
+              trackColor={{ true: colors.primary[600] }}
+              value={me?.tripSyncOnNetworkEnabled}
+              onValueChange={() => updateUser({ tripSyncOnNetworkEnabled: !me?.tripSyncOnNetworkEnabled })}
+            />
           </View>
-          <Switch
-            trackColor={{ true: colors.primary[600] }}
-            value={me?.tripSyncOnNetworkEnabled}
-            onValueChange={() => updateUser({ tripSyncOnNetworkEnabled: !me?.tripSyncOnNetworkEnabled })}
-          />
         </View>
 
         <View className="pb-8">
