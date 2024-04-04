@@ -4,10 +4,9 @@ import * as cheerio from "cheerio"
 const makeUrl = (lat: string, lng: string) =>
   `https://spots.roadsurfer.com/en-gb/roadsurfer-spots?allowWithoutLocation&categoryIds&country&endDate&lat=${lat}&lng=${lng}&locationSearchString=Selected%20area&maxPrice&onlyFreeSpots&searchRadius=250&searchType=modified&sort=distance&startDate&terrainFor[]=camperVan`
 
-import exampleData from "./komoot.json"
 
 import { prisma } from "@ramble/database"
-import { SpotType } from "@ramble/database/types"
+
 import { convert } from "html-to-text"
 
 export type RoadsurferSpot = {
@@ -26,26 +25,25 @@ async function getCards({ lat, lng }: { lat: string; lng: string }) {
   const urlWithParams = makeUrl(lat, lng)
   console.log(urlWithParams)
   const browser = await puppeteer.launch({
-    headless: "new",
+    headless: true,
   })
 
   const page = await browser.newPage()
 
+  
   await page.goto(urlWithParams, {
     waitUntil: "domcontentloaded",
   })
-  // await page.waitForNetworkIdle({ idleTime: 1000 })
-  // await page.waitForTimeout(4000)
+  
   await new Promise((r) => setTimeout(r, 5000))
-  // await page.waitForSelector(".jss180")
-
+  
   const pageData = await page.evaluate(() => {
     return { html: document.documentElement.innerHTML }
   })
 
-  const $ = cheerio.load(pageData.html)
+  console.log("Got page data:" + pageData.html)
 
-  browser.close()
+  const $ = cheerio.load(pageData.html)
 
   const newSpots: RoadsurferSpot[] = []
   const newSpotCount = $('div[id^="spot-result-item-"]').length
@@ -82,15 +80,10 @@ async function getCards({ lat, lng }: { lat: string; lng: string }) {
     const spot = newSpots[index]
 
     try {
-      // if in db, continue
-      const exists = currentData.find((s) => s.roadsurferId === spot.id)
-      console.log(exists && "Spot exists: " + spot.id)
-      if (exists) continue
-
-      console.log("Adding spot: " + index + " out of " + newSpots.length + " - " + lat + "," + lng)
+      console.log("Getting spot data: " + index + " out of " + newSpots.length + " - " + lat + "," + lng)
 
       const browser = await puppeteer.launch({
-        headless: "new",
+        headless: true,
       })
 
       const detailPage = await browser.newPage()
@@ -139,24 +132,103 @@ async function getCards({ lat, lng }: { lat: string; lng: string }) {
       const wifi = $(".product-facility__icons-icon__label").filter((_, p) => $(p).text().includes("Wi-Fi")).length > 0
       const firePit = $(".product-facility__icons-icon__label").filter((_, p) => $(p).text().includes("Campfire")).length > 0
 
-      await prisma.spot.create({
-        data: {
-          name: spot.name,
-          latitude: parseFloat(latitude),
-          longitude: parseFloat(longitude),
-          description: convert(description, { wordwrap: false, preserveNewlines: true }),
-          images: { create: images.map((image) => ({ path: image, creator: { connect: { email: "george@noquarter.co" } } })) },
-          roadsurferId: spot.id,
-          type: "CAMPING",
-          isPetFriendly,
-          sourceUrl: spot.link,
-          creator: { connect: { email: "george@noquarter.co" } },
-          // verifier: { connect: { email: "george@noquarter.co" } },
-          amenities: {
-            create: { bbq, shower, kitchen, sauna: false, firePit, wifi, toilet, water, electricity, hotWater: false, pool },
+
+      // if in db, continue
+      const existingSpot = currentData.find((s) => s.roadsurferId === spot.id)
+      console.log(existingSpot && "Spot exists: " + spot.id + " updating...")
+      if (existingSpot) {
+        await prisma.spot.update({
+          where: { roadsurferId: spot.id },
+          data: {
+            roadsurferId: spot.id,
+            hipcampId: null,
+            name: spot.name,
+            latitude: parseFloat(latitude),
+            longitude: parseFloat(longitude),
+            description: convert(description, { wordwrap: false, preserveNewlines: true }),
+            type: "CAMPING",
+            isPetFriendly,
+            sourceUrl: spot.link,
+            creator: { connect: { email: "george@noquarter.co" } },
+            amenities: {
+              update: { bbq, shower, kitchen, sauna: false, firePit, wifi, toilet, water, electricity, hotWater: false, pool },
+            },
+            images: {
+              create: (await Promise.all(images.map(async (imagePath) => {
+                // Check if the image already exists for the spot
+                const existingImage = await prisma.spotImage.findFirst({
+                  where: {
+                    path: imagePath,
+                    spotId: existingSpot.id,
+                  },
+                });
+        
+                // If the image doesn't exist, create it
+                if (!existingImage) {
+                  return {
+                    path: imagePath,
+                    creator: { connect: { email: "jack@noquarter.co" } },
+                  };
+                }
+        
+                // If the image already exists, return an empty object to skip its creation
+                return {};
+              }))).filter(image => Object.keys(image).length !== 0) as { path: string; creator: { connect: { email: string } } }[], // Filter out null values (indicating duplicates)
+            },
           },
-        },
-      })
+        })
+         // Fetch existing images associated with the spot
+        const existingImages = await prisma.spotImage.findMany({
+          where: { spotId: existingSpot.id }, 
+          include: { spot: true },
+        });
+
+        // Find images to delete (images that are not in the images array)
+        const imagesToDelete = existingImages.filter(image => !images.includes(image.path));
+
+        if (imagesToDelete.length > 0) {
+          console.log("images to delete: " + imagesToDelete.map(image => image.path))
+        }
+
+        // Delete images
+        await Promise.all(imagesToDelete.map(async (image) => {
+          // check if image is cover image
+          if (image.spot.coverId === image.id) {
+            await prisma.spot.update({
+              where: { id: image.spot.id },
+              data: {
+                coverId: null,
+              },
+            });
+          }
+          await prisma.spotImage.delete({
+            where: { id: image.id },
+          });
+        }));
+      } else {
+        console.log("Adding spot: " + index + " out of " + newSpots.length + " - " + lat + "," + lng)
+
+        await prisma.spot.create({
+          data: {
+            name: spot.name,
+            latitude: parseFloat(latitude),
+            longitude: parseFloat(longitude),
+            description: convert(description, { wordwrap: false, preserveNewlines: true }),
+            images: { create: images.map((image) => ({ path: image, creator: { connect: { email: "george@noquarter.co" } } })) },
+            roadsurferId: spot.id,
+            type: "CAMPING",
+            isPetFriendly,
+            sourceUrl: spot.link,
+            creator: { connect: { email: "george@noquarter.co" } },
+            amenities: {
+              create: { bbq, shower, kitchen, sauna: false, firePit, wifi, toilet, water, electricity, hotWater: false, pool },
+            },
+          },
+        })
+      }
+
+      await browser.close();
+
     } catch (error) {
       console.log(spot.id + error)
     }
@@ -165,10 +237,10 @@ async function getCards({ lat, lng }: { lat: string; lng: string }) {
 
 async function main() {
   try {
-    // Start at 37.51, -5.01 for whole scan of europe
-    for (let lat = 37.51; lat < 76; lat = lat + 1) {
+    // Start at 36, -10 for whole scan of europe
+    for (let lat = 36; lat < 71; lat = lat + 1) {
       console.log("Lat: " + lat)
-      for (let lng = -5.01; lng < 22; lng = lng + 1) {
+      for (let lng = -10; lng < 32; lng = lng + 1) {
         console.log("Lng: " + lng)
         await getCards({
           lat: Number(Math.round(parseFloat(lat + "e" + 2)) + "e-" + 2).toFixed(2),
