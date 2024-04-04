@@ -6,7 +6,7 @@ import * as React from "react"
 import { TouchableOpacity, View, useColorScheme } from "react-native"
 
 import type { Review, User } from "@ramble/database/types"
-import { createImageUrl } from "@ramble/shared"
+import { createAssetUrl } from "@ramble/shared"
 
 import { api } from "~/lib/api"
 import { FULL_WEB_URL } from "~/lib/config"
@@ -70,7 +70,7 @@ export function ReviewItem({
               height={40}
               width={40}
               placeholder={review.user.avatarBlurHash}
-              source={{ uri: createImageUrl(review.user.avatar) }}
+              source={{ uri: createAssetUrl(review.user.avatar) }}
               className="sq-10 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
             />
           ) : (

@@ -4,7 +4,7 @@ import { ChevronLeft, Heart, Instagram, User2 } from "lucide-react-native"
 import * as React from "react"
 import { Linking, ScrollView, TouchableOpacity, View, useColorScheme } from "react-native"
 
-import { createImageUrl } from "@ramble/shared"
+import { createAssetUrl } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
@@ -58,23 +58,9 @@ export default function UserScreen() {
 
   if (!me)
     return (
-      <SafeAreaView>
-        <View className="p-4">
-          <View className="flex flex-row items-center">
-            {router.canGoBack() && (
-              <TouchableOpacity className="sq-8 flex items-center justify-center" onPress={router.back} activeOpacity={0.8}>
-                <ChevronLeft className="mt-2 text-primary" />
-              </TouchableOpacity>
-            )}
-            <View>
-              <BrandHeading style={{ paddingLeft: 6 }} className="text-3xl">
-                {username}
-              </BrandHeading>
-            </View>
-          </View>
-          <LoginPlaceholder text="log in to view other profiles" />
-        </View>
-      </SafeAreaView>
+      <ScreenView title={username}>
+        <LoginPlaceholder text="log in to view other profiles" />
+      </ScreenView>
     )
 
   return (
@@ -111,7 +97,7 @@ export default function UserScreen() {
                   width={100}
                   placeholder={user.avatarBlurHash}
                   height={100}
-                  source={{ uri: createImageUrl(user.avatar) }}
+                  source={{ uri: createAssetUrl(user.avatar) }}
                   style={{ height: 100, width: 100 }}
                   className="rounded-full bg-gray-100 object-cover dark:bg-gray-700"
                 />

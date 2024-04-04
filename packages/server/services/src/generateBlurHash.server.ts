@@ -1,10 +1,10 @@
 import { encode } from "blurhash"
 import sharp from "sharp"
 
-import { createImageUrl } from "@ramble/shared"
+import { createAssetUrl } from "@ramble/shared"
 
 export async function generateBlurHash(path: string) {
-  const url = createImageUrl(path)
+  const url = createAssetUrl(path)
   try {
     if (!url) return null
     const res = await fetch(url)

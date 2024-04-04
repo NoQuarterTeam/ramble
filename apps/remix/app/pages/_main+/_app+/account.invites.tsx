@@ -3,7 +3,7 @@ import { type LoaderFunctionArgs, json } from "@vercel/remix"
 import { Copy } from "lucide-react"
 
 // import { generateInviteCodes } from "@ramble/server-services"
-import { createImageUrl } from "@ramble/shared"
+import { createAssetUrl } from "@ramble/shared"
 
 // import { Form, FormButton } from "~/components/Form"
 import { Avatar, Badge, Button } from "~/components/ui"
@@ -50,7 +50,7 @@ export default function AccountInvite() {
               <Avatar
                 size={40}
                 className="sq-6"
-                src={createImageUrl(inviteCode.user.avatar)}
+                src={createAssetUrl(inviteCode.user.avatar)}
                 placeholder={inviteCode.user.avatarBlurHash}
               />
               <p>{inviteCode.user.firstName}</p>

@@ -1,7 +1,7 @@
 import { useLoaderData } from "@remix-run/react"
 import { cacheHeader } from "pretty-cache-header"
 
-import { createImageUrl } from "@ramble/shared"
+import { createAssetUrl } from "@ramble/shared"
 
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { db } from "~/lib/db.server"
@@ -43,7 +43,7 @@ export default function ProfileVan() {
                 key={image.id}
                 alt="van"
                 placeholder={image.blurHash}
-                src={createImageUrl(image.path)}
+                src={createAssetUrl(image.path)}
                 width={500}
                 height={350}
                 className="rounded-xs object-cover"

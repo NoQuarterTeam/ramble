@@ -3,7 +3,7 @@ import { Edit2, User2 } from "lucide-react-native"
 import { FormProvider } from "react-hook-form"
 import { Keyboard, ScrollView, TouchableOpacity, View } from "react-native"
 
-import { createImageUrl } from "@ramble/shared"
+import { createAssetUrl } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
@@ -115,7 +115,7 @@ export default function AccountInfoScreen() {
                   width={80}
                   height={80}
                   placeholder={me.avatarBlurHash}
-                  source={{ uri: createImageUrl(me.avatar) }}
+                  source={{ uri: createAssetUrl(me.avatar) }}
                   className="sq-20 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
                 />
               ) : (

@@ -13,7 +13,7 @@ import {
   activitySpotTypes,
   amenitiesFields,
   canManageSpot,
-  createImageUrl,
+  createAssetUrl,
   displayRating,
   isPartnerSpot,
   spotPartnerFields,
@@ -145,7 +145,7 @@ export const meta: MetaFunction<typeof loader, { root: typeof rootLoader }> = ({
     { name: "og:description", content: data?.spot.description },
     {
       name: "og:image",
-      content: image ? FULL_WEB_URL + transformImageSrc(createImageUrl(image), { width: 600, height: 400 }) : null,
+      content: image ? FULL_WEB_URL + transformImageSrc(createAssetUrl(image), { width: 600, height: 400 }) : null,
     },
   ]
 }
@@ -223,7 +223,7 @@ export default function SpotDetail() {
                   alt="spot"
                   key={image.id}
                   placeholder={image.blurHash}
-                  src={createImageUrl(image.path)}
+                  src={createAssetUrl(image.path)}
                   className="h-[300px] max-w-[400px] rounded-xs"
                   height={400}
                   width={600}

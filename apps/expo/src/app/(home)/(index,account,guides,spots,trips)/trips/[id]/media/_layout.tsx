@@ -9,7 +9,7 @@ export default function Layout() {
     <Stack initialRouteName="index" screenOptions={{ contentStyle: { backgroundColor }, headerShown: false }}>
       <Stack.Screen name="index" />
       <Stack.Screen name="cluster" />
-      <Stack.Screen name="[imageId]" />
+      <Stack.Screen name="[mediaId]" />
     </Stack>
   )
 }

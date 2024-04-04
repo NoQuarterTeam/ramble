@@ -2,7 +2,7 @@ import type { NavLinkProps } from "@remix-run/react"
 import { Link, NavLink, useNavigate, useSubmit } from "@remix-run/react"
 import { Heart, LogOut, Moon, Plus, Settings, Sun, UserCircle, UserCog } from "lucide-react"
 
-import { createImageUrl, merge } from "@ramble/shared"
+import { createAssetUrl, merge } from "@ramble/shared"
 
 import { useFetcher } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -70,7 +70,7 @@ export function Nav() {
                 size={60}
                 placeholder={user.avatarBlurHash}
                 className="sq-10 hover:opacity-70"
-                src={createImageUrl(user.avatar)}
+                src={createAssetUrl(user.avatar)}
               />
             ) : null}
           </DropdownMenuTrigger>

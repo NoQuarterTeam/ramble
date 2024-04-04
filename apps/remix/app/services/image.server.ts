@@ -5,7 +5,7 @@ import { cacheHeader } from "pretty-cache-header"
 import sharp from "sharp"
 
 import { deleteObject, getHead, uploadStream } from "@ramble/server-services"
-import { s3Url, srcWhitelist } from "@ramble/shared"
+import { assetUrl } from "@ramble/shared"
 
 import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"
 
@@ -31,7 +31,7 @@ export async function generateImage({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url)
   const src = url.searchParams.get("src")
   if (!src) return badImageResponse()
-  if (!srcWhitelist.some((s) => src.startsWith(s))) return badImageResponse()
+  if (!src.startsWith(assetUrl)) return badImageResponse()
   try {
     const width = getIntOrNull(url.searchParams.get("width"))
     const height = getIntOrNull(url.searchParams.get("height"))
@@ -41,38 +41,30 @@ export async function generateImage({ request }: LoaderFunctionArgs) {
     // Create hash of the url for unique cache key
     const hash = crypto
       .createHash("sha256")
-      .update("v1")
+      .update("v2")
       .update(src)
       .update(width?.toString() || "0")
       .update(height?.toString() || "0")
       .update(quality?.toString() || "90")
       .update(fit)
 
-    const shouldPurge = url.searchParams.get("purge") === "true"
-
     const key = `transforms/${hash.digest("hex")}`
 
     const isInCache = await getHead(key)
       .then(() => true)
       .catch((e) => {
-        if (!(e instanceof NotFound)) throw badImageResponse()
+        if (!(e instanceof NotFound)) throw e
         return false
       })
 
-    const cacheSrc = s3Url + key
+    const cacheSrc = assetUrl + key
 
     // if in cache, return cached image
-    if (isInCache) {
-      if (shouldPurge) {
-        await deleteObject(key)
-      } else {
-        return getCachedImage(cacheSrc)
-      }
-    }
+    if (isInCache) return getCachedImage(cacheSrc)
 
     // fetch from original source
     const res = await axios.get(src, { responseType: "stream" })
-    if (!res) return badImageResponse()
+    if (!res) throw new Error("Failed to fetch image")
 
     // transform image
     const sharpInstance = sharp()
@@ -90,11 +82,7 @@ export async function generateImage({ request }: LoaderFunctionArgs) {
     return getCachedImage(cacheSrc)
   } catch (e) {
     console.log(e)
-    const res = await axios.get(src, { responseType: "stream" })
-    return new Response(res.data, {
-      status: 200,
-      headers: { "Cache-Control": cacheHeader({ public: true, maxAge: "0d" }) },
-    })
+    return badImageResponse()
   }
 }
 

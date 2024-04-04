@@ -10,9 +10,9 @@
     "with-env": "dotenv -e ../../../.env --"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.537.0",
-    "@aws-sdk/lib-storage": "3.537.0",
-    "@aws-sdk/s3-request-presigner": "3.537.0",
+    "@aws-sdk/client-s3": "3.540.0",
+    "@aws-sdk/lib-storage": "3.540.0",
+    "@aws-sdk/s3-request-presigner": "3.540.0",
     "@ramble/database": "workspace:*",
     "@ramble/emails": "workspace:*",
     "@ramble/server-env": "workspace:*",
@@ -23,7 +23,7 @@
     "dayjs": "1.11.10",
     "flickr-sdk": "7.0.0-beta.7",
     "jsonwebtoken": "9.0.2",
-    "loops": "0.3.0",
+    "loops": "0.4.1",
     "nodemailer": "6.9.13",
     "resend": "3.2.0",
     "sharp": "0.32.6",
@@ -32,7 +32,7 @@
   "devDependencies": {
     "@types/bcryptjs": "2.4.6",
     "@types/jsonwebtoken": "9.0.6",
-    "@types/node": "18.19.26",
+    "@types/node": "18.19.29",
     "@types/nodemailer": "6.4.14",
     "dotenv-cli": "7.4.1",
     "typescript": "5.4.3"

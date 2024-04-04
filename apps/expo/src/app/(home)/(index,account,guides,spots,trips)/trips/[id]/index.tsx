@@ -1,4 +1,5 @@
 import { useActionSheet } from "@expo/react-native-action-sheet"
+import type { MediaType } from "@ramble/database/types"
 import {
   Camera,
   LineLayer,
@@ -14,9 +15,10 @@ import * as Haptics from "expo-haptics"
 import { Image } from "expo-image"
 import * as Location from "expo-location"
 import * as MediaLibrary from "expo-media-library"
-import { MediaType, getAssetsAsync } from "expo-media-library"
+import * as Network from "expo-network"
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
+import * as VideoThumbnails from "expo-video-thumbnails"
 import { ChevronLeft, Edit2, Flag, Home, Image as ImageIcon, MapPin, Plus, Users } from "lucide-react-native"
 import * as React from "react"
 import { ActivityIndicator, Alert, Linking, TouchableOpacity, View } from "react-native"
@@ -24,7 +26,7 @@ import DraggableFlatList, { type RenderItemParams, ScaleDecorator } from "react-
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import * as DropdownMenu from "zeego/dropdown-menu"
 
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createImageUrl, join } from "@ramble/shared"
+import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createAssetUrl, join } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
@@ -140,21 +142,20 @@ export default function TripDetailScreen() {
       mediaClusters?.map((point, i) => {
         if (point.properties.cluster) {
           const bounds = point.properties.bounds
+          const properties = point.properties.media[0]?.properties
+          const clusterImagePath = properties?.thumbnailPath || properties?.path
           return (
             <MarkerView key={`${point.id || 0}${i}`} allowOverlap allowOverlapWithPuck coordinate={point.geometry.coordinates}>
               <TouchableOpacity
                 activeOpacity={0.7}
-                onPress={() => router.push(`/(home)/(trips)/trips/${id}/images/cluster?bounds=${bounds.join(",")}`)}
+                onPress={() => router.push(`/(home)/(trips)/trips/${id}/media/cluster?bounds=${bounds.join(",")}`)}
                 className={join(
                   "relative flex items-center justify-center",
                   point.properties.point_count > 150 ? "sq-20" : point.properties.point_count > 75 ? "sq-16" : "sq-14",
                 )}
               >
                 <View className="h-full w-full rounded-sm border-2 border-white bg-background dark:bg-background-dark">
-                  <Image
-                    source={{ uri: createImageUrl(point.properties.media[0]?.properties.path) }}
-                    style={{ width: "100%", height: "100%" }}
-                  />
+                  <Image source={{ uri: createAssetUrl(clusterImagePath) }} style={{ width: "100%", height: "100%" }} />
                 </View>
                 <View className="sq-5 -top-1 -right-1 absolute flex items-center justify-center rounded-full bg-blue-500">
                   <Text className="text-center font-600 text-white">{point.properties.point_count_abbreviated}</Text>
@@ -166,16 +167,18 @@ export default function TripDetailScreen() {
         const media = point.properties as {
           cluster: false
           path: string
+          thumbnailPath: string | null
           id: string
         }
+        const itemImagePath = media.thumbnailPath || media.path
         return (
           <MarkerView key={media.id} allowOverlap allowOverlapWithPuck coordinate={point.geometry.coordinates}>
             <TouchableOpacity
               activeOpacity={0.7}
-              onPress={() => router.push(`/(home)/(trips)/trips/${id}/images/${media.id}`)}
+              onPress={() => router.push(`/(home)/(trips)/trips/${id}/media/${media.id}`)}
               className="sq-12 flex items-center justify-center overflow-hidden rounded-md border-2 border-white"
             >
-              <Image source={{ uri: createImageUrl(media.path) }} style={{ width: "100%", height: "100%" }} />
+              <Image source={{ uri: createAssetUrl(itemImagePath) }} style={{ width: "100%", height: "100%" }} />
             </TouchableOpacity>
           </MarkerView>
         )
@@ -274,7 +277,7 @@ export default function TripDetailScreen() {
           </View>
           {trip && me && (
             <View className="flex flex-row items-center space-x-1">
-              <Link push href={`/${tab}/trips/${id}/images`} asChild>
+              <Link push href={`/${tab}/trips/${id}/media`} asChild>
                 <TouchableOpacity
                   className="sq-10 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
                   activeOpacity={0.8}
@@ -349,6 +352,7 @@ function TripImageSync({
   const { id } = useLocalSearchParams<{ id: string }>()
   const utils = api.useUtils()
 
+  const { me } = useMe()
   const upload = useS3QuickUpload()
 
   const { mutate: uploadMedia } = api.trip.media.upload.useMutation({
@@ -360,9 +364,16 @@ function TripImageSync({
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: allow it
   React.useEffect(() => {
-    async function loadImages() {
+    async function loadMedia() {
+      if (!me) return
       const isTripActive = dayjs(startDate).isBefore(dayjs()) && dayjs(endDate).isAfter(dayjs())
       if (!isTripActive) return
+      const networkState = await Network.getNetworkStateAsync()
+      if (!networkState.isConnected) return toast({ title: "Syncing disabled", message: "No internet connection" })
+      if (!me.tripSyncOnNetworkEnabled && networkState.type !== Network.NetworkStateType.WIFI) {
+        return toast({ title: "Syncing disabled", message: "Not on wifi" })
+      }
+
       try {
         setIsSyncing(true)
         const createdAfter = latestMediaTimestamp
@@ -371,44 +382,57 @@ function TripImageSync({
               .toDate()
           : dayjs(startDate).startOf("day").toDate()
         const createdBefore = dayjs(endDate).endOf("day").toDate()
-        const pages = await getAssetsAsync({ createdAfter, createdBefore, mediaType: MediaType.photo, sortBy: "creationTime" })
+        const pages = await MediaLibrary.getAssetsAsync({
+          createdAfter,
+          createdBefore,
+          mediaType: [MediaLibrary.MediaType.photo, MediaLibrary.MediaType.video],
+          sortBy: "creationTime",
+        })
         if (pages.totalCount === 0) return
-        let images: MediaLibrary.Asset[] = pages.assets
+        let assets: MediaLibrary.Asset[] = pages.assets
         let endCursor = pages.endCursor
         while (true) {
-          const newPages = await getAssetsAsync({
+          const newPages = await MediaLibrary.getAssetsAsync({
             after: endCursor,
             createdAfter,
             createdBefore,
-            mediaType: MediaType.photo,
+            mediaType: [MediaLibrary.MediaType.photo, MediaLibrary.MediaType.video],
             sortBy: "creationTime",
           })
-          images = images.concat(newPages.assets)
+          assets = assets.concat(newPages.assets)
           endCursor = newPages.endCursor
           if (!newPages.hasNextPage) break
         }
-        const imagesToSync = []
-        for (const image of images) {
+        const mediaToSync = []
+        for (const asset of assets) {
           try {
-            const info = await MediaLibrary.getAssetInfoAsync(image)
+            const info = await MediaLibrary.getAssetInfoAsync(asset)
             if (!info.location) continue
-            const imageWithData = {
-              assetId: image.id,
-              url: info.localUri || image.uri,
+            const type: MediaType = info.mediaType === MediaLibrary.MediaType.photo ? "IMAGE" : "VIDEO"
+            const mediaWithData = {
+              assetId: asset.id,
+              url: info.localUri || asset.uri,
               latitude: info.location.latitude,
               longitude: info.location.longitude,
-              timestamp: dayjs(image.creationTime).toDate(),
+              timestamp: dayjs(asset.creationTime).toDate(),
+              type,
+              duration: info.duration || null,
             }
-            imagesToSync.push(imageWithData)
+            mediaToSync.push(mediaWithData)
           } catch (error) {
             console.log(error)
           }
         }
-        if (imagesToSync.length === 0) return
-        for (const image of imagesToSync) {
+        if (mediaToSync.length === 0) return
+        for (const media of mediaToSync) {
           try {
-            const key = await upload(image.url)
-            const payload = { path: key, ...image }
+            let thumbnailPath = null
+            if (media.type === "VIDEO") {
+              const { uri } = await VideoThumbnails.getThumbnailAsync(media.url, { time: 0 })
+              thumbnailPath = await upload(uri)
+            }
+            const path = await upload(media.url)
+            const payload = { path, thumbnailPath, ...media }
             uploadMedia({ tripId: id, image: payload })
           } catch (error) {
             console.log(error)
@@ -417,19 +441,19 @@ function TripImageSync({
         onDone()
       } catch (error) {
         console.log(error)
-        toast({ title: "Error syncing images", type: "error" })
+        toast({ title: "Error syncing media", type: "error" })
       } finally {
         setIsSyncing(false)
       }
     }
-    loadImages()
-  }, [startDate, endDate, latestMediaTimestamp, id])
+    loadMedia()
+  }, [me, startDate, endDate, latestMediaTimestamp, id])
   if (!isSyncing) return null
   return (
     <View className="flex items-center justify-center pt-2">
       <View className="flex flex-row items-center space-x-2 rounded-full bg-primary px-4 py-2">
         <ActivityIndicator size="small" color="white" />
-        <Text className="text-white">Syncing photos</Text>
+        <Text className="text-white">Syncing media</Text>
       </View>
     </View>
   )
@@ -619,7 +643,7 @@ const TripItem = React.memo(function _TripItem({
                     placeholder={spot.images[0].blurHash}
                     height={150}
                     className="w-full flex-1 rounded-t bg-gray-50 object-cover dark:bg-gray-800"
-                    source={{ uri: createImageUrl(spot.images[0].path) }}
+                    source={{ uri: createAssetUrl(spot.images[0].path) }}
                   />
                 ) : (
                   <View className="flex h-full w-full flex-1 items-center justify-center rounded bg-gray-50 dark:bg-gray-800">

@@ -13,7 +13,7 @@ import {
   INITIAL_LATITUDE,
   INITIAL_LONGITUDE,
   SPOT_TYPE_OPTIONS,
-  createImageUrl,
+  createAssetUrl,
   doesSpotTypeRequireAmenities,
   merge,
 } from "@ramble/shared"
@@ -234,7 +234,7 @@ export function SpotReportForm({
                     </Button>
                   </div>
                   <img
-                    src={createImageUrl(path)}
+                    src={createAssetUrl(path)}
                     className={merge(
                       "h-[300px] w-full overflow-hidden rounded object-cover hover:opacity-80",
                       isFlagged(id) && "opacity-80 outline outline-red-500 outline-solid",

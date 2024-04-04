@@ -3,7 +3,7 @@ import { cacheHeader } from "pretty-cache-header"
 import * as React from "react"
 import { promiseHash } from "remix-utils/promise"
 
-import { createImageUrl } from "@ramble/shared"
+import { createAssetUrl } from "@ramble/shared"
 
 import { PageContainer } from "~/components/PageContainer"
 import { Avatar, Button } from "~/components/ui"
@@ -105,7 +105,7 @@ function GuideItem(props: { guide: SerializeFrom<typeof loader>["guides"][number
           className="sq-20 flex-shrink-0"
           size={100}
           placeholder={props.guide.avatarBlurHash}
-          src={createImageUrl(props.guide.avatar)}
+          src={createAssetUrl(props.guide.avatar)}
         />
         <div>
           <p className="text-lg leading-3 lg:text-2xl md:text-xl">

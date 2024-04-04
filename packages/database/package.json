@@ -16,13 +16,13 @@
   "sideEffects": false,
   "dependencies": {
     "@planetscale/database": "1.16.0",
-    "@prisma/adapter-planetscale": "5.11.0",
-    "@prisma/client": "5.11.0",
+    "@prisma/adapter-planetscale": "5.12.1",
+    "@prisma/client": "5.12.1",
     "@ramble/server-env": "workspace:*",
-    "prisma": "5.11.0"
+    "prisma": "5.12.1"
   },
   "devDependencies": {
-    "@types/node": "18.19.26",
+    "@types/node": "18.19.29",
     "dotenv-cli": "7.4.1",
     "typescript": "5.4.3"
   },

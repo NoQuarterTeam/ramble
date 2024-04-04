@@ -6,7 +6,7 @@ import * as React from "react"
 import { AuthenticityTokenInput } from "remix-utils/csrf/react"
 import type { z } from "zod"
 
-import { createImageUrl, merge } from "@ramble/shared"
+import { createAssetUrl, merge } from "@ramble/shared"
 
 import type { ButtonProps, InputProps, InputStyleProps } from "~/components/ui"
 import { Button, IconButton, Input, inputStyles } from "~/components/ui"
@@ -208,7 +208,7 @@ export function ImageField(props: ImageFieldProps) {
           }
         >
           {image ? (
-            <img src={createImageUrl(image)} className="h-full w-full object-cover" alt="preview" />
+            <img src={createAssetUrl(image)} className="h-full w-full object-cover" alt="preview" />
           ) : hasChildren ? (
             props.children
           ) : (

@@ -3,7 +3,7 @@ import dayjs from "dayjs"
 import { cacheHeader } from "pretty-cache-header"
 import * as React from "react"
 
-import { createImageUrl } from "@ramble/shared"
+import { createAssetUrl } from "@ramble/shared"
 
 import { OptimizedImage } from "~/components/OptimisedImage"
 import { PageContainer } from "~/components/PageContainer"
@@ -99,7 +99,7 @@ function VanItem(props: { van: SerializeFrom<LoaderData>["vans"][number] }) {
             width={300}
             height={200}
             className="h-full object-contain"
-            src={createImageUrl(props.van.images[0].path)}
+            src={createAssetUrl(props.van.images[0].path)}
             placeholder={props.van.images[0].blurHash}
           />
         ) : (
@@ -124,7 +124,7 @@ function VanItem(props: { van: SerializeFrom<LoaderData>["vans"][number] }) {
           <Avatar
             size={40}
             className="sq-10"
-            src={createImageUrl(props.van.user.avatar)}
+            src={createAssetUrl(props.van.user.avatar)}
             placeholder={props.van.user.avatarBlurHash}
           />
           <p>{props.van.user.username}</p>

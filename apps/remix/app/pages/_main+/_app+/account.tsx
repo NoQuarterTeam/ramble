@@ -3,7 +3,7 @@ import { Outlet, useActionData, useLoaderData } from "@remix-run/react"
 import { AlertCircle, Settings, ToggleRight, User, UserPlus } from "lucide-react"
 
 import { sendAccountVerificationEmail } from "@ramble/server-services"
-import { createImageUrl, merge } from "@ramble/shared"
+import { createAssetUrl, merge } from "@ramble/shared"
 
 import { Form, FormButton } from "~/components/Form"
 import { LinkButton } from "~/components/LinkButton"
@@ -62,7 +62,7 @@ export default function AccountLayout() {
       )}
       <div className="flex flex-wrap items-center justify-between">
         <div className="flex items-center space-x-2 py-2">
-          <Avatar size={100} className="sq-20" placeholder={user.avatarBlurHash} src={createImageUrl(user.avatar)} />
+          <Avatar size={100} className="sq-20" placeholder={user.avatarBlurHash} src={createAssetUrl(user.avatar)} />
           <div>
             <p className="text-2xl">
               {user.firstName} {user.lastName}
