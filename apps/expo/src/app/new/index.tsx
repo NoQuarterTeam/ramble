@@ -3,7 +3,7 @@ import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { AlertTriangle, CircleDot, MapPinned, Navigation } from "lucide-react-native"
 import * as React from "react"
-import { TouchableOpacity, View } from "react-native"
+import { Alert, TouchableOpacity, View } from "react-native"
 
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE } from "@ramble/shared"
 
@@ -83,6 +83,7 @@ export default function NewSpotLocationScreen() {
   }
   const onMapMove = ({ properties }: MapState) => setCoords(properties.center)
 
+  const utils = api.useUtils()
   if (me && spotCheckLoading) return null
 
   if (!me)
@@ -190,13 +191,35 @@ export default function NewSpotLocationScreen() {
             <Button
               className="rounded-full bg-background"
               textClassName="text-black"
-              onPress={() => {
-                if (!me) return
+              onPress={async () => {
                 if (!coords || !addressToUse) return toast({ title: "Please select a valid location" })
                 if (!me.isVerified) return toast({ title: "Please verify your account" })
                 if (!coords[0] || !coords[1]) return toast({ title: "Please select a location" })
+                const nearbySpots = await utils.spot.findNearby.fetch({ longitude: coords[0], latitude: coords[1] }).catch()
+                if (nearbySpots && nearbySpots.length > 0) {
+                  return Alert.alert(
+                    `${nearbySpots.length} spot${nearbySpots.length === 1 ? "" : "s"} found nearby`,
+                    "Make sure to check the map without any filters applied to see if the spot you are creating already exists. Would you like to continue and create a new spot here?",
+                    [
+                      { text: "Cancel", style: "destructive", onPress: () => router.back() },
+                      {
+                        text: "Continue",
+                        onPress: () =>
+                          router.push(
+                            // @ts-ignore
+                            `/new/type?${new URLSearchParams({
+                              ...params,
+                              longitude: coords[0],
+                              latitude: coords[1],
+                              address: addressToUse,
+                            })}`,
+                          ),
+                      },
+                    ],
+                  )
+                }
+
                 router.push(
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   // @ts-ignore
                   `/new/type?${new URLSearchParams({
                     ...params,

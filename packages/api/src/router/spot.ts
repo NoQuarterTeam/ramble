@@ -335,6 +335,19 @@ export const spotRouter = createTRPCRouter({
         },
       })
     }),
+  findNearby: protectedProcedure
+    .input(z.object({ latitude: z.number(), longitude: z.number() }))
+    .query(async ({ input, ctx }) => {
+      const fiveHundredMeters = 0.0045
+      const spots = await ctx.prisma.spot.findMany({
+        where: {
+          latitude: { gte: input.latitude - fiveHundredMeters, lte: input.latitude + fiveHundredMeters },
+          longitude: { gte: input.longitude - fiveHundredMeters, lte: input.longitude + fiveHundredMeters },
+        },
+        take: 50,
+      })
+      return spots
+    }),
   addImages: protectedProcedure
     .input(z.object({ id: z.string().uuid(), images: z.array(z.object({ path: z.string() })) }))
     .mutation(async ({ ctx, input }) => {
