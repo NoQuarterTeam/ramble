@@ -171,7 +171,7 @@ export default function SpotDetailScreen() {
         <Animated.View style={imageStyle}>
           <SpotImageCarousel
             placeholderPaddingTop={insets.top}
-            canAddMore
+            canAddMore={!isPartnerSpot(spot)}
             width={width}
             height={height * 0.37}
             images={spot.images}
