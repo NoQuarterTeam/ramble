@@ -13,6 +13,7 @@ import {
 } from "@ramble/server-services"
 import { userInterestFields } from "@ramble/shared"
 
+import dayjs from "dayjs"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const userRouter = createTRPCRouter({
@@ -82,6 +83,7 @@ export const userRouter = createTRPCRouter({
     const users = await ctx.prisma.user.findMany({
       where: {
         isLocationPrivate: false,
+        updatedAt: { gt: dayjs().subtract(1, "month").toDate() },
         latitude: { not: null, gt: coords.minLat, lt: coords.maxLat },
         longitude: { not: null, gt: coords.minLng, lt: coords.maxLng },
       },
