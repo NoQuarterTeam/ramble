@@ -63,7 +63,7 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
           </TouchableOpacity>
 
           <TouchableOpacity onPress={handleGoToSpot} activeOpacity={0.7} className="flex flex-row items-center space-x-2">
-            <View className="flex flex-row justify-between w-full items-start">
+            <View className="flex flex-row justify-between w-full items-center">
               <Text numberOfLines={1} className="text-lg leading-6">
                 {spot.name}
               </Text>
@@ -71,14 +71,12 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
                 <Spinner />
               ) : (
                 weatherData && (
-                  <View className="flex items-end">
+                  <View className="flex flex-row items-center">
+                    <Text>{Math.round(weatherData.main.temp)}°C</Text>
                     <Image
                       style={{ width: 35, height: 35 }}
                       source={{ uri: `https://openweathermap.org/img/wn/${weatherData.weather[0]?.icon}@2x.png` }}
                     />
-                    <Text>
-                      {weatherData.weather[0]?.description} · {Math.round(weatherData.main.temp)}°C
-                    </Text>
                   </View>
                 )
               )}

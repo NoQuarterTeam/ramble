@@ -5,8 +5,9 @@ export * from "./utils/assets"
 export * from "./utils/image"
 export * from "./utils/translate"
 export * from "./utils/promiseHash"
-
 export * from "./utils/map"
+export * from "./utils/helpers"
+
 export * from "./models/spot"
 export * from "./models/user"
 export * from "./models/amenities"

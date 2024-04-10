@@ -231,22 +231,38 @@ export default function SpotDetailScreen() {
 
             <View className="pt-4">
               {forecastLoading ? (
-                <Spinner />
+                <View className="flex items-center justify-center min-h-[100px]">
+                  <Spinner />
+                </View>
               ) : (
-                forecastData && (
+                forecastData &&
+                forecastData.list.length > 0 && (
                   <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    {forecastData.map((forecast) => (
-                      <View className="flex items-center">
-                        <Text>{dayjs.unix(forecast.dt).format("ddd")}</Text>
-                        <Text>{dayjs.unix(forecast.dt).format("ha")}</Text>
-
-                        <Image
-                          style={{ width: 45, height: 45 }}
-                          source={{ uri: `https://openweathermap.org/img/wn/${forecast.weather[0]?.icon}@2x.png` }}
-                        />
-                        <Text>{Math.round(forecast.main.temp)}°C</Text>
-                      </View>
-                    ))}
+                    <View className="flex flex-row space-x-2">
+                      {forecastData.list.map((groupedForecasts, ia) => (
+                        <View key={Math.random()} className="border border-gray-300 rounded-md px-2 pt-1 pb-2 space-y-1">
+                          <Text className="font-600">
+                            {dayjs(groupedForecasts[0]?.dt_txt).add(forecastData.timezoneOffset, "seconds").format("ddd")}
+                          </Text>
+                          <View className="flex flex-row space-x-2">
+                            {groupedForecasts.map((forecast, ib) => (
+                              <View key={Math.random()} className="flex items-center">
+                                {ia === 0 && ib === 0 ? (
+                                  <Text>Now</Text>
+                                ) : (
+                                  <Text>{dayjs(forecast.dt_txt).add(forecastData.timezoneOffset, "seconds").format("HH")}</Text>
+                                )}
+                                <Image
+                                  style={{ width: 40, height: 40 }}
+                                  source={{ uri: `https://openweathermap.org/img/wn/${forecast.weather[0]?.icon}@2x.png` }}
+                                />
+                                <Text className="ml-2 text-lg">{Math.round(forecast.main.temp)}°</Text>
+                              </View>
+                            ))}
+                          </View>
+                        </View>
+                      ))}
+                    </View>
                   </ScrollView>
                 )
               )}
