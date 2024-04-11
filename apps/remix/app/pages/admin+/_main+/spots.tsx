@@ -68,7 +68,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   })
   return json(data, request, {
     headers: {
-      "cache-control": cacheHeader({ maxAge: "1 hour", sMaxage: "1 hour" }),
+      // "cache-control": cacheHeader({ maxAge: "1 hour", sMaxage: "1 hour" }),
     },
   })
 }
