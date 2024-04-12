@@ -48,7 +48,7 @@ export async function get5DayForecast(lat: number, lon: number) {
       `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${env.OPEN_WEATHER_API_KEY}`,
     )
     const json = (await res.json()) as ForecastResponse
-    if (!json || !json.list || json.list.length === 0) return
+    if (!json || !json.list || json.list.length === 0) return null
     const timezoneOffset = json.city.timezone
 
     const sunriseLocalHour = dayjs
@@ -77,14 +77,14 @@ export async function get5DayForecast(lat: number, lon: number) {
     const data = grouped.map((forecasts) =>
       forecasts.map((forecast) => ({
         ...forecast,
-        localTime: dayjs(forecast.dt_txt).add(timezoneOffset, "seconds").format("YYYY-MM-DD HH:mm"),
+        localTime: dayjs(forecast.dt_txt).add(timezoneOffset, "seconds").format(),
       })),
     )
 
     // Adding a fake "now" right at the start to mimmick a real current forecast
     data[0]?.unshift({
       isNow: true,
-      localTime: dayjs().add(timezoneOffset, "seconds").utc().format("YYYY-MM-DD HH:mm"),
+      localTime: dayjs().add(timezoneOffset, "seconds").utc().format(),
       main: { temp: data[0][0]?.main?.temp || 0 },
       weather: [{ icon: data[0][0]?.weather[0]?.icon || "" }],
     })
@@ -98,7 +98,7 @@ export async function get5DayForecast(lat: number, lon: number) {
         // Insert sunrise
         forecasts.push({
           isSunrise: true,
-          localTime: dailySunrise.format("YYYY-MM-DD HH:mm"),
+          localTime: dailySunrise.format(),
           weather: [{ icon: "" }],
         })
       }
@@ -109,7 +109,7 @@ export async function get5DayForecast(lat: number, lon: number) {
         localTime: dayjs(forecasts[0]?.localTime)
           .set("hour", Number.parseInt(sunsetLocalHour))
           .set("minute", Number.parseInt(sunsetLocalMinute))
-          .format("YYYY-MM-DD HH:mm"),
+          .format(),
       })
       forecasts.sort((a, b) => dayjs(a.localTime).unix() - dayjs(b.localTime).unix())
     })
