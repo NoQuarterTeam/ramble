@@ -82,19 +82,19 @@ export async function get5DayForecast(lat: number, lon: number) {
     )
 
     // Adding a fake "now" right at the start to mimmick a real current forecast
-    data[0].unshift({
+    data[0]?.unshift({
       isNow: true,
       localTime: dayjs().add(timezoneOffset, "seconds").utc().format("YYYY-MM-DD HH:mm"),
-      main: { temp: data[0][0].main?.temp || 0 },
-      weather: [{ icon: data[0][0].weather[0].icon }],
+      main: { temp: data[0][0]?.main?.temp || 0 },
+      weather: [{ icon: data[0][0]?.weather[0]?.icon || "" }],
     })
 
     data.map((forecasts) => {
-      const dailySunrise = dayjs(forecasts[0].localTime)
+      const dailySunrise = dayjs(forecasts[0]?.localTime)
         .set("hour", Number.parseInt(sunriseLocalHour))
         .set("minute", Number.parseInt(sunriseLocalMinute))
 
-      if (dayjs(forecasts[0].localTime).isBefore(dailySunrise)) {
+      if (dayjs(forecasts[0]?.localTime).isBefore(dailySunrise)) {
         // Insert sunrise
         forecasts.push({
           isSunrise: true,
@@ -106,7 +106,7 @@ export async function get5DayForecast(lat: number, lon: number) {
       forecasts.push({
         isSunset: true,
         weather: [{ icon: "" }],
-        localTime: dayjs(forecasts[0].localTime)
+        localTime: dayjs(forecasts[0]?.localTime)
           .set("hour", Number.parseInt(sunsetLocalHour))
           .set("minute", Number.parseInt(sunsetLocalMinute))
           .format("YYYY-MM-DD HH:mm"),
