@@ -102,15 +102,17 @@ export async function get5DayForecast(lat: number, lon: number) {
           weather: [{ icon: "" }],
         })
       }
-      // Insert sunset
-      forecasts.push({
-        isSunset: true,
-        weather: [{ icon: "" }],
-        localTime: dayjs(forecasts[0]?.localTime)
-          .set("hour", Number.parseInt(sunsetLocalHour))
-          .set("minute", Number.parseInt(sunsetLocalMinute))
-          .format(),
-      })
+      if (dayjs().add(timezoneOffset, "seconds").utc().isBefore(dailySunrise)) {
+        // Insert sunset
+        forecasts.push({
+          isSunset: true,
+          weather: [{ icon: "" }],
+          localTime: dayjs(forecasts[0]?.localTime)
+            .set("hour", Number.parseInt(sunsetLocalHour))
+            .set("minute", Number.parseInt(sunsetLocalMinute))
+            .format(),
+        })
+      }
       forecasts.sort((a, b) => dayjs(a.localTime).unix() - dayjs(b.localTime).unix())
     })
 
