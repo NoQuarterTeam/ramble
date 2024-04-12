@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import dayjs from "dayjs"
+import advancedFormat from "dayjs/plugin/advancedFormat"
 import { Image } from "expo-image"
 import { LinearGradient } from "expo-linear-gradient"
 import * as Location from "expo-location"
@@ -59,7 +60,6 @@ import { SpotTypeBadge } from "~/components/SpotTypeBadge"
 import { Button } from "~/components/ui/Button"
 import { Heading } from "~/components/ui/Heading"
 import { ScreenView } from "~/components/ui/ScreenView"
-import { Spinner } from "~/components/ui/Spinner"
 import { SpotImageCarousel } from "~/components/ui/SpotImageCarousel"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
@@ -70,6 +70,8 @@ import { useMe } from "~/lib/hooks/useMe"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 
+dayjs.extend(advancedFormat)
+
 export default function SpotDetailScreen() {
   const { me } = useMe()
   const colorScheme = useColorScheme()
@@ -78,7 +80,7 @@ export default function SpotDetailScreen() {
   const { data, isLoading } = api.spot.detail.useQuery({ id: params.id }, { cacheTime: Number.POSITIVE_INFINITY })
   const spot = data?.spot
 
-  const forecastData = data?.weather
+  const forecastDays = data?.weather
 
   const translationY = useSharedValue(0)
   const [isScrolledPassedThreshold, setIsScrolledPassedThreshold] = React.useState(false)
@@ -235,37 +237,40 @@ export default function SpotDetailScreen() {
             )}
 
             <View className="pt-4">
-              {forecastData && forecastData.length > 0 && (
+              {forecastDays && forecastDays.length > 0 && (
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   <View className="flex flex-row space-x-2">
-                    {forecastData.map((groupedForecasts) => (
-                      <View key={Math.random()} className="border border-gray-300 rounded-md px-2 pt-1 pb-2 space-y-1">
-                        <Text className="font-600">{dayjs(groupedForecasts[0]?.localTime).format("ddd")}</Text>
+                    {forecastDays.map((day) => (
+                      <View
+                        key={day[0]?.localTime}
+                        className="border border-gray-300 dark:border-gray-700 rounded-sm p-2 space-y-1"
+                      >
+                        <Text className="font-600">{dayjs(day[0]?.localTime).format("ddd Do")}</Text>
                         <View className="flex flex-row space-x-3">
-                          {groupedForecasts.map((forecast) => (
-                            <View key={Math.random()} className="flex items-center">
-                              {forecast.isSunrise ? (
-                                <View className="space-y-2 items-center">
-                                  <Text>{dayjs(forecast.localTime).format("HH:mm")}</Text>
-                                  <Sunrise className="w-[40px] h-[40px] text-primary" />
-                                  <Text className="pt-1">Sunrise</Text>
+                          {day.map((forecast) => (
+                            <View key={forecast.localTime} className="flex items-center">
+                              <View className="space-y-1 items-center">
+                                <Text>{forecast.isNow ? "Now" : dayjs(forecast.localTime).format("HH")}</Text>
+                                <View className="w-[40px] h-[40px] flex items-center justify-center">
+                                  {forecast.isSunrise ? (
+                                    <Icon icon={Sunrise} size={24} color="primary" />
+                                  ) : forecast.isSunset ? (
+                                    <Icon icon={Sunset} size={24} color="primary" />
+                                  ) : (
+                                    <Image
+                                      style={{ width: 38, height: 38 }}
+                                      source={{ uri: `https://openweathermap.org/img/wn/${forecast.weather[0]!.icon}@2x.png` }}
+                                    />
+                                  )}
                                 </View>
-                              ) : forecast.isSunset ? (
-                                <View className="space-y-2 items-center">
-                                  <Text>{dayjs(forecast.localTime).format("HH:mm")}</Text>
-                                  <Sunset className="w-[40px] h-[40px] text-primary" />
-                                  <Text className="pt-1">Sunset</Text>
-                                </View>
-                              ) : (
-                                <>
-                                  <Text>{forecast.isNow ? "Now" : dayjs(forecast.localTime).format("HH")}</Text>
-                                  <Image
-                                    style={{ width: 40, height: 40 }}
-                                    source={{ uri: `https://openweathermap.org/img/wn/${forecast.weather[0]?.icon}@2x.png` }}
-                                  />
-                                  <Text className="ml-2 text-lg">{Math.round(forecast.main?.temp || 0)}°</Text>
-                                </>
-                              )}
+                                <Text>
+                                  {forecast.isSunrise
+                                    ? "Sunrise"
+                                    : forecast.isSunset
+                                      ? "Sunset"
+                                      : `${Math.round(forecast.main?.temp || 0)}°`}
+                                </Text>
+                              </View>
                             </View>
                           ))}
                         </View>
