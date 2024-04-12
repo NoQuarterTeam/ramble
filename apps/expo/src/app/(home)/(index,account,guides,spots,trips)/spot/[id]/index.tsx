@@ -78,7 +78,7 @@ export default function SpotDetailScreen() {
   const { data, isLoading } = api.spot.detail.useQuery({ id: params.id }, { cacheTime: Number.POSITIVE_INFINITY })
   const spot = data?.spot
 
-  const { data: forecastData, isLoading: forecastLoading } = api.weather.getSpotDetailForecast.useQuery({ spotId: params.id })
+  const forecastData = data?.weather
 
   const translationY = useSharedValue(0)
   const [isScrolledPassedThreshold, setIsScrolledPassedThreshold] = React.useState(false)
@@ -235,51 +235,44 @@ export default function SpotDetailScreen() {
             )}
 
             <View className="pt-4">
-              {forecastLoading ? (
-                <View className="flex items-center justify-center min-h-[100px]">
-                  <Spinner />
-                </View>
-              ) : (
-                forecastData &&
-                forecastData.length > 0 && (
-                  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                    <View className="flex flex-row space-x-2">
-                      {forecastData.map((groupedForecasts) => (
-                        <View key={Math.random()} className="border border-gray-300 rounded-md px-2 pt-1 pb-2 space-y-1">
-                          <Text className="font-600">{dayjs(groupedForecasts[0]?.localTime).format("ddd")}</Text>
-                          <View className="flex flex-row space-x-3">
-                            {groupedForecasts.map((forecast) => (
-                              <View key={Math.random()} className="flex items-center">
-                                {forecast.isSunrise ? (
-                                  <View className="space-y-2 items-center">
-                                    <Text>{dayjs(forecast.localTime).format("HH:mm")}</Text>
-                                    <Sunrise className="w-[40px] h-[40px] text-primary" />
-                                    <Text className="pt-1">Sunrise</Text>
-                                  </View>
-                                ) : forecast.isSunset ? (
-                                  <View className="space-y-2 items-center">
-                                    <Text>{dayjs(forecast.localTime).format("HH:mm")}</Text>
-                                    <Sunset className="w-[40px] h-[40px] text-primary" />
-                                    <Text className="pt-1">Sunset</Text>
-                                  </View>
-                                ) : (
-                                  <>
-                                    <Text>{forecast.isNow ? "Now" : dayjs(forecast.localTime).format("HH")}</Text>
-                                    <Image
-                                      style={{ width: 40, height: 40 }}
-                                      source={{ uri: `https://openweathermap.org/img/wn/${forecast.weather[0]?.icon}@2x.png` }}
-                                    />
-                                    <Text className="ml-2 text-lg">{Math.round(forecast.main?.temp || 0)}°</Text>
-                                  </>
-                                )}
-                              </View>
-                            ))}
-                          </View>
+              {forecastData && forecastData.length > 0 && (
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  <View className="flex flex-row space-x-2">
+                    {forecastData.map((groupedForecasts) => (
+                      <View key={Math.random()} className="border border-gray-300 rounded-md px-2 pt-1 pb-2 space-y-1">
+                        <Text className="font-600">{dayjs(groupedForecasts[0]?.localTime).format("ddd")}</Text>
+                        <View className="flex flex-row space-x-3">
+                          {groupedForecasts.map((forecast) => (
+                            <View key={Math.random()} className="flex items-center">
+                              {forecast.isSunrise ? (
+                                <View className="space-y-2 items-center">
+                                  <Text>{dayjs(forecast.localTime).format("HH:mm")}</Text>
+                                  <Sunrise className="w-[40px] h-[40px] text-primary" />
+                                  <Text className="pt-1">Sunrise</Text>
+                                </View>
+                              ) : forecast.isSunset ? (
+                                <View className="space-y-2 items-center">
+                                  <Text>{dayjs(forecast.localTime).format("HH:mm")}</Text>
+                                  <Sunset className="w-[40px] h-[40px] text-primary" />
+                                  <Text className="pt-1">Sunset</Text>
+                                </View>
+                              ) : (
+                                <>
+                                  <Text>{forecast.isNow ? "Now" : dayjs(forecast.localTime).format("HH")}</Text>
+                                  <Image
+                                    style={{ width: 40, height: 40 }}
+                                    source={{ uri: `https://openweathermap.org/img/wn/${forecast.weather[0]?.icon}@2x.png` }}
+                                  />
+                                  <Text className="ml-2 text-lg">{Math.round(forecast.main?.temp || 0)}°</Text>
+                                </>
+                              )}
+                            </View>
+                          ))}
                         </View>
-                      ))}
-                    </View>
-                  </ScrollView>
-                )
+                      </View>
+                    ))}
+                  </View>
+                </ScrollView>
               )}
             </View>
 

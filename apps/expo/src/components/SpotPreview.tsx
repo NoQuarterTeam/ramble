@@ -25,8 +25,6 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
   const { data: spot, isLoading } = api.spot.mapPreview.useQuery({ id })
   const router = useRouter()
 
-  const { data: weatherData, isLoading: weatherLoading } = api.weather.getSpotPreviewForecast.useQuery({ spotId: id })
-
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
   const utils = api.useUtils()
@@ -36,6 +34,7 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
     void utils.spot.detail.prefetch({ id: spot.id })
   }, [spot])
 
+  const weatherData = spot?.weather
   const backgroundColor = useBackgroundColor()
   const increment = useFeedbackActivity((s) => s.increment)
   const handleGoToSpot = () => {
@@ -67,18 +66,14 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
               <Text numberOfLines={1} className="text-lg leading-6">
                 {spot.name}
               </Text>
-              {weatherLoading ? (
-                <Spinner />
-              ) : (
-                weatherData && (
-                  <View className="flex flex-row items-center">
-                    <Text>{Math.round(weatherData.main.temp)}°C</Text>
-                    <Image
-                      style={{ width: 35, height: 35 }}
-                      source={{ uri: `https://openweathermap.org/img/wn/${weatherData.weather[0]?.icon}@2x.png` }}
-                    />
-                  </View>
-                )
+              {weatherData && (
+                <View className="flex flex-row items-center">
+                  <Text>{Math.round(weatherData.temp)}°C</Text>
+                  <Image
+                    style={{ width: 35, height: 35 }}
+                    source={{ uri: `https://openweathermap.org/img/wn/${weatherData.icon}@2x.png` }}
+                  />
+                </View>
               )}
             </View>
           </TouchableOpacity>

@@ -35,10 +35,10 @@ export async function getCurrentWeather(lat: number, lon: number) {
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${env.OPEN_WEATHER_API_KEY}`,
     )
     const json = (await res.json()) as WeatherResponse
-    return json
+    return json?.main && json.weather[0]?.icon ? { temp: json.main.temp, icon: json.weather[0].icon } : null
   } catch (error) {
     console.log(error)
-    return
+    return null
   }
 }
 
@@ -117,6 +117,6 @@ export async function get5DayForecast(lat: number, lon: number) {
     return data
   } catch (error) {
     console.log(error)
-    return
+    return null
   }
 }
