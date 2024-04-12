@@ -134,7 +134,7 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
 
           <View className="overflow-hidden rounded-xs">
             <SpotImageCarousel
-              canAddMore
+              canAddMore={!isPartnerSpot(spot)}
               onPress={handleGoToSpot}
               key={spot.id} // so images reload
               spot={spot}
