@@ -17,6 +17,8 @@ import {
   Route,
   Share,
   Star,
+  Sunrise,
+  Sunset,
   Trash,
 } from "lucide-react-native"
 import * as React from "react"
@@ -236,27 +238,37 @@ export default function SpotDetailScreen() {
                 </View>
               ) : (
                 forecastData &&
-                forecastData.list.length > 0 && (
+                forecastData.length > 0 && (
                   <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     <View className="flex flex-row space-x-2">
-                      {forecastData.list.map((groupedForecasts, ia) => (
+                      {forecastData.map((groupedForecasts) => (
                         <View key={Math.random()} className="border border-gray-300 rounded-md px-2 pt-1 pb-2 space-y-1">
-                          <Text className="font-600">
-                            {dayjs(groupedForecasts[0]?.dt_txt).add(forecastData.timezoneOffset, "seconds").format("ddd")}
-                          </Text>
-                          <View className="flex flex-row space-x-2">
-                            {groupedForecasts.map((forecast, ib) => (
+                          <Text className="font-600">{dayjs(groupedForecasts[0]?.localTime).format("ddd")}</Text>
+                          <View className="flex flex-row space-x-3">
+                            {groupedForecasts.map((forecast) => (
                               <View key={Math.random()} className="flex items-center">
-                                {ia === 0 && ib === 0 ? (
-                                  <Text>Now</Text>
+                                {forecast.isSunrise ? (
+                                  <View className="space-y-2 items-center">
+                                    <Text>{dayjs(forecast.localTime).format("HH:mm")}</Text>
+                                    <Sunrise className="w-[40px] h-[40px] text-primary" />
+                                    <Text className="pt-1">Sunrise</Text>
+                                  </View>
+                                ) : forecast.isSunset ? (
+                                  <View className="space-y-2 items-center">
+                                    <Text>{dayjs(forecast.localTime).format("HH:mm")}</Text>
+                                    <Sunset className="w-[40px] h-[40px] text-primary" />
+                                    <Text className="pt-1">Sunset</Text>
+                                  </View>
                                 ) : (
-                                  <Text>{dayjs(forecast.dt_txt).add(forecastData.timezoneOffset, "seconds").format("HH")}</Text>
+                                  <>
+                                    <Text>{forecast.isNow ? "Now" : dayjs(forecast.localTime).format("HH")}</Text>
+                                    <Image
+                                      style={{ width: 40, height: 40 }}
+                                      source={{ uri: `https://openweathermap.org/img/wn/${forecast.weather[0]?.icon}@2x.png` }}
+                                    />
+                                    <Text className="ml-2 text-lg">{Math.round(forecast.main?.temp || 0)}°</Text>
+                                  </>
                                 )}
-                                <Image
-                                  style={{ width: 40, height: 40 }}
-                                  source={{ uri: `https://openweathermap.org/img/wn/${forecast.weather[0]?.icon}@2x.png` }}
-                                />
-                                <Text className="ml-2 text-lg">{Math.round(forecast.main.temp)}°</Text>
                               </View>
                             ))}
                           </View>
