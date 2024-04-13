@@ -243,7 +243,7 @@ export default function SpotDetailScreen() {
                     {forecastDays.map((day) => (
                       <View
                         key={day[0]?.localTime}
-                        className="border border-gray-300 dark:border-gray-700 rounded-sm p-2 space-y-1"
+                        className="border border-gray-200 dark:border-gray-700 rounded-sm p-2 space-y-1"
                       >
                         <Text className="font-600">{dayjs(day[0]?.localTime).format("ddd Do")}</Text>
                         <View className="flex flex-row space-x-3">

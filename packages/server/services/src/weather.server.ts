@@ -93,6 +93,9 @@ export async function get5DayForecast(lat: number, lon: number) {
       const dailySunrise = dayjs(forecasts[0]?.localTime)
         .set("hour", Number.parseInt(sunriseLocalHour))
         .set("minute", Number.parseInt(sunriseLocalMinute))
+      const dailySunset = dayjs(forecasts[0]?.localTime)
+        .set("hour", Number.parseInt(sunsetLocalHour))
+        .set("minute", Number.parseInt(sunsetLocalMinute))
 
       if (dayjs(forecasts[0]?.localTime).isBefore(dailySunrise)) {
         // Insert sunrise
@@ -102,7 +105,7 @@ export async function get5DayForecast(lat: number, lon: number) {
           weather: [{ icon: "" }],
         })
       }
-      if (dayjs().add(timezoneOffset, "seconds").utc().isBefore(dailySunrise)) {
+      if (dayjs().add(timezoneOffset, "seconds").utc().isBefore(dailySunset)) {
         // Insert sunset
         forecasts.push({
           isSunset: true,
