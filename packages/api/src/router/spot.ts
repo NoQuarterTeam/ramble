@@ -172,7 +172,17 @@ export const spotRouter = createTRPCRouter({
           ownerId: true,
           address: true,
           verifier: true,
-          creator: true,
+          creator: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              avatar: true,
+              avatarBlurHash: true,
+              username: true,
+              deletedAt: true,
+            },
+          },
           ...spotPartnerFields,
           _count: { select: { reviews: true, listSpots: true } },
           reviews: { take: 5, include: { user: true }, orderBy: { createdAt: "desc" } },

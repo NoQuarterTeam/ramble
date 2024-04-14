@@ -68,8 +68,9 @@ model User {
   approvedSpotRevisions SpotRevision[] @relation(name: "Approver")
   accessRequest         AccessRequest?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
 
   @@index([latitude])
 }

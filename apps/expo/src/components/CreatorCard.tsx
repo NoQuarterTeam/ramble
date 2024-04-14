@@ -13,7 +13,7 @@ import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
 
 interface Props {
-  creator: Pick<User, "avatar" | "avatarBlurHash" | "firstName" | "lastName" | "username">
+  creator: Pick<User, "avatar" | "avatarBlurHash" | "firstName" | "lastName" | "username" | "deletedAt">
 }
 
 export function CreatorCard({ creator }: Props) {
@@ -25,8 +25,10 @@ export function CreatorCard({ creator }: Props) {
     <TouchableOpacity
       onPress={() => {
         increment()
+        if (creator.deletedAt) return
         router.push(`/${tab}/${creator.username}/(profile)`)
       }}
+      activeOpacity={creator.deletedAt ? 1 : 0.7}
       className="flex flex-row items-center justify-between rounded-xs border border-gray-200 p-1.5 px-2.5 dark:border-gray-700/70"
     >
       <View>
