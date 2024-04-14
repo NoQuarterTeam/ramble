@@ -1,8 +1,8 @@
 import { prisma } from "@ramble/database"
 import { gql, GraphQLClient } from "graphql-request"
-import { spotVerifyOrRemove } from './helpers/spotVerifierOrRemove'
 
-const LIMIT = 100
+
+const LIMIT = 2000
 
 const ROOT_URL = "https://www.hipcamp.com"
 const camperEndpoint = ROOT_URL + "/graphql/camper"
@@ -170,72 +170,158 @@ async function run(bbox: {southwestLatitude: number, southwestLongitude: number,
     const existingHipcampSpots = await prisma.spot.findMany({
       where: { hipcampId: { not: { equals: null } } },
     })
-    const existingHipcampIds = existingHipcampSpots.map((spot) => spot.hipcampId)
 
     for (const node of nodes) {
       try {
         count++
         process.stdout.clearLine(0)
         process.stdout.cursorTo(0)
-        process.stdout.write(`Processing: ${count}/${results}`)
+        process.stdout.write(`Processing: ${count}/${results} `)
 
         const last = node.url.split("-").length - 1
         const landId = node.url.split("-")[last]
 
-        // if in db, skip
-        const exists = existingHipcampIds.includes(landId)
-        if (exists) continue
-
+        
         const landRes: LandRes = await camper.request(landQuery, { landId, landIdType: "MASKED" })
         const land = landRes.land
         const landSitesRes: LandSitesRes = await camper.request(landSitesQuery, { landId, landIdType: "MASKED", siteFilter: {} })
-
+        
         const amenities =
-          landSitesRes.land.sites.edges.length > 0
-            ? landSitesRes.land.sites.edges[0].node.amenities.map((amenity) => ({
-                slug: amenity.slug,
-                state: amenity.state,
-              }))
-            : []
+        landSitesRes.land.sites.edges.length > 0
+        ? landSitesRes.land.sites.edges[0].node.amenities.map((amenity) => ({
+          slug: amenity.slug,
+          state: amenity.state,
+        }))
+        : []
         const firePit = !!amenities.find((amenity) => amenity.slug === "fire" && amenity.state === "PRESENT")
         const toilet = !!amenities.find((amenity) => amenity.slug === "toilet" && amenity.state === "PRESENT")
         const water = !!amenities.find((amenity) => amenity.slug === "water" && amenity.state === "PRESENT")
         const electricity = !!amenities.find((amenity) => amenity.slug === "electricity-hookup" && amenity.state === "PRESENT")
-
+        
         // console.dir(amenities, { depth: null })
         // console.dir(landRes, { depth: null })
         const images = node.topPhotos.flatMap((topPhoto) => topPhoto.urls.map((url) => url.url))
-        await prisma.spot.create({
-          data: {
-            hipcampId: landId,
-            name: node.name,
-            latitude: parseFloat(node.coordinate.latitude),
-            longitude: parseFloat(node.coordinate.longitude),
-            address: [node.cityName, node.countyName, node.stateName].filter((e) => !!e).join(", "),
-            type: "CAMPING",
-            creator: { connect: { email: "dan@noquarter.co" } },
-            sourceUrl: ROOT_URL + node.url,
-            description: land.overview,
-            images: { create: images.map((image) => ({ path: image, creator: { connect: { email: "dan@noquarter.co" } } })) },
-            amenities: {
-              create: {
-                bbq: false,
-                shower: false,
-                kitchen: false,
-                sauna: false,
-                firePit,
-                wifi: false,
-                toilet,
-                water,
-                electricity,
-                hotWater: false,
-                pool: false,
+      
+        // if in db, update
+        const existingSpot = existingHipcampSpots.find((s) => s.hipcampId === landId)
+        console.log(existingSpot && "Spot exists: " + existingSpot.id + " updating...")
+
+        if (existingSpot) {
+          await prisma.spot.update({
+            where: { hipcampId: landId },
+            data: {
+              hipcampId: landId,
+              name: node.name,
+              latitude: parseFloat(node.coordinate.latitude),
+              longitude: parseFloat(node.coordinate.longitude),
+              address: [node.cityName, node.countyName, node.stateName].filter((e) => !!e).join(", "),
+              type: "CAMPING",
+              creator: { connect: { email: "dan@noquarter.co" } },
+              sourceUrl: ROOT_URL + node.url,
+              description: land.overview,
+              images: {
+                create: (await Promise.all(images.map(async (imagePath) => {
+                  // Check if the image already exists for the spot
+                  const existingImage = await prisma.spotImage.findFirst({
+                    where: {
+                      path: imagePath,
+                      spotId: existingSpot.id,
+                    },
+                  });
+          
+                  // If the image doesn't exist, create it
+                  if (!existingImage) {
+                    return {
+                      path: imagePath,
+                      creator: { connect: { email: "jack@noquarter.co" } },
+                    };
+                  }
+          
+                  // If the image already exists, return an empty object to skip its creation
+                  return {};
+                }))).filter(image => Object.keys(image).length !== 0) as { path: string; creator: { connect: { email: string } } }[], // Filter out null values (indicating duplicates)
+              },
+              amenities: {
+                update: {
+                  bbq: false,
+                  shower: false,
+                  kitchen: false,
+                  sauna: false,
+                  firePit,
+                  wifi: false,
+                  toilet,
+                  water,
+                  electricity,
+                  hotWater: false,
+                  pool: false,
+                },
               },
             },
-          },
-        })
+          })
+           // Fetch existing images associated with the spot
+          const existingImages = await prisma.spotImage.findMany({
+            where: { spotId: existingSpot.id }, 
+            include: { spot: true },
+          });
+
+          // Find images to delete (images that are not in the images array)
+          const imagesToDelete = existingImages.filter(image => !images.includes(image.path));
+
+          if (imagesToDelete.length > 0) {
+            console.log("images to delete: " + imagesToDelete.map(image => image.path))
+          }
+
+          // Delete images
+          await Promise.all(imagesToDelete.map(async (image) => {
+            // check if image is cover image
+            if (image.spot.coverId === image.id) {
+              await prisma.spot.update({
+                where: { id: image.spot.id },
+                data: {
+                  coverId: null,
+                },
+              });
+            }
+            await prisma.spotImage.delete({
+              where: { id: image.id },
+            });
+          }));
+        } else {
+          console.log("Adding new spot: " + node.url)
+
+          await prisma.spot.create({
+            data: {
+              hipcampId: landId,
+              name: node.name,
+              latitude: parseFloat(node.coordinate.latitude),
+              longitude: parseFloat(node.coordinate.longitude),
+              address: [node.cityName, node.countyName, node.stateName].filter((e) => !!e).join(", "),
+              type: "CAMPING",
+              creator: { connect: { email: "dan@noquarter.co" } },
+              sourceUrl: ROOT_URL + node.url,
+              description: land.overview,
+              images: { create: images.map((image) => ({ path: image, creator: { connect: { email: "dan@noquarter.co" } } })) },
+              amenities: {
+                create: {
+                  bbq: false,
+                  shower: false,
+                  kitchen: false,
+                  sauna: false,
+                  firePit,
+                  wifi: false,
+                  toilet,
+                  water,
+                  electricity,
+                  hotWater: false,
+                  pool: false,
+                },
+              },
+            },
+          })
+        }
       } catch (e) {
         console.log("error attempting ", node.url)
+        console.log(e)
         errors.push(e)
         continue
       }
@@ -253,13 +339,6 @@ async function run(bbox: {southwestLatitude: number, southwestLongitude: number,
 
 async function main() {
   try {
-    const spots = await prisma.spot.findMany({
-      where: { sourceUrl: { not: null }, hipcampId: { not: null } },
-      select: { sourceUrl: true },
-    }) as { sourceUrl: string }[]
-
-    await spotVerifyOrRemove(spots)
-
     const bboxs = [
       // uk
       {
@@ -284,9 +363,11 @@ async function main() {
       }
     ]
 
-    bboxs.forEach(async bbox => {
-      await run(bbox)
-    });
+
+    for (const bbox of bboxs) {
+      await run(bbox);
+    }
+
     
   } catch (error) {
     console.log(error)
