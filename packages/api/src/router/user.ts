@@ -1,4 +1,5 @@
 import { TRPCError } from "@trpc/server"
+import dayjs from "dayjs"
 import Supercluster from "supercluster"
 import { z } from "zod"
 
@@ -13,14 +14,13 @@ import {
 } from "@ramble/server-services"
 import { userInterestFields } from "@ramble/shared"
 
-import dayjs from "dayjs"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const userRouter = createTRPCRouter({
   me: publicProcedure.query(({ ctx }) => ctx.user),
   profile: publicProcedure.input(userSchema.pick({ username: true })).query(async ({ ctx, input }) => {
     const user = await ctx.prisma.user.findUnique({
-      where: { username: input.username },
+      where: { username: input.username, deletedAt: null },
       select: {
         id: true,
         username: true,
@@ -65,14 +65,14 @@ export const userRouter = createTRPCRouter({
     return user
   }),
   followers: publicProcedure.input(userSchema.pick({ username: true })).query(async ({ ctx, input }) => {
-    const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })
+    const user = await ctx.prisma.user.findUnique({ where: { username: input.username, deletedAt: null } })
     if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
     return ctx.prisma.user.findUnique({ where: { username: input.username } }).followers({
       select: { id: true, username: true, firstName: true, lastName: true, avatar: true, avatarBlurHash: true },
     })
   }),
   following: publicProcedure.input(userSchema.pick({ username: true })).query(async ({ ctx, input }) => {
-    const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })
+    const user = await ctx.prisma.user.findUnique({ where: { username: input.username, deletedAt: null } })
     if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
     return ctx.prisma.user.findUnique({ where: { username: input.username } }).following({
       select: { id: true, username: true, firstName: true, lastName: true, avatar: true, avatarBlurHash: true },
@@ -82,6 +82,7 @@ export const userRouter = createTRPCRouter({
     if (!coords) return []
     const users = await ctx.prisma.user.findMany({
       where: {
+        deletedAt: null,
         isLocationPrivate: false,
         updatedAt: { gt: dayjs().subtract(1, "month").toDate() },
         latitude: { not: null, gt: coords.minLat, lt: coords.maxLat },
@@ -136,17 +137,28 @@ export const userRouter = createTRPCRouter({
     return true
   }),
   deleteAccount: protectedProcedure.mutation(async ({ ctx }) => {
+    const today = dayjs().format("YYYY-MM-DD")
+    await ctx.prisma.user.update({
+      where: { id: ctx.user.id },
+      data: {
+        deletedAt: new Date(),
+        firstName: "Deleted",
+        lastName: "User",
+        email: `${today}-${ctx.user.email}`,
+        bio: "",
+        instagram: "",
+        avatar: null,
+        latitude: null,
+        longitude: null,
+      },
+    })
+    if (ctx.user.avatar) await deleteObject(ctx.user.avatar)
     void sendSlackMessage(`😭 User @${ctx.user.username} deleted their account.`)
-    const myCodes = await ctx.prisma.inviteCode.findMany({ where: { ownerId: { equals: ctx.user.id } } })
-    await ctx.prisma.$transaction([
-      ctx.prisma.inviteCode.deleteMany({ where: { id: { in: myCodes.map((c) => c.id) } } }),
-      ctx.prisma.user.delete({ where: { id: ctx.user.id } }),
-    ])
     return true
   }),
   guides: protectedProcedure.input(z.object({ skip: z.number() })).query(async ({ ctx, input }) => {
     return ctx.prisma.user.findMany({
-      where: { role: "GUIDE" },
+      where: { role: "GUIDE", deletedAt: null },
       skip: input.skip,
       take: 12,
       orderBy: { createdAt: "desc" },
