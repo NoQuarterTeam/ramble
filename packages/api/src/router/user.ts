@@ -14,7 +14,6 @@ import {
 } from "@ramble/server-services"
 import { userInterestFields } from "@ramble/shared"
 
-import dayjs from "dayjs"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const userRouter = createTRPCRouter({
