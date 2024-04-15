@@ -250,7 +250,11 @@ export default function SpotDetailScreen() {
                           {day.map((forecast) => (
                             <View key={forecast.localTime} className="flex items-center">
                               <View className="space-y-1 items-center">
-                                <Text>{forecast.isNow ? "Now" : dayjs(forecast.localTime).format("HH")}</Text>
+                                <Text>
+                                  {forecast.isNow
+                                    ? "Now"
+                                    : dayjs(forecast.localTime).format(forecast.isSunrise || forecast.isSunset ? "HH:mm" : "HH")}
+                                </Text>
                                 <View className="w-[40px] h-[40px] flex items-center justify-center">
                                   {forecast.isSunrise ? (
                                     <Icon icon={Sunrise} size={24} color="primary" />
