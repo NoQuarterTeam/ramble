@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import dayjs from "dayjs"
+import advancedFormat from "dayjs/plugin/advancedFormat"
+import { Image } from "expo-image"
 import { LinearGradient } from "expo-linear-gradient"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
@@ -16,10 +18,12 @@ import {
   Route,
   Share,
   Star,
+  Sunrise,
+  Sunset,
   Trash,
 } from "lucide-react-native"
 import * as React from "react"
-import { Alert, Share as RNShare, TouchableOpacity, View, type ViewProps, useColorScheme } from "react-native"
+import { Alert, Share as RNShare, ScrollView, TouchableOpacity, View, type ViewProps, useColorScheme } from "react-native"
 import { showLocation } from "react-native-map-link"
 import Animated, {
   Extrapolation,
@@ -43,12 +47,15 @@ import {
   useDisclosure,
 } from "@ramble/shared"
 
+import { Camera, LocationPuck, MarkerView } from "@rnmapbox/maps"
 import { CreatorCard } from "~/components/CreatorCard"
 import { Icon } from "~/components/Icon"
 import { LanguageSelector } from "~/components/LanguageSelector"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
+import { MapView } from "~/components/Map"
 import { PartnerLink } from "~/components/PartnerLink"
 import { ReviewItem } from "~/components/ReviewItem"
+import { SpotMarker } from "~/components/SpotMarker"
 import { SpotTypeBadge } from "~/components/SpotTypeBadge"
 import { Button } from "~/components/ui/Button"
 import { Heading } from "~/components/ui/Heading"
@@ -63,6 +70,8 @@ import { useMe } from "~/lib/hooks/useMe"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 
+dayjs.extend(advancedFormat)
+
 export default function SpotDetailScreen() {
   const { me } = useMe()
   const colorScheme = useColorScheme()
@@ -70,6 +79,9 @@ export default function SpotDetailScreen() {
   const params = useLocalSearchParams<{ id: string }>()
   const { data, isLoading } = api.spot.detail.useQuery({ id: params.id }, { cacheTime: Number.POSITIVE_INFINITY })
   const spot = data?.spot
+
+  const forecastDays = data?.weather
+
   const translationY = useSharedValue(0)
   const [isScrolledPassedThreshold, setIsScrolledPassedThreshold] = React.useState(false)
 
@@ -171,7 +183,7 @@ export default function SpotDetailScreen() {
         <Animated.View style={imageStyle}>
           <SpotImageCarousel
             placeholderPaddingTop={insets.top}
-            canAddMore
+            canAddMore={!isPartnerSpot(spot)}
             width={width}
             height={height * 0.37}
             images={spot.images}
@@ -223,6 +235,55 @@ export default function SpotDetailScreen() {
                 })}
               </View>
             )}
+
+            <View className="pt-4">
+              {forecastDays && forecastDays.length > 0 && (
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  <View className="flex flex-row space-x-2">
+                    {forecastDays.map((day) => (
+                      <View
+                        key={day[0]?.localTime}
+                        className="border border-gray-200 dark:border-gray-700 rounded-sm p-2 space-y-1"
+                      >
+                        <Text className="font-600">{dayjs(day[0]?.localTime).format("ddd Do")}</Text>
+                        <View className="flex flex-row space-x-3">
+                          {day.map((forecast) => (
+                            <View key={forecast.localTime} className="flex items-center">
+                              <View className="space-y-1 items-center">
+                                <Text>
+                                  {forecast.isNow
+                                    ? "Now"
+                                    : dayjs(forecast.localTime).format(forecast.isSunrise || forecast.isSunset ? "HH:mm" : "HH")}
+                                </Text>
+                                <View className="w-[40px] h-[40px] flex items-center justify-center">
+                                  {forecast.isSunrise ? (
+                                    <Icon icon={Sunrise} size={24} color="primary" />
+                                  ) : forecast.isSunset ? (
+                                    <Icon icon={Sunset} size={24} color="primary" />
+                                  ) : (
+                                    <Image
+                                      style={{ width: 38, height: 38 }}
+                                      source={{ uri: `https://openweathermap.org/img/wn/${forecast.weather[0]!.icon}@2x.png` }}
+                                    />
+                                  )}
+                                </View>
+                                <Text>
+                                  {forecast.isSunrise
+                                    ? "Sunrise"
+                                    : forecast.isSunset
+                                      ? "Sunset"
+                                      : `${Math.round(forecast.main?.temp || 0)}°`}
+                                </Text>
+                              </View>
+                            </View>
+                          ))}
+                        </View>
+                      </View>
+                    ))}
+                  </View>
+                </ScrollView>
+              )}
+            </View>
 
             <View className="space-y-2 py-4">
               {me && (
@@ -282,6 +343,24 @@ export default function SpotDetailScreen() {
             </View>
           </View>
 
+          <MapView className="overflow-hidden rounded-xs h-[300px]" scrollEnabled={true}>
+            <LocationPuck />
+            <Camera
+              allowUpdates
+              followUserLocation={false}
+              defaultSettings={{
+                centerCoordinate: [spot.longitude, spot.latitude],
+                zoomLevel: 8,
+                pitch: 0,
+                heading: 0,
+              }}
+            />
+
+            <MarkerView allowOverlap allowOverlapWithPuck coordinate={[spot.longitude, spot.latitude]}>
+              <SpotMarker spot={spot} />
+            </MarkerView>
+          </MapView>
+
           <View className="h-px w-full bg-gray-200 dark:bg-gray-700" />
           <View className="space-y-2">
             <View className="flex flex-row justify-between">
@@ -333,14 +412,14 @@ export default function SpotDetailScreen() {
             {router.canGoBack() ? <Icon icon={ChevronLeft} className="pr-1" /> : <Icon icon={ChevronDown} className="pr-1" />}
           </TouchableOpacity>
           <Animated.Text
-            style={[nameStyle, { maxWidth: width - 175 }]}
+            style={[nameStyle, { maxWidth: width - 185 }]}
             className="pr-4 font-400 text-black text-lg dark:text-white"
             numberOfLines={1}
           >
             {spot.name}
           </Animated.Text>
         </View>
-        <View className="flex flex-shrink-0 flex-row items-center space-x-3">
+        <View className="flex flex-shrink-0 flex-row items-center space-x-2">
           <TouchableOpacity
             onPress={async () => {
               try {
@@ -356,33 +435,33 @@ export default function SpotDetailScreen() {
               }
             }}
             activeOpacity={0.8}
-            className="sq-8 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
+            className="sq-7 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
           >
-            <Icon icon={Share} size={20} />
+            <Icon icon={Share} size={16} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={handleGetDirections}
             activeOpacity={0.8}
-            className="sq-8 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
+            className="sq-7 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
           >
-            <Icon icon={Compass} size={20} />
+            <Icon icon={Compass} size={16} />
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => router.push(`/spot/${spot.id}/save-to-list`)}
             activeOpacity={0.8}
-            className="sq-8 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
+            className="sq-7 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
           >
-            <Icon icon={Heart} size={20} fill={data.isLiked ? (isDark ? "white" : "black") : "transparent"} />
+            <Icon icon={Heart} size={16} fill={data.isLiked ? (isDark ? "white" : "black") : "transparent"} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => router.push(`/spot/${spot.id}/save-to-trip`)}
             activeOpacity={0.8}
-            className="sq-8 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
+            className="sq-7 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
           >
             <Icon
               icon={Route}
-              size={20}
+              size={16}
               // fill={data.isLiked ? (isDark ? "white" : "black") : "transparent"}
             />
           </TouchableOpacity>

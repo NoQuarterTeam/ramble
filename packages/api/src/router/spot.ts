@@ -11,6 +11,8 @@ import {
   generateBlurHash,
   geocodeAddress,
   geocodeCoords,
+  get5DayForecast,
+  getCurrentWeather,
   publicSpotWhereClause,
   publicSpotWhereClauseRaw,
   sendSlackMessage,
@@ -119,6 +121,8 @@ export const spotRouter = createTRPCRouter({
         id: true,
         name: true,
         type: true,
+        latitude: true,
+        longitude: true,
         ownerId: true,
         verifier: true, // deprecated
         verifiedAt: true, // deprecated
@@ -131,9 +135,10 @@ export const spotRouter = createTRPCRouter({
       },
     })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
+    const weather = await getCurrentWeather(spot.latitude, spot.longitude)
     const rating = await ctx.prisma.review.aggregate({ where: { spotId: input.id }, _avg: { rating: true } })
     spot.images = spot.images.sort((a, b) => (a.id === spot.coverId ? -1 : b.id === spot.coverId ? 1 : 0))
-    return { ...spot, rating }
+    return { ...spot, rating, weather }
   }),
   report: publicProcedure.input(z.object({ id: z.string().uuid() })).query(async ({ ctx, input }) => {
     const spot = await ctx.prisma.spot.findUnique({
@@ -171,7 +176,17 @@ export const spotRouter = createTRPCRouter({
           ownerId: true,
           address: true,
           verifier: true,
-          creator: true,
+          creator: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              avatar: true,
+              avatarBlurHash: true,
+              username: true,
+              deletedAt: true,
+            },
+          },
           ...spotPartnerFields,
           _count: { select: { reviews: true, listSpots: true } },
           reviews: { take: 5, include: { user: true }, orderBy: { createdAt: "desc" } },
@@ -196,6 +211,7 @@ export const spotRouter = createTRPCRouter({
           return null
         })
     }
+    const weather = await get5DayForecast(spot.latitude, spot.longitude)
     spot.images = spot.images.sort((a, b) => (a.id === spot.coverId ? -1 : b.id === spot.coverId ? 1 : 0))
     return {
       spot,
@@ -203,6 +219,7 @@ export const spotRouter = createTRPCRouter({
       descriptionHash,
       isLiked: !!ctx.user && spot.listSpots.length > 0,
       rating,
+      weather,
     }
   }),
   byUser: publicProcedure.input(userSchema.pick({ username: true })).query(async ({ ctx, input }) => {
@@ -334,6 +351,19 @@ export const spotRouter = createTRPCRouter({
             : { delete: spot.amenities ? true : undefined },
         },
       })
+    }),
+  findNearby: protectedProcedure
+    .input(z.object({ latitude: z.number(), longitude: z.number() }))
+    .query(async ({ input, ctx }) => {
+      const fiveHundredMeters = 0.0045
+      const spots = await ctx.prisma.spot.findMany({
+        where: {
+          latitude: { gte: input.latitude - fiveHundredMeters, lte: input.latitude + fiveHundredMeters },
+          longitude: { gte: input.longitude - fiveHundredMeters, lte: input.longitude + fiveHundredMeters },
+        },
+        take: 50,
+      })
+      return spots
     }),
   addImages: protectedProcedure
     .input(z.object({ id: z.string().uuid(), images: z.array(z.object({ path: z.string() })) }))

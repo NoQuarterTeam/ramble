@@ -352,6 +352,7 @@ function TripImageSync({
   const { id } = useLocalSearchParams<{ id: string }>()
   const utils = api.useUtils()
 
+  const { me } = useMe()
   const upload = useS3QuickUpload()
 
   const { mutate: uploadMedia } = api.trip.media.upload.useMutation({
@@ -364,11 +365,15 @@ function TripImageSync({
   // biome-ignore lint/correctness/useExhaustiveDependencies: allow it
   React.useEffect(() => {
     async function loadMedia() {
+      if (!me) return
       const isTripActive = dayjs(startDate).isBefore(dayjs()) && dayjs(endDate).isAfter(dayjs())
       if (!isTripActive) return
       const networkState = await Network.getNetworkStateAsync()
       if (!networkState.isConnected) return toast({ title: "Syncing disabled", message: "No internet connection" })
-      if (networkState.type !== Network.NetworkStateType.WIFI) return toast({ title: "Syncing disabled", message: "Not on wifi" })
+      if (!me.tripSyncOnNetworkEnabled && networkState.type !== Network.NetworkStateType.WIFI) {
+        return toast({ title: "Syncing disabled", message: "Not on wifi" })
+      }
+
       try {
         setIsSyncing(true)
         const createdAfter = latestMediaTimestamp
@@ -442,7 +447,7 @@ function TripImageSync({
       }
     }
     loadMedia()
-  }, [startDate, endDate, latestMediaTimestamp, id])
+  }, [me, startDate, endDate, latestMediaTimestamp, id])
   if (!isSyncing) return null
   return (
     <View className="flex items-center justify-center pt-2">

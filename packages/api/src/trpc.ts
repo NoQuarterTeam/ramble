@@ -29,6 +29,7 @@ const userSelectFields = {
   role: true,
   createdAt: true,
   tripSyncEnabled: true,
+  tripSyncOnNetworkEnabled: true,
   ...userInterestFields,
 } satisfies Prisma.UserSelect
 
