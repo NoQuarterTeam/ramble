@@ -345,6 +345,9 @@ importers:
       '@remix-run/serve':
         specifier: 2.8.1
         version: 2.8.1(typescript@5.4.5)
+      '@sentry/node':
+        specifier: 7.110.0
+        version: 7.110.0
       '@tailwindcss/container-queries':
         specifier: 0.1.1
         version: 0.1.1(tailwindcss@3.3.2)
@@ -409,8 +412,8 @@ importers:
         specifier: 5.2.4
         version: 5.2.4
       lucide-react:
-        specifier: 0.365.0
-        version: 0.365.0(react@18.2.0)
+        specifier: 0.368.0
+        version: 0.368.0(react@18.2.0)
       mapbox-gl:
         specifier: 3.3.0
         version: 3.3.0
@@ -734,8 +737,8 @@ importers:
         specifier: 9.0.5
         version: 9.0.5
       puppeteer:
-        specifier: 22.6.4
-        version: 22.6.4(typescript@5.4.5)
+        specifier: 22.6.5
+        version: 22.6.5(typescript@5.4.5)
       ts-node:
         specifier: 10.9.2
         version: 10.9.2(@types/node@18.19.31)(typescript@5.4.5)
@@ -1136,7 +1139,7 @@ packages:
     dependencies:
       '@smithy/core': 1.4.2
       '@smithy/protocol-http': 3.3.0
-      '@smithy/signature-v4': 2.2.1
+      '@smithy/signature-v4': 2.3.0
       '@smithy/smithy-client': 2.5.1
       '@smithy/types': 2.12.0
       fast-xml-parser: 4.2.5
@@ -1348,7 +1351,7 @@ packages:
       '@aws-sdk/util-arn-parser': 3.535.0
       '@smithy/node-config-provider': 2.3.0
       '@smithy/protocol-http': 3.3.0
-      '@smithy/signature-v4': 2.2.1
+      '@smithy/signature-v4': 2.3.0
       '@smithy/smithy-client': 2.5.1
       '@smithy/types': 2.12.0
       '@smithy/util-config-provider': 2.3.0
@@ -1362,7 +1365,7 @@ packages:
       '@aws-sdk/types': 3.535.0
       '@smithy/property-provider': 2.2.0
       '@smithy/protocol-http': 3.3.0
-      '@smithy/signature-v4': 2.2.1
+      '@smithy/signature-v4': 2.3.0
       '@smithy/types': 2.12.0
       '@smithy/util-middleware': 2.2.0
       tslib: 2.6.2
@@ -1421,7 +1424,7 @@ packages:
       '@aws-sdk/middleware-sdk-s3': 3.552.0
       '@aws-sdk/types': 3.535.0
       '@smithy/protocol-http': 3.3.0
-      '@smithy/signature-v4': 2.2.1
+      '@smithy/signature-v4': 2.3.0
       '@smithy/types': 2.12.0
       tslib: 2.6.2
     dev: false
@@ -4005,7 +4008,7 @@ packages:
       '@inquirer/figures': 1.0.0
       '@inquirer/type': 1.3.0
       '@types/mute-stream': 0.0.4
-      '@types/node': 20.12.4
+      '@types/node': 20.12.7
       '@types/wrap-ansi': 3.0.0
       ansi-escapes: 4.3.2
       chalk: 4.1.2
@@ -4458,8 +4461,8 @@ packages:
       '@prisma/debug': 5.12.1
     dev: false
 
-  /@puppeteer/browsers@2.2.1:
-    resolution: {integrity: sha512-QSXujx4d4ogDamQA8ckkkRieFzDgZEuZuGiey9G7CuDcbnX4iINKWxTPC5Br2AEzY9ICAvcndqgAUFMMKnS/Tw==}
+  /@puppeteer/browsers@2.2.2:
+    resolution: {integrity: sha512-hZ/JhxPIceWaGSEzUZp83/8M49CoxlkuThfTR7t4AoCu5+ZvJ3vktLm60Otww2TXeROB5igiZ8D9oPQh6ckBVg==}
     engines: {node: '>=18'}
     hasBin: true
     dependencies:
@@ -6288,6 +6291,15 @@ packages:
       '@sentry/utils': 7.100.1
     dev: false
 
+  /@sentry-internal/tracing@7.110.0:
+    resolution: {integrity: sha512-IIHHa9e/mE7uOMJfNELI8adyoELxOy6u6TNCn5t6fphmq84w8FTc9adXkG/FY2AQpglkIvlILojfMROFB2aaAQ==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/core': 7.110.0
+      '@sentry/types': 7.110.0
+      '@sentry/utils': 7.110.0
+    dev: false
+
   /@sentry/browser@7.100.1:
     resolution: {integrity: sha512-IxHQ08ixf0bmaWpe4yt1J4UUsOpg02fxax9z3tOQYXw5MSzz5pDXn8M8DFUVJB3wWuyXhHXTub9yD3VIP9fnoA==}
     engines: {node: '>=8'}
@@ -6395,6 +6407,14 @@ packages:
       '@sentry/utils': 7.100.1
     dev: false
 
+  /@sentry/core@7.110.0:
+    resolution: {integrity: sha512-g4suCQO94mZsKVaAbyD1zLFC5YSuBQCIPHXx9fdgtfoPib7BWjWWePkllkrvsKAv4u8Oq05RfnKOhOMRHpOKqg==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/types': 7.110.0
+      '@sentry/utils': 7.110.0
+    dev: false
+
   /@sentry/hub@7.100.1:
     resolution: {integrity: sha512-zdt7f1k+5JE5FAunzBZUEFbvK5YP/LekLMeogTonaRObB07J6fJ9FD4mtNk7pV0utrTDwR+n942qmp+LbWauWA==}
     engines: {node: '>=8'}
@@ -6412,6 +6432,16 @@ packages:
       '@sentry/types': 7.100.1
       '@sentry/utils': 7.100.1
       localforage: 1.10.0
+    dev: false
+
+  /@sentry/node@7.110.0:
+    resolution: {integrity: sha512-YPfweCSzo/omnx5q1xOEZfI8Em3jnPqj7OM4ObXmoSKEK+kM1oUF3BTRzw5BJOaOCSTBFY1RAsGyfVIyrwxWnA==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry-internal/tracing': 7.110.0
+      '@sentry/core': 7.110.0
+      '@sentry/types': 7.110.0
+      '@sentry/utils': 7.110.0
     dev: false
 
   /@sentry/react-native@5.19.1(expo@50.0.14)(react-native@0.73.6)(react@18.2.0):
@@ -6470,11 +6500,23 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
+  /@sentry/types@7.110.0:
+    resolution: {integrity: sha512-DqYBLyE8thC5P5MuPn+sj8tL60nCd/f5cerFFPcudn5nJ4Zs1eI6lKlwwyHYTEu5c4KFjCB0qql6kXfwAHmTyA==}
+    engines: {node: '>=8'}
+    dev: false
+
   /@sentry/utils@7.100.1:
     resolution: {integrity: sha512-Ve6dXr1o6xiBe3VCoJgiutmBKrugryI65EZAbYto5XI+t+PjiLLf9wXtEMF24ZrwImo4Lv3E9Uqza+fWkEbw6A==}
     engines: {node: '>=8'}
     dependencies:
       '@sentry/types': 7.100.1
+    dev: false
+
+  /@sentry/utils@7.110.0:
+    resolution: {integrity: sha512-VBsdLLN+5tf73fhf/Cm7JIsUJ6y9DkJj8h4I6Mxx0rszrvOyH6S5px40K+V4jdLBzMEvVinC7q2Cbf1YM18BSw==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry/types': 7.110.0
     dev: false
 
   /@shopify/flash-list@1.6.3(@babel/runtime@7.24.4)(react-native@0.73.6)(react@18.2.0):
@@ -6835,8 +6877,8 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@smithy/signature-v4@2.2.1:
-    resolution: {integrity: sha512-j5fHgL1iqKTsKJ1mTcw88p0RUcidDu95AWSeZTgiYJb+QcfwWU/UpBnaqiB59FNH5MiAZuSbOBnZlwzeeY2tIw==}
+  /@smithy/signature-v4@2.3.0:
+    resolution: {integrity: sha512-ui/NlpILU+6HAQBfJX8BBsDXuKSNrjTSuOYArRblcrErwKFutjrCNb/OExfVRyj9+26F9J+ZmfWT+fKWuDrH3Q==}
     engines: {node: '>=14.0.0'}
     dependencies:
       '@smithy/is-array-buffer': 2.2.0
@@ -7382,12 +7424,6 @@ packages:
     resolution: {integrity: sha512-ArgCD39YpyyrtFKIqMDvjz79jto5fcI/SVUs2HwB+f0dAzq68yqOdyaSivLiLugSziTpNXLQrVb7RZFmdZzbhA==}
     dependencies:
       undici-types: 5.26.5
-
-  /@types/node@20.12.4:
-    resolution: {integrity: sha512-E+Fa9z3wSQpzgYQdYmme5X3OTuejnnTx88A6p6vkkJosR3KBz+HpE3kqNm98VE6cfLFcISx7zW7MsJkH6KwbTw==}
-    dependencies:
-      undici-types: 5.26.5
-    dev: true
 
   /@types/node@20.12.7:
     resolution: {integrity: sha512-wq0cICSkRLVaf3UGLMGItu/PtdY7oaXaI/RVU+xliKVOtRna3PRY57ZDfztpDL0n11vfymMUnXv8QwYCO7L1wg==}
@@ -11941,8 +11977,8 @@ packages:
       react-native-svg: 14.1.0(react-native@0.73.6)(react@18.2.0)
     dev: false
 
-  /lucide-react@0.365.0(react@18.2.0):
-    resolution: {integrity: sha512-sJYpPyyzGHI4B3pys+XSFnE4qtSWc68rFnDLxbNNKjkLST5XSx9DNn5+1Z3eFgFiw39PphNRiVBSVb+AL3oKwA==}
+  /lucide-react@0.368.0(react@18.2.0):
+    resolution: {integrity: sha512-soryVrCjheZs8rbXKdINw9B8iPi5OajBJZMJ1HORig89ljcOcEokKKAgGbg3QWxSXel7JwHOfDFUdDHAKyUAMw==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
@@ -14335,11 +14371,11 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
-  /puppeteer-core@22.6.4:
-    resolution: {integrity: sha512-QtfJwPmqQec3EHc6LqbEz03vSiuVAr9bYp0TV87dLoreev6ZevsXdLgOfQgoA3GocrsSe/eUf7NRPQ1lQfsc3w==}
+  /puppeteer-core@22.6.5:
+    resolution: {integrity: sha512-s0/5XkAWe0/dWISiljdrybjwDCHhgN31Nu/wznOZPKeikgcJtZtbvPKBz0t802XWqfSQnQDt3L6xiAE5JLlfuw==}
     engines: {node: '>=18'}
     dependencies:
-      '@puppeteer/browsers': 2.2.1
+      '@puppeteer/browsers': 2.2.2
       chromium-bidi: 0.5.17(devtools-protocol@0.0.1262051)
       debug: 4.3.4
       devtools-protocol: 0.0.1262051
@@ -14350,16 +14386,16 @@ packages:
       - utf-8-validate
     dev: true
 
-  /puppeteer@22.6.4(typescript@5.4.5):
-    resolution: {integrity: sha512-J9hXNwZmuqKDmNMj6kednZH8jzbdX9735NQfQJrq5LRD4nHisAMyW9pCD7glKi+iM7RV9JkesI1MYhdsN+0ZSQ==}
+  /puppeteer@22.6.5(typescript@5.4.5):
+    resolution: {integrity: sha512-YuoRKGj3MxHhUwrey7vmNvU4odGdUdNsj1ee8pfcqQlLWIXfMOXZCAXh8xdzpZESHH3tCGWp2xmPZE8E6iUEWg==}
     engines: {node: '>=18'}
     hasBin: true
     requiresBuild: true
     dependencies:
-      '@puppeteer/browsers': 2.2.1
+      '@puppeteer/browsers': 2.2.2
       cosmiconfig: 9.0.0(typescript@5.4.5)
       devtools-protocol: 0.0.1262051
-      puppeteer-core: 22.6.4
+      puppeteer-core: 22.6.5
     transitivePeerDependencies:
       - bufferutil
       - supports-color
