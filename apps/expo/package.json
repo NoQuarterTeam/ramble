@@ -24,7 +24,6 @@
     "@ramble/tailwind-config": "workspace:*",
     "@react-native-async-storage/async-storage": "1.21.0",
     "@react-native-community/datetimepicker": "^7.6.1",
-    "@react-native-menu/menu": "^0.9.1",
     "@rnmapbox/maps": "10.1.19",
     "@sentry/react-native": "5.19.1",
     "@shopify/flash-list": "1.6.3",
@@ -68,7 +67,7 @@
     "react-hook-form": "7.51.3",
     "react-native": "0.73.6",
     "react-native-avoid-softinput": "4.0.2",
-    "react-native-draggable-flatlist": "^4.0.1",
+    "react-native-draggable-flatlist": "4.0.1",
     "react-native-gesture-handler": "2.14.1",
     "react-native-ios-context-menu": "^2.4.3",
     "react-native-ios-utilities": "^4.3.2",
@@ -80,7 +79,7 @@
     "react-native-toast-message": "2.2.0",
     "react-native-web": "0.19.10",
     "superjson": "1.13.3",
-    "zeego": "^1.9.1",
+    "zeego": "1.9.1",
     "zod": "3.22.4"
   },
   "devDependencies": {
