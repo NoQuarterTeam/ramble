@@ -234,8 +234,8 @@ importers:
         specifier: 1.13.3
         version: 1.13.3
       zeego:
-        specifier: 1.9.1
-        version: 1.9.1(@react-native-menu/menu@1.0.0)(@types/react@18.2.78)(react-dom@18.2.0)(react-native-ios-context-menu@2.5.1)(react-native@0.73.6)(react@18.2.0)
+        specifier: 1.10.0
+        version: 1.10.0(@react-native-menu/menu@1.0.0)(@types/react@18.2.78)(react-dom@18.2.0)(react-native-ios-context-menu@2.5.1)(react-native@0.73.6)(react@18.2.0)
       zod:
         specifier: 3.22.4
         version: 3.22.4
@@ -17112,8 +17112,8 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
-  /zeego@1.9.1(@react-native-menu/menu@1.0.0)(@types/react@18.2.78)(react-dom@18.2.0)(react-native-ios-context-menu@2.5.1)(react-native@0.73.6)(react@18.2.0):
-    resolution: {integrity: sha512-KtntfWXS81CRwehvkOIhybhX7sKtrrlg2zOaSP6tzlMwDfvl9SGNYZf2zBkO+CGFlqvrhdAuP7boQEXwFtYEXg==}
+  /zeego@1.10.0(@react-native-menu/menu@1.0.0)(@types/react@18.2.78)(react-dom@18.2.0)(react-native-ios-context-menu@2.5.1)(react-native@0.73.6)(react@18.2.0):
+    resolution: {integrity: sha512-HrPv7DfyAubkp/NOy+Uwcb1rcS3DtkZEtNQFiSDduBoZt2EDf89+1N+aweACj1UnmGOOu+kk56WYiV9sliMpng==}
     peerDependencies:
       '@react-native-menu/menu': '*'
       react: '*'
