@@ -66,7 +66,7 @@ importers:
         specifier: ^7.6.1
         version: 7.6.1
       '@react-native-menu/menu':
-        specifier: ^1.0.0
+        specifier: 1.0.0
         version: 1.0.0(react-native@0.73.6)(react@18.2.0)
       '@rnmapbox/maps':
         specifier: 10.1.19
@@ -195,8 +195,8 @@ importers:
         specifier: 0.73.6
         version: 0.73.6(@babel/core@7.24.4)(@babel/preset-env@7.24.4)(react@18.2.0)
       react-native-avoid-softinput:
-        specifier: 4.0.2
-        version: 4.0.2(react-native@0.73.6)(react@18.2.0)
+        specifier: 5.0.0
+        version: 5.0.0(react-native@0.73.6)(react@18.2.0)
       react-native-draggable-flatlist:
         specifier: 4.0.1
         version: 4.0.1(@babel/core@7.24.4)(react-native-gesture-handler@2.14.1)(react-native-reanimated@3.6.3)(react-native@0.73.6)
@@ -14571,11 +14571,11 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /react-native-avoid-softinput@4.0.2(react-native@0.73.6)(react@18.2.0):
-    resolution: {integrity: sha512-/i8xNWGjpu3hEPCVjW2WsWTsM/mC4zTBr3DabOrdPfgw9Ww0Na69YQY1TSXCjbTjJmWwfTToPK5OEVm+ZwHmiQ==}
+  /react-native-avoid-softinput@5.0.0(react-native@0.73.6)(react@18.2.0):
+    resolution: {integrity: sha512-hpyWhBLiWcMqKbnhH1uQ+xWjv8b9L4sxIUyWiRE4F2O7lk7KlOvMKcpdl7Xxb6cyBOUNQxxtqN0btOAC6hT6oQ==}
     peerDependencies:
-      react: '>=17.0.0'
-      react-native: '>=0.65.0'
+      react: '>=18.2.0'
+      react-native: '>=0.71.0'
     dependencies:
       react: 18.2.0
       react-native: 0.73.6(@babel/core@7.24.4)(@babel/preset-env@7.24.4)(react@18.2.0)
