@@ -65,6 +65,9 @@ importers:
       '@react-native-community/datetimepicker':
         specifier: ^7.6.1
         version: 7.6.1
+      '@react-native-menu/menu':
+        specifier: ^1.0.0
+        version: 1.0.0(react-native@0.73.6)(react@18.2.0)
       '@rnmapbox/maps':
         specifier: 10.1.19
         version: 10.1.19(expo@50.0.14)(react-native@0.73.6)(react@18.2.0)
@@ -232,7 +235,7 @@ importers:
         version: 1.13.3
       zeego:
         specifier: 1.9.1
-        version: 1.9.1(@react-native-menu/menu@0.9.1)(@types/react@18.2.78)(react-dom@18.2.0)(react-native-ios-context-menu@2.5.1)(react-native@0.73.6)(react@18.2.0)
+        version: 1.9.1(@react-native-menu/menu@1.0.0)(@types/react@18.2.78)(react-dom@18.2.0)(react-native-ios-context-menu@2.5.1)(react-native@0.73.6)(react@18.2.0)
       zod:
         specifier: 3.22.4
         version: 3.22.4
@@ -5642,8 +5645,8 @@ packages:
       invariant: 2.2.4
     dev: false
 
-  /@react-native-menu/menu@0.9.1(react-native@0.73.6)(react@18.2.0):
-    resolution: {integrity: sha512-PdZoN1P72ESQ7UTzm5YI4W+87KU5mv7vVJ3GsQVRtnrzzuVskfp5E9ds1biGClcTieXAdIZ7hvPD1HHHZPobdg==}
+  /@react-native-menu/menu@1.0.0(react-native@0.73.6)(react@18.2.0):
+    resolution: {integrity: sha512-DFtREX4I4w4Vh89ohnhvxzYtf4iPmJVILpTbpBOx0iDuVO94NFF1pqtULdlhzdqeJlyuE1FwTlBifziD9ZBx6g==}
     peerDependencies:
       react: '*'
       react-native: '*'
@@ -17108,7 +17111,7 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
-  /zeego@1.9.1(@react-native-menu/menu@0.9.1)(@types/react@18.2.78)(react-dom@18.2.0)(react-native-ios-context-menu@2.5.1)(react-native@0.73.6)(react@18.2.0):
+  /zeego@1.9.1(@react-native-menu/menu@1.0.0)(@types/react@18.2.78)(react-dom@18.2.0)(react-native-ios-context-menu@2.5.1)(react-native@0.73.6)(react@18.2.0):
     resolution: {integrity: sha512-KtntfWXS81CRwehvkOIhybhX7sKtrrlg2zOaSP6tzlMwDfvl9SGNYZf2zBkO+CGFlqvrhdAuP7boQEXwFtYEXg==}
     peerDependencies:
       '@react-native-menu/menu': '*'
@@ -17118,7 +17121,7 @@ packages:
     dependencies:
       '@radix-ui/react-context-menu': 2.1.5(@types/react@18.2.78)(react-dom@18.2.0)(react@18.2.0)
       '@radix-ui/react-dropdown-menu': 2.0.6(@types/react-dom@18.2.25)(@types/react@18.2.78)(react-dom@18.2.0)(react@18.2.0)
-      '@react-native-menu/menu': 0.9.1(react-native@0.73.6)(react@18.2.0)
+      '@react-native-menu/menu': 1.0.0(react-native@0.73.6)(react@18.2.0)
       react: 18.2.0
       react-native: 0.73.6(@babel/core@7.24.4)(@babel/preset-env@7.24.4)(react@18.2.0)
       react-native-ios-context-menu: 2.5.1(expo@50.0.14)(react-native-ios-utilities@4.4.4)(react-native@0.73.6)(react@18.2.0)
