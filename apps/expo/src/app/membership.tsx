@@ -186,7 +186,7 @@ export default function Screen() {
             </View>
           </ScrollView>
 
-          {me.planId && (
+          {!me.planId && (
             <View className="absolute bottom-16 left-0 right-0 flex items-center justify-center">
               <Button isLoading={isPurchasing} className="w-full" disabled={!selectedPackage} onPress={handlePurchase}>
                 Continue
