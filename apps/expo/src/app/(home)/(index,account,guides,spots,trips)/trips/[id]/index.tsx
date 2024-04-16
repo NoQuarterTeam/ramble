@@ -285,16 +285,15 @@ export default function TripDetailScreen() {
                   <Icon icon={ImageIcon} size={16} />
                 </TouchableOpacity>
               </Link>
-              {trip.creatorId === me.id && (
-                <Link push href={`/${tab}/trips/${id}/users`} asChild>
-                  <TouchableOpacity
-                    className="sq-10 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
-                    activeOpacity={0.8}
-                  >
-                    <Icon icon={Users} size={16} />
-                  </TouchableOpacity>
-                </Link>
-              )}
+
+              <Link push href={`/${tab}/trips/${id}/users`} asChild>
+                <TouchableOpacity
+                  className="sq-10 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
+                  activeOpacity={0.8}
+                >
+                  <Icon icon={Users} size={16} />
+                </TouchableOpacity>
+              </Link>
               <Link push href={`/${tab}/trips/${id}/edit`} asChild>
                 <TouchableOpacity
                   className="sq-10 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
