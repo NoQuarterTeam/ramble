@@ -89,27 +89,6 @@ export default function RootLayout() {
         options={{ host: "https://eu.posthog.com", disabled: !IS_PRODUCTION }}
       >
         <ActionSheetProvider>
-<<<<<<< HEAD
-          <PrefetchTabs>
-            <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
-              <SafeAreaProvider>
-                <TrackScreens />
-                <IdentifyUser />
-                <Stack initialRouteName="(home)" screenOptions={{ headerShown: false, contentStyle: { backgroundColor } }}>
-                  <Stack.Screen name="(home)" />
-                  <Stack.Screen name="onboarding" />
-                  <Stack.Screen name="(auth)" options={{ presentation: "modal" }} />
-                  <Stack.Screen name="new" options={{ presentation: "modal" }} />
-                  <Stack.Screen name="spot" options={{ presentation: "modal" }} />
-                  <Stack.Screen name="filters" options={{ presentation: "modal" }} />
-                  <Stack.Screen name="membership" options={{ presentation: "modal" }} />
-                </Stack>
-                <Toast />
-                <StatusBar style={isDark ? "light" : "dark"} />
-              </SafeAreaProvider>
-            </GestureHandlerRootView>
-          </PrefetchTabs>
-=======
           <CheckSupportedVersion>
             <PrefetchTabs>
               <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
@@ -123,6 +102,7 @@ export default function RootLayout() {
                     <Stack.Screen name="new" options={{ presentation: "modal" }} />
                     <Stack.Screen name="spot" options={{ presentation: "modal" }} />
                     <Stack.Screen name="filters" options={{ presentation: "modal" }} />
+                    <Stack.Screen name="membership" options={{ presentation: "modal" }} />
                   </Stack>
                   <Toast />
                   <StatusBar style={isDark ? "light" : "dark"} />
@@ -130,7 +110,6 @@ export default function RootLayout() {
               </GestureHandlerRootView>
             </PrefetchTabs>
           </CheckSupportedVersion>
->>>>>>> develop
         </ActionSheetProvider>
       </PostHogProvider>
     </TRPCProvider>
