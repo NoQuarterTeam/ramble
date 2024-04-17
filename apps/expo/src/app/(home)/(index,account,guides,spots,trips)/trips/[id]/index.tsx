@@ -715,7 +715,10 @@ function AddTripItemMenu({ order, children }: { order?: number; children: React.
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>{children}</DropdownMenu.Trigger>
       <DropdownMenu.Content>
-        <DropdownMenu.Item key="add-stop" onSelect={() => router.push(`/(home)/(trips)/trips/${id}/add-location?order=${order}`)}>
+        <DropdownMenu.Item
+          key="add-stop"
+          onSelect={() => router.push(`/(home)/(trips)/trips/${id}/add-location?order=${order || 0}`)}
+        >
           <DropdownMenu.ItemIcon ios={{ name: "mappin.and.ellipse", pointSize: 10, scale: "large" }} />
           <DropdownMenu.ItemTitle>Add location</DropdownMenu.ItemTitle>
         </DropdownMenu.Item>
