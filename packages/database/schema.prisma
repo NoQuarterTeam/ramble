@@ -40,6 +40,7 @@ model User {
   isMountainBiker Boolean @default(false)
   isPaddleBoarder Boolean @default(false)
   isSurfer        Boolean @default(false)
+  isYogi          Boolean @default(false)
 
   // Settings
   isLocationPrivate        Boolean @default(false)
@@ -130,6 +131,7 @@ enum SpotType {
   MOUNTAIN_BIKING
   HIKING_TRAIL
   PADDLE_KAYAK
+  YOGA
   // Services
   GAS_STATION
   ELECTRIC_CHARGE_POINT

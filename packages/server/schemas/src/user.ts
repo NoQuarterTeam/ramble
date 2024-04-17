@@ -27,6 +27,7 @@ export const userSchema = z.object({
   isPetOwner: FormBoolean,
   isLocationPrivate: FormBoolean,
   isMountainBiker: FormBoolean,
+  isYogi: FormBoolean,
   latitude: NullableFormNumber,
   longitude: NullableFormNumber,
   tripSyncEnabled: FormBoolean,

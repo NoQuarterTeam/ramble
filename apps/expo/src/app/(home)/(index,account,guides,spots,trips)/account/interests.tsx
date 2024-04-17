@@ -22,6 +22,7 @@ export default function InterestsScreen() {
     isPaddleBoarder: !!me?.isPaddleBoarder,
     isHiker: !!me?.isHiker,
     isPetOwner: !!me?.isPetOwner,
+    isYogi: !!me?.isYogi,
   })
   const utils = api.useUtils()
   const { mutate, error } = api.user.update.useMutation({
