@@ -17,7 +17,6 @@ type WeatherResponse = {
   weather: {
     icon: string
   }[]
-  timezoneOffset: number
 }
 
 // https://openweathermap.org/forecast5
@@ -77,7 +76,6 @@ export async function get5DayForecast(lat: number, lon: number) {
           .unix(forecast.dt + timezoneOffset)
           .utc()
           .format(),
-        timezoneOffset,
       })),
     )
 
@@ -89,7 +87,6 @@ export async function get5DayForecast(lat: number, lon: number) {
       localTime: currentLocalTime.format(),
       main: { temp: data[0][0]?.main?.temp || 0 },
       weather: [{ icon: data[0][0]?.weather[0]?.icon || "" }],
-      timezoneOffset,
       dt: 0,
     })
 
@@ -103,7 +100,6 @@ export async function get5DayForecast(lat: number, lon: number) {
           isSunrise: true,
           localTime: dailySunrise.format(),
           weather: [{ icon: "" }],
-          timezoneOffset,
           dt: 0,
         })
       }
@@ -113,7 +109,6 @@ export async function get5DayForecast(lat: number, lon: number) {
           isSunset: true,
           weather: [{ icon: "" }],
           localTime: dailySunset.format(),
-          timezoneOffset,
           dt: 0,
         })
       }
