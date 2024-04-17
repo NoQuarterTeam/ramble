@@ -10,13 +10,14 @@ type WeatherResponse = {
   isSunset?: boolean
   isNow?: boolean
   localTime: string
-  dt_txt?: string
+  dt: number
   main?: {
     temp: number
   }
   weather: {
     icon: string
   }[]
+  timezoneOffset: number
 }
 
 // https://openweathermap.org/forecast5
@@ -51,25 +52,20 @@ export async function get5DayForecast(lat: number, lon: number) {
     if (!json || !json.list || json.list.length === 0) return null
     const timezoneOffset = json.city.timezone
 
-    const sunriseLocalHour = dayjs
-      .unix(json.city.sunrise + timezoneOffset)
-      .utc()
-      .format("H")
-    const sunriseLocalMinute = dayjs
-      .unix(json.city.sunrise + timezoneOffset)
-      .utc()
-      .format("m")
-    const sunsetLocalHour = dayjs
-      .unix(json.city.sunset + timezoneOffset)
-      .utc()
-      .format("H")
-    const sunsetLocalMinute = dayjs
-      .unix(json.city.sunset + timezoneOffset)
-      .utc()
-      .format("m")
+    const sunriseLocal = dayjs.unix(json.city.sunrise + timezoneOffset)
+    const sunriseLocalHour = Number.parseInt(sunriseLocal.format("H"))
+    const sunriseLocalMinute = Number.parseInt(sunriseLocal.format("m"))
+    const sunsetLocal = dayjs.unix(json.city.sunset + timezoneOffset)
+    const sunsetLocalHour = Number.parseInt(sunsetLocal.format("H"))
+    const sunsetLocalMinute = Number.parseInt(sunsetLocal.format("m"))
 
     const grouped = Object.values(
-      groupBy(json.list, (forecast) => dayjs(forecast.dt_txt).add(timezoneOffset, "seconds").format("YYYY-MM-DD")),
+      groupBy(json.list, (forecast) =>
+        dayjs
+          .unix(forecast.dt + timezoneOffset)
+          .utc()
+          .format("YYYY-MM-DD"),
+      ),
     )
 
     grouped.pop() // remove last day, as it will likely be just a partial forecast, not the entire day
@@ -77,43 +73,48 @@ export async function get5DayForecast(lat: number, lon: number) {
     const data = grouped.map((forecasts) =>
       forecasts.map((forecast) => ({
         ...forecast,
-        localTime: dayjs(forecast.dt_txt).add(timezoneOffset, "seconds").format(),
+        localTime: dayjs
+          .unix(forecast.dt + timezoneOffset)
+          .utc()
+          .format(),
+        timezoneOffset,
       })),
     )
+
+    const currentLocalTime = dayjs().add(timezoneOffset, "seconds").utc()
 
     // Adding a fake "now" right at the start to mimmick a real current forecast
     data[0]?.unshift({
       isNow: true,
-      localTime: dayjs().add(timezoneOffset, "seconds").utc().format(),
+      localTime: currentLocalTime.format(),
       main: { temp: data[0][0]?.main?.temp || 0 },
       weather: [{ icon: data[0][0]?.weather[0]?.icon || "" }],
+      timezoneOffset,
+      dt: 0,
     })
 
     data.map((forecasts) => {
-      const dailySunrise = dayjs(forecasts[0]?.localTime)
-        .set("hour", Number.parseInt(sunriseLocalHour))
-        .set("minute", Number.parseInt(sunriseLocalMinute))
-      const dailySunset = dayjs(forecasts[0]?.localTime)
-        .set("hour", Number.parseInt(sunsetLocalHour))
-        .set("minute", Number.parseInt(sunsetLocalMinute))
+      const dailySunrise = dayjs(forecasts[0]?.localTime).set("hour", sunriseLocalHour).set("minute", sunriseLocalMinute)
+      const dailySunset = dayjs(forecasts[0]?.localTime).set("hour", sunsetLocalHour).set("minute", sunsetLocalMinute)
 
-      if (dayjs(forecasts[0]?.localTime).isBefore(dailySunrise)) {
-        // Insert sunrise if the first item in the forecast is before sunrise
+      if (currentLocalTime.isBefore(dailySunrise)) {
+        // Insert sunrise if the current time is before sunrise
         forecasts.push({
           isSunrise: true,
           localTime: dailySunrise.format(),
           weather: [{ icon: "" }],
+          timezoneOffset,
+          dt: 0,
         })
       }
-      if (dayjs().add(timezoneOffset, "seconds").utc().isBefore(dailySunset)) {
+      if (currentLocalTime.isBefore(dailySunset)) {
         // Insert sunset if the current time is before sunset
         forecasts.push({
           isSunset: true,
           weather: [{ icon: "" }],
-          localTime: dayjs(forecasts[0]?.localTime)
-            .set("hour", Number.parseInt(sunsetLocalHour))
-            .set("minute", Number.parseInt(sunsetLocalMinute))
-            .format(),
+          localTime: dailySunset.format(),
+          timezoneOffset,
+          dt: 0,
         })
       }
       forecasts.sort((a, b) => dayjs(a.localTime).unix() - dayjs(b.localTime).unix())
