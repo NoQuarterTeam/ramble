@@ -26,7 +26,7 @@ import { ModalView } from "~/components/ui/ModalView"
 
 export default function NewItemScreen() {
   const router = useRouter()
-  const { id, order } = useLocalSearchParams<{ id: string; order?: string }>()
+  const { id, order } = useLocalSearchParams<{ id: string; order: string }>()
 
   const initialCoords = useMapCoords((s) => s.coords)
   const [coords, setCoords] = React.useState<Position | undefined>(initialCoords)
@@ -89,7 +89,7 @@ export default function NewItemScreen() {
       name: geocodeData.place,
       latitude: coords[1]!,
       longitude: coords[0]!,
-      order: order ? Number(order) : undefined,
+      order: Number(order),
     })
   }
 
