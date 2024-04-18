@@ -22,6 +22,7 @@ export default function ReviewDetailScreen() {
       if (!review) return
       void utils.spot.detail.refetch({ id: review.spotId })
       void utils.spot.mapPreview.refetch({ id: review.spotId })
+      void utils.review.detail.refetch({ id: reviewId })
       router.back()
       await new Promise((resolve) => setTimeout(resolve, 1000))
       toast({ title: "Review updated" })
@@ -41,6 +42,7 @@ export default function ReviewDetailScreen() {
         ) : (
           <ReviewForm
             review={review}
+            tags={review.tags}
             spotId={review?.spotId}
             isLoading={isLoading}
             error={error}

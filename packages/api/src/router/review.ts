@@ -1,3 +1,4 @@
+import { groupBy } from "@ramble/shared"
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
@@ -8,7 +9,7 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const reviewRouter = createTRPCRouter({
   detail: publicProcedure.input(z.object({ id: z.string().uuid() })).query(({ ctx, input }) => {
-    return ctx.prisma.review.findUnique({ where: { id: input.id }, include: { spot: true } })
+    return ctx.prisma.review.findUnique({ where: { id: input.id }, include: { spot: true, tags: true } })
   }),
   create: protectedProcedure.input(reviewSchema).mutation(async ({ ctx, input }) => {
     const existingReviewsWithin1Month = await ctx.prisma.review.count({
@@ -21,7 +22,15 @@ export const reviewRouter = createTRPCRouter({
     if (existingReviewsWithin1Month > 0)
       throw new TRPCError({ code: "BAD_REQUEST", message: "You can only review a spot once per month." })
     const language = await getLanguage(input.description)
-    return ctx.prisma.review.create({ data: { ...input, language, userId: ctx.user.id } })
+    const { tagIds, ...data } = input
+    return ctx.prisma.review.create({
+      data: {
+        ...data,
+        language,
+        userId: ctx.user.id,
+        tags: { connect: tagIds.map((tagId) => ({ id: tagId })) },
+      },
+    })
   }),
   update: protectedProcedure
     .input(reviewDataSchema.partial().extend({ id: z.string().uuid() }))
@@ -32,12 +41,20 @@ export const reviewRouter = createTRPCRouter({
       })
       if (!review) throw new TRPCError({ code: "NOT_FOUND" })
       if (review.userId !== ctx.user.id) throw new TRPCError({ code: "UNAUTHORIZED" })
-      return ctx.prisma.review.update({ where: { id }, data: input })
+      const { tagIds, ...data } = input
+      return ctx.prisma.review.update({
+        where: { id },
+        data: { ...data, tags: tagIds && { set: tagIds.map((tagId) => ({ id: tagId })) } },
+      })
     }),
   delete: protectedProcedure.input(z.object({ id: z.string().uuid() })).mutation(async ({ ctx, input }) => {
     const review = await ctx.prisma.review.findUnique({ where: { id: input.id }, select: { userId: true } })
     if (!review) throw new TRPCError({ code: "NOT_FOUND" })
     if (review.userId !== ctx.user.id) throw new TRPCError({ code: "UNAUTHORIZED" })
     return ctx.prisma.review.delete({ where: { id: input.id } })
+  }),
+  allTagsGrouped: protectedProcedure.query(async ({ ctx }) => {
+    const tags = await ctx.prisma.tag.findMany()
+    return groupBy(tags, (tag) => tag.category)
   }),
 })
