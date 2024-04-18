@@ -16,13 +16,11 @@ import type { ApiError } from "~/lib/hooks/useForm"
 import { backgroundDark, backgroundLight } from "~/lib/tailwind"
 
 type UpdateSubmit = {
-  review: Pick<Review, "rating" | "description">
-  tags: Tag[]
+  review: Pick<Review, "rating" | "description"> & { tags: Pick<Tag, "id" | "name" | "category">[] }
   onUpdate: (data: Omit<RouterInputs["review"]["update"], "id">) => void
 }
 type CreateSubmit = {
   review?: undefined
-  tags?: undefined
   onCreate: (data: RouterInputs["review"]["create"]) => void
 }
 
@@ -37,14 +35,14 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
   const isDark = colorScheme === "dark"
   const { data: allTagsGrouped, isLoading: tagsLoading } = api.review.allTagsGrouped.useQuery()
 
-  const [selectedTagIds, setSelectedTagIds] = React.useState<string[]>(props.tags?.map((tag) => tag.id) || [])
+  const [selectedTagIds, setSelectedTagIds] = React.useState<string[]>(props.review?.tags.map((tag) => tag.id) || [])
 
   const form = useForm({
     defaultValues: {
       description: props.review?.description || "",
       spotId: props.spotId,
       rating: props.review?.rating || 0,
-      tagIds: props.tags?.map((tag) => tag.id) || [],
+      tagIds: props.review?.tags.map((tag) => tag.id) || [],
     },
   })
   const rating = form.watch("rating")

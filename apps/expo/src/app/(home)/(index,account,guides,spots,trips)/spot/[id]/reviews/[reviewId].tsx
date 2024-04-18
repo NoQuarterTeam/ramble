@@ -42,8 +42,7 @@ export default function ReviewDetailScreen() {
         ) : (
           <ReviewForm
             review={review}
-            tags={review.tags}
-            spotId={review?.spotId}
+            spotId={review.spotId}
             isLoading={isLoading}
             error={error}
             onUpdate={(data) => mutate({ ...data, id: reviewId })}

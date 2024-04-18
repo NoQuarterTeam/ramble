@@ -9,7 +9,7 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const reviewRouter = createTRPCRouter({
   detail: publicProcedure.input(z.object({ id: z.string().uuid() })).query(({ ctx, input }) => {
-    return ctx.prisma.review.findUnique({ where: { id: input.id }, include: { spot: true, tags: true } })
+    return ctx.prisma.review.findUnique({ where: { id: input.id }, include: { tags: true } })
   }),
   create: protectedProcedure.input(reviewSchema).mutation(async ({ ctx, input }) => {
     const existingReviewsWithin1Month = await ctx.prisma.review.count({
