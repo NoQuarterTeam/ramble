@@ -64,11 +64,11 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
         <Spinner />
       ) : (
         allTagsGrouped &&
-        Object.keys(allTagsGrouped).map((key) => (
-          <View key={key}>
-            <Text className="font-700">{key}</Text>
+        Object.keys(allTagsGrouped).map((category) => (
+          <View key={category}>
+            <Text className="font-700">{category}</Text>
             <View className="flex flex-row flex-wrap gap-2 pb-2">
-              {allTagsGrouped[key]?.map((tag) => (
+              {allTagsGrouped[category]?.map((tag) => (
                 <Button
                   key={tag.id}
                   size="sm"
