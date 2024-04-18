@@ -7,6 +7,7 @@ import { SPOT_TYPES, type SpotTypeInfo, useDisclosure } from "@ramble/shared"
 
 import { SpotIcon } from "~/components/SpotIcon"
 import { Button, IconButton, Modal, Switch, Tooltip } from "~/components/ui"
+import { useMaybeUser } from "~/lib/hooks/useMaybeUser"
 
 export function MapFilters({ onChange }: { onChange: (params: string) => void }) {
   const onSubmit = (e: React.SyntheticEvent) => {
@@ -161,10 +162,11 @@ function SpotTypeSection({ title, types }: { title: string; types: SpotType[] })
 
 function SpotTypeSelector({ type, defaultValue }: { type: SpotTypeInfo; defaultValue: boolean }) {
   const [isSelected, setIsSelected] = React.useState(defaultValue)
+  const user = useMaybeUser()
   return (
     <div className="relative">
       <Button
-        disabled={type.isComingSoon}
+        disabled={user?.isAdmin ? false : type.isComingSoon}
         variant={isSelected ? "primary" : "outline"}
         type="button"
         className="min-w-[100px]"
@@ -173,12 +175,12 @@ function SpotTypeSelector({ type, defaultValue }: { type: SpotTypeInfo; defaultV
       >
         {type.label}
       </Button>
-      {type.isComingSoon && (
+      {!user?.isAdmin && type.isComingSoon && (
         <p className="-right-1 -top-1 absolute flex items-center justify-center rounded-full border bg-background px-1 text-xxs shadow">
           Coming soon
         </p>
       )}
-      {isSelected && !type.isComingSoon && <input type="hidden" name="type[]" value={type.value} />}
+      {isSelected && <input type="hidden" name="type[]" value={type.value} />}
     </div>
   )
 }
