@@ -6,7 +6,6 @@ export const reviewSchema = z.object({
   description: NullableFormString,
   rating: FormNumber.min(1, "Select a rating").max(5),
   spotId: z.string().uuid(),
-  tagIds: z.array(z.string()),
 })
 
-export const reviewDataSchema = reviewSchema.pick({ description: true, rating: true, tagIds: true })
+export const reviewTags = z.object({ tagIds: z.array(z.string()).optional() })
