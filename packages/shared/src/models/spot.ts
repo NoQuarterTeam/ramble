@@ -168,10 +168,6 @@ export function doesSpotTypeRequireAmenities(type?: SpotType | null | undefined)
   if (!type) return false
   return type === "CAMPING" || type === "FREE_CAMPING"
 }
-export function doesSpotTypeRequireDescription(type?: SpotType | null | undefined) {
-  if (!type) return false
-  return type === "CAMPING" || type === "FREE_CAMPING"
-}
 
 export const activitySpotTypes = ["CLIMBING", "CLIMBING", "HIKING_TRAIL", "PADDLE_KAYAK", "MOUNTAIN_BIKING"] as SpotType[]
 
