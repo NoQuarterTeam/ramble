@@ -139,7 +139,7 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
               images={spot.images}
             />
           </View>
-          <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <CreatorCard creator={spot.creator} />}</View>
+          <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <CreatorCard spot={spot} />}</View>
         </View>
       )}
 
