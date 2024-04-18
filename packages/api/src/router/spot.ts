@@ -221,7 +221,6 @@ export const spotRouter = createTRPCRouter({
     })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
     let translatedDescription: string | null | undefined
-    console.log({ tags })
 
     let descriptionHash: string | undefined
     if (ctx.user && spot.description) {
