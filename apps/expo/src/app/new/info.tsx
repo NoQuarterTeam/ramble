@@ -68,9 +68,9 @@ export default function NewSpotInfoScreen() {
       >
         <Button
           className="rounded-full"
-          disabled={!description || !name}
+          disabled={!name}
           onPress={() => {
-            if (!name || !description) return
+            if (!name) return
             const searchParams = new URLSearchParams({
               ...params,
               name,

@@ -97,7 +97,6 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
         <div className="space-y-2">
           <FormField required name="name" label="Name" defaultValue={spot?.name} />
           <FormField
-            required={isCampingSpot(type)}
             name="description"
             label="Description"
             defaultValue={spot?.description || ""}
