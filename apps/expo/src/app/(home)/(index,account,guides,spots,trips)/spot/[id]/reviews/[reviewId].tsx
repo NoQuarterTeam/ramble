@@ -7,7 +7,7 @@ import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
 
-import { ReviewForm } from "./ReviewForm"
+import { ReviewForm } from "../../../../../../components/ReviewForm"
 
 export default function ReviewDetailScreen() {
   useKeyboardController()

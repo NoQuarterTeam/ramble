@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { ScrollView } from "react-native"
-import { ReviewForm } from "~/app/(home)/(index,account,guides,spots,trips)/spot/[id]/reviews/ReviewForm"
+import { ReviewForm } from "~/components/ReviewForm"
 
 import { ModalView } from "~/components/ui/ModalView"
 import { Text } from "~/components/ui/Text"
