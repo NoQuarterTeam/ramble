@@ -1,11 +1,12 @@
 import { z } from "zod"
 
-import { FormNumber } from "./utils/form"
+import { FormNumber, NullableFormString } from "./utils/form"
 
 export const reviewSchema = z.object({
-  description: z.string().min(10),
-  rating: FormNumber.min(1).max(5),
+  description: NullableFormString,
+  rating: FormNumber.min(1, "Select a rating").max(5),
   spotId: z.string().uuid(),
+  tagIds: z.array(z.string()),
 })
 
-export const reviewDataSchema = reviewSchema.pick({ description: true, rating: true })
+export const reviewDataSchema = reviewSchema.pick({ description: true, rating: true, tagIds: true })

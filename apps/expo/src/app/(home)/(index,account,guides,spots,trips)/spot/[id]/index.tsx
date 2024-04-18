@@ -379,7 +379,7 @@ export default function SpotDetailScreen() {
                 </View>
               </View>
               {me && (
-                <Button onPress={() => router.push(`/${tab}/spot/${spot.id}/reviews/new`)} variant="secondary">
+                <Button onPress={() => router.push(`/spot/${spot.id}/new-review`)} variant="secondary">
                   Add review
                 </Button>
               )}
