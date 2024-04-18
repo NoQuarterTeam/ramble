@@ -8,7 +8,6 @@ export default function SpotsReviewsLayout() {
   return (
     <Stack screenOptions={{ contentStyle: { backgroundColor }, headerShown: false }}>
       <Stack.Screen name="[reviewId]" />
-      <Stack.Screen name="new" options={{ presentation: "modal" }} />
     </Stack>
   )
 }
