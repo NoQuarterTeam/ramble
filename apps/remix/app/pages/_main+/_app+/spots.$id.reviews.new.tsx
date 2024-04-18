@@ -1,6 +1,6 @@
 import { useLoaderData } from "@remix-run/react"
 
-import { reviewDataSchema } from "@ramble/server-schemas"
+import { reviewSchema } from "@ramble/server-schemas"
 import { getLanguage } from "@ramble/server-services"
 
 import { track } from "~/lib/analytics.server"
@@ -40,7 +40,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   const redirectVal = url.searchParams.get("redirect") as NEW_REVIEW_REDIRECTS
   const redirectLocation = redirectVal === NEW_REVIEW_REDIRECTS.Map ? `/map/${params.id}` : `/spots/${params.id}`
 
-  const result = await validateFormData(request, reviewDataSchema)
+  const result = await validateFormData(request, reviewSchema.omit({ spotId: true }))
   if (!result.success) return formError(result)
   const spot = await db.spot.findUnique({ where: { id: params.id } })
   if (!spot) throw notFound()
