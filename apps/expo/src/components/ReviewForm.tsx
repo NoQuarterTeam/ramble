@@ -1,10 +1,11 @@
-import { Star } from "lucide-react-native"
+import { Heart, Leaf, Star, Users } from "lucide-react-native"
 import * as React from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { TouchableOpacity, View, useColorScheme } from "react-native"
 
-import type { Review, Tag } from "@ramble/database/types"
+import type { Review, SpotType, Tag, TagCategory } from "@ramble/database/types"
 
+import { isCampingSpot } from "@ramble/shared"
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
 import { FormError } from "~/components/ui/FormError"
@@ -26,6 +27,7 @@ type CreateSubmit = {
 
 interface Props {
   spotId: string
+  spotType: SpotType
   isLoading: boolean
   error?: ApiError
 }
@@ -33,7 +35,10 @@ interface Props {
 export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
-  const { data: allTagsGrouped, isLoading: tagsLoading } = api.review.allTagsGrouped.useQuery()
+
+  const { data: allTagsGrouped, isLoading: tagsLoading } = api.review.allTagsGrouped.useQuery(undefined, {
+    enabled: isCampingSpot(props.spotType),
+  })
 
   const [selectedTagIds, setSelectedTagIds] = React.useState<string[]>(props.review?.tags.map((tag) => tag.id) || [])
 
@@ -58,28 +63,54 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
 
   return (
     <FormProvider {...form}>
-      {tagsLoading ? (
-        <Spinner />
-      ) : (
-        allTagsGrouped &&
-        Object.keys(allTagsGrouped).map((category) => (
-          <View key={category}>
-            <Text className="font-700">{category}</Text>
-            <View className="flex flex-row flex-wrap gap-2 pb-2">
-              {allTagsGrouped[category]?.map((tag) => (
-                <Button
-                  key={tag.id}
-                  size="sm"
-                  variant={selectedTagIds.includes(tag.id) ? "primary" : "outline"}
-                  onPress={() => handleToggleTag(tag.id)}
-                >
-                  {tag.name}
-                </Button>
-              ))}
+      {isCampingSpot(props.spotType) && (
+        <View>
+          {/* <Text className="text-primary text-lg font-700">Tags</Text> */}
+          <View className="relative flex items-center justify-center mt-4 mb-2">
+            <View className="absolute h-px w-full bg-gray-200 dark:bg-gray-700" />
+            <View className="bg-background px-2 dark:bg-background-dark">
+              <Text className="text-center text-xs opacity-70 font-700">TAGS</Text>
             </View>
           </View>
-        ))
+          {tagsLoading ? (
+            <Spinner />
+          ) : (
+            allTagsGrouped &&
+            (Object.keys(allTagsGrouped) as TagCategory[]).map((category) => (
+              <View key={category}>
+                <View className="flex flex-row gap-1 items-center mb-1">
+                  {category === "NATURE" ? (
+                    <Leaf size={15} color="black" />
+                  ) : category === "PEOPLE" ? (
+                    <Users size={15} color="black" />
+                  ) : (
+                    category === "SELF" && <Heart size={15} color="black" />
+                  )}
+                  <Text className="font-700">{category}</Text>
+                </View>
+                <View className="flex flex-row flex-wrap gap-2 pb-2">
+                  {allTagsGrouped[category]?.map((tag) => (
+                    <Button
+                      key={tag.id}
+                      size="xs"
+                      variant={selectedTagIds.includes(tag.id) ? "primary" : "outline"}
+                      onPress={() => handleToggleTag(tag.id)}
+                    >
+                      {tag.name.toLocaleUpperCase()}
+                    </Button>
+                  ))}
+                </View>
+              </View>
+            ))
+          )}
+        </View>
       )}
+      <View className="relative flex items-center justify-center mt-4 mb-2">
+        <View className="absolute h-px w-full bg-gray-200 dark:bg-gray-700" />
+        <View className="bg-background px-2 dark:bg-background-dark">
+          <Text className="text-center text-xs opacity-70 font-700">ADDITIONAL NOTES</Text>
+        </View>
+      </View>
       <FormInput
         className="mb-2"
         name="description"
@@ -90,13 +121,19 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
         error={props.error}
       />
 
+      <View className="relative flex items-center justify-center mt-4 mb-2">
+        <View className="absolute h-px w-full bg-gray-200 dark:bg-gray-700" />
+        <View className="bg-background px-2 dark:bg-background-dark">
+          <Text className="text-center text-xs opacity-70 font-700">OVERALL EXPERIENCE</Text>
+        </View>
+      </View>
       <View className="mb-4 flex flex-row items-center justify-center space-x-2">
         {[1, 2, 3, 4, 5].map((val) => (
           <TouchableOpacity key={val} onPress={() => form.setValue("rating", val)}>
             <Icon
               icon={Star}
               strokeWidth={1}
-              size={50}
+              size={30}
               fill={rating >= val ? (isDark ? backgroundLight : backgroundDark) : "transparent"}
             />
           </TouchableOpacity>
@@ -106,6 +143,7 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
         <FormInputError key={error} error={error} />
       ))}
       <Button
+        className="mt-8"
         isLoading={props.isLoading}
         onPress={form.handleSubmit((data) =>
           props.review

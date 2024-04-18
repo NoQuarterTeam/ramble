@@ -11,7 +11,7 @@ export const reviewRouter = createTRPCRouter({
   detail: publicProcedure.input(z.object({ id: z.string().uuid() })).query(({ ctx, input }) => {
     return ctx.prisma.review.findUnique({
       where: { id: input.id },
-      include: { tags: { select: { id: true, category: true, name: true } } },
+      include: { spot: { select: { id: true, type: true } }, tags: { select: { id: true, category: true, name: true } } },
     })
   }),
   create: protectedProcedure.input(reviewSchema.and(reviewTags)).mutation(async ({ ctx, input }) => {

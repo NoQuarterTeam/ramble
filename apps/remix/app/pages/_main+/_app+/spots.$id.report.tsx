@@ -3,7 +3,7 @@ import { z } from "zod"
 
 import { NullableFormString, spotAmenitiesSchema, spotRevisionSchema } from "@ramble/server-schemas"
 import { publicSpotWhereClause } from "@ramble/server-services"
-import { canManageSpot, doesSpotTypeRequireAmenities } from "@ramble/shared"
+import { canManageSpot, isCampingSpot } from "@ramble/shared"
 
 import { track } from "~/lib/analytics.server"
 import { db } from "~/lib/db.server"
@@ -34,7 +34,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   if (!spot) throw notFound()
 
   let amenities: undefined | z.infer<typeof spotAmenitiesSchema>
-  if (doesSpotTypeRequireAmenities(result.data.type)) {
+  if (isCampingSpot(result.data.type)) {
     const amenitiesResult = await validateFormData(request, spotAmenitiesSchema)
     if (!amenitiesResult.success) return formError(amenitiesResult)
     amenities = amenitiesResult.data

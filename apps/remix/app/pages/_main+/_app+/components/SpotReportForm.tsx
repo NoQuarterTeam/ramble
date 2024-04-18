@@ -14,7 +14,7 @@ import {
   INITIAL_LONGITUDE,
   SPOT_TYPE_OPTIONS,
   createAssetUrl,
-  doesSpotTypeRequireAmenities,
+  isCampingSpot,
   merge,
 } from "@ramble/shared"
 
@@ -199,7 +199,7 @@ export function SpotReportForm({
             </div>
             <p className="py-2 text-sm opacity-80">More options coming soon!</p>
           </div>
-          {doesSpotTypeRequireAmenities(type) && (
+          {isCampingSpot(type) && (
             <div className="space-y-0.5">
               <FormFieldLabel>Amenities</FormFieldLabel>
               <div className="flex flex-wrap gap-1">

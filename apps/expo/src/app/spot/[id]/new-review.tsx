@@ -31,7 +31,7 @@ export default function NewReviewScreen() {
         showsVerticalScrollIndicator={false}
       >
         <Text className="pb-4">{spot?.name}</Text>
-        <ReviewForm isLoading={isLoading} error={error} onCreate={mutate} spotId={id} />
+        {spot && <ReviewForm isLoading={isLoading} error={error} onCreate={mutate} spotId={id} spotType={spot.type} />}
       </ScrollView>
     </ModalView>
   )

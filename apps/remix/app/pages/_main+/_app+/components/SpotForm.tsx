@@ -9,14 +9,7 @@ import type { ViewStateChangeEvent } from "react-map-gl"
 import type { Spot, SpotAmenities, SpotImage } from "@ramble/database/types"
 import type { SpotType } from "@ramble/database/types"
 import type { spotSchema } from "@ramble/server-schemas"
-import {
-  AMENITIES,
-  INITIAL_LATITUDE,
-  INITIAL_LONGITUDE,
-  SPOT_TYPE_OPTIONS,
-  doesSpotTypeRequireAmenities,
-  doesSpotTypeRequireDescription,
-} from "@ramble/shared"
+import { AMENITIES, INITIAL_LATITUDE, INITIAL_LONGITUDE, SPOT_TYPE_OPTIONS, isCampingSpot } from "@ramble/shared"
 
 import { AmenitySelector } from "~/components/AmenitySelector"
 import { Form, FormButton, FormError, FormField, FormFieldError, FormFieldLabel, ImageField } from "~/components/Form"
@@ -104,7 +97,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
         <div className="space-y-2">
           <FormField required name="name" label="Name" defaultValue={spot?.name} />
           <FormField
-            required={doesSpotTypeRequireDescription(type)}
+            required={isCampingSpot(type)}
             name="description"
             label="Description"
             defaultValue={spot?.description || ""}
@@ -154,7 +147,7 @@ export function SpotForm({ spot }: { spot?: SerializeFrom<Spot & { images: SpotI
             </div>
             <p className="py-2 text-sm opacity-80">More options coming soon!</p>
           </div>
-          {doesSpotTypeRequireAmenities(type) && (
+          {isCampingSpot(type) && (
             <div className="space-y-0.5">
               <FormFieldLabel required>Amenities</FormFieldLabel>
               <div className="flex flex-wrap gap-1">
