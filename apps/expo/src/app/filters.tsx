@@ -221,6 +221,7 @@ function SpotTypeSelector({
   isSelected: boolean
   onPress: () => void
 }) {
+  const { me } = useMe()
   return (
     <View className="relative">
       <Button
@@ -234,12 +235,12 @@ function SpotTypeSelector({
           />
         }
         className="min-w-[100px]"
-        disabled={type.isComingSoon || isDisabled}
+        disabled={me?.isAdmin ? false : type.isComingSoon || isDisabled}
         onPress={onPress}
       >
         {type.label}
       </Button>
-      {type.isComingSoon && (
+      {!me?.isAdmin && type.isComingSoon && (
         <View
           className={join(
             "-right-1 -top-1 absolute flex h-[18px] w-[70px] items-center justify-center rounded-full border border-gray-300 bg-background dark:border-gray-700 dark:bg-background-dark",

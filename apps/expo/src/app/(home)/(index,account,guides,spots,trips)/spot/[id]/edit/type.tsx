@@ -9,18 +9,20 @@ import { SpotIcon } from "~/components/SpotIcon"
 import { Button } from "~/components/ui/Button"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
+import { useMe } from "~/lib/hooks/useMe"
 import { EditSpotModalView } from "./EditSpotModalView"
 
 export default function EditSpotTypeScreen() {
   const { id, ...params } = useLocalSearchParams<{ id: string; type: string }>()
   const [type, setType] = React.useState<SpotType>(params.type as SpotType)
   const router = useRouter()
+  const { me } = useMe()
   const tab = useTabSegment()
   return (
     <EditSpotModalView title="what type?">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
         <View className="flex flex-row flex-wrap gap-2 pt-4">
-          {SPOT_TYPE_OPTIONS.filter((s) => !s.isComingSoon).map((spotType) => (
+          {SPOT_TYPE_OPTIONS.filter((s) => (me?.isAdmin ? true : !s.isComingSoon)).map((spotType) => (
             <Button
               variant={type === spotType.value ? "primary" : "outline"}
               leftIcon={
