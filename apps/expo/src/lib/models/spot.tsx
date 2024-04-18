@@ -37,6 +37,7 @@ export const SPOT_TYPE_ICONS = {
   MOUNTAIN_BIKING: Bike,
   PADDLE_KAYAK: Icons.Sup,
   HIKING_TRAIL: Footprints,
+  YOGA: Icons.Yoga,
   // Services
   GAS_STATION: Fuel,
   ELECTRIC_CHARGE_POINT: PlugZap,

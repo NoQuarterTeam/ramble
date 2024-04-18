@@ -48,6 +48,7 @@ import {
 } from "@ramble/shared"
 
 import { Camera, LocationPuck, MarkerView } from "@rnmapbox/maps"
+import utc from "dayjs/plugin/utc"
 import { CreatorCard } from "~/components/CreatorCard"
 import { Icon } from "~/components/Icon"
 import { LanguageSelector } from "~/components/LanguageSelector"
@@ -72,6 +73,7 @@ import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 
 dayjs.extend(advancedFormat)
+dayjs.extend(utc)
 
 export default function SpotDetailScreen() {
   const { me } = useMe()
@@ -254,7 +256,9 @@ export default function SpotDetailScreen() {
                                 <Text>
                                   {forecast.isNow
                                     ? "Now"
-                                    : dayjs(forecast.localTime).format(forecast.isSunrise || forecast.isSunset ? "HH:mm" : "HH")}
+                                    : dayjs(forecast.localTime)
+                                        .utc()
+                                        .format(forecast.isSunrise || forecast.isSunset ? "HH:mm" : "HH")}
                                 </Text>
                                 <View className="w-[40px] h-[40px] flex items-center justify-center">
                                   {forecast.isSunrise ? (

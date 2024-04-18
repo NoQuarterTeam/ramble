@@ -125,6 +125,27 @@ export const Icons = {
       />
     </svg>
   ),
+  Yoga: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: IconProps) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <title>Yoga</title>
+      <path
+        d="M12.5 19L5.5 18.6786L11.9286 16L18.3571 18.6786L10.4286 21"
+        stroke={color}
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M4 11L7.5 13L12 9L16.5 13L20 11"
+        stroke={color}
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M12 9V16.1273" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="12" cy="5" r="1" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
   Sup: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: IconProps) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <title>SUP</title>
