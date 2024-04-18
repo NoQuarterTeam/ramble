@@ -9,17 +9,20 @@ import { SpotIcon } from "~/components/SpotIcon"
 import { Button } from "~/components/ui/Button"
 import { Text } from "~/components/ui/Text"
 
+import { useMe } from "~/lib/hooks/useMe"
 import { NewSpotModalView } from "./NewSpotModalView"
 
 export default function NewSpotTypeScreen() {
   const params = useLocalSearchParams<{ type?: SpotType }>()
   const router = useRouter()
   const [type, setType] = React.useState(params.type)
+  const { me } = useMe()
+
   return (
     <NewSpotModalView title="what type?">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
         <View className="flex flex-row flex-wrap gap-2 py-4">
-          {SPOT_TYPE_OPTIONS.filter((s) => !s.isComingSoon).map((spotType) => (
+          {SPOT_TYPE_OPTIONS.filter((s) => (me?.isAdmin ? true : !s.isComingSoon)).map((spotType) => (
             <Button
               size="sm"
               variant={type === spotType.value ? "primary" : "outline"}
