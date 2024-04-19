@@ -55,10 +55,10 @@ export default function NewReviewScreen() {
       <ScrollView
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="interactive"
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
       >
-        <Text className="pb-4">{spot?.name}</Text>
+        <Text className="text-lg">{spot?.name}</Text>
         {spot && <ReviewForm isLoading={isLoading} error={error} onCreate={mutate} spotId={id} spotType={spot.type} />}
       </ScrollView>
     </ModalView>

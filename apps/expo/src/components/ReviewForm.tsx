@@ -64,12 +64,12 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
   return (
     <FormProvider {...form}>
       {isCampingSpot(props.spotType) && (
+        // <View className="border-t border-gray-200 dark:border-gray-700 pt-4">
         <View>
-          {/* <Text className="text-primary text-lg font-700">Tags</Text> */}
           <View className="relative flex items-center justify-center mt-4 mb-2">
             <View className="absolute h-px w-full bg-gray-200 dark:bg-gray-700" />
             <View className="bg-background px-2 dark:bg-background-dark">
-              <Text className="text-center text-xs opacity-70 font-700">TAGS</Text>
+              <Text className="text-center text-xs opacity-70 font-600">TAGS</Text>
             </View>
           </View>
           {tagsLoading ? (
@@ -86,7 +86,7 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
                   ) : (
                     category === "SELF" && <Heart size={15} color="black" />
                   )}
-                  <Text className="font-700">{category}</Text>
+                  <Text className="font-600">{category}</Text>
                 </View>
                 <View className="flex flex-row flex-wrap gap-2 pb-2">
                   {tags.map((tag) => (
@@ -108,7 +108,7 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
       <View className="relative flex items-center justify-center mt-4 mb-2">
         <View className="absolute h-px w-full bg-gray-200 dark:bg-gray-700" />
         <View className="bg-background px-2 dark:bg-background-dark">
-          <Text className="text-center text-xs opacity-70 font-700">ADDITIONAL NOTES</Text>
+          <Text className="text-center text-xs opacity-70 font-600">ADDITIONAL NOTES</Text>
         </View>
       </View>
       <FormInput
@@ -124,7 +124,7 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
       <View className="relative flex items-center justify-center mt-4 mb-2">
         <View className="absolute h-px w-full bg-gray-200 dark:bg-gray-700" />
         <View className="bg-background px-2 dark:bg-background-dark">
-          <Text className="text-center text-xs opacity-70 font-700">OVERALL EXPERIENCE</Text>
+          <Text className="text-center text-xs opacity-70 font-600">OVERALL EXPERIENCE</Text>
         </View>
       </View>
       <View className="mb-4 flex flex-row items-center justify-center space-x-2">
