@@ -22,13 +22,16 @@ import * as SplashScreen from "expo-splash-screen"
 import { StatusBar } from "expo-status-bar"
 import { PostHogProvider, usePostHog } from "posthog-react-native"
 import * as React from "react"
-import { AppState, type AppStateStatus, useColorScheme } from "react-native"
+import { AppState, type AppStateStatus, Text, View, useColorScheme } from "react-native"
 import { AvoidSoftInput } from "react-native-avoid-softinput"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { enableScreens } from "react-native-screens"
 import { UnsupportedVersion } from "~/components/UnsupportedVersion"
 
+import NetInfo from "@react-native-community/netinfo"
+import Animated, { SlideInUp, SlideOutUp } from "react-native-reanimated"
+import { Spinner } from "~/components/ui/Spinner"
 import { Toast } from "~/components/ui/Toast"
 import { TRPCProvider, api } from "~/lib/api"
 import { IS_DEV, IS_PRODUCTION, VERSION } from "~/lib/config"
@@ -88,29 +91,65 @@ export default function RootLayout() {
         options={{ host: "https://eu.posthog.com", disabled: !IS_PRODUCTION }}
       >
         <ActionSheetProvider>
-          <CheckSupportedVersion>
-            <PrefetchTabs>
-              <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
-                <SafeAreaProvider>
-                  <TrackScreens />
-                  <IdentifyUser />
-                  <Stack initialRouteName="(home)" screenOptions={{ headerShown: false, contentStyle: { backgroundColor } }}>
-                    <Stack.Screen name="(home)" />
-                    <Stack.Screen name="onboarding" />
-                    <Stack.Screen name="(auth)" options={{ presentation: "modal" }} />
-                    <Stack.Screen name="new" options={{ presentation: "modal" }} />
-                    <Stack.Screen name="spot" options={{ presentation: "modal" }} />
-                    <Stack.Screen name="filters" options={{ presentation: "modal" }} />
-                  </Stack>
-                  <Toast />
-                  <StatusBar style={isDark ? "light" : "dark"} />
-                </SafeAreaProvider>
-              </GestureHandlerRootView>
-            </PrefetchTabs>
-          </CheckSupportedVersion>
+          <CheckNetwork>
+            <CheckSupportedVersion>
+              <PrefetchTabs>
+                <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
+                  <SafeAreaProvider>
+                    <TrackScreens />
+                    <IdentifyUser />
+                    <Stack initialRouteName="(home)" screenOptions={{ headerShown: false, contentStyle: { backgroundColor } }}>
+                      <Stack.Screen name="(home)" />
+                      <Stack.Screen name="onboarding" />
+                      <Stack.Screen name="(auth)" options={{ presentation: "modal" }} />
+                      <Stack.Screen name="new" options={{ presentation: "modal" }} />
+                      <Stack.Screen name="spot" options={{ presentation: "modal" }} />
+                      <Stack.Screen name="filters" options={{ presentation: "modal" }} />
+                    </Stack>
+                    <Toast />
+                    <StatusBar style={isDark ? "light" : "dark"} />
+                  </SafeAreaProvider>
+                </GestureHandlerRootView>
+              </PrefetchTabs>
+            </CheckSupportedVersion>
+          </CheckNetwork>
         </ActionSheetProvider>
       </PostHogProvider>
     </TRPCProvider>
+  )
+}
+
+function CheckNetwork(props: { children: React.ReactNode }) {
+  const [isConnected, setIsConnected] = React.useState(true)
+  React.useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      // console.log("Connection type", state.type)
+      // console.log("Is connected?", state.isConnected)
+      if (state.isConnected) {
+        setIsConnected(true)
+      } else {
+        setIsConnected(false)
+      }
+    })
+    return () => unsubscribe()
+  }, [])
+
+  return (
+    <>
+      {!isConnected && (
+        <Animated.View
+          entering={SlideInUp.duration(500)}
+          exiting={SlideOutUp.duration(500)}
+          className="absolute top-14 z-10 w-full"
+        >
+          <View className="bg-red-500 px-4 py-3 flex flex-row space-x-2 justify-center rounded-full mx-auto">
+            <Text className="text-white">No internet connection</Text>
+            <Spinner color="white" />
+          </View>
+        </Animated.View>
+      )}
+      {props.children}
+    </>
   )
 }
 

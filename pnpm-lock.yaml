@@ -65,6 +65,9 @@ importers:
       '@react-native-community/datetimepicker':
         specifier: ^7.6.1
         version: 7.6.1
+      '@react-native-community/netinfo':
+        specifier: 11.1.0
+        version: 11.1.0(react-native@0.73.6)
       '@react-native-menu/menu':
         specifier: 1.0.0
         version: 1.0.0(react-native@0.73.6)(react@18.2.0)
@@ -5706,6 +5709,14 @@ packages:
     resolution: {integrity: sha512-g66Q2Kd9Uw3eRL7kkrTsGhi+eXxNoPDRFYH6z78sZQuYjPkUQgJDDMUYgBmaBsQx/fKMtemPrCj1ulGmyi0OSw==}
     dependencies:
       invariant: 2.2.4
+    dev: false
+
+  /@react-native-community/netinfo@11.1.0(react-native@0.73.6):
+    resolution: {integrity: sha512-pIbCuqgrY7SkngAcjUs9fMzNh1h4soQMVw1IeGp1HN5//wox3fUVOuvyIubTscUbdLFKiltJAiuQek7Nhx1bqA==}
+    peerDependencies:
+      react-native: '>=0.59'
+    dependencies:
+      react-native: 0.73.6(@babel/core@7.24.4)(@babel/preset-env@7.24.4)(react@18.2.0)
     dev: false
 
   /@react-native-menu/menu@1.0.0(react-native@0.73.6)(react@18.2.0):
