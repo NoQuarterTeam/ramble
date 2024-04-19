@@ -76,7 +76,7 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
             <Spinner />
           ) : (
             allTagsGrouped &&
-            (Object.keys(allTagsGrouped) as TagCategory[]).map((category) => (
+            Object.entries(allTagsGrouped).map(([category, tags]) => (
               <View key={category}>
                 <View className="flex flex-row gap-1 items-center mb-1">
                   {category === "NATURE" ? (
@@ -89,7 +89,7 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
                   <Text className="font-700">{category}</Text>
                 </View>
                 <View className="flex flex-row flex-wrap gap-2 pb-2">
-                  {allTagsGrouped[category]?.map((tag) => (
+                  {tags.map((tag) => (
                     <Button
                       key={tag.id}
                       size="xs"
