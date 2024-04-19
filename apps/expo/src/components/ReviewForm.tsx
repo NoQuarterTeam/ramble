@@ -54,8 +54,8 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
 
   const handleToggleTag = (tagId: string) => {
     if (selectedTagIds.includes(tagId)) {
-      const onion = selectedTagIds.filter((existingTagId) => existingTagId !== tagId)
-      setSelectedTagIds(onion)
+      const newTags = selectedTagIds.filter((existingTagId) => existingTagId !== tagId)
+      setSelectedTagIds(newTags)
     } else {
       setSelectedTagIds([...selectedTagIds, tagId])
     }
