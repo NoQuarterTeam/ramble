@@ -764,8 +764,8 @@ importers:
         specifier: workspace:*
         version: link:../../shared
       '@slack/web-api':
-        specifier: 7.0.3
-        version: 7.0.3
+        specifier: 7.0.4
+        version: 7.0.4
       bcryptjs:
         specifier: 2.4.3
         version: 2.4.3
@@ -6608,8 +6608,8 @@ packages:
     engines: {node: '>= 12.13.0', npm: '>= 6.12.0'}
     dev: false
 
-  /@slack/web-api@7.0.3:
-    resolution: {integrity: sha512-X2fc8Yr0477TroIOE7Iw0JC3RmRVYW94GNJMxZ1hEewIcJoGq+6S2152IhnMsVguvlrplxNTOsmKB9aadmQfyg==}
+  /@slack/web-api@7.0.4:
+    resolution: {integrity: sha512-21tbte7N8itwjG7nsiQbDmXP9T/oqEILuvyL2UtgaZxfSY4a1JWWsLGL5n/hcgS2WE2oxmEHsBuhuRkZDwDovw==}
     engines: {node: '>= 18', npm: '>= 8.6.0'}
     dependencies:
       '@slack/logger': 4.0.0
