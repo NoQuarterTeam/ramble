@@ -10,7 +10,7 @@
   "dependencies": {
     "@ramble/database": "workspace:*",
     "@ramble/shared": "workspace:*",
-    "tailwind-merge": "2.2.2",
+    "tailwind-merge": "2.3.0",
     "zod": "3.22.5",
     "zodix": "0.4.4"
   },
