@@ -271,8 +271,8 @@ importers:
         specifier: 3.556.0
         version: 3.556.0
       '@fontsource/urbanist':
-        specifier: 5.0.19
-        version: 5.0.19
+        specifier: 5.0.20
+        version: 5.0.20
       '@radix-ui/react-alert-dialog':
         specifier: 1.0.5
         version: 1.0.5(@types/react-dom@18.2.25)(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0)
@@ -3997,8 +3997,8 @@ packages:
     resolution: {integrity: sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==}
     dev: false
 
-  /@fontsource/urbanist@5.0.19:
-    resolution: {integrity: sha512-MFA+4XInWsSNY/k0oJcVfwuQ2Zn5ZOJ/kaWpOk8B6QDBK7wOwHpgB4xTrUzeYthN4NWpBnbitRig+f5lXv8kJQ==}
+  /@fontsource/urbanist@5.0.20:
+    resolution: {integrity: sha512-cTbD74+OiR9Y7CCWN7shaaEMgrv6ujgDRbMO6/PUszdND7wWPz+/Dot/MBkdDzkW68i73i3LqQ/5G+iAeyJUVQ==}
     dev: false
 
   /@gar/promisify@1.1.3:
