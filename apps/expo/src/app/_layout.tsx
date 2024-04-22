@@ -91,65 +91,49 @@ export default function RootLayout() {
         options={{ host: "https://eu.posthog.com", disabled: !IS_PRODUCTION }}
       >
         <ActionSheetProvider>
-          <CheckNetwork>
-            <CheckSupportedVersion>
-              <PrefetchTabs>
-                <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
-                  <SafeAreaProvider>
-                    <TrackScreens />
-                    <IdentifyUser />
-                    <Stack initialRouteName="(home)" screenOptions={{ headerShown: false, contentStyle: { backgroundColor } }}>
-                      <Stack.Screen name="(home)" />
-                      <Stack.Screen name="onboarding" />
-                      <Stack.Screen name="(auth)" options={{ presentation: "modal" }} />
-                      <Stack.Screen name="new" options={{ presentation: "modal" }} />
-                      <Stack.Screen name="spot" options={{ presentation: "modal" }} />
-                      <Stack.Screen name="filters" options={{ presentation: "modal" }} />
-                    </Stack>
-                    <Toast />
-                    <StatusBar style={isDark ? "light" : "dark"} />
-                  </SafeAreaProvider>
-                </GestureHandlerRootView>
-              </PrefetchTabs>
-            </CheckSupportedVersion>
-          </CheckNetwork>
+          <CheckNetwork />
+          <CheckSupportedVersion>
+            <PrefetchTabs>
+              <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
+                <SafeAreaProvider>
+                  <TrackScreens />
+                  <IdentifyUser />
+                  <Stack initialRouteName="(home)" screenOptions={{ headerShown: false, contentStyle: { backgroundColor } }}>
+                    <Stack.Screen name="(home)" />
+                    <Stack.Screen name="onboarding" />
+                    <Stack.Screen name="(auth)" options={{ presentation: "modal" }} />
+                    <Stack.Screen name="new" options={{ presentation: "modal" }} />
+                    <Stack.Screen name="spot" options={{ presentation: "modal" }} />
+                    <Stack.Screen name="filters" options={{ presentation: "modal" }} />
+                  </Stack>
+                  <Toast />
+                  <StatusBar style={isDark ? "light" : "dark"} />
+                </SafeAreaProvider>
+              </GestureHandlerRootView>
+            </PrefetchTabs>
+          </CheckSupportedVersion>
         </ActionSheetProvider>
       </PostHogProvider>
     </TRPCProvider>
   )
 }
 
-function CheckNetwork(props: { children: React.ReactNode }) {
+function CheckNetwork() {
   const [isConnected, setIsConnected] = React.useState(true)
   React.useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
-      // console.log("Connection type", state.type)
-      // console.log("Is connected?", state.isConnected)
-      if (state.isConnected) {
-        setIsConnected(true)
-      } else {
-        setIsConnected(false)
-      }
+      setIsConnected(state.isConnected || false)
     })
     return () => unsubscribe()
   }, [])
 
+  if (isConnected) return null
   return (
-    <>
-      {!isConnected && (
-        <Animated.View
-          entering={SlideInUp.duration(500)}
-          exiting={SlideOutUp.duration(500)}
-          className="absolute top-14 z-10 w-full"
-        >
-          <View className="bg-red-500 px-4 py-3 flex flex-row space-x-2 justify-center rounded-full mx-auto">
-            <Text className="text-white">No internet connection</Text>
-            <Spinner color="white" />
-          </View>
-        </Animated.View>
-      )}
-      {props.children}
-    </>
+    <Animated.View entering={SlideInUp.duration(500)} exiting={SlideOutUp.duration(500)} className="absolute top-14 z-10 w-full">
+      <View className="bg-red-500 px-4 py-3 flex flex-row items-center justify-center rounded-full mx-auto">
+        <Text className="text-white">No internet connection</Text>
+      </View>
+    </Animated.View>
   )
 }
 
