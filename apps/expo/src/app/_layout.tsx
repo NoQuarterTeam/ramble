@@ -91,7 +91,6 @@ export default function RootLayout() {
         options={{ host: "https://eu.posthog.com", disabled: !IS_PRODUCTION }}
       >
         <ActionSheetProvider>
-          <CheckNetwork />
           <CheckSupportedVersion>
             <PrefetchTabs>
               <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
@@ -107,6 +106,7 @@ export default function RootLayout() {
                     <Stack.Screen name="filters" options={{ presentation: "modal" }} />
                   </Stack>
                   <Toast />
+                  <CheckNetwork />
                   <StatusBar style={isDark ? "light" : "dark"} />
                 </SafeAreaProvider>
               </GestureHandlerRootView>
