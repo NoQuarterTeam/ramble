@@ -108,8 +108,8 @@ importers:
         specifier: 5.8.4
         version: 5.8.4(expo@50.0.17)
       expo-av:
-        specifier: ~13.10.5
-        version: 13.10.5(expo@50.0.17)
+        specifier: ~13.10.6
+        version: 13.10.6(expo@50.0.17)
       expo-build-properties:
         specifier: ~0.11.1
         version: 0.11.1(expo@50.0.17)
@@ -9835,8 +9835,8 @@ packages:
       - supports-color
     dev: false
 
-  /expo-av@13.10.5(expo@50.0.17):
-    resolution: {integrity: sha512-w45oCoe+8PunDeM0rh/Ut6UaGh7OjEJOCjAiQy3nCxpA8FaXB17KaqpsvkAXIMvceHYWndH8+D29esUTS6wEsA==}
+  /expo-av@13.10.6(expo@50.0.17):
+    resolution: {integrity: sha512-h3c1fg5yhWnP0RIGO+fhgPx6cmh4B4lnKdXR2i69aC3vs5D5Cu+JlzBon1gLIu6eUo2IVfC0RjSLpfQbcJ4doQ==}
     peerDependencies:
       expo: '*'
     dependencies:
