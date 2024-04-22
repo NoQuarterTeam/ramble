@@ -65,9 +65,12 @@ importers:
       '@react-native-community/datetimepicker':
         specifier: ^7.6.1
         version: 7.6.1
+      '@react-native-community/netinfo':
+        specifier: 11.1.0
+        version: 11.1.0(react-native@0.73.6)
       '@react-native-menu/menu':
-        specifier: 1.0.0
-        version: 1.0.0(react-native@0.73.6)(react@18.2.0)
+        specifier: 1.0.1
+        version: 1.0.1(react-native@0.73.6)(react@18.2.0)
       '@rnmapbox/maps':
         specifier: 10.1.19
         version: 10.1.19(expo@50.0.17)(react-native@0.73.6)(react@18.2.0)
@@ -105,8 +108,8 @@ importers:
         specifier: 5.8.4
         version: 5.8.4(expo@50.0.17)
       expo-av:
-        specifier: ~13.10.5
-        version: 13.10.5(expo@50.0.17)
+        specifier: ~13.10.6
+        version: 13.10.6(expo@50.0.17)
       expo-build-properties:
         specifier: ~0.11.1
         version: 0.11.1(expo@50.0.17)
@@ -238,10 +241,10 @@ importers:
         version: 1.13.3
       zeego:
         specifier: 1.10.0
-        version: 1.10.0(@react-native-menu/menu@1.0.0)(@types/react@18.2.79)(react-dom@18.2.0)(react-native-ios-context-menu@2.5.1)(react-native@0.73.6)(react@18.2.0)
+        version: 1.10.0(@react-native-menu/menu@1.0.1)(@types/react@18.2.79)(react-dom@18.2.0)(react-native-ios-context-menu@2.5.1)(react-native@0.73.6)(react@18.2.0)
       zod:
-        specifier: 3.22.4
-        version: 3.22.4
+        specifier: 3.23.0
+        version: 3.23.0
     devDependencies:
       '@babel/core':
         specifier: 7.24.4
@@ -274,8 +277,8 @@ importers:
         specifier: 3.556.0
         version: 3.556.0
       '@fontsource/urbanist':
-        specifier: 5.0.19
-        version: 5.0.19
+        specifier: 5.0.20
+        version: 5.0.20
       '@radix-ui/react-alert-dialog':
         specifier: 1.0.5
         version: 1.0.5(@types/react-dom@18.2.25)(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0)
@@ -346,8 +349,8 @@ importers:
         specifier: 2.8.1
         version: 2.8.1(typescript@5.4.5)
       '@sentry/node':
-        specifier: 7.110.1
-        version: 7.110.1
+        specifier: 7.111.0
+        version: 7.111.0
       '@tailwindcss/container-queries':
         specifier: 0.1.1
         version: 0.1.1(tailwindcss@3.3.2)
@@ -412,8 +415,8 @@ importers:
         specifier: 5.2.4
         version: 5.2.4
       lucide-react:
-        specifier: 0.368.0
-        version: 0.368.0(react@18.2.0)
+        specifier: 0.372.0
+        version: 0.372.0(react@18.2.0)
       mapbox-gl:
         specifier: 3.3.0
         version: 3.3.0
@@ -421,8 +424,8 @@ importers:
         specifier: 0.2.0
         version: 0.2.0
       posthog-js:
-        specifier: 1.128.0
-        version: 1.128.0
+        specifier: 1.128.2
+        version: 1.128.2
       pretty-cache-header:
         specifier: 1.0.0
         version: 1.0.0
@@ -443,7 +446,7 @@ importers:
         version: 7.1.7(mapbox-gl@3.3.0)(react-dom@18.2.0)(react@18.2.0)
       remix-utils:
         specifier: 7.6.0
-        version: 7.6.0(@remix-run/node@2.8.1)(@remix-run/react@2.8.1)(crypto-js@4.2.0)(react@18.2.0)(zod@3.22.4)
+        version: 7.6.0(@remix-run/node@2.8.1)(@remix-run/react@2.8.1)(crypto-js@4.2.0)(react@18.2.0)(zod@3.23.0)
       sharp:
         specifier: 0.32.6
         version: 0.32.6
@@ -463,11 +466,11 @@ importers:
         specifier: 0.4.1
         version: 0.4.1(@types/react@18.2.79)(react@18.2.0)
       zod:
-        specifier: 3.22.4
-        version: 3.22.4
+        specifier: 3.23.0
+        version: 3.23.0
       zodix:
         specifier: 0.4.4
-        version: 0.4.4(@remix-run/server-runtime@2.8.1)(zod@3.22.4)
+        version: 0.4.4(@remix-run/server-runtime@2.8.1)(zod@3.23.0)
       zustand:
         specifier: ^4.4.7
         version: 4.5.2(@types/react@18.2.79)(react@18.2.0)
@@ -563,8 +566,8 @@ importers:
         specifier: 1.13.3
         version: 1.13.3
       zod:
-        specifier: 3.22.4
-        version: 3.22.4
+        specifier: 3.23.0
+        version: 3.23.0
     devDependencies:
       '@types/node':
         specifier: 18.19.31
@@ -651,8 +654,8 @@ importers:
   packages/server/env:
     dependencies:
       zod:
-        specifier: 3.22.4
-        version: 3.22.4
+        specifier: 3.23.0
+        version: 3.23.0
     devDependencies:
       '@types/node':
         specifier: 18.19.31
@@ -673,14 +676,14 @@ importers:
         specifier: workspace:*
         version: link:../../shared
       tailwind-merge:
-        specifier: 2.2.2
-        version: 2.2.2
+        specifier: 2.3.0
+        version: 2.3.0
       zod:
-        specifier: 3.22.4
-        version: 3.22.4
+        specifier: 3.23.0
+        version: 3.23.0
       zodix:
         specifier: 0.4.4
-        version: 0.4.4(@remix-run/server-runtime@2.8.1)(zod@3.22.4)
+        version: 0.4.4(@remix-run/server-runtime@2.8.1)(zod@3.23.0)
     devDependencies:
       '@ramble/tailwind-config':
         specifier: workspace:*
@@ -770,8 +773,8 @@ importers:
         specifier: workspace:*
         version: link:../../shared
       '@slack/web-api':
-        specifier: 7.0.3
-        version: 7.0.3
+        specifier: 7.0.4
+        version: 7.0.4
       bcryptjs:
         specifier: 2.4.3
         version: 2.4.3
@@ -800,8 +803,8 @@ importers:
         specifier: 0.32.6
         version: 0.32.6
       zod:
-        specifier: 3.22.4
-        version: 3.22.4
+        specifier: 3.23.0
+        version: 3.23.0
     devDependencies:
       '@types/bcryptjs':
         specifier: 2.4.6
@@ -828,8 +831,8 @@ importers:
         specifier: workspace:*
         version: link:../database
       tailwind-merge:
-        specifier: 2.2.2
-        version: 2.2.2
+        specifier: 2.3.0
+        version: 2.3.0
     devDependencies:
       '@ramble/tailwind-config':
         specifier: workspace:*
@@ -4003,8 +4006,8 @@ packages:
     resolution: {integrity: sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==}
     dev: false
 
-  /@fontsource/urbanist@5.0.19:
-    resolution: {integrity: sha512-MFA+4XInWsSNY/k0oJcVfwuQ2Zn5ZOJ/kaWpOk8B6QDBK7wOwHpgB4xTrUzeYthN4NWpBnbitRig+f5lXv8kJQ==}
+  /@fontsource/urbanist@5.0.20:
+    resolution: {integrity: sha512-cTbD74+OiR9Y7CCWN7shaaEMgrv6ujgDRbMO6/PUszdND7wWPz+/Dot/MBkdDzkW68i73i3LqQ/5G+iAeyJUVQ==}
     dev: false
 
   /@gar/promisify@1.1.3:
@@ -5714,8 +5717,16 @@ packages:
       invariant: 2.2.4
     dev: false
 
-  /@react-native-menu/menu@1.0.0(react-native@0.73.6)(react@18.2.0):
-    resolution: {integrity: sha512-DFtREX4I4w4Vh89ohnhvxzYtf4iPmJVILpTbpBOx0iDuVO94NFF1pqtULdlhzdqeJlyuE1FwTlBifziD9ZBx6g==}
+  /@react-native-community/netinfo@11.1.0(react-native@0.73.6):
+    resolution: {integrity: sha512-pIbCuqgrY7SkngAcjUs9fMzNh1h4soQMVw1IeGp1HN5//wox3fUVOuvyIubTscUbdLFKiltJAiuQek7Nhx1bqA==}
+    peerDependencies:
+      react-native: '>=0.59'
+    dependencies:
+      react-native: 0.73.6(@babel/core@7.24.4)(@babel/preset-env@7.24.4)(react@18.2.0)
+    dev: false
+
+  /@react-native-menu/menu@1.0.1(react-native@0.73.6)(react@18.2.0):
+    resolution: {integrity: sha512-NCGE0ktq481O9sxvKzoLAK27oyfcoJlOTQeTuXMxvaB56rjZm4T1pmPQGWdxhTQQ57Nf7+p6GVLwh0cT3+a5vw==}
     peerDependencies:
       react: '*'
       react-native: '*'
@@ -6334,13 +6345,13 @@ packages:
       '@sentry/utils': 7.100.1
     dev: false
 
-  /@sentry-internal/tracing@7.110.1:
-    resolution: {integrity: sha512-4kTd6EM0OP1SVWl2yLn3KIwlCpld1lyhNDeR8G1aKLm1PN+kVsR6YB/jy9KPPp4Q3lN3W9EkTSES3qhP4jVffQ==}
+  /@sentry-internal/tracing@7.111.0:
+    resolution: {integrity: sha512-CgXly8rsdu4loWVKi2RqpInH3C2cVBuaYsx4ZP5IJpzSinsUAMyyr3Pc0PZzCyoVpBBXGBGj/4HhFsY3q6Z0Vg==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/core': 7.110.1
-      '@sentry/types': 7.110.1
-      '@sentry/utils': 7.110.1
+      '@sentry/core': 7.111.0
+      '@sentry/types': 7.111.0
+      '@sentry/utils': 7.111.0
     dev: false
 
   /@sentry/browser@7.100.1:
@@ -6450,12 +6461,12 @@ packages:
       '@sentry/utils': 7.100.1
     dev: false
 
-  /@sentry/core@7.110.1:
-    resolution: {integrity: sha512-yC1yeUFQlmHj9u/KxKmwOMVanBmgfX+4MZnZU31QPqN95adyZTwpaYFZl4fH5kDVnz7wXJI0qRP8SxuMePtqhw==}
+  /@sentry/core@7.111.0:
+    resolution: {integrity: sha512-/ljeMjZu8CSrLGrseBi/7S2zRIFsqMcvfyG6Nwgfc07J9nbHt8/MqouE1bXZfiaILqDBpK7BK9MLAAph4mkAWg==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/types': 7.110.1
-      '@sentry/utils': 7.110.1
+      '@sentry/types': 7.111.0
+      '@sentry/utils': 7.111.0
     dev: false
 
   /@sentry/hub@7.100.1:
@@ -6477,14 +6488,14 @@ packages:
       localforage: 1.10.0
     dev: false
 
-  /@sentry/node@7.110.1:
-    resolution: {integrity: sha512-n6sNzZJ/ChfyCI1FxuGWgloeevC8j2vax3vXM4IZrSIm5hS1d9L2oCJ4HEPuxGUxCkQ1f4kXPcdmNaQsWH0JBw==}
+  /@sentry/node@7.111.0:
+    resolution: {integrity: sha512-bTLZNETT7W89HEk04rwsch02KSpu++Yec/BEyM3AxUNY+ZQ9ZLL/lrNZuCwbe7fURpKoZrvGAhxpPjgs5UcB9w==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry-internal/tracing': 7.110.1
-      '@sentry/core': 7.110.1
-      '@sentry/types': 7.110.1
-      '@sentry/utils': 7.110.1
+      '@sentry-internal/tracing': 7.111.0
+      '@sentry/core': 7.111.0
+      '@sentry/types': 7.111.0
+      '@sentry/utils': 7.111.0
     dev: false
 
   /@sentry/react-native@5.20.0(expo@50.0.17)(react-native@0.73.6)(react@18.2.0):
@@ -6543,8 +6554,8 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
-  /@sentry/types@7.110.1:
-    resolution: {integrity: sha512-sZxOpM5gfyxvJeWVvNpHnxERTnlqcozjqNcIv29SZ6wonlkekmxDyJ3uCuPv85VO54WLyA4uzskPKnNFHacI8A==}
+  /@sentry/types@7.111.0:
+    resolution: {integrity: sha512-Oti4pgQ55+FBHKKcHGu51ZUxO1u52G5iVNK4mbtAN+5ArSCy/2s1H8IDJiOMswn3acfUnCR0oB/QsbEgAPZ26g==}
     engines: {node: '>=8'}
     dev: false
 
@@ -6555,11 +6566,11 @@ packages:
       '@sentry/types': 7.100.1
     dev: false
 
-  /@sentry/utils@7.110.1:
-    resolution: {integrity: sha512-eibLo2m1a7sHkOHxYYmRujr3D7ek2l9sv26F1SLoQBVDF7Afw5AKyzPmtA1D+4M9P/ux1okj7cGj3SaBrVpxXA==}
+  /@sentry/utils@7.111.0:
+    resolution: {integrity: sha512-CB5rz1EgCSwj3xoXogsCZ5pQtfERrURc/ItcCuoaijUhkD0iMq5MCNWMHW3mBsBrqx/Oba+XGvDu0t/5+SWwBg==}
     engines: {node: '>=8'}
     dependencies:
-      '@sentry/types': 7.110.1
+      '@sentry/types': 7.111.0
     dev: false
 
   /@shopify/flash-list@1.6.3(@babel/runtime@7.24.4)(react-native@0.73.6)(react@18.2.0):
@@ -6618,8 +6629,8 @@ packages:
     engines: {node: '>= 12.13.0', npm: '>= 6.12.0'}
     dev: false
 
-  /@slack/web-api@7.0.3:
-    resolution: {integrity: sha512-X2fc8Yr0477TroIOE7Iw0JC3RmRVYW94GNJMxZ1hEewIcJoGq+6S2152IhnMsVguvlrplxNTOsmKB9aadmQfyg==}
+  /@slack/web-api@7.0.4:
+    resolution: {integrity: sha512-21tbte7N8itwjG7nsiQbDmXP9T/oqEILuvyL2UtgaZxfSY4a1JWWsLGL5n/hcgS2WE2oxmEHsBuhuRkZDwDovw==}
     engines: {node: '>= 18', npm: '>= 8.6.0'}
     dependencies:
       '@slack/logger': 4.0.0
@@ -9834,8 +9845,8 @@ packages:
       - supports-color
     dev: false
 
-  /expo-av@13.10.5(expo@50.0.17):
-    resolution: {integrity: sha512-w45oCoe+8PunDeM0rh/Ut6UaGh7OjEJOCjAiQy3nCxpA8FaXB17KaqpsvkAXIMvceHYWndH8+D29esUTS6wEsA==}
+  /expo-av@13.10.6(expo@50.0.17):
+    resolution: {integrity: sha512-h3c1fg5yhWnP0RIGO+fhgPx6cmh4B4lnKdXR2i69aC3vs5D5Cu+JlzBon1gLIu6eUo2IVfC0RjSLpfQbcJ4doQ==}
     peerDependencies:
       expo: '*'
     dependencies:
@@ -12029,8 +12040,8 @@ packages:
       react-native-svg: 14.1.0(react-native@0.73.6)(react@18.2.0)
     dev: false
 
-  /lucide-react@0.368.0(react@18.2.0):
-    resolution: {integrity: sha512-soryVrCjheZs8rbXKdINw9B8iPi5OajBJZMJ1HORig89ljcOcEokKKAgGbg3QWxSXel7JwHOfDFUdDHAKyUAMw==}
+  /lucide-react@0.372.0(react@18.2.0):
+    resolution: {integrity: sha512-0cKdqmilHXWUwWAWnf6CrrjHD8YaqPMtLrmEHXolZusNTr9epULCsiJwIOHk2q1yFxdEwd96D4zShlAj67UJdA==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
@@ -14169,8 +14180,8 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.2.0
 
-  /posthog-js@1.128.0:
-    resolution: {integrity: sha512-l52Xk9NnmwNRhgCFWhx0OAIlA+ZXVCqoT3sjQBj6oJhflFQMXYRaJIdWF9EGLG9DWFrka5iTKIlW9swQYuzxNQ==}
+  /posthog-js@1.128.2:
+    resolution: {integrity: sha512-uKjCfRZKCs346bXNEyyjHkbkaTASUcRSWtA3u1yJTDElUuuiGkCKUrbRz6fG1+2019Y8ebuXvwVfqQQwODks7A==}
     dependencies:
       fflate: 0.4.8
       preact: 10.19.3
@@ -15135,7 +15146,7 @@ packages:
       minimatch: 5.1.6
     dev: true
 
-  /remix-utils@7.6.0(@remix-run/node@2.8.1)(@remix-run/react@2.8.1)(crypto-js@4.2.0)(react@18.2.0)(zod@3.22.4):
+  /remix-utils@7.6.0(@remix-run/node@2.8.1)(@remix-run/react@2.8.1)(crypto-js@4.2.0)(react@18.2.0)(zod@3.23.0):
     resolution: {integrity: sha512-BPhCUEy+nwrhDDDg2v3+LFSszV6tluMbeSkbffj2o4tqZxt5Kn69Y9sNpGxYLAj8gjqeYDuxjv55of+gYnnykA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
@@ -15176,7 +15187,7 @@ packages:
       crypto-js: 4.2.0
       react: 18.2.0
       type-fest: 4.8.3
-      zod: 3.22.4
+      zod: 3.23.0
     dev: false
 
   /remove-trailing-slash@0.1.1:
@@ -16023,8 +16034,8 @@ packages:
       picocolors: 1.0.0
     dev: true
 
-  /tailwind-merge@2.2.2:
-    resolution: {integrity: sha512-tWANXsnmJzgw6mQ07nE3aCDkCK4QdT3ThPMCzawoYA2Pws7vSTCvz3Vrjg61jVUGfFZPJzxEP+NimbcW+EdaDw==}
+  /tailwind-merge@2.3.0:
+    resolution: {integrity: sha512-vkYrLpIP+lgR0tQCG6AP7zZXCTLc1Lnv/CCRT3BqJ9CZ3ui2++GPaGb1x/ILsINIMSYqqvrpqjUFsMNLlW99EA==}
     dependencies:
       '@babel/runtime': 7.24.4
     dev: false
@@ -17212,7 +17223,7 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
-  /zeego@1.10.0(@react-native-menu/menu@1.0.0)(@types/react@18.2.79)(react-dom@18.2.0)(react-native-ios-context-menu@2.5.1)(react-native@0.73.6)(react@18.2.0):
+  /zeego@1.10.0(@react-native-menu/menu@1.0.1)(@types/react@18.2.79)(react-dom@18.2.0)(react-native-ios-context-menu@2.5.1)(react-native@0.73.6)(react@18.2.0):
     resolution: {integrity: sha512-HrPv7DfyAubkp/NOy+Uwcb1rcS3DtkZEtNQFiSDduBoZt2EDf89+1N+aweACj1UnmGOOu+kk56WYiV9sliMpng==}
     peerDependencies:
       '@react-native-menu/menu': '*'
@@ -17222,7 +17233,7 @@ packages:
     dependencies:
       '@radix-ui/react-context-menu': 2.1.5(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0)
       '@radix-ui/react-dropdown-menu': 2.0.6(@types/react-dom@18.2.25)(@types/react@18.2.79)(react-dom@18.2.0)(react@18.2.0)
-      '@react-native-menu/menu': 1.0.0(react-native@0.73.6)(react@18.2.0)
+      '@react-native-menu/menu': 1.0.1(react-native@0.73.6)(react@18.2.0)
       react: 18.2.0
       react-native: 0.73.6(@babel/core@7.24.4)(@babel/preset-env@7.24.4)(react@18.2.0)
       react-native-ios-context-menu: 2.5.1(expo@50.0.17)(react-native-ios-utilities@4.4.4)(react-native@0.73.6)(react@18.2.0)
@@ -17235,15 +17246,20 @@ packages:
 
   /zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
+    dev: true
 
-  /zodix@0.4.4(@remix-run/server-runtime@2.8.1)(zod@3.22.4):
+  /zod@3.23.0:
+    resolution: {integrity: sha512-OFLT+LTocvabn6q76BTwVB0hExEBS0IduTr3cqZyMqEDbOnYmcU+y0tUAYbND4uwclpBGi4I4UUBGzylWpjLGA==}
+    dev: false
+
+  /zodix@0.4.4(@remix-run/server-runtime@2.8.1)(zod@3.23.0):
     resolution: {integrity: sha512-msoW2RM8t0ktSKmQYT7/AjsGTqzWHeEwY+U/6w7Jzd29yoeh/QceseQG8PBb5lpY4KUUowMsYRWm926vGrwrdQ==}
     peerDependencies:
       '@remix-run/server-runtime': 1.x || 2.x
       zod: 3.x
     dependencies:
       '@remix-run/server-runtime': 2.8.1(typescript@5.4.5)
-      zod: 3.22.4
+      zod: 3.23.0
     dev: false
 
   /zustand@4.5.2(@types/react@18.2.79)(react@18.2.0):

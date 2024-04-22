@@ -35,7 +35,9 @@ export default function NewSpotInfoScreen() {
   const router = useRouter()
   const [name, setName] = React.useState<string>(params.name || "")
   const [description, setDescription] = React.useState<string>()
-  const [isPetFriendly, setIsPetFriendly] = React.useState(params.isPetFriendly === "true")
+  const [isPetFriendly, setIsPetFriendly] = React.useState(
+    params.isPetFriendly === undefined ? true : params.isPetFriendly === "true",
+  )
 
   return (
     <NewSpotModalView title="some info">

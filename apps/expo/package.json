@@ -27,7 +27,8 @@
     "@ramble/tailwind-config": "workspace:*",
     "@react-native-async-storage/async-storage": "1.21.0",
     "@react-native-community/datetimepicker": "^7.6.1",
-    "@react-native-menu/menu": "1.0.0",
+    "@react-native-community/netinfo": "11.1.0",
+    "@react-native-menu/menu": "1.0.1",
     "@rnmapbox/maps": "10.1.19",
     "@sentry/react-native": "5.20.0",
     "@shopify/flash-list": "1.6.3",
@@ -39,7 +40,7 @@
     "d3-shape": "3.2.0",
     "dayjs": "1.11.10",
     "expo-application": "5.8.4",
-    "expo-av": "~13.10.5",
+    "expo-av": "~13.10.6",
     "expo-build-properties": "~0.11.1",
     "expo-clipboard": "5.0.1",
     "expo-constants": "15.4.6",
@@ -85,7 +86,7 @@
     "react": "18.2.0",
     "superjson": "1.13.3",
     "zeego": "1.10.0",
-    "zod": "3.22.4"
+    "zod": "3.23.0"
   },
   "devDependencies": {
     "@babel/core": "7.24.4",

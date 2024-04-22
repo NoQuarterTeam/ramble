@@ -1,7 +1,7 @@
 import type { ConfigContext, ExpoConfig } from "expo/config"
 
 const VERSION = "1.5.0"
-const BUILD = 67
+const BUILD = 69
 
 const splash: ExpoConfig["splash"] = {
   image: "./assets/splash.png",
@@ -18,7 +18,7 @@ const IS_DEV = process.env.APP_VARIANT === "development"
 
 const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   name: IS_DEV ? "Ramble (dev)" : "Ramble",
-  description: "Ramble: Van Travel App",
+  description: IS_DEV ? "Ramble (dev): Van Travel App" : "Ramble: Van Travel App",
   slug: "ramble",
   scheme: "ramble",
   owner: "noquarter",

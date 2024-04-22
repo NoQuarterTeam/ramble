@@ -22,7 +22,7 @@ import * as SplashScreen from "expo-splash-screen"
 import { StatusBar } from "expo-status-bar"
 import { PostHogProvider, usePostHog } from "posthog-react-native"
 import * as React from "react"
-import { AppState, type AppStateStatus, useColorScheme } from "react-native"
+import { AppState, type AppStateStatus, Text, View, useColorScheme } from "react-native"
 import { AvoidSoftInput } from "react-native-avoid-softinput"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 
@@ -30,6 +30,9 @@ import { SafeAreaProvider } from "react-native-safe-area-context"
 import { enableScreens } from "react-native-screens"
 import { UnsupportedVersion } from "~/components/UnsupportedVersion"
 
+import NetInfo from "@react-native-community/netinfo"
+import Animated, { SlideInUp, SlideOutUp } from "react-native-reanimated"
+import { Spinner } from "~/components/ui/Spinner"
 import { Toast } from "~/components/ui/Toast"
 import { TRPCProvider, api } from "~/lib/api"
 import { IS_DEV, IS_PRODUCTION, VERSION } from "~/lib/config"
@@ -105,6 +108,7 @@ export default function RootLayout() {
                     <Stack.Screen name="membership" options={{ presentation: "modal" }} />
                   </Stack>
                   <Toast />
+                  <CheckNetwork />
                   <StatusBar style={isDark ? "light" : "dark"} />
                 </SafeAreaProvider>
               </GestureHandlerRootView>
@@ -113,6 +117,25 @@ export default function RootLayout() {
         </ActionSheetProvider>
       </PostHogProvider>
     </TRPCProvider>
+  )
+}
+
+function CheckNetwork() {
+  const [isConnected, setIsConnected] = React.useState(true)
+  React.useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      setIsConnected(state.isConnected || false)
+    })
+    return () => unsubscribe()
+  }, [])
+
+  if (isConnected) return null
+  return (
+    <Animated.View entering={SlideInUp.duration(500)} exiting={SlideOutUp.duration(500)} className="absolute top-14 z-10 w-full">
+      <View className="bg-red-500 px-4 py-3 flex flex-row items-center justify-center rounded-full mx-auto">
+        <Text className="text-white">No internet connection</Text>
+      </View>
+    </Animated.View>
   )
 }
 
