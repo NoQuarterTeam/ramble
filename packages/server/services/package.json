@@ -17,7 +17,7 @@
     "@ramble/emails": "workspace:*",
     "@ramble/server-env": "workspace:*",
     "@ramble/shared": "workspace:*",
-    "@slack/web-api": "7.0.3",
+    "@slack/web-api": "7.0.4",
     "bcryptjs": "2.4.3",
     "blurhash": "2.0.5",
     "dayjs": "1.11.10",
@@ -27,7 +27,7 @@
     "nodemailer": "6.9.13",
     "resend": "3.2.0",
     "sharp": "0.32.6",
-    "zod": "3.22.4"
+    "zod": "3.23.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "2.4.6",
