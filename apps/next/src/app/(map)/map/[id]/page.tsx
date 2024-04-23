@@ -9,12 +9,13 @@ import { PartnerLink } from "@/components/PartnerLink"
 import { SpotTypeBadge } from "@/components/SpotTypeBadge"
 import { VerifiedCard } from "@/components/VerifiedCard"
 import { db } from "@/lib/db"
+import { unstable_cache } from "next/cache"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { SpotContainer } from "./SpotContainer"
 
-const getSpotData = async (id: string) => {
+const getSpotData = unstable_cache(async (id: string) => {
   const initialSpot = await db.spot.findUnique({
     where: { id, ...publicSpotWhereClause(null) },
     select: { id: true, latitude: true, longitude: true, description: true },
@@ -54,7 +55,7 @@ const getSpotData = async (id: string) => {
     sameLocationSpots: data.sameLocationSpots,
     flickrImages,
   }
-}
+})
 
 export default async function Page({ params }: { params: { id: string } }) {
   const data = await getSpotData(params.id)
