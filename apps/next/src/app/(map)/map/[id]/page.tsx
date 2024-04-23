@@ -11,7 +11,6 @@ import { VerifiedCard } from "@/components/VerifiedCard"
 import { db } from "@/lib/db"
 import { unstable_cache } from "next/cache"
 import Image from "next/image"
-import Link from "next/link"
 import { notFound } from "next/navigation"
 import { SpotContainer } from "./SpotContainer"
 
