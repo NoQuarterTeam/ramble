@@ -38,7 +38,7 @@
     "@remix-run/node": "2.8.1",
     "@remix-run/react": "2.8.1",
     "@remix-run/serve": "2.8.1",
-    "@sentry/node": "7.112.0",
+    "@sentry/node": "7.112.1",
     "@tailwindcss/container-queries": "0.1.1",
     "@tanstack/react-table": "8.16.0",
     "@trpc/server": "10.45.2",
