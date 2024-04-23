@@ -34,7 +34,6 @@
   "ignoreDeps": [
     "@expo/config-plugins",
     "@react-email/components",
-    "@react-email/components",
     "@react-native-async-storage/async-storage",
     "@react-native-community/datetimepicker",
     "@react-native-community/netinfo",

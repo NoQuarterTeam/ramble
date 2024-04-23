@@ -7,13 +7,13 @@ import { merge } from "@ramble/shared"
 import { type ButtonProps, buttonStyles } from "./Button"
 import { Spinner } from "./Spinner"
 
-export const iconbuttonStyles = cva("px-0", {
+export const iconbuttonStyles = cva("px-0 flex items-center justify-center", {
   variants: {
     size: {
-      xs: "sq-7",
-      sm: "sq-8",
-      md: "sq-9",
-      lg: "sq-11",
+      xs: "h-7 w-7",
+      sm: "h-8 w-8",
+      md: "h-9 w-9",
+      lg: "h-11 w-11",
     },
   },
   defaultVariants: {
@@ -40,7 +40,7 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(f
         props.className,
       )}
     >
-      <div className="center h-full w-full">{isLoading ? <Spinner size="xs" /> : icon}</div>
+      <div className="flex items-center justify-center h-full w-full">{isLoading ? <Spinner size="xs" /> : icon}</div>
     </button>
   )
 })

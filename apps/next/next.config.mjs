@@ -1,4 +1,25 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  transpilePackages: [
+    "axios",
+    "decode-uri-component",
+    "filter-obj",
+    "loops",
+    "kdbush",
+    "loops",
+    "query-string",
+    "split-on-first",
+    "supercluster",
+    "superjson",
+  ],
+  images: {
+    remotePatterns: [
+      { hostname: "cdn.ramble.guide" },
+      { hostname: "campspace.com" },
+      { hostname: "hipcamp-res.cloudinary.com" },
+      { hostname: "polskicaravaning.pl" },
+    ],
+  },
+}
 
-export default nextConfig;
+export default nextConfig

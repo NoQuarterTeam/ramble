@@ -5,8 +5,9 @@ import { User2 } from "lucide-react"
 import { merge } from "@ramble/shared"
 import Image, { type ImageProps } from "next/image"
 
-interface Props extends Omit<ImageProps, "height" | "width" | "alt"> {
+interface Props extends Omit<ImageProps, "height" | "width" | "alt" | "src"> {
   size?: number
+  src?: string
 }
 
 export function Avatar({ size = 100, src, ...props }: Props) {
