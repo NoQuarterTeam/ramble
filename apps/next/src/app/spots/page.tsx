@@ -23,14 +23,14 @@ export default async function Page({ searchParams: { type, sort } }: { searchPar
         <div className="flex w-full items-center justify-between gap-2">
           <div className="flex gap-1">
             <form method="get">
-              <input type="hidden" name="sort" value={sort} />
+              <input type="hidden" name="sort" value={sort || ""} />
               <Button type="submit" variant={!type ? "primary" : "outline"} name="type" value="">
                 All
               </Button>
             </form>
             {STAY_SPOT_TYPE_OPTIONS.map(({ value, label }) => (
               <form key={value} method="get">
-                <input type="hidden" name="sort" value={sort} />
+                <input type="hidden" name="sort" value={sort || ""} />
                 <Button
                   type="submit"
                   name="type"

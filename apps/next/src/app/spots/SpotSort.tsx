@@ -17,7 +17,7 @@ export function SpotSort({ defaultValue }: { defaultValue?: string }) {
       defaultValue={defaultValue}
       name="sort"
       onChange={(e) => {
-        router.push(`/spots?sort=${e.target.value}&type=${searchParams.get("type")}`)
+        router.push(`/spots?sort=${e.target.value}&type=${searchParams.get("type") || ""}`)
       }}
     >
       {SORT_OPTIONS.map(({ value, label }) => (
