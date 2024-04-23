@@ -17,5 +17,15 @@ export function Avatar({ size = 100, src, ...props }: Props) {
         <User2 size={16} />
       </div>
     )
-  return <Image src={src} width={size} height={size} alt="avatar" {...props} className={merge("rounded-full", props.className)} />
+  return (
+    <Image
+      objectFit="cover"
+      src={src}
+      width={size}
+      height={size}
+      alt="avatar"
+      {...props}
+      className={merge("rounded-full object-cover", props.className)}
+    />
+  )
 }

@@ -16,7 +16,14 @@ export function SpotItem({ spot }: Props) {
       <div className="space-y-2">
         <div className="relative h-[250px] w-full">
           {spot.image ? (
-            <Image alt="spot" width={450} height={300} className="h-full w-full rounded-xs" src={createAssetUrl(spot.image)} />
+            <Image
+              alt="spot"
+              width={450}
+              height={300}
+              objectFit="cover"
+              className="h-full w-full rounded-xs object-cover"
+              src={createAssetUrl(spot.image)}
+            />
           ) : (
             <div className="flex h-full w-full items-center justify-center rounded-xs bg-gray-50 dark:bg-gray-800">
               <div className="rounded-full p-4">
