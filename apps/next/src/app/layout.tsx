@@ -14,8 +14,8 @@ const PostHogPageView = dynamic(() => import("../components/PosthogPageView"), {
 const font = Urbanist({ subsets: ["latin"], variable: "--font-urbanist" })
 
 export const metadata: Metadata = {
-  title: "Ramble",
-  description: "Van life app",
+  title: "Ramble: Van Travel App",
+  description: "For a new generation of digitally connected, adventurous and eco-conscious travelers.",
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
