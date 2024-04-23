@@ -41,7 +41,7 @@ export default async function Page() {
             <Link
               key={props.id}
               href={`/blog/${props.slug.toLocaleLowerCase()}`}
-              className="p-4 grow-0 space-y-2 border rounded-sm hover:shadow-sm transition-shadow duration-200 cursor-pointer"
+              className="p-4 space-y-2 border rounded-sm hover:border-gray-600 duration-200 cursor-pointer"
             >
               <p className="text-xl font-semibold">{props.title}</p>
               <p className="line-clamp-3">{props.summary}</p>
