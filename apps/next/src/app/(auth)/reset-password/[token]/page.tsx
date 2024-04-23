@@ -1,37 +1,37 @@
-import { cacheHeader } from "pretty-cache-header"
-import { z } from "zod"
+"use client"
 
-import { hashPassword } from "@ramble/server-services"
-import Link from "next/link"
-
-// export const action = async ({ request }: ActionFunctionArgs) => {
-//   const resetPasswordSchema = z.object({
-//     token: z.string(),
-//     password: z.string().min(8, "Must be at least 8 characters"),
-//   })
-//   const result = await validateFormData(request, resetPasswordSchema)
-//   if (!result.success) return formError(result)
-//   const data = result.data
-//   const payload = await decryptToken<{ id: string }>(data.token)
-//   const hashedPassword = await hashPassword(data.password)
-//   await db.user.update({ where: { id: payload.id }, data: { password: hashedPassword } })
-//   return redirect("/login", request, {
-//     flash: { title: "Password changed", description: "You can now login with your new password" },
-//   })
-// }
+import { FormError, FormField } from "@/components/Form"
+import { FormButton } from "@/components/FormButton"
+import { useFormState } from "react-dom"
+import { action } from "./action"
 
 export default function ResetPassword({ params: { token } }: { params: { token: string } }) {
+  const [state, formAction] = useFormState(action, { ok: false })
+  if (state.ok)
+    return (
+      <div className="space-y-2">
+        <h1 className="text-4xl">Password reset!</h1>
+        <p>Try logging in with your new password.</p>
+      </div>
+    )
   return (
-    <form>
+    <form action={formAction}>
       <div className="space-y-2">
         <div>
           <h1 className="text-4xl">Reset password</h1>
           <p>Enter a new password below.</p>
         </div>
         <input name="token" type="hidden" value={token} />
-        {/* <FormField required label="Password" name="password" type="password" placeholder="********" />
-        <FormError />
-        <FormButton className="w-full">Reset</FormButton> */}
+        <FormField
+          required
+          label="Password"
+          name="password"
+          type="password"
+          placeholder="********"
+          errors={state.fieldErrors?.password}
+        />
+        <FormError error={state.formError} />
+        <FormButton className="w-full">Reset</FormButton>
       </div>
     </form>
   )
