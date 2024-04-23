@@ -240,8 +240,8 @@ importers:
         specifier: 1.10.0
         version: 1.10.0(@react-native-menu/menu@1.0.1)(@types/react@18.2.79)(react-dom@18.2.0)(react-native-ios-context-menu@2.5.1)(react-native@0.73.6)(react@18.2.0)
       zod:
-        specifier: 3.23.0
-        version: 3.23.0
+        specifier: 3.23.3
+        version: 3.23.3
     devDependencies:
       '@babel/core':
         specifier: 7.24.4
@@ -443,7 +443,7 @@ importers:
         version: 7.1.7(mapbox-gl@3.3.0)(react-dom@18.2.0)(react@18.2.0)
       remix-utils:
         specifier: 7.6.0
-        version: 7.6.0(@remix-run/node@2.8.1)(@remix-run/react@2.8.1)(crypto-js@4.2.0)(react@18.2.0)(zod@3.23.0)
+        version: 7.6.0(@remix-run/node@2.8.1)(@remix-run/react@2.8.1)(crypto-js@4.2.0)(react@18.2.0)(zod@3.23.3)
       sharp:
         specifier: 0.32.6
         version: 0.32.6
@@ -463,11 +463,11 @@ importers:
         specifier: 0.4.1
         version: 0.4.1(@types/react@18.2.79)(react@18.2.0)
       zod:
-        specifier: 3.23.0
-        version: 3.23.0
+        specifier: 3.23.3
+        version: 3.23.3
       zodix:
         specifier: 0.4.4
-        version: 0.4.4(@remix-run/server-runtime@2.8.1)(zod@3.23.0)
+        version: 0.4.4(@remix-run/server-runtime@2.8.1)(zod@3.23.3)
       zustand:
         specifier: ^4.4.7
         version: 4.5.2(@types/react@18.2.79)(react@18.2.0)
@@ -560,8 +560,8 @@ importers:
         specifier: 1.13.3
         version: 1.13.3
       zod:
-        specifier: 3.23.0
-        version: 3.23.0
+        specifier: 3.23.3
+        version: 3.23.3
     devDependencies:
       '@types/node':
         specifier: 18.19.31
@@ -648,8 +648,8 @@ importers:
   packages/server/env:
     dependencies:
       zod:
-        specifier: 3.23.0
-        version: 3.23.0
+        specifier: 3.23.3
+        version: 3.23.3
     devDependencies:
       '@types/node':
         specifier: 18.19.31
@@ -673,11 +673,11 @@ importers:
         specifier: 2.3.0
         version: 2.3.0
       zod:
-        specifier: 3.23.0
-        version: 3.23.0
+        specifier: 3.23.3
+        version: 3.23.3
       zodix:
         specifier: 0.4.4
-        version: 0.4.4(@remix-run/server-runtime@2.8.1)(zod@3.23.0)
+        version: 0.4.4(@remix-run/server-runtime@2.8.1)(zod@3.23.3)
     devDependencies:
       '@ramble/tailwind-config':
         specifier: workspace:*
@@ -797,8 +797,8 @@ importers:
         specifier: 0.32.6
         version: 0.32.6
       zod:
-        specifier: 3.23.0
-        version: 3.23.0
+        specifier: 3.23.3
+        version: 3.23.3
     devDependencies:
       '@types/bcryptjs':
         specifier: 2.4.6
@@ -15125,7 +15125,7 @@ packages:
       minimatch: 5.1.6
     dev: true
 
-  /remix-utils@7.6.0(@remix-run/node@2.8.1)(@remix-run/react@2.8.1)(crypto-js@4.2.0)(react@18.2.0)(zod@3.23.0):
+  /remix-utils@7.6.0(@remix-run/node@2.8.1)(@remix-run/react@2.8.1)(crypto-js@4.2.0)(react@18.2.0)(zod@3.23.3):
     resolution: {integrity: sha512-BPhCUEy+nwrhDDDg2v3+LFSszV6tluMbeSkbffj2o4tqZxt5Kn69Y9sNpGxYLAj8gjqeYDuxjv55of+gYnnykA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
@@ -15166,7 +15166,7 @@ packages:
       crypto-js: 4.2.0
       react: 18.2.0
       type-fest: 4.8.3
-      zod: 3.23.0
+      zod: 3.23.3
     dev: false
 
   /remove-trailing-slash@0.1.1:
@@ -17219,18 +17219,18 @@ packages:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
     dev: true
 
-  /zod@3.23.0:
-    resolution: {integrity: sha512-OFLT+LTocvabn6q76BTwVB0hExEBS0IduTr3cqZyMqEDbOnYmcU+y0tUAYbND4uwclpBGi4I4UUBGzylWpjLGA==}
+  /zod@3.23.3:
+    resolution: {integrity: sha512-tPvq1B/2Yu/dh2uAIH2/BhUlUeLIUvAjr6dpL/75I0pCYefHgjhXk1o1Kob3kTU8C7yU1j396jFHlsVWFi9ogg==}
     dev: false
 
-  /zodix@0.4.4(@remix-run/server-runtime@2.8.1)(zod@3.23.0):
+  /zodix@0.4.4(@remix-run/server-runtime@2.8.1)(zod@3.23.3):
     resolution: {integrity: sha512-msoW2RM8t0ktSKmQYT7/AjsGTqzWHeEwY+U/6w7Jzd29yoeh/QceseQG8PBb5lpY4KUUowMsYRWm926vGrwrdQ==}
     peerDependencies:
       '@remix-run/server-runtime': 1.x || 2.x
       zod: 3.x
     dependencies:
       '@remix-run/server-runtime': 2.8.1(typescript@5.4.5)
-      zod: 3.23.0
+      zod: 3.23.3
     dev: false
 
   /zustand@4.5.2(@types/react@18.2.79)(react@18.2.0):
