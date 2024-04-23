@@ -4,7 +4,7 @@ import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoint
 import { unstable_cache } from "next/cache"
 import Link from "next/link"
 
-const getItems = async () => {
+const getItems = unstable_cache(async () => {
   const content = await notion.databases.query({
     database_id: BLOG_DB_ID,
     filter: {
@@ -26,7 +26,7 @@ const getItems = async () => {
       return { ...page, cover: url }
     }),
   )
-}
+})
 
 export default async function Page() {
   const items = await getItems()

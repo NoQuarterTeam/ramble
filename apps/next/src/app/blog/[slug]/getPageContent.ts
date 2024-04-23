@@ -1,10 +1,10 @@
 import { BLOG_DB_ID, notion } from "@/lib/notion"
 import { upload } from "@/lib/s3"
 import type { BlockObjectResponse, PageObjectResponse } from "@notionhq/client/build/src/api-endpoints"
+import { unstable_cache } from "next/cache"
 import { redirect } from "next/navigation"
-import { cache } from "react"
 
-export const getPageContent = cache(async (slug: string) => {
+export const getPageContent = unstable_cache(async (slug: string) => {
   const pages = await notion.databases.query({
     database_id: BLOG_DB_ID,
     page_size: 1,
