@@ -6,7 +6,7 @@
   "license": "",
   "scripts": {
     "build": "remix build",
-    "dev": "pnpm with-env remix dev --manual",
+    "dev": "PORT=3333 pnpm with-env remix dev --manual",
     "routes": "remix routes",
     "format": "pnpm dlx @biomejs/biome check --apply-unsafe ./app",
     "typecheck": "tsc --noEmit",
