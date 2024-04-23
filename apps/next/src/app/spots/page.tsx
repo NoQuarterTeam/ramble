@@ -55,7 +55,7 @@ export default async function Page({ searchParams: { type, sort } }: { searchPar
           </div>
 
           <div>
-            <SpotSort defaultValue={sort} />
+            <SpotSort />
           </div>
         </div>
       </div>

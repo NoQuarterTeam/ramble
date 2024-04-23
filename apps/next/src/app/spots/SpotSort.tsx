@@ -9,12 +9,12 @@ const SORT_OPTIONS: { value: SpotListSort; label: string }[] = [
   { value: "saved", label: "Most saved" },
 ] as const
 
-export function SpotSort({ defaultValue }: { defaultValue?: string }) {
+export function SpotSort() {
   const router = useRouter()
   const searchParams = useSearchParams()
   return (
     <Select
-      defaultValue={defaultValue}
+      defaultValue={searchParams.get("sort") || ""}
       name="sort"
       onChange={(e) => {
         router.push(`/spots?sort=${e.target.value}&type=${searchParams.get("type") || ""}`)
