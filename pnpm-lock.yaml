@@ -379,8 +379,8 @@ importers:
         specifier: 1.1.1
         version: 1.1.1
       '@vercel/remix':
-        specifier: 2.8.1
-        version: 2.8.1(@remix-run/dev@2.9.0)(@remix-run/node@2.9.0)(@remix-run/server-runtime@2.8.1)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 2.9.0
+        version: 2.9.0(@remix-run/dev@2.9.0)(@remix-run/node@2.9.0)(@remix-run/server-runtime@2.9.0)(react-dom@18.2.0)(react@18.2.0)
       '@vercel/remix-run-dev':
         specifier: 2.8.1
         version: 2.8.1(@remix-run/serve@2.9.0)(typescript@5.4.5)
@@ -467,7 +467,7 @@ importers:
         version: 3.23.4
       zodix:
         specifier: 0.4.4
-        version: 0.4.4(@remix-run/server-runtime@2.8.1)(zod@3.23.4)
+        version: 0.4.4(@remix-run/server-runtime@2.9.0)(zod@3.23.4)
       zustand:
         specifier: ^4.4.7
         version: 4.5.2(@types/react@18.2.79)(react@18.2.0)
@@ -677,7 +677,7 @@ importers:
         version: 3.23.4
       zodix:
         specifier: 0.4.4
-        version: 0.4.4(@remix-run/server-runtime@2.8.1)(zod@3.23.4)
+        version: 0.4.4(@remix-run/server-runtime@2.9.0)(zod@3.23.4)
     devDependencies:
       '@ramble/tailwind-config':
         specifier: workspace:*
@@ -7780,19 +7780,19 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@vercel/remix@2.8.1(@remix-run/dev@2.9.0)(@remix-run/node@2.9.0)(@remix-run/server-runtime@2.8.1)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-7UGVAxP5mJsJFcLp0ERr8whWfX3tK9gx9zu8TqHH3ICR2OixUYXXg2XLD0M7U9dUHH43aGYr5EVefKcYbuGX1Q==}
+  /@vercel/remix@2.9.0(@remix-run/dev@2.9.0)(@remix-run/node@2.9.0)(@remix-run/server-runtime@2.9.0)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-p2//5S+Ar7/9cGkJv/BVae25ekmCl5rhwy1SC0AH96aQIHUG604ygE/SensmDELTcEz1ZAcpy96sdSYeACmtGA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
-      '@remix-run/dev': 2.8.1
-      '@remix-run/node': 2.8.1
-      '@remix-run/server-runtime': 2.8.1
+      '@remix-run/dev': 2.9.0
+      '@remix-run/node': 2.9.0
+      '@remix-run/server-runtime': 2.9.0
       react: '*'
       react-dom: '*'
     dependencies:
       '@remix-run/dev': 2.9.0(@remix-run/react@2.9.0)(@remix-run/serve@2.9.0)(typescript@5.4.5)
       '@remix-run/node': 2.9.0(typescript@5.4.5)
-      '@remix-run/server-runtime': 2.8.1(typescript@5.4.5)
+      '@remix-run/server-runtime': 2.9.0(typescript@5.4.5)
       '@vercel/static-config': 3.0.0
       isbot: 3.7.1
       react: 18.2.0
@@ -17276,13 +17276,13 @@ packages:
     resolution: {integrity: sha512-/AtWOKbBgjzEYYQRNfoGKHObgfAZag6qUJX1VbHo2PRBgS+wfWagEY2mizjfyAPcGesrJOcx/wcl0L9WnVrHFw==}
     dev: false
 
-  /zodix@0.4.4(@remix-run/server-runtime@2.8.1)(zod@3.23.4):
+  /zodix@0.4.4(@remix-run/server-runtime@2.9.0)(zod@3.23.4):
     resolution: {integrity: sha512-msoW2RM8t0ktSKmQYT7/AjsGTqzWHeEwY+U/6w7Jzd29yoeh/QceseQG8PBb5lpY4KUUowMsYRWm926vGrwrdQ==}
     peerDependencies:
       '@remix-run/server-runtime': 1.x || 2.x
       zod: 3.x
     dependencies:
-      '@remix-run/server-runtime': 2.8.1(typescript@5.4.5)
+      '@remix-run/server-runtime': 2.9.0(typescript@5.4.5)
       zod: 3.23.4
     dev: false
 
