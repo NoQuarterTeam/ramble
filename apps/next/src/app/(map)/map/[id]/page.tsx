@@ -42,11 +42,6 @@ const getSpotData = async (id: string) => {
         verifier: { select: { firstName: true, username: true, lastName: true, avatar: true, avatarBlurHash: true } },
         verifiedAt: true,
         images: { select: { id: true, path: true, blurHash: true } },
-        // reviews: {
-        //   take: 5,
-        //   orderBy: { createdAt: "desc" },
-        //   select: reviewItemSelectFields,
-        // },
       },
     }),
     rating: db.review.aggregate({ where: { spotId: initialSpot.id }, _avg: { rating: true } }),
