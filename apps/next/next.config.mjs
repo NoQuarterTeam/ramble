@@ -2,6 +2,7 @@
 const nextConfig = {
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
+  experimental: { ppr: true },
   transpilePackages: [
     "axios",
     "decode-uri-component",
