@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "co.noquarter.ramble",
+      "sha256_cert_fingerprints": [
+        "AA:43:C4:68:31:2E:03:E2:26:25:12:F2:49:B9:A3:DB:2F:CB:11:69:67:04:0D:3E:15:43:CF:44:11:AB:5A:D3"
+      ]
+    }
+  }
+]

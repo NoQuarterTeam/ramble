@@ -1,10 +1,9 @@
 import type { Config } from "tailwindcss"
-import plugin from "tailwindcss/plugin"
 
 const config = {
   darkMode: "class",
   presets: [require("@ramble/tailwind-config")],
-  content: ["./app/**/*.{ts,tsx}", "../../packages/shared/**/*.{ts,tsx}"],
+  content: ["./src/**/*.{ts,tsx}", "../../packages/shared/**/*.{ts,tsx}"],
   theme: {
     extend: {
       spacing: {
@@ -25,31 +24,12 @@ const config = {
         border: "var(--border)",
       },
       fontFamily: {
-        serif: ["Urbanist", "sans-serif"],
-        sans: ["Urbanist", "sans-serif"],
+        serif: ["var(--font-urbanist)"],
+        sans: ["var(--font-urbanist)"],
       },
     },
   },
   plugins: [
-    plugin(({ addUtilities }) => {
-      addUtilities({
-        ".brand-header": {
-          "@apply font-serif font-bold italic text-primary": {},
-        },
-        ".center": {
-          "@apply flex items-center justify-center": {},
-        },
-        ".border-hover": {
-          "@apply hover:border-gray-200 dark:hover:border-gray-600": {},
-        },
-        ".hstack": {
-          "@apply flex flex-row items-center space-x-2": {},
-        },
-        ".vstack": {
-          "@apply flex flex-col items-center space-y-2": {},
-        },
-      })
-    }),
     require("@tailwindcss/forms"),
     require("tailwindcss-radix"),
     require("tailwind-scrollbar-hide"),

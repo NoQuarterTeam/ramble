@@ -11,5 +11,10 @@ export namespace theme {
         export { colors };
     }
 }
-export let plugins: any[];
+export let plugins: ({
+    handler: import("tailwindcss/types/config").PluginCreator;
+    config?: Partial<import("tailwindcss/types/config").Config>;
+} | {
+    handler: () => void;
+})[];
 //# sourceMappingURL=index.d.ts.map
