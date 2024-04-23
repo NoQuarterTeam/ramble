@@ -2,7 +2,7 @@
 const nextConfig = {
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
-  experimental: { ppr: true },
+  experimental: { ppr: true, serverComponentsExternalPackages: ["@aws-sdk"] },
   transpilePackages: [
     "axios",
     "decode-uri-component",
