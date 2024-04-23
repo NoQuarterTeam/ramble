@@ -14,6 +14,7 @@
     "@aws-sdk/client-s3": "3.556.0",
     "@fontsource/urbanist": "5.0.20",
     "@notionhq/client": "^2.2.15",
+    "@plaiceholder/next": "^3.0.0",
     "@radix-ui/react-alert-dialog": "1.0.5",
     "@radix-ui/react-avatar": "1.0.4",
     "@radix-ui/react-checkbox": "1.0.4",
