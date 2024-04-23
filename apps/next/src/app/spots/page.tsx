@@ -6,13 +6,14 @@ import { db } from "@/lib/db"
 import type { SpotType } from "@ramble/database/types"
 import { spotListQuery } from "@ramble/server-services"
 import { STAY_SPOT_TYPE_OPTIONS, type SpotItemType, type SpotListSort, join } from "@ramble/shared"
+import { unstable_cache } from "next/cache"
 import { SpotSort } from "./SpotSort"
 
 const TAKE = 24
-const getSpots = async ({ type, sort = "latest" }: { type?: SpotType; sort?: SpotListSort }) => {
+const getSpots = unstable_cache(async ({ type, sort = "latest" }: { type?: SpotType; sort?: SpotListSort }) => {
   const spots = await db.$queryRaw<Array<SpotItemType>>`${spotListQuery({ type, sort, take: TAKE })}`
   return spots
-}
+})
 
 export default async function Page({ searchParams: { type, sort } }: { searchParams: { type?: SpotType; sort?: SpotListSort } }) {
   const spots = await getSpots({ type, sort })
