@@ -25,6 +25,7 @@ const nextConfig = {
       { hostname: "cucortu.ro" },
       { hostname: "image.thecrag.com" },
       { hostname: "cdn3.park4night.com" },
+      { hostname: "api.natuurkampeerterreinen.nl" },
       { hostname: "d2exd72xrrp1s7.cloudfront.net" },
       { hostname: "lh3.googleusercontent.com" },
     ],
