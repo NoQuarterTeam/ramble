@@ -373,9 +373,6 @@ importers:
       next:
         specifier: 14.3.0-canary.19
         version: 14.3.0-canary.19(react-dom@18.2.0)(react@18.2.0)
-      nprogress:
-        specifier: 0.2.0
-        version: 0.2.0
       posthog-js:
         specifier: 1.128.3
         version: 1.128.3
@@ -434,9 +431,6 @@ importers:
       '@types/node':
         specifier: ^20
         version: 20.12.7
-      '@types/nprogress':
-        specifier: 0.2.3
-        version: 0.2.3
       '@types/react':
         specifier: 18.2.79
         version: 18.2.79
