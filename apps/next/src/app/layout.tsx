@@ -14,11 +14,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <body className={font.className}>
-        <Nav />
-        <TRPCReactProvider>{children}</TRPCReactProvider>
-      </body>
+    <html lang="en" className="dark">
+      <TRPCReactProvider>
+        <body className={font.className}>
+          <Nav />
+          <div className="pt-nav">{children}</div>
+        </body>
+      </TRPCReactProvider>
     </html>
   )
 }

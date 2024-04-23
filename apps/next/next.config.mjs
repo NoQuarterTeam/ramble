@@ -18,6 +18,7 @@ const nextConfig = {
       { hostname: "campspace.com" },
       { hostname: "hipcamp-res.cloudinary.com" },
       { hostname: "polskicaravaning.pl" },
+      { hostname: "spots.roadsurfer.com" },
     ],
   },
 }

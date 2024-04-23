@@ -7,6 +7,7 @@ import { useState } from "react"
 import superjson from "superjson"
 
 import type { AppRouter } from "@ramble/api"
+
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server"
 
 /**
@@ -39,7 +40,7 @@ const getQueryClient = () => {
     return createQueryClient()
   }
   // Browser: use singleton pattern to keep the same query client
-  // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
+  // biome-ignore lint/suspicious/noAssignInExpressions: allow
   return (clientQueryClientSingleton ??= createQueryClient())
 }
 
@@ -51,17 +52,7 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
   const [trpcClient] = useState(() =>
     api.createClient({
       transformer: superjson,
-      links: [
-        unstable_httpBatchStreamLink({
-          transformer: superjson,
-          url: `${getBaseUrl()}/api/trpc`,
-          headers: () => {
-            const headers = new Headers()
-            headers.set("x-trpc-source", "nextjs-react")
-            return headers
-          },
-        }),
-      ],
+      links: [unstable_httpBatchStreamLink({ url: `${getBaseUrl()}/api/trpc` })],
     }),
   )
 
@@ -76,7 +67,6 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
 
 const getBaseUrl = () => {
   if (typeof window !== "undefined") return window.location.origin
-  // if (env.VERCEL_URL) return `https://${env.VERCEL_URL}`
-  // eslint-disable-next-line no-restricted-properties
-  return `http://localhost:${process.env.PORT ?? 3000}`
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`
+  return "http://localhost:3000}"
 }

@@ -48,7 +48,10 @@ export default async function Page() {
               <p className="opacity-60">{props.publishedAt}</p>
               <div className="flex space-x-2">
                 {props.tags.map((tag) => (
-                  <span key={tag} className="text-sm bg-primary-100 text-primary-800 px-3 py-1 rounded-full">
+                  <span
+                    key={tag}
+                    className="text-sm bg-primary-100 text-primary-800 px-3 py-1 rounded-full dark:bg-primary-900 dark:text-primary-300"
+                  >
                     {tag}
                   </span>
                 ))}

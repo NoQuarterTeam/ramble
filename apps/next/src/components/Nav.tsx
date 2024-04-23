@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation"
 
 export function Nav() {
   return (
-    <div className="flex h-nav w-full items-center justify-between border-b bg-background px-4 align-middle xl:px-12">
+    <div className="fixed top-0 left-0 z-10 flex h-nav w-full items-center justify-between border-b bg-background px-4 align-middle xl:px-12">
       <div className="flex items-center space-x-4">
         <Link href="/" className="flex w-[100px] text-primary items-center space-x-1 text-2xl italic font-bold">
           ramble
@@ -17,7 +17,7 @@ export function Nav() {
         <div className="hidden items-center space-x-1 md:flex">
           <NavbarLink href="/">Map</NavbarLink>
           <NavbarLink href="/spots">Latest spots</NavbarLink>
-          <NavbarLink href="/guides">Guides</NavbarLink>
+          {/* <NavbarLink href="/guides">Guides</NavbarLink> */}
         </div>
       </div>
       <div className="flex space-x-3">

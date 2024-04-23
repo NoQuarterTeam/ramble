@@ -517,7 +517,9 @@ async function getTranslation({ id, lang, hash }: TranslateInput) {
   try {
     const res = await fetch(`${FULL_WEB_URL}/api/spots/${id}/translate/${lang}?hash=${hash}`)
     return await res.json()
-  } catch {
+  } catch (e) {
+    console.log(e)
+
     return "Error translating description"
   }
 }
