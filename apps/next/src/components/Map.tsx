@@ -1,5 +1,4 @@
 "use client"
-import "mapbox-gl/dist/mapbox-gl.css"
 
 import * as React from "react"
 import ReactGLMap, { GeolocateControl, type MapRef, NavigationControl } from "react-map-gl"
@@ -24,7 +23,7 @@ export const MapView = React.forwardRef<MapRef, MapViewProps & { children?: Reac
         props.onLoad?.(e)
         // @ts-ignore
         e.target.setConfigProperty("basemap", "lightPreset", "night")
-        await new Promise((r) => setTimeout(r, 500))
+        await new Promise((r) => setTimeout(r, 300))
         setIsLoaded(true)
       }}
     >

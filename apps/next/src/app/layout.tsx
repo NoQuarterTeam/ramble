@@ -3,6 +3,7 @@ import { Urbanist } from "next/font/google"
 
 import { Nav } from "@/components/Nav"
 import { TRPCReactProvider } from "@/lib/trpc/react"
+import "mapbox-gl/dist/mapbox-gl.css"
 import "./globals.css"
 
 const font = Urbanist({ subsets: ["latin"], variable: "--font-urbanist" })
