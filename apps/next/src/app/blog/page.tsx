@@ -46,7 +46,8 @@ export default async function Page() {
         <div>
           <h1 className="text-4xl font-bold">ramblings</h1>
           <p className="font-light">
-            <i>to talk at length in a confused or inconsequential way</i>
+            <i className="opacity-70">noun</i> <span className="opacity-70">[plural]</span>: to talk at length in a confused or
+            inconsequential way
           </p>
         </div>
 
