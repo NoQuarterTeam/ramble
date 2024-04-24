@@ -46,7 +46,7 @@ export default async function Page() {
         <div>
           <h1 className="text-4xl font-bold">ramblings</h1>
           <p className="font-light">
-            <i>to talk at length in a confused or inconsequential way.</i>
+            <i>to talk at length in a confused or inconsequential way</i>
           </p>
         </div>
 
