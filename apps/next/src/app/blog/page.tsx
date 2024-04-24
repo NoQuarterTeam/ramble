@@ -43,7 +43,13 @@ export default async function Page() {
   return (
     <div className="px-4 py-8">
       <div className="mx-auto max-w-6xl  space-y-6">
-        <h1 className="text-4xl font-bold">blog</h1>
+        <div>
+          <h1 className="text-4xl font-bold">ramblings</h1>
+          <p className="font-light">
+            <i>to talk at length in a confused or inconsequential way.</i>
+          </p>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {items.map((item) => {
             const page = formatPageProperties(item)
