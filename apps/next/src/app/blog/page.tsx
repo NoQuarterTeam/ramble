@@ -59,8 +59,8 @@ export default async function Page() {
                   unoptimized={!page.cover.startsWith("https://cdn.ramble")}
                   alt={page.title}
                   width={600}
-                  height={200}
-                  className="rounded-sm h-[200px] w-full object-cover"
+                  height={300}
+                  className="rounded-sm h-[300px] w-full object-cover"
                 />
               )}
               <p className="opacity-60">{dayjs(page.publishedAt).format("Do MMMM YYYY")}</p>

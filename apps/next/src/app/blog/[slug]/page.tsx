@@ -1,8 +1,11 @@
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints"
 import advancedFormat from "dayjs/plugin/advancedFormat"
 
+import { AppCta } from "@/components/AppCta"
+import { LinkButton } from "@/components/LinkButton"
 import { BLOG_DB_ID, notion } from "@/lib/notion"
 import dayjs from "dayjs"
+import { ArrowLeft } from "lucide-react"
 import type { Metadata } from "next"
 import Image from "next/image"
 import { NotionBlock } from "../components/NotionBlock"
@@ -51,30 +54,39 @@ export default async function Page({ params }: { params: { slug: string } }) {
   const page = await getPageContent(slug)
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap gap-4 items-center">
-        <div className="flex flex-wrap gap-2">
-          {page.tags.map((tag) => (
-            <Tag key={tag.id} tag={tag} />
+    <div className="p-2 md:p-6">
+      <div className="mx-auto max-w-2xl space-y-6">
+        <LinkButton size="sm" leftIcon={<ArrowLeft size={14} />} aria-label="Back to home" variant="outline" href="/blog">
+          Back
+        </LinkButton>
+
+        <div className="flex flex-wrap gap-4 items-center">
+          <div className="flex flex-wrap gap-2">
+            {page.tags.map((tag) => (
+              <Tag key={tag.id} tag={tag} />
+            ))}
+          </div>
+          <p className="opacity-60">{dayjs(page.publishedAt).format("Do MMMM YYYY")}</p>
+        </div>
+        <h1 className="text-4xl font-bold">{page.title}</h1>
+        {page.cover && (
+          <Image
+            src={page.cover}
+            unoptimized={!page.cover.startsWith("https://cdn.ramble")}
+            alt={page.title}
+            width={800}
+            height={350}
+            className="w-full h-[350px] object-cover rounded-sm"
+          />
+        )}
+        <div>
+          {page.content.map((block) => (
+            <NotionBlock key={block.id} block={block} />
           ))}
         </div>
-        <p className="opacity-60">{dayjs(page.publishedAt).format("Do MMMM YYYY")}</p>
-      </div>
-      <h1 className="text-4xl font-bold">{page.title}</h1>
-      {page.cover && (
-        <Image
-          src={page.cover}
-          unoptimized={!page.cover.startsWith("https://cdn.ramble")}
-          alt={page.title}
-          width={800}
-          height={300}
-          className="w-full h-[300px] object-cover rounded-sm"
-        />
-      )}
-      <div>
-        {page.content.map((block) => (
-          <NotionBlock key={block.id} block={block} />
-        ))}
+        <div className="py-20">
+          <AppCta message="Download the app now and explore!" />
+        </div>
       </div>
     </div>
   )
