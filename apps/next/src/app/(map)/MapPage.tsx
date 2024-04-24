@@ -147,13 +147,13 @@ function UserClusterMarker(props: UserMarkerProps) {
               objectFit="cover"
               // placeholder={props.point.properties.avatarBlurHash}
               src={createAssetUrl(props.point.properties.avatar)}
-              className="sq-10 rounded-full object-cover"
+              className="sq-10 rounded-full object-cover blur-sm"
             />
           ) : (
             <User size={18} className="text-white" />
           )}
           <div className="-bottom-5 -translate-x-1/2 absolute left-1/2 hidden rounded-xs bg-background px-2 py-1 group-hover:block">
-            <p className="text-xs">{props.point.properties.username}</p>
+            <p className="text-xs blur-sm">{props.point.properties.username}</p>
           </div>
         </div>
       )}

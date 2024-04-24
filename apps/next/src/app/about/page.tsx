@@ -144,7 +144,7 @@ export default function Home() {
           <div>
             <h3 className="text-primary font-bold italic text-4xl">join the beta now</h3>
           </div>
-          <AppCta message="To maintain an authentic and trustworthy community, members can currently only join via invite." />
+          <AppCta message="To maintain an authentic and trustworthy community, members can currently only join via invite. Download the app to request an invite." />
         </div>
       </div>
       <div className="mx-auto max-w-6xl space-y-20 px-4 py-20">
@@ -200,7 +200,7 @@ export default function Home() {
         <div>
           <h3 className="text-primary font-bold italic text-4xl">get access now</h3>
         </div>
-        <AppCta message="To maintain an authentic and trustworthy community, members can only join via invite." />
+        <AppCta message="To maintain an authentic and trustworthy community, members can currently only join via invite. Download the app to request an invite." />
       </div>
       <div className="border-t">
         <PageContainer className="flex justify-between px-4 py-6">
