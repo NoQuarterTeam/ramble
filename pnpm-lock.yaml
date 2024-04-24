@@ -558,8 +558,8 @@ importers:
         specifier: 7.0.0-alpha.115
         version: 7.0.0-alpha.115
       '@turf/helpers':
-        specifier: 7.0.0-alpha.114
-        version: 7.0.0-alpha.114
+        specifier: 7.0.0-alpha.115
+        version: 7.0.0-alpha.115
       '@vercel/analytics':
         specifier: 1.2.2
         version: 1.2.2(next@14.3.0-canary.19)(react@18.2.0)
@@ -730,8 +730,8 @@ importers:
         specifier: 7.0.0-alpha.115
         version: 7.0.0-alpha.115
       '@turf/helpers':
-        specifier: 7.0.0-alpha.114
-        version: 7.0.0-alpha.114
+        specifier: 7.0.0-alpha.115
+        version: 7.0.0-alpha.115
       dayjs:
         specifier: 1.11.10
         version: 1.11.10
@@ -7601,13 +7601,6 @@ packages:
 
   /@turf/helpers@6.5.0:
     resolution: {integrity: sha512-VbI1dV5bLFzohYYdgqwikdMVpe7pJ9X3E+dlr425wa2/sMJqYDhTO++ec38/pcPvPE6oD9WEEeU3Xu3gza+VPw==}
-    dev: false
-
-  /@turf/helpers@7.0.0-alpha.114:
-    resolution: {integrity: sha512-hqoARkwAaFMK/8wOWDQhmvIxjUL2l9jUhn1GUzW3fsumImPxuHoJZbIZhiHjE7ceQngveCeUCtkiKw89lekN8w==}
-    dependencies:
-      deep-equal: 2.2.3
-      tslib: 2.6.2
     dev: false
 
   /@turf/helpers@7.0.0-alpha.115:
