@@ -32,6 +32,5 @@ export async function upload(fileUrl: string): Promise<string> {
     await uploader.done()
   })
   const fullUrl = `${assetUrl}${key}`
-  console.log({ fullUrl })
   return fullUrl
 }
