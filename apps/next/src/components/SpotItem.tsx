@@ -5,9 +5,7 @@ import { type SpotItemType, displaySaved } from "@ramble/shared"
 import { createAssetUrl, displayRating } from "@ramble/shared"
 import Image from "next/image"
 import { SpotIcon } from "./SpotIcon"
-import { IconButton, Popover, PopoverContent, PopoverTrigger } from "./ui"
 
-import { AppCta } from "./AppCta"
 import { SaveSpot } from "./SaveSpot"
 
 interface Props {
@@ -60,7 +58,6 @@ export function SpotItem({ spot }: Props) {
             </div>
           </div>
           {spot.address && <p className="line-clamp-1 font-thin text-sm opacity-70">{spot.address}</p>}
-          {spot.distanceFromMe && <p className="font-thin text-sm opacity-70">{Math.round(spot.distanceFromMe)} km away</p>}
         </div>
       </div>
       <div className="absolute top-2 right-2">
