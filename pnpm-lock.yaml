@@ -555,8 +555,8 @@ importers:
         specifier: 7.0.0-alpha.115
         version: 7.0.0-alpha.115
       '@turf/center':
-        specifier: 7.0.0-alpha.114
-        version: 7.0.0-alpha.114
+        specifier: 7.0.0-alpha.115
+        version: 7.0.0-alpha.115
       '@turf/helpers':
         specifier: 7.0.0-alpha.114
         version: 7.0.0-alpha.114
@@ -727,8 +727,8 @@ importers:
         specifier: 7.0.0-alpha.115
         version: 7.0.0-alpha.115
       '@turf/center':
-        specifier: 7.0.0-alpha.114
-        version: 7.0.0-alpha.114
+        specifier: 7.0.0-alpha.115
+        version: 7.0.0-alpha.115
       '@turf/helpers':
         specifier: 7.0.0-alpha.114
         version: 7.0.0-alpha.114
@@ -7568,14 +7568,6 @@ packages:
       '@turf/meta': 7.0.0-alpha.115
       '@turf/projection': 7.0.0-alpha.115
       d3-geo: 1.7.1
-    dev: false
-
-  /@turf/center@7.0.0-alpha.114:
-    resolution: {integrity: sha512-MuFebMXfC2olfqjtVBm3GWhgkwUR+8Mx7QwHCyv2YTCVMiEcX18KRZjcvAJudXc2/EwFR5COUUbmIYuhVIfjmQ==}
-    dependencies:
-      '@turf/bbox': 7.0.0-alpha.115
-      '@turf/helpers': 7.0.0-alpha.114
-      tslib: 2.6.2
     dev: false
 
   /@turf/center@7.0.0-alpha.115:
