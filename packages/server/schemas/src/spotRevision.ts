@@ -1,15 +1,15 @@
 import { SpotType } from "@ramble/database/types"
 import { z } from "zod"
-import { FormBoolean, FormNumber, NullableFormString } from "./utils/form"
+import { NullableFormString } from "./utils/form"
 
 export const spotRevisionSchema = z.object({
   name: z.string().min(1),
   description: NullableFormString,
-  isLocationUnknown: FormBoolean,
+  isLocationUnknown: z.boolean(),
   address: NullableFormString,
-  latitude: FormNumber,
-  longitude: FormNumber,
-  // isPetFriendly: FormBoolean,
+  latitude: z.number().optional(),
+  longitude: z.number().optional(),
+  // isPetFriendly: z.boolean(),
   type: z.nativeEnum(SpotType),
   notes: z.string().min(1),
 })

@@ -1,11 +1,9 @@
 import { z } from "zod"
 
-import { FormNumber } from "./utils/form"
-
 export const clusterSchema = z.object({
-  zoom: FormNumber,
-  minLat: FormNumber,
-  maxLat: FormNumber,
-  minLng: FormNumber,
-  maxLng: FormNumber,
+  zoom: z.number(),
+  minLat: z.number(),
+  maxLat: z.number(),
+  minLng: z.number(),
+  maxLng: z.number(),
 })
