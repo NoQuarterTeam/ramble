@@ -41,39 +41,41 @@ const getItems = unstable_cache(
 export default async function Page() {
   const items = await getItems()
   return (
-    <div className="mx-auto max-w-6xl py-8 space-y-6">
-      <h1 className="text-4xl font-bold">blog</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {items.map((item) => {
-          const page = formatPageProperties(item)
-          if (!page.slug) return null
-          return (
-            <Link
-              key={page.id}
-              href={`/blog/${page.slug.toLocaleLowerCase()}`}
-              className="p-4 space-y-2 border rounded-sm hover:border-gray-600 duration-200 cursor-pointer"
-            >
-              {page.cover && (
-                <Image
-                  src={page.cover}
-                  unoptimized={!page.cover.startsWith("https://cdn.ramble")}
-                  alt={page.title}
-                  width={600}
-                  height={300}
-                  className="rounded-sm h-[300px] w-full object-cover"
-                />
-              )}
-              <p className="opacity-60">{dayjs(page.publishedAt).format("Do MMMM YYYY")}</p>
-              <p className="text-2xl font-semibold leading-8">{page.title}</p>
-              <p className="line-clamp-3 font-light">{page.summary}</p>
-              <div className="flex flex-wrap gap-2">
-                {page.tags.map((tag) => (
-                  <Tag key={tag.id} tag={tag} />
-                ))}
-              </div>
-            </Link>
-          )
-        })}
+    <div className="px-4 py-8">
+      <div className="mx-auto max-w-6xl  space-y-6">
+        <h1 className="text-4xl font-bold">blog</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {items.map((item) => {
+            const page = formatPageProperties(item)
+            if (!page.slug) return null
+            return (
+              <Link
+                key={page.id}
+                href={`/blog/${page.slug.toLocaleLowerCase()}`}
+                className="p-4 space-y-2 border rounded-sm hover:border-gray-600 duration-200 cursor-pointer"
+              >
+                {page.cover && (
+                  <Image
+                    src={page.cover}
+                    unoptimized={!page.cover.startsWith("https://cdn.ramble")}
+                    alt={page.title}
+                    width={600}
+                    height={300}
+                    className="rounded-sm h-[300px] w-full object-cover"
+                  />
+                )}
+                <p className="opacity-60">{dayjs(page.publishedAt).format("Do MMMM YYYY")}</p>
+                <p className="text-2xl font-semibold leading-8">{page.title}</p>
+                <p className="line-clamp-3 font-light">{page.summary}</p>
+                <div className="flex flex-wrap gap-2">
+                  {page.tags.map((tag) => (
+                    <Tag key={tag.id} tag={tag} />
+                  ))}
+                </div>
+              </Link>
+            )
+          })}
+        </div>
       </div>
     </div>
   )

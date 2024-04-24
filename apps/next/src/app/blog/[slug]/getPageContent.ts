@@ -30,12 +30,15 @@ export const getPageContent = unstable_cache(
     let cover = null
     if (imageUrl) cover = await upload(imageUrl)
     const pageContent = await notion.blocks.children.list({ block_id: page.id })
+
     return {
       title: properties.Title.type === "title" ? properties.Title.title[0].plain_text : "",
       summary: properties.Summary.type === "rich_text" ? properties.Summary.rich_text[0]?.plain_text : null,
       tags: properties.Tags.type === "multi_select" ? properties.Tags.multi_select : [],
       publishedAt: properties.Published.type === "date" ? properties.Published.date?.start : null,
       cover,
+      coverSource: properties["Cover source"].type === "rich_text" ? properties["Cover source"].rich_text[0].plain_text : null,
+      coverSourceUrl: properties["Cover source url"].type === "url" ? properties["Cover source url"].url : null,
       content: await Promise.all(
         (pageContent.results as BlockObjectResponse[]).map(async (block) => {
           if (block.type === "image" && block.image.type === "file") {

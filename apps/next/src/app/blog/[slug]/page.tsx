@@ -54,7 +54,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
   const page = await getPageContent(slug)
 
   return (
-    <div className="p-2 md:p-6">
+    <div className="px-4 py-8">
       <div className="mx-auto max-w-2xl space-y-6">
         <LinkButton size="sm" leftIcon={<ArrowLeft size={14} />} aria-label="Back to home" variant="outline" href="/blog">
           Back
@@ -70,14 +70,26 @@ export default async function Page({ params }: { params: { slug: string } }) {
         </div>
         <h1 className="text-4xl font-bold">{page.title}</h1>
         {page.cover && (
-          <Image
-            src={page.cover}
-            unoptimized={!page.cover.startsWith("https://cdn.ramble")}
-            alt={page.title}
-            width={800}
-            height={350}
-            className="w-full h-[350px] object-cover rounded-sm"
-          />
+          <div className="relative">
+            <Image
+              src={page.cover}
+              unoptimized={!page.cover.startsWith("https://cdn.ramble")}
+              alt={page.title}
+              width={800}
+              height={350}
+              className="w-full h-[350px] object-cover rounded-sm"
+            />
+            {page.coverSource && page.coverSourceUrl && (
+              <a
+                href={page.coverSourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute bottom-1 text-xs right-1 bg-background px-2 py-1 rounded-sm hover:opacity-75"
+              >
+                Photo by {page.coverSource}
+              </a>
+            )}
+          </div>
         )}
         <div>
           {page.content.map((block) => (
