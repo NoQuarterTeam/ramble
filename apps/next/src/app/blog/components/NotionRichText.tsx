@@ -8,7 +8,9 @@ export function NotionRichText({ richText }: { richText: RichTextItemResponse | 
     return (
       <a
         href={richText.text.link.url}
-        className={join("inline-block underline hover:opacity-75", richText.annotations.bold && "font-bold")}
+        className={join("inline-block underline hover:opacity-75", richText.annotations.bold && "font-semibold")}
+        target="_blank"
+        rel="noreferrer noopener"
       >
         {richText.text.content}
       </a>
