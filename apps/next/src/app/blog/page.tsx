@@ -2,33 +2,36 @@ import { BLOG_DB_ID, notion } from "@/lib/notion"
 import { upload } from "@/lib/s3"
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints"
 import { unstable_cache } from "next/cache"
+// import Image from "next/image"
 import Link from "next/link"
 
-const getItems = unstable_cache(async () => {
-  const content = await notion.databases.query({
-    database_id: BLOG_DB_ID,
-    filter: {
-      and: [
-        { property: "Published", date: { is_not_empty: true } },
-        { property: "Slug", rich_text: { is_not_empty: true } },
-      ],
-    },
-    sorts: [{ property: "Published", direction: "descending" }],
-  })
+const getItems = unstable_cache(
+  async () => {
+    const content = await notion.databases.query({
+      database_id: BLOG_DB_ID,
+      filter: {
+        and: [
+          { property: "Published", date: { is_not_empty: true } },
+          { property: "Slug", rich_text: { is_not_empty: true } },
+        ],
+      },
+      sorts: [{ property: "Published", direction: "descending" }],
+    })
 
-  return Promise.all(
-    (content.results as PageObjectResponse[]).map(async (page) => {
-      const cover = page.cover
-      if (!cover) return { ...page, cover: null }
-      const imageUrl = cover.type === "external" ? cover.external.url : cover.file.url
-      if (!imageUrl) return { ...page, cover: null }
-      const url = await upload(imageUrl)
-      return { ...page, cover: url }
-    }),
-  )
-})
-
-export const revalidate = 86400
+    return Promise.all(
+      (content.results as PageObjectResponse[]).map(async (page) => {
+        const cover = page.cover
+        if (!cover) return { ...page, cover: null }
+        const imageUrl = cover.type === "external" ? cover.external.url : cover.file.url
+        if (!imageUrl) return { ...page, cover: null }
+        const url = await upload(imageUrl)
+        return { ...page, cover: url }
+      }),
+    )
+  },
+  ["blog"],
+  { revalidate: 86400 },
+)
 
 export default async function Page() {
   const items = await getItems()
@@ -45,6 +48,9 @@ export default async function Page() {
               href={`/blog/${props.slug.toLocaleLowerCase()}`}
               className="p-4 space-y-2 border rounded-sm hover:border-gray-600 duration-200 cursor-pointer"
             >
+              {/* {props.cover && (
+                <Image src={props.cover} alt={props.title} width={500} height={300} layout="responsive" className="rounded-sm" />
+              )} */}
               <p className="opacity-60">{props.publishedAt}</p>
               <p className="text-xl font-semibold">{props.title}</p>
               <p className="line-clamp-3">{props.summary}</p>
@@ -75,7 +81,7 @@ const formatPageProperties = (page: Omit<PageObjectResponse, "cover"> & { cover:
     title: properties.Title.type === "title" ? properties.Title.title[0].plain_text : "",
     summary: properties.Summary.type === "rich_text" ? properties.Summary.rich_text[0]?.plain_text : null,
     tags: properties.Tags.type === "multi_select" ? properties.Tags.multi_select.map((tag) => tag.name) : [],
-    image: page.cover,
+    cover: page.cover,
     slug:
       properties.Slug.type === "rich_text"
         ? properties.Slug.rich_text.length > 0
