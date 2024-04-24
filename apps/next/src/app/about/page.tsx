@@ -3,6 +3,7 @@ import { join } from "@ramble/shared"
 import { Instagram } from "lucide-react"
 // import { ClientOnly } from "remix-utils/client-only"
 
+import { AppCta } from "@/components/AppCta"
 import { PageContainer } from "@/components/PageContainer"
 import Link from "next/link"
 
@@ -126,11 +127,8 @@ export default function Home() {
         <div className="mx-auto max-w-6xl space-y-4">
           <div>
             <h3 className="text-primary font-bold italic text-4xl">join the beta now</h3>
-            <p className="text-lg">
-              To maintain an authentic and trustworthy community, members can currently only join via invite.
-            </p>
           </div>
-          {/* <RequestAccessForm mode="dark" /> */}
+          <AppCta message="To maintain an authentic and trustworthy community, members can currently only join via invite." />
         </div>
       </div>
       <div className="mx-auto max-w-6xl space-y-20 px-4 py-20">
@@ -185,9 +183,8 @@ export default function Home() {
       <div className="mx-auto flex max-w-7xl flex-col items-center space-y-8 px-4 py-20 text-center md:py-32">
         <div>
           <h3 className="text-primary font-bold italic text-4xl">get access now</h3>
-          <p className="text-lg">To maintain an authentic and trustworthy community, members can only join via invite.</p>
         </div>
-        {/* <RequestAccessForm mode="dark" /> */}
+        <AppCta message="To maintain an authentic and trustworthy community, members can only join via invite." />
       </div>
       <div className="border-t">
         <PageContainer className="flex items-center justify-between space-y-0 px-4 py-6">

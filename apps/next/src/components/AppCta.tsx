@@ -3,7 +3,7 @@ import Link from "next/link"
 export function AppCta({ message }: { message?: string }) {
   return (
     <div className="p-4 border rounded-sm">
-      <p className="pb-2 text-center font-semibold">{message || "Download the app to access more features"}</p>
+      <p className="pb-2 text-center text-lg">{message || "Download the app to access more features"}</p>
       <div className="flex items-center justify-center space-x-2">
         <Link
           target="_blank"
