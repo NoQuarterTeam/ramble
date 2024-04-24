@@ -1,9 +1,34 @@
 import { BLOG_DB_ID, notion } from "@/lib/notion"
 import { upload } from "@/lib/s3"
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints"
+import { join } from "@ramble/shared"
+import { cva } from "class-variance-authority"
+import dayjs from "dayjs"
+import advancedFormat from "dayjs/plugin/advancedFormat"
 import { unstable_cache } from "next/cache"
-// import Image from "next/image"
+import Image from "next/image"
 import Link from "next/link"
+dayjs.extend(advancedFormat)
+
+const tags = cva("text-sm px-3 py-1 flex items-center justify-center rounded-full", {
+  variants: {
+    color: {
+      default: "text-white bg-gray-700",
+      blue: "text-blue-200 bg-blue-900",
+      brown: "text-amber-200 bg-amber-900",
+      gray: "text-gray-200 bg-stone-700",
+      green: "text-green-200 bg-green-900",
+      orange: "text-orange-200 bg-orange-900",
+      pink: "text-pink-200 bg-pink-900",
+      purple: "text-purple-200 bg-purple-900",
+      red: "text-red-200 bg-red-900",
+      yellow: "text-yellow-200 bg-yellow-900",
+    },
+  },
+  defaultVariants: {
+    color: "default",
+  },
+})
 
 const getItems = unstable_cache(
   async () => {
@@ -11,7 +36,7 @@ const getItems = unstable_cache(
       database_id: BLOG_DB_ID,
       filter: {
         and: [
-          { property: "Published", date: { is_not_empty: true } },
+          { property: "Published", date: { is_not_empty: true, before: dayjs().format() } },
           { property: "Slug", rich_text: { is_not_empty: true } },
         ],
       },
@@ -38,30 +63,35 @@ export default async function Page() {
   return (
     <div className="mx-auto max-w-6xl py-8 space-y-6">
       <h1 className="text-4xl font-bold">blog</h1>
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {items.map((item) => {
-          const props = formatPageProperties(item)
-          if (!props.slug) return null
+          const page = formatPageProperties(item)
+          if (!page.slug) return null
           return (
             <Link
-              key={props.id}
-              href={`/blog/${props.slug.toLocaleLowerCase()}`}
+              key={page.id}
+              href={`/blog/${page.slug.toLocaleLowerCase()}`}
               className="p-4 space-y-2 border rounded-sm hover:border-gray-600 duration-200 cursor-pointer"
             >
-              {/* {props.cover && (
-                <Image src={props.cover} alt={props.title} width={500} height={300} layout="responsive" className="rounded-sm" />
-              )} */}
-              <p className="opacity-60">{props.publishedAt}</p>
-              <p className="text-xl font-semibold">{props.title}</p>
-              <p className="line-clamp-3">{props.summary}</p>
-              <div className="flex space-x-2">
-                {props.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-sm bg-primary-100 text-primary-800 px-3 py-1 rounded-full dark:bg-primary-900 dark:text-primary-300"
-                  >
-                    {tag}
-                  </span>
+              {page.cover && (
+                <Image
+                  src={page.cover}
+                  unoptimized={!page.cover.startsWith("https://cdn.ramble")}
+                  alt={page.title}
+                  width={600}
+                  height={200}
+                  objectFit="cover"
+                  className="rounded-sm h-[200px] w-full object-cover"
+                />
+              )}
+              <p className="opacity-60">{dayjs(page.publishedAt).format("Do MMMM YYYY")}</p>
+              <p className="text-2xl font-semibold leading-8">{page.title}</p>
+              <p className="line-clamp-3 font-light">{page.summary}</p>
+              <div className="flex flex-wrap gap-2">
+                {page.tags.map((tag) => (
+                  <div key={tag.id} className={join(tags({ color: tag.color }))}>
+                    <span className="pt-px">{tag.name}</span>
+                  </div>
                 ))}
               </div>
             </Link>
@@ -80,14 +110,9 @@ const formatPageProperties = (page: Omit<PageObjectResponse, "cover"> & { cover:
     id: page.id,
     title: properties.Title.type === "title" ? properties.Title.title[0].plain_text : "",
     summary: properties.Summary.type === "rich_text" ? properties.Summary.rich_text[0]?.plain_text : null,
-    tags: properties.Tags.type === "multi_select" ? properties.Tags.multi_select.map((tag) => tag.name) : [],
+    tags: properties.Tags.type === "multi_select" ? properties.Tags.multi_select : [],
+    publishedAt: properties.Published.type === "date" ? properties.Published.date?.start! : "",
     cover: page.cover,
-    slug:
-      properties.Slug.type === "rich_text"
-        ? properties.Slug.rich_text.length > 0
-          ? properties.Slug.rich_text[0]?.plain_text
-          : null
-        : null,
-    publishedAt: properties.Published.type === "date" ? properties.Published.date?.start : null,
+    slug: properties.Slug.type === "rich_text" ? properties.Slug.rich_text[0]!.plain_text! : "",
   }
 }

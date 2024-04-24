@@ -12,7 +12,7 @@ export async function NotionBlock({ block }: Props) {
     case "paragraph":
       if (block.paragraph.rich_text.length === 0) return <br />
       return (
-        <p className="mb-3 font-light text-lg leading-normal">
+        <p className="mb-6 font-light text-lg leading-normal">
           {block.paragraph.rich_text.map((richText, i) => (
             // biome-ignore lint/suspicious/noArrayIndexKey: allow
             <NotionRichText key={i} richText={richText} />
@@ -22,7 +22,7 @@ export async function NotionBlock({ block }: Props) {
     case "numbered_list_item":
       if (block.numbered_list_item.rich_text.length === 0) return <br />
       return (
-        <li className="mb-3 font-light text-lg leading-normal list-decimal">
+        <li className="mb-6 font-light text-lg leading-normal list-decimal">
           {block.numbered_list_item.rich_text.map((richText, i) => (
             // biome-ignore lint/suspicious/noArrayIndexKey: allow
             <NotionRichText key={i} richText={richText} />
@@ -31,7 +31,7 @@ export async function NotionBlock({ block }: Props) {
       )
     case "image":
       return (
-        <div className="mb-3 space-y-2">
+        <div className="mb-6 space-y-2">
           <Image
             src={block.image.type === "external" ? block.image.external.url : block.image.file.url}
             width={700}
@@ -58,7 +58,7 @@ export async function NotionBlock({ block }: Props) {
         return url[2] !== undefined ? url[2].split(/[^0-9a-z_\-]/i)[0] : url[0]
       }
       return (
-        <div className="mb-3 space-y-2">
+        <div className="mb-6 space-y-2">
           {block.video.type === "external" && block.video.external.url.includes("youtube") ? (
             <iframe
               width="672"
@@ -69,7 +69,7 @@ export async function NotionBlock({ block }: Props) {
               allowFullScreen
             />
           ) : (
-            <video muted className="mb-3 aspect-video w-full bg-gray-950" preload="none" controls>
+            <video muted className="mb-6 aspect-video w-full bg-gray-950" preload="none" controls>
               <source src={block.video.type === "external" ? block.video.external.url : block.video.file.url} type="video/mp4" />
             </video>
           )}
@@ -115,7 +115,7 @@ export async function NotionBlock({ block }: Props) {
         </h1>
       )
     case "divider":
-      return <hr className="mb-3 border-gray-600" />
+      return <hr className="mb-6 border-gray-600" />
     case "bulleted_list_item":
       if (block.bulleted_list_item.rich_text.length === 0) return <br />
       return (
