@@ -549,8 +549,8 @@ importers:
         specifier: 7.0.0-alpha.115
         version: 7.0.0-alpha.115
       '@turf/boolean-point-in-polygon':
-        specifier: 7.0.0-alpha.114
-        version: 7.0.0-alpha.114
+        specifier: 7.0.0-alpha.115
+        version: 7.0.0-alpha.115
       '@turf/buffer':
         specifier: 7.0.0-alpha.114
         version: 7.0.0-alpha.114
@@ -7549,11 +7549,11 @@ packages:
       '@turf/invariant': 6.5.0
     dev: false
 
-  /@turf/boolean-point-in-polygon@7.0.0-alpha.114:
-    resolution: {integrity: sha512-ytxwVqHbbBCG5DsN5QLBO6PD21EnnhnqFiGkg6a4pEOv/y7TnapSQ8RTKVJfSUdA+MhJ+uu3aSXOVH44udgNfA==}
+  /@turf/boolean-point-in-polygon@7.0.0-alpha.115:
+    resolution: {integrity: sha512-1ct4qSlLKoIxsU/tCIEjPDZy5zJjc2P20YtogVvue2PjFki43UymJa2Uf04gTWy6u7dPJCBurN4Ch7tumYUPEw==}
     dependencies:
-      '@turf/helpers': 7.0.0-alpha.114
-      '@turf/invariant': 7.0.0-alpha.114
+      '@turf/helpers': 7.0.0-alpha.115
+      '@turf/invariant': 7.0.0-alpha.115
       point-in-polygon-hao: 1.1.0
       tslib: 2.6.2
     dev: false
@@ -7623,10 +7623,10 @@ packages:
       '@turf/helpers': 6.5.0
     dev: false
 
-  /@turf/invariant@7.0.0-alpha.114:
-    resolution: {integrity: sha512-d6KGoItyg2FFj6JSXlS23Ymvt6YA3DwAbpTwKiHCkrDP5UtHQwli+yYvmY/Bo2eC3HyDAgk/YTutmv3mNiWaJA==}
+  /@turf/invariant@7.0.0-alpha.115:
+    resolution: {integrity: sha512-OotxjtmGo+sVOPJYGiXEWdqz8trI/UQHbL3ciXfUxBVPOkTi7oGby7niLg+EZ0TKHt/Dcl/2WgA33zZmqKSquA==}
     dependencies:
-      '@turf/helpers': 7.0.0-alpha.114
+      '@turf/helpers': 7.0.0-alpha.115
       tslib: 2.6.2
     dev: false
 
