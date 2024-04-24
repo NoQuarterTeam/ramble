@@ -1,5 +1,7 @@
 node_modules
 
+/old
+
 /.cache
 /build
 /public/build

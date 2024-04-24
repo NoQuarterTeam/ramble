@@ -4,7 +4,7 @@ import axios from "axios"
 import { cacheHeader } from "pretty-cache-header"
 import sharp from "sharp"
 
-import { deleteObject, getHead, uploadStream } from "@ramble/server-services"
+import { getHead, uploadStream } from "@ramble/server-services"
 import { assetUrl } from "@ramble/shared"
 
 import type { LoaderFunctionArgs } from "~/lib/vendor/vercel.server"

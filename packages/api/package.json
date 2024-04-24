@@ -17,15 +17,15 @@
     "@ramble/server-services": "workspace:*",
     "@ramble/shared": "workspace:*",
     "@trpc/server": "10.45.2",
-    "@turf/bbox": "6.5.0",
-    "@turf/center": "6.5.0",
-    "@turf/helpers": "6.5.0",
+    "@turf/bbox": "7.0.0-alpha.115",
+    "@turf/center": "7.0.0-alpha.114",
+    "@turf/helpers": "7.0.0-alpha.114",
     "dayjs": "1.11.10",
     "stripe": "^14.21.0",
     "semver": "^7.6.0",
     "supercluster": "8.0.1",
     "superjson": "1.13.3",
-    "zod": "3.23.0"
+    "zod": "3.23.4"
   },
   "devDependencies": {
     "@types/node": "18.19.31",

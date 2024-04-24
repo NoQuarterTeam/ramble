@@ -17,6 +17,7 @@ const envSchema = z.object({
   REVENUE_CAT_API_KEY: z.string(),
   REVENUE_CAT_PROJECT_ID: z.string(),
   REVENUE_CAT_WEBHOOK_TOKEN: z.string(),
+  NOTION_TOKEN: z.string(),
   NODE_ENV: z.enum(["development", "production"]).optional(),
   APP_SECRET: z.string(),
   DATABASE_URL: z.string(),

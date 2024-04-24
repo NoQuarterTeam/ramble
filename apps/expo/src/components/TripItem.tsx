@@ -118,30 +118,30 @@ function TripUsers({ trip }: Props) {
           )}
 
           <View className="flex flex-row items-center">
-            {shownUsers.map((user, i) =>
-              user.avatar ? (
-                <OptimizedImage
-                  width={30}
-                  height={30}
-                  key={user.id}
-                  placeholder={user.avatarBlurHash}
-                  source={{ uri: createAssetUrl(user.avatar) }}
-                  style={{ zIndex: i * -1 }}
-                  className="sq-6 -ml-1.5 rounded-full border border-background object-cover dark:border-background-dark"
-                />
-              ) : (
-                <View
-                  key={user.id}
-                  style={{ zIndex: i * -1 }}
-                  className="sq-6 -ml-1.5 flex items-center justify-center rounded-full border border-background bg-gray-200 object-cover dark:border-background-dark dark:bg-gray-700"
-                >
-                  <Text className="font-600 text-xxs">
-                    {user.firstName[0]}
-                    {user.lastName[0]}
-                  </Text>
-                </View>
-              ),
-            )}
+            {shownUsers.map((user, i) => (
+              <React.Fragment key={user.id}>
+                {user.avatar ? (
+                  <OptimizedImage
+                    width={30}
+                    height={30}
+                    placeholder={user.avatarBlurHash}
+                    source={{ uri: createAssetUrl(user.avatar) }}
+                    style={{ zIndex: i * -1 }}
+                    className="sq-6 -ml-1.5 rounded-full border border-background object-cover dark:border-background-dark"
+                  />
+                ) : (
+                  <View
+                    style={{ zIndex: i * -1 }}
+                    className="sq-6 -ml-1.5 flex items-center justify-center rounded-full border border-background bg-gray-200 object-cover dark:border-background-dark dark:bg-gray-700"
+                  >
+                    <Text className="font-600 text-xxs">
+                      {user.firstName[0]}
+                      {user.lastName[0]}
+                    </Text>
+                  </View>
+                )}
+              </React.Fragment>
+            ))}
             {remainingUsers > 0 && (
               <View
                 style={{ zIndex: -5 }}
