@@ -546,8 +546,8 @@ importers:
         specifier: 10.45.2
         version: 10.45.2
       '@turf/bbox':
-        specifier: 7.0.0-alpha.114
-        version: 7.0.0-alpha.114
+        specifier: 7.0.0-alpha.115
+        version: 7.0.0-alpha.115
       '@turf/boolean-point-in-polygon':
         specifier: 7.0.0-alpha.114
         version: 7.0.0-alpha.114
@@ -724,8 +724,8 @@ importers:
         specifier: 10.45.2
         version: 10.45.2
       '@turf/bbox':
-        specifier: 7.0.0-alpha.114
-        version: 7.0.0-alpha.114
+        specifier: 7.0.0-alpha.115
+        version: 7.0.0-alpha.115
       '@turf/center':
         specifier: 7.0.0-alpha.114
         version: 7.0.0-alpha.114
@@ -7534,11 +7534,11 @@ packages:
       '@turf/meta': 6.5.0
     dev: false
 
-  /@turf/bbox@7.0.0-alpha.114:
-    resolution: {integrity: sha512-DlN2C6hZKEtExNqT7phY7dB2XnxIJBNJXNjBsP5cqeWFgL+hbgdDYOniDd6uLWST2pRiCag8UWJ6TYp9Cx2uVw==}
+  /@turf/bbox@7.0.0-alpha.115:
+    resolution: {integrity: sha512-c2EANPh1X5tesS9lQ3A1a2OeFF6ATkXwIjmMOAS6yqg0tCio8wmB3XSk8qT6oePM2IncKhGXSOldeSO/7wWtBw==}
     dependencies:
-      '@turf/helpers': 7.0.0-alpha.114
-      '@turf/meta': 7.0.0-alpha.114
+      '@turf/helpers': 7.0.0-alpha.115
+      '@turf/meta': 7.0.0-alpha.115
       tslib: 2.6.2
     dev: false
 
@@ -7561,7 +7561,7 @@ packages:
   /@turf/buffer@7.0.0-alpha.114:
     resolution: {integrity: sha512-7WPl5TqDwdF76MrHwLJ5Ttp1HE3eHqrU01pAB5MbhF2MGpcA1tOX0OTYK21TaxQtFnL3X+6wWtjHec9fZl1jkw==}
     dependencies:
-      '@turf/bbox': 7.0.0-alpha.114
+      '@turf/bbox': 7.0.0-alpha.115
       '@turf/center': 7.0.0-alpha.114
       '@turf/helpers': 7.0.0-alpha.114
       '@turf/jsts': 2.7.1
@@ -7573,7 +7573,7 @@ packages:
   /@turf/center@7.0.0-alpha.114:
     resolution: {integrity: sha512-MuFebMXfC2olfqjtVBm3GWhgkwUR+8Mx7QwHCyv2YTCVMiEcX18KRZjcvAJudXc2/EwFR5COUUbmIYuhVIfjmQ==}
     dependencies:
-      '@turf/bbox': 7.0.0-alpha.114
+      '@turf/bbox': 7.0.0-alpha.115
       '@turf/helpers': 7.0.0-alpha.114
       tslib: 2.6.2
     dev: false
@@ -7605,6 +7605,13 @@ packages:
 
   /@turf/helpers@7.0.0-alpha.114:
     resolution: {integrity: sha512-hqoARkwAaFMK/8wOWDQhmvIxjUL2l9jUhn1GUzW3fsumImPxuHoJZbIZhiHjE7ceQngveCeUCtkiKw89lekN8w==}
+    dependencies:
+      deep-equal: 2.2.3
+      tslib: 2.6.2
+    dev: false
+
+  /@turf/helpers@7.0.0-alpha.115:
+    resolution: {integrity: sha512-wXvGiDfDmpJThzsDtxmR9Mgv/rLNZmZe8a1n3S9PrNkUNbYO+6JKp6ZOeb7Erm1AZRsHvXN7SR8GKzToYugugA==}
     dependencies:
       deep-equal: 2.2.3
       tslib: 2.6.2
@@ -7665,6 +7672,12 @@ packages:
     resolution: {integrity: sha512-R/VHKBLqVnPcXaawR7PlXSfgLSPvMUBwe04m2riTPhOrUCrh5/UW3+NTshAg9tjIMk1njsnlpqgUcrG0OYu9OQ==}
     dependencies:
       '@turf/helpers': 7.0.0-alpha.114
+    dev: false
+
+  /@turf/meta@7.0.0-alpha.115:
+    resolution: {integrity: sha512-CQ9JhdX+gebdfE618aZuNRa0c+qYZxN8HbRpjVygpMcMtkj6WrYFTSGvFvUQuAk0922Luj+RGyZjS4mRhIsK3Q==}
+    dependencies:
+      '@turf/helpers': 7.0.0-alpha.115
     dev: false
 
   /@turf/nearest-point-on-line@6.5.0:
