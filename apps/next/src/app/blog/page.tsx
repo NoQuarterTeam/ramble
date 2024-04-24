@@ -1,8 +1,7 @@
 import { BLOG_DB_ID, notion } from "@/lib/notion"
 import { upload } from "@/lib/s3"
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints"
-import { join } from "@ramble/shared"
-import { cva } from "class-variance-authority"
+
 import dayjs from "dayjs"
 import advancedFormat from "dayjs/plugin/advancedFormat"
 import { unstable_cache } from "next/cache"
@@ -36,7 +35,7 @@ const getItems = unstable_cache(
     )
   },
   ["blog"],
-  { revalidate: 86400 },
+  { revalidate: 86400, tags: ["blog"] },
 )
 
 export default async function Page() {

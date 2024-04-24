@@ -54,5 +54,5 @@ export const getPageContent = unstable_cache(
     }
   },
   ["blog-detail"],
-  { revalidate: 86400 },
+  { revalidate: 86400, tags: ["blog-detail"] },
 )
