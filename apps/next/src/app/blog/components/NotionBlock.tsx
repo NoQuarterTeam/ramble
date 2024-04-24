@@ -36,7 +36,6 @@ export async function NotionBlock({ block }: Props) {
             src={block.image.type === "external" ? block.image.external.url : block.image.file.url}
             width={700}
             height={420}
-            objectFit="contain"
             quality={70}
             className="!max-h-[600px] object-contain"
             alt={block.image.caption?.[0]?.plain_text || "No Quarter post image"}

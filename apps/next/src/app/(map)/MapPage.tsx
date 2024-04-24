@@ -144,7 +144,6 @@ function UserClusterMarker(props: UserMarkerProps) {
               width={50}
               height={50}
               alt="user location"
-              objectFit="cover"
               // placeholder={props.point.properties.avatarBlurHash}
               src={createAssetUrl(props.point.properties.avatar)}
               className="sq-10 rounded-full object-cover blur-sm"

@@ -68,7 +68,6 @@ export default async function Page({ params }: { params: { slug: string } }) {
           alt={page.title}
           width={800}
           height={300}
-          objectFit="cover"
           className="w-full h-[300px] object-cover rounded-sm"
         />
       )}

@@ -20,7 +20,6 @@ export function SpotItem({ spot }: Props) {
               alt="spot"
               width={450}
               height={300}
-              objectFit="cover"
               className="h-full w-full rounded-xs object-cover"
               src={createAssetUrl(spot.image)}
             />

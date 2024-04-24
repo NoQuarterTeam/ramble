@@ -19,7 +19,6 @@ export function Avatar({ size = 100, src, ...props }: Props) {
     )
   return (
     <Image
-      objectFit="cover"
       src={src}
       width={size}
       height={size}

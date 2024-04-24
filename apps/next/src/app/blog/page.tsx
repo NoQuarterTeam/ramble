@@ -61,7 +61,6 @@ export default async function Page() {
                   alt={page.title}
                   width={600}
                   height={200}
-                  objectFit="cover"
                   className="rounded-sm h-[200px] w-full object-cover"
                 />
               )}
