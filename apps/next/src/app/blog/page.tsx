@@ -46,8 +46,8 @@ export default async function Page() {
         <div>
           <h1 className="text-4xl font-bold">ramblings</h1>
           <p className="font-light">
-            <i className="opacity-70">noun</i> <span className="opacity-70">[plural]</span>: writing that goes on for a white and
-            does not seem to have any clear organization or purpose
+            <i className="opacity-70">noun</i> <span className="opacity-70">[plural]</span>: writing that goes on for a while and
+            doesn't seem to have any clear organization or purpose
           </p>
         </div>
 
