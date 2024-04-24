@@ -10,6 +10,9 @@ import { useRouter } from "next/navigation"
 import * as React from "react"
 import { type LngLatLike, type MapRef, Marker, type ViewStateChangeEvent } from "react-map-gl"
 import type { MarkerEvent, MarkerInstance } from "react-map-gl/dist/esm/types"
+import { MapFilters } from "./components/MapFilters"
+import { MapLayerControls } from "./components/MapLayerControls"
+import { MapSearch } from "./components/MapSearch"
 
 export function MapPage() {
   const mapRef = React.useRef<MapRef>(null)
@@ -100,10 +103,9 @@ export function MapPage() {
         {userMarkers}
       </MapView>
 
-      {/* <ClientOnly>{() => <MapFilters onChange={onParamsChange} />}</ClientOnly>
-
+      <MapLayerControls />
+      <MapFilters />
       <MapSearch onSearch={(center) => mapRef.current?.flyTo({ center })} />
-       */}
     </div>
   )
 }
