@@ -33,7 +33,7 @@ export const getPageContent = unstable_cache(
     return {
       title: properties.Title.type === "title" ? properties.Title.title[0].plain_text : "",
       summary: properties.Summary.type === "rich_text" ? properties.Summary.rich_text[0]?.plain_text : null,
-      tags: properties.Tags.type === "multi_select" ? properties.Tags.multi_select.map((tag) => tag.name) : [],
+      tags: properties.Tags.type === "multi_select" ? properties.Tags.multi_select : [],
       publishedAt: properties.Published.type === "date" ? properties.Published.date?.start : null,
       cover,
       content: await Promise.all(

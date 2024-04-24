@@ -6,6 +6,7 @@ import dayjs from "dayjs"
 import type { Metadata } from "next"
 import Image from "next/image"
 import { NotionBlock } from "../components/NotionBlock"
+import { Tag } from "../components/Tag"
 import { getPageContent } from "./getPageContent"
 dayjs.extend(advancedFormat)
 
@@ -54,12 +55,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
       <div className="flex flex-wrap gap-4 items-center">
         <div className="flex flex-wrap gap-2">
           {page.tags.map((tag) => (
-            <span
-              key={tag}
-              className="text-sm bg-primary-100 text-primary-800 px-3 py-1 rounded-full dark:bg-primary-900 dark:text-primary-300"
-            >
-              {tag}
-            </span>
+            <Tag key={tag.id} tag={tag} />
           ))}
         </div>
         <p className="opacity-60">{dayjs(page.publishedAt).format("Do MMMM YYYY")}</p>

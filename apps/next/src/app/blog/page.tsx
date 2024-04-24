@@ -8,27 +8,8 @@ import advancedFormat from "dayjs/plugin/advancedFormat"
 import { unstable_cache } from "next/cache"
 import Image from "next/image"
 import Link from "next/link"
+import { Tag } from "./components/Tag"
 dayjs.extend(advancedFormat)
-
-const tags = cva("text-sm px-3 py-1 flex items-center justify-center rounded-full", {
-  variants: {
-    color: {
-      default: "text-white bg-gray-700",
-      blue: "text-blue-200 bg-blue-900",
-      brown: "text-amber-200 bg-amber-900",
-      gray: "text-gray-200 bg-stone-700",
-      green: "text-green-200 bg-green-900",
-      orange: "text-orange-200 bg-orange-900",
-      pink: "text-pink-200 bg-pink-900",
-      purple: "text-purple-200 bg-purple-900",
-      red: "text-red-200 bg-red-900",
-      yellow: "text-yellow-200 bg-yellow-900",
-    },
-  },
-  defaultVariants: {
-    color: "default",
-  },
-})
 
 const getItems = unstable_cache(
   async () => {
@@ -89,9 +70,7 @@ export default async function Page() {
               <p className="line-clamp-3 font-light">{page.summary}</p>
               <div className="flex flex-wrap gap-2">
                 {page.tags.map((tag) => (
-                  <div key={tag.id} className={join(tags({ color: tag.color }))}>
-                    <span className="pt-px">{tag.name}</span>
-                  </div>
+                  <Tag key={tag.id} tag={tag} />
                 ))}
               </div>
             </Link>
