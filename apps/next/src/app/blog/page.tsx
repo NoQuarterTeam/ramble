@@ -28,6 +28,8 @@ const getItems = unstable_cache(async () => {
   )
 })
 
+export const revalidate = 86400
+
 export default async function Page() {
   const items = await getItems()
   return (
@@ -43,9 +45,9 @@ export default async function Page() {
               href={`/blog/${props.slug.toLocaleLowerCase()}`}
               className="p-4 space-y-2 border rounded-sm hover:border-gray-600 duration-200 cursor-pointer"
             >
+              <p className="opacity-60">{props.publishedAt}</p>
               <p className="text-xl font-semibold">{props.title}</p>
               <p className="line-clamp-3">{props.summary}</p>
-              <p className="opacity-60">{props.publishedAt}</p>
               <div className="flex space-x-2">
                 {props.tags.map((tag) => (
                   <span
