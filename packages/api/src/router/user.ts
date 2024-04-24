@@ -99,15 +99,15 @@ export const userRouter = createTRPCRouter({
       radius: 50,
     })
     const clustersData = supercluster.load(
-      users.map((user) => ({
+      users.map((user, i) => ({
         type: "Feature",
         geometry: { type: "Point", coordinates: [user.longitude!, user.latitude!] },
         properties: {
           cluster: false,
           id: user.id,
-          username: user.username,
-          avatar: user.avatar,
-          avatarBlurHash: user.avatarBlurHash,
+          username: ctx.user ? user.username : `User ${i + 1}`,
+          avatar: ctx.user ? user.avatar : null,
+          avatarBlurHash: ctx.user ? user.avatarBlurHash : null,
         },
       })),
     )
