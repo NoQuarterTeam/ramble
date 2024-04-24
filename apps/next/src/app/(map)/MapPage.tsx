@@ -125,7 +125,7 @@ function UserClusterMarker(props: UserMarkerProps) {
       {props.point.properties.cluster ? (
         <div
           className={join(
-            "flex items-center justify-center cursor-pointer rounded-full border border-purple-100 bg-purple-700 text-white shadow transition-transform hover:scale-110",
+            "flex items-center justify-center cursor-pointer rounded-full border border-primary-100 bg-primary-700 text-white shadow transition-transform hover:scale-110",
             props.point.properties.point_count > 150
               ? "h-20 w-20"
               : props.point.properties.point_count > 75
@@ -138,7 +138,7 @@ function UserClusterMarker(props: UserMarkerProps) {
           <p className="text-center text-sm">{props.point.properties.point_count_abbreviated}</p>
         </div>
       ) : (
-        <div className="flex items-center justify-center w-10 h-10 group relative cursor-pointer rounded-full border border-purple-100 bg-purple-500 shadow transition-transform hover:scale-110">
+        <div className="flex items-center justify-center w-10 h-10 group relative cursor-pointer rounded-full border border-primary-200 bg-primary-700 shadow transition-transform hover:scale-110">
           {props.point.properties.avatar ? (
             <Image
               width={50}
