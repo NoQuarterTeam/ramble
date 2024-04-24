@@ -97,7 +97,7 @@ export function MapPage() {
         ref={mapRef}
         onLoad={onMove}
         onMoveEnd={onMove}
-        initialViewState={{ latitude: INITIAL_LATITUDE, longitude: INITIAL_LONGITUDE, zoom: 8, pitch: 0 }}
+        initialViewState={{ latitude: 42, longitude: 1, zoom: 5, pitch: 0 }}
       >
         {spotMarkers}
         {userMarkers}
@@ -146,13 +146,13 @@ function UserClusterMarker(props: UserMarkerProps) {
               alt="user location"
               // placeholder={props.point.properties.avatarBlurHash}
               src={createAssetUrl(props.point.properties.avatar)}
-              className="sq-10 rounded-full object-cover blur-sm"
+              className="sq-10 rounded-full object-cover"
             />
           ) : (
             <User size={18} className="text-white" />
           )}
           <div className="-bottom-5 -translate-x-1/2 absolute left-1/2 hidden rounded-xs bg-background px-2 py-1 group-hover:block">
-            <p className="text-xs blur-sm">{props.point.properties.username}</p>
+            <p className="text-xs whitespace-nowrap">{props.point.properties.username}</p>
           </div>
         </div>
       )}
