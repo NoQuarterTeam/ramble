@@ -31,5 +31,7 @@ export async function upload(fileUrl: string): Promise<string> {
     })
     await uploader.done()
   })
-  return `${assetUrl}${key}`
+  const fullUrl = `${assetUrl}${key}`
+  console.log({ fullUrl })
+  return fullUrl
 }
