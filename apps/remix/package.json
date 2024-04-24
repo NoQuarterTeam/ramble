@@ -44,7 +44,7 @@
     "@trpc/server": "10.45.2",
     "@turf/bbox": "7.0.0-alpha.115",
     "@turf/boolean-point-in-polygon": "7.0.0-alpha.115",
-    "@turf/buffer": "7.0.0-alpha.114",
+    "@turf/buffer": "7.0.0-alpha.115",
     "@turf/center": "7.0.0-alpha.114",
     "@turf/helpers": "7.0.0-alpha.114",
     "@vercel/analytics": "1.2.2",
