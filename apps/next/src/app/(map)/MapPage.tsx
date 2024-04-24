@@ -3,7 +3,7 @@ import { MapView } from "@/components/Map"
 import { SpotClusterMarker } from "@/components/SpotMarker"
 import { useMapSettings } from "@/lib/hooks/useMapSettings"
 import { type RouterOutputs, api } from "@/lib/trpc/react"
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createAssetUrl, join } from "@ramble/shared"
+import { createAssetUrl, join } from "@ramble/shared"
 import { User } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
@@ -97,7 +97,7 @@ export function MapPage() {
         ref={mapRef}
         onLoad={onMove}
         onMoveEnd={onMove}
-        initialViewState={{ latitude: 42, longitude: 1, zoom: 5, pitch: 0 }}
+        initialViewState={{ latitude: 46, longitude: 2, zoom: 4.5, pitch: 0 }}
       >
         {spotMarkers}
         {userMarkers}
