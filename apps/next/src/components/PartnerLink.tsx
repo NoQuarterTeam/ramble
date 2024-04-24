@@ -46,7 +46,7 @@ export function PartnerLink(props: Props) {
       className="flex cursor-pointer flex-row items-center justify-between gap-6 rounded-xs border border-hover px-6 py-2"
     >
       <p className="text-lg">Provided by</p>
-      <img alt="partner" className="h-[40px] w-[150px] bg-right object-contain" src={partner.logo.light} />
+      <img alt="partner" className="h-[40px] w-[150px] bg-right object-contain" src={partner.logo.dark} />
     </a>
   )
 }

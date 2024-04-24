@@ -1,8 +1,8 @@
-"use client"
 import * as RadioGroup from "@radix-ui/react-radio-group"
 import { useDisclosure } from "@ramble/shared"
 import { CloudRain, Layers, MountainSnow, SunMoon, Thermometer, Users2 } from "lucide-react"
 
+import { AppCta } from "@/components/AppCta"
 import { Button, IconButton, Modal, Switch, Tooltip } from "@/components/ui"
 
 export function MapLayerControls() {
@@ -24,6 +24,7 @@ export function MapLayerControls() {
 
       <Modal {...modalProps} size="xl" title="Map layers">
         <div className="space-y-4">
+          <AppCta />
           <div className="space-y-4">
             <RadioGroup.Root defaultValue={""} name="layer" className="space-y-2">
               <label

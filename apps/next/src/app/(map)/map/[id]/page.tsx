@@ -1,9 +1,9 @@
-import { ArrowLeft, ArrowRight, Heart, Image as ImageIcon, Star } from "lucide-react"
+import { ArrowLeft, ArrowRight, Heart, Star } from "lucide-react"
 
-import type { SpotType } from "@ramble/database/types"
-import { getActivityFlickrImages, publicSpotWhereClause } from "@ramble/server-services"
+import { publicSpotWhereClause } from "@ramble/server-services"
 import { createAssetUrl, displayRating, isPartnerSpot, promiseHash, spotPartnerFields } from "@ramble/shared"
 
+import { AppCta } from "@/components/AppCta"
 import { LinkButton } from "@/components/LinkButton"
 import { PartnerLink } from "@/components/PartnerLink"
 import { SpotTypeBadge } from "@/components/SpotTypeBadge"
@@ -12,6 +12,7 @@ import { db } from "@/lib/db"
 import { unstable_cache } from "next/cache"
 import Image from "next/image"
 import { notFound } from "next/navigation"
+import { ReviewItem, reviewItemSelectFields } from "./ReviewItem"
 import { SpotContainer } from "./SpotContainer"
 
 const getSpotData = unstable_cache(async (id: string) => {
@@ -39,6 +40,7 @@ const getSpotData = unstable_cache(async (id: string) => {
         ...spotPartnerFields,
         _count: { select: { reviews: true, listSpots: true } },
         description: true,
+        reviews: { take: 5, select: reviewItemSelectFields },
         verifier: { select: { firstName: true, username: true, lastName: true, avatar: true, avatarBlurHash: true } },
         verifiedAt: true,
         images: { select: { id: true, path: true, blurHash: true } },
@@ -46,13 +48,10 @@ const getSpotData = unstable_cache(async (id: string) => {
     }),
     rating: db.review.aggregate({ where: { spotId: initialSpot.id }, _avg: { rating: true } }),
   })
-  const flickrImages = await getActivityFlickrImages(data.spot)
-
   return {
     spot: data.spot,
     rating: data.rating._avg.rating,
     sameLocationSpots: data.sameLocationSpots,
-    flickrImages,
   }
 })
 
@@ -84,7 +83,6 @@ export default async function Page({ params }: { params: { id: string } }) {
                 <p>{spot._count.listSpots || 0}</p>
               </div>
             </div>
-            {/* {user && <SaveToList spotId={spot.id} />} */}
           </div>
         </div>
         {spot.images.length > 0 && (
@@ -107,9 +105,10 @@ export default async function Page({ params }: { params: { id: string } }) {
         {isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <VerifiedCard spot={spot} />}
         <div>
           <h3 className="font-medium text-lg">Description</h3>
-          <p className="whitespace-pre-wrap">{spot.description}</p>
+          <p className="whitespace-pre-wrap line-clamp-2">{spot.description}</p>
         </div>
-        <p className="text-sm italic">{spot.address}</p>
+        <p className="text-sm italic blur-sm">{spot.address}</p>
+        <AppCta message="Download the app to read more" />
         <hr />
         <div className="space-y-4">
           <div className="flex justify-between">
@@ -123,17 +122,12 @@ export default async function Page({ params }: { params: { id: string } }) {
                 <p>{displayRating(rating)}</p>
               </div>
             </div>
-            {/* {user && (
-              <LinkButton variant="secondary" to={`/spots/${spot.id}/reviews/new?redirect=${NEW_REVIEW_REDIRECTS.Map}`}>
-                Add review
-              </LinkButton>
-            )} */}
           </div>
-          {/* <div className="space-y-6">
+          <div className="space-y-6">
             {spot.reviews?.map((review) => (
               <ReviewItem key={review.id} review={review} />
             ))}
-          </div> */}
+          </div>
         </div>
       </div>
     </SpotContainer>

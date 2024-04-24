@@ -1,3 +1,4 @@
+import { AppCta } from "@/components/AppCta"
 import { PageContainer } from "@/components/PageContainer"
 import { SpotIcon } from "@/components/SpotIcon"
 import { SpotItem } from "@/components/SpotItem"
@@ -61,7 +62,7 @@ export default async function Page({ searchParams: { type, sort } }: { searchPar
         </div>
       </div>
       <div>
-        <div className={join("space-y-10 pb-20")}>
+        <div className="space-y-10 pb-20">
           {spots.length === 0 ? (
             <div className="flex flex-col items-center justify-center gap-4 p-10">
               <p className="text-xl">No spots yet</p>
@@ -74,12 +75,13 @@ export default async function Page({ searchParams: { type, sort } }: { searchPar
               )}
             </div>
           ) : (
-            <div className={join("grid grid-cols-1 gap-4 lg:grid-cols-3 md:grid-cols-2")}>
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 md:grid-cols-2">
               {spots.map((spot) => (
                 <SpotItem key={spot.id} spot={spot} />
               ))}
             </div>
           )}
+          <AppCta message="Download the app to see more spots" />
         </div>
       </div>
     </PageContainer>

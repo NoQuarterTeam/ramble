@@ -1,13 +1,13 @@
-"use client"
 import { BadgeX, Dog, Settings2 } from "lucide-react"
-import queryString from "query-string"
 import * as React from "react"
 
 import { SpotType } from "@ramble/database/types"
 import { SPOT_TYPES, type SpotTypeInfo, useDisclosure } from "@ramble/shared"
 
+import { AppCta } from "@/components/AppCta"
 import { SpotIcon } from "@/components/SpotIcon"
 import { Button, IconButton, Modal, Switch, Tooltip } from "@/components/ui"
+import Link from "next/link"
 
 export function MapFilters() {
   const modalProps = useDisclosure()
@@ -38,6 +38,7 @@ export function MapFilters() {
 
       <Modal {...modalProps} size="3xl" title="Filters">
         <div className="max-h-[85svh] space-y-6 px-1">
+          <AppCta />
           <div className="space-y-4">
             <SpotTypeSection title="Stays" types={[SpotType.CAMPING, SpotType.FREE_CAMPING, SpotType.PARKING]} />
             <SpotTypeSection
