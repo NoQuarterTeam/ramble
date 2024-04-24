@@ -31,5 +31,5 @@ export async function upload(fileUrl: string): Promise<string> {
     })
     await uploader.done()
   })
-  return `${assetUrl}/${key}`
+  return `${assetUrl}${key}`
 }
