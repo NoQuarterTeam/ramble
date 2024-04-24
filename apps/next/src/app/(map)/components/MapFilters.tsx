@@ -7,7 +7,6 @@ import { SPOT_TYPES, type SpotTypeInfo, useDisclosure } from "@ramble/shared"
 import { AppCta } from "@/components/AppCta"
 import { SpotIcon } from "@/components/SpotIcon"
 import { Button, IconButton, Modal, Switch, Tooltip } from "@/components/ui"
-import Link from "next/link"
 
 export function MapFilters() {
   const modalProps = useDisclosure()
