@@ -1,7 +1,6 @@
 import { join } from "@ramble/shared"
 
 import { Instagram } from "lucide-react"
-// import { ClientOnly } from "remix-utils/client-only"
 
 import { AppCta } from "@/components/AppCta"
 import { PageContainer } from "@/components/PageContainer"
@@ -40,21 +39,12 @@ import Link from "next/link"
 //   }
 // }
 
-// export const loader = () => {
-//   return json({ honeypotInputProps: honeypot.getInputProps() })
-// }
-
 export default function Home() {
-  // const { honeypotInputProps } = useLoaderData<typeof loader>()
-
   const randomPerson = PEOPLE[Math.floor(Math.random() * PEOPLE.length)]
   return (
     <div className="dark bg-background font-serif text-white">
-      <div className="h-[75vh] w-screen space-y-20 bg-[url('/landing/hero.avif')] bg-center bg-cover px-2 pt-36">
+      <div className="h-[65vh] w-screen space-y-20 bg-[url('/landing/hero.avif')] bg-center bg-cover px-2 pt-32">
         <div className="mx-auto flex max-w-7xl flex-col items-start space-y-8">
-          {/* <div className="flex flex-col items-center">
-            <p className="font-semibold text-black text-lg">VAN TRAVEL APP</p>
-          </div> */}
           <div className="max-w-3xl space-y-2">
             <h1 className="max-w-4xl font-bold text-2xl text-black md:text-5xl">
               Everything you need for van life <br />
@@ -63,9 +53,35 @@ export default function Home() {
             <h2 className="text-black text-lg md:text-xl">
               For a new generation of remote working, digitally connected and eco-conscious travellers.
             </h2>
+            <div className="flex items-center">
+              <Link
+                target="_blank"
+                rel="noreferer noopener"
+                href="https://apps.apple.com/app/ramble-van-travel-app/id6468265289?itsct=apps_box_badge&amp;itscg=30200"
+              >
+                <img
+                  src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1595289600"
+                  alt="Download on the App Store"
+                  width={120}
+                  height={30}
+                  className="object-contain"
+                />
+              </Link>
+              <Link
+                target="_blank"
+                rel="noreferer noopener"
+                href="https://play.google.com/store/apps/details?id=co.noquarter.ramble&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"
+              >
+                <img
+                  width={145}
+                  height={40}
+                  className="object-contain"
+                  alt="Get it on Google Play"
+                  src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+                />
+              </Link>
+            </div>
           </div>
-
-          {/* <RequestAccessForm /> */}
         </div>
       </div>
       <div className="flex justify-end px-6">
@@ -187,23 +203,55 @@ export default function Home() {
         <AppCta message="To maintain an authentic and trustworthy community, members can only join via invite." />
       </div>
       <div className="border-t">
-        <PageContainer className="flex items-center justify-between space-y-0 px-4 py-6">
-          <div className="space-y-4">
+        <PageContainer className="flex justify-between px-4 py-6">
+          <div className="flex-1 flex flex-col justify-start">
             <p className="text-primary font-bold italic text-2xl">ramble</p>
+            <div className="flex items-center">
+              <Link
+                target="_blank"
+                rel="noreferer noopener"
+                href="https://apps.apple.com/app/ramble-van-travel-app/id6468265289?itsct=apps_box_badge&amp;itscg=30200"
+              >
+                <img
+                  src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1595289600"
+                  alt="Download on the App Store"
+                  width={100}
+                  height={30}
+                  className="object-contain"
+                />
+              </Link>
+              <Link
+                target="_blank"
+                rel="noreferer noopener"
+                href="https://play.google.com/store/apps/details?id=co.noquarter.ramble&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"
+              >
+                <img
+                  width={125}
+                  height={40}
+                  className="object-contain"
+                  alt="Get it on Google Play"
+                  src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+                />
+              </Link>
+            </div>
           </div>
-          <a
-            aria-label="go to instagram"
-            href="https://instagram.com/ramble.guide"
-            target="_blank"
-            rel="noreferrer noopener"
-            className="hover:opacity-70"
-          >
-            <Instagram />
-          </a>
+          <div className="flex-1 justify-center items-center flex">
+            <a
+              aria-label="go to instagram"
+              href="https://instagram.com/ramble.guide"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="hover:opacity-70"
+            >
+              <Instagram />
+            </a>
+          </div>
 
-          <Link href="/privacy" className="text-sm hover:opacity-70">
-            Privacy
-          </Link>
+          <div className="flex-1 justify-end items-center flex">
+            <Link href="/privacy" className="text-sm hover:opacity-70">
+              Privacy
+            </Link>
+          </div>
         </PageContainer>
       </div>
     </div>
