@@ -34,10 +34,10 @@
     "@ramble/server-services": "workspace:*",
     "@ramble/shared": "workspace:*",
     "@ramble/tailwind-config": "workspace:*",
-    "@remix-run/css-bundle": "2.9.0",
-    "@remix-run/node": "2.9.0",
-    "@remix-run/react": "2.9.0",
-    "@remix-run/serve": "2.9.0",
+    "@remix-run/css-bundle": "2.9.1",
+    "@remix-run/node": "2.9.1",
+    "@remix-run/react": "2.9.1",
+    "@remix-run/serve": "2.9.1",
     "@sentry/node": "7.112.2",
     "@tailwindcss/container-queries": "0.1.1",
     "@tanstack/react-table": "8.16.0",
@@ -81,7 +81,7 @@
     "zustand": "^4.4.7"
   },
   "devDependencies": {
-    "@remix-run/dev": "2.9.0",
+    "@remix-run/dev": "2.9.1",
     "@tailwindcss/forms": "0.5.7",
     "@types/d3-shape": "3.1.6",
     "@types/nprogress": "0.2.3",
