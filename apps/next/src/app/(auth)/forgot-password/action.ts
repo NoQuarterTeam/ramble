@@ -1,7 +1,7 @@
 "use server"
 
-import { db } from "@/lib/db"
 import { createToken } from "@/lib/jwt"
+import { db } from "@/lib/server/db"
 import { sendResetPasswordEmail } from "@ramble/server-services"
 import { z } from "zod"
 

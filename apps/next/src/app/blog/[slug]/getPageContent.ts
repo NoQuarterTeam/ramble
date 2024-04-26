@@ -1,9 +1,10 @@
-import { BLOG_DB_ID, notion } from "@/lib/notion"
-import { upload } from "@/lib/s3"
+import { BLOG_DB_ID, notion } from "@/lib/server/notion"
+import { upload } from "@/lib/server/s3"
 import type { BlockObjectResponse, PageObjectResponse } from "@notionhq/client/build/src/api-endpoints"
 import dayjs from "dayjs"
 import { unstable_cache } from "next/cache"
 import { redirect } from "next/navigation"
+import { BLOG_FOLDER } from "../config"
 
 export const getPageContent = unstable_cache(
   async (slug: string) => {
@@ -28,7 +29,7 @@ export const getPageContent = unstable_cache(
     const coverFile = page.cover || null
     const imageUrl = coverFile ? (coverFile.type === "external" ? coverFile.external.url : coverFile.file.url) : null
     let cover = null
-    if (imageUrl) cover = await upload(imageUrl)
+    if (imageUrl) cover = await upload(imageUrl, BLOG_FOLDER)
     const pageContent = await notion.blocks.children.list({ block_id: page.id })
 
     return {
@@ -43,12 +44,12 @@ export const getPageContent = unstable_cache(
         (pageContent.results as BlockObjectResponse[]).map(async (block) => {
           if (block.type === "image" && block.image.type === "file") {
             const imageUrl = block.image.file.url
-            const url = await upload(imageUrl)
+            const url = await upload(imageUrl, BLOG_FOLDER)
             return { ...block, image: { ...block.image, file: { ...block.image.file, url } } }
           }
           if (block.type === "video" && block.video.type === "file") {
             const videoUrl = block.video.file.url
-            const url = await upload(videoUrl)
+            const url = await upload(videoUrl, BLOG_FOLDER)
             return { ...block, video: { ...block.video, file: { ...block.video.file, url } } }
           }
           return block

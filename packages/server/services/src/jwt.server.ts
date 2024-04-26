@@ -1,7 +1,23 @@
+import { env } from "@ramble/server-env"
 import jwt from "jsonwebtoken"
 import { z } from "zod"
 
 const SESSION_SECRET = process.env.SESSION_SECRET
+
+export function createToken<T extends object | string>(payload: T) {
+  const token = jwt.sign(payload, env.APP_SECRET, {
+    issuer: "@ramble/api",
+    audience: ["@ramble/app", "@ramble/web"],
+    expiresIn: "1 week",
+  })
+  return token
+}
+
+export function decodeToken<T>(token: string): T {
+  jwt.verify(token, env.APP_SECRET)
+  const payload = jwt.decode(token) as T
+  return payload
+}
 
 export const createAuthToken = (payload: { id: string }) => {
   if (!SESSION_SECRET) throw new Error("SESSION_SECRET is not defined")

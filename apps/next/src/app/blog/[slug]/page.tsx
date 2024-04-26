@@ -3,7 +3,7 @@ import advancedFormat from "dayjs/plugin/advancedFormat"
 
 import { AppCta } from "@/components/AppCta"
 import { LinkButton } from "@/components/LinkButton"
-import { BLOG_DB_ID, notion } from "@/lib/notion"
+import { BLOG_DB_ID, notion } from "@/lib/server/notion"
 import dayjs from "dayjs"
 import { ArrowLeft } from "lucide-react"
 import type { Metadata } from "next"

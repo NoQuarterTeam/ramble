@@ -1,5 +1,5 @@
-import { BLOG_DB_ID, notion } from "@/lib/notion"
-import { upload } from "@/lib/s3"
+import { BLOG_DB_ID, notion } from "@/lib/server/notion"
+import { upload } from "@/lib/server/s3"
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints"
 
 import dayjs from "dayjs"
@@ -8,6 +8,7 @@ import { unstable_cache } from "next/cache"
 import Image from "next/image"
 import Link from "next/link"
 import { Tag } from "./components/Tag"
+import { BLOG_FOLDER } from "./config"
 dayjs.extend(advancedFormat)
 
 const getItems = unstable_cache(
@@ -29,7 +30,7 @@ const getItems = unstable_cache(
         if (!cover) return { ...page, cover: null }
         const imageUrl = cover.type === "external" ? cover.external.url : cover.file.url
         if (!imageUrl) return { ...page, cover: null }
-        const url = await upload(imageUrl)
+        const url = await upload(imageUrl, BLOG_FOLDER)
         return { ...page, cover: url }
       }),
     )

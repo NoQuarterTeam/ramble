@@ -1,6 +1,6 @@
 "use server"
 
-import { db } from "@/lib/db"
+import { db } from "@/lib/server/db"
 import { comparePasswords, deleteObject, sendSlackMessage } from "@ramble/server-services"
 import dayjs from "dayjs"
 import { z } from "zod"

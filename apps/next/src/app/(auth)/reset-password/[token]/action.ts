@@ -1,7 +1,7 @@
 "use server"
 
-import { db } from "@/lib/db"
 import { decryptToken } from "@/lib/jwt"
+import { db } from "@/lib/server/db"
 import { hashPassword } from "@ramble/server-services"
 import { z } from "zod"
 

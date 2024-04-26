@@ -1,6 +1,6 @@
 import { cacheHeader } from "pretty-cache-header"
 
-import { db } from "@/lib/db"
+import { db } from "@/lib/server/db"
 import { getTranslation } from "@ramble/server-services"
 import { notFound } from "next/navigation"
 import { NextResponse } from "next/server"

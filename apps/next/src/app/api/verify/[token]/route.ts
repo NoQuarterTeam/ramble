@@ -1,7 +1,7 @@
 import { updateLoopsContact } from "@ramble/server-services"
 
-import { db } from "@/lib/db"
 import { decryptToken } from "@/lib/jwt"
+import { db } from "@/lib/server/db"
 import { redirect } from "next/navigation"
 
 export const GET = async (_request: Request, { params }: { params: { token: string } }) => {
