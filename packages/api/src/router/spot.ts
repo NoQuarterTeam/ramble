@@ -127,8 +127,6 @@ export const spotRouter = createTRPCRouter({
         latitude: true,
         longitude: true,
         ownerId: true,
-        verifier: true, // deprecated
-        verifiedAt: true, // deprecated
         creator: true,
         createdAt: true,
         ...spotPartnerFields,

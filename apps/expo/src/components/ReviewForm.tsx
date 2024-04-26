@@ -36,7 +36,7 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
 
-  const { data: allTagsGrouped, isLoading: tagsLoading } = api.review.allTagsGrouped.useQuery(undefined, {
+  const { data: groupedTags, isLoading: tagsLoading } = api.review.groupedTags.useQuery(undefined, {
     enabled: isCampingSpot(props.spotType),
   })
 
@@ -74,8 +74,8 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
           </View>
           {tagsLoading ? (
             <Spinner />
-          ) : !allTagsGrouped ? null : (
-            Object.entries(allTagsGrouped).map(([category, tags]) => (
+          ) : !groupedTags ? null : (
+            Object.entries(groupedTags).map(([category, tags]) => (
               <View key={category} className="pb-4">
                 <View className="flex flex-row gap-1 items-center pb-2">
                   {category === "NATURE" ? (

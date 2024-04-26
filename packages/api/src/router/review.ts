@@ -62,7 +62,7 @@ export const reviewRouter = createTRPCRouter({
     if (review.userId !== ctx.user.id) throw new TRPCError({ code: "UNAUTHORIZED" })
     return ctx.prisma.review.delete({ where: { id: input.id } })
   }),
-  allTagsGrouped: protectedProcedure.query(async ({ ctx }) => {
+  groupedTags: protectedProcedure.query(async ({ ctx }) => {
     const tags = await ctx.prisma.tag.findMany()
     return groupBy(tags, (tag) => tag.category)
   }),

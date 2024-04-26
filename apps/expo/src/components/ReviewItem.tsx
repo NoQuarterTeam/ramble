@@ -93,7 +93,7 @@ export function ReviewItem({
         </View>
       </View>
 
-      <Text>{(isTranslated && me && data) || review.description}</Text>
+      {review.description && <Text>{(isTranslated && me && data) || review.description}</Text>}
       {error && <Text className="text-sm">Error translating description</Text>}
 
       {me ? (
