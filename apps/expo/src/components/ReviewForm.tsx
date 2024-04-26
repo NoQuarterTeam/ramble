@@ -3,7 +3,7 @@ import * as React from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { TouchableOpacity, View, useColorScheme } from "react-native"
 
-import type { Review, SpotType, Tag, TagCategory } from "@ramble/database/types"
+import type { Review, SpotType, Tag } from "@ramble/database/types"
 
 import { isCampingSpot } from "@ramble/shared"
 import { Icon } from "~/components/Icon"
@@ -74,8 +74,7 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
           </View>
           {tagsLoading ? (
             <Spinner />
-          ) : (
-            allTagsGrouped &&
+          ) : !allTagsGrouped ? null : (
             Object.entries(allTagsGrouped).map(([category, tags]) => (
               <View key={category}>
                 <View className="flex flex-row gap-1 items-center mb-1">
