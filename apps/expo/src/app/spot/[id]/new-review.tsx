@@ -51,7 +51,7 @@ export default function NewReviewScreen() {
   }
 
   return (
-    <ModalView title="new review" onBack={onRedirect}>
+    <ModalView title="add a review" onBack={onRedirect}>
       <ScrollView
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="interactive"

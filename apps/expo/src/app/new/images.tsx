@@ -38,7 +38,7 @@ export default function NewSpotImagesScreen() {
   }
 
   return (
-    <NewSpotModalView title="upload images">
+    <NewSpotModalView title="upload images" shouldRenderToast>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         {(params.type === "CAMPING" || params.type === "FREE_CAMPING") && (
           <Text className="pb-2">Try and add a photo of your van at the spot, maybe a nice picture of the view!</Text>
@@ -75,6 +75,7 @@ export default function NewSpotImagesScreen() {
         <Button
           className="rounded-full"
           onPress={() => {
+            if (images.length === 0) return toast({ title: "Please add at least one image" })
             const searchParams = new URLSearchParams({ ...params, coverIndex: coverIndex.toString(), images: images.join(",") })
             // @ts-ignore
             router.push(`/new/confirm?${searchParams}`)
