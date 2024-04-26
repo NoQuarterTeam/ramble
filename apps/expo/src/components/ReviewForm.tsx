@@ -76,8 +76,8 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
             <Spinner />
           ) : !allTagsGrouped ? null : (
             Object.entries(allTagsGrouped).map(([category, tags]) => (
-              <View key={category}>
-                <View className="flex flex-row gap-1 items-center mb-1">
+              <View key={category} className="pb-4">
+                <View className="flex flex-row gap-1 items-center pb-2">
                   {category === "NATURE" ? (
                     <Leaf size={15} color="black" />
                   ) : category === "PEOPLE" ? (
@@ -113,8 +113,7 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
       <FormInput
         className="mb-2"
         name="description"
-        label="Be nice, be honest"
-        placeholder="How was your stay? what did you like?"
+        placeholder="Anything else you want to share?"
         numberOfLines={4}
         multiline
         error={props.error}
