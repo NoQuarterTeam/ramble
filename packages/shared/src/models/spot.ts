@@ -164,11 +164,7 @@ export function displaySaved(saved: number | string | null | undefined) {
   return saved
 }
 
-export function doesSpotTypeRequireAmenities(type?: SpotType | null | undefined) {
-  if (!type) return false
-  return type === "CAMPING" || type === "FREE_CAMPING"
-}
-export function doesSpotTypeRequireDescription(type?: SpotType | null | undefined) {
+export function isCampingSpot(type?: SpotType | null | undefined) {
   if (!type) return false
   return type === "CAMPING" || type === "FREE_CAMPING"
 }

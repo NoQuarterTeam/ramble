@@ -5,7 +5,7 @@ import { ScrollView, Switch, View } from "react-native"
 import Animated, { useAnimatedKeyboard, useAnimatedStyle } from "react-native-reanimated"
 
 import type { SpotType } from "@ramble/database/types"
-import { doesSpotTypeRequireAmenities } from "@ramble/shared"
+import { isCampingSpot } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { Icon } from "~/components/Icon"
@@ -80,7 +80,7 @@ export default function EditSpotOptionsScreen() {
             })
 
             router.push(
-              doesSpotTypeRequireAmenities(params.type)
+              isCampingSpot(params.type)
                 ? `/${tab}/spot/${id}/edit/amenities?${searchParams}`
                 : `/${tab}/spot/${id}/edit/images?${searchParams}`,
             )

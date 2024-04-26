@@ -172,6 +172,7 @@ export default function SpotDetailScreen() {
         <LoginPlaceholder text="Log in to view more information about this spot" />
       </ScreenView>
     )
+
   return (
     <View>
       <StatusBar style={isDark ? "light" : isScrolledPassedThreshold ? "dark" : "light"} />
@@ -209,16 +210,17 @@ export default function SpotDetailScreen() {
               </View>
             </View>
           </View>
-          <View className="space-y-1">
-            <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <CreatorCard creator={spot.creator} />}</View>
-            <View>
-              <TranslateSpotDescription
-                spot={spot}
-                hash={data.descriptionHash}
-                translatedDescription={data.translatedDescription}
-              />
-            </View>
-            <Text className="text-sm">Added on {dayjs(spot.createdAt).format("DD/MM/YYYY")}</Text>
+          <View className="space-y-2">
+            <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <CreatorCard spot={spot} />}</View>
+            {spot.description && (
+              <View>
+                <TranslateSpotDescription
+                  spot={spot}
+                  hash={data.descriptionHash}
+                  translatedDescription={data.translatedDescription}
+                />
+              </View>
+            )}
             {spot.address && <Text className="font-400-italic text-sm">{spot.address}</Text>}
             {spot.amenities && (
               <View className="flex flex-row flex-wrap gap-2">
@@ -287,6 +289,17 @@ export default function SpotDetailScreen() {
                   </View>
                 </ScrollView>
               )}
+            </View>
+
+            <View className="flex flex-row flex-wrap gap-2">
+              {data.tags.map((tag) => (
+                <View key={tag.name} className="p-2 rounded-sm border border-gray-200 dark:border-gray-700">
+                  <Text className="text-sm">{tag.name}</Text>
+                  <View className="absolute -top-1 -right-1 sq-4 flex items-center justify-center bg-background dark:bg-background-dark rounded-full border border-gray-200 dark:border-gray-700">
+                    <Text className="text-xxs leading-3">{tag.count}</Text>
+                  </View>
+                </View>
+              ))}
             </View>
 
             <View className="space-y-2 py-4">
@@ -379,7 +392,7 @@ export default function SpotDetailScreen() {
                 </View>
               </View>
               {me && (
-                <Button onPress={() => router.push(`/${tab}/spot/${spot.id}/reviews/new`)} variant="secondary">
+                <Button size="sm" onPress={() => router.push(`/spot/${spot.id}/new-review`)} variant="secondary">
                   Add review
                 </Button>
               )}
@@ -537,7 +550,7 @@ function TranslateSpotDescription(props: DescProps) {
 
   if (!props.spot.description) return null
   return (
-    <View className="mt-2 space-y-1">
+    <View className="space-y-1">
       <View className="flex flex-row items-center justify-between">
         <Text className="font-600">Description</Text>
         <Button

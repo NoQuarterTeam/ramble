@@ -32,6 +32,8 @@
     }
   ],
   "ignoreDeps": [
+    "react",
+    "react-dom",
     "@expo/config-plugins",
     "@react-email/components",
     "@react-native-async-storage/async-storage",
