@@ -4,7 +4,7 @@ import dayjs from "dayjs"
 import Supercluster from "supercluster"
 import { z } from "zod"
 
-import { SpotType } from "@ramble/database/types"
+import { type Spot, SpotType } from "@ramble/database/types"
 import { FULL_WEB_URL } from "@ramble/server-env"
 import { clusterSchema, spotAmenitiesSchema, spotSchema, userSchema } from "@ramble/server-schemas"
 import {
@@ -59,7 +59,10 @@ export const spotRouter = createTRPCRouter({
         take: 8000,
       })
       if (spots.length === 0) return []
-      const supercluster = new Supercluster<{ id: string; type: SpotType; cluster: false }, { cluster: true }>({
+      const supercluster = new Supercluster<
+        { cluster: false } & Pick<Spot, "id" | "type">,
+        { cluster: true; types: SpotClusterTypes }
+      >({
         maxZoom: 16,
         minPoints: 8,
         radius: !types || typeof types === "string" ? 30 : types.length > 4 ? 60 : 40,

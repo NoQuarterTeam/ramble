@@ -19,14 +19,11 @@ import {
   isRouteErrorResponse,
   useFetchers,
   useLoaderData,
-  useLocation,
   useNavigation,
   useRouteError,
 } from "@remix-run/react"
-import { Analytics } from "@vercel/analytics/react"
 import { Frown } from "lucide-react"
 import NProgress from "nprogress"
-import posthog from "posthog-js"
 import * as React from "react"
 import { AuthenticityTokenProvider } from "remix-utils/csrf/react"
 import { promiseHash } from "remix-utils/promise"
@@ -46,11 +43,11 @@ import {
 import { LinkButton } from "./components/LinkButton"
 import { useConfig } from "./lib/hooks/useConfig"
 import type { Theme } from "./lib/theme"
-import { GDPR } from "./pages/api+/gdpr"
+
+import { redirect } from "./lib/remix.server"
 import { getMaybeUser } from "./services/auth/auth.server"
 import { csrf } from "./services/session/csrf.server"
 import { getFlashSession } from "./services/session/flash.server"
-import { getGdprSession } from "./services/session/gdpr.server"
 import { getThemeSession } from "./services/session/theme.server"
 
 export const meta: MetaFunction = () => {
@@ -62,18 +59,18 @@ export const links: LinksFunction = () => {
 }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { flashSession, gdprSession, themeSession, user } = await promiseHash({
+  const user = await getMaybeUser(request)
+  if (user && !user.isAdmin) return redirect("https://ramble.guide")
+
+  const { flashSession, themeSession } = await promiseHash({
     flashSession: getFlashSession(request),
     themeSession: getThemeSession(request),
-    gdprSession: getGdprSession(request),
-    user: getMaybeUser(request),
   })
   const [csrfToken, csrfCookieHeader] = await csrf.commitToken()
 
   return json(
     {
       user,
-      gdpr: gdprSession.gdpr,
       csrf: csrfToken,
       flash: flashSession.message,
       theme: themeSession.theme,
@@ -83,7 +80,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       headers: [
         ["set-cookie", csrfCookieHeader as string],
         ["set-cookie", await flashSession.commit()],
-        ["set-cookie", await gdprSession.commit()],
         ["set-cookie", await themeSession.commit()],
       ],
     },
@@ -93,7 +89,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export type RootLoader = SerializeFrom<typeof loader>
 
 export default function App() {
-  const { csrf, flash, user, config, theme, gdpr } = useLoaderData<typeof loader>()
+  const { csrf, flash, theme } = useLoaderData<typeof loader>()
   const transition = useNavigation()
   const fetchers = useFetchers()
   const state = React.useMemo<"idle" | "loading">(() => {
@@ -107,34 +103,33 @@ export default function App() {
     if (state === "idle") NProgress.done()
   }, [state])
 
-  const location = useLocation()
-  const [isHogLoaded, setIsHogLoaded] = React.useState(false)
+  // const [isHogLoaded, setIsHogLoaded] = React.useState(false)
 
-  React.useEffect(() => {
-    if ((gdpr && !gdpr.isAnalyticsEnabled) || config.ENV !== "production") return
-    if (!isHogLoaded) {
-      posthog.init("phc_3HuNiIa6zCcsNHFmXst4X0HJjOLq32yRyRPVZQhsD31", {
-        api_host: "https://eu.posthog.com",
-        loaded: () => setIsHogLoaded(true),
-      })
-    }
-    if (user) {
-      posthog.identify(user.id, { email: user.email, firstName: user.firstName, lastName: user.lastName })
-    }
-  }, [gdpr, user, config, isHogLoaded])
+  // React.useEffect(() => {
+  //   if ((gdpr && !gdpr.isAnalyticsEnabled) || config.ENV !== "production") return
+  //   if (!isHogLoaded) {
+  //     posthog.init("phc_3HuNiIa6zCcsNHFmXst4X0HJjOLq32yRyRPVZQhsD31", {
+  //       api_host: "https://eu.posthog.com",
+  //       loaded: () => setIsHogLoaded(true),
+  //     })
+  //   }
+  //   if (user) {
+  //     posthog.identify(user.id, { email: user.email, firstName: user.firstName, lastName: user.lastName })
+  //   }
+  // }, [gdpr, user, config, isHogLoaded])
 
-  React.useEffect(() => {
-    if (!isHogLoaded || !location.pathname) return
-    posthog.capture("$pageview")
-  }, [location.pathname, isHogLoaded])
+  // React.useEffect(() => {
+  //   if (!isHogLoaded || !location.pathname) return
+  //   posthog.capture("$pageview")
+  // }, [location.pathname, isHogLoaded])
 
   return (
     <Document theme={theme}>
       <AuthenticityTokenProvider token={csrf}>
         <Tooltip.Provider>
           <Outlet />
+
           <Toaster flash={flash} />
-          <GDPR />
         </Tooltip.Provider>
       </AuthenticityTokenProvider>
     </Document>
@@ -230,7 +225,6 @@ function Document({ theme, children }: DocumentProps) {
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
-        <Analytics />
       </body>
     </html>
   )

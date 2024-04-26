@@ -1,10 +1,8 @@
 import { z } from "zod"
 
-import { FormNumber, NullableFormString } from "./utils/form"
-
 export const reviewSchema = z.object({
-  description: NullableFormString,
-  rating: FormNumber.min(1, "Select a rating").max(5),
+  description: z.string().nullable(),
+  rating: z.number().min(1, "Select a rating").max(5),
   spotId: z.string().uuid(),
 })
 

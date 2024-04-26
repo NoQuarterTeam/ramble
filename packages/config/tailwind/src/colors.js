@@ -8,6 +8,6 @@ delete twColors["blueGray"]
 
 module.exports = {
   ...twColors,
-  primary: { DEFAULT: twColors.orange[600], ...twColors.orange, 800: "#362926" },
+  primary: { DEFAULT: twColors.orange[600], ...twColors.orange },
   gray: twColors.stone,
 }

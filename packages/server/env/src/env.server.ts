@@ -14,6 +14,7 @@ const envSchema = z.object({
   UNSPLASH_ACCESS_KEY: z.string(),
   SLACK_TOKEN: z.string(),
   GOOGLE_API_KEY: z.string(),
+  NOTION_TOKEN: z.string(),
   NODE_ENV: z.enum(["development", "production"]).optional(),
   APP_SECRET: z.string(),
   DATABASE_URL: z.string(),

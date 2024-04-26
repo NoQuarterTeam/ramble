@@ -14,6 +14,7 @@ import {
 } from "@ramble/server-services"
 import { userInterestFields } from "@ramble/shared"
 
+import type { User } from "@ramble/database/types"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const userRouter = createTRPCRouter({
@@ -78,7 +79,7 @@ export const userRouter = createTRPCRouter({
       select: { id: true, username: true, firstName: true, lastName: true, avatar: true, avatarBlurHash: true },
     })
   }),
-  clusters: protectedProcedure.input(clusterSchema.optional()).query(async ({ ctx, input: coords }) => {
+  clusters: publicProcedure.input(clusterSchema.optional()).query(async ({ ctx, input: coords }) => {
     if (!coords) return []
     const users = await ctx.prisma.user.findMany({
       where: {
@@ -90,20 +91,23 @@ export const userRouter = createTRPCRouter({
       },
       select: { id: true, username: true, avatar: true, avatarBlurHash: true, longitude: true, latitude: true },
     })
-    const supercluster = new Supercluster<{ id: string; cluster: false }, { cluster: true }>({
+    const supercluster = new Supercluster<
+      { cluster: false } & Pick<User, "id" | "avatar" | "avatarBlurHash" | "username">,
+      { cluster: true }
+    >({
       maxZoom: 16,
       radius: 50,
     })
     const clustersData = supercluster.load(
-      users.map((user) => ({
+      users.map((user, i) => ({
         type: "Feature",
         geometry: { type: "Point", coordinates: [user.longitude!, user.latitude!] },
         properties: {
           cluster: false,
           id: user.id,
-          username: user.username,
-          avatar: user.avatar,
-          avatarBlurHash: user.avatarBlurHash,
+          username: ctx.user ? user.username : `User ${i + 1}`,
+          avatar: ctx.user ? user.avatar : null,
+          avatarBlurHash: ctx.user ? user.avatarBlurHash : null,
         },
       })),
     )
@@ -115,6 +119,7 @@ export const userRouter = createTRPCRouter({
         : c.properties,
     }))
   }),
+
   sendVerificationEmail: protectedProcedure.mutation(async ({ ctx }) => {
     const token = createAuthToken({ id: ctx.user.id })
     await sendAccountVerificationEmail(ctx.user, token)
