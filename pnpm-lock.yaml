@@ -217,8 +217,8 @@ importers:
         specifier: 0.19.10
         version: 0.19.10(react-dom@18.2.0)(react@18.2.0)
       superjson:
-        specifier: 1.13.3
-        version: 1.13.3
+        specifier: 2.2.1
+        version: 2.2.1
       zeego:
         specifier: 1.10.0
         version: 1.10.0(@react-native-menu/menu@1.0.1)(@types/react@18.3.1)(react-dom@18.2.0)(react-native-ios-context-menu@2.5.1)(react-native@0.73.6)(react@18.2.0)
@@ -256,9 +256,6 @@ importers:
       '@aws-sdk/client-s3':
         specifier: 3.564.0
         version: 3.564.0
-      '@fontsource/urbanist':
-        specifier: 5.0.20
-        version: 5.0.20
       '@notionhq/client':
         specifier: ^2.2.15
         version: 2.2.15
@@ -346,12 +343,6 @@ importers:
       class-variance-authority:
         specifier: 0.7.0
         version: 0.7.0
-      copy-to-clipboard:
-        specifier: 3.3.3
-        version: 3.3.3
-      crypto-js:
-        specifier: 4.2.0
-        version: 4.2.0
       d3-shape:
         specifier: 3.2.0
         version: 3.2.0
@@ -361,9 +352,6 @@ importers:
       isbot:
         specifier: latest
         version: 5.1.5
-      jose:
-        specifier: 5.2.4
-        version: 5.2.4
       lucide-react:
         specifier: 0.372.0
         version: 0.372.0(react@18.2.0)
@@ -400,9 +388,6 @@ importers:
       sonner:
         specifier: 1.4.41
         version: 1.4.41(react-dom@18.2.0)(react@18.2.0)
-      supercluster:
-        specifier: 8.0.1
-        version: 8.0.1
       tailwind-scrollbar-hide:
         specifier: 1.1.7
         version: 1.1.7
@@ -434,9 +419,6 @@ importers:
       '@types/react-dom':
         specifier: 18.3.0
         version: 18.3.0
-      '@types/supercluster':
-        specifier: 7.1.3
-        version: 7.1.3
       autoprefixer:
         specifier: 10.4.19
         version: 10.4.19(postcss@8.4.38)
@@ -498,8 +480,8 @@ importers:
         specifier: 8.0.1
         version: 8.0.1
       superjson:
-        specifier: 1.13.3
-        version: 1.13.3
+        specifier: 2.2.1
+        version: 2.2.1
       zod:
         specifier: 3.23.4
         version: 3.23.4
@@ -3447,10 +3429,6 @@ packages:
 
   /@floating-ui/utils@0.2.1:
     resolution: {integrity: sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==}
-    dev: false
-
-  /@fontsource/urbanist@5.0.20:
-    resolution: {integrity: sha512-cTbD74+OiR9Y7CCWN7shaaEMgrv6ujgDRbMO6/PUszdND7wWPz+/Dot/MBkdDzkW68i73i3LqQ/5G+iAeyJUVQ==}
     dev: false
 
   /@gar/promisify@1.1.3:
@@ -8222,12 +8200,6 @@ packages:
       is-what: 4.1.16
     dev: false
 
-  /copy-to-clipboard@3.3.3:
-    resolution: {integrity: sha512-2KV8NhB5JqC3ky0r9PMCAZKbUHSwtEo4CwCs0KXgruG43gX5PMqDEBbVU4OUzw2MuAWUfsuFmWvEKG5QRfSnJA==}
-    dependencies:
-      toggle-selection: 1.0.6
-    dev: false
-
   /core-js-compat@3.37.0:
     resolution: {integrity: sha512-vYq4L+T8aS5UuFg4UwDhc7YNRWVeVZwltad9C/jV3R2LgVOpS9BDr7l/WL6BN0dbV3k1XejPTHqqEzJgsa0frA==}
     dependencies:
@@ -8295,10 +8267,6 @@ packages:
 
   /crypt@0.0.2:
     resolution: {integrity: sha512-mCxBlsHFYh9C+HVpiEacem8FEBnMXgU9gy4zmNC+SXAZNB/1idgp/aulFJ4FgCi7GPEVbfyng092GqL2k2rmow==}
-    dev: false
-
-  /crypto-js@4.2.0:
-    resolution: {integrity: sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==}
     dev: false
 
   /crypto-random-string@1.0.0:
@@ -10776,10 +10744,6 @@ packages:
 
   /join-component@1.1.0:
     resolution: {integrity: sha512-bF7vcQxbODoGK1imE2P9GS9aw4zD0Sd+Hni68IMZLj7zRnquH7dXUmMw9hDI5S/Jzt7q+IyTXN0rSg2GI0IKhQ==}
-    dev: false
-
-  /jose@5.2.4:
-    resolution: {integrity: sha512-6ScbIk2WWCeXkmzF6bRPmEuaqy1m8SbsRFMa/FLrSCkGIhj8OLVG/IH+XHVmNMx/KUo8cVWEE6oKR4dJ+S0Rkg==}
     dev: false
 
   /js-beautify@1.15.1:
@@ -14470,9 +14434,9 @@ packages:
       kdbush: 4.0.2
     dev: false
 
-  /superjson@1.13.3:
-    resolution: {integrity: sha512-mJiVjfd2vokfDxsQPOwJ/PtanO87LhpYY88ubI5dUB1Ab58Txbyje3+jpm+/83R/fevaq/107NNhtYBLuoTrFg==}
-    engines: {node: '>=10'}
+  /superjson@2.2.1:
+    resolution: {integrity: sha512-8iGv75BYOa0xRJHK5vRLEjE2H/i4lulTjzpUXic3Eg8akftYjkmQDa8JARQ42rlczXyFR3IeRoeFCc7RxHsYZA==}
+    engines: {node: '>=16'}
     dependencies:
       copy-anything: 3.0.5
     dev: false
@@ -14752,10 +14716,6 @@ packages:
     engines: {node: '>=8.0'}
     dependencies:
       is-number: 7.0.0
-
-  /toggle-selection@1.0.6:
-    resolution: {integrity: sha512-BiZS+C1OS8g/q2RRbJmy59xpyghNBqrr6k5L/uKBGRsTfxmu3ffiRnd8mlGPUVayg8pvfi5urfnu8TU7DVOkLQ==}
-    dev: false
 
   /toidentifier@1.0.1:
     resolution: {integrity: sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==}

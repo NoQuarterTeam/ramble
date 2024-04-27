@@ -3,18 +3,7 @@ const nextConfig = {
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
   experimental: { ppr: true, serverComponentsExternalPackages: ["@aws-sdk"] },
-  transpilePackages: [
-    "axios",
-    "decode-uri-component",
-    "filter-obj",
-    "loops",
-    "kdbush",
-    "loops",
-    "query-string",
-    "split-on-first",
-    "supercluster",
-    "superjson",
-  ],
+  transpilePackages: ["@ramble/shared"],
   images: {
     remotePatterns: [
       { hostname: "cdn.ramble.guide" },
