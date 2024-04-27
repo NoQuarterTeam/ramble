@@ -18,12 +18,12 @@ export default function OnboardingStep3Screen() {
   const { data, isLoading } = api.van.mine.useQuery()
 
   const form = useForm({
-    defaultValues: { name: data?.name, model: data?.model, year: data?.year, description: data?.description },
+    defaultValues: { name: data?.name, model: data?.model, year: data?.year.toString(), description: data?.description },
   })
 
   React.useEffect(() => {
     if (!data || isLoading) return
-    form.reset({ name: data.name, model: data.model, year: data.year, description: data.description })
+    form.reset({ name: data.name, model: data.model, year: data.year.toString(), description: data.description })
   }, [data, form, isLoading])
   const router = useRouter()
 
@@ -47,7 +47,7 @@ export default function OnboardingStep3Screen() {
     if (!model) return toast({ title: "Model is required" })
     if (!name) return toast({ title: "Name is required" })
     if (!year) return toast({ title: "Year is required" })
-    mutate({ model, name, year, id: data?.id, description: van.description })
+    mutate({ model, name, year: Number(year), id: data?.id, description: van.description })
   })
   return (
     <SafeAreaView>

@@ -25,12 +25,12 @@ export default function VanScreen() {
   const { data, isLoading } = api.van.mine.useQuery()
 
   const form = useForm({
-    defaultValues: { name: data?.name, model: data?.model, year: data?.year, description: data?.description },
+    defaultValues: { name: data?.name, model: data?.model, year: data?.year.toString(), description: data?.description },
   })
 
   React.useEffect(() => {
     if (!data || isLoading) return
-    form.reset({ name: data.name, model: data.model, year: data.year, description: data.description })
+    form.reset({ name: data.name, model: data.model, year: data.year.toString(), description: data.description })
   }, [data, form, isLoading])
 
   const utils = api.useUtils()
@@ -40,7 +40,7 @@ export default function VanScreen() {
     error,
   } = api.van.upsert.useMutation({
     onSuccess: (res) => {
-      form.reset({ name: res.name, model: res.model, year: res.year, description: res.description })
+      form.reset({ name: res.name, model: res.model, year: res.year.toString(), description: res.description })
       toast({ title: "Van updated." })
     },
   })
@@ -51,7 +51,7 @@ export default function VanScreen() {
     if (!model) return toast({ title: "Model is required" })
     if (!name) return toast({ title: "Name is required" })
     if (!year) return toast({ title: "Year is required" })
-    mutate({ model, name, year, id: data?.id })
+    mutate({ model, name, year: Number(year), id: data?.id })
   })
 
   const { mutate: removeImage } = api.van.removeImage.useMutation({
