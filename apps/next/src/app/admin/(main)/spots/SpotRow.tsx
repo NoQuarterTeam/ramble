@@ -10,7 +10,7 @@ import { SpotIcon } from "@/components/SpotIcon"
 import { ExternalLink, Eye, EyeOff, Trash } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { deleteSpot, verifySpot } from "../actions"
+import { deleteSpot, verifySpot } from "./actions"
 
 interface Props {
   spot: Pick<Spot, "type" | "sourceUrl" | "id" | "description" | "createdAt" | "name" | "latitude" | "longitude"> & {

@@ -21,7 +21,8 @@ export const action = async (_: unknown, formData: FormData) => {
 
     clearSession()
     setUserSession(user.id)
-  } catch {
+  } catch (e) {
+    console.log(e)
     return { ok: false, formError: "Error logging in. Please try again." }
   }
   redirect("/admin")

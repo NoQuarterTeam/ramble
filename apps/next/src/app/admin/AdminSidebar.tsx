@@ -22,8 +22,8 @@ export function AdminSidebar() {
         <AdminNavLink Icon={Route} href="/admin/trips">
           Trips
         </AdminNavLink>
-        <AdminNavLink Icon={Flag} href="/admin/spot-reports">
-          Spot reports
+        <AdminNavLink Icon={Flag} href="/admin/reports">
+          Reports
         </AdminNavLink>
         <AdminNavLink Icon={HelpingHand} href="/admin/access-requests">
           Access requests

@@ -1,48 +1,40 @@
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/Table"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table"
 import { db } from "@/lib/server/db"
 
 import { Pagination } from "@/components/Pagination"
-import type { Prisma } from "@ramble/database/types"
-import { promiseHash } from "@ramble/shared"
-import { SpotRow } from "./components/SpotRow"
+import { Avatar } from "@/components/ui"
+import { requireAdmin } from "@/lib/server/auth"
+import { createAssetUrl, promiseHash } from "@ramble/shared"
+import dayjs from "dayjs"
 
 export const dynamic = "force-dynamic"
 
-const getSpotsAndCount = ({ page }: { page?: string }) => {
+const getItemsAndCount = async ({ page }: { page?: string }) => {
+  await requireAdmin()
   const skip = page ? (Number(page) - 1) * 25 : 0
 
-  const where = { deletedAt: null } as Prisma.SpotWhereInput
-
   return promiseHash({
-    spots: db.spot.findMany({
-      where,
+    trips: db.trip.findMany({
       orderBy: { createdAt: "desc" },
       take: 25,
       skip,
       select: {
         id: true,
         name: true,
-        description: true,
-        sourceUrl: true,
-        createdAt: true,
-        verifiedAt: true,
-        latitude: true,
-        longitude: true,
-        type: true,
+        startDate: true,
         creator: { select: { id: true, username: true, avatar: true } },
-        verifier: { select: { id: true, username: true, avatar: true } },
-        images: { select: { id: true, path: true }, take: 20 },
+        createdAt: true,
       },
     }),
-    count: db.spot.count({ where }),
+    count: db.trip.count(),
   })
 }
 
 export default async function Page({ searchParams }: { searchParams: { page?: string } }) {
-  const { spots, count } = await getSpotsAndCount({ page: searchParams.page })
+  const { trips, count } = await getItemsAndCount({ page: searchParams.page })
   return (
     <div className="space-y-4">
-      <h1 className="text-4xl">Spots</h1>
+      <h1 className="text-4xl">Trips</h1>
       <div className="flex items-end gap-2">
         {/* <form>
 				<ExistingSearchParams exclude={["type"]} />
@@ -69,7 +61,7 @@ export default async function Page({ searchParams }: { searchParams: { page?: st
 					name={searchParams.get("unverified") === "true" ? undefined : "unverified"}
 					value={searchParams.get("unverified") === "true" ? undefined : "true"}
 				>
-					Show {unverifiedSpotsCount} unverified
+					Show {unverifiedUsersCount} unverified
 				</Button>
 			</Form> */}
 
@@ -81,16 +73,33 @@ export default async function Page({ searchParams }: { searchParams: { page?: st
         <TableHeader>
           <TableRow>
             <TableHead className="w-[300px]">Name</TableHead>
-            <TableHead>Description</TableHead>
             <TableHead>Creator</TableHead>
-            <TableHead>Verifier</TableHead>
-            <TableHead>Created at</TableHead>
-            <TableHead className="text-right"> </TableHead>
+            <TableHead>Start date</TableHead>
+            <TableHead className="text-right">Created at</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {spots.map((spot) => (
-            <SpotRow key={spot.id} spot={spot} />
+          {trips.map((trip) => (
+            <TableRow key={trip.id}>
+              <TableCell>
+                <p className="line-clamp-1 max-w-md">{trip.name}</p>
+              </TableCell>
+              <TableCell>
+                <div className="flex items-center space-x-2">
+                  <div className="flex-shrink-0">
+                    <Avatar src={createAssetUrl(trip.creator.avatar)} size={40} className="w-8 h-8" />
+                  </div>
+                  <p className="line-clamp-1">{trip.creator.username}</p>
+                </div>
+              </TableCell>
+
+              <TableCell>
+                <p>{dayjs(trip.startDate).format("DD/MM/YYYY")}</p>
+              </TableCell>
+              <TableCell className="text-right">
+                <p>{dayjs(trip.createdAt).format("DD/MM/YYYY")}</p>
+              </TableCell>
+            </TableRow>
           ))}
         </TableBody>
       </Table>
