@@ -1,6 +1,5 @@
-import type * as React from "react"
-
 import { requireAdmin } from "@/lib/server/auth"
+import type * as React from "react"
 import { AdminSidebar } from "./AdminSidebar"
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
