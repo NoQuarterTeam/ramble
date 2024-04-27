@@ -1,8 +1,7 @@
 "use server"
 
-import { createToken } from "@/lib/jwt"
 import { db } from "@/lib/server/db"
-import { sendResetPasswordEmail } from "@ramble/server-services"
+import { createToken, sendResetPasswordEmail } from "@ramble/server-services"
 import { z } from "zod"
 
 export const action = async (_: unknown, formData: FormData) => {
@@ -19,7 +18,7 @@ export const action = async (_: unknown, formData: FormData) => {
 
     const user = await db.user.findUnique({ where: { email: result.data.email } })
     if (user) {
-      const token = await createToken({ id: user.id })
+      const token = createToken({ id: user.id })
       await sendResetPasswordEmail(user, token)
     }
 

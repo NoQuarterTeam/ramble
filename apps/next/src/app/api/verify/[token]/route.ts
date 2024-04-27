@@ -1,13 +1,12 @@
-import { updateLoopsContact } from "@ramble/server-services"
+import { decodeToken, updateLoopsContact } from "@ramble/server-services"
 
-import { decryptToken } from "@/lib/jwt"
 import { db } from "@/lib/server/db"
 import { redirect } from "next/navigation"
 
 export const GET = async (_request: Request, { params }: { params: { token: string } }) => {
   const token = params.token
   if (!token) return redirect("/")
-  const { id } = await decryptToken<{ id: string }>(token)
+  const { id } = decodeToken<{ id: string }>(token)
   const user = await db.user.findUnique({ where: { id } })
   if (!user) return redirect("/")
   await db.user.update({ where: { id }, data: { isVerified: true } })
