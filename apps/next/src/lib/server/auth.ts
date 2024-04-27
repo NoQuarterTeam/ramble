@@ -1,5 +1,5 @@
 "use server"
-import type { Prisma } from "@ramble/database/types"
+import { Prisma } from "@ramble/database/types"
 import { createToken, decodeToken } from "@ramble/server-services"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
@@ -26,7 +26,7 @@ export async function setUserSession(id: string) {
   })
 }
 
-const userSelectFields = {
+const userSelectFields = Prisma.validator<Prisma.UserSelect>()({
   id: true,
   email: true,
   firstName: true,
@@ -35,7 +35,7 @@ const userSelectFields = {
   isAdmin: true,
   role: true,
   createdAt: true,
-} satisfies Prisma.UserSelect
+})
 
 export async function getMaybeUser<T extends Prisma.UserSelect>(select?: T) {
   const userId = await getUserSession()

@@ -1,37 +1,47 @@
-import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/Table"
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/Table"
 import { db } from "@/lib/server/db"
-import dayjs from "dayjs"
 
-const getSpots = async () => {
-  return db.spot.findMany({
-    // orderBy,
-    // skip,
-    // take,
-    // where,
-    take: 50,
-    select: {
-      id: true,
-      name: true,
-      description: true,
-      sourceUrl: true,
-      createdAt: true,
-      verifiedAt: true,
-      latitude: true,
-      longitude: true,
-      type: true,
-      creator: true,
-      verifier: true,
-      images: true,
-    },
-  })
-}
+import { Pagination } from "@/components/Pagination"
+import type { Prisma } from "@ramble/database/types"
+import { promiseHash } from "@ramble/shared"
+import { SpotRow } from "./components/SpotRow"
 
 export const dynamic = "force-dynamic"
 
-export default async function Page() {
-  const spots = await getSpots()
+const getSpotsAndCount = ({ page }: { page?: string }) => {
+  const skip = page ? (Number(page) - 1) * 25 : 0
+
+  const where = { deletedAt: null } as Prisma.SpotWhereInput
+
+  return promiseHash({
+    spots: db.spot.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      take: 25,
+      skip,
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        sourceUrl: true,
+        createdAt: true,
+        verifiedAt: true,
+        latitude: true,
+        longitude: true,
+        type: true,
+        creator: { select: { id: true, username: true, avatar: true } },
+        verifier: { select: { id: true, username: true, avatar: true } },
+        images: { select: { id: true, path: true }, take: 20 },
+      },
+    }),
+    count: db.spot.count({ where }),
+  })
+}
+
+export default async function Page({ searchParams }: { searchParams: { page?: string } }) {
+  const { spots, count } = await getSpotsAndCount({ page: searchParams.page })
   return (
-    <div className="space-y-2">
+    <div className="space-y-4">
       <h1 className="text-4xl">Spots</h1>
       <div className="flex items-end gap-2">
         {/* <form>
@@ -70,28 +80,23 @@ export default async function Page() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">Name</TableHead>
-            <TableHead>Desc</TableHead>
-
-            <TableHead className="text-right">Created</TableHead>
+            <TableHead className="w-[300px]">Name</TableHead>
+            <TableHead>Description</TableHead>
+            <TableHead>Creator</TableHead>
+            <TableHead>Verifier</TableHead>
+            <TableHead>Created at</TableHead>
+            <TableHead className="text-right"> </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {spots.map((spot) => (
-            <TableRow key={spot.id}>
-              <TableCell className="font-medium line-clamp-1">{spot.name}</TableCell>
-              <TableCell className="line-clamp-1">{spot.description}</TableCell>
-              <TableCell className="text-right">{dayjs(spot.createdAt).format()}</TableCell>
-            </TableRow>
+            <SpotRow key={spot.id} spot={spot} />
           ))}
         </TableBody>
-        {/* <TableFooter>
-        <TableRow>
-          <TableCell colSpan={3}>Total</TableCell>
-          <TableCell className="text-right">$2,500.00</TableCell>
-        </TableRow>
-      </TableFooter> */}
       </Table>
+      <div>
+        <Pagination count={count} />
+      </div>
     </div>
   )
 }

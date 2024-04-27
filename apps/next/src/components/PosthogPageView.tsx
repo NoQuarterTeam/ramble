@@ -9,6 +9,7 @@ export default function PostHogPageView(): null {
   const posthog = usePostHog()
   // Track pageviews
   useEffect(() => {
+    if (process.env.NODE_ENV === "development") return
     if (pathname && posthog) {
       let url = window.origin + pathname
       if (searchParams.toString()) {

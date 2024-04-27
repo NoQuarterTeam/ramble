@@ -35,7 +35,7 @@ export const spotItemSelectFields = Prisma.sql`
   Spot.id, Spot.name, Spot.type, Spot.address,
   Spot.latitude, Spot.longitude,
   SpotImage.path AS image, SpotImage.blurHash AS blurHash,
-  (SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS rating,
+  CAST((SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS CHAR(32)) AS rating,
   CAST((SELECT COUNT(ListSpot.spotId) FROM ListSpot WHERE ListSpot.spotId = Spot.id) AS CHAR(32)) AS savedCount
 `
 
