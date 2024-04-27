@@ -21,7 +21,7 @@ export const vanRouter = createTRPCRouter({
       const van = await ctx.prisma.van.findUnique({ where: { id } })
       if (!van) throw new TRPCError({ code: "NOT_FOUND" })
       if (van.userId !== ctx.user.id) throw new TRPCError({ code: "UNAUTHORIZED" })
-      return ctx.prisma.van.update({ where: { id }, data })
+      return ctx.prisma.van.update({ where: { id }, data: { ...data, year: data.year ? Number(data.year) : undefined } })
     }),
   saveImages: protectedProcedure.input(z.object({ paths: z.array(z.string()) })).mutation(async ({ ctx, input }) => {
     const van = await ctx.prisma.van.findUnique({ where: { userId: ctx.user.id } })
