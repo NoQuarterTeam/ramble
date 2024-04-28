@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { useRouter } from "expo-router"
 import { FormProvider } from "react-hook-form"
-import { ScrollView, View } from "react-native"
+import { Linking, ScrollView, View } from "react-native"
 
 import { Button } from "~/components/ui/Button"
 import { FormError } from "~/components/ui/FormError"
@@ -67,10 +67,15 @@ export default function LoginScreen() {
             </Button>
             <FormError className="mb-1" error={error} />
           </View>
-          <View className="flex flex-row items-center justify-center">
+          <View className="flex flex-row items-center justify-center mb-2">
             <Text className="text-base">No account yet?</Text>
             <Button className="px-1" variant="link" onPress={() => navigation.replace("/register")}>
               Register
+            </Button>
+          </View>
+          <View className="flex flex-row items-center justify-center">
+            <Button className="px-1" variant="link" onPress={() => Linking.openURL("https://ramble.guide/forgot-password")}>
+              Forgot password?
             </Button>
           </View>
         </ScrollView>
