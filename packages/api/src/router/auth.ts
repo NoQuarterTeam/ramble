@@ -2,15 +2,18 @@ import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
 import { IS_DEV } from "@ramble/server-env"
-import { loginSchema, registerSchema } from "@ramble/server-schemas"
+import { loginSchema, registerSchema, userSchema } from "@ramble/server-schemas"
 import {
   comparePasswords,
   createAccessRequest,
   createAuthToken,
+  createToken,
+  decodeToken,
   deleteLoopsContact,
   generateInviteCodes,
   hashPassword,
   sendAccessRequestConfirmationEmail,
+  sendResetPasswordEmail,
   sendSlackMessage,
   updateLoopsContact,
 } from "@ramble/server-services"
@@ -69,6 +72,24 @@ export const authRouter = createTRPCRouter({
     void sendSlackMessage(`🔥 @${user.username} signed up!`)
     return { user: user, token }
   }),
+  forgotPassword: publicProcedure.input(userSchema.pick({ email: true })).mutation(async ({ input, ctx }) => {
+    const email = input.email.toLowerCase().trim()
+    const user = await ctx.prisma.user.findUnique({ where: { email } })
+    if (user) {
+      const token = createToken({ id: user.id })
+      await sendResetPasswordEmail(user, token)
+    }
+    return true
+  }),
+  resetPassword: publicProcedure
+    .input(userSchema.pick({ password: true }).and(z.object({ token: z.string() })))
+    .mutation(async ({ input, ctx }) => {
+      const { id } = decodeToken<{ id: string }>(input.token)
+      const user = await ctx.prisma.user.findUnique({ where: { id } })
+      if (!user) throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid token" })
+      const updated = await ctx.prisma.user.update({ where: { id }, data: { password: hashPassword(input.password) } })
+      return updated
+    }),
   requestAccess: publicProcedure
     .input(
       z.object({
