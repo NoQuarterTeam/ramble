@@ -82,8 +82,8 @@ importers:
         specifier: 3.2.0
         version: 3.2.0
       dayjs:
-        specifier: 1.11.10
-        version: 1.11.10
+        specifier: 1.11.11
+        version: 1.11.11
       expo:
         specifier: 50.0.17
         version: 50.0.17(@babel/core@7.24.4)(@react-native/babel-preset@0.74.81)
@@ -347,8 +347,8 @@ importers:
         specifier: 3.2.0
         version: 3.2.0
       dayjs:
-        specifier: 1.11.10
-        version: 1.11.10
+        specifier: 1.11.11
+        version: 1.11.11
       isbot:
         specifier: latest
         version: 5.1.5
@@ -471,8 +471,8 @@ importers:
         specifier: 7.0.0-alpha.115
         version: 7.0.0-alpha.115
       dayjs:
-        specifier: 1.11.10
-        version: 1.11.10
+        specifier: 1.11.11
+        version: 1.11.11
       semver:
         specifier: ^7.6.0
         version: 7.6.0
@@ -699,8 +699,8 @@ importers:
         specifier: 2.0.5
         version: 2.0.5
       dayjs:
-        specifier: 1.11.10
-        version: 1.11.10
+        specifier: 1.11.11
+        version: 1.11.11
       flickr-sdk:
         specifier: 7.0.0-beta.7
         version: 7.0.0-beta.7
@@ -8483,8 +8483,8 @@ packages:
       is-data-view: 1.0.1
     dev: false
 
-  /dayjs@1.11.10:
-    resolution: {integrity: sha512-vjAczensTgRcqDERK0SR2XMwsF/tSvnvlv6VcF2GIhg6Sx4yOIt/irsr1RDJsKiIyBzJDpCoXiWWq28MqH2cnQ==}
+  /dayjs@1.11.11:
+    resolution: {integrity: sha512-okzr3f11N6WuqYtZSvm+F776mB41wRZMhKP+hc34YdW+KmtYYK9iqvHSwo2k9FEH3fhGXvOPV6yz2IcSrfRUDg==}
     dev: false
 
   /debounce@1.2.1:
@@ -11144,7 +11144,7 @@ packages:
     hasBin: true
     dependencies:
       ansi-fragments: 0.2.1
-      dayjs: 1.11.10
+      dayjs: 1.11.11
       yargs: 15.4.1
     dev: false
 
