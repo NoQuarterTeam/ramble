@@ -37,7 +37,7 @@ export default function LoginScreen() {
   })
 
   return (
-    <ModalView title="login" onBack={() => navigation.back()}>
+    <ModalView title="login" shouldRenderToast onBack={() => navigation.back()}>
       <FormProvider {...form}>
         <ScrollView
           keyboardShouldPersistTaps="handled"
@@ -67,14 +67,14 @@ export default function LoginScreen() {
             </Button>
             <FormError className="mb-1" error={error} />
           </View>
-          <View className="flex flex-row items-center justify-center mb-2">
-            <Text className="text-base">No account yet?</Text>
-            <Button className="px-1" variant="link" onPress={() => navigation.replace("/register")}>
-              Register
-            </Button>
-          </View>
-          <View className="flex flex-row items-center justify-center">
-            <Button className="px-1" variant="link" onPress={() => Linking.openURL("https://ramble.guide/forgot-password")}>
+          <View>
+            <View className="flex flex-row items-center justify-center mb-2">
+              <Text className="text-base">No account yet?</Text>
+              <Button className="px-1" variant="link" onPress={() => navigation.replace("/register")}>
+                Register
+              </Button>
+            </View>
+            <Button className="px-1" variant="link" onPress={() => navigation.push("/forgot-password")}>
               Forgot password?
             </Button>
           </View>
