@@ -17,21 +17,6 @@ export function decodeToken<T>(token: string): T {
   return payload
 }
 
-export function createToken<T extends object | string>(payload: T) {
-  const token = jwt.sign(payload, env.APP_SECRET, {
-    issuer: "@ramble/api",
-    audience: ["@ramble/app", "@ramble/web"],
-    expiresIn: "1 week",
-  })
-  return token
-}
-
-export function decodeToken<T>(token: string): T {
-  jwt.verify(token, env.APP_SECRET)
-  const payload = jwt.decode(token) as T
-  return payload
-}
-
 export const createAuthToken = (payload: { id: string }) => {
   try {
     const token = jwt.sign(payload, env.SESSION_SECRET, {
