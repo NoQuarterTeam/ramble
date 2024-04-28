@@ -32,6 +32,7 @@ export default function RequestAccessScreen() {
 
   const onSubmit = form.handleSubmit((data) => {
     if (!data.reason) return toast({ title: "Please provide a reason" })
+
     mutate(data)
   })
 
