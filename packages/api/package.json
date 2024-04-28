@@ -20,7 +20,7 @@
     "@turf/bbox": "7.0.0-alpha.115",
     "@turf/center": "7.0.0-alpha.115",
     "@turf/helpers": "7.0.0-alpha.115",
-    "dayjs": "1.11.10",
+    "dayjs": "1.11.11",
     "semver": "^7.6.0",
     "supercluster": "8.0.1",
     "superjson": "2.2.1",
