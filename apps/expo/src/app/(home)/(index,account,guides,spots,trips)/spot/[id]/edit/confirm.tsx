@@ -77,7 +77,7 @@ export default function EditSpotConfirmScreen() {
       type: params.type,
       images: [...newImageKeys, ...existingImages].map((i) => ({ path: i })),
       amenities,
-      isPetFriendly: params.isPetFriendly,
+      isPetFriendly: params.isPetFriendly === "true",
     })
   }
 
