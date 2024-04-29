@@ -295,6 +295,8 @@ export const spotRouter = createTRPCRouter({
       const spot = await ctx.prisma.spot.create({
         data: {
           ...data,
+          // temp until apps send correct data
+          isPetFriendly: data.isPetFriendly === "true" || data.isPetFriendly === true,
           publishedAt: shouldPublishLater ? dayjs().add(2, "weeks").toDate() : undefined,
           creator: { connect: { id: ctx.user.id } },
           images: { create: imageData },
@@ -370,6 +372,8 @@ export const spotRouter = createTRPCRouter({
         where: { id },
         data: {
           ...data,
+          // temp until apps send correct data
+          isPetFriendly: data.isPetFriendly === "true" || data.isPetFriendly === true,
           images: { create: imageData, delete: imagesToDelete },
           amenities: amenities
             ? { update: spot.amenities ? amenities : undefined, create: spot.amenities ? undefined : amenities }
