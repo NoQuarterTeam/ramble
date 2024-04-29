@@ -12,6 +12,7 @@ import {
   geocodeAddress,
   geocodeCoords,
   get5DayForecast,
+  get5DayForecastV2,
   getCurrentWeather,
   publicSpotWhereClause,
   publicSpotWhereClauseRaw,
@@ -235,7 +236,12 @@ export const spotRouter = createTRPCRouter({
           return null
         })
     }
-    const weather = await get5DayForecast(spot.latitude, spot.longitude)
+
+    const { weather, weatherV2 } = await promiseHash({
+      weather: get5DayForecast(spot.latitude, spot.longitude),
+      weatherV2: get5DayForecastV2(spot.latitude, spot.longitude),
+    })
+
     spot.images = spot.images.sort((a, b) => (a.id === spot.coverId ? -1 : b.id === spot.coverId ? 1 : 0))
     return {
       spot,
@@ -245,6 +251,7 @@ export const spotRouter = createTRPCRouter({
       rating,
       tags,
       weather,
+      weatherV2,
     }
   }),
   byUser: publicProcedure.input(userSchema.pick({ username: true })).query(async ({ ctx, input }) => {

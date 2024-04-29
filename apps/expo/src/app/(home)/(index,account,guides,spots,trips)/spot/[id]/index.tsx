@@ -58,6 +58,7 @@ import { PartnerLink } from "~/components/PartnerLink"
 import { ReviewItem } from "~/components/ReviewItem"
 import { SpotMarker } from "~/components/SpotMarker"
 import { SpotTypeBadge } from "~/components/SpotTypeBadge"
+import { WeatherWidget } from "~/components/WeatherWidget"
 import { Button } from "~/components/ui/Button"
 import { Heading } from "~/components/ui/Heading"
 import { ScreenView } from "~/components/ui/ScreenView"
@@ -81,8 +82,6 @@ export default function SpotDetailScreen() {
   const params = useLocalSearchParams<{ id: string }>()
   const { data, isLoading } = api.spot.detail.useQuery({ id: params.id }, { cacheTime: Number.POSITIVE_INFINITY })
   const spot = data?.spot
-
-  const forecastDays = data?.weather
 
   const translationY = useSharedValue(0)
   const [isScrolledPassedThreshold, setIsScrolledPassedThreshold] = React.useState(false)
@@ -240,56 +239,11 @@ export default function SpotDetailScreen() {
               </View>
             )}
 
-            <View className="pt-4">
-              {forecastDays && forecastDays.length > 0 && (
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  <View className="flex flex-row space-x-2">
-                    {forecastDays.map((day) => (
-                      <View
-                        key={day[0]?.localTime}
-                        className="border border-gray-200 dark:border-gray-700 rounded-sm p-2 space-y-1"
-                      >
-                        <Text className="font-600">{dayjs(day[0]?.localTime).format("ddd Do")}</Text>
-                        <View className="flex flex-row space-x-3">
-                          {day.map((forecast) => (
-                            <View key={forecast.localTime} className="flex items-center">
-                              <View className="space-y-1 items-center">
-                                <Text>
-                                  {forecast.isNow
-                                    ? "Now"
-                                    : dayjs(forecast.localTime)
-                                        .utc()
-                                        .format(forecast.isSunrise || forecast.isSunset ? "HH:mm" : "HH")}
-                                </Text>
-                                <View className="w-[40px] h-[40px] flex items-center justify-center">
-                                  {forecast.isSunrise ? (
-                                    <Icon icon={Sunrise} size={24} color="primary" />
-                                  ) : forecast.isSunset ? (
-                                    <Icon icon={Sunset} size={24} color="primary" />
-                                  ) : (
-                                    <Image
-                                      style={{ width: 38, height: 38 }}
-                                      source={{ uri: `https://openweathermap.org/img/wn/${forecast.weather[0]!.icon}@2x.png` }}
-                                    />
-                                  )}
-                                </View>
-                                <Text>
-                                  {forecast.isSunrise
-                                    ? "Sunrise"
-                                    : forecast.isSunset
-                                      ? "Sunset"
-                                      : `${Math.round(forecast.main?.temp || 0)}°`}
-                                </Text>
-                              </View>
-                            </View>
-                          ))}
-                        </View>
-                      </View>
-                    ))}
-                  </View>
-                </ScrollView>
-              )}
-            </View>
+            {data.weatherV2 && (
+              <View className="pt-4">
+                <WeatherWidget weather={data.weatherV2} />
+              </View>
+            )}
 
             <View className="flex flex-row flex-wrap gap-2">
               {data.tags.map((tag) => (

@@ -23,6 +23,7 @@ const envSchema = z.object({
   FLASH_SESSION_SECRET: z.string(),
   THEME_SESSION_SECRET: z.string(),
   OPEN_WEATHER_API_KEY: z.string(),
+  TOMORROW_API_KEY: z.string(),
 })
 
 export const env = envSchema.parse(process.env)
