@@ -3,7 +3,7 @@ import nodemailer from "nodemailer"
 
 import { IS_PRODUCTION } from "@ramble/server-env"
 
-import { resend } from "./resend.server"
+import { resend } from "./resend"
 
 type CreateEmailOptions = Parameters<typeof resend.emails.create>[0]
 
