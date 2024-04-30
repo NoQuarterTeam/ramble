@@ -1,8 +1,14 @@
 {
   "compilerOptions": {
-    "types": ["nativewind/types"],
+    "types": [
+      "nativewind/types"
+    ],
     "target": "es2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "checkJs": true,
     "skipLibCheck": true,
@@ -19,10 +25,22 @@
     "noUncheckedIndexedAccess": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["src/*"]
+      "~/*": [
+        "src/*"
+      ]
     }
   },
-  "include": ["expo-plugins", "./my-app.d.ts", "./**/*.ts", "./**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"],
-  "exclude": ["node_modules", "./expo-plugins/**/*"],
+  "include": [
+    "expo-plugins",
+    "./my-app.d.ts",
+    "./**/*.ts",
+    "./**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "./expo-plugins/**/*"
+  ],
   "extends": "expo/tsconfig.base"
 }

@@ -9,10 +9,7 @@ import { FULL_WEB_URL } from "@ramble/server-env"
 import { clusterSchema, spotAmenitiesSchema, spotSchema, userSchema } from "@ramble/server-schemas"
 import {
   generateBlurHash,
-  geocodeAddress,
-  geocodeCoords,
   get5DayForecast,
-  get5DayForecastV2,
   getCurrentWeather,
   publicSpotWhereClause,
   publicSpotWhereClauseRaw,
@@ -237,7 +234,7 @@ export const spotRouter = createTRPCRouter({
         })
     }
 
-    const weatherV2 = await get5DayForecastV2(spot.latitude, spot.longitude)
+    const weatherV2 = await get5DayForecast(spot.latitude, spot.longitude)
 
     spot.images = spot.images.sort((a, b) => (a.id === spot.coverId ? -1 : b.id === spot.coverId ? 1 : 0))
     return {
@@ -248,7 +245,7 @@ export const spotRouter = createTRPCRouter({
       rating,
       tags,
       /**
-        @deprecated Use weatherV2 instead
+        @deprecated in v1.4.10 - Use weatherV2 instead
       */
       weather: null,
       weatherV2,
@@ -416,18 +413,4 @@ export const spotRouter = createTRPCRouter({
       )
       return ctx.prisma.spot.update({ where: { id }, data: { images: { create: imageData } } })
     }),
-  /**
-   * @deprecated Use mapbox router now
-   */
-  geocodeCoords: publicProcedure.input(z.object({ latitude: z.number(), longitude: z.number() })).query(async ({ input }) => {
-    const address = await geocodeCoords({ latitude: input.latitude, longitude: input.longitude })
-    return address || null
-  }),
-  /**
-   * @deprecated Use mapbox router now
-   */
-  geocodeAddress: publicProcedure.input(z.object({ address: z.string() })).query(async ({ input }) => {
-    const coords = await geocodeAddress({ address: input.address })
-    return coords || []
-  }),
 })

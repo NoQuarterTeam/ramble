@@ -17,12 +17,10 @@ import {
   Route,
   Share,
   Star,
-  Sunrise,
-  Sunset,
   Trash,
 } from "lucide-react-native"
 import * as React from "react"
-import { Alert, Share as RNShare, ScrollView, TouchableOpacity, View, type ViewProps, useColorScheme } from "react-native"
+import { Alert, Share as RNShare, TouchableOpacity, View, type ViewProps, useColorScheme } from "react-native"
 import { showLocation } from "react-native-map-link"
 import Animated, {
   Extrapolation,
