@@ -104,7 +104,13 @@ export const authRouter = createTRPCRouter({
       const accessRequest = await ctx.prisma.accessRequest.findFirst({ where: { email: input.email } })
       if (accessRequest) throw new TRPCError({ code: "BAD_REQUEST", message: "Email already requested access" })
       const success = await createAccessRequest(input.email)
+
       if (!success) throw new TRPCError({ code: "BAD_REQUEST", message: "Error creating request, please try again" })
+      void updateLoopsContact({
+        inviteCode: success.code,
+        email: input.email,
+        accessRequestedAt: new Date().toISOString(),
+      })
       sendSlackMessage(`🚀 New in-app access request from ${input.email}${input.reason ? `- reason: ${input.reason}` : ""}`)
       void sendAccessRequestConfirmationEmail(input.email)
       return true

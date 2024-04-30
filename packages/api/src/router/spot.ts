@@ -237,10 +237,7 @@ export const spotRouter = createTRPCRouter({
         })
     }
 
-    const { weather, weatherV2 } = await promiseHash({
-      weather: get5DayForecast(spot.latitude, spot.longitude),
-      weatherV2: get5DayForecastV2(spot.latitude, spot.longitude),
-    })
+    const weatherV2 = await get5DayForecastV2(spot.latitude, spot.longitude)
 
     spot.images = spot.images.sort((a, b) => (a.id === spot.coverId ? -1 : b.id === spot.coverId ? 1 : 0))
     return {
@@ -250,7 +247,10 @@ export const spotRouter = createTRPCRouter({
       isLiked: !!ctx.user && spot.listSpots.length > 0,
       rating,
       tags,
-      weather,
+      /**
+        @deprecated Use weatherV2 instead
+      */
+      weather: null,
       weatherV2,
     }
   }),
@@ -302,6 +302,8 @@ export const spotRouter = createTRPCRouter({
       const spot = await ctx.prisma.spot.create({
         data: {
           ...data,
+          // temp until apps send correct data
+          isPetFriendly: data.isPetFriendly === "true" || data.isPetFriendly === true,
           publishedAt: shouldPublishLater ? dayjs().add(2, "weeks").toDate() : undefined,
           creator: { connect: { id: ctx.user.id } },
           images: { create: imageData },
@@ -377,6 +379,8 @@ export const spotRouter = createTRPCRouter({
         where: { id },
         data: {
           ...data,
+          // temp until apps send correct data
+          isPetFriendly: data.isPetFriendly === "true" || data.isPetFriendly === true,
           images: { create: imageData, delete: imagesToDelete },
           amenities: amenities
             ? { update: spot.amenities ? amenities : undefined, create: spot.amenities ? undefined : amenities }

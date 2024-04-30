@@ -79,11 +79,11 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
               <View key={category} className="pb-4">
                 <View className="flex flex-row gap-1 items-center pb-2">
                   {category === "NATURE" ? (
-                    <Leaf size={15} color="black" />
+                    <Icon icon={Leaf} size={15} />
                   ) : category === "PEOPLE" ? (
-                    <Users size={15} color="black" />
+                    <Icon icon={Users} size={15} />
                   ) : (
-                    category === "SELF" && <Heart size={15} color="black" />
+                    category === "SELF" && <Icon icon={Heart} size={15} />
                   )}
                   <Text className="font-600">{category}</Text>
                 </View>

@@ -11,7 +11,8 @@ export const spotSchema = z.object({
   address: NullableFormString,
   latitude: z.number(),
   longitude: z.number(),
-  isPetFriendly: z.boolean(),
+  // temp until apps send correct data
+  isPetFriendly: z.union([z.boolean(), z.string()]),
   type: z.nativeEnum(SpotType),
 })
 

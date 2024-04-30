@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import dayjs from "dayjs"
 import advancedFormat from "dayjs/plugin/advancedFormat"
-import { Image } from "expo-image"
 import { LinearGradient } from "expo-linear-gradient"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
@@ -239,12 +238,6 @@ export default function SpotDetailScreen() {
               </View>
             )}
 
-            {data.weatherV2 && (
-              <View className="pt-4">
-                <WeatherWidget weather={data.weatherV2} />
-              </View>
-            )}
-
             <View className="flex flex-row flex-wrap gap-2">
               {data.tags.map((tag) => (
                 <View key={tag.name} className="p-2 rounded-sm border border-gray-200 dark:border-gray-700">
@@ -255,6 +248,12 @@ export default function SpotDetailScreen() {
                 </View>
               ))}
             </View>
+
+            {data.weatherV2 && (
+              <View className="pt-4">
+                <WeatherWidget weather={data.weatherV2} />
+              </View>
+            )}
 
             <View className="space-y-2 py-4">
               {me && (
