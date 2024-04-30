@@ -144,7 +144,7 @@ function SameSpotNavigation({ id, spots }: { id: string; spots: Awaited<ReturnTy
         leftIcon={<ArrowLeft size={14} />}
         size="sm"
         variant="outline"
-        href={`/map/${isFirst ? spots[spots.length - 1]?.id : spots[currentIndex - 1]?.id}${window.location.search}`}
+        href={`/map/${isFirst ? spots[spots.length - 1]?.id : spots[currentIndex - 1]?.id}`}
       >
         Prev
       </LinkButton>
@@ -155,7 +155,7 @@ function SameSpotNavigation({ id, spots }: { id: string; spots: Awaited<ReturnTy
         rightIcon={<ArrowRight size={14} />}
         size="sm"
         variant="outline"
-        href={`/map/${isLast ? spots[0]?.id : spots[currentIndex + 1]?.id}${window.location.search}`}
+        href={`/map/${isLast ? spots[0]?.id : spots[currentIndex + 1]?.id}`}
       >
         Next
       </LinkButton>
