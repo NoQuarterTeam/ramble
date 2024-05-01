@@ -1,8 +1,8 @@
 import { Nav } from "@/components/Nav"
 import { PosthogProvider } from "@/components/PosthogProvider"
-import { TRPCReactProvider } from "@/lib/trpc/react"
-
 import { TooltipProvider } from "@/components/TooltipProvider"
+import { TRPCReactProvider } from "@/lib/trpc/react"
+import { Toaster } from "sonner"
 import "mapbox-gl/dist/mapbox-gl.css"
 import type { Metadata, Viewport } from "next"
 import dynamic from "next/dynamic"
@@ -79,6 +79,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <TooltipProvider>
             <body className={font.className}>
               <Nav />
+              <Toaster />
               <PostHogPageView />
               <div className="pt-nav">{children}</div>
             </body>

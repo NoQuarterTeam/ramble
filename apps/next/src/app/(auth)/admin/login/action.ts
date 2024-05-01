@@ -4,6 +4,7 @@ import { clearSession, setUserSession } from "@/lib/server/auth"
 import { db } from "@/lib/server/db"
 import { loginSchema } from "@ramble/server-schemas"
 import { comparePasswords } from "@ramble/server-services"
+import * as Sentry from "@sentry/nextjs"
 import { redirect } from "next/navigation"
 
 export const action = async (_: unknown, formData: FormData) => {
@@ -18,7 +19,7 @@ export const action = async (_: unknown, formData: FormData) => {
     clearSession()
     setUserSession(user.id)
   } catch (e) {
-    console.log(e)
+    Sentry.captureException(e)
     return { ok: false, formError: "Error logging in. Please try again." }
   }
   redirect("/admin")

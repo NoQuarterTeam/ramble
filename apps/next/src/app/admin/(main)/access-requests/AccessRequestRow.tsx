@@ -5,6 +5,7 @@ import type { AccessRequest, User } from "@ramble/database/types"
 import dayjs from "dayjs"
 import { Check, Trash } from "lucide-react"
 import * as React from "react"
+import { toast } from "sonner"
 import { acceptRequest, deleteRequest } from "./actions"
 
 interface Props {
@@ -40,7 +41,8 @@ export function AccessRequestRow({ accessRequest }: Props) {
               size="sm"
               onClick={() => {
                 startVerify(async () => {
-                  await acceptRequest(accessRequest.id)
+                  const success = await acceptRequest(accessRequest.id)
+                  if (!success) toast.error("Failed to accept request")
                 })
               }}
               icon={<Check size={16} />}
@@ -52,7 +54,8 @@ export function AccessRequestRow({ accessRequest }: Props) {
               aria-label="delete"
               onClick={() => {
                 startDelete(async () => {
-                  await deleteRequest(accessRequest.id)
+                  const success = await deleteRequest(accessRequest.id)
+                  if (!success) toast.error("Failed to delete request")
                 })
               }}
               size="sm"

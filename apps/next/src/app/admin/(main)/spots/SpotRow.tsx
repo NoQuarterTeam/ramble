@@ -10,6 +10,7 @@ import { SpotIcon } from "@/components/SpotIcon"
 import { ExternalLink, Eye, EyeOff, Trash } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { toast } from "sonner"
 import { deleteSpot, verifySpot } from "./actions"
 
 interface Props {
@@ -61,7 +62,8 @@ export function SpotRow({ spot }: Props) {
               isLoading={isVerifying}
               onClick={() => {
                 startVerify(async () => {
-                  await verifySpot(spot.id)
+                  const success = await verifySpot(spot.id)
+                  if (!success) toast.error("Failed to verify spot")
                 })
               }}
             >
@@ -98,7 +100,9 @@ export function SpotRow({ spot }: Props) {
               isLoading={isDeleting}
               onClick={() => {
                 startDelete(async () => {
-                  await deleteSpot(spot.id)
+                  const success = await deleteSpot(spot.id)
+                  if (success) toast.success("Spot deleted")
+                  if (!success) toast.error("Failed to delete spot")
                 })
               }}
               aria-label="delete"
