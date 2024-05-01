@@ -16,7 +16,7 @@ import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
 
 export default function RegisterScreen() {
   useKeyboardController()
-  const { code } = useLocalSearchParams<{ code?: string }>()
+  const { code, email } = useLocalSearchParams<{ code?: string; email?: string }>()
 
   const queryClient = api.useUtils()
   const navigation = useRouter()
@@ -30,7 +30,7 @@ export default function RegisterScreen() {
     },
   })
   const form = useForm({
-    defaultValues: { code: code || "", email: "", password: "", username: "", firstName: "", lastName: "" },
+    defaultValues: { code: code || "", email: email || "", password: "", username: "", firstName: "", lastName: "" },
   })
 
   const onSubmit = form.handleSubmit(async (data) => {
