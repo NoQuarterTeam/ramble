@@ -1,7 +1,7 @@
-import { render } from "@react-email/render"
-import nodemailer from "nodemailer"
-
 import { IS_PRODUCTION } from "@ramble/server-env"
+import { render } from "@react-email/render"
+import * as Sentry from "@sentry/nextjs"
+import nodemailer from "nodemailer"
 
 import { resend } from "./resend"
 
@@ -18,8 +18,7 @@ class Mailer {
         await this.sendDev({ ...args, from })
       }
     } catch (err) {
-      // Sentry.captureException(err)
-      console.log("Error sending mail:", err)
+      Sentry.captureException(err)
     }
   }
 

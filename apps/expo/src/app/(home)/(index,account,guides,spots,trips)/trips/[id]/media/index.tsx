@@ -2,6 +2,7 @@ import type { MediaType } from "@ramble/database/types"
 import { createAssetUrl, useDisclosure } from "@ramble/shared"
 import { Camera, LocationPuck, type MapState, type MapView as MapType, StyleURL } from "@rnmapbox/maps"
 import type { Position } from "@rnmapbox/maps/lib/typescript/src/types/Position"
+import * as Sentry from "@sentry/react-native"
 import { FlashList } from "@shopify/flash-list"
 import dayjs from "dayjs"
 import { Image } from "expo-image"
@@ -126,7 +127,8 @@ export default function TripMedia() {
         uploadMedia({ tripId: id, media: data })
       }
     } catch (error) {
-      console.log(error)
+      Sentry.captureException(error)
+      toast({ title: "Error syncing media", type: "error" })
       refetch()
     } finally {
       setIsLoadingLibrary(false)

@@ -1,4 +1,5 @@
 import { BetaInvitationEmail } from "@ramble/emails"
+import * as Sentry from "@sentry/nextjs"
 import { mailer } from "../lib/mailer"
 
 export async function sendBetaInvitationEmail(email: string, code: string) {
@@ -10,6 +11,6 @@ export async function sendBetaInvitationEmail(email: string, code: string) {
       subject: "Invitation to the Ramble beta",
     })
   } catch (error) {
-    console.log(error)
+    Sentry.captureException(error)
   }
 }

@@ -1,7 +1,7 @@
+import { createAssetUrl } from "@ramble/shared"
+import * as Sentry from "@sentry/nextjs"
 import { encode } from "blurhash"
 import sharp from "sharp"
-
-import { createAssetUrl } from "@ramble/shared"
 
 export async function generateBlurHash(path: string) {
   const url = createAssetUrl(path)
@@ -10,8 +10,7 @@ export async function generateBlurHash(path: string) {
     const res = await fetch(url)
     return (await encodeImageToBlurhash(await res.arrayBuffer())) as Promise<string>
   } catch (error) {
-    console.log(error)
-    console.log("Oops - generating blurhash failed: ", url)
+    Sentry.captureException(error)
     return null
   }
 }

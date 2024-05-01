@@ -1,6 +1,6 @@
-import { FULL_WEB_URL } from "@ramble/server-env"
-
 import { GuideRequestEmail, type GuideRequestProps } from "@ramble/emails"
+import { FULL_WEB_URL } from "@ramble/server-env"
+import * as Sentry from "@sentry/nextjs"
 import { mailer } from "../lib/mailer"
 
 export async function sendGuideRequestSentToAdminsEmail(adminEmails: string[], user: GuideRequestProps["user"]) {
@@ -13,6 +13,6 @@ export async function sendGuideRequestSentToAdminsEmail(adminEmails: string[], u
       subject: "Guide request for Ramble",
     })
   } catch (error) {
-    console.log(error)
+    Sentry.captureException(error)
   }
 }

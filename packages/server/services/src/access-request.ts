@@ -1,7 +1,7 @@
 import crypto from "node:crypto"
-
 import { prisma } from "@ramble/database"
 import { Prisma } from "@ramble/database/types"
+import * as Sentry from "@sentry/nextjs"
 
 let count = 0
 export async function createAccessRequest(
@@ -12,7 +12,10 @@ export async function createAccessRequest(
     await prisma.accessRequest.create({ data: { email: email, code } })
     return { success: true, code }
   } catch (error) {
-    if (count > 5) return { success: false }
+    if (count > 5) {
+      Sentry.captureException(error)
+      return { success: false }
+    }
     count++
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&

@@ -83,7 +83,6 @@ function ReportFlow({ spot }: Props) {
     },
     onError: () => {
       toast({ type: "error", title: "Error submitting report" })
-      console.log(error)
     },
   })
 

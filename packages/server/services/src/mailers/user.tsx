@@ -1,8 +1,10 @@
 import type { User } from "@ramble/database/types"
 import { FULL_WEB_URL } from "@ramble/server-env"
+import * as Sentry from "@sentry/nextjs"
 
 import { ResetPasswordEmail, VerifyAccountEmail } from "@ramble/emails"
 import { mailer } from "../lib/mailer"
+
 export async function sendResetPasswordEmail(user: Pick<User, "email">, token: string) {
   try {
     if (!user.email) return
@@ -14,7 +16,7 @@ export async function sendResetPasswordEmail(user: Pick<User, "email">, token: s
       subject: "Reset Password",
     })
   } catch (error) {
-    console.log(error)
+    Sentry.captureException(error)
   }
 }
 
@@ -30,6 +32,6 @@ export async function sendAccountVerificationEmail(user: Pick<User, "email">, to
       subject: "Verify email",
     })
   } catch (error) {
-    console.log(error)
+    Sentry.captureException(error)
   }
 }

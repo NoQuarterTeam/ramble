@@ -1,6 +1,6 @@
-import { type KnownBlock, WebClient } from "@slack/web-api"
-
 import { IS_PRODUCTION, env } from "@ramble/server-env"
+import * as Sentry from "@sentry/nextjs"
+import { type KnownBlock, WebClient } from "@slack/web-api"
 
 export const slack = new WebClient(env.SLACK_TOKEN)
 
@@ -17,6 +17,6 @@ export async function sendSlackMessage(text: string, blocks?: KnownBlock[]) {
       icon_url: "https://ramble.guide/logo-dark.png",
     })
   } catch (error) {
-    console.log(error)
+    Sentry.captureException(error)
   }
 }

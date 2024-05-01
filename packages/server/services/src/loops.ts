@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs"
 import LoopsClient from "loops"
 
 import type { Role } from "@ramble/database/types"
@@ -47,7 +48,7 @@ export async function updateLoopsContact(contact: LoopsContact) {
     const res = await loops.updateContact(contact.email, formattedData)
     if (!res.success) throw res
   } catch (error) {
-    console.log(error)
+    Sentry.captureException(error)
   }
 }
 
@@ -57,6 +58,6 @@ export async function deleteLoopsContact(contact: Partial<Pick<LoopsContact, "em
     const res = await loops.deleteContact(contact)
     if (!res.success) throw res
   } catch (error) {
-    console.log(error)
+    Sentry.captureException(error)
   }
 }

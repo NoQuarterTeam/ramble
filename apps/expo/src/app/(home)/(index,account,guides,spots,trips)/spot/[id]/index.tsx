@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/react-native"
 import { useQuery } from "@tanstack/react-query"
 import dayjs from "dayjs"
 import advancedFormat from "dayjs/plugin/advancedFormat"
@@ -533,8 +534,7 @@ async function getTranslation({ id, lang, hash }: TranslateInput) {
     const res = await fetch(`${FULL_WEB_URL}/api/spots/${id}/translate/${lang}?hash=${hash}`)
     return await res.json()
   } catch (e) {
-    console.log(e)
-
+    Sentry.captureException(e)
     return "Error translating description"
   }
 }

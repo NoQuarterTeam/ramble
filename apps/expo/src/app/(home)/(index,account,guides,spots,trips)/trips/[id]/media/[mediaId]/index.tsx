@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/react-native"
 import dayjs from "dayjs"
 import { Audio, ResizeMode, Video } from "expo-av"
 import type { AVPlaybackStatus } from "expo-av"
@@ -82,7 +83,7 @@ export default function TripImage() {
       const file = await FileSystem.downloadAsync(createAssetUrl(data.path), FileSystem.documentDirectory + data.path)
       await MediaLibrary.saveToLibraryAsync(file.uri)
     } catch (error) {
-      console.log(error)
+      Sentry.captureException(error)
       toast({ title: "Failed to download image", type: "error" })
     }
   }

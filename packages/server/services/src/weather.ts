@@ -3,6 +3,7 @@ import { groupBy } from "@ramble/shared"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 dayjs.extend(utc)
+import * as Sentry from "@sentry/nextjs"
 
 // https://openweathermap.org/current
 type WeatherResponse = {
@@ -37,7 +38,7 @@ export async function getCurrentWeather(lat: number, lon: number) {
     const json = (await res.json()) as WeatherResponse
     return json?.main && json.weather[0]?.icon ? { temp: json.main.temp, icon: json.weather[0].icon } : null
   } catch (error) {
-    console.log(error)
+    Sentry.captureException(error)
     return null
   }
 }
@@ -117,7 +118,7 @@ export async function get5DayForecast(lat: number, lon: number) {
 
     return data
   } catch (error) {
-    console.log(error)
+    Sentry.captureException(error)
     return null
   }
 }

@@ -1,4 +1,5 @@
 import { AccessRequestEmail } from "@ramble/emails"
+import * as Sentry from "@sentry/nextjs"
 import { mailer } from "../lib/mailer"
 
 export async function sendAccessRequestConfirmationEmail(email: string) {
@@ -10,6 +11,6 @@ export async function sendAccessRequestConfirmationEmail(email: string) {
       subject: "Request confirmation for Ramble",
     })
   } catch (error) {
-    console.log(error)
+    Sentry.captureException(error)
   }
 }

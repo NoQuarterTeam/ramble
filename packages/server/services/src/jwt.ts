@@ -18,22 +18,14 @@ export function decodeToken<T>(token: string): T {
 }
 
 export const createAuthToken = (payload: { id: string }) => {
-  try {
-    const token = jwt.sign(payload, env.SESSION_SECRET, {
-      issuer: "@ramble/api",
-      audience: ["@ramble/app"],
-      expiresIn: "8 weeks",
-    })
-    return token
-  } catch (error) {
-    // Oops
-    console.log(error)
-    throw error
-  }
+  const token = jwt.sign(payload, env.SESSION_SECRET, {
+    issuer: "@ramble/api",
+    audience: ["@ramble/app"],
+    expiresIn: "8 weeks",
+  })
+  return token
 }
-const authSchema = z.object({
-  id: z.string(),
-})
+const authSchema = z.object({ id: z.string() })
 
 export function decodeAuthToken(token: string): { id: string } | null {
   try {

@@ -1,39 +1,55 @@
+import * as Sentry from "@sentry/nextjs"
 export async function geocodeCoords({ latitude, longitude }: { latitude: number; longitude: number }) {
-  const res = await fetch(
-    `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw`,
-  )
-  const jsonResponse = (await res.json()) as FeatureCollection
-  const address = jsonResponse.features.find((feature) => feature.place_type.includes("address"))?.place_name
-  const place = jsonResponse.features.find((feature) => feature.place_type.includes("place"))?.place_name
-  return { address, place }
+  try {
+    const res = await fetch(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw`,
+    )
+    const jsonResponse = (await res.json()) as FeatureCollection
+    const address = jsonResponse.features.find((feature) => feature.place_type.includes("address"))?.place_name
+    const place = jsonResponse.features.find((feature) => feature.place_type.includes("place"))?.place_name
+    return { address, place }
+  } catch (error) {
+    Sentry.captureException(error)
+    return { address: undefined, place: undefined }
+  }
 }
 
 export async function geocodeAddress({ address }: { address: string }) {
-  const res = await fetch(
-    `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
-      address,
-    )}.json?access_token=pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw`,
-  )
-  const jsonResponse = (await res.json()) as FeatureCollection
-  if (jsonResponse.features.length === 0) return null
-  const addressCoords = jsonResponse.features.find((feature) => feature.place_type.includes("address"))?.center
-  const placeCoords = jsonResponse.features[0]?.center
-  return addressCoords || placeCoords
+  try {
+    const res = await fetch(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+        address,
+      )}.json?access_token=pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw`,
+    )
+    const jsonResponse = (await res.json()) as FeatureCollection
+    if (jsonResponse.features.length === 0) return null
+    const addressCoords = jsonResponse.features.find((feature) => feature.place_type.includes("address"))?.center
+    const placeCoords = jsonResponse.features[0]?.center
+    return addressCoords || placeCoords
+  } catch (error) {
+    Sentry.captureException(error)
+    return null
+  }
 }
 
 export async function getPlaces({ search }: { search: string }) {
-  const res = await fetch(
-    `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
-      search,
-    )}.json?access_token=pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw`,
-  )
-  const jsonResponse = (await res.json()) as FeatureCollection
-  if (jsonResponse.features.length === 0) return [] as { name: string; center: [number, number] }[]
+  try {
+    const res = await fetch(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+        search,
+      )}.json?access_token=pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw`,
+    )
+    const jsonResponse = (await res.json()) as FeatureCollection
+    if (jsonResponse.features.length === 0) return [] as { name: string; center: [number, number] }[]
 
-  return jsonResponse.features.map((place) => ({
-    name: place.place_name,
-    center: place.center,
-  }))
+    return jsonResponse.features.map((place) => ({
+      name: place.place_name,
+      center: place.center,
+    }))
+  } catch (error) {
+    Sentry.captureException(error)
+    return [] as { name: string; center: [number, number] }[]
+  }
 }
 
 type Context = {

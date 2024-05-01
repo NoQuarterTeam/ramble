@@ -1,4 +1,5 @@
 import { env } from "@ramble/server-env"
+import * as Sentry from "@sentry/nextjs"
 
 export async function getLanguage(text: string | null | undefined) {
   try {
@@ -12,7 +13,7 @@ export async function getLanguage(text: string | null | undefined) {
     if (!detectedLang) return null
     return detectedLang
   } catch (error) {
-    console.log(error)
+    Sentry.captureException(error)
     return null
   }
 }

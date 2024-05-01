@@ -1,4 +1,5 @@
 import crypto from "node:crypto"
+import * as Sentry from "@sentry/nextjs"
 import { TRPCError } from "@trpc/server"
 import dayjs from "dayjs"
 import Supercluster from "supercluster"
@@ -107,15 +108,10 @@ export const spotRouter = createTRPCRouter({
     .input(z.object({ skip: z.number().optional(), sort: z.enum(["latest", "rated", "saved", "near"]).optional() }))
     .query(async ({ ctx, input }) => {
       const sort = input.sort || "latest"
-      try {
-        const spots = await ctx.prisma.$queryRaw<Array<SpotItemType>>`
+      const spots = await ctx.prisma.$queryRaw<Array<SpotItemType>>`
           ${spotListQuery({ user: ctx.user, sort, take: 20, skip: input.skip })}
         `
-        return spots
-      } catch (error) {
-        console.log(error)
-        return []
-      }
+      return spots
     }),
   mapPreview: publicProcedure.input(z.object({ id: z.string().uuid() })).query(async ({ ctx, input }) => {
     const spot = await ctx.prisma.spot.findUnique({
@@ -231,7 +227,7 @@ export const spotRouter = createTRPCRouter({
       )
         .then((r) => r.json() as Promise<string | null>)
         .catch((error) => {
-          console.log(error)
+          Sentry.captureException(error)
           return null
         })
     }
