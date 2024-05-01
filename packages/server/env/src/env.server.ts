@@ -6,6 +6,7 @@ const envSchema = z.object({
   AWS_SECRET_ACCESS_KEY: z.string(),
   RESEND_API_KEY: z.string(),
   LOOPS_API_KEY: z.string(),
+  SENTRY_AUTH_TOKEN: z.string(),
   VERCEL_ENV: z.enum(["development", "production", "preview"]).optional(),
   VERCEL_GIT_COMMIT_REF: z.string().optional(),
   VERCEL_URL: z.string().optional(),
