@@ -33,7 +33,7 @@
     "@ramble/server-services": "workspace:*",
     "@ramble/shared": "workspace:*",
     "@ramble/tailwind-config": "workspace:*",
-    "@sentry/nextjs": "7.105.0",
+    "@sentry/nextjs": "7.112.2",
     "@tailwindcss/container-queries": "0.1.1",
     "@tanstack/react-table": "8.16.0",
     "@trpc/server": "10.45.2",

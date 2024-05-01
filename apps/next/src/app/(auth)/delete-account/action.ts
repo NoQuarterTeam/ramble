@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/server/db"
 import { comparePasswords, deleteObject, sendSlackMessage } from "@ramble/server-services"
+import * as Sentry from "@sentry/nextjs"
 import dayjs from "dayjs"
 import { z } from "zod"
 
@@ -45,7 +46,8 @@ export const action = async (_: unknown, formData: FormData) => {
     if (user.avatar) await deleteObject(user.avatar)
     void sendSlackMessage(`😭 User @${user.username} deleted their account.`)
     return { ok: true }
-  } catch {
+  } catch (e) {
+    Sentry.captureException(e)
     return { ok: false, formError: "Error resetting password. Please try again." }
   }
 }

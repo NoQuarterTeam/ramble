@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/server/db"
 import { createToken, sendResetPasswordEmail } from "@ramble/server-services"
+import * as Sentry from "@sentry/nextjs"
 import { z } from "zod"
 
 export const action = async (_: unknown, formData: FormData) => {
@@ -23,7 +24,8 @@ export const action = async (_: unknown, formData: FormData) => {
     }
 
     return { ok: true }
-  } catch {
+  } catch (e) {
+    Sentry.captureException(e)
     return { ok: false, formError: "Error sending reset password email. Please try again." }
   }
 }
