@@ -64,13 +64,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
       {
         action: "VIEW",
         autoVerify: true,
-        data: [
-          {
-            scheme: "https",
-            host: "*.ramble.guide",
-            pathPrefix: "/records",
-          },
-        ],
+        data: [{ scheme: "https", host: "ramble.guide" }],
         category: ["BROWSABLE", "DEFAULT"],
       },
     ],
