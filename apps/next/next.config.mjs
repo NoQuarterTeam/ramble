@@ -5,6 +5,7 @@ const nextConfig = {
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
   experimental: { ppr: true, serverComponentsExternalPackages: ["@aws-sdk"] },
+  redirects: () => [{ source: "/register", destination: "/", permanent: false }],
   transpilePackages: [
     "axios",
     "decode-uri-component",
