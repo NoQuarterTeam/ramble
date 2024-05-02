@@ -1,21 +1,16 @@
-import { AppCta } from "@/components/AppCta"
-import { LinkButton } from "@/components/LinkButton"
-import { BLOG_DB_ID, notion } from "@/lib/server/notion"
+import { notion } from "@/lib/server/notion"
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints"
 import dayjs from "dayjs"
 import advancedFormat from "dayjs/plugin/advancedFormat"
-import { ArrowLeft } from "lucide-react"
 import type { Metadata } from "next"
-import Image from "next/image"
-import { NotionBlock } from "../components/NotionBlock"
-import { Tag } from "../components/Tag"
+import { BLOG_NOTION_DB_ID } from "../config"
 import { BlogDetail } from "./BlogDetail"
 import { getBlogContent } from "./getBlogData"
 dayjs.extend(advancedFormat)
 
 export async function generateStaticParams() {
   const pages = await notion.databases.query({
-    database_id: BLOG_DB_ID,
+    database_id: BLOG_NOTION_DB_ID,
     filter: {
       and: [
         { property: "Published", date: { is_not_empty: true, before: dayjs().format() } },

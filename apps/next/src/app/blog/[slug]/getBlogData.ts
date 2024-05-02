@@ -1,16 +1,16 @@
 import { requireAdmin } from "@/lib/server/auth"
-import { BLOG_DB_ID, notion } from "@/lib/server/notion"
+import { notion } from "@/lib/server/notion"
 import { upload } from "@/lib/server/s3"
 import type { BlockObjectResponse, PageObjectResponse } from "@notionhq/client/build/src/api-endpoints"
 import dayjs from "dayjs"
 import { unstable_cache } from "next/cache"
 import { notFound } from "next/navigation"
-import { BLOG_FOLDER } from "../config"
+import { BLOG_NOTION_DB_ID, BLOG_S3_FOLDER } from "../config"
 
 export const getBlogContent = unstable_cache(
   async (slug: string) => {
     const pages = await notion.databases.query({
-      database_id: BLOG_DB_ID,
+      database_id: BLOG_NOTION_DB_ID,
       page_size: 1,
       filter: {
         and: [
@@ -30,7 +30,7 @@ export const getBlogContent = unstable_cache(
 export const getBlogPreviewContent = async (slug: string) => {
   await requireAdmin()
   const pages = await notion.databases.query({
-    database_id: BLOG_DB_ID,
+    database_id: BLOG_NOTION_DB_ID,
     page_size: 1,
     filter: {
       and: [
@@ -52,7 +52,7 @@ async function formatContent(page: PageObjectResponse) {
   const coverFile = page.cover || null
   const imageUrl = coverFile ? (coverFile.type === "external" ? coverFile.external.url : coverFile.file.url) : null
   let cover = null
-  if (imageUrl) cover = await upload(imageUrl, BLOG_FOLDER)
+  if (imageUrl) cover = await upload(imageUrl, BLOG_S3_FOLDER)
   const pageContent = await notion.blocks.children.list({ block_id: page.id })
 
   return {
@@ -67,12 +67,12 @@ async function formatContent(page: PageObjectResponse) {
       (pageContent.results as BlockObjectResponse[]).map(async (block) => {
         if (block.type === "image" && block.image.type === "file") {
           const imageUrl = block.image.file.url
-          const url = await upload(imageUrl, BLOG_FOLDER)
+          const url = await upload(imageUrl, BLOG_S3_FOLDER)
           return { ...block, image: { ...block.image, file: { ...block.image.file, url } } }
         }
         if (block.type === "video" && block.video.type === "file") {
           const videoUrl = block.video.file.url
-          const url = await upload(videoUrl, BLOG_FOLDER)
+          const url = await upload(videoUrl, BLOG_S3_FOLDER)
           return { ...block, video: { ...block.video, file: { ...block.video.file, url } } }
         }
         return block
