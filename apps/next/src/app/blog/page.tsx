@@ -1,4 +1,4 @@
-import { BLOG_DB_ID, notion } from "@/lib/server/notion"
+import { notion } from "@/lib/server/notion"
 import { upload } from "@/lib/server/s3"
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints"
 
@@ -8,13 +8,13 @@ import { unstable_cache } from "next/cache"
 import Image from "next/image"
 import Link from "next/link"
 import { Tag } from "./components/Tag"
-import { BLOG_FOLDER } from "./config"
+import { BLOG_NOTION_DB_ID, BLOG_S3_FOLDER } from "./config"
 dayjs.extend(advancedFormat)
 
 const getItems = unstable_cache(
   async () => {
     const content = await notion.databases.query({
-      database_id: BLOG_DB_ID,
+      database_id: BLOG_NOTION_DB_ID,
       filter: {
         and: [
           { property: "Published", date: { is_not_empty: true, before: dayjs().format() } },
@@ -30,7 +30,7 @@ const getItems = unstable_cache(
         if (!cover) return { ...page, cover: null }
         const imageUrl = cover.type === "external" ? cover.external.url : cover.file.url
         if (!imageUrl) return { ...page, cover: null }
-        const url = await upload(imageUrl, BLOG_FOLDER)
+        const url = await upload(imageUrl, BLOG_S3_FOLDER)
         return { ...page, cover: url }
       }),
     )
