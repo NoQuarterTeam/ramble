@@ -24,8 +24,8 @@ import { IconButton } from "./ui/IconButton"
 
 export const SpotPreview = React.memo(function _SpotPreview({
   id,
-  onClose,
-}: { id: string; onClose: () => void; onSetSpotId: () => void }) {
+  onSetSpotId,
+}: { id: string; onSetSpotId: (id: string | null) => void }) {
   const { data: spot, isLoading } = api.spot.mapPreview.useQuery({ id })
   const router = useRouter()
 
@@ -47,7 +47,7 @@ export const SpotPreview = React.memo(function _SpotPreview({
     router.push(`/(home)/(index)/spot/${spot.id}`)
   }
 
-  const currentIndex = spot?.sameLocationSpots.findIndex((s) => s.id === id)
+  const currentIndex = spot?.sameLocationSpots.findIndex((s) => s.id === id) || 0
   const isLast = spot?.sameLocationSpots ? currentIndex === spot.sameLocationSpots.length - 1 : false
   const isFirst = currentIndex === 0
 
@@ -80,17 +80,28 @@ export const SpotPreview = React.memo(function _SpotPreview({
               )}
             </TouchableOpacity>
             <View className="flex flex-row items-center">
-              {spot.sameLocationSpots.length > 0 && (
+              {spot.sameLocationSpots.length > 1 && (
                 <View className="flex flex-row items-center space-x-1">
+                  <Text className="text-sm pr-0.5">
+                    {currentIndex + 1} / {spot.sameLocationSpots.length}
+                  </Text>
                   <IconButton
-                    // href={`/map/${isFirst ? spots[spots.length - 1]?.id : spots[currentIndex - 1]?.id}`}
+                    onPress={() =>
+                      onSetSpotId(
+                        isFirst
+                          ? spot.sameLocationSpots[spot.sameLocationSpots.length - 1]?.id!
+                          : spot.sameLocationSpots[currentIndex - 1]?.id!,
+                      )
+                    }
                     variant="outline"
                     className="rounded-sm"
                     size="xs"
                     icon={ArrowLeft}
                   />
                   <IconButton
-                    // href={`/map/${isLast ? spots[0]?.id : spots[currentIndex + 1]?.id}`}
+                    onPress={() =>
+                      onSetSpotId(isLast ? spot.sameLocationSpots[0]?.id! : spot.sameLocationSpots[currentIndex + 1]?.id!)
+                    }
                     variant="outline"
                     className="rounded-sm"
                     size="xs"
@@ -99,7 +110,7 @@ export const SpotPreview = React.memo(function _SpotPreview({
                 </View>
               )}
 
-              <IconButton variant="ghost" size="sm" onPress={onClose} icon={X} />
+              <IconButton variant="ghost" size="sm" onPress={() => onSetSpotId(null)} icon={X} />
             </View>
           </View>
 

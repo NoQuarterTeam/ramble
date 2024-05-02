@@ -47,7 +47,7 @@ function MapContainer() {
   const router = useRouter()
   const increment = useFeedbackActivity((s) => s.increment)
   const [activeSpotId, setActiveSpotId] = React.useState<string | null>(null)
-  const handleClosePreview = React.useCallback(() => setActiveSpotId(null), [])
+
   const { me } = useMe()
   const { mutate: updateUser } = api.user.update.useMutation()
   const layers = useMapLayers((s) => s.layers)
@@ -240,7 +240,7 @@ function MapContainer() {
       <MapView
         onDidFinishLoadingMap={handleSetUserLocation}
         onMapIdle={onMapMove}
-        onPress={handleClosePreview}
+        onPress={() => setActiveSpotId(null)}
         ref={mapRef}
         styleURL={
           layers.layer === "rain" || layers.layer === "temp"
@@ -348,7 +348,7 @@ function MapContainer() {
           </TouchableOpacity>
         </Link>
       </View>
-      {activeSpotId && <SpotPreview id={activeSpotId} onClose={handleClosePreview} />}
+      {activeSpotId && <SpotPreview id={activeSpotId} onSetSpotId={setActiveSpotId} />}
     </>
   )
 }
