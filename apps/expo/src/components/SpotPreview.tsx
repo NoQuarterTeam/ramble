@@ -1,6 +1,6 @@
 import { Image } from "expo-image"
 import { useRouter } from "expo-router"
-import { Heart, Route, Star, X } from "lucide-react-native"
+import { ArrowLeft, ArrowRight, Heart, Route, Star, X } from "lucide-react-native"
 import * as React from "react"
 import { TouchableOpacity, View, useColorScheme } from "react-native"
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
@@ -20,8 +20,12 @@ import { useBackgroundColor } from "~/lib/tailwind"
 
 import { CreatorCard } from "./CreatorCard"
 import { useFeedbackActivity } from "./FeedbackCheck"
+import { IconButton } from "./ui/IconButton"
 
-export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { id: string; onClose: () => void }) {
+export const SpotPreview = React.memo(function _SpotPreview({
+  id,
+  onClose,
+}: { id: string; onClose: () => void; onSetSpotId: () => void }) {
   const { data: spot, isLoading } = api.spot.mapPreview.useQuery({ id })
   const router = useRouter()
 
@@ -42,6 +46,11 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
     increment()
     router.push(`/(home)/(index)/spot/${spot.id}`)
   }
+
+  const currentIndex = spot?.sameLocationSpots.findIndex((s) => s.id === id)
+  const isLast = spot?.sameLocationSpots ? currentIndex === spot.sameLocationSpots.length - 1 : false
+  const isFirst = currentIndex === 0
+
   return (
     <Animated.View
       style={{ width: "100%", height: 440, position: "absolute", backgroundColor, bottom: 0, zIndex: 1 }}
@@ -57,18 +66,42 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
         <Text>Spot not found</Text>
       ) : (
         <View className="space-y-2">
-          <TouchableOpacity onPress={handleGoToSpot} activeOpacity={0.9} className="flex flex-row space-x-4">
-            <SpotTypeBadge spot={spot} />
-            {weatherData && (
-              <View className="flex flex-row items-center">
-                <Text>{Math.round(weatherData.temp)}°C</Text>
-                <Image
-                  style={{ width: 35, height: 35 }}
-                  source={{ uri: `https://openweathermap.org/img/wn/${weatherData.icon}@2x.png` }}
-                />
-              </View>
-            )}
-          </TouchableOpacity>
+          <View className="flex flex-row items-center justify-between">
+            <TouchableOpacity onPress={handleGoToSpot} activeOpacity={0.9} className="flex flex-row space-x-4">
+              <SpotTypeBadge spot={spot} />
+              {weatherData && (
+                <View className="flex flex-row items-center">
+                  <Text>{Math.round(weatherData.temp)}°C</Text>
+                  <Image
+                    style={{ width: 35, height: 35 }}
+                    source={{ uri: `https://openweathermap.org/img/wn/${weatherData.icon}@2x.png` }}
+                  />
+                </View>
+              )}
+            </TouchableOpacity>
+            <View className="flex flex-row items-center">
+              {spot.sameLocationSpots.length > 0 && (
+                <View className="flex flex-row items-center space-x-1">
+                  <IconButton
+                    // href={`/map/${isFirst ? spots[spots.length - 1]?.id : spots[currentIndex - 1]?.id}`}
+                    variant="outline"
+                    className="rounded-sm"
+                    size="xs"
+                    icon={ArrowLeft}
+                  />
+                  <IconButton
+                    // href={`/map/${isLast ? spots[0]?.id : spots[currentIndex + 1]?.id}`}
+                    variant="outline"
+                    className="rounded-sm"
+                    size="xs"
+                    icon={ArrowRight}
+                  />
+                </View>
+              )}
+
+              <IconButton variant="ghost" size="sm" onPress={onClose} icon={X} />
+            </View>
+          </View>
 
           <TouchableOpacity onPress={handleGoToSpot} activeOpacity={0.7} className="flex flex-row items-center space-x-2">
             <View className="flex flex-row justify-between w-full items-center">
@@ -142,10 +175,6 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
           <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <CreatorCard spot={spot} />}</View>
         </View>
       )}
-
-      <TouchableOpacity onPress={onClose} className="absolute top-2 right-2 flex items-center justify-center p-2">
-        <X size={24} color={colorScheme === "dark" ? "white" : "black"} />
-      </TouchableOpacity>
     </Animated.View>
   )
 })
