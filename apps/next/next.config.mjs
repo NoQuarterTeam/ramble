@@ -4,7 +4,7 @@ import { withSentryConfig } from "@sentry/nextjs"
 const nextConfig = {
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
-  experimental: { ppr: true, serverComponentsExternalPackages: ["@aws-sdk"] },
+  experimental: { serverComponentsExternalPackages: ["@aws-sdk"] },
   redirects: () => [{ source: "/register", destination: "/", permanent: false }],
   transpilePackages: [
     "axios",
