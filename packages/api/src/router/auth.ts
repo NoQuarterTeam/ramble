@@ -2,7 +2,7 @@ import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
 import { IS_DEV } from "@ramble/server-env"
-import { loginSchema, registerSchema, userSchema } from "@ramble/server-schemas"
+import { registerSchema, userSchema } from "@ramble/server-schemas"
 import {
   comparePasswords,
   createAccessRequest,
@@ -21,7 +21,7 @@ import {
 import { createTRPCRouter, publicProcedure } from "../trpc"
 
 export const authRouter = createTRPCRouter({
-  login: publicProcedure.input(loginSchema).mutation(async ({ ctx, input }) => {
+  login: publicProcedure.input(userSchema.pick({ email: true, password: true })).mutation(async ({ ctx, input }) => {
     const user = await ctx.prisma.user.findUnique({ where: { email: input.email } })
     if (!user) throw new TRPCError({ code: "BAD_REQUEST", message: "Incorrect email or password" })
     const isSamePassword = comparePasswords(input.password, user.password)
