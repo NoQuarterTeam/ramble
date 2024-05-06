@@ -68,7 +68,7 @@ function GuideItem({ guide }: { guide: Awaited<ReturnType<typeof getGuides>>[0] 
           <p className="text-xl leading-5">{guide.username}</p>
         </div>
       </div>
-      <div className="flex items-center justify-around text-center">
+      {/* <div className="flex items-center justify-around text-center">
         <div className="flex-1">
           <p>
             <b>{guide._count.followers}</b> followers
@@ -84,7 +84,7 @@ function GuideItem({ guide }: { guide: Awaited<ReturnType<typeof getGuides>>[0] 
             <b>{guide._count.createdTrips}</b> trips
           </p>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }
