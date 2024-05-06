@@ -2,6 +2,7 @@ import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components
 import { db } from "@/lib/server/db"
 
 import { Pagination } from "@/components/Pagination"
+import { Search } from "@/components/Search"
 import { requireAdmin } from "@/lib/server/auth"
 import type { Prisma } from "@ramble/database/types"
 import { promiseHash } from "@ramble/shared"
@@ -9,10 +10,12 @@ import { SpotRow } from "./SpotRow"
 
 export const dynamic = "force-dynamic"
 
-const getItemsAndCount = async ({ page }: { page?: string }) => {
+type SearchParams = { page?: string; search?: string }
+
+const getItemsAndCount = async ({ page, search }: SearchParams) => {
   await requireAdmin()
   const skip = page ? (Number(page) - 1) * 25 : 0
-  const where = { deletedAt: null } as Prisma.SpotWhereInput
+  const where = { deletedAt: null, name: search ? { contains: search } : undefined } as Prisma.SpotWhereInput
   return promiseHash({
     spots: db.spot.findMany({
       where,
@@ -38,8 +41,8 @@ const getItemsAndCount = async ({ page }: { page?: string }) => {
   })
 }
 
-export default async function Page({ searchParams }: { searchParams: { page?: string } }) {
-  const { spots, count } = await getItemsAndCount({ page: searchParams.page })
+export default async function Page({ searchParams }: { searchParams: SearchParams }) {
+  const { spots, count } = await getItemsAndCount(searchParams)
   return (
     <div className="space-y-4">
       <h1 className="text-4xl">Spots</h1>
@@ -73,9 +76,9 @@ export default async function Page({ searchParams }: { searchParams: { page?: st
 				</Button>
 			</Form> */}
 
-        {/* <div>
-				<Search />
-			</div> */}
+        <div>
+          <Search />
+        </div>
       </div>
       <Table>
         <TableHeader>
