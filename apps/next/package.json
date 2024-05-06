@@ -11,7 +11,7 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.568.0",
+    "@aws-sdk/client-s3": "3.569.0",
     "@notionhq/client": "^2.2.15",
     "@radix-ui/react-alert-dialog": "1.0.5",
     "@radix-ui/react-avatar": "1.0.4",
@@ -44,9 +44,9 @@
     "d3-shape": "3.2.0",
     "dayjs": "1.11.11",
     "isbot": "latest",
-    "lucide-react": "0.376.0",
+    "lucide-react": "0.378.0",
     "mapbox-gl": "3.3.0",
-    "next": "14.3.0-canary.37",
+    "next": "14.3.0-canary.40",
     "posthog-js": "1.130.2",
     "pretty-cache-header": "1.0.0",
     "query-string": "9.0.0",
