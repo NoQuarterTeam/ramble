@@ -10,8 +10,10 @@ const AUTH_COOKIE = "ramble.auth"
 export async function getUserSession() {
   const encyptedUserId = cookies().get(AUTH_COOKIE)?.value
   if (!encyptedUserId) return null
+
   const res = decodeAuthToken(encyptedUserId)
-  return res?.id
+  if (!res) return null
+  return res.id
 }
 
 const oneMonth = 30 * 24 * 60 * 60 * 1000

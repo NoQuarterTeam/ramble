@@ -23,6 +23,7 @@ export const action = async (_: unknown, formData: FormData) => {
       }
 
     const payload = decodeToken<{ id: string }>(result.data.token)
+    if (!payload) return { ok: false, formError: "Invalid token" }
     const hashedPassword = hashPassword(result.data.password)
     await db.user.update({ where: { id: payload.id }, data: { password: hashedPassword } })
     return { ok: true }

@@ -2,7 +2,7 @@ import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
 import { IS_DEV } from "@ramble/server-env"
-import { loginSchema, registerSchema, userSchema } from "@ramble/server-schemas"
+import { registerSchema, userSchema } from "@ramble/server-schemas"
 import {
   comparePasswords,
   createAccessRequest,
@@ -21,7 +21,7 @@ import {
 import { createTRPCRouter, publicProcedure } from "../trpc"
 
 export const authRouter = createTRPCRouter({
-  login: publicProcedure.input(loginSchema).mutation(async ({ ctx, input }) => {
+  login: publicProcedure.input(userSchema.pick({ email: true, password: true })).mutation(async ({ ctx, input }) => {
     const user = await ctx.prisma.user.findUnique({ where: { email: input.email } })
     if (!user) throw new TRPCError({ code: "BAD_REQUEST", message: "Incorrect email or password" })
     const isSamePassword = comparePasswords(input.password, user.password)
@@ -84,10 +84,14 @@ export const authRouter = createTRPCRouter({
   resetPassword: publicProcedure
     .input(userSchema.pick({ password: true }).and(z.object({ token: z.string() })))
     .mutation(async ({ input, ctx }) => {
-      const { id } = decodeToken<{ id: string }>(input.token)
-      const user = await ctx.prisma.user.findUnique({ where: { id } })
+      const payload = decodeToken<{ id: string }>(input.token)
+      if (!payload) throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid token" })
+      const user = await ctx.prisma.user.findUnique({ where: { id: payload.id } })
       if (!user) throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid token" })
-      const updated = await ctx.prisma.user.update({ where: { id }, data: { password: hashPassword(input.password) } })
+      const updated = await ctx.prisma.user.update({
+        where: { id: payload.id },
+        data: { password: hashPassword(input.password) },
+      })
       return updated
     }),
   requestAccess: publicProcedure
