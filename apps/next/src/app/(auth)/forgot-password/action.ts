@@ -1,8 +1,8 @@
 "use server"
 
-import { db } from "@/lib/db"
-import { createToken } from "@/lib/jwt"
-import { sendResetPasswordEmail } from "@ramble/server-services"
+import { db } from "@/lib/server/db"
+import { createToken, sendResetPasswordEmail } from "@ramble/server-services"
+import * as Sentry from "@sentry/nextjs"
 import { z } from "zod"
 
 export const action = async (_: unknown, formData: FormData) => {
@@ -19,12 +19,13 @@ export const action = async (_: unknown, formData: FormData) => {
 
     const user = await db.user.findUnique({ where: { email: result.data.email } })
     if (user) {
-      const token = await createToken({ id: user.id })
+      const token = createToken({ id: user.id })
       await sendResetPasswordEmail(user, token)
     }
 
     return { ok: true }
-  } catch {
+  } catch (e) {
+    Sentry.captureException(e)
     return { ok: false, formError: "Error sending reset password email. Please try again." }
   }
 }

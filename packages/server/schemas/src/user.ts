@@ -10,7 +10,7 @@ export const userSchema = z.object({
     .email()
     .min(2)
     .transform((e) => e.toLowerCase().trim()),
-  password: z.string().min(2),
+  password: z.string().min(8),
   username: z
     .string()
     .min(2)
@@ -33,6 +33,5 @@ export const userSchema = z.object({
   tripSyncEnabled: z.boolean().optional(),
   tripSyncOnNetworkEnabled: z.boolean().optional(),
 })
-export const updateUserSchema = userSchema.partial()
-export const loginSchema = userSchema.pick({ email: true, password: true })
+
 export const registerSchema = userSchema.pick({ email: true, password: true, username: true, firstName: true, lastName: true })

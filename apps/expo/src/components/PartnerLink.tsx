@@ -1,6 +1,7 @@
+import * as Sentry from "@sentry/react-native"
 import { Image } from "expo-image"
 import * as WebBrowser from "expo-web-browser"
-import { TouchableOpacity, useColorScheme } from "react-native"
+import { Linking, TouchableOpacity, useColorScheme } from "react-native"
 
 import { type SpotPartnerFields, isPartnerSpot, partners } from "@ramble/shared"
 
@@ -48,12 +49,14 @@ export function PartnerLink(props: Props) {
                               : partners.polskiCaravaning
 
   const handleOpen = async () => {
+    if (!props.spot.sourceUrl) return
     try {
-      await WebBrowser.openBrowserAsync(props.spot.sourceUrl || "", {
+      await WebBrowser.openBrowserAsync(props.spot.sourceUrl, {
         presentationStyle: WebBrowser.WebBrowserPresentationStyle.PAGE_SHEET,
       })
-    } catch {
-      toast({ type: "error", title: "Error opening link" })
+    } catch (e) {
+      Sentry.captureException(e)
+      Linking.openURL(props.spot.sourceUrl)
     }
   }
 
@@ -61,7 +64,7 @@ export function PartnerLink(props: Props) {
   return (
     <TouchableOpacity
       onPress={handleOpen}
-      className="flex flex-row items-center justify-between rounded-xs border border-gray-200 p-1.5 px-2.5 dark:border-gray-700/70"
+      className="flex flex-row items-center justify-between rounded-xs border border-gray-200 p-2 px-3 dark:border-gray-700/70"
     >
       <Text className="text-base">Provided by</Text>
       <Image

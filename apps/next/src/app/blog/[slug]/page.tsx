@@ -1,18 +1,16 @@
+import { notion } from "@/lib/server/notion"
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints"
-import advancedFormat from "dayjs/plugin/advancedFormat"
-
-import { BLOG_DB_ID, notion } from "@/lib/notion"
 import dayjs from "dayjs"
+import advancedFormat from "dayjs/plugin/advancedFormat"
 import type { Metadata } from "next"
-import Image from "next/image"
-import { NotionBlock } from "../components/NotionBlock"
-import { Tag } from "../components/Tag"
-import { getPageContent } from "./getPageContent"
+import { BLOG_NOTION_DB_ID } from "../config"
+import { BlogDetail } from "./BlogDetail"
+import { getBlogContent } from "./getBlogData"
 dayjs.extend(advancedFormat)
 
 export async function generateStaticParams() {
   const pages = await notion.databases.query({
-    database_id: BLOG_DB_ID,
+    database_id: BLOG_NOTION_DB_ID,
     filter: {
       and: [
         { property: "Published", date: { is_not_empty: true, before: dayjs().format() } },
@@ -32,8 +30,7 @@ export async function generateStaticParams() {
 }
 
 export const generateMetadata = async ({ params: { slug } }: { params: { slug: string } }): Promise<Metadata> => {
-  const { title, summary, cover } = await getPageContent(slug)
-
+  const { title, summary, cover } = await getBlogContent(slug)
   return {
     title,
     description: summary,
@@ -47,35 +44,6 @@ export const generateMetadata = async ({ params: { slug } }: { params: { slug: s
 }
 
 export default async function Page({ params }: { params: { slug: string } }) {
-  const slug = params.slug
-  const page = await getPageContent(slug)
-
-  return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap gap-4 items-center">
-        <div className="flex flex-wrap gap-2">
-          {page.tags.map((tag) => (
-            <Tag key={tag.id} tag={tag} />
-          ))}
-        </div>
-        <p className="opacity-60">{dayjs(page.publishedAt).format("Do MMMM YYYY")}</p>
-      </div>
-      <h1 className="text-4xl font-bold">{page.title}</h1>
-      {page.cover && (
-        <Image
-          src={page.cover}
-          unoptimized={!page.cover.startsWith("https://cdn.ramble")}
-          alt={page.title}
-          width={800}
-          height={300}
-          className="w-full h-[300px] object-cover rounded-sm"
-        />
-      )}
-      <div>
-        {page.content.map((block) => (
-          <NotionBlock key={block.id} block={block} />
-        ))}
-      </div>
-    </div>
-  )
+  const page = await getBlogContent(params.slug)
+  return <BlogDetail page={page} />
 }

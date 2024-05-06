@@ -171,7 +171,6 @@ export default function NewItemScreen() {
         >
           <Icon icon={CircleDot} size={30} color="white" />
         </View>
-
         <View
           pointerEvents="box-none"
           className="absolute right-5 bottom-5 left-5 flex flex-row items-center justify-between space-y-2"

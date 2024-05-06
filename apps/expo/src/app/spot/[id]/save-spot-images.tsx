@@ -1,10 +1,10 @@
+import * as Sentry from "@sentry/react-native"
 import { Image } from "expo-image"
 import * as ImagePicker from "expo-image-picker"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { Plus, X } from "lucide-react-native"
 import * as React from "react"
 import { ScrollView, TouchableOpacity, View } from "react-native"
-
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
 import { ModalView } from "~/components/ui/ModalView"
@@ -47,7 +47,7 @@ export default function SaveSpotImagesScreen() {
       if (result.canceled || result.assets.length === 0) return
       setImages((i) => [...i, ...result.assets.map((asset) => asset.uri)])
     } catch (error) {
-      console.log(error)
+      Sentry.captureException(error)
       let message: string
       if (error instanceof Error) message = error.message
       else message = String(error)

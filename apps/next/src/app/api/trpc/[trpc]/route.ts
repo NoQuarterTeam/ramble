@@ -1,6 +1,6 @@
-import { fetchRequestHandler } from "@trpc/server/adapters/fetch"
-
 import { appRouter, createContext } from "@ramble/api"
+import * as Sentry from "@sentry/nextjs"
+import { fetchRequestHandler } from "@trpc/server/adapters/fetch"
 
 /**
  * Configure basic CORS headers
@@ -18,6 +18,7 @@ export const OPTIONS = () => {
   setCorsHeaders(response)
   return response
 }
+const acceptedErrors = ["BAD_REQUEST", "UNAUTHORIZED", "NOT_FOUND"]
 
 const handler = async (req: Request) => {
   const response = await fetchRequestHandler({
@@ -26,6 +27,8 @@ const handler = async (req: Request) => {
     req,
     createContext,
     onError({ error, path }) {
+      if (acceptedErrors.includes(error.code)) return
+      Sentry.captureException(error)
       console.error(`>>> tRPC Error on '${path}'`, error)
     },
   })

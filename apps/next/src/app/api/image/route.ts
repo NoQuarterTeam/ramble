@@ -1,5 +1,6 @@
 import * as crypto from "node:crypto"
 import { NotFound } from "@aws-sdk/client-s3"
+import * as Sentry from "@sentry/nextjs"
 import axios from "axios"
 import { cacheHeader } from "pretty-cache-header"
 import sharp from "sharp"
@@ -61,7 +62,7 @@ export async function GET(request: Request) {
     // return transformed image
     return getCachedImage(cacheSrc)
   } catch (e) {
-    console.log(e)
+    Sentry.captureException(e)
     return badImageResponse()
   }
 }

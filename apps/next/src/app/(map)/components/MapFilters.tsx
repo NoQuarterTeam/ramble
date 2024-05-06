@@ -1,13 +1,12 @@
 import { BadgeX, Dog, Settings2 } from "lucide-react"
 import * as React from "react"
 
-import { SpotType } from "@ramble/database/types"
+import type { SpotType } from "@ramble/database/types"
 import { SPOT_TYPES, type SpotTypeInfo, useDisclosure } from "@ramble/shared"
 
 import { AppCta } from "@/components/AppCta"
 import { SpotIcon } from "@/components/SpotIcon"
 import { Button, IconButton, Modal, Switch, Tooltip } from "@/components/ui"
-import Link from "next/link"
 
 export function MapFilters() {
   const modalProps = useDisclosure()
@@ -40,26 +39,14 @@ export function MapFilters() {
         <div className="max-h-[85svh] space-y-6 px-1">
           <AppCta />
           <div className="space-y-4">
-            <SpotTypeSection title="Stays" types={[SpotType.CAMPING, SpotType.FREE_CAMPING, SpotType.PARKING]} />
+            <SpotTypeSection title="Stays" types={["CAMPING", "FREE_CAMPING", "PARKING"]} />
             <SpotTypeSection
               title="Activities"
-              types={[
-                SpotType.CLIMBING,
-                SpotType.SURFING,
-                SpotType.PADDLE_KAYAK,
-                SpotType.HIKING_TRAIL,
-                SpotType.MOUNTAIN_BIKING,
-              ]}
+              types={["CLIMBING", "SURFING", "PADDLE_KAYAK", "HIKING_TRAIL", "MOUNTAIN_BIKING"]}
             />
-            <SpotTypeSection
-              title="Services"
-              types={[SpotType.GAS_STATION, SpotType.ELECTRIC_CHARGE_POINT, SpotType.MECHANIC_PARTS, SpotType.VET]}
-            />
-            <SpotTypeSection title="Hospitality" types={[SpotType.CAFE, SpotType.RESTAURANT, SpotType.SHOP, SpotType.BAR]} />
-            <SpotTypeSection
-              title="Other"
-              types={[SpotType.REWILDING, SpotType.NATURE_EDUCATION, SpotType.ART_FILM_PHOTOGRAPHY, SpotType.VOLUNTEERING]}
-            />
+            <SpotTypeSection title="Services" types={["GAS_STATION", "ELECTRIC_CHARGE_POINT", "MECHANIC_PARTS", "VET"]} />
+            <SpotTypeSection title="Hospitality" types={["CAFE", "RESTAURANT", "SHOP", "BAR"]} />
+            <SpotTypeSection title="Other" types={["REWILDING", "NATURE_EDUCATION", "ART_FILM_PHOTOGRAPHY", "VOLUNTEERING"]} />
           </div>
           <hr />
           <div className="space-y-4">

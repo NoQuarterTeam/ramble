@@ -4,7 +4,7 @@ import * as React from "react"
 import { ScrollView, TouchableOpacity, View } from "react-native"
 
 import type { SpotType } from "@ramble/database/types"
-import { doesSpotTypeRequireAmenities } from "@ramble/shared"
+import { isCampingSpot } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
@@ -83,7 +83,6 @@ function ReportFlow({ spot }: Props) {
     },
     onError: () => {
       toast({ type: "error", title: "Error submitting report" })
-      console.log(error)
     },
   })
 
@@ -140,7 +139,7 @@ function ReportFlow({ spot }: Props) {
           onPress={() => router.push(`/${tab}/spot/${spot.id}/report/type?${new URLSearchParams(dataToParams)}`)}
         />
 
-        {doesSpotTypeRequireAmenities(data.type) && (
+        {isCampingSpot(data.type) && (
           <ReportLink
             title="Amenities"
             description="the amenities are incorrect"

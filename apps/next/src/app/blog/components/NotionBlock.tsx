@@ -1,4 +1,4 @@
-import { notion } from "@/lib/notion"
+import { notion } from "@/lib/server/notion"
 import type { BlockObjectResponse } from "@notionhq/client/build/src/api-endpoints"
 import Image from "next/image"
 import { NotionRichText } from "./NotionRichText"

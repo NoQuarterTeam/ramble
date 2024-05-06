@@ -17,7 +17,6 @@ import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
 import { width } from "~/lib/device"
-import { useMe } from "~/lib/hooks/useMe"
 import { useS3Upload } from "~/lib/hooks/useS3"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 
@@ -40,7 +39,6 @@ type Params = {
 }
 
 export default function NewSpotConfirmScreen() {
-  const { me } = useMe()
   const params = useLocalSearchParams<Params>()
   const router = useRouter()
   const [shouldPublishLater, setShouldPublishLater] = React.useState(false)
@@ -55,23 +53,7 @@ export default function NewSpotConfirmScreen() {
     onSuccess: async (data) => {
       posthog.capture("spot created", { type: data.type })
       await utils.user.hasCreatedSpot.refetch()
-      if (params.tripId) {
-        await utils.trip.detail.refetch({ id: params.tripId })
-        router.navigate(`/(home)/(trips)/trips/${params.tripId}`)
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        toast({ title: "Spot created", message: "Thank you for contributing to the community!" })
-      } else {
-        if (me?.role === "GUIDE") {
-          void utils.spot.list.refetch({ skip: 0, sort: "latest" })
-          router.navigate(`/(home)/(index)/spot/${data.id}`)
-          await new Promise((resolve) => setTimeout(resolve, 1000))
-          toast({ title: "Spot created", message: "Thank you for contributing to the community!" })
-        } else {
-          router.navigate("/")
-          await new Promise((resolve) => setTimeout(resolve, 1000))
-          toast({ title: "A guide will review your spot", message: "Thank you for contributing to the community!" })
-        }
-      }
+      router.navigate(`/spot/${data.id}/new-review?tripId=${params.tripId || ""}&shouldRedirect=true`)
     },
     onError: () => {
       setLoading(false)

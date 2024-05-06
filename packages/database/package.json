@@ -15,7 +15,7 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "@planetscale/database": "1.16.0",
+    "@planetscale/database": "1.18.0",
     "@prisma/adapter-planetscale": "5.13.0",
     "@prisma/client": "5.13.0",
     "@ramble/server-env": "workspace:*",

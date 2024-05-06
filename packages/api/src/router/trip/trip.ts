@@ -4,7 +4,7 @@ import { lineString } from "@turf/helpers"
 import { z } from "zod"
 
 import { tripSchema, tripStopSchema } from "@ramble/server-schemas"
-import { getPlaceUnsplashImage } from "@ramble/server-services"
+import { getPlaceUnsplashImage, sendSlackMessage } from "@ramble/server-services"
 import { createTRPCRouter, protectedProcedure } from "../../trpc"
 import { tripItemsRouter } from "./items"
 import { tripMediaRouter } from "./media"
@@ -66,7 +66,11 @@ export const tripRouter = createTRPCRouter({
     if (overlappingTrip) {
       throw new TRPCError({ code: "BAD_REQUEST", message: `Trip dates overlaps with "${overlappingTrip.name}"` })
     }
-    return ctx.prisma.trip.create({ data: { ...input, creatorId: ctx.user.id, users: { connect: { id: ctx.user.id } } } })
+    const trip = await ctx.prisma.trip.create({
+      data: { ...input, creatorId: ctx.user.id, users: { connect: { id: ctx.user.id } } },
+    })
+    await sendSlackMessage(`🚌 New trip created by ${ctx.user.username}!`)
+    return trip
   }),
   update: protectedProcedure
     .input(tripSchema.partial().extend({ id: z.string() }))

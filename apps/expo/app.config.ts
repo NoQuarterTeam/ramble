@@ -1,7 +1,7 @@
 import type { ConfigContext, ExpoConfig } from "expo/config"
 
 const VERSION = "1.5.0"
-const BUILD = 69
+const BUILD = 71
 
 const splash: ExpoConfig["splash"] = {
   image: "./assets/splash.png",
@@ -64,13 +64,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
       {
         action: "VIEW",
         autoVerify: true,
-        data: [
-          {
-            scheme: "https",
-            host: "*.ramble.guide",
-            pathPrefix: "/records",
-          },
-        ],
+        data: [{ scheme: "https", host: "ramble.guide" }],
         category: ["BROWSABLE", "DEFAULT"],
       },
     ],

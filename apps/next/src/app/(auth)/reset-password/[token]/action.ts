@@ -1,8 +1,8 @@
 "use server"
 
-import { db } from "@/lib/db"
-import { decryptToken } from "@/lib/jwt"
-import { hashPassword } from "@ramble/server-services"
+import { db } from "@/lib/server/db"
+import { decodeToken, hashPassword } from "@ramble/server-services"
+import * as Sentry from "@sentry/nextjs"
 import { z } from "zod"
 
 export const action = async (_: unknown, formData: FormData) => {
@@ -22,11 +22,13 @@ export const action = async (_: unknown, formData: FormData) => {
         fieldErrors: result.error.flatten().fieldErrors,
       }
 
-    const payload = await decryptToken<{ id: string }>(result.data.token)
+    const payload = decodeToken<{ id: string }>(result.data.token)
+    if (!payload) return { ok: false, formError: "Invalid token" }
     const hashedPassword = hashPassword(result.data.password)
     await db.user.update({ where: { id: payload.id }, data: { password: hashedPassword } })
     return { ok: true }
-  } catch {
+  } catch (e) {
+    Sentry.captureException(e)
     return { ok: false, formError: "Error resetting password. Please try again." }
   }
 }

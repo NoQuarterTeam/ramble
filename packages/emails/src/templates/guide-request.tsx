@@ -19,7 +19,7 @@ export function GuideRequestContent(props: GuideRequestProps) {
       <Heading className="mb-4">new guide request</Heading>
       <p className="mb-8">Someone wants to be a guide on Ramble:</p>
       <Container className="mb-8 flex flex-col items-center rounded-xs border border-gray-[rgba(120,120,120,0.9)] border-solid p-10 text-center">
-        <Img className="mx-auto mb-4 h-[100px] w-[100px] rounded-full object-contain" src={createAssetUrl(props.user.avatar)} />
+        <Img className="mx-auto mb-4 h-[100px] w-[100px] rounded-full object-cover" src={createAssetUrl(props.user.avatar)} />
         <p>
           {props.user.firstName} {props.user.lastName}
         </p>

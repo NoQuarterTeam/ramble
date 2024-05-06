@@ -141,10 +141,41 @@ export default function Home() {
       </div>
       <div className="bg-primary-50/5 px-4 py-20 md:py-32">
         <div className="mx-auto max-w-6xl space-y-4">
-          <div>
+          <div className="space-y-2">
             <h3 className="text-primary font-bold italic text-4xl">join the beta now</h3>
+            <p>
+              To maintain an authentic and trustworthy community, members can currently only join via invite. Download the app to
+              request an invite.
+            </p>
           </div>
-          <AppCta message="To maintain an authentic and trustworthy community, members can currently only join via invite. Download the app to request an invite." />
+          <div className="flex items-center">
+            <Link
+              target="_blank"
+              rel="noreferer noopener"
+              href="https://apps.apple.com/app/ramble-van-travel-app/id6468265289?itsct=apps_box_badge&amp;itscg=30200"
+            >
+              <img
+                src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1595289600"
+                alt="Download on the App Store"
+                width={150}
+                height={30}
+                className="object-contain"
+              />
+            </Link>
+            <Link
+              target="_blank"
+              rel="noreferer noopener"
+              href="https://play.google.com/store/apps/details?id=co.noquarter.ramble&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"
+            >
+              <img
+                width={195}
+                height={60}
+                className="object-contain"
+                alt="Get it on Google Play"
+                src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+              />
+            </Link>
+          </div>
         </div>
       </div>
       <div className="mx-auto max-w-6xl space-y-20 px-4 py-20">
@@ -197,10 +228,41 @@ export default function Home() {
         </ClientOnly> */}
 
       <div className="mx-auto flex max-w-7xl flex-col items-center space-y-8 px-4 py-20 text-center md:py-32">
-        <div>
+        <div className="space-y-2">
           <h3 className="text-primary font-bold italic text-4xl">get access now</h3>
+          <p>
+            To maintain an authentic and trustworthy community, members can currently only join via invite. Download the app to
+            request an invite.
+          </p>
         </div>
-        <AppCta message="To maintain an authentic and trustworthy community, members can currently only join via invite. Download the app to request an invite." />
+        <div className="flex items-center">
+          <Link
+            target="_blank"
+            rel="noreferer noopener"
+            href="https://apps.apple.com/app/ramble-van-travel-app/id6468265289?itsct=apps_box_badge&amp;itscg=30200"
+          >
+            <img
+              src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1595289600"
+              alt="Download on the App Store"
+              width={150}
+              height={30}
+              className="object-contain"
+            />
+          </Link>
+          <Link
+            target="_blank"
+            rel="noreferer noopener"
+            href="https://play.google.com/store/apps/details?id=co.noquarter.ramble&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"
+          >
+            <img
+              width={195}
+              height={60}
+              className="object-contain"
+              alt="Get it on Google Play"
+              src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+            />
+          </Link>
+        </div>
       </div>
       <div className="border-t">
         <PageContainer className="flex justify-between px-4 py-6">

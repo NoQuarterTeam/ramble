@@ -3,7 +3,7 @@ import dayjs from "dayjs"
 import Supercluster from "supercluster"
 import { z } from "zod"
 
-import { clusterSchema, updateUserSchema, userSchema } from "@ramble/server-schemas"
+import { clusterSchema, userSchema } from "@ramble/server-schemas"
 import {
   createToken,
   deleteObject,
@@ -64,7 +64,7 @@ export const userRouter = createTRPCRouter({
     const spot = await ctx.prisma.spot.findFirst({ where: { creatorId: ctx.user.id }, select: { id: true } })
     return !!spot
   }),
-  update: protectedProcedure.input(updateUserSchema).mutation(async ({ ctx, input }) => {
+  update: protectedProcedure.input(userSchema.partial()).mutation(async ({ ctx, input }) => {
     if (input.username && input.username !== ctx.user.username) {
       const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })
       if (user) throw new TRPCError({ code: "BAD_REQUEST", message: "Username already taken" })
@@ -112,15 +112,15 @@ export const userRouter = createTRPCRouter({
       radius: 50,
     })
     const clustersData = supercluster.load(
-      users.map((user) => ({
+      users.map((user, i) => ({
         type: "Feature",
         geometry: { type: "Point", coordinates: [user.longitude!, user.latitude!] },
         properties: {
           cluster: false,
           id: user.id,
-          username: user.username,
-          avatar: user.avatar,
-          avatarBlurHash: user.avatarBlurHash,
+          username: ctx.user ? user.username : `User ${i + 1}`,
+          avatar: ctx.user ? user.avatar : null,
+          avatarBlurHash: ctx.user ? user.avatarBlurHash : null,
         },
       })),
     )

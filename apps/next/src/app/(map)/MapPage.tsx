@@ -3,7 +3,7 @@ import { MapView } from "@/components/Map"
 import { SpotClusterMarker } from "@/components/SpotMarker"
 import { useMapSettings } from "@/lib/hooks/useMapSettings"
 import { type RouterOutputs, api } from "@/lib/trpc/react"
-import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createAssetUrl, join } from "@ramble/shared"
+import { createAssetUrl, join } from "@ramble/shared"
 import { User } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
@@ -97,7 +97,7 @@ export function MapPage() {
         ref={mapRef}
         onLoad={onMove}
         onMoveEnd={onMove}
-        initialViewState={{ latitude: INITIAL_LATITUDE, longitude: INITIAL_LONGITUDE, zoom: 8, pitch: 0 }}
+        initialViewState={{ latitude: 46, longitude: 2, zoom: 4.5, pitch: 0 }}
       >
         {spotMarkers}
         {userMarkers}
@@ -125,7 +125,7 @@ function UserClusterMarker(props: UserMarkerProps) {
       {props.point.properties.cluster ? (
         <div
           className={join(
-            "flex items-center justify-center cursor-pointer rounded-full border border-purple-100 bg-purple-700 text-white shadow transition-transform hover:scale-110",
+            "flex items-center justify-center cursor-pointer rounded-full border border-primary-100 bg-primary-700 text-white shadow transition-transform hover:scale-110",
             props.point.properties.point_count > 150
               ? "h-20 w-20"
               : props.point.properties.point_count > 75
@@ -138,7 +138,7 @@ function UserClusterMarker(props: UserMarkerProps) {
           <p className="text-center text-sm">{props.point.properties.point_count_abbreviated}</p>
         </div>
       ) : (
-        <div className="flex items-center justify-center w-10 h-10 group relative cursor-pointer rounded-full border border-purple-100 bg-purple-500 shadow transition-transform hover:scale-110">
+        <div className="flex items-center justify-center w-10 h-10 group relative cursor-pointer rounded-full border border-primary-200 bg-primary-700 shadow transition-transform hover:scale-110">
           {props.point.properties.avatar ? (
             <Image
               width={50}
@@ -146,13 +146,13 @@ function UserClusterMarker(props: UserMarkerProps) {
               alt="user location"
               // placeholder={props.point.properties.avatarBlurHash}
               src={createAssetUrl(props.point.properties.avatar)}
-              className="sq-10 rounded-full object-cover blur-sm"
+              className="sq-10 rounded-full object-cover"
             />
           ) : (
             <User size={18} className="text-white" />
           )}
           <div className="-bottom-5 -translate-x-1/2 absolute left-1/2 hidden rounded-xs bg-background px-2 py-1 group-hover:block">
-            <p className="text-xs blur-sm">{props.point.properties.username}</p>
+            <p className="text-xs whitespace-nowrap">{props.point.properties.username}</p>
           </div>
         </div>
       )}

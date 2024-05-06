@@ -2,19 +2,22 @@ import { AppCta } from "@/components/AppCta"
 import { PageContainer } from "@/components/PageContainer"
 import { SpotIcon } from "@/components/SpotIcon"
 import { SpotItem } from "@/components/SpotItem"
-import { Button, IconButton, Select } from "@/components/ui"
-import { db } from "@/lib/db"
+import { Button, IconButton } from "@/components/ui"
+import { db } from "@/lib/server/db"
 import type { SpotType } from "@ramble/database/types"
 import { spotListQuery } from "@ramble/server-services"
-import { STAY_SPOT_TYPE_OPTIONS, type SpotItemType, type SpotListSort, join } from "@ramble/shared"
+import { STAY_SPOT_TYPE_OPTIONS, type SpotItemType, type SpotListSort } from "@ramble/shared"
 import { unstable_cache } from "next/cache"
 import { SpotSort } from "./SpotSort"
 
 const TAKE = 24
-const getSpots = unstable_cache(async ({ type, sort = "latest" }: { type?: SpotType; sort?: SpotListSort }) => {
-  const spots = await db.$queryRaw<Array<SpotItemType>>`${spotListQuery({ type, sort, take: TAKE })}`
-  return spots
-})
+const getSpots = unstable_cache(
+  ({ type, sort = "latest" }: { type?: SpotType; sort?: SpotListSort }) => {
+    return db.$queryRaw<Array<SpotItemType>>`${spotListQuery({ type, sort, take: TAKE })}`
+  },
+  ["spots"],
+  { revalidate: 86400, tags: ["spots"] },
+)
 
 export default async function Page({ searchParams: { type, sort } }: { searchParams: { type?: SpotType; sort?: SpotListSort } }) {
   const spots = await getSpots({ type, sort })

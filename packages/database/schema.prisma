@@ -315,13 +315,14 @@ model ListSpot {
 model Review {
   id          String  @id @default(uuid())
   rating      Int
-  description String  @db.Text
+  description String? @db.Text
   language    String?
 
   spotId String
   spot   Spot   @relation(fields: [spotId], references: [id], onDelete: Cascade)
   userId String
   user   User   @relation(fields: [userId], references: [id])
+  tags   Tag[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -329,6 +330,23 @@ model Review {
   @@index([rating, spotId])
   @@index([spotId])
   @@index([userId])
+}
+
+enum TagCategory {
+  NATURE
+  PEOPLE
+  SELF
+}
+
+model Tag {
+  id       String      @id @default(uuid())
+  name     String
+  category TagCategory
+
+  reviews Review[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model AccessRequest {

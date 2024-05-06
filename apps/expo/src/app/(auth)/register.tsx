@@ -17,6 +17,7 @@ import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
 
 export default function RegisterScreen() {
   useKeyboardController()
+
   const queryClient = api.useUtils()
   const navigation = useRouter()
   const posthog = usePostHog()

@@ -10,6 +10,7 @@ import {
   ShapeSource,
   StyleURL,
 } from "@rnmapbox/maps"
+import * as Sentry from "@sentry/react-native"
 import dayjs from "dayjs"
 import * as Haptics from "expo-haptics"
 import { Image } from "expo-image"
@@ -419,7 +420,8 @@ function TripImageSync({
             }
             mediaToSync.push(mediaWithData)
           } catch (error) {
-            console.log(error)
+            toast({ title: "Error syncing media", type: "error" })
+            Sentry.captureException(error)
           }
         }
         if (mediaToSync.length === 0) return
@@ -434,12 +436,13 @@ function TripImageSync({
             const payload = { path, thumbnailPath, ...media }
             uploadMedia({ tripId: id, image: payload })
           } catch (error) {
-            console.log(error)
+            toast({ title: "Error syncing media", type: "error" })
+            Sentry.captureException(error)
           }
         }
         onDone()
       } catch (error) {
-        console.log(error)
+        Sentry.captureException(error)
         toast({ title: "Error syncing media", type: "error" })
       } finally {
         setIsSyncing(false)

@@ -1,4 +1,5 @@
 import crypto from "node:crypto"
+import * as Sentry from "@sentry/nextjs"
 import { TRPCError } from "@trpc/server"
 import dayjs from "dayjs"
 import Supercluster from "supercluster"
@@ -108,15 +109,10 @@ export const spotRouter = createTRPCRouter({
     .input(z.object({ skip: z.number().optional(), sort: z.enum(["latest", "rated", "saved", "near"]).optional() }))
     .query(async ({ ctx, input }) => {
       const sort = input.sort || "latest"
-      try {
-        const spots = await ctx.prisma.$queryRaw<Array<SpotItemType>>`
+      const spots = await ctx.prisma.$queryRaw<Array<SpotItemType>>`
           ${spotListQuery({ user: ctx.user, sort, take: 20, skip: input.skip })}
         `
-        return spots
-      } catch (error) {
-        console.log(error)
-        return []
-      }
+      return spots
     }),
   mapPreview: publicProcedure.input(z.object({ id: z.string().uuid() })).query(async ({ ctx, input }) => {
     const spot = await ctx.prisma.spot.findUnique({
@@ -128,9 +124,8 @@ export const spotRouter = createTRPCRouter({
         latitude: true,
         longitude: true,
         ownerId: true,
-        verifier: true, // deprecated
-        verifiedAt: true, // deprecated
         creator: true,
+        createdAt: true,
         ...spotPartnerFields,
         _count: { select: { listSpots: true, reviews: true } },
         listSpots: ctx.user ? { where: { list: { creatorId: ctx.user.id } } } : undefined,
@@ -163,7 +158,7 @@ export const spotRouter = createTRPCRouter({
     return spot
   }),
   detail: publicProcedure.input(z.object({ id: z.string().uuid() })).query(async ({ ctx, input }) => {
-    const { spot, rating } = await promiseHash({
+    const { spot, rating, tags } = await promiseHash({
       spot: ctx.prisma.spot.findUnique({
         where: { id: input.id, ...publicSpotWhereClause(ctx.user?.id) },
         select: {
@@ -193,16 +188,38 @@ export const spotRouter = createTRPCRouter({
           },
           ...spotPartnerFields,
           _count: { select: { reviews: true, listSpots: true } },
-          reviews: { take: 5, include: { user: true }, orderBy: { createdAt: "desc" } },
+          reviews: {
+            take: 5,
+            include: {
+              user: { select: { id: true, username: true, avatar: true, avatarBlurHash: true, firstName: true, lastName: true } },
+            },
+            orderBy: { createdAt: "desc" },
+          },
           images: true,
           amenities: { select: amenitiesFields },
           listSpots: ctx.user ? { where: { list: { creatorId: ctx.user.id } } } : undefined,
         },
       }),
       rating: ctx.prisma.review.aggregate({ where: { spotId: input.id }, _avg: { rating: true } }),
+      tags: ctx.prisma.$queryRaw<Array<{ name: string; count: string }>>`
+        SELECT
+          Tag.name,
+          CAST(COUNT(*) AS CHAR(32)) AS count
+        FROM
+          Tag
+          LEFT JOIN _ReviewToTag AS rt ON Tag.id = rt.B
+          LEFT JOIN Review ON Review.id = rt.A
+        WHERE
+          Review.spotId = ${input.id}
+        GROUP BY
+          Tag.name
+        ORDER BY
+	        count DESC;
+      `,
     })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
     let translatedDescription: string | null | undefined
+
     let descriptionHash: string | undefined
     if (ctx.user && spot.description) {
       descriptionHash = crypto.createHash("sha1").update(spot.description).digest("hex") as string
@@ -211,7 +228,7 @@ export const spotRouter = createTRPCRouter({
       )
         .then((r) => r.json() as Promise<string | null>)
         .catch((error) => {
-          console.log(error)
+          Sentry.captureException(error)
           return null
         })
     }
@@ -223,6 +240,7 @@ export const spotRouter = createTRPCRouter({
       descriptionHash,
       isLiked: !!ctx.user && spot.listSpots.length > 0,
       rating,
+      tags,
       weather,
     }
   }),
@@ -274,6 +292,8 @@ export const spotRouter = createTRPCRouter({
       const spot = await ctx.prisma.spot.create({
         data: {
           ...data,
+          // temp until apps send correct data
+          isPetFriendly: data.isPetFriendly === "true" || data.isPetFriendly === true,
           publishedAt: shouldPublishLater ? dayjs().add(2, "weeks").toDate() : undefined,
           creator: { connect: { id: ctx.user.id } },
           images: { create: imageData },
@@ -349,6 +369,8 @@ export const spotRouter = createTRPCRouter({
         where: { id },
         data: {
           ...data,
+          // temp until apps send correct data
+          isPetFriendly: data.isPetFriendly === "true" || data.isPetFriendly === true,
           images: { create: imageData, delete: imagesToDelete },
           amenities: amenities
             ? { update: spot.amenities ? amenities : undefined, create: spot.amenities ? undefined : amenities }
