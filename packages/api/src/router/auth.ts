@@ -84,10 +84,14 @@ export const authRouter = createTRPCRouter({
   resetPassword: publicProcedure
     .input(userSchema.pick({ password: true }).and(z.object({ token: z.string() })))
     .mutation(async ({ input, ctx }) => {
-      const { id } = decodeToken<{ id: string }>(input.token)
-      const user = await ctx.prisma.user.findUnique({ where: { id } })
+      const payload = decodeToken<{ id: string }>(input.token)
+      if (!payload) throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid token" })
+      const user = await ctx.prisma.user.findUnique({ where: { id: payload.id } })
       if (!user) throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid token" })
-      const updated = await ctx.prisma.user.update({ where: { id }, data: { password: hashPassword(input.password) } })
+      const updated = await ctx.prisma.user.update({
+        where: { id: payload.id },
+        data: { password: hashPassword(input.password) },
+      })
       return updated
     }),
   requestAccess: publicProcedure
