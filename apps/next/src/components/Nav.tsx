@@ -45,6 +45,9 @@ export function Nav() {
             <DropdownMenuItem asChild>
               <Link href="/spots">Latest spots</Link>
             </DropdownMenuItem>
+            {/* <DropdownMenuItem asChild>
+              <Link href="/guides">Guides</Link>
+            </DropdownMenuItem> */}
             <DropdownMenuItem asChild>
               <Link href="/blog">Blog</Link>
             </DropdownMenuItem>
