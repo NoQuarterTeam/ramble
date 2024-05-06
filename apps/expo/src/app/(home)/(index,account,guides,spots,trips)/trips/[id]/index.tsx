@@ -525,7 +525,7 @@ function TripList({
       contentContainerStyle={{ paddingRight: 60, paddingLeft: 12 }}
       data={tripItems}
       autoscrollThreshold={1}
-      autoscrollSpeed={100}
+      autoscrollSpeed={50}
       showsHorizontalScrollIndicator={false}
       keyExtractor={(item) => item.id}
       renderItem={(props) => {
@@ -698,7 +698,7 @@ function ListHeader({ trip }: { trip: RouterOutputs["trip"]["detail"]["trip"] })
     <View className="flex h-full items-center justify-center">
       <View
         style={{ width: HEADER_FOOTER_WIDTH, height: HEADER_FOOTER_WIDTH }}
-        className="flex items-center justify-center space-y-2 rounded-full border border-primary bg-background p-2 dark:bg-background-dark"
+        className="flex items-center justify-center space-y-2 rounded-full shadow bg-background p-2 dark:bg-background-dark"
       >
         <Icon icon={Home} size={16} />
         <Text className="text-xxs">{dayjs(trip.startDate).format("D MMM YY")}</Text>
@@ -722,7 +722,7 @@ function ListFooter({ trip }: { trip: RouterOutputs["trip"]["detail"]["trip"] })
       <View className="flex h-full items-center justify-center">
         <View
           style={{ width: HEADER_FOOTER_WIDTH, height: HEADER_FOOTER_WIDTH }}
-          className="flex items-center justify-center space-y-2 rounded-full border border-primary bg-background p-2 dark:bg-background-dark"
+          className="flex items-center justify-center space-y-2 rounded-full shadow bg-background p-2 dark:bg-background-dark"
         >
           <Icon icon={Flag} size={16} />
           <Text className="text-xxs">{dayjs(trip.endDate).format("D MMM YY")}</Text>
