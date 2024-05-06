@@ -2,6 +2,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { db } from "@/lib/server/db"
 
 import { Pagination } from "@/components/Pagination"
+import { Search } from "@/components/Search"
 import { Avatar } from "@/components/ui"
 import { requireAdmin } from "@/lib/server/auth"
 import type { Prisma } from "@ramble/database/types"
@@ -10,11 +11,23 @@ import dayjs from "dayjs"
 
 export const dynamic = "force-dynamic"
 
-const getItemsAndCount = async ({ page }: { page?: string }) => {
+type SearchParams = { page?: string; search?: string }
+
+const getItemsAndCount = async ({ page, search }: SearchParams) => {
   await requireAdmin()
   const skip = page ? (Number(page) - 1) * 25 : 0
 
-  const where = { deletedAt: null } as Prisma.UserWhereInput
+  const where = {
+    deletedAt: null,
+    OR: search
+      ? [
+          { username: { contains: search } },
+          { email: { contains: search } },
+          { firstName: { contains: search } },
+          { lastName: { contains: search } },
+        ]
+      : undefined,
+  } as Prisma.UserWhereInput
 
   return promiseHash({
     users: db.user.findMany({
@@ -36,8 +49,8 @@ const getItemsAndCount = async ({ page }: { page?: string }) => {
   })
 }
 
-export default async function Page({ searchParams }: { searchParams: { page?: string } }) {
-  const { users, count } = await getItemsAndCount({ page: searchParams.page })
+export default async function Page({ searchParams }: { searchParams: SearchParams }) {
+  const { users, count } = await getItemsAndCount(searchParams)
   return (
     <div className="space-y-4">
       <h1 className="text-4xl">Users</h1>
@@ -71,9 +84,9 @@ export default async function Page({ searchParams }: { searchParams: { page?: st
 				</Button>
 			</Form> */}
 
-        {/* <div>
-				<Search />
-			</div> */}
+        <div>
+          <Search />
+        </div>
       </div>
       <Table>
         <TableHeader>
