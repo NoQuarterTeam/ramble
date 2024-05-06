@@ -47,7 +47,7 @@ export default async function Page() {
             ))}
           </div>
         )}
-        <AppCta message="Download the app to see more guides" />
+        <AppCta message="Download the app to become a guides" />
       </div>
     </PageContainer>
   )
