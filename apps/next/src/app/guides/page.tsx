@@ -14,7 +14,13 @@ const getGuides = unstable_cache(
         lastName: true,
         avatar: true,
         username: true,
-        _count: { select: { createdSpots: true, createdTrips: true, followers: true } },
+        _count: {
+          select: {
+            createdSpots: { where: { sourceUrl: { equals: null }, deletedAt: null, verifiedAt: { not: null } } },
+            createdTrips: true,
+            followers: true,
+          },
+        },
       },
       where: { role: "GUIDE" },
       orderBy: { createdAt: "desc" },
