@@ -5,7 +5,7 @@ import { ScrollView, Switch, View } from "react-native"
 import Animated, { useAnimatedKeyboard, useAnimatedStyle } from "react-native-reanimated"
 
 import type { SpotType } from "@ramble/database/types"
-import { doesSpotTypeRequireAmenities } from "@ramble/shared"
+import { isCampingSpot } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { Icon } from "~/components/Icon"
@@ -35,7 +35,9 @@ export default function NewSpotInfoScreen() {
   const router = useRouter()
   const [name, setName] = React.useState<string>(params.name || "")
   const [description, setDescription] = React.useState<string>()
-  const [isPetFriendly, setIsPetFriendly] = React.useState(params.isPetFriendly === "true")
+  const [isPetFriendly, setIsPetFriendly] = React.useState(
+    params.isPetFriendly === undefined ? true : params.isPetFriendly === "true",
+  )
 
   return (
     <NewSpotModalView title="some info">
@@ -68,9 +70,9 @@ export default function NewSpotInfoScreen() {
       >
         <Button
           className="rounded-full"
-          disabled={!description || !name}
+          disabled={!name}
           onPress={() => {
-            if (!name || !description) return
+            if (!name) return
             const searchParams = new URLSearchParams({
               ...params,
               name,
@@ -79,7 +81,7 @@ export default function NewSpotInfoScreen() {
             })
             router.push(
               // @ts-ignore
-              doesSpotTypeRequireAmenities(params.type) ? `/new/amenities?${searchParams}` : `/new/images?${searchParams}`,
+              isCampingSpot(params.type) ? `/new/amenities?${searchParams}` : `/new/images?${searchParams}`,
             )
           }}
         >

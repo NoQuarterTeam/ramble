@@ -18,6 +18,7 @@ export const SPOT_TYPES = {
   MOUNTAIN_BIKING: { value: "MOUNTAIN_BIKING", label: "MTBing", isComingSoon: false },
   PADDLE_KAYAK: { value: "PADDLE_KAYAK", label: "SUPing / Kayaking", isComingSoon: false },
   HIKING_TRAIL: { value: "HIKING_TRAIL", label: "Hiking / Trail running", isComingSoon: false },
+  YOGA: { value: "YOGA", label: "Yoga", isComingSoon: true },
   // Services
   GAS_STATION: { value: "GAS_STATION", label: "Renewable diesel", isComingSoon: false },
   ELECTRIC_CHARGE_POINT: { value: "ELECTRIC_CHARGE_POINT", label: "Electric Charge Point", isComingSoon: true },
@@ -49,6 +50,7 @@ export const SPOT_TYPE_NAMES = [
   "MOUNTAIN_BIKING",
   "PADDLE_KAYAK",
   "HIKING_TRAIL",
+  "YOGA",
   // Services
   "GAS_STATION",
   "ELECTRIC_CHARGE_POINT",
@@ -162,11 +164,7 @@ export function displaySaved(saved: number | string | null | undefined) {
   return saved
 }
 
-export function doesSpotTypeRequireAmenities(type?: SpotType | null | undefined) {
-  if (!type) return false
-  return type === "CAMPING" || type === "FREE_CAMPING"
-}
-export function doesSpotTypeRequireDescription(type?: SpotType | null | undefined) {
+export function isCampingSpot(type?: SpotType | null | undefined) {
   if (!type) return false
   return type === "CAMPING" || type === "FREE_CAMPING"
 }
@@ -184,6 +182,7 @@ export const spotMarkerColorTypes = {
   MOUNTAIN_BIKING: "border-blue-100 bg-blue-500",
   HIKING_TRAIL: "border-blue-100 bg-blue-500",
   PADDLE_KAYAK: "border-blue-100 bg-blue-500",
+  YOGA: "border-blue-100 bg-blue-500",
   // services
   GAS_STATION: "border-gray-500 bg-gray-50",
   ELECTRIC_CHARGE_POINT: "border-gray-500 bg-gray-50",
@@ -213,6 +212,7 @@ export const spotMarkerTextColorTypes = {
   MOUNTAIN_BIKING: "text-white",
   HIKING_TRAIL: "text-white",
   PADDLE_KAYAK: "text-white",
+  YOGA: "text-white",
   // services
   GAS_STATION: "text-black",
   ELECTRIC_CHARGE_POINT: "text-black",
@@ -242,6 +242,7 @@ export const spotMarkerClusterColorTypes = {
   MOUNTAIN_BIKING: colors.blue[500],
   HIKING_TRAIL: colors.blue[500],
   PADDLE_KAYAK: colors.blue[500],
+  YOGA: colors.blue[500],
   // services
   GAS_STATION: colors.gray[50],
   ELECTRIC_CHARGE_POINT: colors.gray[50],

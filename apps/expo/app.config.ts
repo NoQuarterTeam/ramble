@@ -1,7 +1,7 @@
 import type { ConfigContext, ExpoConfig } from "expo/config"
 
-const VERSION = "1.4.4"
-const BUILD = 60
+const VERSION = "1.4.11"
+const BUILD = 71
 
 const splash: ExpoConfig["splash"] = {
   image: "./assets/splash.png",
@@ -18,7 +18,7 @@ const IS_DEV = process.env.APP_VARIANT === "development"
 
 const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
   name: IS_DEV ? "Ramble (dev)" : "Ramble",
-  description: "Ramble: Van Travel App",
+  description: IS_DEV ? "Ramble (dev): Van Travel App" : "Ramble: Van Travel App",
   slug: "ramble",
   scheme: "ramble",
   owner: "noquarter",
@@ -60,6 +60,14 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
       foregroundImage: "./assets/adaptive-icon.png",
       backgroundColor: "#fffefe",
     },
+    intentFilters: [
+      {
+        action: "VIEW",
+        autoVerify: true,
+        data: [{ scheme: "https", host: "ramble.guide" }],
+        category: ["BROWSABLE", "DEFAULT"],
+      },
+    ],
     softwareKeyboardLayoutMode: "resize",
     package: IS_DEV ? "co.noquarter.ramble.dev" : "co.noquarter.ramble",
     splash,

@@ -37,6 +37,7 @@ export default function OnboardingStep2Screen() {
           data?.isHiker ? "HIKING_TRAIL" : null,
           data?.isSurfer ? "SURFING" : null,
           data?.isPaddleBoarder ? "PADDLE_KAYAK" : null,
+          data?.isYogi ? "YOGA" : null,
         ].filter(Boolean) as SpotType[],
       })
       router.push("/onboarding/3")

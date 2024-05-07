@@ -12,11 +12,11 @@
   "sideEffects": false,
   "dependencies": {
     "@ramble/database": "workspace:*",
-    "tailwind-merge": "2.2.2"
+    "tailwind-merge": "2.3.0"
   },
   "devDependencies": {
     "@ramble/tailwind-config": "workspace:*",
-    "@types/node": "18.19.29",
-    "typescript": "5.4.3"
+    "@types/node": "20.12.10",
+    "typescript": "5.4.5"
   }
 }

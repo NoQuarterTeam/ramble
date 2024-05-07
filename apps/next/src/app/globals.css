@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background-light: #fffefe;
+  --background-dark: #241c17;
+  --background: var(--background-light);
+  --border: theme(colors.gray.100);
+}
+
+.dark {
+  --background: var(--background-dark);
+  --border: theme(colors.gray.700);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    @apply font-sans;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-serif font-medium;
+  }
+
+  hr {
+    @apply border;
+  }
+  body {
+    @apply bg-background text-black dark:text-white;
+  }
+}

@@ -2,21 +2,25 @@ import { useRouter } from "expo-router"
 import { User2 } from "lucide-react-native"
 import { TouchableOpacity, View } from "react-native"
 
-import type { User } from "@ramble/database/types"
+import type { Spot, User } from "@ramble/database/types"
 import { createAssetUrl } from "@ramble/shared"
 
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
+import dayjs from "dayjs"
 import { useFeedbackActivity } from "./FeedbackCheck"
 import { Icon } from "./Icon"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
 
 interface Props {
-  creator: Pick<User, "avatar" | "avatarBlurHash" | "firstName" | "lastName" | "username">
+  spot: Pick<Spot, "createdAt"> & {
+    creator: Pick<User, "avatar" | "avatarBlurHash" | "firstName" | "lastName" | "username" | "deletedAt">
+  }
 }
 
-export function CreatorCard({ creator }: Props) {
+export function CreatorCard(props: Props) {
+  const { creator, createdAt } = props.spot
   const router = useRouter()
   const tab = useTabSegment()
   const increment = useFeedbackActivity((s) => s.increment)
@@ -25,19 +29,20 @@ export function CreatorCard({ creator }: Props) {
     <TouchableOpacity
       onPress={() => {
         increment()
+        if (creator.deletedAt) return
         router.push(`/${tab}/${creator.username}/(profile)`)
       }}
-      className="flex flex-row items-center justify-between rounded-xs border border-gray-200 p-1.5 px-2.5 dark:border-gray-700/70"
+      activeOpacity={creator.deletedAt ? 1 : 0.7}
+      className="flex flex-row items-center justify-between rounded-xs border border-gray-200 p-2 px-3 dark:border-gray-700/70"
     >
-      <View>
-        <View className="flex flex-row items-center space-x-1">
-          <Text>
-            Added by{" "}
-            <Text className="font-500">
-              {creator.firstName} {creator.lastName}
-            </Text>
+      <View className="space-y-0.5">
+        <Text>
+          Added by{" "}
+          <Text className="font-500">
+            {creator.firstName} {creator.lastName}
           </Text>
-        </View>
+        </Text>
+        <Text className="text-xs leading-3 opacity-70">on {dayjs(createdAt).format("DD/MM/YYYY")}</Text>
       </View>
 
       <View>

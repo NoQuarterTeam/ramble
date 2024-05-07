@@ -28,9 +28,13 @@ export default function RequestAccessScreen() {
       toast({ title: "Thanks! We will get in contact soon!" })
     },
   })
-  const form = useForm({ defaultValues: { email: "" } })
+  const form = useForm({ defaultValues: { email: "", reason: "" } })
 
-  const onSubmit = form.handleSubmit((data) => mutate(data))
+  const onSubmit = form.handleSubmit((data) => {
+    if (!data.reason) return toast({ title: "Please provide a reason" })
+
+    mutate(data)
+  })
 
   return (
     <ModalView shouldRenderToast title="request access" onBack={() => navigation.back()}>
@@ -43,11 +47,10 @@ export default function RequestAccessScreen() {
         >
           <View>
             <FormInput autoCapitalize="none" name="email" label="Email" error={error} />
-
+            <FormInput autoCapitalize="none" name="reason" label="What are you most looking for in Ramble?" error={error} />
             <Button className="mb-1" isLoading={isLoading} onPress={onSubmit}>
               Request access
             </Button>
-
             <FormError className="mb-1" error={error} />
           </View>
         </ScrollView>

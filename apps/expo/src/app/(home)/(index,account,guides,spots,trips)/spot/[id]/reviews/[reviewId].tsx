@@ -7,7 +7,7 @@ import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
 
-import { ReviewForm } from "./ReviewForm"
+import { ReviewForm } from "../../../../../../components/ReviewForm"
 
 export default function ReviewDetailScreen() {
   useKeyboardController()
@@ -22,6 +22,7 @@ export default function ReviewDetailScreen() {
       if (!review) return
       void utils.spot.detail.refetch({ id: review.spotId })
       void utils.spot.mapPreview.refetch({ id: review.spotId })
+      void utils.review.detail.refetch({ id: reviewId })
       router.back()
       await new Promise((resolve) => setTimeout(resolve, 1000))
       toast({ title: "Review updated" })
@@ -33,7 +34,7 @@ export default function ReviewDetailScreen() {
       <ScrollView
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="interactive"
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
       >
         {reviewLoading ? null : !review ? (
@@ -41,7 +42,8 @@ export default function ReviewDetailScreen() {
         ) : (
           <ReviewForm
             review={review}
-            spotId={review?.spotId}
+            spotId={review.spotId}
+            spotType={review.spot.type}
             isLoading={isLoading}
             error={error}
             onUpdate={(data) => mutate({ ...data, id: reviewId })}

@@ -80,7 +80,7 @@ export default function MapFilters() {
                 isDisabled={!me}
                 {...{ filters, setFilters }}
                 title="Activities"
-                types={["CLIMBING", "SURFING", "PADDLE_KAYAK", "HIKING_TRAIL", "MOUNTAIN_BIKING"]}
+                types={["CLIMBING", "SURFING", "PADDLE_KAYAK", "HIKING_TRAIL", "MOUNTAIN_BIKING", "YOGA"]}
               />
             </View>
             <View>
@@ -221,6 +221,7 @@ function SpotTypeSelector({
   isSelected: boolean
   onPress: () => void
 }) {
+  const { me } = useMe()
   return (
     <View className="relative">
       <Button
@@ -230,22 +231,23 @@ function SpotTypeSelector({
           <Icon
             icon={SPOT_TYPE_ICONS[type.value]}
             size={20}
+            className={join(type.isComingSoon && "opacity-50")}
             color={{ light: isSelected ? "white" : "black", dark: isSelected ? "black" : "white" }}
           />
         }
         className="min-w-[100px]"
-        disabled={type.isComingSoon || isDisabled}
+        disabled={me?.isAdmin ? false : type.isComingSoon || isDisabled}
         onPress={onPress}
       >
         {type.label}
       </Button>
-      {type.isComingSoon && (
+      {!me?.isAdmin && type.isComingSoon && (
         <View
           className={join(
             "-right-1 -top-1 absolute flex h-[18px] w-[70px] items-center justify-center rounded-full border border-gray-300 bg-background dark:border-gray-700 dark:bg-background-dark",
           )}
         >
-          <Text className="text-xxs">Coming soon</Text>
+          <Text className="text-xxs leading-3">Coming soon</Text>
         </View>
       )}
     </View>

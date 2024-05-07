@@ -33,4 +33,9 @@ export const interestOptions: { label: string; value: string; Icon: (props: Luci
     value: "isPaddleBoarder",
     Icon: Icons.Sup,
   },
+  {
+    label: "Yoga",
+    value: "isYogi",
+    Icon: Icons.Yoga,
+  },
 ]

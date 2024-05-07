@@ -2,12 +2,12 @@
   "name": "@ramble/root",
   "private": true,
   "dependencies": {
-    "turbo": "1.13.2"
+    "turbo": "1.13.3"
   },
   "type": "commonjs",
   "devDependencies": {
-    "@biomejs/biome": "1.6.4",
-    "typescript": "5.4.3"
+    "@biomejs/biome": "1.7.3",
+    "typescript": "5.4.5"
   },
   "scripts": {
     "build": "turbo run build",
@@ -25,13 +25,5 @@
     "node": ">=18",
     "pnpm": ">=8"
   },
-  "pnpm": {
-    "patchedDependencies": {
-      "@turf/helpers@6.5.0": "patches/@turf__helpers@6.5.0.patch",
-      "@turf/buffer@6.5.0": "patches/@turf__buffer@6.5.0.patch",
-      "@turf/boolean-point-in-polygon@6.5.0": "patches/@turf__boolean-point-in-polygon@6.5.0.patch",
-      "@turf/center@6.5.0": "patches/@turf__center@6.5.0.patch",
-      "@turf/bbox@6.5.0": "patches/@turf__bbox@6.5.0.patch"
-    }
-  }
+  "pnpm": {}
 }

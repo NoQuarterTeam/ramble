@@ -1,8 +1,9 @@
 import { TRPCError } from "@trpc/server"
+import dayjs from "dayjs"
 import Supercluster from "supercluster"
 import { z } from "zod"
 
-import { clusterSchema, updateUserSchema, userSchema } from "@ramble/server-schemas"
+import { clusterSchema, userSchema } from "@ramble/server-schemas"
 import {
   createAuthToken,
   deleteObject,
@@ -13,13 +14,14 @@ import {
 } from "@ramble/server-services"
 import { userInterestFields } from "@ramble/shared"
 
+import type { User } from "@ramble/database/types"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const userRouter = createTRPCRouter({
   me: publicProcedure.query(({ ctx }) => ctx.user),
   profile: publicProcedure.input(userSchema.pick({ username: true })).query(async ({ ctx, input }) => {
     const user = await ctx.prisma.user.findUnique({
-      where: { username: input.username },
+      where: { username: input.username, deletedAt: null },
       select: {
         id: true,
         username: true,
@@ -49,7 +51,7 @@ export const userRouter = createTRPCRouter({
     const spot = await ctx.prisma.spot.findFirst({ where: { creatorId: ctx.user.id }, select: { id: true } })
     return !!spot
   }),
-  update: protectedProcedure.input(updateUserSchema).mutation(async ({ ctx, input }) => {
+  update: protectedProcedure.input(userSchema.partial()).mutation(async ({ ctx, input }) => {
     if (input.username && input.username !== ctx.user.username) {
       const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })
       if (user) throw new TRPCError({ code: "BAD_REQUEST", message: "Username already taken" })
@@ -64,43 +66,48 @@ export const userRouter = createTRPCRouter({
     return user
   }),
   followers: publicProcedure.input(userSchema.pick({ username: true })).query(async ({ ctx, input }) => {
-    const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })
+    const user = await ctx.prisma.user.findUnique({ where: { username: input.username, deletedAt: null } })
     if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
     return ctx.prisma.user.findUnique({ where: { username: input.username } }).followers({
       select: { id: true, username: true, firstName: true, lastName: true, avatar: true, avatarBlurHash: true },
     })
   }),
   following: publicProcedure.input(userSchema.pick({ username: true })).query(async ({ ctx, input }) => {
-    const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })
+    const user = await ctx.prisma.user.findUnique({ where: { username: input.username, deletedAt: null } })
     if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
     return ctx.prisma.user.findUnique({ where: { username: input.username } }).following({
       select: { id: true, username: true, firstName: true, lastName: true, avatar: true, avatarBlurHash: true },
     })
   }),
-  clusters: protectedProcedure.input(clusterSchema.optional()).query(async ({ ctx, input: coords }) => {
+  clusters: publicProcedure.input(clusterSchema.optional()).query(async ({ ctx, input: coords }) => {
     if (!coords) return []
     const users = await ctx.prisma.user.findMany({
       where: {
+        deletedAt: null,
         isLocationPrivate: false,
+        updatedAt: { gt: dayjs().subtract(1, "month").toDate() },
         latitude: { not: null, gt: coords.minLat, lt: coords.maxLat },
         longitude: { not: null, gt: coords.minLng, lt: coords.maxLng },
       },
       select: { id: true, username: true, avatar: true, avatarBlurHash: true, longitude: true, latitude: true },
     })
-    const supercluster = new Supercluster<{ id: string; cluster: false }, { cluster: true }>({
+    const supercluster = new Supercluster<
+      { cluster: false } & Pick<User, "id" | "avatar" | "avatarBlurHash" | "username">,
+      { cluster: true }
+    >({
       maxZoom: 16,
       radius: 50,
     })
     const clustersData = supercluster.load(
-      users.map((user) => ({
+      users.map((user, i) => ({
         type: "Feature",
         geometry: { type: "Point", coordinates: [user.longitude!, user.latitude!] },
         properties: {
           cluster: false,
           id: user.id,
-          username: user.username,
-          avatar: user.avatar,
-          avatarBlurHash: user.avatarBlurHash,
+          username: ctx.user ? user.username : `User ${i + 1}`,
+          avatar: ctx.user ? user.avatar : null,
+          avatarBlurHash: ctx.user ? user.avatarBlurHash : null,
         },
       })),
     )
@@ -112,6 +119,7 @@ export const userRouter = createTRPCRouter({
         : c.properties,
     }))
   }),
+
   sendVerificationEmail: protectedProcedure.mutation(async ({ ctx }) => {
     const token = createAuthToken({ id: ctx.user.id })
     await sendAccountVerificationEmail(ctx.user, token)
@@ -134,17 +142,28 @@ export const userRouter = createTRPCRouter({
     return true
   }),
   deleteAccount: protectedProcedure.mutation(async ({ ctx }) => {
+    const today = dayjs().format("YYYY-MM-DD")
+    await ctx.prisma.user.update({
+      where: { id: ctx.user.id },
+      data: {
+        deletedAt: new Date(),
+        firstName: "Deleted",
+        lastName: "User",
+        email: `${today}-${ctx.user.email}`,
+        bio: "",
+        instagram: "",
+        avatar: null,
+        latitude: null,
+        longitude: null,
+      },
+    })
+    if (ctx.user.avatar) await deleteObject(ctx.user.avatar)
     void sendSlackMessage(`😭 User @${ctx.user.username} deleted their account.`)
-    const myCodes = await ctx.prisma.inviteCode.findMany({ where: { ownerId: { equals: ctx.user.id } } })
-    await ctx.prisma.$transaction([
-      ctx.prisma.inviteCode.deleteMany({ where: { id: { in: myCodes.map((c) => c.id) } } }),
-      ctx.prisma.user.delete({ where: { id: ctx.user.id } }),
-    ])
     return true
   }),
   guides: protectedProcedure.input(z.object({ skip: z.number() })).query(async ({ ctx, input }) => {
     return ctx.prisma.user.findMany({
-      where: { role: "GUIDE" },
+      where: { role: "GUIDE", deletedAt: null },
       skip: input.skip,
       take: 12,
       orderBy: { createdAt: "desc" },
@@ -158,8 +177,12 @@ export const userRouter = createTRPCRouter({
         _count: {
           select: {
             followers: true,
+            /**
+             * @deprecated in v1.4.11 use trips now
+             */
             lists: { where: { isPrivate: false } },
-            verifiedSpots: { where: { sourceUrl: { equals: null }, deletedAt: null } },
+            createdTrips: true,
+            verifiedSpots: { where: { sourceUrl: { equals: null }, deletedAt: null, verifiedAt: { not: null } } },
           },
         },
       },

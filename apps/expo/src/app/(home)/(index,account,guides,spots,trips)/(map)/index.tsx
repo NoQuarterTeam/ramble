@@ -183,7 +183,7 @@ function MapContainer() {
                 activeOpacity={0.7}
                 onPress={onPress}
                 className={join(
-                  "flex items-center justify-center rounded-full border border-purple-100 bg-purple-700",
+                  "flex items-center justify-center rounded-full border border-primary-100 bg-primary-700",
                   point.properties.point_count > 150
                     ? "sq-20"
                     : point.properties.point_count > 75
@@ -214,7 +214,7 @@ function MapContainer() {
                 increment()
                 router.push(`/(home)/(index)/${user.username}/(profile)`)
               }}
-              className="sq-8 flex items-center justify-center overflow-hidden rounded-full border border-purple-100 bg-purple-500"
+              className="sq-8 flex items-center justify-center overflow-hidden rounded-full border border-primary-200 bg-primary-700"
             >
               {user.avatar ? (
                 <OptimizedImage

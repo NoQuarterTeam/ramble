@@ -22,15 +22,19 @@ import * as SplashScreen from "expo-splash-screen"
 import { StatusBar } from "expo-status-bar"
 import { PostHogProvider, usePostHog } from "posthog-react-native"
 import * as React from "react"
-import { useColorScheme } from "react-native"
+import { AppState, type AppStateStatus, Text, View, useColorScheme } from "react-native"
 import { AvoidSoftInput } from "react-native-avoid-softinput"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { enableScreens } from "react-native-screens"
+import { UnsupportedVersion } from "~/components/UnsupportedVersion"
 
+import NetInfo from "@react-native-community/netinfo"
+import Animated, { SlideInUp, SlideOutUp } from "react-native-reanimated"
+import { Spinner } from "~/components/ui/Spinner"
 import { Toast } from "~/components/ui/Toast"
 import { TRPCProvider, api } from "~/lib/api"
-import { IS_DEV, IS_PRODUCTION } from "~/lib/config"
+import { IS_DEV, IS_PRODUCTION, VERSION } from "~/lib/config"
 import { useCheckExpoUpdates } from "~/lib/hooks/useCheckExpoUpdates"
 import { useMe } from "~/lib/hooks/useMe"
 import { useBackgroundColor } from "~/lib/tailwind"
@@ -87,57 +91,76 @@ export default function RootLayout() {
         options={{ host: "https://eu.posthog.com", disabled: !IS_PRODUCTION }}
       >
         <ActionSheetProvider>
-          <PrefetchTabs>
-            <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
-              <SafeAreaProvider>
-                <TrackScreens />
-                <IdentifyUser />
-                <Stack initialRouteName="(home)" screenOptions={{ headerShown: false, contentStyle: { backgroundColor } }}>
-                  <Stack.Screen name="(home)" />
-                  <Stack.Screen name="onboarding" />
-                  <Stack.Screen name="(auth)" options={{ presentation: "modal" }} />
-                  <Stack.Screen name="new" options={{ presentation: "modal" }} />
-                  <Stack.Screen name="spot" options={{ presentation: "modal" }} />
-                  <Stack.Screen name="filters" options={{ presentation: "modal" }} />
-                </Stack>
-                <Toast />
-                <StatusBar style={isDark ? "light" : "dark"} />
-              </SafeAreaProvider>
-            </GestureHandlerRootView>
-          </PrefetchTabs>
+          <CheckSupportedVersion>
+            <PrefetchTabs>
+              <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
+                <SafeAreaProvider>
+                  <TrackScreens />
+                  <IdentifyUser />
+                  <Stack initialRouteName="(home)" screenOptions={{ headerShown: false, contentStyle: { backgroundColor } }}>
+                    <Stack.Screen name="(home)" />
+                    <Stack.Screen name="onboarding" />
+                    <Stack.Screen name="(auth)" options={{ presentation: "modal" }} />
+                    <Stack.Screen name="new" options={{ presentation: "modal" }} />
+                    <Stack.Screen name="spot" options={{ presentation: "modal" }} />
+                    <Stack.Screen name="filters" options={{ presentation: "modal" }} />
+                  </Stack>
+                  <Toast />
+                  <CheckNetwork />
+                  <StatusBar style={isDark ? "light" : "dark"} />
+                </SafeAreaProvider>
+              </GestureHandlerRootView>
+            </PrefetchTabs>
+          </CheckSupportedVersion>
         </ActionSheetProvider>
       </PostHogProvider>
     </TRPCProvider>
   )
 }
 
-// function CheckAPIVersion(props: { children: React.ReactNode }) {
-//   const { data, isLoading } = api.version.latest.useQuery()
+function CheckNetwork() {
+  const [isConnected, setIsConnected] = React.useState(true)
+  React.useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      setIsConnected(state.isConnected || false)
+    })
+    return () => unsubscribe()
+  }, [])
 
-//   if (isLoading) return null
-//   if (data !== VERSION)
-//     return (
-//       <View className="flex-1 bg-background dark:bg-background-dark p-6 flex items-center justify-center">
-//         <Image source={require("../../assets/adaptive-icon.png")} style={{ width: 100, height: 100 }} />
-//         <Text className="text-center pb-4 text-xl">
-//           You are using an outdated version of Ramble. Please update to the latest version to get the best experience.
-//         </Text>
-//         <Button
-//           size="sm"
-//           onPress={() =>
-//             Linking.openURL(
-//               isAndroid
-//                 ? "https://play.google.com/store/apps/details?id=co.noquarter.ramble"
-//                 : "https://apps.apple.com/app/ramble-van-travel-app/id6468265289?l=en-GB",
-//             )
-//           }
-//         >
-//           Update now
-//         </Button>
-//       </View>
-//     )
-//   return <>{props.children}</>
-// }
+  if (isConnected) return null
+  return (
+    <Animated.View entering={SlideInUp.duration(500)} exiting={SlideOutUp.duration(500)} className="absolute top-14 z-10 w-full">
+      <View className="bg-red-500 px-4 py-3 flex flex-row items-center justify-center rounded-full mx-auto">
+        <Text className="text-white">No internet connection</Text>
+      </View>
+    </Animated.View>
+  )
+}
+
+function CheckSupportedVersion(props: { children: React.ReactNode }) {
+  const { data, isLoading, refetch } = api.version.isSupported.useQuery({ version: VERSION! })
+  const appState = React.useRef(AppState.currentState)
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: allow
+  const handleAppStateChange = React.useCallback((nextAppState: AppStateStatus) => {
+    const isBackground = appState.current === "background"
+    if (isBackground && nextAppState === "active") {
+      refetch()
+    }
+    appState.current = nextAppState
+  }, [])
+
+  React.useEffect(() => {
+    const subscription = AppState.addEventListener("change", handleAppStateChange)
+    return () => {
+      subscription.remove()
+    }
+  }, [handleAppStateChange])
+
+  if (isLoading) return null
+  if (data === false) return <UnsupportedVersion />
+  return <>{props.children}</>
+}
 
 function PrefetchTabs(props: { children: React.ReactNode }) {
   const { me, isLoading, error } = useMe()

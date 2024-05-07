@@ -1,3 +1,4 @@
+import { Image } from "expo-image"
 import { useRouter } from "expo-router"
 import { Heart, Route, Star, X } from "lucide-react-native"
 import * as React from "react"
@@ -33,6 +34,7 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
     void utils.spot.detail.prefetch({ id: spot.id })
   }, [spot])
 
+  const weatherData = spot?.weather
   const backgroundColor = useBackgroundColor()
   const increment = useFeedbackActivity((s) => s.increment)
   const handleGoToSpot = () => {
@@ -55,14 +57,25 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
         <Text>Spot not found</Text>
       ) : (
         <View className="space-y-2">
-          <TouchableOpacity onPress={handleGoToSpot} activeOpacity={0.9}>
+          <TouchableOpacity onPress={handleGoToSpot} activeOpacity={0.9} className="flex flex-row space-x-4">
             <SpotTypeBadge spot={spot} />
+            {weatherData && (
+              <View className="flex flex-row items-center">
+                <Text>{Math.round(weatherData.temp)}°C</Text>
+                <Image
+                  style={{ width: 35, height: 35 }}
+                  source={{ uri: `https://openweathermap.org/img/wn/${weatherData.icon}@2x.png` }}
+                />
+              </View>
+            )}
           </TouchableOpacity>
 
           <TouchableOpacity onPress={handleGoToSpot} activeOpacity={0.7} className="flex flex-row items-center space-x-2">
-            <Text numberOfLines={1} className="text-lg leading-6">
-              {spot.name}
-            </Text>
+            <View className="flex flex-row justify-between w-full items-center">
+              <Text numberOfLines={1} className="text-lg leading-6">
+                {spot.name}
+              </Text>
+            </View>
           </TouchableOpacity>
           <View className="flex flex-row items-center justify-between">
             <View className="flex flex-row items-center space-x-2">
@@ -116,7 +129,7 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
 
           <View className="overflow-hidden rounded-xs">
             <SpotImageCarousel
-              canAddMore
+              canAddMore={!isPartnerSpot(spot)}
               onPress={handleGoToSpot}
               key={spot.id} // so images reload
               spot={spot}
@@ -126,7 +139,7 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
               images={spot.images}
             />
           </View>
-          <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <CreatorCard creator={spot.creator} />}</View>
+          <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <CreatorCard spot={spot} />}</View>
         </View>
       )}
 

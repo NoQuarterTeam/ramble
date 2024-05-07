@@ -10,6 +10,7 @@ import {
   ShapeSource,
   StyleURL,
 } from "@rnmapbox/maps"
+import * as Sentry from "@sentry/react-native"
 import dayjs from "dayjs"
 import * as Haptics from "expo-haptics"
 import { Image } from "expo-image"
@@ -285,16 +286,15 @@ export default function TripDetailScreen() {
                   <Icon icon={ImageIcon} size={16} />
                 </TouchableOpacity>
               </Link>
-              {trip.creatorId === me.id && (
-                <Link push href={`/${tab}/trips/${id}/users`} asChild>
-                  <TouchableOpacity
-                    className="sq-10 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
-                    activeOpacity={0.8}
-                  >
-                    <Icon icon={Users} size={16} />
-                  </TouchableOpacity>
-                </Link>
-              )}
+
+              <Link push href={`/${tab}/trips/${id}/users`} asChild>
+                <TouchableOpacity
+                  className="sq-10 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
+                  activeOpacity={0.8}
+                >
+                  <Icon icon={Users} size={16} />
+                </TouchableOpacity>
+              </Link>
               <Link push href={`/${tab}/trips/${id}/edit`} asChild>
                 <TouchableOpacity
                   className="sq-10 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
@@ -420,7 +420,8 @@ function TripImageSync({
             }
             mediaToSync.push(mediaWithData)
           } catch (error) {
-            console.log(error)
+            toast({ title: "Error syncing media", type: "error" })
+            Sentry.captureException(error)
           }
         }
         if (mediaToSync.length === 0) return
@@ -435,12 +436,13 @@ function TripImageSync({
             const payload = { path, thumbnailPath, ...media }
             uploadMedia({ tripId: id, image: payload })
           } catch (error) {
-            console.log(error)
+            toast({ title: "Error syncing media", type: "error" })
+            Sentry.captureException(error)
           }
         }
         onDone()
       } catch (error) {
-        console.log(error)
+        Sentry.captureException(error)
         toast({ title: "Error syncing media", type: "error" })
       } finally {
         setIsSyncing(false)
@@ -523,7 +525,7 @@ function TripList({
       contentContainerStyle={{ paddingRight: 60, paddingLeft: 12 }}
       data={tripItems}
       autoscrollThreshold={1}
-      autoscrollSpeed={100}
+      autoscrollSpeed={50}
       showsHorizontalScrollIndicator={false}
       keyExtractor={(item) => item.id}
       renderItem={(props) => {
@@ -696,7 +698,7 @@ function ListHeader({ trip }: { trip: RouterOutputs["trip"]["detail"]["trip"] })
     <View className="flex h-full items-center justify-center">
       <View
         style={{ width: HEADER_FOOTER_WIDTH, height: HEADER_FOOTER_WIDTH }}
-        className="flex items-center justify-center space-y-2 rounded-full border border-primary bg-background p-2 dark:bg-background-dark"
+        className="flex items-center justify-center space-y-2 rounded-full shadow bg-background p-2 dark:bg-background-dark"
       >
         <Icon icon={Home} size={16} />
         <Text className="text-xxs">{dayjs(trip.startDate).format("D MMM YY")}</Text>
@@ -720,7 +722,7 @@ function ListFooter({ trip }: { trip: RouterOutputs["trip"]["detail"]["trip"] })
       <View className="flex h-full items-center justify-center">
         <View
           style={{ width: HEADER_FOOTER_WIDTH, height: HEADER_FOOTER_WIDTH }}
-          className="flex items-center justify-center space-y-2 rounded-full border border-primary bg-background p-2 dark:bg-background-dark"
+          className="flex items-center justify-center space-y-2 rounded-full shadow bg-background p-2 dark:bg-background-dark"
         >
           <Icon icon={Flag} size={16} />
           <Text className="text-xxs">{dayjs(trip.endDate).format("D MMM YY")}</Text>
@@ -739,7 +741,10 @@ function AddTripItemMenu({ order, children }: { order?: number; children: React.
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>{children}</DropdownMenu.Trigger>
       <DropdownMenu.Content>
-        <DropdownMenu.Item key="add-stop" onSelect={() => router.push(`/(home)/(trips)/trips/${id}/add-location?order=${order}`)}>
+        <DropdownMenu.Item
+          key="add-stop"
+          onSelect={() => router.push(`/(home)/(trips)/trips/${id}/add-location?order=${order || 0}`)}
+        >
           <DropdownMenu.ItemIcon ios={{ name: "mappin.and.ellipse", pointSize: 10, scale: "large" }} />
           <DropdownMenu.ItemTitle>Add location</DropdownMenu.ItemTitle>
         </DropdownMenu.Item>

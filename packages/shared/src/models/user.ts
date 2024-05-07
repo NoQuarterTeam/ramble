@@ -5,5 +5,6 @@ export const userInterestFields = {
   isHiker: true,
   isMountainBiker: true,
   isPetOwner: true,
+  isYogi: true,
   isPaddleBoarder: true,
 } satisfies Prisma.UserSelect

@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { useRouter } from "expo-router"
+import { useLocalSearchParams, useRouter } from "expo-router"
 import { usePostHog } from "posthog-react-native"
 import { FormProvider } from "react-hook-form"
 import { ScrollView, View } from "react-native"
@@ -16,6 +16,8 @@ import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
 
 export default function RegisterScreen() {
   useKeyboardController()
+  const { code, email } = useLocalSearchParams<{ code?: string; email?: string }>()
+
   const queryClient = api.useUtils()
   const navigation = useRouter()
   const posthog = usePostHog()
@@ -28,7 +30,7 @@ export default function RegisterScreen() {
     },
   })
   const form = useForm({
-    defaultValues: { code: "", email: "", password: "", username: "", firstName: "", lastName: "" },
+    defaultValues: { code: code || "", email: email || "", password: "", username: "", firstName: "", lastName: "" },
   })
 
   const onSubmit = form.handleSubmit(async (data) => {

@@ -9,8 +9,8 @@ export const tripUsersRouter = createTRPCRouter({
       select: {
         id: true,
         name: true,
+        creatorId: true,
         users: {
-          where: { id: { not: { equals: ctx.user.id } } },
           select: { id: true, username: true, firstName: true, lastName: true, avatar: true, avatarBlurHash: true },
         },
       },

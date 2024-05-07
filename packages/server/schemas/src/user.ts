@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { FormBoolean, NullableFormNumber, NullableFormString } from "./utils/form"
+import { NullableFormString } from "./utils/form"
 
 export const userSchema = z.object({
   firstName: z.string().min(2),
@@ -10,7 +10,7 @@ export const userSchema = z.object({
     .email()
     .min(2)
     .transform((e) => e.toLowerCase().trim()),
-  password: z.string().min(2),
+  password: z.string().min(8),
   username: z
     .string()
     .min(2)
@@ -20,20 +20,20 @@ export const userSchema = z.object({
   bio: NullableFormString,
   instagram: NullableFormString,
   avatar: NullableFormString,
-  isClimber: FormBoolean,
-  isSurfer: FormBoolean,
-  isPaddleBoarder: FormBoolean,
-  isHiker: FormBoolean,
-  isPetOwner: FormBoolean,
-  isLocationPrivate: FormBoolean,
-  isMountainBiker: FormBoolean,
-  latitude: NullableFormNumber,
-  longitude: NullableFormNumber,
-  tripSyncEnabled: FormBoolean,
-  tripSyncOnNetworkEnabled: FormBoolean,
+  isClimber: z.boolean().optional(),
+  isSurfer: z.boolean().optional(),
+  isPaddleBoarder: z.boolean().optional(),
+  isHiker: z.boolean().optional(),
+  isPetOwner: z.boolean().optional(),
+  isLocationPrivate: z.boolean().optional(),
+  isMountainBiker: z.boolean().optional(),
+  isYogi: z.boolean().optional(),
+  latitude: z.number().nullish(),
+  longitude: z.number().nullish(),
+  tripSyncEnabled: z.boolean().optional(),
+  tripSyncOnNetworkEnabled: z.boolean().optional(),
 })
-export const updateUserSchema = userSchema.partial()
-export const loginSchema = userSchema.pick({ email: true, password: true })
+
 export const registerSchema = userSchema
   .pick({ email: true, password: true, username: true, firstName: true, lastName: true })
   .extend({ code: z.string().transform((e) => e.toUpperCase().trim()) })

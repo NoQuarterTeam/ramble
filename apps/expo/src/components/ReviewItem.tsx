@@ -83,7 +83,7 @@ export function ReviewItem({
             <Text>
               {review.user.firstName} {review.user.lastName}
             </Text>
-            <Text className="text-sm opacity-70">{dayjs(review.createdAt).format("DD/MM/YYYY")}</Text>
+            <Text className="text-xs leading-4 opacity-70">{dayjs(review.createdAt).format("DD/MM/YYYY")}</Text>
           </View>
         </TouchableOpacity>
 
@@ -93,20 +93,27 @@ export function ReviewItem({
         </View>
       </View>
 
-      <Text>{(isTranslated && me && data) || review.description}</Text>
+      {review.description && <Text>{(isTranslated && me && data) || review.description}</Text>}
       {error && <Text className="text-sm">Error translating description</Text>}
 
       {me ? (
         me.id === review.user.id ? (
           <View className="flex flex-row space-x-1">
             <Button
-              size="sm"
+              size="xs"
+              className="w-[60px]"
               variant="secondary"
               onPress={() => router.push(`/${tab}/spot/${review.spotId}/reviews/${review.id}/`)}
             >
               Edit
             </Button>
-            <Button size="sm" isLoading={deleteLoading} variant="destructive" onPress={() => deleteReview({ id: review.id })}>
+            <Button
+              className="w-[60px]"
+              size="xs"
+              isLoading={deleteLoading}
+              variant="destructive"
+              onPress={() => deleteReview({ id: review.id })}
+            >
               Delete
             </Button>
           </View>
@@ -117,8 +124,8 @@ export function ReviewItem({
                 onPress={() => setIsTranslated((t) => !t)}
                 isLoading={isInitialLoading}
                 variant="ghost"
-                size="sm"
-                className="h-8 px-0"
+                size="xs"
+                className="px-0 h-4"
               >
                 {isTranslated ? "See original" : "See translation"}
               </Button>

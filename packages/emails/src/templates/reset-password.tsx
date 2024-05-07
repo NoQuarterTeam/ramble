@@ -14,10 +14,10 @@ export function ResetPasswordContent(props: Props) {
       <p className="mb-4">
         Someone recently requested a password change for your Ramble account. If this was you, you can set a new password here:
       </p>
-      <Button className="mb-4" href={props.link}>
-        Reset password
-      </Button>
-      <p>If you don't want to change your password or didn't request this, just ignore and delete this message.</p>
+      <Button href={props.link}>Reset password</Button>
+      <p className="mt-4">
+        If you don't want to change your password or didn't request this, just ignore and delete this message.
+      </p>
     </EmailWrapper>
   )
 }

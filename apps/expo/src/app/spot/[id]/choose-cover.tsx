@@ -51,7 +51,7 @@ function ImageList({ spot }: { spot: NonNullable<RouterOutputs["spot"]["images"]
         showsVerticalScrollIndicator={false}
         estimatedItemSize={120}
         numColumns={2}
-        ListEmptyComponent={<Text>No lists yet</Text>}
+        ListEmptyComponent={<Text>No images yet</Text>}
         data={spot?.images || []}
         extraData={coverId}
         ItemSeparatorComponent={() => <View className="h-2" />}

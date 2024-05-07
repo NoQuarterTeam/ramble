@@ -1,4 +1,4 @@
-import { Link, useLocalSearchParams } from "expo-router"
+import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import { Trash, User2 } from "lucide-react-native"
 import { ActivityIndicator, Alert, ScrollView, TouchableOpacity, View } from "react-native"
 
@@ -10,11 +10,37 @@ import { ModalView } from "~/components/ui/ModalView"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { Text } from "~/components/ui/Text"
 import { type RouterOutputs, api } from "~/lib/api"
+import { useMe } from "~/lib/hooks/useMe"
 
 export default function TripUsers() {
   const { id } = useLocalSearchParams<{ id: string }>()
   const { data, isLoading } = api.trip.usersV2.all.useQuery({ tripId: id }, { enabled: !!id })
   const users = data?.users
+  const { me } = useMe()
+  const isCreator = me?.id === data?.creatorId
+  const router = useRouter()
+  const utils = api.useUtils()
+  const { mutate } = api.trip.usersV2.remove.useMutation({
+    onSuccess: () => {
+      router.back()
+      router.back()
+      void utils.trip.mine.refetch()
+    },
+  })
+
+  const handleRemove = () => {
+    if (!me || !id) return
+    Alert.alert("Leave trip", "Are you sure you want to be removed from this trip?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Remove",
+        style: "destructive",
+        onPress: () => {
+          mutate({ tripId: id, userId: me.id })
+        },
+      },
+    ])
+  }
 
   return (
     <ModalView title="users on trip">
@@ -28,32 +54,43 @@ export default function TripUsers() {
         ) : (
           <>
             {users.map((user) => (
-              <UserItem key={user.id} user={user} />
+              <UserItem key={user.id} user={user} trip={data} />
             ))}
           </>
         )}
-        <Link asChild push href={`/(home)/(trips)/trips/${id}/users/add`}>
-          <Button size="sm" variant="secondary">
-            Add users
+        {isCreator ? (
+          <Link asChild push href={`/(home)/(trips)/trips/${id}/users/add`}>
+            <Button size="sm" variant="secondary">
+              Add users
+            </Button>
+          </Link>
+        ) : (
+          <Button size="sm" variant="secondary" onPress={handleRemove}>
+            Leave trip
           </Button>
-        </Link>
+        )}
       </ScrollView>
     </ModalView>
   )
 }
 
-function UserItem({ user }: { user: RouterOutputs["trip"]["usersV2"]["all"]["users"][number] }) {
-  const { id } = useLocalSearchParams<{ id: string }>()
+function UserItem({
+  user,
+  trip,
+}: { trip: RouterOutputs["trip"]["usersV2"]["all"]; user: RouterOutputs["trip"]["usersV2"]["all"]["users"][number] }) {
+  const { me } = useMe()
+
+  const isCreator = user.id === trip.creatorId
   const utils = api.useUtils()
   const { mutate, isLoading } = api.trip.usersV2.remove.useMutation({
     onMutate: () => {
-      utils.trip.usersV2.all.setData({ tripId: id }, (prev) => {
+      utils.trip.usersV2.all.setData({ tripId: trip.id }, (prev) => {
         if (!prev) return prev
         return { ...prev, users: prev.users.filter((u) => u.id !== user.id) }
       })
     },
     onSuccess: () => {
-      void utils.trip.usersV2.all.refetch({ tripId: id })
+      void utils.trip.usersV2.all.refetch({ tripId: trip.id })
     },
   })
 
@@ -64,7 +101,7 @@ function UserItem({ user }: { user: RouterOutputs["trip"]["usersV2"]["all"]["use
         text: "Remove",
         style: "destructive",
         onPress: () => {
-          mutate({ tripId: id, userId: user.id })
+          mutate({ tripId: trip.id, userId: user.id })
         },
       },
     ])
@@ -72,7 +109,7 @@ function UserItem({ user }: { user: RouterOutputs["trip"]["usersV2"]["all"]["use
   return (
     <TouchableOpacity
       activeOpacity={0.6}
-      disabled={isLoading}
+      disabled={isLoading || me?.id !== trip.creatorId || isCreator}
       className={join("flex flex-row items-center justify-between pb-2", isLoading && "opacity-60")}
       onPress={handleRemove}
     >
@@ -97,7 +134,7 @@ function UserItem({ user }: { user: RouterOutputs["trip"]["usersV2"]["all"]["use
           </Text>
         </View>
       </View>
-      {isLoading ? <ActivityIndicator /> : <Icon icon={Trash} size={16} />}
+      {me?.id !== trip.creatorId || isCreator ? null : isLoading ? <ActivityIndicator /> : <Icon icon={Trash} size={16} />}
     </TouchableOpacity>
   )
 }

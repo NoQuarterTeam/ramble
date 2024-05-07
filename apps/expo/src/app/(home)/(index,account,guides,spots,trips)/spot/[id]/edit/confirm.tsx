@@ -58,6 +58,7 @@ export default function EditSpotConfirmScreen() {
   const [upload] = useS3Upload()
   const amenities = params.amenities ? JSON.parse(params.amenities) : null
 
+  const isPetFriendly = params.isPetFriendly === "true"
   const handleCreateSpot = async () => {
     // upload images
     setLoading(true)
@@ -77,7 +78,7 @@ export default function EditSpotConfirmScreen() {
       type: params.type,
       images: [...newImageKeys, ...existingImages].map((i) => ({ path: i })),
       amenities,
-      isPetFriendly: params.isPetFriendly,
+      isPetFriendly,
     })
   }
 
@@ -104,7 +105,7 @@ export default function EditSpotConfirmScreen() {
           )}
 
           <Text>{params.description}</Text>
-          {params.isPetFriendly && (
+          {isPetFriendly && (
             <View className="flex flex-row items-center space-x-2">
               <Icon icon={Dog} size={20} />
               <Text>Pet friendly</Text>
