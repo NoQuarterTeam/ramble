@@ -462,8 +462,8 @@ importers:
         specifier: 10.45.2
         version: 10.45.2
       '@turf/bbox':
-        specifier: 7.0.0-alpha.115
-        version: 7.0.0-alpha.115
+        specifier: 7.0.0-alpha.116
+        version: 7.0.0-alpha.116
       '@turf/center':
         specifier: 7.0.0-alpha.115
         version: 7.0.0-alpha.115
@@ -7180,11 +7180,11 @@ packages:
       '@turf/meta': 6.5.0
     dev: false
 
-  /@turf/bbox@7.0.0-alpha.115:
-    resolution: {integrity: sha512-c2EANPh1X5tesS9lQ3A1a2OeFF6ATkXwIjmMOAS6yqg0tCio8wmB3XSk8qT6oePM2IncKhGXSOldeSO/7wWtBw==}
+  /@turf/bbox@7.0.0-alpha.116:
+    resolution: {integrity: sha512-ad87qitlt9LLDMxI5v55plaGZPvR0WCnM9V9nRVFfrzLo9d56gvQfC/7mZBb9k1JlYz9hB2p2M9L3rklLi392w==}
     dependencies:
-      '@turf/helpers': 7.0.0-alpha.115
-      '@turf/meta': 7.0.0-alpha.115
+      '@turf/helpers': 7.0.0-alpha.116
+      '@turf/meta': 7.0.0-alpha.116
       tslib: 2.6.2
     dev: false
 
@@ -7198,7 +7198,7 @@ packages:
   /@turf/center@7.0.0-alpha.115:
     resolution: {integrity: sha512-+Ap6VH2eYZ17wQJrI5QChEtRj7jz+dh57DWLkdkb9Y3ppsgHigCWexdklvhW9vggkNSeWIynUJ8yEBmCEDppow==}
     dependencies:
-      '@turf/bbox': 7.0.0-alpha.115
+      '@turf/bbox': 7.0.0-alpha.116
       '@turf/helpers': 7.0.0-alpha.115
       tslib: 2.6.2
     dev: false
@@ -7223,6 +7223,13 @@ packages:
 
   /@turf/helpers@7.0.0-alpha.115:
     resolution: {integrity: sha512-wXvGiDfDmpJThzsDtxmR9Mgv/rLNZmZe8a1n3S9PrNkUNbYO+6JKp6ZOeb7Erm1AZRsHvXN7SR8GKzToYugugA==}
+    dependencies:
+      deep-equal: 2.2.3
+      tslib: 2.6.2
+    dev: false
+
+  /@turf/helpers@7.0.0-alpha.116:
+    resolution: {integrity: sha512-lBgYicZrgX0s/TqTmE5AjsLSqEgI5dsNwBp6O9xaTNVBoPz/vIbaaB9R/sepCL5pLW1BHDWBswVSTUPYSoHCrQ==}
     dependencies:
       deep-equal: 2.2.3
       tslib: 2.6.2
@@ -7266,10 +7273,10 @@ packages:
       '@turf/helpers': 6.5.0
     dev: false
 
-  /@turf/meta@7.0.0-alpha.115:
-    resolution: {integrity: sha512-CQ9JhdX+gebdfE618aZuNRa0c+qYZxN8HbRpjVygpMcMtkj6WrYFTSGvFvUQuAk0922Luj+RGyZjS4mRhIsK3Q==}
+  /@turf/meta@7.0.0-alpha.116:
+    resolution: {integrity: sha512-wFOMWBN65Zhf8YcIiLMtd0mxv1lFRjeKeTNNzXSzNms46hcaOkQHvc3PhQR3mydB9HYPhDK0ivbFcJR6sGTl7Q==}
     dependencies:
-      '@turf/helpers': 7.0.0-alpha.115
+      '@turf/helpers': 7.0.0-alpha.116
     dev: false
 
   /@turf/nearest-point-on-line@6.5.0:
