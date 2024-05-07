@@ -468,8 +468,8 @@ importers:
         specifier: 7.0.0-alpha.116
         version: 7.0.0-alpha.116
       '@turf/helpers':
-        specifier: 7.0.0-alpha.115
-        version: 7.0.0-alpha.115
+        specifier: 7.0.0-alpha.116
+        version: 7.0.0-alpha.116
       dayjs:
         specifier: 1.11.11
         version: 1.11.11
@@ -7219,13 +7219,6 @@ packages:
 
   /@turf/helpers@6.5.0:
     resolution: {integrity: sha512-VbI1dV5bLFzohYYdgqwikdMVpe7pJ9X3E+dlr425wa2/sMJqYDhTO++ec38/pcPvPE6oD9WEEeU3Xu3gza+VPw==}
-    dev: false
-
-  /@turf/helpers@7.0.0-alpha.115:
-    resolution: {integrity: sha512-wXvGiDfDmpJThzsDtxmR9Mgv/rLNZmZe8a1n3S9PrNkUNbYO+6JKp6ZOeb7Erm1AZRsHvXN7SR8GKzToYugugA==}
-    dependencies:
-      deep-equal: 2.2.3
-      tslib: 2.6.2
     dev: false
 
   /@turf/helpers@7.0.0-alpha.116:
