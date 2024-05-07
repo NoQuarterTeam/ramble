@@ -5,7 +5,6 @@ import { FormProvider } from "react-hook-form"
 import { ScrollView, View } from "react-native"
 
 import { Button } from "~/components/ui/Button"
-import { FormError } from "~/components/ui/FormError"
 import { FormInput } from "~/components/ui/FormInput"
 import { ModalView } from "~/components/ui/ModalView"
 import { toast } from "~/components/ui/Toast"

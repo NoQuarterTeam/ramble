@@ -1,10 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { useRouter } from "expo-router"
 import { FormProvider } from "react-hook-form"
-import { Linking, ScrollView, View } from "react-native"
+import { ScrollView, View } from "react-native"
 
 import { Button } from "~/components/ui/Button"
-import { FormError } from "~/components/ui/FormError"
 import { FormInput } from "~/components/ui/FormInput"
 import { ModalView } from "~/components/ui/ModalView"
 import { Text } from "~/components/ui/Text"

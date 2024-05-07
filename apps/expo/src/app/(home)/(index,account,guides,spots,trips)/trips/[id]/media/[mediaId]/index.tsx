@@ -15,9 +15,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-na
 import { createAssetUrl } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
-import { Button } from "~/components/ui/Button"
 import { ScreenView } from "~/components/ui/ScreenView"
-import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"

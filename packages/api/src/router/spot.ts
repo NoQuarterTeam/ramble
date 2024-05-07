@@ -10,8 +10,6 @@ import { FULL_WEB_URL } from "@ramble/server-env"
 import { clusterSchema, spotAmenitiesSchema, spotSchema, userSchema } from "@ramble/server-schemas"
 import {
   generateBlurHash,
-  geocodeAddress,
-  geocodeCoords,
   get5DayForecast,
   getCurrentWeather,
   publicSpotWhereClause,
