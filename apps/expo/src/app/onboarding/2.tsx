@@ -58,8 +58,8 @@ export default function OnboardingStep2Screen() {
 
   return (
     <SafeAreaView>
-      <View className="flex-1 px-4">
-        <ScrollView className="space-y-4" contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+      <View className="flex-1 px-4 pt-4">
+        <ScrollView className="space-y-2" contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
           <Heading className="text-2xl">What are you into?</Heading>
 
           <View>
@@ -105,7 +105,7 @@ function InterestSelector({
   icon: (props: IconProps) => JSX.Element
 }) {
   return (
-    <View className="flex w-full flex-row items-center justify-between p-4">
+    <View className="flex w-full flex-row items-center justify-between py-3 px-2">
       <View className="flex flex-row items-center space-x-2">
         <Icon icon={icon} className="sq-4" />
         <Text className="text-xl">{label}</Text>

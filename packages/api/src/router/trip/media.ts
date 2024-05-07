@@ -123,7 +123,7 @@ export const tripMediaRouter = createTRPCRouter({
         tripId: z.string(),
         media: tripMediaSchema.optional(),
         /**
-         * @deprecated in 1.4.11, delete soon
+         * @deprecated in 1.4.11, use media
          */
         image: tripMediaSchema.optional(),
       }),

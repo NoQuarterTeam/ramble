@@ -32,7 +32,7 @@ export default function OnboardingStep1Screen() {
 
   return (
     <SafeAreaView>
-      <View className="flex-1 px-4">
+      <View className="flex-1 px-4 pt-4">
         <FormProvider {...form}>
           <AvoidSoftInputView>
             <ScrollView
@@ -40,7 +40,7 @@ export default function OnboardingStep1Screen() {
               keyboardShouldPersistTaps="handled"
               keyboardDismissMode="interactive"
               showsVerticalScrollIndicator={false}
-              className="space-y-4"
+              className="space-y-2"
             >
               <Heading className="text-2xl">Tell us a bit about youself</Heading>
               <FormInput
