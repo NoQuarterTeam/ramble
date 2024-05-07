@@ -52,8 +52,8 @@ importers:
         specifier: 11.1.0
         version: 11.1.0(react-native@0.73.6)
       '@react-native-menu/menu':
-        specifier: 1.0.1
-        version: 1.0.1(react-native@0.73.6)(react@18.2.0)
+        specifier: 1.0.2
+        version: 1.0.2(react-native@0.73.6)(react@18.2.0)
       '@rnmapbox/maps':
         specifier: 10.1.21
         version: 10.1.21(expo@50.0.17)(react-native@0.73.6)(react@18.2.0)
@@ -221,7 +221,7 @@ importers:
         version: 2.2.1
       zeego:
         specifier: 1.10.0
-        version: 1.10.0(@react-native-menu/menu@1.0.1)(@types/react@18.3.1)(react-dom@18.2.0)(react-native-ios-context-menu@2.5.1)(react-native@0.73.6)(react@18.2.0)
+        version: 1.10.0(@react-native-menu/menu@1.0.2)(@types/react@18.3.1)(react-dom@18.2.0)(react-native-ios-context-menu@2.5.1)(react-native@0.73.6)(react@18.2.0)
       zod:
         specifier: 3.23.6
         version: 3.23.6
@@ -5618,8 +5618,8 @@ packages:
       react-native: 0.73.6(@babel/core@7.24.5)(@babel/preset-env@7.24.5)(react@18.2.0)
     dev: false
 
-  /@react-native-menu/menu@1.0.1(react-native@0.73.6)(react@18.2.0):
-    resolution: {integrity: sha512-NCGE0ktq481O9sxvKzoLAK27oyfcoJlOTQeTuXMxvaB56rjZm4T1pmPQGWdxhTQQ57Nf7+p6GVLwh0cT3+a5vw==}
+  /@react-native-menu/menu@1.0.2(react-native@0.73.6)(react@18.2.0):
+    resolution: {integrity: sha512-C0TSpjN8DUa9vkEhmY5BNsIyuh3Jf6nHXcNA2vy1quOCouKeUQ3B2jtO0Jb9CDdLw2I1NNbYCshdna0VJRSKBw==}
     peerDependencies:
       react: '*'
       react-native: '*'
@@ -15961,7 +15961,7 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
-  /zeego@1.10.0(@react-native-menu/menu@1.0.1)(@types/react@18.3.1)(react-dom@18.2.0)(react-native-ios-context-menu@2.5.1)(react-native@0.73.6)(react@18.2.0):
+  /zeego@1.10.0(@react-native-menu/menu@1.0.2)(@types/react@18.3.1)(react-dom@18.2.0)(react-native-ios-context-menu@2.5.1)(react-native@0.73.6)(react@18.2.0):
     resolution: {integrity: sha512-HrPv7DfyAubkp/NOy+Uwcb1rcS3DtkZEtNQFiSDduBoZt2EDf89+1N+aweACj1UnmGOOu+kk56WYiV9sliMpng==}
     peerDependencies:
       '@react-native-menu/menu': '*'
@@ -15971,7 +15971,7 @@ packages:
     dependencies:
       '@radix-ui/react-context-menu': 2.1.5(@types/react@18.3.1)(react-dom@18.2.0)(react@18.2.0)
       '@radix-ui/react-dropdown-menu': 2.0.6(@types/react-dom@18.3.0)(@types/react@18.3.1)(react-dom@18.2.0)(react@18.2.0)
-      '@react-native-menu/menu': 1.0.1(react-native@0.73.6)(react@18.2.0)
+      '@react-native-menu/menu': 1.0.2(react-native@0.73.6)(react@18.2.0)
       react: 18.2.0
       react-native: 0.73.6(@babel/core@7.24.5)(@babel/preset-env@7.24.5)(react@18.2.0)
       react-native-ios-context-menu: 2.5.1(expo@50.0.17)(react-native-ios-utilities@4.4.5)(react-native@0.73.6)(react@18.2.0)
