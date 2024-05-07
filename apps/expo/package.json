@@ -82,7 +82,7 @@
     "react-native-web": "0.19.10",
     "superjson": "2.2.1",
     "zeego": "1.10.0",
-    "zod": "3.23.6"
+    "zod": "3.23.7"
   },
   "devDependencies": {
     "@babel/core": "7.24.5",

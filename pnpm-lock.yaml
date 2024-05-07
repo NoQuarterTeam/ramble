@@ -223,8 +223,8 @@ importers:
         specifier: 1.10.0
         version: 1.10.0(@react-native-menu/menu@1.0.1)(@types/react@18.3.1)(react-dom@18.2.0)(react-native-ios-context-menu@2.5.1)(react-native@0.73.6)(react@18.2.0)
       zod:
-        specifier: 3.23.6
-        version: 3.23.6
+        specifier: 3.23.7
+        version: 3.23.7
     devDependencies:
       '@babel/core':
         specifier: 7.24.5
@@ -404,8 +404,8 @@ importers:
         specifier: 0.4.1
         version: 0.4.1(@types/react@18.3.1)(react@18.2.0)
       zod:
-        specifier: 3.23.6
-        version: 3.23.6
+        specifier: 3.23.7
+        version: 3.23.7
       zustand:
         specifier: ^4.4.7
         version: 4.5.2(@types/react@18.3.1)(react@18.2.0)
@@ -489,8 +489,8 @@ importers:
         specifier: 2.2.1
         version: 2.2.1
       zod:
-        specifier: 3.23.6
-        version: 3.23.6
+        specifier: 3.23.7
+        version: 3.23.7
     devDependencies:
       '@types/node':
         specifier: 20.12.10
@@ -577,8 +577,8 @@ importers:
   packages/server/env:
     dependencies:
       zod:
-        specifier: 3.23.6
-        version: 3.23.6
+        specifier: 3.23.7
+        version: 3.23.7
     devDependencies:
       '@types/node':
         specifier: 20.12.10
@@ -602,8 +602,8 @@ importers:
         specifier: 2.3.0
         version: 2.3.0
       zod:
-        specifier: 3.23.6
-        version: 3.23.6
+        specifier: 3.23.7
+        version: 3.23.7
     devDependencies:
       '@ramble/tailwind-config':
         specifier: workspace:*
@@ -726,8 +726,8 @@ importers:
         specifier: 0.32.6
         version: 0.32.6
       zod:
-        specifier: 3.23.6
-        version: 3.23.6
+        specifier: 3.23.7
+        version: 3.23.7
     devDependencies:
       '@types/bcryptjs':
         specifier: 2.4.6
@@ -16007,8 +16007,8 @@ packages:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
     dev: true
 
-  /zod@3.23.6:
-    resolution: {integrity: sha512-RTHJlZhsRbuA8Hmp/iNL7jnfc4nZishjsanDAfEY1QpDQZCahUp3xDzl+zfweE9BklxMUcgBgS1b7Lvie/ZVwA==}
+  /zod@3.23.7:
+    resolution: {integrity: sha512-NBeIoqbtOiUMomACV/y+V3Qfs9+Okr18vR5c/5pHClPpufWOrsx8TENboDPe265lFdfewX2yBtNTLPvnmCxwog==}
     dev: false
 
   /zustand@4.5.2(@types/react@18.3.1)(react@18.2.0):
