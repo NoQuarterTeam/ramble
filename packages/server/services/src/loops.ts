@@ -1,5 +1,5 @@
 import * as Sentry from "@sentry/nextjs"
-import LoopsClient from "loops"
+import { LoopsClient } from "loops"
 
 import type { Role } from "@ramble/database/types"
 import { IS_PRODUCTION, env } from "@ramble/server-env"
