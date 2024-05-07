@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 patchedDependencies:
   '@turf/bbox@6.5.0':
     hash: llmcs46qko6dssxqwpy2iedvzi
@@ -401,7 +397,7 @@ importers:
         version: 1.11.10
       isbot:
         specifier: latest
-        version: 3.7.1
+        version: 5.1.4
       jose:
         specifier: 5.2.3
         version: 5.2.3
@@ -678,6 +674,10 @@ importers:
         version: 5.4.3
 
   packages/server/scripts:
+    dependencies:
+      readline:
+        specifier: ^1.3.0
+        version: 1.3.0
     devDependencies:
       '@faker-js/faker':
         specifier: 8.4.1
@@ -11297,6 +11297,11 @@ packages:
     engines: {node: '>=12'}
     dev: false
 
+  /isbot@5.1.4:
+    resolution: {integrity: sha512-KuqD/TAG/qtgCDnO8Ab1v5rGRK3jl9hb+2KfJt+roIPE7R4Hiq99VinR0qrLGFptdUNIkClYjuXEpVTGkD9V/A==}
+    engines: {node: '>=18'}
+    dev: false
+
   /isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
 
@@ -17130,3 +17135,7 @@ packages:
 
   /zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false

@@ -2,11 +2,11 @@ import * as cheerio from "cheerio"
 
 const url = `https://campspace.com/en/campsites?viewport=-52.03125%2C34.30714385628804%2C80.85937500000001%2C68.49604022839505&location=Map+area&startDate=&endDate=&numberOfAdults=2&numberOfChildren=0&filter%5Baccommodations%5D%5B%5D=bring_motorhome&filter%5Baccommodations%5D%5B%5D=bring_minivan&page=`
 
-const pageCount = 50
+const pageCount = 51
 
 import { prisma } from "@ramble/database"
 import { convert } from "html-to-text"
-
+import { confirmDeleteSpots } from './helpers/utils'
 
 export type CampspaceSpot = {
   id: number
@@ -18,6 +18,7 @@ export type CampspaceSpot = {
   address?: string
   description?: string
 }
+
 
 async function getPageCards(currentPage: number) {
   const res = await fetch(url + currentPage)
@@ -38,14 +39,22 @@ async function getPageCards(currentPage: number) {
     spots.push({ id: parseInt(id), latitude: parseFloat(latitude), longitude: parseFloat(longitude), name, link })
   })
 
-  console.log(spots.length + " spots found")
+  console.log(spots.length + " spots found" + " on page " + currentPage)
 
   const currentData = await prisma.spot.findMany({
-    where: { campspaceId: { in: spots.map((s) => s.id) } },
+    where: { NOT: { campspaceId: null }},
   })
 
+  
   for (let index = 0; index < spots.length; index++) {
     const spot = spots[index]
+
+    const existingSpot = currentData.find((s) => s.campspaceId === spot.id)
+
+    if (existingSpot?.deletedAt) {
+      console.log("Spot already deleted: " + spot.link)
+      continue
+    }
 
     try {
       const spotDetail = await fetch(spot.link)
@@ -54,11 +63,17 @@ async function getPageCards(currentPage: number) {
       const $ = cheerio.load(spotDetailHtml)
 
       let images: string[] = []
+      $(".space-single-image .space-single-image--img").each((_, img) => {
+        const src = $(img).attr("src")
+        if (src) images.push(src.replace("teaser", "medium"))
+      })
+
       $(".space-images .space-images--img").each((_, img) => {
         const src = $(img).attr("src")
         if (src) images.push(src.replace("teaser", "medium"))
       })
       images = [...new Set(images)]
+
 
       const description = $(".space-popup--body p").html()?.trim() || ""
 
@@ -85,10 +100,10 @@ async function getPageCards(currentPage: number) {
       const firePit = $("p").filter((_, p) => $(p).text().includes("Fire")).length > 0
       const sauna = $("p").filter((_, p) => $(p).text().includes("Sauna")).length > 0
 
+      const amenities = { bbq, shower, kitchen, sauna, firePit, wifi, toilet, water, electricity, hotWater, pool }
 
-      const existingSpot = currentData.find((s) => s.campspaceId === spot.id)
-      if (existingSpot) {
-        console.log(existingSpot && "Spot exists: " + spot.id + " updating...")
+      if (existingSpot && existingSpot.deletedAt === null) {
+        console.log(existingSpot && "Spot exists: " + "https://ramble.guide/spots/"+ existingSpot.id + " updating...")
         await prisma.spot.update({where: {campspaceId: spot.id},  data: {
           name: spot.name,
           address,
@@ -123,9 +138,26 @@ async function getPageCards(currentPage: number) {
           sourceUrl: spot.link,
           creator: { connect: { email: "jack@noquarter.co" } },
           amenities: {
-            update: { bbq, shower, kitchen, sauna, firePit, wifi, toilet, water, electricity, hotWater, pool },
+            upsert: {
+              create: amenities,
+              update: amenities
+            }
           },
-        }})
+        }, include: { images: true}});
+
+        if (existingSpot.coverId === null) {
+          // Find the corresponding image of the first image in the images array
+          const firstImage = await prisma.spotImage.findFirst({where: {spotId: existingSpot.id, path: images[0]}, select: {id: true}})
+
+          if (firstImage) {
+            await prisma.spot.update({
+              where: { id: existingSpot.id },
+              data: {
+                cover: { connect: { id: firstImage?.id }}
+              },
+            });
+          }
+        }
 
         // Fetch existing images associated with the spot
         const existingImages = await prisma.spotImage.findMany({
@@ -137,7 +169,7 @@ async function getPageCards(currentPage: number) {
         const imagesToDelete = existingImages.filter(image => !images.includes(image.path));
 
         if (imagesToDelete.length > 0) {
-          console.log("images to delete: " + imagesToDelete.map(image => image.path))
+          console.log("images to delete: " + imagesToDelete.map(image => image.path + " "))
         }
 
         // Delete images
@@ -156,8 +188,8 @@ async function getPageCards(currentPage: number) {
           });
         }));
       } else {
-        console.log("Adding new spot: " + index + " out of " + spots.length + " / page: " + currentPage)
-        await prisma.spot.create({
+        console.log("Adding new spot: " + index + " out of " + spots.length + " / page: " + currentPage + " " + spot.link)
+        const newSpot = await prisma.spot.create({
           data: {
             name: spot.name,
             address,
@@ -174,8 +206,18 @@ async function getPageCards(currentPage: number) {
               create: { bbq, shower, kitchen, sauna, firePit, wifi, toilet, water, electricity, hotWater, pool },
             },
           },
+        })
+      
+        if (newSpot.coverId === null) {
+          const firstImage = await prisma.spotImage.findFirst({where: {spotId: newSpot.id, path: images[0]}, select: {id: true}})
+          await prisma.spot.update({
+            where: { id: newSpot.id },
+            data: {
+              cover: { connect: { id: firstImage?.id }},
+            },
+          });
         }
-      )}
+      }
     } catch (error: any) {
       console.log(spot.id + error)
     }
@@ -190,14 +232,17 @@ async function main() {
     for (let currentPage = 1; currentPage < pageCount + 1; currentPage++) {
       const spotIds = await getPageCards(currentPage)
       scrapedIds = [...scrapedIds, ...spotIds]
+
     }
-    // remove any spots that are no longer on the website
-    await prisma.spot.updateMany({
-      where: { NOT: { campspaceId: { in: scrapedIds } }, deletedAt: null },
-      data: {deletedAt: new Date()}
-    })
-    const dbIds = await prisma.spot.findMany({select: {campspaceId: true}, where: {deletedAt: null}})
-    console.log(dbIds.filter(dbId => dbId.campspaceId && !scrapedIds.includes(dbId.campspaceId)).map(dbId => dbId.campspaceId));
+    const dbIds = await prisma.spot.findMany({select: {campspaceId: true, id: true}, where: {deletedAt: null, campspaceId: {not: null}}})
+    const spotsToDelete = dbIds.filter(dbId => dbId.campspaceId && !scrapedIds.includes(dbId.campspaceId)).map(dbId => dbId.id) as string[]
+
+    if (spotsToDelete.length > 0) {
+      await confirmDeleteSpots(spotsToDelete)
+    } else {
+      console.log("No spots to delete");
+    }
+
   } catch (error) {
     console.log(error)
     process.exit(1)
