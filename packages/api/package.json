@@ -18,7 +18,7 @@
     "@ramble/shared": "workspace:*",
     "@trpc/server": "10.45.2",
     "@turf/bbox": "7.0.0-alpha.116",
-    "@turf/center": "7.0.0-alpha.115",
+    "@turf/center": "7.0.0-alpha.116",
     "@turf/helpers": "7.0.0-alpha.115",
     "dayjs": "1.11.11",
     "semver": "^7.6.0",
