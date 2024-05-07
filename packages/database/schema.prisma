@@ -92,11 +92,16 @@ model InviteCode {
 }
 
 model Van {
-  id          String  @id @default(uuid())
-  name        String
-  model       String
-  year        Int
-  description String? @db.Text
+  id             String  @id @default(uuid())
+  name           String
+  model          String
+  year           Int
+  description    String? @db.Text
+  hasToilet      Boolean @default(false)
+  hasShower      Boolean @default(false)
+  hasElectricity Boolean @default(false)
+  hasInternet    Boolean @default(false)
+  hasBikeRack    Boolean @default(false)
 
   user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String     @unique

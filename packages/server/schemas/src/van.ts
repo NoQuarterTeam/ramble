@@ -10,7 +10,15 @@ export const vanSchema = z.object({
       .number()
       .min(1950)
       .max(new Date().getFullYear() + 5),
+    /**
+     * @deprecated in 1.4.11, use number instead and remove union
+     */
     z.string(),
   ]),
   description: NullableFormString,
+  hasToilet: z.boolean().optional(),
+  hasShower: z.boolean().optional(),
+  hasElectricity: z.boolean().optional(),
+  hasInternet: z.boolean().optional(),
+  hasBikeRack: z.boolean().optional(),
 })
