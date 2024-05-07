@@ -119,16 +119,28 @@ export const tripMediaRouter = createTRPCRouter({
       })
       return true
     }),
-  upload: protectedProcedure.input(z.object({ tripId: z.string(), media: tripMediaSchema })).mutation(async ({ ctx, input }) => {
-    const data = input.media
-    await ctx.prisma.tripMedia.create({ data: { tripId: input.tripId, ...data, creatorId: ctx.user.id } })
-    const latestTimestamp = await ctx.prisma.tripMedia.findFirst({
-      where: { tripId: input.tripId, deletedAt: null },
-      orderBy: { timestamp: "desc" },
-      select: { timestamp: true },
-    })
-    return latestTimestamp?.timestamp
-  }),
+  upload: protectedProcedure
+    .input(
+      z.object({
+        tripId: z.string(),
+        media: tripMediaSchema.optional(),
+        /**
+         * @deprecated in 1.4.11, delete soon
+         */
+        image: tripMediaSchema.optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (!input.image && !input.media) throw new TRPCError({ code: "BAD_REQUEST", message: "Media required" })
+      const data = input.image || input.media!
+      await ctx.prisma.tripMedia.create({ data: { tripId: input.tripId, ...data, creatorId: ctx.user.id } })
+      const latestTimestamp = await ctx.prisma.tripMedia.findFirst({
+        where: { tripId: input.tripId, deletedAt: null },
+        orderBy: { timestamp: "desc" },
+        select: { timestamp: true },
+      })
+      return latestTimestamp?.timestamp
+    }),
   remove: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
     await ctx.prisma.tripMedia.update({ where: { id: input.id }, data: { deletedAt: new Date() } })
     return true
