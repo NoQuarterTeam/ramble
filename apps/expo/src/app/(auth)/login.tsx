@@ -19,7 +19,11 @@ export default function LoginScreen() {
 
   const form = useForm({ defaultValues: { email: "", password: "" } })
 
-  const { mutate, isLoading, error } = api.auth.login.useMutation({
+  const {
+    mutate,
+    isPending: isLoading,
+    error,
+  } = api.auth.login.useMutation({
     onSuccess: async (data) => {
       await AsyncStorage.setItem(AUTH_TOKEN, data.token)
       utils.user.me.setData(undefined, data.user)
@@ -65,7 +69,6 @@ export default function LoginScreen() {
             <Button className="mb-1" isLoading={isLoading} disabled={isLoading} onPress={onSubmit}>
               Login
             </Button>
-            <FormError className="mb-1" error={error} />
           </View>
           <View>
             <View className="flex flex-row items-center justify-center mb-2">

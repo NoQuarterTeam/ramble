@@ -75,7 +75,11 @@ function ReportFlow({ spot }: Props) {
 
   const [notes, setNotes] = React.useState("")
 
-  const { mutate, isLoading, error } = api.spotRevision.create.useMutation({
+  const {
+    mutate,
+    isPending: isLoading,
+    error,
+  } = api.spotRevision.create.useMutation({
     onSuccess: async () => {
       router.navigate(`/${tab}/spot/${id}`)
       await new Promise((resolve) => setTimeout(resolve, 1000))

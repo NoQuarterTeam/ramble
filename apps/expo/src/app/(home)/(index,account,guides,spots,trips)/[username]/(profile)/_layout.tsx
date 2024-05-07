@@ -27,7 +27,7 @@ export default function UserScreen() {
   const params = useLocalSearchParams<{ username: string }>()
   const username = params.username
 
-  const { data: user, isLoading } = api.user.profile.useQuery({ username }, { cacheTime: 30000, enabled: !!username })
+  const { data: user, isPending: isLoading } = api.user.profile.useQuery({ username }, { staleTime: 30000, enabled: !!username })
 
   const router = useRouter()
   const utils = api.useUtils()

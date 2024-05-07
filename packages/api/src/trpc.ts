@@ -1,5 +1,4 @@
 import { TRPCError, initTRPC } from "@trpc/server"
-import type { inferAsyncReturnType } from "@trpc/server"
 import type * as trpcFetch from "@trpc/server/adapters/fetch"
 import superjson from "superjson"
 import { ZodError } from "zod"
@@ -46,7 +45,7 @@ export async function createContext({ req }: trpcFetch.FetchCreateContextFnOptio
   }
   return { req, prisma, user }
 }
-export type Context = inferAsyncReturnType<typeof createContext>
+export type Context = Awaited<ReturnType<typeof createContext>>
 
 export const t = initTRPC.context<Context>().create({
   transformer: superjson,

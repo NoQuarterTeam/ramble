@@ -39,7 +39,7 @@ function ImageList({ spot }: { spot: NonNullable<RouterOutputs["spot"]["images"]
   const [coverId, setCoverId] = React.useState(spot.coverId)
   const router = useRouter()
   const utils = api.useUtils()
-  const { mutate, isLoading } = api.spot.update.useMutation({
+  const { mutate, isPending } = api.spot.update.useMutation({
     onSuccess: () => {
       utils.spot.detail.refetch({ id: spot.id })
       router.back()
@@ -68,7 +68,7 @@ function ImageList({ spot }: { spot: NonNullable<RouterOutputs["spot"]["images"]
       />
       {coverId && (
         <View className="absolute right-0 bottom-8 left-0 flex items-center justify-center">
-          <Button isLoading={isLoading} className="w-[100px] rounded-full" onPress={() => mutate({ id: spot.id, coverId })}>
+          <Button isLoading={isPending} className="w-[100px] rounded-full" onPress={() => mutate({ id: spot.id, coverId })}>
             Save
           </Button>
         </View>

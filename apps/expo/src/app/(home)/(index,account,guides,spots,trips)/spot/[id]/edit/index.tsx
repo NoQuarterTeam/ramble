@@ -16,6 +16,7 @@ import { api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
+import { keepPreviousData } from "@tanstack/react-query"
 import { EditSpotModalView } from "./EditSpotModalView"
 
 export default function EditSpotLocationScreen() {
@@ -31,10 +32,10 @@ export default function EditSpotLocationScreen() {
     isFetching,
   } = api.mapbox.geocodeCoords.useQuery(
     { latitude: coords?.[1]!, longitude: coords?.[0]! },
-    { enabled: !!coords?.[0] && !!coords?.[1], keepPreviousData: true },
+    { enabled: !!coords?.[0] && !!coords?.[1], placeholderData: keepPreviousData },
   )
 
-  const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, keepPreviousData: true })
+  const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, placeholderData: keepPreviousData })
 
   const { me } = useMe()
   const router = useRouter()

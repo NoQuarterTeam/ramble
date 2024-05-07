@@ -7,7 +7,6 @@ import type { Trip } from "@ramble/database/types"
 import { useDisclosure } from "@ramble/shared"
 
 import { Button } from "~/components/ui/Button"
-import { FormError } from "~/components/ui/FormError"
 import { FormInput, FormInputLabel } from "~/components/ui/FormInput"
 import type { RouterInputs } from "~/lib/api"
 import { type ApiError, useForm } from "~/lib/hooks/useForm"
@@ -101,7 +100,6 @@ export function TripForm(props: Props & (UpdateSubmit | CreateSubmit)) {
         <Button isLoading={props.isLoading} onPress={handleSubmit()}>
           Save
         </Button>
-        <FormError error={props.error} />
       </View>
     </FormProvider>
   )

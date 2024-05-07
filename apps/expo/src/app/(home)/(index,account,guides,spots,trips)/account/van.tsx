@@ -9,7 +9,6 @@ import { createAssetUrl } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
-import { FormError } from "~/components/ui/FormError"
 import { FormInput, FormInputLabel } from "~/components/ui/FormInput"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { ScreenView } from "~/components/ui/ScreenView"
@@ -36,7 +35,7 @@ export default function VanScreen() {
   const utils = api.useUtils()
   const {
     mutate,
-    isLoading: updateLoading,
+    isPending: updateLoading,
     error,
   } = api.van.upsert.useMutation({
     onSuccess: (res) => {
@@ -114,7 +113,6 @@ export default function VanScreen() {
             <FormInput name="model" label="Model" error={error} />
             <FormInput name="year" label="Year" error={error} />
             <FormInput multiline name="description" label="Description" error={error} />
-            <FormError error={error} />
             {data && (
               <View>
                 <FormInputLabel label="Images" />

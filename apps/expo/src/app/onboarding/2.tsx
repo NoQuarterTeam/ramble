@@ -24,7 +24,7 @@ export default function OnboardingStep2Screen() {
   const router = useRouter()
   const setFilters = useMapFilters((state) => state.setFilters)
   const utils = api.useUtils()
-  const { mutate, isLoading, error } = api.user.update.useMutation({
+  const { mutate, isPending: isLoading } = api.user.update.useMutation({
     onSuccess: async (data) => {
       await utils.user.me.refetch()
       setFilters({
@@ -75,7 +75,6 @@ export default function OnboardingStep2Screen() {
             ))}
           </View>
 
-          <FormError error={error} />
           <View className="flex flex-row items-center justify-between">
             <Button onPress={router.back} variant="ghost">
               Back

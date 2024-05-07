@@ -4,6 +4,7 @@ import { Camera, LocationPuck, type MapState, type MapView as MapType, StyleURL 
 import type { Position } from "@rnmapbox/maps/lib/typescript/src/types/Position"
 import * as Sentry from "@sentry/react-native"
 import { FlashList } from "@shopify/flash-list"
+import { keepPreviousData } from "@tanstack/react-query"
 import dayjs from "dayjs"
 import { Image } from "expo-image"
 import * as ImagePicker from "expo-image-picker"
@@ -320,7 +321,7 @@ function AddMediaLocation({ ids, onClose, onSave }: { ids: string[]; onClose: ()
   const camera = React.useRef<Camera>(null)
   const mapRef = React.useRef<MapType>(null)
 
-  const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, keepPreviousData: true })
+  const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, placeholderData: keepPreviousData })
 
   const handleSetUserLocation = async () => {
     try {
@@ -342,7 +343,7 @@ function AddMediaLocation({ ids, onClose, onSave }: { ids: string[]; onClose: ()
     setCoords(properties.center)
   }
 
-  const { mutate, isLoading: saveLoading } = api.trip.media.updateMany.useMutation({
+  const { mutate, isPending: saveLoading } = api.trip.media.updateMany.useMutation({
     onSuccess: () => {
       if (!coords) return
 

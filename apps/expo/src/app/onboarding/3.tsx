@@ -7,7 +7,6 @@ import { AvoidSoftInputView } from "react-native-avoid-softinput"
 
 import { SafeAreaView } from "~/components/SafeAreaView"
 import { Button } from "~/components/ui/Button"
-import { FormError } from "~/components/ui/FormError"
 import { FormInput } from "~/components/ui/FormInput"
 import { Heading } from "~/components/ui/Heading"
 import { toast } from "~/components/ui/Toast"
@@ -31,7 +30,7 @@ export default function OnboardingStep3Screen() {
   const posthog = usePostHog()
   const {
     mutate,
-    isLoading: updateLoading,
+    isPending: updateLoading,
     error,
   } = api.van.upsert.useMutation({
     onSuccess: async () => {
@@ -74,7 +73,6 @@ export default function OnboardingStep3Screen() {
                 <FormInput error={error} multiline name="description" label="Anything else you wanna mention?" />
               </View>
 
-              <FormError error={error} />
               <View className="flex flex-row items-center justify-between">
                 <Button onPress={router.back} variant="ghost">
                   Back

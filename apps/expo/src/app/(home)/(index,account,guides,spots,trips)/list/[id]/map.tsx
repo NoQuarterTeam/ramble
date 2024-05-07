@@ -1,4 +1,5 @@
 import { Camera, LocationPuck, type MapState, type MapView as MapType } from "@rnmapbox/maps"
+import { keepPreviousData } from "@tanstack/react-query"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { Navigation } from "lucide-react-native"
@@ -25,7 +26,7 @@ export default function ListDetailMapScreen() {
 
   const { data: clusters, isLoading: spotsLoading } = api.list.spotClusters.useQuery(
     mapSettings ? { ...mapSettings, id: params.id } : undefined,
-    { enabled: !!mapSettings, keepPreviousData: true },
+    { enabled: !!mapSettings, placeholderData: keepPreviousData },
   )
   const router = useRouter()
 

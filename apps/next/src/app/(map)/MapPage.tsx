@@ -4,6 +4,7 @@ import { SpotClusterMarker } from "@/components/SpotMarker"
 import { useMapSettings } from "@/lib/hooks/useMapSettings"
 import { type RouterOutputs, api } from "@/lib/trpc/react"
 import { createAssetUrl, join } from "@ramble/shared"
+import { keepPreviousData } from "@tanstack/react-query"
 import { User } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
@@ -34,11 +35,11 @@ export function MapPage() {
 
   const { data } = api.spot.clusters.useQuery(mapSettings ? { ...mapSettings, types: ["CAMPING", "FREE_CAMPING"] } : undefined, {
     enabled: !!mapSettings,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   })
   const { data: userData } = api.user.clusters.useQuery(mapSettings || undefined, {
     enabled: !!mapSettings,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   })
 
   const router = useRouter()

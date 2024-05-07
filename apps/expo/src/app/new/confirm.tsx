@@ -45,11 +45,7 @@ export default function NewSpotConfirmScreen() {
   const utils = api.useUtils()
   const posthog = usePostHog()
 
-  const {
-    mutate,
-    isLoading: createLoading,
-    error,
-  } = api.spot.create.useMutation({
+  const { mutate, isPending: createLoading } = api.spot.create.useMutation({
     onSuccess: async (data) => {
       posthog.capture("spot created", { type: data.type })
       await utils.user.hasCreatedSpot.refetch()
@@ -165,7 +161,6 @@ export default function NewSpotConfirmScreen() {
         >
           Create
         </Button>
-        <FormError error={error} />
       </View>
     </NewSpotModalView>
   )

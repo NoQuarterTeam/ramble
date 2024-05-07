@@ -2,7 +2,7 @@ import semver from "semver"
 import { z } from "zod"
 import { createTRPCRouter, publicProcedure } from "../trpc"
 
-const MIN_SUPPORTED_VERSION = "1.4.1"
+const MIN_SUPPORTED_VERSION = "1.4.11"
 
 export const versionRouter = createTRPCRouter({
   isSupported: publicProcedure.input(z.object({ version: z.string() })).query(({ input }) => {

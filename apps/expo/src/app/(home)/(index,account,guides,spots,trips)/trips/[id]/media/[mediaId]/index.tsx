@@ -43,13 +43,13 @@ export default function TripImage() {
 
   const { data, isLoading } = api.trip.media.byId.useQuery(
     { id: mediaId! },
-    { enabled: !!mediaId, staleTime: Number.POSITIVE_INFINITY, cacheTime: Number.POSITIVE_INFINITY },
+    { enabled: !!mediaId, staleTime: Number.POSITIVE_INFINITY },
   )
 
   const router = useRouter()
 
   const utils = api.useUtils()
-  const { mutate, isLoading: removeLoading } = api.trip.media.remove.useMutation({
+  const { mutate, isPending: removeLoading } = api.trip.media.remove.useMutation({
     onSuccess: () => {
       if (!mediaId) return
       void utils.trip.detail.refetch({ id })

@@ -10,7 +10,7 @@ export default function UserSpots() {
   const params = useLocalSearchParams<{ username: string }>()
   const { data: spots, isLoading } = api.spot.byUser.useQuery(
     { username: params.username?.toLowerCase().trim() },
-    { cacheTime: 30000, enabled: !!params.username },
+    { staleTime: 30000, enabled: !!params.username },
   )
   if (isLoading)
     return (

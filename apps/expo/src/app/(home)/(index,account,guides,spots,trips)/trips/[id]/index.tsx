@@ -29,6 +29,7 @@ import * as DropdownMenu from "zeego/dropdown-menu"
 
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createAssetUrl, join } from "@ramble/shared"
 
+import { keepPreviousData } from "@tanstack/react-query"
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { MapView } from "~/components/Map"
@@ -122,7 +123,7 @@ export default function TripDetailScreen() {
   const [mapSettings, setMapSettings] = useMapSettings()
   const { data: mediaClusters, refetch } = api.trip.media.clusters.useQuery(
     mapSettings ? { ...mapSettings, tripId: id } : undefined,
-    { enabled: !!mapSettings, keepPreviousData: true },
+    { enabled: !!mapSettings, placeholderData: keepPreviousData },
   )
 
   const onMapMove = ({ properties }: MapState) => {
@@ -434,7 +435,7 @@ function TripImageSync({
             }
             const path = await upload(media.url)
             const payload = { path, thumbnailPath, ...media }
-            uploadMedia({ tripId: id, image: payload })
+            uploadMedia({ tripId: id, media: payload })
           } catch (error) {
             toast({ title: "Error syncing media", type: "error" })
             Sentry.captureException(error)

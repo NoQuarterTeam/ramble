@@ -5,6 +5,7 @@ import { ActivityIndicator, ScrollView, TouchableOpacity, View } from "react-nat
 
 import { createAssetUrl, join } from "@ramble/shared"
 
+import { keepPreviousData } from "@tanstack/react-query"
 import { Icon } from "~/components/Icon"
 import { Input } from "~/components/ui/Input"
 import { ModalView } from "~/components/ui/ModalView"
@@ -18,7 +19,7 @@ export default function AddTripUsers() {
   const [search, setSearch] = React.useState("")
   const { data, isLoading, refetch } = api.trip.usersV2.search.useQuery(
     { tripId: id, search, skip: 0 },
-    { enabled: !!search, keepPreviousData: true },
+    { enabled: !!search, placeholderData: keepPreviousData },
   )
   const users = data
 
@@ -62,7 +63,7 @@ function UserItem({
 }) {
   const { id } = useLocalSearchParams<{ id: string }>()
   const utils = api.useUtils()
-  const { mutate, isLoading } = api.trip.usersV2.add.useMutation({
+  const { mutate, isPending } = api.trip.usersV2.add.useMutation({
     onSuccess: async () => {
       onSelect()
       void utils.trip.mine.refetch()
@@ -73,8 +74,8 @@ function UserItem({
   return (
     <TouchableOpacity
       activeOpacity={0.6}
-      disabled={isLoading}
-      className={join("flex flex-row items-center justify-between pb-2", isLoading && "opacity-60")}
+      disabled={isPending}
+      className={join("flex flex-row items-center justify-between pb-2", isPending && "opacity-60")}
       onPress={() => mutate({ tripId: id, userId: user.id })}
     >
       <View className="flex flex-row items-center space-x-2">
@@ -98,7 +99,7 @@ function UserItem({
           </Text>
         </View>
       </View>
-      {isLoading && <ActivityIndicator />}
+      {isPending && <ActivityIndicator />}
     </TouchableOpacity>
   )
 }

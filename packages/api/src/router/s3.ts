@@ -7,12 +7,14 @@ import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const s3Router = createTRPCRouter({
   /**
-   * @deprecated use createSignedUrlNew
+   * @deprecated in 1.4.11 - use createSignedUrl
    */
-  createSignedUrl: protectedProcedure.input(z.object({ key: z.string().min(1) })).mutation(({ input }) => {
-    return createSignedUrl(input.key)
-  }),
   createSignedUrlNew: protectedProcedure.input(z.object({ type: z.string() })).mutation(async ({ input }) => {
+    const uuid = randomUUID()
+    const key = `${assetPrefix}${uuid}.${input.type}`
+    return { url: await createSignedUrl(key), key }
+  }),
+  createSignedUrl: protectedProcedure.input(z.object({ type: z.string() })).mutation(async ({ input }) => {
     const uuid = randomUUID()
     const key = `${assetPrefix}${uuid}.${input.type}`
     return { url: await createSignedUrl(key), key }
