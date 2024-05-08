@@ -19,7 +19,7 @@ export function VanSettingSelector({
   return (
     <TouchableOpacity
       className={join(
-        "flex relative h-[100px] w-full items-center justify-center border-gray-200 dark:border-gray-700 p-4 border rounded-sm",
+        "flex relative h-[80px] w-full items-center justify-center border-gray-200 dark:border-gray-700 p-2 border rounded-sm",
         isSelected && "border-primary",
       )}
       onPress={onToggle}

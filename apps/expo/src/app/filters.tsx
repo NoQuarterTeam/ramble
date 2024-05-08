@@ -10,7 +10,7 @@ import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 
 import type { SpotType } from "@ramble/database/types"
-import { SPOT_TYPES, SPOT_TYPE_NAMES, type SpotTypeInfo, join } from "@ramble/shared"
+import { SPOT_TYPES, SPOT_TYPE_OPTIONS, type SpotTypeInfo, join } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { Icon } from "~/components/Icon"
@@ -22,17 +22,18 @@ import { useMe } from "~/lib/hooks/useMe"
 import { SPOT_TYPE_ICONS } from "~/lib/models/spot"
 
 const mapFiltersSchema = z.object({
-  types: z.array(z.enum(SPOT_TYPE_NAMES)),
+  types: z.array(z.string()),
   isPetFriendly: z.boolean(),
   isUnverified: z.boolean(),
 })
 
-export type MapFiltersOptions = z.infer<typeof mapFiltersSchema>
+// hack to force types
+export type MapFiltersOptions = Omit<z.infer<typeof mapFiltersSchema>, "types"> & { types: SpotType[] }
 
 export const initialFilters = {
   isPetFriendly: false,
   isUnverified: false,
-  types: ["CAMPING", "FREE_CAMPING", "REWILDING"],
+  types: ["CAMPING", "VAN_PARK", "REWILDING"],
 } satisfies MapFiltersOptions
 
 export const useMapFilters = create<{
@@ -73,14 +74,18 @@ export default function MapFilters() {
               </View>
             )}
             <View>
-              <SpotTypeSection {...{ filters, setFilters }} title="Stays" types={["CAMPING", "FREE_CAMPING", "PARKING"]} />
+              <SpotTypeSection
+                {...{ filters, setFilters }}
+                title="Stays"
+                types={SPOT_TYPE_OPTIONS.filter((s) => s.category === "STAY").map((s) => s.value)}
+              />
             </View>
             <View>
               <SpotTypeSection
                 isDisabled={!me}
                 {...{ filters, setFilters }}
                 title="Activities"
-                types={["CLIMBING", "SURFING", "PADDLE_KAYAK", "HIKING_TRAIL", "MOUNTAIN_BIKING", "YOGA"]}
+                types={SPOT_TYPE_OPTIONS.filter((s) => s.category === "ACTIVITY").map((s) => s.value)}
               />
             </View>
             <View>
@@ -88,7 +93,7 @@ export default function MapFilters() {
                 isDisabled={!me}
                 {...{ filters, setFilters }}
                 title="Services"
-                types={["GAS_STATION", "ELECTRIC_CHARGE_POINT", "MECHANIC_PARTS", "VET"]}
+                types={SPOT_TYPE_OPTIONS.filter((s) => s.category === "SERVICE").map((s) => s.value)}
               />
             </View>
             <View>
@@ -96,7 +101,7 @@ export default function MapFilters() {
                 isDisabled={!me}
                 {...{ filters, setFilters }}
                 title="Hospitality"
-                types={["CAFE", "RESTAURANT", "SHOP", "BAR"]}
+                types={SPOT_TYPE_OPTIONS.filter((s) => s.category === "HOSPITALITY").map((s) => s.value)}
               />
             </View>
             <View>
@@ -104,7 +109,7 @@ export default function MapFilters() {
                 {...{ filters, setFilters }}
                 title="Other"
                 isDisabled={!me}
-                types={["REWILDING", "NATURE_EDUCATION", "ART_FILM_PHOTOGRAPHY", "VOLUNTEERING"]}
+                types={SPOT_TYPE_OPTIONS.filter((s) => s.category === "OTHER").map((s) => s.value)}
               />
             </View>
           </View>
@@ -231,7 +236,7 @@ function SpotTypeSelector({
           <Icon
             icon={SPOT_TYPE_ICONS[type.value]}
             size={20}
-            className={join(type.isComingSoon && "opacity-50")}
+            className={join(!me?.isAdmin && (type.isComingSoon || isDisabled) && "opacity-50")}
             color={{ light: isSelected ? "white" : "black", dark: isSelected ? "black" : "white" }}
           />
         }

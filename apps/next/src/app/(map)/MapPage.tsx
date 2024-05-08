@@ -33,7 +33,7 @@ export function MapPage() {
     })
   }
 
-  const { data } = api.spot.clusters.useQuery(mapSettings ? { ...mapSettings, types: ["CAMPING", "FREE_CAMPING"] } : undefined, {
+  const { data } = api.spot.clusters.useQuery(mapSettings ? { ...mapSettings, types: ["CAMPING", "VAN_PARK"] } : undefined, {
     enabled: !!mapSettings,
     placeholderData: keepPreviousData,
   })

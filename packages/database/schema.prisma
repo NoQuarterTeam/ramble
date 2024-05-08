@@ -128,8 +128,11 @@ model VanImage {
 enum SpotType {
   // Stays
   CAMPING
-  FREE_CAMPING
-  PARKING
+  VAN_PARK
+  PRIVATE_LAND
+  ROADSIDE
+  CARPARK
+  FREE_CAMPING // deprecated in 1.4.11 - migrate to others later, default to van park for now
   // Activities
   CLIMBING
   SURFING
@@ -138,6 +141,7 @@ enum SpotType {
   PADDLE_KAYAK
   YOGA
   // Services
+  SAFE_PARKING
   GAS_STATION
   ELECTRIC_CHARGE_POINT
   MECHANIC_PARTS

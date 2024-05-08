@@ -110,18 +110,18 @@ export default function OnboardingStep3Screen() {
                 <View className="flex flex-row gap-2">
                   <View className="flex-1">
                     <VanSettingSelector
-                      onToggle={() => form.setValue("hasToilet", !hasToilet, { shouldDirty: true })}
-                      icon={Icons.Toilet}
-                      label={VAN_SETTINGS.hasToilet}
-                      isSelected={hasToilet}
-                    />
-                  </View>
-                  <View className="flex-1">
-                    <VanSettingSelector
                       onToggle={() => form.setValue("hasShower", !hasShower, { shouldDirty: true })}
                       icon={ShowerHead}
                       label={VAN_SETTINGS.hasShower}
                       isSelected={hasShower}
+                    />
+                  </View>
+                  <View className="flex-1">
+                    <VanSettingSelector
+                      onToggle={() => form.setValue("hasToilet", !hasToilet, { shouldDirty: true })}
+                      icon={Icons.Toilet}
+                      label={VAN_SETTINGS.hasToilet}
+                      isSelected={hasToilet}
                     />
                   </View>
                 </View>
