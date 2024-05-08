@@ -368,8 +368,8 @@ importers:
         specifier: 14.3.0-canary.49
         version: 14.3.0-canary.49(react-dom@18.2.0)(react@18.2.0)
       posthog-js:
-        specifier: 1.131.2
-        version: 1.131.2
+        specifier: 1.131.3
+        version: 1.131.3
       pretty-cache-header:
         specifier: 1.0.0
         version: 1.0.0
@@ -13196,8 +13196,8 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.2.0
 
-  /posthog-js@1.131.2:
-    resolution: {integrity: sha512-un5c5CbDhJ1LRBDgy4I1D5a1++P8/mNl4CS9C5A1z95qIF7iY8OuA6XPW7sIA6tKSdda4PGwfa2Gmfz1nvnywQ==}
+  /posthog-js@1.131.3:
+    resolution: {integrity: sha512-ds/TADDS+rT/WgUyeW4cJ+X+fX+O1KdkOyssNI/tP90PrFf0IJsck5B42YOLhfz87U2vgTyBaKHkdlMgWuOFog==}
     dependencies:
       fflate: 0.4.8
       preact: 10.20.2
