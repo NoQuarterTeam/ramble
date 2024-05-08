@@ -37,4 +37,5 @@ const handler = async (req: Request) => {
   return response
 }
 
+export const dynamic = "force-dynamic"
 export { handler as GET, handler as POST }
