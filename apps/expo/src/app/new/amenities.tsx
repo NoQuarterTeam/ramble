@@ -47,7 +47,7 @@ export default function NewSpotAmenitiesScreen() {
         <Button
           className="rounded-full"
           onPress={() => {
-            const searchParams = new URLSearchParams({ ...params, amenities: JSON.stringify(amenities) })
+            const searchParams = new URLSearchParams({ ...params, amenities: amenities ? JSON.stringify(amenities) : "" })
             // @ts-ignore
             router.push(`/new/images?${searchParams}`)
           }}
