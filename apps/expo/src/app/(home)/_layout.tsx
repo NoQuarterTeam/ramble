@@ -21,8 +21,6 @@ export default function HomeLayout() {
   const router = useRouter()
 
   const tab = useTabSegment()
-  console.log({ tab })
-
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
   const { me } = useMe()
