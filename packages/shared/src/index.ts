@@ -6,6 +6,7 @@ export * from "./utils/image"
 export * from "./utils/translate"
 export * from "./utils/promiseHash"
 export * from "./utils/map"
+export * from "./utils/bioRegions"
 export * from "./utils/helpers"
 
 export * from "./models/spot"
