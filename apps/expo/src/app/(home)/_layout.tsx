@@ -9,6 +9,7 @@ import { Icon } from "~/components/Icon"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { useMe } from "~/lib/hooks/useMe"
 
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { useBackgroundColor } from "../../lib/tailwind"
 
 export const unstable_settings = {
@@ -18,6 +19,10 @@ export const unstable_settings = {
 
 export default function HomeLayout() {
   const router = useRouter()
+
+  const tab = useTabSegment()
+  console.log({ tab })
+
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
   const { me } = useMe()
@@ -25,13 +30,6 @@ export default function HomeLayout() {
   return (
     <Tabs
       initialRouteName="(index)"
-      screenListeners={{
-        tabPress: () => {
-          if (router.canDismiss()) {
-            router.dismissAll()
-          }
-        },
-      }}
       sceneContainerStyle={{ backgroundColor }}
       screenOptions={{
         tabBarStyle: { backgroundColor, borderTopColor: colors.gray[isDark ? 700 : 200] },
@@ -41,30 +39,66 @@ export default function HomeLayout() {
     >
       <Tabs.Screen
         name="(index)"
+        listeners={{
+          tabPress: () => {
+            if (tab === "(home)/(index)" && router.canDismiss()) {
+              router.dismissAll()
+            }
+          },
+        }}
         options={{
           tabBarIcon: (props) => <Icon icon={MapIcon} size={22} color={!!props.focused && "primary"} />,
         }}
       />
       <Tabs.Screen
         name="(spots)"
+        listeners={{
+          tabPress: () => {
+            if (tab === "(home)/(spots)" && router.canDismiss()) {
+              router.dismissAll()
+            }
+          },
+        }}
         options={{
           tabBarIcon: (props) => <Icon icon={List} size={22} color={!!props.focused && "primary"} />,
         }}
       />
       <Tabs.Screen
         name="(trips)"
+        listeners={{
+          tabPress: () => {
+            if (tab === "(home)/(trips)" && router.canDismiss()) {
+              router.dismissAll()
+              router.dismissAll()
+            }
+          },
+        }}
         options={{
           tabBarIcon: (props) => <Icon icon={Route} size={22} color={!!props.focused && "primary"} />,
         }}
       />
       <Tabs.Screen
         name="(guides)"
+        listeners={{
+          tabPress: () => {
+            if (tab === "(home)/(guides)" && router.canDismiss()) {
+              router.dismissAll()
+            }
+          },
+        }}
         options={{
           tabBarIcon: (props) => <Icon icon={Users} size={22} color={!!props.focused && "primary"} />,
         }}
       />
       <Tabs.Screen
         name="(account)"
+        listeners={{
+          tabPress: () => {
+            if (tab === "(home)/(account)" && router.canDismiss()) {
+              router.dismissAll()
+            }
+          },
+        }}
         options={{
           tabBarIcon: (props) =>
             me?.avatar ? (
