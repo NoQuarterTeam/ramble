@@ -1,4 +1,4 @@
-import { Tabs } from "expo-router"
+import { Tabs, useRouter } from "expo-router"
 import { List, Map as MapIcon, Route, UserCircle, Users } from "lucide-react-native"
 import { useColorScheme } from "react-native"
 
@@ -17,6 +17,7 @@ export const unstable_settings = {
 }
 
 export default function HomeLayout() {
+  const router = useRouter()
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
   const { me } = useMe()
@@ -24,6 +25,13 @@ export default function HomeLayout() {
   return (
     <Tabs
       initialRouteName="(index)"
+      screenListeners={{
+        tabPress: () => {
+          if (router.canDismiss()) {
+            router.dismissAll()
+          }
+        },
+      }}
       sceneContainerStyle={{ backgroundColor }}
       screenOptions={{
         tabBarStyle: { backgroundColor, borderTopColor: colors.gray[isDark ? 700 : 200] },
