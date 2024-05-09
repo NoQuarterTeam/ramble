@@ -13,7 +13,7 @@ export default function EditTripItem() {
 
   const router = useRouter()
   const utils = api.useUtils()
-  const { mutate, isLoading } = api.trip.items.update.useMutation({
+  const { mutate, isPending: isLoading } = api.trip.items.update.useMutation({
     onSuccess: async () => {
       await utils.trip.detail.refetch({ id })
       router.back()

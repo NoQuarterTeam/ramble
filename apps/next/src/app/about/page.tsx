@@ -1,9 +1,7 @@
 import { join } from "@ramble/shared"
 
-import { Instagram } from "lucide-react"
-
-import { AppCta } from "@/components/AppCta"
 import { PageContainer } from "@/components/PageContainer"
+import { Instagram } from "lucide-react"
 import Link from "next/link"
 
 // const schema = userSchema.pick({ email: true })

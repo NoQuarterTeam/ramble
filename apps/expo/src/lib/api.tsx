@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { httpBatchLink } from "@trpc/client"
+import { MutationCache, QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { TRPCClientError, httpBatchLink } from "@trpc/client"
 import { createTRPCReact } from "@trpc/react-query"
 import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server"
 import Constants from "expo-constants"
@@ -9,6 +9,7 @@ import superjson from "superjson"
 
 import type { AppRouter } from "@ramble/api"
 
+import { toast } from "~/components/ui/Toast"
 import { FULL_WEB_URL } from "./config"
 
 /**
@@ -47,17 +48,25 @@ const getBaseUrl = () => {
 
 export const AUTH_TOKEN = "AUTH_TOKEN"
 
+const mutationCache = new MutationCache({
+  onError: (error) => {
+    if (error instanceof TRPCClientError && error.data?.formError) {
+      toast({ title: error.data?.formError, type: "error" })
+    }
+  },
+})
+
 /**
  * A wrapper for your app that provides the TRPC context.
  * Use only in _app.tsx
  */
 export function TRPCProvider({ children }: { children: React.ReactNode }) {
-  const [queryClient] = React.useState(() => new QueryClient())
+  const [queryClient] = React.useState(() => new QueryClient({ mutationCache }))
   const [trpcClient] = React.useState(() =>
     api.createClient({
-      transformer: superjson,
       links: [
         httpBatchLink({
+          transformer: superjson,
           url: `${getBaseUrl()}/api/trpc`,
           headers: async () => {
             const token = await AsyncStorage.getItem(AUTH_TOKEN).catch()

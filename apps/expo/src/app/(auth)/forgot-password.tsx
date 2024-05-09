@@ -3,7 +3,6 @@ import { FormProvider } from "react-hook-form"
 import { ScrollView, View } from "react-native"
 
 import { Button } from "~/components/ui/Button"
-import { FormError } from "~/components/ui/FormError"
 import { FormInput } from "~/components/ui/FormInput"
 import { ModalView } from "~/components/ui/ModalView"
 import { toast } from "~/components/ui/Toast"
@@ -18,14 +17,18 @@ export default function Screen() {
 
   const form = useForm({ defaultValues: { email: "" } })
 
-  const { mutate, isLoading, error } = api.auth.forgotPassword.useMutation({
+  const {
+    mutate,
+    isPending: isLoading,
+    error,
+  } = api.auth.forgotPassword.useMutation({
     onSuccess: async () => {
       if (navigation.canGoBack()) {
         navigation.back()
       } else {
         navigation.push("/")
       }
-      await new Promise((resolve) => setTimeout(resolve, 500))
+      await new Promise((resolve) => setTimeout(resolve, 100))
       toast({ title: "Instructions sent to your email" })
     },
   })
@@ -53,7 +56,6 @@ export default function Screen() {
             <Button className="mb-1" isLoading={isLoading} disabled={isLoading} onPress={onSubmit}>
               Send instructions
             </Button>
-            <FormError className="mb-1" error={error} />
           </View>
         </ScrollView>
       </FormProvider>

@@ -2,7 +2,7 @@ import { BadgeX, Dog, Settings2 } from "lucide-react"
 import * as React from "react"
 
 import type { SpotType } from "@ramble/database/types"
-import { SPOT_TYPES, type SpotTypeInfo, useDisclosure } from "@ramble/shared"
+import { SPOT_TYPES, SPOT_TYPE_OPTIONS, type SpotTypeInfo, useDisclosure } from "@ramble/shared"
 
 import { AppCta } from "@/components/AppCta"
 import { SpotIcon } from "@/components/SpotIcon"
@@ -39,14 +39,20 @@ export function MapFilters() {
         <div className="max-h-[85svh] space-y-6 px-1">
           <AppCta />
           <div className="space-y-4">
-            <SpotTypeSection title="Stays" types={["CAMPING", "FREE_CAMPING", "PARKING"]} />
+            <SpotTypeSection title="Stays" types={SPOT_TYPE_OPTIONS.filter((s) => s.category === "STAY").map((s) => s.value)} />
             <SpotTypeSection
               title="Activities"
-              types={["CLIMBING", "SURFING", "PADDLE_KAYAK", "HIKING_TRAIL", "MOUNTAIN_BIKING"]}
+              types={SPOT_TYPE_OPTIONS.filter((s) => s.category === "ACTIVITY").map((s) => s.value)}
             />
-            <SpotTypeSection title="Services" types={["GAS_STATION", "ELECTRIC_CHARGE_POINT", "MECHANIC_PARTS", "VET"]} />
-            <SpotTypeSection title="Hospitality" types={["CAFE", "RESTAURANT", "SHOP", "BAR"]} />
-            <SpotTypeSection title="Other" types={["REWILDING", "NATURE_EDUCATION", "ART_FILM_PHOTOGRAPHY", "VOLUNTEERING"]} />
+            <SpotTypeSection
+              title="Services"
+              types={SPOT_TYPE_OPTIONS.filter((s) => s.category === "SERVICE").map((s) => s.value)}
+            />
+            <SpotTypeSection
+              title="Hospitality"
+              types={SPOT_TYPE_OPTIONS.filter((s) => s.category === "HOSPITALITY").map((s) => s.value)}
+            />
+            <SpotTypeSection title="Other" types={SPOT_TYPE_OPTIONS.filter((s) => s.category === "OTHER").map((s) => s.value)} />
           </div>
           <hr />
           <div className="space-y-4">
@@ -89,7 +95,7 @@ export function MapFilters() {
 }
 
 function SpotTypeSection({ title, types }: { title: string; types: SpotType[] }) {
-  const enabledTypes = ["CAMPING", "FREE_CAMPING"]
+  const enabledTypes = ["CAMPING", "VAN_PARK"] as SpotType[]
   return (
     <div>
       <p className="text-lg">{title}</p>

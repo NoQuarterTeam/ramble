@@ -11,7 +11,7 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.569.0",
+    "@aws-sdk/client-s3": "3.572.0",
     "@notionhq/client": "^2.2.15",
     "@radix-ui/react-alert-dialog": "1.0.5",
     "@radix-ui/react-avatar": "1.0.4",
@@ -32,10 +32,12 @@
     "@ramble/server-services": "workspace:*",
     "@ramble/shared": "workspace:*",
     "@ramble/tailwind-config": "workspace:*",
-    "@sentry/nextjs": "7.113.0",
+    "@sentry/nextjs": "7.114.0",
     "@tailwindcss/container-queries": "0.1.1",
+    "@tanstack/react-query": "5.35.1",
     "@tanstack/react-table": "8.16.0",
-    "@trpc/server": "10.45.2",
+    "@trpc/react-query": "11.0.0-rc.366",
+    "@trpc/server": "11.0.0-rc.366",
     "@vercel/analytics": "1.2.2",
     "@vercel/edge": "1.1.1",
     "axios": "1.6.8",
@@ -46,8 +48,8 @@
     "isbot": "latest",
     "lucide-react": "0.378.0",
     "mapbox-gl": "3.3.0",
-    "next": "14.3.0-canary.44",
-    "posthog-js": "1.131.0",
+    "next": "14.3.0-canary.52",
+    "posthog-js": "1.131.3",
     "pretty-cache-header": "1.0.0",
     "query-string": "9.0.0",
     "react": "18.2.0",
@@ -59,7 +61,7 @@
     "tailwind-scrollbar-hide": "1.1.7",
     "tailwindcss-radix": "3.0.3",
     "use-onclickoutside": "0.4.1",
-    "zod": "3.23.6",
+    "zod": "3.23.8",
     "zustand": "^4.4.7"
   },
   "devDependencies": {
@@ -70,7 +72,7 @@
     "@types/react-dom": "18.3.0",
     "autoprefixer": "10.4.19",
     "cssnano": "7.0.1",
-    "dotenv-cli": "7.4.1",
+    "dotenv-cli": "7.4.2",
     "postcss": "8.4.38",
     "tailwindcss": "3.3.2",
     "typescript": "5.4.5"

@@ -29,6 +29,7 @@ import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 
+import { keepPreviousData } from "@tanstack/react-query"
 import { useMapSettings } from "~/lib/hooks/useMapSettings"
 import { useMapFilters } from "../../../filters"
 import { useMapLayers } from "./layers"
@@ -66,11 +67,11 @@ function MapContainer() {
     isRefetching,
   } = api.spot.clusters.useQuery(mapSettings ? { ...mapSettings, ...filters } : undefined, {
     enabled: !!mapSettings,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   })
   const { data: users } = api.user.clusters.useQuery(mapSettings ? mapSettings : undefined, {
     enabled: !!mapSettings && !!me && layers.shouldShowUsers,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   })
 
   const handleSetUserLocation = async () => {

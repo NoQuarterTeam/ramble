@@ -12,7 +12,11 @@ export default function NewListScreen() {
   const { me } = useMe()
   const utils = api.useUtils()
   const posthog = usePostHog()
-  const { mutate, error, isLoading } = api.list.create.useMutation({
+  const {
+    mutate,
+    error,
+    isPending: isLoading,
+  } = api.list.create.useMutation({
     onSuccess: (data) => {
       if (!me) return
       posthog.capture("list created", { name: data.name })

@@ -26,13 +26,13 @@
     "@react-native-community/datetimepicker": "7.6.1",
     "@react-native-community/netinfo": "11.1.0",
     "@react-native-menu/menu": "1.0.1",
-    "@rnmapbox/maps": "10.1.21",
+    "@rnmapbox/maps": "10.1.23",
     "@sentry/react-native": "5.20.0",
     "@shopify/flash-list": "1.6.3",
-    "@tanstack/react-query": "4.36.1",
-    "@trpc/client": "10.45.2",
-    "@trpc/react-query": "10.45.2",
-    "@trpc/server": "10.45.2",
+    "@tanstack/react-query": "5.35.1",
+    "@trpc/client": "11.0.0-rc.366",
+    "@trpc/react-query": "11.0.0-rc.366",
+    "@trpc/server": "11.0.0-rc.366",
     "class-variance-authority": "0.7.0",
     "d3-shape": "3.2.0",
     "dayjs": "1.11.11",
@@ -82,7 +82,7 @@
     "react-native-web": "0.19.10",
     "superjson": "2.2.1",
     "zeego": "1.10.0",
-    "zod": "3.23.6"
+    "zod": "3.23.8"
   },
   "devDependencies": {
     "@babel/core": "7.24.5",

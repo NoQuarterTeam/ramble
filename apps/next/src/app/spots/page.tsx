@@ -6,7 +6,7 @@ import { Button, IconButton } from "@/components/ui"
 import { db } from "@/lib/server/db"
 import type { SpotType } from "@ramble/database/types"
 import { spotListQuery } from "@ramble/server-services"
-import { STAY_SPOT_TYPE_OPTIONS, type SpotItemType, type SpotListSort } from "@ramble/shared"
+import { SPOT_TYPE_OPTIONS, type SpotItemType, type SpotListSort } from "@ramble/shared"
 import { unstable_cache } from "next/cache"
 import { SpotSort } from "./SpotSort"
 
@@ -33,7 +33,7 @@ export default async function Page({ searchParams: { type, sort } }: { searchPar
                 All
               </Button>
             </form>
-            {STAY_SPOT_TYPE_OPTIONS.map(({ value, label }) => (
+            {SPOT_TYPE_OPTIONS.filter((s) => s.category === "STAY" && !s.isComingSoon).map(({ value, label }) => (
               <form key={value} method="get">
                 <input type="hidden" name="sort" value={sort || ""} />
                 <Button

@@ -8,7 +8,6 @@ import { type SpotPartnerFields, isPartnerSpot, partners } from "@ramble/shared"
 import { FULL_WEB_URL } from "~/lib/config"
 
 import { Text } from "./ui/Text"
-import { toast } from "./ui/Toast"
 
 interface Props {
   spot: SpotPartnerFields

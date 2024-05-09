@@ -2,7 +2,7 @@
 
 import { type RambleIcon, buttonSizeStyles, buttonStyles } from "@/components/ui"
 import { merge } from "@ramble/shared"
-import { Flag, GaugeCircle, HelpingHand, Mail, MapPin, MessageCircle, Moon, Route, Sun, User } from "lucide-react"
+import { Flag, GaugeCircle, HelpingHand, Mail, MapPin, MessageCircle, Route, User } from "lucide-react"
 import Link, { type LinkProps } from "next/link"
 import { usePathname } from "next/navigation"
 

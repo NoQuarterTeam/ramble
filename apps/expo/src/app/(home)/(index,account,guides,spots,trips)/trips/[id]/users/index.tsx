@@ -77,14 +77,14 @@ export default function TripUsers() {
 function UserItem({
   user,
   trip,
-}: { trip: RouterOutputs["trip"]["usersV2"]["all"]; user: RouterOutputs["trip"]["usersV2"]["all"]["users"][number] }) {
+}: { trip: RouterOutputs["trip"]["users"]["all"]; user: RouterOutputs["trip"]["users"]["all"]["users"][number] }) {
   const { me } = useMe()
 
   const isCreator = user.id === trip.creatorId
   const utils = api.useUtils()
-  const { mutate, isLoading } = api.trip.usersV2.remove.useMutation({
+  const { mutate, isPending: isLoading } = api.trip.users.remove.useMutation({
     onMutate: () => {
-      utils.trip.usersV2.all.setData({ tripId: trip.id }, (prev) => {
+      utils.trip.users.all.setData({ tripId: trip.id }, (prev) => {
         if (!prev) return prev
         return { ...prev, users: prev.users.filter((u) => u.id !== user.id) }
       })

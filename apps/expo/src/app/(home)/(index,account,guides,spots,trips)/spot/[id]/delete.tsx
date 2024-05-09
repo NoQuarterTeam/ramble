@@ -13,7 +13,7 @@ export default function DeleteSpotScreen() {
   const router = useRouter()
 
   const utils = api.useUtils()
-  const { mutate, isLoading } = api.spot.delete.useMutation({
+  const { mutate, isPending: isLoading } = api.spot.delete.useMutation({
     onSuccess: async () => {
       await utils.spot.list.refetch({ skip: 0, sort: "latest" })
       router.navigate("/")

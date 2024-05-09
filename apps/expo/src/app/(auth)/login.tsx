@@ -1,10 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { useRouter } from "expo-router"
 import { FormProvider } from "react-hook-form"
-import { Linking, ScrollView, View } from "react-native"
+import { ScrollView, View } from "react-native"
 
 import { Button } from "~/components/ui/Button"
-import { FormError } from "~/components/ui/FormError"
 import { FormInput } from "~/components/ui/FormInput"
 import { ModalView } from "~/components/ui/ModalView"
 import { Text } from "~/components/ui/Text"
@@ -19,7 +18,11 @@ export default function LoginScreen() {
 
   const form = useForm({ defaultValues: { email: "", password: "" } })
 
-  const { mutate, isLoading, error } = api.auth.login.useMutation({
+  const {
+    mutate,
+    isPending: isLoading,
+    error,
+  } = api.auth.login.useMutation({
     onSuccess: async (data) => {
       await AsyncStorage.setItem(AUTH_TOKEN, data.token)
       utils.user.me.setData(undefined, data.user)
@@ -65,7 +68,6 @@ export default function LoginScreen() {
             <Button className="mb-1" isLoading={isLoading} disabled={isLoading} onPress={onSubmit}>
               Login
             </Button>
-            <FormError className="mb-1" error={error} />
           </View>
           <View>
             <View className="flex flex-row items-center justify-center mb-2">

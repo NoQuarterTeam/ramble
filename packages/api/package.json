@@ -16,7 +16,7 @@
     "@ramble/server-schemas": "workspace:*",
     "@ramble/server-services": "workspace:*",
     "@ramble/shared": "workspace:*",
-    "@trpc/server": "10.45.2",
+    "@trpc/server": "11.0.0-rc.366",
     "@turf/bbox": "7.0.0-alpha.116",
     "@turf/center": "7.0.0-alpha.116",
     "@turf/helpers": "7.0.0-alpha.116",
@@ -24,13 +24,13 @@
     "semver": "^7.6.0",
     "supercluster": "8.0.1",
     "superjson": "2.2.1",
-    "zod": "3.23.6"
+    "zod": "3.23.8"
   },
   "devDependencies": {
-    "@types/node": "20.12.10",
+    "@types/node": "20.12.11",
     "@types/semver": "^7.5.8",
     "@types/supercluster": "7.1.3",
-    "dotenv-cli": "7.4.1",
+    "dotenv-cli": "7.4.2",
     "typescript": "5.4.5"
   }
 }

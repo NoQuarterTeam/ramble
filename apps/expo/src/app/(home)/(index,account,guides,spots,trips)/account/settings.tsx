@@ -20,7 +20,7 @@ export default function AccountSettingsScreen() {
   const utils = api.useUtils()
 
   const { me } = useMe()
-  const { mutate: deleteAccount, isLoading } = api.user.deleteAccount.useMutation({
+  const { mutate: deleteAccount, isPending: isLoading } = api.user.deleteAccount.useMutation({
     onSuccess: async () => {
       modalProps.onClose()
       router.navigate("/")
