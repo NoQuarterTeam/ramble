@@ -38,7 +38,7 @@ export function ReviewItem({
   const { me } = useMe()
   const router = useRouter()
   const utils = api.useUtils()
-  const { mutate: deleteReview, isLoading: deleteLoading } = api.review.delete.useMutation({
+  const { mutate: deleteReview, isPending: deleteLoading } = api.review.delete.useMutation({
     onSuccess: () => {
       if (!review) return
       utils.spot.detail.refetch({ id: review.spotId })
@@ -48,10 +48,10 @@ export function ReviewItem({
 
   const [isTranslated, setIsTranslated] = React.useState(false)
 
-  const { data, error, isInitialLoading } = useQuery<TranslateInput, string, string>({
+  const { data, error, isLoading } = useQuery<TranslateInput, string, string>({
     queryKey: ["review-translation", { id: review.id, lang: me?.preferredLanguage || "en" }],
     queryFn: () => getTranslation({ id: review.id, lang: me?.preferredLanguage || "en" }),
-    cacheTime: Number.POSITIVE_INFINITY,
+    staleTime: Number.POSITIVE_INFINITY,
     enabled: isTranslated && !!me && !!me?.preferredLanguage,
   })
 
@@ -122,7 +122,7 @@ export function ReviewItem({
             <View className="flex items-start">
               <Button
                 onPress={() => setIsTranslated((t) => !t)}
-                isLoading={isInitialLoading}
+                isLoading={isLoading}
                 variant="ghost"
                 size="xs"
                 className="px-0 h-4"

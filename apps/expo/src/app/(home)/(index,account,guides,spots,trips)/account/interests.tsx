@@ -4,7 +4,7 @@ import { ScrollView, Switch, View } from "react-native"
 import colors from "@ramble/tailwind-config/src/colors"
 
 import { Icon } from "~/components/Icon"
-import { FormError } from "~/components/ui/FormError"
+
 import type { IconProps } from "~/components/ui/Icons"
 import { ScreenView } from "~/components/ui/ScreenView"
 import { Text } from "~/components/ui/Text"
@@ -25,7 +25,7 @@ export default function InterestsScreen() {
     isYogi: !!me?.isYogi,
   })
   const utils = api.useUtils()
-  const { mutate, error } = api.user.update.useMutation({
+  const { mutate } = api.user.update.useMutation({
     onSuccess: (data) => {
       utils.user.me.setData(undefined, data)
       toast({ title: "Interests updated." })
@@ -54,7 +54,6 @@ export default function InterestsScreen() {
             isSelected={interests[interest.value as keyof typeof interests]}
           />
         ))}
-        <FormError error={error} />
       </ScrollView>
     </ScreenView>
   )

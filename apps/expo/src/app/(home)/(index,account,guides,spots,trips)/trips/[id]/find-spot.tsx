@@ -25,6 +25,7 @@ import { api } from "~/lib/api"
 import { isTablet, width } from "~/lib/device"
 import { useMapCoords } from "~/lib/hooks/useMapCoords"
 
+import { keepPreviousData } from "@tanstack/react-query"
 import { useMapSettings } from "~/lib/hooks/useMapSettings"
 import { useMapFilters } from "../../../../filters"
 
@@ -38,7 +39,7 @@ export default function FindSpotScreen() {
   const [mapSettings, setMapSettings] = useMapSettings()
   const { data: clusters } = api.spot.clusters.useQuery(mapSettings ? { ...mapSettings, ...filters } : undefined, {
     enabled: !!mapSettings,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   })
   const [isMapLoaded, setIsMapLoaded] = React.useState(false)
 
@@ -47,7 +48,7 @@ export default function FindSpotScreen() {
   const camera = React.useRef<Camera>(null)
   const mapRef = React.useRef<MapType>(null)
 
-  const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, keepPreviousData: true })
+  const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, placeholderData: keepPreviousData })
 
   const handleSetUserLocation = async () => {
     try {

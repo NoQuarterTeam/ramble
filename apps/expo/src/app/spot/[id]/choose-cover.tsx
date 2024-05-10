@@ -3,8 +3,7 @@ import { FlashList } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import { useRouter } from "expo-router"
 import { useLocalSearchParams } from "expo-router"
-import { Heart, Lock } from "lucide-react-native"
-import { usePostHog } from "posthog-react-native"
+import { Heart } from "lucide-react-native"
 import * as React from "react"
 import { TouchableOpacity, View, useColorScheme } from "react-native"
 
@@ -39,7 +38,7 @@ function ImageList({ spot }: { spot: NonNullable<RouterOutputs["spot"]["images"]
   const [coverId, setCoverId] = React.useState(spot.coverId)
   const router = useRouter()
   const utils = api.useUtils()
-  const { mutate, isLoading } = api.spot.update.useMutation({
+  const { mutate, isPending } = api.spot.update.useMutation({
     onSuccess: () => {
       utils.spot.detail.refetch({ id: spot.id })
       router.back()
@@ -68,7 +67,7 @@ function ImageList({ spot }: { spot: NonNullable<RouterOutputs["spot"]["images"]
       />
       {coverId && (
         <View className="absolute right-0 bottom-8 left-0 flex items-center justify-center">
-          <Button isLoading={isLoading} className="w-[100px] rounded-full" onPress={() => mutate({ id: spot.id, coverId })}>
+          <Button isLoading={isPending} className="w-[100px] rounded-full" onPress={() => mutate({ id: spot.id, coverId })}>
             Save
           </Button>
         </View>

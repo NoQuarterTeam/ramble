@@ -13,7 +13,10 @@ import {
   PartyPopper,
   PlugZap,
   ShoppingCart,
+  SignpostBig,
   Sprout,
+  TentTree,
+  Tractor,
   Utensils,
   Wrench,
 } from "lucide-react"
@@ -28,9 +31,12 @@ export type SpotTypeIconInfo = {
 }
 export const SPOT_TYPE_ICONS = {
   // Stays
-  CAMPING: Icons.Van,
-  FREE_CAMPING: Icons.Timer,
-  PARKING: ParkingCircle,
+  CAMPING: TentTree,
+  VAN_PARK: Icons.Van,
+  PRIVATE_LAND: Tractor,
+  CARPARK: ParkingCircle,
+  ROADSIDE: SignpostBig,
+  FREE_CAMPING: Icons.Timer, // @deprecated
   // Activities
   SURFING: Icons.Surf,
   CLIMBING: Mountain,
@@ -39,6 +45,7 @@ export const SPOT_TYPE_ICONS = {
   HIKING_TRAIL: Footprints,
   YOGA: Icons.Yoga,
   // Services
+  SAFE_PARKING: ParkingCircle,
   GAS_STATION: Fuel,
   ELECTRIC_CHARGE_POINT: PlugZap,
   MECHANIC_PARTS: Wrench,

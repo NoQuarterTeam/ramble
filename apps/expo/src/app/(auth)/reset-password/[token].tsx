@@ -3,7 +3,6 @@ import { FormProvider } from "react-hook-form"
 import { ScrollView, View } from "react-native"
 
 import { Button } from "~/components/ui/Button"
-import { FormError } from "~/components/ui/FormError"
 import { FormInput } from "~/components/ui/FormInput"
 import { ModalView } from "~/components/ui/ModalView"
 import { toast } from "~/components/ui/Toast"
@@ -18,7 +17,11 @@ export default function Screen() {
 
   const form = useForm({ defaultValues: { password: "" } })
 
-  const { mutate, isLoading, error } = api.auth.resetPassword.useMutation({
+  const {
+    mutate,
+    isPending: isLoading,
+    error,
+  } = api.auth.resetPassword.useMutation({
     onSuccess: async () => {
       navigation.navigate("/login")
       await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -29,7 +32,7 @@ export default function Screen() {
   const onSubmit = form.handleSubmit((data) => mutate({ ...data, token }))
 
   return (
-    <ModalView title="reset password" onBack={() => navigation.back()}>
+    <ModalView shouldRenderToast title="reset password" onBack={() => navigation.back()}>
       <FormProvider {...form}>
         <ScrollView
           keyboardShouldPersistTaps="handled"
@@ -49,7 +52,6 @@ export default function Screen() {
             <Button className="mb-1" isLoading={isLoading} disabled={isLoading} onPress={onSubmit}>
               Reset
             </Button>
-            <FormError className="mb-1" error={error} />
           </View>
         </ScrollView>
       </FormProvider>

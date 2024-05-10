@@ -12,7 +12,11 @@ export default function NewTripScreen() {
   const utils = api.useUtils()
   const posthog = usePostHog()
 
-  const { mutate, error, isLoading } = api.trip.create.useMutation({
+  const {
+    mutate,
+    error,
+    isPending: isLoading,
+  } = api.trip.create.useMutation({
     onSuccess: (data) => {
       posthog.capture("trip created", { name: data.name })
       utils.trip.mine.refetch()

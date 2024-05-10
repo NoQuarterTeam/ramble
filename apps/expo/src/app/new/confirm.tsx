@@ -11,7 +11,6 @@ import colors from "@ramble/tailwind-config/src/colors"
 import { Icon } from "~/components/Icon"
 import { SpotIcon } from "~/components/SpotIcon"
 import { Button } from "~/components/ui/Button"
-import { FormError } from "~/components/ui/FormError"
 import { SpotImageCarousel } from "~/components/ui/SpotImageCarousel"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
@@ -45,11 +44,7 @@ export default function NewSpotConfirmScreen() {
   const utils = api.useUtils()
   const posthog = usePostHog()
 
-  const {
-    mutate,
-    isLoading: createLoading,
-    error,
-  } = api.spot.create.useMutation({
+  const { mutate, isPending: createLoading } = api.spot.create.useMutation({
     onSuccess: async (data) => {
       posthog.capture("spot created", { type: data.type })
       await utils.user.hasCreatedSpot.refetch()
@@ -165,7 +160,6 @@ export default function NewSpotConfirmScreen() {
         >
           Create
         </Button>
-        <FormError error={error} />
       </View>
     </NewSpotModalView>
   )

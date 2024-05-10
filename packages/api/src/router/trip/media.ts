@@ -1,12 +1,10 @@
-import { z } from "zod"
-
-import { Prisma } from "@ramble/database/types"
 import { clusterSchema, tripMediaSchema } from "@ramble/server-schemas"
 import { promiseHash } from "@ramble/shared"
 import { TRPCError } from "@trpc/server"
 import bbox from "@turf/bbox"
 import { lineString } from "@turf/helpers"
 import Supercluster from "supercluster"
+import { z } from "zod"
 import { createTRPCRouter, protectedProcedure } from "../../trpc"
 
 export const tripMediaRouter = createTRPCRouter({
@@ -123,11 +121,11 @@ export const tripMediaRouter = createTRPCRouter({
     .input(
       z.object({
         tripId: z.string(),
+        media: tripMediaSchema.optional(),
         /**
-         * @deprecated
+         * @deprecated in 1.4.11, use media
          */
         image: tripMediaSchema.optional(),
-        media: tripMediaSchema.optional(), // make required at some point,
       }),
     )
     .mutation(async ({ ctx, input }) => {

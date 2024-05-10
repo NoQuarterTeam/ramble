@@ -9,7 +9,6 @@ import { join } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
-import { FormError } from "~/components/ui/FormError"
 import { FormInput } from "~/components/ui/FormInput"
 import { ScreenView } from "~/components/ui/ScreenView"
 import { Text } from "~/components/ui/Text"
@@ -32,7 +31,11 @@ export default function AccountFeedbackScreen() {
     defaultValues: { message: "" },
   })
 
-  const { mutate, isLoading, error } = api.feedback.create.useMutation({
+  const {
+    mutate,
+    isPending: isLoading,
+    error,
+  } = api.feedback.create.useMutation({
     onSuccess: async () => {
       router.back()
       await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -82,8 +85,6 @@ export default function AccountFeedbackScreen() {
             ))}
           </View>
           <FormInput multiline name="message" label="Message" error={error} />
-
-          <FormError error={error} />
         </ScrollView>
       </ScreenView>
     </FormProvider>

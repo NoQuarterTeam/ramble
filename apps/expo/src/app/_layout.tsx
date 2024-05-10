@@ -31,7 +31,6 @@ import { UnsupportedVersion } from "~/components/UnsupportedVersion"
 
 import NetInfo from "@react-native-community/netinfo"
 import Animated, { SlideInUp, SlideOutUp } from "react-native-reanimated"
-import { Spinner } from "~/components/ui/Spinner"
 import { Toast } from "~/components/ui/Toast"
 import { TRPCProvider, api } from "~/lib/api"
 import { IS_DEV, IS_PRODUCTION, VERSION } from "~/lib/config"

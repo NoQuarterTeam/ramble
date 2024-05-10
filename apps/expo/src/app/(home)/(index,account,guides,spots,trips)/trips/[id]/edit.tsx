@@ -17,7 +17,11 @@ export default function EditTrip() {
   const router = useRouter()
   const { data, isLoading: tripLoading } = api.trip.info.useQuery({ id })
 
-  const { mutate, isLoading, error } = api.trip.update.useMutation({
+  const {
+    mutate,
+    isPending: isLoading,
+    error,
+  } = api.trip.update.useMutation({
     onSuccess: async (data) => {
       utils.trip.info.refetch({ id })
       utils.trip.detail.setData({ id }, (prev) => (prev ? { ...prev, trip: { ...prev.trip, ...data } } : prev))
@@ -26,7 +30,7 @@ export default function EditTrip() {
     },
   })
 
-  const { mutate: deleteTrip, isLoading: deleteLoading } = api.trip.delete.useMutation({
+  const { mutate: deleteTrip, isPending: deleteLoading } = api.trip.delete.useMutation({
     onSuccess: async () => {
       void utils.trip.mine.refetch()
       router.navigate("/(home)/(trips)/trips")

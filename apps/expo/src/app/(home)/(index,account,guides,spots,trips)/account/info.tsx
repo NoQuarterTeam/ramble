@@ -7,7 +7,6 @@ import { createAssetUrl } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
-import { FormError } from "~/components/ui/FormError"
 import { FormInput } from "~/components/ui/FormInput"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { ScreenView } from "~/components/ui/ScreenView"
@@ -35,7 +34,11 @@ export default function AccountInfoScreen() {
   })
 
   const utils = api.useUtils()
-  const { mutate, isLoading, error } = api.user.update.useMutation({
+  const {
+    mutate,
+    isPending: isLoading,
+    error,
+  } = api.user.update.useMutation({
     onSuccess: (data) => {
       utils.user.me.setData(undefined, data)
       form.reset({
@@ -56,7 +59,7 @@ export default function AccountInfoScreen() {
     mutate(data)
   })
 
-  const { mutate: saveAvatar, isLoading: isAvatarSavingLoading } = api.user.update.useMutation({
+  const { mutate: saveAvatar, isPending: isAvatarSavingLoading } = api.user.update.useMutation({
     onSuccess: async () => {
       await utils.user.me.refetch()
       await new Promise((resolve) => setTimeout(resolve, 500))
@@ -134,7 +137,6 @@ export default function AccountInfoScreen() {
           <FormInput autoCapitalize="none" name="username" label="Username" error={error} />
           <FormInput multiline name="bio" label="Bio" error={error} />
           <FormInput autoCapitalize="none" name="instagram" label="Instagram handle" error={error} />
-          <FormError error={error} />
         </ScrollView>
       </ScreenView>
     </FormProvider>

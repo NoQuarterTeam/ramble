@@ -5,78 +5,87 @@ export type SpotTypeInfo = {
   value: SpotType
   label: string
   isComingSoon: boolean
+  isArchived: boolean
+  category: "STAY" | "ACTIVITY" | "SERVICE" | "HOSPITALITY" | "OTHER"
 }
 
 export const SPOT_TYPES = {
   // Stays
-  CAMPING: { value: "CAMPING", label: "Long stay", isComingSoon: false },
-  FREE_CAMPING: { value: "FREE_CAMPING", label: "Overnight stop-off", isComingSoon: false },
-  PARKING: { value: "PARKING", label: "Safe parking", isComingSoon: true },
+  CAMPING: { isArchived: false, value: "CAMPING", label: "Camping", isComingSoon: false, category: "STAY" },
+  VAN_PARK: { isArchived: false, value: "VAN_PARK", label: "Van park", isComingSoon: false, category: "STAY" },
+  CARPARK: { isArchived: false, value: "CARPARK", label: "Car park", isComingSoon: false, category: "STAY" },
+  PRIVATE_LAND: { isArchived: false, value: "PRIVATE_LAND", label: "Private land", isComingSoon: true, category: "STAY" },
+  ROADSIDE: { isArchived: false, value: "ROADSIDE", label: "Roadside", isComingSoon: true, category: "STAY" },
+  /**
+   * @deprecated in 1.4.11, migrate to others
+   */
+  FREE_CAMPING: { value: "FREE_CAMPING", label: "Overnight stop-off", isComingSoon: false, category: "STAY", isArchived: true },
   // Activities
-  SURFING: { value: "SURFING", label: "Surfing", isComingSoon: false },
-  CLIMBING: { value: "CLIMBING", label: "Climbing", isComingSoon: false },
-  MOUNTAIN_BIKING: { value: "MOUNTAIN_BIKING", label: "MTBing", isComingSoon: false },
-  PADDLE_KAYAK: { value: "PADDLE_KAYAK", label: "SUPing / Kayaking", isComingSoon: false },
-  HIKING_TRAIL: { value: "HIKING_TRAIL", label: "Hiking / Trail running", isComingSoon: false },
-  YOGA: { value: "YOGA", label: "Yoga", isComingSoon: true },
+  SURFING: { isArchived: false, value: "SURFING", label: "Surfing", isComingSoon: false, category: "ACTIVITY" },
+  CLIMBING: { isArchived: false, value: "CLIMBING", label: "Climbing", isComingSoon: false, category: "ACTIVITY" },
+  MOUNTAIN_BIKING: { isArchived: false, value: "MOUNTAIN_BIKING", label: "MTBing", isComingSoon: false, category: "ACTIVITY" },
+  PADDLE_KAYAK: {
+    isArchived: false,
+    value: "PADDLE_KAYAK",
+    label: "SUPing / Kayaking",
+    isComingSoon: false,
+    category: "ACTIVITY",
+  },
+  HIKING_TRAIL: {
+    isArchived: false,
+    value: "HIKING_TRAIL",
+    label: "Hiking / Trail running",
+    isComingSoon: false,
+    category: "ACTIVITY",
+  },
+  YOGA: { isArchived: false, value: "YOGA", label: "Yoga", isComingSoon: true, category: "ACTIVITY" },
   // Services
-  GAS_STATION: { value: "GAS_STATION", label: "Renewable diesel", isComingSoon: false },
-  ELECTRIC_CHARGE_POINT: { value: "ELECTRIC_CHARGE_POINT", label: "Electric Charge Point", isComingSoon: true },
-  MECHANIC_PARTS: { value: "MECHANIC_PARTS", label: "Mechanic / Parts", isComingSoon: true },
-  VET: { value: "VET", label: "Vet", isComingSoon: true },
+  GAS_STATION: { isArchived: false, value: "GAS_STATION", label: "Renewable diesel", isComingSoon: false, category: "SERVICE" },
+  SAFE_PARKING: { isArchived: false, value: "SAFE_PARKING", label: "Safe parking", isComingSoon: true, category: "SERVICE" },
+  ELECTRIC_CHARGE_POINT: {
+    isArchived: false,
+    value: "ELECTRIC_CHARGE_POINT",
+    label: "Electric Charge Point",
+    isComingSoon: true,
+    category: "SERVICE",
+  },
+  MECHANIC_PARTS: {
+    isArchived: false,
+    value: "MECHANIC_PARTS",
+    label: "Mechanic / Parts",
+    isComingSoon: true,
+    category: "SERVICE",
+  },
+  VET: { isArchived: false, value: "VET", label: "Vet", isComingSoon: true, category: "SERVICE" },
   // Hospitality
-  CAFE: { value: "CAFE", label: "Cafe", isComingSoon: true },
-  RESTAURANT: { value: "RESTAURANT", label: "Restaurant", isComingSoon: true },
-  BAR: { value: "BAR", label: "Bar", isComingSoon: true },
-  SHOP: { value: "SHOP", label: "Shop", isComingSoon: true },
+  CAFE: { isArchived: false, value: "CAFE", label: "Cafe", isComingSoon: true, category: "HOSPITALITY" },
+  RESTAURANT: { isArchived: false, value: "RESTAURANT", label: "Restaurant", isComingSoon: true, category: "HOSPITALITY" },
+  BAR: { isArchived: false, value: "BAR", label: "Bar", isComingSoon: true, category: "HOSPITALITY" },
+  SHOP: { isArchived: false, value: "SHOP", label: "Shop", isComingSoon: true, category: "HOSPITALITY" },
   // Other
-  REWILDING: { value: "REWILDING", label: "Rewilding", isComingSoon: false },
-  NATURE_EDUCATION: { value: "NATURE_EDUCATION", label: "Nature Education", isComingSoon: true },
-  FESTIVAL: { value: "FESTIVAL", label: "Festival", isComingSoon: true },
-  ART_FILM_PHOTOGRAPHY: { value: "ART_FILM_PHOTOGRAPHY", label: "Art, Film & Photography", isComingSoon: true },
-  VOLUNTEERING: { value: "VOLUNTEERING", label: "Volunteering", isComingSoon: true },
+  REWILDING: { isArchived: false, value: "REWILDING", label: "Rewilding", isComingSoon: false, category: "OTHER" },
+  NATURE_EDUCATION: {
+    isArchived: false,
+    value: "NATURE_EDUCATION",
+    label: "Nature Education",
+    isComingSoon: true,
+    category: "OTHER",
+  },
+  FESTIVAL: { isArchived: false, value: "FESTIVAL", label: "Festival", isComingSoon: true, category: "OTHER" },
+  ART_FILM_PHOTOGRAPHY: {
+    isArchived: false,
+    value: "ART_FILM_PHOTOGRAPHY",
+    label: "Art, Film & Photography",
+    isComingSoon: true,
+    category: "OTHER",
+  },
+  VOLUNTEERING: { isArchived: false, value: "VOLUNTEERING", label: "Volunteering", isComingSoon: true, category: "OTHER" },
 } satisfies Record<SpotType, SpotTypeInfo>
 
-export const SPOT_TYPE_OPTIONS = Object.entries(SPOT_TYPES).map(([_, val]) => val)
+export const SPOT_TYPE_OPTIONS = Object.entries(SPOT_TYPES)
+  .map(([_, val]) => val)
+  .filter((s) => !s.isArchived)
 
-// TODO: how to enforce all types? need const assertion
-export const SPOT_TYPE_NAMES = [
-  "CAMPING",
-  "FREE_CAMPING",
-  "PARKING",
-  // Activities
-  "SURFING",
-  "CLIMBING",
-  "MOUNTAIN_BIKING",
-  "PADDLE_KAYAK",
-  "HIKING_TRAIL",
-  "YOGA",
-  // Services
-  "GAS_STATION",
-  "ELECTRIC_CHARGE_POINT",
-  "MECHANIC_PARTS",
-  "VET",
-  // Hospitality
-  "CAFE",
-  "RESTAURANT",
-  "BAR",
-  "SHOP",
-  // Other
-  "REWILDING",
-  "NATURE_EDUCATION",
-  "FESTIVAL",
-  "ART_FILM_PHOTOGRAPHY",
-  "VOLUNTEERING",
-] as const
-
-export const STAY_SPOT_TYPE_OPTIONS = Object.entries({
-  CAMPING: SPOT_TYPES.CAMPING,
-  FREE_CAMPING: SPOT_TYPES.FREE_CAMPING,
-}).map(([_, { label, value, isComingSoon }]) => ({ label, value, isComingSoon })) as {
-  label: string
-  value: SpotType
-  isComingSoon: boolean
-}[]
 export const spotPartnerFields = {
   campspaceId: true,
   cucortuId: true,
@@ -174,8 +183,11 @@ export const activitySpotTypes = ["CLIMBING", "CLIMBING", "HIKING_TRAIL", "PADDL
 export const spotMarkerColorTypes = {
   // stays
   CAMPING: "border-green-100 bg-green-700",
-  FREE_CAMPING: "border-cyan-100 bg-cyan-800",
-  PARKING: "border-gray-500 bg-gray-50",
+  VAN_PARK: "border-green-100 bg-green-700",
+  PRIVATE_LAND: "border-green-100 bg-green-700",
+  ROADSIDE: "border-green-100 bg-green-700",
+  CARPARK: "border-green-100 bg-green-700",
+  FREE_CAMPING: "border-cyan-100 bg-cyan-800", // deprecated
   // activities
   SURFING: "border-blue-100 bg-blue-500",
   CLIMBING: "border-blue-100 bg-blue-500",
@@ -184,6 +196,7 @@ export const spotMarkerColorTypes = {
   PADDLE_KAYAK: "border-blue-100 bg-blue-500",
   YOGA: "border-blue-100 bg-blue-500",
   // services
+  SAFE_PARKING: "border-gray-500 bg-gray-50",
   GAS_STATION: "border-gray-500 bg-gray-50",
   ELECTRIC_CHARGE_POINT: "border-gray-500 bg-gray-50",
   MECHANIC_PARTS: "border-gray-500 bg-gray-50",
@@ -205,7 +218,11 @@ export const spotMarkerTextColorTypes = {
   // stays
   CAMPING: "text-white",
   FREE_CAMPING: "text-white",
-  PARKING: "text-black",
+  VAN_PARK: "text-white",
+  PRIVATE_LAND: "text-white",
+  ROADSIDE: "text-white",
+  CARPARK: "text-white",
+
   // activities
   SURFING: "text-white",
   CLIMBING: "text-white",
@@ -214,6 +231,7 @@ export const spotMarkerTextColorTypes = {
   PADDLE_KAYAK: "text-white",
   YOGA: "text-white",
   // services
+  SAFE_PARKING: "text-black",
   GAS_STATION: "text-black",
   ELECTRIC_CHARGE_POINT: "text-black",
   MECHANIC_PARTS: "text-black",
@@ -235,7 +253,10 @@ export const spotMarkerClusterColorTypes = {
   // stays
   CAMPING: colors.green[700],
   FREE_CAMPING: colors.cyan[800],
-  PARKING: colors.gray[50],
+  VAN_PARK: colors.green[700],
+  PRIVATE_LAND: colors.green[700],
+  ROADSIDE: colors.green[700],
+  CARPARK: colors.green[700],
   // activities
   SURFING: colors.blue[500],
   CLIMBING: colors.blue[500],
@@ -244,6 +265,7 @@ export const spotMarkerClusterColorTypes = {
   PADDLE_KAYAK: colors.blue[500],
   YOGA: colors.blue[500],
   // services
+  SAFE_PARKING: colors.gray[50],
   GAS_STATION: colors.gray[50],
   ELECTRIC_CHARGE_POINT: colors.gray[50],
   MECHANIC_PARTS: colors.gray[50],

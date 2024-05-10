@@ -44,7 +44,7 @@ export default function EditSpotAmenitiesScreen() {
         <Button
           className="rounded-full"
           onPress={() => {
-            const searchParams = new URLSearchParams({ ...params, amenities: JSON.stringify(amenities) })
+            const searchParams = new URLSearchParams({ ...params, amenities: amenities ? JSON.stringify(amenities) : "" })
             router.push(`/${tab}/spot/${id}/edit/images?${searchParams}`)
           }}
         >

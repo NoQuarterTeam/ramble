@@ -22,6 +22,7 @@ import { api } from "~/lib/api"
 
 import { useMapCoords } from "~/lib/hooks/useMapCoords"
 
+import { keepPreviousData } from "@tanstack/react-query"
 import { ModalView } from "~/components/ui/ModalView"
 
 export default function NewItemScreen() {
@@ -43,14 +44,14 @@ export default function NewItemScreen() {
     isFetching,
   } = api.mapbox.geocodeCoords.useQuery(
     { latitude: coords?.[1]!, longitude: coords?.[0]! },
-    { enabled: !!coords?.[0] && !!coords?.[1], keepPreviousData: true },
+    { enabled: !!coords?.[0] && !!coords?.[1], placeholderData: keepPreviousData },
   )
 
   const address = geocodeData?.place || geocodeData?.address
 
   const isUnknownAddress = !address
 
-  const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, keepPreviousData: true })
+  const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, placeholderData: keepPreviousData })
 
   const handleSetUserLocation = async () => {
     try {
@@ -73,7 +74,7 @@ export default function NewItemScreen() {
   }
 
   const posthog = usePostHog()
-  const { mutate, isLoading: createLoading } = api.trip.saveStop.useMutation({
+  const { mutate, isPending: createLoading } = api.trip.saveStop.useMutation({
     onSuccess: (data) => {
       posthog.capture("trip stop created", { place: data.name })
       void utils.trip.detail.refetch({ id })

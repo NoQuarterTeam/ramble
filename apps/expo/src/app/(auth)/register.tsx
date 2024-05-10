@@ -5,7 +5,6 @@ import { FormProvider } from "react-hook-form"
 import { ScrollView, View } from "react-native"
 
 import { Button } from "~/components/ui/Button"
-import { FormError } from "~/components/ui/FormError"
 import { FormInput } from "~/components/ui/FormInput"
 import { ModalView } from "~/components/ui/ModalView"
 import { toast } from "~/components/ui/Toast"
@@ -21,7 +20,11 @@ export default function RegisterScreen() {
   const queryClient = api.useUtils()
   const navigation = useRouter()
   const posthog = usePostHog()
-  const { mutate, error, isLoading } = api.auth.register.useMutation({
+  const {
+    mutate,
+    error,
+    isPending: isLoading,
+  } = api.auth.register.useMutation({
     onSuccess: async (data) => {
       posthog.capture("user registered")
       await AsyncStorage.setItem(AUTH_TOKEN, data.token)
@@ -88,8 +91,6 @@ export default function RegisterScreen() {
             <Button className="mb-1" variant="link" onPress={() => navigation.replace("/request-access")}>
               No code? Request access
             </Button>
-
-            <FormError className="mb-1" error={error} />
           </View>
 
           <View className="flex flex-row items-center justify-center">

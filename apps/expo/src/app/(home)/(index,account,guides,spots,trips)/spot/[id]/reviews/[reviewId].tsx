@@ -17,7 +17,11 @@ export default function ReviewDetailScreen() {
   const utils = api.useUtils()
   const { data: review, isLoading: reviewLoading } = api.review.detail.useQuery({ id: reviewId })
 
-  const { mutate, isLoading, error } = api.review.update.useMutation({
+  const {
+    mutate,
+    isPending: isLoading,
+    error,
+  } = api.review.update.useMutation({
     onSuccess: async () => {
       if (!review) return
       void utils.spot.detail.refetch({ id: review.spotId })

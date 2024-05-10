@@ -16,7 +16,11 @@ export default function EditListScreen() {
   const router = useRouter()
   const { me } = useMe()
   const utils = api.useUtils()
-  const { mutate, error, isLoading } = api.list.update.useMutation({
+  const {
+    mutate,
+    error,
+    isPending: isLoading,
+  } = api.list.update.useMutation({
     onSuccess: () => {
       if (!me) return
       utils.list.detail.refetch({ id })
@@ -26,7 +30,7 @@ export default function EditListScreen() {
   })
 
   const tab = useTabSegment()
-  const { mutate: deleteList, isLoading: deleteLoading } = api.list.delete.useMutation({
+  const { mutate: deleteList, isPending: deleteLoading } = api.list.delete.useMutation({
     onSuccess: () => {
       if (!me) return
       utils.list.allByUser.refetch({ username: me.username })

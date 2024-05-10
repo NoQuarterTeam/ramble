@@ -10,5 +10,6 @@ export * from "./utils/bioRegions"
 export * from "./utils/helpers"
 
 export * from "./models/spot"
+export * from "./models/van"
 export * from "./models/user"
 export * from "./models/amenities"

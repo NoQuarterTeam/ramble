@@ -20,28 +20,137 @@ export default function NewSpotTypeScreen() {
 
   return (
     <NewSpotModalView title="what type?">
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
-        <View className="flex flex-row flex-wrap gap-2 py-4">
-          {SPOT_TYPE_OPTIONS.filter((s) => (me?.isAdmin ? true : !s.isComingSoon)).map((spotType) => (
-            <Button
-              size="sm"
-              variant={type === spotType.value ? "primary" : "outline"}
-              leftIcon={
-                <SpotIcon
-                  type={spotType.value}
-                  size={20}
-                  color={{
-                    light: type === spotType.value ? "white" : "black",
-                    dark: type === spotType.value ? "black" : "white",
-                  }}
-                />
-              }
-              key={spotType.value}
-              onPress={() => setType(spotType.value)}
-            >
-              {spotType.label}
-            </Button>
-          ))}
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
+        <View className="pb-4">
+          <Text className="text-lg pb-0.5">Stay</Text>
+          <View className="flex flex-row flex-wrap gap-2">
+            {SPOT_TYPE_OPTIONS.filter((s) => s.category === "STAY" && (me?.isAdmin ? true : !s.isComingSoon)).map((spotType) => (
+              <Button
+                size="sm"
+                variant={type === spotType.value ? "primary" : "outline"}
+                leftIcon={
+                  <SpotIcon
+                    type={spotType.value}
+                    size={20}
+                    color={{
+                      light: type === spotType.value ? "white" : "black",
+                      dark: type === spotType.value ? "black" : "white",
+                    }}
+                  />
+                }
+                key={spotType.value}
+                onPress={() => setType(spotType.value)}
+              >
+                {spotType.label}
+              </Button>
+            ))}
+          </View>
+        </View>
+        <View className="pb-4">
+          <Text className="text-lg pb-0.5">Activity</Text>
+          <View className="flex flex-row flex-wrap gap-2">
+            {SPOT_TYPE_OPTIONS.filter((s) => s.category === "ACTIVITY" && (me?.isAdmin ? true : !s.isComingSoon)).map(
+              (spotType) => (
+                <Button
+                  size="sm"
+                  variant={type === spotType.value ? "primary" : "outline"}
+                  leftIcon={
+                    <SpotIcon
+                      type={spotType.value}
+                      size={20}
+                      color={{
+                        light: type === spotType.value ? "white" : "black",
+                        dark: type === spotType.value ? "black" : "white",
+                      }}
+                    />
+                  }
+                  key={spotType.value}
+                  onPress={() => setType(spotType.value)}
+                >
+                  {spotType.label}
+                </Button>
+              ),
+            )}
+          </View>
+        </View>
+        <View className="pb-4">
+          <Text className="text-lg pb-0.5">Service</Text>
+          <View className="flex flex-row flex-wrap gap-2">
+            {SPOT_TYPE_OPTIONS.filter((s) => s.category === "SERVICE" && (me?.isAdmin ? true : !s.isComingSoon)).map(
+              (spotType) => (
+                <Button
+                  size="sm"
+                  variant={type === spotType.value ? "primary" : "outline"}
+                  leftIcon={
+                    <SpotIcon
+                      type={spotType.value}
+                      size={20}
+                      color={{
+                        light: type === spotType.value ? "white" : "black",
+                        dark: type === spotType.value ? "black" : "white",
+                      }}
+                    />
+                  }
+                  key={spotType.value}
+                  onPress={() => setType(spotType.value)}
+                >
+                  {spotType.label}
+                </Button>
+              ),
+            )}
+          </View>
+        </View>
+        <View className="pb-4">
+          <Text className="text-lg pb-0.5">Hospitality</Text>
+          <View className="flex flex-row flex-wrap gap-2">
+            {SPOT_TYPE_OPTIONS.filter((s) => s.category === "HOSPITALITY" && (me?.isAdmin ? true : !s.isComingSoon)).map(
+              (spotType) => (
+                <Button
+                  size="sm"
+                  variant={type === spotType.value ? "primary" : "outline"}
+                  leftIcon={
+                    <SpotIcon
+                      type={spotType.value}
+                      size={20}
+                      color={{
+                        light: type === spotType.value ? "white" : "black",
+                        dark: type === spotType.value ? "black" : "white",
+                      }}
+                    />
+                  }
+                  key={spotType.value}
+                  onPress={() => setType(spotType.value)}
+                >
+                  {spotType.label}
+                </Button>
+              ),
+            )}
+          </View>
+        </View>
+        <View className="pb-4">
+          <Text className="text-lg pb-0.5">Other</Text>
+          <View className="flex flex-row flex-wrap gap-2">
+            {SPOT_TYPE_OPTIONS.filter((s) => s.category === "OTHER" && (me?.isAdmin ? true : !s.isComingSoon)).map((spotType) => (
+              <Button
+                size="sm"
+                variant={type === spotType.value ? "primary" : "outline"}
+                leftIcon={
+                  <SpotIcon
+                    type={spotType.value}
+                    size={20}
+                    color={{
+                      light: type === spotType.value ? "white" : "black",
+                      dark: type === spotType.value ? "black" : "white",
+                    }}
+                  />
+                }
+                key={spotType.value}
+                onPress={() => setType(spotType.value)}
+              >
+                {spotType.label}
+              </Button>
+            ))}
+          </View>
         </View>
         <Text className="text-center text-sm opacity-80">More options coming soon</Text>
       </ScrollView>

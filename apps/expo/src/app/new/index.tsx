@@ -8,6 +8,7 @@ import * as React from "react"
 import { Alert, TouchableOpacity, View, useColorScheme } from "react-native"
 
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, displayRating } from "@ramble/shared"
+import { keepPreviousData } from "@tanstack/react-query"
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
@@ -49,13 +50,13 @@ export default function NewSpotLocationScreen() {
 
   const { data: address } = api.mapbox.geocodeCoords.useQuery(
     { longitude: coords?.[0]!, latitude: coords?.[1]! },
-    { enabled: !!coords, keepPreviousData: true },
+    { enabled: !!coords, placeholderData: keepPreviousData },
   )
 
-  const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, keepPreviousData: true })
+  const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, placeholderData: keepPreviousData })
   const { data: googleData, isFetching: isFetchingPlaces } = api.google.getPlacesInArea.useQuery(
     { center: coordsForPlaces || [] },
-    { enabled: !!coordsForPlaces, keepPreviousData: true },
+    { enabled: !!coordsForPlaces, placeholderData: keepPreviousData },
   )
 
   const googlePlaces = googleData || []
@@ -312,7 +313,7 @@ function GooglePlacePreview({ place, onClose, addressToUse, coords }: Props) {
 
   const { data, isLoading } = api.google.getPlacePhotos.useQuery(
     { names: place.photos || [] },
-    { enabled: place.photos && place.photos.length > 0, keepPreviousData: true },
+    { enabled: place.photos && place.photos.length > 0, placeholderData: keepPreviousData },
   )
   const images = data || []
 

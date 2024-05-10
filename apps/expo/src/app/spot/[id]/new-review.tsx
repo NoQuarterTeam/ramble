@@ -16,7 +16,11 @@ export default function NewReviewScreen() {
   const { me } = useMe()
   const router = useRouter()
   const utils = api.useUtils()
-  const { mutate, isLoading, error } = api.review.create.useMutation({
+  const {
+    mutate,
+    isPending: isLoading,
+    error,
+  } = api.review.create.useMutation({
     onSuccess: () => {
       utils.spot.detail.refetch({ id })
       utils.spot.mapPreview.refetch({ id })

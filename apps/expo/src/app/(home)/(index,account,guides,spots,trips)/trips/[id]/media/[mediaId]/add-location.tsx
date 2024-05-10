@@ -1,5 +1,6 @@
 import { Camera, LocationPuck, type MapState, type MapView as MapType, StyleURL } from "@rnmapbox/maps"
 import type { Position } from "@rnmapbox/maps/lib/typescript/src/types/Position"
+import { keepPreviousData } from "@tanstack/react-query"
 import * as Location from "expo-location"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { CircleDot, Navigation } from "lucide-react-native"
@@ -29,7 +30,7 @@ export default function AddImageLocation() {
   const mapRef = React.useRef<MapType>(null)
   const utils = api.useUtils()
 
-  const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, keepPreviousData: true })
+  const { data: places } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, placeholderData: keepPreviousData })
 
   const handleSetUserLocation = async () => {
     try {
@@ -51,7 +52,7 @@ export default function AddImageLocation() {
     setCoords(properties.center)
   }
 
-  const { mutate, isLoading: saveLoading } = api.trip.media.update.useMutation({
+  const { mutate, isPending: saveLoading } = api.trip.media.update.useMutation({
     onSuccess: () => {
       if (!coords) return
       void utils.trip.media.byId.refetch({ id: imageId })

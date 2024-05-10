@@ -19,7 +19,7 @@ export default function SaveSpotImagesScreen() {
   const [images, setImages] = React.useState(params.images?.split(",") || [])
   const [upload] = useS3Upload()
   const utils = api.useUtils()
-  const { mutate, isLoading: mutationLoading } = api.spot.addImages.useMutation({
+  const { mutate, isPending: mutationLoading } = api.spot.addImages.useMutation({
     onSuccess: async () => {
       await Promise.all([utils.spot.mapPreview.refetch({ id: params.id }), utils.spot.detail.refetch({ id: params.id })])
       router.back()

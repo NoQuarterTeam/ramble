@@ -80,7 +80,7 @@ export default function SpotDetailScreen() {
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
   const params = useLocalSearchParams<{ id: string }>()
-  const { data, isLoading } = api.spot.detail.useQuery({ id: params.id }, { cacheTime: Number.POSITIVE_INFINITY })
+  const { data, isLoading } = api.spot.detail.useQuery({ id: params.id }, { staleTime: Number.POSITIVE_INFINITY })
   const spot = data?.spot
 
   const forecastDays = data?.weather
@@ -143,7 +143,7 @@ export default function SpotDetailScreen() {
     } catch (_error) {}
   }
   const utils = api.useUtils()
-  const { mutate: verifySpot, isLoading: isVerifyingLoading } = api.spot.verify.useMutation({
+  const { mutate: verifySpot, isPending: isVerifyingLoading } = api.spot.verify.useMutation({
     onSuccess: async () => {
       if (!spot) return
       try {
@@ -543,10 +543,10 @@ function TranslateSpotDescription(props: DescProps) {
   const modalProps = useDisclosure()
   const { me } = useMe()
   const [lang, setLang] = React.useState<string>(me?.preferredLanguage || "en")
-  const { data, error, isInitialLoading } = useQuery<TranslateInput, string, string>({
+  const { data, error, isLoading } = useQuery<TranslateInput, string, string>({
     queryKey: ["spot-translation", { id: props.spot.id, lang, hash: props.hash || "" }],
     queryFn: () => getTranslation({ id: props.spot.id, lang, hash: props.hash || "" }),
-    cacheTime: Number.POSITIVE_INFINITY,
+    staleTime: Number.POSITIVE_INFINITY,
     enabled: !!me && lang !== me.preferredLanguage,
   })
 
@@ -558,7 +558,7 @@ function TranslateSpotDescription(props: DescProps) {
         <Button
           leftIcon={<Icon icon={Languages} size={16} />}
           rightIcon={<Icon icon={ChevronDown} size={16} />}
-          isLoading={isInitialLoading}
+          isLoading={isLoading}
           variant="outline"
           disabled={!me}
           size="xs"
