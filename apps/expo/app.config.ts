@@ -113,7 +113,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
       {
         RNMapboxMapsImpl: "mapbox",
         RNMapboxMapsDownloadToken: "sk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNsaHVvaXZ4bDAxdjMzY2xiNnE3OHp0dnMifQ.nwE8EhfOoonpunlKdGikiA",
-        RNMapboxMapsVersion: "11.0.0",
+        RNMapboxMapsVersion: "11.3.0",
       },
     ],
     [
