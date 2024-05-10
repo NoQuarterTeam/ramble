@@ -11,7 +11,6 @@ on:
 permissions:
   actions: write
   contents: read
-
 jobs:
   update:
     name: EAS Update
