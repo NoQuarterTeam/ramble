@@ -36,10 +36,10 @@ export const BioRegionPreview = React.memo(function _BioRegionPreview({ id, onCl
 
   return (
     <Animated.View
-      style={{ width: "100%", height: 400, position: "absolute", backgroundColor, bottom: 0, zIndex: 1 }}
+      style={{ width: "100%", position: "absolute", backgroundColor, bottom: 0, zIndex: 1 }}
       entering={SlideInDown.duration(200)}
       exiting={SlideOutDown.duration(200)}
-      className="rounded-t-xs p-4"
+      className="rounded-t-sm p-4"
     >
       {!bioRegion ? (
         <Text>Bio region not found</Text>
@@ -50,8 +50,8 @@ export const BioRegionPreview = React.memo(function _BioRegionPreview({ id, onCl
               <Icon icon={Earth} size={16} />
               <Text className="text-xs">Bio region</Text>
             </View>
-            <TouchableOpacity onPress={onClose} className="flex items-center justify-center p-2">
-              <Icon icon={X} size={24} />
+            <TouchableOpacity onPress={onClose} className="flex items-center justify-center p-1">
+              <Icon icon={X} size={22} />
             </TouchableOpacity>
           </View>
           <TouchableOpacity onPress={handleGoToBioRegion} activeOpacity={0.7} className="flex flex-row items-center space-x-2">

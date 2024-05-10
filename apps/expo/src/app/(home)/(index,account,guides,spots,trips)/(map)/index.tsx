@@ -157,6 +157,7 @@ function MapContainer() {
             })
             if (!point.properties.cluster) {
               increment()
+              setSelectedBioRegion(null)
               setActiveSpotId(point.properties.id)
             }
           }}
@@ -247,6 +248,7 @@ function MapContainer() {
     const layerNames = features.map((feature) => feature?.properties?.short_name)
     const selectedBioRegion = Object.keys(BIOREGIONS).find((bioRegion) => layerNames.includes(bioRegion)) as BioRegion
     if (!selectedBioRegion) return
+    setActiveSpotId(null)
     setSelectedBioRegion(selectedBioRegion)
   }
 

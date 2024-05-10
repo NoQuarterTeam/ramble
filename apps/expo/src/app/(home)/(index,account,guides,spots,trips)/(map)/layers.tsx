@@ -131,7 +131,7 @@ export default function MapLayers() {
               <View>
                 <Text className="h-[25px] text-lg">Bio Regions</Text>
                 <Text numberOfLines={2} style={{ lineHeight: 16 }} className="max-w-[220px] text-sm opacity-75">
-                  Shows bioregions
+                  Shows bioregions of europe
                 </Text>
               </View>
             </View>

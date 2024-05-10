@@ -44,10 +44,10 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
   }
   return (
     <Animated.View
-      style={{ width: "100%", height: 440, position: "absolute", backgroundColor, bottom: 0, zIndex: 1 }}
+      style={{ width: "100%", position: "absolute", backgroundColor, bottom: 0, zIndex: 1 }}
       entering={SlideInDown.duration(200)}
       exiting={SlideOutDown.duration(200)}
-      className="rounded-t-xs p-4"
+      className="rounded-t-sm p-4"
     >
       {isLoading ? (
         <View className="flex items-center justify-center p-10">
@@ -57,18 +57,23 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
         <Text>Spot not found</Text>
       ) : (
         <View className="space-y-2">
-          <TouchableOpacity onPress={handleGoToSpot} activeOpacity={0.9} className="flex flex-row space-x-4">
-            <SpotTypeBadge spot={spot} />
-            {weatherData && (
-              <View className="flex flex-row items-center">
-                <Text>{Math.round(weatherData.temp)}°C</Text>
-                <Image
-                  style={{ width: 35, height: 35 }}
-                  source={{ uri: `https://openweathermap.org/img/wn/${weatherData.icon}@2x.png` }}
-                />
-              </View>
-            )}
-          </TouchableOpacity>
+          <View className="flex flex-row justify-between">
+            <TouchableOpacity onPress={handleGoToSpot} activeOpacity={0.9} className="flex flex-row space-x-4">
+              <SpotTypeBadge spot={spot} />
+              {weatherData && (
+                <View className="flex flex-row items-center">
+                  <Text>{Math.round(weatherData.temp)}°C</Text>
+                  <Image
+                    style={{ width: 35, height: 35 }}
+                    source={{ uri: `https://openweathermap.org/img/wn/${weatherData.icon}@2x.png` }}
+                  />
+                </View>
+              )}
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onClose} className="flex items-center justify-center p-1">
+              <Icon icon={X} size={22} />
+            </TouchableOpacity>
+          </View>
 
           <TouchableOpacity onPress={handleGoToSpot} activeOpacity={0.7} className="flex flex-row items-center space-x-2">
             <View className="flex flex-row justify-between w-full items-center">
@@ -142,10 +147,6 @@ export const SpotPreview = React.memo(function _SpotPreview({ id, onClose }: { i
           <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <CreatorCard spot={spot} />}</View>
         </View>
       )}
-
-      <TouchableOpacity onPress={onClose} className="absolute top-2 right-2 flex items-center justify-center p-2">
-        <X size={24} color={colorScheme === "dark" ? "white" : "black"} />
-      </TouchableOpacity>
     </Animated.View>
   )
 })
