@@ -1,4 +1,4 @@
-import { BIOREGIONS, type BioRegion, createAssetUrl } from "@ramble/shared"
+import { BIOREGIONS, type BioRegion } from "@ramble/shared"
 import * as Sentry from "@sentry/react-native"
 import { Image } from "expo-image"
 import * as WebBrowser from "expo-web-browser"
@@ -8,10 +8,8 @@ import { Linking, TouchableOpacity, View, useColorScheme } from "react-native"
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
 import { Text } from "~/components/ui/Text"
 import { FULL_WEB_URL } from "~/lib/config"
-import { width } from "~/lib/device"
 import { useBackgroundColor } from "~/lib/tailwind"
 import { Icon } from "./Icon"
-import { OptimizedImage } from "./ui/OptimisedImage"
 
 export const BioRegionPreview = React.memo(function _BioRegionPreview({ id, onClose }: { id: BioRegion; onClose: () => void }) {
   const bioRegion = BIOREGIONS[id]
@@ -31,8 +29,6 @@ export const BioRegionPreview = React.memo(function _BioRegionPreview({ id, onCl
       Linking.openURL(bioRegion.url)
     }
   }
-
-  const image = bioRegion?.imageUrl ? { path: bioRegion.imageUrl, blurHash: "" } : { path: "", blurHash: "" }
 
   return (
     <Animated.View
@@ -61,18 +57,15 @@ export const BioRegionPreview = React.memo(function _BioRegionPreview({ id, onCl
               </Text>
             </View>
           </TouchableOpacity>
-          <View className="overflow-hidden rounded-xs">
-            <TouchableOpacity onPress={handleGoToBioRegion} activeOpacity={1}>
-              <OptimizedImage
-                width={width - 32}
-                height={235}
-                placeholder={image.blurHash}
-                source={{ uri: createAssetUrl(image.path) }}
-                style={{ width: width - 32, height: 235, marginHorizontal: 0 }}
-                className="rounded-xs object-cover"
-              />
-            </TouchableOpacity>
-          </View>
+
+          <TouchableOpacity onPress={handleGoToBioRegion} activeOpacity={1}>
+            <Image
+              source={{ uri: bioRegion.imageUrl }}
+              style={{ width: "100%", height: 235 }}
+              className="rounded-xs object-cover"
+            />
+          </TouchableOpacity>
+
           <View>
             <TouchableOpacity
               onPress={handleGoToBioRegion}
