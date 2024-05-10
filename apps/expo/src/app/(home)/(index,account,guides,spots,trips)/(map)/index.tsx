@@ -1,3 +1,4 @@
+import { BIOREGIONS, type BioRegion, INITIAL_LATITUDE, INITIAL_LONGITUDE, createAssetUrl, join } from "@ramble/shared"
 import {
   Camera,
   LocationPuck,
@@ -5,16 +6,15 @@ import {
   type MapView as MapType,
   MarkerView,
   RasterLayer,
-  RasterSource
+  RasterSource,
 } from "@rnmapbox/maps"
+import { keepPreviousData } from "@tanstack/react-query"
 import * as Location from "expo-location"
 import { Link, useRouter } from "expo-router"
 import { Layers, Navigation, PlusCircle, Settings2, User } from "lucide-react-native"
 import * as React from "react"
 import { TouchableOpacity, View, useColorScheme } from "react-native"
-
-import { BIOREGIONS, BioRegion, INITIAL_LATITUDE, INITIAL_LONGITUDE, createAssetUrl, join } from "@ramble/shared"
-
+import { BioRegionPreview } from "~/components/BioRegionPreview"
 import { FeedbackCheck, useFeedbackActivity } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
 import { MapView } from "~/components/Map"
@@ -27,13 +27,10 @@ import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
-import { useMe } from "~/lib/hooks/useMe"
-
-import { keepPreviousData } from "@tanstack/react-query"
 import { useMapSettings } from "~/lib/hooks/useMapSettings"
+import { useMe } from "~/lib/hooks/useMe"
 import { useMapFilters } from "../../../filters"
 import { useMapLayers } from "./layers"
-import { BioRegionPreview } from '~/components/BioRegionPreview'
 
 export default function MapScreen() {
   return (
@@ -50,7 +47,6 @@ function MapContainer() {
   const increment = useFeedbackActivity((s) => s.increment)
   const [activeSpotId, setActiveSpotId] = React.useState<string | null>(null)
   const handleClosePreview = React.useCallback(() => setActiveSpotId(null), [])
-  const handleCloseBioRegionPreview = React.useCallback(() => setSelectedBioRegion(null), [])
 
   const { me } = useMe()
   const { mutate: updateUser } = api.user.update.useMutation()
@@ -58,6 +54,7 @@ function MapContainer() {
   const isDark = useColorScheme() === "dark"
   const [isMapLoaded, setIsMapLoaded] = React.useState(false)
   const [selectedBioRegion, setSelectedBioRegion] = React.useState<BioRegion | null>(null)
+  const handleCloseBioRegionPreview = React.useCallback(() => setSelectedBioRegion(null), [])
 
   const [mapSettings, setMapSettings] = useMapSettings()
 
@@ -240,37 +237,37 @@ function MapContainer() {
     [users, layers.shouldShowUsers],
   )
 
-  const onRegionPress = async (e: any) => {
-    const { screenPointX, screenPointY } = e.properties;
-    const currentMap = mapRef.current;
+  const onRegionPress = async (e: GeoJSON.Feature) => {
+    const { screenPointX, screenPointY } = e.properties as { screenPointX: number; screenPointY: number }
+    const currentMap = mapRef.current
     if (!currentMap) return
-    const featureCollection = await currentMap.queryRenderedFeaturesAtPoint(
-      [screenPointX, screenPointY]
-    );
-    const features = featureCollection?.features;
-    if (features && features.length > 0) {
-      const layerNames = features.map(feature => feature.properties && feature.properties.short_name);
-      const selectedBioRegion = Object.keys(BIOREGIONS).find(bioRegion => layerNames.includes(bioRegion)) as BioRegion;
-      if (!selectedBioRegion) return
-      setSelectedBioRegion(selectedBioRegion);
-    }
-  };
-  
+    const featureCollection = await currentMap.queryRenderedFeaturesAtPoint([screenPointX, screenPointY])
+    const features = featureCollection?.features
+    if (!features || features.length === 0) return
+    const layerNames = features.map((feature) => feature?.properties?.short_name)
+    const selectedBioRegion = Object.keys(BIOREGIONS).find((bioRegion) => layerNames.includes(bioRegion)) as BioRegion
+    if (!selectedBioRegion) return
+    setSelectedBioRegion(selectedBioRegion)
+  }
 
   return (
     <>
       <MapView
         onDidFinishLoadingMap={handleSetUserLocation}
         onMapIdle={onMapMove}
-        onPress={layers.layer === "bioRegions" ? (selectedBioRegion ? handleCloseBioRegionPreview : onRegionPress) : handleClosePreview}
+        onPress={
+          layers.layer === "bioRegions" ? (selectedBioRegion ? handleCloseBioRegionPreview : onRegionPress) : handleClosePreview
+        }
         ref={mapRef}
         styleURL={
-          layers.layer === "rain" || layers.layer === "temp" 
+          layers.layer === "rain" || layers.layer === "temp"
             ? `mapbox://styles/mapbox/${isDark ? "dark" : "light"}-v11`
             : layers.layer === "satellite"
-              ? "mapbox://styles/mapbox/satellite-streets-v12" 
-              : layers.layer === "bioRegions" 
-                ? isDark ? "mapbox://styles/jclackett/clvz84gzh015v01pccwv7bcnj" : "mapbox://styles/jclackett/clvxvin5p02a301qv6waq1fhg" 
+              ? "mapbox://styles/mapbox/satellite-streets-v12"
+              : layers.layer === "bioRegions"
+                ? isDark
+                  ? "mapbox://styles/jclackett/clvz84gzh015v01pccwv7bcnj"
+                  : "mapbox://styles/jclackett/clvxvin5p02a301qv6waq1fhg"
                 : undefined
         }
       >
@@ -281,7 +278,7 @@ function MapContainer() {
           ref={camera}
           allowUpdates
           followUserLocation={false}
-          minZoomLevel={layers.layer === "bioRegions" ? 5 : 0 }
+          minZoomLevel={layers.layer === "bioRegions" ? 5 : 0}
           defaultSettings={{ centerCoordinate: [INITIAL_LONGITUDE, INITIAL_LATITUDE], zoomLevel: 8, pitch: 0, heading: 0 }}
         />
 

@@ -1,33 +1,27 @@
+import { BIOREGIONS, type BioRegion, createAssetUrl } from "@ramble/shared"
 import * as Sentry from "@sentry/react-native"
 import { Image } from "expo-image"
 import * as WebBrowser from "expo-web-browser"
-
-import { X, Earth } from "lucide-react-native"
+import { Earth, X } from "lucide-react-native"
 import * as React from "react"
 import { Linking, TouchableOpacity, View, useColorScheme } from "react-native"
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
-
-import { BIOREGIONS, BioRegion, createAssetUrl, merge } from "@ramble/shared"
-
 import { Text } from "~/components/ui/Text"
+import { FULL_WEB_URL } from "~/lib/config"
+import { width } from "~/lib/device"
 import { useBackgroundColor } from "~/lib/tailwind"
-import { OptimizedImage } from './ui/OptimisedImage'
-import { width } from '~/lib/device'
-import { Icon } from './Icon'
-import { FULL_WEB_URL } from '~/lib/config'
-
-
+import { Icon } from "./Icon"
+import { OptimizedImage } from "./ui/OptimisedImage"
 
 export const BioRegionPreview = React.memo(function _BioRegionPreview({ id, onClose }: { id: BioRegion; onClose: () => void }) {
   const bioRegion = BIOREGIONS[id]
 
   const isDark = useColorScheme() === "dark"
-  console.log(`${FULL_WEB_URL}/partners/one-earth${isDark ? "-dark":""}.png`)
 
   const backgroundColor = useBackgroundColor()
 
   const handleGoToBioRegion = async () => {
-    if (!bioRegion?.url) return
+    if (!bioRegion) return
     try {
       await WebBrowser.openBrowserAsync(bioRegion.url, {
         presentationStyle: WebBrowser.WebBrowserPresentationStyle.PAGE_SHEET,
@@ -56,6 +50,9 @@ export const BioRegionPreview = React.memo(function _BioRegionPreview({ id, onCl
               <Icon icon={Earth} size={16} />
               <Text className="text-xs">Bio region</Text>
             </View>
+            <TouchableOpacity onPress={onClose} className="flex items-center justify-center p-2">
+              <Icon icon={X} size={24} />
+            </TouchableOpacity>
           </View>
           <TouchableOpacity onPress={handleGoToBioRegion} activeOpacity={0.7} className="flex flex-row items-center space-x-2">
             <View className="flex flex-row justify-between w-full items-center">
@@ -67,12 +64,12 @@ export const BioRegionPreview = React.memo(function _BioRegionPreview({ id, onCl
           <View className="overflow-hidden rounded-xs">
             <TouchableOpacity onPress={handleGoToBioRegion} activeOpacity={1}>
               <OptimizedImage
-                width={(width - 32)}
+                width={width - 32}
                 height={235}
                 placeholder={image.blurHash}
                 source={{ uri: createAssetUrl(image.path) }}
-                style={{ width: ((width - 32)), height: 235, marginHorizontal: 0 }}
-                className={merge("rounded-xs object-cover")}
+                style={{ width: width - 32, height: 235, marginHorizontal: 0 }}
+                className="rounded-xs object-cover"
               />
             </TouchableOpacity>
           </View>
@@ -85,16 +82,12 @@ export const BioRegionPreview = React.memo(function _BioRegionPreview({ id, onCl
               <Image
                 contentFit="contain"
                 className="h-[40px] w-[120px] bg-right object-contain"
-                source={{ uri: `${FULL_WEB_URL}/partners/one-earth${isDark ? "-dark":""}.png` }}
+                source={{ uri: `${FULL_WEB_URL}/partners/one-earth${isDark ? "-dark" : ""}.png` }}
               />
             </TouchableOpacity>
           </View>
         </View>
       )}
-
-      <TouchableOpacity onPress={onClose} className="absolute top-2 right-2 flex items-center justify-center p-2">
-        <X size={24} color={isDark ? "white" : "black"} />
-      </TouchableOpacity>
     </Animated.View>
   )
 })
