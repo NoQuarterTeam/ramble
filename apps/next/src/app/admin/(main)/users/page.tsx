@@ -1,21 +1,23 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table"
-import { db } from "@/lib/server/db"
-
 import { Pagination } from "@/components/Pagination"
 import { Search } from "@/components/Search"
+import { TableSortLink } from "@/components/TableSortLink"
 import { Avatar } from "@/components/ui"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table"
 import { requireAdmin } from "@/lib/server/auth"
-import type { Prisma } from "@ramble/database/types"
+import { db } from "@/lib/server/db"
+import type { Prisma, User } from "@ramble/database/types"
 import { createAssetUrl, promiseHash } from "@ramble/shared"
 import dayjs from "dayjs"
+import Link from "next/link"
 
 export const dynamic = "force-dynamic"
 
-type SearchParams = { page?: string; search?: string }
+type SearchParams = { page?: string; search?: string; sort?: "asc" | "desc"; sortBy?: keyof User }
 
-const getItemsAndCount = async ({ page, search }: SearchParams) => {
+const TAKE = 25
+const getItemsAndCount = async ({ page, search, sort = "desc", sortBy = "createdAt" }: SearchParams) => {
   await requireAdmin()
-  const skip = page ? (Number(page) - 1) * 25 : 0
+  const skip = page ? (Number(page) - 1) * TAKE : 0
 
   const where = {
     deletedAt: null,
@@ -32,8 +34,8 @@ const getItemsAndCount = async ({ page, search }: SearchParams) => {
   return promiseHash({
     users: db.user.findMany({
       where,
-      orderBy: { createdAt: "desc" },
-      take: 25,
+      orderBy: { [sortBy]: sort },
+      take: TAKE,
       skip,
       select: {
         id: true,
@@ -51,6 +53,7 @@ const getItemsAndCount = async ({ page, search }: SearchParams) => {
 
 export default async function Page({ searchParams }: { searchParams: SearchParams }) {
   const { users, count } = await getItemsAndCount(searchParams)
+
   return (
     <div className="space-y-4">
       <h1 className="text-4xl">Users</h1>
@@ -91,33 +94,49 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Username</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead className="text-right">Created at</TableHead>
+            <TableHead>
+              <TableSortLink<User> href="/admin/users" field="firstName">
+                Name
+              </TableSortLink>
+            </TableHead>
+            <TableHead>
+              <TableSortLink<User> href="/admin/users" field="username">
+                Username
+              </TableSortLink>
+            </TableHead>
+            <TableHead>
+              <TableSortLink<User> href="/admin/users" field="email">
+                Email
+              </TableSortLink>
+            </TableHead>
+            <TableHead>
+              <TableSortLink<User> href="/admin/users" field="createdAt" isDefault className="justify-end">
+                Created at
+              </TableSortLink>
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {users.map((user) => (
             <TableRow key={user.id}>
               <TableCell>
-                <div className="flex items-center space-x-2">
+                <Link href={`/admin/users/${user.id}`} className="flex items-center space-x-2">
                   <div className="flex-shrink-0">
                     <Avatar src={createAssetUrl(user.avatar)} size={40} className="w-8 h-8" />
                   </div>
                   <p className="line-clamp-1">
                     {user.firstName} {user.lastName}
                   </p>
-                </div>
+                </Link>
               </TableCell>
               <TableCell>
-                <p>{user.username}</p>
+                <Link href={`/admin/users/${user.id}`}>{user.username}</Link>
               </TableCell>
               <TableCell>
-                <p>{user.email}</p>
+                <Link href={`/admin/users/${user.id}`}>{user.email}</Link>
               </TableCell>
               <TableCell className="text-right">
-                <p>{dayjs(user.createdAt).format("DD/MM/YYYY")}</p>
+                <Link href={`/admin/users/${user.id}`}>{dayjs(user.createdAt).format("DD/MM/YYYY")}</Link>
               </TableCell>
             </TableRow>
           ))}
