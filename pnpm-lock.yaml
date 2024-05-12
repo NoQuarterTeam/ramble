@@ -326,8 +326,8 @@ importers:
         specifier: 5.36.0
         version: 5.36.0(react@18.2.0)
       '@tanstack/react-table':
-        specifier: 8.16.0
-        version: 8.16.0(react-dom@18.2.0)(react@18.2.0)
+        specifier: 8.17.0
+        version: 8.17.0(react-dom@18.2.0)(react@18.2.0)
       '@trpc/react-query':
         specifier: 11.0.0-rc.366
         version: 11.0.0-rc.366(@tanstack/react-query@5.36.0)(@trpc/client@11.0.0-rc.366)(@trpc/server@11.0.0-rc.366)(react-dom@18.2.0)(react@18.2.0)
@@ -6928,8 +6928,8 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@tanstack/react-table@8.16.0(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-rKRjnt8ostqN2fercRVOIH/dq7MAmOENCMvVlKx6P9Iokhh6woBGnIZEkqsY/vEJf1jN3TqLOb34xQGLVRuhAg==}
+  /@tanstack/react-table@8.17.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-LSJxTDzlKGs8EN7/UHB1l3yLR9HUIxoHFkTbTjHaUUGL4kgYZFYhsQsdDJSIykG86qpIA/6gSWmtwNfy5Iprhw==}
     engines: {node: '>=12'}
     peerDependencies:
       react: '>=16.8'
