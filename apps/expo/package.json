@@ -29,7 +29,7 @@
     "@rnmapbox/maps": "10.1.23",
     "@sentry/react-native": "5.20.0",
     "@shopify/flash-list": "1.6.3",
-    "@tanstack/react-query": "5.35.5",
+    "@tanstack/react-query": "5.36.0",
     "@trpc/client": "11.0.0-rc.366",
     "@trpc/react-query": "11.0.0-rc.366",
     "@trpc/server": "11.0.0-rc.366",
