@@ -44,7 +44,7 @@ export const action = async (_: unknown, formData: FormData) => {
       },
     })
     if (user.avatar) await deleteObject(user.avatar)
-    void sendSlackMessage(`😭 User @${user.username} deleted their account.`)
+    sendSlackMessage(`😭 User @${user.username} deleted their account.`)
     return { ok: true }
   } catch (e) {
     Sentry.captureException(e)
