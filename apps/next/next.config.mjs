@@ -8,6 +8,7 @@ const nextConfig = {
   redirects: () => [{ source: "/register", destination: "/", permanent: false }],
   images: {
     remotePatterns: [
+      { hostname: "ramble.guide" },
       { hostname: "cdn.ramble.guide" },
       { hostname: "campspace.com" },
       { hostname: "hipcamp-res.cloudinary.com" },

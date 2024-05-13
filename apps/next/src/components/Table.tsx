@@ -84,7 +84,11 @@ export function TableSortLink<T>({
     sort: isSorted ? (isDesc ? "asc" : "desc") : "desc",
   })
   return (
-    <Link href={`${pathname}?${search}`} {...props} className={merge("flex hover:underline items-center space-x-1", className)}>
+    <Link
+      href={`${pathname}?${search}`}
+      {...props}
+      className={merge("flex whitespace-nowrap hover:underline items-center space-x-1", className)}
+    >
       <span>{children}</span>
       <span className="w-2">{isSorted ? isDesc ? <MoveDown size={12} /> : <MoveUp size={12} /> : null}</span>
     </Link>

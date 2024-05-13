@@ -2,6 +2,7 @@ import { join } from "@ramble/shared"
 
 import { PageContainer } from "@/components/PageContainer"
 import { Instagram } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 
 // const schema = userSchema.pick({ email: true })
@@ -57,8 +58,8 @@ export default function Home() {
                 rel="noreferer noopener"
                 href="https://apps.apple.com/app/ramble-van-travel-app/id6468265289?itsct=apps_box_badge&amp;itscg=30200"
               >
-                <img
-                  src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1595289600"
+                <Image
+                  src="https://ramble.guide/apple.svg"
                   alt="Download on the App Store"
                   width={120}
                   height={30}
@@ -70,12 +71,12 @@ export default function Home() {
                 rel="noreferer noopener"
                 href="https://play.google.com/store/apps/details?id=co.noquarter.ramble&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"
               >
-                <img
+                <Image
                   width={145}
                   height={40}
                   className="object-contain"
                   alt="Get it on Google Play"
-                  src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+                  src="https://ramble.guide/google.png"
                 />
               </Link>
             </div>
@@ -123,7 +124,7 @@ export default function Home() {
           </div>
         </div>
         <div>
-          <img
+          <Image
             width={500}
             height={800}
             alt="mission"
@@ -152,8 +153,8 @@ export default function Home() {
               rel="noreferer noopener"
               href="https://apps.apple.com/app/ramble-van-travel-app/id6468265289?itsct=apps_box_badge&amp;itscg=30200"
             >
-              <img
-                src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1595289600"
+              <Image
+                src="https://ramble.guide/apple.svg"
                 alt="Download on the App Store"
                 width={150}
                 height={30}
@@ -165,12 +166,12 @@ export default function Home() {
               rel="noreferer noopener"
               href="https://play.google.com/store/apps/details?id=co.noquarter.ramble&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"
             >
-              <img
+              <Image
                 width={195}
                 height={60}
                 className="object-contain"
                 alt="Get it on Google Play"
-                src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+                src="https://ramble.guide/google.png"
               />
             </Link>
           </div>
@@ -190,7 +191,7 @@ export default function Home() {
             )}
           >
             <p className="text-2xl">{feature}</p>
-            <img
+            <Image
               src={`/landing/features${i + 1}.png`}
               alt={`features ${i + 1}`}
               width={300}
@@ -211,7 +212,7 @@ export default function Home() {
           rel="noreferrer"
           className="flex flex-col items-center"
         >
-          <img
+          <Image
             width={100}
             height={100}
             alt="testimony user"
@@ -239,8 +240,8 @@ export default function Home() {
             rel="noreferer noopener"
             href="https://apps.apple.com/app/ramble-van-travel-app/id6468265289?itsct=apps_box_badge&amp;itscg=30200"
           >
-            <img
-              src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1595289600"
+            <Image
+              src="https://ramble.guide/apple.svg"
               alt="Download on the App Store"
               width={150}
               height={30}
@@ -252,12 +253,12 @@ export default function Home() {
             rel="noreferer noopener"
             href="https://play.google.com/store/apps/details?id=co.noquarter.ramble&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"
           >
-            <img
+            <Image
               width={195}
               height={60}
               className="object-contain"
               alt="Get it on Google Play"
-              src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+              src="https://ramble.guide/google.png"
             />
           </Link>
         </div>
@@ -272,8 +273,8 @@ export default function Home() {
                 rel="noreferer noopener"
                 href="https://apps.apple.com/app/ramble-van-travel-app/id6468265289?itsct=apps_box_badge&amp;itscg=30200"
               >
-                <img
-                  src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1595289600"
+                <Image
+                  src="https://ramble.guide/apple.svg"
                   alt="Download on the App Store"
                   width={100}
                   height={30}
@@ -285,12 +286,12 @@ export default function Home() {
                 rel="noreferer noopener"
                 href="https://play.google.com/store/apps/details?id=co.noquarter.ramble&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"
               >
-                <img
+                <Image
                   width={125}
                   height={40}
                   className="object-contain"
                   alt="Get it on Google Play"
-                  src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+                  src="https://ramble.guide/google.png"
                 />
               </Link>
             </div>

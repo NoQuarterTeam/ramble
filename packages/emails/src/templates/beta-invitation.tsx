@@ -32,20 +32,10 @@ export function BetaInvitationContent(props: Props) {
       </Container>
       <div className="flex items-center justify-center space-x-4">
         <Link href="https://apps.apple.com/app/ramble-van-travel-app/id6468265289?itsct=apps_box_badge&amp;itscg=30200">
-          <Img
-            src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1595289600"
-            alt="Download on the App Store"
-            width={200}
-            height={80}
-          />
+          <Img src="https://ramble.guide/apple.svg" alt="Download on the App Store" width={200} height={80} />
         </Link>
         <Link href="https://play.google.com/store/apps/details?id=co.noquarter.ramble&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1">
-          <Img
-            width={250}
-            height={100}
-            alt="Get it on Google Play"
-            src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
-          />
+          <Img width={250} height={100} alt="Get it on Google Play" src="https://ramble.guide/google.png" />
         </Link>
       </div>
     </EmailWrapper>
