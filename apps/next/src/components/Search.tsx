@@ -21,7 +21,7 @@ export function Search() {
       allParams.delete("page")
       allParams.delete("search")
     }
-    router.push(`${pathname}?${allParams.toString()}`)
+    router.push(`${pathname}?${allParams}`)
   }
   return (
     <form onSubmit={handleSubmit} className="relative">
@@ -36,7 +36,7 @@ export function Search() {
               setSearch("")
               const allParams = new URLSearchParams(searchParams)
               allParams.delete("search")
-              router.push(`${pathname}?${allParams.toString()}`)
+              router.push(`${pathname}?${allParams}`)
             }}
             size="xs"
             aria-label="Clear"

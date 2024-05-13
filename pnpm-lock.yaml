@@ -340,6 +340,9 @@ importers:
       '@vercel/edge':
         specifier: 1.1.1
         version: 1.1.1
+      '@vercel/functions':
+        specifier: ^1.0.2
+        version: 1.0.2
       axios:
         specifier: 1.6.8
         version: 1.6.8
@@ -7317,6 +7320,11 @@ packages:
 
   /@vercel/edge@1.1.1:
     resolution: {integrity: sha512-NtKiIbn9Cq6HWGy+qRudz28mz5nxfOJWls5Pnckjw1yCfSX8rhXdvY/il3Sy3Zd5n/sKCM2h7VSCCpJF/oaDrQ==}
+    dev: false
+
+  /@vercel/functions@1.0.2:
+    resolution: {integrity: sha512-j3udyHOv/05Y8o3WQ/ANMWa1aYagsY5B3ouImiwgYsz5z4CBUHTY5dk74oQAXYr+bgoVDpdDlmxkpnxGzKEdLQ==}
+    engines: {node: '>= 16'}
     dev: false
 
   /@web3-storage/multipart-parser@1.0.0:

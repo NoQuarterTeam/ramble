@@ -318,7 +318,7 @@ export const spotRouter = createTRPCRouter({
           },
         })
       }
-      void sendSlackMessage(`📍 New spot added by @${ctx.user.username}!`)
+      sendSlackMessage(`📍 New spot added by @${ctx.user.username}!`)
       return spot
     }),
   images: protectedProcedure.input(z.object({ id: z.string().uuid() })).query(async ({ ctx, input }) => {

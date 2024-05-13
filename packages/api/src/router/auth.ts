@@ -66,10 +66,10 @@ export const authRouter = createTRPCRouter({
     await ctx.prisma.inviteCode.createMany({ data: codes.map((c) => ({ code: c, ownerId: user.id })) })
     const token = createAuthToken({ id: user.id })
     if (accessRequest && accessRequest.email !== user.email) {
-      void deleteLoopsContact({ email: accessRequest.email })
+      deleteLoopsContact({ email: accessRequest.email })
     }
-    void updateLoopsContact({ ...user, signedUpAt: user.createdAt.toISOString(), userGroup: "beta", userId: user.id })
-    void sendSlackMessage(`🔥 @${user.username} signed up!`)
+    updateLoopsContact({ ...user, signedUpAt: user.createdAt.toISOString(), userGroup: "beta", userId: user.id })
+    sendSlackMessage(`🔥 @${user.username} signed up!`)
     return { user: user, token }
   }),
   forgotPassword: publicProcedure.input(userSchema.pick({ email: true })).mutation(async ({ input, ctx }) => {
@@ -110,13 +110,13 @@ export const authRouter = createTRPCRouter({
       const success = await createAccessRequest(input.email)
 
       if (!success) throw new TRPCError({ code: "BAD_REQUEST", message: "Error creating request, please try again" })
-      void updateLoopsContact({
+      updateLoopsContact({
         inviteCode: success.code,
         email: input.email,
         accessRequestedAt: new Date().toISOString(),
       })
       sendSlackMessage(`🚀 New in-app access request from ${input.email}${input.reason ? `- reason: ${input.reason}` : ""}`)
-      void sendAccessRequestConfirmationEmail(input.email)
+      sendAccessRequestConfirmationEmail(input.email)
       return true
     }),
 })

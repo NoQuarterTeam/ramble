@@ -1,8 +1,8 @@
-import * as Sentry from "@sentry/nextjs"
-import { LoopsClient } from "loops"
-
 import type { Role } from "@ramble/database/types"
 import { IS_PRODUCTION, env } from "@ramble/server-env"
+import * as Sentry from "@sentry/nextjs"
+import { waitUntil } from "@vercel/functions"
+import { LoopsClient } from "loops"
 
 const loops = new LoopsClient(env.LOOPS_API_KEY)
 
@@ -25,39 +25,28 @@ export type LoopsContact = {
 }
 
 // if changing email, make sure to pass userId
-export async function updateLoopsContact(contact: LoopsContact) {
+export function updateLoopsContact(contact: LoopsContact) {
   if (!IS_PRODUCTION) return
-  try {
-    const formattedData: NonNullable<LoopsContact> = {
-      email: contact.email,
-      firstName: contact.firstName,
-      lastName: contact.lastName,
-      notes: contact.notes,
-      source: contact.source,
-      userGroup: contact.userGroup,
-      inviteCode: contact.inviteCode,
-      isVerified: contact.isVerified,
-      userId: contact.userId,
-      role: contact.role,
-      isAdmin: contact.isAdmin,
-      signedUpAt: contact.signedUpAt,
-      accessRequestedAt: contact.accessRequestedAt,
-      accessRequestAcceptedAt: contact.accessRequestAcceptedAt,
-    }
-
-    const res = await loops.updateContact(contact.email, formattedData)
-    if (!res.success) throw res
-  } catch (error) {
-    Sentry.captureException(error)
+  const formattedData: NonNullable<LoopsContact> = {
+    email: contact.email,
+    firstName: contact.firstName,
+    lastName: contact.lastName,
+    notes: contact.notes,
+    source: contact.source,
+    userGroup: contact.userGroup,
+    inviteCode: contact.inviteCode,
+    isVerified: contact.isVerified,
+    userId: contact.userId,
+    role: contact.role,
+    isAdmin: contact.isAdmin,
+    signedUpAt: contact.signedUpAt,
+    accessRequestedAt: contact.accessRequestedAt,
+    accessRequestAcceptedAt: contact.accessRequestAcceptedAt,
   }
+  waitUntil(loops.updateContact(contact.email, formattedData).catch(Sentry.captureException))
 }
 
-export async function deleteLoopsContact(contact: Partial<Pick<LoopsContact, "email" | "userId">>) {
+export function deleteLoopsContact(contact: Partial<Pick<LoopsContact, "email" | "userId">>) {
   if (!IS_PRODUCTION) return
-  try {
-    const res = await loops.deleteContact(contact)
-    if (!res.success) throw res
-  } catch (error) {
-    Sentry.captureException(error)
-  }
+  waitUntil(loops.deleteContact(contact).catch(Sentry.captureException))
 }
