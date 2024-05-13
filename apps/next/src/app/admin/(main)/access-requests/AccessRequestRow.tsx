@@ -26,11 +26,17 @@ export function AccessRequestRow({ accessRequest }: Props) {
         <p>{accessRequest.code}</p>
       </TableCell>
       <TableCell>
-        <p>{dayjs(accessRequest.createdAt).format("DD/MM/YYYY")}</p>
+        <p>{dayjs(accessRequest.createdAt).startOf("day").add(12, "hours").format("DD/MM/YYYY")}</p>
       </TableCell>
-      <TableCell>{accessRequest.acceptedAt && <p>{dayjs(accessRequest.acceptedAt).format("DD/MM/YYYY")}</p>}</TableCell>
+      <TableCell>
+        {accessRequest.acceptedAt && (
+          <p>{dayjs(accessRequest.acceptedAt).startOf("day").add(12, "hours").format("DD/MM/YYYY")}</p>
+        )}
+      </TableCell>
 
-      <TableCell>{accessRequest.user && <p>{dayjs(accessRequest.user.createdAt).format("DD/MM/YYYY")}</p>}</TableCell>
+      <TableCell>
+        {accessRequest.user && <p>{dayjs(accessRequest.user.createdAt).startOf("day").add(12, "hours").format("DD/MM/YYYY")}</p>}
+      </TableCell>
       <TableCell className="text-right">
         <div className="flex items-center space-x-2 justify-end">
           {!accessRequest.user && !accessRequest.acceptedAt && (
