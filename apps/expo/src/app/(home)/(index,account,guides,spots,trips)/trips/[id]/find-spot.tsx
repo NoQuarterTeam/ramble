@@ -14,7 +14,6 @@ import { MapView } from "~/components/Map"
 import { SpotClusterMarker } from "~/components/SpotMarker"
 import { SpotTypeBadge } from "~/components/SpotTypeBadge"
 import { Button } from "~/components/ui/Button"
-import { IconButton } from "~/components/ui/IconButton"
 import { Input } from "~/components/ui/Input"
 import { ScreenView } from "~/components/ui/ScreenView"
 import { Spinner } from "~/components/ui/Spinner"
@@ -255,7 +254,9 @@ export function AddTripSpotPreview({ spotId, onClose }: { spotId: string; onClos
             <TouchableOpacity onPress={() => router.push(`/(home)/(trips)/spot/${spot.id}`)} activeOpacity={0.9}>
               <SpotTypeBadge spot={spot} />
             </TouchableOpacity>
-            <IconButton variant="ghost" size="sm" onPress={onClose} icon={X} />
+            <TouchableOpacity onPress={onClose} className="flex items-center justify-center p-1">
+              <Icon icon={X} size={22} />
+            </TouchableOpacity>
           </View>
 
           <TouchableOpacity
