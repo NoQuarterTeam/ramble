@@ -18,7 +18,7 @@ export function AccessRequestRow({ accessRequest }: Props) {
   const [isVerifying, startVerify] = React.useTransition()
   const [isDeleting, startDelete] = React.useTransition()
   return (
-    <TableRow key={accessRequest.id}>
+    <TableRow>
       <TableCell>
         <p>{accessRequest.email}</p>
       </TableCell>

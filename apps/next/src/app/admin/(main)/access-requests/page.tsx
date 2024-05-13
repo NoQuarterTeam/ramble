@@ -34,40 +34,7 @@ export default async function Page({ searchParams }: { searchParams: { page?: st
   return (
     <div className="space-y-4">
       <h1 className="text-4xl">Access requests</h1>
-      <div className="flex items-end gap-2">
-        {/* <form>
-				<ExistingSearchParams exclude={["type"]} />
-				<p className="font-medium text-sm">Type</p>
-				<Select
-					defaultValue={searchParams.get("type") || ""}
-					onChange={(e) => e.currentTarget.form?.dispatchEvent(new Event("submit", { bubbles: true }))}
-					name="type"
-				>
-					<option value="">All</option>
-					{SPOT_TYPE_OPTIONS.map((option) => (
-						<option key={option.value} value={option.value}>
-							{option.label}
-						</option>
-					))}
-				</Select>
-			</form> */}
-        {/* 
-			<Form>
-				<ExistingSearchParams exclude={["unverified"]} />
-				<Button
-					variant={searchParams.get("unverified") === "true" ? "primary" : "outline"}
-					type="submit"
-					name={searchParams.get("unverified") === "true" ? undefined : "unverified"}
-					value={searchParams.get("unverified") === "true" ? undefined : "true"}
-				>
-					Show {unverifiedUsersCount} unverified
-				</Button>
-			</Form> */}
-
-        {/* <div>
-				<Search />
-			</div> */}
-      </div>
+      {/* <div className="flex items-end gap-2"></div> */}
       <Table>
         <TableHeader>
           <TableRow>
