@@ -11,7 +11,7 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.574.0",
+    "@aws-sdk/client-s3": "3.575.0",
     "@notionhq/client": "^2.2.15",
     "@radix-ui/react-alert-dialog": "1.0.5",
     "@radix-ui/react-avatar": "1.0.4",
