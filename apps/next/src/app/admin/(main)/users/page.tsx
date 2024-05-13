@@ -5,6 +5,7 @@ import { Avatar } from "@/components/ui"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table"
 import { requireAdmin } from "@/lib/server/auth"
 import { db } from "@/lib/server/db"
+import type { TableParams } from "@/lib/table"
 import type { Prisma, User } from "@ramble/database/types"
 import { createAssetUrl, promiseHash } from "@ramble/shared"
 import dayjs from "dayjs"
@@ -12,10 +13,8 @@ import Link from "next/link"
 
 export const dynamic = "force-dynamic"
 
-type SearchParams = { page?: string; search?: string; sort?: "asc" | "desc"; sortBy?: keyof User }
-
 const TAKE = 25
-const getItemsAndCount = async ({ page, search, sort = "desc", sortBy = "createdAt" }: SearchParams) => {
+const getItemsAndCount = async ({ page, search, sort = "desc", sortBy = "createdAt" }: TableParams<User>) => {
   await requireAdmin()
   const skip = page ? (Number(page) - 1) * TAKE : 0
 
@@ -51,7 +50,7 @@ const getItemsAndCount = async ({ page, search, sort = "desc", sortBy = "created
   })
 }
 
-export default async function Page({ searchParams }: { searchParams: SearchParams }) {
+export default async function Page({ searchParams }: { searchParams: TableParams<User> }) {
   const { users, count } = await getItemsAndCount(searchParams)
 
   return (
@@ -95,22 +94,16 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
         <TableHeader>
           <TableRow>
             <TableHead>
-              <TableSortLink<User> href="/admin/users" field="firstName">
-                Name
-              </TableSortLink>
+              <TableSortLink<User> field="firstName">Name</TableSortLink>
             </TableHead>
             <TableHead>
-              <TableSortLink<User> href="/admin/users" field="username">
-                Username
-              </TableSortLink>
+              <TableSortLink<User> field="username">Username</TableSortLink>
             </TableHead>
             <TableHead>
-              <TableSortLink<User> href="/admin/users" field="email">
-                Email
-              </TableSortLink>
+              <TableSortLink<User> field="email">Email</TableSortLink>
             </TableHead>
             <TableHead>
-              <TableSortLink<User> href="/admin/users" field="createdAt" isDefault className="justify-end">
+              <TableSortLink<User> field="createdAt" isDefault className="justify-end">
                 Created at
               </TableSortLink>
             </TableHead>

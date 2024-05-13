@@ -2,11 +2,10 @@
 import { merge } from "@ramble/shared"
 import { MoveDown, MoveUp } from "lucide-react"
 import Link, { type LinkProps } from "next/link"
-import { useSearchParams } from "next/navigation"
+import { usePathname, useSearchParams } from "next/navigation"
 
 export function TableSortLink<T>({
   children,
-  href,
   className,
   isDefault,
   field,
@@ -16,8 +15,9 @@ export function TableSortLink<T>({
   className?: string
   children: React.ReactNode
   isDefault?: boolean
-} & LinkProps) {
+} & Omit<LinkProps, "href">) {
   const searchParams = useSearchParams()
+  const pathname = usePathname()
   const sortBy = searchParams.get("sortBy")
   const sort = searchParams.get("sort")
   const isSorted = sortBy ? sortBy === (field as string) : isDefault
@@ -28,7 +28,7 @@ export function TableSortLink<T>({
     sort: isSorted ? (isDesc ? "asc" : "desc") : "desc",
   })
   return (
-    <Link href={`${href}?${search}`} {...props} className={merge("flex hover:underline items-center space-x-1", className)}>
+    <Link href={`${pathname}?${search}`} {...props} className={merge("flex hover:underline items-center space-x-1", className)}>
       <span>{children}</span>
       <span className="w-2">{isSorted ? isDesc ? <MoveDown size={12} /> : <MoveUp size={12} /> : null}</span>
     </Link>

@@ -3,23 +3,23 @@ import { db } from "@/lib/server/db"
 
 import { Pagination } from "@/components/Pagination"
 import { Search } from "@/components/Search"
+import { TableSortLink } from "@/components/TableSortLink"
 import { requireAdmin } from "@/lib/server/auth"
-import type { Prisma } from "@ramble/database/types"
+import type { TableParams } from "@/lib/table"
+import type { Prisma, Spot } from "@ramble/database/types"
 import { promiseHash } from "@ramble/shared"
 import { SpotRow } from "./SpotRow"
 
 export const dynamic = "force-dynamic"
 
-type SearchParams = { page?: string; search?: string }
-
-const getItemsAndCount = async ({ page, search }: SearchParams) => {
+const getItemsAndCount = async ({ page, search, sort = "desc", sortBy = "createdAt" }: TableParams<Spot>) => {
   await requireAdmin()
   const skip = page ? (Number(page) - 1) * 25 : 0
   const where = { deletedAt: null, name: search ? { contains: search } : undefined } as Prisma.SpotWhereInput
   return promiseHash({
     spots: db.spot.findMany({
       where,
-      orderBy: { createdAt: "desc" },
+      orderBy: { [sortBy]: sort },
       take: 25,
       skip,
       select: {
@@ -41,7 +41,7 @@ const getItemsAndCount = async ({ page, search }: SearchParams) => {
   })
 }
 
-export default async function Page({ searchParams }: { searchParams: SearchParams }) {
+export default async function Page({ searchParams }: { searchParams: TableParams<Spot> }) {
   const { spots, count } = await getItemsAndCount(searchParams)
   return (
     <div className="space-y-4">
@@ -83,11 +83,17 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[300px]">Name</TableHead>
+            <TableHead className="w-[300px]">
+              <TableSortLink<Spot> field="name">Name</TableSortLink>
+            </TableHead>
             <TableHead>Description</TableHead>
-            <TableHead>Creator</TableHead>
             <TableHead>Verifier</TableHead>
-            <TableHead>Created at</TableHead>
+            <TableHead>Creator</TableHead>
+            <TableHead>
+              <TableSortLink<Spot> field="createdAt" isDefault>
+                Created at
+              </TableSortLink>
+            </TableHead>
             <TableHead className="text-right"> </TableHead>
           </TableRow>
         </TableHeader>
