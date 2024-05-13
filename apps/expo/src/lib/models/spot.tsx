@@ -25,10 +25,6 @@ import type { SpotType } from "@ramble/database/types"
 
 import { Icons, type RambleIcon } from "~/components/ui/Icons"
 
-export type SpotTypeIconInfo = {
-  Icon: RambleIcon
-}
-
 export const SPOT_TYPE_ICONS = {
   // Stays
   CAMPING: TentTree,

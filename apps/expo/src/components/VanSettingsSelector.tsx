@@ -2,7 +2,7 @@ import { join } from "@ramble/shared"
 import { Check } from "lucide-react-native"
 import { TouchableOpacity, View } from "react-native"
 import { Icon } from "./Icon"
-import type { IconProps } from "./ui/Icons"
+import type { RambleIcon } from "./ui/Icons"
 import { Text } from "./ui/Text"
 
 export function VanSettingSelector({
@@ -14,7 +14,7 @@ export function VanSettingSelector({
   isSelected: boolean
   onToggle: () => void
   label: string
-  icon: (props: IconProps) => JSX.Element
+  icon: RambleIcon
 }) {
   return (
     <TouchableOpacity

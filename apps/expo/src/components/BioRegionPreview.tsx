@@ -10,6 +10,7 @@ import { Text } from "~/components/ui/Text"
 import { FULL_WEB_URL } from "~/lib/config"
 import { useBackgroundColor } from "~/lib/tailwind"
 import { Icon } from "./Icon"
+import { IconButton } from "./ui/IconButton"
 
 export const BioRegionPreview = React.memo(function _BioRegionPreview({ id, onClose }: { id: BioRegion; onClose: () => void }) {
   const bioRegion = BIOREGIONS[id]
@@ -46,9 +47,7 @@ export const BioRegionPreview = React.memo(function _BioRegionPreview({ id, onCl
               <Icon icon={Earth} size={16} />
               <Text className="text-xs">Bio region</Text>
             </View>
-            <TouchableOpacity onPress={onClose} className="flex items-center justify-center p-1">
-              <Icon icon={X} size={22} />
-            </TouchableOpacity>
+            <IconButton variant="ghost" size="sm" onPress={onClose} icon={X} />
           </View>
           <TouchableOpacity onPress={handleGoToBioRegion} activeOpacity={0.7} className="flex flex-row items-center space-x-2">
             <View className="flex flex-row justify-between w-full items-center">

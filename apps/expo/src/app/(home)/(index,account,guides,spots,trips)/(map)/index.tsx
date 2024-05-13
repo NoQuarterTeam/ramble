@@ -46,7 +46,6 @@ function MapContainer() {
   const router = useRouter()
   const increment = useFeedbackActivity((s) => s.increment)
   const [activeSpotId, setActiveSpotId] = React.useState<string | null>(null)
-  const handleClosePreview = React.useCallback(() => setActiveSpotId(null), [])
 
   const { me } = useMe()
   const { mutate: updateUser } = api.user.update.useMutation()
@@ -258,7 +257,11 @@ function MapContainer() {
         onDidFinishLoadingMap={handleSetUserLocation}
         onMapIdle={onMapMove}
         onPress={
-          layers.layer === "bioRegions" ? (selectedBioRegion ? handleCloseBioRegionPreview : onRegionPress) : handleClosePreview
+          layers.layer === "bioRegions"
+            ? selectedBioRegion
+              ? handleCloseBioRegionPreview
+              : onRegionPress
+            : () => setActiveSpotId(null)
         }
         ref={mapRef}
         styleURL={
@@ -372,7 +375,7 @@ function MapContainer() {
           </TouchableOpacity>
         </Link>
       </View>
-      {activeSpotId && <SpotPreview id={activeSpotId} onClose={handleClosePreview} />}
+      {activeSpotId && <SpotPreview id={activeSpotId} onSetSpotId={setActiveSpotId} />}
       {selectedBioRegion && <BioRegionPreview id={selectedBioRegion} onClose={handleCloseBioRegionPreview} />}
     </>
   )

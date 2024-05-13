@@ -214,6 +214,7 @@ model Spot {
   rewildingEuropeId        String? @unique
   polskiCaravaningId       String? @unique
   googlePlaceId            String? @unique
+  volunteeringEventsId     String? @unique
 
   @@index([publishedAt])
   @@index([ownerId])

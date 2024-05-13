@@ -5,7 +5,7 @@ import colors from "@ramble/tailwind-config/src/colors"
 
 import { Icon } from "~/components/Icon"
 
-import type { IconProps } from "~/components/ui/Icons"
+import type { RambleIcon } from "~/components/ui/Icons"
 import { ScreenView } from "~/components/ui/ScreenView"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
@@ -68,7 +68,7 @@ function InterestSelector({
   isSelected: boolean
   onToggle: () => void
   label: string
-  icon: (props: IconProps) => JSX.Element
+  icon: RambleIcon
 }) {
   return (
     <View className="flex w-full flex-row items-center justify-between px-4 py-2">

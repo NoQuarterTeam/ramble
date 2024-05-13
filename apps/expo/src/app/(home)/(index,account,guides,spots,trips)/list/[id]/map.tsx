@@ -123,7 +123,7 @@ export default function ListDetailMapScreen() {
           }
         />
       </MapView>
-      {activeSpotId && <SpotPreview id={activeSpotId} onClose={() => setActiveSpotId(null)} />}
+      {activeSpotId && <SpotPreview id={activeSpotId} onSetSpotId={setActiveSpotId} />}
       <View pointerEvents="box-none" className="absolute bottom-4 flex w-full flex-row items-center justify-center">
         <Button onPress={router.back} className="rounded-full" size="sm">
           View list

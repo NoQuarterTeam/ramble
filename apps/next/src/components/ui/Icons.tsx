@@ -2,11 +2,8 @@ import type { LucideIcon, LucideProps } from "lucide-react"
 
 export type RambleIcon = LucideIcon | ((props: LucideProps) => JSX.Element)
 
-export interface IconProps extends React.SVGProps<SVGSVGElement> {
-  size?: number | string
-}
 export const Icons = {
-  Timer: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: IconProps) => (
+  Timer: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: LucideProps) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <title>Timer</title>
       <path d="M10 2H14" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
@@ -20,7 +17,7 @@ export const Icons = {
       />
     </svg>
   ),
-  Bbq: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: IconProps) => (
+  Bbq: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: LucideProps) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <title>Bbq</title>
       <path
@@ -32,7 +29,7 @@ export const Icons = {
       />
     </svg>
   ),
-  Surf: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: IconProps) => (
+  Surf: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: LucideProps) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <title>Surf</title>
       <path
@@ -44,7 +41,7 @@ export const Icons = {
       />
     </svg>
   ),
-  Surf2: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: IconProps) => (
+  Surf2: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: LucideProps) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <title>Surf</title>
       <path
@@ -70,7 +67,7 @@ export const Icons = {
       />
     </svg>
   ),
-  Van: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: IconProps) => (
+  Van: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: LucideProps) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <title>Van</title>
       <path
@@ -82,7 +79,7 @@ export const Icons = {
       />
     </svg>
   ),
-  Toilet: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: IconProps) => (
+  Toilet: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: LucideProps) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <title>Toilet</title>
       <path
@@ -94,7 +91,7 @@ export const Icons = {
       />
     </svg>
   ),
-  Sauna: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: IconProps) => (
+  Sauna: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: LucideProps) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <title>Sauna</title>
       <path
@@ -106,7 +103,7 @@ export const Icons = {
       />
     </svg>
   ),
-  Pool: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: IconProps) => (
+  Pool: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: LucideProps) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <title>Pool</title>
       <path
@@ -125,7 +122,7 @@ export const Icons = {
       />
     </svg>
   ),
-  Yoga: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: IconProps) => (
+  Yoga: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: LucideProps) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <title>Yoga</title>
       <path
@@ -146,7 +143,7 @@ export const Icons = {
       <circle cx="12" cy="5" r="1" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ),
-  Sup: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: IconProps) => (
+  Sup: ({ strokeWidth = 2, size = 24, color = "currentColor", ...props }: LucideProps) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <title>SUP</title>
       <path

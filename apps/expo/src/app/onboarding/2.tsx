@@ -9,7 +9,7 @@ import { Icon } from "~/components/Icon"
 import { SafeAreaView } from "~/components/SafeAreaView"
 import { Button } from "~/components/ui/Button"
 import { Heading } from "~/components/ui/Heading"
-import type { IconProps } from "~/components/ui/Icons"
+import type { RambleIcon } from "~/components/ui/Icons"
 import { Text } from "~/components/ui/Text"
 import { api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
@@ -102,7 +102,7 @@ function InterestSelector({
   isSelected: boolean
   onToggle: () => void
   label: string
-  icon: (props: IconProps) => JSX.Element
+  icon: RambleIcon
 }) {
   return (
     <View className="flex w-full flex-row items-center justify-between py-3 px-2">

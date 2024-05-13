@@ -21,31 +21,33 @@ export function PartnerLink(props: Props) {
     ? partners.campspace
     : props.spot.theCragId
       ? partners.theCrag
-      : props.spot.komootId
-        ? partners.komoot
-        : props.spot.natuurKampeerterreinenId
-          ? partners.natuur
-          : props.spot.park4nightId
-            ? partners.park4night
-            : props.spot.nesteId
-              ? partners.neste
-              : props.spot.hipcampId
-                ? partners.hipcamp
-                : props.spot.surflineId
-                  ? partners.surfline
-                  : props.spot.roadsurferId
-                    ? partners.roadsurfer
-                    : props.spot.cucortuId
-                      ? partners.cucortu
-                      : props.spot.loodusegakoosId
-                        ? partners.loodusegakoos
-                        : props.spot.norcampId
-                          ? partners.norcamp
-                          : props.spot.mossyEarthId
-                            ? partners.mossyEarth
-                            : props.spot.rewildingEuropeId
-                              ? partners.rewildingEurope
-                              : partners.polskiCaravaning
+      : props.spot.volunteeringEventsId
+        ? partners.volunteeringEvents
+        : props.spot.komootId
+          ? partners.komoot
+          : props.spot.natuurKampeerterreinenId
+            ? partners.natuur
+            : props.spot.park4nightId
+              ? partners.park4night
+              : props.spot.nesteId
+                ? partners.neste
+                : props.spot.hipcampId
+                  ? partners.hipcamp
+                  : props.spot.surflineId
+                    ? partners.surfline
+                    : props.spot.roadsurferId
+                      ? partners.roadsurfer
+                      : props.spot.cucortuId
+                        ? partners.cucortu
+                        : props.spot.loodusegakoosId
+                          ? partners.loodusegakoos
+                          : props.spot.norcampId
+                            ? partners.norcamp
+                            : props.spot.mossyEarthId
+                              ? partners.mossyEarth
+                              : props.spot.rewildingEuropeId
+                                ? partners.rewildingEurope
+                                : partners.polskiCaravaning
 
   const handleOpen = async () => {
     if (!props.spot.sourceUrl) return
@@ -68,7 +70,7 @@ export function PartnerLink(props: Props) {
       <Text className="text-base">Provided by</Text>
       <Image
         contentFit="contain"
-        className="h-[40px] w-[120px] bg-right object-contain"
+        className="h-[40px] w-1/2 bg-right object-contain"
         source={{ uri: FULL_WEB_URL + partner.logo[theme] }}
       />
     </TouchableOpacity>
