@@ -63,9 +63,7 @@ export default async function Page({ searchParams }: { searchParams: SpotParams 
           ))}
         </TableSelect>
         <TableCheckbox name="unverified">Unverified</TableCheckbox>
-        <div>
-          <Search />
-        </div>
+        <Search />
       </div>
       <Table>
         <TableHeader>
