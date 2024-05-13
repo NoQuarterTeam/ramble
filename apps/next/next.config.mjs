@@ -20,6 +20,7 @@ const nextConfig = {
       { hostname: "api.natuurkampeerterreinen.nl" },
       { hostname: "d2exd72xrrp1s7.cloudfront.net" },
       { hostname: "lh3.googleusercontent.com" },
+      { hostname: "storage.googleapis.com", pathname: "/volunteeringevents-event-pictures/**" },
     ],
   },
 }
