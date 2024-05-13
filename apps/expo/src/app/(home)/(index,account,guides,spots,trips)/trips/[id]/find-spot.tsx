@@ -1,4 +1,6 @@
+import { displayRating } from "@ramble/shared"
 import { Camera, LocationPuck, type MapState, type MapView as MapType, StyleURL } from "@rnmapbox/maps"
+import { keepPreviousData } from "@tanstack/react-query"
 import * as Location from "expo-location"
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
@@ -7,14 +9,12 @@ import { usePostHog } from "posthog-react-native"
 import * as React from "react"
 import { Keyboard, TouchableOpacity, View, useColorScheme } from "react-native"
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
-
-import { displayRating } from "@ramble/shared"
-
 import { Icon } from "~/components/Icon"
 import { MapView } from "~/components/Map"
 import { SpotClusterMarker } from "~/components/SpotMarker"
 import { SpotTypeBadge } from "~/components/SpotTypeBadge"
 import { Button } from "~/components/ui/Button"
+import { IconButton } from "~/components/ui/IconButton"
 import { Input } from "~/components/ui/Input"
 import { ScreenView } from "~/components/ui/ScreenView"
 import { Spinner } from "~/components/ui/Spinner"
@@ -24,8 +24,6 @@ import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
 import { isTablet, width } from "~/lib/device"
 import { useMapCoords } from "~/lib/hooks/useMapCoords"
-
-import { keepPreviousData } from "@tanstack/react-query"
 import { useMapSettings } from "~/lib/hooks/useMapSettings"
 import { useMapFilters } from "../../../../filters"
 
@@ -253,9 +251,12 @@ export function AddTripSpotPreview({ spotId, onClose }: { spotId: string; onClos
         <Text>Spot not found</Text>
       ) : (
         <View className="space-y-2">
-          <TouchableOpacity onPress={() => router.push(`/(home)/(trips)/spot/${spot.id}`)} activeOpacity={0.9}>
-            <SpotTypeBadge spot={spot} />
-          </TouchableOpacity>
+          <View className="flex flex-row justify-between">
+            <TouchableOpacity onPress={() => router.push(`/(home)/(trips)/spot/${spot.id}`)} activeOpacity={0.9}>
+              <SpotTypeBadge spot={spot} />
+            </TouchableOpacity>
+            <IconButton variant="ghost" size="sm" onPress={onClose} icon={X} />
+          </View>
 
           <TouchableOpacity
             onPress={() => router.push(`/(home)/(trips)/spot/${spot.id}`)}
@@ -303,10 +304,6 @@ export function AddTripSpotPreview({ spotId, onClose }: { spotId: string; onClos
           </View>
         </View>
       )}
-
-      <TouchableOpacity onPress={onClose} className="absolute top-2 right-2 flex items-center justify-center p-2">
-        <Icon icon={X} size={20} />
-      </TouchableOpacity>
     </Animated.View>
   )
 }
