@@ -19,7 +19,7 @@ export function BetaInvitationContent(props: Props) {
         You are one of the very first members of a growing intimate community built around a shared love and respect for nature
         whilst supporting local communities when traveling.
       </p>
-      <p className="mb-4 text-center text-xl">Click below to use this code when signing up to get access.</p>
+      <p className="mb-4 text-center">Click below to use this code when signing up to get access.</p>
       <Link href={props.link} className="text-orange-600 font-bold">
         <Container className="mb-4 rounded-xs border border-gray-[rgba(120,120,120,0.9)] border-solid">
           <div className="p-6">
