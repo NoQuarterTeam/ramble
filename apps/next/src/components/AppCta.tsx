@@ -11,7 +11,7 @@ export function AppCta({ message }: { message?: string }) {
           href="https://apps.apple.com/app/ramble-van-travel-app/id6468265289?itsct=apps_box_badge&amp;itscg=30200"
         >
           <img
-            src="https://ramble.guide/apple.svg"
+            src="https://ramble.guide/apple.png"
             alt="Download on the App Store"
             width={200}
             height={80}

@@ -59,7 +59,7 @@ export default function Home() {
                 href="https://apps.apple.com/app/ramble-van-travel-app/id6468265289?itsct=apps_box_badge&amp;itscg=30200"
               >
                 <Image
-                  src="https://ramble.guide/apple.svg"
+                  src="https://ramble.guide/apple.png"
                   alt="Download on the App Store"
                   width={120}
                   height={30}
@@ -154,7 +154,7 @@ export default function Home() {
               href="https://apps.apple.com/app/ramble-van-travel-app/id6468265289?itsct=apps_box_badge&amp;itscg=30200"
             >
               <Image
-                src="https://ramble.guide/apple.svg"
+                src="https://ramble.guide/apple.png"
                 alt="Download on the App Store"
                 width={150}
                 height={30}
@@ -241,7 +241,7 @@ export default function Home() {
             href="https://apps.apple.com/app/ramble-van-travel-app/id6468265289?itsct=apps_box_badge&amp;itscg=30200"
           >
             <Image
-              src="https://ramble.guide/apple.svg"
+              src="https://ramble.guide/apple.png"
               alt="Download on the App Store"
               width={150}
               height={30}
@@ -274,7 +274,7 @@ export default function Home() {
                 href="https://apps.apple.com/app/ramble-van-travel-app/id6468265289?itsct=apps_box_badge&amp;itscg=30200"
               >
                 <Image
-                  src="https://ramble.guide/apple.svg"
+                  src="https://ramble.guide/apple.png"
                   alt="Download on the App Store"
                   width={100}
                   height={30}
