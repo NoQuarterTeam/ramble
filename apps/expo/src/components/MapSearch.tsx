@@ -1,9 +1,7 @@
-import { useFocusEffect } from "expo-router"
 import { Search, X } from "lucide-react-native"
 import { usePostHog } from "posthog-react-native"
 import * as React from "react"
 import { Keyboard, TextInput, TouchableOpacity, View } from "react-native"
-import { AvoidSoftInput } from "react-native-avoid-softinput"
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { SafeAreaView } from "react-native-safe-area-context"
 
@@ -15,15 +13,6 @@ import { width } from "~/lib/device"
 
 export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) => void }) {
   const [search, setSearch] = React.useState("")
-
-  const onFocusEffect = React.useCallback(() => {
-    AvoidSoftInput.setEnabled(true)
-    return () => {
-      AvoidSoftInput.setEnabled(false)
-    }
-  }, [])
-
-  useFocusEffect(onFocusEffect)
 
   const searchWidth = useSharedValue(0)
   const animatedStyles = useAnimatedStyle(() => ({

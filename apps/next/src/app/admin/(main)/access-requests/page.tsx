@@ -1,10 +1,9 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table"
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/Table"
 import { db } from "@/lib/server/db"
 
 import { Pagination } from "@/components/Pagination"
 import { requireAdmin } from "@/lib/server/auth"
 import { promiseHash } from "@ramble/shared"
-import dayjs from "dayjs"
 import { AccessRequestRow } from "./AccessRequestRow"
 
 export const dynamic = "force-dynamic"

@@ -1,16 +1,16 @@
 import * as ImagePicker from "expo-image-picker"
-import { Plus, X } from "lucide-react-native"
+import { Bike, Plus, ShowerHead, Wifi, X, Zap } from "lucide-react-native"
 import * as React from "react"
 import { FormProvider } from "react-hook-form"
 import { Keyboard, ScrollView, TouchableOpacity, View } from "react-native"
-import { AvoidSoftInputView } from "react-native-avoid-softinput"
 
-import { createAssetUrl } from "@ramble/shared"
+import { VAN_SETTINGS, createAssetUrl } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
+import { VanSettingSelector } from "~/components/VanSettingsSelector"
 import { Button } from "~/components/ui/Button"
-import { FormError } from "~/components/ui/FormError"
 import { FormInput, FormInputLabel } from "~/components/ui/FormInput"
+import { Icons } from "~/components/ui/Icons"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { ScreenView } from "~/components/ui/ScreenView"
 import { toast } from "~/components/ui/Toast"
@@ -25,22 +25,52 @@ export default function VanScreen() {
   const { data, isLoading } = api.van.mine.useQuery()
 
   const form = useForm({
-    defaultValues: { name: data?.name, model: data?.model, year: data?.year.toString(), description: data?.description },
+    defaultValues: {
+      name: data?.name || "",
+      model: data?.model || "",
+      year: data?.year.toString() || "",
+      description: data?.description || "",
+      hasToilet: data?.hasToilet || false,
+      hasShower: data?.hasShower || false,
+      hasElectricity: data?.hasElectricity || false,
+      hasInternet: data?.hasInternet || false,
+      hasBikeRack: data?.hasBikeRack || false,
+    },
   })
 
   React.useEffect(() => {
     if (!data || isLoading) return
-    form.reset({ name: data.name, model: data.model, year: data.year.toString(), description: data.description })
+    form.reset({
+      name: data.name,
+      model: data.model,
+      year: data.year.toString(),
+      description: data.description || "",
+      hasToilet: data.hasToilet,
+      hasShower: data.hasShower,
+      hasElectricity: data.hasElectricity,
+      hasInternet: data.hasInternet,
+      hasBikeRack: data.hasBikeRack,
+    })
   }, [data, form, isLoading])
 
   const utils = api.useUtils()
   const {
     mutate,
-    isLoading: updateLoading,
+    isPending: updateLoading,
     error,
   } = api.van.upsert.useMutation({
     onSuccess: (res) => {
-      form.reset({ name: res.name, model: res.model, year: res.year.toString(), description: res.description })
+      form.reset({
+        name: res.name,
+        model: res.model,
+        year: res.year.toString(),
+        description: res.description || "",
+        hasToilet: res.hasToilet,
+        hasShower: res.hasShower,
+        hasElectricity: res.hasElectricity,
+        hasInternet: res.hasInternet,
+        hasBikeRack: res.hasBikeRack,
+      })
       toast({ title: "Van updated." })
     },
   })
@@ -51,7 +81,7 @@ export default function VanScreen() {
     if (!model) return toast({ title: "Model is required" })
     if (!name) return toast({ title: "Name is required" })
     if (!year) return toast({ title: "Year is required" })
-    mutate({ model, name, year: Number(year), id: data?.id })
+    mutate({ ...van, model, name, year: Number(year), id: data?.id })
   })
 
   const { mutate: removeImage } = api.van.removeImage.useMutation({
@@ -90,6 +120,12 @@ export default function VanScreen() {
     }
   }
 
+  const hasToilet = form.watch("hasToilet")
+  const hasShower = form.watch("hasShower")
+  const hasElectricity = form.watch("hasElectricity")
+  const hasInternet = form.watch("hasInternet")
+  const hasBikeRack = form.watch("hasBikeRack")
+
   const isDirty = form.formState.isDirty
   return (
     <FormProvider {...form}>
@@ -103,18 +139,74 @@ export default function VanScreen() {
           ) : undefined
         }
       >
-        <AvoidSoftInputView>
-          <ScrollView
-            keyboardShouldPersistTaps="handled"
-            keyboardDismissMode="interactive"
-            contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}
-            showsVerticalScrollIndicator={false}
-          >
-            <FormInput name="name" label="Name" error={error} />
-            <FormInput name="model" label="Model" error={error} />
-            <FormInput name="year" label="Year" error={error} />
-            <FormInput multiline name="description" label="Description" error={error} />
-            <FormError error={error} />
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="interactive"
+          contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}
+          showsVerticalScrollIndicator={false}
+        >
+          <FormInput name="name" label="Name" error={error} />
+          <View className="flex items-center flex-row gap-4">
+            <View className="flex-1">
+              <FormInput name="model" label="Model" error={error} />
+            </View>
+            <View className="flex-1">
+              <FormInput name="year" label="Year" error={error} />
+            </View>
+          </View>
+          <FormInput multiline name="description" label="Description" error={error} />
+
+          <View className="space-y-0.5">
+            <View className="flex flex-row gap-2">
+              <View className="flex-1">
+                <VanSettingSelector
+                  onToggle={() => form.setValue("hasShower", !hasShower, { shouldDirty: true })}
+                  icon={ShowerHead}
+                  label={VAN_SETTINGS.hasShower}
+                  isSelected={hasShower}
+                />
+              </View>
+              <View className="flex-1">
+                <VanSettingSelector
+                  onToggle={() => form.setValue("hasToilet", !hasToilet, { shouldDirty: true })}
+                  icon={Icons.Toilet}
+                  label={VAN_SETTINGS.hasToilet}
+                  isSelected={hasToilet}
+                />
+              </View>
+            </View>
+            <View className="flex flex-row gap-2">
+              <View className="flex-1">
+                <VanSettingSelector
+                  onToggle={() => form.setValue("hasElectricity", !hasElectricity, { shouldDirty: true })}
+                  icon={Zap}
+                  label={VAN_SETTINGS.hasElectricity}
+                  isSelected={hasElectricity}
+                />
+              </View>
+              <View className="flex-1">
+                <VanSettingSelector
+                  onToggle={() => form.setValue("hasInternet", !hasInternet, { shouldDirty: true })}
+                  icon={Wifi}
+                  label={VAN_SETTINGS.hasInternet}
+                  isSelected={hasInternet}
+                />
+              </View>
+            </View>
+            <View className="flex flex-row gap-2">
+              <View className="flex-1">
+                <VanSettingSelector
+                  onToggle={() => form.setValue("hasBikeRack", !hasBikeRack, { shouldDirty: true })}
+                  icon={Bike}
+                  label={VAN_SETTINGS.hasBikeRack}
+                  isSelected={hasBikeRack}
+                />
+              </View>
+              <View className="flex-1" />
+            </View>
+          </View>
+          <View />
+          <View className="pt-2">
             {data && (
               <View>
                 <FormInputLabel label="Images" />
@@ -146,8 +238,8 @@ export default function VanScreen() {
                 </View>
               </View>
             )}
-          </ScrollView>
-        </AvoidSoftInputView>
+          </View>
+        </ScrollView>
       </ScreenView>
     </FormProvider>
   )

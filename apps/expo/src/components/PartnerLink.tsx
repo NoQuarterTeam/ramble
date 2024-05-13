@@ -1,13 +1,13 @@
+import * as Sentry from "@sentry/react-native"
 import { Image } from "expo-image"
 import * as WebBrowser from "expo-web-browser"
-import { TouchableOpacity, useColorScheme } from "react-native"
+import { Linking, TouchableOpacity, useColorScheme } from "react-native"
 
 import { type SpotPartnerFields, isPartnerSpot, partners } from "@ramble/shared"
 
 import { FULL_WEB_URL } from "~/lib/config"
 
 import { Text } from "./ui/Text"
-import { toast } from "./ui/Toast"
 
 interface Props {
   spot: SpotPartnerFields
@@ -50,12 +50,14 @@ export function PartnerLink(props: Props) {
                                 : partners.polskiCaravaning
 
   const handleOpen = async () => {
+    if (!props.spot.sourceUrl) return
     try {
-      await WebBrowser.openBrowserAsync(props.spot.sourceUrl || "", {
+      await WebBrowser.openBrowserAsync(props.spot.sourceUrl, {
         presentationStyle: WebBrowser.WebBrowserPresentationStyle.PAGE_SHEET,
       })
-    } catch {
-      toast({ type: "error", title: "Error opening link" })
+    } catch (e) {
+      Sentry.captureException(e)
+      Linking.openURL(props.spot.sourceUrl)
     }
   }
 

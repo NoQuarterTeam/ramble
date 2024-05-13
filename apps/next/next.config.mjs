@@ -6,18 +6,6 @@ const nextConfig = {
   typescript: { ignoreBuildErrors: true },
   experimental: { serverComponentsExternalPackages: ["@aws-sdk"] },
   redirects: () => [{ source: "/register", destination: "/", permanent: false }],
-  transpilePackages: [
-    "axios",
-    "decode-uri-component",
-    "filter-obj",
-    "loops",
-    "kdbush",
-    "loops",
-    "query-string",
-    "split-on-first",
-    "supercluster",
-    "superjson",
-  ],
   images: {
     remotePatterns: [
       { hostname: "cdn.ramble.guide" },

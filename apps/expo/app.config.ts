@@ -1,7 +1,7 @@
 import type { ConfigContext, ExpoConfig } from "expo/config"
 
-const VERSION = "1.4.11"
-const BUILD = 70
+const VERSION = "1.4.13"
+const BUILD = 73
 
 const splash: ExpoConfig["splash"] = {
   image: "./assets/splash.png",
@@ -113,7 +113,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
       {
         RNMapboxMapsImpl: "mapbox",
         RNMapboxMapsDownloadToken: "sk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNsaHVvaXZ4bDAxdjMzY2xiNnE3OHp0dnMifQ.nwE8EhfOoonpunlKdGikiA",
-        RNMapboxMapsVersion: "11.0.0",
+        RNMapboxMapsVersion: "11.3.0",
       },
     ],
     [

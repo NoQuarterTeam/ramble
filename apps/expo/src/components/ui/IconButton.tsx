@@ -1,7 +1,7 @@
 import * as React from "react"
 import { TouchableOpacity, type TouchableOpacityProps, useColorScheme } from "react-native"
 
-import { join, merge } from "@ramble/shared"
+import { merge } from "@ramble/shared"
 
 import { Spinner } from "./Spinner"
 

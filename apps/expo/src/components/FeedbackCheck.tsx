@@ -56,7 +56,7 @@ export const FeedbackCheck = React.memo(function _FeedbackCheck() {
   const form = useForm({
     defaultValues: { rating: 0, needs: [] as string[], shareable: 0, other: "" },
   })
-  const { mutate, isLoading: createLoading } = api.feedback.create.useMutation({
+  const { mutate, isPending: createLoading } = api.feedback.create.useMutation({
     onSuccess: async () => {
       complete()
       await new Promise((r) => setTimeout(r, 1000))

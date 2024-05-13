@@ -4,7 +4,6 @@ import { FormProvider } from "react-hook-form"
 import { ScrollView, View } from "react-native"
 
 import { Button } from "~/components/ui/Button"
-import { FormError } from "~/components/ui/FormError"
 import { FormInput } from "~/components/ui/FormInput"
 import { ModalView } from "~/components/ui/ModalView"
 import { toast } from "~/components/ui/Toast"
@@ -16,7 +15,11 @@ export default function RequestAccessScreen() {
   useKeyboardController()
   const navigation = useRouter()
   const posthog = usePostHog()
-  const { mutate, error, isLoading } = api.auth.requestAccess.useMutation({
+  const {
+    mutate,
+    error,
+    isPending: isLoading,
+  } = api.auth.requestAccess.useMutation({
     onSuccess: async () => {
       posthog.capture("user requested access")
       if (navigation.canGoBack()) {
@@ -51,7 +54,6 @@ export default function RequestAccessScreen() {
             <Button className="mb-1" isLoading={isLoading} onPress={onSubmit}>
               Request access
             </Button>
-            <FormError className="mb-1" error={error} />
           </View>
         </ScrollView>
       </FormProvider>

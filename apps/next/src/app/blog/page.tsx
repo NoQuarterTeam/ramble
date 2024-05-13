@@ -1,46 +1,13 @@
-import { notion } from "@/lib/server/notion"
-import { upload } from "@/lib/server/s3"
-import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints"
-
 import dayjs from "dayjs"
 import advancedFormat from "dayjs/plugin/advancedFormat"
-import { unstable_cache } from "next/cache"
 import Image from "next/image"
 import Link from "next/link"
 import { Tag } from "./components/Tag"
-import { BLOG_NOTION_DB_ID, BLOG_S3_FOLDER } from "./config"
+import { getBlogPosts } from "./getBlogPosts"
 dayjs.extend(advancedFormat)
 
-const getItems = unstable_cache(
-  async () => {
-    const content = await notion.databases.query({
-      database_id: BLOG_NOTION_DB_ID,
-      filter: {
-        and: [
-          { property: "Published", date: { is_not_empty: true, before: dayjs().format() } },
-          { property: "Slug", rich_text: { is_not_empty: true } },
-        ],
-      },
-      sorts: [{ property: "Published", direction: "descending" }],
-    })
-
-    return Promise.all(
-      (content.results as PageObjectResponse[]).map(async (page) => {
-        const cover = page.cover
-        if (!cover) return { ...page, cover: null }
-        const imageUrl = cover.type === "external" ? cover.external.url : cover.file.url
-        if (!imageUrl) return { ...page, cover: null }
-        const url = await upload(imageUrl, BLOG_S3_FOLDER)
-        return { ...page, cover: url }
-      }),
-    )
-  },
-  ["blog"],
-  { revalidate: 86400, tags: ["blog"] },
-)
-
 export default async function Page() {
-  const items = await getItems()
+  const items = await getBlogPosts()
   return (
     <div className="px-4 py-8">
       <div className="mx-auto max-w-6xl  space-y-6">
@@ -53,53 +20,34 @@ export default async function Page() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {items.map((item) => {
-            const page = formatPageProperties(item)
-            if (!page.slug) return null
-            return (
-              <Link
-                key={page.id}
-                href={`/blog/${page.slug.toLocaleLowerCase()}`}
-                className="p-4 space-y-2 border rounded-sm hover:border-gray-600 duration-200 cursor-pointer"
-              >
-                {page.cover && (
-                  <Image
-                    src={page.cover}
-                    unoptimized={!page.cover.startsWith("https://cdn.ramble")}
-                    alt={page.title}
-                    width={600}
-                    height={300}
-                    className="rounded-sm h-[300px] w-full object-cover"
-                  />
-                )}
-                <p className="opacity-60">{dayjs(page.publishedAt).format("Do MMMM YYYY")}</p>
-                <p className="text-2xl font-semibold leading-8">{page.title}</p>
-                <p className="line-clamp-3 font-light">{page.summary}</p>
-                <div className="flex flex-wrap gap-2">
-                  {page.tags.map((tag) => (
-                    <Tag key={tag.id} tag={tag} />
-                  ))}
-                </div>
-              </Link>
-            )
-          })}
+          {items.map((item) => (
+            <Link
+              key={item.id}
+              href={`/blog/${item.slug.toLocaleLowerCase()}`}
+              className="p-4 space-y-2 border rounded-sm hover:border-gray-600 duration-200 cursor-pointer"
+            >
+              {item.cover && (
+                <Image
+                  src={item.cover}
+                  unoptimized={!item.cover.startsWith("https://cdn.ramble")}
+                  alt={item.title}
+                  width={600}
+                  height={300}
+                  className="rounded-sm h-[300px] w-full object-cover"
+                />
+              )}
+              <p className="opacity-60">{dayjs(item.publishedAt).format("Do MMMM YYYY")}</p>
+              <p className="text-2xl font-semibold leading-8">{item.title}</p>
+              <p className="line-clamp-3 font-light">{item.summary}</p>
+              <div className="flex flex-wrap gap-2">
+                {item.tags.map((tag) => (
+                  <Tag key={tag.id} tag={tag} />
+                ))}
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </div>
   )
-}
-
-const formatPageProperties = (page: Omit<PageObjectResponse, "cover"> & { cover: string | null }) => {
-  // return page properties as a flat object
-  const properties = page.properties
-
-  return {
-    id: page.id,
-    title: properties.Title.type === "title" ? properties.Title.title[0].plain_text : "",
-    summary: properties.Summary.type === "rich_text" ? properties.Summary.rich_text[0]?.plain_text : null,
-    tags: properties.Tags.type === "multi_select" ? properties.Tags.multi_select : [],
-    publishedAt: properties.Published.type === "date" ? properties.Published.date?.start! : "",
-    cover: page.cover,
-    slug: properties.Slug.type === "rich_text" ? properties.Slug.rich_text[0]!.plain_text! : "",
-  }
 }

@@ -3,7 +3,7 @@ import dayjs from "dayjs"
 import Supercluster from "supercluster"
 import { z } from "zod"
 
-import { clusterSchema, updateUserSchema, userSchema } from "@ramble/server-schemas"
+import { clusterSchema, userSchema } from "@ramble/server-schemas"
 import {
   createAuthToken,
   deleteObject,
@@ -40,18 +40,11 @@ export const userRouter = createTRPCRouter({
     if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
     return { ...user, isFollowedByMe: user.followers && user.followers.length > 0 }
   }),
-  /**
-   * @deprecated Using local storage to track activity count
-   */
-  hasSubmittedFeedback: publicProcedure.query(() => {
-    // leave until a few versions later
-    return true
-  }),
   hasCreatedSpot: protectedProcedure.query(async ({ ctx }) => {
     const spot = await ctx.prisma.spot.findFirst({ where: { creatorId: ctx.user.id }, select: { id: true } })
     return !!spot
   }),
-  update: protectedProcedure.input(updateUserSchema).mutation(async ({ ctx, input }) => {
+  update: protectedProcedure.input(userSchema.partial()).mutation(async ({ ctx, input }) => {
     if (input.username && input.username !== ctx.user.username) {
       const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })
       if (user) throw new TRPCError({ code: "BAD_REQUEST", message: "Username already taken" })
@@ -62,7 +55,7 @@ export const userRouter = createTRPCRouter({
       avatarBlurHash = await generateBlurHash(input.avatar)
     }
     const user = await ctx.prisma.user.update({ where: { id: ctx.user.id }, data: { ...input, avatarBlurHash } })
-    await updateLoopsContact({ userId: user.id, email: user.email, ...input })
+    updateLoopsContact({ userId: user.id, email: user.email, ...input })
     return user
   }),
   followers: publicProcedure.input(userSchema.pick({ username: true })).query(async ({ ctx, input }) => {
@@ -158,7 +151,7 @@ export const userRouter = createTRPCRouter({
       },
     })
     if (ctx.user.avatar) await deleteObject(ctx.user.avatar)
-    void sendSlackMessage(`😭 User @${ctx.user.username} deleted their account.`)
+    sendSlackMessage(`😭 User @${ctx.user.username} deleted their account.`)
     return true
   }),
   guides: protectedProcedure.input(z.object({ skip: z.number() })).query(async ({ ctx, input }) => {
@@ -177,8 +170,12 @@ export const userRouter = createTRPCRouter({
         _count: {
           select: {
             followers: true,
+            /**
+             * @deprecated in v1.4.11 - use trips now
+             */
             lists: { where: { isPrivate: false } },
-            verifiedSpots: { where: { sourceUrl: { equals: null }, deletedAt: null } },
+            createdTrips: true,
+            verifiedSpots: { where: { sourceUrl: { equals: null }, deletedAt: null, verifiedAt: { not: null } } },
           },
         },
       },

@@ -66,6 +66,7 @@
     "react-native-gesture-handler",
     "react-native-ios-context-menu",
     "react-native-ios-utilities",
+    "@react-native-menu/menu",
     "react-native-progress",
     "react-native-reanimated",
     "react-native-safe-area-context",

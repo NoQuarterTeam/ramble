@@ -1,6 +1,4 @@
 import { Container, Img, Link } from "@react-email/components"
-
-import { Button } from "../components/Button"
 import { EmailDocument } from "../components/EmailDocument"
 import { EmailWrapper } from "../components/EmailWrapper"
 import { Heading } from "../components/Heading"

@@ -3,10 +3,11 @@ import * as React from "react"
 import useOnClickOutside from "use-onclickoutside"
 
 import { Button, Input, Spinner } from "@/components/ui"
+import { keepPreviousData } from "@tanstack/react-query"
 
 export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) => void }) {
   const [search, setSearch] = React.useState("")
-  const { data, isLoading } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, keepPreviousData: true })
+  const { data, isLoading } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search, placeholderData: keepPreviousData })
   const ref = React.useRef<HTMLDivElement>(null)
   useOnClickOutside(ref, () => setSearch(""))
 

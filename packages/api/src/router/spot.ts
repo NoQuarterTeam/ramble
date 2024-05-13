@@ -10,8 +10,6 @@ import { FULL_WEB_URL } from "@ramble/server-env"
 import { clusterSchema, spotAmenitiesSchema, spotSchema, userSchema } from "@ramble/server-schemas"
 import {
   generateBlurHash,
-  geocodeAddress,
-  geocodeCoords,
   get5DayForecast,
   getCurrentWeather,
   publicSpotWhereClause,
@@ -325,7 +323,7 @@ export const spotRouter = createTRPCRouter({
           },
         })
       }
-      void sendSlackMessage(`📍 New spot added by @${ctx.user.username}!`)
+      sendSlackMessage(`📍 New spot added by @${ctx.user.username}!`)
       return spot
     }),
   images: protectedProcedure.input(z.object({ id: z.string().uuid() })).query(async ({ ctx, input }) => {
@@ -410,18 +408,4 @@ export const spotRouter = createTRPCRouter({
       )
       return ctx.prisma.spot.update({ where: { id }, data: { images: { create: imageData } } })
     }),
-  /**
-   * @deprecated Use mapbox router now
-   */
-  geocodeCoords: publicProcedure.input(z.object({ latitude: z.number(), longitude: z.number() })).query(async ({ input }) => {
-    const address = await geocodeCoords({ latitude: input.latitude, longitude: input.longitude })
-    return address || null
-  }),
-  /**
-   * @deprecated Use mapbox router now
-   */
-  geocodeAddress: publicProcedure.input(z.object({ address: z.string() })).query(async ({ input }) => {
-    const coords = await geocodeAddress({ address: input.address })
-    return coords || []
-  }),
 })

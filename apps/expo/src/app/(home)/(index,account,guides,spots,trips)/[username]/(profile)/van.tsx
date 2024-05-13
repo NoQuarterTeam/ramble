@@ -3,6 +3,9 @@ import { View } from "react-native"
 
 import { createAssetUrl } from "@ramble/shared"
 
+import { Bike, ShowerHead, Wifi, Zap } from "lucide-react-native"
+import { Icon } from "~/components/Icon"
+import { Icons } from "~/components/ui/Icons"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
@@ -41,15 +44,43 @@ export default function UserVan() {
           <Text className="opacity-75">{van.year}</Text>
         </View>
       </View>
-      <Text>{van.description}</Text>
-      <View className="flex flex-row flex-wrap">
+      <Text className="text-base">{van.description}</Text>
+      <View className="flex flex-row flex-wrap gap-1">
+        {van.hasToilet && (
+          <View className="p-2 rounded-sm border border-gray-200 dark:border-gray-700">
+            <Icon icon={Icons.Toilet} size={20} />
+          </View>
+        )}
+        {van.hasShower && (
+          <View className="p-2 rounded-sm border border-gray-200 dark:border-gray-700">
+            <Icon icon={ShowerHead} size={20} />
+          </View>
+        )}
+        {van.hasElectricity && (
+          <View className="p-2 rounded-sm border border-gray-200 dark:border-gray-700">
+            <Icon icon={Zap} size={20} />
+          </View>
+        )}
+        {van.hasInternet && (
+          <View className="p-2 rounded-sm border border-gray-200 dark:border-gray-700">
+            <Icon icon={Wifi} size={20} />
+          </View>
+        )}
+        {van.hasBikeRack && (
+          <View className="p-2 rounded-sm border border-gray-200 dark:border-gray-700">
+            <Icon icon={Bike} size={20} />
+          </View>
+        )}
+      </View>
+      <View className="flex">
         {van.images.map((image) => (
           <OptimizedImage
             key={image.id}
             width={500}
+            height={300}
             placeholder={image.blurHash}
             style={{ width: isTablet ? "48%" : "100%", marginHorizontal: isTablet ? 10 : 0, marginBottom: 10 }}
-            className="min-h-[300px] rounded-xs object-contain"
+            className="h-[300px] rounded-sm object-cover"
             source={{ uri: createAssetUrl(image.path) }}
           />
         ))}

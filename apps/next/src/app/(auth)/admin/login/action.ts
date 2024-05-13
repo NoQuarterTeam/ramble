@@ -2,14 +2,16 @@
 
 import { clearSession, setUserSession } from "@/lib/server/auth"
 import { db } from "@/lib/server/db"
-import { loginSchema } from "@ramble/server-schemas"
+import { userSchema } from "@ramble/server-schemas"
 import { comparePasswords } from "@ramble/server-services"
 import * as Sentry from "@sentry/nextjs"
 import { redirect } from "next/navigation"
 
 export const action = async (_: unknown, formData: FormData) => {
   try {
-    const result = loginSchema.safeParse({ email: formData.get("email"), password: formData.get("password") })
+    const result = userSchema
+      .pick({ email: true, password: true })
+      .safeParse({ email: formData.get("email"), password: formData.get("password") })
     if (!result.success) return { ok: false, fieldErrors: result.error.flatten().fieldErrors }
     const user = await db.user.findUnique({ where: { email: result.data.email } })
     if (!user) return { ok: false, formError: "Incorrect email or password" }

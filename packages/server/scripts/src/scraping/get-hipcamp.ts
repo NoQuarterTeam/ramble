@@ -1,6 +1,7 @@
 import { prisma } from "@ramble/database"
 import { gql, GraphQLClient } from "graphql-request"
 
+import { confirmDeleteSpots } from './helpers/utils';
 
 const LIMIT = 2000
 
@@ -26,6 +27,7 @@ const headers = {
   "User-Agent":
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15",
 }
+
 
 const search = new GraphQLClient(searchEndpoint, { headers })
 const camper = new GraphQLClient(camperEndpoint, { headers })
@@ -161,7 +163,7 @@ async function run(bbox: {southwestLatitude: number, southwestLongitude: number,
       console.log(" ----------- WARNING ----------")
       console.log("You're leaving spots on the table bruv")
     }
-    console.log()
+
 
     const nodes = searchRes.lands.privateLands.edges.map((edge) => edge.node)
 
@@ -170,6 +172,7 @@ async function run(bbox: {southwestLatitude: number, southwestLongitude: number,
     const existingHipcampSpots = await prisma.spot.findMany({
       where: { hipcampId: { not: { equals: null } } },
     })
+    
 
     for (const node of nodes) {
       try {
@@ -181,6 +184,12 @@ async function run(bbox: {southwestLatitude: number, southwestLongitude: number,
         const last = node.url.split("-").length - 1
         const landId = node.url.split("-")[last]
 
+        const existingSpot = existingHipcampSpots.find((s) => s.hipcampId === landId)
+
+        if (existingSpot?.deletedAt) {
+          console.log("Spot already deleted: " + "https://www.hipcamp.com/" + node.url)
+          continue
+        }
         
         const landRes: LandRes = await camper.request(landQuery, { landId, landIdType: "MASKED" })
         const land = landRes.land
@@ -202,11 +211,9 @@ async function run(bbox: {southwestLatitude: number, southwestLongitude: number,
         // console.dir(landRes, { depth: null })
         const images = node.topPhotos.flatMap((topPhoto) => topPhoto.urls.map((url) => url.url))
       
-        // if in db, update
-        const existingSpot = existingHipcampSpots.find((s) => s.hipcampId === landId)
-        console.log(existingSpot && "Spot exists: " + existingSpot.id + " updating...")
 
-        if (existingSpot) {
+        if (existingSpot && existingSpot.deletedAt === null) {
+          console.log(existingSpot && "Spot exists: " + "https://ramble.guide/spots/"+ existingSpot.id + " updating...")
           await prisma.spot.update({
             where: { hipcampId: landId },
             data: {
@@ -258,6 +265,20 @@ async function run(bbox: {southwestLatitude: number, southwestLongitude: number,
               },
             },
           })
+          if (existingSpot.coverId === null) {
+            // Find the corresponding image of the first image in the images array
+            const firstImage = await prisma.spotImage.findFirst({where: {spotId: existingSpot.id, path: images[0]}, select: {id: true}})
+  
+            if (firstImage) {
+              await prisma.spot.update({
+                where: { id: existingSpot.id },
+                data: {
+                  cover: { connect: { id: firstImage?.id }}
+                },
+              });
+            }
+          }
+
            // Fetch existing images associated with the spot
           const existingImages = await prisma.spotImage.findMany({
             where: { spotId: existingSpot.id }, 
@@ -268,7 +289,7 @@ async function run(bbox: {southwestLatitude: number, southwestLongitude: number,
           const imagesToDelete = existingImages.filter(image => !images.includes(image.path));
 
           if (imagesToDelete.length > 0) {
-            console.log("images to delete: " + imagesToDelete.map(image => image.path))
+            console.log("images to delete: " + imagesToDelete.map(image => image.path + " ,"))
           }
 
           // Delete images
@@ -289,7 +310,7 @@ async function run(bbox: {southwestLatitude: number, southwestLongitude: number,
         } else {
           console.log("Adding new spot: " + node.url)
 
-          await prisma.spot.create({
+          const newSpot = await prisma.spot.create({
             data: {
               hipcampId: landId,
               name: node.name,
@@ -318,6 +339,17 @@ async function run(bbox: {southwestLatitude: number, southwestLongitude: number,
               },
             },
           })
+
+          if (newSpot.coverId === null) {
+            const firstImage = await prisma.spotImage.findFirst({where: {spotId: newSpot.id, path: images[0]}, select: {id: true}})
+            await prisma.spot.update({
+              where: { id: newSpot.id },
+              data: {
+                cover: { connect: { id: firstImage?.id }},
+              },
+            });
+          }
+
         }
       } catch (e) {
         console.log("error attempting ", node.url)
@@ -326,6 +358,7 @@ async function run(bbox: {southwestLatitude: number, southwestLongitude: number,
         continue
       }
     }
+    return nodes.map((node) => node.url.split("-")[node.url.split("-").length - 1]) 
   } catch (e) {
     console.log("---------- ERROR ----------")
     console.log(e)
@@ -337,6 +370,7 @@ async function run(bbox: {southwestLatitude: number, southwestLongitude: number,
   }
 }
 
+
 async function main() {
   try {
     const bboxs = [
@@ -347,7 +381,7 @@ async function main() {
         northeastLatitude: 59.064346051468334,
         northeastLongitude: 1.9696403331486465,
       },
-      // france, spain, portugal
+      // // france, spain, portugal
       {
         southwestLatitude: 34.26465635258491,
         southwestLongitude: -13.909058402557605,
@@ -363,12 +397,25 @@ async function main() {
       }
     ]
 
-
+    let scrapedIds: string[] = []
+    // loop over each page
     for (const bbox of bboxs) {
-      await run(bbox);
+      const spotIds = await run(bbox);
+      if (spotIds && spotIds.length > 0) {
+        scrapedIds = [...scrapedIds, ...spotIds]
+      }
     }
 
-    
+    const dbIds = await prisma.spot.findMany({select: {hipcampId: true, id: true}, where: {deletedAt: null, hipcampId: {not: null}}})
+    const spotsToDelete = dbIds.filter(dbId => dbId.hipcampId && !scrapedIds.includes(dbId.hipcampId)).map(dbId => dbId.id) as string[]
+
+    // ask for a command confirmation before continuing
+    if (spotsToDelete.length > 0) {
+      await confirmDeleteSpots(spotsToDelete)
+    } else {
+      console.log("No spots to delete");
+    }
+
   } catch (error) {
     console.log(error)
     process.exit(1)

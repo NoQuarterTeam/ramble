@@ -18,14 +18,14 @@
     "@ramble/shared": "workspace:*",
     "@ramble/server-services": "workspace:*",
     "@types/html-to-text": "9.0.4",
-    "@types/node": "18.19.31",
+    "@types/node": "20.12.11",
     "cheerio": "1.0.0-rc.12",
     "csv-stringify": "6.4.6",
-    "dotenv-cli": "7.4.1",
+    "dotenv-cli": "7.4.2",
     "graphql-request": "6.1.0",
     "graphql": "16.8.1",
     "html-to-text": "9.0.5",
-    "puppeteer": "22.7.1",
+    "puppeteer": "22.8.0",
     "ts-node": "10.9.2",
     "typescript": "5.4.5"
   }

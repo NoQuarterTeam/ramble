@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Link } from "expo-router"
-import { CloudRain, MountainSnow, SunMoon, Thermometer, Users2 } from "lucide-react-native"
+import { CloudRain, Earth, MountainSnow, SunMoon, Thermometer, Users2 } from "lucide-react-native"
 import { usePostHog } from "posthog-react-native"
 import { Switch, TouchableOpacity, View } from "react-native"
 import { z } from "zod"
@@ -16,7 +16,7 @@ import { Text } from "~/components/ui/Text"
 import { useMe } from "~/lib/hooks/useMe"
 
 const mapLayersSchema = z.object({
-  layer: z.enum(["rain", "temp", "satellite"]).nullable(),
+  layer: z.enum(["rain", "temp", "satellite", "bioRegions"]).nullable(),
   shouldShowUsers: z.boolean(),
 })
 
@@ -116,6 +116,27 @@ export default function MapLayers() {
             </View>
             <View className="sq-6 flex items-center justify-center rounded-full border border-gray-200 dark:border-gray-700">
               {layers.layer === "temp" && <View className="sq-4 rounded-full bg-primary" />}
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => onSetMapLayer("bioRegions")}
+            disabled={!me}
+            className={join(
+              "flex flex-row items-center justify-between space-x-2 rounded border border-gray-200 p-3 dark:border-gray-700",
+              !me && "opacity-70",
+            )}
+          >
+            <View className="flex flex-row items-center space-x-3">
+              <Icon icon={Earth} size={24} />
+              <View>
+                <Text className="h-[25px] text-lg">Bio Regions</Text>
+                <Text numberOfLines={2} style={{ lineHeight: 16 }} className="max-w-[220px] text-sm opacity-75">
+                  Shows bioregions of europe
+                </Text>
+              </View>
+            </View>
+            <View className="sq-6 flex items-center justify-center rounded-full border border-gray-200 dark:border-gray-700">
+              {layers.layer === "bioRegions" && <View className="sq-4 rounded-full bg-primary" />}
             </View>
           </TouchableOpacity>
           <TouchableOpacity

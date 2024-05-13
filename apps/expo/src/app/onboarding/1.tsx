@@ -5,7 +5,6 @@ import { AvoidSoftInputView } from "react-native-avoid-softinput"
 
 import { SafeAreaView } from "~/components/SafeAreaView"
 import { Button } from "~/components/ui/Button"
-import { FormError } from "~/components/ui/FormError"
 import { FormInput } from "~/components/ui/FormInput"
 import { Heading } from "~/components/ui/Heading"
 import { api } from "~/lib/api"
@@ -18,7 +17,11 @@ export default function OnboardingStep1Screen() {
   const router = useRouter()
 
   const utils = api.useUtils()
-  const { mutate, isLoading, error } = api.user.update.useMutation({
+  const {
+    mutate,
+    isPending: isLoading,
+    error,
+  } = api.user.update.useMutation({
     onSuccess: async () => {
       await utils.user.me.refetch()
       router.push("/onboarding/2")
@@ -29,7 +32,7 @@ export default function OnboardingStep1Screen() {
 
   return (
     <SafeAreaView>
-      <View className="flex-1 px-4">
+      <View className="flex-1 px-4 pt-4">
         <FormProvider {...form}>
           <AvoidSoftInputView>
             <ScrollView
@@ -37,7 +40,7 @@ export default function OnboardingStep1Screen() {
               keyboardShouldPersistTaps="handled"
               keyboardDismissMode="interactive"
               showsVerticalScrollIndicator={false}
-              className="space-y-4"
+              className="space-y-2"
             >
               <Heading className="text-2xl">Tell us a bit about youself</Heading>
               <FormInput
@@ -48,7 +51,6 @@ export default function OnboardingStep1Screen() {
                 label="A little bio, just a few words about yourself and your interests"
                 error={error}
               />
-              <FormError error={error} />
 
               <View className="flex flex-row items-center justify-between">
                 <View />

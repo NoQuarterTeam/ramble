@@ -8,9 +8,8 @@ import colors from "@ramble/tailwind-config/src/colors"
 import { Icon } from "~/components/Icon"
 import { SafeAreaView } from "~/components/SafeAreaView"
 import { Button } from "~/components/ui/Button"
-import { FormError } from "~/components/ui/FormError"
 import { Heading } from "~/components/ui/Heading"
-import type { IconProps } from "~/components/ui/Icons"
+import type { RambleIcon } from "~/components/ui/Icons"
 import { Text } from "~/components/ui/Text"
 import { api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
@@ -24,7 +23,7 @@ export default function OnboardingStep2Screen() {
   const router = useRouter()
   const setFilters = useMapFilters((state) => state.setFilters)
   const utils = api.useUtils()
-  const { mutate, isLoading, error } = api.user.update.useMutation({
+  const { mutate, isPending: isLoading } = api.user.update.useMutation({
     onSuccess: async (data) => {
       await utils.user.me.refetch()
       setFilters({
@@ -59,8 +58,8 @@ export default function OnboardingStep2Screen() {
 
   return (
     <SafeAreaView>
-      <View className="flex-1 px-4">
-        <ScrollView className="space-y-4" contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+      <View className="flex-1 px-4 pt-4">
+        <ScrollView className="space-y-2" contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
           <Heading className="text-2xl">What are you into?</Heading>
 
           <View>
@@ -75,7 +74,6 @@ export default function OnboardingStep2Screen() {
             ))}
           </View>
 
-          <FormError error={error} />
           <View className="flex flex-row items-center justify-between">
             <Button onPress={router.back} variant="ghost">
               Back
@@ -104,10 +102,10 @@ function InterestSelector({
   isSelected: boolean
   onToggle: () => void
   label: string
-  icon: (props: IconProps) => JSX.Element
+  icon: RambleIcon
 }) {
   return (
-    <View className="flex w-full flex-row items-center justify-between p-4">
+    <View className="flex w-full flex-row items-center justify-between py-3 px-2">
       <View className="flex flex-row items-center space-x-2">
         <Icon icon={icon} className="sq-4" />
         <Text className="text-xl">{label}</Text>

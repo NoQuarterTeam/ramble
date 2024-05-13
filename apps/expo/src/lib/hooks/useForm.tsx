@@ -8,7 +8,13 @@ export function useForm<TFieldValues extends FieldValues = FieldValues, TContext
 }
 
 export type ApiError = TRPCClientErrorLike<{
-  code: number
-  message: string
-  data: { zodError?: { fieldErrors: { [key: string]: undefined | string[] } } | null; formError?: string | null }
+  transformer: true
+  errorShape: {
+    message: string
+    data: {
+      code: string
+      zodError?: { fieldErrors: { [key: string]: undefined | string[] } } | null
+      formError?: string | null
+    }
+  }
 }> | null

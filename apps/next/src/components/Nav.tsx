@@ -1,19 +1,9 @@
-"use client"
-
-import { merge } from "@ramble/shared"
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  IconButton,
-  buttonSizeStyles,
-  buttonStyles,
-} from "@/components/ui"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, IconButton } from "@/components/ui"
+import { getMaybeUser } from "@/lib/server/auth"
 import { Menu } from "lucide-react"
-import Link, { type LinkProps } from "next/link"
-import { usePathname } from "next/navigation"
+import Link from "next/link"
+import { Suspense } from "react"
+import { NavLink } from "./NavLink"
 
 export function Nav() {
   return (
@@ -24,14 +14,17 @@ export function Nav() {
         </Link>
 
         <div className="hidden md:flex items-center space-x-1">
-          <NavbarLink href="/">Map</NavbarLink>
-          <NavbarLink href="/spots">Latest spots</NavbarLink>
-          {/* <NavbarLink href="/guides">Guides</NavbarLink> */}
+          <NavLink href="/">Map</NavLink>
+          <NavLink href="/spots">Latest spots</NavLink>
+          {/* <NavLink href="/guides">Guides</NavLink> */}
         </div>
       </div>
       <div className="hidden md:flex space-x-1">
-        <NavbarLink href="/blog">Blog</NavbarLink>
-        <NavbarLink href="/about">About</NavbarLink>
+        <Suspense>
+          <AdminLink />
+        </Suspense>
+        <NavLink href="/blog">Blog</NavLink>
+        <NavLink href="/about">About</NavLink>
       </div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -45,6 +38,9 @@ export function Nav() {
             <DropdownMenuItem asChild>
               <Link href="/spots">Latest spots</Link>
             </DropdownMenuItem>
+            {/* <DropdownMenuItem asChild>
+              <Link href="/guides">Guides</Link>
+            </DropdownMenuItem> */}
             <DropdownMenuItem asChild>
               <Link href="/blog">Blog</Link>
             </DropdownMenuItem>
@@ -58,20 +54,8 @@ export function Nav() {
   )
 }
 
-function NavbarLink(props: LinkProps & { className?: string; children?: React.ReactNode }) {
-  const pathname = usePathname()
-  const isActive = pathname === props.href
-  return (
-    <Link
-      {...props}
-      href={props.href}
-      className={merge(
-        buttonStyles({ size: "md", variant: isActive ? "secondary" : "ghost" }),
-        buttonSizeStyles({ size: "md" }),
-        props.className,
-      )}
-    >
-      {props.children}
-    </Link>
-  )
+async function AdminLink() {
+  const user = await getMaybeUser()
+  if (!user?.isAdmin) return null
+  return <NavLink href="/admin">Admin</NavLink>
 }

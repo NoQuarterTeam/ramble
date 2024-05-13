@@ -11,11 +11,11 @@
     "@ramble/database": "workspace:*",
     "@ramble/shared": "workspace:*",
     "tailwind-merge": "2.3.0",
-    "zod": "3.23.5"
+    "zod": "3.23.8"
   },
   "devDependencies": {
     "@ramble/tailwind-config": "workspace:*",
-    "@types/node": "18.19.31",
+    "@types/node": "20.12.11",
     "typescript": "5.4.5"
   }
 }

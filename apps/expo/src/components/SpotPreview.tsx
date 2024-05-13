@@ -53,10 +53,10 @@ export const SpotPreview = React.memo(function _SpotPreview({
 
   return (
     <Animated.View
-      style={{ width: "100%", height: 440, position: "absolute", backgroundColor, bottom: 0, zIndex: 1 }}
+      style={{ width: "100%", position: "absolute", backgroundColor, bottom: 0, zIndex: 1 }}
       entering={SlideInDown.duration(200)}
       exiting={SlideOutDown.duration(200)}
-      className="rounded-t-xs p-4"
+      className="rounded-t-sm p-4"
     >
       {isLoading ? (
         <View className="flex items-center justify-center p-10">

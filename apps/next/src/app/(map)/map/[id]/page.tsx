@@ -33,10 +33,7 @@ const getSpotData = unstable_cache(async (id: string) => {
       select: {
         id: true,
         name: true,
-        address: true,
         type: true,
-        latitude: true,
-        longitude: true,
         ...spotPartnerFields,
         _count: { select: { reviews: true, listSpots: true } },
         description: true,
@@ -106,7 +103,6 @@ export default async function Page({ params }: { params: { id: string } }) {
           <h3 className="font-medium text-lg">Description</h3>
           <p className="whitespace-pre-wrap line-clamp-2">{spot.description}</p>
         </div>
-        <p className="text-sm italic blur-sm">{spot.address}</p>
         <AppCta message="Download the app to read more" />
         <hr />
         <div className="space-y-4">

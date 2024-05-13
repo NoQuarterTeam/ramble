@@ -1,6 +1,6 @@
 "use server"
 import { Prisma } from "@ramble/database/types"
-import { createToken, decodeToken } from "@ramble/server-services"
+import { createAuthToken, decodeAuthToken } from "@ramble/server-services"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { db } from "./db"
@@ -10,14 +10,16 @@ const AUTH_COOKIE = "ramble.auth"
 export async function getUserSession() {
   const encyptedUserId = cookies().get(AUTH_COOKIE)?.value
   if (!encyptedUserId) return null
-  const { id } = decodeToken<{ id: string }>(encyptedUserId)
-  return id
+
+  const res = decodeAuthToken(encyptedUserId)
+  if (!res) return null
+  return res.id
 }
 
 const oneMonth = 30 * 24 * 60 * 60 * 1000
 
 export async function setUserSession(id: string) {
-  const encyptedUserId = createToken({ id })
+  const encyptedUserId = createAuthToken({ id })
   return cookies().set(AUTH_COOKIE, encyptedUserId, {
     secure: process.env.NODE_ENV === "production",
     httpOnly: true,

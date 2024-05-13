@@ -39,7 +39,7 @@ export default function EditSpotConfirmScreen() {
   const utils = api.useUtils()
   const {
     mutate,
-    isLoading: updateLoading,
+    isPending: updateLoading,
     error,
   } = api.spot.update.useMutation({
     onSuccess: async (data) => {

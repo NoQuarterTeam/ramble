@@ -1,6 +1,6 @@
 import { Slot, useLocalSearchParams, useRouter, useSegments } from "expo-router"
 import { StatusBar } from "expo-status-bar"
-import { ChevronLeft, Heart, Instagram, User2 } from "lucide-react-native"
+import { Heart, Instagram, User2 } from "lucide-react-native"
 import * as React from "react"
 import { Linking, ScrollView, TouchableOpacity, View, useColorScheme } from "react-native"
 
@@ -8,8 +8,6 @@ import { createAssetUrl } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
-import { SafeAreaView } from "~/components/SafeAreaView"
-import { BrandHeading } from "~/components/ui/BrandHeading"
 import { Button } from "~/components/ui/Button"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { ScreenView } from "~/components/ui/ScreenView"
@@ -27,7 +25,7 @@ export default function UserScreen() {
   const params = useLocalSearchParams<{ username: string }>()
   const username = params.username
 
-  const { data: user, isLoading } = api.user.profile.useQuery({ username }, { cacheTime: 30000, enabled: !!username })
+  const { data: user, isPending: isLoading } = api.user.profile.useQuery({ username }, { staleTime: 30000, enabled: !!username })
 
   const router = useRouter()
   const utils = api.useUtils()

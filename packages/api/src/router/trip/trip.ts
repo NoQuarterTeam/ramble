@@ -30,16 +30,6 @@ export const tripRouter = createTRPCRouter({
       skip: input?.skip || 0,
     })
   }),
-  /**
-   * @deprecated Use "mine" and filter on frontend
-   */
-  active: protectedProcedure.query(({ ctx }) => {
-    return ctx.prisma.trip.findFirst({
-      where: { startDate: { lt: new Date() }, endDate: { gt: new Date() }, users: { some: { id: ctx.user.id } } },
-      orderBy: { startDate: "desc" },
-      include: { creator: true, users: true },
-    })
-  }),
   allWithSavedSpot: protectedProcedure.input(z.object({ spotId: z.string() })).query(async ({ ctx, input }) => {
     const trips = await ctx.prisma.trip.findMany({
       where: { users: { some: { id: ctx.user.id } } },
@@ -235,20 +225,6 @@ export const tripRouter = createTRPCRouter({
         return tx.tripStop.create({ data: { ...data, tripItemId: tripItem.id, image: image } })
       })
     }),
-  /**
-   * @deprecated Use items router
-   */
-  removeItem: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
-    const item = await ctx.prisma.tripItem.findUniqueOrThrow({ where: { id: input.id }, include: { stop: true } })
-    await ctx.prisma.$transaction(async (tx) => {
-      if (item.stop) {
-        await tx.tripStop.delete({ where: { id: item.stop.id } })
-      }
-      await tx.tripItem.delete({ where: { id: input.id } })
-      return
-    })
-    return true
-  }),
   updateOrder: protectedProcedure
     .input(z.object({ id: z.string(), items: z.array(z.string()), itemDateResetId: z.string().optional() }))
     .mutation(({ input, ctx }) => {
@@ -260,72 +236,11 @@ export const tripRouter = createTRPCRouter({
         return true
       })
     }),
-  usersV2: tripUsersRouter, // temp v2 name until we can move to "users" key, will need to keep v2 for a while too
+  /**
+   *  @deprecated in 1.4.11 - use users key
+   */
+  usersV2: tripUsersRouter,
+  users: tripUsersRouter,
   media: tripMediaRouter,
   items: tripItemsRouter,
-  /**
-   * @deprecated Use users router
-   */
-  users: protectedProcedure.input(z.object({ id: z.string() })).query(({ ctx, input }) => {
-    return ctx.prisma.trip.findUniqueOrThrow({
-      where: { id: input.id },
-      select: {
-        id: true,
-        name: true,
-        users: {
-          where: { id: { not: { equals: ctx.user.id } } },
-          select: { id: true, username: true, firstName: true, lastName: true, avatar: true, avatarBlurHash: true },
-        },
-      },
-    })
-  }),
-  /**
-   * @deprecated Use users router
-   */
-  searchForUsers: protectedProcedure
-    .input(z.object({ tripId: z.string(), skip: z.number(), search: z.string().optional() }))
-    .query(({ ctx, input }) => {
-      return ctx.prisma.user.findMany({
-        skip: input.skip,
-        take: 12,
-        where: {
-          id: { not: ctx.user.id },
-          trips: { none: { id: input.tripId } },
-          OR: input.search
-            ? [
-                { username: { contains: input.search } },
-                { firstName: { contains: input.search } },
-                { lastName: { contains: input.search } },
-              ]
-            : undefined,
-        },
-        orderBy: { createdAt: "desc" },
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-          username: true,
-          avatar: true,
-          avatarBlurHash: true,
-        },
-      })
-    }),
-  /**
-   * @deprecated Use users router
-   */
-  addUser: protectedProcedure.input(z.object({ tripId: z.string(), userId: z.string() })).mutation(({ ctx, input }) => {
-    return ctx.prisma.trip.update({
-      where: { id: input.tripId },
-      data: { users: { connect: { id: input.userId } } },
-    })
-  }),
-  /**
-   * @deprecated Use users router
-   */
-  removeUser: protectedProcedure.input(z.object({ tripId: z.string(), userId: z.string() })).mutation(({ ctx, input }) => {
-    return ctx.prisma.trip.update({
-      where: { id: input.tripId },
-      data: { users: { disconnect: { id: input.userId } } },
-    })
-  }),
 })

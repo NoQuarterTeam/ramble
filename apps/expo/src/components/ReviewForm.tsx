@@ -8,7 +8,6 @@ import type { Review, SpotType, Tag } from "@ramble/database/types"
 import { isCampingSpot } from "@ramble/shared"
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
-import { FormError } from "~/components/ui/FormError"
 import { FormInput, FormInputError } from "~/components/ui/FormInput"
 import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
@@ -151,7 +150,6 @@ export function ReviewForm(props: Props & (UpdateSubmit | CreateSubmit)) {
       >
         Save
       </Button>
-      <FormError className="mb-1" error={props.error} />
     </FormProvider>
   )
 }
