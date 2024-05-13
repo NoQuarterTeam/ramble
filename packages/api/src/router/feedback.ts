@@ -12,7 +12,7 @@ export const feedbackRouter = createTRPCRouter({
       const user = ctx.user
       await ctx.prisma.feedback.create({ data: { ...input, user: user ? { connect: { id: user.id } } : undefined } })
       const userString = user ? `by @${user.username}` : "by anonymous user"
-      void sendSlackMessage(`🙏 New feedback submitted (${input.type}) ${userString}: ${input.message}`)
+      sendSlackMessage(`🙏 New feedback submitted (${input.type}) ${userString}: ${input.message}`)
       return true
     }),
 })

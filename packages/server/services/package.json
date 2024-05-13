@@ -10,9 +10,9 @@
     "with-env": "dotenv -e ../../../.env --"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.572.0",
-    "@aws-sdk/lib-storage": "3.572.0",
-    "@aws-sdk/s3-request-presigner": "3.572.0",
+    "@aws-sdk/client-s3": "3.574.0",
+    "@aws-sdk/lib-storage": "3.574.0",
+    "@aws-sdk/s3-request-presigner": "3.574.0",
     "@ramble/database": "workspace:*",
     "@ramble/emails": "workspace:*",
     "@ramble/server-env": "workspace:*",

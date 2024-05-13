@@ -11,6 +11,6 @@ export const GET = async (_request: Request, { params }: { params: { token: stri
   const user = await db.user.findUnique({ where: { id: payload.id } })
   if (!user) return redirect("/")
   await db.user.update({ where: { id: payload.id }, data: { isVerified: true } })
-  void updateLoopsContact({ email: user.email, isVerified: true })
+  updateLoopsContact({ email: user.email, isVerified: true })
   return redirect("/verified")
 }

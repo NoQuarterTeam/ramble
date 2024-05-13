@@ -82,7 +82,6 @@ export default function MapFilters() {
             </View>
             <View>
               <SpotTypeSection
-                isDisabled={!me}
                 {...{ filters, setFilters }}
                 title="Activities"
                 types={SPOT_TYPE_OPTIONS.filter((s) => s.category === "ACTIVITY").map((s) => s.value)}
@@ -90,7 +89,6 @@ export default function MapFilters() {
             </View>
             <View>
               <SpotTypeSection
-                isDisabled={!me}
                 {...{ filters, setFilters }}
                 title="Services"
                 types={SPOT_TYPE_OPTIONS.filter((s) => s.category === "SERVICE").map((s) => s.value)}
@@ -98,7 +96,6 @@ export default function MapFilters() {
             </View>
             <View>
               <SpotTypeSection
-                isDisabled={!me}
                 {...{ filters, setFilters }}
                 title="Hospitality"
                 types={SPOT_TYPE_OPTIONS.filter((s) => s.category === "HOSPITALITY").map((s) => s.value)}
@@ -108,7 +105,6 @@ export default function MapFilters() {
               <SpotTypeSection
                 {...{ filters, setFilters }}
                 title="Other"
-                isDisabled={!me}
                 types={SPOT_TYPE_OPTIONS.filter((s) => s.category === "OTHER").map((s) => s.value)}
               />
             </View>
@@ -180,13 +176,11 @@ function SpotTypeSection({
   types,
   filters,
   setFilters,
-  isDisabled,
 }: {
   title: string
   types: SpotType[]
   filters: MapFiltersOptions
   setFilters: (filters: MapFiltersOptions) => void
-  isDisabled?: boolean
 }) {
   return (
     <View>
@@ -199,7 +193,6 @@ function SpotTypeSection({
               <SpotTypeSelector
                 type={SPOT_TYPES[type]}
                 isSelected={isSelected}
-                isDisabled={isDisabled}
                 onPress={() =>
                   setFilters({
                     ...filters,
@@ -219,14 +212,13 @@ function SpotTypeSelector({
   type,
   onPress,
   isSelected,
-  isDisabled,
 }: {
-  isDisabled?: boolean
   type: SpotTypeInfo
   isSelected: boolean
   onPress: () => void
 }) {
   const { me } = useMe()
+  const isDisabled = !me ? true : me.isAdmin ? false : type.isComingSoon
   return (
     <View className="relative">
       <Button
@@ -241,7 +233,7 @@ function SpotTypeSelector({
           />
         }
         className="min-w-[100px]"
-        disabled={me?.isAdmin ? false : type.isComingSoon || isDisabled}
+        disabled={me?.isAdmin ? false : isDisabled}
         onPress={onPress}
       >
         {type.label}

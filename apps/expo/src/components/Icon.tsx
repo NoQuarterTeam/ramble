@@ -1,14 +1,15 @@
-import type { LucideIcon, LucideProps } from "lucide-react-native"
+import type { LucideProps } from "lucide-react-native"
 import { useColorScheme } from "react-native"
 
 import { colorGray, colorPrimary, colorRed } from "~/lib/tailwind"
+import type { RambleIcon } from "./ui/Icons"
 
 export type IconColors = "primary" | "red" | "white" | "black" | "gray"
 
 export type IconColorProp = IconColors | { dark: IconColors; light: IconColors } | false
 
 export interface IconProps extends Omit<LucideProps, "color"> {
-  icon: LucideIcon
+  icon: RambleIcon
   color?: IconColorProp
 }
 

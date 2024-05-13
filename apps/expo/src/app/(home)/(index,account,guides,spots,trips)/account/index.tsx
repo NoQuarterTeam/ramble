@@ -4,7 +4,6 @@ import {
   AlertCircle,
   ChevronRight,
   Heart,
-  type LucideIcon,
   MessageCircle,
   Settings,
   ToggleRight,
@@ -20,7 +19,7 @@ import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { Button } from "~/components/ui/Button"
 import { Heading } from "~/components/ui/Heading"
-import { Icons } from "~/components/ui/Icons"
+import { Icons, type RambleIcon } from "~/components/ui/Icons"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { TabView } from "~/components/ui/TabView"
 import { Text } from "~/components/ui/Text"
@@ -154,7 +153,7 @@ export default function AccountScreen() {
   )
 }
 
-function ProfileLink({ children, to, icon }: { to: string; children: string; icon: LucideIcon }) {
+function ProfileLink({ children, to, icon }: { to: string; children: string; icon: RambleIcon }) {
   const router = useRouter()
 
   const path = `/(home)/(account)/account/${to}` as Href<AllRoutes>

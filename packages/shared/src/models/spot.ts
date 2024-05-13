@@ -63,6 +63,7 @@ export const SPOT_TYPES = {
   BAR: { isArchived: false, value: "BAR", label: "Bar", isComingSoon: true, category: "HOSPITALITY" },
   SHOP: { isArchived: false, value: "SHOP", label: "Shop", isComingSoon: true, category: "HOSPITALITY" },
   // Other
+  VOLUNTEERING: { isArchived: false, value: "VOLUNTEERING", label: "Volunteering", isComingSoon: false, category: "OTHER" },
   REWILDING: { isArchived: false, value: "REWILDING", label: "Rewilding", isComingSoon: false, category: "OTHER" },
   NATURE_EDUCATION: {
     isArchived: false,
@@ -79,7 +80,6 @@ export const SPOT_TYPES = {
     isComingSoon: true,
     category: "OTHER",
   },
-  VOLUNTEERING: { isArchived: false, value: "VOLUNTEERING", label: "Volunteering", isComingSoon: true, category: "OTHER" },
 } satisfies Record<SpotType, SpotTypeInfo>
 
 export const SPOT_TYPE_OPTIONS = Object.entries(SPOT_TYPES)
@@ -102,6 +102,7 @@ export const spotPartnerFields = {
   mossyEarthId: true,
   rewildingEuropeId: true,
   polskiCaravaningId: true,
+  volunteeringEventsId: true,
   sourceUrl: true,
 } satisfies Prisma.SpotSelect
 
@@ -122,7 +123,8 @@ export const isPartnerSpot = (spot: SpotPartnerFields) =>
   spot.norcampId ||
   spot.mossyEarthId ||
   spot.rewildingEuropeId ||
-  spot.polskiCaravaningId
+  spot.polskiCaravaningId ||
+  spot.volunteeringEventsId
 
 export const partners = {
   campspace: { name: "Campspace", logo: { light: "/partners/campspace.svg", dark: "/partners/campspace-dark.svg" } },
@@ -145,6 +147,10 @@ export const partners = {
   polskiCaravaning: {
     name: "Polski Caravaning",
     logo: { light: "/partners/polski-caravaning.svg", dark: "/partners/polski-caravaning.svg" },
+  },
+  volunteeringEvents: {
+    name: "Volunteering Events",
+    logo: { light: "/partners/volunteering-events.png", dark: "/partners/volunteering-events-dark.png" },
   },
 } as const
 

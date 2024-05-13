@@ -131,10 +131,15 @@ export const spotRouter = createTRPCRouter({
       },
     })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
+    const sameLocationSpots = await ctx.prisma.spot.findMany({
+      where: { ...publicSpotWhereClause(null), latitude: spot.latitude, longitude: spot.longitude },
+      select: { id: true },
+      orderBy: { createdAt: "desc" },
+    })
     const weather = await getCurrentWeather(spot.latitude, spot.longitude)
     const rating = await ctx.prisma.review.aggregate({ where: { spotId: input.id }, _avg: { rating: true } })
     spot.images = spot.images.sort((a, b) => (a.id === spot.coverId ? -1 : b.id === spot.coverId ? 1 : 0))
-    return { ...spot, rating, weather }
+    return { ...spot, rating, weather, sameLocationSpots }
   }),
   report: publicProcedure.input(z.object({ id: z.string().uuid() })).query(async ({ ctx, input }) => {
     const spot = await ctx.prisma.spot.findUnique({
@@ -318,7 +323,7 @@ export const spotRouter = createTRPCRouter({
           },
         })
       }
-      void sendSlackMessage(`📍 New spot added by @${ctx.user.username}!`)
+      sendSlackMessage(`📍 New spot added by @${ctx.user.username}!`)
       return spot
     }),
   images: protectedProcedure.input(z.object({ id: z.string().uuid() })).query(async ({ ctx, input }) => {

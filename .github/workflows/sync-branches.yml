@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-      - develop
 jobs:
   sync:
     name: ⏩ Sync branches
@@ -23,8 +22,3 @@ jobs:
           git checkout develop
           git merge "origin/main"
           git push
-
-          # echo "🪜 Merging ${dev_branch} -> nextjs"
-          # git checkout nextjs
-          # git merge origin/develop
-          # git push

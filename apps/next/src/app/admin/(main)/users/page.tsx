@@ -1,21 +1,22 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table"
-import { db } from "@/lib/server/db"
-
 import { Pagination } from "@/components/Pagination"
 import { Search } from "@/components/Search"
+import { TableSortLink } from "@/components/Table"
 import { Avatar } from "@/components/ui"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table"
 import { requireAdmin } from "@/lib/server/auth"
-import type { Prisma } from "@ramble/database/types"
+import { db } from "@/lib/server/db"
+import type { TableParams } from "@/lib/table"
+import type { Prisma, User } from "@ramble/database/types"
 import { createAssetUrl, promiseHash } from "@ramble/shared"
 import dayjs from "dayjs"
+import Link from "next/link"
 
 export const dynamic = "force-dynamic"
 
-type SearchParams = { page?: string; search?: string }
-
-const getItemsAndCount = async ({ page, search }: SearchParams) => {
+const TAKE = 25
+const getItemsAndCount = async ({ page, search, sort = "desc", sortBy = "createdAt" }: TableParams<User>) => {
   await requireAdmin()
-  const skip = page ? (Number(page) - 1) * 25 : 0
+  const skip = page ? (Number(page) - 1) * TAKE : 0
 
   const where = {
     deletedAt: null,
@@ -32,8 +33,8 @@ const getItemsAndCount = async ({ page, search }: SearchParams) => {
   return promiseHash({
     users: db.user.findMany({
       where,
-      orderBy: { createdAt: "desc" },
-      take: 25,
+      orderBy: { [sortBy]: sort },
+      take: TAKE,
       skip,
       select: {
         id: true,
@@ -49,75 +50,55 @@ const getItemsAndCount = async ({ page, search }: SearchParams) => {
   })
 }
 
-export default async function Page({ searchParams }: { searchParams: SearchParams }) {
+export default async function Page({ searchParams }: { searchParams: TableParams<User> }) {
   const { users, count } = await getItemsAndCount(searchParams)
+
   return (
     <div className="space-y-4">
       <h1 className="text-4xl">Users</h1>
       <div className="flex items-end gap-2">
-        {/* <form>
-				<ExistingSearchParams exclude={["type"]} />
-				<p className="font-medium text-sm">Type</p>
-				<Select
-					defaultValue={searchParams.get("type") || ""}
-					onChange={(e) => e.currentTarget.form?.dispatchEvent(new Event("submit", { bubbles: true }))}
-					name="type"
-				>
-					<option value="">All</option>
-					{SPOT_TYPE_OPTIONS.map((option) => (
-						<option key={option.value} value={option.value}>
-							{option.label}
-						</option>
-					))}
-				</Select>
-			</form> */}
-        {/* 
-			<Form>
-				<ExistingSearchParams exclude={["unverified"]} />
-				<Button
-					variant={searchParams.get("unverified") === "true" ? "primary" : "outline"}
-					type="submit"
-					name={searchParams.get("unverified") === "true" ? undefined : "unverified"}
-					value={searchParams.get("unverified") === "true" ? undefined : "true"}
-				>
-					Show {unverifiedUsersCount} unverified
-				</Button>
-			</Form> */}
-
-        <div>
-          <Search />
-        </div>
+        <Search />
       </div>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Username</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead className="text-right">Created at</TableHead>
+            <TableHead>
+              <TableSortLink<User> field="firstName">Name</TableSortLink>
+            </TableHead>
+            <TableHead>
+              <TableSortLink<User> field="username">Username</TableSortLink>
+            </TableHead>
+            <TableHead>
+              <TableSortLink<User> field="email">Email</TableSortLink>
+            </TableHead>
+            <TableHead>
+              <TableSortLink<User> field="createdAt" isDefault className="justify-end">
+                Created at
+              </TableSortLink>
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {users.map((user) => (
             <TableRow key={user.id}>
               <TableCell>
-                <div className="flex items-center space-x-2">
+                <Link href={`/admin/users/${user.id}`} className="flex items-center space-x-2">
                   <div className="flex-shrink-0">
                     <Avatar src={createAssetUrl(user.avatar)} size={40} className="w-8 h-8" />
                   </div>
                   <p className="line-clamp-1">
                     {user.firstName} {user.lastName}
                   </p>
-                </div>
+                </Link>
               </TableCell>
               <TableCell>
-                <p>{user.username}</p>
+                <Link href={`/admin/users/${user.id}`}>{user.username}</Link>
               </TableCell>
               <TableCell>
-                <p>{user.email}</p>
+                <Link href={`/admin/users/${user.id}`}>{user.email}</Link>
               </TableCell>
               <TableCell className="text-right">
-                <p>{dayjs(user.createdAt).format("DD/MM/YYYY")}</p>
+                <Link href={`/admin/users/${user.id}`}>{dayjs(user.createdAt).format("DD/MM/YYYY")}</Link>
               </TableCell>
             </TableRow>
           ))}

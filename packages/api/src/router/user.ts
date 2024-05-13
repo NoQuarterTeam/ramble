@@ -55,7 +55,7 @@ export const userRouter = createTRPCRouter({
       avatarBlurHash = await generateBlurHash(input.avatar)
     }
     const user = await ctx.prisma.user.update({ where: { id: ctx.user.id }, data: { ...input, avatarBlurHash } })
-    await updateLoopsContact({ userId: user.id, email: user.email, ...input })
+    updateLoopsContact({ userId: user.id, email: user.email, ...input })
     return user
   }),
   followers: publicProcedure.input(userSchema.pick({ username: true })).query(async ({ ctx, input }) => {
@@ -151,7 +151,7 @@ export const userRouter = createTRPCRouter({
       },
     })
     if (ctx.user.avatar) await deleteObject(ctx.user.avatar)
-    void sendSlackMessage(`😭 User @${ctx.user.username} deleted their account.`)
+    sendSlackMessage(`😭 User @${ctx.user.username} deleted their account.`)
     return true
   }),
   guides: protectedProcedure.input(z.object({ skip: z.number() })).query(async ({ ctx, input }) => {

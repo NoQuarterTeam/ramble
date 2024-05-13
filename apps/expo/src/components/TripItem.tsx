@@ -42,7 +42,9 @@ export function TripItem({ trip }: Props) {
     >
       <View className="flex flex-row justify-between">
         <View className="">
-          <Text className="text-xl">{trip.name}</Text>
+          <Text className="text-xl" numberOfLines={1}>
+            {trip.name}
+          </Text>
           {trip.media.length > 0 && (
             <View className="relative mt-2" style={{ height: 40 }}>
               {trip.media.map((media, i) => (

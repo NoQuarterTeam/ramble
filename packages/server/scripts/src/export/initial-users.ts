@@ -1,5 +1,5 @@
 import { prisma } from "@ramble/database"
-import { Role } from "@ramble/database/types"
+import type { Role } from "@ramble/database/types"
 
 // async function main() {
 //   const users = await prisma.user.findMany({ include: { accessRequest: true } })
@@ -30,7 +30,7 @@ async function main() {
   )
 
   for (const contact of contacts) {
-    await updateLoopsContact(contact)
+    updateLoopsContact(contact)
   }
 
   return
@@ -69,7 +69,7 @@ export type LoopsContact = RequiredIdOrEmail & {
 const API_URL = "https://app.loops.so/api/v1"
 
 const defaultOptions = {
-  headers: { Authorization: `Bearer 0d3fdb68a71eb59b20f21adab26acc25`, "Content-Type": "application/json" },
+  headers: { Authorization: "Bearer 0d3fdb68a71eb59b20f21adab26acc25", "Content-Type": "application/json" },
 }
 
 type LoopsContactResponse =
