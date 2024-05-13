@@ -46,14 +46,14 @@ export default function UserVan() {
       </View>
       <Text className="text-base">{van.description}</Text>
       <View className="flex flex-row flex-wrap gap-1">
-        {van.hasToilet && (
-          <View className="p-2 rounded-sm border border-gray-200 dark:border-gray-700">
-            <Icon icon={Icons.Toilet} size={20} />
-          </View>
-        )}
         {van.hasShower && (
           <View className="p-2 rounded-sm border border-gray-200 dark:border-gray-700">
             <Icon icon={ShowerHead} size={20} />
+          </View>
+        )}
+        {van.hasToilet && (
+          <View className="p-2 rounded-sm border border-gray-200 dark:border-gray-700">
+            <Icon icon={Icons.Toilet} size={20} />
           </View>
         )}
         {van.hasElectricity && (
@@ -72,19 +72,18 @@ export default function UserVan() {
           </View>
         )}
       </View>
-      <View className="flex">
-        {van.images.map((image) => (
-          <OptimizedImage
-            key={image.id}
-            width={500}
-            height={300}
-            placeholder={image.blurHash}
-            style={{ width: isTablet ? "48%" : "100%", marginHorizontal: isTablet ? 10 : 0, marginBottom: 10 }}
-            className="h-[300px] rounded-sm object-cover"
-            source={{ uri: createAssetUrl(image.path) }}
-          />
-        ))}
-      </View>
+
+      {van.images.map((image) => (
+        <OptimizedImage
+          key={image.id}
+          width={500}
+          height={300}
+          placeholder={image.blurHash}
+          style={{ width: isTablet ? "48%" : "100%", marginHorizontal: isTablet ? 10 : 0, marginBottom: 10 }}
+          className="h-[300px] rounded-sm object-cover"
+          source={{ uri: createAssetUrl(image.path) }}
+        />
+      ))}
     </View>
   )
 }
