@@ -43,7 +43,7 @@ export default async function Page({ searchParams }: { searchParams: { page?: st
             <TableHead>Created</TableHead>
             <TableHead>Accepted</TableHead>
             <TableHead>Joined</TableHead>
-            <TableHead className="text-right"> </TableHead>
+            <TableHead />
           </TableRow>
         </TableHeader>
         <TableBody>
