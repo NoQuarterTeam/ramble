@@ -1,21 +1,28 @@
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/Table"
-import { db } from "@/lib/server/db"
-
 import { Pagination } from "@/components/Pagination"
 import { Search } from "@/components/Search"
-import { TableSortLink } from "@/components/TableSortLink"
+import { TableCheckbox, TableSelect, TableSortLink } from "@/components/Table"
+
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/Table"
 import { requireAdmin } from "@/lib/server/auth"
+import { db } from "@/lib/server/db"
 import type { TableParams } from "@/lib/table"
-import type { Prisma, Spot } from "@ramble/database/types"
-import { promiseHash } from "@ramble/shared"
+import type { Prisma, Spot, SpotType } from "@ramble/database/types"
+import { SPOT_TYPE_OPTIONS, promiseHash } from "@ramble/shared"
 import { SpotRow } from "./SpotRow"
 
 export const dynamic = "force-dynamic"
 
-const getItemsAndCount = async ({ page, search, sort = "desc", sortBy = "createdAt" }: TableParams<Spot>) => {
+type SpotParams = { type?: SpotType; unverified?: "true" | "false" } & TableParams<Spot>
+
+const getItemsAndCount = async ({ page, unverified, type, search, sort = "desc", sortBy = "createdAt" }: SpotParams) => {
   await requireAdmin()
   const skip = page ? (Number(page) - 1) * 25 : 0
-  const where = { deletedAt: null, name: search ? { contains: search } : undefined } as Prisma.SpotWhereInput
+  const where = {
+    deletedAt: null,
+    verifiedAt: unverified === "true" ? null : undefined,
+    type: type ? { equals: type } : undefined,
+    name: search ? { contains: search } : undefined,
+  } as Prisma.SpotWhereInput
   return promiseHash({
     spots: db.spot.findMany({
       where,
@@ -41,41 +48,21 @@ const getItemsAndCount = async ({ page, search, sort = "desc", sortBy = "created
   })
 }
 
-export default async function Page({ searchParams }: { searchParams: TableParams<Spot> }) {
+export default async function Page({ searchParams }: { searchParams: SpotParams }) {
   const { spots, count } = await getItemsAndCount(searchParams)
   return (
     <div className="space-y-4">
       <h1 className="text-4xl">Spots</h1>
       <div className="flex items-end gap-2">
-        {/* <form>
-				<ExistingSearchParams exclude={["type"]} />
-				<p className="font-medium text-sm">Type</p>
-				<Select
-					defaultValue={searchParams.get("type") || ""}
-					onChange={(e) => e.currentTarget.form?.dispatchEvent(new Event("submit", { bubbles: true }))}
-					name="type"
-				>
-					<option value="">All</option>
-					{SPOT_TYPE_OPTIONS.map((option) => (
-						<option key={option.value} value={option.value}>
-							{option.label}
-						</option>
-					))}
-				</Select>
-			</form> */}
-        {/* 
-			<Form>
-				<ExistingSearchParams exclude={["unverified"]} />
-				<Button
-					variant={searchParams.get("unverified") === "true" ? "primary" : "outline"}
-					type="submit"
-					name={searchParams.get("unverified") === "true" ? undefined : "unverified"}
-					value={searchParams.get("unverified") === "true" ? undefined : "true"}
-				>
-					Show {unverifiedSpotsCount} unverified
-				</Button>
-			</Form> */}
-
+        <TableSelect defaultValue={searchParams.type || ""} name="type">
+          <option value="">All types</option>
+          {SPOT_TYPE_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </TableSelect>
+        <TableCheckbox name="unverified">Unverified</TableCheckbox>
         <div>
           <Search />
         </div>
