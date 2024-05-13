@@ -25,6 +25,7 @@ import { api } from "~/lib/api"
 import { isTablet, width } from "~/lib/device"
 import { useMapCoords } from "~/lib/hooks/useMapCoords"
 
+import { IconButton } from "~/components/ui/IconButton"
 import { useMapSettings } from "~/lib/hooks/useMapSettings"
 import { useMapFilters } from "../../../../filters"
 
@@ -252,9 +253,12 @@ export function AddTripSpotPreview({ spotId, onClose }: { spotId: string; onClos
         <Text>Spot not found</Text>
       ) : (
         <View className="space-y-2">
-          <TouchableOpacity onPress={() => router.push(`/(home)/(trips)/spot/${spot.id}`)} activeOpacity={0.9}>
-            <SpotTypeBadge spot={spot} />
-          </TouchableOpacity>
+          <View className="flex flex-row justify-between">
+            <TouchableOpacity onPress={() => router.push(`/(home)/(trips)/spot/${spot.id}`)} activeOpacity={0.9}>
+              <SpotTypeBadge spot={spot} />
+            </TouchableOpacity>
+            <IconButton variant="ghost" size="sm" onPress={onClose} icon={X} />
+          </View>
 
           <TouchableOpacity
             onPress={() => router.push(`/(home)/(trips)/spot/${spot.id}`)}
@@ -302,10 +306,6 @@ export function AddTripSpotPreview({ spotId, onClose }: { spotId: string; onClos
           </View>
         </View>
       )}
-
-      <TouchableOpacity onPress={onClose} className="absolute top-2 right-2 flex items-center justify-center p-2">
-        <Icon icon={X} size={20} />
-      </TouchableOpacity>
     </Animated.View>
   )
 }
