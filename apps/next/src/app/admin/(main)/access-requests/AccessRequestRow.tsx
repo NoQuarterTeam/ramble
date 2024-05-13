@@ -18,7 +18,7 @@ export function AccessRequestRow({ accessRequest }: Props) {
   const [isVerifying, startVerify] = React.useTransition()
   const [isDeleting, startDelete] = React.useTransition()
   return (
-    <TableRow>
+    <TableRow suppressHydrationWarning>
       <TableCell>
         <p>{accessRequest.email}</p>
       </TableCell>
