@@ -9,6 +9,7 @@ import {
   deleteObject,
   generateBlurHash,
   sendAccountVerificationEmail,
+  sendFollowNotification,
   sendSlackMessage,
   updateLoopsContact,
 } from "@ramble/server-services"
@@ -112,7 +113,6 @@ export const userRouter = createTRPCRouter({
         : c.properties,
     }))
   }),
-
   sendVerificationEmail: protectedProcedure.mutation(async ({ ctx }) => {
     const token = createAuthToken({ id: ctx.user.id })
     sendAccountVerificationEmail(ctx.user, token)
@@ -130,6 +130,8 @@ export const userRouter = createTRPCRouter({
         data: { followers: { disconnect: { id: ctx.user.id } } },
       })
     } else {
+      const tokens = await ctx.prisma.pushToken.findMany({ where: { user: { username: input.username } } })
+      sendFollowNotification({ tokens: tokens.map((t) => t.token), username: ctx.user.username })
       await ctx.prisma.user.update({ where: { username: input.username }, data: { followers: { connect: { id: ctx.user.id } } } })
     }
     return true
