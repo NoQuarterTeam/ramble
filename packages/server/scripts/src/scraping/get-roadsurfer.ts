@@ -8,6 +8,7 @@ const makeUrl = (lat: string, lng: string) =>
 import { prisma } from "@ramble/database"
 
 import { convert } from "html-to-text"
+import { confirmDeleteSpots } from './helpers/utils'
 
 export type RoadsurferSpot = {
   id: string
@@ -21,38 +22,48 @@ export type RoadsurferSpot = {
 }
 
 async function getCards({ lat, lng }: { lat: string; lng: string }) {
-  console.log(lat, lng)
+  console.log(lat,lng)
   const urlWithParams = makeUrl(lat, lng)
-  console.log(urlWithParams)
   const browser = await puppeteer.launch({
     headless: true,
   })
 
   const page = await browser.newPage()
-
+  
   
   await page.goto(urlWithParams, {
-    waitUntil: "domcontentloaded",
-  })
-  
-  await new Promise((r) => setTimeout(r, 5000))
-  
+    waitUntil: 'networkidle0', // Waits until network is idle (no more than 2 connections for at least 500 ms)
+  });
+ 
+
+  // Take a screenshot
+  await page.screenshot({path: 'debug_screenshot.png'});
+
+  // Dump the HTML to a file to inspect
+  await page.evaluate(() => document.documentElement.outerHTML).then(html => {
+      require('fs').writeFileSync('debug_html.html', html);
+  });
+
   const pageData = await page.evaluate(() => {
     return { html: document.documentElement.innerHTML }
   })
 
-  console.log("Got page data:" + pageData.html)
+  const elements = await page.$$eval('div[id*="spot-result-item-"]', divs => divs.length);
+  console.log('Number of divs found:', elements); // This should print the count of elements
 
   const $ = cheerio.load(pageData.html)
+  
+  const spots: RoadsurferSpot[] = []
+  const spotsCount = $('div[id*="spot-result-item-"]').length
 
-  const newSpots: RoadsurferSpot[] = []
-  const newSpotCount = $('div[id^="spot-result-item-"]').length
+  // // Select elements and log their HTML
+  // $('div[id*="spot-result-item-"]').each(function() {
+  //   console.log($(this).html());
+  // });
 
-  console.log(newSpotCount + " spots found")
+  console.log(spotsCount + " spots found" + " for coords " + lat + "," + lng + " " + urlWithParams)
 
-  // +11 on mozilla classname
-  $('div[id^="spot-result-item-"]').each((_, card) => {
-    // $(".jss127").each((_, card) => {
+  $('div[id*="spot-result-item-"]').each((_, card) => {
     const id = $(card).attr("id")?.split("-")[3]
     const name = $(card).find("a").eq(1).next().text().trim()
     const link = $(card).find("a").attr("href")
@@ -69,18 +80,25 @@ async function getCards({ lat, lng }: { lat: string; lng: string }) {
       console.log("No link found")
       return
     }
-    newSpots.push({ id, name, link })
+    spots.push({ id, name, link })
   })
 
   const currentData = await prisma.spot.findMany({
-    where: { roadsurferId: { in: newSpots.map((s) => s.id) } },
+    where: { roadsurferId: { in: spots.map((s) => s.id) } },
   })
 
-  for (let index = 0; index < newSpots.length; index++) {
-    const spot = newSpots[index]
+  for (let index = 0; index < spots.length; index++) {
+    const spot = spots[index]
+
+    const existingSpot = currentData.find((s) => s.roadsurferId === spot.id)
+
+    if (existingSpot?.deletedAt) {
+      console.log("Spot already deleted: " + spot.link)
+      continue
+    }
 
     try {
-      console.log("Getting spot data: " + index + " out of " + newSpots.length + " - " + lat + "," + lng)
+      console.log("Getting spot data: " + index + " out of " + spots.length + " - " + lat + "," + lng)
 
       const browser = await puppeteer.launch({
         headless: true,
@@ -132,16 +150,17 @@ async function getCards({ lat, lng }: { lat: string; lng: string }) {
       const wifi = $(".product-facility__icons-icon__label").filter((_, p) => $(p).text().includes("Wi-Fi")).length > 0
       const firePit = $(".product-facility__icons-icon__label").filter((_, p) => $(p).text().includes("Campfire")).length > 0
 
+      const amenities = { bbq, shower, kitchen, sauna: false, firePit, wifi, toilet, water, electricity, hotWater: false, pool }
+
 
       // if in db, continue
       const existingSpot = currentData.find((s) => s.roadsurferId === spot.id)
-      console.log(existingSpot && "Spot exists: " + spot.id + " updating...")
-      if (existingSpot) {
+      if (existingSpot && existingSpot.deletedAt === null) {
+        console.log(existingSpot && "Spot exists: " + "https://ramble.guide/spots/"+ existingSpot.id + " updating...")
         await prisma.spot.update({
           where: { roadsurferId: spot.id },
           data: {
             roadsurferId: spot.id,
-            hipcampId: null,
             name: spot.name,
             latitude: parseFloat(latitude),
             longitude: parseFloat(longitude),
@@ -151,7 +170,10 @@ async function getCards({ lat, lng }: { lat: string; lng: string }) {
             sourceUrl: spot.link,
             creator: { connect: { email: "george@noquarter.co" } },
             amenities: {
-              update: { bbq, shower, kitchen, sauna: false, firePit, wifi, toilet, water, electricity, hotWater: false, pool },
+              upsert: {
+                create: amenities,
+                update: amenities
+              }
             },
             images: {
               create: (await Promise.all(images.map(async (imagePath) => {
@@ -167,7 +189,7 @@ async function getCards({ lat, lng }: { lat: string; lng: string }) {
                 if (!existingImage) {
                   return {
                     path: imagePath,
-                    creator: { connect: { email: "jack@noquarter.co" } },
+                    creator: { connect: { email: "george@noquarter.co" } },
                   };
                 }
         
@@ -177,6 +199,21 @@ async function getCards({ lat, lng }: { lat: string; lng: string }) {
             },
           },
         })
+
+        if (existingSpot.coverId === null) {
+          // Find the corresponding image of the first image in the images array
+          const firstImage = await prisma.spotImage.findFirst({where: {spotId: existingSpot.id, path: images[0]}, select: {id: true}})
+
+          if (firstImage) {
+            await prisma.spot.update({
+              where: { id: existingSpot.id },
+              data: {
+                cover: { connect: { id: firstImage?.id }}
+              },
+            });
+          }
+        }
+
          // Fetch existing images associated with the spot
         const existingImages = await prisma.spotImage.findMany({
           where: { spotId: existingSpot.id }, 
@@ -206,7 +243,7 @@ async function getCards({ lat, lng }: { lat: string; lng: string }) {
           });
         }));
       } else {
-        console.log("Adding spot: " + index + " out of " + newSpots.length + " - " + lat + "," + lng)
+        console.log("Adding new spot: " + index + " out of " + spots.length + " - " + lat + "," + lng)
 
         await prisma.spot.create({
           data: {
@@ -221,8 +258,8 @@ async function getCards({ lat, lng }: { lat: string; lng: string }) {
             sourceUrl: spot.link,
             creator: { connect: { email: "george@noquarter.co" } },
             amenities: {
-              create: { bbq, shower, kitchen, sauna: false, firePit, wifi, toilet, water, electricity, hotWater: false, pool },
-            },
+              create: amenities
+            }
           },
         })
       }
@@ -233,20 +270,34 @@ async function getCards({ lat, lng }: { lat: string; lng: string }) {
       console.log(spot.id + error)
     }
   }
+  return spots.map((s) => s.id)
 }
 
 async function main() {
   try {
-    // Start at 36, -10 for whole scan of europe
-    for (let lat = 36; lat < 71; lat = lat + 1) {
+    let scrapedIds: string[] = []
+    
+    // Start at 36 lat, -10 lng for whole scan of europe
+    for (let lat = 36; lat < 75; lat = lat + 1) {
       console.log("Lat: " + lat)
       for (let lng = -10; lng < 32; lng = lng + 1) {
         console.log("Lng: " + lng)
-        await getCards({
+        const spotIds = await getCards({
           lat: Number(Math.round(parseFloat(lat + "e" + 2)) + "e-" + 2).toFixed(2),
           lng: Number(Math.round(parseFloat(lng + "e" + 2)) + "e-" + 2).toFixed(2),
         })
+        scrapedIds = [...scrapedIds, ...spotIds]
       }
+    }
+
+    const dbIds = await prisma.spot.findMany({select: {roadsurferId: true, id: true}, where: {deletedAt: null, roadsurferId: {not: null}}})
+    const spotsToDelete = dbIds.filter(dbId => dbId.roadsurferId && !scrapedIds.includes(dbId.roadsurferId)).map(dbId => dbId.id) as string[]
+
+
+    if (spotsToDelete.length > 0) {
+      await confirmDeleteSpots(spotsToDelete)
+    } else {
+      console.log("No spots to delete");
     }
   } catch (error) {
     console.log(error)
