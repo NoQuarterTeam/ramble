@@ -7,7 +7,7 @@
     "dev:device": "APP_VARIANT=development expo start --dev-client",
     "start": "APP_VARIANT=development expo start --dev-client",
     "build": "pnpm run \"/build:/\"",
-    "build:production": "eas build --profile production --platform all --auto-submit",
+    "build:production": "eas build --profile production --platform android --auto-submit",
     "build:preview": "eas build --profile preview --platform all",
     "build:development": "eas build --profile development --platform ios",
     "build:development:device": "eas build --profile development:device --platform ios",

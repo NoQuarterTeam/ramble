@@ -33,7 +33,8 @@
       "distribution": "store",
       "pnpm": "8.15.4",
       "env": {
-        "SENTRY_AUTH_TOKEN": "private"
+        "SENTRY_AUTH_TOKEN": "private",
+        "GOOGLE_SERVICES_KEY": "private"
       }
     }
   },

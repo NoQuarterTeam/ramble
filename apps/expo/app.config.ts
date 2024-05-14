@@ -68,7 +68,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
         category: ["BROWSABLE", "DEFAULT"],
       },
     ],
-    googleServicesFile: "./ramble-402909-firebase-adminsdk-4avea-898ffc7a0b.json",
+    googleServicesFile: process.env.GOOGLE_SERVICES_KEY,
     softwareKeyboardLayoutMode: "resize",
     package: IS_DEV ? "co.noquarter.ramble.dev" : "co.noquarter.ramble",
     splash,
