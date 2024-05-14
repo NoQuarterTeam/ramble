@@ -16,7 +16,9 @@ import {
   useFonts,
 } from "@expo-google-fonts/urbanist"
 import { ActionSheetProvider } from "@expo/react-native-action-sheet"
+import NetInfo from "@react-native-community/netinfo"
 import * as Sentry from "@sentry/react-native"
+import * as Notifications from "expo-notifications"
 import { Stack, useGlobalSearchParams, usePathname } from "expo-router"
 import * as SplashScreen from "expo-splash-screen"
 import { StatusBar } from "expo-status-bar"
@@ -25,17 +27,16 @@ import * as React from "react"
 import { AppState, type AppStateStatus, Text, View, useColorScheme } from "react-native"
 import { AvoidSoftInput } from "react-native-avoid-softinput"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
+import Animated, { SlideInUp, SlideOutUp } from "react-native-reanimated"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { enableScreens } from "react-native-screens"
 import { UnsupportedVersion } from "~/components/UnsupportedVersion"
-
-import NetInfo from "@react-native-community/netinfo"
-import Animated, { SlideInUp, SlideOutUp } from "react-native-reanimated"
 import { Toast } from "~/components/ui/Toast"
 import { TRPCProvider, api } from "~/lib/api"
 import { IS_DEV, IS_PRODUCTION, VERSION } from "~/lib/config"
 import { useCheckExpoUpdates } from "~/lib/hooks/useCheckExpoUpdates"
 import { useMe } from "~/lib/hooks/useMe"
+import { useNotificationObserver } from "~/lib/hooks/useNotificationObserver"
 import { useBackgroundColor } from "~/lib/tailwind"
 
 Sentry.init({
@@ -48,6 +49,14 @@ AvoidSoftInput.setShouldMimicIOSBehavior(true)
 
 SplashScreen.preventAutoHideAsync()
 enableScreens()
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+})
 
 export const unstable_settings = {
   initialRouteName: "(home)",
@@ -70,6 +79,7 @@ export default function RootLayout() {
     urbanist800Italic: Urbanist_800ExtraBold_Italic,
     urbanist900Italic: Urbanist_900Black_Italic,
   })
+  useNotificationObserver()
 
   const backgroundColor = useBackgroundColor()
 

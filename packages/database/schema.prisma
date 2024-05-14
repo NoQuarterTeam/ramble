@@ -69,12 +69,24 @@ model User {
   createdSpotRevisions  SpotRevision[] @relation(name: "Creator")
   approvedSpotRevisions SpotRevision[] @relation(name: "Approver")
   accessRequest         AccessRequest?
+  pushTokens            PushToken[]
 
   deletedAt DateTime?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
 
   @@index([latitude])
+}
+
+model PushToken {
+  id        String   @id @default(uuid())
+  token     String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@unique([userId, token])
 }
 
 model InviteCode {

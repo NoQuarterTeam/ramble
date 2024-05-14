@@ -1,7 +1,7 @@
 import type { ConfigContext, ExpoConfig } from "expo/config"
 
-const VERSION = "1.4.14"
-const BUILD = 74
+const VERSION = "1.5.0"
+const BUILD = 75
 
 const splash: ExpoConfig["splash"] = {
   image: "./assets/splash.png",
@@ -68,6 +68,7 @@ const defineConfig = (_ctx: ConfigContext): ExpoConfig => ({
         category: ["BROWSABLE", "DEFAULT"],
       },
     ],
+    googleServicesFile: "./ramble-402909-firebase-adminsdk-4avea-898ffc7a0b.json",
     softwareKeyboardLayoutMode: "resize",
     package: IS_DEV ? "co.noquarter.ramble.dev" : "co.noquarter.ramble",
     splash,

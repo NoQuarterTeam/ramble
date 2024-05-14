@@ -115,7 +115,7 @@ export const userRouter = createTRPCRouter({
 
   sendVerificationEmail: protectedProcedure.mutation(async ({ ctx }) => {
     const token = createAuthToken({ id: ctx.user.id })
-    await sendAccountVerificationEmail(ctx.user, token)
+    sendAccountVerificationEmail(ctx.user, token)
     return true
   }),
   toggleFollow: protectedProcedure.input(userSchema.pick({ username: true })).mutation(async ({ ctx, input }) => {

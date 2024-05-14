@@ -13,6 +13,7 @@ export * from "./s3"
 export * from "./slack"
 export * from "./directions"
 export * from "./spot"
+export * from "./notifications/follow"
 export * from "./weather"
 
 export * from "./mailers/access-request"
