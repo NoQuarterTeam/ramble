@@ -123,6 +123,7 @@ export function SpotRow({ spot }: Props) {
               {spot.images.map((image) => (
                 <Image
                   key={image.id}
+                  unoptimized={image.path.startsWith("http")}
                   height={200}
                   width={300}
                   className="h-[200px] w-[300px] rounded-sm object-cover"
