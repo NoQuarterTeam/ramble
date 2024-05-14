@@ -43,14 +43,6 @@ export function SpotRow({ spot }: Props) {
           <p className="line-clamp-1 max-w-md">{spot.description}</p>
         </TableCell>
         <TableCell>
-          <div className="flex space-x-2 items-center">
-            <div className="flex-shrink-0">
-              <Avatar src={createAssetUrl(spot.creator.avatar)} size={30} className="h-7 w-7" />
-            </div>
-            <p>{spot.creator.username}</p>
-          </div>
-        </TableCell>
-        <TableCell>
           {spot.verifier ? (
             <div className="flex space-x-2 items-center">
               <div className="flex-shrink-0">
@@ -72,6 +64,14 @@ export function SpotRow({ spot }: Props) {
               Verify
             </Button>
           )}
+        </TableCell>
+        <TableCell>
+          <div className="flex space-x-2 items-center">
+            <div className="flex-shrink-0">
+              <Avatar src={createAssetUrl(spot.creator.avatar)} size={30} className="h-7 w-7" />
+            </div>
+            <p>{spot.creator.username}</p>
+          </div>
         </TableCell>
         <TableCell>
           <p>{dayjs(spot.createdAt).format("DD/MM/YYYY")}</p>
