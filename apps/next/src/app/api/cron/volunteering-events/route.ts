@@ -1,6 +1,7 @@
 import { db } from "@/lib/server/db"
 import type { Prisma } from "@ramble/database/types"
 import { IS_DEV, env } from "@ramble/server-env"
+import { geocodeCoords } from "@ramble/server-services"
 import * as Sentry from "@sentry/nextjs"
 import dayjs from "dayjs"
 import type { NextRequest } from "next/server"
@@ -22,10 +23,13 @@ export async function GET(request: NextRequest) {
 
     // create and update new spots
     for (const event of events) {
+      const address = await geocodeCoords({ latitude: event.location_lat, longitude: event.location_lng })
+      const addressToUse = address?.address || address?.place
       const data = {
         name: `${event.start_date ? `${event.start_date}: ` : ""}${event.name}`,
         latitude: event.location_lat,
         longitude: event.location_lng,
+        address: addressToUse,
         description: `${event.start_date ? `Date: ${event.start_date}\n` : ""}${
           event.repeat_schedule === "never" ? "" : `Repeating: ${event.repeat_schedule}\n`
         }${event.weekday ? `Weekday: ${event.weekday}\n` : ""}${event.start_time ? `Start time: ${event.start_time}\n` : ""}${
