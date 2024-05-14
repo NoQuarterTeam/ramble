@@ -1,6 +1,6 @@
 import { Pagination } from "@/components/Pagination"
 import { Search } from "@/components/Search"
-import { TableSortLink } from "@/components/Table"
+import { TableSortLink } from "@/components/TableSortLink"
 import { Avatar } from "@/components/ui"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table"
 import { requireAdmin } from "@/lib/server/auth"

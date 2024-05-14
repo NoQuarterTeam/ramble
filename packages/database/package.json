@@ -22,7 +22,7 @@
     "prisma": "5.13.0"
   },
   "devDependencies": {
-    "@types/node": "20.12.11",
+    "@types/node": "20.12.12",
     "dotenv-cli": "7.4.2",
     "typescript": "5.4.5"
   },

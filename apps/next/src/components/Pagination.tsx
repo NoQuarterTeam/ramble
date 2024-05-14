@@ -11,6 +11,7 @@ export function Pagination({ count, defaultTake }: { count: number; defaultTake?
   const currentPage = Number(searchParams.get("page") || "1")
   const router = useRouter()
   const pathname = usePathname()
+
   const maxPages = 5
   const halfMaxPages = Math.floor(maxPages / 2)
   const pageNumbers = [] as Array<number>
@@ -51,7 +52,11 @@ export function Pagination({ count, defaultTake }: { count: number; defaultTake?
           <IconButton
             size="xs"
             name="page"
-            onClick={() => router.push(`${pathname}?page=1`)}
+            onClick={() => {
+              const existingParams = new URLSearchParams(searchParams.toString())
+              existingParams.set("page", "1")
+              router.push(`${pathname}?${existingParams}`)
+            }}
             aria-label="first page"
             icon={<ChevronsLeft size={16} />}
             variant="outline"
@@ -60,7 +65,11 @@ export function Pagination({ count, defaultTake }: { count: number; defaultTake?
           <IconButton
             size="xs"
             name="page"
-            onClick={() => router.push(`${pathname}?page=${currentPage - 1}`)}
+            onClick={() => {
+              const existingParams = new URLSearchParams(searchParams.toString())
+              existingParams.set("page", (currentPage - 1).toString())
+              router.push(`${pathname}?${existingParams}`)
+            }}
             aria-label="previous page"
             icon={<ChevronLeft size={16} />}
             variant="outline"
@@ -74,7 +83,11 @@ export function Pagination({ count, defaultTake }: { count: number; defaultTake?
                 variant={isCurrentPage ? "secondary" : "outline"}
                 size="xs"
                 name="page"
-                onClick={() => router.push(`${pathname}?page=${pageNumber}`)}
+                onClick={() => {
+                  const existingParams = new URLSearchParams(searchParams.toString())
+                  existingParams.set("page", pageNumber.toString())
+                  router.push(`${pathname}?${existingParams}`)
+                }}
                 key={`${pageNumber}-active`}
                 aria-label={`Page ${pageNumber}`}
                 disabled={!isValidPage}
@@ -86,7 +99,11 @@ export function Pagination({ count, defaultTake }: { count: number; defaultTake?
             size="xs"
             aria-label="next page"
             name="page"
-            onClick={() => router.push(`${pathname}?page=${currentPage + 1}`)}
+            onClick={() => {
+              const existingParams = new URLSearchParams(searchParams.toString())
+              existingParams.set("page", (currentPage + 1).toString())
+              router.push(`${pathname}?${existingParams}`)
+            }}
             icon={<ChevronRight size={16} />}
             variant="outline"
             disabled={currentPage === noOfPages}
@@ -97,7 +114,11 @@ export function Pagination({ count, defaultTake }: { count: number; defaultTake?
             aria-label="last page"
             variant="outline"
             name="page"
-            onClick={() => router.push(`${pathname}?page=${noOfPages}`)}
+            onClick={() => {
+              const existingParams = new URLSearchParams(searchParams.toString())
+              existingParams.set("page", noOfPages.toString())
+              router.push(`${pathname}?${existingParams}`)
+            }}
             disabled={currentPage === noOfPages}
           />
         </div>

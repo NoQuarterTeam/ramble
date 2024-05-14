@@ -13,7 +13,7 @@ export function Search() {
   const pathname = usePathname()
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    const allParams = new URLSearchParams(searchParams)
+    const allParams = new URLSearchParams(searchParams.toString())
     if (search) {
       allParams.set("search", search)
       allParams.delete("page")

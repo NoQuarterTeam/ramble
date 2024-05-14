@@ -9,7 +9,6 @@ import { spotMarkerClusterColorTypes, spotMarkerColorTypes, spotMarkerTextColorT
 import { PieChart } from "@/components/PieChart"
 import { SpotIcon } from "@/components/SpotIcon"
 import type { RouterOutputs } from "@/lib/trpc/react"
-import type { SpotClusterTypes } from "@ramble/api/src/router/spot"
 
 interface MarkerProps {
   spot: { type: SpotType }
@@ -42,6 +41,8 @@ const spotMarkerIconColors = cva<MarkerIconConfig>("sq-4", {
     type: spotMarkerTextColorTypes,
   },
 })
+
+type SpotClusterTypes = { [key in SpotType]?: number }
 
 function ClusterMarker({ countAbbr, count, types }: { countAbbr: string | number; count: number; types: SpotClusterTypes }) {
   const outerSize = count > 150 ? 80 : count > 75 ? 64 : count > 10 ? 48 : 32

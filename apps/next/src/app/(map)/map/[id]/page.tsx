@@ -90,6 +90,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                   alt="spot"
                   width={350}
                   height={225}
+                  unoptimized={image.path.startsWith("http")}
                   className="h-[225px] max-w-[350px] rounded-xs object-cover"
                   key={image.id}
                   src={createAssetUrl(image.path)}

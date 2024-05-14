@@ -3,14 +3,19 @@ import { generateBlurHash } from "@ramble/server-services"
 
 async function main() {
   const images = await prisma.spotImage.findMany({
-    where: { blurHash: { equals: null }, spot: { verifiedAt: { not: null } } },
+    take: 2000,
+    skip: 0,
+    orderBy: { createdAt: "desc" },
+    where: {
+      blurHash: { equals: null },
+      // coverSpot: { isNot: null },
+      spot: { type: { equals: "CAMPING" }, verifiedAt: { not: null }, deletedAt: null },
+    },
   })
   console.log(images.length, " images")
 
   for (const image of images) {
     const hash = await generateBlurHash(image.path)
-    console.log("Hash generated")
-
     await prisma.spotImage.update({ where: { id: image.id }, data: { blurHash: hash } })
   }
 }
