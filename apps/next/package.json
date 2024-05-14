@@ -35,7 +35,7 @@
     "@sentry/nextjs": "7.114.0",
     "@tailwindcss/container-queries": "0.1.1",
     "@tanstack/react-query": "5.36.0",
-    "@tanstack/react-table": "8.17.0",
+    "@tanstack/react-table": "8.17.3",
     "@trpc/react-query": "11.0.0-rc.370",
     "@trpc/server": "11.0.0-rc.370",
     "@vercel/analytics": "1.2.2",
