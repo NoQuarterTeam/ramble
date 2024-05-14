@@ -1,66 +1,70 @@
 import { AppCta } from "@/components/AppCta"
 import { PageContainer } from "@/components/PageContainer"
+import { SearchParamButton, SearchParamIconButton, SearchParamSelect } from "@/components/SearchParamInputs"
 import { SpotIcon } from "@/components/SpotIcon"
 import { SpotItem } from "@/components/SpotItem"
-import { Button, IconButton } from "@/components/ui"
+import { Button } from "@/components/ui"
 import { db } from "@/lib/server/db"
 import type { SpotType } from "@ramble/database/types"
 import { spotListQuery } from "@ramble/server-services"
 import { SPOT_TYPE_OPTIONS, type SpotItemType, type SpotListSort } from "@ramble/shared"
-import { unstable_cache } from "next/cache"
-import { SpotSort } from "./SpotSort"
 
 const TAKE = 24
-const getSpots = unstable_cache(
-  ({ type, sort = "latest" }: { type?: SpotType; sort?: SpotListSort }) => {
-    return db.$queryRaw<Array<SpotItemType>>`${spotListQuery({ type, sort, take: TAKE })}`
-  },
-  ["spots"],
-  { revalidate: 86400, tags: ["spots"] },
-)
 
-export default async function Page({ searchParams: { type, sort } }: { searchParams: { type?: SpotType; sort?: SpotListSort } }) {
-  const spots = await getSpots({ type, sort })
+type SearchParams = { type?: SpotType; sort?: SpotListSort }
+
+const getSpots = ({ type, sort = "latest" }: SearchParams) =>
+  db.$queryRaw<Array<SpotItemType>>`${spotListQuery({ type, sort, take: TAKE })}`
+
+export const revalidate = 86400
+
+const SORT_OPTIONS: { value: SpotListSort; label: string }[] = [
+  { value: "latest", label: "Latest" },
+  { value: "rated", label: "Top rated" },
+  { value: "saved", label: "Most saved" },
+] as const
+
+export default async function Page({ searchParams }: { searchParams: SearchParams }) {
+  const spots = await getSpots(searchParams)
 
   return (
     <PageContainer className="pt-0">
       <div className="sticky top-nav z-[1] bg-background py-4">
         <div className="flex w-full items-center justify-between gap-2">
           <div className="flex gap-1">
-            <form method="get">
-              <input type="hidden" name="sort" value={sort || ""} />
-              <Button type="submit" variant={!type ? "primary" : "outline"} name="type" value="">
-                All
-              </Button>
-            </form>
+            <SearchParamButton name="type" value="">
+              All
+            </SearchParamButton>
+
             {SPOT_TYPE_OPTIONS.filter((s) => s.category === "STAY" && !s.isComingSoon).map(({ value, label }) => (
-              <form key={value} method="get">
-                <input type="hidden" name="sort" value={sort || ""} />
-                <Button
-                  type="submit"
+              <div key={value}>
+                <SearchParamButton
                   name="type"
                   value={value}
                   className="hidden md:flex"
-                  variant={type === value ? "primary" : "outline"}
                   leftIcon={<SpotIcon type={value} className="sq-4" />}
                 >
                   {label}
-                </Button>
-                <IconButton
+                </SearchParamButton>
+                <SearchParamIconButton
                   aria-label={`Filter ${label}`}
                   icon={<SpotIcon type={value} className="sq-4" />}
-                  type="submit"
                   name="type"
                   className="flex md:hidden"
                   value={value}
-                  variant={type === value ? "primary" : "outline"}
                 />
-              </form>
+              </div>
             ))}
           </div>
 
           <div>
-            <SpotSort />
+            <SearchParamSelect name="sort">
+              {SORT_OPTIONS.map(({ value, label }) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </SearchParamSelect>
           </div>
         </div>
       </div>
@@ -69,13 +73,11 @@ export default async function Page({ searchParams: { type, sort } }: { searchPar
           {spots.length === 0 ? (
             <div className="flex flex-col items-center justify-center gap-4 p-10">
               <p className="text-xl">No spots yet</p>
-              {type && (
-                <form>
-                  <Button type="submit" variant="outline">
-                    Clear filter
-                  </Button>
-                </form>
-              )}
+              <form>
+                <Button type="submit" variant="outline">
+                  Clear filter
+                </Button>
+              </form>
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 md:grid-cols-2">

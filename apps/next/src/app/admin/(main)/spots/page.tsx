@@ -1,7 +1,8 @@
 import { Pagination } from "@/components/Pagination"
 import { Search } from "@/components/Search"
-import { TableCheckbox, TableSelect, TableSortLink } from "@/components/Table"
+import { TableSortLink } from "@/components/TableSortLink"
 
+import { SearchParamCheckbox, SearchParamSelect } from "@/components/SearchParamInputs"
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/Table"
 import { requireAdmin } from "@/lib/server/auth"
 import { db } from "@/lib/server/db"
@@ -54,15 +55,15 @@ export default async function Page({ searchParams }: { searchParams: SpotParams 
     <div className="space-y-4">
       <h1 className="text-4xl">Spots</h1>
       <div className="flex items-end gap-2">
-        <TableSelect defaultValue={searchParams.type || ""} name="type">
+        <SearchParamSelect name="type">
           <option value="">All types</option>
           {SPOT_TYPE_OPTIONS.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
           ))}
-        </TableSelect>
-        <TableCheckbox name="unverified">Unverified</TableCheckbox>
+        </SearchParamSelect>
+        <SearchParamCheckbox name="unverified">Unverified</SearchParamCheckbox>
         <Search />
       </div>
       <Table>
