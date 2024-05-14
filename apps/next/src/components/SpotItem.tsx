@@ -21,6 +21,7 @@ export function SpotItem({ spot }: Props) {
             <Image
               alt="spot"
               width={450}
+              unoptimized={spot.image.startsWith("http")}
               height={300}
               className="h-full w-full rounded-xs object-cover"
               src={createAssetUrl(spot.image)}
