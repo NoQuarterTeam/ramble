@@ -7,16 +7,17 @@ import dayjs from "dayjs"
 import * as React from "react"
 
 import { SpotIcon } from "@/components/SpotIcon"
-import { ExternalLink, Eye, EyeOff, Trash } from "lucide-react"
+import { ExternalLink, Eye, EyeOff, Star, Trash } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { toast } from "sonner"
-import { deleteSpot, verifySpot } from "./actions"
+import { deleteSpot, updateSpotCover, verifySpot } from "./actions"
 
 interface Props {
-  spot: Pick<Spot, "type" | "sourceUrl" | "id" | "description" | "createdAt" | "name" | "latitude" | "longitude"> & {
+  spot: Pick<Spot, "type" | "sourceUrl" | "id" | "description" | "createdAt" | "name" | "coverId" | "latitude" | "longitude"> & {
     creator: Pick<User, "avatar" | "username">
     verifier: Pick<User, "avatar" | "username"> | null
+    cover: Pick<SpotImage, "id" | "path"> | null
     images: Pick<SpotImage, "id" | "path">[]
   }
 }
@@ -26,6 +27,7 @@ export function SpotRow({ spot }: Props) {
   const mapImageUrl = `https://api.mapbox.com/styles/v1/jclackett/clh82otfi00ay01r5bftedls1/static/geojson(%7B%22type%22%3A%22Point%22%2C%22coordinates%22%3A%5B${spot.longitude}%2C${spot.latitude}%5D%7D)/${spot.longitude},${spot.latitude},4/300x200@2x?access_token=pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw`
   const [isVerifying, startVerify] = React.useTransition()
   const [isDeleting, startDelete] = React.useTransition()
+
   return (
     <React.Fragment key={spot.id}>
       <TableRow>
@@ -120,21 +122,67 @@ export function SpotRow({ spot }: Props) {
               <div className="flex-shrink-0">
                 <img height={200} width={300} className="h-[200px] w-[300px] rounded" alt="location" src={mapImageUrl} />
               </div>
-              {spot.images.map((image) => (
-                <Image
-                  key={image.id}
-                  unoptimized={image.path.startsWith("http")}
-                  height={200}
-                  width={300}
-                  className="h-[200px] w-[300px] rounded-sm object-cover"
-                  alt="spot"
-                  src={createAssetUrl(image.path)}
-                />
-              ))}
+              <div className="relative flex flex-shrink-0">
+                {spot.cover ? (
+                  <>
+                    <Image
+                      unoptimized={spot.cover.path.startsWith("http")}
+                      height={200}
+                      width={300}
+                      className="h-[200px] w-[300px]rounded-sm object-cover"
+                      alt="spot"
+                      src={createAssetUrl(spot.cover.path)}
+                    />
+                    <div className="absolute bg-background-light rounded-full p-2 bottom-2 right-2">
+                      <Star className="text-black" size={18} />
+                    </div>
+                  </>
+                ) : (
+                  <div className="h-[200px] flex items-center justify-center w-[300px] rounded-sm object-cover bg-gray-700">
+                    <p>No cover</p>
+                  </div>
+                )}
+              </div>
+              {spot.images
+                .filter((i) => i.id !== spot.coverId)
+                .map((image) => (
+                  <SpotImageItem key={image.id} image={image} spotId={spot.id} />
+                ))}
             </div>
           </TableCell>
         </TableRow>
       )}
     </React.Fragment>
+  )
+}
+
+function SpotImageItem({ spotId, image }: { spotId: string; image: Pick<SpotImage, "id" | "path"> }) {
+  const [isUpdatingCover, startUpdateCover] = React.useTransition()
+
+  return (
+    <div className="relative flex flex-shrink-0">
+      <Image
+        unoptimized={image.path.startsWith("http")}
+        height={200}
+        width={300}
+        className="h-[200px] w-[300px] flex-shrink-0 rounded-sm object-cover"
+        alt="spot"
+        src={createAssetUrl(image.path)}
+      />
+      <Button
+        size="xs"
+        isLoading={isUpdatingCover}
+        className="absolute bottom-3 right-2"
+        onClick={() => {
+          startUpdateCover(async () => {
+            const success = await updateSpotCover(spotId, image.id)
+            if (success) toast.success("Cover updated")
+            if (!success) toast.error("Failed to update cover")
+          })
+        }}
+      >
+        Choose as cover
+      </Button>
+    </div>
   )
 }
