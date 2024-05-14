@@ -17,8 +17,10 @@ export async function GET(request: NextRequest) {
 
     const res = await fetch(URL)
     const data = (await res.json()) as Data
-    const events = data.events.filter(
-      (event) => dayjs(event.start_date).isAfter(dayjs()) && dayjs(event.start_date).isBefore(dayjs().add(2, "month")),
+    const events = data.events.filter((event) =>
+      event.start_date
+        ? dayjs(event.start_date).isAfter(dayjs()) && dayjs(event.start_date).isBefore(dayjs().add(2, "month"))
+        : true,
     )
 
     // create and update new spots
