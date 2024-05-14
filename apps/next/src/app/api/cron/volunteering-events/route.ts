@@ -28,11 +28,11 @@ export async function GET(request: NextRequest) {
       const address = await geocodeCoords({ latitude: event.location_lat, longitude: event.location_lng })
       const addressToUse = address?.address || address?.place
       const data = {
-        name: `${event.start_date ? `${event.start_date}: ` : ""}${event.name}`,
+        name: `${event.start_date ? (event.repeat_schedule !== "never" && event.weekday) ? `Every ${event.weekday}: ` : `${event.start_date}: ` : ""}${event.name}`,
         latitude: event.location_lat,
         longitude: event.location_lng,
         address: addressToUse,
-        description: `${event.start_date ? `Date: ${event.start_date}\n` : ""}${
+        description: `${eventTypeDescriptions[event.event_type] ? eventTypeDescriptions[event.event_type]: ""}\n ${event.start_date ? `Date: ${event.start_date}\n` : ""}${
           event.repeat_schedule === "never" ? "" : `Repeating: ${event.repeat_schedule}\n`
         }${event.weekday ? `Weekday: ${event.weekday}\n` : ""}${event.start_time ? `Start time: ${event.start_time}\n` : ""}${
           event.end_time ? `End time: ${event.end_time}\n` : ""
@@ -85,6 +85,18 @@ type EventType =
   | "charity"
   | "other"
   | "social_projects"
+
+const eventTypeDescriptions = {
+  beach_cleanup: "Beach Cleanup",
+  river_cleanup: "River Cleanup",
+  trash_picking: "Trash Picking",
+  tree_planting: "Tree Planting",
+  dog_walking: "Dog Walking",
+  helping_shelters: "Helping Shelters",
+  charity: "Charity",
+  other: "Other",
+  social_projects: "Social Projects"
+};
 
 type Data = {
   events: {
