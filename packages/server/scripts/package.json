@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "pnpm with-env ts-node src/index.ts",
+    "address": "pnpm with-env ts-node ./src/format/gen-address.ts",
     "blur": "pnpm with-env ts-node ./src/format/gen-blurhash.ts",
     "crag": "pnpm with-env ts-node ./src/scraping/get-thecrag.ts",
     "gpt": "pnpm with-env ts-node ./src/export/ramble-gpt.ts",
