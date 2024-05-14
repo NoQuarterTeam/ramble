@@ -28,3 +28,15 @@ export async function verifySpot(id: string) {
     return false
   }
 }
+
+export async function updateSpotCover(id: string, coverId: string) {
+  await requireAdmin()
+  try {
+    await db.spot.update({ where: { id }, data: { coverId } })
+    revalidatePath("/admin/spots", "page")
+    return true
+  } catch (e) {
+    Sentry.captureException(e)
+    return false
+  }
+}
