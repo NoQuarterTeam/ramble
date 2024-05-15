@@ -18,7 +18,7 @@ import {
 import { ActionSheetProvider } from "@expo/react-native-action-sheet"
 import NetInfo from "@react-native-community/netinfo"
 import * as Sentry from "@sentry/react-native"
-import * as Notifications from "expo-notifications"
+// import * as Notifications from "expo-notifications"
 import { Stack, useGlobalSearchParams, usePathname } from "expo-router"
 import * as SplashScreen from "expo-splash-screen"
 import { StatusBar } from "expo-status-bar"
@@ -50,13 +50,13 @@ AvoidSoftInput.setShouldMimicIOSBehavior(true)
 SplashScreen.preventAutoHideAsync()
 enableScreens()
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
-})
+// Notifications.setNotificationHandler({
+//   handleNotification: async () => ({
+//     shouldShowAlert: true,
+//     shouldPlaySound: false,
+//     shouldSetBadge: false,
+//   }),
+// })
 
 export const unstable_settings = {
   initialRouteName: "(home)",

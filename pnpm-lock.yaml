@@ -138,9 +138,6 @@ importers:
       expo-network:
         specifier: ~5.8.0
         version: 5.8.0(expo@50.0.17)
-      expo-notifications:
-        specifier: ~0.27.7
-        version: 0.27.7(expo@50.0.17)
       expo-router:
         specifier: 3.4.10
         version: 3.4.10(expo-constants@15.4.6)(expo-linking@6.2.2)(expo-modules-autolinking@1.11.1)(expo-status-bar@1.11.1)(expo@50.0.17)(react-native-reanimated@3.6.3)(react-native-safe-area-context@4.8.2)(react-native-screens@3.29.0)(react-native@0.73.6)(react@18.2.0)
@@ -3684,10 +3681,6 @@ packages:
       react-hook-form: ^7.0.0
     dependencies:
       react-hook-form: 7.51.4(react@18.2.0)
-    dev: false
-
-  /@ide/backoff@1.0.0:
-    resolution: {integrity: sha512-F0YfUDjvT+Mtt/R4xdl2X0EYCHMMiJqNLdxHD++jDT5ydEFIyqbCHh51Qx2E211dgZprPKhV7sHmnXKpLuvc5g==}
     dev: false
 
   /@inquirer/checkbox@2.3.3:
@@ -7580,16 +7573,6 @@ packages:
     resolution: {integrity: sha512-BSHWgDSAiKs50o2Re8ppvp3seVHXSRM44cdSsT9FfNEUUZLOGWVCsiWaRPWM1Znn+mqZ1OfVZ3z3DWEzSp7hRA==}
     dev: false
 
-  /assert@2.1.0:
-    resolution: {integrity: sha512-eLHpSK/Y4nhMJ07gDaAzoX/XAKS8PSaojml3M0DM4JpV1LAi5JOJ/p6H/XWrl8L+DzVEvVCW1z3vWAaB9oTsQw==}
-    dependencies:
-      call-bind: 1.0.7
-      is-nan: 1.3.2
-      object-is: 1.1.6
-      object.assign: 4.1.5
-      util: 0.12.5
-    dev: false
-
   /assign-symbols@1.0.0:
     resolution: {integrity: sha512-Q+JC7Whu8HhmTdBph/Tq59IoRtoy6KAm5zzPv00WdujX82lbAL8K7WVjne7vdCsAmbF4AYaDOPyO3k0kl8qIrw==}
     engines: {node: '>=0.10.0'}
@@ -7775,10 +7758,6 @@ packages:
       '@babel/plugin-transform-spread': 7.24.1(@babel/core@7.24.5)
       '@babel/plugin-transform-template-literals': 7.24.1(@babel/core@7.24.5)
       babel-plugin-syntax-trailing-function-commas: 7.0.0-beta.0
-    dev: false
-
-  /badgin@1.2.3:
-    resolution: {integrity: sha512-NQGA7LcfCpSzIbGRbkgjgdWkjy7HI+Th5VLxTJfW5EeaAf3fnS+xWQaQOCYiny+q6QSvxqoSO04vCx+4u++EJw==}
     dev: false
 
   /balanced-match@1.0.2:
@@ -9568,25 +9547,6 @@ packages:
       expo: 50.0.17(@babel/core@7.24.5)(@react-native/babel-preset@0.74.83)
     dev: false
 
-  /expo-notifications@0.27.7(expo@50.0.17):
-    resolution: {integrity: sha512-qcetBEQlmV3VHvsJrpbQYDWpxXxFLs9HgUCb75YlGNzLrLG9puCE5lBIVskgErrG5ph8LaJs3JmazuwgW4qpQA==}
-    peerDependencies:
-      expo: '*'
-    dependencies:
-      '@expo/image-utils': 0.4.2
-      '@ide/backoff': 1.0.0
-      abort-controller: 3.0.0
-      assert: 2.1.0
-      badgin: 1.2.3
-      expo: 50.0.17(@babel/core@7.24.5)(@react-native/babel-preset@0.74.83)
-      expo-application: 5.8.4(expo@50.0.17)
-      expo-constants: 15.4.6(expo@50.0.17)
-      fs-extra: 9.1.0
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
-    dev: false
-
   /expo-router@3.4.10(expo-constants@15.4.6)(expo-linking@6.2.2)(expo-modules-autolinking@1.11.1)(expo-status-bar@1.11.1)(expo@50.0.17)(react-native-reanimated@3.6.3)(react-native-safe-area-context@4.8.2)(react-native-screens@3.29.0)(react-native@0.73.6)(react@18.2.0):
     resolution: {integrity: sha512-3Ldhsva/EtfWFFTDaTl6PRuJFJWG0DTd3OOI3U9/tY+/S7oaNbIOO8yVJbbTbsymAreVZuDwrQsfCmw0xLsB7g==}
     peerDependencies:
@@ -10773,14 +10733,6 @@ packages:
   /is-map@2.0.3:
     resolution: {integrity: sha512-1Qed0/Hr2m+YqxnM09CjA2d/i6YZNfF6R2oRAOj36eUdS6qIV/huPJNSEpKbupewFs+ZsJlxsjjPbc0/afW6Lw==}
     engines: {node: '>= 0.4'}
-    dev: false
-
-  /is-nan@1.3.2:
-    resolution: {integrity: sha512-E+zBKpQ2t6MEo1VsonYmluk9NxGrbzpeeLC2xIViuO2EjU2xsXsBPwTr3Ykv9l08UYEVEdWeRZNouaZqF6RN0w==}
-    engines: {node: '>= 0.4'}
-    dependencies:
-      call-bind: 1.0.7
-      define-properties: 1.2.1
     dev: false
 
   /is-negative-zero@2.0.3:
