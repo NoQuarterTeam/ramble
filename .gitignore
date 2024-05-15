@@ -9,12 +9,6 @@ node_modules
 tsconfig.tsbuildinfo
 .vercel
 .env
-fly.wireguard.conf
-
-pc-api-8703296620103690660-58-0d0aff733697.json
-ramble-402909-firebase-adminsdk-4avea-898ffc7a0b.json
-
-tailwind.css
 
 .cache/*
 .cache
@@ -25,5 +19,4 @@ tailwind.css
 turbo-build.log
 turbo-*.log
 .expo
-pc-api-8703296620103690660-58-a47abfbe9daa.json
 dist
