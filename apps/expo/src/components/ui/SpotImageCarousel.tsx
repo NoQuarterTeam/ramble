@@ -1,22 +1,25 @@
 import { FlashList } from "@shopify/flash-list"
+import relativeTime from "dayjs/plugin/relativeTime"
 import * as ImagePicker from "expo-image-picker"
 import { router, useRouter } from "expo-router"
-import { Image, ImagePlus } from "lucide-react-native"
+import { Image, ImagePlus, User2 } from "lucide-react-native"
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
 
-import type { Spot, SpotImage } from "@ramble/database/types"
+import type { Spot } from "@ramble/database/types"
 import { canManageSpot, createAssetUrl, merge } from "@ramble/shared"
 
 import { useMe } from "~/lib/hooks/useMe"
 
+import dayjs from "dayjs"
+import type { RouterOutputs } from "~/lib/api"
+import { useFeedbackActivity } from "../FeedbackCheck"
 import { Icon } from "../Icon"
 import { Button } from "./Button"
 import { OptimizedImage } from "./OptimisedImage"
 import { Text } from "./Text"
 import { toast } from "./Toast"
-
-type SpotImageType = Pick<SpotImage, "path" | "blurHash">
+dayjs.extend(relativeTime)
 
 type AddMoreProps = {
   canAddMore: true
@@ -32,7 +35,7 @@ type Props = {
   width: number
   height: number
   noOfColumns?: number
-  images: SpotImageType[]
+  images: RouterOutputs["spot"]["detail"]["spot"]["images"]
   imageClassName?: string
   onPress?: () => void
   placeholderPaddingTop?: number
@@ -50,9 +53,9 @@ export function SpotImageCarousel({
   onPress,
 }: Props) {
   const { me } = useMe()
+  const increment = useFeedbackActivity((s) => s.increment)
   const [imageIndex, setImageIndex] = React.useState(0)
-
-  const ref = React.useRef<FlashList<SpotImageType>>(null)
+  const ref = React.useRef<FlashList<RouterOutputs["spot"]["detail"]["spot"]["images"][0]>>(null)
   const itemWidth = width / (noOfColumns || 1) - (noOfColumns && noOfColumns > 1 ? 10 : 0)
   return (
     <View style={{ width, height }} className="bg-background dark:bg-background-dark">
@@ -89,6 +92,65 @@ export function SpotImageCarousel({
                 className={merge("rounded-xs object-cover", imageClassName)}
               />
             </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                increment()
+                if (image.creator.deletedAt) return
+                router.push(`/(home)/(index)/${image.creator.username}/(profile)`)
+              }}
+              activeOpacity={image.creator.deletedAt ? 1 : 0.7}
+              className="absolute bottom-2 right-2 p-1 rounded-md bg-gray-800/70 flex flex-row space-x-1 items-center"
+            >
+              {/* TEST ONE */}
+              {/* <View className="max-w-[130px]">
+                <Text className="text-xs text-white text-right" numberOfLines={1}>
+                  Created on {dayjs(image.createdAt).format("DD.MM.YYYY")}
+                </Text>
+                <Text className="text-xs text-white text-right" numberOfLines={1}>
+                  by {image.creator.username}
+                </Text>
+              </View> */}
+              {/* TEST TWO */}
+              {/* <View className="max-w-[130px]">
+                <Text className="text-xs text-white text-right" numberOfLines={1}>
+                  Created by {image.creator.username}
+                </Text>
+                <Text className="text-xs text-white text-right" numberOfLines={1}>
+                  {dayjs(image.createdAt).format("DD.MM.YYYY")}
+                </Text>
+              </View> */}
+              {/* TEST THREE */}
+              {/* <View className="max-w-[130px]">
+                <Text className="text-xs text-white text-right" numberOfLines={1}>
+                  Created by {image.creator.username}
+                </Text>
+                <Text className="text-xs text-white text-right" numberOfLines={1}>
+                  {dayjs(image.createdAt).format("DD.MM.YYYY")}
+                </Text>
+              </View> */}
+              {image.creator?.avatar ? (
+                <OptimizedImage
+                  height={30}
+                  width={30}
+                  placeholder={image.creator.avatarBlurHash}
+                  source={{ uri: createAssetUrl(image.creator.avatar) }}
+                  className="sq-7 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
+                />
+              ) : (
+                <View className="sq-7 flex flex-row items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
+                  <Icon icon={User2} />
+                </View>
+              )}
+              <View className="max-w-[80px]">
+                <Text className="text-white text-xs leading-4 text-right" numberOfLines={1}>
+                  {image.creator.username}
+                </Text>
+                <Text className="text-white text-xxs leading-4 text-right" numberOfLines={1}>
+                  {/* {dayjs(image.createdAt).fromNow()} */}
+                  {dayjs(image.createdAt).format("DD.MM.YYYY")}
+                </Text>
+              </View>
+            </TouchableOpacity>
           </View>
         )}
       />
@@ -104,10 +166,12 @@ export function SpotImageCarousel({
         </View>
       )}
       {images.length > 1 && (
-        <View className="absolute right-2 bottom-2 rounded-xs bg-gray-800/70 p-1">
-          <Text className="text-white text-xs">{`${imageIndex + 1}/${
-            images.length / (noOfColumns || 1) + (canAddMore ? 1 : 0)
-          }`}</Text>
+        <View className="absolute bottom-2 left-[48%]">
+          <View className="rounded-xs bg-gray-800/70 p-1">
+            <Text className="text-white text-xs">
+              {`${imageIndex + 1}/${images.length / (noOfColumns || 1) + (canAddMore ? 1 : 0)}`}
+            </Text>
+          </View>
         </View>
       )}
     </View>
