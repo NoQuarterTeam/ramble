@@ -1,8 +1,10 @@
 import { clusterSchema, tripMediaSchema } from "@ramble/server-schemas"
+import { sendTripMediaAddedNotification } from "@ramble/server-services"
 import { promiseHash } from "@ramble/shared"
 import { TRPCError } from "@trpc/server"
 import bbox from "@turf/bbox"
 import { lineString } from "@turf/helpers"
+import { waitUntil } from "@vercel/functions"
 import Supercluster from "supercluster"
 import { z } from "zod"
 import { createTRPCRouter, protectedProcedure } from "../../trpc"
@@ -137,6 +139,7 @@ export const tripMediaRouter = createTRPCRouter({
         orderBy: { timestamp: "desc" },
         select: { timestamp: true },
       })
+      waitUntil(sendTripMediaAddedNotification({ initiatorId: ctx.user.id, tripId: input.tripId, username: ctx.user.username }))
       return latestTimestamp?.timestamp
     }),
   remove: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {

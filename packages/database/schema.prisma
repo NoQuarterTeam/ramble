@@ -49,27 +49,29 @@ model User {
   tripSyncOnNetworkEnabled Boolean @default(false)
 
   // Relations
-  followers             User[]         @relation("UserFollows")
-  following             User[]         @relation("UserFollows")
-  createdSpots          Spot[]         @relation(name: "Creator")
-  ownedSpots            Spot[]         @relation(name: "Owner")
-  verifiedSpots         Spot[]         @relation(name: "Verifier")
-  spotImages            SpotImage[]
-  lists                 List[]
-  reviews               Review[]
-  trips                 Trip[]         @relation(name: "UserTrips")
-  createdTrips          Trip[]         @relation(name: "CreatedTrips")
-  tripItems             TripItem[]
-  tripMedias            TripMedia[]
-  van                   Van?
-  feedback              Feedback[]
-  myInviteCodes         InviteCode[]   @relation(name: "MyInviteCodes")
-  usedInviteCode        InviteCode?    @relation(fields: [usedInviteCodeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  usedInviteCodeId      String?        @unique
-  createdSpotRevisions  SpotRevision[] @relation(name: "Creator")
-  approvedSpotRevisions SpotRevision[] @relation(name: "Approver")
-  accessRequest         AccessRequest?
-  pushTokens            PushToken[]
+  followers              User[]             @relation("UserFollows")
+  following              User[]             @relation("UserFollows")
+  createdSpots           Spot[]             @relation(name: "Creator")
+  ownedSpots             Spot[]             @relation(name: "Owner")
+  verifiedSpots          Spot[]             @relation(name: "Verifier")
+  spotImages             SpotImage[]
+  lists                  List[]
+  reviews                Review[]
+  trips                  Trip[]             @relation(name: "UserTrips")
+  createdTrips           Trip[]             @relation(name: "CreatedTrips")
+  tripItems              TripItem[]
+  tripMedias             TripMedia[]
+  van                    Van?
+  feedback               Feedback[]
+  myInviteCodes          InviteCode[]       @relation(name: "MyInviteCodes")
+  usedInviteCode         InviteCode?        @relation(fields: [usedInviteCodeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  usedInviteCodeId       String?            @unique
+  createdSpotRevisions   SpotRevision[]     @relation(name: "Creator")
+  approvedSpotRevisions  SpotRevision[]     @relation(name: "Approver")
+  accessRequest          AccessRequest?
+  pushTokens             PushToken[]
+  userNotifications      UserNotification[]
+  initiatedNotifications Notification[]
 
   deletedAt DateTime?
   createdAt DateTime  @default(now())
@@ -398,12 +400,13 @@ model Feedback {
 }
 
 model Trip {
-  id        String   @id @default(uuid())
-  name      String
-  startDate DateTime @db.Date
-  endDate   DateTime @db.Date
-  creator   User     @relation(name: "CreatedTrips", fields: [creatorId], references: [id])
-  creatorId String
+  id            String         @id @default(uuid())
+  name          String
+  startDate     DateTime       @db.Date
+  endDate       DateTime       @db.Date
+  creator       User           @relation(name: "CreatedTrips", fields: [creatorId], references: [id])
+  creatorId     String
+  notifications Notification[]
 
   users User[]      @relation(name: "UserTrips")
   items TripItem[]
@@ -481,4 +484,51 @@ model TripStop {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum NotificationType {
+  USER_FOLLOWED
+  TRIP_MEDIA_ADDED
+  TRIP_STOP_ADDED
+  TRIP_SPOT_ADDED
+}
+
+model Notification {
+  id   String           @id @default(uuid())
+  type NotificationType
+
+  userNotifications UserNotification[]
+  initiator         User               @relation(fields: [initiatorId], references: [id])
+  initiatorId       String
+  trip              Trip?              @relation(fields: [tripId], references: [id])
+  tripId            String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([initiatorId])
+  @@index([tripId])
+}
+
+enum UserNotificationStatus {
+  READ
+  SEEN
+  UNREAD
+}
+
+model UserNotification {
+  id     String                 @id @default(uuid())
+  status UserNotificationStatus @default(UNREAD)
+
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String
+  notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  notificationId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([notificationId])
 }
