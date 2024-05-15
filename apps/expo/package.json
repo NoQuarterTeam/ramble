@@ -18,7 +18,7 @@
   "dependencies": {
     "@expo-google-fonts/urbanist": "0.2.3",
     "@expo/react-native-action-sheet": "4.0.1",
-    "@hookform/resolvers": "3.3.4",
+    "@hookform/resolvers": "3.4.0",
     "@ramble/api": "workspace:*",
     "@ramble/database": "workspace:*",
     "@ramble/shared": "workspace:*",
