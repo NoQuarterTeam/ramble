@@ -1,10 +1,15 @@
+import { tripSchema, tripStopSchema } from "@ramble/server-schemas"
+import {
+  getPlaceUnsplashImage,
+  sendSlackMessage,
+  sendTripSpotAddedNotification,
+  sendTripStopAddedNotification,
+} from "@ramble/server-services"
 import { TRPCError } from "@trpc/server"
 import bbox from "@turf/bbox"
 import { lineString } from "@turf/helpers"
+import { waitUntil } from "@vercel/functions"
 import { z } from "zod"
-
-import { tripSchema, tripStopSchema } from "@ramble/server-schemas"
-import { getPlaceUnsplashImage, sendSlackMessage } from "@ramble/server-services"
 import { createTRPCRouter, protectedProcedure } from "../../trpc"
 import { tripItemsRouter } from "./items"
 import { tripMediaRouter } from "./media"
@@ -206,9 +211,11 @@ export const tripRouter = createTRPCRouter({
         const tripItems = await ctx.prisma.trip.findUnique({ where: { id: input.tripId } }).items()
         newOrder = tripItems?.length || 0
       }
-      return ctx.prisma.tripItem.create({
+      const item = await ctx.prisma.tripItem.create({
         data: { spotId: input.spotId, tripId: input.tripId, creatorId: ctx.user.id, order: newOrder },
       })
+      waitUntil(sendTripSpotAddedNotification({ initiatorId: ctx.user.id, tripId: input.tripId, username: ctx.user.username }))
+      return item
     }),
   saveStop: protectedProcedure
     .input(z.object({ tripId: z.string(), order: z.number().optional() }).merge(tripStopSchema))
@@ -220,10 +227,13 @@ export const tripRouter = createTRPCRouter({
         newOrder = tripItems.length || 0
       }
       const image = await getPlaceUnsplashImage(data.name)
-      return ctx.prisma.$transaction(async (tx) => {
+      const stop = await ctx.prisma.$transaction(async (tx) => {
         const tripItem = await tx.tripItem.create({ data: { tripId, creatorId: ctx.user.id, order: newOrder } })
         return tx.tripStop.create({ data: { ...data, tripItemId: tripItem.id, image: image } })
       })
+
+      waitUntil(sendTripStopAddedNotification({ initiatorId: ctx.user.id, tripId: input.tripId, username: ctx.user.username }))
+      return stop
     }),
   updateOrder: protectedProcedure
     .input(z.object({ id: z.string(), items: z.array(z.string()), itemDateResetId: z.string().optional() }))

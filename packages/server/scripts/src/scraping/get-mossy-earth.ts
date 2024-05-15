@@ -1,8 +1,9 @@
 // import puppeteer from "puppeteer"
 // import * as cheerio from "cheerio"
+import { geocodeCoords } from '@ramble/server-services'
 import mossyEarthData from "./data/mossy-earth.json"
 import { prisma } from "@ramble/database"
-import { geocodeCoords } from "./helpers/geocode"
+
 
 // interface MossyEarthData {
 //   id: string
@@ -46,7 +47,7 @@ async function run() {
         const sourceUrl = `https://www.mossy.earth/projects/${spot.uid}`
         const latitude = spot.data.project_location.latitude
         const longitude = spot.data.project_location.longitude
-        const address = await geocodeCoords({ latitude: Number(latitude), longitude: Number(longitude) })
+        const location = await geocodeCoords({ latitude: Number(latitude), longitude: Number(longitude) })
         const description = [spot.data.subtitle[0]?.text, spot.data.summary[0]?.text].join(". ")
 
         await prisma.spot.create({
@@ -55,7 +56,7 @@ async function run() {
             name,
             latitude,
             longitude,
-            address,
+            address: location.address || location.place,
             type: "REWILDING",
             creator: { connect: { email: "dan@noquarter.co" } },
             sourceUrl,

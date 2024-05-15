@@ -3,7 +3,6 @@ import { useLocalSearchParams, useRouter } from "expo-router"
 import { usePostHog } from "posthog-react-native"
 import { FormProvider } from "react-hook-form"
 import { ScrollView, View } from "react-native"
-
 import { Button } from "~/components/ui/Button"
 import { FormInput } from "~/components/ui/FormInput"
 import { ModalView } from "~/components/ui/ModalView"
@@ -12,6 +11,7 @@ import { AUTH_TOKEN, api } from "~/lib/api"
 import { IS_DEV } from "~/lib/config"
 import { useForm } from "~/lib/hooks/useForm"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
+import { getPushToken } from "~/lib/pushToken"
 
 export default function RegisterScreen() {
   useKeyboardController()
@@ -20,6 +20,8 @@ export default function RegisterScreen() {
   const queryClient = api.useUtils()
   const navigation = useRouter()
   const posthog = usePostHog()
+  const { mutate: createPushToken } = api.pushToken.create.useMutation()
+
   const {
     mutate,
     error,
@@ -27,6 +29,10 @@ export default function RegisterScreen() {
   } = api.auth.register.useMutation({
     onSuccess: async (data) => {
       posthog.capture("user registered")
+
+      const token = await getPushToken()
+      if (token) createPushToken({ token })
+
       await AsyncStorage.setItem(AUTH_TOKEN, data.token)
       queryClient.user.me.setData(undefined, data.user)
       navigation.replace("/onboarding/1")

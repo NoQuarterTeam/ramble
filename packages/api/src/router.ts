@@ -4,6 +4,7 @@ import { googleRouter } from "./router/google"
 import { inviteCodeRouter } from "./router/inviteCode"
 import { listRouter } from "./router/list"
 import { mapboxRouter } from "./router/mapbox"
+import { pushTokenRouter } from "./router/pushToken"
 import { reviewRouter } from "./router/review"
 import { s3Router } from "./router/s3"
 import { spotRouter } from "./router/spot"
@@ -15,20 +16,21 @@ import { versionRouter } from "./router/version"
 import { createTRPCRouter } from "./trpc"
 
 export const appRouter = createTRPCRouter({
-  version: versionRouter,
   auth: authRouter,
   feedback: feedbackRouter,
+  google: googleRouter,
   inviteCode: inviteCodeRouter,
   list: listRouter,
-  trip: tripRouter,
+  mapbox: mapboxRouter,
+  pushToken: pushTokenRouter,
   review: reviewRouter,
   s3: s3Router,
   spot: spotRouter,
-  mapbox: mapboxRouter,
   spotRevision: spotRevisionRouter,
+  trip: tripRouter,
   user: userRouter,
   van: vanRouter,
-  google: googleRouter,
+  version: versionRouter,
 })
 
 // export type definition of API

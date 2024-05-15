@@ -1,6 +1,7 @@
 import { db } from "@/lib/server/db"
 import type { Prisma } from "@ramble/database/types"
 import { IS_DEV, env } from "@ramble/server-env"
+import { geocodeCoords } from "@ramble/server-services"
 import * as Sentry from "@sentry/nextjs"
 import dayjs from "dayjs"
 import type { NextRequest } from "next/server"
@@ -16,17 +17,22 @@ export async function GET(request: NextRequest) {
 
     const res = await fetch(URL)
     const data = (await res.json()) as Data
-    const events = data.events.filter(
-      (event) => dayjs(event.start_date).isAfter(dayjs()) && dayjs(event.start_date).isBefore(dayjs().add(2, "month")),
+    const events = data.events.filter((event) =>
+      event.start_date
+        ? dayjs(event.start_date).isAfter(dayjs()) && dayjs(event.start_date).isBefore(dayjs().add(2, "month"))
+        : true,
     )
 
     // create and update new spots
     for (const event of events) {
+      const address = await geocodeCoords({ latitude: event.location_lat, longitude: event.location_lng })
+      const addressToUse = address?.address || address?.place
       const data = {
-        name: `${event.start_date ? `${event.start_date}: ` : ""}${event.name}`,
+        name: `${(event.repeat_schedule !== "never" && event.weekday) ? `Every ${event.weekday}: ` : event.start_date ? `${event.start_date}: ` : ""}${event.name}`,
         latitude: event.location_lat,
         longitude: event.location_lng,
-        description: `${event.start_date ? `Date: ${event.start_date}\n` : ""}${
+        address: addressToUse,
+        description: `${eventTypeDescriptions[event.event_type] ? eventTypeDescriptions[event.event_type]: ""}\n${event.start_date ? `Date: ${event.start_date}\n` : ""}${
           event.repeat_schedule === "never" ? "" : `Repeating: ${event.repeat_schedule}\n`
         }${event.weekday ? `Weekday: ${event.weekday}\n` : ""}${event.start_time ? `Start time: ${event.start_time}\n` : ""}${
           event.end_time ? `End time: ${event.end_time}\n` : ""
@@ -79,6 +85,18 @@ type EventType =
   | "charity"
   | "other"
   | "social_projects"
+
+const eventTypeDescriptions = {
+  beach_cleanup: "Beach Cleanup",
+  river_cleanup: "River Cleanup",
+  trash_picking: "Trash Picking",
+  tree_planting: "Tree Planting",
+  dog_walking: "Dog Walking",
+  helping_shelters: "Helping Shelters",
+  charity: "Charity",
+  other: "Other",
+  social_projects: "Social Projects"
+};
 
 type Data = {
   events: {

@@ -7,22 +7,7 @@ const nextConfig = {
   experimental: { serverComponentsExternalPackages: ["@aws-sdk"] },
   redirects: () => [{ source: "/register", destination: "/", permanent: false }],
   images: {
-    remotePatterns: [
-      { hostname: "ramble.guide" },
-      { hostname: "cdn.ramble.guide" },
-      { hostname: "campspace.com" },
-      { hostname: "hipcamp-res.cloudinary.com" },
-      { hostname: "polskicaravaning.pl" },
-      { hostname: "spots.roadsurfer.com" },
-      { hostname: "www.norcamp.de" },
-      { hostname: "cucortu.ro" },
-      { hostname: "image.thecrag.com" },
-      { hostname: "cdn3.park4night.com" },
-      { hostname: "api.natuurkampeerterreinen.nl" },
-      { hostname: "d2exd72xrrp1s7.cloudfront.net" },
-      { hostname: "lh3.googleusercontent.com" },
-      { hostname: "storage.googleapis.com", pathname: "/volunteeringevents-event-pictures/**" },
-    ],
+    remotePatterns: [{ hostname: "ramble.guide" }, { hostname: "cdn.ramble.guide" }],
   },
 }
 
@@ -46,7 +31,6 @@ export default withSentryConfig(
 
     // Transpiles SDK to be compatible with IE11 (increases bundle size)
     transpileClientSDK: true,
-
     // Uncomment to route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
     // This can increase your server load as well as your hosting bill.
     // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-

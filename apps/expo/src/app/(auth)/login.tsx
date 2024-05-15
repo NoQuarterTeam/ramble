@@ -9,6 +9,7 @@ import { Text } from "~/components/ui/Text"
 import { AUTH_TOKEN, api } from "~/lib/api"
 import { useForm } from "~/lib/hooks/useForm"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
+import { getPushToken } from "~/lib/pushToken"
 
 export default function LoginScreen() {
   useKeyboardController()
@@ -17,13 +18,17 @@ export default function LoginScreen() {
 
   const form = useForm({ defaultValues: { email: "", password: "" } })
 
+  const { mutate: createPushToken } = api.pushToken.create.useMutation()
   const {
     mutate,
     isPending: isLoading,
     error,
   } = api.auth.login.useMutation({
     onSuccess: async (data) => {
+      const token = await getPushToken()
+      if (token) createPushToken({ token })
       await AsyncStorage.setItem(AUTH_TOKEN, data.token)
+
       utils.user.me.setData(undefined, data.user)
       if (navigation.canGoBack()) {
         navigation.back()

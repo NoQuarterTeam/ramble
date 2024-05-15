@@ -1,8 +1,3 @@
-import { TRPCError } from "@trpc/server"
-import dayjs from "dayjs"
-import Supercluster from "supercluster"
-import { z } from "zod"
-
 import { clusterSchema, userSchema } from "@ramble/server-schemas"
 import {
   createAuthToken,
@@ -10,9 +5,15 @@ import {
   generateBlurHash,
   sendAccountVerificationEmail,
   sendSlackMessage,
+  sendUserFollowedNotification,
   updateLoopsContact,
 } from "@ramble/server-services"
 import { userInterestFields } from "@ramble/shared"
+import { TRPCError } from "@trpc/server"
+import { waitUntil } from "@vercel/functions"
+import dayjs from "dayjs"
+import Supercluster from "supercluster"
+import { z } from "zod"
 
 import type { User } from "@ramble/database/types"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
@@ -112,17 +113,17 @@ export const userRouter = createTRPCRouter({
         : c.properties,
     }))
   }),
-
   sendVerificationEmail: protectedProcedure.mutation(async ({ ctx }) => {
     const token = createAuthToken({ id: ctx.user.id })
-    await sendAccountVerificationEmail(ctx.user, token)
+    sendAccountVerificationEmail(ctx.user, token)
     return true
   }),
   toggleFollow: protectedProcedure.input(userSchema.pick({ username: true })).mutation(async ({ ctx, input }) => {
     if (input.username === ctx.user.username) throw new TRPCError({ code: "BAD_REQUEST" })
-    const followers = await ctx.prisma.user.findUnique({ where: { username: input.username } }).followers({
-      where: { id: ctx.user.id },
-    })
+    const followers = await ctx.prisma.user
+      .findUnique({ where: { username: input.username } })
+      .followers({ where: { id: ctx.user.id } })
+
     if (!followers) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
     if (followers.length) {
       await ctx.prisma.user.update({
@@ -131,6 +132,7 @@ export const userRouter = createTRPCRouter({
       })
     } else {
       await ctx.prisma.user.update({ where: { username: input.username }, data: { followers: { connect: { id: ctx.user.id } } } })
+      waitUntil(sendUserFollowedNotification({ initiatorId: ctx.user.id, username: ctx.user.username }))
     }
     return true
   }),
