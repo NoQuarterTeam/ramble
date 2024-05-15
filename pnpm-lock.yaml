@@ -55,8 +55,8 @@ importers:
         specifier: 1.0.3
         version: 1.0.3(react-native@0.73.6)(react@18.2.0)
       '@rnmapbox/maps':
-        specifier: 10.1.23
-        version: 10.1.23(expo@50.0.17)(react-native@0.73.6)(react@18.2.0)
+        specifier: 10.1.24
+        version: 10.1.24(expo@50.0.17)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0)
       '@sentry/react-native':
         specifier: 5.20.0
         version: 5.20.0(expo@50.0.17)(react-native@0.73.6)(react@18.2.0)
@@ -5894,17 +5894,20 @@ packages:
     engines: {node: '>=14.0.0'}
     dev: false
 
-  /@rnmapbox/maps@10.1.23(expo@50.0.17)(react-native@0.73.6)(react@18.2.0):
-    resolution: {integrity: sha512-XVV8yoHZpm72RsZVMHYGlPU+MO6QyKWLdZ2uKWeXHk6rBrltEe6kboknd1gtzqEWp48qsUInLxCOxeUZLP5/Wg==}
+  /@rnmapbox/maps@10.1.24(expo@50.0.17)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0):
+    resolution: {integrity: sha512-3l3WV8rnK28InMl5rVjtO4XxK/x2aHV4qDp3BGlNU8a+lCIF0fR3Dw3ChukgV2dszxjS7pX6OHtmkng6yoc0Tw==}
     peerDependencies:
       expo: '>=47.0.0'
       mapbox-gl: ^2.9.0
       react: '>=16.6.1'
+      react-dom: '>= 17.0.0'
       react-native: '>=0.59.9'
     peerDependenciesMeta:
       expo:
         optional: true
       mapbox-gl:
+        optional: true
+      react-dom:
         optional: true
     dependencies:
       '@turf/along': 6.5.0
@@ -5916,6 +5919,7 @@ packages:
       debounce: 1.2.1
       expo: 50.0.17(@babel/core@7.24.5)(@react-native/babel-preset@0.74.83)
       react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
       react-native: 0.73.6(@babel/core@7.24.5)(@babel/preset-env@7.24.5)(react@18.2.0)
     dev: false
 
