@@ -48,7 +48,7 @@ export async function GET(request: Request) {
     if (!res) throw new Error("Failed to fetch image")
 
     // transform image
-    const sharpInstance = sharp()
+    const sharpInstance = sharp({ failOn: "none" })
     sharpInstance.on("error", (error) => {
       console.error(error)
     })
