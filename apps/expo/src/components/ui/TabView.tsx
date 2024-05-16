@@ -18,7 +18,7 @@ export function TabView(props: Props) {
   return (
     <View style={{ paddingTop: insets.top }} className="flex-1">
       <StatusBar style="auto" />
-      <View className="flex h-14 flex-row items-center justify-between px-4">
+      <View className="flex h-16 flex-row items-center justify-between px-4">
         <View>
           {typeof props.title === "string" ? <BrandHeading className="text-4xl">{props.title}</BrandHeading> : props.title}
         </View>

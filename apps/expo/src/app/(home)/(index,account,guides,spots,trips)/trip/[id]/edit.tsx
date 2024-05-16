@@ -8,6 +8,7 @@ import { Text } from "~/components/ui/Text"
 import { api } from "~/lib/api"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
 import { useMe } from "~/lib/hooks/useMe"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 export default function EditTrip() {
   const { id } = useLocalSearchParams<{ id: string }>()
@@ -30,10 +31,12 @@ export default function EditTrip() {
     },
   })
 
+  const tab = useTabSegment()
+
   const { mutate: deleteTrip, isPending: deleteLoading } = api.trip.delete.useMutation({
     onSuccess: async () => {
       void utils.trip.mine.refetch()
-      router.navigate("/(home)/(trips)/trips")
+      router.navigate(`/${tab}`)
     },
   })
   const handleDelete = () => {
