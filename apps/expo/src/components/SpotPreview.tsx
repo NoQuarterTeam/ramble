@@ -66,61 +66,59 @@ export const SpotPreview = React.memo(function _SpotPreview({
         <Text>Spot not found</Text>
       ) : (
         <View className="space-y-2">
-          <View className="flex flex-row items-center justify-between">
-            <TouchableOpacity onPress={handleGoToSpot} activeOpacity={0.9} className="flex flex-row space-x-4">
-              <SpotTypeBadge spot={spot} />
-              {weatherData && (
-                <View className="flex flex-row items-center">
-                  <Text>{Math.round(weatherData.temp)}°C</Text>
-                  <Image
-                    style={{ width: 35, height: 35 }}
-                    source={{ uri: `https://openweathermap.org/img/wn/${weatherData.icon}@2x.png` }}
-                  />
-                </View>
-              )}
-            </TouchableOpacity>
-            <View className="flex flex-row items-center">
-              {spot.sameLocationSpots.length > 1 && (
-                <View className="flex flex-row items-center space-x-1">
-                  <Text className="text-sm pr-0.5">
-                    {currentIndex + 1} / {spot.sameLocationSpots.length}
-                  </Text>
-                  <IconButton
-                    onPress={() =>
-                      onSetSpotId(
-                        isFirst
-                          ? spot.sameLocationSpots[spot.sameLocationSpots.length - 1]?.id!
-                          : spot.sameLocationSpots[currentIndex - 1]?.id!,
-                      )
-                    }
-                    variant="outline"
-                    className="rounded-sm"
-                    size="xs"
-                    icon={ArrowLeft}
-                  />
-                  <IconButton
-                    onPress={() =>
-                      onSetSpotId(isLast ? spot.sameLocationSpots[0]?.id! : spot.sameLocationSpots[currentIndex + 1]?.id!)
-                    }
-                    variant="outline"
-                    className="rounded-sm"
-                    size="xs"
-                    icon={ArrowRight}
-                  />
-                </View>
-              )}
-
-              <IconButton variant="ghost" size="sm" onPress={() => onSetSpotId(null)} icon={X} />
+          <View>
+            <View className="flex flex-row items-center justify-between">
+              <TouchableOpacity onPress={handleGoToSpot} activeOpacity={0.9} className="flex flex-row space-x-4">
+                <SpotTypeBadge spot={spot} />
+                {weatherData && (
+                  <View className="flex flex-row items-center">
+                    <Text>{Math.round(weatherData.temp)}°C</Text>
+                    <Image
+                      style={{ width: 35, height: 35 }}
+                      source={{ uri: `https://openweathermap.org/img/wn/${weatherData.icon}@2x.png` }}
+                    />
+                  </View>
+                )}
+              </TouchableOpacity>
+              <View className="flex flex-row items-center">
+                {spot.sameLocationSpots.length > 1 && (
+                  <View className="flex flex-row items-center space-x-1">
+                    <Text className="text-sm pr-0.5">
+                      {currentIndex + 1} / {spot.sameLocationSpots.length}
+                    </Text>
+                    <IconButton
+                      onPress={() =>
+                        onSetSpotId(
+                          isFirst
+                            ? spot.sameLocationSpots[spot.sameLocationSpots.length - 1]?.id!
+                            : spot.sameLocationSpots[currentIndex - 1]?.id!,
+                        )
+                      }
+                      variant="outline"
+                      className="rounded-sm"
+                      size="xs"
+                      icon={ArrowLeft}
+                    />
+                    <IconButton
+                      onPress={() =>
+                        onSetSpotId(isLast ? spot.sameLocationSpots[0]?.id! : spot.sameLocationSpots[currentIndex + 1]?.id!)
+                      }
+                      variant="outline"
+                      className="rounded-sm"
+                      size="xs"
+                      icon={ArrowRight}
+                    />
+                  </View>
+                )}
+                <IconButton variant="ghost" size="sm" onPress={() => onSetSpotId(null)} icon={X} />
+              </View>
             </View>
-          </View>
-
-          <TouchableOpacity onPress={handleGoToSpot} activeOpacity={0.7} className="flex flex-row items-center space-x-2">
-            <View className="flex flex-row justify-between w-full items-center">
-              <Text numberOfLines={1} className="text-lg leading-6">
+            <TouchableOpacity onPress={handleGoToSpot} activeOpacity={0.7} className="flex flex-row items-center space-x-2">
+              <Text numberOfLines={1} className="text-lg">
                 {spot.name}
               </Text>
-            </View>
-          </TouchableOpacity>
+            </TouchableOpacity>
+          </View>
           <View className="flex flex-row items-center justify-between">
             <View className="flex flex-row items-center space-x-2">
               <View className="flex flex-row flex-wrap items-center space-x-1">

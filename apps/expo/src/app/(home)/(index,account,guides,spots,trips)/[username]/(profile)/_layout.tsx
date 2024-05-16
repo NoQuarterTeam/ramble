@@ -134,12 +134,15 @@ export default function UserScreen() {
                     <Text className="opacity-70">followers</Text>
                   </TouchableOpacity>
                 </View>
-                <View className="flex flex-row items-center space-x-1">
+                <View className="flex flex-row items-center space-x-0.5">
                   {interestOptions
                     .filter((i) => user[i.value as keyof typeof user])
                     .map((interest) => (
-                      <View key={interest.value} className="rounded-xs border border-gray-100 p-1.5 dark:border-gray-700">
-                        <Icon icon={interest.Icon} size={18} />
+                      <View
+                        key={interest.value}
+                        className="rounded-xs border border-gray-100 sq-7 flex items-center justify-center dark:border-gray-700"
+                      >
+                        <Icon icon={interest.Icon} size={16} />
                       </View>
                     ))}
                 </View>
