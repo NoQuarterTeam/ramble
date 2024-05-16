@@ -45,7 +45,7 @@ export default function TripImagesCluster() {
   }, [media, total, parsedBounds, id])
 
   return (
-    <ScreenView title="" containerClassName="px-0">
+    <ScreenView containerClassName="px-0">
       {isLoading ? (
         <View className="flex items-center justify-center p-4">
           <ActivityIndicator />
