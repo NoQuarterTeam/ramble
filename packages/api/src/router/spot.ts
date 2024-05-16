@@ -341,7 +341,7 @@ export const spotRouter = createTRPCRouter({
             .object({
               coverId: z.string(),
               images: z.array(z.object({ path: z.string() })),
-              amenities: spotAmenitiesSchema.partial(),
+              amenities: spotAmenitiesSchema.partial().nullish(),
             })
             .partial(),
         ),
