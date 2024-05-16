@@ -131,8 +131,11 @@ export const userRouter = createTRPCRouter({
         data: { followers: { disconnect: { id: ctx.user.id } } },
       })
     } else {
-      await ctx.prisma.user.update({ where: { username: input.username }, data: { followers: { connect: { id: ctx.user.id } } } })
-      waitUntil(sendUserFollowedNotification({ initiatorId: ctx.user.id, username: ctx.user.username }))
+      const user = await ctx.prisma.user.update({
+        where: { username: input.username },
+        data: { followers: { connect: { id: ctx.user.id } } },
+      })
+      waitUntil(sendUserFollowedNotification({ initiatorId: ctx.user.id, userId: user.id }))
     }
     return true
   }),
