@@ -681,8 +681,8 @@ importers:
         specifier: 3.577.0
         version: 3.577.0
       '@aws-sdk/lib-storage':
-        specifier: 3.577.0
-        version: 3.577.0(@aws-sdk/client-s3@3.577.0)
+        specifier: 3.578.0
+        version: 3.578.0(@aws-sdk/client-s3@3.577.0)
       '@aws-sdk/s3-request-presigner':
         specifier: 3.577.0
         version: 3.577.0
@@ -1189,8 +1189,8 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@aws-sdk/lib-storage@3.577.0(@aws-sdk/client-s3@3.577.0):
-    resolution: {integrity: sha512-Gj+ND4DZv3yymx2OcQ5M1JXz+/4089ipuRxIGUjKcHn7/4bwNANtSutd7hZiHpGhwfUFXK3hrHSy9uKTbU61Zw==}
+  /@aws-sdk/lib-storage@3.578.0(@aws-sdk/client-s3@3.577.0):
+    resolution: {integrity: sha512-SluLJrA/fG82UnE83Albh+gv48McmXkz17kmAMhhNswOxqHsklb5Vu5d/G0DUDAQdeC30sS/9Vhu2zAiJokunw==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       '@aws-sdk/client-s3': ^3.577.0
