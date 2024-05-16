@@ -196,10 +196,8 @@ export default function SpotDetailScreen() {
         </Animated.View>
         <View className="space-y-3 p-4">
           <View className="space-y-2">
-            <View className="space-y-2">
-              <SpotTypeBadge spot={spot} />
-              <Heading className="font-600 text-2xl leading-7">{spot.name}</Heading>
-            </View>
+            <SpotTypeBadge spot={spot} />
+            <Heading className="font-600 text-2xl leading-7">{spot.name}</Heading>
             <View className="flex flex-row items-center space-x-2">
               <View className="flex flex-row flex-wrap items-center space-x-1">
                 <Icon icon={Heart} size={16} fill={isDark ? "white" : "black"} />
