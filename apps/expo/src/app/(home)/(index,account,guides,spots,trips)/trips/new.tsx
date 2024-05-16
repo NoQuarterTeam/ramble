@@ -21,7 +21,7 @@ export default function NewTripScreen() {
       posthog.capture("trip created", { name: data.name })
       utils.trip.mine.refetch()
       router.back()
-      router.push(`/(home)/(trips)/trips/${data.id}`)
+      router.push(`/(home)/(trips)/trip/${data.id}`)
     },
   })
 

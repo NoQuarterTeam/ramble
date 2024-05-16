@@ -25,7 +25,7 @@ export function ScreenView(props: Props) {
     <SafeAreaView>
       <StatusBar style="auto" />
       <View className="flex-1">
-        <View className="flex h-14 flex-row items-center justify-between px-4">
+        <View className="flex h-14 flex-row items-center justify-between px-4 ">
           <View className="flex-1">
             <TouchableOpacity onPress={props.onBack || router.back} className="sq-8 flex items-center justify-center pt-0.5">
               <Icon icon={ChevronLeft} color="primary" />

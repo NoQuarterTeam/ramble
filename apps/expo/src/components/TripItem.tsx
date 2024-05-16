@@ -35,7 +35,7 @@ export function TripItem({ trip }: Props) {
     <TouchableOpacity
       onPress={() => {
         increment()
-        router.push(`/(home)/(trips)/trips/${trip.id}`)
+        router.push(`/(home)/(trips)/trip/${trip.id}`)
       }}
       activeOpacity={0.8}
       className={join("space-y-4 rounded-xs border border-gray-200 p-4 dark:border-gray-700", isActive && "border-primary-500")}

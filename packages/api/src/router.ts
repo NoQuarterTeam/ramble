@@ -4,6 +4,7 @@ import { googleRouter } from "./router/google"
 import { inviteCodeRouter } from "./router/inviteCode"
 import { listRouter } from "./router/list"
 import { mapboxRouter } from "./router/mapbox"
+import { notificatioRouter } from "./router/notifications"
 import { pushTokenRouter } from "./router/pushToken"
 import { reviewRouter } from "./router/review"
 import { s3Router } from "./router/s3"
@@ -25,6 +26,7 @@ export const appRouter = createTRPCRouter({
   pushToken: pushTokenRouter,
   review: reviewRouter,
   s3: s3Router,
+  notification: notificatioRouter,
   spot: spotRouter,
   spotRevision: spotRevisionRouter,
   trip: tripRouter,
