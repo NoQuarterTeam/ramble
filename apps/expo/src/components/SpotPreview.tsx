@@ -59,7 +59,7 @@ export const SpotPreview = React.memo(function _SpotPreview({
       className="rounded-t-sm p-4"
     >
       {isLoading ? (
-        <View className="flex items-center justify-center p-10">
+        <View className="flex items-center justify-center h-[417px]">
           <Spinner />
         </View>
       ) : !spot ? (
