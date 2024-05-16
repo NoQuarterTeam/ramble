@@ -58,12 +58,12 @@ import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { MapView } from "~/components/Map"
 import { PartnerLink } from "~/components/PartnerLink"
 import { ReviewItem } from "~/components/ReviewItem"
+import { SpotImageCarousel } from "~/components/SpotImageCarousel"
 import { SpotMarker } from "~/components/SpotMarker"
 import { SpotTypeBadge } from "~/components/SpotTypeBadge"
 import { Button } from "~/components/ui/Button"
 import { Heading } from "~/components/ui/Heading"
 import { ScreenView } from "~/components/ui/ScreenView"
-import { SpotImageCarousel } from "~/components/ui/SpotImageCarousel"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
@@ -188,7 +188,6 @@ export default function SpotDetailScreen() {
         <Animated.View style={imageStyle}>
           <SpotImageCarousel
             placeholderPaddingTop={insets.top}
-            canAddMore={!isPartnerSpot(spot)}
             width={width}
             height={height * 0.37}
             images={spot.images}

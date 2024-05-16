@@ -1,4 +1,4 @@
-import type { Spot } from "@ramble/database/types"
+import type { Spot, SpotImage, User } from "@ramble/database/types"
 import { createAssetUrl, merge } from "@ramble/shared"
 import { FlashList } from "@shopify/flash-list"
 import dayjs from "dayjs"
@@ -8,36 +8,30 @@ import { router, useRouter } from "expo-router"
 import { Image, User2 } from "lucide-react-native"
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
-import type { RouterOutputs } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
-import { useFeedbackActivity } from "../FeedbackCheck"
-import { Icon } from "../Icon"
-import { Button } from "./Button"
-import { OptimizedImage } from "./OptimisedImage"
-import { Text } from "./Text"
-import { toast } from "./Toast"
+import { useFeedbackActivity } from "./FeedbackCheck"
+import { Icon } from "./Icon"
+import { Button } from "./ui/Button"
+import { OptimizedImage } from "./ui/OptimisedImage"
+import { Text } from "./ui/Text"
+import { toast } from "./ui/Toast"
 dayjs.extend(relativeTime)
 
-type AddMoreProps = {
-  canAddMore: true
-  spot: Pick<Spot, "id" | "ownerId">
-}
-
-type NoAddMoreProps = {
-  canAddMore?: false
-  spot?: Pick<Spot, "id" | "ownerId">
+type ImageCarousel = Pick<SpotImage, "id" | "blurHash" | "path" | "createdAt"> & {
+  creator: Pick<User, "id" | "avatar" | "avatarBlurHash" | "username" | "deletedAt">
 }
 
 type Props = {
+  spot: Pick<Spot, "id" | "ownerId">
   width: number
   height: number
   noOfColumns?: number
-  images: RouterOutputs["spot"]["detail"]["spot"]["images"]
+  images: ImageCarousel[]
   imageClassName?: string
   onPress?: () => void
   placeholderPaddingTop?: number
-} & (AddMoreProps | NoAddMoreProps)
+}
 
 export function SpotImageCarousel({
   images,
@@ -47,12 +41,11 @@ export function SpotImageCarousel({
   noOfColumns,
   spot,
   imageClassName,
-  canAddMore,
   onPress,
 }: Props) {
   const increment = useFeedbackActivity((s) => s.increment)
   const [imageIndex, setImageIndex] = React.useState(0)
-  const ref = React.useRef<FlashList<RouterOutputs["spot"]["detail"]["spot"]["images"][0]>>(null)
+  const ref = React.useRef<FlashList<ImageCarousel>>(null)
   const itemWidth = width / (noOfColumns || 1) - (noOfColumns && noOfColumns > 1 ? 10 : 0)
   const tab = useTabSegment()
   return (
@@ -70,13 +63,9 @@ export function SpotImageCarousel({
         estimatedItemSize={width}
         showsHorizontalScrollIndicator={false}
         data={images}
-        ListEmptyComponent={
-          !canAddMore ? <Empty placeholderPaddingTop={placeholderPaddingTop} width={itemWidth} height={height} /> : undefined
-        }
+        ListEmptyComponent={<Empty placeholderPaddingTop={placeholderPaddingTop} width={itemWidth} height={height} />}
         ListFooterComponent={
-          canAddMore ? (
-            <Footer placeholderPaddingTop={placeholderPaddingTop} width={itemWidth} height={height} images={images} spot={spot} />
-          ) : undefined
+          <Footer placeholderPaddingTop={placeholderPaddingTop} width={itemWidth} height={height} images={images} spot={spot} />
         }
         renderItem={({ item: image }) => (
           <View className="relative">
@@ -127,9 +116,7 @@ export function SpotImageCarousel({
       {images.length > 1 && (
         <View className="absolute bottom-2 left-2">
           <View className="rounded-xs bg-gray-800/70 p-1">
-            <Text className="text-white text-xs">
-              {`${imageIndex + 1}/${images.length / (noOfColumns || 1) + (canAddMore ? 1 : 0)}`}
-            </Text>
+            <Text className="text-white text-xs">{`${imageIndex + 1}/${images.length / (noOfColumns || 1) + 1}`}</Text>
           </View>
         </View>
       )}
@@ -143,7 +130,7 @@ function Footer({
   images,
   spot,
   placeholderPaddingTop = 0,
-}: Pick<Props, "placeholderPaddingTop" | "width" | "height" | "images" | "canAddMore" | "spot">) {
+}: Pick<Props, "placeholderPaddingTop" | "width" | "height" | "images" | "spot">) {
   const { me } = useMe()
   const router = useRouter()
   const onPickImage = async () => {

@@ -9,10 +9,10 @@ import { displayRating, isPartnerSpot } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { PartnerLink } from "~/components/PartnerLink"
+import { SpotImageCarousel } from "~/components/SpotImageCarousel"
 import { SpotTypeBadge } from "~/components/SpotTypeBadge"
 import { Button } from "~/components/ui/Button"
 import { Spinner } from "~/components/ui/Spinner"
-import { SpotImageCarousel } from "~/components/ui/SpotImageCarousel"
 import { Text } from "~/components/ui/Text"
 import { api } from "~/lib/api"
 import { isTablet, width } from "~/lib/device"
@@ -171,7 +171,6 @@ export const SpotPreview = React.memo(function _SpotPreview({
 
           <View className="overflow-hidden rounded-xs">
             <SpotImageCarousel
-              canAddMore={!isPartnerSpot(spot)}
               onPress={handleGoToSpot}
               key={spot.id} // so images reload
               spot={spot}
