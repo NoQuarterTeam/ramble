@@ -62,15 +62,18 @@ export function PartnerLink(props: Props) {
   }
 
   if (!props.spot.sourceUrl) return null
+
   return (
     <TouchableOpacity
       onPress={handleOpen}
       className="flex flex-row items-center justify-between rounded-xs border border-gray-200 p-2 px-3 dark:border-gray-700/70"
     >
-      <Text className="text-base">Provided by</Text>
+      <Text className="text-base w-[45%] pr-2" numberOfLines={2}>
+        {partner.pretext}
+      </Text>
       <Image
         contentFit="contain"
-        className="h-[40px] w-1/2 bg-right object-contain"
+        className="h-[40px] w-[55%] bg-right object-contain"
         source={{ uri: FULL_WEB_URL + partner.logo[theme] }}
       />
     </TouchableOpacity>
