@@ -12,7 +12,7 @@ export async function GET(request: Request) {
   const url = new URL(request.url)
   const src = url.searchParams.get("src")
   if (!src) return badImageResponse()
-  if (!src.startsWith(assetUrl)) return badImageResponse()
+  if (!src.startsWith(assetUrl)) return getOriginalImage(src)
   try {
     const width = getIntOrNull(url.searchParams.get("width"))
     const height = getIntOrNull(url.searchParams.get("height"))
@@ -63,7 +63,7 @@ export async function GET(request: Request) {
     return getCachedImage(cacheSrc)
   } catch (e) {
     Sentry.captureException(e)
-    return badImageResponse()
+    return getOriginalImage(src)
   }
 }
 
@@ -104,4 +104,9 @@ async function getCachedImage(src: string) {
       "Cache-Control": cacheHeader({ public: true, noTransform: true, maxAge: "1year", sMaxage: "1year", immutable: true }),
     },
   })
+}
+
+async function getOriginalImage(src: string) {
+  const res = await axios.get(src, { responseType: "stream" })
+  return new Response(res.data, { status: 200 })
 }
