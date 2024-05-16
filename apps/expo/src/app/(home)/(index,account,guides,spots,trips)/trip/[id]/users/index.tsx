@@ -11,6 +11,7 @@ import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { Text } from "~/components/ui/Text"
 import { type RouterOutputs, api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 export default function TripUsers() {
   const { id } = useLocalSearchParams<{ id: string }>()
@@ -42,6 +43,7 @@ export default function TripUsers() {
     ])
   }
 
+  const tab = useTabSegment()
   return (
     <ModalView title="users on trip">
       <ScrollView className="flex-1 space-y-2" keyboardShouldPersistTaps="handled" keyboardDismissMode="interactive">
@@ -59,7 +61,7 @@ export default function TripUsers() {
           </>
         )}
         {isCreator ? (
-          <Link asChild push href={`/(home)/(trips)/trips/${id}/users/add`}>
+          <Link asChild push href={`/${tab}/trip/${id}/users/add`}>
             <Button size="sm" variant="secondary">
               Add users
             </Button>

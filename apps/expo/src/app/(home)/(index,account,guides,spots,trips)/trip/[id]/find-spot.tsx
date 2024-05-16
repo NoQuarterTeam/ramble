@@ -24,6 +24,7 @@ import { api } from "~/lib/api"
 import { isTablet, width } from "~/lib/device"
 import { useMapCoords } from "~/lib/hooks/useMapCoords"
 import { useMapSettings } from "~/lib/hooks/useMapSettings"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { useMapFilters } from "../../../../filters"
 
 export default function FindSpotScreen() {
@@ -235,6 +236,7 @@ export function AddTripSpotPreview({ spotId, onClose }: { spotId: string; onClos
     mutate({ tripId: id, spotId, order: parsedOrder })
   }
 
+  const tab = useTabSegment()
   return (
     <Animated.View
       style={{ width: "100%", position: "absolute", bottom: 0, zIndex: 1 }}
@@ -251,7 +253,7 @@ export function AddTripSpotPreview({ spotId, onClose }: { spotId: string; onClos
       ) : (
         <View className="space-y-2">
           <View className="flex flex-row justify-between">
-            <TouchableOpacity onPress={() => router.push(`/(home)/(trips)/spot/${spot.id}`)} activeOpacity={0.9}>
+            <TouchableOpacity onPress={() => router.push(`/${tab}/spot/${spot.id}`)} activeOpacity={0.9}>
               <SpotTypeBadge spot={spot} />
             </TouchableOpacity>
             <TouchableOpacity onPress={onClose} className="flex items-center justify-center p-1">
@@ -260,7 +262,7 @@ export function AddTripSpotPreview({ spotId, onClose }: { spotId: string; onClos
           </View>
 
           <TouchableOpacity
-            onPress={() => router.push(`/(home)/(trips)/spot/${spot.id}`)}
+            onPress={() => router.push(`/${tab}/spot/${spot.id}`)}
             activeOpacity={0.7}
             className="flex flex-row items-center space-x-2"
           >
@@ -295,7 +297,7 @@ export function AddTripSpotPreview({ spotId, onClose }: { spotId: string; onClos
             <SpotImageCarousel
               canAddMore
               spot={spot}
-              onPress={() => router.push(`/(home)/(trips)/spot/${spot.id}`)}
+              onPress={() => router.push(`/${tab}/spot/${spot.id}`)}
               key={spot.id} // so images reload
               width={width - 32}
               height={180}

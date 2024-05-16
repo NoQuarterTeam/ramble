@@ -11,6 +11,7 @@ import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
 import { width } from "~/lib/device"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { formatVideoDuration } from "~/lib/utils"
 
 const size = width / 3
@@ -44,6 +45,7 @@ export default function TripImagesCluster() {
     }
   }, [media, total, parsedBounds, id])
 
+  const tab = useTabSegment()
   return (
     <ScreenView containerClassName="px-0">
       {isLoading ? (
@@ -60,7 +62,7 @@ export default function TripImagesCluster() {
           ListEmptyComponent={<Text className="text-center">Nothing here yet</Text>}
           data={media}
           renderItem={({ item }) => (
-            <Link href={`/(home)/(trips)/trips/${id}/media/${item.id}?bounds=${bounds}`} asChild>
+            <Link href={`/${tab}/trip/${id}/media/${item.id}?bounds=${bounds}`} asChild>
               <TouchableOpacity style={{ width: size, height: size }}>
                 {item.type === "VIDEO" ? (
                   <View className="w-full h-full flex items-center justify-center">
