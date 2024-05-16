@@ -11,13 +11,13 @@ import { Keyboard, TouchableOpacity, View, useColorScheme } from "react-native"
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
 import { Icon } from "~/components/Icon"
 import { MapView } from "~/components/Map"
+import { SpotImageCarousel } from "~/components/SpotImageCarousel"
 import { SpotClusterMarker } from "~/components/SpotMarker"
 import { SpotTypeBadge } from "~/components/SpotTypeBadge"
 import { Button } from "~/components/ui/Button"
 import { Input } from "~/components/ui/Input"
 import { ScreenView } from "~/components/ui/ScreenView"
 import { Spinner } from "~/components/ui/Spinner"
-import { SpotImageCarousel } from "~/components/ui/SpotImageCarousel"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
@@ -295,7 +295,6 @@ export function AddTripSpotPreview({ spotId, onClose }: { spotId: string; onClos
 
           <View className="overflow-hidden rounded-xs">
             <SpotImageCarousel
-              canAddMore
               spot={spot}
               onPress={() => router.push(`/${tab}/spot/${spot.id}`)}
               key={spot.id} // so images reload

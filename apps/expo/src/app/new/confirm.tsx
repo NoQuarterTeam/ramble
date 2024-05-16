@@ -11,7 +11,6 @@ import colors from "@ramble/tailwind-config/src/colors"
 import { Icon } from "~/components/Icon"
 import { SpotIcon } from "~/components/SpotIcon"
 import { Button } from "~/components/ui/Button"
-import { SpotImageCarousel } from "~/components/ui/SpotImageCarousel"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
@@ -19,6 +18,7 @@ import { width } from "~/lib/device"
 import { useS3Upload } from "~/lib/hooks/useS3"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 
+import { ImageCarousel } from "~/components/ui/ImageCarousel"
 import { NewSpotModalView } from "./NewSpotModalView"
 
 type Params = {
@@ -101,11 +101,7 @@ export default function NewSpotConfirmScreen() {
           </View>
           {params.images && params.images.length > 0 && (
             <View className="overflow-hidden rounded-xs">
-              <SpotImageCarousel
-                width={width - 32}
-                height={200}
-                images={params.images.split(",").map((path) => ({ path, blurHash: null }))}
-              />
+              <ImageCarousel width={width - 32} height={200} images={params.images.split(",")} />
             </View>
           )}
 

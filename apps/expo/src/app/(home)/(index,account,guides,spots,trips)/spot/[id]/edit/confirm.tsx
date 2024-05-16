@@ -9,7 +9,6 @@ import { AMENITIES } from "@ramble/shared"
 import { Icon } from "~/components/Icon"
 import { SpotIcon } from "~/components/SpotIcon"
 import { Button } from "~/components/ui/Button"
-import { SpotImageCarousel } from "~/components/ui/SpotImageCarousel"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
@@ -18,6 +17,7 @@ import { useS3Upload } from "~/lib/hooks/useS3"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
 
+import { ImageCarousel } from "~/components/ui/ImageCarousel"
 import { EditSpotModalView } from "./EditSpotModalView"
 
 type Params = {
@@ -96,11 +96,7 @@ export default function EditSpotConfirmScreen() {
           </View>
           {params.images.length > 0 && (
             <View className="overflow-hidden rounded-xs">
-              <SpotImageCarousel
-                width={width - 32}
-                height={200}
-                images={params.images.split(",").map((path) => ({ path, blurHash: null }))}
-              />
+              <ImageCarousel width={width - 32} height={200} images={params.images.split(",")} />
             </View>
           )}
 
