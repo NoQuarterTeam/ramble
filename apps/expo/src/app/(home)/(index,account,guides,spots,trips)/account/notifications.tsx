@@ -169,12 +169,7 @@ function NotificationType({ userNotification }: { userNotification: RouterOutput
         },
       })
       return (
-        <Link
-          push
-          asChild
-          // @ts-ignore
-          href={`/(home)/(account)/${userNotification.notification.initiator.username}`}
-        >
+        <Link push asChild href={`/(home)/(account)/${userNotification.notification.initiator.username}/(profile)`}>
           <TouchableOpacity className="flex flex-row items-center justify-between space-x-2">
             <View className="flex flex-row items-center space-x-4">
               {initiator.avatar ? (

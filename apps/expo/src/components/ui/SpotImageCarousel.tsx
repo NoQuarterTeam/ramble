@@ -1,18 +1,16 @@
+import type { Spot } from "@ramble/database/types"
+import { createAssetUrl, merge } from "@ramble/shared"
 import { FlashList } from "@shopify/flash-list"
+import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 import * as ImagePicker from "expo-image-picker"
 import { router, useRouter } from "expo-router"
 import { Image, User2 } from "lucide-react-native"
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
-
-import type { Spot } from "@ramble/database/types"
-import { createAssetUrl, merge } from "@ramble/shared"
-
-import { useMe } from "~/lib/hooks/useMe"
-
-import dayjs from "dayjs"
 import type { RouterOutputs } from "~/lib/api"
+import { useMe } from "~/lib/hooks/useMe"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { useFeedbackActivity } from "../FeedbackCheck"
 import { Icon } from "../Icon"
 import { Button } from "./Button"
@@ -56,6 +54,7 @@ export function SpotImageCarousel({
   const [imageIndex, setImageIndex] = React.useState(0)
   const ref = React.useRef<FlashList<RouterOutputs["spot"]["detail"]["spot"]["images"][0]>>(null)
   const itemWidth = width / (noOfColumns || 1) - (noOfColumns && noOfColumns > 1 ? 10 : 0)
+  const tab = useTabSegment()
   return (
     <View style={{ width, height }} className="bg-background dark:bg-background-dark">
       <FlashList
@@ -95,15 +94,15 @@ export function SpotImageCarousel({
               onPress={() => {
                 increment()
                 if (image.creator.deletedAt) return
-                router.push(`/(home)/(index)/${image.creator.username}/(profile)`)
+                router.push(`/${tab}/${image.creator.username}/(profile)`)
               }}
               activeOpacity={image.creator.deletedAt ? 1 : 0.7}
-              className="absolute bottom-2 right-2 p-1 pr-2 rounded-full bg-gray-800/70 flex flex-row space-x-1 items-center"
+              className="absolute bottom-2 right-2 p-1 rounded-full bg-gray-800/70 flex flex-row space-x-1.5 items-center"
             >
               {image.creator?.avatar ? (
                 <OptimizedImage
-                  height={30}
-                  width={30}
+                  height={40}
+                  width={40}
                   placeholder={image.creator.avatarBlurHash}
                   source={{ uri: createAssetUrl(image.creator.avatar) }}
                   className="sq-7 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
@@ -113,11 +112,11 @@ export function SpotImageCarousel({
                   <Icon icon={User2} size={18} />
                 </View>
               )}
-              <View className="max-w-[65px]">
-                <Text className="text-white text-xs leading-3" numberOfLines={1}>
+              <View>
+                <Text className="text-white text-xs leading-3 w-[50px]" numberOfLines={1}>
                   {image.creator.username}
                 </Text>
-                <Text className="text-white text-xxs leading-3" numberOfLines={1}>
+                <Text className="text-white text-xxs leading-3 opacity-80" numberOfLines={1}>
                   {dayjs(image.createdAt).format("DD/MM/YYYY")}
                 </Text>
               </View>
