@@ -30,7 +30,13 @@ export function ModalView(props: Props) {
         className={merge("flex-1 bg-background px-4 pt-4 dark:bg-background-dark", props.containerClassName)}
       >
         <View className="flex flex-row justify-between pb-2">
-          {props.title ? <BrandHeading className="w-11/12 text-3xl">{props.title.toLowerCase()}</BrandHeading> : <Text />}
+          {props.title ? (
+            <BrandHeading className="w-11/12 text-3xl" numberOfLines={1}>
+              {props.title.toLowerCase()}
+            </BrandHeading>
+          ) : (
+            <Text />
+          )}
           <TouchableOpacity onPress={props.onBack || router.back} className="p-1">
             <Icon icon={X} size={24} />
           </TouchableOpacity>

@@ -56,7 +56,7 @@ export default function EditSpotConfirmScreen() {
 
   const [isLoading, setLoading] = React.useState(false)
   const [upload] = useS3Upload()
-  const amenities = params.amenities ? JSON.parse(params.amenities) : null
+  const amenities = params.amenities ? JSON.parse(params.amenities) : undefined
 
   const isPetFriendly = params.isPetFriendly === "true"
   const handleCreateSpot = async () => {

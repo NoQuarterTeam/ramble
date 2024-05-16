@@ -30,6 +30,7 @@ import { type RouterOutputs, api } from "~/lib/api"
 import { width } from "~/lib/device"
 import { useMapCoords } from "~/lib/hooks/useMapCoords"
 import { useS3QuickUpload } from "~/lib/hooks/useS3"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { formatVideoDuration } from "~/lib/utils"
 
 const size = width / 3
@@ -159,6 +160,7 @@ export default function TripMedia() {
     ])
   }
 
+  const tab = useTabSegment()
   return (
     <ScreenView
       containerClassName="px-0"
@@ -214,7 +216,7 @@ export default function TripMedia() {
                         s.find((i) => i.id === item.id) ? s.filter((i) => i.id !== item.id) : [...s, item],
                       )
                     } else {
-                      return router.push(`/(home)/(trips)/trips/${id}/media/${item.id}`)
+                      return router.push(`/${tab}/trip/${id}/media/${item.id}`)
                     }
                   }}
                 >

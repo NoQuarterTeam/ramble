@@ -21,7 +21,7 @@ export default function ListDetailScreen() {
   const tab = useTabSegment()
   return (
     <ScreenView
-      title={list?.name || ""}
+      title={list?.name}
       rightElement={
         list &&
         me?.id === list.creatorId && (

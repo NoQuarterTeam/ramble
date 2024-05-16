@@ -21,6 +21,7 @@ import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
 import { height, isAndroid, width } from "~/lib/device"
 import { useMe } from "~/lib/hooks/useMe"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
 const clamp = (value: number, min: number, max: number): number => {
   "worklet"
@@ -238,6 +239,7 @@ export default function TripImage() {
       video.current?.playAsync()
     }
   }
+  const tab = useTabSegment()
 
   return (
     <ScreenView
@@ -269,7 +271,7 @@ export default function TripImage() {
           >
             <View className="flex-1">
               {(!data.latitude || !data.longitude) && (
-                <Link push href={`/(home)/(trips)/trips/${id}/media/${mediaId}/add-location`} asChild>
+                <Link push href={`/${tab}/trip/${id}/media/${mediaId}/add-location`} asChild>
                   <Icon icon={MapPin} size={20} />
                 </Link>
               )}

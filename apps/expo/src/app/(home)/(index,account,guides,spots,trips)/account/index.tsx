@@ -2,6 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import { type AllRoutes, type Href, Link, useRouter } from "expo-router"
 import {
   AlertCircle,
+  Bell,
   ChevronRight,
   Heart,
   MessageCircle,
@@ -32,6 +33,8 @@ export default function AccountScreen() {
   const { me } = useMe()
   const router = useRouter()
   const utils = api.useUtils()
+
+  const { data: unreadCount } = api.notification.unreadCount.useQuery(undefined, { enabled: !!me })
 
   const { mutate, data } = api.user.sendVerificationEmail.useMutation({
     onSuccess: () => {
@@ -66,7 +69,21 @@ export default function AccountScreen() {
       </TabView>
     )
   return (
-    <TabView title="account">
+    <TabView
+      title="account"
+      rightElement={
+        <Link asChild push href="/(home)/(account)/account/notifications">
+          <TouchableOpacity className="p-2 relative">
+            <Icon icon={Bell} size={22} />
+            {!!unreadCount && unreadCount > 0 && (
+              <View className="absolute top-1.5 right-1.5 border-2 border-background dark:border-background-dark">
+                <View className="bg-red-500 rounded-full sq-2" />
+              </View>
+            )}
+          </TouchableOpacity>
+        </Link>
+      }
+    >
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false} className="flex-1 space-y-4">
         {!me.isVerified && (
           <View className="flex flex-col space-y-3 rounded-xs border border-gray-200 p-2 pl-4 dark:border-gray-700">

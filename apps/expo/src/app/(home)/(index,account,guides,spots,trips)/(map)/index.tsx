@@ -306,12 +306,31 @@ function MapContainer() {
         }}
       />
 
-      <TouchableOpacity
-        onPress={handleSetUserLocation}
-        className="sq-12 shadow absolute right-3 bottom-3 flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
-      >
-        <Icon icon={Navigation} size={20} />
-      </TouchableOpacity>
+      <View pointerEvents="box-none" className="absolute bottom-3 left-3 flex space-y-2">
+        <Link push href="/layers" asChild>
+          <TouchableOpacity
+            onPress={() => increment()}
+            activeOpacity={0.8}
+            className="sq-12 shadow flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
+          >
+            <Icon icon={Layers} size={20} />
+          </TouchableOpacity>
+        </Link>
+        <Link push href="/filters" asChild>
+          <TouchableOpacity
+            onPress={() => increment()}
+            activeOpacity={0.8}
+            className="sq-12 shadow flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark relative"
+          >
+            <Icon icon={Settings2} size={20} />
+            {filters.types.length > 0 && (
+              <View className="absolute -top-1.5 -right-1.5 bg-primary rounded-full w-6 h-6">
+                <Text className="text-white text-sm text-center font-700 leading-6">{filters.types.length}</Text>
+              </View>
+            )}
+          </TouchableOpacity>
+        </Link>
+      </View>
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={() => {
@@ -324,26 +343,12 @@ function MapContainer() {
         <Icon icon={PlusCircle} size={20} color="white" />
       </TouchableOpacity>
 
-      <View pointerEvents="box-none" className="absolute bottom-3 left-3 flex space-y-2">
-        <Link push href={"/layers"} asChild>
-          <TouchableOpacity
-            onPress={() => increment()}
-            activeOpacity={0.8}
-            className="sq-12 flex flex-row items-center shadow justify-center rounded-full bg-background dark:bg-background-dark"
-          >
-            <Icon icon={Layers} size={20} />
-          </TouchableOpacity>
-        </Link>
-        <Link push href={"/filters"} asChild>
-          <TouchableOpacity
-            onPress={() => increment()}
-            activeOpacity={0.8}
-            className="sq-12 flex flex-row items-center shadow justify-center rounded-full bg-background dark:bg-background-dark"
-          >
-            <Icon icon={Settings2} size={20} />
-          </TouchableOpacity>
-        </Link>
-      </View>
+      <TouchableOpacity
+        onPress={handleSetUserLocation}
+        className="sq-12 shadow absolute right-3 bottom-3 flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
+      >
+        <Icon icon={Navigation} size={20} />
+      </TouchableOpacity>
       {activeSpotId && <SpotPreview id={activeSpotId} onSetSpotId={setActiveSpotId} />}
       {selectedBioRegion && <BioRegionPreview id={selectedBioRegion} onClose={handleCloseBioRegionPreview} />}
     </>

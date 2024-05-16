@@ -127,7 +127,15 @@ export const spotRouter = createTRPCRouter({
         _count: { select: { listSpots: true, reviews: true } },
         listSpots: ctx.user ? { where: { list: { creatorId: ctx.user.id } } } : undefined,
         coverId: true,
-        images: true,
+        images: {
+          select: {
+            id: true,
+            path: true,
+            blurHash: true,
+            createdAt: true,
+            creator: { select: { id: true, username: true, avatar: true, avatarBlurHash: true, deletedAt: true } },
+          },
+        },
       },
     })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
@@ -197,7 +205,15 @@ export const spotRouter = createTRPCRouter({
             },
             orderBy: { createdAt: "desc" },
           },
-          images: true,
+          images: {
+            select: {
+              id: true,
+              path: true,
+              blurHash: true,
+              createdAt: true,
+              creator: { select: { id: true, username: true, avatar: true, avatarBlurHash: true, deletedAt: true } },
+            },
+          },
           amenities: { select: amenitiesFields },
           listSpots: ctx.user ? { where: { list: { creatorId: ctx.user.id } } } : undefined,
         },
@@ -341,7 +357,7 @@ export const spotRouter = createTRPCRouter({
             .object({
               coverId: z.string(),
               images: z.array(z.object({ path: z.string() })),
-              amenities: spotAmenitiesSchema.partial(),
+              amenities: spotAmenitiesSchema.partial().nullish(),
             })
             .partial(),
         ),
