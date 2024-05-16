@@ -45,7 +45,7 @@ export default function UserVan() {
         </View>
       </View>
       <Text className="text-base">{van.description}</Text>
-      <View className="flex flex-row flex-wrap gap-1">
+      <View className="flex flex-row flex-wrap space-x-1">
         {van.hasShower && (
           <View className="p-2 rounded-sm border border-gray-200 dark:border-gray-700">
             <Icon icon={ShowerHead} size={20} />
