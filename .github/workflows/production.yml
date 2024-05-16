@@ -43,7 +43,11 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --ignore-scripts
-
+        
+      - name: Typecheck
+        working-directory: apps/expo
+        run: pnpm typecheck
+          
       - name: Create preview
         uses: expo/expo-github-action/preview@v8
         with:
