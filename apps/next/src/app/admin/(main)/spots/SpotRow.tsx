@@ -24,7 +24,6 @@ interface Props {
 
 export function SpotRow({ spot }: Props) {
   const expandProps = useDisclosure()
-  const mapImageUrl = `https://api.mapbox.com/styles/v1/jclackett/clh82otfi00ay01r5bftedls1/static/geojson(%7B%22type%22%3A%22Point%22%2C%22coordinates%22%3A%5B${spot.longitude}%2C${spot.latitude}%5D%7D)/${spot.longitude},${spot.latitude},4/300x200@2x?access_token=pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw`
   const [isVerifying, startVerify] = React.useTransition()
   const [isDeleting, startDelete] = React.useTransition()
 
@@ -120,7 +119,13 @@ export function SpotRow({ spot }: Props) {
           <TableCell colSpan={6}>
             <div className="flex w-full gap-1 overflow-x-scroll">
               <div className="flex-shrink-0">
-                <img height={200} width={300} className="h-[200px] w-[300px] rounded" alt="location" src={mapImageUrl} />
+                <img
+                  height={200}
+                  width={300}
+                  className="h-[200px] w-[300px] rounded"
+                  alt="location"
+                  src={`https://api.mapbox.com/styles/v1/jclackett/clh82otfi00ay01r5bftedls1/static/geojson(%7B%22type%22%3A%22Point%22%2C%22coordinates%22%3A%5B${spot.longitude}%2C${spot.latitude}%5D%7D)/${spot.longitude},${spot.latitude},4/300x200@2x?access_token=pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw`}
+                />
               </div>
               <div className="relative flex flex-shrink-0">
                 {spot.cover ? (
