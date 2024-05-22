@@ -71,7 +71,7 @@ function MapContainer() {
     placeholderData: keepPreviousData,
   })
   const { data: users } = api.user.clusters.useQuery(mapSettings ? mapSettings : undefined, {
-    enabled: !!mapSettings && !!me && layers.shouldShowUsers,
+    enabled: !!mapSettings && layers.shouldShowUsers,
     placeholderData: keepPreviousData,
   })
 
@@ -212,9 +212,10 @@ function MapContainer() {
         return (
           <MarkerView key={user.id} allowOverlap allowOverlapWithPuck coordinate={point.geometry.coordinates}>
             <TouchableOpacity
-              activeOpacity={0.7}
+              activeOpacity={me ? 0.7 : 0}
               onPress={() => {
                 increment()
+                if (!me) return
                 router.push(`/(home)/(index)/${user.username}/(profile)`)
               }}
               className="sq-8 flex items-center justify-center overflow-hidden rounded-full border border-primary-200 bg-primary-700"
