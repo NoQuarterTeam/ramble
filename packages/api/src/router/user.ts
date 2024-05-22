@@ -180,7 +180,11 @@ export const userRouter = createTRPCRouter({
              */
             lists: { where: { isPrivate: false } },
             createdTrips: true,
+            /**
+             * @deprecated in v1.5.1 - use created now
+             */
             verifiedSpots: { where: { sourceUrl: { equals: null }, deletedAt: null, verifiedAt: { not: null } } },
+            createdSpots: { where: { sourceUrl: { equals: null }, deletedAt: null, verifiedAt: { not: null } } },
           },
         },
       },
