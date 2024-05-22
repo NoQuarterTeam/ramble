@@ -90,7 +90,7 @@ function GuideItem(props: { guide: RouterOutputs["user"]["guides"][number] }) {
         </View>
         <View className="flex flex-row items-center justify-around gap-4">
           <View className="flex flex-row items-center space-x-1">
-            <Text className="font-600">{props.guide._count?.verifiedSpots.toLocaleString()}</Text>
+            <Text className="font-600">{props.guide._count?.createdSpots.toLocaleString()}</Text>
             <Text>spots</Text>
           </View>
           <View className="flex flex-row items-center space-x-1">
