@@ -1,6 +1,7 @@
 "use client"
 import { MapView } from "@/components/Map"
 import { SpotClusterMarker } from "@/components/SpotMarker"
+import { Spinner } from "@/components/ui"
 import { useMapSettings } from "@/lib/hooks/useMapSettings"
 import { type RouterOutputs, api } from "@/lib/trpc/react"
 import { createAssetUrl, join } from "@ramble/shared"
@@ -33,10 +34,13 @@ export function MapPage() {
     })
   }
 
-  const { data } = api.spot.clusters.useQuery(mapSettings ? { ...mapSettings, types: ["CAMPING", "VAN_PARK"] } : undefined, {
-    enabled: !!mapSettings,
-    placeholderData: keepPreviousData,
-  })
+  const { data, isPending } = api.spot.clusters.useQuery(
+    mapSettings ? { ...mapSettings, types: ["CAMPING", "VAN_PARK"] } : undefined,
+    {
+      enabled: !!mapSettings,
+      placeholderData: keepPreviousData,
+    },
+  )
   const { data: userData } = api.user.clusters.useQuery(mapSettings || undefined, {
     enabled: !!mapSettings,
     placeholderData: keepPreviousData,
@@ -103,7 +107,13 @@ export function MapPage() {
         {spotMarkers}
         {userMarkers}
       </MapView>
-
+      {isPending && (
+        <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+          <div className="bg-background shadow bg-opacity-50 rounded p-4">
+            <Spinner />
+          </div>
+        </div>
+      )}
       <MapLayerControls />
       <MapFilters />
       <MapSearch onSearch={(center) => mapRef.current?.flyTo({ center })} />
@@ -145,7 +155,6 @@ function UserClusterMarker(props: UserMarkerProps) {
               width={50}
               height={50}
               alt="user location"
-              // placeholder={props.point.properties.avatarBlurHash}
               src={createAssetUrl(props.point.properties.avatar)}
               className="sq-10 rounded-full object-cover"
             />
