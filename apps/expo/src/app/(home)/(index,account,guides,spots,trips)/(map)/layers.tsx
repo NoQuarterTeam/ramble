@@ -163,27 +163,26 @@ export default function MapLayers() {
         </View>
         <View className="h-1 border-gray-200 border-t dark:border-gray-700" />
 
-        {me && (
-          <View className="flex flex-row items-center justify-between space-x-2 p-3">
-            <View className="flex flex-row items-center space-x-3">
-              <Icon icon={Users2} size={24} />
-              <View>
-                <Text className="h-[25px] text-lg">Ramble users</Text>
-                <Text numberOfLines={2} style={{ lineHeight: 16 }} className="max-w-[220px] text-sm opacity-75">
-                  See the approximate location of other Ramble users
-                </Text>
-              </View>
+        <View className="flex flex-row items-center justify-between space-x-2 p-3">
+          <View className="flex flex-row items-center space-x-3">
+            <Icon icon={Users2} size={24} />
+            <View>
+              <Text className="h-[25px] text-lg">Ramble users</Text>
+              <Text numberOfLines={2} style={{ lineHeight: 16 }} className="max-w-[220px] text-sm opacity-75">
+                See the approximate location of other Ramble users
+              </Text>
             </View>
-            <Switch
-              trackColor={{ true: colors.primary[600] }}
-              value={layers.shouldShowUsers}
-              onValueChange={() => {
-                posthog.capture("map should show users", { shouldShowUsers: !layers.shouldShowUsers })
-                setLayers({ ...layers, shouldShowUsers: !layers.shouldShowUsers })
-              }}
-            />
           </View>
-        )}
+          <Switch
+            trackColor={{ true: colors.primary[600] }}
+            value={layers.shouldShowUsers}
+            onValueChange={() => {
+              posthog.capture("map should show users", { shouldShowUsers: !layers.shouldShowUsers })
+              setLayers({ ...layers, shouldShowUsers: !layers.shouldShowUsers })
+            }}
+          />
+        </View>
+
         <Text className="py-2">More coming soon!</Text>
       </View>
     </ModalView>
