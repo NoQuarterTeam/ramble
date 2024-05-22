@@ -175,9 +175,6 @@ export const userRouter = createTRPCRouter({
         _count: {
           select: {
             followers: true,
-            /**
-             * @deprecated in v1.4.11 - use trips now
-             */
             lists: { where: { isPrivate: false } },
             createdTrips: true,
             /**
