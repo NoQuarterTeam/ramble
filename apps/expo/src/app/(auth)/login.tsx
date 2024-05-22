@@ -5,7 +5,6 @@ import { ScrollView, View } from "react-native"
 import { Button } from "~/components/ui/Button"
 import { FormInput } from "~/components/ui/FormInput"
 import { ModalView } from "~/components/ui/ModalView"
-import { Text } from "~/components/ui/Text"
 import { AUTH_TOKEN, api } from "~/lib/api"
 import { useForm } from "~/lib/hooks/useForm"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
@@ -64,19 +63,20 @@ export default function LoginScreen() {
               label="Password"
               error={error}
             />
-            <Button className="mb-1" isLoading={isLoading} disabled={isLoading} onPress={onSubmit}>
+            <Button className="mb-2" isLoading={isLoading} disabled={isLoading} onPress={onSubmit}>
               Login
+            </Button>
+            <Button variant="link" onPress={() => navigation.push("/forgot-password")}>
+              Forgot password?
             </Button>
           </View>
           <View>
-            <View className="flex flex-row items-center justify-center mb-2">
-              <Text className="text-base">No account yet?</Text>
-              <Button className="px-1" variant="link" onPress={() => navigation.replace("/register")}>
-                Register
-              </Button>
-            </View>
-            <Button className="px-1" variant="link" onPress={() => navigation.push("/forgot-password")}>
-              Forgot password?
+            <Button className="mb-2" variant="link" onPress={() => navigation.push("/request-access")}>
+              Request access
+            </Button>
+
+            <Button className="mb-2" variant="link" onPress={() => navigation.replace("/register")}>
+              Register
             </Button>
           </View>
         </ScrollView>
