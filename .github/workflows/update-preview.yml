@@ -1,4 +1,4 @@
-name: preview
+name: Update preview app
 on:
   push:
     paths:
