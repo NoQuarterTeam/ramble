@@ -10,14 +10,14 @@
     "with-env": "dotenv -e ../../../.env --"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.577.0",
-    "@aws-sdk/lib-storage": "3.577.0",
-    "@aws-sdk/s3-request-presigner": "3.577.0",
+    "@aws-sdk/client-s3": "3.582.0",
+    "@aws-sdk/lib-storage": "3.582.0",
+    "@aws-sdk/s3-request-presigner": "3.582.0",
     "@ramble/database": "workspace:*",
     "@ramble/emails": "workspace:*",
     "@ramble/server-env": "workspace:*",
     "@ramble/shared": "workspace:*",
-    "@react-email/render": "^0.0.13",
+    "@react-email/render": "^0.0.14",
     "@slack/web-api": "7.0.4",
     "bcryptjs": "2.4.3",
     "blurhash": "2.0.5",
