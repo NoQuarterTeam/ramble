@@ -17,6 +17,7 @@ export * from "./notifications/user-followed"
 export * from "./notifications/trip-spot-added"
 export * from "./notifications/trip-stop-added"
 export * from "./notifications/trip-media-added"
+export * from "./notifications/spot-verified"
 export * from "./weather"
 
 export * from "./mailers/access-request"
