@@ -183,7 +183,7 @@ function NotificationType({ userNotification }: { userNotification: RouterOutput
           rightElement={
             <Button
               size="sm"
-              className="h-8 w-[80px]"
+              className="h-8 w-[85px]"
               variant={initiator.followers.length === 0 ? "primary" : "secondary"}
               onPress={() => mutate({ username: initiator.username })}
             >
