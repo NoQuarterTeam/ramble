@@ -25,4 +25,14 @@ interface TripMediaAddedPayload extends NotificationPayloadType {
   tripId: string
 }
 
-export type NotificationPayload = UserFollowedPayload | TripSpotAddedPayload | TripStopAddedPayload | TripMediaAddedPayload
+interface SpotVerifiedPayload extends NotificationPayloadType {
+  type: "SPOT_VERIFIED"
+  spotId: string
+}
+
+export type NotificationPayload =
+  | UserFollowedPayload
+  | TripSpotAddedPayload
+  | TripStopAddedPayload
+  | TripMediaAddedPayload
+  | SpotVerifiedPayload
