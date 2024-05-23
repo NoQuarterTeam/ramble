@@ -3,12 +3,14 @@ import {
   createAuthToken,
   deleteObject,
   generateBlurHash,
+  getLanguage,
   sendAccountVerificationEmail,
   sendSlackMessage,
   sendUserFollowedNotification,
   updateLoopsContact,
 } from "@ramble/server-services"
 import { userInterestFields } from "@ramble/shared"
+import * as Sentry from "@sentry/nextjs"
 import { TRPCError } from "@trpc/server"
 import { waitUntil } from "@vercel/functions"
 import dayjs from "dayjs"
@@ -16,6 +18,7 @@ import Supercluster from "supercluster"
 import { z } from "zod"
 
 import type { User } from "@ramble/database/types"
+import { FULL_WEB_URL } from "@ramble/server-env"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const userRouter = createTRPCRouter({
@@ -36,10 +39,25 @@ export const userRouter = createTRPCRouter({
         followers: ctx.user ? { where: { id: ctx.user.id } } : undefined,
         _count: { select: { followers: true, following: true } },
         bio: true,
+        bioLanguage: true,
       },
     })
     if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
-    return { ...user, isFollowedByMe: user.followers && user.followers.length > 0 }
+    let language = user.bioLanguage
+    if (!language && user.bio) {
+      language = await getLanguage(user.bio)
+      await ctx.prisma.user.update({ where: { id: user.id }, data: { bioLanguage: language } })
+    }
+    let translatedBio: string | null | undefined
+    if (ctx.user && user.bio && language !== ctx.user.preferredLanguage) {
+      translatedBio = await fetch(`${FULL_WEB_URL}/api/translations/${ctx.user.preferredLanguage}/${user.bio}`)
+        .then((r) => r.json() as Promise<string | null>)
+        .catch((error) => {
+          Sentry.captureException(error)
+          return null
+        })
+    }
+    return { ...user, isFollowedByMe: user.followers && user.followers.length > 0, translatedBio }
   }),
   hasCreatedSpot: protectedProcedure.query(async ({ ctx }) => {
     const spot = await ctx.prisma.spot.findFirst({ where: { creatorId: ctx.user.id }, select: { id: true } })

@@ -64,9 +64,9 @@ export default function AccountSettingsScreen() {
             <View className="flex flex-row items-center space-x-3">
               <Icon icon={Languages} size={30} />
               <View>
-                <Text className="h-[22px] text-base">Description & review language</Text>
+                <Text className="h-[22px] text-base">Preferred content language</Text>
                 <Text style={{ lineHeight: 16 }} numberOfLines={3} className="max-w-[220px] text-sm opacity-75">
-                  What language to show for the spot description and reviews
+                  What language to show for the spot description, reviews, user bios, etc
                 </Text>
               </View>
             </View>

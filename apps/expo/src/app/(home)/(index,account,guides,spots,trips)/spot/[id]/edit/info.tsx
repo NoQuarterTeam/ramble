@@ -60,7 +60,9 @@ export default function EditSpotOptionsScreen() {
           />
         </View>
         <FormInputLabel label="Describe the spot" />
-        <Input value={description || ""} onChangeText={setDescription} multiline numberOfLines={4} />
+        <View className="max-h-[65%]">
+          <Input value={description || ""} onChangeText={setDescription} multiline numberOfLines={4} />
+        </View>
       </ScrollView>
 
       <Animated.View

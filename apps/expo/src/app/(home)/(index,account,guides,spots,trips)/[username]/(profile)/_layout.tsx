@@ -1,10 +1,10 @@
 import { Slot, useLocalSearchParams, useRouter, useSegments } from "expo-router"
 import { StatusBar } from "expo-status-bar"
-import { Heart, Instagram, User2 } from "lucide-react-native"
+import { Heart, Instagram, Languages, User2 } from "lucide-react-native"
 import * as React from "react"
 import { Linking, ScrollView, TouchableOpacity, View, useColorScheme } from "react-native"
 
-import { createAssetUrl } from "@ramble/shared"
+import { createAssetUrl, languages } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
@@ -19,16 +19,20 @@ import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { interestOptions } from "~/lib/models/user"
 
 export default function UserScreen() {
-  const colorScheme = useColorScheme()
-  const isDark = colorScheme === "dark"
   const { me } = useMe()
+  const router = useRouter()
+  const utils = api.useUtils()
+  const colorScheme = useColorScheme()
+
+  const isDark = colorScheme === "dark"
+
   const params = useLocalSearchParams<{ username: string }>()
   const username = params.username
 
   const { data: user, isPending: isLoading } = api.user.profile.useQuery({ username }, { staleTime: 30000, enabled: !!username })
 
-  const router = useRouter()
-  const utils = api.useUtils()
+  const [isTranslated, setIsTranslated] = React.useState(!!user?.translatedBio)
+
   const { mutate } = api.user.toggleFollow.useMutation({
     onSuccess: () => {
       if (!me) return
@@ -158,7 +162,28 @@ export default function UserScreen() {
                 <Text>{user.instagram}</Text>
               </TouchableOpacity>
             )}
-            <Text>{user.bio}</Text>
+            <View className="space-y-1">
+              <Text>{isTranslated ? user.translatedBio : user.bio}</Text>
+              {user.translatedBio && (
+                <View className="flex items-end my-2">
+                  <Button
+                    leftIcon={<Languages size={14} color="black" />}
+                    onPress={() => setIsTranslated((t) => !t)}
+                    variant="link"
+                    size="xs"
+                    className="px-0 h-5"
+                  >
+                    {isTranslated
+                      ? `Translated - See original (${
+                          languages.find((l) => l.code === user.bioLanguage)?.name || user.bioLanguage
+                        })`
+                      : `See translation (${
+                          languages.find((l) => l.code === me?.preferredLanguage)?.name || me?.preferredLanguage
+                        })`}
+                  </Button>
+                </View>
+              )}
+            </View>
           </View>
 
           <View className="flex flex-row items-center justify-center space-x-2 border-gray-100 border-b bg-background py-2 dark:border-gray-800 dark:bg-background-dark">

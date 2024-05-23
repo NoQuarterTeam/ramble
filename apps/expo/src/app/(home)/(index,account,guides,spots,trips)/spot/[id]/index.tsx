@@ -1,5 +1,3 @@
-import * as Sentry from "@sentry/react-native"
-import { useQuery } from "@tanstack/react-query"
 import dayjs from "dayjs"
 import advancedFormat from "dayjs/plugin/advancedFormat"
 import { Image } from "expo-image"
@@ -38,22 +36,12 @@ import Animated, {
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import type { Spot } from "@ramble/database/types"
-import {
-  AMENITIES,
-  canManageSpot,
-  displayRating,
-  displaySaved,
-  isPartnerSpot,
-  languages,
-  merge,
-  useDisclosure,
-} from "@ramble/shared"
+import { AMENITIES, canManageSpot, displayRating, displaySaved, isPartnerSpot, languages, merge } from "@ramble/shared"
 
 import { Camera, LocationPuck, MarkerView } from "@rnmapbox/maps"
 import utc from "dayjs/plugin/utc"
 import { CreatorCard } from "~/components/CreatorCard"
 import { Icon } from "~/components/Icon"
-import { LanguageSelector } from "~/components/LanguageSelector"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { MapView } from "~/components/Map"
 import { PartnerLink } from "~/components/PartnerLink"
@@ -213,11 +201,7 @@ export default function SpotDetailScreen() {
             <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <CreatorCard spot={spot} />}</View>
             {spot.description && (
               <View>
-                <TranslateSpotDescription
-                  spot={spot}
-                  hash={data.descriptionHash}
-                  translatedDescription={data.translatedDescription}
-                />
+                <TranslateSpotDescription spot={spot} translatedDescription={data.translatedDescription} />
               </View>
             )}
             {spot.address && <Text className="font-400-italic text-sm">{spot.address}</Text>}
@@ -485,11 +469,7 @@ export default function SpotDetailScreen() {
             activeOpacity={0.8}
             className="sq-7 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
           >
-            <Icon
-              icon={Route}
-              size={16}
-              // fill={data.isLiked ? (isDark ? "white" : "black") : "transparent"}
-            />
+            <Icon icon={Route} size={16} />
           </TouchableOpacity>
         </View>
       </View>
@@ -529,53 +509,35 @@ function Skeleton(props: ViewProps) {
 }
 
 interface DescProps {
-  spot: Pick<Spot, "id" | "description">
-  hash?: string | null
+  spot: Pick<Spot, "id" | "description" | "language">
   translatedDescription?: string | null
 }
 
-type TranslateInput = { id: string; lang: string; hash: string }
-async function getTranslation({ id, lang, hash }: TranslateInput) {
-  try {
-    const res = await fetch(`${FULL_WEB_URL}/api/spots/${id}/translate/${lang}?hash=${hash}`)
-    return await res.json()
-  } catch (e) {
-    Sentry.captureException(e)
-    return "Error translating description"
-  }
-}
-
-function TranslateSpotDescription(props: DescProps) {
-  const modalProps = useDisclosure()
+function TranslateSpotDescription({ spot, translatedDescription }: DescProps) {
   const { me } = useMe()
-  const [lang, setLang] = React.useState<string>(me?.preferredLanguage || "en")
-  const { data, error, isLoading } = useQuery<TranslateInput, string, string>({
-    queryKey: ["spot-translation", { id: props.spot.id, lang, hash: props.hash || "" }],
-    queryFn: () => getTranslation({ id: props.spot.id, lang, hash: props.hash || "" }),
-    staleTime: Number.POSITIVE_INFINITY,
-    enabled: !!me && lang !== me.preferredLanguage,
-  })
-
-  if (!props.spot.description) return null
+  const [isTranslated, setIsTranslated] = React.useState(!!translatedDescription)
+  if (!spot.description) return null
   return (
     <View className="space-y-1">
       <View className="flex flex-row items-center justify-between">
         <Text className="font-600">Description</Text>
-        <Button
-          leftIcon={<Icon icon={Languages} size={16} />}
-          rightIcon={<Icon icon={ChevronDown} size={16} />}
-          isLoading={isLoading}
-          variant="outline"
-          disabled={!me}
-          size="xs"
-          onPress={modalProps.onOpen}
-        >
-          {languages.find((l) => l.code === lang)?.name || "English"}
-        </Button>
       </View>
-      <Text>{data || props.translatedDescription || props.spot.description}</Text>
-      {error && <Text className="text-sm">{error}</Text>}
-      <LanguageSelector modalProps={modalProps} selectedLanguage={lang} setSelectedLang={setLang} />
+      <Text>{isTranslated ? translatedDescription : spot.description}</Text>
+      {translatedDescription && (
+        <View className="flex items-end my-2">
+          <Button
+            leftIcon={<Languages size={14} color="black" />}
+            onPress={() => setIsTranslated((t) => !t)}
+            variant="link"
+            size="xs"
+            className="px-0 h-5"
+          >
+            {isTranslated
+              ? `Translated - See original (${languages.find((l) => l.code === spot.language)?.name || spot.language})`
+              : `See translation (${languages.find((l) => l.code === me?.preferredLanguage)?.name || me?.preferredLanguage})`}
+          </Button>
+        </View>
+      )}
     </View>
   )
 }

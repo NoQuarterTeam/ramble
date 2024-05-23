@@ -26,6 +26,7 @@ model User {
   avatar                 String?
   avatarBlurHash         String?
   bio                    String? @db.Text
+  bioLanguage            String?
   instagram              String?
   isVerified             Boolean @default(false)
   isAdmin                Boolean @default(false)
@@ -178,6 +179,7 @@ model Spot {
   name        String
   type        SpotType
   description String?   @db.Text
+  language    String?
   address     String?
   latitude    Float
   longitude   Float

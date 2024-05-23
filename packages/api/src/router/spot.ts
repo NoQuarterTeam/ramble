@@ -1,4 +1,3 @@
-import crypto from "node:crypto"
 import * as Sentry from "@sentry/nextjs"
 import { TRPCError } from "@trpc/server"
 import dayjs from "dayjs"
@@ -12,6 +11,7 @@ import {
   generateBlurHash,
   get5DayForecast,
   getCurrentWeather,
+  getLanguage,
   publicSpotWhereClause,
   publicSpotWhereClauseRaw,
   sendSlackMessage,
@@ -175,6 +175,7 @@ export const spotRouter = createTRPCRouter({
           id: true,
           name: true,
           description: true,
+          language: true,
           latitude: true,
           longitude: true,
           coverId: true,
@@ -236,14 +237,15 @@ export const spotRouter = createTRPCRouter({
       `,
     })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
-    let translatedDescription: string | null | undefined
 
-    let descriptionHash: string | undefined
-    if (ctx.user && spot.description) {
-      descriptionHash = crypto.createHash("sha1").update(spot.description).digest("hex") as string
-      translatedDescription = await fetch(
-        `${FULL_WEB_URL}/api/spots/${spot.id}/translate/${ctx.user.preferredLanguage}?hash=${descriptionHash}`,
-      )
+    let language = spot.language
+    if (!language && spot.description) {
+      language = await getLanguage(spot.description)
+      await ctx.prisma.spot.update({ where: { id: spot.id }, data: { language } })
+    }
+    let translatedDescription: string | null | undefined
+    if (ctx.user && spot.description && language !== ctx.user.preferredLanguage) {
+      translatedDescription = await fetch(`${FULL_WEB_URL}/api/translations/${ctx.user.preferredLanguage}/${spot.description}`)
         .then((r) => r.json() as Promise<string | null>)
         .catch((error) => {
           Sentry.captureException(error)
@@ -254,8 +256,8 @@ export const spotRouter = createTRPCRouter({
     spot.images = spot.images.sort((a, b) => (a.id === spot.coverId ? -1 : b.id === spot.coverId ? 1 : 0))
     return {
       spot,
+      language,
       translatedDescription,
-      descriptionHash,
       isLiked: !!ctx.user && spot.listSpots.length > 0,
       rating,
       tags,
@@ -307,9 +309,14 @@ export const spotRouter = createTRPCRouter({
           return { path, blurHash, creator: { connect: { id: ctx.user.id } } }
         }),
       )
+      let language = undefined
+      if (input.description) {
+        language = await getLanguage(input.description)
+      }
       const spot = await ctx.prisma.spot.create({
         data: {
           ...data,
+          language,
           // temp until apps send correct data
           isPetFriendly: data.isPetFriendly === "true" || data.isPetFriendly === true,
           publishedAt: shouldPublishLater ? dayjs().add(2, "weeks").toDate() : undefined,
@@ -382,11 +389,15 @@ export const spotRouter = createTRPCRouter({
         )
       }
       // await deleteManyObjects(imagesToDelete.map((i) => i.path))
-
+      let language = spot.language
+      if (!language) {
+        language = await getLanguage(input.description)
+      }
       return ctx.prisma.spot.update({
         where: { id },
         data: {
           ...data,
+          language,
           // temp until apps send correct data
           isPetFriendly: data.isPetFriendly === "true" || data.isPetFriendly === true,
           images: { create: imageData, delete: imagesToDelete },

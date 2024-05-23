@@ -61,7 +61,9 @@ export default function NewSpotInfoScreen() {
           />
         </View>
         <FormInputLabel label="Describe the spot" name="description" />
-        <Input nativeID="description" value={description} onChangeText={setDescription} multiline numberOfLines={4} />
+        <View className="max-h-[65%]">
+          <Input nativeID="description" value={description} onChangeText={setDescription} multiline numberOfLines={4} />
+        </View>
       </ScrollView>
 
       <Animated.View
