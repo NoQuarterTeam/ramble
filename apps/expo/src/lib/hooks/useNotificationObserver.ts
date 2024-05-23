@@ -20,6 +20,9 @@ export function useNotificationObserver() {
         case "TRIP_MEDIA_ADDED":
           router.push(`/trips/${payload.tripId}` as Route<string>)
           break
+        case "SPOT_VERIFIED":
+          router.push(`/spots/${payload.spotId}` as Route<string>)
+          break
         default:
           break
       }
