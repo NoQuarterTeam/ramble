@@ -71,7 +71,7 @@ function NotificationItem({
 }) {
   const timeAgo = getTimeAgo(userNotification.createdAt)
   return (
-    <View className="p-2 flex flex-row justify-between space-x-3">
+    <View className="p-1.5 mb-1 flex flex-row justify-between space-x-3">
       <View className="flex flex-1 flex-row space-x-3">
         {leftElement}
         <View className="flex-1 items-center flex-row">
@@ -181,14 +181,16 @@ function NotificationType({ userNotification }: { userNotification: RouterOutput
             </Link>
           }
           rightElement={
-            <Button
-              size="sm"
-              className="h-8 w-[85px]"
-              variant={initiator.followers.length === 0 ? "primary" : "secondary"}
-              onPress={() => mutate({ username: initiator.username })}
-            >
-              {initiator.followers.length === 0 ? "Follow" : "Following"}
-            </Button>
+            <View className="h-[40px] flex items-center justify-center">
+              <Button
+                size="sm"
+                className="h-8 w-[85px]"
+                variant={initiator.followers.length === 0 ? "primary" : "secondary"}
+                onPress={() => mutate({ username: initiator.username })}
+              >
+                {initiator.followers.length === 0 ? "Follow" : "Following"}
+              </Button>
+            </View>
           }
         />
       )
@@ -219,7 +221,7 @@ function UserAvatarNotification({ user }: { user: RouterOutputs["notification"][
             style={{ height: 40, width: 40 }}
             className="flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700"
           >
-            <Icon icon={User2} />
+            <Icon icon={User2} size={20} />
           </View>
         )}
       </TouchableOpacity>
