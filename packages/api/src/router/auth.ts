@@ -73,11 +73,11 @@ export const authRouter = createTRPCRouter({
     return { user: user, token }
   }),
   forgotPassword: publicProcedure.input(userSchema.pick({ email: true })).mutation(async ({ input, ctx }) => {
-    const email = input.email.toLowerCase().trim()
+    const email = input.email
     const user = await ctx.prisma.user.findUnique({ where: { email } })
     if (user) {
       const token = createToken({ id: user.id })
-      await sendResetPasswordEmail(user, token)
+      sendResetPasswordEmail(user, token)
     }
     return true
   }),
@@ -97,10 +97,7 @@ export const authRouter = createTRPCRouter({
   requestAccess: publicProcedure
     .input(
       z.object({
-        email: z
-          .string()
-          .email()
-          .transform((e) => e.toLowerCase().trim()),
+        email: z.string().email().toLowerCase().trim(),
         reason: z.string().nullish(),
       }),
     )
