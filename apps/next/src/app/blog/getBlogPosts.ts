@@ -39,5 +39,5 @@ export const getBlogPosts = unstable_cache(
     )
   },
   ["blog"],
-  { revalidate: 86400, tags: ["blog"] },
+  { tags: ["blog"] },
 )
