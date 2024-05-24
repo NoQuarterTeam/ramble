@@ -20,6 +20,7 @@
     "@turf/bbox": "7.0.0-alpha.116",
     "@turf/center": "7.0.0-alpha.116",
     "@turf/helpers": "7.0.0-alpha.116",
+    "@vercel/functions": "^1.0.2",
     "dayjs": "1.11.11",
     "semver": "^7.6.0",
     "supercluster": "8.0.1",

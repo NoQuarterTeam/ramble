@@ -1,4 +1,3 @@
-// import dayjs from "dayjs"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const notificatioRouter = createTRPCRouter({
