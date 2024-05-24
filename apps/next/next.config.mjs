@@ -4,7 +4,7 @@ import { withSentryConfig } from "@sentry/nextjs"
 const nextConfig = {
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
-  experimental: { serverComponentsExternalPackages: ["@aws-sdk"], ppr: true },
+  experimental: { serverComponentsExternalPackages: ["@aws-sdk"] },
   redirects: () => [{ source: "/register", destination: "/", permanent: false }],
   images: {
     remotePatterns: [{ hostname: "ramble.guide" }, { hostname: "cdn.ramble.guide" }],
