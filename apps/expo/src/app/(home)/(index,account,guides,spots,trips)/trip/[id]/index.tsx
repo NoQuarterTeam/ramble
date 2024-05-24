@@ -289,7 +289,7 @@ export default function TripDetailScreen() {
 
       <View style={{ top: insets.top + 8 }} pointerEvents="box-none" className="absolute right-0 left-0 flex">
         <View className="flex flex-row items-center justify-between px-4">
-          <View className="flex flex-row items-center space-x-2">
+          <View className="flex flex-row items-center space-x-2 flex-1">
             <TouchableOpacity
               onPress={router.back}
               activeOpacity={0.5}
@@ -312,7 +312,7 @@ export default function TripDetailScreen() {
             </View>
           </View>
           {trip && me && (
-            <View className="flex flex-row items-center space-x-1">
+            <View className="flex flex-row items-center space-x-1 justify-end flex-1">
               {/* <Link push href={`/${tab}/trip/${id}/layers`} asChild>
                 <TouchableOpacity
                   onPress={() => increment()}
