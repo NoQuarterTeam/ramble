@@ -136,7 +136,13 @@ export default function AccountInfoScreen() {
           <FormInput autoCapitalize="none" name="email" label="Email" error={error} />
           <FormInput autoCapitalize="none" name="username" label="Username" error={error} />
           <FormInput multiline name="bio" label="Bio" error={error} />
-          <FormInput autoCapitalize="none" name="instagram" label="Instagram handle" error={error} />
+          <FormInput
+            autoCapitalize="none"
+            name="instagram"
+            label="Instagram handle"
+            subLabel="This will be used to promote your instagram and gives other ramble users a way to contact you"
+            error={error}
+          />
         </ScrollView>
       </ScreenView>
     </FormProvider>
