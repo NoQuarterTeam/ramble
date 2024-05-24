@@ -7,6 +7,8 @@ import {
   type MapState,
   type MapView as MapType,
   MarkerView,
+  RasterLayer,
+  RasterSource,
   ShapeSource,
   StyleURL,
 } from "@rnmapbox/maps"
@@ -20,9 +22,9 @@ import * as Network from "expo-network"
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import * as VideoThumbnails from "expo-video-thumbnails"
-import { ChevronLeft, Edit2, Flag, Home, Image as ImageIcon, MapPin, Plus, Users } from "lucide-react-native"
+import { ChevronLeft, Edit2, Flag, Home, Image as ImageIcon, Layers, MapPin, Plus, Users } from "lucide-react-native"
 import * as React from "react"
-import { ActivityIndicator, Alert, Linking, TouchableOpacity, View } from "react-native"
+import { ActivityIndicator, Alert, Linking, TouchableOpacity, View, useColorScheme } from "react-native"
 import DraggableFlatList, { type RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlist"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import * as DropdownMenu from "zeego/dropdown-menu"
@@ -30,6 +32,7 @@ import * as DropdownMenu from "zeego/dropdown-menu"
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createAssetUrl, join } from "@ramble/shared"
 
 import { keepPreviousData } from "@tanstack/react-query"
+import { useFeedbackActivity } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
 import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { MapView } from "~/components/Map"
@@ -45,18 +48,21 @@ import { useMapSettings } from "~/lib/hooks/useMapSettings"
 import { useMe } from "~/lib/hooks/useMe"
 import { useS3QuickUpload } from "~/lib/hooks/useS3"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
+import { useMapLayers } from "./layers"
 
 export default function TripDetailScreen() {
   const { me } = useMe()
+  const router = useRouter()
+  const layers = useMapLayers((s) => s.layers)
   const { id } = useLocalSearchParams<{ id: string }>()
+  const increment = useFeedbackActivity((s) => s.increment)
 
   const { data, isLoading } = api.trip.detail.useQuery({ id })
   const trip = data?.trip
   const bounds = data?.bounds
   const center = data?.center
   const utils = api.useUtils()
-
-  const router = useRouter()
+  const isDark = useColorScheme() === "dark"
 
   const camera = React.useRef<Camera>(null)
   const mapRef = React.useRef<MapType>(null)
@@ -199,7 +205,22 @@ export default function TripDetailScreen() {
   return (
     <View className="flex-1">
       <StatusBar style="light" />
-      <MapView ref={mapRef} styleURL={StyleURL.SatelliteStreet} compassPosition={{ top: 54, right: 12 }} onMapIdle={onMapMove}>
+      <MapView
+        ref={mapRef}
+        styleURL={
+          layers.layer === "rain" || layers.layer === "temp"
+            ? `mapbox://styles/mapbox/${isDark ? "dark" : "light"}-v11`
+            : layers.layer === "satellite"
+              ? StyleURL.SatelliteStreet
+              : layers.layer === "bioRegions"
+                ? isDark
+                  ? "mapbox://styles/jclackett/clvz84gzh015v01pccwv7bcnj"
+                  : "mapbox://styles/jclackett/clvxvin5p02a301qv6waq1fhg"
+                : undefined
+        }
+        compassPosition={{ top: 54, right: 12 }}
+        onMapIdle={onMapMove}
+      >
         {data?.line && (
           <ShapeSource id="directions" shape={data.line.geometry}>
             <LineLayer id="line" style={{ lineDasharray: [0.5, 2], lineColor: "white", lineCap: "round", lineWidth: 2 }} />
@@ -213,6 +234,7 @@ export default function TripDetailScreen() {
         {itemMarkers}
         {mediaMarkers}
         <LocationPuck />
+        <MapLayers />
 
         <Camera
           ref={camera}
@@ -253,6 +275,18 @@ export default function TripDetailScreen() {
         />
       </MapView>
 
+      <View pointerEvents="box-none" className="absolute bottom-[130px] left-3 flex space-y-2">
+        <Link push href={`/${tab}/trip/${id}/layers`} asChild>
+          <TouchableOpacity
+            onPress={() => increment()}
+            activeOpacity={0.8}
+            className="sq-12 shadow flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
+          >
+            <Icon icon={Layers} size={20} />
+          </TouchableOpacity>
+        </Link>
+      </View>
+
       <View style={{ top: insets.top + 8 }} pointerEvents="box-none" className="absolute right-0 left-0 flex">
         <View className="flex flex-row items-center justify-between px-4">
           <View className="flex flex-row items-center space-x-2">
@@ -279,6 +313,15 @@ export default function TripDetailScreen() {
           </View>
           {trip && me && (
             <View className="flex flex-row items-center space-x-1">
+              {/* <Link push href={`/${tab}/trip/${id}/layers`} asChild>
+                <TouchableOpacity
+                  onPress={() => increment()}
+                  activeOpacity={0.8}
+                  className="sq-10 shadow flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
+                >
+                  <Icon icon={Layers} size={16} />
+                </TouchableOpacity>
+              </Link> */}
               <Link push href={`/${tab}/trip/${id}/media`} asChild>
                 <TouchableOpacity
                   className="sq-10 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
@@ -769,5 +812,29 @@ function AddTripItemMenu({ order, children }: { order?: number; children: React.
         <DropdownMenu.Arrow />
       </DropdownMenu.Content>
     </DropdownMenu.Root>
+  )
+}
+
+function MapLayers() {
+  const layers = useMapLayers((s) => s.layers)
+
+  return (
+    <>
+      <RasterSource
+        id="temp"
+        tileSize={256}
+        tileUrlTemplates={["https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63"]}
+      />
+      {layers.layer === "temp" && <RasterLayer id="tempLayer" sourceID="temp" style={{ rasterOpacity: 1 }} />}
+
+      <RasterSource
+        id="rain"
+        tileSize={256}
+        tileUrlTemplates={[
+          "https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=0937eef5e79a9078196f43c47db32b63",
+        ]}
+      />
+      {layers.layer === "rain" && <RasterLayer id="rainLayer" sourceID="rain" style={{ rasterOpacity: 1 }} />}
+    </>
   )
 }
