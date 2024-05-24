@@ -10,7 +10,7 @@ export default async function Page() {
   const items = await getBlogPosts()
   return (
     <div className="px-4 py-8">
-      <div className="mx-auto max-w-6xl  space-y-6">
+      <div className="mx-auto max-w-6xl space-y-6">
         <div>
           <h1 className="text-4xl font-bold">ramblings</h1>
           <p className="font-light">
@@ -31,7 +31,7 @@ export default async function Page() {
                   src={item.cover}
                   unoptimized={!item.cover.startsWith("https://cdn.ramble")}
                   alt={item.title}
-                  width={600}
+                  width={550}
                   height={300}
                   className="rounded-sm h-[300px] w-full object-cover"
                 />
