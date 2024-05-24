@@ -3,7 +3,7 @@ import * as Sentry from "@sentry/nextjs"
 
 import { sendMessages } from "./send-messages"
 
-export async function sendSpotVerifiedNotification({ initiatorId, spotId }: { spotId: string; initiatorId: string }) {
+export async function sendSpotAddedToTripNotification({ initiatorId, spotId }: { spotId: string; initiatorId: string }) {
   try {
     const spot = await prisma.spot.findUnique({
       where: { id: spotId },
@@ -21,14 +21,14 @@ export async function sendSpotVerifiedNotification({ initiatorId, spotId }: { sp
     await sendMessages({
       tokens,
       payload: {
-        body: `${initiator.username} verified your spot: ${spot.name}!`,
-        data: { type: "SPOT_VERIFIED", spotId: spot.id },
+        body: `${initiator.username} saved your spot to their trip!`,
+        data: { type: "SPOT_ADDED_TO_TRIP", spotId: spot.id },
       },
     })
 
     await prisma.notification.create({
       data: {
-        type: "SPOT_VERIFIED",
+        type: "SPOT_ADDED_TO_TRIP",
         initiator: { connect: { id: initiatorId } },
         spot: { connect: { id: spotId } },
         userNotifications: { createMany: { data: { userId: spot.creatorId } } },

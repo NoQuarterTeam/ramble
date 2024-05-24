@@ -1,4 +1,3 @@
-import dayjs from "dayjs"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
 export const notificatioRouter = createTRPCRouter({
@@ -32,10 +31,10 @@ export const notificatioRouter = createTRPCRouter({
       },
       take: 40,
     })
-    for (const n of notis) {
-      // temp fix until we figure out the timezone issue
-      n.createdAt = dayjs(n.createdAt).subtract(2, "hours").toDate()
-    }
+    // for (const n of notis) {
+    //   // temp fix until we figure out the timezone issue
+    //   n.createdAt = dayjs(n.createdAt).subtract(2, "hours").toDate()
+    // }
     return notis
   }),
   unreadCount: protectedProcedure.query(({ ctx }) => {

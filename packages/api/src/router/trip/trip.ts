@@ -2,6 +2,7 @@ import { tripSchema, tripStopSchema } from "@ramble/server-schemas"
 import {
   getPlaceUnsplashImage,
   sendSlackMessage,
+  sendSpotAddedToTripNotification,
   sendTripSpotAddedNotification,
   sendTripStopAddedNotification,
 } from "@ramble/server-services"
@@ -215,6 +216,7 @@ export const tripRouter = createTRPCRouter({
         data: { spotId: input.spotId, tripId: input.tripId, creatorId: ctx.user.id, order: newOrder },
       })
       waitUntil(sendTripSpotAddedNotification({ initiatorId: ctx.user.id, tripId: input.tripId }))
+      waitUntil(sendSpotAddedToTripNotification({ spotId: input.spotId, initiatorId: ctx.user.id }))
       return item
     }),
   saveStop: protectedProcedure

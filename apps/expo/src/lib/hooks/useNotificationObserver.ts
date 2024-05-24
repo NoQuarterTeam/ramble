@@ -10,19 +10,18 @@ export function useNotificationObserver() {
       const payload = notification.request.content.data as NotificationPayload
       if (!payload) return
 
-      // TODO: figure out how to properly type urls
       switch (payload.type) {
         case "USER_FOLLOWED":
-          router.push(`/${payload.username}/`)
-          break
+          return router.push(`/${payload.username}/`)
         case "TRIP_SPOT_ADDED":
         case "TRIP_STOP_ADDED":
         case "TRIP_MEDIA_ADDED":
-          router.push(`/trip/${payload.tripId}/`)
-          break
+          return router.push(`/trip/${payload.tripId}/`)
         case "SPOT_VERIFIED":
-          router.push(`/spot/${payload.spotId}/`)
-          break
+        case "SPOT_ADDED_TO_LIST":
+        case "SPOT_ADDED_TO_TRIP":
+        case "SPOT_REVIEWED":
+          return router.push(`/spot/${payload.spotId}/`)
         default:
           break
       }
