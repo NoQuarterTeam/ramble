@@ -139,7 +139,7 @@ export const tripMediaRouter = createTRPCRouter({
         orderBy: { timestamp: "desc" },
         select: { timestamp: true },
       })
-      waitUntil(sendTripMediaAddedNotification({ initiatorId: ctx.user.id, tripId: input.tripId, username: ctx.user.username }))
+      waitUntil(sendTripMediaAddedNotification({ initiatorId: ctx.user.id, tripId: input.tripId }))
       return latestTimestamp?.timestamp
     }),
   remove: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {

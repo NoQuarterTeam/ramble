@@ -1,21 +1,17 @@
 import { prisma } from "@ramble/database"
-import type { User } from "@ramble/database/types"
 import * as Sentry from "@sentry/nextjs"
 
 import { sendMessages } from "./send-messages"
 
-export async function sendTripSpotAddedNotification({
-  initiatorId,
-  tripId,
-  username,
-}: { tripId: string; initiatorId: string } & Pick<User, "username">) {
+export async function sendTripSpotAddedNotification({ initiatorId, tripId }: { tripId: string; initiatorId: string }) {
   try {
     const trip = await prisma.trip.findUnique({
       where: { id: tripId },
-      select: { id: true, name: true, users: { select: { id: true } } },
+      select: { id: true, name: true, users: { select: { id: true }, where: { id: { not: initiatorId } } } },
     })
     if (!trip) return
-
+    const initiator = await prisma.user.findUnique({ where: { id: initiatorId }, select: { username: true } })
+    if (!initiator) return
     const tokens = await prisma.pushToken.findMany({
       select: { token: true },
       where: { user: { id: { in: trip.users.map((u) => u.id) } } },
@@ -24,7 +20,7 @@ export async function sendTripSpotAddedNotification({
     await sendMessages({
       tokens,
       payload: {
-        body: `${username} added a new spot to ${trip.name}!`,
+        body: `${initiator.username} added a new spot to your trip: ${trip.name}!`,
         data: { type: "TRIP_SPOT_ADDED", tripId: trip.id },
       },
     })

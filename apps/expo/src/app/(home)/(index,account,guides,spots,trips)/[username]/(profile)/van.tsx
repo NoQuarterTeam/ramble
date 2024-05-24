@@ -1,16 +1,14 @@
-import { useLocalSearchParams } from "expo-router"
-import { View } from "react-native"
-
 import { createAssetUrl } from "@ramble/shared"
-
+import { useLocalSearchParams } from "expo-router"
 import { Bike, ShowerHead, Wifi, Zap } from "lucide-react-native"
+import { View } from "react-native"
 import { Icon } from "~/components/Icon"
 import { Icons } from "~/components/ui/Icons"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
 import { api } from "~/lib/api"
-import { isTablet } from "~/lib/device"
+// import { isTablet } from "~/lib/device"
 
 export default function UserVan() {
   const params = useLocalSearchParams<{ username: string }>()
@@ -45,7 +43,7 @@ export default function UserVan() {
         </View>
       </View>
       <Text className="text-base">{van.description}</Text>
-      <View className="flex flex-row flex-wrap gap-1">
+      <View className="flex flex-row flex-wrap space-x-1">
         {van.hasShower && (
           <View className="p-2 rounded-sm border border-gray-200 dark:border-gray-700">
             <Icon icon={ShowerHead} size={20} />
@@ -79,8 +77,7 @@ export default function UserVan() {
           width={500}
           height={300}
           placeholder={image.blurHash}
-          style={{ width: isTablet ? "48%" : "100%", marginHorizontal: isTablet ? 10 : 0, marginBottom: 10 }}
-          className="h-[300px] rounded-sm object-cover"
+          className="h-[300px] w-full rounded-sm object-cover"
           source={{ uri: createAssetUrl(image.path) }}
         />
       ))}

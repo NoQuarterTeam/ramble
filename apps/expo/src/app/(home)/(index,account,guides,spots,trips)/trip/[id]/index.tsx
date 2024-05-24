@@ -150,7 +150,7 @@ export default function TripDetailScreen() {
             <MarkerView key={`${point.id || 0}${i}`} allowOverlap allowOverlapWithPuck coordinate={point.geometry.coordinates}>
               <TouchableOpacity
                 activeOpacity={0.7}
-                onPress={() => router.push(`/(home)/(trips)/trips/${id}/media/cluster?bounds=${bounds.join(",")}`)}
+                onPress={() => router.push(`/${tab}/trip/${id}/media/cluster?bounds=${bounds.join(",")}`)}
                 className={join(
                   "relative flex items-center justify-center",
                   point.properties.point_count > 150 ? "sq-20" : point.properties.point_count > 75 ? "sq-16" : "sq-14",
@@ -177,7 +177,7 @@ export default function TripDetailScreen() {
           <MarkerView key={media.id} allowOverlap allowOverlapWithPuck coordinate={point.geometry.coordinates}>
             <TouchableOpacity
               activeOpacity={0.7}
-              onPress={() => router.push(`/(home)/(trips)/trips/${id}/media/${media.id}`)}
+              onPress={() => router.push(`/${tab}/trip/${id}/media/${media.id}`)}
               className="sq-12 flex items-center justify-center overflow-hidden rounded-md border-2 border-white"
             >
               <Image source={{ uri: createAssetUrl(itemImagePath) }} style={{ width: "100%", height: "100%" }} />
@@ -279,7 +279,7 @@ export default function TripDetailScreen() {
           </View>
           {trip && me && (
             <View className="flex flex-row items-center space-x-1">
-              <Link push href={`/${tab}/trips/${id}/media`} asChild>
+              <Link push href={`/${tab}/trip/${id}/media`} asChild>
                 <TouchableOpacity
                   className="sq-10 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
                   activeOpacity={0.8}
@@ -288,7 +288,7 @@ export default function TripDetailScreen() {
                 </TouchableOpacity>
               </Link>
 
-              <Link push href={`/${tab}/trips/${id}/users`} asChild>
+              <Link push href={`/${tab}/trip/${id}/users`} asChild>
                 <TouchableOpacity
                   className="sq-10 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
                   activeOpacity={0.8}
@@ -296,7 +296,7 @@ export default function TripDetailScreen() {
                   <Icon icon={Users} size={16} />
                 </TouchableOpacity>
               </Link>
-              <Link push href={`/${tab}/trips/${id}/edit`} asChild>
+              <Link push href={`/${tab}/trip/${id}/edit`} asChild>
                 <TouchableOpacity
                   className="sq-10 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
                   activeOpacity={0.8}
@@ -585,7 +585,7 @@ const TripItem = React.memo(function _TripItem({
             router.push(`/${tab}/spot/${item.spot!.id}`)
             break
           case editIndex:
-            router.push(`/${tab}/trips/${id}/items/${item.id}?date=${item.date?.toISOString() || ""}`)
+            router.push(`/${tab}/trip/${id}/items/${item.id}?date=${item.date?.toISOString() || ""}`)
             break
           case destructiveButtonIndex:
             mutate({ id: item.id })
@@ -603,7 +603,7 @@ const TripItem = React.memo(function _TripItem({
       showActionSheetWithOptions({ options, cancelButtonIndex, destructiveButtonIndex }, (selectedIndex) => {
         switch (selectedIndex) {
           case editIndex:
-            router.push(`/${tab}/trips/${id}/items/${item.id}?date=${item.date?.toISOString() || ""}`)
+            router.push(`/${tab}/trip/${id}/items/${item.id}?date=${item.date?.toISOString() || ""}`)
             break
           case destructiveButtonIndex:
             mutate({ id: item.id })
@@ -737,15 +737,12 @@ function AddTripItemMenu({ order, children }: { order?: number; children: React.
   const { id } = useLocalSearchParams<{ id: string }>()
   const coords = useMapCoords((s) => s.coords)
   const router = useRouter()
-
+  const tab = useTabSegment()
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>{children}</DropdownMenu.Trigger>
       <DropdownMenu.Content>
-        <DropdownMenu.Item
-          key="add-stop"
-          onSelect={() => router.push(`/(home)/(trips)/trips/${id}/add-location?order=${order || 0}`)}
-        >
+        <DropdownMenu.Item key="add-stop" onSelect={() => router.push(`/${tab}/trip/${id}/add-location?order=${order || 0}`)}>
           <DropdownMenu.ItemIcon ios={{ name: "mappin.and.ellipse", pointSize: 10, scale: "large" }} />
           <DropdownMenu.ItemTitle>Add location</DropdownMenu.ItemTitle>
         </DropdownMenu.Item>
@@ -764,7 +761,7 @@ function AddTripItemMenu({ order, children }: { order?: number; children: React.
           <DropdownMenu.ItemIcon ios={{ name: "plus.circle", pointSize: 10, scale: "large" }} />
           <DropdownMenu.ItemTitle>Add a new spot</DropdownMenu.ItemTitle>
         </DropdownMenu.Item>
-        <DropdownMenu.Item key="find-spot" onSelect={() => router.push(`/(home)/(trips)/trips/${id}/find-spot?order=${order}`)}>
+        <DropdownMenu.Item key="find-spot" onSelect={() => router.push(`/${tab}/trip/${id}/find-spot?order=${order}`)}>
           <DropdownMenu.ItemIcon ios={{ name: "magnifyingglass", pointSize: 10, scale: "large" }} />
           <DropdownMenu.ItemTitle>Find an existing spot</DropdownMenu.ItemTitle>
         </DropdownMenu.Item>

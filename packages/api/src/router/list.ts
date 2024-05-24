@@ -6,9 +6,15 @@ import { z } from "zod"
 
 import type { SpotType } from "@ramble/database/types"
 import { clusterSchema, listSchema, userSchema } from "@ramble/server-schemas"
-import { publicSpotWhereClauseRaw, spotItemDistanceFromMeField, spotItemSelectFields } from "@ramble/server-services"
+import {
+  publicSpotWhereClauseRaw,
+  sendSpotAddedToListNotification,
+  spotItemDistanceFromMeField,
+  spotItemSelectFields,
+} from "@ramble/server-services"
 import type { SpotItemType } from "@ramble/shared"
 
+import { waitUntil } from "@vercel/functions"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 import type { SpotClusterTypes } from "./spot"
 
@@ -141,7 +147,9 @@ export const listRouter = createTRPCRouter({
     if (listSpot) {
       return ctx.prisma.listSpot.delete({ where: { id: listSpot.id } })
     }
-    return ctx.prisma.listSpot.create({ data: { spotId: input.spotId, listId: input.listId } })
+    const list = await ctx.prisma.listSpot.create({ data: { spotId: input.spotId, listId: input.listId } })
+    waitUntil(sendSpotAddedToListNotification({ spotId: input.spotId, initiatorId: ctx.user.id }))
+    return list
   }),
   create: protectedProcedure.input(listSchema).mutation(({ ctx, input }) => {
     return ctx.prisma.list.create({ data: { ...input, creatorId: ctx.user.id } })

@@ -1,6 +1,6 @@
 import type { NotificationPayload } from "@ramble/shared"
 import * as Notifications from "expo-notifications"
-import { type Route, router } from "expo-router"
+import { router } from "expo-router"
 import * as React from "react"
 
 export function useNotificationObserver() {
@@ -10,16 +10,18 @@ export function useNotificationObserver() {
       const payload = notification.request.content.data as NotificationPayload
       if (!payload) return
 
-      // TODO: figure out how to properly type urls
       switch (payload.type) {
         case "USER_FOLLOWED":
-          router.push(`/${payload.username}` as Route<string>)
-          break
+          return router.push(`/${payload.username}/`)
         case "TRIP_SPOT_ADDED":
         case "TRIP_STOP_ADDED":
         case "TRIP_MEDIA_ADDED":
-          router.push(`/trips/${payload.tripId}` as Route<string>)
-          break
+          return router.push(`/trip/${payload.tripId}/`)
+        case "SPOT_VERIFIED":
+        case "SPOT_ADDED_TO_LIST":
+        case "SPOT_ADDED_TO_TRIP":
+        case "SPOT_REVIEWED":
+          return router.push(`/spot/${payload.spotId}/`)
         default:
           break
       }

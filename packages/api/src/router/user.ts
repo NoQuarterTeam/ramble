@@ -131,8 +131,11 @@ export const userRouter = createTRPCRouter({
         data: { followers: { disconnect: { id: ctx.user.id } } },
       })
     } else {
-      await ctx.prisma.user.update({ where: { username: input.username }, data: { followers: { connect: { id: ctx.user.id } } } })
-      waitUntil(sendUserFollowedNotification({ initiatorId: ctx.user.id, username: ctx.user.username }))
+      const user = await ctx.prisma.user.update({
+        where: { username: input.username },
+        data: { followers: { connect: { id: ctx.user.id } } },
+      })
+      waitUntil(sendUserFollowedNotification({ initiatorId: ctx.user.id, userId: user.id }))
     }
     return true
   }),
@@ -172,12 +175,13 @@ export const userRouter = createTRPCRouter({
         _count: {
           select: {
             followers: true,
-            /**
-             * @deprecated in v1.4.11 - use trips now
-             */
             lists: { where: { isPrivate: false } },
             createdTrips: true,
+            /**
+             * @deprecated in v1.5.1 - use created now
+             */
             verifiedSpots: { where: { sourceUrl: { equals: null }, deletedAt: null, verifiedAt: { not: null } } },
+            createdSpots: { where: { sourceUrl: { equals: null }, deletedAt: null, verifiedAt: { not: null } } },
           },
         },
       },

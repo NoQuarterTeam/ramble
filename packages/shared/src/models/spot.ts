@@ -127,30 +127,85 @@ export const isPartnerSpot = (spot: SpotPartnerFields) =>
   spot.volunteeringEventsId
 
 export const partners = {
-  campspace: { name: "Campspace", logo: { light: "/partners/campspace.svg", dark: "/partners/campspace-dark.svg" } },
-  komoot: { name: "Komoot", logo: { light: "/partners/komoot.svg", dark: "/partners/komoot-dark.svg" } },
-  park4night: { name: "Park4Night", logo: { light: "/partners/park4night.svg", dark: "/partners/park4night-dark.svg" } },
-  surfline: { name: "Surfline", logo: { light: "/partners/surfline.svg", dark: "/partners/surfline-dark.svg" } },
-  natuur: { name: "Natuurkampeerterrein", logo: { light: "/partners/natuur.svg", dark: "/partners/natuur.svg" } },
-  roadsurfer: { name: "Roadsurfer", logo: { light: "/partners/roadsurfer.svg", dark: "/partners/roadsurfer-dark.svg" } },
-  loodusegakoos: { name: "Loodusega koos ", logo: { light: "/partners/loodusegakoos.svg", dark: "/partners/loodusegakoos.svg" } },
-  cucortu: { name: "Cucortu'", logo: { light: "/partners/cucortu.png", dark: "/partners/cucortu-dark.png" } },
-  theCrag: { name: "The Crag", logo: { light: "/partners/the-crag.svg", dark: "/partners/the-crag-dark.svg" } },
-  neste: { name: "Neste", logo: { light: "/partners/neste.png", dark: "/partners/neste.png" } },
-  hipcamp: { name: "Hipcamp", logo: { light: "/partners/hipcamp.svg", dark: "/partners/hipcamp-dark.svg" } },
-  norcamp: { name: "Norcamp", logo: { light: "/partners/norcamp.png", dark: "/partners/norcamp.png" } },
-  mossyEarth: { name: "Mossy Earth", logo: { light: "/partners/mossy-earth.png", dark: "/partners/mossy-earth-dark.png" } },
+  campspace: {
+    name: "Campspace",
+    logo: { light: "/partners/campspace.svg", dark: "/partners/campspace-dark.svg" },
+    pretext: "Book a spot on",
+  },
+  komoot: {
+    name: "Komoot",
+    logo: { light: "/partners/komoot.svg", dark: "/partners/komoot-dark.svg" },
+    pretext: "More info on",
+  },
+  park4night: {
+    name: "Park4Night",
+    logo: { light: "/partners/park4night.svg", dark: "/partners/park4night-dark.svg" },
+    pretext: "More info on",
+  },
+  surfline: {
+    name: "Surfline",
+    logo: { light: "/partners/surfline.svg", dark: "/partners/surfline-dark.svg" },
+    pretext: "Check forecast on",
+  },
+  natuur: {
+    name: "Natuurkampeerterrein",
+    logo: { light: "/partners/natuur.svg", dark: "/partners/natuur.svg" },
+    pretext: "Book a spot on",
+  },
+  roadsurfer: {
+    name: "Roadsurfer",
+    logo: { light: "/partners/roadsurfer.svg", dark: "/partners/roadsurfer-dark.svg" },
+    pretext: "Book a spot on",
+  },
+  loodusegakoos: {
+    name: "Loodusega koos ",
+    logo: { light: "/partners/loodusegakoos.svg", dark: "/partners/loodusegakoos.svg" },
+    pretext: "More info on",
+  },
+  cucortu: {
+    name: "Cucortu'",
+    logo: { light: "/partners/cucortu.png", dark: "/partners/cucortu-dark.png" },
+    pretext: "More info on",
+  },
+  theCrag: {
+    name: "The Crag",
+    logo: { light: "/partners/the-crag.svg", dark: "/partners/the-crag-dark.svg" },
+    pretext: "More route info on",
+  },
+  neste: {
+    name: "Neste",
+    logo: { light: "/partners/neste.png", dark: "/partners/neste.png" },
+    pretext: "More info on",
+  },
+  hipcamp: {
+    name: "Hipcamp",
+    logo: { light: "/partners/hipcamp.svg", dark: "/partners/hipcamp-dark.svg" },
+    pretext: "Book a spot on",
+  },
+  norcamp: {
+    name: "Norcamp",
+    logo: { light: "/partners/norcamp.png", dark: "/partners/norcamp.png" },
+    pretext: "More info on",
+  },
+  mossyEarth: {
+    name: "Mossy Earth",
+    logo: { light: "/partners/mossy-earth.png", dark: "/partners/mossy-earth-dark.png" },
+    pretext: "More info on",
+  },
   rewildingEurope: {
     name: "Rewilding Europe",
     logo: { light: "/partners/rewilding-europe.png", dark: "/partners/rewilding-europe-dark.png" },
+    pretext: "More info on",
   },
   polskiCaravaning: {
     name: "Polski Caravaning",
     logo: { light: "/partners/polski-caravaning.svg", dark: "/partners/polski-caravaning.svg" },
+    pretext: "More info on",
   },
   volunteeringEvents: {
     name: "Volunteering Events",
     logo: { light: "/partners/volunteering-events.png", dark: "/partners/volunteering-events-dark.png" },
+    pretext: "More info on",
   },
 } as const
 

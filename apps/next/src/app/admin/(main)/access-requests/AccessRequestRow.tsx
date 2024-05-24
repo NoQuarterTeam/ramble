@@ -26,11 +26,15 @@ export function AccessRequestRow({ accessRequest }: Props) {
         <p>{accessRequest.code}</p>
       </TableCell>
       <TableCell>
-        <p>{dayjs(accessRequest.createdAt).format("DD/MM/YYYY")}</p>
+        <p suppressHydrationWarning>{dayjs(accessRequest.createdAt).format("DD/MM/YYYY")}</p>
       </TableCell>
-      <TableCell>{accessRequest.acceptedAt && <p>{dayjs(accessRequest.acceptedAt).format("DD/MM/YYYY")}</p>}</TableCell>
+      <TableCell>
+        {accessRequest.acceptedAt ? <p suppressHydrationWarning>{dayjs(accessRequest.acceptedAt).format("DD/MM/YYYY")}</p> : null}
+      </TableCell>
 
-      <TableCell>{accessRequest.user && <p>{dayjs(accessRequest.user.createdAt).format("DD/MM/YYYY")}</p>}</TableCell>
+      <TableCell>
+        {accessRequest.user ? <p suppressHydrationWarning>{dayjs(accessRequest.user.createdAt).format("DD/MM/YYYY")}</p> : null}
+      </TableCell>
       <TableCell className="text-right">
         <div className="flex items-center space-x-2 justify-end">
           {!accessRequest.user && !accessRequest.acceptedAt && (

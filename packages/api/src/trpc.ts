@@ -1,12 +1,12 @@
-import { TRPCError, initTRPC } from "@trpc/server"
-import type * as trpcFetch from "@trpc/server/adapters/fetch"
-import superjson from "superjson"
-import { ZodError } from "zod"
-
 import { prisma } from "@ramble/database"
 import type { Prisma } from "@ramble/database/types"
 import { decodeAuthToken } from "@ramble/server-services"
 import { userInterestFields } from "@ramble/shared"
+import * as Sentry from "@sentry/nextjs"
+import { TRPCError, initTRPC } from "@trpc/server"
+import type * as trpcFetch from "@trpc/server/adapters/fetch"
+import superjson from "superjson"
+import { ZodError } from "zod"
 
 const userSelectFields = {
   id: true,
@@ -43,6 +43,7 @@ export async function createContext({ req }: trpcFetch.FetchCreateContextFnOptio
       user = await prisma.user.findUnique({ where: { id: payload.id }, select: userSelectFields })
     }
   }
+  if (user) Sentry.setUser({ id: user.id, email: user.email, username: user.username })
   return { req, prisma, user }
 }
 export type Context = Awaited<ReturnType<typeof createContext>>
