@@ -275,18 +275,6 @@ export default function TripDetailScreen() {
         />
       </MapView>
 
-      <View pointerEvents="box-none" className="absolute bottom-[130px] left-3 flex space-y-2">
-        <Link push href={`/${tab}/trip/${id}/layers`} asChild>
-          <TouchableOpacity
-            onPress={() => increment()}
-            activeOpacity={0.8}
-            className="sq-12 shadow flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
-          >
-            <Icon icon={Layers} size={20} />
-          </TouchableOpacity>
-        </Link>
-      </View>
-
       <View style={{ top: insets.top + 8 }} pointerEvents="box-none" className="absolute right-0 left-0 flex">
         <View className="flex flex-row items-center justify-between px-4">
           <View className="flex flex-row items-center space-x-2 flex-1">
@@ -313,15 +301,6 @@ export default function TripDetailScreen() {
           </View>
           {trip && me && (
             <View className="flex flex-row items-center space-x-1 justify-end flex-1">
-              {/* <Link push href={`/${tab}/trip/${id}/layers`} asChild>
-                <TouchableOpacity
-                  onPress={() => increment()}
-                  activeOpacity={0.8}
-                  className="sq-10 shadow flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
-                >
-                  <Icon icon={Layers} size={16} />
-                </TouchableOpacity>
-              </Link> */}
               <Link push href={`/${tab}/trip/${id}/media`} asChild>
                 <TouchableOpacity
                   className="sq-10 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
@@ -330,7 +309,6 @@ export default function TripDetailScreen() {
                   <Icon icon={ImageIcon} size={16} />
                 </TouchableOpacity>
               </Link>
-
               <Link push href={`/${tab}/trip/${id}/users`} asChild>
                 <TouchableOpacity
                   className="sq-10 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
@@ -350,6 +328,19 @@ export default function TripDetailScreen() {
             </View>
           )}
         </View>
+
+        <View pointerEvents="box-none" className="absolute left-4 top-12">
+          <Link push href={`/${tab}/trip/${id}/layers`} asChild>
+            <TouchableOpacity
+              onPress={() => increment()}
+              activeOpacity={0.8}
+              className="sq-10 shadow flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
+            >
+              <Icon icon={Layers} size={20} />
+            </TouchableOpacity>
+          </Link>
+        </View>
+
         {me.tripSyncEnabled && permissionResponse?.granted && data && (
           <TripImageSync
             startDate={data.trip.startDate}
