@@ -41,7 +41,7 @@ export function TripItem({ trip }: Props) {
       className={join("space-y-4 rounded-xs border border-gray-200 p-4 dark:border-gray-700", isActive && "border-primary-500")}
     >
       <View className="flex flex-row justify-between">
-        <View className="">
+        <View className="flex-shrink">
           <Text className="text-xl" numberOfLines={1}>
             {trip.name}
           </Text>
