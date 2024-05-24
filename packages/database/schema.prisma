@@ -493,6 +493,9 @@ enum NotificationType {
   TRIP_STOP_ADDED
   TRIP_SPOT_ADDED
   SPOT_VERIFIED
+  SPOT_ADDED_TO_LIST
+  SPOT_ADDED_TO_TRIP
+  SPOT_REVIEWED
 }
 
 model Notification {

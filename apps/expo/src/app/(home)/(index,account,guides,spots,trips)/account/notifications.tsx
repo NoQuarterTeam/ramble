@@ -2,7 +2,7 @@ import { createAssetUrl } from "@ramble/shared"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 import utc from "dayjs/plugin/utc"
-import { Link } from "expo-router"
+import { type Href, Link } from "expo-router"
 import { User2 } from "lucide-react-native"
 import * as React from "react"
 import { ScrollView, TouchableOpacity, View } from "react-native"
@@ -61,11 +61,13 @@ export default function AccountNotificationsScreen() {
 function NotificationItem({
   leftElement,
   body,
+  href,
   rightElement,
   userNotification,
 }: {
   leftElement: React.ReactNode
   body: React.ReactNode
+  href: Href<string>
   rightElement?: React.ReactNode
   userNotification: RouterOutputs["notification"]["all"][0]
 }) {
@@ -74,12 +76,14 @@ function NotificationItem({
     <View className="p-1.5 mb-1 flex flex-row justify-between space-x-3">
       <View className="flex flex-1 flex-row space-x-3">
         {leftElement}
-        <View className="flex-1 items-center flex-row">
-          <Text className="flex-1">
-            {body}
-            <Text className="opacity-60"> {timeAgo}</Text>
-          </Text>
-        </View>
+        <Link push asChild href={href}>
+          <TouchableOpacity className="flex-1 items-center flex-row">
+            <Text className="flex-1">
+              {body}
+              <Text className="opacity-60"> {timeAgo}</Text>
+            </Text>
+          </TouchableOpacity>
+        </Link>
       </View>
       {rightElement}
     </View>
@@ -105,13 +109,12 @@ function NotificationType({ userNotification }: { userNotification: RouterOutput
         <NotificationItem
           userNotification={userNotification}
           leftElement={<UserAvatarNotification user={userNotification.notification.initiator} />}
+          href={`/${tab}/trip/${userNotification.notification.trip?.id}` as Href<string>}
           body={
-            <Link push href={`/${tab}/trip/${userNotification.notification.trip?.id}`}>
-              <>
-                <Text className="font-600">{initiator.username}</Text> {body}{" "}
-                <Text className="font-600">{userNotification.notification.trip?.name}</Text>.
-              </>
-            </Link>
+            <>
+              <Text className="font-600">{initiator.username}</Text> {body}{" "}
+              <Text className="font-600">{userNotification.notification.trip?.name}</Text>.
+            </>
           }
         />
       )
@@ -121,13 +124,12 @@ function NotificationType({ userNotification }: { userNotification: RouterOutput
         <NotificationItem
           userNotification={userNotification}
           leftElement={<UserAvatarNotification user={userNotification.notification.initiator} />}
+          href={`/${tab}/spot/${userNotification.notification.spot?.id}` as Href<string>}
           body={
-            <Link push href={`/${tab}/spot/${userNotification.notification.spot?.id}`}>
-              <>
-                <Text className="font-600">{initiator.username}</Text> just verified your spot:{" "}
-                <Text className="font-600">{userNotification.notification.spot?.name}</Text>.
-              </>
-            </Link>
+            <>
+              <Text className="font-600">{initiator.username}</Text> just verified your spot:{" "}
+              <Text className="font-600">{userNotification.notification.spot?.name}</Text>.
+            </>
           }
           rightElement={
             userNotification.notification.spot?.cover && (
@@ -147,6 +149,44 @@ function NotificationType({ userNotification }: { userNotification: RouterOutput
           }
         />
       )
+    case "SPOT_ADDED_TO_TRIP":
+    case "SPOT_ADDED_TO_LIST":
+    case "SPOT_REVIEWED": {
+      const body =
+        type === "SPOT_ADDED_TO_TRIP"
+          ? "added your spot to their trip"
+          : type === "SPOT_ADDED_TO_LIST"
+            ? "added your spot to their list"
+            : "reviewed your spot"
+      return (
+        <NotificationItem
+          userNotification={userNotification}
+          leftElement={<UserAvatarNotification user={userNotification.notification.initiator} />}
+          href={`/${tab}/spot/${userNotification.notification.spot?.id}` as Href<string>}
+          body={
+            <>
+              <Text className="font-600">{initiator.username}</Text> {body}
+            </>
+          }
+          rightElement={
+            userNotification.notification.spot?.cover && (
+              <Link push asChild href={`/${tab}/spot/${userNotification.notification.spot?.id}`}>
+                <TouchableOpacity>
+                  <OptimizedImage
+                    placeholder={userNotification.notification.spot?.cover.blurHash}
+                    style={{ width: 60, height: 40 }}
+                    className="rounded"
+                    source={{ uri: createAssetUrl(userNotification.notification.spot.cover.path) }}
+                    width={140}
+                    height={10}
+                  />
+                </TouchableOpacity>
+              </Link>
+            )
+          }
+        />
+      )
+    }
     case "USER_FOLLOWED": {
       const utils = api.useUtils()
       const { mutate } = api.user.toggleFollow.useMutation({
@@ -175,10 +215,11 @@ function NotificationType({ userNotification }: { userNotification: RouterOutput
         <NotificationItem
           userNotification={userNotification}
           leftElement={<UserAvatarNotification user={userNotification.notification.initiator} />}
+          href={`/${tab}/${userNotification.notification.initiator.username}/(profile)` as Href<string>}
           body={
-            <Link push href={`/${tab}/${userNotification.notification.initiator.username}/(profile)`}>
+            <>
               <Text className="font-600">{initiator.username}</Text> started following you.
-            </Link>
+            </>
           }
           rightElement={
             <View className="h-[40px] flex items-center justify-center">

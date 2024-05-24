@@ -3,8 +3,9 @@ import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
 import { reviewSchema, reviewTags } from "@ramble/server-schemas"
-import { getLanguage } from "@ramble/server-services"
+import { getLanguage, sendSpotReviewedNotification } from "@ramble/server-services"
 
+import { waitUntil } from "@vercel/functions"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const reviewRouter = createTRPCRouter({
@@ -26,7 +27,7 @@ export const reviewRouter = createTRPCRouter({
       throw new TRPCError({ code: "BAD_REQUEST", message: "You can only review a spot once per month." })
     const language = await getLanguage(input.description)
     const { tagIds, ...data } = input
-    return ctx.prisma.review.create({
+    const review = await ctx.prisma.review.create({
       data: {
         ...data,
         language,
@@ -34,6 +35,8 @@ export const reviewRouter = createTRPCRouter({
         tags: { connect: tagIds?.map((tagId) => ({ id: tagId })) },
       },
     })
+    waitUntil(sendSpotReviewedNotification({ spotId: input.spotId, initiatorId: ctx.user.id }))
+    return review
   }),
   update: protectedProcedure
     .input(
