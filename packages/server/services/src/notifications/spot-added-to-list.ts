@@ -1,6 +1,5 @@
 import { prisma } from "@ramble/database"
 import * as Sentry from "@sentry/nextjs"
-
 import { sendMessages } from "./send-messages"
 
 export async function sendSpotAddedToListNotification({ initiatorId, spotId }: { spotId: string; initiatorId: string }) {
@@ -31,7 +30,7 @@ export async function sendSpotAddedToListNotification({ initiatorId, spotId }: {
         type: "SPOT_ADDED_TO_LIST",
         initiator: { connect: { id: initiatorId } },
         spot: { connect: { id: spotId } },
-        userNotifications: { createMany: { data: { userId: spot.creatorId } } },
+        userNotifications: { create: { userId: spot.creatorId } },
       },
     })
   } catch (error) {
