@@ -179,9 +179,11 @@ export function displaySaved(saved: number | string | null | undefined) {
   return saved
 }
 
+export const campingSpotTypes = ["CAMPING", "VAN_PARK", "PRIVATE_LAND", "ROADSIDE", "CARPARK"] as SpotType[]
+
 export function isCampingSpot(type?: SpotType | null | undefined) {
   if (!type) return false
-  return type === "CAMPING" || type === "FREE_CAMPING"
+  return campingSpotTypes.includes(type)
 }
 
 export const activitySpotTypes = ["CLIMBING", "CLIMBING", "HIKING_TRAIL", "PADDLE_KAYAK", "MOUNTAIN_BIKING"] as SpotType[]
