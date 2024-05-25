@@ -1,6 +1,5 @@
 import { prisma } from "@ramble/database"
 import * as Sentry from "@sentry/nextjs"
-
 import { sendMessages } from "./send-messages"
 
 export async function sendTripStopAddedNotification({ initiatorId, tripId }: { tripId: string; initiatorId: string }) {
