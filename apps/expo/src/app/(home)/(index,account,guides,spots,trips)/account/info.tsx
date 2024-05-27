@@ -1,5 +1,6 @@
 import * as ImagePicker from "expo-image-picker"
 import { Edit2, User2 } from "lucide-react-native"
+import * as React from "react"
 import { FormProvider } from "react-hook-form"
 import { Keyboard, ScrollView, TouchableOpacity, View } from "react-native"
 
@@ -11,6 +12,7 @@ import { FormInput } from "~/components/ui/FormInput"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { ScreenView } from "~/components/ui/ScreenView"
 import { Spinner } from "~/components/ui/Spinner"
+import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
 import { useForm } from "~/lib/hooks/useForm"
@@ -18,9 +20,17 @@ import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
 import { useMe } from "~/lib/hooks/useMe"
 import { useS3Upload } from "~/lib/hooks/useS3"
 
+const MAX_TAGS = 5
+
 export default function AccountInfoScreen() {
   useKeyboardController()
   const { me } = useMe()
+
+  const { data: tagOptions, isLoading: isTagOptionsLoading } = api.user.tagOptions.useQuery()
+  const { data: myTags, isLoading: isMyTagsLoading } = api.user.myTags.useQuery()
+
+  const initialTagIds = myTags?.map((tag) => tag.id) || []
+  const [selectedTagIds, setSelectedTagIds] = React.useState(initialTagIds)
 
   const form = useForm({
     defaultValues: {
@@ -49,6 +59,7 @@ export default function AccountInfoScreen() {
         instagram: data.instagram,
         bio: data.bio,
       })
+      utils.user.myTags.refetch()
       toast({ title: "Account updated." })
     },
   })
@@ -56,7 +67,7 @@ export default function AccountInfoScreen() {
   const onSubmit = form.handleSubmit((data) => {
     if (data.username.trim().includes(" ")) return toast({ title: "Username can not contain empty spaces" })
     Keyboard.dismiss()
-    mutate(data)
+    mutate({ ...data, tagIds: selectedTagIds })
   })
 
   const { mutate: saveAvatar, isPending: isAvatarSavingLoading } = api.user.update.useMutation({
@@ -88,13 +99,24 @@ export default function AccountInfoScreen() {
     }
   }
 
+  const handleToggleTag = (tagId: string) => {
+    if (selectedTagIds.includes(tagId)) {
+      const newTags = selectedTagIds.filter((selectedTagId) => tagId !== selectedTagId)
+      setSelectedTagIds(newTags)
+    } else {
+      if (selectedTagIds.length === MAX_TAGS) return
+      setSelectedTagIds([...selectedTagIds, tagId])
+    }
+  }
+
   const isDirty = form.formState.isDirty
+  const areTagsChanged = initialTagIds.sort().join(",") !== selectedTagIds.sort().join(",")
   return (
     <FormProvider {...form}>
       <ScreenView
         title="Info"
         rightElement={
-          isDirty ? (
+          isDirty || areTagsChanged ? (
             <Button isLoading={isLoading} variant="link" size="sm" onPress={onSubmit}>
               Save
             </Button>
@@ -143,6 +165,31 @@ export default function AccountInfoScreen() {
             subLabel="This will be used to promote your instagram and gives other ramble users a way to contact you"
             error={error}
           />
+
+          <View className="mb-4">
+            <View className="flex flex-row justify-between">
+              <Text className="leading-6">Describe yourself</Text>
+              <Text className="opacity-70">
+                {selectedTagIds.length}/{MAX_TAGS}
+              </Text>
+            </View>
+            {isTagOptionsLoading || isMyTagsLoading ? (
+              <Spinner />
+            ) : (
+              <View className="flex flex-row flex-wrap gap-2">
+                {tagOptions?.map((tag) => (
+                  <Button
+                    key={tag.id}
+                    size="xs"
+                    variant={selectedTagIds.includes(tag.id) ? "primary" : "outline"}
+                    onPress={() => handleToggleTag(tag.id)}
+                  >
+                    {tag.name}
+                  </Button>
+                ))}
+              </View>
+            )}
+          </View>
         </ScrollView>
       </ScreenView>
     </FormProvider>

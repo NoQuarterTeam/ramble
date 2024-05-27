@@ -158,7 +158,16 @@ export default function UserScreen() {
                 <Text>{user.instagram}</Text>
               </TouchableOpacity>
             )}
-            <Text>{user.bio}</Text>
+            <View className="space-y-0.5">
+              <Text>{user.bio}</Text>
+              <View className="flex flex-row flex-wrap gap-2">
+                {user.tags?.map((tag) => (
+                  <View key={tag.id} className="border border-gray-200 dark:border-gray-700 px-2 py-1">
+                    <Text className="text-xs opacity-80">{tag.name}</Text>
+                  </View>
+                ))}
+              </View>
+            </View>
           </View>
 
           <View className="flex flex-row items-center justify-center space-x-2 border-gray-100 border-b bg-background py-2 dark:border-gray-800 dark:bg-background-dark">

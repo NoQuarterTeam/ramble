@@ -29,6 +29,7 @@ export const userSchema = z.object({
   longitude: z.number().nullish(),
   tripSyncEnabled: z.boolean().optional(),
   tripSyncOnNetworkEnabled: z.boolean().optional(),
+  tagIds: z.array(z.string()),
 })
 
 export const registerSchema = userSchema
