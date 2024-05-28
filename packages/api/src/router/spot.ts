@@ -9,7 +9,9 @@ import { type Spot, SpotType } from "@ramble/database/types"
 import { FULL_WEB_URL } from "@ramble/server-env"
 import { clusterSchema, spotAmenitiesSchema, spotSchema, userSchema } from "@ramble/server-schemas"
 import {
+  COUNTRIES,
   generateBlurHash,
+  geocodeCoords,
   get5DayForecast,
   getCurrentWeather,
   publicSpotWhereClause,
@@ -330,12 +332,17 @@ export const spotRouter = createTRPCRouter({
           const tripItems = await ctx.prisma.trip.findUnique({ where: { id: tripId } }).items()
           newOrder = tripItems?.length || 0
         }
+
+        const data = await geocodeCoords({ latitude: spot.latitude, longitude: spot.longitude })
+        const countryCode = COUNTRIES.find((c) => c.name === data.country)?.code
+
         await ctx.prisma.tripItem.create({
           data: {
             creator: { connect: { id: ctx.user.id } },
             spot: { connect: { id: spot.id } },
             trip: { connect: { id: tripId } },
             order: newOrder,
+            countryCode,
           },
         })
       }

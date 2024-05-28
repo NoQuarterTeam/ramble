@@ -453,9 +453,10 @@ model TripMedia {
 }
 
 model TripItem {
-  id    String    @id @default(uuid())
-  date  DateTime? @db.Date
-  order Float     @default(0)
+  id          String    @id @default(uuid())
+  date        DateTime? @db.Date
+  order       Float     @default(0)
+  countryCode String?
 
   creator   User      @relation(fields: [creatorId], references: [id])
   creatorId String

@@ -14,6 +14,8 @@ import { useFeedbackActivity } from "./FeedbackCheck"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
 
+const MAX_FLAGS = 11
+
 interface Props {
   trip: Pick<Trip, "id" | "name" | "startDate" | "endDate"> & {
     creator: Pick<User, "id" | "avatar" | "avatarBlurHash" | "firstName" | "lastName">
@@ -21,6 +23,8 @@ interface Props {
     users: Pick<User, "id" | "firstName" | "lastName" | "avatar" | "avatarBlurHash">[]
   } & {
     media: Pick<TripMedia, "id" | "path" | "thumbnailPath">[]
+  } & {
+    countryFlags: string[]
   }
 }
 const today = dayjs()
@@ -86,6 +90,21 @@ export function TripItem({ trip }: Props) {
         </Text>
         <TripUsers trip={trip} />
       </View>
+
+      {trip.countryFlags.length > 0 && (
+        <View className="flex flex-row gap-1 items-center flex-wrap">
+          {trip.countryFlags.slice(0, MAX_FLAGS).map((flag) => (
+            <Text key={flag} className="text-lg">
+              {flag}
+            </Text>
+          ))}
+          {trip.countryFlags.length > MAX_FLAGS && (
+            <View>
+              <Text className="opacity-70">+{trip.countryFlags.length - MAX_FLAGS}</Text>
+            </View>
+          )}
+        </View>
+      )}
     </TouchableOpacity>
   )
 }

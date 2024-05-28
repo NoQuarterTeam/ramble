@@ -22,6 +22,7 @@ export * from "./notifications/spot-reviewed"
 export * from "./notifications/spot-added-to-list"
 export * from "./notifications/spot-added-to-trip"
 export * from "./weather"
+export * from "./countries"
 
 export * from "./mailers/access-request"
 export * from "./mailers/beta-invitation"
