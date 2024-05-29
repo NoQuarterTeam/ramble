@@ -1,17 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { type AllRoutes, type Href, Link, useRouter } from "expo-router"
-import {
-  AlertCircle,
-  Bell,
-  ChevronRight,
-  Heart,
-  MessageCircle,
-  Settings,
-  ToggleRight,
-  User,
-  User2,
-  UserPlus,
-} from "lucide-react-native"
+import { AlertCircle, Bell, ChevronRight, Heart, MessageCircle, Settings, ToggleRight, User, User2 } from "lucide-react-native"
 import { ScrollView, TouchableOpacity, View } from "react-native"
 
 import { createAssetUrl } from "@ramble/shared"
@@ -140,9 +129,6 @@ export default function AccountScreen() {
               </ProfileLink>
               <ProfileLink to="interests" icon={ToggleRight}>
                 Interests
-              </ProfileLink>
-              <ProfileLink to="invite" icon={UserPlus}>
-                Invites
               </ProfileLink>
               <ProfileLink to="settings" icon={Settings}>
                 Settings
