@@ -11,7 +11,6 @@ export default function AccountLayout() {
       <Stack.Screen name="info" />
       <Stack.Screen name="interests" />
       <Stack.Screen name="lists" />
-      <Stack.Screen name="invite" />
       <Stack.Screen name="notifications" />
       <Stack.Screen name="settings" />
       <Stack.Screen name="van" />

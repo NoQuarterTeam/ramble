@@ -15,7 +15,7 @@ import {
   Edit2,
   Flag,
   Heart,
-  ImagePlus,
+  Images,
   Languages,
   Route,
   Share,
@@ -347,11 +347,12 @@ export default function SpotDetailScreen() {
                   Edit
                 </Button>
               )}
-              {canManageSpot(spot, me) && (
+              {me?.isAdmin && (
                 <Button
                   size="sm"
                   onPress={() => router.push(`/spot/${spot.id}/choose-cover`)}
-                  leftIcon={<Icon icon={ImagePlus} color={{ dark: "black", light: "white" }} size={16} />}
+                  variant="outline"
+                  leftIcon={<Icon icon={Images} size={18} />}
                 >
                   Choose cover
                 </Button>
