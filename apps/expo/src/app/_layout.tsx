@@ -36,7 +36,6 @@ import { TRPCProvider, api } from "~/lib/api"
 import { IS_DEV, IS_PRODUCTION, VERSION } from "~/lib/config"
 import { useCheckExpoUpdates } from "~/lib/hooks/useCheckExpoUpdates"
 import { useMe } from "~/lib/hooks/useMe"
-import { useNotificationObserver } from "~/lib/hooks/useNotificationObserver"
 import { useBackgroundColor } from "~/lib/tailwind"
 
 Sentry.init({
@@ -79,7 +78,6 @@ export default function RootLayout() {
     urbanist800Italic: Urbanist_800ExtraBold_Italic,
     urbanist900Italic: Urbanist_900Black_Italic,
   })
-  useNotificationObserver()
 
   const backgroundColor = useBackgroundColor()
 
