@@ -32,12 +32,11 @@ export const authRouter = createTRPCRouter({
     const existingEmail = await ctx.prisma.user.findUnique({ where: { email: input.email } })
     if (existingEmail) throw new TRPCError({ code: "BAD_REQUEST", message: "Email already in use" })
 
-    const accessRequest = await ctx.prisma.accessRequest.findFirst({ where: { code: code.trim(), user: null } })
-    const referrer = await ctx.prisma.user.findUnique({ where: { inviteCode: code.trim() } })
+    const accessRequest = await ctx.prisma.accessRequest.findFirst({ where: { code, user: null } })
+    const referrer = await ctx.prisma.user.findUnique({ where: { inviteCode: code } })
     if (!IS_DEV) {
       if (!accessRequest && !referrer) throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid code" })
     }
-
     const existingUsername = await ctx.prisma.user.findUnique({ where: { username: input.username } })
     if (existingUsername) throw new TRPCError({ code: "BAD_REQUEST", message: "User with this username already exists" })
     const hashedPassword = hashPassword(input.password)
@@ -50,6 +49,9 @@ export const authRouter = createTRPCRouter({
         referrer: referrer ? { connect: { id: referrer.id } } : undefined,
       },
     })
+    if (referrer) {
+      await ctx.prisma.user.update({ where: { id: referrer.id }, data: { followers: { connect: { id: user.id } } } })
+    }
     if (accessRequest) {
       await ctx.prisma.accessRequest.update({
         where: { id: accessRequest.id },
