@@ -64,7 +64,6 @@ model User {
   tripMedias             TripMedia[]
   van                    Van?
   feedback               Feedback[]
-  usedInviteCodeId       String?            @unique
   createdSpotRevisions   SpotRevision[]     @relation(name: "Creator")
   approvedSpotRevisions  SpotRevision[]     @relation(name: "Approver")
   accessRequest          AccessRequest?
