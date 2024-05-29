@@ -36,4 +36,4 @@ export const userSchema = z.object({
 
 export const registerSchema = userSchema
   .pick({ email: true, password: true, username: true, firstName: true, lastName: true })
-  .extend({ code: z.string().transform((e) => e.toUpperCase().trim()) })
+  .extend({ code: z.string().trim().toUpperCase() })
