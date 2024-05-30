@@ -1,6 +1,6 @@
 import * as RadioGroup from "@radix-ui/react-radio-group"
 import { useDisclosure } from "@ramble/shared"
-import { CloudRain, Layers, MountainSnow, SunMoon, Thermometer, Users2 } from "lucide-react"
+import { CloudRain, Earth, Layers, MountainSnow, SunMoon, Thermometer, Users2 } from "lucide-react"
 
 import { AppCta } from "@/components/AppCta"
 import { Button, IconButton, Modal, Switch, Tooltip } from "@/components/ui"
@@ -107,6 +107,28 @@ export function MapLayerControls() {
                 <RadioGroup.Item
                   value="satellite"
                   id="satellite"
+                  disabled
+                  className="sq-5 aspect-square rounded-full border shadow disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                >
+                  <RadioGroup.Indicator className="flex items-center justify-center">
+                    <div className="sq-3 rounded-full bg-primary" />
+                  </RadioGroup.Indicator>
+                </RadioGroup.Item>
+              </label>
+              <label
+                htmlFor="bioRegions"
+                className="flex cursor-not-allowed items-center justify-between rounded-sm border p-4 hover:opacity-90"
+              >
+                <div className="flex items-center space-x-4">
+                  <Earth className="sq-7" />
+                  <div>
+                    <p>Bio Regions</p>
+                    <p className="text-sm opacity-70">Shows bioregions of europe</p>
+                  </div>
+                </div>
+                <RadioGroup.Item
+                  value="bioRegions"
+                  id="bioRegions"
                   disabled
                   className="sq-5 aspect-square rounded-full border shadow disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 >
