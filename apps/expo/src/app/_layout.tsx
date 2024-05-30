@@ -107,6 +107,7 @@ export default function RootLayout() {
                   <Stack initialRouteName="(home)" screenOptions={{ headerShown: false, contentStyle: { backgroundColor } }}>
                     <Stack.Screen name="(home)" />
                     <Stack.Screen name="onboarding" />
+                    <Stack.Screen name="blog" />
                     <Stack.Screen name="(auth)" options={{ presentation: "modal" }} />
                     <Stack.Screen name="new" options={{ presentation: "modal" }} />
                     <Stack.Screen name="spot" options={{ presentation: "modal" }} />
