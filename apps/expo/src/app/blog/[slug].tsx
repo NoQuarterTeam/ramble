@@ -1,6 +1,6 @@
-import { useLocalSearchParams } from "expo-router"
+import { Redirect, useLocalSearchParams } from "expo-router"
 import * as React from "react"
-import { Linking, View } from "react-native"
+import { Linking } from "react-native"
 
 export default function BlogDetail() {
   const { slug } = useLocalSearchParams<{ slug: string }>()
@@ -11,5 +11,5 @@ export default function BlogDetail() {
     }
     Linking.openURL(`https://ramble.guide/blog/${slug}`)
   }, [slug])
-  return <View className="flex-1" />
+  return <Redirect href="/" />
 }
