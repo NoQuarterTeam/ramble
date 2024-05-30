@@ -9,6 +9,7 @@ import { Icon } from "~/components/Icon"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { useMe } from "~/lib/hooks/useMe"
 
+import { useNotificationObserver } from "~/lib/hooks/useNotificationObserver"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { useBackgroundColor } from "../../lib/tailwind"
 
@@ -19,6 +20,7 @@ export const unstable_settings = {
 
 export default function HomeLayout() {
   const router = useRouter()
+  useNotificationObserver()
 
   const tab = useTabSegment()
   const colorScheme = useColorScheme()
