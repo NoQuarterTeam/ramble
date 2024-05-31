@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { Link } from "expo-router"
+import { Link, useRouter } from "expo-router"
 import { CloudRain, Earth, MountainSnow, SunMoon, Thermometer, Users2 } from "lucide-react-native"
 import { usePostHog } from "posthog-react-native"
 import { Switch, TouchableOpacity, View } from "react-native"
@@ -38,6 +38,7 @@ export const useMapLayers = create<{
 export default function MapLayers() {
   const { layers, setLayers } = useMapLayers()
   const { me } = useMe()
+  const router = useRouter()
   const posthog = usePostHog()
 
   const onSetMapLayer = (layer: MapLayerOptions["layer"]) => {
@@ -77,8 +78,9 @@ export default function MapLayers() {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => onSetMapLayer("rain")}
-            disabled={!me}
+            onPress={() => {
+              !me ? router.push("/login") : onSetMapLayer("rain")
+            }}
             className={join(
               "flex flex-row items-center justify-between space-x-2 rounded border border-gray-200 p-3 dark:border-gray-700",
               !me && "opacity-70",
@@ -98,8 +100,9 @@ export default function MapLayers() {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => onSetMapLayer("temp")}
-            disabled={!me}
+            onPress={() => {
+              !me ? router.push("/login") : onSetMapLayer("temp")
+            }}
             className={join(
               "flex flex-row items-center justify-between space-x-2 rounded border border-gray-200 p-3 dark:border-gray-700",
               !me && "opacity-70",
@@ -119,8 +122,9 @@ export default function MapLayers() {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => onSetMapLayer("bioRegions")}
-            disabled={!me}
+            onPress={() => {
+              !me ? router.push("/login") : onSetMapLayer("bioRegions")
+            }}
             className={join(
               "flex flex-row items-center justify-between space-x-2 rounded border border-gray-200 p-3 dark:border-gray-700",
               !me && "opacity-70",
@@ -140,8 +144,9 @@ export default function MapLayers() {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => onSetMapLayer("satellite")}
-            disabled={!me}
+            onPress={() => {
+              !me ? router.push("/login") : onSetMapLayer("satellite")
+            }}
             className={join(
               "flex flex-row items-center justify-between space-x-2 rounded border border-gray-200 p-3 dark:border-gray-700",
               !me && "opacity-70",
