@@ -1,12 +1,11 @@
 import { FlashList } from "@shopify/flash-list"
-import { Link } from "expo-router"
+import { Link, router } from "expo-router"
 import * as React from "react"
 import { Modal, TouchableOpacity, View } from "react-native"
 
 import { createAssetUrl, useDisclosure } from "@ramble/shared"
 
 import { useFeedbackActivity } from "~/components/FeedbackCheck"
-import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { Button } from "~/components/ui/Button"
 import { ModalView } from "~/components/ui/ModalView"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
@@ -23,7 +22,7 @@ export default function GuidesScreen() {
   const modalProps = useDisclosure()
   const utils = api.useUtils()
 
-  const { data, isLoading } = api.user.guides.useQuery({ skip: 0 }, { enabled: !!me })
+  const { data, isLoading } = api.user.guides.useQuery({ skip: 0 })
   const { mutate: sendGuideInterest, isPending: isGuideInterestLoading } = api.user.guideInterest.useMutation({
     onSuccess: async () => {
       await utils.user.me.refetch()
@@ -43,17 +42,11 @@ export default function GuidesScreen() {
     setGuides([...(guides || []), ...newGuides])
   }, [guides, utils.user.guides])
 
-  if (!me)
-    return (
-      <TabView title="guides">
-        <LoginPlaceholder text="Log in to view guides" />
-      </TabView>
-    )
   return (
     <TabView
       title="guides"
       rightElement={
-        me.role !== "GUIDE" && (
+        me?.role !== "GUIDE" && (
           <Button variant="link" onPress={modalProps.onOpen}>
             Become a guide
           </Button>
@@ -106,9 +99,11 @@ export default function GuidesScreen() {
             </View>
             <Button
               size="lg"
-              onPress={() => sendGuideInterest()}
+              onPress={() => {
+                me ? sendGuideInterest() : router.push("/register")
+              }}
               isLoading={isGuideInterestLoading}
-              disabled={me.isPendingGuideApproval}
+              disabled={me?.isPendingGuideApproval}
             >
               I'm interested, lets talk!
             </Button>

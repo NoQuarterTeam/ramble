@@ -159,7 +159,7 @@ export const userRouter = createTRPCRouter({
     sendSlackMessage(`😭 User @${ctx.user.username} deleted their account.`)
     return true
   }),
-  guides: protectedProcedure.input(z.object({ skip: z.number() })).query(async ({ ctx, input }) => {
+  guides: publicProcedure.input(z.object({ skip: z.number() })).query(async ({ ctx, input }) => {
     return ctx.prisma.user.findMany({
       where: { role: "GUIDE", deletedAt: null },
       skip: input.skip,

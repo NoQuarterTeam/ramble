@@ -8,7 +8,7 @@ import * as DropdownMenu from "zeego/dropdown-menu"
 
 import { Icon } from "~/components/Icon"
 import { ListItem } from "~/components/ListItem"
-import { LoginPlaceholder } from "~/components/LoginPlaceholder"
+import { SignupCta } from "~/components/SignupCta"
 import { BrandHeading } from "~/components/ui/BrandHeading"
 import { ScreenView } from "~/components/ui/ScreenView"
 import { Spinner } from "~/components/ui/Spinner"
@@ -32,7 +32,7 @@ export default function ListsScreen() {
   if (!me)
     return (
       <ScreenView title="lists">
-        <LoginPlaceholder text="Log in to create lists" />
+        <SignupCta text="Sign up to create lists" />
       </ScreenView>
     )
   return (

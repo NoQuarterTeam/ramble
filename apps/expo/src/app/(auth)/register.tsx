@@ -62,7 +62,7 @@ export default function RegisterScreen() {
   })
 
   return (
-    <ModalView shouldRenderToast title="register" onBack={() => navigation.back()}>
+    <ModalView shouldRenderToast title="sign up" onBack={() => navigation.back()}>
       <FormProvider {...form}>
         <ScrollView
           keyboardShouldPersistTaps="handled"
@@ -72,6 +72,9 @@ export default function RegisterScreen() {
         >
           <View>
             <FormInput name="code" label="Invite code" autoCapitalize="characters" error={error} />
+            <Button variant="link" onPress={() => navigation.replace("/request-access")}>
+              No code? Request invite code
+            </Button>
             <FormInput
               autoCapitalize="none"
               keyboardType="email-address"
@@ -92,16 +95,13 @@ export default function RegisterScreen() {
             <FormInput name="firstName" label="First name" autoComplete="nickname" error={error} />
             <FormInput name="lastName" label="Last name" autoComplete="family-name" error={error} />
             <Button className="mb-1" isLoading={isLoading} onPress={onSubmit}>
-              Register
-            </Button>
-            <Button className="mb-1" variant="link" onPress={() => navigation.replace("/request-access")}>
-              No code? Request invite code
+              Sign up
             </Button>
           </View>
 
           <View className="flex flex-row items-center justify-center">
             <Button className="px-1" variant="link" onPress={() => navigation.replace("/login")}>
-              Login
+              Already signed up? Login
             </Button>
           </View>
         </ScrollView>

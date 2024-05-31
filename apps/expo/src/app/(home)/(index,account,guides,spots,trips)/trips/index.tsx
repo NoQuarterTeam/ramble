@@ -6,7 +6,7 @@ import { ScrollView, TouchableOpacity, View } from "react-native"
 import { useFeedbackActivity } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
 import { LinkButton } from "~/components/LinkButton"
-import { LoginPlaceholder } from "~/components/LoginPlaceholder"
+import { SignupCta } from "~/components/SignupCta"
 import { TripItem } from "~/components/TripItem"
 import { Spinner } from "~/components/ui/Spinner"
 import { TabView } from "~/components/ui/TabView"
@@ -24,7 +24,7 @@ export default function TripsLayout() {
   if (!me)
     return (
       <TabView title="trips">
-        <LoginPlaceholder text="Log in to create a trip" />
+        <SignupCta text="Sign up to create a trip" />
       </TabView>
     )
 

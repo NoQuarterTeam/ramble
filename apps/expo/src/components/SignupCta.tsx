@@ -9,7 +9,7 @@ interface Props {
   children?: React.ReactNode
 }
 
-export function LoginPlaceholder(props: Props) {
+export function SignupCta(props: Props) {
   const router = useRouter()
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -17,8 +17,11 @@ export function LoginPlaceholder(props: Props) {
         <View className="space-y-6">
           <Text className="text-lg">{props.text}</Text>
           <View>
-            <Button onPress={() => router.push("/login")}>Login</Button>
+            <Button onPress={() => router.push("/register")}>Sign up</Button>
           </View>
+          <Button variant="link" onPress={() => router.push("/login")}>
+            Already signed up? Login
+          </Button>
         </View>
         <View>{props.children}</View>
       </View>

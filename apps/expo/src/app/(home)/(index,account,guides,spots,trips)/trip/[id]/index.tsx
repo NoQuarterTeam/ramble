@@ -34,8 +34,8 @@ import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createAssetUrl, join } from "@ramb
 import { keepPreviousData } from "@tanstack/react-query"
 import { useFeedbackActivity } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
-import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { MapView } from "~/components/Map"
+import { SignupCta } from "~/components/SignupCta"
 import { SpotIcon } from "~/components/SpotIcon"
 import { SpotMarker } from "~/components/SpotMarker"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
@@ -199,7 +199,7 @@ export default function TripDetailScreen() {
   if (!me)
     return (
       <ScreenView title={trip?.name}>
-        <LoginPlaceholder text="Log in to view this trip" />
+        <SignupCta text="Sign up to view this trip" />
       </ScreenView>
     )
   return (

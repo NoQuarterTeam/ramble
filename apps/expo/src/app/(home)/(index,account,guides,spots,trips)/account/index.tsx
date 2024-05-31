@@ -6,7 +6,7 @@ import { ScrollView, TouchableOpacity, View } from "react-native"
 import { createAssetUrl } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
-import { LoginPlaceholder } from "~/components/LoginPlaceholder"
+import { SignupCta } from "~/components/SignupCta"
 import { Button } from "~/components/ui/Button"
 import { Heading } from "~/components/ui/Heading"
 import { Icons, type RambleIcon } from "~/components/ui/Icons"
@@ -39,22 +39,14 @@ export default function AccountScreen() {
   if (!me)
     return (
       <TabView title="profile">
-        <LoginPlaceholder text="Log in to create your profile">
+        <SignupCta text="Sign up to create your profile">
           <View className="space-y-4">
-            <Link push href="/(auth)/register" asChild>
-              <TouchableOpacity>
-                <Text className="text-lg">
-                  Don't have an account yet? <Text className="text-lg underline">Sign up</Text>
-                </Text>
-              </TouchableOpacity>
-            </Link>
-
             <View className="pt-10">
               <Text className="text-center">v{VERSION}</Text>
               <Text className="text-center opacity-60">{UPDATE_ID}</Text>
             </View>
           </View>
-        </LoginPlaceholder>
+        </SignupCta>
       </TabView>
     )
   return (
