@@ -95,7 +95,7 @@ export default function RegisterScreen() {
               Register
             </Button>
             <Button className="mb-1" variant="link" onPress={() => navigation.replace("/request-access")}>
-              No code? Request access
+              No code? Request invite code
             </Button>
           </View>
 

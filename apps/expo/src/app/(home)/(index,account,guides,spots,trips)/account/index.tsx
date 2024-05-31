@@ -38,7 +38,7 @@ export default function AccountScreen() {
 
   if (!me)
     return (
-      <TabView title="account">
+      <TabView title="profile">
         <LoginPlaceholder text="Log in to create your profile">
           <View className="space-y-4">
             <Link push href="/(auth)/register" asChild>
@@ -59,7 +59,7 @@ export default function AccountScreen() {
     )
   return (
     <TabView
-      title="account"
+      title="profile"
       rightElement={
         <Link asChild push href="/(home)/(account)/account/notifications">
           <TouchableOpacity className="p-2 relative">
