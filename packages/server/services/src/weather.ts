@@ -74,7 +74,7 @@ export async function get5DayForecast(lat: number, lon: number) {
     const data = grouped.map((forecasts) =>
       forecasts.map((forecast) => ({
         ...forecast,
-        main: { temp_max: forecast.main?.temp, temp: forecast.main?.temp },
+        main: { temp_max: forecast.main?.temp_max, temp: forecast.main?.temp_max },
         localTime: dayjs
           .unix(forecast.dt + timezoneOffset)
           .utc()
