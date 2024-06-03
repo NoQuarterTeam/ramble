@@ -67,8 +67,8 @@ export default function MapFilters() {
           <View className="space-y-2">
             {!me && (
               <View className="flex flex-row space-x-1">
-                <Link href="/login" push asChild>
-                  <Text className="text-base underline">Log in</Text>
+                <Link href="/register" push asChild>
+                  <Text className="text-base underline">Sign up</Text>
                 </Link>
                 <Text className="text-base">to access more filters</Text>
               </View>
@@ -218,7 +218,8 @@ function SpotTypeSelector({
   onPress: () => void
 }) {
   const { me } = useMe()
-  const isDisabled = !me ? true : me.isAdmin ? false : type.isComingSoon
+  const router = useRouter()
+  const isDisabled = me?.isAdmin ? false : type.isComingSoon
   return (
     <View className="relative">
       <Button
@@ -233,11 +234,14 @@ function SpotTypeSelector({
           />
         }
         className="min-w-[100px]"
-        disabled={me?.isAdmin ? false : isDisabled}
-        onPress={onPress}
+        disabled={(me && isDisabled) || false}
+        onPress={() => {
+          !me ? router.push("/register") : onPress()
+        }}
       >
-        {type.label}
+        <Text className={join(!me && "text-gray-500")}>{type.label}</Text>
       </Button>
+
       {!me?.isAdmin && type.isComingSoon && (
         <View
           className={join(

@@ -51,8 +51,8 @@ export default function MapLayers() {
       <View className="space-y-4">
         {!me && (
           <View className="flex flex-row space-x-1">
-            <Link href="/login" push asChild>
-              <Text className="text-base underline">Log in</Text>
+            <Link href="/register" push asChild>
+              <Text className="text-base underline">Sign up</Text>
             </Link>
             <Text className="text-base">to access more layers</Text>
           </View>
@@ -79,7 +79,7 @@ export default function MapLayers() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              !me ? router.push("/login") : onSetMapLayer("rain")
+              !me ? router.push("/register") : onSetMapLayer("rain")
             }}
             className={join(
               "flex flex-row items-center justify-between space-x-2 rounded border border-gray-200 p-3 dark:border-gray-700",
@@ -101,7 +101,7 @@ export default function MapLayers() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              !me ? router.push("/login") : onSetMapLayer("temp")
+              !me ? router.push("/register") : onSetMapLayer("temp")
             }}
             className={join(
               "flex flex-row items-center justify-between space-x-2 rounded border border-gray-200 p-3 dark:border-gray-700",
@@ -123,7 +123,7 @@ export default function MapLayers() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              !me ? router.push("/login") : onSetMapLayer("bioRegions")
+              !me ? router.push("/register") : onSetMapLayer("bioRegions")
             }}
             className={join(
               "flex flex-row items-center justify-between space-x-2 rounded border border-gray-200 p-3 dark:border-gray-700",
@@ -145,7 +145,7 @@ export default function MapLayers() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              !me ? router.push("/login") : onSetMapLayer("satellite")
+              !me ? router.push("/register") : onSetMapLayer("satellite")
             }}
             className={join(
               "flex flex-row items-center justify-between space-x-2 rounded border border-gray-200 p-3 dark:border-gray-700",
