@@ -453,8 +453,8 @@ export default function SpotDetailScreen() {
               try {
                 await RNShare.share({
                   title: spot.name,
-                  message: isAndroid ? `${FULL_WEB_URL}/spots/${spot.id}` : spot.name,
-                  url: `${FULL_WEB_URL}/spots/${spot.id}`,
+                  message: isAndroid ? `${FULL_WEB_URL}/spot/${spot.id}` : spot.name,
+                  url: `${FULL_WEB_URL}/spot/${spot.id}`,
                 })
               } catch (error: unknown) {
                 if (error instanceof Error) {
