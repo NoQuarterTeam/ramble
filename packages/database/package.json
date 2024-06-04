@@ -16,10 +16,10 @@
   "sideEffects": false,
   "dependencies": {
     "@planetscale/database": "1.18.0",
-    "@prisma/adapter-planetscale": "5.14.0",
-    "@prisma/client": "5.14.0",
+    "@prisma/adapter-planetscale": "5.15.0",
+    "@prisma/client": "5.15.0",
     "@ramble/server-env": "workspace:*",
-    "prisma": "5.14.0"
+    "prisma": "5.15.0"
   },
   "devDependencies": {
     "@types/node": "20.14.1",
