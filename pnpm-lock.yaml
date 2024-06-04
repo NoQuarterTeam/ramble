@@ -64,14 +64,14 @@ importers:
         specifier: 1.6.3
         version: 1.6.3(@babel/runtime@7.24.6)(react-native@0.73.6)(react@18.2.0)
       '@tanstack/react-query':
-        specifier: 5.40.0
-        version: 5.40.0(react@18.2.0)
+        specifier: 5.40.1
+        version: 5.40.1(react@18.2.0)
       '@trpc/client':
         specifier: 11.0.0-rc.390
         version: 11.0.0-rc.390(@trpc/server@11.0.0-rc.390)
       '@trpc/react-query':
         specifier: 11.0.0-rc.390
-        version: 11.0.0-rc.390(@tanstack/react-query@5.40.0)(@trpc/client@11.0.0-rc.390)(@trpc/server@11.0.0-rc.390)(react-dom@18.2.0)(react@18.2.0)
+        version: 11.0.0-rc.390(@tanstack/react-query@5.40.1)(@trpc/client@11.0.0-rc.390)(@trpc/server@11.0.0-rc.390)(react-dom@18.2.0)(react@18.2.0)
       '@trpc/server':
         specifier: 11.0.0-rc.390
         version: 11.0.0-rc.390
@@ -326,14 +326,14 @@ importers:
         specifier: 0.1.1
         version: 0.1.1(tailwindcss@3.3.2)
       '@tanstack/react-query':
-        specifier: 5.40.0
-        version: 5.40.0(react@18.2.0)
+        specifier: 5.40.1
+        version: 5.40.1(react@18.2.0)
       '@tanstack/react-table':
         specifier: 8.17.3
         version: 8.17.3(react-dom@18.2.0)(react@18.2.0)
       '@trpc/react-query':
         specifier: 11.0.0-rc.390
-        version: 11.0.0-rc.390(@tanstack/react-query@5.40.0)(@trpc/client@11.0.0-rc.390)(@trpc/server@11.0.0-rc.390)(react-dom@18.2.0)(react@18.2.0)
+        version: 11.0.0-rc.390(@tanstack/react-query@5.40.1)(@trpc/client@11.0.0-rc.390)(@trpc/server@11.0.0-rc.390)(react-dom@18.2.0)(react@18.2.0)
       '@trpc/server':
         specifier: 11.0.0-rc.390
         version: 11.0.0-rc.390
@@ -7441,8 +7441,8 @@ packages:
     resolution: {integrity: sha512-eD8K8jsOIq0Z5u/QbvOmfvKKE/XC39jA7yv4hgpl/1SRiU+J8QCIwgM/mEHuunQsL87dcvnHqSVLmf9pD4CiaA==}
     dev: false
 
-  /@tanstack/react-query@5.40.0(react@18.2.0):
-    resolution: {integrity: sha512-iv/W0Axc4aXhFzkrByToE1JQqayxTPNotCoSCnarR/A1vDIHaoKpg7FTIfP3Ev2mbKn1yrxq0ZKYUdLEJxs6Tg==}
+  /@tanstack/react-query@5.40.1(react@18.2.0):
+    resolution: {integrity: sha512-gOcmu+gpFd2taHrrgMM9RemLYYEDYfsCqszxCC0xtx+csDa4R8t7Hr7SfWXQP13S2sF+mOxySo/+FNXJFYBqcA==}
     peerDependencies:
       react: ^18.0.0
     dependencies:
@@ -7479,7 +7479,7 @@ packages:
       '@trpc/server': 11.0.0-rc.390
     dev: false
 
-  /@trpc/react-query@11.0.0-rc.390(@tanstack/react-query@5.40.0)(@trpc/client@11.0.0-rc.390)(@trpc/server@11.0.0-rc.390)(react-dom@18.2.0)(react@18.2.0):
+  /@trpc/react-query@11.0.0-rc.390(@tanstack/react-query@5.40.1)(@trpc/client@11.0.0-rc.390)(@trpc/server@11.0.0-rc.390)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-SVty+Kx3C7CL357Q7QmI+8X/Elj4B3qtUOpP+NBpanoKpIbS9FbZHqm73rPYE0MrM+jukT8s3hLmwYnn16xQrA==}
     peerDependencies:
       '@tanstack/react-query': ^5.25.0
@@ -7488,7 +7488,7 @@ packages:
       react: '>=18.2.0'
       react-dom: '>=18.2.0'
     dependencies:
-      '@tanstack/react-query': 5.40.0(react@18.2.0)
+      '@tanstack/react-query': 5.40.1(react@18.2.0)
       '@trpc/client': 11.0.0-rc.390(@trpc/server@11.0.0-rc.390)
       '@trpc/server': 11.0.0-rc.390
       react: 18.2.0
@@ -15105,7 +15105,7 @@ packages:
       queue-tick: 1.0.1
       text-decoder: 1.1.0
     optionalDependencies:
-      bare-events: 2.2.2
+      bare-events: 2.3.1
     optional: true
 
   /strict-uri-encode@1.1.0:
