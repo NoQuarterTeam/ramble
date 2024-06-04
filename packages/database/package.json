@@ -2,10 +2,7 @@
   "name": "@ramble/database",
   "version": "1.0.0",
   "main": "./index.ts",
-  "files": [
-    "./index.ts",
-    "./types.ts"
-  ],
+  "files": ["./index.ts", "./types.ts"],
   "scripts": {
     "dev": "pnpm with-env prisma studio",
     "db:push": "pnpm with-env prisma db push && pnpm generate",
@@ -19,6 +16,7 @@
     "@prisma/adapter-planetscale": "5.15.0",
     "@prisma/client": "5.15.0",
     "@ramble/server-env": "workspace:*",
+    "nanoid": "3.3.4",
     "prisma": "5.15.0"
   },
   "devDependencies": {
