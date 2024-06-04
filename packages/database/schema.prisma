@@ -171,6 +171,7 @@ model Spot {
   longitude   Float
   publishedAt DateTime?
   verifiedAt  DateTime?
+  nanoid      String?   @unique
 
   pointLocation Unsupported("POINT GENERATED ALWAYS AS (ST_GeomFromText(CONCAT('POINT(',longitude,' ',latitude,')'))) STORED")?
 
