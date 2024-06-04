@@ -14,7 +14,10 @@ import { toast } from "sonner"
 import { deleteSpot, updateSpotCover, verifySpot } from "./actions"
 
 interface Props {
-  spot: Pick<Spot, "type" | "sourceUrl" | "id" | "description" | "createdAt" | "name" | "coverId" | "latitude" | "longitude"> & {
+  spot: Pick<
+    Spot,
+    "type" | "nanoid" | "sourceUrl" | "id" | "description" | "createdAt" | "name" | "coverId" | "latitude" | "longitude"
+  > & {
     creator: Pick<User, "avatar" | "username">
     verifier: Pick<User, "avatar" | "username"> | null
     cover: Pick<SpotImage, "id" | "path"> | null
@@ -77,19 +80,14 @@ export function SpotRow({ spot }: Props) {
         </TableCell>
         <TableCell>
           <div className="flex items-center justify-end">
-            {spot.sourceUrl && (
-              <Link
-                href={spot.sourceUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={merge(
-                  buttonStyles({ size: "sm", disabled: false, variant: "ghost" }),
-                  iconbuttonStyles({ size: "sm" }),
-                )}
-              >
-                <ExternalLink size={16} />
-              </Link>
-            )}
+            <Link
+              href={spot.sourceUrl ? spot.sourceUrl : `/s/${spot.nanoid}`}
+              target="_blank"
+              className={merge(buttonStyles({ size: "sm", disabled: false, variant: "ghost" }), iconbuttonStyles({ size: "sm" }))}
+            >
+              <ExternalLink size={16} />
+            </Link>
+
             <IconButton
               variant="ghost"
               size="sm"

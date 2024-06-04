@@ -32,6 +32,7 @@ const getItemsAndCount = async ({ page, unverified, type, search, sort = "desc",
       skip,
       select: {
         id: true,
+        nanoid: true,
         name: true,
         coverId: true,
         description: true,
