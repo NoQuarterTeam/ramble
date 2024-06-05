@@ -5,10 +5,10 @@
   "files": ["./index.ts", "./types.ts"],
   "scripts": {
     "dev": "pnpm with-env prisma studio",
-    "db:push": "pnpm with-env prisma db push && pnpm generate",
-    "generate": "pnpm with-env prisma generate",
+    "db:push": "pnpm with-env prisma db push",
+    "db:generate": "pnpm with-env prisma generate",
     "with-env": "dotenv -e ../../.env --",
-    "postinstall": "pnpm generate"
+    "postinstall": "pnpm db:generate"
   },
   "sideEffects": false,
   "dependencies": {
