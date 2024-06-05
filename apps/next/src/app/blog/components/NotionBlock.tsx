@@ -62,6 +62,7 @@ export async function NotionBlock({ block }: Props) {
             <iframe
               width="672"
               height="379"
+              className="max-w-full"
               src={`https://www.youtube.com/embed/${getYoutubeId(block.video.external.url)}`}
               title="YouTube video player"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
