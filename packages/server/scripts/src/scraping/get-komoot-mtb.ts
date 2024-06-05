@@ -139,6 +139,7 @@ async function getCards({ lat, lng }: { lat: number; lng: number }) {
             const newSpot = await prisma.spot.create({
               data: {
                 ...data,
+                verifiedAt: new Date(),
                 images: {
                   create:
                     uniqueImages &&
