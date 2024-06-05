@@ -1,5 +1,5 @@
 import type { Spot, SpotImage, User } from "@ramble/database/types"
-import { createAssetUrl, merge } from "@ramble/shared"
+import { type SpotPartnerFields, createAssetUrl, isPartnerSpot, merge } from "@ramble/shared"
 import { FlashList } from "@shopify/flash-list"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
@@ -23,7 +23,7 @@ type ImageCarousel = Pick<SpotImage, "id" | "blurHash" | "path" | "createdAt"> &
 }
 
 type Props = {
-  spot: Pick<Spot, "id" | "ownerId">
+  spot: Pick<Spot, "id" | "ownerId"> & SpotPartnerFields
   width: number
   height: number
   noOfColumns?: number
@@ -79,37 +79,39 @@ export function SpotImageCarousel({
                 className={merge("rounded-xs object-cover", imageClassName)}
               />
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                increment()
-                if (image.creator.deletedAt) return
-                router.push(`/${tab}/${image.creator.username}/(profile)`)
-              }}
-              activeOpacity={image.creator.deletedAt ? 1 : 0.7}
-              className="absolute bottom-2 right-2 p-1 rounded-full bg-gray-800/70 flex flex-row space-x-1.5 items-center"
-            >
-              {image.creator?.avatar ? (
-                <OptimizedImage
-                  height={40}
-                  width={40}
-                  placeholder={image.creator.avatarBlurHash}
-                  source={{ uri: createAssetUrl(image.creator.avatar) }}
-                  className="sq-7 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
-                />
-              ) : (
-                <View className="sq-7 flex flex-row items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
-                  <Icon icon={User2} size={18} />
+            {!isPartnerSpot(spot) && (
+              <TouchableOpacity
+                onPress={() => {
+                  increment()
+                  if (image.creator.deletedAt) return
+                  router.push(`/${tab}/${image.creator.username}/(profile)`)
+                }}
+                activeOpacity={image.creator.deletedAt ? 1 : 0.7}
+                className="absolute bottom-2 right-2 p-1 rounded-full bg-gray-800/70 flex flex-row space-x-1.5 items-center"
+              >
+                {image.creator?.avatar ? (
+                  <OptimizedImage
+                    height={40}
+                    width={40}
+                    placeholder={image.creator.avatarBlurHash}
+                    source={{ uri: createAssetUrl(image.creator.avatar) }}
+                    className="sq-7 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
+                  />
+                ) : (
+                  <View className="sq-7 flex flex-row items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
+                    <Icon icon={User2} size={18} />
+                  </View>
+                )}
+                <View>
+                  <Text className="text-white text-xs leading-3 w-[50px]" numberOfLines={1}>
+                    {image.creator.username}
+                  </Text>
+                  <Text className="text-white text-xxs leading-3 opacity-80" numberOfLines={1}>
+                    {dayjs(image.createdAt).format("DD/MM/YYYY")}
+                  </Text>
                 </View>
-              )}
-              <View>
-                <Text className="text-white text-xs leading-3 w-[50px]" numberOfLines={1}>
-                  {image.creator.username}
-                </Text>
-                <Text className="text-white text-xxs leading-3 opacity-80" numberOfLines={1}>
-                  {dayjs(image.createdAt).format("DD/MM/YYYY")}
-                </Text>
-              </View>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            )}
           </View>
         )}
       />
