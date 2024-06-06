@@ -16,7 +16,7 @@ export const prisma =
   new PrismaClient(!env.DATABASE_URL.includes("127.0.0.1") ? { adapter } : undefined).$extends({
     query: {
       spot: {
-        create: async ({ query, args }) => {
+        create: ({ query, args }) => {
           const id = customAlphabet("abcdefghjkmnpqrstuvwxyz2345678ABCDEFGHJKLMPQRSTUVXYZ")(8)
           return query({ ...args, data: { ...args.data, nanoid: id } })
         },
