@@ -37,7 +37,9 @@ export function PartnerLink(props: Props) {
                               ? partners.mossyEarth
                               : props.spot.rewildingEuropeId
                                 ? partners.rewildingEurope
-                                : partners.polskiCaravaning
+                                : props.spot.camperguruId
+                                  ? partners.camperguru 
+                                  : partners.polskiCaravaning
 
   if (!props.spot.sourceUrl) return null
   return (
