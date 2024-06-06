@@ -1,4 +1,4 @@
-name: Update release
+name: 📲 Update release
 on:
   push:
     paths:

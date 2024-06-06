@@ -2,7 +2,7 @@ import { Client } from "@planetscale/database"
 import { PrismaPlanetScale } from "@prisma/adapter-planetscale"
 import { PrismaClient } from "@prisma/client"
 import { env } from "@ramble/server-env"
-import { customAlphabet } from "nanoid"
+import { createSpotNanoId } from "./nanoid"
 
 const client = new Client({ url: env.DATABASE_URL })
 
@@ -16,9 +16,13 @@ export const prisma =
   new PrismaClient(!env.DATABASE_URL.includes("127.0.0.1") ? { adapter } : undefined).$extends({
     query: {
       spot: {
-        create: async ({ query, args }) => {
-          const id = customAlphabet("abcdefghjkmnpqrstuvwxyz2345678ABCDEFGHJKLMPQRSTUVXYZ")(8)
+        create: ({ query, args }) => {
+          const id = createSpotNanoId()
           return query({ ...args, data: { ...args.data, nanoid: id } })
+        },
+        upsert: ({ query, args }) => {
+          const id = createSpotNanoId()
+          return query({ ...args, create: { ...args.create, nanoid: id } })
         },
       },
     },
