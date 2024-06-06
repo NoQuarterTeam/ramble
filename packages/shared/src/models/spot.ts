@@ -103,6 +103,7 @@ export const spotPartnerFields = {
   rewildingEuropeId: true,
   polskiCaravaningId: true,
   volunteeringEventsId: true,
+  camperguruId: true,
   sourceUrl: true,
 } satisfies Prisma.SpotSelect
 
@@ -124,6 +125,7 @@ export const isPartnerSpot = (spot: SpotPartnerFields) =>
   spot.mossyEarthId ||
   spot.rewildingEuropeId ||
   spot.polskiCaravaningId ||
+  spot.camperguruId ||
   spot.volunteeringEventsId
 
 export const partners = {
@@ -205,6 +207,11 @@ export const partners = {
   volunteeringEvents: {
     name: "Volunteering Events",
     logo: { light: "/partners/volunteering-events.png", dark: "/partners/volunteering-events-dark.png" },
+    pretext: "More info on",
+  },
+  camperguru: {
+    name: "Camperguru",
+    logo: { light: "/partners/camperguru.png", dark: "/partners/camperguru-dark.png" },
     pretext: "More info on",
   },
 } as const

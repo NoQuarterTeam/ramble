@@ -47,7 +47,10 @@ export function PartnerLink(props: Props) {
                               ? partners.mossyEarth
                               : props.spot.rewildingEuropeId
                                 ? partners.rewildingEurope
-                                : partners.polskiCaravaning
+                                : props.spot.polskiCaravaningId
+                                  ? partners.polskiCaravaning
+                                  : partners.camperguru
+
 
   const handleOpen = async () => {
     if (!props.spot.sourceUrl) return
