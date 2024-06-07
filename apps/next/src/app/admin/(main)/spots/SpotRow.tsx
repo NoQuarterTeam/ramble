@@ -28,6 +28,12 @@ interface Props {
 
 export function SpotRow({ spot, defaultIsOpen }: Props) {
   const expandProps = useDisclosure({ defaultIsOpen })
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: allow
+  React.useEffect(() => {
+    if (defaultIsOpen) expandProps.onOpen()
+  }, [defaultIsOpen])
+
   const [isVerifying, startVerify] = React.useTransition()
   const [isDeleting, startDelete] = React.useTransition()
 
