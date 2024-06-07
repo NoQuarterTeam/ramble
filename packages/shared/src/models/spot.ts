@@ -211,7 +211,7 @@ export const partners = {
   },
   camperguru: {
     name: "Camperguru",
-    logo: { light: "/partners/camperguru.png", dark: "/partners/camperguru-dark.png" },
+    logo: { light: "/partners/camperguru.svg", dark: "/partners/camperguru-dark.svg" },
     pretext: "More info on",
   },
 } as const
