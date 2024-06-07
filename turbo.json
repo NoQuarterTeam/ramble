@@ -1,9 +1,9 @@
 {
   "$schema": "https://turborepo.org/schema.json",
   "globalDependencies": ["./.env"],
-  "pipeline": {
+  "tasks": {
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "^db:generate"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
     "format": {
