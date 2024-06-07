@@ -2,7 +2,7 @@
   "name": "@ramble/root",
   "private": true,
   "dependencies": {
-    "turbo": "1.13.4"
+    "turbo": "2.0.3"
   },
   "type": "commonjs",
   "devDependencies": {
