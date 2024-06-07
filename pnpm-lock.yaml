@@ -477,8 +477,8 @@ importers:
         specifier: 7.0.0
         version: 7.0.0
       '@turf/center':
-        specifier: 7.0.0-alpha.116
-        version: 7.0.0-alpha.116
+        specifier: 7.0.0
+        version: 7.0.0
       '@turf/helpers':
         specifier: 7.0.0-alpha.116
         version: 7.0.0-alpha.116
@@ -7601,11 +7601,11 @@ packages:
       '@turf/invariant': 6.5.0
     dev: false
 
-  /@turf/center@7.0.0-alpha.116:
-    resolution: {integrity: sha512-vjPwTRU2U4XmfwKJsRkJ0rX+t5cAM63xssXaLweP+9614lgJG1574vWd/PCfZAqb6pvc9trdH1ge+0cU5Nbq7g==}
+  /@turf/center@7.0.0:
+    resolution: {integrity: sha512-5RZia9uuWxz2oCyd1vsNkBeraBNdwCsIo4UGRQdyswBeLFVbRwIUa7M7+2z2D7B1YIgovuLIRVfk6FeWUQXDtQ==}
     dependencies:
       '@turf/bbox': 7.0.0
-      '@turf/helpers': 7.0.0-alpha.116
+      '@turf/helpers': 7.0.0
       tslib: 2.6.2
     dev: false
 
