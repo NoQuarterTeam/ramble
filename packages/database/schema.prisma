@@ -218,6 +218,7 @@ model Spot {
   polskiCaravaningId       String? @unique
   googlePlaceId            String? @unique
   volunteeringEventsId     String? @unique
+  camperguruId             Int?    @unique
 
   @@index([publishedAt])
   @@index([ownerId])
