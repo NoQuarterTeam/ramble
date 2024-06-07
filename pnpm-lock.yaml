@@ -480,8 +480,8 @@ importers:
         specifier: 7.0.0
         version: 7.0.0
       '@turf/helpers':
-        specifier: 7.0.0-alpha.116
-        version: 7.0.0-alpha.116
+        specifier: 7.0.0
+        version: 7.0.0
       '@vercel/functions':
         specifier: ^1.0.2
         version: 1.0.2
@@ -7629,13 +7629,6 @@ packages:
 
   /@turf/helpers@7.0.0:
     resolution: {integrity: sha512-vwZvxRuyjGpGXvhXSbT9mX6FK92dBMLWbMbDJ/MXQUPx17ReVPFc+6N6IcxAzZfkiCnqy7vpuq0c+/TTrQxIiA==}
-    dependencies:
-      deep-equal: 2.2.3
-      tslib: 2.6.2
-    dev: false
-
-  /@turf/helpers@7.0.0-alpha.116:
-    resolution: {integrity: sha512-lBgYicZrgX0s/TqTmE5AjsLSqEgI5dsNwBp6O9xaTNVBoPz/vIbaaB9R/sepCL5pLW1BHDWBswVSTUPYSoHCrQ==}
     dependencies:
       deep-equal: 2.2.3
       tslib: 2.6.2
