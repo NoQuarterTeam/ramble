@@ -23,10 +23,11 @@ interface Props {
     cover: Pick<SpotImage, "id" | "path"> | null
     images: Pick<SpotImage, "id" | "path">[]
   }
+  defaultIsOpen?: boolean
 }
 
-export function SpotRow({ spot }: Props) {
-  const expandProps = useDisclosure()
+export function SpotRow({ spot, defaultIsOpen }: Props) {
+  const expandProps = useDisclosure({ defaultIsOpen })
   const [isVerifying, startVerify] = React.useTransition()
   const [isDeleting, startDelete] = React.useTransition()
 
