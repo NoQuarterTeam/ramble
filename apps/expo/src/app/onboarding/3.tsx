@@ -13,6 +13,7 @@ import { Button } from "~/components/ui/Button"
 import { FormInput } from "~/components/ui/FormInput"
 import { Heading } from "~/components/ui/Heading"
 import { Icons } from "~/components/ui/Icons"
+import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
 import { useForm } from "~/lib/hooks/useForm"
@@ -106,6 +107,7 @@ export default function OnboardingStep3Screen() {
                 <FormInput error={error} multiline name="description" label="Anything else you wanna mention?" />
               </View>
 
+              <Text className="font-400">Features</Text>
               <View className="space-y-0.5">
                 <View className="flex flex-row gap-2">
                   <View className="flex-1">

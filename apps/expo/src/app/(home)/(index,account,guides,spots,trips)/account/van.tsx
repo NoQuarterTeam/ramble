@@ -13,6 +13,7 @@ import { FormInput, FormInputLabel } from "~/components/ui/FormInput"
 import { Icons } from "~/components/ui/Icons"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { ScreenView } from "~/components/ui/ScreenView"
+import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
 import { useForm } from "~/lib/hooks/useForm"
@@ -156,6 +157,7 @@ export default function VanScreen() {
           </View>
           <FormInput multiline name="description" label="Description" error={error} />
 
+          <Text className="font-400">Features</Text>
           <View className="space-y-0.5">
             <View className="flex flex-row gap-2">
               <View className="flex-1">
