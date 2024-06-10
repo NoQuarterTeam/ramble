@@ -208,9 +208,16 @@ export const tripRouter = createTRPCRouter({
     .input(z.object({ spotId: z.string(), tripId: z.string(), order: z.number().optional() }))
     .mutation(async ({ ctx, input }) => {
       let newOrder = input.order
-      if (!input.order) {
-        const tripItems = await ctx.prisma.trip.findUnique({ where: { id: input.tripId } }).items()
+      if (!newOrder) {
+        const tripItems = await ctx.prisma.trip.findUnique({ where: { id: input.tripId } }).items({ select: { id: true } })
         newOrder = tripItems?.length || 0
+      } else if (newOrder === -1) {
+        const tripItems = await ctx.prisma.trip
+          .findUnique({ where: { id: input.tripId } })
+          .items({ orderBy: { order: "asc" }, select: { order: true } })
+        if (tripItems && tripItems.length > 0 && tripItems[0]?.order && tripItems[0]?.order <= -1) {
+          newOrder = tripItems[0]?.order - 1
+        }
       }
       const item = await ctx.prisma.tripItem.create({
         data: { spotId: input.spotId, tripId: input.tripId, creatorId: ctx.user.id, order: newOrder },
@@ -224,9 +231,16 @@ export const tripRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { tripId, order, ...data } = input
       let newOrder = order
-      if (!order) {
-        const tripItems = await ctx.prisma.trip.findUniqueOrThrow({ where: { id: input.tripId } }).items()
+      if (!newOrder) {
+        const tripItems = await ctx.prisma.trip.findUniqueOrThrow({ where: { id: input.tripId } }).items({ select: { id: true } })
         newOrder = tripItems.length || 0
+      } else if (newOrder === -1) {
+        const tripItems = await ctx.prisma.trip
+          .findUnique({ where: { id: input.tripId } })
+          .items({ orderBy: { order: "asc" }, select: { order: true } })
+        if (tripItems && tripItems.length > 0 && tripItems[0]?.order && tripItems[0]?.order <= -1) {
+          newOrder = tripItems[0]?.order - 1
+        }
       }
       const image = await getPlaceUnsplashImage(data.name)
       const stop = await ctx.prisma.$transaction(async (tx) => {
