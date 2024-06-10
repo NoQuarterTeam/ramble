@@ -77,6 +77,7 @@
     "react-native-ios-utilities": "^4.3.2",
     "react-native-map-link": "3.4.1",
     "react-native-reanimated": "3.6.3",
+    "react-native-reanimated-carousel": "^3.5.1",
     "react-native-safe-area-context": "4.8.2",
     "react-native-screens": "3.29.0",
     "react-native-svg": "14.1.0",

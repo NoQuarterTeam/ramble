@@ -1,12 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { Image } from "expo-image"
 import { type AllRoutes, type Href, Link, useRouter } from "expo-router"
 import { AlertCircle, Bell, ChevronRight, Heart, MessageCircle, Settings, ToggleRight, User, User2 } from "lucide-react-native"
-import { ScrollView, TouchableOpacity, View } from "react-native"
+import { Dimensions, ScrollView, TouchableOpacity, View } from "react-native"
 
 import { createAssetUrl } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
-import { SignupCta } from "~/components/SignupCta"
 import { Button } from "~/components/ui/Button"
 import { Heading } from "~/components/ui/Heading"
 import { Icons, type RambleIcon } from "~/components/ui/Icons"
@@ -22,6 +22,9 @@ export default function AccountScreen() {
   const { me } = useMe()
   const router = useRouter()
   const utils = api.useUtils()
+
+  const DEVICE_HEIGHT = Dimensions.get("window").height
+  const IMAGE_HEIGHT = DEVICE_HEIGHT * 0.35
 
   const { data: unreadCount } = api.notification.unreadCount.useQuery(undefined, { enabled: !!me })
 
@@ -39,14 +42,28 @@ export default function AccountScreen() {
   if (!me)
     return (
       <TabView title="profile">
-        <SignupCta text="Sign up to create your profile">
-          <View className="space-y-4">
+        <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }} showsVerticalScrollIndicator={false}>
+          <View className="flex items-center my-8 space-y-4">
+            <Text className="px-8 text-center text-xl">
+              Create your profile, follow others Ramblers, save spots, plan trips, and share everything with your friends
+            </Text>
+            <Image style={{ height: IMAGE_HEIGHT, width: IMAGE_HEIGHT }} source={require("assets/profile.png")} />
+          </View>
+
+          <View className="px-8">
+            <Button onPress={() => router.push("/register")}>Sign up</Button>
+            <Button variant="link" onPress={() => router.push("/login")}>
+              Already signed up? Login
+            </Button>
+          </View>
+
+          <View className="space-y-4 mt-4">
             <View className="pt-10">
               <Text className="text-center">v{VERSION}</Text>
               <Text className="text-center opacity-60">{UPDATE_ID}</Text>
             </View>
           </View>
-        </SignupCta>
+        </ScrollView>
       </TabView>
     )
   return (
