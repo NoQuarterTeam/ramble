@@ -85,6 +85,10 @@ export default function NewSpotConfirmScreen() {
     })
   }
 
+  const images = params.images?.split(",")
+  const coverImage = images?.[Number(params.coverIndex)]
+  const orderedImages = images ? images.sort((a, b) => (a === coverImage ? -1 : b === coverImage ? 1 : 0)) : []
+
   return (
     <NewSpotModalView title="confirm">
       <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }} showsVerticalScrollIndicator={false}>
@@ -101,7 +105,7 @@ export default function NewSpotConfirmScreen() {
           </View>
           {params.images && params.images.length > 0 && (
             <View className="overflow-hidden rounded-xs">
-              <ImageCarousel width={width - 32} height={200} images={params.images.split(",")} />
+              <ImageCarousel width={width - 32} height={200} images={orderedImages} />
             </View>
           )}
 
