@@ -46,7 +46,7 @@ export function ReviewItem({ review }: Props) {
           <p>{review.rating}</p>
         </div>
       </div>
-      <p className="blur-sm">{review.description}</p>
+      <p className="blur-sm select-none">{review.description}</p>
     </div>
   )
 }

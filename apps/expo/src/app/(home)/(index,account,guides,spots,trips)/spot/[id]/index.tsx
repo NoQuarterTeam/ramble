@@ -458,6 +458,7 @@ export default function SpotDetailScreen() {
             {spot.name}
           </Animated.Text>
         </View>
+<<<<<<< HEAD
         {me && (
           <View className="flex flex-shrink-0 flex-row items-center space-x-2">
             <TouchableOpacity
@@ -472,6 +473,20 @@ export default function SpotDetailScreen() {
                   if (error instanceof Error) {
                     Alert.alert(error.message)
                   }
+=======
+        <View className="flex flex-shrink-0 flex-row items-center space-x-2">
+          <TouchableOpacity
+            onPress={async () => {
+              try {
+                await RNShare.share({
+                  title: spot.name,
+                  message: isAndroid ? `${FULL_WEB_URL}/spot/${spot.id}` : spot.name,
+                  url: `${FULL_WEB_URL}/spot/${spot.id}`,
+                })
+              } catch (error: unknown) {
+                if (error instanceof Error) {
+                  Alert.alert(error.message)
+>>>>>>> main
                 }
               }}
               activeOpacity={0.8}

@@ -3,6 +3,8 @@ import * as cheerio from "cheerio"
 const url = `https://terreinzoeker.natuurkampeerterreinen.nl/?terrain&open_at&property_id%5B0%5D=103&property_id%5B1%5D=5&action=terrain_results_loop&maptype=mapbox`
 
 import { prisma } from "@ramble/database"
+import { convert } from 'html-to-text'
+import { confirmDeleteSpots } from './helpers/utils'
 
 export type NatuurSpot = {
   id: string
@@ -16,26 +18,31 @@ export type NatuurSpot = {
 }
 
 async function getCards() {
+  let spotIds: string[] = []
   const res = await fetch(url)
   const html = await res.text()
   const $ = cheerio.load(html)
 
-  const newSpots = $(".terrain")
+  const spots = $(".terrain")
 
-  const dbSpots = await prisma.spot.findMany({
-    select: { natuurKampeerterreinenId: true, deletedAt: true },
-    where: { type: "CAMPING", natuurKampeerterreinenId: { in: newSpots.toArray().map((s) => s.attribs["data-item"]) } },
+  const currentData = await prisma.spot.findMany({
+    select: { natuurKampeerterreinenId: true, deletedAt: true, id: true, coverId: true},
+    where: { type: "CAMPING", natuurKampeerterreinenId: { not: null } },
   })
 
-  for (let index = 0; index < newSpots.length; index++) {
-    const spot = newSpots[index]
+  console.log(spots.length + " spots found")
+
+
+  for (let index = 0; index < spots.length; index++) {
+    const spot = spots[index]
     const id = spot.attribs["data-item"]
+    spotIds.push(id)
+    const existingSpot = currentData.find((s) => s.natuurKampeerterreinenId === id)
 
-    const exists = dbSpots.find((s) => s.natuurKampeerterreinenId === id)
-    console.log(exists && "Spot exists: " + id)
-    if (exists) continue
-
-    console.log("Adding spot: " + index + " out of " + newSpots.length)
+    if (existingSpot?.deletedAt) {
+      console.log("Spot already deleted: " + spot.attribs.href)
+      continue
+    }
 
     try {
       const link = spot.attribs.href
@@ -58,6 +65,12 @@ async function getCards() {
       const toilet = true
       const wifi = $(".c-terrain__list").find(".icon-wifi-available").length > 0
       const firePit = $(".c-terrain__list").find(".icon-campfire-allowed").length > 0
+      const bbq = false
+      const sauna = false
+      const pool = false
+
+      const amenities = { bbq, shower, kitchen, sauna, firePit, wifi, toilet, water, electricity, hotWater, pool }
+
 
       let images: string[] = []
       $(".c-terrain__media")
@@ -67,45 +80,140 @@ async function getCards() {
           if (src) images.push(src)
         })
 
-      await prisma.spot.create({
-        data: {
-          natuurKampeerterreinenId: id,
-          name: name,
+      if (existingSpot && existingSpot.deletedAt === null) {
+        console.log(existingSpot && "Spot exists: " + "https://ramble.guide/spots/"+ existingSpot.id + " updating...")
+        await prisma.spot.update({where: {natuurKampeerterreinenId: id},  data: {
+          name: spot.name,
           address,
-          latitude: latitude,
-          longitude: longitude,
-          description,
+          latitude,
+          longitude,
+          description: convert(description, { wordwrap: false, preserveNewlines: true }),
+          images: {
+            create: (await Promise.all(images.map(async (imagePath) => {
+              // Check if the image already exists for the spot
+              const existingImage = await prisma.spotImage.findFirst({
+                where: {
+                  path: imagePath,
+                  spotId: existingSpot.id,
+                },
+              });
+      
+              // If the image doesn't exist, create it
+              if (!existingImage) {
+                return {
+                  path: imagePath,
+                  creator: { connect: { email: "jack@noquarter.co" } },
+                };
+              }
+      
+              // If the image already exists, return an empty object to skip its creation
+              return {};
+            }))).filter(image => Object.keys(image).length !== 0) as { path: string; creator: { connect: { email: string } } }[], // Filter out null values (indicating duplicates)
+          },
+          natuurKampeerterreinenId: id,
           type: "CAMPING",
-          sourceUrl: link,
           isPetFriendly,
-          creator: { connect: { email: "george@noquarter.co" } },
-          images: { create: images.map((image) => ({ path: image, creator: { connect: { email: "george@noquarter.co" } } })) },
+          sourceUrl: link,
+          creator: { connect: { email: "jack@noquarter.co" } },
           amenities: {
-            create: {
-              shower,
-              kitchen,
-              firePit,
-              wifi,
-              toilet,
-              water,
-              electricity,
-              hotWater,
-              bbq: false,
-              pool: false,
-              sauna: false,
+            upsert: {
+              create: amenities,
+              update: amenities
+            }
+          },
+        }, include: { images: true}});
+
+        if (existingSpot.coverId === null) {
+          // Find the corresponding image of the first image in the images array
+          const firstImage = await prisma.spotImage.findFirst({where: {spotId: existingSpot.id, path: images[0]}, select: {id: true}})
+
+          if (firstImage) {
+            await prisma.spot.update({
+              where: { id: existingSpot.id },
+              data: {
+                cover: { connect: { id: firstImage?.id }}
+              },
+            });
+          }
+        }
+
+        // Fetch existing images associated with the spot
+        const existingImages = await prisma.spotImage.findMany({
+          where: { spotId: existingSpot.id }, 
+          include: { spot: true },
+        });
+
+        // Find images to delete (images that are not in the images array)
+        const imagesToDelete = existingImages.filter(image => !images.includes(image.path));
+
+        if (imagesToDelete.length > 0) {
+          console.log("images to delete: " + imagesToDelete.map(image => image.path + " "))
+        }
+
+        // Delete images
+        await Promise.all(imagesToDelete.map(async (image) => {
+          // check if image is cover image
+          if (image.spot.coverId === image.id) {
+            await prisma.spot.update({
+              where: { id: image.spot.id },
+              data: {
+                coverId: null,
+              },
+            });
+          }
+          await prisma.spotImage.delete({
+            where: { id: image.id },
+          });
+        }));
+      } else {
+        console.log("Adding new spot: " + index + " out of " + spots.length + " " + link)
+        const newSpot = await prisma.spot.create({
+          data: {
+            natuurKampeerterreinenId: id,
+            name: name,
+            address,
+            latitude: latitude,
+            longitude: longitude,
+            description,
+            type: "CAMPING",
+            sourceUrl: link,
+            isPetFriendly,
+            creator: { connect: { email: "jack@noquarter.co" } },
+            images: { create: images.map((image) => ({ path: image, creator: { connect: { email: "jack@noquarter.co" } } })) },
+            amenities: {
+              create: amenities,
             },
           },
-        },
-      })
+        })
+
+        if (newSpot.coverId === null) {
+          const firstImage = await prisma.spotImage.findFirst({where: {spotId: newSpot.id, path: images[0]}, select: {id: true}})
+          await prisma.spot.update({
+            where: { id: newSpot.id },
+            data: {
+              cover: { connect: { id: firstImage?.id }},
+            },
+          });
+        }
+      }
     } catch (error) {
       console.log(error)
     }
   }
+  return spotIds
 }
 
 async function main() {
   try {
-    await getCards()
+    const spotIds = await getCards()
+    const dbIds = await prisma.spot.findMany({select: {natuurKampeerterreinenId: true, id: true}, where: {deletedAt: null, natuurKampeerterreinenId: {not: null}}})
+    const spotsToDelete = dbIds.filter(dbId => dbId.natuurKampeerterreinenId && spotIds && !spotIds.includes(dbId.natuurKampeerterreinenId)).map(dbId => dbId.id) as string[]
+
+    if (spotsToDelete.length > 0) {
+      await confirmDeleteSpots(spotsToDelete)
+    } else {
+      console.log("No spots to delete");
+    }
   } catch (error) {
     console.log(error)
     process.exit(1)

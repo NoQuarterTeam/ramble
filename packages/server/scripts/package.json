@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "pnpm with-env ts-node src/index.ts",
     "address": "pnpm with-env ts-node ./src/format/gen-address.ts",
+    "ids": "pnpm with-env ts-node ./src/format/gen-ids.ts",
     "blur": "pnpm with-env ts-node ./src/format/gen-blurhash.ts",
     "crag": "pnpm with-env ts-node ./src/scraping/get-thecrag.ts",
     "gpt": "pnpm with-env ts-node ./src/export/ramble-gpt.ts",
@@ -19,7 +20,8 @@
     "@ramble/shared": "workspace:*",
     "@ramble/server-services": "workspace:*",
     "@types/html-to-text": "9.0.4",
-    "@types/node": "20.14.0",
+    "@types/node": "20.14.2",
+    "nanoid": "3.3.4",
     "cheerio": "1.0.0-rc.12",
     "csv-stringify": "6.5.0",
     "dotenv-cli": "7.4.2",
