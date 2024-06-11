@@ -3,11 +3,13 @@ import { type SpotPartnerFields, createAssetUrl, isPartnerSpot, merge } from "@r
 import { FlashList } from "@shopify/flash-list"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
+import * as FileSystem from "expo-file-system"
 import * as ImagePicker from "expo-image-picker"
 import { router, useRouter } from "expo-router"
 import { Image, User2 } from "lucide-react-native"
 import * as React from "react"
-import { TouchableOpacity, View } from "react-native"
+import { Platform, TouchableOpacity, View } from "react-native"
+import { type FileInfo, TEN_MB } from "~/lib/fileSystem"
 import { useMe } from "~/lib/hooks/useMe"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { useFeedbackActivity } from "./FeedbackCheck"
@@ -138,12 +140,25 @@ function Footer({
   const onPickImage = async () => {
     if (!spot) return
     try {
+      const quality = Platform.OS === "ios" ? 0.3 : 0.4
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsMultipleSelection: true,
-        quality: 1,
+        quality,
       })
       if (result.canceled || result.assets.length === 0) return
+
+      await Promise.all(
+        result.assets.map(async (asset) => {
+          const { uri } = asset
+          // Android doesn't have result.fileSize available, so need to use expo filesystem instead
+          const info: FileInfo = await FileSystem.getInfoAsync(uri)
+          if (info.size && info.size > TEN_MB) {
+            throw new Error("Please select an image with a smaller filesize")
+          }
+        }),
+      )
+
       const searchParams = new URLSearchParams({
         images: result.assets.map((asset) => asset.uri).join(","),
       })

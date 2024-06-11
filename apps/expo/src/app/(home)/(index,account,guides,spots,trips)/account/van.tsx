@@ -1,8 +1,9 @@
+import * as FileSystem from "expo-file-system"
 import * as ImagePicker from "expo-image-picker"
 import { Bike, Plus, ShowerHead, Wifi, X, Zap } from "lucide-react-native"
 import * as React from "react"
 import { FormProvider } from "react-hook-form"
-import { Keyboard, ScrollView, TouchableOpacity, View } from "react-native"
+import { Keyboard, Platform, ScrollView, TouchableOpacity, View } from "react-native"
 
 import { VAN_SETTINGS, createAssetUrl } from "@ramble/shared"
 
@@ -16,6 +17,7 @@ import { ScreenView } from "~/components/ui/ScreenView"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
+import { type FileInfo, TEN_MB } from "~/lib/fileSystem"
 import { useForm } from "~/lib/hooks/useForm"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
 import { useS3Upload } from "~/lib/hooks/useS3"
@@ -103,13 +105,24 @@ export default function VanScreen() {
   const onPickImage = async () => {
     setIsSavingImagesLoading(true)
     try {
+      const quality = Platform.OS === "ios" ? 0.3 : 0.4
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsMultipleSelection: true,
         selectionLimit: 10,
-        quality: 1,
+        quality,
       })
       if (result.canceled || result.assets.length === 0) return
+      await Promise.all(
+        result.assets.map(async (asset) => {
+          const { uri } = asset
+          // Android doesn't have result.fileSize available, so need to use expo filesystem instead
+          const info: FileInfo = await FileSystem.getInfoAsync(uri)
+          if (info.size && info.size > TEN_MB) {
+            throw new Error("Please select an image with a smaller filesize")
+          }
+        }),
+      )
       const paths = await Promise.all(result.assets.map((asset) => upload(asset.uri)))
       saveImages({ paths })
     } catch (error) {
