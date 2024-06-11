@@ -12,6 +12,7 @@ import { Button } from "~/components/ui/Button"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 
+import { isCampingSpot } from "@ramble/shared"
 import { NewSpotModalView } from "./NewSpotModalView"
 
 export default function NewSpotImagesScreen() {
@@ -40,7 +41,7 @@ export default function NewSpotImagesScreen() {
   return (
     <NewSpotModalView title="upload images" shouldRenderToast>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        {(params.type === "CAMPING" || params.type === "FREE_CAMPING") && (
+        {isCampingSpot(params.type) && (
           <Text className="pb-2">Try and add a photo of your van at the spot, maybe a nice picture of the view!</Text>
         )}
         <Text className="pb-2">Click the image you want to have as the cover</Text>
