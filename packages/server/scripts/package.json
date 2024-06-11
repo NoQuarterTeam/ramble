@@ -28,7 +28,7 @@
     "graphql-request": "6.1.0",
     "graphql": "16.8.1",
     "html-to-text": "9.0.5",
-    "puppeteer": "22.10.0",
+    "puppeteer": "22.10.1",
     "ts-node": "10.9.2",
     "typescript": "5.4.5"
   }
