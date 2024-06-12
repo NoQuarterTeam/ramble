@@ -7,7 +7,8 @@ export async function geocodeCoords({ latitude, longitude }: { latitude: number;
     const jsonResponse = (await res.json()) as FeatureCollection
     const address = jsonResponse.features.find((feature) => feature.place_type.includes("address"))?.place_name
     const place = jsonResponse.features.find((feature) => feature.place_type.includes("place"))?.place_name
-    return { address, place }
+    const country = jsonResponse.features.find((feature) => feature.place_type.includes("country"))?.place_name
+    return { address, place, country }
   } catch (error) {
     Sentry.captureException(error)
     return { address: undefined, place: undefined }

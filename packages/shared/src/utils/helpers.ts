@@ -8,3 +8,7 @@ export const groupBy = <T>(array: T[], predicate: (value: T, index: number, arra
     },
     {} as { [key: string]: T[] },
   )
+
+export function uniq(a: unknown[]) {
+  return Array.from(new Set(a))
+}

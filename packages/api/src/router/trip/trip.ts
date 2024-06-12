@@ -1,11 +1,14 @@
 import { tripSchema, tripStopSchema } from "@ramble/server-schemas"
 import {
+  COUNTRIES,
+  geocodeCoords,
   getPlaceUnsplashImage,
   sendSlackMessage,
   sendSpotAddedToTripNotification,
   sendTripSpotAddedNotification,
   sendTripStopAddedNotification,
 } from "@ramble/server-services"
+import { uniq } from "@ramble/shared"
 import { TRPCError } from "@trpc/server"
 import bbox from "@turf/bbox"
 import { lineString } from "@turf/helpers"
@@ -18,7 +21,7 @@ import { tripUsersRouter } from "./users"
 
 export const tripRouter = createTRPCRouter({
   mine: protectedProcedure.input(z.object({ skip: z.number().optional() }).optional()).query(async ({ ctx, input }) => {
-    return ctx.prisma.trip.findMany({
+    const data = await ctx.prisma.trip.findMany({
       where: { users: { some: { id: ctx.user.id } } },
       orderBy: { startDate: "desc" },
       include: {
@@ -34,6 +37,16 @@ export const tripRouter = createTRPCRouter({
       },
       take: 50, // TODO pagination
       skip: input?.skip || 0,
+    })
+
+    return data.map((trip) => {
+      const countryFlags = []
+      for (const item of trip.items.sort((a, b) => a.order - b.order)) {
+        const flag = COUNTRIES.find((c) => c.code === item.countryCode)?.emoji
+        if (!flag) continue
+        countryFlags.push(flag)
+      }
+      return { ...trip, countryFlags: uniq(countryFlags) as string[] }
     })
   }),
   allWithSavedSpot: protectedProcedure.input(z.object({ spotId: z.string() })).query(async ({ ctx, input }) => {
@@ -219,8 +232,12 @@ export const tripRouter = createTRPCRouter({
           newOrder = tripItems[0]?.order - 1
         }
       }
+      const spot = await ctx.prisma.spot.findUnique({ where: { id: input.spotId } })
+      if (!spot) throw new TRPCError({ code: "NOT_FOUND", message: "Spot not found" })
+      const data = await geocodeCoords({ latitude: spot.latitude, longitude: spot.longitude })
+      const countryCode = COUNTRIES.find((c) => c.name === data.country)?.code
       const item = await ctx.prisma.tripItem.create({
-        data: { spotId: input.spotId, tripId: input.tripId, creatorId: ctx.user.id, order: newOrder },
+        data: { spotId: input.spotId, tripId: input.tripId, creatorId: ctx.user.id, order: newOrder, countryCode },
       })
       waitUntil(sendTripSpotAddedNotification({ initiatorId: ctx.user.id, tripId: input.tripId }))
       waitUntil(sendSpotAddedToTripNotification({ spotId: input.spotId, initiatorId: ctx.user.id }))
@@ -244,7 +261,9 @@ export const tripRouter = createTRPCRouter({
       }
       const image = await getPlaceUnsplashImage(data.name)
       const stop = await ctx.prisma.$transaction(async (tx) => {
-        const tripItem = await tx.tripItem.create({ data: { tripId, creatorId: ctx.user.id, order: newOrder } })
+        const geoData = await geocodeCoords({ latitude: data.latitude, longitude: data.longitude })
+        const countryCode = COUNTRIES.find((c) => c.name === geoData.country)?.code
+        const tripItem = await tx.tripItem.create({ data: { tripId, creatorId: ctx.user.id, order: newOrder, countryCode } })
         return tx.tripStop.create({ data: { ...data, tripItemId: tripItem.id, image: image } })
       })
 
