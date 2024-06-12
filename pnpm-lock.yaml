@@ -67,14 +67,14 @@ importers:
         specifier: 5.44.0
         version: 5.44.0(react@18.2.0)
       '@trpc/client':
-        specifier: 11.0.0-rc.401
-        version: 11.0.0-rc.401(@trpc/server@11.0.0-rc.401)
+        specifier: 11.0.0-rc.402
+        version: 11.0.0-rc.402(@trpc/server@11.0.0-rc.402)
       '@trpc/react-query':
-        specifier: 11.0.0-rc.401
-        version: 11.0.0-rc.401(@tanstack/react-query@5.44.0)(@trpc/client@11.0.0-rc.401)(@trpc/server@11.0.0-rc.401)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 11.0.0-rc.402
+        version: 11.0.0-rc.402(@tanstack/react-query@5.44.0)(@trpc/client@11.0.0-rc.402)(@trpc/server@11.0.0-rc.402)(react-dom@18.2.0)(react@18.2.0)
       '@trpc/server':
-        specifier: 11.0.0-rc.401
-        version: 11.0.0-rc.401
+        specifier: 11.0.0-rc.402
+        version: 11.0.0-rc.402
       class-variance-authority:
         specifier: 0.7.0
         version: 0.7.0
@@ -335,11 +335,11 @@ importers:
         specifier: 8.17.3
         version: 8.17.3(react-dom@18.2.0)(react@18.2.0)
       '@trpc/react-query':
-        specifier: 11.0.0-rc.401
-        version: 11.0.0-rc.401(@tanstack/react-query@5.44.0)(@trpc/client@11.0.0-rc.401)(@trpc/server@11.0.0-rc.401)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 11.0.0-rc.402
+        version: 11.0.0-rc.402(@tanstack/react-query@5.44.0)(@trpc/client@11.0.0-rc.402)(@trpc/server@11.0.0-rc.402)(react-dom@18.2.0)(react@18.2.0)
       '@trpc/server':
-        specifier: 11.0.0-rc.401
-        version: 11.0.0-rc.401
+        specifier: 11.0.0-rc.402
+        version: 11.0.0-rc.402
       '@vercel/analytics':
         specifier: 1.3.1
         version: 1.3.1(next@14.2.4)(react@18.2.0)
@@ -377,8 +377,8 @@ importers:
         specifier: 14.2.4
         version: 14.2.4(react-dom@18.2.0)(react@18.2.0)
       posthog-js:
-        specifier: 1.139.0
-        version: 1.139.0
+        specifier: 1.139.1
+        version: 1.139.1
       pretty-cache-header:
         specifier: 1.0.0
         version: 1.0.0
@@ -474,8 +474,8 @@ importers:
         specifier: workspace:*
         version: link:../shared
       '@trpc/server':
-        specifier: 11.0.0-rc.401
-        version: 11.0.0-rc.401
+        specifier: 11.0.0-rc.402
+        version: 11.0.0-rc.402
       '@turf/bbox':
         specifier: 7.0.0
         version: 7.0.0
@@ -678,8 +678,8 @@ importers:
         specifier: 3.3.4
         version: 3.3.4
       puppeteer:
-        specifier: 22.10.1
-        version: 22.10.1(typescript@5.4.5)
+        specifier: 22.11.0
+        version: 22.11.0(typescript@5.4.5)
       ts-node:
         specifier: 10.9.2
         version: 10.9.2(@types/node@20.14.2)(typescript@5.4.5)
@@ -1674,7 +1674,7 @@ packages:
       '@babel/core': 7.24.7
       '@babel/helper-compilation-targets': 7.24.7
       '@babel/helper-plugin-utils': 7.24.7
-      debug: 4.3.4
+      debug: 4.3.5
       lodash.debounce: 4.0.8
       resolve: 1.22.8
     transitivePeerDependencies:
@@ -3593,7 +3593,7 @@ packages:
       '@babel/helper-split-export-declaration': 7.24.7
       '@babel/parser': 7.24.6
       '@babel/types': 7.24.6
-      debug: 4.3.4
+      debug: 4.3.5
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -3611,7 +3611,7 @@ packages:
       '@babel/helper-split-export-declaration': 7.24.7
       '@babel/parser': 7.24.7
       '@babel/types': 7.24.7
-      debug: 4.3.4
+      debug: 4.3.5
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -3793,7 +3793,7 @@ packages:
       chalk: 4.1.2
       ci-info: 3.9.0
       connect: 3.7.0
-      debug: 4.3.4
+      debug: 4.3.5
       env-editor: 0.4.2
       find-yarn-workspace-root: 2.0.0
       form-data: 3.0.1
@@ -3892,7 +3892,7 @@ packages:
       '@expo/sdk-runtime-versions': 1.0.0
       '@react-native/normalize-color': 2.1.0
       chalk: 4.1.2
-      debug: 4.3.4
+      debug: 4.3.5
       find-up: 5.0.0
       getenv: 1.0.0
       glob: 7.1.6
@@ -3951,7 +3951,7 @@ packages:
     resolution: {integrity: sha512-a+uJ/e6MAVxPVVN/HbXU5qxzdqrqDwNQYxCfxtAufgmd5VZj54e5f3TJA3LEEUW3pTSZR8xK0H0EtVN297AZnw==}
     dependencies:
       chalk: 4.1.2
-      debug: 4.3.4
+      debug: 4.3.5
       dotenv: 16.4.5
       dotenv-expand: 11.0.6
       getenv: 1.0.0
@@ -3965,7 +3965,7 @@ packages:
     dependencies:
       '@expo/spawn-async': 1.7.2
       chalk: 4.1.2
-      debug: 4.3.4
+      debug: 4.3.5
       find-up: 5.0.0
       minimatch: 3.1.2
       p-limit: 3.1.0
@@ -4013,7 +4013,7 @@ packages:
       '@react-native/babel-preset': 0.74.84(@babel/core@7.24.7)(@babel/preset-env@7.24.7)
       babel-preset-fbjs: 3.4.0(@babel/core@7.24.7)
       chalk: 4.1.2
-      debug: 4.3.4
+      debug: 4.3.5
       find-yarn-workspace-root: 2.0.0
       fs-extra: 9.1.0
       getenv: 1.0.0
@@ -4142,7 +4142,7 @@ packages:
     dependencies:
       '@remix-run/node': 1.19.3
       abort-controller: 3.0.0
-      debug: 4.3.4
+      debug: 4.3.5
       source-map-support: 0.5.21
     transitivePeerDependencies:
       - supports-color
@@ -7509,32 +7509,32 @@ packages:
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
     dev: true
 
-  /@trpc/client@11.0.0-rc.401(@trpc/server@11.0.0-rc.401):
-    resolution: {integrity: sha512-nRjqcZhsdIJk1BlVGhJhEwsET/KQH+izksWQP7oupeuqYLD6pvCQAvNpzqa1qhlfrfrN08ZSQmgHZ4A+O2FIww==}
+  /@trpc/client@11.0.0-rc.402(@trpc/server@11.0.0-rc.402):
+    resolution: {integrity: sha512-bcI5007X6pH3IoZFvYHnJ4I4kHROaOrWJcV/Vq2h7qsKYGK/NzZ0a2lpIU4o5QX2zBQr6Xy1IvU9SpNiu5tqog==}
     peerDependencies:
-      '@trpc/server': 11.0.0-rc.401+91720833b
+      '@trpc/server': 11.0.0-rc.402+f5eb0631e
     dependencies:
-      '@trpc/server': 11.0.0-rc.401
+      '@trpc/server': 11.0.0-rc.402
     dev: false
 
-  /@trpc/react-query@11.0.0-rc.401(@tanstack/react-query@5.44.0)(@trpc/client@11.0.0-rc.401)(@trpc/server@11.0.0-rc.401)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-xH/3UE2dPUuF/MstlcappOlDQLNfuhI+YObLcYIJC+Yg8inkuygTZ5W6vRL/2BYHRJ8/UmV/K4aZazsTyKw9xg==}
+  /@trpc/react-query@11.0.0-rc.402(@tanstack/react-query@5.44.0)(@trpc/client@11.0.0-rc.402)(@trpc/server@11.0.0-rc.402)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-YXTe3XBr2wb9ZuAK01/Gk85shY8gOFnT5Rfz2BczeFrPeVdhZf1dLgZ/txpN+4o4KZlv3Stylt+Vz8X8usTeMg==}
     peerDependencies:
       '@tanstack/react-query': ^5.25.0
-      '@trpc/client': 11.0.0-rc.401+91720833b
-      '@trpc/server': 11.0.0-rc.401+91720833b
+      '@trpc/client': 11.0.0-rc.402+f5eb0631e
+      '@trpc/server': 11.0.0-rc.402+f5eb0631e
       react: '>=18.2.0'
       react-dom: '>=18.2.0'
     dependencies:
       '@tanstack/react-query': 5.44.0(react@18.2.0)
-      '@trpc/client': 11.0.0-rc.401(@trpc/server@11.0.0-rc.401)
-      '@trpc/server': 11.0.0-rc.401
+      '@trpc/client': 11.0.0-rc.402(@trpc/server@11.0.0-rc.402)
+      '@trpc/server': 11.0.0-rc.402
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@trpc/server@11.0.0-rc.401:
-    resolution: {integrity: sha512-cHNrdZSTxabIo9XZ+c2GUCVlJOa84DI7ElzLph0oMn8Tsrq9iep+YWyhuoBlQKNdoCiRFgsptdTIvozWGdaNFw==}
+  /@trpc/server@11.0.0-rc.402:
+    resolution: {integrity: sha512-bXKR0pVEx5LXMhp5lLr2sMXbD4hH7PqwtfWHyrYfQ4czZdFz+V888kGa59sEX5/9JOsCaqSkchnGnyAZBvCyqg==}
     dev: false
 
   /@trysound/sax@0.2.0:
@@ -7929,7 +7929,7 @@ packages:
     resolution: {integrity: sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ==}
     engines: {node: '>= 6.0.0'}
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.5
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -7938,7 +7938,7 @@ packages:
     resolution: {integrity: sha512-H0TSyFNDMomMNJQBn8wFV5YC/2eJ+VXECwOadZJT554xP6cODZHPX3H9QMQECxvrgiSOP1pHjy1sMWQVYJOUOA==}
     engines: {node: '>= 14'}
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.5
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -8726,12 +8726,12 @@ packages:
       - supports-color
     dev: false
 
-  /chromium-bidi@0.5.23(devtools-protocol@0.0.1286932):
+  /chromium-bidi@0.5.23(devtools-protocol@0.0.1299070):
     resolution: {integrity: sha512-1o/gLU9wDqbN5nL2MtfjykjOuighGXc3/hnWueO1haiEoFgX8h5vbvcA4tgdQfjw1mkZ1OEF4x/+HVeqEX6NoA==}
     peerDependencies:
       devtools-protocol: '*'
     dependencies:
-      devtools-protocol: 0.0.1286932
+      devtools-protocol: 0.0.1299070
       mitt: 3.0.1
       urlpattern-polyfill: 10.0.0
       zod: 3.23.8
@@ -9325,7 +9325,6 @@ packages:
         optional: true
     dependencies:
       ms: 2.1.2
-    dev: true
 
   /decamelize@1.2.0:
     resolution: {integrity: sha512-z2S+W9X73hAUUki+N+9Za2lBlun89zigOyGrsax+KUQ6wKW4ZoWpEYBkGhQjwAjjDCkWxhY0VKEhk8wzY7F5cA==}
@@ -9485,8 +9484,8 @@ packages:
     resolution: {integrity: sha512-ypdmJU/TbBby2Dxibuv7ZLW3Bs1QEmM7nHjEANfohJLvE0XVujisn1qPJcZxg+qDucsr+bP6fLD1rPS3AhJ7EQ==}
     dev: false
 
-  /devtools-protocol@0.0.1286932:
-    resolution: {integrity: sha512-wu58HMQll9voDjR4NlPyoDEw1syfzaBNHymMMZ/QOXiHRNluOnDgu9hp1yHOKYoMlxCh4lSSiugLITe6Fvu1eA==}
+  /devtools-protocol@0.0.1299070:
+    resolution: {integrity: sha512-+qtL3eX50qsJ7c+qVyagqi7AWMoQCBGNfoyJZMwm/NSXVqLYbuitrWEEIzxfUmTNy7//Xe8yhMmQ+elj3uAqSg==}
     dev: true
 
   /didyoumean@1.2.2:
@@ -10350,7 +10349,7 @@ packages:
     engines: {node: '>= 10.17.0'}
     hasBin: true
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.5
       get-stream: 5.2.0
       yauzl: 2.10.0
     optionalDependencies:
@@ -10756,7 +10755,7 @@ packages:
     dependencies:
       basic-ftp: 5.0.5
       data-uri-to-buffer: 6.0.2
-      debug: 4.3.4
+      debug: 4.3.5
       fs-extra: 11.2.0
     transitivePeerDependencies:
       - supports-color
@@ -11041,7 +11040,7 @@ packages:
     engines: {node: '>= 14'}
     dependencies:
       agent-base: 7.1.1
-      debug: 4.3.4
+      debug: 4.3.5
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -11051,7 +11050,7 @@ packages:
     engines: {node: '>= 6'}
     dependencies:
       agent-base: 6.0.2
-      debug: 4.3.4
+      debug: 4.3.5
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -11061,7 +11060,7 @@ packages:
     engines: {node: '>= 14'}
     dependencies:
       agent-base: 7.1.1
-      debug: 4.3.4
+      debug: 4.3.5
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -13076,7 +13075,7 @@ packages:
     dependencies:
       '@tootallnate/quickjs-emscripten': 0.23.0
       agent-base: 7.1.1
-      debug: 4.3.4
+      debug: 4.3.5
       get-uri: 6.0.3
       http-proxy-agent: 7.0.2
       https-proxy-agent: 7.0.4
@@ -13662,8 +13661,8 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.2.0
 
-  /posthog-js@1.139.0:
-    resolution: {integrity: sha512-FuYlxQFO0Dq5X1/bFEM8F+NgOqZiVh4fPVHHeOTWMkqVP+pCnODQitbtW0hgT0/EE665w0xpZBk93YavaZRhzQ==}
+  /posthog-js@1.139.1:
+    resolution: {integrity: sha512-+JDu2S7z6sh9Q5kj0oh/W8PZJMQ1gSigWi7gbY4NwwCq2M3t0wNFjxlfHbAo1GncRWDxen+IC+3J7oJ8TJGnkA==}
     dependencies:
       fflate: 0.4.8
       preact: 10.20.2
@@ -13852,7 +13851,7 @@ packages:
     engines: {node: '>= 14'}
     dependencies:
       agent-base: 7.1.1
-      debug: 4.3.4
+      debug: 4.3.5
       http-proxy-agent: 7.0.2
       https-proxy-agent: 7.0.4
       lru-cache: 7.18.3
@@ -13881,14 +13880,14 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
-  /puppeteer-core@22.10.1:
-    resolution: {integrity: sha512-t98x55ohn6eioM/e1dmhy6bG9iuQ+mvpNXyr+UppB789uvNKKOvy9YnWpKp4mVyKxi9BGsceHAFuovQGqQKyCQ==}
+  /puppeteer-core@22.11.0:
+    resolution: {integrity: sha512-57YUjhRoSpZWg9lCssWsgzM1/X/1jQnkKbbspbeW0bhZTt3TD4WdNXEYI7KrFFnSvx21tyHhfWW0zlxzbwYSAA==}
     engines: {node: '>=18'}
     dependencies:
       '@puppeteer/browsers': 2.2.3
-      chromium-bidi: 0.5.23(devtools-protocol@0.0.1286932)
+      chromium-bidi: 0.5.23(devtools-protocol@0.0.1299070)
       debug: 4.3.5
-      devtools-protocol: 0.0.1286932
+      devtools-protocol: 0.0.1299070
       ws: 8.17.0
     transitivePeerDependencies:
       - bufferutil
@@ -13896,16 +13895,16 @@ packages:
       - utf-8-validate
     dev: true
 
-  /puppeteer@22.10.1(typescript@5.4.5):
-    resolution: {integrity: sha512-yFT7BlyIa4B1SnE6ccBVt+nYpDNTtZtwNh9tL79d6eWlGh94YrdzQDH+WtG88mCuQIcjjcJgvTRfm8uljuMgUQ==}
+  /puppeteer@22.11.0(typescript@5.4.5):
+    resolution: {integrity: sha512-U5U0Dx5Tsd/ec39BmflhcSFIK9UnZxGQfyUzvQVHivt6gIi6RgJqYL9MJaU90OG6tTz65XqzN4wF0ZyDyY0NuA==}
     engines: {node: '>=18'}
     hasBin: true
     requiresBuild: true
     dependencies:
       '@puppeteer/browsers': 2.2.3
       cosmiconfig: 9.0.0(typescript@5.4.5)
-      devtools-protocol: 0.0.1286932
-      puppeteer-core: 22.10.1
+      devtools-protocol: 0.0.1299070
+      puppeteer-core: 22.11.0
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -14996,7 +14995,7 @@ packages:
     engines: {node: '>= 14'}
     dependencies:
       agent-base: 7.1.1
-      debug: 4.3.4
+      debug: 4.3.5
       socks: 2.8.3
     transitivePeerDependencies:
       - supports-color
