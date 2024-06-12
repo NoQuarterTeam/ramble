@@ -9,7 +9,6 @@ export default function NewSpotLayout() {
       <Stack.Screen name="index" />
       <Stack.Screen name="type" />
       <Stack.Screen name="info" />
-      <Stack.Screen name="amenities" />
       <Stack.Screen name="images" />
       <Stack.Screen name="confirm" />
     </Stack>

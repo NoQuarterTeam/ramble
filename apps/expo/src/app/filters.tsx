@@ -131,7 +131,7 @@ export default function MapFilters() {
               <View className="flex flex-row items-center space-x-4">
                 <Icon icon={Dog} size={30} />
                 <View>
-                  <Text className="text-lg">Pet friendly</Text>
+                  <Text className="text-lg">Suitable for pets</Text>
                   <Text className="text-sm opacity-75">Furry friends allowed</Text>
                 </View>
               </View>

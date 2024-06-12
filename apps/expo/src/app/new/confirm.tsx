@@ -117,7 +117,7 @@ export default function NewSpotConfirmScreen() {
           {params.isPetFriendly === "true" && (
             <View className="flex flex-row items-center space-x-2">
               <Icon icon={Dog} size={20} />
-              <Text>Pet friendly</Text>
+              <Text>Suitable for pets</Text>
             </View>
           )}
           {parsedAmenities && (
