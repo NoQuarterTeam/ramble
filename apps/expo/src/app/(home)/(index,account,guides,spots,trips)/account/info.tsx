@@ -175,7 +175,6 @@ export default function AccountInfoScreen() {
             subLabel="This will be used to promote your instagram and gives other ramble users a way to contact you"
             error={error}
           />
-
           <View className="mb-4">
             <View className="flex flex-row justify-between">
               <Text className="leading-6">Describe yourself</Text>
