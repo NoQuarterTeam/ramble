@@ -70,6 +70,7 @@ model User {
   pushTokens             PushToken[]
   userNotifications      UserNotification[]
   initiatedNotifications Notification[]
+  tags                   UserTag[]
   referrer               User?              @relation("UserReferrals", fields: [referrerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   referrerId             String?
   referrals              User[]             @relation("UserReferrals")
@@ -530,4 +531,14 @@ model UserNotification {
   @@index([userId])
   @@index([status])
   @@index([notificationId])
+}
+
+model UserTag {
+  id   String @id @default(uuid())
+  name String
+
+  users User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }

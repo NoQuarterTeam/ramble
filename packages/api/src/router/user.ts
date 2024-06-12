@@ -1,4 +1,4 @@
-import { clusterSchema, userSchema } from "@ramble/server-schemas"
+import { clusterSchema, userSchema, userTags } from "@ramble/server-schemas"
 import {
   createAuthToken,
   deleteObject,
@@ -36,6 +36,7 @@ export const userRouter = createTRPCRouter({
         followers: ctx.user ? { where: { id: ctx.user.id } } : undefined,
         _count: { select: { followers: true, following: true } },
         bio: true,
+        tags: { select: { id: true, name: true } },
       },
     })
     if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
@@ -45,18 +46,21 @@ export const userRouter = createTRPCRouter({
     const spot = await ctx.prisma.spot.findFirst({ where: { creatorId: ctx.user.id }, select: { id: true } })
     return !!spot
   }),
-  update: protectedProcedure.input(userSchema.partial()).mutation(async ({ ctx, input }) => {
-    if (input.username && input.username !== ctx.user.username) {
-      const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })
+  update: protectedProcedure.input(userSchema.partial().and(userTags)).mutation(async ({ ctx, input: { tagIds, ...data } }) => {
+    if (data.username && data.username !== ctx.user.username) {
+      const user = await ctx.prisma.user.findUnique({ where: { username: data.username } })
       if (user) throw new TRPCError({ code: "BAD_REQUEST", message: "Username already taken" })
     }
     let avatarBlurHash = ctx.user.avatarBlurHash
-    if (input.avatar && input.avatar !== ctx.user.avatar) {
+    if (data.avatar && data.avatar !== ctx.user.avatar) {
       if (ctx.user.avatar) await deleteObject(ctx.user.avatar)
-      avatarBlurHash = await generateBlurHash(input.avatar)
+      avatarBlurHash = await generateBlurHash(data.avatar)
     }
-    const user = await ctx.prisma.user.update({ where: { id: ctx.user.id }, data: { ...input, avatarBlurHash } })
-    updateLoopsContact({ userId: user.id, email: user.email, ...input })
+    const user = await ctx.prisma.user.update({
+      where: { id: ctx.user.id },
+      data: { ...data, avatarBlurHash, tags: { set: tagIds?.map((tagId) => ({ id: tagId })) } },
+    })
+    updateLoopsContact({ userId: user.id, email: user.email, ...data })
     return user
   }),
   followers: publicProcedure.input(userSchema.pick({ username: true })).query(async ({ ctx, input }) => {
@@ -191,5 +195,11 @@ export const userRouter = createTRPCRouter({
     sendSlackMessage(`User @${ctx.user.username} is interested in becoming a guide - get in touch with them! 💬`)
     await ctx.prisma.user.update({ where: { id: ctx.user.id }, data: { isPendingGuideApproval: true } })
     return true
+  }),
+  myTags: protectedProcedure.query(({ ctx }) => {
+    return ctx.prisma.user.findUnique({ where: { id: ctx.user.id } }).tags()
+  }),
+  tagOptions: protectedProcedure.query(({ ctx }) => {
+    return ctx.prisma.userTag.findMany()
   }),
 })

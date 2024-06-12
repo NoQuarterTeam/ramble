@@ -31,6 +31,8 @@ export const userSchema = z.object({
   tripSyncOnNetworkEnabled: z.boolean().optional(),
 })
 
+export const userTags = z.object({ tagIds: z.array(z.string()).optional() })
+
 export const registerSchema = userSchema
   .pick({ email: true, password: true, username: true, firstName: true, lastName: true })
   .extend({ code: z.string().trim().toUpperCase() })
