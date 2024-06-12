@@ -5,7 +5,7 @@ import * as React from "react"
 import { TouchableOpacity, View, useColorScheme } from "react-native"
 
 import { Icon } from "~/components/Icon"
-import { LoginPlaceholder } from "~/components/LoginPlaceholder"
+import { SignupCta } from "~/components/SignupCta"
 import { ModalView } from "~/components/ui/ModalView"
 import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
@@ -19,7 +19,7 @@ export default function SaveSpotToTripScreen() {
   if (!me)
     return (
       <ModalView title="add to trip">
-        <LoginPlaceholder text="Log in to start saving spots" />
+        <SignupCta text="Sign up to start saving spots" />
       </ModalView>
     )
   return (

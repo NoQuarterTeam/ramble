@@ -4,20 +4,14 @@
     "details": [
       {
         "appID": "C5XTRW3VUY.co.noquarter.ramble",
-        "paths": [
-          "*"
-        ]
+        "paths": ["*"]
       }
     ]
   },
   "activitycontinuation": {
-    "apps": [
-      "C5XTRW3VUY.co.noquarter.ramble"
-    ]
+    "apps": ["C5XTRW3VUY.co.noquarter.ramble"]
   },
   "webcredentials": {
-    "apps": [
-      "C5XTRW3VUY.co.noquarter.ramble"
-    ]
+    "apps": ["C5XTRW3VUY.co.noquarter.ramble"]
   }
 }

@@ -1,7 +1,13 @@
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 
+/**
+ * @deprecated in 1.5.0 - no longer used
+ */
 export const inviteCodeRouter = createTRPCRouter({
-  myCodes: protectedProcedure.query(({ ctx }) => {
-    return ctx.prisma.inviteCode.findMany({ where: { ownerId: ctx.user.id }, include: { user: true } })
+  /**
+   * @deprecated in 1.5.0 - no longer used
+   */
+  myCodes: protectedProcedure.query(() => {
+    return []
   }),
 })

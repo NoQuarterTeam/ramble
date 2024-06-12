@@ -14,6 +14,7 @@ type WeatherResponse = {
   dt: number
   main?: {
     temp: number
+    temp_max?: number
   }
   weather: {
     icon: string
@@ -36,7 +37,7 @@ export async function getCurrentWeather(lat: number, lon: number) {
       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${env.OPEN_WEATHER_API_KEY}`,
     )
     const json = (await res.json()) as WeatherResponse
-    return json?.main && json.weather[0]?.icon ? { temp: json.main.temp, icon: json.weather[0].icon } : null
+    return json?.main && json.weather[0]?.icon ? { temp: json.main.temp_max, icon: json.weather[0].icon } : null
   } catch (error) {
     Sentry.captureException(error)
     return null
@@ -73,6 +74,7 @@ export async function get5DayForecast(lat: number, lon: number) {
     const data = grouped.map((forecasts) =>
       forecasts.map((forecast) => ({
         ...forecast,
+        main: { temp_max: forecast.main?.temp_max, temp: forecast.main?.temp_max },
         localTime: dayjs
           .unix(forecast.dt + timezoneOffset)
           .utc()
@@ -86,7 +88,7 @@ export async function get5DayForecast(lat: number, lon: number) {
     data[0]?.unshift({
       isNow: true,
       localTime: currentLocalTime.format(),
-      main: { temp: data[0][0]?.main?.temp || 0 },
+      main: { temp: data[0][0]?.main?.temp_max || 0, temp_max: data[0][0]?.main?.temp_max || 0 },
       weather: [{ icon: data[0][0]?.weather[0]?.icon || "" }],
       dt: 0,
     })
@@ -98,6 +100,7 @@ export async function get5DayForecast(lat: number, lon: number) {
       if (currentLocalTime.isBefore(dailySunrise)) {
         // Insert sunrise if the current time is before sunrise
         forecasts.push({
+          main: { temp: 0, temp_max: 0 },
           isSunrise: true,
           localTime: dailySunrise.format(),
           weather: [{ icon: "" }],
@@ -107,6 +110,7 @@ export async function get5DayForecast(lat: number, lon: number) {
       if (currentLocalTime.isBefore(dailySunset)) {
         // Insert sunset if the current time is before sunset
         forecasts.push({
+          main: { temp: 0, temp_max: 0 },
           isSunset: true,
           weather: [{ icon: "" }],
           localTime: dailySunset.format(),

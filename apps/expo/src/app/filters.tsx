@@ -67,8 +67,8 @@ export default function MapFilters() {
           <View className="space-y-2">
             {!me && (
               <View className="flex flex-row space-x-1">
-                <Link href="/login" push asChild>
-                  <Text className="text-base underline">Log in</Text>
+                <Link href="/register" push asChild>
+                  <Text className="text-base underline">Sign up</Text>
                 </Link>
                 <Text className="text-base">to access more filters</Text>
               </View>
@@ -131,7 +131,7 @@ export default function MapFilters() {
               <View className="flex flex-row items-center space-x-4">
                 <Icon icon={Dog} size={30} />
                 <View>
-                  <Text className="text-lg">Pet friendly</Text>
+                  <Text className="text-lg">Suitable for pets</Text>
                   <Text className="text-sm opacity-75">Furry friends allowed</Text>
                 </View>
               </View>
@@ -218,7 +218,8 @@ function SpotTypeSelector({
   onPress: () => void
 }) {
   const { me } = useMe()
-  const isDisabled = !me ? true : me.isAdmin ? false : type.isComingSoon
+  const router = useRouter()
+  const isDisabled = me?.isAdmin ? false : type.isComingSoon
   return (
     <View className="relative">
       <Button
@@ -233,11 +234,14 @@ function SpotTypeSelector({
           />
         }
         className="min-w-[100px]"
-        disabled={me?.isAdmin ? false : isDisabled}
-        onPress={onPress}
+        disabled={(me && isDisabled) || false}
+        onPress={() => {
+          !me ? router.push("/register") : onPress()
+        }}
       >
-        {type.label}
+        <Text className={join(!me && "text-gray-500")}>{type.label}</Text>
       </Button>
+
       {!me?.isAdmin && type.isComingSoon && (
         <View
           className={join(

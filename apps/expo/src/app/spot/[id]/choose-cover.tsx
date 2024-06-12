@@ -1,11 +1,11 @@
-import { createAssetUrl } from "@ramble/shared"
+import { createAssetUrl, merge } from "@ramble/shared"
 import { FlashList } from "@shopify/flash-list"
 import { Image } from "expo-image"
 import { useRouter } from "expo-router"
 import { useLocalSearchParams } from "expo-router"
-import { Heart } from "lucide-react-native"
+import { Star } from "lucide-react-native"
 import * as React from "react"
-import { TouchableOpacity, View, useColorScheme } from "react-native"
+import { TouchableOpacity, View } from "react-native"
 
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
@@ -34,7 +34,6 @@ export default function ChooseSpotCover() {
 }
 
 function ImageList({ spot }: { spot: NonNullable<RouterOutputs["spot"]["images"]> }) {
-  const isDark = useColorScheme() === "dark"
   const [coverId, setCoverId] = React.useState(spot.coverId)
   const router = useRouter()
   const utils = api.useUtils()
@@ -56,10 +55,15 @@ function ImageList({ spot }: { spot: NonNullable<RouterOutputs["spot"]["images"]
         ItemSeparatorComponent={() => <View className="h-2" />}
         renderItem={({ item }) => (
           <TouchableOpacity activeOpacity={0.8} className="relative w-full px-1" onPress={() => setCoverId(item.id)}>
-            <Image className="rounded" source={{ uri: createAssetUrl(item.path) }} style={{ width: "100%", height: 120 }} />
+            <Image
+              className={merge(item.id === coverId && "border-2 border-primary-500", "rounded")}
+              source={{ uri: createAssetUrl(item.path) }}
+              style={{ width: "100%", height: 120 }}
+            />
             {item.id === coverId && (
-              <View className="absolute top-1 left-2 flex items-center justify-center rounded-full bg-background p-1.5 dark:bg-background-dark">
-                <Icon icon={Heart} size={18} fill={isDark ? "white" : "black"} />
+              <View className="absolute bottom-1 left-2 rounded-sm bg-primary-500 px-1 flex-row space-x-0.5 items-center pb-0.5">
+                <Icon icon={Star} size={11} color="white" className="mt-0.5" />
+                <Text className="text-white">cover</Text>
               </View>
             )}
           </TouchableOpacity>

@@ -11,8 +11,8 @@ import { INITIAL_LATITUDE, INITIAL_LONGITUDE, displayRating } from "@ramble/shar
 import { keepPreviousData } from "@tanstack/react-query"
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
 import { Icon } from "~/components/Icon"
-import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { MapView } from "~/components/Map"
+import { SignupCta } from "~/components/SignupCta"
 import { Empty } from "~/components/SpotImageCarousel"
 import { SpotTypeBadge } from "~/components/SpotTypeBadge"
 import { Button } from "~/components/ui/Button"
@@ -109,7 +109,7 @@ export default function NewSpotLocationScreen() {
   if (!me)
     return (
       <NewSpotModalView title="new spot" canGoBack={false}>
-        <LoginPlaceholder text="Log in to start creating spots" />
+        <SignupCta text="Sign up to start creating spots" />
       </NewSpotModalView>
     )
 

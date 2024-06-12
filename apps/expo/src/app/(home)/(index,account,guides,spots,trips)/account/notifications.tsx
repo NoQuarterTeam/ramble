@@ -136,12 +136,12 @@ function NotificationType({ userNotification }: { userNotification: RouterOutput
               <Link push asChild href={`/${tab}/spot/${userNotification.notification.spot?.id}`}>
                 <TouchableOpacity>
                   <OptimizedImage
-                    placeholder={userNotification.notification.spot?.cover.blurHash}
+                    placeholder={userNotification.notification.spot.cover.blurHash}
                     style={{ width: 60, height: 40 }}
                     className="rounded"
                     source={{ uri: createAssetUrl(userNotification.notification.spot.cover.path) }}
-                    width={140}
-                    height={10}
+                    width={120}
+                    height={80}
                   />
                 </TouchableOpacity>
               </Link>
@@ -170,15 +170,16 @@ function NotificationType({ userNotification }: { userNotification: RouterOutput
           }
           rightElement={
             userNotification.notification.spot?.cover && (
-              <Link push asChild href={`/${tab}/spot/${userNotification.notification.spot?.id}`}>
+              <Link push asChild href={`/${tab}/spot/${userNotification.notification.spot.id}`}>
                 <TouchableOpacity>
                   <OptimizedImage
-                    placeholder={userNotification.notification.spot?.cover.blurHash}
+                    placeholder={userNotification.notification.spot.cover.blurHash}
                     style={{ width: 60, height: 40 }}
                     className="rounded"
+                    fit="cover"
                     source={{ uri: createAssetUrl(userNotification.notification.spot.cover.path) }}
-                    width={140}
-                    height={10}
+                    width={120}
+                    height={80}
                   />
                 </TouchableOpacity>
               </Link>

@@ -1,10 +1,11 @@
 import * as Sentry from "@sentry/react-native"
+import * as FileSystem from "expo-file-system"
 import { Image } from "expo-image"
 import * as ImagePicker from "expo-image-picker"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { Plus, X } from "lucide-react-native"
 import * as React from "react"
-import { ScrollView, TouchableOpacity, View } from "react-native"
+import { Platform, ScrollView, TouchableOpacity, View } from "react-native"
 
 import { createAssetUrl } from "@ramble/shared"
 
@@ -13,6 +14,7 @@ import { Button } from "~/components/ui/Button"
 import { toast } from "~/components/ui/Toast"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
+import { type FileInfo, TEN_MB } from "~/lib/fileSystem"
 import { EditSpotModalView } from "./EditSpotModalView"
 
 export default function EditSpotImagesScreen() {
@@ -21,12 +23,23 @@ export default function EditSpotImagesScreen() {
 
   const onPickImage = async () => {
     try {
+      const quality = Platform.OS === "ios" ? 0.3 : 0.4
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsMultipleSelection: true,
-        quality: 1,
+        quality,
       })
       if (result.canceled || result.assets.length === 0) return
+      await Promise.all(
+        result.assets.map(async (asset) => {
+          const { uri } = asset
+          // Android doesn't have result.fileSize available, so need to use expo filesystem instead
+          const info: FileInfo = await FileSystem.getInfoAsync(uri)
+          if (info.size && info.size > TEN_MB) {
+            throw new Error("Please select an image with a smaller filesize")
+          }
+        }),
+      )
       setImages((i) => [...i, ...result.assets.map((asset) => asset.uri)])
     } catch (error) {
       Sentry.captureException(error)

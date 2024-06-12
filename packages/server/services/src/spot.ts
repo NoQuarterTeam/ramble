@@ -1,5 +1,5 @@
-import { Prisma, SpotType, type User } from "@ramble/database/types"
-import type { SpotListSort } from "@ramble/shared"
+import { Prisma, type SpotType, type User } from "@ramble/database/types"
+import { type SpotListSort, campingSpotTypes } from "@ramble/shared"
 
 export const publicSpotWhereClause = (userId?: string | null) => {
   return {
@@ -59,10 +59,7 @@ export const spotListQuery = ({
 }) => {
   const whereClause = type
     ? Prisma.sql`Spot.verifiedAt IS NOT NULL AND Spot.type = ${type} AND ${publicSpotWhereClauseRaw(user?.id)}`
-    : Prisma.sql`Spot.verifiedAt IS NOT NULL AND Spot.type IN (${Prisma.join([
-        SpotType.CAMPING,
-        SpotType.FREE_CAMPING,
-      ])}) AND ${publicSpotWhereClauseRaw(user?.id)}`
+    : Prisma.sql`Spot.verifiedAt IS NOT NULL AND Spot.type IN (${Prisma.join(campingSpotTypes)}) AND ${publicSpotWhereClauseRaw(user?.id)}`
 
   const whereWithDistanceSort =
     sort === "near" && user?.latitude && user?.longitude
