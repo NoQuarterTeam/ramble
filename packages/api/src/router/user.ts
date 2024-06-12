@@ -187,7 +187,7 @@ export const userRouter = createTRPCRouter({
       },
     })
   }),
-  guideInterest: protectedProcedure.mutation(async ({ ctx }) => {
+  requestGuideStatus: protectedProcedure.mutation(async ({ ctx }) => {
     sendSlackMessage(`User @${ctx.user.username} is interested in becoming a guide - get in touch with them! 💬`)
     await ctx.prisma.user.update({ where: { id: ctx.user.id }, data: { isPendingGuideApproval: true } })
     return true

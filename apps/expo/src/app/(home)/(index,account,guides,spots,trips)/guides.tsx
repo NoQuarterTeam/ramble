@@ -23,7 +23,7 @@ export default function GuidesScreen() {
   const utils = api.useUtils()
 
   const { data, isLoading } = api.user.guides.useQuery({ skip: 0 })
-  const { mutate: sendGuideInterest, isPending: isGuideInterestLoading } = api.user.guideInterest.useMutation({
+  const { mutate: sendGuideInterest, isPending: isGuideInterestLoading } = api.user.requestGuideStatus.useMutation({
     onSuccess: async () => {
       await utils.user.me.refetch()
       modalProps.onClose()
