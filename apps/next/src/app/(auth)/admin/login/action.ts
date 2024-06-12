@@ -20,6 +20,7 @@ export const action = async (_: unknown, formData: FormData) => {
     if (!isCorrectPassword) return { ok: false, formError: "Incorrect email or password" }
     clearSession()
     setUserSession(user.id)
+    Sentry.setUser({ id: user.id, email: user.email, username: user.username })
   } catch (e) {
     Sentry.captureException(e)
     return { ok: false, formError: "Error logging in. Please try again." }

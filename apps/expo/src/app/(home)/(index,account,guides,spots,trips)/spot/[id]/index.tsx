@@ -13,7 +13,7 @@ import {
   Edit2,
   Flag,
   Heart,
-  ImagePlus,
+  Images,
   Languages,
   Route,
   Share,
@@ -42,7 +42,6 @@ import { Camera, LocationPuck, MarkerView } from "@rnmapbox/maps"
 import utc from "dayjs/plugin/utc"
 import { CreatorCard } from "~/components/CreatorCard"
 import { Icon } from "~/components/Icon"
-import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { MapView } from "~/components/Map"
 import { PartnerLink } from "~/components/PartnerLink"
 import { ReviewItem } from "~/components/ReviewItem"
@@ -51,7 +50,6 @@ import { SpotMarker } from "~/components/SpotMarker"
 import { SpotTypeBadge } from "~/components/SpotTypeBadge"
 import { Button } from "~/components/ui/Button"
 import { Heading } from "~/components/ui/Heading"
-import { ScreenView } from "~/components/ui/ScreenView"
 import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
@@ -156,12 +154,12 @@ export default function SpotDetailScreen() {
         {router.canGoBack() && <Button onPress={router.back}>Back</Button>}
       </View>
     )
-  if (!me)
-    return (
-      <ScreenView title={spot.name}>
-        <LoginPlaceholder text="Log in to view more information about this spot" />
-      </ScreenView>
-    )
+  // if (!me)
+  //   return (
+  //     <ScreenView title={spot.name}>
+  //       <SignupCta text="Log in to view more information about this spot" />
+  //     </ScreenView>
+  //   )
 
   return (
     <View>
@@ -204,200 +202,215 @@ export default function SpotDetailScreen() {
                 <TranslateSpotDescription spot={spot} translatedDescription={data.translatedDescription} />
               </View>
             )}
-            {spot.address && <Text className="font-400-italic text-sm">{spot.address}</Text>}
-            {spot.amenities && (
-              <View className="flex flex-row flex-wrap gap-2">
-                {Object.entries(AMENITIES).map(([key, value]) => {
-                  if (!spot.amenities?.[key as keyof typeof AMENITIES]) return null
-                  const icon = AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]
-                  return (
-                    <View
-                      key={key}
-                      className="flex flex-row space-x-1 rounded-xs border border-gray-200 p-2 dark:border-gray-700"
-                    >
-                      {icon && <Icon icon={icon} size={20} />}
-                      <Text className="text-sm">{value}</Text>
-                    </View>
-                  )
-                })}
+            {!me ? (
+              <View className="w-full px-16 flex space-y-4 pt-4">
+                <Text className="text-center text-xl">Sign up to see more</Text>
+                <Button onPress={() => router.push("/login")}>Sign up</Button>
               </View>
-            )}
-
-            {data.tags.length > 0 && (
-              <View className="flex flex-row flex-wrap gap-2">
-                {data.tags.map((tag) => (
-                  <View key={tag.name} className="p-2 rounded-sm border border-gray-200 dark:border-gray-700">
-                    <Text className="text-sm">{tag.name}</Text>
-                    <View className="absolute -top-1 -right-1 sq-4 flex items-center justify-center bg-background dark:bg-background-dark rounded-full border border-gray-200 dark:border-gray-700">
-                      <Text className="text-xxs leading-3">{tag.count}</Text>
-                    </View>
+            ) : (
+              <>
+                {spot.address && <Text className="font-400-italic text-sm">{spot.address}</Text>}
+                {spot.amenities && (
+                  <View className="flex flex-row flex-wrap gap-2">
+                    {Object.entries(AMENITIES).map(([key, value]) => {
+                      if (!spot.amenities?.[key as keyof typeof AMENITIES]) return null
+                      const icon = AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]
+                      return (
+                        <View
+                          key={key}
+                          className="flex flex-row space-x-1 rounded-xs border border-gray-200 p-2 dark:border-gray-700"
+                        >
+                          {icon && <Icon icon={icon} size={20} />}
+                          <Text className="text-sm">{value}</Text>
+                        </View>
+                      )
+                    })}
                   </View>
-                ))}
-              </View>
-            )}
+                )}
 
-            {forecastDays && forecastDays.length > 0 && (
-              <View className="pt-4">
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  <View className="flex flex-row space-x-2">
-                    {forecastDays.map((day) => (
-                      <View
-                        key={day[0]?.localTime}
-                        className="border border-gray-200 dark:border-gray-700 rounded-sm p-2 space-y-1"
-                      >
-                        <Text className="font-600">{dayjs(day[0]?.localTime).format("ddd Do")}</Text>
-                        <View className="flex flex-row space-x-3">
-                          {day.map((forecast) => (
-                            <View key={forecast.localTime} className="flex items-center">
-                              <View className="space-y-1 items-center">
-                                <Text>
-                                  {forecast.isNow
-                                    ? "Now"
-                                    : dayjs(forecast.localTime)
-                                        .utc()
-                                        .format(forecast.isSunrise || forecast.isSunset ? "HH:mm" : "HH")}
-                                </Text>
-                                <View className="w-[40px] h-[40px] flex items-center justify-center">
-                                  {forecast.isSunrise ? (
-                                    <Icon icon={Sunrise} size={24} color="primary" />
-                                  ) : forecast.isSunset ? (
-                                    <Icon icon={Sunset} size={24} color="primary" />
-                                  ) : (
-                                    <Image
-                                      style={{ width: 38, height: 38 }}
-                                      source={{ uri: `https://openweathermap.org/img/wn/${forecast.weather[0]!.icon}@2x.png` }}
-                                    />
-                                  )}
-                                </View>
-                                <Text>
-                                  {forecast.isSunrise
-                                    ? "Sunrise"
-                                    : forecast.isSunset
-                                      ? "Sunset"
-                                      : `${Math.round(forecast.main?.temp || 0)}°`}
-                                </Text>
-                              </View>
-                            </View>
-                          ))}
+                {data.tags.length > 0 && (
+                  <View className="flex flex-row flex-wrap gap-2">
+                    {data.tags.map((tag) => (
+                      <View key={tag.name} className="p-2 rounded-sm border border-gray-200 dark:border-gray-700">
+                        <Text className="text-sm">{tag.name}</Text>
+                        <View className="absolute -top-1 -right-1 sq-4 flex items-center justify-center bg-background dark:bg-background-dark rounded-full border border-gray-200 dark:border-gray-700">
+                          <Text className="text-xxs leading-3">{tag.count}</Text>
                         </View>
                       </View>
                     ))}
                   </View>
-                </ScrollView>
-              </View>
+                )}
+
+                {forecastDays && forecastDays.length > 0 && (
+                  <View className="pt-4">
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                      <View className="flex flex-row space-x-2">
+                        {forecastDays.map((day) => (
+                          <View
+                            key={day[0]?.localTime}
+                            className="border border-gray-200 dark:border-gray-700 rounded-sm p-2 space-y-1"
+                          >
+                            <Text className="font-600">{dayjs(day[0]?.localTime).format("ddd Do")}</Text>
+                            <View className="flex flex-row space-x-3">
+                              {day.map((forecast) => (
+                                <View key={forecast.localTime} className="flex items-center">
+                                  <View className="space-y-1 items-center">
+                                    <Text>
+                                      {forecast.isNow
+                                        ? "Now"
+                                        : dayjs(forecast.localTime)
+                                            .utc()
+                                            .format(forecast.isSunrise || forecast.isSunset ? "HH:mm" : "HH")}
+                                    </Text>
+                                    <View className="w-[40px] h-[40px] flex items-center justify-center">
+                                      {forecast.isSunrise ? (
+                                        <Icon icon={Sunrise} size={24} color="primary" />
+                                      ) : forecast.isSunset ? (
+                                        <Icon icon={Sunset} size={24} color="primary" />
+                                      ) : (
+                                        <Image
+                                          style={{ width: 38, height: 38 }}
+                                          source={{
+                                            uri: `https://openweathermap.org/img/wn/${forecast.weather[0]!.icon}@2x.png`,
+                                          }}
+                                        />
+                                      )}
+                                    </View>
+                                    <Text>
+                                      {forecast.isSunrise
+                                        ? "Sunrise"
+                                        : forecast.isSunset
+                                          ? "Sunset"
+                                          : `${Math.round(forecast.main?.temp || 0)}°`}
+                                    </Text>
+                                  </View>
+                                </View>
+                              ))}
+                            </View>
+                          </View>
+                        ))}
+                      </View>
+                    </ScrollView>
+                  </View>
+                )}
+
+                <View className="space-y-2 py-4">
+                  {me && (
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      leftIcon={<Icon icon={Flag} size={16} />}
+                      onPress={() => router.push(`/${tab}/spot/${spot.id}/report`)}
+                    >
+                      Report spot
+                    </Button>
+                  )}
+                  {canManageSpot(spot, me) && !spot.verifiedAt && (
+                    <Button
+                      size="sm"
+                      onPress={() => verifySpot({ id: spot.id })}
+                      isLoading={isVerifyingLoading}
+                      leftIcon={<Icon icon={Check} size={18} />}
+                    >
+                      Verify
+                    </Button>
+                  )}
+                  {canManageSpot(spot, me) && (
+                    <Button
+                      size="sm"
+                      onPress={() => {
+                        const searchParams = new URLSearchParams({
+                          latitude: spot.latitude.toString(),
+                          longitude: spot.longitude.toString(),
+                          address: spot.address || "",
+                          type: spot.type,
+                          name: spot.name,
+                          description: spot.description || "",
+                          isPetFriendly: spot.isPetFriendly ? "true" : "false",
+                          amenities: spot.amenities ? JSON.stringify(spot.amenities) : "",
+                          images: spot.images.map((i) => i.path).join(","),
+                        })
+                        router.push(`/${tab}/spot/${spot.id}/edit?${searchParams}`)
+                      }}
+                      variant="outline"
+                      leftIcon={<Icon icon={Edit2} size={18} />}
+                    >
+                      Edit
+                    </Button>
+                  )}
+                  {me?.isAdmin && (
+                    <Button
+                      size="sm"
+                      onPress={() => router.push(`/spot/${spot.id}/choose-cover`)}
+                      variant="outline"
+                      leftIcon={<Icon icon={Images} size={18} />}
+                    >
+                      Choose cover
+                    </Button>
+                  )}
+                  {me?.isAdmin && (
+                    <Button
+                      size="sm"
+                      onPress={() => router.push(`/${tab}/spot/${spot.id}/delete`)}
+                      variant="destructive"
+                      leftIcon={<Trash size={18} className="text-white" />}
+                    >
+                      Delete
+                    </Button>
+                  )}
+                </View>
+              </>
             )}
-
-            <View className="space-y-2 py-4">
-              {me && (
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  leftIcon={<Icon icon={Flag} size={16} />}
-                  onPress={() => router.push(`/${tab}/spot/${spot.id}/report`)}
-                >
-                  Report spot
-                </Button>
-              )}
-              {canManageSpot(spot, me) && !spot.verifiedAt && (
-                <Button
-                  size="sm"
-                  onPress={() => verifySpot({ id: spot.id })}
-                  isLoading={isVerifyingLoading}
-                  leftIcon={<Icon icon={Check} size={18} />}
-                >
-                  Verify
-                </Button>
-              )}
-              {canManageSpot(spot, me) && (
-                <Button
-                  size="sm"
-                  onPress={() => {
-                    const searchParams = new URLSearchParams({
-                      latitude: spot.latitude.toString(),
-                      longitude: spot.longitude.toString(),
-                      address: spot.address || "",
-                      type: spot.type,
-                      name: spot.name,
-                      description: spot.description || "",
-                      isPetFriendly: spot.isPetFriendly ? "true" : "false",
-                      amenities: spot.amenities ? JSON.stringify(spot.amenities) : "",
-                      images: spot.images.map((i) => i.path).join(","),
-                    })
-                    router.push(`/${tab}/spot/${spot.id}/edit?${searchParams}`)
-                  }}
-                  variant="outline"
-                  leftIcon={<Icon icon={Edit2} size={18} />}
-                >
-                  Edit
-                </Button>
-              )}
-              {canManageSpot(spot, me) && (
-                <Button
-                  size="sm"
-                  onPress={() => router.push(`/spot/${spot.id}/choose-cover`)}
-                  leftIcon={<Icon icon={ImagePlus} color={{ dark: "black", light: "white" }} size={16} />}
-                >
-                  Choose cover
-                </Button>
-              )}
-              {me?.isAdmin && (
-                <Button
-                  size="sm"
-                  onPress={() => router.push(`/${tab}/spot/${spot.id}/delete`)}
-                  variant="destructive"
-                  leftIcon={<Trash size={18} className="text-white" />}
-                >
-                  Delete
-                </Button>
-              )}
-            </View>
           </View>
+          {me && (
+            <>
+              <MapView className="overflow-hidden rounded-xs h-[300px]" scrollEnabled={true}>
+                <LocationPuck />
+                <Camera
+                  allowUpdates
+                  followUserLocation={false}
+                  defaultSettings={{
+                    centerCoordinate: [spot.longitude, spot.latitude],
+                    zoomLevel: 8,
+                    pitch: 0,
+                    heading: 0,
+                  }}
+                />
 
-          <MapView className="overflow-hidden rounded-xs h-[300px]" scrollEnabled={true}>
-            <LocationPuck />
-            <Camera
-              allowUpdates
-              followUserLocation={false}
-              defaultSettings={{
-                centerCoordinate: [spot.longitude, spot.latitude],
-                zoomLevel: 8,
-                pitch: 0,
-                heading: 0,
-              }}
-            />
+                <MarkerView allowOverlap allowOverlapWithPuck coordinate={[spot.longitude, spot.latitude]}>
+                  <SpotMarker spot={spot} />
+                </MarkerView>
+              </MapView>
 
-            <MarkerView allowOverlap allowOverlapWithPuck coordinate={[spot.longitude, spot.latitude]}>
-              <SpotMarker spot={spot} />
-            </MarkerView>
-          </MapView>
-
-          <View className="h-px w-full bg-gray-200 dark:bg-gray-700" />
-          <View className="space-y-2">
-            <View className="flex flex-row justify-between">
-              <View className="flex flex-row items-center space-x-2">
-                <Text className="text-xl">
-                  {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
-                </Text>
-                <Text>·</Text>
-                <View className="flex flex-row items-center space-x-1">
-                  <Icon icon={Star} size={20} />
-                  <Text className="pt-1">{displayRating(data.rating._avg.rating)}</Text>
+              <View className="h-px w-full bg-gray-200 dark:bg-gray-700" />
+              <View className="space-y-2">
+                <View className="flex flex-row justify-between">
+                  <View className="flex flex-row items-center space-x-2">
+                    <Text className="text-xl">
+                      {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
+                    </Text>
+                    <Text>·</Text>
+                    <View className="flex flex-row items-center space-x-1">
+                      <Icon icon={Star} size={20} />
+                      <Text className="pt-1">{displayRating(data.rating._avg.rating)}</Text>
+                    </View>
+                  </View>
+                  {me && (
+                    <Button size="sm" onPress={() => router.push(`/spot/${spot.id}/new-review`)} variant="secondary">
+                      Add review
+                    </Button>
+                  )}
+                </View>
+                <View>
+                  {spot.reviews.map((review) => (
+                    <View key={review.id} className="mb-2">
+                      <ReviewItem review={review} />
+                    </View>
+                  ))}
                 </View>
               </View>
-              {me && (
-                <Button size="sm" onPress={() => router.push(`/spot/${spot.id}/new-review`)} variant="secondary">
-                  Add review
-                </Button>
-              )}
-            </View>
-            <View>
-              {spot.reviews.map((review) => (
-                <View key={review.id} className="mb-2">
-                  <ReviewItem review={review} />
-                </View>
-              ))}
-            </View>
-          </View>
+            </>
+          )}
         </View>
       </Animated.ScrollView>
 
@@ -429,49 +442,51 @@ export default function SpotDetailScreen() {
             {spot.name}
           </Animated.Text>
         </View>
-        <View className="flex flex-shrink-0 flex-row items-center space-x-2">
-          <TouchableOpacity
-            onPress={async () => {
-              try {
-                await RNShare.share({
-                  title: spot.name,
-                  message: isAndroid ? `${FULL_WEB_URL}/spots/${spot.id}` : spot.name,
-                  url: `${FULL_WEB_URL}/spots/${spot.id}`,
-                })
-              } catch (error: unknown) {
-                if (error instanceof Error) {
-                  Alert.alert(error.message)
+        {me && (
+          <View className="flex flex-shrink-0 flex-row items-center space-x-2">
+            <TouchableOpacity
+              onPress={async () => {
+                try {
+                  await RNShare.share({
+                    title: spot.name,
+                    message: isAndroid ? `${FULL_WEB_URL}/spots/${spot.id}` : spot.name,
+                    url: `${FULL_WEB_URL}/spots/${spot.id}`,
+                  })
+                } catch (error: unknown) {
+                  if (error instanceof Error) {
+                    Alert.alert(error.message)
+                  }
                 }
-              }
-            }}
-            activeOpacity={0.8}
-            className="sq-7 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
-          >
-            <Icon icon={Share} size={16} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={handleGetDirections}
-            activeOpacity={0.8}
-            className="sq-7 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
-          >
-            <Icon icon={Compass} size={16} />
-          </TouchableOpacity>
+              }}
+              activeOpacity={0.8}
+              className="sq-7 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
+            >
+              <Icon icon={Share} size={16} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={handleGetDirections}
+              activeOpacity={0.8}
+              className="sq-7 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
+            >
+              <Icon icon={Compass} size={16} />
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => router.push(`/spot/${spot.id}/save-to-list`)}
-            activeOpacity={0.8}
-            className="sq-7 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
-          >
-            <Icon icon={Heart} size={16} fill={data.isLiked ? (isDark ? "white" : "black") : "transparent"} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => router.push(`/spot/${spot.id}/save-to-trip`)}
-            activeOpacity={0.8}
-            className="sq-7 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
-          >
-            <Icon icon={Route} size={16} />
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity
+              onPress={() => router.push(`/spot/${spot.id}/save-to-list`)}
+              activeOpacity={0.8}
+              className="sq-7 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
+            >
+              <Icon icon={Heart} size={16} fill={data.isLiked ? (isDark ? "white" : "black") : "transparent"} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => router.push(`/spot/${spot.id}/save-to-trip`)}
+              activeOpacity={0.8}
+              className="sq-7 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
+            >
+              <Icon icon={Route} size={16} />
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </View>
   )

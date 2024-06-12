@@ -1,6 +1,5 @@
 import { prisma } from "@ramble/database"
 import * as Sentry from "@sentry/nextjs"
-
 import { sendMessages } from "./send-messages"
 
 export async function sendTripSpotAddedNotification({ initiatorId, tripId }: { tripId: string; initiatorId: string }) {
@@ -20,7 +19,7 @@ export async function sendTripSpotAddedNotification({ initiatorId, tripId }: { t
     await sendMessages({
       tokens,
       payload: {
-        body: `${initiator.username} added a new spot to ${trip.name}!`,
+        body: `${initiator.username} added a new spot to your trip: ${trip.name}!`,
         data: { type: "TRIP_SPOT_ADDED", tripId: trip.id },
       },
     })

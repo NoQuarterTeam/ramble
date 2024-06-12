@@ -177,7 +177,7 @@ export const userRouter = createTRPCRouter({
     sendSlackMessage(`😭 User @${ctx.user.username} deleted their account.`)
     return true
   }),
-  guides: protectedProcedure.input(z.object({ skip: z.number() })).query(async ({ ctx, input }) => {
+  guides: publicProcedure.input(z.object({ skip: z.number() })).query(async ({ ctx, input }) => {
     return ctx.prisma.user.findMany({
       where: { role: "GUIDE", deletedAt: null },
       skip: input.skip,
@@ -204,5 +204,10 @@ export const userRouter = createTRPCRouter({
         },
       },
     })
+  }),
+  guideInterest: protectedProcedure.mutation(async ({ ctx }) => {
+    sendSlackMessage(`User @${ctx.user.username} is interested in becoming a guide - get in touch with them! 💬`)
+    await ctx.prisma.user.update({ where: { id: ctx.user.id }, data: { isPendingGuideApproval: true } })
+    return true
   }),
 })

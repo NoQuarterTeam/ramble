@@ -103,6 +103,7 @@ export const spotPartnerFields = {
   rewildingEuropeId: true,
   polskiCaravaningId: true,
   volunteeringEventsId: true,
+  camperguruId: true,
   sourceUrl: true,
 } satisfies Prisma.SpotSelect
 
@@ -124,6 +125,7 @@ export const isPartnerSpot = (spot: SpotPartnerFields) =>
   spot.mossyEarthId ||
   spot.rewildingEuropeId ||
   spot.polskiCaravaningId ||
+  spot.camperguruId ||
   spot.volunteeringEventsId
 
 export const partners = {
@@ -207,6 +209,11 @@ export const partners = {
     logo: { light: "/partners/volunteering-events.png", dark: "/partners/volunteering-events-dark.png" },
     pretext: "More info on",
   },
+  camperguru: {
+    name: "Camperguru",
+    logo: { light: "/partners/camperguru.svg", dark: "/partners/camperguru-dark.svg" },
+    pretext: "Book a spot on",
+  },
 } as const
 
 export const canManageSpot = (
@@ -234,9 +241,11 @@ export function displaySaved(saved: number | string | null | undefined) {
   return saved
 }
 
+export const campingSpotTypes = ["CAMPING", "VAN_PARK", "PRIVATE_LAND", "ROADSIDE", "CARPARK"] as SpotType[]
+
 export function isCampingSpot(type?: SpotType | null | undefined) {
   if (!type) return false
-  return type === "CAMPING" || type === "FREE_CAMPING"
+  return campingSpotTypes.includes(type)
 }
 
 export const activitySpotTypes = ["CLIMBING", "CLIMBING", "HIKING_TRAIL", "PADDLE_KAYAK", "MOUNTAIN_BIKING"] as SpotType[]

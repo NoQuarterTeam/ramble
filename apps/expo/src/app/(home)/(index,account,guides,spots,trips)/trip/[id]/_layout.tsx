@@ -14,6 +14,7 @@ export default function Layout() {
       <Stack.Screen name="add-location" options={{ presentation: "modal" }} />
       <Stack.Screen name="edit" options={{ presentation: "modal" }} />
       <Stack.Screen name="users" options={{ presentation: "modal" }} />
+      <Stack.Screen name="layers" options={{ presentation: "modal" }} />
     </Stack>
   )
 }

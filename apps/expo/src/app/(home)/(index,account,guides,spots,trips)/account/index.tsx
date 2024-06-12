@@ -1,23 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { Image } from "expo-image"
 import { type AllRoutes, type Href, Link, useRouter } from "expo-router"
-import {
-  AlertCircle,
-  Bell,
-  ChevronRight,
-  Heart,
-  MessageCircle,
-  Settings,
-  ToggleRight,
-  User,
-  User2,
-  UserPlus,
-} from "lucide-react-native"
-import { ScrollView, TouchableOpacity, View } from "react-native"
+import { AlertCircle, Bell, ChevronRight, Heart, MessageCircle, Settings, ToggleRight, User, User2 } from "lucide-react-native"
+import { Dimensions, ScrollView, TouchableOpacity, View } from "react-native"
 
 import { createAssetUrl } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
-import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { Button } from "~/components/ui/Button"
 import { Heading } from "~/components/ui/Heading"
 import { Icons, type RambleIcon } from "~/components/ui/Icons"
@@ -34,6 +23,9 @@ export default function AccountScreen() {
   const router = useRouter()
   const utils = api.useUtils()
 
+  const DEVICE_HEIGHT = Dimensions.get("window").height
+  const IMAGE_HEIGHT = DEVICE_HEIGHT * 0.35
+
   const { data: unreadCount } = api.notification.unreadCount.useQuery(undefined, { enabled: !!me })
 
   const { mutate, data } = api.user.sendVerificationEmail.useMutation({
@@ -49,28 +41,34 @@ export default function AccountScreen() {
 
   if (!me)
     return (
-      <TabView title="account">
-        <LoginPlaceholder text="Log in to create your profile">
-          <View className="space-y-4">
-            <Link push href="/(auth)/register" asChild>
-              <TouchableOpacity>
-                <Text className="text-lg">
-                  Don't have an account yet? <Text className="text-lg underline">Sign up</Text>
-                </Text>
-              </TouchableOpacity>
-            </Link>
+      <TabView title="profile">
+        <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }} showsVerticalScrollIndicator={false}>
+          <View className="flex items-center my-8 space-y-4">
+            <Text className="px-8 text-center text-xl">
+              Create your profile, follow others Ramblers, save spots, plan trips, and share everything with your friends
+            </Text>
+            <Image style={{ height: IMAGE_HEIGHT, width: IMAGE_HEIGHT }} source={require("assets/profile.png")} />
+          </View>
 
+          <View className="px-8">
+            <Button onPress={() => router.push("/register")}>Sign up</Button>
+            <Button variant="link" onPress={() => router.push("/login")}>
+              Already signed up? Login
+            </Button>
+          </View>
+
+          <View className="space-y-4 mt-4">
             <View className="pt-10">
               <Text className="text-center">v{VERSION}</Text>
               <Text className="text-center opacity-60">{UPDATE_ID}</Text>
             </View>
           </View>
-        </LoginPlaceholder>
+        </ScrollView>
       </TabView>
     )
   return (
     <TabView
-      title="account"
+      title="profile"
       rightElement={
         <Link asChild push href="/(home)/(account)/account/notifications">
           <TouchableOpacity className="p-2 relative">
@@ -140,9 +138,6 @@ export default function AccountScreen() {
               </ProfileLink>
               <ProfileLink to="interests" icon={ToggleRight}>
                 Interests
-              </ProfileLink>
-              <ProfileLink to="invite" icon={UserPlus}>
-                Invites
               </ProfileLink>
               <ProfileLink to="settings" icon={Settings}>
                 Settings

@@ -34,7 +34,7 @@ export default function NewReviewScreen() {
     if (shouldRedirect === "true") {
       if (tripId) {
         await utils.trip.detail.refetch({ id: tripId })
-        router.navigate(`/(home)/(trips)/trips/${tripId}`)
+        router.navigate(`/(home)/(trips)/trip/${tripId}`)
         await new Promise((resolve) => setTimeout(resolve, 1000))
         toast({ title: "Spot created", message: "Thank you for contributing to the community!" })
       } else {

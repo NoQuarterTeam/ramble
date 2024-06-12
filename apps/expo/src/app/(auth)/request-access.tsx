@@ -40,7 +40,7 @@ export default function RequestAccessScreen() {
   })
 
   return (
-    <ModalView shouldRenderToast title="request access" onBack={() => navigation.back()}>
+    <ModalView shouldRenderToast title="request invite code" onBack={() => navigation.back()}>
       <FormProvider {...form}>
         <ScrollView
           keyboardShouldPersistTaps="handled"

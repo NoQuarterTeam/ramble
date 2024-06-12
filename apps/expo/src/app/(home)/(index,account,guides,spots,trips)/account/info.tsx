@@ -1,7 +1,8 @@
+import * as FileSystem from "expo-file-system"
 import * as ImagePicker from "expo-image-picker"
 import { Edit2, User2 } from "lucide-react-native"
 import { FormProvider } from "react-hook-form"
-import { Keyboard, ScrollView, TouchableOpacity, View } from "react-native"
+import { Keyboard, Platform, ScrollView, TouchableOpacity, View } from "react-native"
 
 import { createAssetUrl } from "@ramble/shared"
 
@@ -13,6 +14,7 @@ import { ScreenView } from "~/components/ui/ScreenView"
 import { Spinner } from "~/components/ui/Spinner"
 import { toast } from "~/components/ui/Toast"
 import { api } from "~/lib/api"
+import { type FileInfo, TEN_MB } from "~/lib/fileSystem"
 import { useForm } from "~/lib/hooks/useForm"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
 import { useMe } from "~/lib/hooks/useMe"
@@ -70,14 +72,22 @@ export default function AccountInfoScreen() {
 
   const onPickImage = async () => {
     try {
+      const quality = Platform.OS === "ios" ? 0.3 : 0.4
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         allowsMultipleSelection: false,
         selectionLimit: 1,
-        quality: 1,
+        quality,
       })
       if (result.canceled || !result.assets[0]?.uri) return
+
+      // Android doesn't have result.fileSize available, so need to use expo filesystem instead
+      const info: FileInfo = await FileSystem.getInfoAsync(result.assets[0].uri)
+      if (info.size && info.size > TEN_MB) {
+        throw new Error("Please select an image with a smaller filesize")
+      }
+
       const key = await upload(result.assets[0].uri)
       saveAvatar({ avatar: key })
     } catch (error) {
@@ -136,7 +146,13 @@ export default function AccountInfoScreen() {
           <FormInput autoCapitalize="none" name="email" label="Email" error={error} />
           <FormInput autoCapitalize="none" name="username" label="Username" error={error} />
           <FormInput multiline name="bio" label="Bio" error={error} />
-          <FormInput autoCapitalize="none" name="instagram" label="Instagram handle" error={error} />
+          <FormInput
+            autoCapitalize="none"
+            name="instagram"
+            label="Instagram handle"
+            subLabel="This will be used to promote your instagram and gives other ramble users a way to contact you"
+            error={error}
+          />
         </ScrollView>
       </ScreenView>
     </FormProvider>

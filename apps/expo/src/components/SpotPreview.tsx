@@ -72,7 +72,7 @@ export const SpotPreview = React.memo(function _SpotPreview({
                 <SpotTypeBadge spot={spot} />
                 {weatherData && (
                   <View className="flex flex-row items-center">
-                    <Text>{Math.round(weatherData.temp)}°C</Text>
+                    {weatherData.temp && <Text>{Math.round(weatherData.temp)}°C</Text>}
                     <Image
                       style={{ width: 35, height: 35 }}
                       source={{ uri: `https://openweathermap.org/img/wn/${weatherData.icon}@2x.png` }}

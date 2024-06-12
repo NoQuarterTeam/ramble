@@ -7,7 +7,7 @@ import { Linking, ScrollView, TouchableOpacity, View, useColorScheme } from "rea
 import { createAssetUrl, languages } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
-import { LoginPlaceholder } from "~/components/LoginPlaceholder"
+import { SignupCta } from "~/components/SignupCta"
 import { Button } from "~/components/ui/Button"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
 import { ScreenView } from "~/components/ui/ScreenView"
@@ -61,7 +61,7 @@ export default function UserScreen() {
   if (!me)
     return (
       <ScreenView title={username}>
-        <LoginPlaceholder text="log in to view other profiles" />
+        <SignupCta text="Sign up to view other profiles" />
       </ScreenView>
     )
 

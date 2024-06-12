@@ -19,10 +19,10 @@ export default function NewSpotTypeScreen() {
   const { me } = useMe()
 
   return (
-    <NewSpotModalView title="what type?">
-      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
-        <View className="pb-4">
-          <Text className="text-lg pb-0.5">Stay</Text>
+    <NewSpotModalView title="select a type">
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 80 }} showsVerticalScrollIndicator={false}>
+        <View className="py-4">
+          <Text className="text-sm opacity-70 mb-1">Stay</Text>
           <View className="flex flex-row flex-wrap gap-2">
             {SPOT_TYPE_OPTIONS.filter((s) => s.category === "STAY" && (me?.isAdmin ? true : !s.isComingSoon)).map((spotType) => (
               <Button
@@ -47,7 +47,7 @@ export default function NewSpotTypeScreen() {
           </View>
         </View>
         <View className="pb-4">
-          <Text className="text-lg pb-0.5">Activity</Text>
+          <Text className="text-sm opacity-70 mb-1">Activity</Text>
           <View className="flex flex-row flex-wrap gap-2">
             {SPOT_TYPE_OPTIONS.filter((s) => s.category === "ACTIVITY" && (me?.isAdmin ? true : !s.isComingSoon)).map(
               (spotType) => (
@@ -74,7 +74,7 @@ export default function NewSpotTypeScreen() {
           </View>
         </View>
         <View className="pb-4">
-          <Text className="text-lg pb-0.5">Service</Text>
+          <Text className="text-sm opacity-70 mb-1">Service</Text>
           <View className="flex flex-row flex-wrap gap-2">
             {SPOT_TYPE_OPTIONS.filter((s) => s.category === "SERVICE" && (me?.isAdmin ? true : !s.isComingSoon)).map(
               (spotType) => (
@@ -101,7 +101,7 @@ export default function NewSpotTypeScreen() {
           </View>
         </View>
         <View className="pb-4">
-          <Text className="text-lg pb-0.5">Hospitality</Text>
+          <Text className="text-sm opacity-70 mb-1">Hospitality</Text>
           <View className="flex flex-row flex-wrap gap-2">
             {SPOT_TYPE_OPTIONS.filter((s) => s.category === "HOSPITALITY" && (me?.isAdmin ? true : !s.isComingSoon)).map(
               (spotType) => (
@@ -128,7 +128,7 @@ export default function NewSpotTypeScreen() {
           </View>
         </View>
         <View className="pb-4">
-          <Text className="text-lg pb-0.5">Other</Text>
+          <Text className="text-sm opacity-70 mb-1">Other</Text>
           <View className="flex flex-row flex-wrap gap-2">
             {SPOT_TYPE_OPTIONS.filter((s) => s.category === "OTHER" && (me?.isAdmin ? true : !s.isComingSoon)).map((spotType) => (
               <Button
@@ -158,12 +158,13 @@ export default function NewSpotTypeScreen() {
         <View className="absolute right-4 bottom-12 left-4 flex items-center justify-center space-y-2">
           <Button
             className="rounded-full"
-            onPress={() =>
+            onPress={() => {
+              const searchParams = new URLSearchParams({ ...params, type })
               // @ts-ignore
-              router.push(`/new/info?${new URLSearchParams({ ...params, type })}`)
-            }
+              router.push(`/new/info?${searchParams}`)
+            }}
           >
-            Next
+            Continue as {SPOT_TYPE_OPTIONS.find((spotType) => spotType.value === type)?.label}
           </Button>
         </View>
       )}

@@ -10,7 +10,6 @@ import {
   createToken,
   decodeToken,
   deleteLoopsContact,
-  generateInviteCodes,
   hashPassword,
   sendAccessRequestConfirmationEmail,
   sendResetPasswordEmail,
@@ -34,11 +33,10 @@ export const authRouter = createTRPCRouter({
     if (existingEmail) throw new TRPCError({ code: "BAD_REQUEST", message: "Email already in use" })
 
     const accessRequest = await ctx.prisma.accessRequest.findFirst({ where: { code, user: null } })
-    const inviteCode = await ctx.prisma.inviteCode.findFirst({ where: { code, acceptedAt: null } })
+    const referrer = await ctx.prisma.user.findUnique({ where: { inviteCode: code } })
     if (!IS_DEV) {
-      if (!accessRequest && !inviteCode) throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid code" })
+      if (!accessRequest && !referrer) throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid code" })
     }
-
     const existingUsername = await ctx.prisma.user.findUnique({ where: { username: input.username } })
     if (existingUsername) throw new TRPCError({ code: "BAD_REQUEST", message: "User with this username already exists" })
     const hashedPassword = hashPassword(input.password)
@@ -48,36 +46,38 @@ export const authRouter = createTRPCRouter({
         isVerified: true, // temp
         lists: { create: { name: "Favourites", description: "All my favourite spots" } },
         password: hashedPassword,
+        referrer: referrer ? { connect: { id: referrer.id } } : undefined,
       },
     })
+    if (referrer) {
+      await ctx.prisma.user.update({ where: { id: referrer.id }, data: { followers: { connect: { id: user.id } } } })
+    }
     if (accessRequest) {
       await ctx.prisma.accessRequest.update({
         where: { id: accessRequest.id },
         data: { acceptedAt: new Date(), user: { connect: { id: user.id } } },
       })
     }
-    if (inviteCode) {
-      await ctx.prisma.inviteCode.update({
-        where: { id: inviteCode.id },
-        data: { acceptedAt: new Date(), user: { connect: { id: user.id } } },
-      })
-    }
-    const codes = generateInviteCodes(user.id)
-    await ctx.prisma.inviteCode.createMany({ data: codes.map((c) => ({ code: c, ownerId: user.id })) })
     const token = createAuthToken({ id: user.id })
     if (accessRequest && accessRequest.email !== user.email) {
       deleteLoopsContact({ email: accessRequest.email })
     }
-    updateLoopsContact({ ...user, signedUpAt: user.createdAt.toISOString(), userGroup: "beta", userId: user.id })
+    updateLoopsContact({
+      ...user,
+      inviteCode: code,
+      signedUpAt: user.createdAt.toISOString(),
+      userGroup: "beta",
+      userId: user.id,
+    })
     sendSlackMessage(`🔥 @${user.username} signed up!`)
     return { user: user, token }
   }),
   forgotPassword: publicProcedure.input(userSchema.pick({ email: true })).mutation(async ({ input, ctx }) => {
-    const email = input.email.toLowerCase().trim()
+    const email = input.email
     const user = await ctx.prisma.user.findUnique({ where: { email } })
     if (user) {
       const token = createToken({ id: user.id })
-      await sendResetPasswordEmail(user, token)
+      sendResetPasswordEmail(user, token)
     }
     return true
   }),
@@ -97,10 +97,7 @@ export const authRouter = createTRPCRouter({
   requestAccess: publicProcedure
     .input(
       z.object({
-        email: z
-          .string()
-          .email()
-          .transform((e) => e.toLowerCase().trim()),
+        email: z.string().email().toLowerCase().trim(),
         reason: z.string().nullish(),
       }),
     )

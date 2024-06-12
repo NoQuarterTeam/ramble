@@ -1,8 +1,8 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, IconButton } from "@/components/ui"
-import { getMaybeUser } from "@/lib/server/auth"
+// import { getMaybeUser } from "@/lib/server/auth"
 import { Menu } from "lucide-react"
 import Link from "next/link"
-import { Suspense } from "react"
+// import { Suspense } from "react"
 import { NavLink } from "./NavLink"
 
 export function Nav() {
@@ -20,9 +20,9 @@ export function Nav() {
         </div>
       </div>
       <div className="hidden md:flex space-x-1">
-        <Suspense>
+        {/* <Suspense>
           <AdminLink />
-        </Suspense>
+        </Suspense> */}
         <NavLink href="/blog">Blog</NavLink>
         <NavLink href="/about">About</NavLink>
       </div>
@@ -54,8 +54,8 @@ export function Nav() {
   )
 }
 
-async function AdminLink() {
-  const user = await getMaybeUser()
-  if (!user?.isAdmin) return null
-  return <NavLink href="/admin">Admin</NavLink>
-}
+// async function AdminLink() {
+//   const user = await getMaybeUser()
+//   if (!user?.isAdmin) return null
+//   return <NavLink href="/admin">Admin</NavLink>
+// }

@@ -1,6 +1,5 @@
 import { prisma } from "@ramble/database"
 import * as Sentry from "@sentry/nextjs"
-
 import { sendMessages } from "./send-messages"
 
 export async function sendTripMediaAddedNotification({ initiatorId, tripId }: { tripId: string; initiatorId: string }) {
@@ -20,7 +19,7 @@ export async function sendTripMediaAddedNotification({ initiatorId, tripId }: { 
     await sendMessages({
       tokens,
       payload: {
-        body: `${initiator.username} added new images to ${trip.name}!`,
+        body: `${initiator.username} added some images to your trip: ${trip.name}!`,
         data: { type: "TRIP_MEDIA_ADDED", tripId: trip.id },
       },
     })

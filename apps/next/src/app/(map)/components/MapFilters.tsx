@@ -72,7 +72,7 @@ export function MapFilters() {
               <div className="flex items-center space-x-4">
                 <Dog className="sq-6" />
                 <div>
-                  <p>Pet friendly</p>
+                  <p>Suitable for pets</p>
                   <p className="text-sm opacity-70">Furry friends allowed!</p>
                 </div>
               </div>

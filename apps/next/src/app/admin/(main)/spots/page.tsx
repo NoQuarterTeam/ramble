@@ -32,6 +32,7 @@ const getItemsAndCount = async ({ page, unverified, type, search, sort = "desc",
       skip,
       select: {
         id: true,
+        nanoid: true,
         name: true,
         coverId: true,
         description: true,
@@ -86,8 +87,8 @@ export default async function Page({ searchParams }: { searchParams: SpotParams 
           </TableRow>
         </TableHeader>
         <TableBody>
-          {spots.map((spot) => (
-            <SpotRow key={spot.id} spot={spot} />
+          {spots.map((spot, i) => (
+            <SpotRow key={spot.id} spot={spot} defaultIsOpen={i === 0} />
           ))}
         </TableBody>
       </Table>

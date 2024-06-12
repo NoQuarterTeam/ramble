@@ -5,17 +5,14 @@ import { NullableFormString } from "./utils/form"
 export const userSchema = z.object({
   firstName: z.string().min(2),
   lastName: z.string().min(2),
-  email: z
-    .string()
-    .email()
-    .min(2)
-    .transform((e) => e.toLowerCase().trim()),
+  email: z.string().email().min(2).toLowerCase().trim(),
   password: z.string().min(8),
   username: z
     .string()
     .min(2)
-    .transform((e) => e.toLowerCase())
-    .refine((username) => !username.trim().includes(" "), "Username can not contain empty spaces"),
+    .toLowerCase()
+    .trim()
+    .refine((username) => !username.includes(" "), "Username can not contain empty spaces"),
   preferredLanguage: z.string().optional(),
   bio: NullableFormString,
   instagram: NullableFormString,
@@ -36,4 +33,4 @@ export const userSchema = z.object({
 
 export const registerSchema = userSchema
   .pick({ email: true, password: true, username: true, firstName: true, lastName: true })
-  .extend({ code: z.string().transform((e) => e.toUpperCase().trim()) })
+  .extend({ code: z.string().trim().toUpperCase() })

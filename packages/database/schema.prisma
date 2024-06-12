@@ -33,6 +33,7 @@ model User {
   isPendingGuideApproval Boolean @default(false)
   latitude               Float?
   longitude              Float?
+  inviteCode             String? @unique
 
   // Spot preferences
   isPetOwner      Boolean @default(false)
@@ -64,21 +65,22 @@ model User {
   tripMedias             TripMedia[]
   van                    Van?
   feedback               Feedback[]
-  myInviteCodes          InviteCode[]       @relation(name: "MyInviteCodes")
-  usedInviteCode         InviteCode?        @relation(fields: [usedInviteCodeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  usedInviteCodeId       String?            @unique
   createdSpotRevisions   SpotRevision[]     @relation(name: "Creator")
   approvedSpotRevisions  SpotRevision[]     @relation(name: "Approver")
   accessRequest          AccessRequest?
   pushTokens             PushToken[]
   userNotifications      UserNotification[]
   initiatedNotifications Notification[]
+  referrer               User?              @relation("UserReferrals", fields: [referrerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  referrerId             String?
+  referrals              User[]             @relation("UserReferrals")
 
   deletedAt DateTime?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
 
   @@index([latitude])
+  @@index([referrerId])
 }
 
 model PushToken {
@@ -90,20 +92,6 @@ model PushToken {
   updatedAt DateTime @default(now()) @updatedAt
 
   @@unique([userId, token])
-}
-
-model InviteCode {
-  id         String    @id @default(uuid())
-  code       String    @unique
-  acceptedAt DateTime?
-  owner      User      @relation(name: "MyInviteCodes", fields: [ownerId], references: [id])
-  ownerId    String
-  user       User?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-
-  @@index([ownerId])
 }
 
 model Van {
@@ -185,6 +173,7 @@ model Spot {
   longitude   Float
   publishedAt DateTime?
   verifiedAt  DateTime?
+  nanoid      String?   @unique
 
   pointLocation Unsupported("POINT GENERATED ALWAYS AS (ST_GeomFromText(CONCAT('POINT(',longitude,' ',latitude,')'))) STORED")?
 
@@ -206,6 +195,7 @@ model Spot {
   tripItems     TripItem[]
   cover         SpotImage?     @relation(fields: [coverId], references: [id], name: "SpotCover", onDelete: NoAction, onUpdate: NoAction)
   coverId       String?        @unique
+  notifications Notification[]
 
   deletedAt DateTime?
   closedAt  DateTime?
@@ -231,6 +221,7 @@ model Spot {
   polskiCaravaningId       String? @unique
   googlePlaceId            String? @unique
   volunteeringEventsId     String? @unique
+  camperguruId             Int?    @unique
 
   @@index([publishedAt])
   @@index([ownerId])
@@ -493,6 +484,10 @@ enum NotificationType {
   TRIP_MEDIA_ADDED
   TRIP_STOP_ADDED
   TRIP_SPOT_ADDED
+  SPOT_VERIFIED
+  SPOT_ADDED_TO_LIST
+  SPOT_ADDED_TO_TRIP
+  SPOT_REVIEWED
 }
 
 model Notification {
@@ -504,12 +499,15 @@ model Notification {
   initiatorId       String
   trip              Trip?              @relation(fields: [tripId], references: [id])
   tripId            String?
+  spot              Spot?              @relation(fields: [spotId], references: [id])
+  spotId            String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
   @@index([initiatorId])
   @@index([tripId])
+  @@index([spotId])
 }
 
 enum UserNotificationStatus {

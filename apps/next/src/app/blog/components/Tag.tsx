@@ -1,5 +1,5 @@
 import { join } from "@ramble/shared"
-import { cva } from "class-variance-authority"
+import { type VariantProps, cva } from "class-variance-authority"
 import type * as React from "react"
 
 const tags = cva("text-sm px-3 py-1 flex items-center justify-center rounded-full", {
@@ -22,25 +22,20 @@ const tags = cva("text-sm px-3 py-1 flex items-center justify-center rounded-ful
   },
 })
 
+export type TagProps = VariantProps<typeof tags>
+
 interface Props {
   children?: React.ReactNode
   tag: {
     id: string
     name: string
-    color: string
+    color: TagProps["color"]
   }
 }
 
 export function Tag(props: Props) {
   return (
-    <div
-      className={join(
-        tags({
-          // @ts-ignore
-          color: props.tag.color,
-        }),
-      )}
-    >
+    <div className={join(tags({ color: props.tag.color }))}>
       <span className="pt-px">{props.tag.name}</span>
     </div>
   )

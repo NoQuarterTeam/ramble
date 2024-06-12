@@ -1,10 +1,9 @@
+import type { SpotType } from "@ramble/database/types"
+import { campingSpotTypes } from "@ramble/shared"
+import colors from "@ramble/tailwind-config/src/colors"
 import { useRouter } from "expo-router"
 import * as React from "react"
 import { ScrollView, Switch, View } from "react-native"
-
-import type { SpotType } from "@ramble/database/types"
-import colors from "@ramble/tailwind-config/src/colors"
-
 import { Icon } from "~/components/Icon"
 import { SafeAreaView } from "~/components/SafeAreaView"
 import { Button } from "~/components/ui/Button"
@@ -14,7 +13,6 @@ import { Text } from "~/components/ui/Text"
 import { api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 import { interestOptions } from "~/lib/models/user"
-
 import { useMapFilters } from "../filters"
 
 export default function OnboardingStep2Screen() {
@@ -28,8 +26,7 @@ export default function OnboardingStep2Screen() {
       await utils.user.me.refetch()
       setFilters({
         types: [
-          "CAMPING",
-          "FREE_CAMPING",
+          ...(campingSpotTypes as SpotType[]),
           "REWILDING",
           data?.isMountainBiker ? "MOUNTAIN_BIKING" : null,
           data?.isClimber ? "CLIMBING" : null,

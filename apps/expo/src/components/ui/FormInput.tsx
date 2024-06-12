@@ -11,18 +11,21 @@ import { Text } from "./Text"
 
 interface Props extends InputProps {
   label?: string
+  subLabel?: string
   name: string
   error?: ApiError
   rightElement?: React.ReactNode
   updater?: (value: string) => string
 }
 
-export function FormInput({ label, name, error, updater, rightElement, ...props }: Props) {
+export function FormInput({ label, subLabel, name, error, updater, rightElement, ...props }: Props) {
   const { control } = useFormContext()
 
   return (
     <View className="mb-2 space-y-0.5">
       {label && <FormInputLabel label={label} name={name} />}
+      {subLabel && <FormInputSubLabel subLabel={subLabel} name={name} />}
+
       <Controller
         name={name}
         control={control}
@@ -72,6 +75,14 @@ export function FormInputLabel({ label, name }: { label: string; name?: string }
   return (
     <Text nativeID={name} className="font-400">
       {label}
+    </Text>
+  )
+}
+
+export function FormInputSubLabel({ subLabel, name }: { subLabel: string; name?: string }) {
+  return (
+    <Text nativeID={name} className="text-sm font-300 leading-4 mb-0.5 opacity-70">
+      {subLabel}
     </Text>
   )
 }

@@ -7,42 +7,74 @@ import colors from "@ramble/tailwind-config/src/colors"
 
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
-import { FormInputLabel } from "~/components/ui/FormInput"
+import { FormInputLabel, FormInputSubLabel } from "~/components/ui/FormInput"
 import { Input } from "~/components/ui/Input"
 import { Text } from "~/components/ui/Text"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
+import type { SpotType } from "@ramble/database/types"
+import { AMENITIES, isCampingSpot } from "@ramble/shared"
+import Animated, { useAnimatedKeyboard, useAnimatedStyle } from "react-native-reanimated"
+import { type AmenityObject, AmenitySelector } from "~/components/AmenitySelector"
+import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
+import { AMENITIES_ICONS } from "~/lib/models/amenities"
 import { ReportSpotModalView } from "./ReportSpotModalView"
 
 export default function SpotReportInfoScreen() {
   const router = useRouter()
-  const { id, ...params } = useLocalSearchParams<{ id: string; name: string; description: string; isPetFriendly: string }>()
+  useKeyboardController()
+  const keyboard = useAnimatedKeyboard()
+  const translateStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: -keyboard.height.value }],
+    }
+  })
+  const { id, ...params } = useLocalSearchParams<{
+    id: string
+    type: SpotType
+    name: string
+    description: string
+    isPetFriendly: string
+    amenities?: string
+  }>()
+
+  const [amenities, setAmenities] = React.useState(
+    params.amenities
+      ? Object.entries(JSON.parse(params.amenities)).reduce((acc, [key, value]) => {
+          acc[key as keyof typeof AMENITIES] = value as boolean
+          return acc
+        }, {} as AmenityObject)
+      : Object.keys(AMENITIES).reduce((acc, key) => {
+          acc[key as keyof typeof AMENITIES] = false
+          return acc
+        }, {} as AmenityObject),
+  )
+
   const [name, setName] = React.useState(params.name)
   const [description, setDescription] = React.useState(params.description)
   const [isPetFriendly, setIsPetFriendly] = React.useState(params.isPetFriendly === "true")
   const tab = useTabSegment()
+
   const onClose = () => {
     router.navigate(
-      `/${tab}/spot/${id}/report?${new URLSearchParams({ ...params, name, description, isPetFriendly: String(isPetFriendly) })}`,
+      `/${tab}/spot/${id}/report?${new URLSearchParams({ ...params, name, description, isPetFriendly: String(isPetFriendly), amenities: amenities ? JSON.stringify(amenities) : "" })}`,
     )
   }
   return (
-    <ReportSpotModalView title="basic info">
+    <ReportSpotModalView title="some info">
       <ScrollView
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="interactive"
-        contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
-        className="space-y-2"
       >
-        <View>
-          <FormInputLabel label="Name" />
-          <Input value={name} onChangeText={setName} />
-        </View>
-        <View className="flex w-full flex-row items-center justify-between py-4">
+        <FormInputLabel label="Name" />
+        <Input value={name} onChangeText={setName} />
+
+        <View className="flex w-full flex-row items-center justify-between pt-4 pb-1">
           <View className="flex flex-row items-center space-x-2">
             <Icon icon={Dog} size={20} />
-            <Text className="text-xl">Pet friendly</Text>
+            <Text className="text-xl">Suitable for pets</Text>
           </View>
           <Switch
             trackColor={{ true: colors.primary[600] }}
@@ -50,12 +82,39 @@ export default function SpotReportInfoScreen() {
             onValueChange={() => setIsPetFriendly((p) => !p)}
           />
         </View>
-        <View>
-          <FormInputLabel label="Describe the spot" />
-          <Input value={description || ""} onChangeText={setDescription} multiline numberOfLines={4} />
+
+        {isCampingSpot(params.type) &&
+          Object.entries(AMENITIES).map(([key, label]) => (
+            <AmenitySelector
+              key={key}
+              label={label}
+              icon={AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]}
+              isSelected={!!amenities[key as keyof typeof AMENITIES]}
+              onToggle={() => setAmenities((a) => ({ ...a, [key]: !a[key as keyof typeof AMENITIES] }))}
+            />
+          ))}
+
+        <View className="pt-6">
+          <FormInputSubLabel subLabel="Anything else worth mentioning?" name="description" />
+          <Input
+            nativeID="description"
+            value={description}
+            onChangeText={setDescription}
+            multiline
+            numberOfLines={4}
+            placeholder="e.g. narrow entrance, not suitable for large campers"
+          />
         </View>
-        <Button onPress={onClose}>Done</Button>
       </ScrollView>
+
+      <Animated.View
+        style={[translateStyle]}
+        className="absolute right-4 bottom-12 left-4 flex items-center justify-center space-y-2"
+      >
+        <Button className="rounded-full" disabled={!name} onPress={onClose}>
+          Next
+        </Button>
+      </Animated.View>
     </ReportSpotModalView>
   )
 }

@@ -15,7 +15,7 @@ export function BlogDetail({ page }: { page: FormattedPage }) {
         </div>
         <p className="opacity-60">{dayjs(page.publishedAt).format("Do MMMM YYYY")}</p>
       </div>
-      <h1 className="text-4xl font-bold">{page.title}</h1>
+      <h1 className="text-2xl md:text-4xl font-bold">{page.title}</h1>
       {page.cover && (
         <div className="relative">
           <Image
