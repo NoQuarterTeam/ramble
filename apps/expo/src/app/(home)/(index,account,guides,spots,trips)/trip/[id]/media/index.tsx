@@ -14,7 +14,7 @@ import { useLocalSearchParams, useRouter } from "expo-router"
 import * as VideoThumbnails from "expo-video-thumbnails"
 import { Check, CircleDot, ImageOff, MapPin, MapPinOff, Navigation, PlusCircle, Trash } from "lucide-react-native"
 import * as React from "react"
-import { ActivityIndicator, Alert, Linking, Modal, TouchableOpacity, View } from "react-native"
+import { ActivityIndicator, Alert, Linking, Modal, Platform, TouchableOpacity, View } from "react-native"
 
 import { Icon } from "~/components/Icon"
 import { MapView } from "~/components/Map"
@@ -92,12 +92,14 @@ export default function TripMedia() {
           ],
         )
       }
+      const quality = Platform.OS === "ios" ? 0.3 : 0.4
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: false,
         allowsMultipleSelection: true,
         selectionLimit: 40,
-        quality: 0.5,
+        quality,
+        videoQuality: ImagePicker.UIImagePickerControllerQualityType.Low,
       })
       setIsLoadingLibrary(false)
       if (result.canceled || result.assets.length === 0) return

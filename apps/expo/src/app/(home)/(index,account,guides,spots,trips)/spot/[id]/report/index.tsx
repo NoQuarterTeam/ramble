@@ -4,7 +4,6 @@ import * as React from "react"
 import { ScrollView, TouchableOpacity, View } from "react-native"
 
 import type { SpotType } from "@ramble/database/types"
-import { isCampingSpot } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
 import { Button } from "~/components/ui/Button"
@@ -123,14 +122,6 @@ function ReportFlow({ spot }: Props) {
       <Text>Let us know what you think is incorrect</Text>
       <View className="space-y-5">
         <ReportLink
-          title="Basic info"
-          description="the name or description is incorrect"
-          hasChanged={
-            data.name !== spot.name || data.description !== spot.description || data.isPetFriendly !== spot.isPetFriendly
-          }
-          onPress={() => router.push(`/${tab}/spot/${spot.id}/report/info?${new URLSearchParams(dataToParams)}`)}
-        />
-        <ReportLink
           title="Location"
           description="the location is incorrect"
           hasChanged={data.latitude !== spot.latitude || data.longitude !== spot.longitude}
@@ -142,23 +133,22 @@ function ReportFlow({ spot }: Props) {
           hasChanged={data.type !== spot.type}
           onPress={() => router.push(`/${tab}/spot/${spot.id}/report/type?${new URLSearchParams(dataToParams)}`)}
         />
-
-        {isCampingSpot(data.type) && (
-          <ReportLink
-            title="Amenities"
-            description="the amenities are incorrect"
-            onPress={() => router.push(`/${tab}/spot/${spot.id}/report/amenities?${new URLSearchParams(dataToParams)}`)}
-            hasChanged={
-              data.amenities && spot.amenities
-                ? !!Object.keys(data.amenities).find(
-                    (key) =>
-                      data.amenities?.[key as keyof typeof data.amenities] !==
-                      spot.amenities?.[key as keyof typeof spot.amenities],
-                  )
-                : false
-            }
-          />
-        )}
+        <ReportLink
+          title="Info"
+          description="the basic info or amenities are incorrect"
+          hasChanged={
+            data.name !== spot.name ||
+            data.description !== spot.description ||
+            data.isPetFriendly !== spot.isPetFriendly ||
+            (data.amenities && spot.amenities
+              ? !!Object.keys(data.amenities).find(
+                  (key) =>
+                    data.amenities?.[key as keyof typeof data.amenities] !== spot.amenities?.[key as keyof typeof spot.amenities],
+                )
+              : false)
+          }
+          onPress={() => router.push(`/${tab}/spot/${spot.id}/report/info?${new URLSearchParams(dataToParams)}`)}
+        />
         <ReportLink
           title="Images"
           description="the images are inaccurate or inappropriate"
@@ -193,7 +183,7 @@ function ReportLink({
   return (
     <TouchableOpacity className="flex flex-row items-center justify-between py-1" onPress={onPress}>
       <View>
-        <Text className="h-6 text-lg">{title}</Text>
+        <Text className="h-[26px] text-lg">{title}</Text>
         <Text className="text-sm opacity-70">{description}</Text>
       </View>
       <Icon icon={ChevronRight} size={24} color={hasChanged ? "primary" : undefined} />

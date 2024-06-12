@@ -1,13 +1,15 @@
 import type { Spot, SpotImage, User } from "@ramble/database/types"
-import { createAssetUrl, merge } from "@ramble/shared"
+import { type SpotPartnerFields, createAssetUrl, isPartnerSpot, merge } from "@ramble/shared"
 import { FlashList } from "@shopify/flash-list"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
+import * as FileSystem from "expo-file-system"
 import * as ImagePicker from "expo-image-picker"
 import { router, useRouter } from "expo-router"
 import { Image, User2 } from "lucide-react-native"
 import * as React from "react"
-import { TouchableOpacity, View } from "react-native"
+import { Platform, TouchableOpacity, View } from "react-native"
+import { type FileInfo, TEN_MB } from "~/lib/fileSystem"
 import { useMe } from "~/lib/hooks/useMe"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { useFeedbackActivity } from "./FeedbackCheck"
@@ -23,7 +25,7 @@ type ImageCarousel = Pick<SpotImage, "id" | "blurHash" | "path" | "createdAt"> &
 }
 
 type Props = {
-  spot: Pick<Spot, "id" | "ownerId">
+  spot: Pick<Spot, "id" | "ownerId"> & SpotPartnerFields
   width: number
   height: number
   noOfColumns?: number
@@ -79,37 +81,39 @@ export function SpotImageCarousel({
                 className={merge("rounded-xs object-cover", imageClassName)}
               />
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                increment()
-                if (image.creator.deletedAt) return
-                router.push(`/${tab}/${image.creator.username}/(profile)`)
-              }}
-              activeOpacity={image.creator.deletedAt ? 1 : 0.7}
-              className="absolute bottom-2 right-2 p-1 rounded-full bg-gray-800/70 flex flex-row space-x-1.5 items-center"
-            >
-              {image.creator?.avatar ? (
-                <OptimizedImage
-                  height={40}
-                  width={40}
-                  placeholder={image.creator.avatarBlurHash}
-                  source={{ uri: createAssetUrl(image.creator.avatar) }}
-                  className="sq-7 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
-                />
-              ) : (
-                <View className="sq-7 flex flex-row items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
-                  <Icon icon={User2} size={18} />
+            {!isPartnerSpot(spot) && (
+              <TouchableOpacity
+                onPress={() => {
+                  increment()
+                  if (image.creator.deletedAt) return
+                  router.push(`/${tab}/${image.creator.username}/(profile)`)
+                }}
+                activeOpacity={image.creator.deletedAt ? 1 : 0.7}
+                className="absolute bottom-2 right-2 p-1 rounded-full bg-gray-800/70 flex flex-row space-x-1.5 items-center"
+              >
+                {image.creator?.avatar ? (
+                  <OptimizedImage
+                    height={40}
+                    width={40}
+                    placeholder={image.creator.avatarBlurHash}
+                    source={{ uri: createAssetUrl(image.creator.avatar) }}
+                    className="sq-7 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
+                  />
+                ) : (
+                  <View className="sq-7 flex flex-row items-center justify-center rounded-full bg-gray-100 object-cover dark:bg-gray-700">
+                    <Icon icon={User2} size={18} />
+                  </View>
+                )}
+                <View>
+                  <Text className="text-white text-xs leading-3 w-[50px]" numberOfLines={1}>
+                    {image.creator.username}
+                  </Text>
+                  <Text className="text-white text-xxs leading-3 opacity-80" numberOfLines={1}>
+                    {dayjs(image.createdAt).format("DD/MM/YYYY")}
+                  </Text>
                 </View>
-              )}
-              <View>
-                <Text className="text-white text-xs leading-3 w-[50px]" numberOfLines={1}>
-                  {image.creator.username}
-                </Text>
-                <Text className="text-white text-xxs leading-3 opacity-80" numberOfLines={1}>
-                  {dayjs(image.createdAt).format("DD/MM/YYYY")}
-                </Text>
-              </View>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            )}
           </View>
         )}
       />
@@ -136,12 +140,25 @@ function Footer({
   const onPickImage = async () => {
     if (!spot) return
     try {
+      const quality = Platform.OS === "ios" ? 0.3 : 0.4
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsMultipleSelection: true,
-        quality: 1,
+        quality,
       })
       if (result.canceled || result.assets.length === 0) return
+
+      await Promise.all(
+        result.assets.map(async (asset) => {
+          const { uri } = asset
+          // Android doesn't have result.fileSize available, so need to use expo filesystem instead
+          const info: FileInfo = await FileSystem.getInfoAsync(uri)
+          if (info.size && info.size > TEN_MB) {
+            throw new Error("Please select an image with a smaller filesize")
+          }
+        }),
+      )
+
       const searchParams = new URLSearchParams({
         images: result.assets.map((asset) => asset.uri).join(","),
       })

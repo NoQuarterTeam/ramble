@@ -10,7 +10,6 @@ import type { SpotListSort } from "@ramble/shared"
 
 import { useFeedbackActivity } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
-import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { SpotItem } from "~/components/SpotItem"
 import { BrandHeading } from "~/components/ui/BrandHeading"
 import { Spinner } from "~/components/ui/Spinner"
@@ -46,13 +45,6 @@ export default function SpotsScreen() {
     const newSpots = await utils.spot.list.fetch({ skip: spots?.length || 0, sort })
     setSpots([...(spots || []), ...newSpots])
   }, [spots, utils.spot.list, sort])
-
-  if (!me)
-    return (
-      <TabView title="latest">
-        <LoginPlaceholder text="Log in to view latest spots" />
-      </TabView>
-    )
 
   return (
     <TabView

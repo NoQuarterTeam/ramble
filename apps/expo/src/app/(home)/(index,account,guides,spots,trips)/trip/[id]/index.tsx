@@ -34,8 +34,8 @@ import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createAssetUrl, join } from "@ramb
 import { keepPreviousData } from "@tanstack/react-query"
 import { useFeedbackActivity } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
-import { LoginPlaceholder } from "~/components/LoginPlaceholder"
 import { MapView } from "~/components/Map"
+import { SignupCta } from "~/components/SignupCta"
 import { SpotIcon } from "~/components/SpotIcon"
 import { SpotMarker } from "~/components/SpotMarker"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
@@ -199,7 +199,7 @@ export default function TripDetailScreen() {
   if (!me)
     return (
       <ScreenView title={trip?.name}>
-        <LoginPlaceholder text="Log in to view this trip" />
+        <SignupCta text="Sign up to view this trip" />
       </ScreenView>
     )
   return (
@@ -442,13 +442,13 @@ function TripImageSync({
         for (const asset of assets) {
           try {
             const info = await MediaLibrary.getAssetInfoAsync(asset)
-            if (!info.location) continue
+            // if (!info.location) continue
             const type: MediaType = info.mediaType === MediaLibrary.MediaType.photo ? "IMAGE" : "VIDEO"
             const mediaWithData = {
               assetId: asset.id,
               url: info.localUri || asset.uri,
-              latitude: info.location.latitude,
-              longitude: info.location.longitude,
+              latitude: info.location?.latitude,
+              longitude: info.location?.longitude,
               timestamp: dayjs(asset.creationTime).toDate(),
               type,
               duration: info.duration || null,
