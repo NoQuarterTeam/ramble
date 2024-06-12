@@ -29,8 +29,9 @@ export const userSchema = z.object({
   longitude: z.number().nullish(),
   tripSyncEnabled: z.boolean().optional(),
   tripSyncOnNetworkEnabled: z.boolean().optional(),
-  tagIds: z.array(z.string()),
 })
+
+export const userTags = z.object({ tagIds: z.array(z.string()).optional() })
 
 export const registerSchema = userSchema
   .pick({ email: true, password: true, username: true, firstName: true, lastName: true })

@@ -1,4 +1,4 @@
-import { clusterSchema, userSchema } from "@ramble/server-schemas"
+import { clusterSchema, userSchema, userTags } from "@ramble/server-schemas"
 import {
   createAuthToken,
   deleteObject,
@@ -46,7 +46,7 @@ export const userRouter = createTRPCRouter({
     const spot = await ctx.prisma.spot.findFirst({ where: { creatorId: ctx.user.id }, select: { id: true } })
     return !!spot
   }),
-  update: protectedProcedure.input(userSchema.partial()).mutation(async ({ ctx, input: { tagIds, ...data } }) => {
+  update: protectedProcedure.input(userSchema.partial().and(userTags)).mutation(async ({ ctx, input: { tagIds, ...data } }) => {
     if (data.username && data.username !== ctx.user.username) {
       const user = await ctx.prisma.user.findUnique({ where: { username: data.username } })
       if (user) throw new TRPCError({ code: "BAD_REQUEST", message: "Username already taken" })
