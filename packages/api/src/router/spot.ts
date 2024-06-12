@@ -334,7 +334,8 @@ export const spotRouter = createTRPCRouter({
         }
 
         const data = await geocodeCoords({ latitude: spot.latitude, longitude: spot.longitude })
-        const countryCode = COUNTRIES.find((c) => c.name === data.country)?.code
+        const countryCode =
+          data.country && COUNTRIES.find((c) => c.name === data.country || c.alternatives?.includes(data.country!))?.code
 
         await ctx.prisma.tripItem.create({
           data: {

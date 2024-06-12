@@ -5,9 +5,11 @@ export async function geocodeCoords({ latitude, longitude }: { latitude: number;
       `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=pk.eyJ1IjoiamNsYWNrZXR0IiwiYSI6ImNpdG9nZDUwNDAwMTMyb2xiZWp0MjAzbWQifQ.fpvZu03J3o5D8h6IMjcUvw`,
     )
     const jsonResponse = (await res.json()) as FeatureCollection
+
     const address = jsonResponse.features.find((feature) => feature.place_type.includes("address"))?.place_name
     const place = jsonResponse.features.find((feature) => feature.place_type.includes("place"))?.place_name
     const country = jsonResponse.features.find((feature) => feature.place_type.includes("country"))?.place_name
+
     return { address, place, country }
   } catch (error) {
     Sentry.captureException(error)

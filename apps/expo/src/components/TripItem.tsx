@@ -4,12 +4,11 @@ import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
 dayjs.extend(isBetween)
 
+import { createAssetUrl, join } from "@ramble/shared"
 import dayjs from "dayjs"
 
-import type { Trip, TripMedia, User } from "@ramble/database/types"
-import { createAssetUrl, join } from "@ramble/shared"
-
 import { Image } from "expo-image"
+import type { RouterOutputs } from "~/lib/api"
 import { useFeedbackActivity } from "./FeedbackCheck"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
@@ -17,15 +16,7 @@ import { Text } from "./ui/Text"
 const MAX_FLAGS = 11
 
 interface Props {
-  trip: Pick<Trip, "id" | "name" | "startDate" | "endDate"> & {
-    creator: Pick<User, "id" | "avatar" | "avatarBlurHash" | "firstName" | "lastName">
-  } & {
-    users: Pick<User, "id" | "firstName" | "lastName" | "avatar" | "avatarBlurHash">[]
-  } & {
-    media: Pick<TripMedia, "id" | "path" | "thumbnailPath">[]
-  } & {
-    countryFlags: string[]
-  }
+  trip: RouterOutputs["trip"]["mine"][number]
 }
 const today = dayjs()
 

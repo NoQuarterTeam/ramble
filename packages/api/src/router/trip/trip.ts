@@ -24,10 +24,14 @@ export const tripRouter = createTRPCRouter({
     const data = await ctx.prisma.trip.findMany({
       where: { users: { some: { id: ctx.user.id } } },
       orderBy: { startDate: "desc" },
-      include: {
-        items: true, // TODO: <-- remove later
-        creator: true,
-        users: true,
+      select: {
+        id: true,
+        name: true,
+        startDate: true,
+        endDate: true,
+        items: { select: { id: true, order: true, countryCode: true } },
+        creator: { select: { avatar: true, avatarBlurHash: true, id: true, username: true, firstName: true, lastName: true } },
+        users: { select: { id: true, username: true, avatar: true, avatarBlurHash: true, firstName: true, lastName: true } },
         media: {
           where: { deletedAt: null },
           orderBy: { timestamp: "desc" },
@@ -46,7 +50,7 @@ export const tripRouter = createTRPCRouter({
         if (!flag) continue
         countryFlags.push(flag)
       }
-      return { ...trip, countryFlags: uniq(countryFlags) as string[] }
+      return { ...trip, countryFlags: uniq(countryFlags) }
     })
   }),
   allWithSavedSpot: protectedProcedure.input(z.object({ spotId: z.string() })).query(async ({ ctx, input }) => {

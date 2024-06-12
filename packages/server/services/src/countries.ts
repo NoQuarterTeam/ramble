@@ -2,6 +2,7 @@ export type Country = {
   name: string
   code: string
   emoji: string
+  alternatives?: string[]
 }
 export const COUNTRIES: Country[] = [
   { name: "Albania", code: "AL", emoji: "🇦🇱" },
@@ -50,7 +51,7 @@ export const COUNTRIES: Country[] = [
   { name: "Spain", code: "ES", emoji: "🇪🇸" },
   { name: "Sweden", code: "SE", emoji: "🇸🇪" },
   { name: "Switzerland", code: "CH", emoji: "🇨🇭" },
-  { name: "Turkey", code: "TR", emoji: "🇹🇷" },
+  { name: "Turkey", code: "TR", emoji: "🇹🇷", alternatives: ["Türkiye"] },
   { name: "Ukraine", code: "UA", emoji: "🇺🇦" },
   { name: "United Kingdom", code: "GB", emoji: "🇬🇧" },
   { name: "Vatican City", code: "VA", emoji: "🇻🇦" },
