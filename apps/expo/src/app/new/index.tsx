@@ -109,7 +109,7 @@ export default function NewSpotLocationScreen() {
   if (!me)
     return (
       <NewSpotModalView title="new spot" canGoBack={false}>
-        <SignupCta text="sign up to start creating spots" />
+        <SignupCta text="Sign up to start creating spots" />
       </NewSpotModalView>
     )
 
