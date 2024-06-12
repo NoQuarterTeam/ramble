@@ -29,7 +29,7 @@ export const tripRouter = createTRPCRouter({
         name: true,
         startDate: true,
         endDate: true,
-        items: { select: { id: true, order: true, countryCode: true } },
+        items: { orderBy: { order: "asc" }, select: { id: true, order: true, countryCode: true } },
         creator: { select: { avatar: true, avatarBlurHash: true, id: true, username: true, firstName: true, lastName: true } },
         users: { select: { id: true, username: true, avatar: true, avatarBlurHash: true, firstName: true, lastName: true } },
         media: {
@@ -45,7 +45,7 @@ export const tripRouter = createTRPCRouter({
 
     return data.map((trip) => {
       const countryFlags = []
-      for (const item of trip.items.sort((a, b) => a.order - b.order)) {
+      for (const item of trip.items) {
         const flag = COUNTRIES.find((c) => c.code === item.countryCode)?.emoji
         if (!flag) continue
         countryFlags.push(flag)
