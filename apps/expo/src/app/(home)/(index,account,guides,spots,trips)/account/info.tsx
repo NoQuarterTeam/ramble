@@ -134,7 +134,7 @@ export default function AccountInfoScreen() {
         }
       >
         <ScrollView
-          contentContainerStyle={{ flexGrow: 1, flex: 1, paddingBottom: 200 }}
+          contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="interactive"
@@ -175,7 +175,7 @@ export default function AccountInfoScreen() {
             subLabel="This will be used to promote your instagram and gives other ramble users a way to contact you"
             error={error}
           />
-          <View className="mb-4">
+          <View className="pb-4">
             <View className="flex flex-row justify-between">
               <Text className="leading-6">Describe yourself</Text>
               <Text className="opacity-70">
