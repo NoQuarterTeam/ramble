@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Image } from "expo-image"
 import { type AllRoutes, type Href, Link, useRouter } from "expo-router"
 import { AlertCircle, Bell, ChevronRight, Heart, MessageCircle, Settings, ToggleRight, User, User2 } from "lucide-react-native"
-import { Dimensions, ScrollView, TouchableOpacity, View } from "react-native"
+import { ScrollView, TouchableOpacity, View } from "react-native"
 
 import { createAssetUrl } from "@ramble/shared"
 
@@ -16,15 +16,15 @@ import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { AUTH_TOKEN, api } from "~/lib/api"
 import { IS_DEV, UPDATE_ID, VERSION } from "~/lib/config"
+import { height } from "~/lib/device"
 import { useMe } from "~/lib/hooks/useMe"
+
+const IMAGE_HEIGHT = height * 0.35
 
 export default function AccountScreen() {
   const { me } = useMe()
   const router = useRouter()
   const utils = api.useUtils()
-
-  const DEVICE_HEIGHT = Dimensions.get("window").height
-  const IMAGE_HEIGHT = DEVICE_HEIGHT * 0.35
 
   const { data: unreadCount } = api.notification.unreadCount.useQuery(undefined, { enabled: !!me })
 
