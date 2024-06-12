@@ -49,7 +49,7 @@
     "isbot": "latest",
     "lucide-react": "0.390.0",
     "mapbox-gl": "3.4.0",
-    "next": "14.2.3",
+    "next": "14.2.4",
     "posthog-js": "1.139.0",
     "pretty-cache-header": "1.0.0",
     "query-string": "9.0.0",
