@@ -31,8 +31,12 @@ export default function AccountInfoScreen() {
   const { data: tagOptions, isLoading: isTagOptionsLoading } = api.user.tagOptions.useQuery()
   const { data: myTags, isLoading: isMyTagsLoading } = api.user.myTags.useQuery()
 
-  const initialTagIds = myTags?.map((tag) => tag.id) || []
+  const initialTagIds = myTags?.map((tag) => tag.id)
   const [selectedTagIds, setSelectedTagIds] = React.useState(initialTagIds)
+
+  React.useEffect(() => {
+    if (initialTagIds) setSelectedTagIds(initialTagIds)
+  }, [initialTagIds])
 
   const form = useForm({
     defaultValues: {
@@ -110,6 +114,7 @@ export default function AccountInfoScreen() {
   }
 
   const handleToggleTag = (tagId: string) => {
+    if (!selectedTagIds) return
     if (selectedTagIds.includes(tagId)) {
       const newTags = selectedTagIds.filter((selectedTagId) => tagId !== selectedTagId)
       setSelectedTagIds(newTags)
@@ -120,7 +125,7 @@ export default function AccountInfoScreen() {
   }
 
   const isDirty = form.formState.isDirty
-  const areTagsChanged = initialTagIds.sort().join(",") !== selectedTagIds.sort().join(",")
+  const areTagsChanged = initialTagIds?.sort().join(",") !== selectedTagIds?.sort().join(",")
   return (
     <FormProvider {...form}>
       <ScreenView
@@ -175,30 +180,32 @@ export default function AccountInfoScreen() {
             subLabel="This will be used to promote your instagram and gives other ramble users a way to contact you"
             error={error}
           />
-          <View className="pb-4">
-            <View className="flex flex-row justify-between">
-              <Text className="leading-6">Describe yourself</Text>
-              <Text className="opacity-70">
-                {selectedTagIds.length}/{MAX_TAGS}
-              </Text>
-            </View>
-            {isTagOptionsLoading || isMyTagsLoading ? (
-              <Spinner />
-            ) : (
-              <View className="flex flex-row flex-wrap gap-2">
-                {tagOptions?.map((tag) => (
-                  <Button
-                    key={tag.id}
-                    size="xs"
-                    variant={selectedTagIds.includes(tag.id) ? "primary" : "outline"}
-                    onPress={() => handleToggleTag(tag.id)}
-                  >
-                    {tag.name}
-                  </Button>
-                ))}
+          {selectedTagIds && (
+            <View className="pb-4">
+              <View className="flex flex-row justify-between">
+                <Text className="leading-6">Describe yourself</Text>
+                <Text className="opacity-70">
+                  {selectedTagIds.length}/{MAX_TAGS}
+                </Text>
               </View>
-            )}
-          </View>
+              {isTagOptionsLoading || isMyTagsLoading ? (
+                <Spinner />
+              ) : (
+                <View className="flex flex-row flex-wrap gap-2">
+                  {tagOptions?.map((tag) => (
+                    <Button
+                      key={tag.id}
+                      size="xs"
+                      variant={selectedTagIds.includes(tag.id) ? "primary" : "outline"}
+                      onPress={() => handleToggleTag(tag.id)}
+                    >
+                      {tag.name}
+                    </Button>
+                  ))}
+                </View>
+              )}
+            </View>
+          )}
         </ScrollView>
       </ScreenView>
     </FormProvider>

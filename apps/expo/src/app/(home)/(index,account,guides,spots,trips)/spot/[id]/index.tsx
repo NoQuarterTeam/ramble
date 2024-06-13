@@ -399,7 +399,7 @@ export default function SpotDetailScreen() {
               </MapView>
 
               <View className="h-px w-full bg-gray-200 dark:bg-gray-700" />
-              <View className="space-y-2">
+              <View className="space-y-2 pt-4">
                 <View className="flex flex-row justify-between">
                   <View className="flex flex-row items-center space-x-2">
                     <Text className="text-xl">
