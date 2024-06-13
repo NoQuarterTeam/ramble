@@ -5,7 +5,7 @@ import dayjs from "dayjs"
 import Supercluster from "supercluster"
 import { z } from "zod"
 
-import { type Spot, SpotType } from "@ramble/database/types"
+import { type Spot, SpotType } from "@ramble/database/server"
 import { FULL_WEB_URL } from "@ramble/server-env"
 import { clusterSchema, spotAmenitiesSchema, spotSchema, userSchema } from "@ramble/server-schemas"
 import {

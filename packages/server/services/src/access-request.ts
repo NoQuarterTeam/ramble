@@ -1,6 +1,6 @@
 import crypto from "node:crypto"
 import { prisma } from "@ramble/database"
-import { Prisma } from "@ramble/database/types"
+import { Prisma } from "@ramble/database/server"
 import * as Sentry from "@sentry/nextjs"
 
 let count = 0

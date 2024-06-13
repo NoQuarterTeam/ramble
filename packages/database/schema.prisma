@@ -5,7 +5,6 @@ generator client {
 
 datasource db {
   provider     = "mysql"
-  relationMode = "prisma"
   url          = env("DATABASE_URL")
 }
 
@@ -80,7 +79,6 @@ model User {
   updatedAt DateTime  @default(now()) @updatedAt
 
   @@index([latitude])
-  @@index([referrerId])
 }
 
 model PushToken {
@@ -223,9 +221,7 @@ model Spot {
   camperguruId             Int?    @unique
 
   @@index([publishedAt])
-  @@index([ownerId])
-  @@index([verifierId])
-  @@index([creatorId])
+  @@index([name])
   @@index([longitude])
   @@index([verifiedAt, type, deletedAt, creatorId, publishedAt])
   @@index([type, verifiedAt, latitude, longitude, deletedAt, creatorId, publishedAt])
@@ -268,7 +264,6 @@ model SpotImage {
   updatedAt DateTime @default(now()) @updatedAt
 
   @@unique([spotId, path])
-  @@index([creatorId])
 }
 
 model SpotRevision {
@@ -285,10 +280,6 @@ model SpotRevision {
   deletedAt DateTime?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
-
-  @@index([spotId])
-  @@index([creatorId])
-  @@index([approverId])
 }
 
 model List {
@@ -303,8 +294,6 @@ model List {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-
-  @@index([creatorId])
 }
 
 model ListSpot {
@@ -316,9 +305,6 @@ model ListSpot {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-
-  @@index([spotId])
-  @@index([listId])
 }
 
 model Review {
@@ -337,8 +323,6 @@ model Review {
   updatedAt DateTime @default(now()) @updatedAt
 
   @@index([rating, spotId])
-  @@index([spotId])
-  @@index([userId])
 }
 
 enum TagCategory {
@@ -365,7 +349,7 @@ model AccessRequest {
   code       String    @unique
 
   userId String? @unique
-  user   User?   @relation(fields: [userId], references: [id])
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -382,13 +366,11 @@ model Feedback {
   type    FeedbackType
   message String       @db.Text
 
-  user   User?   @relation(fields: [userId], references: [id])
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
   userId String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-
-  @@index([userId])
 }
 
 model Trip {
@@ -406,8 +388,6 @@ model Trip {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-
-  @@index([creatorId])
 }
 
 enum MediaType {
@@ -436,10 +416,8 @@ model TripMedia {
   updatedAt DateTime  @default(now()) @updatedAt
   deletedAt DateTime?
 
-  @@index([tripId])
   @@index([latitude])
   @@index([longitude])
-  @@index([creatorId])
   @@index([deletedAt])
 }
 
@@ -459,10 +437,6 @@ model TripItem {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-
-  @@index([creatorId])
-  @@index([tripId])
-  @@index([spotId])
 }
 
 model TripStop {
@@ -504,10 +478,6 @@ model Notification {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-
-  @@index([initiatorId])
-  @@index([tripId])
-  @@index([spotId])
 }
 
 enum UserNotificationStatus {
@@ -528,9 +498,7 @@ model UserNotification {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  @@index([userId])
   @@index([status])
-  @@index([notificationId])
 }
 
 model UserTag {

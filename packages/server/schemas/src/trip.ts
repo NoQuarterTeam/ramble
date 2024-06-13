@@ -1,4 +1,4 @@
-import { MediaType } from "@ramble/database/types"
+import { MediaType } from "@ramble/database/server"
 import { z } from "zod"
 
 export const tripSchema = z.object({

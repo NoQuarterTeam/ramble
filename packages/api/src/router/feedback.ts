@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { FeedbackType } from "@ramble/database/types"
+import { FeedbackType } from "@ramble/database/server"
 import { sendSlackMessage } from "@ramble/server-services"
 
 import { createTRPCRouter, publicProcedure } from "../trpc"
