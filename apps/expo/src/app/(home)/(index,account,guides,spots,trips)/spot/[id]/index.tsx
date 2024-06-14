@@ -225,37 +225,39 @@ export default function SpotDetailScreen() {
               </View>
             ) : (
               <>
-                {spot.address && <Text className="font-400-italic text-sm">{spot.address}</Text>}
-                {spot.amenities && (
-                  <View className="flex flex-row flex-wrap gap-2">
-                    {Object.entries(AMENITIES).map(([key, value]) => {
-                      if (!spot.amenities?.[key as keyof typeof AMENITIES]) return null
-                      const icon = AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]
-                      return (
-                        <View
-                          key={key}
-                          className="flex flex-row space-x-1 rounded-xs border border-gray-200 p-2 dark:border-gray-700"
-                        >
-                          {icon && <Icon icon={icon} size={20} />}
-                          <Text className="text-sm">{value}</Text>
-                        </View>
-                      )
-                    })}
-                  </View>
-                )}
+                <View className="space-y-2">
+                  {spot.address && <Text className="font-400-italic text-sm">{spot.address}</Text>}
+                  {spot.amenities && (
+                    <View className="flex flex-row flex-wrap gap-2">
+                      {Object.entries(AMENITIES).map(([key, value]) => {
+                        if (!spot.amenities?.[key as keyof typeof AMENITIES]) return null
+                        const icon = AMENITIES_ICONS[key as keyof typeof AMENITIES_ICONS]
+                        return (
+                          <View
+                            key={key}
+                            className="flex flex-row space-x-1 rounded-xs border border-gray-200 p-2 dark:border-gray-700"
+                          >
+                            {icon && <Icon icon={icon} size={20} />}
+                            <Text className="text-sm">{value}</Text>
+                          </View>
+                        )
+                      })}
+                    </View>
+                  )}
 
-                {data.tags.length > 0 && (
-                  <View className="flex flex-row flex-wrap gap-2">
-                    {data.tags.map((tag) => (
-                      <View key={tag.name} className="p-2 rounded-sm border border-gray-200 dark:border-gray-700">
-                        <Text className="text-sm">{tag.name}</Text>
-                        <View className="absolute -top-1 -right-1 sq-4 flex items-center justify-center bg-background dark:bg-background-dark rounded-full border border-gray-200 dark:border-gray-700">
-                          <Text className="text-xxs leading-3">{tag.count}</Text>
+                  {data.tags.length > 0 && (
+                    <View className="flex flex-row flex-wrap gap-2">
+                      {data.tags.map((tag) => (
+                        <View key={tag.name} className="p-2 rounded-sm border border-gray-200 dark:border-gray-700">
+                          <Text className="text-sm">{tag.name}</Text>
+                          <View className="absolute -top-1 -right-1 sq-4 flex items-center justify-center bg-background dark:bg-background-dark rounded-full border border-gray-200 dark:border-gray-700">
+                            <Text className="text-xxs leading-3">{tag.count}</Text>
+                          </View>
                         </View>
-                      </View>
-                    ))}
-                  </View>
-                )}
+                      ))}
+                    </View>
+                  )}
+                </View>
 
                 {forecastDays && forecastDays.length > 0 && (
                   <View className="pt-4">
@@ -499,11 +501,7 @@ export default function SpotDetailScreen() {
               activeOpacity={0.8}
               className="sq-7 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
             >
-              <Icon
-                icon={Route}
-                size={16}
-                // fill={data.isLiked ? (isDark ? "white" : "black") : "transparent"}
-              />
+              <Icon icon={Route} size={16} />
             </TouchableOpacity>
           </View>
         )}

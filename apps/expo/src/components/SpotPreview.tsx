@@ -143,7 +143,7 @@ export const SpotPreview = React.memo(function _SpotPreview({
                   <Icon
                     icon={Heart}
                     size={14}
-                    fill={spot.listSpots && spot.listSpots.length > 0 ? (isDark ? "white" : "black") : undefined}
+                    fill={spot.listSpots && spot.listSpots.length > 0 ? (isDark ? "white" : "black") : "transparent"}
                   />
                 }
               >
@@ -156,13 +156,7 @@ export const SpotPreview = React.memo(function _SpotPreview({
                   increment()
                   router.push(`/spot/${spot.id}/save-to-trip`)
                 }}
-                leftIcon={
-                  <Icon
-                    icon={Route}
-                    size={14}
-                    // fill={spot.listSpots && spot.listSpots.length > 0 ? (isDark ? "white" : "black") : undefined}
-                  />
-                }
+                leftIcon={<Icon icon={Route} size={14} />}
               >
                 Add to Trip
               </Button>
