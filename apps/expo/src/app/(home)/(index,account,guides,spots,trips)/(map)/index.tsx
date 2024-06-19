@@ -139,6 +139,7 @@ function MapContainer() {
       zoom: properties.zoom,
     })
   }
+
   const posthog = usePostHog()
   // biome-ignore lint/correctness/useExhaustiveDependencies: dont add activeSpotId here
   const spotMarkers = React.useMemo(
