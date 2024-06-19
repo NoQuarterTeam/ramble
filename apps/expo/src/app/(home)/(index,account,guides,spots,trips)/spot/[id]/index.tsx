@@ -224,7 +224,7 @@ export default function SpotDetailScreen() {
                 <Button onPress={() => router.push("/login")}>Sign up</Button>
               </View>
             ) : (
-              <>
+              <View className="space-y-2">
                 {spot.address && <Text className="font-400-italic text-sm">{spot.address}</Text>}
                 {spot.amenities && (
                   <View className="flex flex-row flex-wrap gap-2">
@@ -311,16 +311,15 @@ export default function SpotDetailScreen() {
                 )}
 
                 <View className="space-y-2 py-4">
-                  {me && (
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      leftIcon={<Icon icon={Flag} size={16} />}
-                      onPress={() => router.push(`/${tab}/spot/${spot.id}/report`)}
-                    >
-                      Report spot
-                    </Button>
-                  )}
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    leftIcon={<Icon icon={Flag} size={16} />}
+                    onPress={() => router.push(`/${tab}/spot/${spot.id}/report`)}
+                  >
+                    Report spot
+                  </Button>
+
                   {canManageSpot(spot, me) && !spot.verifiedAt && (
                     <Button
                       size="sm"
@@ -375,58 +374,54 @@ export default function SpotDetailScreen() {
                     </Button>
                   )}
                 </View>
-              </>
-            )}
-          </View>
-          {me && (
-            <>
-              <MapView className="overflow-hidden rounded-xs h-[300px]" scrollEnabled={true}>
-                <LocationPuck />
-                <Camera
-                  allowUpdates
-                  followUserLocation={false}
-                  defaultSettings={{
-                    centerCoordinate: [spot.longitude, spot.latitude],
-                    zoomLevel: 8,
-                    pitch: 0,
-                    heading: 0,
-                  }}
-                />
+                <MapView className="overflow-hidden rounded-xs h-[300px]" scrollEnabled={true}>
+                  <LocationPuck />
+                  <Camera
+                    allowUpdates
+                    followUserLocation={false}
+                    defaultSettings={{
+                      centerCoordinate: [spot.longitude, spot.latitude],
+                      zoomLevel: 8,
+                      pitch: 0,
+                      heading: 0,
+                    }}
+                  />
 
-                <MarkerView allowOverlap allowOverlapWithPuck coordinate={[spot.longitude, spot.latitude]}>
-                  <SpotMarker spot={spot} />
-                </MarkerView>
-              </MapView>
+                  <MarkerView allowOverlap allowOverlapWithPuck coordinate={[spot.longitude, spot.latitude]}>
+                    <SpotMarker spot={spot} />
+                  </MarkerView>
+                </MapView>
 
-              <View className="h-px w-full bg-gray-200 dark:bg-gray-700" />
-              <View className="space-y-2 pt-4">
-                <View className="flex flex-row justify-between">
-                  <View className="flex flex-row items-center space-x-2">
-                    <Text className="text-xl">
-                      {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
-                    </Text>
-                    <Text>·</Text>
-                    <View className="flex flex-row items-center space-x-1">
-                      <Icon icon={Star} size={20} />
-                      <Text className="pt-1">{displayRating(data.rating._avg.rating)}</Text>
+                <View className="h-px w-full bg-gray-200 dark:bg-gray-700" />
+                <View className="space-y-2 pt-4">
+                  <View className="flex flex-row justify-between">
+                    <View className="flex flex-row items-center space-x-2">
+                      <Text className="text-xl">
+                        {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
+                      </Text>
+                      <Text>·</Text>
+                      <View className="flex flex-row items-center space-x-1">
+                        <Icon icon={Star} size={20} />
+                        <Text className="pt-1">{displayRating(data.rating._avg.rating)}</Text>
+                      </View>
                     </View>
+                    {me && (
+                      <Button size="sm" onPress={() => router.push(`/spot/${spot.id}/new-review`)} variant="secondary">
+                        Add review
+                      </Button>
+                    )}
                   </View>
-                  {me && (
-                    <Button size="sm" onPress={() => router.push(`/spot/${spot.id}/new-review`)} variant="secondary">
-                      Add review
-                    </Button>
-                  )}
-                </View>
-                <View>
-                  {spot.reviews.map((review) => (
-                    <View key={review.id} className="mb-2">
-                      <ReviewItem review={review} />
-                    </View>
-                  ))}
+                  <View>
+                    {spot.reviews.map((review) => (
+                      <View key={review.id} className="mb-2">
+                        <ReviewItem review={review} />
+                      </View>
+                    ))}
+                  </View>
                 </View>
               </View>
-            </>
-          )}
+            )}
+          </View>
         </View>
       </Animated.ScrollView>
 
