@@ -310,65 +310,69 @@ export default function SpotDetailScreen() {
                   </View>
                 )}
 
-                <View className="space-y-2 py-4">
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    leftIcon={<Icon icon={Flag} size={16} />}
-                    onPress={() => router.push(`/${tab}/spot/${spot.id}/report`)}
-                  >
-                    Report spot
-                  </Button>
-
+                <View className="space-y-2 py-2">
                   {canManageSpot(spot, me) && !spot.verifiedAt && (
                     <Button
                       size="sm"
                       onPress={() => verifySpot({ id: spot.id })}
                       isLoading={isVerifyingLoading}
-                      leftIcon={<Icon icon={Check} size={18} />}
+                      leftIcon={<Icon icon={Check} size={16} color={{ dark: "black", light: "white" }} />}
                     >
                       Verify
                     </Button>
                   )}
-                  {canManageSpot(spot, me) && (
+                  <View className="flex-row items-center space-x-2">
                     <Button
                       size="sm"
-                      onPress={() => {
-                        const searchParams = new URLSearchParams({
-                          latitude: spot.latitude.toString(),
-                          longitude: spot.longitude.toString(),
-                          address: spot.address || "",
-                          type: spot.type,
-                          name: spot.name,
-                          description: spot.description || "",
-                          isPetFriendly: spot.isPetFriendly ? "true" : "false",
-                          amenities: spot.amenities ? JSON.stringify(spot.amenities) : "",
-                          images: spot.images.map((i) => i.path).join(","),
-                        })
-                        router.push(`/${tab}/spot/${spot.id}/edit?${searchParams}`)
-                      }}
+                      className="flex-1"
                       variant="outline"
-                      leftIcon={<Icon icon={Edit2} size={18} />}
+                      leftIcon={<Icon icon={Flag} size={16} />}
+                      onPress={() => router.push(`/${tab}/spot/${spot.id}/report`)}
                     >
-                      Edit
+                      Report
                     </Button>
-                  )}
-                  {me?.isAdmin && (
-                    <Button
-                      size="sm"
-                      onPress={() => router.push(`/spot/${spot.id}/choose-cover`)}
-                      variant="outline"
-                      leftIcon={<Icon icon={Images} size={18} />}
-                    >
-                      Choose cover
-                    </Button>
-                  )}
+                    {canManageSpot(spot, me) && (
+                      <Button
+                        size="sm"
+                        className="flex-1"
+                        onPress={() => {
+                          const searchParams = new URLSearchParams({
+                            latitude: spot.latitude.toString(),
+                            longitude: spot.longitude.toString(),
+                            address: spot.address || "",
+                            type: spot.type,
+                            name: spot.name,
+                            description: spot.description || "",
+                            isPetFriendly: spot.isPetFriendly ? "true" : "false",
+                            amenities: spot.amenities ? JSON.stringify(spot.amenities) : "",
+                            images: spot.images.map((i) => i.path).join(","),
+                          })
+                          router.push(`/${tab}/spot/${spot.id}/edit?${searchParams}`)
+                        }}
+                        variant="outline"
+                        leftIcon={<Icon icon={Edit2} size={16} />}
+                      >
+                        Edit
+                      </Button>
+                    )}
+                    {me?.isAdmin && (
+                      <Button
+                        size="sm"
+                        className="flex-1"
+                        onPress={() => router.push(`/spot/${spot.id}/choose-cover`)}
+                        variant="outline"
+                        leftIcon={<Icon icon={Images} size={16} />}
+                      >
+                        Pick cover
+                      </Button>
+                    )}
+                  </View>
                   {me?.isAdmin && (
                     <Button
                       size="sm"
                       onPress={() => router.push(`/${tab}/spot/${spot.id}/delete`)}
                       variant="destructive"
-                      leftIcon={<Trash size={18} className="text-white" />}
+                      leftIcon={<Trash size={16} className="text-white" />}
                     >
                       Delete
                     </Button>
