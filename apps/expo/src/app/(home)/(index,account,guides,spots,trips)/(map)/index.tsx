@@ -12,6 +12,7 @@ import { keepPreviousData } from "@tanstack/react-query"
 import * as Location from "expo-location"
 import { Link, useRouter } from "expo-router"
 import { Layers, Navigation, PlusCircle, Settings2, User } from "lucide-react-native"
+import { usePostHog } from "posthog-react-native"
 import * as React from "react"
 import { TouchableOpacity, View, useColorScheme } from "react-native"
 import { BioRegionPreview } from "~/components/BioRegionPreview"
@@ -138,7 +139,7 @@ function MapContainer() {
       zoom: properties.zoom,
     })
   }
-
+  const posthog = usePostHog()
   // biome-ignore lint/correctness/useExhaustiveDependencies: dont add activeSpotId here
   const spotMarkers = React.useMemo(
     () =>
@@ -156,6 +157,7 @@ function MapContainer() {
             })
             if (!point.properties.cluster) {
               increment()
+              posthog.capture("spot preview viewed", { spotId: point.properties.id })
               setSelectedBioRegion(null)
               setActiveSpotId(point.properties.id)
             }
