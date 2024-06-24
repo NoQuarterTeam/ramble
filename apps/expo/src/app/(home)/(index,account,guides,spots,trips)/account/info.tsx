@@ -31,12 +31,10 @@ export default function AccountInfoScreen() {
   const { data: tagOptions, isLoading: isTagOptionsLoading } = api.user.tagOptions.useQuery()
   const { data: myTags, isLoading: isMyTagsLoading } = api.user.myTags.useQuery()
 
-  const initialTagIds = myTags?.map((tag) => tag.id)
-  const [selectedTagIds, setSelectedTagIds] = React.useState(initialTagIds)
-
+  const [selectedTagIds, setSelectedTagIds] = React.useState<string[]>([])
   React.useEffect(() => {
-    if (initialTagIds) setSelectedTagIds(initialTagIds)
-  }, [initialTagIds])
+    if (myTags) setSelectedTagIds(myTags?.map((tag) => tag.id))
+  }, [myTags])
 
   const form = useForm({
     defaultValues: {
@@ -125,7 +123,11 @@ export default function AccountInfoScreen() {
   }
 
   const isDirty = form.formState.isDirty
-  const areTagsChanged = initialTagIds?.sort().join(",") !== selectedTagIds?.sort().join(",")
+  const areTagsChanged =
+    myTags
+      ?.map((i) => i.id)
+      ?.sort()
+      .join(",") !== selectedTagIds?.sort().join(",")
   return (
     <FormProvider {...form}>
       <ScreenView
