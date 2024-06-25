@@ -55,8 +55,8 @@ importers:
         specifier: 1.0.3
         version: 1.0.3(react-native@0.73.6)(react@18.2.0)
       '@rnmapbox/maps':
-        specifier: 10.1.25
-        version: 10.1.25(expo@50.0.17)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0)
+        specifier: 10.1.27
+        version: 10.1.27(expo@50.0.17)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0)
       '@sentry/react-native':
         specifier: 5.20.0
         version: 5.20.0(expo@50.0.17)(react-native@0.73.6)(react@18.2.0)
@@ -64,14 +64,14 @@ importers:
         specifier: 1.6.3
         version: 1.6.3(@babel/runtime@7.24.7)(react-native@0.73.6)(react@18.2.0)
       '@tanstack/react-query':
-        specifier: 5.45.0
-        version: 5.45.0(react@18.2.0)
+        specifier: 5.45.1
+        version: 5.45.1(react@18.2.0)
       '@trpc/client':
         specifier: 11.0.0-rc.402
         version: 11.0.0-rc.402(@trpc/server@11.0.0-rc.402)
       '@trpc/react-query':
         specifier: 11.0.0-rc.402
-        version: 11.0.0-rc.402(@tanstack/react-query@5.45.0)(@trpc/client@11.0.0-rc.402)(@trpc/server@11.0.0-rc.402)(react-dom@18.2.0)(react@18.2.0)
+        version: 11.0.0-rc.402(@tanstack/react-query@5.45.1)(@trpc/client@11.0.0-rc.402)(@trpc/server@11.0.0-rc.402)(react-dom@18.2.0)(react@18.2.0)
       '@trpc/server':
         specifier: 11.0.0-rc.402
         version: 11.0.0-rc.402
@@ -329,14 +329,14 @@ importers:
         specifier: 0.1.1
         version: 0.1.1(tailwindcss@3.3.2)
       '@tanstack/react-query':
-        specifier: 5.45.0
-        version: 5.45.0(react@18.2.0)
+        specifier: 5.45.1
+        version: 5.45.1(react@18.2.0)
       '@tanstack/react-table':
         specifier: 8.17.3
         version: 8.17.3(react-dom@18.2.0)(react@18.2.0)
       '@trpc/react-query':
         specifier: 11.0.0-rc.402
-        version: 11.0.0-rc.402(@tanstack/react-query@5.45.0)(@trpc/client@11.0.0-rc.402)(@trpc/server@11.0.0-rc.402)(react-dom@18.2.0)(react@18.2.0)
+        version: 11.0.0-rc.402(@tanstack/react-query@5.45.1)(@trpc/client@11.0.0-rc.402)(@trpc/server@11.0.0-rc.402)(react-dom@18.2.0)(react@18.2.0)
       '@trpc/server':
         specifier: 11.0.0-rc.402
         version: 11.0.0-rc.402
@@ -6447,8 +6447,8 @@ packages:
     engines: {node: '>=14.0.0'}
     dev: false
 
-  /@rnmapbox/maps@10.1.25(expo@50.0.17)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0):
-    resolution: {integrity: sha512-bVwNmWW4c2tNiJTvJT5vf9Gm+Y/kTwqs3Yfmu85sdi7PW7eExeUogTyqKp38DNRoLPv+XSuHfZkiGpbfJWqlsg==}
+  /@rnmapbox/maps@10.1.27(expo@50.0.17)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0):
+    resolution: {integrity: sha512-x//dWjd9BbaSL0UBcbgbl9nu8rUCOIIxcTB4bbuorHnNapCq6v7gIle/dXhGYyaCGw3fLKC24PK0BEOlZYeTTg==}
     peerDependencies:
       expo: '>=47.0.0'
       mapbox-gl: ^2.9.0
@@ -7479,8 +7479,8 @@ packages:
     resolution: {integrity: sha512-RVfIZQmFUTdjhSAAblvueimfngYyfN6HlwaJUPK71PKd7yi43Vs1S/rdimmZedPWX/WGppcq/U1HOj7O7FwYxw==}
     dev: false
 
-  /@tanstack/react-query@5.45.0(react@18.2.0):
-    resolution: {integrity: sha512-y272cKRJp1BvehrWG4ashOBuqBj1Qm2O6fgYJ9LYSHrLdsCXl74GbSVjUQTReUdHuRIl9cEOoyPa6HYag400lw==}
+  /@tanstack/react-query@5.45.1(react@18.2.0):
+    resolution: {integrity: sha512-mYYfJujKg2kxmkRRjA6nn4YKG3ITsKuH22f1kteJ5IuVQqgKUgbaSQfYwVP0gBS05mhwxO03HVpD0t7BMN7WOA==}
     peerDependencies:
       react: ^18.0.0
     dependencies:
@@ -7517,7 +7517,7 @@ packages:
       '@trpc/server': 11.0.0-rc.402
     dev: false
 
-  /@trpc/react-query@11.0.0-rc.402(@tanstack/react-query@5.45.0)(@trpc/client@11.0.0-rc.402)(@trpc/server@11.0.0-rc.402)(react-dom@18.2.0)(react@18.2.0):
+  /@trpc/react-query@11.0.0-rc.402(@tanstack/react-query@5.45.1)(@trpc/client@11.0.0-rc.402)(@trpc/server@11.0.0-rc.402)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-YXTe3XBr2wb9ZuAK01/Gk85shY8gOFnT5Rfz2BczeFrPeVdhZf1dLgZ/txpN+4o4KZlv3Stylt+Vz8X8usTeMg==}
     peerDependencies:
       '@tanstack/react-query': ^5.25.0
@@ -7526,7 +7526,7 @@ packages:
       react: '>=18.2.0'
       react-dom: '>=18.2.0'
     dependencies:
-      '@tanstack/react-query': 5.45.0(react@18.2.0)
+      '@tanstack/react-query': 5.45.1(react@18.2.0)
       '@trpc/client': 11.0.0-rc.402(@trpc/server@11.0.0-rc.402)
       '@trpc/server': 11.0.0-rc.402
       react: 18.2.0
