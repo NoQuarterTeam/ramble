@@ -4,8 +4,8 @@ generator client {
 }
 
 datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 enum Role {
@@ -162,17 +162,17 @@ enum SpotType {
 }
 
 model Spot {
-  id          String    @id @default(uuid())
-  name        String
-  type        SpotType
-  description String?   @db.Text
-  descriptionLanguage    String?
-  address     String?
-  latitude    Float
-  longitude   Float
-  publishedAt DateTime?
-  verifiedAt  DateTime?
-  nanoid      String?   @unique
+  id                  String    @id @default(uuid())
+  name                String
+  type                SpotType
+  description         String?   @db.Text
+  descriptionLanguage String?
+  address             String?
+  latitude            Float
+  longitude           Float
+  publishedAt         DateTime?
+  verifiedAt          DateTime?
+  nanoid              String?   @unique
 
   pointLocation Unsupported("POINT GENERATED ALWAYS AS (ST_GeomFromText(CONCAT('POINT(',longitude,' ',latitude,')'))) STORED")?
 
