@@ -6,6 +6,7 @@
     "address": "pnpm with-env ts-node ./src/format/gen-address.ts",
     "ids": "pnpm with-env ts-node ./src/format/gen-ids.ts",
     "blur": "pnpm with-env ts-node ./src/format/gen-blurhash.ts",
+    "lang": "pnpm with-env ts-node ./src/format/set-biolang.ts",
     "trip-flags": "pnpm with-env ts-node ./src/format/gen-trip-item-country-code.ts",
     "crag": "pnpm with-env ts-node ./src/scraping/get-thecrag.ts",
     "gpt": "pnpm with-env ts-node ./src/export/ramble-gpt.ts",
