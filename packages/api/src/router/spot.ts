@@ -174,7 +174,7 @@ export const spotRouter = createTRPCRouter({
           id: true,
           name: true,
           description: true,
-          language: true,
+          descriptionLanguage: true,
           latitude: true,
           longitude: true,
           coverId: true,
@@ -241,8 +241,7 @@ export const spotRouter = createTRPCRouter({
     spot.images = spot.images.sort((a, b) => (a.id === spot.coverId ? -1 : b.id === spot.coverId ? 1 : 0))
     return {
       spot,
-      language: spot.language,
-      translatedDescription: spot.description, // @deprecated translate on the fly now,
+      translatedDescription: spot.description, // @deprecated translate description on client
       isLiked: !!ctx.user && spot.listSpots.length > 0,
       rating,
       tags,
@@ -294,14 +293,14 @@ export const spotRouter = createTRPCRouter({
           return { path, blurHash, creator: { connect: { id: ctx.user.id } } }
         }),
       )
-      let language = undefined
+      let descriptionLanguage = undefined
       if (input.description) {
-        language = await getLanguage(input.description)
+        descriptionLanguage = await getLanguage(input.description)
       }
       const spot = await ctx.prisma.spot.create({
         data: {
           ...data,
-          language,
+          descriptionLanguage,
           // temp until apps send correct data
           isPetFriendly: data.isPetFriendly === "true" || data.isPetFriendly === true,
           publishedAt: shouldPublishLater ? dayjs().add(2, "weeks").toDate() : undefined,
@@ -380,15 +379,15 @@ export const spotRouter = createTRPCRouter({
         )
       }
       // await deleteManyObjects(imagesToDelete.map((i) => i.path))
-      let language = spot.language
-      if (!language) {
-        language = await getLanguage(input.description)
+      let descriptionLanguage = spot.descriptionLanguage
+      if (!descriptionLanguage) {
+        descriptionLanguage = await getLanguage(input.description)
       }
       return ctx.prisma.spot.update({
         where: { id },
         data: {
           ...data,
-          language,
+          descriptionLanguage,
           // temp until apps send correct data
           isPetFriendly: data.isPetFriendly === "true" || data.isPetFriendly === true,
           images: { create: imageData, delete: imagesToDelete },
