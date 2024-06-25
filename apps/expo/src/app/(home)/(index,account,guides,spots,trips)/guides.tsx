@@ -47,7 +47,7 @@ export default function GuidesScreen() {
       title="guides"
       rightElement={
         me?.role !== "GUIDE" && (
-          <Button variant="link" onPress={modalProps.onOpen}>
+          <Button variant="link" onPress={modalProps.onOpen} className="pr-0">
             Become a guide
           </Button>
         )

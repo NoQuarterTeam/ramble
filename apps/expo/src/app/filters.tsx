@@ -239,7 +239,9 @@ function SpotTypeSelector({
           !me ? router.push("/register") : onPress()
         }}
       >
-        <Text className={join(!me && "text-gray-500")}>{type.label}</Text>
+        <Text className={join(isSelected ? "text-white dark:text-black" : "text-black dark:text-white", !me && "opacity-70")}>
+          {type.label}
+        </Text>
       </Button>
 
       {!me?.isAdmin && type.isComingSoon && (

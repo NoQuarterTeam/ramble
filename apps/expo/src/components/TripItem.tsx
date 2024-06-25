@@ -4,24 +4,19 @@ import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
 dayjs.extend(isBetween)
 
+import { createAssetUrl, join } from "@ramble/shared"
 import dayjs from "dayjs"
 
-import type { Trip, TripMedia, User } from "@ramble/database/types"
-import { createAssetUrl, join } from "@ramble/shared"
-
 import { Image } from "expo-image"
+import type { RouterOutputs } from "~/lib/api"
 import { useFeedbackActivity } from "./FeedbackCheck"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
 
+const MAX_FLAGS = 11
+
 interface Props {
-  trip: Pick<Trip, "id" | "name" | "startDate" | "endDate"> & {
-    creator: Pick<User, "id" | "avatar" | "avatarBlurHash" | "firstName" | "lastName">
-  } & {
-    users: Pick<User, "id" | "firstName" | "lastName" | "avatar" | "avatarBlurHash">[]
-  } & {
-    media: Pick<TripMedia, "id" | "path" | "thumbnailPath">[]
-  }
+  trip: RouterOutputs["trip"]["mine"][number]
 }
 const today = dayjs()
 
@@ -86,6 +81,21 @@ export function TripItem({ trip }: Props) {
         </Text>
         <TripUsers trip={trip} />
       </View>
+
+      {trip.countryFlags.length > 0 && (
+        <View className="flex flex-row gap-1 items-center flex-wrap">
+          {trip.countryFlags.slice(0, MAX_FLAGS).map((flag) => (
+            <Text key={flag} className="text-lg">
+              {flag}
+            </Text>
+          ))}
+          {trip.countryFlags.length > MAX_FLAGS && (
+            <View>
+              <Text className="opacity-70">+{trip.countryFlags.length - MAX_FLAGS}</Text>
+            </View>
+          )}
+        </View>
+      )}
     </TouchableOpacity>
   )
 }

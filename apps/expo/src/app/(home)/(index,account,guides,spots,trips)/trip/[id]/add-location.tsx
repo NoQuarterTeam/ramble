@@ -78,6 +78,7 @@ export default function NewItemScreen() {
     onSuccess: (data) => {
       posthog.capture("trip stop created", { place: data.name })
       void utils.trip.detail.refetch({ id })
+      void utils.trip.mine.refetch()
       router.back()
     },
   })

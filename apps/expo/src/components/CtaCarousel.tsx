@@ -1,21 +1,19 @@
 import { merge } from "@ramble/shared"
 import { Image } from "expo-image"
 import * as React from "react"
-import { Dimensions, TouchableOpacity, View } from "react-native"
-import type { ICarouselInstance } from "react-native-reanimated-carousel"
-import Carousel from "react-native-reanimated-carousel"
+import { TouchableOpacity, View } from "react-native"
+import Carousel, { type ICarouselInstance } from "react-native-reanimated-carousel"
 import { Text } from "~/components/ui/Text"
+import { height, width } from "~/lib/device"
 
 interface Props {
   items: { text: string; image: string }[]
 }
 
-export function CtaCarousel({ items }: Props) {
-  const DEVICE_WIDTH = Dimensions.get("window").width
-  const DEVICE_HEIGHT = Dimensions.get("window").height
-  const IMAGE_HEIGHT = DEVICE_HEIGHT * 0.35
-  const TEXT_HEIGHT = 70
+const IMAGE_HEIGHT = height * 0.35
+const TEXT_HEIGHT = 70
 
+export function CtaCarousel({ items }: Props) {
   const ref = React.useRef<ICarouselInstance>(null)
 
   const [currentIndex, setCurrentIndex] = React.useState(0)
@@ -25,7 +23,7 @@ export function CtaCarousel({ items }: Props) {
       <Carousel
         ref={ref}
         loop={false}
-        width={DEVICE_WIDTH - 32}
+        width={width - 32}
         height={IMAGE_HEIGHT + TEXT_HEIGHT}
         data={items}
         scrollAnimationDuration={200}

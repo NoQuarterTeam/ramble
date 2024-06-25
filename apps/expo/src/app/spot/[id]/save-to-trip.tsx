@@ -60,6 +60,7 @@ function SaveableTripItem({ trip, spotId }: Props) {
     onSuccess: () => {
       void utils.trip.detail.refetch({ id: trip.id })
       void utils.trip.allWithSavedSpot.refetch({ spotId })
+      void utils.trip.mine.refetch()
     },
   })
   const colorScheme = useColorScheme()

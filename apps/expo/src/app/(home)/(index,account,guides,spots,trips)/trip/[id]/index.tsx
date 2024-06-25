@@ -513,6 +513,7 @@ function TripList({
   const { mutate } = api.trip.updateOrder.useMutation({
     onSuccess: () => {
       void utils.trip.detail.refetch({ id })
+      void utils.trip.mine.refetch()
     },
   })
 
@@ -603,6 +604,7 @@ const TripItem = React.memo(function _TripItem({
   const { mutate } = api.trip.items.remove.useMutation({
     onSuccess: () => {
       void utils.trip.detail.refetch({ id })
+      void utils.trip.mine.refetch()
     },
   })
   const handleOpenMenu = () => {
