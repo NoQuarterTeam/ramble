@@ -1,11 +1,10 @@
+import { createAssetUrl } from "@ramble/shared"
+import { useQuery } from "@tanstack/react-query"
 import { Slot, useLocalSearchParams, useRouter, useSegments } from "expo-router"
 import { StatusBar } from "expo-status-bar"
-import { Instagram, User2 } from "lucide-react-native"
+import { Instagram, Languages, User2 } from "lucide-react-native"
 import * as React from "react"
 import { Linking, ScrollView, TouchableOpacity, View } from "react-native"
-
-import { createAssetUrl } from "@ramble/shared"
-
 import { Icon } from "~/components/Icon"
 import { SignupCta } from "~/components/SignupCta"
 import { Button } from "~/components/ui/Button"
@@ -17,16 +16,27 @@ import { api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { interestOptions } from "~/lib/models/user"
+import { type TranslateInput, getTranslation } from "~/lib/translation"
 
 export default function UserScreen() {
   const { me } = useMe()
+  const router = useRouter()
+  const utils = api.useUtils()
+
   const params = useLocalSearchParams<{ username: string }>()
   const username = params.username
 
   const { data: user, isPending: isLoading } = api.user.profile.useQuery({ username }, { staleTime: 30000, enabled: !!username })
 
-  const router = useRouter()
-  const utils = api.useUtils()
+  const [isTranslated, setIsTranslated] = React.useState(false) // by default, leave review untranslated, until user actioned
+
+  const { data, isLoading: isLoadingTranslation } = useQuery<TranslateInput, string, string>({
+    queryKey: ["bio-translation", { id: user?.id, bio: user?.bio, lang: me?.preferredLanguage || "en" }],
+    queryFn: () => getTranslation({ text: user?.bio, lang: me?.preferredLanguage || "en" }),
+    staleTime: Number.POSITIVE_INFINITY,
+    enabled: isTranslated && !!me?.preferredLanguage && !!user?.bio,
+  })
+
   const { mutate } = api.user.toggleFollow.useMutation({
     onSuccess: () => {
       if (!me) return
@@ -143,13 +153,26 @@ export default function UserScreen() {
                 className="flex flex-row items-center space-x-1"
                 onPress={() => Linking.openURL(`https://www.instagram.com/${user.instagram}`)}
               >
-                <Icon icon={Instagram} />
+                <Icon icon={Instagram} size={16} />
                 <Text>{user.instagram}</Text>
               </TouchableOpacity>
             )}
             <View className="space-y-0.5">
-              <Text>{user.bio}</Text>
-              <View className="flex flex-row flex-wrap gap-2">
+              <Text>{isTranslated && data ? data : user.bio}</Text>
+              {me.preferredLanguage !== user.bioLanguage && (
+                <Button
+                  leftIcon={<Icon icon={Languages} size={14} />}
+                  onPress={() => setIsTranslated((t) => !t)}
+                  variant="link"
+                  isLoading={isLoadingTranslation}
+                  size="xs"
+                  className="px-0 h-6 justify-start"
+                >
+                  {isTranslated ? "See original" : "Translate"}
+                </Button>
+              )}
+
+              <View className="flex flex-row flex-wrap gap-1">
                 {user.tags?.map((tag) => (
                   <View key={tag.id} className="border border-gray-200 dark:border-gray-700 px-2 py-1">
                     <Text className="text-xs opacity-80">{tag.name}</Text>

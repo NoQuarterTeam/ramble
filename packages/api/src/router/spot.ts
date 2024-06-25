@@ -1,12 +1,4 @@
-import crypto from "node:crypto"
-import * as Sentry from "@sentry/nextjs"
-import { TRPCError } from "@trpc/server"
-import dayjs from "dayjs"
-import Supercluster from "supercluster"
-import { z } from "zod"
-
-import { type Spot, SpotType } from "@ramble/database/types"
-import { FULL_WEB_URL } from "@ramble/server-env"
+import { type Spot, SpotType } from "@ramble/database/server"
 import { clusterSchema, spotAmenitiesSchema, spotSchema, userSchema } from "@ramble/server-schemas"
 import {
   COUNTRIES,
@@ -14,6 +6,7 @@ import {
   geocodeCoords,
   get5DayForecast,
   getCurrentWeather,
+  getLanguage,
   publicSpotWhereClause,
   publicSpotWhereClauseRaw,
   sendSlackMessage,
@@ -22,8 +15,12 @@ import {
   spotListQuery,
   verifiedSpotWhereClause,
 } from "@ramble/server-services"
-import { amenitiesFields, promiseHash, spotPartnerFields } from "@ramble/shared"
 import type { SpotItemType } from "@ramble/shared"
+import { amenitiesFields, promiseHash, spotPartnerFields } from "@ramble/shared"
+import { TRPCError } from "@trpc/server"
+import dayjs from "dayjs"
+import Supercluster from "supercluster"
+import { z } from "zod"
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
@@ -177,6 +174,7 @@ export const spotRouter = createTRPCRouter({
           id: true,
           name: true,
           description: true,
+          descriptionLanguage: true,
           latitude: true,
           longitude: true,
           coverId: true,
@@ -238,26 +236,12 @@ export const spotRouter = createTRPCRouter({
       `,
     })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
-    let translatedDescription: string | null | undefined
 
-    let descriptionHash: string | undefined
-    if (ctx.user && spot.description) {
-      descriptionHash = crypto.createHash("sha1").update(spot.description).digest("hex") as string
-      translatedDescription = await fetch(
-        `${FULL_WEB_URL}/api/spots/${spot.id}/translate/${ctx.user.preferredLanguage}?hash=${descriptionHash}`,
-      )
-        .then((r) => r.json() as Promise<string | null>)
-        .catch((error) => {
-          Sentry.captureException(error)
-          return null
-        })
-    }
     const weather = await get5DayForecast(spot.latitude, spot.longitude)
     spot.images = spot.images.sort((a, b) => (a.id === spot.coverId ? -1 : b.id === spot.coverId ? 1 : 0))
     return {
       spot,
-      translatedDescription,
-      descriptionHash,
+      translatedDescription: spot.description, // @deprecated translate description on client
       isLiked: !!ctx.user && spot.listSpots.length > 0,
       rating,
       tags,
@@ -309,9 +293,14 @@ export const spotRouter = createTRPCRouter({
           return { path, blurHash, creator: { connect: { id: ctx.user.id } } }
         }),
       )
+      let descriptionLanguage = undefined
+      if (input.description) {
+        descriptionLanguage = await getLanguage(input.description)
+      }
       const spot = await ctx.prisma.spot.create({
         data: {
           ...data,
+          descriptionLanguage,
           // temp until apps send correct data
           isPetFriendly: data.isPetFriendly === "true" || data.isPetFriendly === true,
           publishedAt: shouldPublishLater ? dayjs().add(2, "weeks").toDate() : undefined,
@@ -390,11 +379,15 @@ export const spotRouter = createTRPCRouter({
         )
       }
       // await deleteManyObjects(imagesToDelete.map((i) => i.path))
-
+      let descriptionLanguage = spot.descriptionLanguage
+      if (!descriptionLanguage) {
+        descriptionLanguage = await getLanguage(input.description)
+      }
       return ctx.prisma.spot.update({
         where: { id },
         data: {
           ...data,
+          descriptionLanguage,
           // temp until apps send correct data
           isPetFriendly: data.isPetFriendly === "true" || data.isPetFriendly === true,
           images: { create: imageData, delete: imagesToDelete },

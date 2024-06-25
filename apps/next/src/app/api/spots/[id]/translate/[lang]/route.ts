@@ -5,6 +5,9 @@ import { getTranslation } from "@ramble/server-services"
 import { notFound } from "next/navigation"
 import { NextResponse } from "next/server"
 
+/**
+ * @deprecated in 1.5.0 - use apps/next/src/app/api/translations/[lang]/[text]/route.ts
+ */
 export const GET = async (_request: Request, { params }: { params: { id: string; lang: string } }) => {
   const { id, lang } = params
   const spot = await db.spot.findUnique({ where: { id }, select: { description: true } })

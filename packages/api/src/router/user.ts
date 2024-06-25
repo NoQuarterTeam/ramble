@@ -3,6 +3,7 @@ import {
   createAuthToken,
   deleteObject,
   generateBlurHash,
+  getLanguage,
   sendAccountVerificationEmail,
   sendSlackMessage,
   sendUserFollowedNotification,
@@ -36,6 +37,7 @@ export const userRouter = createTRPCRouter({
         followers: ctx.user ? { where: { id: ctx.user.id } } : undefined,
         _count: { select: { followers: true, following: true } },
         bio: true,
+        bioLanguage: true,
         tags: { select: { id: true, name: true } },
       },
     })
@@ -56,9 +58,13 @@ export const userRouter = createTRPCRouter({
       if (ctx.user.avatar) await deleteObject(ctx.user.avatar)
       avatarBlurHash = await generateBlurHash(data.avatar)
     }
+    let bioLanguage = ctx.user.bioLanguage
+    if (data.bio && data.bio !== ctx.user.bio) {
+      bioLanguage = await getLanguage(data.bio)
+    }
     const user = await ctx.prisma.user.update({
       where: { id: ctx.user.id },
-      data: { ...data, avatarBlurHash, tags: { set: tagIds?.map((tagId) => ({ id: tagId })) } },
+      data: { ...data, bioLanguage, avatarBlurHash, tags: { set: tagIds?.map((tagId) => ({ id: tagId })) } },
     })
     updateLoopsContact({ userId: user.id, email: user.email, ...data })
     return user

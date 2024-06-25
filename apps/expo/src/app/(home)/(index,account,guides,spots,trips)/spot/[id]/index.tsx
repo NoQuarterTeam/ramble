@@ -1,7 +1,9 @@
-import * as Sentry from "@sentry/react-native"
+import { AMENITIES, canManageSpot, displayRating, displaySaved, isPartnerSpot, merge } from "@ramble/shared"
+import { Camera, LocationPuck, MarkerView } from "@rnmapbox/maps"
 import { useQuery } from "@tanstack/react-query"
 import dayjs from "dayjs"
 import advancedFormat from "dayjs/plugin/advancedFormat"
+import utc from "dayjs/plugin/utc"
 import { Image } from "expo-image"
 import { LinearGradient } from "expo-linear-gradient"
 import * as Location from "expo-location"
@@ -36,24 +38,8 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-
-import type { Spot } from "@ramble/database/types"
-import {
-  AMENITIES,
-  canManageSpot,
-  displayRating,
-  displaySaved,
-  isPartnerSpot,
-  languages,
-  merge,
-  useDisclosure,
-} from "@ramble/shared"
-
-import { Camera, LocationPuck, MarkerView } from "@rnmapbox/maps"
-import utc from "dayjs/plugin/utc"
 import { CreatorCard } from "~/components/CreatorCard"
 import { Icon } from "~/components/Icon"
-import { LanguageSelector } from "~/components/LanguageSelector"
 import { MapView } from "~/components/Map"
 import { PartnerLink } from "~/components/PartnerLink"
 import { ReviewItem } from "~/components/ReviewItem"
@@ -70,6 +56,7 @@ import { height, isAndroid, width } from "~/lib/device"
 import { useMe } from "~/lib/hooks/useMe"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
+import { type TranslateInput, getTranslation } from "~/lib/translation"
 
 dayjs.extend(advancedFormat)
 dayjs.extend(utc)
@@ -154,6 +141,15 @@ export default function SpotDetailScreen() {
     },
   })
 
+  const [isTranslated, setIsTranslated] = React.useState(false) // by default, leave review untranslated, until user actioned
+
+  const { data: translatedDescription, isLoading: isLoadingTranslation } = useQuery<TranslateInput, string, string>({
+    queryKey: ["spot-description", { id: spot?.id, description: spot?.description, lang: me?.preferredLanguage || "en" }],
+    queryFn: () => getTranslation({ text: spot?.description, lang: me?.preferredLanguage || "en" }),
+    staleTime: Number.POSITIVE_INFINITY,
+    enabled: isTranslated && !!me?.preferredLanguage && !!spot?.description,
+  })
+
   const insets = useSafeAreaInsets()
 
   const tab = useTabSegment()
@@ -166,13 +162,6 @@ export default function SpotDetailScreen() {
         {router.canGoBack() && <Button onPress={router.back}>Back</Button>}
       </View>
     )
-  // if (!me)
-  //   return (
-  //     <ScreenView title={spot.name}>
-  //       <SignupCta text="Log in to view more information about this spot" />
-  //     </ScreenView>
-  //   )
-
   return (
     <View>
       <StatusBar style={isDark ? "light" : isScrolledPassedThreshold ? "dark" : "light"} />
@@ -210,12 +199,23 @@ export default function SpotDetailScreen() {
           <View className="space-y-2">
             <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <CreatorCard spot={spot} />}</View>
             {spot.description && (
-              <View>
-                <TranslateSpotDescription
-                  spot={spot}
-                  hash={data.descriptionHash}
-                  translatedDescription={data.translatedDescription}
-                />
+              <View className="space-y-0.5">
+                <View className="flex flex-row items-center justify-between">
+                  <Text className="font-600">Description</Text>
+                </View>
+                <Text>{isTranslated && translatedDescription ? translatedDescription : spot.description}</Text>
+                {me?.preferredLanguage !== spot.descriptionLanguage && (
+                  <Button
+                    leftIcon={<Icon icon={Languages} size={14} />}
+                    onPress={() => setIsTranslated((t) => !t)}
+                    variant="link"
+                    isLoading={isLoadingTranslation}
+                    size="xs"
+                    className="px-0 h-6 justify-start"
+                  >
+                    {isTranslated ? "See original" : "Translate"}
+                  </Button>
+                )}
               </View>
             )}
             {!me ? (
@@ -498,11 +498,7 @@ export default function SpotDetailScreen() {
               activeOpacity={0.8}
               className="sq-7 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
             >
-              <Icon
-                icon={Route}
-                size={16}
-                // fill={data.isLiked ? (isDark ? "white" : "black") : "transparent"}
-              />
+              <Icon icon={Route} size={16} />
             </TouchableOpacity>
           </View>
         )}
@@ -540,56 +536,4 @@ function SpotLoading() {
 
 function Skeleton(props: ViewProps) {
   return <View {...props} className={merge("rounded-xs bg-gray-200 dark:bg-gray-700", props.className)} />
-}
-
-interface DescProps {
-  spot: Pick<Spot, "id" | "description">
-  hash?: string | null
-  translatedDescription?: string | null
-}
-
-type TranslateInput = { id: string; lang: string; hash: string }
-async function getTranslation({ id, lang, hash }: TranslateInput) {
-  try {
-    const res = await fetch(`${FULL_WEB_URL}/api/spots/${id}/translate/${lang}?hash=${hash}`)
-    return await res.json()
-  } catch (e) {
-    Sentry.captureException(e)
-    return "Error translating description"
-  }
-}
-
-function TranslateSpotDescription(props: DescProps) {
-  const modalProps = useDisclosure()
-  const { me } = useMe()
-  const [lang, setLang] = React.useState<string>(me?.preferredLanguage || "en")
-  const { data, error, isLoading } = useQuery<TranslateInput, string, string>({
-    queryKey: ["spot-translation", { id: props.spot.id, lang, hash: props.hash || "" }],
-    queryFn: () => getTranslation({ id: props.spot.id, lang, hash: props.hash || "" }),
-    staleTime: Number.POSITIVE_INFINITY,
-    enabled: !!me && lang !== me.preferredLanguage,
-  })
-
-  if (!props.spot.description) return null
-  return (
-    <View className="space-y-1">
-      <View className="flex flex-row items-center justify-between">
-        <Text className="font-600">Description</Text>
-        <Button
-          leftIcon={<Icon icon={Languages} size={16} />}
-          rightIcon={<Icon icon={ChevronDown} size={16} />}
-          isLoading={isLoading}
-          variant="outline"
-          disabled={!me}
-          size="xs"
-          onPress={modalProps.onOpen}
-        >
-          {languages.find((l) => l.code === lang)?.name || "English"}
-        </Button>
-      </View>
-      <Text numberOfLines={me ? undefined : 3}>{data || props.translatedDescription || props.spot.description}</Text>
-      {error && <Text className="text-sm">{error}</Text>}
-      <LanguageSelector modalProps={modalProps} selectedLanguage={lang} setSelectedLang={setLang} />
-    </View>
-  )
 }
