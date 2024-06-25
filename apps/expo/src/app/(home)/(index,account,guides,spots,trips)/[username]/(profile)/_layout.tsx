@@ -2,9 +2,9 @@ import { createAssetUrl } from "@ramble/shared"
 import { useQuery } from "@tanstack/react-query"
 import { Slot, useLocalSearchParams, useRouter, useSegments } from "expo-router"
 import { StatusBar } from "expo-status-bar"
-import { Heart, Instagram, Languages, User2 } from "lucide-react-native"
+import { Instagram, Languages, User2 } from "lucide-react-native"
 import * as React from "react"
-import { Linking, ScrollView, TouchableOpacity, View, useColorScheme } from "react-native"
+import { Linking, ScrollView, TouchableOpacity, View } from "react-native"
 import { Icon } from "~/components/Icon"
 import { SignupCta } from "~/components/SignupCta"
 import { Button } from "~/components/ui/Button"
@@ -22,9 +22,6 @@ export default function UserScreen() {
   const { me } = useMe()
   const router = useRouter()
   const utils = api.useUtils()
-  const colorScheme = useColorScheme()
-
-  const isDark = colorScheme === "dark"
 
   const params = useLocalSearchParams<{ username: string }>()
   const username = params.username
@@ -73,22 +70,7 @@ export default function UserScreen() {
     )
 
   return (
-    <ScreenView
-      title={username}
-      rightElement={
-        user &&
-        me &&
-        me.username !== username && (
-          <TouchableOpacity
-            onPress={onToggleFollow}
-            activeOpacity={0.8}
-            className="sq-8 flex items-center justify-center rounded-full bg-background dark:bg-gray-800"
-          >
-            <Icon icon={Heart} size={20} fill={isFollowedByMe ? (isDark ? "white" : "black") : "transparent"} />
-          </TouchableOpacity>
-        )
-      }
-    >
+    <ScreenView title={username}>
       {isLoading ? (
         <View className="flex items-center justify-center p-4">
           <Spinner />
@@ -103,32 +85,31 @@ export default function UserScreen() {
             <View className="flex flex-row items-center space-x-3">
               {user.avatar ? (
                 <OptimizedImage
-                  width={100}
+                  width={120}
                   placeholder={user.avatarBlurHash}
-                  height={100}
+                  height={120}
                   source={{ uri: createAssetUrl(user.avatar) }}
-                  style={{ height: 100, width: 100 }}
+                  style={{ height: 120, width: 120 }}
                   className="rounded-full bg-gray-100 object-cover dark:bg-gray-700"
                 />
               ) : (
                 <View
-                  style={{ height: 100, width: 100 }}
+                  style={{ height: 120, width: 120 }}
                   className="flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700"
                 >
                   <Icon icon={User2} />
                 </View>
               )}
-              <View className="space-y-px">
-                <Text className="text-xl">
+              <View className="space-y-0.5 w-full">
+                <Text className="text-xl leading-6">
                   {user.firstName} {user.lastName}
                 </Text>
-
                 <View className="flex flex-row items-center space-x-4">
                   <TouchableOpacity
                     onPressIn={() => {
                       void utils.user.following.prefetch({ username })
                     }}
-                    className="flex flex-row space-x-1 pb-2"
+                    className="flex flex-row pb-0.5 space-x-1"
                     onPress={() => router.push(`/${tab}/${username}/following`)}
                   >
                     <Text className="font-600">{user._count.following}</Text>
@@ -138,14 +119,14 @@ export default function UserScreen() {
                     onPressIn={() => {
                       void utils.user.followers.prefetch({ username })
                     }}
-                    className="flex flex-row space-x-1 pb-2"
+                    className="flex flex-row pb-0.5 space-x-1"
                     onPress={() => router.push(`/${tab}/${username}/followers`)}
                   >
                     <Text className="font-600">{user._count.followers}</Text>
                     <Text className="opacity-70">followers</Text>
                   </TouchableOpacity>
                 </View>
-                <View className="flex flex-row items-center space-x-0.5">
+                <View className="flex flex-row items-center space-x-0.5 pb-1">
                   {interestOptions
                     .filter((i) => user[i.value as keyof typeof user])
                     .map((interest) => (
@@ -157,6 +138,13 @@ export default function UserScreen() {
                       </View>
                     ))}
                 </View>
+                {user && me && me.username !== username && (
+                  <View className="flex items-start justify-start">
+                    <Button className="h-7" size="xs" onPress={onToggleFollow} variant={isFollowedByMe ? "secondary" : "primary"}>
+                      {isFollowedByMe ? "Unfollow" : "Follow"}
+                    </Button>
+                  </View>
+                )}
               </View>
             </View>
             {user.instagram && (
