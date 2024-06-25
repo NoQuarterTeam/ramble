@@ -166,7 +166,7 @@ model Spot {
   name        String
   type        SpotType
   description String?   @db.Text
-  language    String?
+  descriptionLanguage    String?
   address     String?
   latitude    Float
   longitude   Float

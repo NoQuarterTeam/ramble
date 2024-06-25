@@ -204,7 +204,7 @@ export default function SpotDetailScreen() {
                   <Text className="font-600">Description</Text>
                 </View>
                 <Text>{isTranslated && translatedDescription ? translatedDescription : spot.description}</Text>
-                {me?.preferredLanguage !== spot.language && (
+                {me?.preferredLanguage !== spot.descriptionLanguage && (
                   <Button
                     leftIcon={<Icon icon={Languages} size={14} />}
                     onPress={() => setIsTranslated((t) => !t)}
