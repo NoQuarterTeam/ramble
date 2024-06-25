@@ -1,11 +1,4 @@
-import * as Sentry from "@sentry/nextjs"
-import { TRPCError } from "@trpc/server"
-import dayjs from "dayjs"
-import Supercluster from "supercluster"
-import { z } from "zod"
-
 import { type Spot, SpotType } from "@ramble/database/server"
-import { FULL_WEB_URL } from "@ramble/server-env"
 import { clusterSchema, spotAmenitiesSchema, spotSchema, userSchema } from "@ramble/server-schemas"
 import {
   COUNTRIES,
@@ -22,8 +15,12 @@ import {
   spotListQuery,
   verifiedSpotWhereClause,
 } from "@ramble/server-services"
-import { amenitiesFields, promiseHash, spotPartnerFields } from "@ramble/shared"
 import type { SpotItemType } from "@ramble/shared"
+import { amenitiesFields, promiseHash, spotPartnerFields } from "@ramble/shared"
+import { TRPCError } from "@trpc/server"
+import dayjs from "dayjs"
+import Supercluster from "supercluster"
+import { z } from "zod"
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
@@ -240,26 +237,12 @@ export const spotRouter = createTRPCRouter({
     })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
 
-    let language = spot.language
-    if (!language && spot.description) {
-      language = await getLanguage(spot.description)
-      await ctx.prisma.spot.update({ where: { id: spot.id }, data: { language } })
-    }
-    let translatedDescription: string | null | undefined
-    if (ctx.user && spot.description && language !== ctx.user.preferredLanguage) {
-      translatedDescription = await fetch(`${FULL_WEB_URL}/api/translations/${ctx.user.preferredLanguage}/${spot.description}`)
-        .then((r) => r.json() as Promise<string | null>)
-        .catch((error) => {
-          Sentry.captureException(error)
-          return null
-        })
-    }
     const weather = await get5DayForecast(spot.latitude, spot.longitude)
     spot.images = spot.images.sort((a, b) => (a.id === spot.coverId ? -1 : b.id === spot.coverId ? 1 : 0))
     return {
       spot,
-      language,
-      translatedDescription,
+      language: spot.language,
+      translatedDescription: spot.description, // @deprecated translate on the fly now,
       isLiked: !!ctx.user && spot.listSpots.length > 0,
       rating,
       tags,

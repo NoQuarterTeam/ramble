@@ -1,11 +1,10 @@
+import { createAssetUrl } from "@ramble/shared"
+import { useQuery } from "@tanstack/react-query"
 import { Slot, useLocalSearchParams, useRouter, useSegments } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { Heart, Instagram, Languages, User2 } from "lucide-react-native"
 import * as React from "react"
 import { Linking, ScrollView, TouchableOpacity, View, useColorScheme } from "react-native"
-
-import { createAssetUrl, languages } from "@ramble/shared"
-
 import { Icon } from "~/components/Icon"
 import { SignupCta } from "~/components/SignupCta"
 import { Button } from "~/components/ui/Button"
@@ -17,6 +16,7 @@ import { api } from "~/lib/api"
 import { useMe } from "~/lib/hooks/useMe"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { interestOptions } from "~/lib/models/user"
+import { type TranslateInput, getTranslation } from "~/lib/translation"
 
 export default function UserScreen() {
   const { me } = useMe()
@@ -31,7 +31,14 @@ export default function UserScreen() {
 
   const { data: user, isPending: isLoading } = api.user.profile.useQuery({ username }, { staleTime: 30000, enabled: !!username })
 
-  const [isTranslated, setIsTranslated] = React.useState(!!user?.translatedBio)
+  const [isTranslated, setIsTranslated] = React.useState(false) // by default, leave review untranslated, until user actioned
+
+  const { data, isLoading: isLoadingTranslation } = useQuery<TranslateInput, string, string>({
+    queryKey: ["bio-translation", { id: user?.id, lang: me?.preferredLanguage || "en" }],
+    queryFn: () => getTranslation({ text: user?.bio, lang: me?.preferredLanguage || "en" }),
+    staleTime: Number.POSITIVE_INFINITY,
+    enabled: isTranslated && !!user,
+  })
 
   const { mutate } = api.user.toggleFollow.useMutation({
     onSuccess: () => {
@@ -163,27 +170,21 @@ export default function UserScreen() {
               </TouchableOpacity>
             )}
             <View className="space-y-0.5">
-              <Text>{isTranslated ? user.translatedBio : user.bio}</Text>
-              {user.translatedBio && (
-                <View className="flex items-end my-2">
-                  <Button
-                    leftIcon={<Languages size={14} color="black" />}
-                    onPress={() => setIsTranslated((t) => !t)}
-                    variant="link"
-                    size="xs"
-                    className="px-0 h-5"
-                  >
-                    {isTranslated
-                      ? `Translated - See original (${
-                          languages.find((l) => l.code === user.bioLanguage)?.name || user.bioLanguage
-                        })`
-                      : `See translation (${
-                          languages.find((l) => l.code === me?.preferredLanguage)?.name || me?.preferredLanguage
-                        })`}
-                  </Button>
-                </View>
+              <Text>{isTranslated && data ? data : user.bio}</Text>
+              {me.preferredLanguage !== user.bioLanguage && (
+                <Button
+                  leftIcon={<Icon icon={Languages} size={14} />}
+                  onPress={() => setIsTranslated((t) => !t)}
+                  variant="link"
+                  isLoading={isLoadingTranslation}
+                  size="xs"
+                  className="px-0 h-6 justify-start"
+                >
+                  {isTranslated ? "See original" : "Translate"}
+                </Button>
               )}
-              <View className="flex flex-row flex-wrap gap-2">
+
+              <View className="flex flex-row flex-wrap gap-1">
                 {user.tags?.map((tag) => (
                   <View key={tag.id} className="border border-gray-200 dark:border-gray-700 px-2 py-1">
                     <Text className="text-xs opacity-80">{tag.name}</Text>

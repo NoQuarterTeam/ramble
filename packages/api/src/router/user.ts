@@ -10,7 +10,6 @@ import {
   updateLoopsContact,
 } from "@ramble/server-services"
 import { userInterestFields } from "@ramble/shared"
-import * as Sentry from "@sentry/nextjs"
 import { TRPCError } from "@trpc/server"
 import { waitUntil } from "@vercel/functions"
 import dayjs from "dayjs"
@@ -18,7 +17,6 @@ import Supercluster from "supercluster"
 import { z } from "zod"
 
 import type { User } from "@ramble/database/types"
-import { FULL_WEB_URL } from "@ramble/server-env"
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
 export const userRouter = createTRPCRouter({
@@ -44,21 +42,7 @@ export const userRouter = createTRPCRouter({
       },
     })
     if (!user) throw new TRPCError({ code: "NOT_FOUND", message: "User not found" })
-    let language = user.bioLanguage
-    if (!language && user.bio) {
-      language = await getLanguage(user.bio)
-      await ctx.prisma.user.update({ where: { id: user.id }, data: { bioLanguage: language } })
-    }
-    let translatedBio: string | null | undefined
-    if (ctx.user && user.bio && language !== ctx.user.preferredLanguage) {
-      translatedBio = await fetch(`${FULL_WEB_URL}/api/translations/${ctx.user.preferredLanguage}/${user.bio}`)
-        .then((r) => r.json() as Promise<string | null>)
-        .catch((error) => {
-          Sentry.captureException(error)
-          return null
-        })
-    }
-    return { ...user, isFollowedByMe: user.followers && user.followers.length > 0, translatedBio }
+    return { ...user, isFollowedByMe: user.followers && user.followers.length > 0 }
   }),
   hasCreatedSpot: protectedProcedure.query(async ({ ctx }) => {
     const spot = await ctx.prisma.spot.findFirst({ where: { creatorId: ctx.user.id }, select: { id: true } })
@@ -74,9 +58,13 @@ export const userRouter = createTRPCRouter({
       if (ctx.user.avatar) await deleteObject(ctx.user.avatar)
       avatarBlurHash = await generateBlurHash(data.avatar)
     }
+    let bioLanguage = ctx.user.bioLanguage
+    if (data.bio && data.bio !== ctx.user.bio) {
+      bioLanguage = await getLanguage(data.bio)
+    }
     const user = await ctx.prisma.user.update({
       where: { id: ctx.user.id },
-      data: { ...data, avatarBlurHash, tags: { set: tagIds?.map((tagId) => ({ id: tagId })) } },
+      data: { ...data, bioLanguage, avatarBlurHash, tags: { set: tagIds?.map((tagId) => ({ id: tagId })) } },
     })
     updateLoopsContact({ userId: user.id, email: user.email, ...data })
     return user
