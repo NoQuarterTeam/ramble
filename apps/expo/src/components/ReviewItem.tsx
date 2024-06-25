@@ -36,10 +36,10 @@ export function ReviewItem({
   const [isTranslated, setIsTranslated] = React.useState(false) // by default, leave review untranslated, until user actioned
 
   const { data, error, isLoading } = useQuery<TranslateInput, string, string>({
-    queryKey: ["review-translation", { id: review.id, lang: me?.preferredLanguage || "en" }],
+    queryKey: ["review-translation", { id: review.id, description: review.description, lang: me?.preferredLanguage || "en" }],
     queryFn: () => getTranslation({ text: review.description, lang: me?.preferredLanguage || "en" }),
     staleTime: Number.POSITIVE_INFINITY,
-    enabled: isTranslated && !!me && !!me?.preferredLanguage,
+    enabled: isTranslated && !!me?.preferredLanguage && !!review.description,
   })
 
   const tab = useTabSegment()

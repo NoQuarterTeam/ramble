@@ -34,10 +34,10 @@ export default function UserScreen() {
   const [isTranslated, setIsTranslated] = React.useState(false) // by default, leave review untranslated, until user actioned
 
   const { data, isLoading: isLoadingTranslation } = useQuery<TranslateInput, string, string>({
-    queryKey: ["bio-translation", { id: user?.id, lang: me?.preferredLanguage || "en" }],
+    queryKey: ["bio-translation", { id: user?.id, bio: user?.bio, lang: me?.preferredLanguage || "en" }],
     queryFn: () => getTranslation({ text: user?.bio, lang: me?.preferredLanguage || "en" }),
     staleTime: Number.POSITIVE_INFINITY,
-    enabled: isTranslated && !!user,
+    enabled: isTranslated && !!me?.preferredLanguage && !!user?.bio,
   })
 
   const { mutate } = api.user.toggleFollow.useMutation({
@@ -165,7 +165,7 @@ export default function UserScreen() {
                 className="flex flex-row items-center space-x-1"
                 onPress={() => Linking.openURL(`https://www.instagram.com/${user.instagram}`)}
               >
-                <Icon icon={Instagram} />
+                <Icon icon={Instagram} size={16} />
                 <Text>{user.instagram}</Text>
               </TouchableOpacity>
             )}

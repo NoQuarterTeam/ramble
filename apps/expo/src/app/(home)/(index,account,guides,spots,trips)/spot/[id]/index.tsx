@@ -144,10 +144,10 @@ export default function SpotDetailScreen() {
   const [isTranslated, setIsTranslated] = React.useState(false) // by default, leave review untranslated, until user actioned
 
   const { data: translatedDescription, isLoading: isLoadingTranslation } = useQuery<TranslateInput, string, string>({
-    queryKey: ["spot-description", { id: spot?.id, lang: me?.preferredLanguage || "en" }],
+    queryKey: ["spot-description", { id: spot?.id, description: spot?.description, lang: me?.preferredLanguage || "en" }],
     queryFn: () => getTranslation({ text: spot?.description, lang: me?.preferredLanguage || "en" }),
     staleTime: Number.POSITIVE_INFINITY,
-    enabled: isTranslated && !!me && !!spot?.description,
+    enabled: isTranslated && !!me?.preferredLanguage && !!spot?.description,
   })
 
   const insets = useSafeAreaInsets()
@@ -162,13 +162,6 @@ export default function SpotDetailScreen() {
         {router.canGoBack() && <Button onPress={router.back}>Back</Button>}
       </View>
     )
-  // if (!me)
-  //   return (
-  //     <ScreenView title={spot.name}>
-  //       <SignupCta text="Log in to view more information about this spot" />
-  //     </ScreenView>
-  //   )
-
   return (
     <View>
       <StatusBar style={isDark ? "light" : isScrolledPassedThreshold ? "dark" : "light"} />
