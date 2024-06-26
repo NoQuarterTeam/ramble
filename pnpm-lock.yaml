@@ -417,7 +417,7 @@ importers:
         version: 3.23.8
       zustand:
         specifier: ^4.4.7
-        version: 4.5.3(@types/react@18.3.3)(react@18.2.0)
+        version: 4.5.4(@types/react@18.3.3)(react@18.2.0)
     devDependencies:
       '@tailwindcss/forms':
         specifier: 0.5.7
@@ -15670,7 +15670,7 @@ packages:
       queue-tick: 1.0.1
       text-decoder: 1.1.0
     optionalDependencies:
-      bare-events: 2.4.2
+      bare-events: 2.2.2
     optional: true
 
   /strict-uri-encode@1.1.0:
@@ -16993,8 +16993,8 @@ packages:
   /zod@3.23.8:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
 
-  /zustand@4.5.3(@types/react@18.3.3)(react@18.2.0):
-    resolution: {integrity: sha512-iH1gA/3uOMR0Gz260Fsklxo7wWEXJ008p1bO9O6gxwkbvBUaTDlcVChkDKGGSsvdbOyVce0nQfBitVH6sbYyew==}
+  /zustand@4.5.4(@types/react@18.3.3)(react@18.2.0):
+    resolution: {integrity: sha512-/BPMyLKJPtFEvVL0E9E9BTUM63MNyhPGlvxk1XjrfWTUlV+BR8jufjsovHzrtR6YNcBEcL7cMHovL1n9xHawEg==}
     engines: {node: '>=12.7.0'}
     peerDependencies:
       '@types/react': '>=16.8'
