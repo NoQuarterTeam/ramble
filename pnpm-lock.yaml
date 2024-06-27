@@ -377,8 +377,8 @@ importers:
         specifier: 14.2.4
         version: 14.2.4(react-dom@18.2.0)(react@18.2.0)
       posthog-js:
-        specifier: 1.139.1
-        version: 1.139.1
+        specifier: 1.141.4
+        version: 1.141.4
       pretty-cache-header:
         specifier: 1.0.0
         version: 1.0.0
@@ -14119,11 +14119,12 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.2.0
 
-  /posthog-js@1.139.1:
-    resolution: {integrity: sha512-+JDu2S7z6sh9Q5kj0oh/W8PZJMQ1gSigWi7gbY4NwwCq2M3t0wNFjxlfHbAo1GncRWDxen+IC+3J7oJ8TJGnkA==}
+  /posthog-js@1.141.4:
+    resolution: {integrity: sha512-e8rUFEnAR1MB+YqrjWLEmvm0d1X90cebCPNyby6oNX1cp36s/PpxeTx+Up7bArJmRv2N+rT1Kd5sJ7jpXWAonA==}
     dependencies:
       fflate: 0.4.8
       preact: 10.20.2
+      web-vitals: 4.2.0
     dev: false
 
   /posthog-react-native@3.1.1(@react-native-async-storage/async-storage@1.21.0)(@react-navigation/native@6.1.17)(expo-application@5.8.4)(expo-device@5.9.4)(expo-file-system@16.0.9):
@@ -16691,6 +16692,10 @@ packages:
   /web-streams-polyfill@3.3.3:
     resolution: {integrity: sha512-d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw==}
     engines: {node: '>= 8'}
+    dev: false
+
+  /web-vitals@4.2.0:
+    resolution: {integrity: sha512-ohj72kbtVWCpKYMxcbJ+xaOBV3En76hW47j52dG+tEGG36LZQgfFw5yHl9xyjmosy3XUMn8d/GBUAy4YPM839w==}
     dev: false
 
   /webidl-conversions@3.0.1:
