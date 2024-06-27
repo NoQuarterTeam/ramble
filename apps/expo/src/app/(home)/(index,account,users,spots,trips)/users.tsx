@@ -50,8 +50,8 @@ export default function UsersScreen() {
   }, [initialUsers])
 
   const handleLoadMore = React.useCallback(async () => {
-    const newGuides = await utils.user.all.fetch({ skip: users?.length || 0, filter })
-    setUsers([...(users || []), ...newGuides])
+    const newUsers = await utils.user.all.fetch({ skip: users?.length || 0, filter })
+    setUsers([...(users || []), ...newUsers])
   }, [users, utils.user.all, filter])
 
   const increment = useFeedbackActivity((s) => s.increment)
