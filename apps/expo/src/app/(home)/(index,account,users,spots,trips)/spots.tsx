@@ -1,3 +1,4 @@
+import type { SpotListSort } from "@ramble/shared"
 import { FlashList } from "@shopify/flash-list"
 import { useRouter } from "expo-router"
 import { ChevronDown, PlusCircle } from "lucide-react-native"
@@ -5,9 +6,6 @@ import { usePostHog } from "posthog-react-native"
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
 import * as DropdownMenu from "zeego/dropdown-menu"
-
-import type { SpotListSort } from "@ramble/shared"
-
 import { useFeedbackActivity } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
 import { SpotItem } from "~/components/SpotItem"

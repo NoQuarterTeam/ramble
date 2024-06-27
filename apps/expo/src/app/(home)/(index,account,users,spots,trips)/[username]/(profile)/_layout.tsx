@@ -38,6 +38,9 @@ export default function UserScreen() {
   })
 
   const { mutate } = api.user.toggleFollow.useMutation({
+    onMutate: () => {
+      utils.user.profile.setData(params, (prev) => (prev ? { ...prev, isFollowedByMe: !prev.isFollowedByMe } : prev))
+    },
     onSuccess: () => {
       if (!me) return
       void utils.user.followers.refetch({ username })
@@ -47,17 +50,7 @@ export default function UserScreen() {
     },
   })
 
-  const [isFollowedByMe, setIsFollowedByMe] = React.useState(!!user?.isFollowedByMe)
-
-  React.useEffect(() => {
-    if (!user) return
-    setIsFollowedByMe(user.isFollowedByMe)
-  }, [user, user?.isFollowedByMe])
-
-  const onToggleFollow = () => {
-    setIsFollowedByMe(!isFollowedByMe)
-    mutate(params)
-  }
+  const onToggleFollow = () => mutate(params)
 
   const tab = useTabSegment()
   const segments = useSegments()
@@ -140,8 +133,13 @@ export default function UserScreen() {
                 </View>
                 {user && me && me.username !== username && (
                   <View className="flex items-start justify-start">
-                    <Button className="h-7" size="xs" onPress={onToggleFollow} variant={isFollowedByMe ? "secondary" : "primary"}>
-                      {isFollowedByMe ? "Unfollow" : "Follow"}
+                    <Button
+                      className="h-7"
+                      size="xs"
+                      onPress={onToggleFollow}
+                      variant={user.isFollowedByMe ? "secondary" : "primary"}
+                    >
+                      {user.isFollowedByMe ? "Unfollow" : "Follow"}
                     </Button>
                   </View>
                 )}
@@ -159,7 +157,7 @@ export default function UserScreen() {
             )}
             <View className="space-y-0.5">
               <Text>{isTranslated && data ? data : user.bio}</Text>
-              {me.preferredLanguage !== user.bioLanguage && (
+              {user.bio && me.preferredLanguage !== user.bioLanguage && (
                 <Button
                   leftIcon={<Icon icon={Languages} size={14} />}
                   onPress={() => setIsTranslated((t) => !t)}
