@@ -51,6 +51,7 @@ export default function UsersScreen() {
 
   const handleLoadMore = React.useCallback(async () => {
     const newUsers = await utils.user.all.fetch({ skip: users?.length || 0, filter })
+    if (!newUsers || newUsers.length === 0) return
     setUsers([...(users || []), ...newUsers])
   }, [users, utils.user.all, filter])
 
