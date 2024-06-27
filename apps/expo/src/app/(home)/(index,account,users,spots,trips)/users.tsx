@@ -1,7 +1,7 @@
 import { createAssetUrl, useDisclosure } from "@ramble/shared"
 import { FlashList } from "@shopify/flash-list"
 import { Link, router } from "expo-router"
-import { ChevronDown } from "lucide-react-native"
+import { ChevronDown, User } from "lucide-react-native"
 import { usePostHog } from "posthog-react-native"
 import * as React from "react"
 import { Modal, TouchableOpacity, View } from "react-native"
@@ -51,6 +51,7 @@ export default function UsersScreen() {
 
   const handleLoadMore = React.useCallback(async () => {
     const newUsers = await utils.user.all.fetch({ skip: users?.length || 0, filter })
+    if (!newUsers || newUsers.length === 0) return
     setUsers([...(users || []), ...newUsers])
   }, [users, utils.user.all, filter])
 
@@ -172,13 +173,20 @@ function UserItem(props: { user: RouterOutputs["user"]["all"][number] }) {
         className="space-y-1 rounded-xs border border-gray-200 p-4 dark:border-gray-700"
       >
         <View className="flex flex-row items-center space-x-2">
-          <OptimizedImage
-            className="sq-16 rounded-full"
-            width={80}
-            height={80}
-            placeholder={props.user.avatarBlurHash}
-            source={{ uri: createAssetUrl(props.user.avatar) }}
-          />
+          {props.user.avatar ? (
+            <OptimizedImage
+              className="sq-16 rounded-full"
+              key={props.user.id}
+              width={80}
+              height={80}
+              placeholder={props.user.avatarBlurHash}
+              source={{ uri: createAssetUrl(props.user.avatar) }}
+            />
+          ) : (
+            <View className="sq-16 flex items-center justify-center rounded-full bg-gray-50 dark:bg-gray-800">
+              <Icon icon={User} size={18} />
+            </View>
+          )}
           <View>
             <Text className="text-xl">
               {props.user.firstName} {props.user.lastName}
