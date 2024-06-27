@@ -442,13 +442,13 @@ function TripImageSync({
         for (const asset of assets) {
           try {
             const info = await MediaLibrary.getAssetInfoAsync(asset)
-            if (!info.location) continue
+            // if (!info.location) continue
             const type: MediaType = info.mediaType === MediaLibrary.MediaType.photo ? "IMAGE" : "VIDEO"
             const mediaWithData = {
               assetId: asset.id,
               url: info.localUri || asset.uri,
-              latitude: info.location.latitude,
-              longitude: info.location.longitude,
+              latitude: info.location?.latitude,
+              longitude: info.location?.longitude,
               timestamp: dayjs(asset.creationTime).toDate(),
               type,
               duration: info.duration || null,
@@ -513,6 +513,7 @@ function TripList({
   const { mutate } = api.trip.updateOrder.useMutation({
     onSuccess: () => {
       void utils.trip.detail.refetch({ id })
+      void utils.trip.mine.refetch()
     },
   })
 
@@ -603,6 +604,7 @@ const TripItem = React.memo(function _TripItem({
   const { mutate } = api.trip.items.remove.useMutation({
     onSuccess: () => {
       void utils.trip.detail.refetch({ id })
+      void utils.trip.mine.refetch()
     },
   })
   const handleOpenMenu = () => {

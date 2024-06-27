@@ -1,7 +1,9 @@
-import * as Sentry from "@sentry/react-native"
+import { AMENITIES, canManageSpot, displayRating, displaySaved, isPartnerSpot, merge } from "@ramble/shared"
+import { Camera, LocationPuck, MarkerView } from "@rnmapbox/maps"
 import { useQuery } from "@tanstack/react-query"
 import dayjs from "dayjs"
 import advancedFormat from "dayjs/plugin/advancedFormat"
+import utc from "dayjs/plugin/utc"
 import { Image } from "expo-image"
 import { LinearGradient } from "expo-linear-gradient"
 import * as Location from "expo-location"
@@ -36,24 +38,8 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-
-import type { Spot } from "@ramble/database/types"
-import {
-  AMENITIES,
-  canManageSpot,
-  displayRating,
-  displaySaved,
-  isPartnerSpot,
-  languages,
-  merge,
-  useDisclosure,
-} from "@ramble/shared"
-
-import { Camera, LocationPuck, MarkerView } from "@rnmapbox/maps"
-import utc from "dayjs/plugin/utc"
 import { CreatorCard } from "~/components/CreatorCard"
 import { Icon } from "~/components/Icon"
-import { LanguageSelector } from "~/components/LanguageSelector"
 import { MapView } from "~/components/Map"
 import { PartnerLink } from "~/components/PartnerLink"
 import { ReviewItem } from "~/components/ReviewItem"
@@ -70,6 +56,7 @@ import { height, isAndroid, width } from "~/lib/device"
 import { useMe } from "~/lib/hooks/useMe"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { AMENITIES_ICONS } from "~/lib/models/amenities"
+import { type TranslateInput, getTranslation } from "~/lib/translation"
 
 dayjs.extend(advancedFormat)
 dayjs.extend(utc)
@@ -154,6 +141,15 @@ export default function SpotDetailScreen() {
     },
   })
 
+  const [isTranslated, setIsTranslated] = React.useState(false) // by default, leave review untranslated, until user actioned
+
+  const { data: translatedDescription, isLoading: isLoadingTranslation } = useQuery<TranslateInput, string, string>({
+    queryKey: ["spot-description", { id: spot?.id, description: spot?.description, lang: me?.preferredLanguage || "en" }],
+    queryFn: () => getTranslation({ text: spot?.description, lang: me?.preferredLanguage || "en" }),
+    staleTime: Number.POSITIVE_INFINITY,
+    enabled: isTranslated && !!me?.preferredLanguage && !!spot?.description,
+  })
+
   const insets = useSafeAreaInsets()
 
   const tab = useTabSegment()
@@ -166,13 +162,6 @@ export default function SpotDetailScreen() {
         {router.canGoBack() && <Button onPress={router.back}>Back</Button>}
       </View>
     )
-  // if (!me)
-  //   return (
-  //     <ScreenView title={spot.name}>
-  //       <SignupCta text="Log in to view more information about this spot" />
-  //     </ScreenView>
-  //   )
-
   return (
     <View>
       <StatusBar style={isDark ? "light" : isScrolledPassedThreshold ? "dark" : "light"} />
@@ -210,12 +199,23 @@ export default function SpotDetailScreen() {
           <View className="space-y-2">
             <View>{isPartnerSpot(spot) ? <PartnerLink spot={spot} /> : <CreatorCard spot={spot} />}</View>
             {spot.description && (
-              <View>
-                <TranslateSpotDescription
-                  spot={spot}
-                  hash={data.descriptionHash}
-                  translatedDescription={data.translatedDescription}
-                />
+              <View className="space-y-0.5">
+                <View className="flex flex-row items-center justify-between">
+                  <Text className="font-600">Description</Text>
+                </View>
+                <Text>{isTranslated && translatedDescription ? translatedDescription : spot.description}</Text>
+                {me?.preferredLanguage !== spot.descriptionLanguage && (
+                  <Button
+                    leftIcon={<Icon icon={Languages} size={14} />}
+                    onPress={() => setIsTranslated((t) => !t)}
+                    variant="link"
+                    isLoading={isLoadingTranslation}
+                    size="xs"
+                    className="px-0 h-6 justify-start"
+                  >
+                    {isTranslated ? "See original" : "Translate"}
+                  </Button>
+                )}
               </View>
             )}
             {!me ? (
@@ -224,7 +224,7 @@ export default function SpotDetailScreen() {
                 <Button onPress={() => router.push("/login")}>Sign up</Button>
               </View>
             ) : (
-              <>
+              <View className="space-y-2">
                 {spot.address && <Text className="font-400-italic text-sm">{spot.address}</Text>}
                 {spot.amenities && (
                   <View className="flex flex-row flex-wrap gap-2">
@@ -310,123 +310,122 @@ export default function SpotDetailScreen() {
                   </View>
                 )}
 
-                <View className="space-y-2 py-4">
-                  {me && (
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      leftIcon={<Icon icon={Flag} size={16} />}
-                      onPress={() => router.push(`/${tab}/spot/${spot.id}/report`)}
-                    >
-                      Report spot
-                    </Button>
-                  )}
+                <View className="space-y-2 py-2">
                   {canManageSpot(spot, me) && !spot.verifiedAt && (
                     <Button
                       size="sm"
                       onPress={() => verifySpot({ id: spot.id })}
                       isLoading={isVerifyingLoading}
-                      leftIcon={<Icon icon={Check} size={18} />}
+                      leftIcon={<Icon icon={Check} size={16} color={{ dark: "black", light: "white" }} />}
                     >
                       Verify
                     </Button>
                   )}
-                  {canManageSpot(spot, me) && (
+                  <View className="flex-row items-center space-x-2">
                     <Button
                       size="sm"
-                      onPress={() => {
-                        const searchParams = new URLSearchParams({
-                          latitude: spot.latitude.toString(),
-                          longitude: spot.longitude.toString(),
-                          address: spot.address || "",
-                          type: spot.type,
-                          name: spot.name,
-                          description: spot.description || "",
-                          isPetFriendly: spot.isPetFriendly ? "true" : "false",
-                          amenities: spot.amenities ? JSON.stringify(spot.amenities) : "",
-                          images: spot.images.map((i) => i.path).join(","),
-                        })
-                        router.push(`/${tab}/spot/${spot.id}/edit?${searchParams}`)
-                      }}
+                      className="flex-1"
                       variant="outline"
-                      leftIcon={<Icon icon={Edit2} size={18} />}
+                      leftIcon={<Icon icon={Flag} size={16} />}
+                      onPress={() => router.push(`/${tab}/spot/${spot.id}/report`)}
                     >
-                      Edit
+                      Report
                     </Button>
-                  )}
-                  {me?.isAdmin && (
-                    <Button
-                      size="sm"
-                      onPress={() => router.push(`/spot/${spot.id}/choose-cover`)}
-                      variant="outline"
-                      leftIcon={<Icon icon={Images} size={18} />}
-                    >
-                      Choose cover
-                    </Button>
-                  )}
+                    {canManageSpot(spot, me) && (
+                      <Button
+                        size="sm"
+                        className="flex-1"
+                        onPress={() => {
+                          const searchParams = new URLSearchParams({
+                            latitude: spot.latitude.toString(),
+                            longitude: spot.longitude.toString(),
+                            address: spot.address || "",
+                            type: spot.type,
+                            name: spot.name,
+                            description: spot.description || "",
+                            isPetFriendly: spot.isPetFriendly ? "true" : "false",
+                            amenities: spot.amenities ? JSON.stringify(spot.amenities) : "",
+                            images: spot.images.map((i) => i.path).join(","),
+                          })
+                          router.push(`/${tab}/spot/${spot.id}/edit?${searchParams}`)
+                        }}
+                        variant="outline"
+                        leftIcon={<Icon icon={Edit2} size={16} />}
+                      >
+                        Edit
+                      </Button>
+                    )}
+                    {me?.isAdmin && (
+                      <Button
+                        size="sm"
+                        className="flex-1"
+                        onPress={() => router.push(`/spot/${spot.id}/choose-cover`)}
+                        variant="outline"
+                        leftIcon={<Icon icon={Images} size={16} />}
+                      >
+                        Pick cover
+                      </Button>
+                    )}
+                  </View>
                   {me?.isAdmin && (
                     <Button
                       size="sm"
                       onPress={() => router.push(`/${tab}/spot/${spot.id}/delete`)}
                       variant="destructive"
-                      leftIcon={<Trash size={18} className="text-white" />}
+                      leftIcon={<Trash size={16} className="text-white" />}
                     >
                       Delete
                     </Button>
                   )}
                 </View>
-              </>
-            )}
-          </View>
-          {me && (
-            <>
-              <MapView className="overflow-hidden rounded-xs h-[300px]" scrollEnabled={true}>
-                <LocationPuck />
-                <Camera
-                  allowUpdates
-                  followUserLocation={false}
-                  defaultSettings={{
-                    centerCoordinate: [spot.longitude, spot.latitude],
-                    zoomLevel: 8,
-                    pitch: 0,
-                    heading: 0,
-                  }}
-                />
+                <MapView className="overflow-hidden rounded-xs h-[300px]" scrollEnabled={true}>
+                  <LocationPuck />
+                  <Camera
+                    allowUpdates
+                    followUserLocation={false}
+                    defaultSettings={{
+                      centerCoordinate: [spot.longitude, spot.latitude],
+                      zoomLevel: 8,
+                      pitch: 0,
+                      heading: 0,
+                    }}
+                  />
 
-                <MarkerView allowOverlap allowOverlapWithPuck coordinate={[spot.longitude, spot.latitude]}>
-                  <SpotMarker spot={spot} />
-                </MarkerView>
-              </MapView>
+                  <MarkerView allowOverlap allowOverlapWithPuck coordinate={[spot.longitude, spot.latitude]}>
+                    <SpotMarker spot={spot} />
+                  </MarkerView>
+                </MapView>
 
-              <View className="h-px w-full bg-gray-200 dark:bg-gray-700" />
-              <View className="space-y-2">
-                <View className="flex flex-row justify-between">
-                  <View className="flex flex-row items-center space-x-2">
-                    <Text className="text-xl">
-                      {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
-                    </Text>
-                    <Text>·</Text>
-                    <View className="flex flex-row items-center space-x-1">
-                      <Icon icon={Star} size={20} />
-                      <Text className="pt-1">{displayRating(data.rating._avg.rating)}</Text>
+                <View className="h-px w-full bg-gray-200 dark:bg-gray-700" />
+                <View className="space-y-2 pt-4">
+                  <View className="flex flex-row justify-between">
+                    <View className="flex flex-row items-center space-x-2">
+                      <Text className="text-xl">
+                        {spot._count.reviews} {spot._count.reviews === 1 ? "review" : "reviews"}
+                      </Text>
+                      <Text>·</Text>
+                      <View className="flex flex-row items-center space-x-1">
+                        <Icon icon={Star} size={20} />
+                        <Text className="pt-1">{displayRating(data.rating._avg.rating)}</Text>
+                      </View>
                     </View>
+                    {me && (
+                      <Button size="sm" onPress={() => router.push(`/spot/${spot.id}/new-review`)} variant="secondary">
+                        Add review
+                      </Button>
+                    )}
                   </View>
-                  {me && (
-                    <Button size="sm" onPress={() => router.push(`/spot/${spot.id}/new-review`)} variant="secondary">
-                      Add review
-                    </Button>
-                  )}
-                </View>
-                <View>
-                  {spot.reviews.map((review) => (
-                    <View key={review.id} className="mb-2">
-                      <ReviewItem review={review} />
-                    </View>
-                  ))}
+                  <View>
+                    {spot.reviews.map((review) => (
+                      <View key={review.id} className="mb-2">
+                        <ReviewItem review={review} />
+                      </View>
+                    ))}
+                  </View>
                 </View>
               </View>
-            </>
-          )}
+            )}
+          </View>
         </View>
       </Animated.ScrollView>
 
@@ -458,7 +457,6 @@ export default function SpotDetailScreen() {
             {spot.name}
           </Animated.Text>
         </View>
-<<<<<<< HEAD
         {me && (
           <View className="flex flex-shrink-0 flex-row items-center space-x-2">
             <TouchableOpacity
@@ -473,20 +471,6 @@ export default function SpotDetailScreen() {
                   if (error instanceof Error) {
                     Alert.alert(error.message)
                   }
-=======
-        <View className="flex flex-shrink-0 flex-row items-center space-x-2">
-          <TouchableOpacity
-            onPress={async () => {
-              try {
-                await RNShare.share({
-                  title: spot.name,
-                  message: isAndroid ? `${FULL_WEB_URL}/spot/${spot.id}` : spot.name,
-                  url: `${FULL_WEB_URL}/spot/${spot.id}`,
-                })
-              } catch (error: unknown) {
-                if (error instanceof Error) {
-                  Alert.alert(error.message)
->>>>>>> main
                 }
               }}
               activeOpacity={0.8}
@@ -514,11 +498,7 @@ export default function SpotDetailScreen() {
               activeOpacity={0.8}
               className="sq-7 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
             >
-              <Icon
-                icon={Route}
-                size={16}
-                // fill={data.isLiked ? (isDark ? "white" : "black") : "transparent"}
-              />
+              <Icon icon={Route} size={16} />
             </TouchableOpacity>
           </View>
         )}
@@ -556,56 +536,4 @@ function SpotLoading() {
 
 function Skeleton(props: ViewProps) {
   return <View {...props} className={merge("rounded-xs bg-gray-200 dark:bg-gray-700", props.className)} />
-}
-
-interface DescProps {
-  spot: Pick<Spot, "id" | "description">
-  hash?: string | null
-  translatedDescription?: string | null
-}
-
-type TranslateInput = { id: string; lang: string; hash: string }
-async function getTranslation({ id, lang, hash }: TranslateInput) {
-  try {
-    const res = await fetch(`${FULL_WEB_URL}/api/spots/${id}/translate/${lang}?hash=${hash}`)
-    return await res.json()
-  } catch (e) {
-    Sentry.captureException(e)
-    return "Error translating description"
-  }
-}
-
-function TranslateSpotDescription(props: DescProps) {
-  const modalProps = useDisclosure()
-  const { me } = useMe()
-  const [lang, setLang] = React.useState<string>(me?.preferredLanguage || "en")
-  const { data, error, isLoading } = useQuery<TranslateInput, string, string>({
-    queryKey: ["spot-translation", { id: props.spot.id, lang, hash: props.hash || "" }],
-    queryFn: () => getTranslation({ id: props.spot.id, lang, hash: props.hash || "" }),
-    staleTime: Number.POSITIVE_INFINITY,
-    enabled: !!me && lang !== me.preferredLanguage,
-  })
-
-  if (!props.spot.description) return null
-  return (
-    <View className="space-y-1">
-      <View className="flex flex-row items-center justify-between">
-        <Text className="font-600">Description</Text>
-        <Button
-          leftIcon={<Icon icon={Languages} size={16} />}
-          rightIcon={<Icon icon={ChevronDown} size={16} />}
-          isLoading={isLoading}
-          variant="outline"
-          disabled={!me}
-          size="xs"
-          onPress={modalProps.onOpen}
-        >
-          {languages.find((l) => l.code === lang)?.name || "English"}
-        </Button>
-      </View>
-      <Text numberOfLines={me ? undefined : 3}>{data || props.translatedDescription || props.spot.description}</Text>
-      {error && <Text className="text-sm">{error}</Text>}
-      <LanguageSelector modalProps={modalProps} selectedLanguage={lang} setSelectedLang={setLang} />
-    </View>
-  )
 }

@@ -37,9 +37,9 @@ export function PartnerLink(props: Props) {
                               ? partners.mossyEarth
                               : props.spot.rewildingEuropeId
                                 ? partners.rewildingEurope
-                                : props.spot.camperguruId
-                                  ? partners.camperguru 
-                                  : partners.polskiCaravaning
+                                : props.spot.polskiCaravaningId
+                                  ? partners.polskiCaravaning
+                                  : partners.camperguru
 
   if (!props.spot.sourceUrl) return null
   return (
@@ -49,7 +49,7 @@ export function PartnerLink(props: Props) {
       rel="noopener noreferrer"
       className="flex cursor-pointer flex-row items-center justify-between gap-6 rounded-xs border border-hover px-6 py-2"
     >
-      <p className="text-lg">Provided by</p>
+      <p className="text-lg">{partner.pretext}</p>
       <img alt="partner" className="h-[40px] w-[150px] bg-right object-contain" src={partner.logo.dark} />
     </a>
   )

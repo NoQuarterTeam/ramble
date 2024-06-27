@@ -2,12 +2,13 @@ import dayjs from "dayjs"
 import { useRouter } from "expo-router"
 import { Plus, PlusCircle } from "lucide-react-native"
 import { ScrollView, TouchableOpacity, View } from "react-native"
+import { CtaCarousel } from "~/components/CtaCarousel"
 
 import { useFeedbackActivity } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
 import { LinkButton } from "~/components/LinkButton"
-import { SignupCta } from "~/components/SignupCta"
 import { TripItem } from "~/components/TripItem"
+import { Button } from "~/components/ui/Button"
 import { Spinner } from "~/components/ui/Spinner"
 import { TabView } from "~/components/ui/TabView"
 import { Text } from "~/components/ui/Text"
@@ -21,10 +22,31 @@ export default function TripsLayout() {
 
   const { data, isLoading } = api.trip.mine.useQuery(undefined, { enabled: !!me })
 
+  const carouselItems = [
+    { text: "Plan upcoming trips or add a travel log of your past trips", image: require("assets/trips-slide-1.png") },
+    { text: "Share with your travel companions", image: require("assets/trips-slide-2.png") },
+    { text: "Enjoy reliving memories with auto sync'd photos", image: require("assets/trips-slide-3.png") },
+  ]
+
   if (!me)
     return (
-      <TabView title="trips">
-        <SignupCta text="Sign up to create a trip" />
+      <TabView
+        title="trips"
+        rightElement={
+          <TouchableOpacity onPress={() => router.push("/register")}>
+            <Icon icon={PlusCircle} />
+          </TouchableOpacity>
+        }
+      >
+        <View className="pt-10">
+          <CtaCarousel items={carouselItems} />
+          <View className="px-8">
+            <Button onPress={() => router.push("/register")}>Sign up</Button>
+            <Button variant="link" onPress={() => router.push("/login")}>
+              Already signed up? Login
+            </Button>
+          </View>
+        </View>
       </TabView>
     )
 

@@ -225,6 +225,7 @@ export function AddTripSpotPreview({ spotId, onClose }: { spotId: string; onClos
     onSuccess: (data) => {
       posthog.capture("trip spot created", { spotId: data.spotId })
       void utils.trip.detail.refetch({ id })
+      void utils.trip.mine.refetch()
       router.back()
     },
   })

@@ -2,7 +2,7 @@
   "name": "@ramble/database",
   "version": "1.0.0",
   "main": "./index.ts",
-  "files": ["./index.ts", "./types.ts"],
+  "files": ["./index.ts", "./types.ts", "./server.ts"],
   "scripts": {
     "dev": "pnpm with-env prisma studio",
     "db:push": "pnpm with-env prisma db push",
@@ -20,7 +20,7 @@
     "prisma": "5.15.0"
   },
   "devDependencies": {
-    "@types/node": "20.14.2",
+    "@types/node": "20.14.9",
     "dotenv-cli": "7.4.2",
     "typescript": "5.4.5"
   },

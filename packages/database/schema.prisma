@@ -4,9 +4,8 @@ generator client {
 }
 
 datasource db {
-  provider     = "mysql"
-  relationMode = "prisma"
-  url          = env("DATABASE_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 enum Role {
@@ -26,6 +25,7 @@ model User {
   avatar                 String?
   avatarBlurHash         String?
   bio                    String? @db.Text
+  bioLanguage            String?
   instagram              String?
   isVerified             Boolean @default(false)
   isAdmin                Boolean @default(false)
@@ -70,6 +70,7 @@ model User {
   pushTokens             PushToken[]
   userNotifications      UserNotification[]
   initiatedNotifications Notification[]
+  tags                   UserTag[]
   referrer               User?              @relation("UserReferrals", fields: [referrerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   referrerId             String?
   referrals              User[]             @relation("UserReferrals")
@@ -79,7 +80,6 @@ model User {
   updatedAt DateTime  @default(now()) @updatedAt
 
   @@index([latitude])
-  @@index([referrerId])
 }
 
 model PushToken {
@@ -162,16 +162,17 @@ enum SpotType {
 }
 
 model Spot {
-  id          String    @id @default(uuid())
-  name        String
-  type        SpotType
-  description String?   @db.Text
-  address     String?
-  latitude    Float
-  longitude   Float
-  publishedAt DateTime?
-  verifiedAt  DateTime?
-  nanoid      String?   @unique
+  id                  String    @id @default(uuid())
+  name                String
+  type                SpotType
+  description         String?   @db.Text
+  descriptionLanguage String?
+  address             String?
+  latitude            Float
+  longitude           Float
+  publishedAt         DateTime?
+  verifiedAt          DateTime?
+  nanoid              String?   @unique
 
   pointLocation Unsupported("POINT GENERATED ALWAYS AS (ST_GeomFromText(CONCAT('POINT(',longitude,' ',latitude,')'))) STORED")?
 
@@ -222,9 +223,7 @@ model Spot {
   camperguruId             Int?    @unique
 
   @@index([publishedAt])
-  @@index([ownerId])
-  @@index([verifierId])
-  @@index([creatorId])
+  @@index([name])
   @@index([longitude])
   @@index([verifiedAt, type, deletedAt, creatorId, publishedAt])
   @@index([type, verifiedAt, latitude, longitude, deletedAt, creatorId, publishedAt])
@@ -267,7 +266,6 @@ model SpotImage {
   updatedAt DateTime @default(now()) @updatedAt
 
   @@unique([spotId, path])
-  @@index([creatorId])
 }
 
 model SpotRevision {
@@ -284,10 +282,6 @@ model SpotRevision {
   deletedAt DateTime?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt
-
-  @@index([spotId])
-  @@index([creatorId])
-  @@index([approverId])
 }
 
 model List {
@@ -302,8 +296,6 @@ model List {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-
-  @@index([creatorId])
 }
 
 model ListSpot {
@@ -315,9 +307,6 @@ model ListSpot {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-
-  @@index([spotId])
-  @@index([listId])
 }
 
 model Review {
@@ -336,8 +325,6 @@ model Review {
   updatedAt DateTime @default(now()) @updatedAt
 
   @@index([rating, spotId])
-  @@index([spotId])
-  @@index([userId])
 }
 
 enum TagCategory {
@@ -364,7 +351,7 @@ model AccessRequest {
   code       String    @unique
 
   userId String? @unique
-  user   User?   @relation(fields: [userId], references: [id])
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -381,13 +368,11 @@ model Feedback {
   type    FeedbackType
   message String       @db.Text
 
-  user   User?   @relation(fields: [userId], references: [id])
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
   userId String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-
-  @@index([userId])
 }
 
 model Trip {
@@ -405,8 +390,6 @@ model Trip {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-
-  @@index([creatorId])
 }
 
 enum MediaType {
@@ -435,17 +418,16 @@ model TripMedia {
   updatedAt DateTime  @default(now()) @updatedAt
   deletedAt DateTime?
 
-  @@index([tripId])
   @@index([latitude])
   @@index([longitude])
-  @@index([creatorId])
   @@index([deletedAt])
 }
 
 model TripItem {
-  id    String    @id @default(uuid())
-  date  DateTime? @db.Date
-  order Float     @default(0)
+  id          String    @id @default(uuid())
+  date        DateTime? @db.Date
+  order       Float     @default(0)
+  countryCode String?
 
   creator   User      @relation(fields: [creatorId], references: [id])
   creatorId String
@@ -457,10 +439,6 @@ model TripItem {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-
-  @@index([creatorId])
-  @@index([tripId])
-  @@index([spotId])
 }
 
 model TripStop {
@@ -502,10 +480,6 @@ model Notification {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-
-  @@index([initiatorId])
-  @@index([tripId])
-  @@index([spotId])
 }
 
 enum UserNotificationStatus {
@@ -526,7 +500,15 @@ model UserNotification {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  @@index([userId])
   @@index([status])
-  @@index([notificationId])
+}
+
+model UserTag {
+  id   String @id @default(uuid())
+  name String
+
+  users User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }

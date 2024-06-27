@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { Image } from "expo-image"
 import { type AllRoutes, type Href, Link, useRouter } from "expo-router"
 import { AlertCircle, Bell, ChevronRight, Heart, MessageCircle, Settings, ToggleRight, User, User2 } from "lucide-react-native"
 import { ScrollView, TouchableOpacity, View } from "react-native"
@@ -6,7 +7,6 @@ import { ScrollView, TouchableOpacity, View } from "react-native"
 import { createAssetUrl } from "@ramble/shared"
 
 import { Icon } from "~/components/Icon"
-import { SignupCta } from "~/components/SignupCta"
 import { Button } from "~/components/ui/Button"
 import { Heading } from "~/components/ui/Heading"
 import { Icons, type RambleIcon } from "~/components/ui/Icons"
@@ -16,7 +16,10 @@ import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { AUTH_TOKEN, api } from "~/lib/api"
 import { IS_DEV, UPDATE_ID, VERSION } from "~/lib/config"
+import { height } from "~/lib/device"
 import { useMe } from "~/lib/hooks/useMe"
+
+const IMAGE_HEIGHT = height * 0.35
 
 export default function AccountScreen() {
   const { me } = useMe()
@@ -39,14 +42,28 @@ export default function AccountScreen() {
   if (!me)
     return (
       <TabView title="profile">
-        <SignupCta text="Sign up to create your profile">
-          <View className="space-y-4">
+        <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }} showsVerticalScrollIndicator={false}>
+          <View className="flex items-center my-8 space-y-4">
+            <Text className="px-8 text-center text-xl">
+              Create your profile, follow others Ramblers, save spots, plan trips, and share everything with your friends
+            </Text>
+            <Image style={{ height: IMAGE_HEIGHT, width: IMAGE_HEIGHT }} source={require("assets/profile.png")} />
+          </View>
+
+          <View className="px-8">
+            <Button onPress={() => router.push("/register")}>Sign up</Button>
+            <Button variant="link" onPress={() => router.push("/login")}>
+              Already signed up? Login
+            </Button>
+          </View>
+
+          <View className="space-y-4 mt-4">
             <View className="pt-10">
               <Text className="text-center">v{VERSION}</Text>
               <Text className="text-center opacity-60">{UPDATE_ID}</Text>
             </View>
           </View>
-        </SignupCta>
+        </ScrollView>
       </TabView>
     )
   return (

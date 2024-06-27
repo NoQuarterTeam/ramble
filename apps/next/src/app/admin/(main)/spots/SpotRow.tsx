@@ -23,10 +23,17 @@ interface Props {
     cover: Pick<SpotImage, "id" | "path"> | null
     images: Pick<SpotImage, "id" | "path">[]
   }
+  defaultIsOpen?: boolean
 }
 
-export function SpotRow({ spot }: Props) {
-  const expandProps = useDisclosure()
+export function SpotRow({ spot, defaultIsOpen }: Props) {
+  const expandProps = useDisclosure({ defaultIsOpen })
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: allow
+  React.useEffect(() => {
+    if (defaultIsOpen) expandProps.onOpen()
+  }, [defaultIsOpen])
+
   const [isVerifying, startVerify] = React.useTransition()
   const [isDeleting, startDelete] = React.useTransition()
 

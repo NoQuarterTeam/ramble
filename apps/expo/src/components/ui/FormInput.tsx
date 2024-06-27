@@ -81,7 +81,7 @@ export function FormInputLabel({ label, name }: { label: string; name?: string }
 
 export function FormInputSubLabel({ subLabel, name }: { subLabel: string; name?: string }) {
   return (
-    <Text nativeID={name} className="text-sm font-300 leading-4 mb-0.5">
+    <Text nativeID={name} className="text-sm font-300 leading-4 mb-0.5 opacity-70">
       {subLabel}
     </Text>
   )
