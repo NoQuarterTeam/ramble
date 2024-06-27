@@ -741,8 +741,8 @@ importers:
         specifier: 6.9.14
         version: 6.9.14
       resend:
-        specifier: 3.3.0
-        version: 3.3.0
+        specifier: 3.4.0
+        version: 3.4.0
       sharp:
         specifier: 0.32.6
         version: 0.32.6
@@ -15016,8 +15016,8 @@ packages:
       resolve: 1.7.1
     dev: false
 
-  /resend@3.3.0:
-    resolution: {integrity: sha512-twDI+rORUQzJC546lEUKhsLKEuqWNFxthZ27kGiK+sR2Cq7CNsro/pgM0W7qT0OiXNLEFp0u3gkJ6kqocpWmYQ==}
+  /resend@3.4.0:
+    resolution: {integrity: sha512-F3PVHdTHeLonSnrU5V6k8643LJ9QacLu3uI9M+BAFkmBmB1ELM2x7fdsziYZoSm6DmU6TKwiQCK0jf8dcNomcQ==}
     engines: {node: '>=18'}
     dependencies:
       '@react-email/render': 0.0.15
