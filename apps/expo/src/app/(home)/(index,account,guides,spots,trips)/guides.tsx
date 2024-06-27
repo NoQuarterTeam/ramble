@@ -83,19 +83,19 @@ export default function GuidesScreen() {
         <ModalView edges={["top", "bottom"]} title="Become a Guide" onBack={modalProps.onClose}>
           <View className="space-y-6 mt-4">
             <View>
-              <Text className="text-xl font-600">What you need to do:</Text>
-              <Text className="text-lg">- Endorse Ramble via your stories on Instagram once a month</Text>
-              <Text className="text-lg">- Add at least 3 camp spots</Text>
-              <Text className="text-lg">- Continue to add at least 1 spot a month</Text>
+              <Text className="text-xl font-600">What you get as a Guide:</Text>
+              <Text className="text-lg">- Get featured the list of Guides</Text>
+              <Text className="text-lg">- Ramblers can follow your profile, view your spots and check out your socials</Text>
+              <Text className="text-lg">- Featured on the Guide list on the Ramble website which links through to your socials</Text>
+              <Text className="text-lg">- Also featured in our Insta highlight of the Ramble Guides</Text>
+              <Text className="text-lg">- Free access to Ramble</Text>
+              <Text className="text-lg">- Priority requests of what features you would like to see added to Ramble</Text>
             </View>
             <View>
-              <Text className="text-xl font-600">What you get as a Guide:</Text>
-              <Text className="text-lg">- Shown in the list of Guides</Text>
-              <Text className="text-lg">- Ramblers can follow your profile and check out your socials</Text>
-              <Text className="text-lg">- Shown on the Ramble website in the Guide list with link through to your socials</Text>
-              <Text className="text-lg">- Shown in our Insta highlight of the Ramble Guides</Text>
-              <Text className="text-lg">- Free access to Ramble</Text>
-              <Text className="text-lg">- Priority requests of what features you would like to see in Ramble</Text>
+              <Text className="text-xl font-600">What you need to do:</Text>
+              <Text className="text-lg">- Add at least 3 high quality camp spots</Text>
+              <Text className="text-lg">- Continue to add at least 1 amazing spot a month</Text>
+              <Text className="text-lg">- Endorse Ramble on Instagram once a month</Text>
             </View>
             <Button
               size="lg"
