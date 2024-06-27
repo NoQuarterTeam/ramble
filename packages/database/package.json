@@ -13,11 +13,11 @@
   "sideEffects": false,
   "dependencies": {
     "@planetscale/database": "1.18.0",
-    "@prisma/adapter-planetscale": "5.15.0",
-    "@prisma/client": "5.15.0",
+    "@prisma/adapter-planetscale": "5.16.0",
+    "@prisma/client": "5.16.0",
     "@ramble/server-env": "workspace:*",
     "nanoid": "3.3.4",
-    "prisma": "5.15.0"
+    "prisma": "5.16.0"
   },
   "devDependencies": {
     "@types/node": "20.14.9",
