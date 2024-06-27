@@ -1,11 +1,14 @@
+import { createAssetUrl, useDisclosure } from "@ramble/shared"
 import { FlashList } from "@shopify/flash-list"
 import { Link, router } from "expo-router"
+import { ChevronDown } from "lucide-react-native"
+import { usePostHog } from "posthog-react-native"
 import * as React from "react"
 import { Modal, TouchableOpacity, View } from "react-native"
-
-import { createAssetUrl, useDisclosure } from "@ramble/shared"
-
+import * as DropdownMenu from "zeego/dropdown-menu"
 import { useFeedbackActivity } from "~/components/FeedbackCheck"
+import { Icon } from "~/components/Icon"
+import { BrandHeading } from "~/components/ui/BrandHeading"
 import { Button } from "~/components/ui/Button"
 import { ModalView } from "~/components/ui/ModalView"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
@@ -15,14 +18,23 @@ import { Text } from "~/components/ui/Text"
 import { toast } from "~/components/ui/Toast"
 import { type RouterOutputs, api } from "~/lib/api"
 import { isTablet } from "~/lib/device"
+import { useAsyncStorage } from "~/lib/hooks/useAsyncStorage"
 import { useMe } from "~/lib/hooks/useMe"
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
 
-export default function GuidesScreen() {
+const FILTER_OPTIONS: { [key in "guides" | "users"]: string } = {
+  guides: "Guides",
+  users: "Members",
+} as const
+
+export default function UsersScreen() {
+  const [filter, setFilter, isReady] = useAsyncStorage<keyof typeof FILTER_OPTIONS>("ramble.users.filter", "guides")
   const { me } = useMe()
   const modalProps = useDisclosure()
   const utils = api.useUtils()
 
-  const { data, isLoading } = api.user.guides.useQuery({ skip: 0 })
+  const { data: initialUsers, isLoading } = api.user.all.useQuery({ skip: 0, filter })
+
   const { mutate: sendGuideInterest, isPending: isGuideInterestLoading } = api.user.requestGuideStatus.useMutation({
     onSuccess: async () => {
       await utils.user.me.refetch()
@@ -31,21 +43,53 @@ export default function GuidesScreen() {
     },
   })
 
-  const [guides, setGuides] = React.useState(data)
+  const [users, setUsers] = React.useState(initialUsers)
 
   React.useEffect(() => {
-    setGuides(guides)
-  }, [guides])
+    setUsers(initialUsers)
+  }, [initialUsers])
 
   const handleLoadMore = React.useCallback(async () => {
-    const newGuides = await utils.user.guides.fetch({ skip: guides?.length || 0 })
-    setGuides([...(guides || []), ...newGuides])
-  }, [guides, utils.user.guides])
+    const newGuides = await utils.user.all.fetch({ skip: users?.length || 0, filter })
+    setUsers([...(users || []), ...newGuides])
+  }, [users, utils.user.all, filter])
 
+  const increment = useFeedbackActivity((s) => s.increment)
+
+  const posthog = usePostHog()
   return (
     <TabView
-      title="guides"
+      title={
+        isReady ? (
+          <DropdownMenu.Root>
+            <DropdownMenu.Trigger asChild>
+              <TouchableOpacity className="flex flex-row items-center">
+                <BrandHeading className="py-2 text-4xl">{FILTER_OPTIONS[filter].toLowerCase()}</BrandHeading>
+                <Icon icon={ChevronDown} size={20} color="primary" />
+              </TouchableOpacity>
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Content>
+              {Object.entries(FILTER_OPTIONS).map(([key, label]) => (
+                <DropdownMenu.Item
+                  key={key}
+                  onSelect={() => {
+                    increment()
+                    posthog.capture("users list filtered", { filter: label })
+                    setFilter(key as keyof typeof FILTER_OPTIONS)
+                  }}
+                >
+                  {label}
+                </DropdownMenu.Item>
+              ))}
+              <DropdownMenu.Arrow />
+            </DropdownMenu.Content>
+          </DropdownMenu.Root>
+        ) : (
+          <BrandHeading className="py-2 text-4xl"> </BrandHeading>
+        )
+      }
       rightElement={
+        filter === "guides" &&
         me?.role !== "GUIDE" && (
           <Button variant="link" onPress={modalProps.onOpen} className="pr-0">
             Become a guide
@@ -59,16 +103,17 @@ export default function GuidesScreen() {
         </View>
       ) : (
         <FlashList
+          extraData={{ filter }}
           showsVerticalScrollIndicator={false}
           estimatedItemSize={142}
           onEndReached={handleLoadMore}
           numColumns={isTablet ? 2 : undefined}
-          ListEmptyComponent={<Text className="text-center">No guides yet</Text>}
-          data={guides}
+          // ListEmptyComponent={<Text className="text-center">No users yet</Text>}
+          data={users}
           ItemSeparatorComponent={() => <View style={{ height: 4 }} />}
           renderItem={({ item }) => (
             <View style={{ width: "100%", paddingHorizontal: isTablet ? 10 : 0 }}>
-              <GuideItem guide={item} />
+              <UserItem user={item} />
             </View>
           )}
         />
@@ -82,11 +127,13 @@ export default function GuidesScreen() {
       >
         <ModalView edges={["top", "bottom"]} title="Become a Guide" onBack={modalProps.onClose}>
           <View className="space-y-6 mt-4">
-          <View>
+            <View>
               <Text className="text-xl font-600">What you get as a Guide:</Text>
               <Text className="text-lg">- Get featured the list of Guides</Text>
               <Text className="text-lg">- Ramblers can follow your profile, view your spots and check out your socials</Text>
-              <Text className="text-lg">- Featured on the Guide list on the Ramble website which links through to your socials</Text>
+              <Text className="text-lg">
+                - Featured on the Guide list on the Ramble website which links through to your socials
+              </Text>
               <Text className="text-lg">- Also featured in our Insta highlight of the Ramble Guides</Text>
               <Text className="text-lg">- Free access to Ramble</Text>
               <Text className="text-lg">- Priority requests of what features you would like to see added to Ramble</Text>
@@ -114,10 +161,11 @@ export default function GuidesScreen() {
   )
 }
 
-function GuideItem(props: { guide: RouterOutputs["user"]["guides"][number] }) {
+function UserItem(props: { user: RouterOutputs["user"]["all"][number] }) {
   const increment = useFeedbackActivity((s) => s.increment)
+  const tab = useTabSegment()
   return (
-    <Link asChild push href={`/(home)/(guides)/${props.guide.username}/(profile)`}>
+    <Link asChild push href={`/${tab}/${props.user.username}/(profile)`}>
       <TouchableOpacity
         onPress={increment}
         activeOpacity={0.8}
@@ -128,27 +176,27 @@ function GuideItem(props: { guide: RouterOutputs["user"]["guides"][number] }) {
             className="sq-16 rounded-full"
             width={80}
             height={80}
-            placeholder={props.guide.avatarBlurHash}
-            source={{ uri: createAssetUrl(props.guide.avatar) }}
+            placeholder={props.user.avatarBlurHash}
+            source={{ uri: createAssetUrl(props.user.avatar) }}
           />
           <View>
             <Text className="text-xl">
-              {props.guide.firstName} {props.guide.lastName}
+              {props.user.firstName} {props.user.lastName}
             </Text>
-            <Text>{props.guide.username}</Text>
+            <Text>{props.user.username}</Text>
           </View>
         </View>
         <View className="flex flex-row items-center justify-around gap-4">
           <View className="flex flex-row items-center space-x-1">
-            <Text className="font-600">{props.guide._count?.createdSpots.toLocaleString()}</Text>
+            <Text className="font-600">{props.user._count?.createdSpots.toLocaleString()}</Text>
             <Text>spots</Text>
           </View>
           <View className="flex flex-row items-center space-x-1">
-            <Text className="font-600">{props.guide._count?.followers.toLocaleString()}</Text>
+            <Text className="font-600">{props.user._count?.followers.toLocaleString()}</Text>
             <Text>followers</Text>
           </View>
           <View className="flex flex-row items-center space-x-1">
-            <Text className="font-600">{props.guide._count?.createdTrips.toLocaleString()}</Text>
+            <Text className="font-600">{props.user._count?.createdTrips.toLocaleString()}</Text>
             <Text>trips</Text>
           </View>
         </View>
@@ -156,5 +204,3 @@ function GuideItem(props: { guide: RouterOutputs["user"]["guides"][number] }) {
     </Link>
   )
 }
-
-

@@ -2,7 +2,7 @@ import { useSegments } from "expo-router"
 
 type Group<T extends string> = `(${T})`
 
-type SharedSegment = Group<"index"> | Group<"account"> | Group<"guides"> | Group<"spots"> | Group<"trips">
+type SharedSegment = Group<"index"> | Group<"account"> | Group<"users"> | Group<"spots"> | Group<"trips">
 
 type Home = Group<"home">
 
