@@ -735,8 +735,8 @@ importers:
         specifier: 9.0.2
         version: 9.0.2
       loops:
-        specifier: 2.0.0
-        version: 2.0.0
+        specifier: 2.1.1
+        version: 2.1.1
       nodemailer:
         specifier: 6.9.14
         version: 6.9.14
@@ -12483,8 +12483,8 @@ packages:
       yargs: 15.4.1
     dev: false
 
-  /loops@2.0.0:
-    resolution: {integrity: sha512-9kgk4FgGZ8lDlX65AppVJH/Z63mWTjcBCmq8Dw064Q9EIPi6PaNY8XmBfKKBKO+DpcQB4Hnxz4w8g67XSUPUnA==}
+  /loops@2.1.1:
+    resolution: {integrity: sha512-+cFs6He1nPGsK5f5/lJbxujEFWcmK4Bt78F4cYem3TaMMBcD906a/WU0rUBb1zp813T5z++E0USr1wKzuTVm7A==}
     engines: {node: '>=18'}
     dev: false
 
