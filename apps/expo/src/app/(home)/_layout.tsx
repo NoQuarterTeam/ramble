@@ -78,10 +78,10 @@ export default function HomeLayout() {
         }}
       />
       <Tabs.Screen
-        name="(guides)"
+        name="(users)"
         listeners={{
           tabPress: () => {
-            if (tab === "(home)/(guides)" && router.canDismiss()) {
+            if (tab === "(home)/(users)" && router.canDismiss()) {
               router.dismissAll()
             }
           },
