@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio"
 
-const url = `https://terreinzoeker.natuurkampeerterreinen.nl/?terrain&open_at&property_id%5B0%5D=103&property_id%5B1%5D=5&action=terrain_results_loop&maptype=mapbox`
+const url = `https://terreinzoeker.natuurkampeerterreinen.nl/?terrain&property_id%5B0%5D=103&type%5B0%5D=terrain&kind%5B0%5D=1&kind%5B1%5D=0&kind%5B2%5D=2&open_at&action=terrain_results_loop&maptype=mapbox`
 
 import { prisma } from "@ramble/database"
 import { convert } from 'html-to-text'
@@ -49,7 +49,8 @@ async function getCards() {
       const detailPage = await fetch(link)
       const spotDetailHtml = await detailPage.text()
       const $ = cheerio.load(spotDetailHtml)
-      const name = $(".c-terrain__title").text().trim()
+      const name = $(".c-terrain__title").text().trim() || $(".c-terrain__title").text().trim()
+      console.log(name)
       const description = $(".c-terrain__content").find("p").first().text().trim()
       const address = $("#contact").next().find("span").html()?.replaceAll("<br>", ", ").trim()
       const coords = $(".c-terrain__list").find("li").last().text().trim()
@@ -83,7 +84,7 @@ async function getCards() {
       if (existingSpot && existingSpot.deletedAt === null) {
         console.log(existingSpot && "Spot exists: " + "https://ramble.guide/spots/"+ existingSpot.id + " updating...")
         await prisma.spot.update({where: {natuurKampeerterreinenId: id},  data: {
-          name: spot.name,
+          name,
           address,
           latitude,
           longitude,
@@ -102,7 +103,7 @@ async function getCards() {
               if (!existingImage) {
                 return {
                   path: imagePath,
-                  creator: { connect: { email: "jack@noquarter.co" } },
+                  creator: { connect: { email: "george@noquarter.co" } },
                 };
               }
       
@@ -114,7 +115,7 @@ async function getCards() {
           type: "CAMPING",
           isPetFriendly,
           sourceUrl: link,
-          creator: { connect: { email: "jack@noquarter.co" } },
+          creator: { connect: { email: "george@noquarter.co" } },
           amenities: {
             upsert: {
               create: amenities,
@@ -178,8 +179,8 @@ async function getCards() {
             type: "CAMPING",
             sourceUrl: link,
             isPetFriendly,
-            creator: { connect: { email: "jack@noquarter.co" } },
-            images: { create: images.map((image) => ({ path: image, creator: { connect: { email: "jack@noquarter.co" } } })) },
+            creator: { connect: { email: "george@noquarter.co" } },
+            images: { create: images.map((image) => ({ path: image, creator: { connect: { email: "george@noquarter.co" } } })) },
             amenities: {
               create: amenities,
             },
