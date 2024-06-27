@@ -378,23 +378,24 @@ export default function SpotDetailScreen() {
                     </Button>
                   )}
                 </View>
-                <MapView className="overflow-hidden rounded-xs h-[300px]" scrollEnabled={true}>
-                  <LocationPuck />
-                  <Camera
-                    allowUpdates
-                    followUserLocation={false}
-                    defaultSettings={{
-                      centerCoordinate: [spot.longitude, spot.latitude],
-                      zoomLevel: 8,
-                      pitch: 0,
-                      heading: 0,
-                    }}
-                  />
-
-                  <MarkerView allowOverlap allowOverlapWithPuck coordinate={[spot.longitude, spot.latitude]}>
-                    <SpotMarker spot={spot} />
-                  </MarkerView>
-                </MapView>
+                <View className="h-[300px]">
+                  <MapView className="overflow-hidden rounded-xs h-full" scrollEnabled={true}>
+                    <LocationPuck />
+                    <Camera
+                      allowUpdates
+                      followUserLocation={false}
+                      defaultSettings={{
+                        centerCoordinate: [spot.longitude, spot.latitude],
+                        zoomLevel: 8,
+                        pitch: 0,
+                        heading: 0,
+                      }}
+                    />
+                    <MarkerView allowOverlap allowOverlapWithPuck coordinate={[spot.longitude, spot.latitude]}>
+                      <SpotMarker spot={spot} />
+                    </MarkerView>
+                  </MapView>
+                </View>
 
                 <View className="h-px w-full bg-gray-200 dark:bg-gray-700" />
                 <View className="space-y-2 pt-4">
