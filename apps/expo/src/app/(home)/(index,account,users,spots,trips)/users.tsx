@@ -166,7 +166,7 @@ function UserItem(props: { user: RouterOutputs["user"]["all"][number] }) {
   const increment = useFeedbackActivity((s) => s.increment)
   const tab = useTabSegment()
   return (
-    <Link key={props.user.id} asChild push href={`/${tab}/${props.user.username}/(profile)`}>
+    <Link asChild push href={`/${tab}/${props.user.username}/(profile)`}>
       <TouchableOpacity
         onPress={increment}
         activeOpacity={0.8}
@@ -176,6 +176,7 @@ function UserItem(props: { user: RouterOutputs["user"]["all"][number] }) {
           {props.user.avatar ? (
             <OptimizedImage
               className="sq-16 rounded-full"
+              key={props.user.id}
               width={80}
               height={80}
               placeholder={props.user.avatarBlurHash}
