@@ -1,7 +1,7 @@
 import type { ConfigContext, ExpoConfig } from "expo/config"
 
-const VERSION = "1.6.0"
-const BUILD = 80
+const VERSION = "1.6.1"
+const BUILD = 81
 
 const splash: ExpoConfig["splash"] = {
   image: "./assets/splash.png",
