@@ -40,6 +40,8 @@
     "@react-native-community/datetimepicker",
     "@react-native-community/netinfo",
     "@sentry/react-native",
+    "expo-insights",
+    "expo-image-manipulator",
     "@shopify/flash-list",
     "expo-application",
     "expo-build-properties",
