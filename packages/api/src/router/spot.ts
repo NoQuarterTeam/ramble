@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client"
 import { type Spot, SpotType } from "@ramble/database/server"
 import { clusterSchema, spotAmenitiesSchema, spotSchema, userSchema } from "@ramble/server-schemas"
 import {
@@ -46,10 +47,10 @@ export const spotRouter = createTRPCRouter({
         select: { id: true, latitude: true, longitude: true, type: true },
         where: {
           type: typeof types === "string" ? { equals: types } : { in: types },
+          // if isUnverified is pass return all spots, if not, return all spots that are verified or ones created by me
           ...verifiedSpotWhereClause(ctx.user?.id, isUnverified),
           latitude: { gt: coords.minLat, lt: coords.maxLat },
           longitude: { gt: coords.minLng, lt: coords.maxLng },
-          // if isUnverified is pass return all spots, if not, return all spots that are verified or ones created by me
           ...publicSpotWhereClause(ctx.user?.id),
           isPetFriendly: isPetFriendly ? { equals: true } : undefined,
         },
@@ -139,7 +140,12 @@ export const spotRouter = createTRPCRouter({
     })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
     const sameLocationSpots = await ctx.prisma.spot.findMany({
-      where: { ...publicSpotWhereClause(null), latitude: spot.latitude, longitude: spot.longitude },
+      where: {
+        ...verifiedSpotWhereClause(ctx.user?.id),
+        ...publicSpotWhereClause(ctx.user?.id),
+        latitude: spot.latitude,
+        longitude: spot.longitude,
+      },
       select: { id: true },
       orderBy: { createdAt: "desc" },
     })
@@ -251,6 +257,7 @@ export const spotRouter = createTRPCRouter({
   byUser: publicProcedure.input(userSchema.pick({ username: true })).query(async ({ ctx, input }) => {
     const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })
     if (!user) throw new TRPCError({ code: "NOT_FOUND" })
+    const userVerifiedSpots = ctx.user && ctx.user.id === user.id ? Prisma.sql`` : Prisma.sql`AND Spot.verifiedAt IS NOT NULL`
     const spots = await ctx.prisma.$queryRaw<SpotItemType[]>`
       SELECT
         ${spotItemDistanceFromMeField(ctx.user)},
@@ -260,7 +267,7 @@ export const spotRouter = createTRPCRouter({
       LEFT JOIN
         SpotImage ON Spot.coverId = SpotImage.id
       WHERE
-        Spot.creatorId = ${user.id} AND Spot.verifiedAt IS NOT NULL AND ${publicSpotWhereClauseRaw(user.id)} AND Spot.sourceUrl IS NULL
+        Spot.creatorId = ${user.id} ${userVerifiedSpots} AND ${publicSpotWhereClauseRaw(user.id)} AND Spot.sourceUrl IS NULL
       GROUP BY
         Spot.id
       ORDER BY

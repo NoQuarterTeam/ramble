@@ -355,7 +355,7 @@ export const spotMarkerClusterColorTypes = {
 
 export type SpotListSort = "latest" | "rated" | "saved" | "near"
 
-export type SpotItemType = Pick<Spot, "id" | "name" | "address" | "type" | "latitude" | "longitude"> & {
+export type SpotItemType = Pick<Spot, "id" | "name" | "address" | "verifiedAt" | "type" | "latitude" | "longitude"> & {
   rating: string
   savedCount: string
   image?: SpotImage["path"] | null
