@@ -149,7 +149,7 @@ export default function UserScreen() {
               <TouchableOpacity
                 activeOpacity={0.8}
                 className="flex flex-row items-center space-x-1"
-                onPress={() => Linking.openURL(`https://www.instagram.com/${user.instagram}`)}
+                onPress={() => Linking.openURL(`https://www.instagram.com/${user.instagram?.replace("@", "")}`)}
               >
                 <Icon icon={Instagram} size={16} />
                 <Text>{user.instagram}</Text>
