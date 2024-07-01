@@ -266,8 +266,8 @@ importers:
   apps/next:
     dependencies:
       '@aws-sdk/client-s3':
-        specifier: 3.606.0
-        version: 3.606.0
+        specifier: 3.608.0
+        version: 3.608.0
       '@notionhq/client':
         specifier: ^2.2.15
         version: 2.2.15
@@ -696,14 +696,14 @@ importers:
   packages/server/services:
     dependencies:
       '@aws-sdk/client-s3':
-        specifier: 3.606.0
-        version: 3.606.0
+        specifier: 3.608.0
+        version: 3.608.0
       '@aws-sdk/lib-storage':
-        specifier: 3.606.0
-        version: 3.606.0(@aws-sdk/client-s3@3.606.0)
+        specifier: 3.608.0
+        version: 3.608.0(@aws-sdk/client-s3@3.608.0)
       '@aws-sdk/s3-request-presigner':
-        specifier: 3.606.0
-        version: 3.606.0
+        specifier: 3.608.0
+        version: 3.608.0
       '@ramble/database':
         specifier: workspace:*
         version: link:../../database
@@ -870,8 +870,8 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@aws-sdk/client-s3@3.606.0:
-    resolution: {integrity: sha512-IGM/E8kVk/NY/kZwLdmGRsX1QYtuPljoNutM5kBRdtGahQL5VwVAve5PElPUArcsTkfTyW+LfXpznDeeHxMCcA==}
+  /@aws-sdk/client-s3@3.608.0:
+    resolution: {integrity: sha512-la2R6QfUOmE4JMubxLD3OdnPTduAs5YekIvx68I5CbLudb5pbxkHDqnrWDhgK1lX4Cu19pXjgQXmS8oZMJPeLQ==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/sha1-browser': 5.2.0
@@ -1203,13 +1203,13 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@aws-sdk/lib-storage@3.606.0(@aws-sdk/client-s3@3.606.0):
-    resolution: {integrity: sha512-SagGtmyU0Zyjq5ZA+EvccqPrJTrRNAHXE/rjk9Z2ENqtTYI2pK451sD5kLQqgNIAHNf/6U1TX7hnYz1wkInLUQ==}
+  /@aws-sdk/lib-storage@3.608.0(@aws-sdk/client-s3@3.608.0):
+    resolution: {integrity: sha512-A6RXgkXYf+eY2POxi382nhMdo7x7QpVfgeehvOqpK5c7LgXjwsPTfjSPqLV1fIZuPLn3NG6uNd12Gs6x/466tQ==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      '@aws-sdk/client-s3': ^3.606.0
+      '@aws-sdk/client-s3': ^3.608.0
     dependencies:
-      '@aws-sdk/client-s3': 3.606.0
+      '@aws-sdk/client-s3': 3.608.0
       '@smithy/abort-controller': 3.1.0
       '@smithy/middleware-endpoint': 3.0.3
       '@smithy/smithy-client': 3.1.4
@@ -1354,8 +1354,8 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@aws-sdk/s3-request-presigner@3.606.0:
-    resolution: {integrity: sha512-ErxArdCk73MVOh5xiTWZkk76kZWCHZqCCdMnSJTD0lzTpfGbwL/eEjHIjKLJO+EsRtDKYmS8vN+qijyMvMqruw==}
+  /@aws-sdk/s3-request-presigner@3.608.0:
+    resolution: {integrity: sha512-5IJskqhzkw+XA/RshAewRlFsJchl3M6I6ZTo9b9It3oFya/J/rEwpDKMt+HPS0E74Zg1mSj1bCGVXNQutmaWAA==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-sdk/signature-v4-multi-region': 3.598.0
