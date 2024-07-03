@@ -106,7 +106,7 @@ export default function TripMedia() {
 
       setIsUploading(true)
 
-      for await (const asset of result.assets) {
+      for (const asset of result.assets) {
         if (!asset.assetId) continue // ??
         const info = await MediaLibrary.getAssetInfoAsync(asset.assetId)
         if (info.mediaType !== MediaLibrary.MediaType.photo && info.mediaType !== MediaLibrary.MediaType.video)

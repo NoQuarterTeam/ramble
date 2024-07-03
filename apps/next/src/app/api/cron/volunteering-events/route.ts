@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     )
 
     // create and update new spots
-    for await (const event of events) {
+    for (const event of events) {
       const address = await geocodeCoords({ latitude: event.location_lat, longitude: event.location_lng })
       const addressToUse = address?.address || address?.place
       const data = {
