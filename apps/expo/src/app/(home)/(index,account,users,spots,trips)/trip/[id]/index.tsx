@@ -439,7 +439,7 @@ function TripImageSync({
           if (!newPages.hasNextPage) break
         }
         const mediaToSync = []
-        for (const asset of assets) {
+        for await (const asset of assets) {
           try {
             const info = await MediaLibrary.getAssetInfoAsync(asset)
             // if (!info.location) continue
@@ -460,7 +460,7 @@ function TripImageSync({
           }
         }
         if (mediaToSync.length === 0) return
-        for (const media of mediaToSync) {
+        for await (const media of mediaToSync) {
           try {
             let thumbnailPath = null
             if (media.type === "VIDEO") {
