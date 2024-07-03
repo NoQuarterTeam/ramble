@@ -720,8 +720,8 @@ importers:
         specifier: ^0.0.16
         version: 0.0.16(react-dom@18.2.0)(react@18.2.0)
       '@slack/web-api':
-        specifier: 7.2.0
-        version: 7.2.0
+        specifier: 7.3.0
+        version: 7.3.0
       bcryptjs:
         specifier: 2.4.3
         version: 2.4.3
@@ -7307,8 +7307,8 @@ packages:
     engines: {node: '>= 12.13.0', npm: '>= 6.12.0'}
     dev: false
 
-  /@slack/web-api@7.2.0:
-    resolution: {integrity: sha512-Dicpm9h/M9gZXHVlsDurUxQOzhh5QDZ6jahnsYRl9ZLAD58SPfgZdlS5a6Rz3zs82RnYWhNVjMW+pMLysetgRw==}
+  /@slack/web-api@7.3.0:
+    resolution: {integrity: sha512-BXpzmNRD7xi/IRErOVfDe8v+8mEZoIgsU3Mqtz2fFkLDRjxu7EzCvuQrcagKdWI+jRm6GhZVhUityGcYJOpqkg==}
     engines: {node: '>= 18', npm: '>= 8.6.0'}
     dependencies:
       '@slack/logger': 4.0.0
