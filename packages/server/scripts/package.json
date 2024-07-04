@@ -16,7 +16,7 @@
   "sideEffects": false,
   "devDependencies": {
     "@faker-js/faker": "8.4.1",
-    "@inquirer/prompts": "5.1.1",
+    "@inquirer/prompts": "5.1.2",
     "@ramble/api": "workspace:*",
     "@ramble/database": "workspace:*",
     "@ramble/shared": "workspace:*",
