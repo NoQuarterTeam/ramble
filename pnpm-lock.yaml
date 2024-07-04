@@ -67,14 +67,14 @@ importers:
         specifier: 5.49.2
         version: 5.49.2(react@18.2.0)
       '@trpc/client':
-        specifier: 11.0.0-rc.439
-        version: 11.0.0-rc.439(@trpc/server@11.0.0-rc.439)
+        specifier: 11.0.0-rc.441
+        version: 11.0.0-rc.441(@trpc/server@11.0.0-rc.441)
       '@trpc/react-query':
-        specifier: 11.0.0-rc.439
-        version: 11.0.0-rc.439(@tanstack/react-query@5.49.2)(@trpc/client@11.0.0-rc.439)(@trpc/server@11.0.0-rc.439)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 11.0.0-rc.441
+        version: 11.0.0-rc.441(@tanstack/react-query@5.49.2)(@trpc/client@11.0.0-rc.441)(@trpc/server@11.0.0-rc.441)(react-dom@18.2.0)(react@18.2.0)
       '@trpc/server':
-        specifier: 11.0.0-rc.439
-        version: 11.0.0-rc.439
+        specifier: 11.0.0-rc.441
+        version: 11.0.0-rc.441
       class-variance-authority:
         specifier: 0.7.0
         version: 0.7.0
@@ -341,11 +341,11 @@ importers:
         specifier: 8.19.2
         version: 8.19.2(react-dom@18.2.0)(react@18.2.0)
       '@trpc/react-query':
-        specifier: 11.0.0-rc.439
-        version: 11.0.0-rc.439(@tanstack/react-query@5.49.2)(@trpc/client@11.0.0-rc.439)(@trpc/server@11.0.0-rc.439)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 11.0.0-rc.441
+        version: 11.0.0-rc.441(@tanstack/react-query@5.49.2)(@trpc/client@11.0.0-rc.441)(@trpc/server@11.0.0-rc.441)(react-dom@18.2.0)(react@18.2.0)
       '@trpc/server':
-        specifier: 11.0.0-rc.439
-        version: 11.0.0-rc.439
+        specifier: 11.0.0-rc.441
+        version: 11.0.0-rc.441
       '@vercel/analytics':
         specifier: 1.3.1
         version: 1.3.1(next@14.2.4)(react@18.2.0)
@@ -480,8 +480,8 @@ importers:
         specifier: workspace:*
         version: link:../shared
       '@trpc/server':
-        specifier: 11.0.0-rc.439
-        version: 11.0.0-rc.439
+        specifier: 11.0.0-rc.441
+        version: 11.0.0-rc.441
       '@turf/bbox':
         specifier: 7.0.0
         version: 7.0.0
@@ -7867,32 +7867,32 @@ packages:
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
     dev: true
 
-  /@trpc/client@11.0.0-rc.439(@trpc/server@11.0.0-rc.439):
-    resolution: {integrity: sha512-JkszxTq6yy8BJNIWxNOV+hky4XsanqqqcHvZvsXpobBjcc7TLyGkC/UMNK3LXuwulgtD/W17WBeJU8czhDyVHg==}
+  /@trpc/client@11.0.0-rc.441(@trpc/server@11.0.0-rc.441):
+    resolution: {integrity: sha512-O9zHP7JcK35jO5G8BoW304WdRcHW1TKZae2QDU65KvfMxosbmqY2ajwAgs6CxTS45c1PuF9vI0kXtP52e3FYgQ==}
     peerDependencies:
-      '@trpc/server': 11.0.0-rc.439+775af00cc
+      '@trpc/server': 11.0.0-rc.441+0c4a58144
     dependencies:
-      '@trpc/server': 11.0.0-rc.439
+      '@trpc/server': 11.0.0-rc.441
     dev: false
 
-  /@trpc/react-query@11.0.0-rc.439(@tanstack/react-query@5.49.2)(@trpc/client@11.0.0-rc.439)(@trpc/server@11.0.0-rc.439)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-qmg7ZRfh8tZjhAOaaEZXJyC6nBTE2StIeSUwizH+2QYQ3zep4fa5+dzcttNv+4X2RIduAQGQ8P2KAoIix0JZmA==}
+  /@trpc/react-query@11.0.0-rc.441(@tanstack/react-query@5.49.2)(@trpc/client@11.0.0-rc.441)(@trpc/server@11.0.0-rc.441)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-VZm17FyQ/imz5S2pdJe6Qt9Od3JH1jDL8SlI5LZJ/ZXm+vdIbY3KJO1GOBKWfUw5oewaAE/QZJS0xVZqpIvw7g==}
     peerDependencies:
-      '@tanstack/react-query': ^5.40.0
-      '@trpc/client': 11.0.0-rc.439+775af00cc
-      '@trpc/server': 11.0.0-rc.439+775af00cc
+      '@tanstack/react-query': ^5.49.2
+      '@trpc/client': 11.0.0-rc.441+0c4a58144
+      '@trpc/server': 11.0.0-rc.441+0c4a58144
       react: '>=18.2.0'
       react-dom: '>=18.2.0'
     dependencies:
       '@tanstack/react-query': 5.49.2(react@18.2.0)
-      '@trpc/client': 11.0.0-rc.439(@trpc/server@11.0.0-rc.439)
-      '@trpc/server': 11.0.0-rc.439
+      '@trpc/client': 11.0.0-rc.441(@trpc/server@11.0.0-rc.441)
+      '@trpc/server': 11.0.0-rc.441
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@trpc/server@11.0.0-rc.439:
-    resolution: {integrity: sha512-Xs6TKmaVXox4CnVFBSAlbM/rUBlrg8hwgwmy/sKChMEDmmk1Ot9PDyG7IkGb5oNfLeAim/GLKOCoQWIze6zQpA==}
+  /@trpc/server@11.0.0-rc.441:
+    resolution: {integrity: sha512-H0NN85JDgDlvG9tHW9efygLJZbVkszLagm5VeLD8MuhXqqKU+WyMTqb4D8rI560dse4dMC3lI5IoXaCEXMoznA==}
     dev: false
 
   /@trysound/sax@0.2.0:
