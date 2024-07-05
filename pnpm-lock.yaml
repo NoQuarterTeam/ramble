@@ -377,8 +377,8 @@ importers:
         specifier: 0.399.0
         version: 0.399.0(react@18.2.0)
       mapbox-gl:
-        specifier: 3.5.0
-        version: 3.5.0
+        specifier: 3.5.1
+        version: 3.5.1
       next:
         specifier: 14.2.4
         version: 14.2.4(react-dom@18.2.0)(react@18.2.0)
@@ -402,7 +402,7 @@ importers:
         version: 14.2.3(react@18.2.0)
       react-map-gl:
         specifier: 7.1.7
-        version: 7.1.7(mapbox-gl@3.5.0)(react-dom@18.2.0)(react@18.2.0)
+        version: 7.1.7(mapbox-gl@3.5.1)(react-dom@18.2.0)(react@18.2.0)
       sharp:
         specifier: 0.32.6
         version: 0.32.6
@@ -12502,8 +12502,8 @@ packages:
       tmpl: 1.0.5
     dev: false
 
-  /mapbox-gl@3.5.0:
-    resolution: {integrity: sha512-IjbyJvJGjQM+5MU2otvK2Pm5Qg/7S1VOR5Y7mf63WsMkQQ9uU1OT5rcxUJEiC7M4107DYL+DTb4vpvXO8l3bNQ==}
+  /mapbox-gl@3.5.1:
+    resolution: {integrity: sha512-sf4N18vl5FHS8lPRWZjTZShgIziDqSxan3MazHClvYYXezsAPn6hApRvAS2HEMTq7MXzRcvvt4sYgQWLubwnBw==}
     dependencies:
       '@mapbox/jsonlint-lines-primitives': 2.0.2
       '@mapbox/mapbox-gl-supported': 3.0.0
@@ -14464,7 +14464,7 @@ packages:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
     dev: false
 
-  /react-map-gl@7.1.7(mapbox-gl@3.5.0)(react-dom@18.2.0)(react@18.2.0):
+  /react-map-gl@7.1.7(mapbox-gl@3.5.1)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-mwjc0obkBJOXCcoXQr3VoLqmqwo9vS4bXfbGsdxXzEgVCv/PM0v+1QggL7W0d/ccIy+VCjbXNlGij+PENz6VNg==}
     peerDependencies:
       mapbox-gl: '>=1.13.0'
@@ -14479,7 +14479,7 @@ packages:
     dependencies:
       '@maplibre/maplibre-gl-style-spec': 19.3.3
       '@types/mapbox-gl': 3.1.0
-      mapbox-gl: 3.5.0
+      mapbox-gl: 3.5.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
