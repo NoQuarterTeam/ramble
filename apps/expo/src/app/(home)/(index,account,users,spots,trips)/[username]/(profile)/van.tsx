@@ -30,7 +30,7 @@ export default function UserVan() {
     )
 
   return (
-    <View className="space-y-2 py-2">
+    <View className="flex space-y-2 py-2">
       <View>
         <Text className="text-3xl">{van.name}</Text>
         <View className="flex flex-row items-center space-x-1">
@@ -73,8 +73,9 @@ export default function UserVan() {
           key={image.id}
           width={500}
           height={300}
+          style={{ height: 300 }}
           placeholder={image.blurHash}
-          className="min-h-[300px] h-[300px] border border-gray-100 dark:border-gray-800 w-full rounded-sm object-cover"
+          className="w-full rounded-sm object-cover"
           source={{ uri: createAssetUrl(image.path) }}
         />
       ))}
