@@ -248,7 +248,7 @@ export function isCampingSpot(type?: SpotType | null | undefined) {
   return campingSpotTypes.includes(type)
 }
 
-export const activitySpotTypes = ["CLIMBING", "CLIMBING", "HIKING_TRAIL", "PADDLE_KAYAK", "MOUNTAIN_BIKING"] as SpotType[]
+export const activitySpotTypes = ["CLIMBING", "SURFING", "YOGA", "HIKING_TRAIL", "PADDLE_KAYAK", "MOUNTAIN_BIKING"] as SpotType[]
 
 export const spotMarkerColorTypes = {
   // stays

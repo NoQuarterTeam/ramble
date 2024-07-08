@@ -13,10 +13,7 @@ import { api } from "~/lib/api"
 export default function UserVan() {
   const params = useLocalSearchParams<{ username: string }>()
 
-  const { data: van, isLoading } = api.van.byUser.useQuery(
-    { username: params.username?.toLowerCase().trim() || "" },
-    { enabled: !!params.username },
-  )
+  const { data: van, isLoading } = api.van.byUser.useQuery({ username: params.username }, { enabled: !!params.username })
 
   if (isLoading)
     return (
@@ -33,7 +30,7 @@ export default function UserVan() {
     )
 
   return (
-    <View className="space-y-2 py-2">
+    <View className="flex space-y-2 py-2">
       <View>
         <Text className="text-3xl">{van.name}</Text>
         <View className="flex flex-row items-center space-x-1">
@@ -76,8 +73,9 @@ export default function UserVan() {
           key={image.id}
           width={500}
           height={300}
+          style={{ height: 300 }}
           placeholder={image.blurHash}
-          className="h-[300px] w-full rounded-sm object-cover"
+          className="w-full rounded-sm object-cover"
           source={{ uri: createAssetUrl(image.path) }}
         />
       ))}

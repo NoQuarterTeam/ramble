@@ -14,7 +14,7 @@ export async function sendMessages({
 
   const chunks = expo.chunkPushNotifications(messages)
 
-  for await (const chunk of chunks) {
+  for (const chunk of chunks) {
     await expo.sendPushNotificationsAsync(chunk)
   }
 }
