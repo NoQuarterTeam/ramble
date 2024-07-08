@@ -1,4 +1,15 @@
-import { BIOREGIONS, type BioRegion, INITIAL_LATITUDE, INITIAL_LONGITUDE, createAssetUrl, join } from "@ramble/shared"
+import {
+  BIOREGIONS,
+  type BioRegion,
+  INITIAL_LATITUDE,
+  INITIAL_LONGITUDE,
+  SPOT_TYPES,
+  activitySpotTypes,
+  campingSpotTypes,
+  createAssetUrl,
+  join,
+  merge,
+} from "@ramble/shared"
 import {
   Camera,
   LocationPuck,
@@ -14,13 +25,14 @@ import { Link, useRouter } from "expo-router"
 import { Layers, Navigation, PlusCircle, Settings2, User } from "lucide-react-native"
 import { usePostHog } from "posthog-react-native"
 import * as React from "react"
-import { TouchableOpacity, View, useColorScheme } from "react-native"
+import { ScrollView, TouchableOpacity, View, useColorScheme } from "react-native"
 import { BioRegionPreview } from "~/components/BioRegionPreview"
 import { FeedbackCheck, useFeedbackActivity } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
 import { MapView } from "~/components/Map"
 import { MapSearch } from "~/components/MapSearch"
 import { RegisterCheck } from "~/components/RegisterCheck"
+import { SpotIcon } from "~/components/SpotIcon"
 import { SpotClusterMarker } from "~/components/SpotMarker"
 import { SpotPreview } from "~/components/SpotPreview"
 import { OptimizedImage } from "~/components/ui/OptimisedImage"
@@ -310,7 +322,13 @@ function MapContainer() {
         }}
       />
 
-      <View pointerEvents="box-none" className="absolute bottom-3 left-3 flex space-y-2">
+      <View pointerEvents="box-none" className="absolute bottom-14 right-3 flex space-y-2">
+        <TouchableOpacity
+          onPress={handleSetUserLocation}
+          className="sq-12 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
+        >
+          <Icon icon={Navigation} size={20} />
+        </TouchableOpacity>
         <Link push href="/layers" asChild>
           <TouchableOpacity
             onPress={() => increment()}
@@ -320,39 +338,18 @@ function MapContainer() {
             <Icon icon={Layers} size={20} />
           </TouchableOpacity>
         </Link>
-        <Link push href="/filters" asChild>
-          <TouchableOpacity
-            onPress={() => increment()}
-            activeOpacity={0.8}
-            className="sq-12 shadow flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark relative"
-          >
-            <Icon icon={Settings2} size={20} />
-            {filters.types.length > 0 && (
-              <View className="absolute -top-1.5 -right-1.5 bg-primary rounded-full w-6 h-6">
-                <Text className="text-white text-sm text-center font-700 leading-6">{filters.types.length}</Text>
-              </View>
-            )}
-          </TouchableOpacity>
-        </Link>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => {
+            increment()
+            router.push("/new/")
+          }}
+          className="shadow sq-12 rounded-full bg-primary flex items-center justify-center"
+        >
+          <Icon icon={PlusCircle} size={20} color="white" />
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() => {
-          increment()
-          router.push("/new/")
-        }}
-        style={{ transform: [{ translateX: -26 }] }}
-        className="absolute bottom-3 left-1/2 shadow rounded-full bg-primary p-4"
-      >
-        <Icon icon={PlusCircle} size={20} color="white" />
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        onPress={handleSetUserLocation}
-        className="sq-12 shadow absolute right-3 bottom-3 flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
-      >
-        <Icon icon={Navigation} size={20} />
-      </TouchableOpacity>
+      <MapQuickFilters />
       {activeSpotId && <SpotPreview id={activeSpotId} onSetSpotId={setActiveSpotId} />}
       {selectedBioRegion && <BioRegionPreview id={selectedBioRegion} onClose={handleCloseBioRegionPreview} />}
     </>
@@ -380,5 +377,109 @@ function MapLayers() {
       />
       {layers.layer === "rain" && <RasterLayer id="rainLayer" sourceID="rain" style={{ rasterOpacity: 1 }} />}
     </>
+  )
+}
+
+function MapQuickFilters() {
+  const { me } = useMe()
+  const increment = useFeedbackActivity((s) => s.increment)
+  const { filters, setFilters } = useMapFilters()
+  return (
+    <ScrollView showsHorizontalScrollIndicator={false} horizontal className="absolute bottom-0 left-0 right-0 pl-4 pb-4">
+      <View className="flex items-center flex-row space-x-1 pt-4 pr-8">
+        {campingSpotTypes.map((type) => {
+          const isSelected = filters.types.includes(type)
+          return (
+            <TouchableOpacity
+              key={type}
+              activeOpacity={0.8}
+              onPress={() => {
+                setFilters({
+                  ...filters,
+                  types: isSelected ? filters.types.filter((t) => t !== type) : [...filters.types, type],
+                })
+              }}
+              className={merge(
+                "px-2 shadow py-1.5 flex flex-row items-center space-x-1 rounded-full",
+                isSelected ? "bg-background-dark dark:bg-background" : "bg-background dark:bg-background-dark",
+              )}
+            >
+              <SpotIcon
+                type={type}
+                size={12}
+                color={{
+                  light: isSelected ? "white" : "black",
+                  dark: isSelected ? "black" : "white",
+                }}
+              />
+              <Text
+                className={merge("text-xs font-600", isSelected ? "text-white dark:text-black" : "text-black dark:text-white")}
+              >
+                {SPOT_TYPES[type].label}
+              </Text>
+            </TouchableOpacity>
+          )
+        })}
+        {activitySpotTypes.map((type) => {
+          const isSelected = filters.types.includes(type)
+          const shouldRender =
+            (type === "CLIMBING" && me?.isClimber) ||
+            (type === "SURFING" && me?.isSurfer) ||
+            (type === "HIKING_TRAIL" && me?.isHiker) ||
+            (type === "YOGA" && me?.isYogi) ||
+            (type === "PADDLE_KAYAK" && me?.isPaddleBoarder) ||
+            (type === "MOUNTAIN_BIKING" && me?.isMountainBiker)
+          if (!shouldRender) return null
+          return (
+            <TouchableOpacity
+              key={type}
+              activeOpacity={0.8}
+              onPress={() => {
+                setFilters({
+                  ...filters,
+                  types: isSelected ? filters.types.filter((t) => t !== type) : [...filters.types, type],
+                })
+              }}
+              className={merge(
+                "px-2 shadow py-1.5 flex flex-row items-center space-x-1 rounded-full",
+                isSelected ? "bg-background-dark dark:bg-background" : "bg-background dark:bg-background-dark",
+              )}
+            >
+              <SpotIcon
+                type={type}
+                size={12}
+                color={{
+                  light: isSelected ? "white" : "black",
+                  dark: isSelected ? "black" : "white",
+                }}
+              />
+              <Text
+                className={merge("text-xs font-600", isSelected ? "text-white dark:text-black" : "text-black dark:text-white")}
+              >
+                {SPOT_TYPES[type].label}
+              </Text>
+            </TouchableOpacity>
+          )
+        })}
+
+        <Link href="/filters" push asChild>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => {
+              increment()
+            }}
+            className="px-2 relative shadow py-1.5 flex flex-row items-center space-x-1 bg-background dark:bg-background-dark rounded-full"
+          >
+            <Icon icon={Settings2} size={12} />
+            <Text className="text-xs font-600">More</Text>
+            {filters.types.length > 0 && (
+              <View className="absolute -top-1 -right-1 flex items-center justify-center bg-primary rounded-full sq-4">
+                <Text className="text-white text-xxs leading-3 text-center font-700">{filters.types.length}</Text>
+              </View>
+            )}
+          </TouchableOpacity>
+        </Link>
+      </View>
+    </ScrollView>
   )
 }

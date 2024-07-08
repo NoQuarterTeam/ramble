@@ -15,6 +15,7 @@ export const MapView = React.forwardRef<Mapbox.MapView, MapViewProps & { childre
       <Mapbox.MapView
         logoEnabled={false}
         compassEnabled
+        attributionPosition={{ top: 0, left: 10 }}
         // pitchEnabled={false}
         ref={mapRef}
         compassFadeWhenNorth
