@@ -354,7 +354,7 @@ importers:
         version: 1.1.1
       '@vercel/functions':
         specifier: ^1.0.2
-        version: 1.3.0
+        version: 1.4.0
       axios:
         specifier: 1.7.2
         version: 1.7.2
@@ -493,7 +493,7 @@ importers:
         version: 7.0.0
       '@vercel/functions':
         specifier: ^1.0.2
-        version: 1.3.0
+        version: 1.4.0
       dayjs:
         specifier: 1.11.11
         version: 1.11.11
@@ -8230,9 +8230,14 @@ packages:
     resolution: {integrity: sha512-NtKiIbn9Cq6HWGy+qRudz28mz5nxfOJWls5Pnckjw1yCfSX8rhXdvY/il3Sy3Zd5n/sKCM2h7VSCCpJF/oaDrQ==}
     dev: false
 
-  /@vercel/functions@1.3.0:
-    resolution: {integrity: sha512-CD+EgnNxwNtwNUWGrRmanAph/JJQWA5/NLGUt4uyqLp5qXIaaOhy716SSW/0x5s0UY0epwkS7lx9Tsk/ociQUg==}
+  /@vercel/functions@1.4.0:
+    resolution: {integrity: sha512-Ln6SpIkms1UJg306X2kbEMyG9ol+mjDr2xx389cvsBxgFyFMI9Bm+LYOG4N3TSik4FI59MECyyc4oz7AIAYmqQ==}
     engines: {node: '>= 16'}
+    peerDependencies:
+      '@aws-sdk/credential-provider-web-identity': '*'
+    peerDependenciesMeta:
+      '@aws-sdk/credential-provider-web-identity':
+        optional: true
     dev: false
 
   /@web3-storage/multipart-parser@1.0.0:
