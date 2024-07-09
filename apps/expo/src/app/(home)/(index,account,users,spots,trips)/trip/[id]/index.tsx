@@ -455,6 +455,8 @@ function TripImageSync({
             }
             mediaToSync.push(mediaWithData)
           } catch (error) {
+            console.log(error)
+
             toast({ title: "Error syncing media", type: "error" })
             Sentry.captureException(error)
           }
@@ -471,7 +473,7 @@ function TripImageSync({
             const payload = { path, thumbnailPath, ...media }
             uploadMedia({ tripId: id, media: payload })
           } catch (error) {
-            toast({ title: "Error syncing media", type: "error" })
+            toast({ title: "Error uploading media", type: "error" })
             Sentry.captureException(error)
           }
         }

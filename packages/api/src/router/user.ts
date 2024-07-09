@@ -89,7 +89,7 @@ export const userRouter = createTRPCRouter({
       where: {
         deletedAt: null,
         isLocationPrivate: false,
-        updatedAt: { gt: dayjs().subtract(1, "month").toDate() },
+        updatedAt: { gt: dayjs().subtract(3, "month").toDate() },
         latitude: { not: null, gt: coords.minLat, lt: coords.maxLat },
         longitude: { not: null, gt: coords.minLng, lt: coords.maxLng },
       },

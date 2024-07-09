@@ -68,6 +68,7 @@ export default function TripMedia() {
 
   const { mutate: uploadMedia } = api.trip.media.upload.useMutation({
     onSuccess: (timestamp) => {
+      utils.trip.mine.refetch()
       utils.trip.detail.setData({ id }, (prev) => (prev ? { ...prev, latestMediaTimestamp: timestamp } : prev))
       refetch()
     },
@@ -131,8 +132,9 @@ export default function TripMedia() {
         uploadMedia({ tripId: id, media: data })
       }
     } catch (error) {
+      console.log(error)
       Sentry.captureException(error)
-      toast({ title: "Error syncing media", type: "error" })
+      toast({ title: "Error uploading media", type: "error" })
       refetch()
     } finally {
       setIsLoadingLibrary(false)
