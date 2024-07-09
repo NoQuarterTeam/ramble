@@ -319,16 +319,15 @@ function MapContainer() {
       </MapView>
 
       {(spotsLoading || isRefetching) && (
-        <View
-          pointerEvents="none"
-          className="absolute shadow top-14 right-4 flex flex-col items-center justify-center rounded-sm bg-white p-2 dark:bg-gray-800"
-        >
-          <Spinner />
-        </View>
+        <SafeAreaView pointerEvents="none" className="absolute top-2 right-4">
+          <View className="bg-background p-2 dark:bg-background-dark rounded-sm">
+            <Spinner />
+          </View>
+        </SafeAreaView>
       )}
 
       {weather && (
-        <SafeAreaView edges={["top"]} className="absolute top-16 right-4 left-4">
+        <SafeAreaView pointerEvents="none" edges={["top"]} className="absolute top-16 right-4 left-4">
           <View className=" w-12 h-7 shadow flex flex-row items-center justify-center rounded-sm bg-background dark:bg-background-dark">
             <Image
               style={{ width: 28, height: 24 }}
