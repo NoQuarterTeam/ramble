@@ -16,7 +16,7 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
 
   const searchWidth = useSharedValue(0)
   const animatedStyles = useAnimatedStyle(() => ({
-    width: withTiming(searchWidth.value, { duration: 100 }),
+    width: withTiming(searchWidth.value, { duration: 200 }),
   }))
 
   const { data, isFetching } = api.mapbox.getPlaces.useQuery({ search }, { enabled: !!search })
@@ -33,8 +33,8 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
   return (
     <>
       {data && !!search && (
-        <SafeAreaView edges={["top"]} className="absolute top-2 right-4 left-4">
-          <View className="rounded-[24px] bg-gray-50 p-2 dark:bg-gray-900">
+        <SafeAreaView edges={["top"]} className="absolute top-14 right-4 left-4">
+          <View className="rounded-sm bg-background dark:bg-background-dark">
             {data.map((item) => (
               <Button
                 onPress={() => {
@@ -44,7 +44,8 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
                 }}
                 key={item.name}
                 variant="ghost"
-                className="h-auto w-full justify-start py-2 text-left"
+                textClassName="text-sm text-left"
+                className="h-auto bg-background dark:bg-background-dark w-full justify-start py-1"
               >
                 {item.name}
               </Button>
@@ -55,22 +56,22 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
       <SafeAreaView edges={["top"]} pointerEvents="box-none" className="absolute top-2 left-4">
         <Animated.View
           style={[animatedStyles]}
-          className="flex h-12 flex-row items-center justify-between overflow-hidden rounded-full bg-background pl-12 shadow-lg dark:bg-background-dark"
+          className="flex h-10 flex-row items-center justify-between overflow-hidden rounded-sm bg-background pl-10 shadow-lg dark:bg-background-dark"
         >
           <TextInput
             value={search}
             onChangeText={setSearch}
             ref={inputRef}
             placeholder="Search a location"
-            className="font-500 text-black dark:text-white"
+            className="font-500 pl-2 text-black bg-background dark:bg-background-dark dark:text-white"
             placeholderTextColor="#666"
           />
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={onClear}
-            className="sq-12 flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
+            className="sq-10 flex flex-row items-center justify-center rounded-sm bg-background dark:bg-background-dark"
           >
-            <Icon icon={X} size={22} />
+            <Icon icon={X} size={20} />
           </TouchableOpacity>
         </Animated.View>
       </SafeAreaView>
@@ -81,9 +82,9 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
             searchWidth.value = width - 32
             inputRef.current?.focus()
           }}
-          className="sq-12 shadow flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
+          className="sq-10 shadow flex flex-row items-center justify-center rounded-sm bg-background dark:bg-background-dark"
         >
-          {isFetching ? <Spinner /> : <Icon icon={Search} size={22} />}
+          {isFetching ? <Spinner /> : <Icon icon={Search} size={20} />}
         </TouchableOpacity>
       </SafeAreaView>
     </>

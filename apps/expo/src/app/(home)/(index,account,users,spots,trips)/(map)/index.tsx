@@ -200,7 +200,7 @@ function MapContainer() {
                 activeOpacity={0.7}
                 onPress={onPress}
                 className={join(
-                  "flex items-center justify-center rounded-full border border-primary-100 bg-primary-700",
+                  "flex items-center justify-center rounded-sm border border-primary-100 bg-primary-700",
                   point.properties.point_count > 150
                     ? "sq-20"
                     : point.properties.point_count > 75
@@ -232,7 +232,7 @@ function MapContainer() {
                 if (!me) return
                 router.push(`/(home)/(index)/${user.username}/(profile)`)
               }}
-              className="sq-8 flex items-center justify-center overflow-hidden rounded-full border border-primary-200 bg-primary-700"
+              className="sq-8 flex items-center justify-center overflow-hidden rounded-sm border border-primary-200 bg-primary-700"
             >
               {user.avatar ? (
                 <OptimizedImage
@@ -310,7 +310,7 @@ function MapContainer() {
       {(spotsLoading || isRefetching) && (
         <View
           pointerEvents="none"
-          className="absolute shadow top-14 right-4 flex flex-col items-center justify-center rounded-full bg-white p-2 dark:bg-gray-800"
+          className="absolute shadow top-14 right-4 flex flex-col items-center justify-center rounded-sm bg-white p-2 dark:bg-gray-800"
         >
           <Spinner />
         </View>
@@ -321,21 +321,16 @@ function MapContainer() {
           camera.current?.setCamera({ animationDuration: 600, zoomLevel: 14, centerCoordinate: center })
         }}
       />
+      <MapQuickFilters />
 
-      <View pointerEvents="box-none" className="absolute bottom-14 right-3 flex space-y-2">
-        <TouchableOpacity
-          onPress={handleSetUserLocation}
-          className="sq-12 flex items-center justify-center rounded-full bg-background dark:bg-background-dark"
-        >
-          <Icon icon={Navigation} size={20} />
-        </TouchableOpacity>
+      <View pointerEvents="box-none" className="absolute bottom-[50px] left-2 right-2 flex flex-row items-end justify-between">
         <Link push href="/layers" asChild>
           <TouchableOpacity
             onPress={() => increment()}
             activeOpacity={0.8}
-            className="sq-12 shadow flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
+            className="sq-9 shadow flex flex-row items-center justify-center rounded-sm bg-background dark:bg-background-dark"
           >
-            <Icon icon={Layers} size={20} />
+            <Icon icon={Layers} size={18} />
           </TouchableOpacity>
         </Link>
         <TouchableOpacity
@@ -344,12 +339,17 @@ function MapContainer() {
             increment()
             router.push("/new/")
           }}
-          className="shadow sq-12 rounded-full bg-primary flex items-center justify-center"
+          className="shadow sq-12 rounded-sm bg-primary flex items-center justify-center"
         >
           <Icon icon={PlusCircle} size={20} color="white" />
         </TouchableOpacity>
+        <TouchableOpacity
+          onPress={handleSetUserLocation}
+          className="sq-9 flex items-center justify-center rounded-sm bg-background dark:bg-background-dark"
+        >
+          <Icon icon={Navigation} size={18} />
+        </TouchableOpacity>
       </View>
-      <MapQuickFilters />
       {activeSpotId && <SpotPreview id={activeSpotId} onSetSpotId={setActiveSpotId} />}
       {selectedBioRegion && <BioRegionPreview id={selectedBioRegion} onClose={handleCloseBioRegionPreview} />}
     </>
@@ -385,8 +385,8 @@ function MapQuickFilters() {
   const increment = useFeedbackActivity((s) => s.increment)
   const { filters, setFilters } = useMapFilters()
   return (
-    <ScrollView showsHorizontalScrollIndicator={false} horizontal className="absolute bottom-0 left-0 right-0 pl-4 pb-4">
-      <View className="flex items-center flex-row space-x-1 pt-4 pr-8">
+    <ScrollView showsHorizontalScrollIndicator={false} horizontal className="absolute bottom-0 left-0 right-0 pl-2 pb-2">
+      <View pointerEvents="box-none" className="flex items-center flex-row space-x-1 pt-4 pr-4">
         {campingSpotTypes.map((type) => {
           const isSelected = filters.types.includes(type)
           return (
@@ -400,7 +400,9 @@ function MapQuickFilters() {
                 })
               }}
               className={merge(
-                "px-2 shadow py-1.5 flex flex-row items-center space-x-1 rounded-full",
+                "px-3 shadow py-2 flex flex-row items-center space-x-1 rounded-sm bg-background dark:bg-background-dark",
+                // "border border-background dark:border-background-dark",
+                // isSelected ? "border border-black dark:border-white" : "border-transparent",
                 isSelected ? "bg-background-dark dark:bg-background" : "bg-background dark:bg-background-dark",
               )}
             >
@@ -441,7 +443,9 @@ function MapQuickFilters() {
                 })
               }}
               className={merge(
-                "px-2 shadow py-1.5 flex flex-row items-center space-x-1 rounded-full",
+                "px-3 shadow py-2 flex flex-row items-center space-x-1 rounded-sm bg-background dark:bg-background-dark",
+                // "border border-background dark:border-background-dark",
+                // isSelected ? "border border-black dark:border-white" : "border-transparent",
                 isSelected ? "bg-background-dark dark:bg-background" : "bg-background dark:bg-background-dark",
               )}
             >
@@ -468,12 +472,12 @@ function MapQuickFilters() {
             onPress={() => {
               increment()
             }}
-            className="px-2 relative shadow py-1.5 flex flex-row items-center space-x-1 bg-background dark:bg-background-dark rounded-full"
+            className="px-3 relative shadow py-2 flex flex-row items-center space-x-1 bg-background dark:bg-background-dark rounded-sm"
           >
             <Icon icon={Settings2} size={12} />
             <Text className="text-xs font-600">More</Text>
             {filters.types.length > 0 && (
-              <View className="absolute -top-1 -right-1 flex items-center justify-center bg-primary rounded-full sq-4">
+              <View className="absolute -top-1 -right-1 flex items-center justify-center bg-primary rounded-sm sq-4">
                 <Text className="text-white text-xxs leading-3 text-center font-700">{filters.types.length}</Text>
               </View>
             )}
