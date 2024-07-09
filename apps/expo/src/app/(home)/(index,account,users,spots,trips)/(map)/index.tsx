@@ -232,7 +232,7 @@ function MapContainer() {
                 if (!me) return
                 router.push(`/(home)/(index)/${user.username}/(profile)`)
               }}
-              className="sq-8 flex items-center justify-center overflow-hidden rounded-sm border border-primary-200 bg-primary-700"
+              className="sq-8 flex items-center justify-center overflow-hidden rounded-full border border-primary-200 bg-primary-700"
             >
               {user.avatar ? (
                 <OptimizedImage
