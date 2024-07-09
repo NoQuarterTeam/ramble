@@ -19,7 +19,7 @@ import { useMapCoords } from "~/lib/hooks/useMapCoords"
 
 export default function AddImageLocation() {
   const router = useRouter()
-  const { id, imageId } = useLocalSearchParams<{ id: string; imageId: string }>()
+  const { id, mediaId } = useLocalSearchParams<{ id: string; mediaId: string }>()
 
   const initialCoords = useMapCoords((s) => s.coords)
   const [coords, setCoords] = React.useState<Position | undefined>(initialCoords)
@@ -53,15 +53,18 @@ export default function AddImageLocation() {
   }
 
   const { mutate, isPending: saveLoading } = api.trip.media.update.useMutation({
+    onError: (e) => {
+      console.log(e)
+    },
     onSuccess: () => {
       if (!coords) return
-      void utils.trip.media.byId.refetch({ id: imageId })
+      void utils.trip.media.byId.refetch({ id: mediaId })
       utils.trip.media.all.setData({ skip: 0, tripId: id }, (prev) =>
         prev
           ? {
               total: prev.total,
               items: prev.items.map((media) =>
-                media.id === imageId ? { ...media, latitude: coords[1]!, longitude: coords[0]! } : media,
+                media.id === mediaId ? { ...media, latitude: coords[1]!, longitude: coords[0]! } : media,
               ),
             }
           : prev,
@@ -72,12 +75,13 @@ export default function AddImageLocation() {
   })
 
   const handleSelectLocation = () => {
+    if (!mediaId) return toast({ title: "Image not found" })
     if (!coords) return toast({ title: "Please select a location" })
-    mutate({ id: imageId, longitude: coords[0]!, latitude: coords[1]! })
+    mutate({ id: mediaId, longitude: coords[0]!, latitude: coords[1]! })
   }
 
   return (
-    <ModalView edges={["top", "bottom"]} title="choose a location">
+    <ModalView shouldRenderToast edges={["top", "bottom"]} title="choose a location">
       <View className="relative flex-1">
         <MapView
           className="overflow-hidden rounded-xs"
