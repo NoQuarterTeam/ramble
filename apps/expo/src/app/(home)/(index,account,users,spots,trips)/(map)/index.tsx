@@ -20,6 +20,7 @@ import {
   RasterSource,
 } from "@rnmapbox/maps"
 import { keepPreviousData } from "@tanstack/react-query"
+import { Image } from "expo-image"
 import * as Location from "expo-location"
 import { Link, useRouter } from "expo-router"
 import { Layers, Navigation, PlusCircle, Settings2, User } from "lucide-react-native"
@@ -148,6 +149,7 @@ function MapContainer() {
       minLat: properties.bounds.sw[1] || 0,
       maxLng: properties.bounds.ne[0] || 0,
       maxLat: properties.bounds.ne[1] || 0,
+      center: properties.center,
       zoom: properties.zoom,
     })
   }
@@ -267,6 +269,14 @@ function MapContainer() {
     setSelectedBioRegion(selectedBioRegion)
   }
 
+  const { data: weather } = api.weather.byCoords.useQuery(
+    {
+      longitude: mapSettings?.center?.[1] || INITIAL_LONGITUDE,
+      latitude: mapSettings?.center?.[1] || INITIAL_LATITUDE,
+    },
+    { enabled: !!mapSettings?.center && !!me, placeholderData: keepPreviousData },
+  )
+
   return (
     <>
       <MapView
@@ -316,11 +326,25 @@ function MapContainer() {
         </View>
       )}
 
+      {weather && (
+        <View className="absolute top-[124px] left-4">
+          <View className="w-12 h-7 shadow flex flex-row items-center justify-center rounded-sm bg-background dark:bg-background-dark">
+            <Image
+              style={{ width: 28, height: 24 }}
+              contentFit="cover"
+              contentPosition="left"
+              source={{ uri: `https://openweathermap.org/img/wn/${weather.icon}@2x.png` }}
+            />
+            <Text className="text-xxs font-600 w-[20px] leading-[10px] h-[10px]">{weather.temp?.toFixed(0)}°</Text>
+          </View>
+        </View>
+      )}
       <MapSearch
         onSearch={(center) => {
           camera.current?.setCamera({ animationDuration: 600, zoomLevel: 14, centerCoordinate: center })
         }}
       />
+
       <MapQuickFilters />
 
       <View pointerEvents="box-none" className="absolute bottom-[50px] left-2 right-2 flex flex-row items-end justify-between">

@@ -14,6 +14,7 @@ import { tripRouter } from "./router/trip/trip"
 import { userRouter } from "./router/user"
 import { vanRouter } from "./router/van"
 import { versionRouter } from "./router/version"
+import { weatherRouter } from "./router/weather"
 import { createTRPCRouter } from "./trpc"
 
 export const appRouter = createTRPCRouter({
@@ -33,6 +34,7 @@ export const appRouter = createTRPCRouter({
   user: userRouter,
   van: vanRouter,
   version: versionRouter,
+  weather: weatherRouter,
 })
 
 // export type definition of API

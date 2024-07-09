@@ -33,7 +33,7 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
   return (
     <>
       {data && !!search && (
-        <SafeAreaView edges={["top"]} className="absolute top-14 right-4 left-4">
+        <SafeAreaView edges={["top"]} className="absolute top-[52px] right-4 left-4">
           <View className="rounded-sm bg-background dark:bg-background-dark">
             {data.map((item) => (
               <Button
@@ -56,7 +56,7 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
       <SafeAreaView edges={["top"]} pointerEvents="box-none" className="absolute top-2 left-4">
         <Animated.View
           style={[animatedStyles]}
-          className="flex h-10 flex-row items-center justify-between overflow-hidden rounded-sm bg-background pl-10 shadow-lg dark:bg-background-dark"
+          className="flex h-12 flex-row items-center justify-between overflow-hidden rounded-sm bg-background pl-12 shadow-lg dark:bg-background-dark"
         >
           <TextInput
             value={search}
@@ -69,7 +69,7 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={onClear}
-            className="sq-10 flex flex-row items-center justify-center rounded-sm bg-background dark:bg-background-dark"
+            className="sq-12 flex flex-row items-center justify-center rounded-sm bg-background dark:bg-background-dark"
           >
             <Icon icon={X} size={20} />
           </TouchableOpacity>
@@ -82,7 +82,7 @@ export function MapSearch({ onSearch }: { onSearch: (center: [number, number]) =
             searchWidth.value = width - 32
             inputRef.current?.focus()
           }}
-          className="sq-10 shadow flex flex-row items-center justify-center rounded-sm bg-background dark:bg-background-dark"
+          className="sq-12 shadow flex flex-row items-center justify-center rounded-sm bg-background dark:bg-background-dark"
         >
           {isFetching ? <Spinner /> : <Icon icon={Search} size={20} />}
         </TouchableOpacity>
