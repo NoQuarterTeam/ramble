@@ -272,7 +272,9 @@ export default function TripImage() {
             <View className="flex-1">
               {(!data.latitude || !data.longitude) && (
                 <Link push href={`/${tab}/trip/${id}/media/${mediaId}/add-location`} asChild>
-                  <Icon icon={MapPin} size={20} />
+                  <TouchableOpacity>
+                    <Icon icon={MapPin} size={20} />
+                  </TouchableOpacity>
                 </Link>
               )}
             </View>

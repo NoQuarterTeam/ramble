@@ -32,7 +32,7 @@ export function TripItem({ trip }: Props) {
         router.push(`/(home)/(trips)/trip/${trip.id}`)
       }}
       activeOpacity={0.8}
-      className={join("rounded-sm overflow-hidden border border-gray-200 dark:border-gray-700", isActive && "border-primary-500")}
+      className={join("rounded-sm overflow-hidden border border-gray-200 dark:border-gray-700", isActive && "border-primary")}
     >
       {today.isBefore(trip.startDate) ? (
         <View className="flex items-center justify-center bg-green-800 py-0.5">
@@ -74,12 +74,13 @@ export function TripItem({ trip }: Props) {
         )}
       </View>
       {trip.countryFlags.length > 0 && (
-        <View className="flex p-3 border-t border-gray-100 dark:border-gray-700 flex-row space-x-1 justify-start items-start">
+        <View className="flex p-3 border-t border-gray-100 dark:border-gray-700 flex-row space-x-0.5 justify-start items-start">
           {trip.countryCodes.slice(0, MAX_FLAGS).map((code) => (
             <Image
               key={code}
-              style={{ height: 16, width: 20 }}
+              style={{ height: 16, width: 24 }}
               contentFit="contain"
+              className="rounded-xs border border-gray-100 dark:border-gray-700"
               source={{ uri: `${FULL_WEB_URL}/flags/${code}.png` }}
             />
           ))}
