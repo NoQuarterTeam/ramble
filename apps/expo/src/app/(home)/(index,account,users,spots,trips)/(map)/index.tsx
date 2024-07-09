@@ -27,6 +27,7 @@ import { Layers, Navigation, PlusCircle, Settings2, User } from "lucide-react-na
 import { usePostHog } from "posthog-react-native"
 import * as React from "react"
 import { ScrollView, TouchableOpacity, View, useColorScheme } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
 import { BioRegionPreview } from "~/components/BioRegionPreview"
 import { FeedbackCheck, useFeedbackActivity } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
@@ -327,8 +328,8 @@ function MapContainer() {
       )}
 
       {weather && (
-        <View className="absolute top-[124px] left-4">
-          <View className="w-12 h-7 shadow flex flex-row items-center justify-center rounded-sm bg-background dark:bg-background-dark">
+        <SafeAreaView edges={["top"]} className="absolute top-16 right-4 left-4">
+          <View className=" w-12 h-7 shadow flex flex-row items-center justify-center rounded-sm bg-background dark:bg-background-dark">
             <Image
               style={{ width: 28, height: 24 }}
               contentFit="cover"
@@ -337,7 +338,7 @@ function MapContainer() {
             />
             <Text className="text-xxs font-600 w-[20px] leading-[10px] h-[10px]">{weather.temp?.toFixed(0)}°</Text>
           </View>
-        </View>
+        </SafeAreaView>
       )}
       <MapSearch
         onSearch={(center) => {
