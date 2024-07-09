@@ -3,12 +3,11 @@ import { useRouter } from "expo-router"
 import * as React from "react"
 import { TouchableOpacity, View } from "react-native"
 dayjs.extend(isBetween)
-
 import { createAssetUrl, join } from "@ramble/shared"
 import dayjs from "dayjs"
-
 import { Image } from "expo-image"
 import type { RouterOutputs } from "~/lib/api"
+import { FULL_WEB_URL } from "~/lib/config"
 import { useFeedbackActivity } from "./FeedbackCheck"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
@@ -33,65 +32,60 @@ export function TripItem({ trip }: Props) {
         router.push(`/(home)/(trips)/trip/${trip.id}`)
       }}
       activeOpacity={0.8}
-      className={join("space-y-4 rounded-xs border border-gray-200 p-4 dark:border-gray-700", isActive && "border-primary-500")}
+      className={join("rounded-sm overflow-hidden border border-gray-200 dark:border-gray-700", isActive && "border-primary-500")}
     >
-      <View className="flex flex-row justify-between">
-        <View className="flex-shrink">
-          <Text className="text-xl" numberOfLines={1}>
-            {trip.name}
+      {today.isBefore(trip.startDate) ? (
+        <View className="flex items-center justify-center bg-green-800 py-0.5">
+          <Text className="text-center font-600 text-white text-xs">
+            {daysToGo} day{daysToGo === 1 ? "" : "s"} to go
           </Text>
-          {trip.media.length > 0 && (
-            <View className="relative mt-2" style={{ height: 40 }}>
-              {trip.media.map((media, i) => (
-                <Image
-                  className="absolute top-0 rounded border-background bg-gray-200 dark:bg-gray-700"
-                  key={media.id}
-                  source={{ uri: createAssetUrl(media.thumbnailPath || media.path) }}
-                  style={{
-                    width: 40,
-                    height: 40,
-                    borderWidth: 1.5,
-                    zIndex: -1 * i,
-                    left: i * 25,
-                    transform: [{ scale: 1 - i * 0.1 }, { rotate: `${i === 0 ? -4 : i * 10}deg` }],
-                  }}
-                />
-              ))}
-            </View>
-          )}
         </View>
-        <View>
-          {today.isBefore(trip.startDate) ? (
-            <View className="flex items-center justify-center rounded-full bg-green-800 px-2 py-0.5">
-              <Text className="text-center font-600 text-white text-xs">
-                {daysToGo} day{daysToGo === 1 ? "" : "s"} to go
-              </Text>
-            </View>
-          ) : today.isAfter(trip.endDate) ? null : (
-            <View className="flex items-center justify-center rounded-full bg-primary px-2 py-0.5">
-              <Text className="text-center font-600 text-white text-xs">CURRENT</Text>
-            </View>
-          )}
+      ) : today.isAfter(trip.endDate) ? null : (
+        <View className="flex items-center justify-center bg-primary py-0.5">
+          <Text className="text-center font-600 text-white text-xs">CURRENT</Text>
         </View>
-      </View>
+      )}
 
-      <View className="flex flex-row items-end justify-between">
-        <Text className="text-sm">
-          {dayjs(trip.startDate).format("D MMM YY")} → {dayjs(trip.endDate).format("D MMM YY")}
-        </Text>
-        <TripUsers trip={trip} />
-      </View>
-
-      {trip.countryFlags.length > 0 && (
-        <View className="flex flex-row gap-1 items-center flex-wrap">
-          {trip.countryFlags.slice(0, MAX_FLAGS).map((flag) => (
-            <Text key={flag} className="text-lg">
-              {flag}
+      <View className="space-y-3 p-3">
+        <View className="flex flex-row justify-between items-start">
+          <View>
+            <Text className="text-2xl font-500" numberOfLines={1}>
+              {trip.name}
             </Text>
+            <Text className="text-xs">
+              {dayjs(trip.startDate).format("D MMM YY")} → {dayjs(trip.endDate).format("D MMM YY")}
+            </Text>
+          </View>
+          <View className="flex flex-row items-end justify-between">
+            <TripUsers trip={trip} />
+          </View>
+        </View>
+        {trip.media.length > 0 && (
+          <View className="relative flex flex-row space-x-1">
+            {trip.media.map((media) => (
+              <Image
+                className="rounded-xs bg-gray-200 dark:bg-gray-700"
+                key={media.id}
+                source={{ uri: createAssetUrl(media.thumbnailPath || media.path) }}
+                style={{ width: 40, height: 40 }}
+              />
+            ))}
+          </View>
+        )}
+      </View>
+      {trip.countryFlags.length > 0 && (
+        <View className="flex p-3 border-t border-gray-100 dark:border-gray-700 flex-row space-x-1 justify-start items-start">
+          {trip.countryCodes.slice(0, MAX_FLAGS).map((code) => (
+            <Image
+              key={code}
+              style={{ height: 16, width: 20 }}
+              contentFit="contain"
+              source={{ uri: `${FULL_WEB_URL}/flags/${code}.png` }}
+            />
           ))}
-          {trip.countryFlags.length > MAX_FLAGS && (
+          {trip.countryCodes.length > MAX_FLAGS && (
             <View>
-              <Text className="opacity-70">+{trip.countryFlags.length - MAX_FLAGS}</Text>
+              <Text className="opacity-70">+{trip.countryCodes.length - MAX_FLAGS}</Text>
             </View>
           )}
         </View>

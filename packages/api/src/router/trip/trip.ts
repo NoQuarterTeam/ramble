@@ -35,7 +35,7 @@ export const tripRouter = createTRPCRouter({
         media: {
           where: { deletedAt: null },
           orderBy: { timestamp: "desc" },
-          take: 3,
+          take: 6,
           select: { id: true, path: true, thumbnailPath: true },
         },
       },
@@ -45,12 +45,13 @@ export const tripRouter = createTRPCRouter({
 
     return data.map((trip) => {
       const countryFlags = []
+      const countryCodes = []
       for (const item of trip.items) {
         const flag = COUNTRIES.find((c) => c.code === item.countryCode)?.emoji
-        if (!flag) continue
-        countryFlags.push(flag)
+        if (item.countryCode) countryCodes.push(item.countryCode)
+        if (flag) countryFlags.push(flag)
       }
-      return { ...trip, countryFlags: uniq(countryFlags) }
+      return { ...trip, countryFlags: uniq(countryFlags), countryCodes: uniq(countryCodes) }
     })
   }),
   allWithSavedSpot: protectedProcedure.input(z.object({ spotId: z.string() })).query(async ({ ctx, input }) => {
