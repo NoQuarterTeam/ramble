@@ -2,7 +2,7 @@ import { join } from "@ramble/shared"
 import { type VariantProps, cva } from "class-variance-authority"
 import type * as React from "react"
 
-const tags = cva("text-sm px-3 py-1 flex items-center justify-center rounded-full", {
+const tags = cva("text-sm px-3 py-1 flex items-center justify-center rounded-sm", {
   variants: {
     color: {
       default: "text-white bg-gray-700",
