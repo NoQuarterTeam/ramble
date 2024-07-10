@@ -32,7 +32,13 @@ export function NewSpotModalView({ canGoBack = true, ...props }: Props) {
 
             {props.title ? <BrandHeading className="text-2xl">{props.title}</BrandHeading> : <Text />}
           </View>
-          <TouchableOpacity onPress={() => router.back()} className="p-1">
+          <TouchableOpacity
+            onPress={() => {
+              if (router.canDismiss()) router.dismissAll()
+              if (router.canGoBack()) router.back()
+            }}
+            className="p-1"
+          >
             <Icon icon={X} size={24} />
           </TouchableOpacity>
         </View>

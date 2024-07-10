@@ -130,11 +130,12 @@ export default function EditSpotLocationScreen() {
         </View>
 
         <View className="absolute right-5 bottom-12 left-5 flex flex-row items-center justify-between space-y-2">
-          <View className="w-12" />
+          <View className="w-10" />
 
           <Button
-            className="rounded-full bg-background"
+            className="bg-background"
             textClassName="text-black"
+            size="sm"
             onPress={() => {
               if (!me) return
               if (!me.isVerified) return toast({ title: "Please verify your account" })
@@ -154,9 +155,9 @@ export default function EditSpotLocationScreen() {
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={handleSetUserLocation}
-            className="sq-12 flex flex-row items-center justify-center rounded-full bg-background"
+            className="sq-10 flex flex-row items-center justify-center rounded-sm bg-background"
           >
-            <Icon icon={Navigation} size={20} color="black" />
+            <Icon icon={Navigation} size={16} color="black" />
           </TouchableOpacity>
         </View>
       </View>

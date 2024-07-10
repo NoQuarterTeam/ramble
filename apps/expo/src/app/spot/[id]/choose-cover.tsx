@@ -71,7 +71,7 @@ function ImageList({ spot }: { spot: NonNullable<RouterOutputs["spot"]["images"]
       />
       {coverId && (
         <View className="absolute right-0 bottom-8 left-0 flex items-center justify-center">
-          <Button isLoading={isPending} className="w-[100px] rounded-full" onPress={() => mutate({ id: spot.id, coverId })}>
+          <Button isLoading={isPending} className="w-[100px]" onPress={() => mutate({ id: spot.id, coverId })}>
             Save
           </Button>
         </View>

@@ -161,9 +161,7 @@ export default function SpotReportTypeScreen() {
       </ScrollView>
       {type && (
         <View className="absolute right-4 bottom-12 left-4 flex items-center justify-center space-y-2">
-          <Button className="rounded-full" onPress={onClose}>
-            Continue as {SPOT_TYPE_OPTIONS.find((spotType) => spotType.value === type)?.label}
-          </Button>
+          <Button onPress={onClose}>Continue as {SPOT_TYPE_OPTIONS.find((spotType) => spotType.value === type)?.label}</Button>
         </View>
       )}
     </ReportSpotModalView>

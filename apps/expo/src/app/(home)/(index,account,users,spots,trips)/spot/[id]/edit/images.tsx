@@ -78,7 +78,7 @@ export default function EditSpotImagesScreen() {
       {images.length > 0 && (
         <View className="absolute right-4 bottom-12 left-4 flex items-center justify-center space-y-2">
           <Button
-            className="rounded-full"
+            size="sm"
             onPress={() => {
               const searchParams = new URLSearchParams({ ...params, images: images.join(",") })
               router.push(`/${tab}/spot/${id}/edit/confirm?${searchParams}`)

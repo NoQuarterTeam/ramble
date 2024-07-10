@@ -57,7 +57,7 @@ export default function SpotReportLocationScreen() {
           <Button
             size="sm"
             variant="link"
-            className="h-5 rounded-full"
+            className="h-5"
             onPress={() => {
               router.navigate(`/${tab}/spot/${id}/report?${new URLSearchParams({ ...params, isLocationUnknown: "true" })}`)
             }}
@@ -86,7 +86,7 @@ export default function SpotReportLocationScreen() {
         >
           <View className="flex-1" pointerEvents="box-none" />
           <View className="flex-1 items-center justify-center">
-            <Button className="rounded-full bg-background" textClassName="text-black" onPress={onClose}>
+            <Button className="bg-background" textClassName="text-black" onPress={onClose}>
               Done
             </Button>
           </View>
@@ -94,7 +94,7 @@ export default function SpotReportLocationScreen() {
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={handleSetUserLocation}
-              className="sq-12 flex flex-row items-center justify-center rounded-full bg-background"
+              className="sq-12 flex flex-row items-center justify-center rounded-sm bg-background"
             >
               <Icon icon={Navigation} size={20} color="black" />
             </TouchableOpacity>
