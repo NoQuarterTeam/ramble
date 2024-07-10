@@ -31,6 +31,7 @@ import * as DropdownMenu from "zeego/dropdown-menu"
 
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createAssetUrl, join } from "@ramble/shared"
 
+import colors from "@ramble/tailwind-config/src/colors"
 import { keepPreviousData } from "@tanstack/react-query"
 import { useFeedbackActivity } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
@@ -223,7 +224,10 @@ export default function TripDetailScreen() {
       >
         {data?.line && (
           <ShapeSource id="directions" shape={data.line.geometry}>
-            <LineLayer id="line" style={{ lineDasharray: [0.5, 2], lineColor: "white", lineCap: "round", lineWidth: 2 }} />
+            <LineLayer
+              id="line"
+              style={{ lineDasharray: [0.5, 2], lineColor: colors.primary.DEFAULT, lineCap: "round", lineWidth: 2 }}
+            />
           </ShapeSource>
         )}
         {/* {data?.directions && (
@@ -737,7 +741,7 @@ function ListHeader({ trip }: { trip: RouterOutputs["trip"]["detail"]["trip"] })
     <View className="flex h-full items-center justify-center">
       <View
         style={{ width: HEADER_FOOTER_WIDTH, height: HEADER_FOOTER_WIDTH }}
-        className="flex items-center justify-center space-y-2 rounded-md shadow bg-background p-2 dark:bg-background-dark"
+        className="flex items-center justify-center space-y-2 rounded-sm shadow bg-background p-2 dark:bg-background-dark"
       >
         <Icon icon={Home} size={16} />
         <Text className="text-xxs">{dayjs(trip.startDate).format("D MMM YY")}</Text>
@@ -759,7 +763,7 @@ function ListFooter({ trip }: { trip: RouterOutputs["trip"]["detail"]["trip"] })
       <View className="flex h-full items-center justify-center">
         <View
           style={{ width: HEADER_FOOTER_WIDTH, height: HEADER_FOOTER_WIDTH }}
-          className="flex items-center justify-center space-y-2 rounded-md shadow bg-background p-2 dark:bg-background-dark"
+          className="flex items-center justify-center space-y-2 rounded-sm shadow bg-background p-2 dark:bg-background-dark"
         >
           <Icon icon={Flag} size={16} />
           <Text className="text-xxs">{dayjs(trip.endDate).format("D MMM YY")}</Text>

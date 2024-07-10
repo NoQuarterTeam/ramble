@@ -1,4 +1,4 @@
-import { Camera, LocationPuck, type MapState, type MapView as MapType, StyleURL } from "@rnmapbox/maps"
+import { Camera, LocationPuck, type MapState, type MapView as MapType } from "@rnmapbox/maps"
 import type { Position } from "@rnmapbox/maps/lib/typescript/src/types/Position"
 import { keepPreviousData } from "@tanstack/react-query"
 import * as Location from "expo-location"
@@ -87,7 +87,6 @@ export default function AddImageLocation() {
           className="overflow-hidden rounded-xs"
           onMapIdle={onMapMove}
           ref={mapRef}
-          styleURL={StyleURL.SatelliteStreet}
           compassPosition={{ top: 54, right: 8 }}
         >
           <LocationPuck />
@@ -140,7 +139,7 @@ export default function AddImageLocation() {
           style={{ transform: [{ translateX: -15 }, { translateY: -15 }] }}
           className="absolute top-1/2 left-1/2 flex items-center justify-center"
         >
-          <Icon icon={CircleDot} size={30} color="white" />
+          <Icon icon={CircleDot} size={30} />
         </View>
 
         <View

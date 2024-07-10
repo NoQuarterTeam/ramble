@@ -39,7 +39,7 @@ function ThemeSwitcher(props: { styleUrl: string }) {
   React.useEffect(() => {
     setIsLoaded(false)
     if (props.styleUrl === "mapbox://styles/mapbox/standard") {
-      new Promise((resolve) => setTimeout(resolve, 1000)).then(() => setIsLoaded(true))
+      new Promise((resolve) => setTimeout(resolve, 0)).then(() => setIsLoaded(true))
     }
   }, [props.styleUrl])
 
