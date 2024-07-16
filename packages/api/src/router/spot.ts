@@ -14,6 +14,7 @@ import {
   spotItemDistanceFromMeField,
   spotItemSelectFields,
   spotListQuery,
+  updateLoopsContact,
   verifiedSpotWhereClause,
 } from "@ramble/server-services"
 import type { SpotItemType } from "@ramble/shared"
@@ -316,6 +317,7 @@ export const spotRouter = createTRPCRouter({
           amenities: amenities ? { create: amenities } : undefined,
         },
       })
+      updateLoopsContact({ email: ctx.user.email, hasCreatedSpot: true })
       if (coverImage || imageData?.[0]?.path) {
         await ctx.prisma.spot.update({
           where: { id: spot.id },

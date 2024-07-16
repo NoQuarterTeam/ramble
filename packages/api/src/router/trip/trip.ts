@@ -7,6 +7,7 @@ import {
   sendSpotAddedToTripNotification,
   sendTripSpotAddedNotification,
   sendTripStopAddedNotification,
+  updateLoopsContact,
 } from "@ramble/server-services"
 import { uniq } from "@ramble/shared"
 import { TRPCError } from "@trpc/server"
@@ -83,6 +84,7 @@ export const tripRouter = createTRPCRouter({
     const trip = await ctx.prisma.trip.create({
       data: { ...input, creatorId: ctx.user.id, users: { connect: { id: ctx.user.id } } },
     })
+    updateLoopsContact({ email: ctx.user.email, hasCreatedTrip: true })
     await sendSlackMessage(`🚌 New trip created by ${ctx.user.username}!`)
     return trip
   }),

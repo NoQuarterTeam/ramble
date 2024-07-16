@@ -11,6 +11,7 @@
     "crag": "pnpm with-env ts-node ./src/scraping/get-thecrag.ts",
     "gpt": "pnpm with-env ts-node ./src/export/ramble-gpt.ts",
     "users": "pnpm with-env ts-node ./src/export/initial-users.ts",
+    "loops": "pnpm with-env ts-node ./src/format/update-loops.ts",
     "with-env": "dotenv -e ../../../.env --"
   },
   "sideEffects": false,
