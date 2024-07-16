@@ -14,7 +14,7 @@ export function Nav() {
         </Link>
 
         <div className="hidden md:flex items-center space-x-1">
-          <NavLink href="/">Map</NavLink>
+          <NavLink href="/map">Map</NavLink>
           <NavLink href="/spots">Latest spots</NavLink>
           {/* <NavLink href="/guides">Guides</NavLink> */}
         </div>
@@ -24,7 +24,7 @@ export function Nav() {
           <AdminLink />
         </Suspense> */}
         <NavLink href="/blog">Blog</NavLink>
-        <NavLink href="/about">About</NavLink>
+        <NavLink href="/">About</NavLink>
       </div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
