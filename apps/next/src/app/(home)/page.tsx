@@ -7,11 +7,20 @@ import Link from "next/link"
 export default function Home() {
   return (
     <div className="dark bg-background font-serif text-white w-screen overflow-hidden">
-      <div className="w-screen space-y-2 bg-[url('/landing/hero1.png')] bg-cover px-2 md:px-12 pt-4 md:pt-32">
-        <h1 className="text-[100px] lg:text-[200px] xl:text-[300px] lg:leading-[250px] italic font-bold text-primary">ramble</h1>
+      <div className="w-screen relative space-y-2 bg-[url('/landing/hero1.png')] bg-cover px-2 md:px-12 pt-4 md:pt-32">
+        <h1 className="text-[calc(100vw/4)] lg:leading-[250px] italic font-bold text-primary">ramble</h1>
+        <Image
+          src="/landing/hero0.png"
+          alt="hero0"
+          width={1000}
+          height={7500}
+          className="absolute w-screen top-44 md:top-[400px] right-32 md:right-[300px]"
+        />
+
         <p className="text-2xl md:pl-4 font-semibold max-w-md">
           community for the modern van traveler looking for genuine connections and meaningful experiences.
         </p>
+
         <p className="text-3xl pt-[1000px] pb-40 font-semibold max-w-3xl">
           a new generation of remote working, digitally connected travelers looking for untouched nature, genuine connection and a
           more holistic way to travel and live.
