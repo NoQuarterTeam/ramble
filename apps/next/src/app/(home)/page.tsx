@@ -14,7 +14,7 @@ export default function Home() {
           alt="hero0"
           width={1000}
           height={7500}
-          className="absolute w-screen top-44 md:top-[400px] right-32 md:right-[300px]"
+          className="absolute w-screen pointer-events-none top-44 md:top-[400px] right-32 md:right-[300px]"
         />
 
         <p className="text-2xl md:pl-4 font-semibold max-w-md">
