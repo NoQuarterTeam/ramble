@@ -21,7 +21,7 @@
     "@slack/web-api": "7.3.1",
     "bcryptjs": "2.4.3",
     "blurhash": "2.0.5",
-    "dayjs": "1.11.11",
+    "dayjs": "1.11.12",
     "expo-server-sdk": "^3.10.0",
     "flickr-sdk": "7.0.0-beta.7",
     "jsonwebtoken": "9.0.2",
