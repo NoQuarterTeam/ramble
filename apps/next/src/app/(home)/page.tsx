@@ -94,25 +94,25 @@ export default function Home() {
           </div>
           <div className="relative flex-1">
             <Image
-              src="/landing/hero7.png"
-              alt="hero7"
+              src="/landing/hero8.png"
+              alt="hero8"
               width={250}
-              height={500}
-              className="rounded-2xl object-cover h-[500px] absolute top-1/2 left-0 -translate-y-[50%]"
+              height={543}
+              className="object-cover w-[250px] absolute top-1/2 left-0 -translate-y-[50%]"
             />
             <Image
-              src="/landing/hero7.png"
-              alt="hero7"
+              src="/landing/hero10.png"
+              alt="hero10"
               width={250}
-              height={500}
-              className="rounded-2xl object-cover h-[500px] absolute top-1/2 right-0 -translate-y-[50%]"
+              height={543}
+              className="object-cover w-[250px] absolute top-1/2 right-0 -translate-y-[50%]"
             />
             <Image
-              src="/landing/hero6.png"
-              alt="hero7"
+              src="/landing/hero9.png"
+              alt="hero9"
               width={300}
               height={600}
-              className="rounded-2xl object-cover h-[600px] absolute top-1/2 right-1/2 -translate-y-1/2 translate-x-1/2"
+              className="object-cover w-[300px] absolute top-1/2 right-1/2 -translate-y-1/2 translate-x-1/2"
             />
           </div>
         </PageContainer>
