@@ -1,4 +1,3 @@
-import { AppCta } from "@/components/AppCta"
 import { PageContainer } from "@/components/PageContainer"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/Accordion"
 import { Instagram } from "lucide-react"
@@ -58,9 +57,65 @@ export default function Home() {
         <div className="flex justify-end">
           <Image src="/landing/hero7.png" alt="hero7" width={350} height={350} className="object-cover rotate-[16deg]" />
         </div>
-        <div className="flex items-center justify-center py-20">
-          <AppCta />
-        </div>
+      </div>
+
+      <div className="flex mb-40 items-center justify-center py-20 bg-primary">
+        <PageContainer className="flex w-full justify-between gap-4">
+          <div className="flex flex-col flex-1 gap-4 items-center">
+            <p className="text-white text-6xl font-bold italic">download now</p>
+            <div className="flex items-center justify-center space-x-2">
+              <Link
+                target="_blank"
+                rel="noreferer noopener"
+                href="https://apps.apple.com/app/ramble-van-travel-app/id6468265289?itsct=apps_box_badge&amp;itscg=30200"
+              >
+                <img
+                  src="https://ramble.guide/apple.png"
+                  alt="Download on the App Store"
+                  width={200}
+                  height={80}
+                  className="object-contain"
+                />
+              </Link>
+              <Link
+                target="_blank"
+                rel="noreferer noopener"
+                href="https://play.google.com/store/apps/details?id=co.noquarter.ramble&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"
+              >
+                <img
+                  width={250}
+                  height={100}
+                  className="object-contain"
+                  alt="Get it on Google Play"
+                  src="https://ramble.guide/google.png"
+                />
+              </Link>
+            </div>
+          </div>
+          <div className="relative flex-1">
+            <Image
+              src="/landing/hero7.png"
+              alt="hero7"
+              width={250}
+              height={500}
+              className="rounded-2xl object-cover h-[500px] absolute top-1/2 left-0 -translate-y-[50%]"
+            />
+            <Image
+              src="/landing/hero7.png"
+              alt="hero7"
+              width={250}
+              height={500}
+              className="rounded-2xl object-cover h-[500px] absolute top-1/2 right-0 -translate-y-[50%]"
+            />
+            <Image
+              src="/landing/hero6.png"
+              alt="hero7"
+              width={300}
+              height={600}
+              className="rounded-2xl object-cover h-[600px] absolute top-1/2 right-1/2 -translate-y-1/2 translate-x-1/2"
+            />
+          </div>
+        </PageContainer>
       </div>
       <div className="border-t">
         <PageContainer className="flex justify-between px-4 py-6">
