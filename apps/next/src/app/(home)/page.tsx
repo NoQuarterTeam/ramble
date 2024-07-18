@@ -8,12 +8,12 @@ export default function Home() {
   return (
     <div className="dark bg-background font-serif text-white w-screen overflow-hidden">
       <div className="w-screen relative space-y-2 bg-[url('/landing/hero1.png')] bg-cover px-2 md:px-12 pt-4 md:pt-32">
-        <h1 className="text-[calc(100vw/4)] lg:leading-[250px] italic font-bold text-primary">ramble</h1>
+        <h1 className="text-[calc(100vw/4)] lg:leading-[280px] italic font-bold text-primary">ramble</h1>
         <Image
           src="/landing/hero0.png"
           alt="hero0"
           width={1000}
-          height={7500}
+          height={7000}
           className="absolute w-screen pointer-events-none top-44 md:top-[400px] right-32 md:right-[300px]"
         />
 
