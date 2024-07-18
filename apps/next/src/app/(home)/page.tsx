@@ -62,7 +62,7 @@ export default function Home() {
       <div className="flex mb-40 items-center justify-center py-20 bg-primary">
         <PageContainer className="flex w-full justify-between gap-4">
           <div className="flex flex-col flex-1 gap-4 items-center justify-center">
-            <p className="text-white text-6xl font-bold italic pr-6">download now</p>
+            <p className="text-white text-4xl whitespace-nowrap lg:text-6xl font-bold italic pr-6">download now</p>
             <div className="flex items-center justify-center space-x-2">
               <Link
                 target="_blank"
@@ -92,7 +92,7 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          <div className="relative flex-1">
+          <div className="relative hidden md:flex flex-1">
             <Image
               src="/landing/hero8.png"
               alt="hero8"
