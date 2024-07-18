@@ -642,8 +642,8 @@ importers:
         specifier: 8.4.1
         version: 8.4.1
       '@inquirer/prompts':
-        specifier: 5.1.3
-        version: 5.1.3
+        specifier: 5.2.0
+        version: 5.2.0
       '@ramble/api':
         specifier: workspace:*
         version: link:../../api
@@ -3974,8 +3974,8 @@ packages:
     resolution: {integrity: sha512-F0YfUDjvT+Mtt/R4xdl2X0EYCHMMiJqNLdxHD++jDT5ydEFIyqbCHh51Qx2E211dgZprPKhV7sHmnXKpLuvc5g==}
     dev: false
 
-  /@inquirer/checkbox@2.3.11:
-    resolution: {integrity: sha512-pCt02FZNLX9u8j/42n6iJyJnInbrvrygOfX+Fc4TcASbNRwNUcvhjxR2t49AdlmiO8oXAT3GhFH1T+2GpZPCfw==}
+  /@inquirer/checkbox@2.4.0:
+    resolution: {integrity: sha512-XHOCmntitRBD8SJcrv+6X9YakxO1wfsvezOnU5MBIXeTlSBRCVk9DOIrx6Cgi9BS3qkcy7oQb+fUGEKrP6xecQ==}
     engines: {node: '>=18'}
     dependencies:
       '@inquirer/core': 9.0.3
@@ -4060,11 +4060,11 @@ packages:
       ansi-escapes: 4.3.2
     dev: true
 
-  /@inquirer/prompts@5.1.3:
-    resolution: {integrity: sha512-CguIOxmb5RevOGgkPToKcfaogx2IfgLmIFDmAjqWwvh5DfRWYl5qp1wAMo4SyH0BGQRuxbchkYJr0x1BgB7AVg==}
+  /@inquirer/prompts@5.2.0:
+    resolution: {integrity: sha512-7jBWrlkvprEHEFw29zG/piw/M76c5/zYQWfi8ybHeyzcTuXkh1NjDQxLg2PiruvsIt36z1zvKM5yn7vbF0Yr/A==}
     engines: {node: '>=18'}
     dependencies:
-      '@inquirer/checkbox': 2.3.11
+      '@inquirer/checkbox': 2.4.0
       '@inquirer/confirm': 3.1.15
       '@inquirer/editor': 2.1.15
       '@inquirer/expand': 2.1.15
@@ -4072,7 +4072,7 @@ packages:
       '@inquirer/number': 1.0.3
       '@inquirer/password': 2.1.15
       '@inquirer/rawlist': 2.1.15
-      '@inquirer/select': 2.3.11
+      '@inquirer/select': 2.4.0
     dev: true
 
   /@inquirer/rawlist@2.1.15:
@@ -4084,8 +4084,8 @@ packages:
       yoctocolors-cjs: 2.1.2
     dev: true
 
-  /@inquirer/select@2.3.11:
-    resolution: {integrity: sha512-DebGErUSCyzwIP2zx3hs1X4TAzxSl/yNHzuYGE6KFkHq3ubg+5dJZacFxN1C1eBkJvQ0XBWGpY6MTzHsJbxkpw==}
+  /@inquirer/select@2.4.0:
+    resolution: {integrity: sha512-iU1eRkHirVNs43zWk6anMIMKc7tCXlJ+I5DcpIV7JzMe+45TuPPOGGCgeGIkZ4xYJ3cXdFoh7GJpm84PNC8veg==}
     engines: {node: '>=18'}
     dependencies:
       '@inquirer/core': 9.0.3
