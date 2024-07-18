@@ -48,7 +48,7 @@
     "dayjs": "1.11.12",
     "isbot": "latest",
     "lucide-react": "0.408.0",
-    "mapbox-gl": "3.5.1",
+    "mapbox-gl": "3.5.2",
     "next": "14.2.5",
     "posthog-js": "1.148.0",
     "pretty-cache-header": "1.0.0",
