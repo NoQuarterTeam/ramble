@@ -6,9 +6,9 @@ import Link from "next/link"
 
 export default function Home() {
   return (
-    <div className="dark bg-background font-serif text-white">
+    <div className="dark bg-background font-serif text-white w-screen overflow-hidden">
       <div className="w-screen space-y-2 bg-[url('/landing/hero1.png')] bg-cover px-2 md:px-12 pt-4 md:pt-32">
-        <h1 className="text-[300px] leading-[250px] italic font-bold text-primary">ramble</h1>
+        <h1 className="text-[100px] lg:text-[200px] xl:text-[300px] lg:leading-[250px] italic font-bold text-primary">ramble</h1>
         <p className="text-2xl md:pl-4 font-semibold max-w-md">
           community for the modern van traveler looking for genuine connections and meaningful experiences.
         </p>
