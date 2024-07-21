@@ -345,7 +345,7 @@ export default function TripDetailScreen() {
           </Link>
         </View>
 
-        {me.tripSyncEnabled && permissionResponse?.granted && data && (
+        {me.tripSyncEnabled && permissionResponse?.granted && data && data.trip.mediaSyncEnabled && (
           <TripImageSync
             startDate={data.trip.startDate}
             endDate={data.trip.endDate}

@@ -1,22 +1,22 @@
-import DateTimePicker from "@react-native-community/datetimepicker"
-import dayjs from "dayjs"
-import { FormProvider } from "react-hook-form"
-import { TouchableOpacity, View } from "react-native"
-
 import type { Trip } from "@ramble/database/types"
 import { useDisclosure } from "@ramble/shared"
-
+import colors from "@ramble/tailwind-config/src/colors"
+import DateTimePicker from "@react-native-community/datetimepicker"
+import dayjs from "dayjs"
+import { Image } from "lucide-react-native"
+import { FormProvider } from "react-hook-form"
+import { Switch, TouchableOpacity, View } from "react-native"
 import { Button } from "~/components/ui/Button"
 import { FormInput, FormInputLabel } from "~/components/ui/FormInput"
 import type { RouterInputs } from "~/lib/api"
 import { type ApiError, useForm } from "~/lib/hooks/useForm"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
-
+import { Icon } from "./Icon"
 import { Text } from "./ui/Text"
 import { toast } from "./ui/Toast"
 
 type UpdateSubmit = {
-  trip: Pick<Trip, "name" | "startDate" | "endDate">
+  trip: Pick<Trip, "name" | "startDate" | "endDate" | "mediaSyncEnabled">
   onUpdate: (data: Omit<RouterInputs["trip"]["update"], "id">) => void
 }
 type CreateSubmit = {
@@ -35,6 +35,7 @@ export function TripForm(props: Props & (UpdateSubmit | CreateSubmit)) {
       name: props.trip?.name || "",
       startDate: props.trip ? dayjs(props.trip.startDate).toDate() : new Date(),
       endDate: props.trip ? dayjs(props.trip.endDate).toDate() : dayjs().add(1, "month").toDate(),
+      mediaSyncEnabled: props.trip?.mediaSyncEnabled || false,
     },
   })
 
@@ -42,6 +43,7 @@ export function TripForm(props: Props & (UpdateSubmit | CreateSubmit)) {
   const endDateProps = useDisclosure()
   const startDate = form.watch("startDate")
   const endDate = form.watch("endDate")
+  const mediaSyncEnabled = form.watch("mediaSyncEnabled")
 
   const handleSubmit = () => {
     return form.handleSubmit((data) => {
@@ -96,6 +98,22 @@ export function TripForm(props: Props & (UpdateSubmit | CreateSubmit)) {
               }}
             />
           )}
+        </View>
+        <View className="flex flex-row items-center justify-between space-x-2">
+          <View className="flex flex-row items-center space-x-3">
+            <Icon icon={Image} size={30} />
+            <View>
+              <Text className="h-[22px] text-base">Trip sync on network</Text>
+              <Text style={{ lineHeight: 16 }} numberOfLines={3} className="max-w-[220px] text-sm opacity-75">
+                Enable trip media sync when not connected to wifi
+              </Text>
+            </View>
+          </View>
+          <Switch
+            trackColor={{ true: colors.primary[600] }}
+            value={mediaSyncEnabled}
+            onValueChange={() => form.setValue("mediaSyncEnabled", !mediaSyncEnabled)}
+          />
         </View>
         <Button isLoading={props.isLoading} onPress={handleSubmit()}>
           Save

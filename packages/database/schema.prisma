@@ -380,6 +380,8 @@ model Trip {
   name          String
   startDate     DateTime       @db.Date
   endDate       DateTime       @db.Date
+  mediaSyncEnabled Boolean     @default(true)
+
   creator       User           @relation(name: "CreatedTrips", fields: [creatorId], references: [id])
   creatorId     String
   notifications Notification[]
