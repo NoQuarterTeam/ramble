@@ -16,7 +16,7 @@ export default function EditTrip() {
   const { me } = useMe()
   const utils = api.useUtils()
   const router = useRouter()
-  const { data, isLoading: tripLoading } = api.trip.info.useQuery({ id })
+  const { data, isLoading: tripLoading } = api.trip.info.useQuery({ id: id || "" }, { enabled: !!id })
 
   const {
     mutate,
@@ -24,6 +24,7 @@ export default function EditTrip() {
     error,
   } = api.trip.update.useMutation({
     onSuccess: async (data) => {
+      if (!id) return
       utils.trip.info.refetch({ id })
       utils.trip.detail.setData({ id }, (prev) => (prev ? { ...prev, trip: { ...prev.trip, ...data } } : prev))
       void utils.trip.mine.refetch()
@@ -40,6 +41,7 @@ export default function EditTrip() {
     },
   })
   const handleDelete = () => {
+    if (!id) return
     Alert.alert(
       "Are you sure?",
       "This action cannot be undone",
@@ -66,7 +68,15 @@ export default function EditTrip() {
         ) : !data ? (
           <Text>List not found</Text>
         ) : (
-          <TripForm trip={data} isLoading={isLoading} error={error} onUpdate={(data) => mutate({ ...data, id })} />
+          <TripForm
+            trip={data}
+            isLoading={isLoading}
+            error={error}
+            onUpdate={(data) => {
+              if (!id) return
+              mutate({ ...data, id })
+            }}
+          />
         )}
         {data?.creatorId === me?.id && (
           <View className="flex items-center justify-center py-4">
