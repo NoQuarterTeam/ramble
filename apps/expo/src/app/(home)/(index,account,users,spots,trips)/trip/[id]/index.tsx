@@ -58,7 +58,7 @@ export default function TripDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
   const increment = useFeedbackActivity((s) => s.increment)
 
-  const { data, isLoading } = api.trip.detail.useQuery({ id })
+  const { data, isLoading } = api.trip.detail.useQuery({ id: id || "" }, { enabled: !!id })
   const trip = data?.trip
   const bounds = data?.bounds
   const center = data?.center
@@ -129,8 +129,8 @@ export default function TripDetailScreen() {
 
   const [mapSettings, setMapSettings] = useMapSettings()
   const { data: mediaClusters, refetch } = api.trip.media.clusters.useQuery(
-    mapSettings ? { ...mapSettings, tripId: id } : undefined,
-    { enabled: !!mapSettings, placeholderData: keepPreviousData },
+    mapSettings ? { ...mapSettings, tripId: id! } : undefined,
+    { enabled: !!mapSettings && !!id, placeholderData: keepPreviousData },
   )
 
   const onMapMove = ({ properties }: MapState) => {
@@ -396,6 +396,7 @@ function TripImageSync({
 
   const { mutate: uploadMedia } = api.trip.media.upload.useMutation({
     onSuccess: (timestamp) => {
+      if (!id) return
       utils.trip.detail.setData({ id }, (prev) => (prev ? { ...prev, latestMediaTimestamp: timestamp } : prev))
     },
   })
@@ -404,6 +405,7 @@ function TripImageSync({
   // biome-ignore lint/correctness/useExhaustiveDependencies: allow it
   React.useEffect(() => {
     async function loadMedia() {
+      if (!id) return
       if (!me) return
       const isTripActive = dayjs(startDate).isBefore(dayjs()) && dayjs(endDate).isAfter(dayjs())
       if (!isTripActive) return
@@ -475,6 +477,7 @@ function TripImageSync({
             }
             const path = await upload(media.url)
             const payload = { path, thumbnailPath, ...media }
+
             uploadMedia({ tripId: id, media: payload })
           } catch (error) {
             toast({ title: "Error uploading media", type: "error" })
@@ -518,6 +521,7 @@ function TripList({
   const utils = api.useUtils()
   const { mutate } = api.trip.updateOrder.useMutation({
     onSuccess: () => {
+      if (!id) return
       void utils.trip.detail.refetch({ id })
       void utils.trip.mine.refetch()
     },
@@ -534,6 +538,7 @@ function TripList({
     <DraggableFlatList
       horizontal
       onDragEnd={async ({ to, data }) => {
+        if (!id) return
         const movedItem = data[to]
         let isOutOfOrder = false
         if (movedItem?.date) {
@@ -609,6 +614,7 @@ const TripItem = React.memo(function _TripItem({
 
   const { mutate } = api.trip.items.remove.useMutation({
     onSuccess: () => {
+      if (!id) return
       void utils.trip.detail.refetch({ id })
       void utils.trip.mine.refetch()
     },
@@ -789,6 +795,7 @@ function AddTripItemMenu({ order, children }: { order?: number; children: React.
         <DropdownMenu.Item
           key="new-spot"
           onSelect={() => {
+            if (!id) return
             const searchParams = new URLSearchParams({
               initialLng: coords[0].toString(),
               initialLat: coords[1].toString(),
