@@ -141,6 +141,7 @@ export const tripRouter = createTRPCRouter({
         id: true,
         name: true,
         creatorId: true,
+        mediaSyncEnabled: true,
         startDate: true,
         endDate: true,
         media: {
