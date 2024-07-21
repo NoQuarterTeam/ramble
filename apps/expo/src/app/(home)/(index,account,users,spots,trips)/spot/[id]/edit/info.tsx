@@ -107,7 +107,7 @@ export default function EditSpotOptionsScreen() {
         className="absolute right-4 bottom-12 left-4 flex items-center justify-center space-y-2"
       >
         <Button
-          className="rounded-full"
+          size="sm"
           disabled={!name}
           onPress={() => {
             if (!name) return

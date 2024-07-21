@@ -178,7 +178,7 @@ export default function TripMedia() {
               }}
               size="xs"
               variant="secondary"
-              className="rounded-full px-4"
+              className="px-4"
             >
               {selectProps.isOpen ? "Cancel" : "Select"}
             </Button>

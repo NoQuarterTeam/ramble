@@ -25,8 +25,8 @@ export default function ListDetailMapScreen() {
   const [mapSettings, setMapSettings] = useMapSettings()
 
   const { data: clusters, isLoading: spotsLoading } = api.list.spotClusters.useQuery(
-    mapSettings ? { ...mapSettings, id: params.id } : undefined,
-    { enabled: !!mapSettings, placeholderData: keepPreviousData },
+    mapSettings ? { ...mapSettings, id: params.id! } : undefined,
+    { enabled: !!mapSettings && !!params.id, placeholderData: keepPreviousData },
   )
   const router = useRouter()
 
@@ -90,8 +90,8 @@ export default function ListDetailMapScreen() {
     [clusters],
   )
 
-  const initialBounds = params.initialBounds?.split(",").map(Number)
-  const initialCenter = params.initialCenter?.split(",").map(Number)
+  const initialBounds = params.initialBounds?.split(",").map(Number).filter(Boolean)
+  const initialCenter = params.initialCenter?.split(",").map(Number).filter(Boolean)
 
   return (
     <View className="relative flex-1">
@@ -132,7 +132,7 @@ export default function ListDetailMapScreen() {
       {spotsLoading && (
         <View
           pointerEvents="none"
-          className="absolute top-10 left-4 flex flex-col items-center justify-center rounded-full bg-white p-2 dark:bg-gray-800"
+          className="absolute shadow top-10 left-4 flex flex-col items-center justify-center rounded-full bg-white p-2 dark:bg-gray-800"
         >
           <Spinner />
         </View>
@@ -140,7 +140,7 @@ export default function ListDetailMapScreen() {
 
       <TouchableOpacity
         onPress={handleSetUserLocation}
-        className="sq-12 absolute right-3 bottom-3 flex flex-row items-center justify-center rounded-full bg-background"
+        className="sq-12 absolute shadow right-3 bottom-3 flex flex-row items-center justify-center rounded-full bg-background"
       >
         <Icon icon={Navigation} size={20} color="black" />
       </TouchableOpacity>

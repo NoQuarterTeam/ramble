@@ -11,7 +11,7 @@
     "build:preview": "eas build --profile preview --platform all",
     "build:development": "eas build --profile development --platform ios",
     "build:development:device": "eas build --profile development:device --platform ios",
-    "format": "pnpm dlx @biomejs/biome check --apply-unsafe ./src",
+    "format": "pnpm dlx @biomejs/biome check --write --unsafe ./src",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf .expo .turbo node_modules"
   },

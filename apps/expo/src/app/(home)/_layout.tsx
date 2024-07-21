@@ -69,7 +69,6 @@ export default function HomeLayout() {
           tabPress: () => {
             if (tab === "(home)/(trips)" && router.canDismiss()) {
               router.dismissAll()
-              router.dismissAll()
             }
           },
         }}

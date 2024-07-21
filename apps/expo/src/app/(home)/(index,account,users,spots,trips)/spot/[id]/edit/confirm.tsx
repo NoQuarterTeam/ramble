@@ -127,9 +127,9 @@ export default function EditSpotConfirmScreen() {
       <View className="absolute right-4 bottom-12 left-4 flex items-center justify-center space-y-2">
         {error && <Text className="text-red-500">{error.message}</Text>}
         <Button
+          size="sm"
           isLoading={updateLoading || isLoading}
           leftIcon={<Icon icon={Check} size={20} color={{ light: "white", dark: "black" }} />}
-          className="rounded-full"
           onPress={handleCreateSpot}
         >
           Update
