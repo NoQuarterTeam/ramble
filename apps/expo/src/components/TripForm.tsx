@@ -101,11 +101,11 @@ export function TripForm(props: Props & (UpdateSubmit | CreateSubmit)) {
         </View>
         <View className="flex flex-row items-center justify-between space-x-2">
           <View className="flex flex-row items-center space-x-3">
-            <Icon icon={Image} size={30} />
+            <Icon icon={Image} size={24} />
             <View>
-              <Text className="h-[22px] text-base">Trip sync on network</Text>
+              <Text className="h-[22px] text-base">Media sync</Text>
               <Text style={{ lineHeight: 16 }} numberOfLines={3} className="max-w-[220px] text-sm opacity-75">
-                Enable trip media sync when not connected to wifi
+                Enable automatic media sync for this trip
               </Text>
             </View>
           </View>
