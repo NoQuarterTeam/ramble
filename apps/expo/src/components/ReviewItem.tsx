@@ -105,6 +105,7 @@ export function ReviewItem({
             </Button>
           </View>
         ) : (
+          review.description &&
           me.preferredLanguage !== review.language && (
             <View className="flex items-start">
               <Button

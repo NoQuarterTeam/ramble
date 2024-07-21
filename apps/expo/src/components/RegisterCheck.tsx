@@ -12,7 +12,12 @@ export const RegisterCheck = React.memo(function _RegisterCheck() {
   const router = useRouter()
   React.useEffect(() => {
     if (isLoading || !isReady) return
-    if (!me && !isChecked) router.push("/register")
+    if (me || isChecked) return
+    const timer = setTimeout(() => {
+      router.push("/register")
+    }, 2000)
+
+    return () => clearTimeout(timer)
   }, [me, isLoading, isChecked, isReady, router.push])
 
   return null

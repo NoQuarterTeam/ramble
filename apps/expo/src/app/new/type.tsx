@@ -157,7 +157,7 @@ export default function NewSpotTypeScreen() {
       {type && (
         <View className="absolute right-4 bottom-12 left-4 flex items-center justify-center space-y-2">
           <Button
-            className="rounded-full"
+            size="sm"
             onPress={() => {
               const searchParams = new URLSearchParams({ ...params, type })
               // @ts-ignore

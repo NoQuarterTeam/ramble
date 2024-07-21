@@ -10,7 +10,7 @@ export function useCheckExpoUpdates() {
   const [isDoneChecking, setIsDoneChecking] = React.useState(false)
   const appState = React.useRef(AppState.currentState)
 
-  const checkForExpoUpdates = async () => {
+  const checkForExpoUpdates = React.useCallback(async () => {
     try {
       if (IS_DEV) return setIsDoneChecking(true)
       let timeout: NodeJS.Timeout | undefined
@@ -30,7 +30,7 @@ export function useCheckExpoUpdates() {
     } finally {
       setIsDoneChecking(true)
     }
-  }
+  }, [])
 
   const handleAppStateChange = React.useCallback(
     (nextAppState: AppStateStatus) => {

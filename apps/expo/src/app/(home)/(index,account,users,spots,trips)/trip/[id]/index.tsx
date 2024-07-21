@@ -31,6 +31,7 @@ import * as DropdownMenu from "zeego/dropdown-menu"
 
 import { INITIAL_LATITUDE, INITIAL_LONGITUDE, createAssetUrl, join } from "@ramble/shared"
 
+import colors from "@ramble/tailwind-config/src/colors"
 import { keepPreviousData } from "@tanstack/react-query"
 import { useFeedbackActivity } from "~/components/FeedbackCheck"
 import { Icon } from "~/components/Icon"
@@ -57,7 +58,7 @@ export default function TripDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>()
   const increment = useFeedbackActivity((s) => s.increment)
 
-  const { data, isLoading } = api.trip.detail.useQuery({ id })
+  const { data, isLoading } = api.trip.detail.useQuery({ id: id || "" }, { enabled: !!id })
   const trip = data?.trip
   const bounds = data?.bounds
   const center = data?.center
@@ -128,8 +129,8 @@ export default function TripDetailScreen() {
 
   const [mapSettings, setMapSettings] = useMapSettings()
   const { data: mediaClusters, refetch } = api.trip.media.clusters.useQuery(
-    mapSettings ? { ...mapSettings, tripId: id } : undefined,
-    { enabled: !!mapSettings, placeholderData: keepPreviousData },
+    mapSettings ? { ...mapSettings, tripId: id! } : undefined,
+    { enabled: !!mapSettings && !!id, placeholderData: keepPreviousData },
   )
 
   const onMapMove = ({ properties }: MapState) => {
@@ -223,7 +224,10 @@ export default function TripDetailScreen() {
       >
         {data?.line && (
           <ShapeSource id="directions" shape={data.line.geometry}>
-            <LineLayer id="line" style={{ lineDasharray: [0.5, 2], lineColor: "white", lineCap: "round", lineWidth: 2 }} />
+            <LineLayer
+              id="line"
+              style={{ lineDasharray: [0.5, 2], lineColor: colors.primary.DEFAULT, lineCap: "round", lineWidth: 2 }}
+            />
           </ShapeSource>
         )}
         {/* {data?.directions && (
@@ -392,6 +396,7 @@ function TripImageSync({
 
   const { mutate: uploadMedia } = api.trip.media.upload.useMutation({
     onSuccess: (timestamp) => {
+      if (!id) return
       utils.trip.detail.setData({ id }, (prev) => (prev ? { ...prev, latestMediaTimestamp: timestamp } : prev))
     },
   })
@@ -400,6 +405,7 @@ function TripImageSync({
   // biome-ignore lint/correctness/useExhaustiveDependencies: allow it
   React.useEffect(() => {
     async function loadMedia() {
+      if (!id) return
       if (!me) return
       const isTripActive = dayjs(startDate).isBefore(dayjs()) && dayjs(endDate).isAfter(dayjs())
       if (!isTripActive) return
@@ -471,6 +477,7 @@ function TripImageSync({
             }
             const path = await upload(media.url)
             const payload = { path, thumbnailPath, ...media }
+
             uploadMedia({ tripId: id, media: payload })
           } catch (error) {
             toast({ title: "Error uploading media", type: "error" })
@@ -514,6 +521,7 @@ function TripList({
   const utils = api.useUtils()
   const { mutate } = api.trip.updateOrder.useMutation({
     onSuccess: () => {
+      if (!id) return
       void utils.trip.detail.refetch({ id })
       void utils.trip.mine.refetch()
     },
@@ -530,6 +538,7 @@ function TripList({
     <DraggableFlatList
       horizontal
       onDragEnd={async ({ to, data }) => {
+        if (!id) return
         const movedItem = data[to]
         let isOutOfOrder = false
         if (movedItem?.date) {
@@ -605,6 +614,7 @@ const TripItem = React.memo(function _TripItem({
 
   const { mutate } = api.trip.items.remove.useMutation({
     onSuccess: () => {
+      if (!id) return
       void utils.trip.detail.refetch({ id })
       void utils.trip.mine.refetch()
     },
@@ -737,7 +747,7 @@ function ListHeader({ trip }: { trip: RouterOutputs["trip"]["detail"]["trip"] })
     <View className="flex h-full items-center justify-center">
       <View
         style={{ width: HEADER_FOOTER_WIDTH, height: HEADER_FOOTER_WIDTH }}
-        className="flex items-center justify-center space-y-2 rounded-md shadow bg-background p-2 dark:bg-background-dark"
+        className="flex items-center justify-center space-y-2 rounded-sm shadow bg-background p-2 dark:bg-background-dark"
       >
         <Icon icon={Home} size={16} />
         <Text className="text-xxs">{dayjs(trip.startDate).format("D MMM YY")}</Text>
@@ -759,7 +769,7 @@ function ListFooter({ trip }: { trip: RouterOutputs["trip"]["detail"]["trip"] })
       <View className="flex h-full items-center justify-center">
         <View
           style={{ width: HEADER_FOOTER_WIDTH, height: HEADER_FOOTER_WIDTH }}
-          className="flex items-center justify-center space-y-2 rounded-md shadow bg-background p-2 dark:bg-background-dark"
+          className="flex items-center justify-center space-y-2 rounded-sm shadow bg-background p-2 dark:bg-background-dark"
         >
           <Icon icon={Flag} size={16} />
           <Text className="text-xxs">{dayjs(trip.endDate).format("D MMM YY")}</Text>
@@ -785,6 +795,7 @@ function AddTripItemMenu({ order, children }: { order?: number; children: React.
         <DropdownMenu.Item
           key="new-spot"
           onSelect={() => {
+            if (!id) return
             const searchParams = new URLSearchParams({
               initialLng: coords[0].toString(),
               initialLat: coords[1].toString(),

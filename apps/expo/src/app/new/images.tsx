@@ -94,7 +94,7 @@ export default function NewSpotImagesScreen() {
 
       <View className="absolute right-4 bottom-12 left-4 flex items-center justify-center space-y-2">
         <Button
-          className="rounded-full"
+          size="sm"
           onPress={() => {
             if (images.length === 0) return toast({ title: "Please add at least one image" })
             const searchParams = new URLSearchParams({ ...params, coverIndex: coverIndex.toString(), images: images.join(",") })

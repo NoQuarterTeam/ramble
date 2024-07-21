@@ -1,5 +1,5 @@
 import { displayRating } from "@ramble/shared"
-import { Camera, LocationPuck, type MapState, type MapView as MapType, StyleURL } from "@rnmapbox/maps"
+import { Camera, LocationPuck, type MapState, type MapView as MapType } from "@rnmapbox/maps"
 import { keepPreviousData } from "@tanstack/react-query"
 import * as Location from "expo-location"
 import { Link, useLocalSearchParams, useRouter } from "expo-router"
@@ -132,7 +132,6 @@ export default function FindSpotScreen() {
           onMapIdle={onMapMove}
           onDidFinishLoadingMap={() => setIsMapLoaded(true)}
           ref={mapRef}
-          styleURL={StyleURL.SatelliteStreet}
           compassPosition={{ top: 54, right: 8 }}
           onPress={() => setActiveSpotId(null)}
         >
@@ -187,18 +186,18 @@ export default function FindSpotScreen() {
           <Link push href={"/filters/"} asChild>
             <TouchableOpacity
               activeOpacity={0.8}
-              className="sq-12 flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
+              className="sq-10 flex flex-row items-center justify-center rounded-sm bg-background dark:bg-background-dark"
             >
-              <Icon icon={Settings2} size={20} />
+              <Icon icon={Settings2} size={18} />
             </TouchableOpacity>
           </Link>
 
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={handleSetUserLocation}
-            className="sq-12 flex flex-row items-center justify-center rounded-full bg-background dark:bg-background-dark"
+            className="sq-10 flex flex-row items-center justify-center rounded-sm bg-background dark:bg-background-dark"
           >
-            <Icon icon={Navigation} size={20} />
+            <Icon icon={Navigation} size={18} />
           </TouchableOpacity>
         </View>
 

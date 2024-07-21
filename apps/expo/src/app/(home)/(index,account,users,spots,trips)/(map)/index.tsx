@@ -320,7 +320,7 @@ function MapContainer() {
 
       {(spotsLoading || isRefetching) && (
         <SafeAreaView pointerEvents="none" className="absolute top-2 right-4">
-          <View className="bg-background p-2 dark:bg-background-dark rounded-sm">
+          <View className="bg-background shadow p-2 dark:bg-background-dark rounded-sm">
             <Spinner />
           </View>
         </SafeAreaView>
@@ -369,7 +369,7 @@ function MapContainer() {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={handleSetUserLocation}
-          className="sq-9 flex items-center justify-center rounded-sm bg-background dark:bg-background-dark"
+          className="sq-9 flex items-center justify-center shadow rounded-sm bg-background dark:bg-background-dark"
         >
           <Icon icon={Navigation} size={18} />
         </TouchableOpacity>

@@ -5,7 +5,7 @@
   "types": "./src/index.ts",
   "sideEffects": false,
   "scripts": {
-    "format": "pnpm dlx @biomejs/biome check --apply-unsafe ./src",
+    "format": "pnpm dlx @biomejs/biome check --write --unsafe ./src",
     "typecheck": "tsc --noEmit",
     "with-env": "dotenv -e ../../../.env --"
   },

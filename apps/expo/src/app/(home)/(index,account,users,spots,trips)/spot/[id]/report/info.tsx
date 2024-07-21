@@ -111,7 +111,7 @@ export default function SpotReportInfoScreen() {
         style={[translateStyle]}
         className="absolute right-4 bottom-12 left-4 flex items-center justify-center space-y-2"
       >
-        <Button className="rounded-full" disabled={!name} onPress={onClose}>
+        <Button disabled={!name} onPress={onClose}>
           Next
         </Button>
       </Animated.View>

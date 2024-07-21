@@ -71,7 +71,6 @@ export default function ListDetailScreen() {
                 })}`,
               )
             }
-            className="rounded-full"
             size="sm"
           >
             Map
