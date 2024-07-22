@@ -128,10 +128,10 @@ export default function TripDetailScreen() {
   const setCoords = useMapCoords((s) => s.setCoords)
 
   const [mapSettings, setMapSettings] = useMapSettings()
-  const { data: mediaClusters, refetch } = api.trip.media.clusters.useQuery(
-    mapSettings ? { ...mapSettings, tripId: id! } : undefined,
-    { enabled: !!mapSettings && !!id, placeholderData: keepPreviousData },
-  )
+  const { data: mediaClusters } = api.trip.media.clusters.useQuery(mapSettings ? { ...mapSettings, tripId: id! } : undefined, {
+    enabled: !!mapSettings && !!id,
+    placeholderData: keepPreviousData,
+  })
 
   const onMapMove = ({ properties }: MapState) => {
     if (!properties.bounds) return
@@ -345,14 +345,14 @@ export default function TripDetailScreen() {
           </Link>
         </View>
 
-        {me.tripSyncEnabled && permissionResponse?.granted && data && data.trip.mediaSyncEnabled && (
+        {/* {me.tripSyncEnabled && permissionResponse?.granted && data && data.trip.mediaSyncEnabled && (
           <TripImageSync
             startDate={data.trip.startDate}
             endDate={data.trip.endDate}
             latestMediaTimestamp={data.latestMediaTimestamp}
             onDone={refetch}
           />
-        )}
+        )} */}
       </View>
 
       <View className="absolute right-0 bottom-0 left-0">
@@ -382,7 +382,7 @@ export default function TripDetailScreen() {
   )
 }
 
-function TripImageSync({
+function _TripImageSync({
   startDate,
   endDate,
   latestMediaTimestamp,
