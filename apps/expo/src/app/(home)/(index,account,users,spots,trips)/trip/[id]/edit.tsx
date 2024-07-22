@@ -37,6 +37,7 @@ export default function EditTrip() {
   const { mutate: deleteTrip, isPending: deleteLoading } = api.trip.delete.useMutation({
     onSuccess: async () => {
       void utils.trip.mine.refetch()
+      router.dismissAll()
       router.navigate(`/${tab}`)
     },
   })

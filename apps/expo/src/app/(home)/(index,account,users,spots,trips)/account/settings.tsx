@@ -1,10 +1,8 @@
-import { router } from "expo-router"
-import { AlertCircle, ChevronDown, Image, Languages, MapPinOff, Wifi } from "lucide-react-native"
-import { Alert, ScrollView, Switch, View } from "react-native"
-
 import { languages, useDisclosure } from "@ramble/shared"
 import colors from "@ramble/tailwind-config/src/colors"
-
+import { router } from "expo-router"
+import { AlertCircle, ChevronDown, Languages, MapPinOff } from "lucide-react-native"
+import { Alert, ScrollView, Switch, View } from "react-native"
 import { Icon } from "~/components/Icon"
 import { LanguageSelector } from "~/components/LanguageSelector"
 import { Button } from "~/components/ui/Button"
@@ -101,7 +99,7 @@ export default function AccountSettingsScreen() {
               onValueChange={() => updateUser({ isLocationPrivate: !me?.isLocationPrivate })}
             />
           </View>
-          <View className="flex flex-row items-center justify-between space-x-2">
+          {/* <View className="flex flex-row items-center justify-between space-x-2">
             <View className="flex flex-row items-center space-x-3">
               <Icon icon={Image} size={30} />
               <View>
@@ -132,7 +130,7 @@ export default function AccountSettingsScreen() {
               value={me?.tripSyncOnNetworkEnabled}
               onValueChange={() => updateUser({ tripSyncOnNetworkEnabled: !me?.tripSyncOnNetworkEnabled })}
             />
-          </View>
+          </View> */}
         </View>
 
         <View className="pb-8">
