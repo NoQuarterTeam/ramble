@@ -14,6 +14,7 @@ export default function Page() {
         <Spinner />
       </View>
     )
+
   if (data?.id) <Redirect href={`/${tab}/spot/${data.id}`} />
-  else <Redirect href={`/${tab}/(map)`} />
+  else <Redirect href={`/${tab}/spots`} />
 }
