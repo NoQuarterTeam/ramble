@@ -1,0 +1,15 @@
+model SpotRevision {
+  id         String    @id @default(uuid())
+  notes      Json?
+  spotId     String
+  spot       Spot      @relation(fields: [spotId], references: [id], onDelete: Cascade)
+  creatorId  String
+  creator    User      @relation(name: "Creator", fields: [creatorId], references: [id])
+  approvedAt DateTime?
+  approverId String?
+  approver   User?     @relation(name: "Approver", fields: [approverId], references: [id])
+
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+}
