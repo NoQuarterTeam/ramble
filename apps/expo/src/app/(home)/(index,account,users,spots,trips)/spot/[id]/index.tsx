@@ -66,7 +66,7 @@ export default function SpotDetailScreen() {
   const colorScheme = useColorScheme()
   const isDark = colorScheme === "dark"
   const params = useLocalSearchParams<{ id: string }>()
-  const { data, isLoading } = api.spot.detail.useQuery({ id: params.id }, { staleTime: Number.POSITIVE_INFINITY })
+  const { data, isLoading } = api.spot.detail.useQuery({ id: params.id || "" }, { staleTime: Number.POSITIVE_INFINITY })
   const spot = data?.spot
 
   const forecastDays = data?.weather
@@ -465,8 +465,8 @@ export default function SpotDetailScreen() {
                 try {
                   await RNShare.share({
                     title: spot.name,
-                    message: isAndroid ? `${FULL_WEB_URL}/spots/${spot.id}` : spot.name,
-                    url: `${FULL_WEB_URL}/spots/${spot.id}`,
+                    message: isAndroid ? `${FULL_WEB_URL}/s/${spot.nanoid}` : spot.name,
+                    url: `${FULL_WEB_URL}/s/${spot.nanoid}`,
                   })
                 } catch (error: unknown) {
                   if (error instanceof Error) {
