@@ -47,6 +47,7 @@ model User {
   isLocationPrivate        Boolean @default(false)
   preferredLanguage        String  @default("en")
   tripSyncEnabled          Boolean @default(true)
+  // @deprecated in 1.6.0 - dont use anymore
   tripSyncOnNetworkEnabled Boolean @default(false)
 
   // Relations
@@ -380,6 +381,7 @@ model Trip {
   name          String
   startDate     DateTime       @db.Date
   endDate       DateTime       @db.Date
+  // @deprecated in 1.6.0 - dont use anymore
   mediaSyncEnabled Boolean     @default(true)
 
   creator       User           @relation(name: "CreatedTrips", fields: [creatorId], references: [id])
