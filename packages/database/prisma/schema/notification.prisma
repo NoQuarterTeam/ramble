@@ -1,0 +1,47 @@
+enum NotificationType {
+  USER_FOLLOWED
+  TRIP_MEDIA_ADDED
+  TRIP_STOP_ADDED
+  TRIP_SPOT_ADDED
+  SPOT_VERIFIED
+  SPOT_ADDED_TO_LIST
+  SPOT_ADDED_TO_TRIP
+  SPOT_REVIEWED
+}
+
+model Notification {
+  id   String           @id @default(uuid())
+  type NotificationType
+
+  userNotifications UserNotification[]
+  initiator         User               @relation(fields: [initiatorId], references: [id])
+  initiatorId       String
+  trip              Trip?              @relation(fields: [tripId], references: [id])
+  tripId            String?
+  spot              Spot?              @relation(fields: [spotId], references: [id])
+  spotId            String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum UserNotificationStatus {
+  READ
+  SEEN
+  UNREAD
+}
+
+model UserNotification {
+  id     String                 @id @default(uuid())
+  status UserNotificationStatus @default(UNREAD)
+
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String
+  notification   Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  notificationId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([status])
+}

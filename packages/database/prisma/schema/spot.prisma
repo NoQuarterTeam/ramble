@@ -1,0 +1,140 @@
+enum SpotType {
+  // Stays
+  CAMPING
+  VAN_PARK
+  PRIVATE_LAND
+  ROADSIDE
+  CARPARK
+  FREE_CAMPING // deprecated in 1.4.11 - migrate to others later, default to van park for now
+  // Activities
+  CLIMBING
+  SURFING
+  MOUNTAIN_BIKING
+  HIKING_TRAIL
+  PADDLE_KAYAK
+  YOGA
+  // Services
+  SAFE_PARKING
+  GAS_STATION
+  ELECTRIC_CHARGE_POINT
+  MECHANIC_PARTS
+  VET
+  // Hospitality
+  CAFE
+  RESTAURANT
+  BAR
+  SHOP
+  // Other
+  VOLUNTEERING
+  ART_FILM_PHOTOGRAPHY
+  NATURE_EDUCATION
+  FESTIVAL
+  REWILDING
+}
+
+model Spot {
+  id                  String    @id @default(uuid())
+  name                String
+  type                SpotType
+  description         String?   @db.Text
+  descriptionLanguage String?
+  address             String?
+  latitude            Float
+  longitude           Float
+  publishedAt         DateTime?
+  verifiedAt          DateTime?
+  nanoid              String?   @unique
+
+  pointLocation Unsupported("POINT GENERATED ALWAYS AS (ST_GeomFromText(CONCAT('POINT(',longitude,' ',latitude,')'))) STORED")?
+
+  // Options 
+  isPetFriendly Boolean @default(true)
+
+  // Relations
+  amenities     SpotAmenities?
+  images        SpotImage[]
+  verifierId    String?
+  verifier      User?          @relation(name: "Verifier", fields: [verifierId], references: [id])
+  creatorId     String
+  creator       User           @relation(name: "Creator", fields: [creatorId], references: [id])
+  listSpots     ListSpot[]
+  ownerId       String?
+  owner         User?          @relation(name: "Owner", fields: [ownerId], references: [id])
+  reviews       Review[]
+  spotRevisions SpotRevision[]
+  tripItems     TripItem[]
+  cover         SpotImage?     @relation(fields: [coverId], references: [id], name: "SpotCover", onDelete: NoAction, onUpdate: NoAction)
+  coverId       String?        @unique
+  notifications Notification[]
+
+  deletedAt DateTime?
+  closedAt  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  sourceUrl                String? @db.VarChar(500)
+  campspaceId              Int?    @unique
+  nesteId                  String? @unique
+  park4nightId             Int?    @unique
+  komootId                 String? @unique
+  surflineId               String? @unique
+  natuurKampeerterreinenId String? @unique
+  cucortuId                String? @unique
+  loodusegakoosId          String? @unique
+  roadsurferId             String? @unique
+  hipcampId                String? @unique
+  theCragId                String? @unique
+  norcampId                String? @unique
+  mossyEarthId             String? @unique
+  rewildingEuropeId        String? @unique
+  polskiCaravaningId       String? @unique
+  googlePlaceId            String? @unique
+  volunteeringEventsId     String? @unique
+  camperguruId             Int?    @unique
+
+  @@index([publishedAt])
+  @@index([name])
+  @@index([longitude])
+  @@index([verifiedAt, type, deletedAt, creatorId, publishedAt])
+  @@index([type, verifiedAt, latitude, longitude, deletedAt, creatorId, publishedAt])
+  @@index([deletedAt])
+}
+
+model SpotAmenities {
+  id          String  @id @default(uuid())
+  hotWater    Boolean @default(false)
+  wifi        Boolean @default(false)
+  shower      Boolean @default(false)
+  toilet      Boolean @default(false)
+  kitchen     Boolean @default(false)
+  electricity Boolean @default(false)
+  water       Boolean @default(false)
+  firePit     Boolean @default(false)
+  sauna       Boolean @default(false)
+  pool        Boolean @default(false)
+  bbq         Boolean @default(false)
+
+  spot   Spot   @relation(fields: [spotId], references: [id], onDelete: Cascade)
+  spotId String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model SpotImage {
+  id       String  @id @default(uuid())
+  path     String  @db.VarChar(500)
+  blurHash String?
+
+  spotId    String
+  spot      Spot   @relation(fields: [spotId], references: [id], onDelete: Cascade)
+  creatorId String
+  creator   User   @relation(fields: [creatorId], references: [id])
+  coverSpot Spot?  @relation(name: "SpotCover")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@unique([spotId, path])
+}
