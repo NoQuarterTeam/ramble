@@ -1,0 +1,95 @@
+enum Role {
+  GUIDE
+  OWNER
+  MEMBER
+}
+
+model User {
+  id                     String  @id @default(uuid())
+  email                  String  @unique
+  password               String
+  firstName              String
+  lastName               String
+  username               String  @unique
+  role                   Role    @default(MEMBER)
+  avatar                 String?
+  avatarBlurHash         String?
+  bio                    String? @db.Text
+  bioLanguage            String?
+  instagram              String?
+  isVerified             Boolean @default(false)
+  isAdmin                Boolean @default(false)
+  isPendingGuideApproval Boolean @default(false)
+  latitude               Float?
+  longitude              Float?
+  inviteCode             String? @unique
+
+  // Spot preferences
+  isPetOwner      Boolean @default(false)
+  isClimber       Boolean @default(false)
+  isHiker         Boolean @default(false)
+  isMountainBiker Boolean @default(false)
+  isPaddleBoarder Boolean @default(false)
+  isSurfer        Boolean @default(false)
+  isYogi          Boolean @default(false)
+
+  // Settings
+  isLocationPrivate        Boolean @default(false)
+  preferredLanguage        String  @default("en")
+  tripSyncEnabled          Boolean @default(true)
+  // @deprecated in 1.6.0 - dont use anymore
+  tripSyncOnNetworkEnabled Boolean @default(false)
+
+  // Relations
+  followers              User[]             @relation("UserFollows")
+  following              User[]             @relation("UserFollows")
+  createdSpots           Spot[]             @relation(name: "Creator")
+  ownedSpots             Spot[]             @relation(name: "Owner")
+  verifiedSpots          Spot[]             @relation(name: "Verifier")
+  spotImages             SpotImage[]
+  lists                  List[]
+  reviews                Review[]
+  trips                  Trip[]             @relation(name: "UserTrips")
+  createdTrips           Trip[]             @relation(name: "CreatedTrips")
+  tripItems              TripItem[]
+  tripMedias             TripMedia[]
+  van                    Van?
+  feedback               Feedback[]
+  createdSpotRevisions   SpotRevision[]     @relation(name: "Creator")
+  approvedSpotRevisions  SpotRevision[]     @relation(name: "Approver")
+  accessRequest          AccessRequest?
+  pushTokens             PushToken[]
+  userNotifications      UserNotification[]
+  initiatedNotifications Notification[]
+  tags                   UserTag[]
+  referrer               User?              @relation("UserReferrals", fields: [referrerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  referrerId             String?
+  referrals              User[]             @relation("UserReferrals")
+
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+
+  @@index([latitude])
+}
+
+model PushToken {
+  id        String   @id @default(uuid())
+  token     String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@unique([userId, token])
+}
+
+model UserTag {
+  id   String @id @default(uuid())
+  name String
+
+  users User[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
