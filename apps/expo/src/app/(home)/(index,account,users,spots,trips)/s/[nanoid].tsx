@@ -15,6 +15,6 @@ export default function Page() {
       </View>
     )
 
-  if (data?.id) <Redirect href={`/${tab}/spot/${data.id}`} />
-  else <Redirect href={`/${tab}/spots`} />
+  if (data?.id) return <Redirect href={`/${tab}/spot/${data.id}`} />
+  return <Redirect href={`/${tab}/spots`} />
 }
