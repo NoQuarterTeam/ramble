@@ -89,6 +89,12 @@ export const spotRouter = createTRPCRouter({
           : c.properties,
       }))
     }),
+  byNanoid: publicProcedure.input(z.object({ nanoid: z.string() })).query(({ ctx, input }) => {
+    return ctx.prisma.spot.findUnique({
+      where: { nanoid: input.nanoid },
+      select: { id: true },
+    })
+  }),
   verify: protectedProcedure.input(z.object({ id: z.string().uuid() })).mutation(async ({ ctx, input }) => {
     const spot = await ctx.prisma.spot.findUnique({ where: { id: input.id } })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
@@ -181,6 +187,7 @@ export const spotRouter = createTRPCRouter({
           id: true,
           name: true,
           description: true,
+          nanoid: true,
           descriptionLanguage: true,
           latitude: true,
           longitude: true,
