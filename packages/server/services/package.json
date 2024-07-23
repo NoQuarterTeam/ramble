@@ -17,7 +17,7 @@
     "@ramble/emails": "workspace:*",
     "@ramble/server-env": "workspace:*",
     "@ramble/shared": "workspace:*",
-    "@react-email/render": "^0.0.16",
+    "@react-email/render": "^0.0.17",
     "@slack/web-api": "7.3.1",
     "bcryptjs": "2.4.3",
     "blurhash": "2.0.5",
