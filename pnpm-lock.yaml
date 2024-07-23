@@ -266,8 +266,8 @@ importers:
   apps/next:
     dependencies:
       '@aws-sdk/client-s3':
-        specifier: 3.616.0
-        version: 3.616.0
+        specifier: 3.617.0
+        version: 3.617.0
       '@notionhq/client':
         specifier: ^2.2.15
         version: 2.2.15
@@ -696,14 +696,14 @@ importers:
   packages/server/services:
     dependencies:
       '@aws-sdk/client-s3':
-        specifier: 3.616.0
-        version: 3.616.0
+        specifier: 3.617.0
+        version: 3.617.0
       '@aws-sdk/lib-storage':
-        specifier: 3.616.0
-        version: 3.616.0(@aws-sdk/client-s3@3.616.0)
+        specifier: 3.617.0
+        version: 3.617.0(@aws-sdk/client-s3@3.617.0)
       '@aws-sdk/s3-request-presigner':
-        specifier: 3.616.0
-        version: 3.616.0
+        specifier: 3.617.0
+        version: 3.617.0
       '@ramble/database':
         specifier: workspace:*
         version: link:../../database
@@ -870,8 +870,8 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@aws-sdk/client-s3@3.616.0:
-    resolution: {integrity: sha512-6gyZnBlAgOU8cwNqPhFO9s6maGI4/iHV3cmqvQgUn3uqhi1EgTSZSsTMuRzKEgBpTGgC+9Bm6djKqOderMqjdA==}
+  /@aws-sdk/client-s3@3.617.0:
+    resolution: {integrity: sha512-0f954CU42BhPFVRQCCBc1jAvV9N4XW9I3D4h7tJ8tzxft7fS62MSJkgxRIXNKgWKLeGR7DUbz+XGZ1R5e7pyjA==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/sha1-browser': 5.2.0
@@ -888,12 +888,12 @@ packages:
       '@aws-sdk/middleware-location-constraint': 3.609.0
       '@aws-sdk/middleware-logger': 3.609.0
       '@aws-sdk/middleware-recursion-detection': 3.616.0
-      '@aws-sdk/middleware-sdk-s3': 3.616.0
+      '@aws-sdk/middleware-sdk-s3': 3.617.0
       '@aws-sdk/middleware-signing': 3.616.0
       '@aws-sdk/middleware-ssec': 3.609.0
       '@aws-sdk/middleware-user-agent': 3.616.0
       '@aws-sdk/region-config-resolver': 3.614.0
-      '@aws-sdk/signature-v4-multi-region': 3.616.0
+      '@aws-sdk/signature-v4-multi-region': 3.617.0
       '@aws-sdk/types': 3.609.0
       '@aws-sdk/util-endpoints': 3.614.0
       '@aws-sdk/util-user-agent-browser': 3.609.0
@@ -1203,13 +1203,13 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@aws-sdk/lib-storage@3.616.0(@aws-sdk/client-s3@3.616.0):
-    resolution: {integrity: sha512-VhuJGCbJvI1TGGWDd5pdnCa+pobKAGv5/H4MqN1GlyRuWd6Biwby+pRaFb2nL4GT3bOJdCcM24CyZXO2PefPaw==}
+  /@aws-sdk/lib-storage@3.617.0(@aws-sdk/client-s3@3.617.0):
+    resolution: {integrity: sha512-bR+3E66Dp3CyuSGywxMSwrYQCfwuFu7gRJxOpk1i2AKV1Wh7g0y1eANXHVKnk+UbVRz4S53UCD8LEiKp2KYShA==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      '@aws-sdk/client-s3': ^3.616.0
+      '@aws-sdk/client-s3': ^3.617.0
     dependencies:
-      '@aws-sdk/client-s3': 3.616.0
+      '@aws-sdk/client-s3': 3.617.0
       '@smithy/abort-controller': 3.1.1
       '@smithy/middleware-endpoint': 3.0.5
       '@smithy/smithy-client': 3.1.9
@@ -1294,8 +1294,8 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@aws-sdk/middleware-sdk-s3@3.616.0:
-    resolution: {integrity: sha512-heq9pzn0NRX6VL/oMlmwZdgcCh5eJUDscvwMl/oGev0tNdTpB2oGU+wPaNMka7IrW3eBPn7APmY9fdS1kBaBoQ==}
+  /@aws-sdk/middleware-sdk-s3@3.617.0:
+    resolution: {integrity: sha512-zVOS6sNGcLGhq7i+5POmVqmSPNmrQYDFsynpnWMSLsNaej+xvkdSOnytLrUvag3Du4kAxfO5NNIC0GuNj9lcCg==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-sdk/types': 3.609.0
@@ -1356,11 +1356,11 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@aws-sdk/s3-request-presigner@3.616.0:
-    resolution: {integrity: sha512-C5ADFHTBCPGw+W3XNvS7vZdCY2LtRbcw05hu34xxhNlDXatOAPE4O22uRfiaZq12Lu0Qq8ylNYnD8I28r7I4Qg==}
+  /@aws-sdk/s3-request-presigner@3.617.0:
+    resolution: {integrity: sha512-zszOwBmu3Ei5rRgddcQ3sbKFCtzLtUNDcmeybh4OhxENfgzHZHOeTOt8C+C16DD5YDQqeP4JYPRUp0LPuybkvg==}
     engines: {node: '>=16.0.0'}
     dependencies:
-      '@aws-sdk/signature-v4-multi-region': 3.616.0
+      '@aws-sdk/signature-v4-multi-region': 3.617.0
       '@aws-sdk/types': 3.609.0
       '@aws-sdk/util-format-url': 3.609.0
       '@smithy/middleware-endpoint': 3.0.5
@@ -1370,11 +1370,11 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@aws-sdk/signature-v4-multi-region@3.616.0:
-    resolution: {integrity: sha512-WQn43cfnwbG6jnPjh/SyujDQVqbRjGFY9tGI/tqtUvvGwoDhI343TSDCA7fvs0FEC6Za6vgOBq1CwPv3CFyfhA==}
+  /@aws-sdk/signature-v4-multi-region@3.617.0:
+    resolution: {integrity: sha512-kGbLs9q0/ziuzA1huf0BBh05ChxDeZ8ZWc/kedb80ocq6izOLaGgeqqUR8oB0ianwjel4AQq/iv1fsOIt3wmAA==}
     engines: {node: '>=16.0.0'}
     dependencies:
-      '@aws-sdk/middleware-sdk-s3': 3.616.0
+      '@aws-sdk/middleware-sdk-s3': 3.617.0
       '@aws-sdk/types': 3.609.0
       '@smithy/protocol-http': 4.0.4
       '@smithy/signature-v4': 4.0.0
