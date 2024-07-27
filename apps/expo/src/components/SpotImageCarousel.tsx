@@ -65,7 +65,7 @@ export function SpotImageCarousel({
         estimatedItemSize={width}
         showsHorizontalScrollIndicator={false}
         data={images}
-        ListEmptyComponent={<Empty placeholderPaddingTop={placeholderPaddingTop} width={itemWidth} height={height} />}
+        // ListEmptyComponent={<Empty placeholderPaddingTop={placeholderPaddingTop} width={itemWidth} height={height} />}
         ListFooterComponent={
           <Footer placeholderPaddingTop={placeholderPaddingTop} width={itemWidth} height={height} images={images} spot={spot} />
         }
@@ -170,7 +170,7 @@ function Footer({
       toast({ title: "Error selecting image", message, type: "error" })
     }
   }
-  if (images.length === 0) return null
+  // if (images.length === 0) return null
   return (
     <View
       style={{ width, height, paddingTop: placeholderPaddingTop }}
