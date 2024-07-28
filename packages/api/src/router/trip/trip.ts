@@ -146,15 +146,15 @@ export const tripRouter = createTRPCRouter({
         mediaSyncEnabled: true,
         startDate: true,
         endDate: true,
-        media: {
-          where: {
-            deletedAt: null,
-            latitude: { not: null },
-            longitude: { not: null },
-          },
-          orderBy: { timestamp: "asc" },
-          select: { timestamp: true, latitude: true, longitude: true },
-        },
+        //media: {
+          //where: {
+            //deletedAt: null,
+            //latitude: { not: null },
+            //longitude: { not: null },
+          //},
+          //orderBy: { timestamp: "asc" },
+          //select: { timestamp: true, latitude: true, longitude: true },
+        //},
         items: {
           orderBy: { order: "asc" },
           select: {
