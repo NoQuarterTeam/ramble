@@ -55,7 +55,7 @@ export function SpotImageCarousel({
       <FlashList
         ref={ref}
         pagingEnabled
-        scrollEnabled={images.length > 1}
+        // scrollEnabled={images.length > 1}
         horizontal
         onMomentumScrollEnd={(e) => {
           const { x } = e.nativeEvent.contentOffset
@@ -191,7 +191,7 @@ function Footer({
   )
 }
 
-export function Empty({ width, height, placeholderPaddingTop = 0 }: Pick<Props, "placeholderPaddingTop" | "width" | "height">) {
+function Empty({ width, height, placeholderPaddingTop = 0 }: Pick<Props, "placeholderPaddingTop" | "width" | "height">) {
   return (
     <View
       style={{ width, height, paddingTop: placeholderPaddingTop }}
