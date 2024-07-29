@@ -15,46 +15,47 @@ import { notFound } from "next/navigation"
 import { ReviewItem, reviewItemSelectFields } from "./ReviewItem"
 import { SpotContainer } from "./SpotContainer"
 
-const getSpotData = unstable_cache(
-  async (id: string) => {
-    const initialSpot = await db.spot.findUnique({
-      where: { id, ...publicSpotWhereClause(null) },
-      select: { id: true, latitude: true, longitude: true, description: true },
-    })
-    if (!initialSpot) throw notFound()
+const getSpotData = (id: string) =>
+  unstable_cache(
+    async () => {
+      const initialSpot = await db.spot.findUnique({
+        where: { id, ...publicSpotWhereClause(null) },
+        select: { id: true, latitude: true, longitude: true, description: true },
+      })
+      if (!initialSpot) throw notFound()
 
-    const data = await promiseHash({
-      sameLocationSpots: db.spot.findMany({
-        where: { ...publicSpotWhereClause(null), latitude: initialSpot.latitude, longitude: initialSpot.longitude },
-        select: { id: true },
-        orderBy: { createdAt: "desc" },
-      }),
-      spot: db.spot.findUniqueOrThrow({
-        where: { id: initialSpot.id, ...publicSpotWhereClause(null) },
-        select: {
-          id: true,
-          name: true,
-          type: true,
-          ...spotPartnerFields,
-          _count: { select: { reviews: true, listSpots: true } },
-          description: true,
-          reviews: { take: 5, select: reviewItemSelectFields },
-          verifier: { select: { firstName: true, username: true, lastName: true, avatar: true, avatarBlurHash: true } },
-          verifiedAt: true,
-          images: { select: { id: true, path: true, blurHash: true } },
-        },
-      }),
-      rating: db.review.aggregate({ where: { spotId: initialSpot.id }, _avg: { rating: true } }),
-    })
-    return {
-      spot: data.spot,
-      rating: data.rating._avg.rating,
-      sameLocationSpots: data.sameLocationSpots,
-    }
-  },
-  ["spot-preview"],
-  { revalidate: 120 },
-)
+      const data = await promiseHash({
+        sameLocationSpots: db.spot.findMany({
+          where: { ...publicSpotWhereClause(null), latitude: initialSpot.latitude, longitude: initialSpot.longitude },
+          select: { id: true },
+          orderBy: { createdAt: "desc" },
+        }),
+        spot: db.spot.findUniqueOrThrow({
+          where: { id: initialSpot.id, ...publicSpotWhereClause(null) },
+          select: {
+            id: true,
+            name: true,
+            type: true,
+            ...spotPartnerFields,
+            _count: { select: { reviews: true, listSpots: true } },
+            description: true,
+            reviews: { take: 5, select: reviewItemSelectFields },
+            verifier: { select: { firstName: true, username: true, lastName: true, avatar: true, avatarBlurHash: true } },
+            verifiedAt: true,
+            images: { select: { id: true, path: true, blurHash: true } },
+          },
+        }),
+        rating: db.review.aggregate({ where: { spotId: initialSpot.id }, _avg: { rating: true } }),
+      })
+      return {
+        spot: data.spot,
+        rating: data.rating._avg.rating,
+        sameLocationSpots: data.sameLocationSpots,
+      }
+    },
+    ["spot-preview", id],
+    { revalidate: 120 },
+  )()
 
 export default async function Page({ params }: { params: { id: string } }) {
   const data = await getSpotData(params.id)

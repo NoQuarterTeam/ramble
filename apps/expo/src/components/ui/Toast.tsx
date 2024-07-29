@@ -11,7 +11,11 @@ export function Toast() {
         success: (props) => (
           <BaseToast
             {...props}
-            style={{ borderLeftWidth: 0, backgroundColor: isDark ? "white" : colors.gray[800], borderRadius: 100 }}
+            style={{
+              borderLeftWidth: 0,
+              backgroundColor: isDark ? "white" : colors.gray[800],
+              borderRadius: 3,
+            }}
             text1Style={{ color: isDark ? "black" : "white", fontSize: 13, fontFamily: "urbanist400" }}
             text2Style={{ color: isDark ? "black" : "white", opacity: 0.8, fontSize: 11, fontFamily: "urbanist400" }}
           />
@@ -19,7 +23,11 @@ export function Toast() {
         error: (props) => (
           <BaseToast
             {...props}
-            style={{ borderLeftWidth: 0, backgroundColor: colors.red[500], borderRadius: 100 }}
+            style={{
+              borderLeftWidth: 0,
+              backgroundColor: colors.red[500],
+              borderRadius: 3,
+            }}
             text1Style={{ color: "white", fontSize: 13, fontFamily: "urbanist400" }}
             text2NumberOfLines={1}
             text2Style={{ color: "white", opacity: 0.8, fontSize: 11, fontFamily: "urbanist400" }}

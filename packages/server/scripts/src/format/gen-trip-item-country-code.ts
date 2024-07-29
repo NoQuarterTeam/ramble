@@ -19,7 +19,8 @@ async function main() {
         : { latitude: undefined, longitude: undefined }
     if (!latitude || !longitude) continue
     const data = await geocodeCoords({ latitude, longitude })
-    const countryCode = COUNTRIES.find((c) => c.name === data.country)?.code
+    const countryCode =
+      data.country && COUNTRIES.find((c) => c.name === data.country || c.alternatives?.includes(data.country!))?.code
     await prisma.tripItem.update({ where: { id: tripItem.id }, data: { countryCode } })
   }
 }

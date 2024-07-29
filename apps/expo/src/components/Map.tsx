@@ -15,6 +15,7 @@ export const MapView = React.forwardRef<Mapbox.MapView, MapViewProps & { childre
       <Mapbox.MapView
         logoEnabled={false}
         compassEnabled
+        attributionPosition={{ top: 0, left: 10 }}
         // pitchEnabled={false}
         ref={mapRef}
         compassFadeWhenNorth
@@ -38,7 +39,7 @@ function ThemeSwitcher(props: { styleUrl: string }) {
   React.useEffect(() => {
     setIsLoaded(false)
     if (props.styleUrl === "mapbox://styles/mapbox/standard") {
-      new Promise((resolve) => setTimeout(resolve, 1000)).then(() => setIsLoaded(true))
+      new Promise((resolve) => setTimeout(resolve, 0)).then(() => setIsLoaded(true))
     }
   }, [props.styleUrl])
 

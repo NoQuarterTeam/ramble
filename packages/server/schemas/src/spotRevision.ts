@@ -1,4 +1,4 @@
-import { SpotType } from "@ramble/database/types"
+import { SpotType } from "@ramble/database/server"
 import { z } from "zod"
 import { NullableFormString } from "./utils/form"
 

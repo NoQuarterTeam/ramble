@@ -5,38 +5,38 @@
   "types": "./src/index.ts",
   "sideEffects": false,
   "scripts": {
-    "format": "pnpm dlx @biomejs/biome check --apply-unsafe ./src",
+    "format": "pnpm dlx @biomejs/biome check --write --unsafe ./src",
     "typecheck": "tsc --noEmit",
     "with-env": "dotenv -e ../../../.env --"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.592.0",
-    "@aws-sdk/lib-storage": "3.592.0",
-    "@aws-sdk/s3-request-presigner": "3.592.0",
+    "@aws-sdk/client-s3": "3.620.0",
+    "@aws-sdk/lib-storage": "3.620.0",
+    "@aws-sdk/s3-request-presigner": "3.620.0",
     "@ramble/database": "workspace:*",
     "@ramble/emails": "workspace:*",
     "@ramble/server-env": "workspace:*",
     "@ramble/shared": "workspace:*",
-    "@react-email/render": "^0.0.15",
-    "@slack/web-api": "7.0.4",
+    "@react-email/render": "^0.0.17",
+    "@slack/web-api": "7.3.1",
     "bcryptjs": "2.4.3",
     "blurhash": "2.0.5",
-    "dayjs": "1.11.11",
+    "dayjs": "1.11.12",
     "expo-server-sdk": "^3.10.0",
     "flickr-sdk": "7.0.0-beta.7",
     "jsonwebtoken": "9.0.2",
-    "loops": "2.0.0",
-    "nodemailer": "6.9.13",
-    "resend": "3.3.0",
+    "loops": "3.0.0",
+    "nodemailer": "6.9.14",
+    "resend": "3.5.0",
     "sharp": "0.32.6",
     "zod": "3.23.8"
   },
   "devDependencies": {
     "@types/bcryptjs": "2.4.6",
     "@types/jsonwebtoken": "9.0.6",
-    "@types/node": "20.14.2",
+    "@types/node": "20.14.13",
     "@types/nodemailer": "6.4.15",
     "dotenv-cli": "7.4.2",
-    "typescript": "5.4.5"
+    "typescript": "5.5.4"
   }
 }

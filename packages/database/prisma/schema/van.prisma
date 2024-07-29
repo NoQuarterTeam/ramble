@@ -1,0 +1,33 @@
+model Van {
+  id             String  @id @default(uuid())
+  name           String
+  model          String
+  year           Int
+  description    String? @db.Text
+  hasToilet      Boolean @default(false)
+  hasShower      Boolean @default(false)
+  hasElectricity Boolean @default(false)
+  hasInternet    Boolean @default(false)
+  hasBikeRack    Boolean @default(false)
+
+  user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String     @unique
+  images VanImage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model VanImage {
+  id       String  @id @default(uuid())
+  path     String
+  blurHash String?
+
+  vanId String
+  van   Van    @relation(fields: [vanId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@unique([vanId, path])
+}

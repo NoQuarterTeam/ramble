@@ -6,6 +6,7 @@ import { LoopsClient } from "loops"
 
 const loops = new LoopsClient(env.LOOPS_API_KEY)
 
+// add to formattedData below
 export type LoopsContact = {
   email: string
   userId?: string
@@ -22,6 +23,9 @@ export type LoopsContact = {
   signedUpAt?: string
   accessRequestedAt?: string
   accessRequestAcceptedAt?: string
+  // features
+  hasCreatedSpot?: boolean
+  hasCreatedTrip?: boolean
 }
 
 // if changing email, make sure to pass userId
@@ -42,6 +46,8 @@ export function updateLoopsContact(contact: LoopsContact) {
     signedUpAt: contact.signedUpAt,
     accessRequestedAt: contact.accessRequestedAt,
     accessRequestAcceptedAt: contact.accessRequestAcceptedAt,
+    hasCreatedSpot: contact.hasCreatedSpot,
+    hasCreatedTrip: contact.hasCreatedTrip,
   }
   waitUntil(loops.updateContact(contact.email, formattedData).catch(Sentry.captureException))
 }

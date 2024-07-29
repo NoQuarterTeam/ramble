@@ -2,7 +2,7 @@
   "name": "@ramble/database",
   "version": "1.0.0",
   "main": "./index.ts",
-  "files": ["./index.ts", "./types.ts"],
+  "files": ["./index.ts", "./types.ts", "./server.ts"],
   "scripts": {
     "dev": "pnpm with-env prisma studio",
     "db:push": "pnpm with-env prisma db push",
@@ -13,18 +13,15 @@
   "sideEffects": false,
   "dependencies": {
     "@planetscale/database": "1.18.0",
-    "@prisma/adapter-planetscale": "5.15.0",
-    "@prisma/client": "5.15.0",
+    "@prisma/adapter-planetscale": "5.17.0",
+    "@prisma/client": "5.17.0",
     "@ramble/server-env": "workspace:*",
     "nanoid": "3.3.4",
-    "prisma": "5.15.0"
+    "prisma": "5.17.0"
   },
   "devDependencies": {
-    "@types/node": "20.14.2",
+    "@types/node": "20.14.13",
     "dotenv-cli": "7.4.2",
-    "typescript": "5.4.5"
-  },
-  "prisma": {
-    "schema": "./schema.prisma"
+    "typescript": "5.5.4"
   }
 }

@@ -3,6 +3,7 @@ import {
   createAuthToken,
   deleteObject,
   generateBlurHash,
+  getLanguage,
   sendAccountVerificationEmail,
   sendSlackMessage,
   sendUserFollowedNotification,
@@ -36,6 +37,7 @@ export const userRouter = createTRPCRouter({
         followers: ctx.user ? { where: { id: ctx.user.id } } : undefined,
         _count: { select: { followers: true, following: true } },
         bio: true,
+        bioLanguage: true,
         tags: { select: { id: true, name: true } },
       },
     })
@@ -56,9 +58,13 @@ export const userRouter = createTRPCRouter({
       if (ctx.user.avatar) await deleteObject(ctx.user.avatar)
       avatarBlurHash = await generateBlurHash(data.avatar)
     }
+    let bioLanguage = ctx.user.bioLanguage
+    if (data.bio && data.bio !== ctx.user.bio) {
+      bioLanguage = await getLanguage(data.bio)
+    }
     const user = await ctx.prisma.user.update({
       where: { id: ctx.user.id },
-      data: { ...data, avatarBlurHash, tags: { set: tagIds?.map((tagId) => ({ id: tagId })) } },
+      data: { ...data, bioLanguage, avatarBlurHash, tags: { set: tagIds?.map((tagId) => ({ id: tagId })) } },
     })
     updateLoopsContact({ userId: user.id, email: user.email, ...data })
     return user
@@ -83,7 +89,7 @@ export const userRouter = createTRPCRouter({
       where: {
         deletedAt: null,
         isLocationPrivate: false,
-        updatedAt: { gt: dayjs().subtract(1, "month").toDate() },
+        updatedAt: { gt: dayjs().subtract(3, "month").toDate() },
         latitude: { not: null, gt: coords.minLat, lt: coords.maxLat },
         longitude: { not: null, gt: coords.minLng, lt: coords.maxLng },
       },
@@ -163,6 +169,31 @@ export const userRouter = createTRPCRouter({
     sendSlackMessage(`😭 User @${ctx.user.username} deleted their account.`)
     return true
   }),
+  all: publicProcedure
+    .input(z.object({ skip: z.number(), filter: z.enum(["guides", "users"]).optional() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.prisma.user.findMany({
+        where: { role: input.filter === "guides" ? "GUIDE" : "MEMBER", deletedAt: null },
+        skip: input.skip,
+        take: 12,
+        orderBy: { createdAt: "desc" },
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          username: true,
+          avatar: true,
+          avatarBlurHash: true,
+          _count: {
+            select: {
+              followers: true,
+              createdTrips: true,
+              createdSpots: { where: { sourceUrl: { equals: null }, deletedAt: null, verifiedAt: { not: null } } },
+            },
+          },
+        },
+      })
+    }),
   guides: publicProcedure.input(z.object({ skip: z.number() })).query(async ({ ctx, input }) => {
     return ctx.prisma.user.findMany({
       where: { role: "GUIDE", deletedAt: null },
@@ -179,6 +210,9 @@ export const userRouter = createTRPCRouter({
         _count: {
           select: {
             followers: true,
+            /**
+             * @deprecated in v1.5.1 - dont use anymore
+             */
             lists: { where: { isPrivate: false } },
             createdTrips: true,
             /**

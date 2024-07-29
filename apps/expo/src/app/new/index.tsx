@@ -196,7 +196,6 @@ export default function NewSpotLocationScreen() {
                 <Button
                   isLoading={isFetchingPlaces}
                   onPress={handleFindPlaces}
-                  className="rounded-full"
                   leftIcon={<Icon icon={Icons.GoogleColor} size={14} />}
                   size="xs"
                 >
@@ -238,9 +237,10 @@ export default function NewSpotLocationScreen() {
             pointerEvents="box-none"
             className="absolute right-5 bottom-5 left-5 flex flex-row items-center justify-between space-y-2"
           >
-            <View className="w-12" />
+            <View className="w-10" />
             <Button
-              className="rounded-full bg-background"
+              size="sm"
+              className="bg-background"
               textClassName="text-black"
               onPress={async () => {
                 if (!coords || !addressToUse) return toast({ title: "Please select a valid location" })
@@ -288,9 +288,9 @@ export default function NewSpotLocationScreen() {
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={handleSetUserLocation}
-              className="sq-12 flex flex-row items-center justify-center rounded-full bg-background"
+              className="sq-10 flex flex-row items-center justify-center rounded-sm bg-background"
             >
-              <Navigation size={20} className="text-black" />
+              <Navigation size={16} className="text-black" />
             </TouchableOpacity>
           </View>
         </View>

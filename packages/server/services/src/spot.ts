@@ -1,4 +1,5 @@
-import { Prisma, type SpotType, type User } from "@ramble/database/types"
+import { Prisma } from "@prisma/client"
+import type { SpotType, User } from "@ramble/database/types"
 import { type SpotListSort, campingSpotTypes } from "@ramble/shared"
 
 export const publicSpotWhereClause = (userId?: string | null) => {
@@ -32,7 +33,7 @@ export const verifiedSpotWhereClauseRaw = (userId?: string | null, showUnverifie
 }
 
 export const spotItemSelectFields = Prisma.sql`
-  Spot.id, Spot.name, Spot.type, Spot.address,
+  Spot.id, Spot.name, Spot.verifiedAt, Spot.type, Spot.address,
   Spot.latitude, Spot.longitude,
   SpotImage.path AS image, SpotImage.blurHash AS blurHash,
   CAST((SELECT AVG(rating) FROM Review WHERE Review.spotId = Spot.id) AS CHAR(32)) AS rating,

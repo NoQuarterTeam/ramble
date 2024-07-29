@@ -1,32 +1,19 @@
+import type { Review, User } from "@ramble/database/types"
+import { createAssetUrl } from "@ramble/shared"
 import { useQuery } from "@tanstack/react-query"
 import dayjs from "dayjs"
 import { useRouter } from "expo-router"
-import { Star, User2 } from "lucide-react-native"
+import { Languages, Star, User2 } from "lucide-react-native"
 import * as React from "react"
 import { TouchableOpacity, View, useColorScheme } from "react-native"
-
-import type { Review, User } from "@ramble/database/types"
-import { createAssetUrl } from "@ramble/shared"
-
 import { api } from "~/lib/api"
-import { FULL_WEB_URL } from "~/lib/config"
 import { useMe } from "~/lib/hooks/useMe"
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
-
+import { type TranslateInput, getTranslation } from "~/lib/translation"
 import { Icon } from "./Icon"
 import { Button } from "./ui/Button"
 import { OptimizedImage } from "./ui/OptimisedImage"
 import { Text } from "./ui/Text"
-
-type TranslateInput = { id: string; lang: string }
-async function getTranslation({ id, lang }: TranslateInput) {
-  try {
-    const res = await fetch(`${FULL_WEB_URL}/api/reviews/${id}/translate/${lang}`)
-    return await res.json()
-  } catch {
-    return "Error translating description"
-  }
-}
 
 export function ReviewItem({
   review,
@@ -46,13 +33,13 @@ export function ReviewItem({
     },
   })
 
-  const [isTranslated, setIsTranslated] = React.useState(false)
+  const [isTranslated, setIsTranslated] = React.useState(false) // by default, leave review untranslated, until user actioned
 
   const { data, error, isLoading } = useQuery<TranslateInput, string, string>({
-    queryKey: ["review-translation", { id: review.id, lang: me?.preferredLanguage || "en" }],
-    queryFn: () => getTranslation({ id: review.id, lang: me?.preferredLanguage || "en" }),
+    queryKey: ["review-translation", { id: review.id, description: review.description, lang: me?.preferredLanguage || "en" }],
+    queryFn: () => getTranslation({ text: review.description, lang: me?.preferredLanguage || "en" }),
     staleTime: Number.POSITIVE_INFINITY,
-    enabled: isTranslated && !!me && !!me?.preferredLanguage,
+    enabled: isTranslated && !!me?.preferredLanguage && !!review.description,
   })
 
   const tab = useTabSegment()
@@ -118,16 +105,18 @@ export function ReviewItem({
             </Button>
           </View>
         ) : (
+          review.description &&
           me.preferredLanguage !== review.language && (
             <View className="flex items-start">
               <Button
+                leftIcon={<Icon icon={Languages} size={14} />}
                 onPress={() => setIsTranslated((t) => !t)}
                 isLoading={isLoading}
-                variant="ghost"
+                variant="link"
                 size="xs"
-                className="px-0 h-4"
+                className="px-0 h-6"
               >
-                {isTranslated ? "See original" : "See translation"}
+                {isTranslated ? "See original" : "Translate"}
               </Button>
             </View>
           )

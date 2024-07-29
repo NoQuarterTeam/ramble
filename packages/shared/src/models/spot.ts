@@ -248,7 +248,7 @@ export function isCampingSpot(type?: SpotType | null | undefined) {
   return campingSpotTypes.includes(type)
 }
 
-export const activitySpotTypes = ["CLIMBING", "CLIMBING", "HIKING_TRAIL", "PADDLE_KAYAK", "MOUNTAIN_BIKING"] as SpotType[]
+export const activitySpotTypes = ["CLIMBING", "SURFING", "YOGA", "HIKING_TRAIL", "PADDLE_KAYAK", "MOUNTAIN_BIKING"] as SpotType[]
 
 export const spotMarkerColorTypes = {
   // stays
@@ -355,7 +355,7 @@ export const spotMarkerClusterColorTypes = {
 
 export type SpotListSort = "latest" | "rated" | "saved" | "near"
 
-export type SpotItemType = Pick<Spot, "id" | "name" | "address" | "type" | "latitude" | "longitude"> & {
+export type SpotItemType = Pick<Spot, "id" | "name" | "address" | "verifiedAt" | "type" | "latitude" | "longitude"> & {
   rating: string
   savedCount: string
   image?: SpotImage["path"] | null

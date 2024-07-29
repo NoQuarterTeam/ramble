@@ -7,6 +7,7 @@ import {
   sendSpotAddedToTripNotification,
   sendTripSpotAddedNotification,
   sendTripStopAddedNotification,
+  updateLoopsContact,
 } from "@ramble/server-services"
 import { uniq } from "@ramble/shared"
 import { TRPCError } from "@trpc/server"
@@ -24,14 +25,18 @@ export const tripRouter = createTRPCRouter({
     const data = await ctx.prisma.trip.findMany({
       where: { users: { some: { id: ctx.user.id } } },
       orderBy: { startDate: "desc" },
-      include: {
-        items: true, // TODO: <-- remove later
-        creator: true,
-        users: true,
+      select: {
+        id: true,
+        name: true,
+        startDate: true,
+        endDate: true,
+        items: { orderBy: { order: "asc" }, select: { id: true, order: true, countryCode: true } },
+        creator: { select: { avatar: true, avatarBlurHash: true, id: true, username: true, firstName: true, lastName: true } },
+        users: { select: { id: true, username: true, avatar: true, avatarBlurHash: true, firstName: true, lastName: true } },
         media: {
           where: { deletedAt: null },
           orderBy: { timestamp: "desc" },
-          take: 3,
+          take: 6,
           select: { id: true, path: true, thumbnailPath: true },
         },
       },
@@ -41,12 +46,13 @@ export const tripRouter = createTRPCRouter({
 
     return data.map((trip) => {
       const countryFlags = []
-      for (const item of trip.items.sort((a, b) => a.order - b.order)) {
+      const countryCodes = []
+      for (const item of trip.items) {
         const flag = COUNTRIES.find((c) => c.code === item.countryCode)?.emoji
-        if (!flag) continue
-        countryFlags.push(flag)
+        if (item.countryCode) countryCodes.push(item.countryCode)
+        if (flag) countryFlags.push(flag)
       }
-      return { ...trip, countryFlags: uniq(countryFlags) as string[] }
+      return { ...trip, countryFlags: uniq(countryFlags), countryCodes: uniq(countryCodes) }
     })
   }),
   allWithSavedSpot: protectedProcedure.input(z.object({ spotId: z.string() })).query(async ({ ctx, input }) => {
@@ -78,6 +84,7 @@ export const tripRouter = createTRPCRouter({
     const trip = await ctx.prisma.trip.create({
       data: { ...input, creatorId: ctx.user.id, users: { connect: { id: ctx.user.id } } },
     })
+    updateLoopsContact({ email: ctx.user.email, hasCreatedTrip: true })
     await sendSlackMessage(`🚌 New trip created by ${ctx.user.username}!`)
     return trip
   }),
@@ -136,17 +143,18 @@ export const tripRouter = createTRPCRouter({
         id: true,
         name: true,
         creatorId: true,
+        mediaSyncEnabled: true,
         startDate: true,
         endDate: true,
-        media: {
-          where: {
-            deletedAt: null,
-            latitude: { not: null },
-            longitude: { not: null },
-          },
-          orderBy: { timestamp: "asc" },
-          select: { timestamp: true, latitude: true, longitude: true },
-        },
+        //media: {
+          //where: {
+            //deletedAt: null,
+            //latitude: { not: null },
+            //longitude: { not: null },
+          //},
+          //orderBy: { timestamp: "asc" },
+          //select: { timestamp: true, latitude: true, longitude: true },
+        //},
         items: {
           orderBy: { order: "asc" },
           select: {
@@ -174,7 +182,7 @@ export const tripRouter = createTRPCRouter({
       orderBy: { timestamp: "desc" },
       select: { timestamp: true },
     })
-    const media = trip.media.map((m) => ({ timestamp: m.timestamp, latitude: m.latitude, longitude: m.longitude }))
+    // const media = trip.media.map((m) => ({ timestamp: m.timestamp, latitude: m.latitude, longitude: m.longitude }))
 
     const latestMediaTimestamp = latestMedia?.timestamp
     if (trip.items.length === 0) return { trip, latestMediaTimestamp }
@@ -202,10 +210,10 @@ export const tripRouter = createTRPCRouter({
       //   return coords
       // }
       // put all media between this item and the next
-      const mediaBetween = media.filter((m) => m.timestamp >= item.date! && m.timestamp <= nextItem.date!)
-      if (mediaBetween.length > 0) {
-        coords = coords.concat(mediaBetween.map((m) => [m.longitude!, m.latitude!]))
-      }
+      // const mediaBetween = media.filter((m) => m.timestamp >= item.date! && m.timestamp <= nextItem.date!)
+      // if (mediaBetween.length > 0) {
+        // coords = coords.concat(mediaBetween.map((m) => [m.longitude!, m.latitude!]))
+      // }
       return coords
     }) as [number, number][]
 

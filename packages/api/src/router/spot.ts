@@ -1,12 +1,5 @@
-import crypto from "node:crypto"
-import * as Sentry from "@sentry/nextjs"
-import { TRPCError } from "@trpc/server"
-import dayjs from "dayjs"
-import Supercluster from "supercluster"
-import { z } from "zod"
-
-import { type Spot, SpotType } from "@ramble/database/types"
-import { FULL_WEB_URL } from "@ramble/server-env"
+import { Prisma } from "@prisma/client"
+import { type Spot, SpotType } from "@ramble/database/server"
 import { clusterSchema, spotAmenitiesSchema, spotSchema, userSchema } from "@ramble/server-schemas"
 import {
   COUNTRIES,
@@ -14,16 +7,22 @@ import {
   geocodeCoords,
   get5DayForecast,
   getCurrentWeather,
+  getLanguage,
   publicSpotWhereClause,
   publicSpotWhereClauseRaw,
   sendSlackMessage,
   spotItemDistanceFromMeField,
   spotItemSelectFields,
   spotListQuery,
+  updateLoopsContact,
   verifiedSpotWhereClause,
 } from "@ramble/server-services"
-import { amenitiesFields, promiseHash, spotPartnerFields } from "@ramble/shared"
 import type { SpotItemType } from "@ramble/shared"
+import { amenitiesFields, promiseHash, spotPartnerFields } from "@ramble/shared"
+import { TRPCError } from "@trpc/server"
+import dayjs from "dayjs"
+import Supercluster from "supercluster"
+import { z } from "zod"
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
 
@@ -49,10 +48,10 @@ export const spotRouter = createTRPCRouter({
         select: { id: true, latitude: true, longitude: true, type: true },
         where: {
           type: typeof types === "string" ? { equals: types } : { in: types },
+          // if isUnverified is pass return all spots, if not, return all spots that are verified or ones created by me
           ...verifiedSpotWhereClause(ctx.user?.id, isUnverified),
           latitude: { gt: coords.minLat, lt: coords.maxLat },
           longitude: { gt: coords.minLng, lt: coords.maxLng },
-          // if isUnverified is pass return all spots, if not, return all spots that are verified or ones created by me
           ...publicSpotWhereClause(ctx.user?.id),
           isPetFriendly: isPetFriendly ? { equals: true } : undefined,
         },
@@ -90,6 +89,12 @@ export const spotRouter = createTRPCRouter({
           : c.properties,
       }))
     }),
+  byNanoid: publicProcedure.input(z.object({ nanoid: z.string() })).query(({ ctx, input }) => {
+    return ctx.prisma.spot.findUnique({
+      where: { nanoid: input.nanoid },
+      select: { id: true },
+    })
+  }),
   verify: protectedProcedure.input(z.object({ id: z.string().uuid() })).mutation(async ({ ctx, input }) => {
     const spot = await ctx.prisma.spot.findUnique({ where: { id: input.id } })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
@@ -142,7 +147,12 @@ export const spotRouter = createTRPCRouter({
     })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
     const sameLocationSpots = await ctx.prisma.spot.findMany({
-      where: { ...publicSpotWhereClause(null), latitude: spot.latitude, longitude: spot.longitude },
+      where: {
+        ...verifiedSpotWhereClause(ctx.user?.id),
+        ...publicSpotWhereClause(ctx.user?.id),
+        latitude: spot.latitude,
+        longitude: spot.longitude,
+      },
       select: { id: true },
       orderBy: { createdAt: "desc" },
     })
@@ -177,6 +187,8 @@ export const spotRouter = createTRPCRouter({
           id: true,
           name: true,
           description: true,
+          nanoid: true,
+          descriptionLanguage: true,
           latitude: true,
           longitude: true,
           coverId: true,
@@ -238,26 +250,12 @@ export const spotRouter = createTRPCRouter({
       `,
     })
     if (!spot) throw new TRPCError({ code: "NOT_FOUND" })
-    let translatedDescription: string | null | undefined
 
-    let descriptionHash: string | undefined
-    if (ctx.user && spot.description) {
-      descriptionHash = crypto.createHash("sha1").update(spot.description).digest("hex") as string
-      translatedDescription = await fetch(
-        `${FULL_WEB_URL}/api/spots/${spot.id}/translate/${ctx.user.preferredLanguage}?hash=${descriptionHash}`,
-      )
-        .then((r) => r.json() as Promise<string | null>)
-        .catch((error) => {
-          Sentry.captureException(error)
-          return null
-        })
-    }
     const weather = await get5DayForecast(spot.latitude, spot.longitude)
     spot.images = spot.images.sort((a, b) => (a.id === spot.coverId ? -1 : b.id === spot.coverId ? 1 : 0))
     return {
       spot,
-      translatedDescription,
-      descriptionHash,
+      translatedDescription: spot.description, // @deprecated translate description on client
       isLiked: !!ctx.user && spot.listSpots.length > 0,
       rating,
       tags,
@@ -267,6 +265,7 @@ export const spotRouter = createTRPCRouter({
   byUser: publicProcedure.input(userSchema.pick({ username: true })).query(async ({ ctx, input }) => {
     const user = await ctx.prisma.user.findUnique({ where: { username: input.username } })
     if (!user) throw new TRPCError({ code: "NOT_FOUND" })
+    const userVerifiedSpots = ctx.user && ctx.user.id === user.id ? Prisma.sql`` : Prisma.sql`AND Spot.verifiedAt IS NOT NULL`
     const spots = await ctx.prisma.$queryRaw<SpotItemType[]>`
       SELECT
         ${spotItemDistanceFromMeField(ctx.user)},
@@ -276,7 +275,7 @@ export const spotRouter = createTRPCRouter({
       LEFT JOIN
         SpotImage ON Spot.coverId = SpotImage.id
       WHERE
-        Spot.creatorId = ${user.id} AND Spot.verifiedAt IS NOT NULL AND ${publicSpotWhereClauseRaw(user.id)} AND Spot.sourceUrl IS NULL
+        Spot.creatorId = ${user.id} ${userVerifiedSpots} AND ${publicSpotWhereClauseRaw(user.id)} AND Spot.sourceUrl IS NULL
       GROUP BY
         Spot.id
       ORDER BY
@@ -309,9 +308,14 @@ export const spotRouter = createTRPCRouter({
           return { path, blurHash, creator: { connect: { id: ctx.user.id } } }
         }),
       )
+      let descriptionLanguage = undefined
+      if (input.description) {
+        descriptionLanguage = await getLanguage(input.description)
+      }
       const spot = await ctx.prisma.spot.create({
         data: {
           ...data,
+          descriptionLanguage,
           // temp until apps send correct data
           isPetFriendly: data.isPetFriendly === "true" || data.isPetFriendly === true,
           publishedAt: shouldPublishLater ? dayjs().add(2, "weeks").toDate() : undefined,
@@ -320,6 +324,7 @@ export const spotRouter = createTRPCRouter({
           amenities: amenities ? { create: amenities } : undefined,
         },
       })
+      updateLoopsContact({ email: ctx.user.email, hasCreatedSpot: true })
       if (coverImage || imageData?.[0]?.path) {
         await ctx.prisma.spot.update({
           where: { id: spot.id },
@@ -334,7 +339,8 @@ export const spotRouter = createTRPCRouter({
         }
 
         const data = await geocodeCoords({ latitude: spot.latitude, longitude: spot.longitude })
-        const countryCode = COUNTRIES.find((c) => c.name === data.country)?.code
+        const countryCode =
+          data.country && COUNTRIES.find((c) => c.name === data.country || c.alternatives?.includes(data.country!))?.code
 
         await ctx.prisma.tripItem.create({
           data: {
@@ -389,11 +395,15 @@ export const spotRouter = createTRPCRouter({
         )
       }
       // await deleteManyObjects(imagesToDelete.map((i) => i.path))
-
+      let descriptionLanguage = spot.descriptionLanguage
+      if (!descriptionLanguage) {
+        descriptionLanguage = await getLanguage(input.description)
+      }
       return ctx.prisma.spot.update({
         where: { id },
         data: {
           ...data,
+          descriptionLanguage,
           // temp until apps send correct data
           isPetFriendly: data.isPetFriendly === "true" || data.isPetFriendly === true,
           images: { create: imageData, delete: imagesToDelete },

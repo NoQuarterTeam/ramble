@@ -1,17 +1,14 @@
+import type { Trip } from "@ramble/database/types"
+import { useDisclosure } from "@ramble/shared"
 import DateTimePicker from "@react-native-community/datetimepicker"
 import dayjs from "dayjs"
 import { FormProvider } from "react-hook-form"
 import { TouchableOpacity, View } from "react-native"
-
-import type { Trip } from "@ramble/database/types"
-import { useDisclosure } from "@ramble/shared"
-
 import { Button } from "~/components/ui/Button"
 import { FormInput, FormInputLabel } from "~/components/ui/FormInput"
 import type { RouterInputs } from "~/lib/api"
 import { type ApiError, useForm } from "~/lib/hooks/useForm"
 import { useKeyboardController } from "~/lib/hooks/useKeyboardController"
-
 import { Text } from "./ui/Text"
 import { toast } from "./ui/Toast"
 

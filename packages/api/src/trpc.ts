@@ -23,6 +23,7 @@ const userSelectFields = {
   username: true,
   instagram: true,
   bio: true,
+  bioLanguage: true,
   latitude: true,
   longitude: true,
   role: true,

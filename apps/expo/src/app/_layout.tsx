@@ -28,7 +28,7 @@ import { AppState, type AppStateStatus, Text, View, useColorScheme } from "react
 import { AvoidSoftInput } from "react-native-avoid-softinput"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import Animated, { SlideInUp, SlideOutUp } from "react-native-reanimated"
-import { SafeAreaProvider } from "react-native-safe-area-context"
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 import { enableScreens } from "react-native-screens"
 import { UnsupportedVersion } from "~/components/UnsupportedVersion"
 import { Toast } from "~/components/ui/Toast"
@@ -137,11 +137,13 @@ function CheckNetwork() {
 
   if (isConnected) return null
   return (
-    <Animated.View entering={SlideInUp.duration(500)} exiting={SlideOutUp.duration(500)} className="absolute top-14 z-10 w-full">
-      <View className="bg-red-500 px-4 py-3 flex flex-row items-center justify-center rounded-full mx-auto">
-        <Text className="text-white">No internet connection</Text>
-      </View>
-    </Animated.View>
+    <SafeAreaView pointerEvents="none" className="absolute flex items-center justify-center w-full top-2">
+      <Animated.View entering={SlideInUp.duration(500)} exiting={SlideOutUp.duration(500)} className="z-10 w-full">
+        <View className="bg-red-500 px-4 py-3 flex flex-row items-center justify-center rounded-sm mx-auto shadow">
+          <Text className="text-white">No internet connection</Text>
+        </View>
+      </Animated.View>
+    </SafeAreaView>
   )
 }
 

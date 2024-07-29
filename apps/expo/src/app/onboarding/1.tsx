@@ -37,12 +37,7 @@ export default function OnboardingStep1Screen() {
     },
   })
 
-  const onSubmit = form.handleSubmit((data) =>
-    mutate({
-      bio: data.bio,
-      tagIds: selectedTagIds,
-    }),
-  )
+  const onSubmit = form.handleSubmit((data) => mutate({ bio: data.bio, tagIds: selectedTagIds }))
 
   const handleToggleTag = (tagId: string) => {
     if (selectedTagIds.includes(tagId)) {

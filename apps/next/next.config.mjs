@@ -5,7 +5,10 @@ const nextConfig = {
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
   experimental: { serverComponentsExternalPackages: ["@aws-sdk"] },
-  redirects: () => [{ source: "/register", destination: "/", permanent: false }],
+  redirects: () => [
+    { source: "/register", destination: "/", permanent: false },
+    { source: "/spots/:id", destination: "/map/:id", permanent: false },
+  ],
   images: {
     remotePatterns: [{ hostname: "ramble.guide" }, { hostname: "cdn.ramble.guide" }],
   },

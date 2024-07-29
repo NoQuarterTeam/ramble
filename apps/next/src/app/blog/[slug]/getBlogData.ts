@@ -7,25 +7,26 @@ import { unstable_cache } from "next/cache"
 import { notFound } from "next/navigation"
 import { BLOG_NOTION_DB_ID, BLOG_S3_FOLDER } from "../config"
 
-export const getBlogContent = unstable_cache(
-  async (slug: string) => {
-    const pages = await notion.databases.query({
-      database_id: BLOG_NOTION_DB_ID,
-      page_size: 1,
-      filter: {
-        and: [
-          { property: "Published", date: { is_not_empty: true, before: dayjs().format() } },
-          { property: "Slug", rich_text: { equals: slug } },
-        ],
-      },
-    })
-    const page = pages.results[0] as PageObjectResponse
-    if (!page) notFound()
-    return formatContent(page)
-  },
-  ["blog-detail"],
-  { revalidate: 86400, tags: ["blog-detail"] },
-)
+export const getBlogContent = (slug: string) =>
+  unstable_cache(
+    async () => {
+      const pages = await notion.databases.query({
+        database_id: BLOG_NOTION_DB_ID,
+        page_size: 1,
+        filter: {
+          and: [
+            { property: "Published", date: { is_not_empty: true, before: dayjs().format() } },
+            { property: "Slug", rich_text: { equals: slug } },
+          ],
+        },
+      })
+      const page = pages.results[0] as PageObjectResponse
+      if (!page) notFound()
+      return formatContent(page)
+    },
+    ["blog-detail", slug],
+    { revalidate: 86400, tags: ["blog-detail", `blog-detail:${slug}`] },
+  )()
 
 export const getBlogPreviewContent = async (slug: string) => {
   await requireAdmin()
