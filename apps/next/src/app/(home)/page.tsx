@@ -79,7 +79,7 @@ export default function Home() {
         />
         <div className="relative z-1 pt-[30vh] md:pt-0">
           <h1 className="text-[calc(100vw/3.48)] lg:leading-[280px] italic font-extrabold text-primary">ramble</h1>
-          <p className="text-xl md:text-2xl pl-1 md:pl-4 pt-0 md:pt-5 -mt-7 font-semibold md:mt-0 max-w-[300px] md:max-w-lg">
+          <p className="text-xl md:text-2xl pl-1 md:pl-4 pt-0 md:pt-5 -mt-7 md:mt-0 max-w-[300px] md:max-w-lg">
             community app for the modern van traveler looking for genuine connections and meaningful experiences.
           </p>
 
