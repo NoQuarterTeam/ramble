@@ -7,7 +7,7 @@ import { NavLink } from "./NavLink"
 
 export function Nav() {
   return (
-    <div className="fixed top-0 left-0 z-10 flex h-nav w-full items-center justify-between border-b bg-background px-4 align-middle xl:px-12">
+    <div className="fixed top-0 left-0 z-20 flex h-nav w-full items-center justify-between border-b bg-background px-4 align-middle xl:px-12">
       <div className="flex items-center">
         <Link href="/" className="flex w-[100px] text-primary text-2xl italic font-bold">
           ramble
