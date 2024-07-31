@@ -383,8 +383,8 @@ importers:
         specifier: 14.2.5
         version: 14.2.5(react-dom@18.2.0)(react@18.2.0)
       posthog-js:
-        specifier: 1.151.0
-        version: 1.151.0
+        specifier: 1.151.1
+        version: 1.151.1
       pretty-cache-header:
         specifier: 1.0.0
         version: 1.0.0
@@ -6224,7 +6224,7 @@ packages:
     peerDependencies:
       '@babel/preset-env': ^7.1.6
     dependencies:
-      '@babel/parser': 7.25.0
+      '@babel/parser': 7.25.3
       '@babel/preset-env': 7.25.3(@babel/core@7.25.2)
       glob: 7.2.3
       hermes-parser: 0.19.1
@@ -13803,8 +13803,8 @@ packages:
       picocolors: 1.0.1
       source-map-js: 1.2.0
 
-  /posthog-js@1.151.0:
-    resolution: {integrity: sha512-KcafRksGNYNar230VpGWicUc4FhezSDVd7zw8uX0ohtUgPiq6OSek48YUC4uF+0i1s/zbpFeD3zky1o0zqFacw==}
+  /posthog-js@1.151.1:
+    resolution: {integrity: sha512-kXgBe58IkrTrWH/5PS6DNUxRTWp+5KEFEr9N4gPfKaS1/jsj40mnW81YcTcFS0xx1mH0QHlqkjrjySthio7i1w==}
     dependencies:
       fflate: 0.4.8
       preact: 10.20.2
