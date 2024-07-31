@@ -144,7 +144,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <div className="bg-[url('/landing/bg-contors.png')] bg-cover pb-[180px] md:pb-40 relative">
+      <div className="bg-[url('/landing/bg-contors.png')] bg-cover pb-[180px] md:pb-60 relative">
         <div className="items-center justify-center bg-primary flex">
           <PageContainer className="w-full justify-between gap-4 flex-col-reverse md:flex-row flex">
             <div className="flex flex-col flex-1 gap-4 items-center justify-center relative">
@@ -186,7 +186,7 @@ export default function Home() {
                 alt="hero11"
                 width={250}
                 height={543}
-                className="object-cover w-[700px] absolute top-0 md:top-[50px] right-0 -translate-y-[50%] z-20"
+                className="object-cover w-[700px] absolute top-0 md:top-[50px] right-0 -translate-y-[50%] z-10"
               />
             </div>
           </PageContainer>
