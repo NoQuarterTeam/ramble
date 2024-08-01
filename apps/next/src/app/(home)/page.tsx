@@ -84,8 +84,7 @@ export default function Home() {
           </p>
 
           <p className="text-2xl md:text-5xl pt-[550px] md:pt-[1000px] pb-8 md:pb-16 font-semibold max-w-[300px] md:max-w-5xl">
-            together with a team of experienced <Link href="/guides" target='_blank' className='underline hover:text-sky-300'>Guides</Link>, <span className="text-primary font-bold italic">ramble</span> offers curated camp stays,
-            services, hospitality spots and experiences all with a focus on sustainability and nature connection.
+            built for a new generation of eco-conscious, digitally connected travelers looking for untouched nature, genuine connection and a more holistic way to travel and live.
           </p>
         </div>
       </div>
@@ -106,7 +105,8 @@ export default function Home() {
           <Image src="/landing/hero4.png" alt="hero4" width={isMobile ? 200 : 535} height={isMobile ? 133 : 350} className="object-cover -rotate-[6deg] ml-0 md:ml-32" />
         </div>
         <p className="text-2xl md:text-5xl pt-20 md:pt-60 font-semibold max-w-[300px] md:max-w-5xl">
-          built for a new generation of eco-conscious, digitally connected travelers looking for untouched nature, genuine connection and a more holistic way to travel and live.
+          together with a team of experienced <Link href="/guides" target='_blank' className='underline hover:text-sky-300'>Guides</Link>, <span className="text-primary font-bold italic">ramble</span> offers curated camp stays,
+          services, hospitality spots and experiences all with a focus on sustainability and nature connection.
         </p>
       </div>
       <div className="relative w-screen pt-[860px] md:pt-[1230px] pb-40 space-y-6 px-2 md:px-12 overflow-hidden">
