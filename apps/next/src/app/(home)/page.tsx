@@ -66,7 +66,7 @@ export default function Home() {
         alt="hero0"
         width={1200}
         height={7000}
-        className="absolute pointer-events-none top-[360px] md:top-[400px] right-[5px] md:right-[170px] z-10"
+        className="absolute pointer-events-none top-[50vh] md:top-[400px] right-[5vw] md:right-[170px] z-10 w-95vh"
       />
       <div className="relative w-screen space-y-0 md:space-y-2 px-2 md:px-6 pt-4 md:pt-32 -mt-[75px] overflow-hidden">
         <div 
@@ -83,12 +83,12 @@ export default function Home() {
             community app for the modern van traveler looking for genuine connections and meaningful experiences.
           </p>
 
-          <p className="text-2xl md:text-5xl pt-[550px] md:pt-[1000px] pb-8 md:pb-16 font-semibold max-w-[300px] md:max-w-5xl">
+          <p className="text-2xl md:text-5xl pt-[600px] md:pt-[1000px] pb-8 md:pb-16 font-semibold max-w-[300px] md:max-w-5xl">
             built for a new generation of eco-conscious, digitally connected travelers looking for untouched nature, genuine connection and a more holistic way to travel and live in Europe.
           </p>
         </div>
       </div>
-      <div className="pt-16 md:pt-32 pb-16 px-2 md:px-6  bg-[url('/landing/bg-contors.png')] bg-cover py-40">
+      <div className="pt-[120px] md:pt-32 pb-16 px-2 md:px-6  bg-[url('/landing/bg-contors.png')] bg-cover py-40">
         <div>
           <Image src="/landing/hero2.png" alt="hero2" width={isMobile ? 150 : 420} height={isMobile ? 150 : 420} className="ml-[100px] md:ml-40 object-cover -rotate-[14deg]" />
         </div>
@@ -98,7 +98,7 @@ export default function Home() {
           </div>
 
           <Image src="/landing/hero3.png" alt="hero3" width={isMobile ? 160 : 440} height={isMobile ? 160 : 440} className={`transition-opacity duration-500 ${!isNegative ? 'opacity-0' : 'opacity-100'} object-cover mt-[33px] md:-mt-20 ml-[160px] md:ml-0 rotate-[12deg]`} />
-          <Image src="/landing/hero3-negative.png" alt="hero3" width={isMobile ? 160 : 440} height={isMobile ? 160 :440} className={`transition-opacity duration-500 ${!isNegative ? 'opacity-100' : 'opacity-0'} object-cover mt-[30px] md:-mt-20 ml-[130px] md:ml-0 rotate-[12deg] absolute right-[31px] md:right-[80px] top-[183px] md:top-0`} />
+          <Image src="/landing/hero3-negative.png" alt="hero3" width={isMobile ? 160 : 440} height={isMobile ? 160 :440} className={`transition-opacity duration-500 ${!isNegative ? 'opacity-100' : 'opacity-0'} object-cover mt-[30px] md:-mt-20 ml-[130px] md:ml-0 rotate-[12deg] absolute right-[46px] md:right-[80px] top-[183px] md:top-0`} />
 
         </div>
         <div className="px-8 lg:px-20 pt-56 md:pt-64">
@@ -109,7 +109,7 @@ export default function Home() {
           services, hospitality spots and experiences all with a focus on sustainability and nature connection.
         </p>
       </div>
-      <div className="relative w-screen pt-[860px] md:pt-[1230px] pb-40 space-y-6 px-2 md:px-12 overflow-hidden">
+      <div className="relative w-screen pt-[900px] md:pt-[1430px] pb-40 space-y-6 px-2 md:px-12 overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{
@@ -264,6 +264,10 @@ const features = [
     a: "part of the appeal of van travel is the solitude and nature, but sometimes you just want to share a beer with someone who gets it. Find other travellers in the area, or connect with like-minded locals.",
   },
   {
+    q: "a way to connect deeper with the local region and environment",
+    a: "learn about the local ecology, re-wilding projects and cultural history. Connect deeper with the place you find yourself in.",
+  },
+  {
     q: "tools and data to help you plan your trip",
     a: "weather data, network strength and more to help you plan your trip and find your next stop.",
   },
@@ -278,9 +282,5 @@ const features = [
   {
     q: "trusted services, utilities and shops to keep you on the road",
     a: "whether your van (or dog) is in need of some repairs or you're looking for a way to reduce your impact on the road, ramble has a selection of reliable services and sustainable alternatives when you need them most.",
-  },
-  {
-    q: "a way to connect deeper with the local region and environment",
-    a: "learn about the local ecology, re-wilding projects and cultural history. Connect deeper with the place you find yourself in.",
-  },
+  }
 ]
