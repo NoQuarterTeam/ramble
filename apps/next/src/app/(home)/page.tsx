@@ -85,7 +85,7 @@ export default function Home() {
 
           <p className="text-2xl md:text-5xl pt-[550px] md:pt-[1000px] pb-8 md:pb-16 font-semibold max-w-[300px] md:max-w-5xl">
             together with a team of experienced <Link href="/guides" target='_blank' className='underline hover:text-sky-300'>Guides</Link>, <span className="text-primary font-bold italic">ramble</span> offers curated camp stays,
-            services, hospitality spots and experiences all with a focus on sustainability, wellness and nature connection.
+            services, hospitality spots and experiences all with a focus on sustainability and nature connection.
           </p>
         </div>
       </div>
