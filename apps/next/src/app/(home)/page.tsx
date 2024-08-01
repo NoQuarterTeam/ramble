@@ -84,7 +84,7 @@ export default function Home() {
           </p>
 
           <p className="text-2xl md:text-5xl pt-[550px] md:pt-[1000px] pb-8 md:pb-16 font-semibold max-w-[300px] md:max-w-5xl">
-            built for a new generation of eco-conscious, digitally connected travelers looking for untouched nature, genuine connection and a more holistic way to travel and live.
+            built for a new generation of eco-conscious, digitally connected travelers looking for untouched nature, genuine connection and a more holistic way to travel and live in Europe.
           </p>
         </div>
       </div>
