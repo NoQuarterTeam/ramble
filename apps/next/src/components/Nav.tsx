@@ -33,7 +33,7 @@ export function Nav() {
         <DropdownMenuContent align="end" className="w-[200px] p-1 py-1.5">
           <div className="block md:hidden">
             <DropdownMenuItem asChild>
-              <Link href="/">Map</Link>
+              <Link href="/map">Map</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href="/spots">Latest spots</Link>
