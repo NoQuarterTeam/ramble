@@ -29,7 +29,7 @@ export default function Home() {
       setHero5Scale(Math.min(newScale, maxScale));
     }
 
-    if (scrollY > 1600 && scrollY < 2400) {
+    if (scrollY > 1800 && scrollY < 2200) {
       setIsNegative(true);
     } else {
       setIsNegative(false);
@@ -61,86 +61,91 @@ export default function Home() {
 
   return (
     <div className="dark bg-background font-serif text-white w-screen scroll-smooth">
-      <Image
-        src={isMobile ? "/landing/hero0-mob.png" : "/landing/hero0.png"}
-        alt="hero0"
-        width={1200}
-        height={7000}
-        className="absolute pointer-events-none top-[50vh] md:top-[400px] right-[5vw] md:right-[170px] z-10 w-95vh"
-      />
-      <div className="relative w-screen space-y-0 md:space-y-2 px-2 md:px-6 pt-4 md:pt-32 -mt-[75px] overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover md:bg-cover bg-top md:bg-bottom"
-          style={{
-            backgroundImage: `url(${isMobile ? '/landing/hero1-mob.png' : '/landing/hero1.png'})`,
-            transform: `scale(${scaleHero1})`,
-            transition: 'transform 0.1s ease-out'
-          }}
-        />
-        <div className="relative z-1 pt-[30vh] md:pt-0">
-          <h1 className="text-[calc(100vw/3.48)] lg:leading-[280px] italic font-extrabold text-primary">ramble</h1>
-          <p className="text-xl md:text-2xl pl-1 md:pl-4 pt-0 md:pt-5 -mt-7 md:mt-0 max-w-[300px] md:max-w-lg">
-            community app for the modern van traveler looking for genuine connections and meaningful experiences.
-          </p>
-
-          <p className="text-2xl md:text-5xl pt-[600px] md:pt-[1000px] pb-8 md:pb-16 font-semibold max-w-[300px] md:max-w-5xl">
-            built for a new generation of eco-conscious, digitally connected travelers looking for untouched nature, genuine connection and a more holistic way to travel and live in Europe.
-          </p>
+      <div className="relative w-screen px-3 md:px-6  h-[175vh] md:h-[200vh] flex flex-col justify-between">
+        <div className="absolute z-0 inset-0  max-w-[100vw] overflow-hidden">
+          <div 
+            className="h-[208vh] md:h-[200vh] bg-cover md:bg-cover bg-[center_top_-20rem] md:bg-[center_top_-6rem]"
+            style={{
+              backgroundImage: `url(${isMobile ? '/landing/hero1-mob.png' : '/landing/hero1.png'})`,
+              transform: `scale(${scaleHero1})`,
+              transition: 'transform 0.1s ease-out',
+            }}
+          />
         </div>
-      </div>
-      <div className="pt-[120px] md:pt-32 pb-16 px-2 md:px-6  bg-[url('/landing/bg-contors.png')] bg-cover py-40">
-        <div>
-          <Image src="/landing/hero2.png" alt="hero2" width={isMobile ? 150 : 420} height={isMobile ? 150 : 420} className="ml-[100px] md:ml-40 object-cover -rotate-[14deg]" />
-        </div>
-        <div className="px-2 lg:px-20 flex flex-col md:flex-row justify-between align-bottom relative">
-          <div className='ml-10 md:ml-64 my-10 md:my-20'>
-            <Image src="/landing/surfers.png" alt="surfers" width={isMobile ? 130 : 234} height={isMobile ? 100 : 180}  />
+        <div className="relative justify-center flex flex-col pt-[30vh] md:pt-[10vh]">
+          <h1 className="text-[28vw] leading-none italic font-extrabold text-primary">ramble</h1>
+          <div className='relative'>
+            <Image
+              src={isMobile ? "/landing/hero0-mob.png" : "/landing/hero0.png"}
+              alt="hero0"
+              width={1200}
+              height={7000}
+              className="absolute pointer-events-none right-[0vw] md:right-[7vw] lg:right-[10vw] z-10 h-[765vh] -top-[3vw] md:top-[-5vw]"
+            />
+            <p className="text-xl md:text-2xl pl-1 md:pl-4 mt-0 md:-mt-[3rem] max-w-[75vw] md:max-w-lg">
+              community app for the modern van traveler looking for genuine connections and meaningful experiences.
+            </p>
           </div>
-
-          <Image src="/landing/hero3.png" alt="hero3" width={isMobile ? 160 : 440} height={isMobile ? 160 : 440} className={`transition-opacity duration-500 ${!isNegative ? 'opacity-0' : 'opacity-100'} object-cover mt-[33px] md:-mt-20 ml-[160px] md:ml-0 rotate-[12deg]`} />
-          <Image src="/landing/hero3-negative.png" alt="hero3" width={isMobile ? 160 : 440} height={isMobile ? 160 :440} className={`transition-opacity duration-500 ${!isNegative ? 'opacity-100' : 'opacity-0'} object-cover mt-[30px] md:-mt-20 ml-[130px] md:ml-0 rotate-[12deg] absolute right-[46px] md:right-[80px] top-[183px] md:top-0`} />
-
         </div>
-        <div className="px-8 lg:px-20 pt-56 md:pt-64">
+        <p className="relative text-3xl lg:text-5xl pb-[6vw] font-semibold max-w-[75vw] md:max-w-[70vw]">
+          built for a <span className="text-primary font-bold italic">new generation</span> of adventurous, digitally connected travelers looking for untouched nature, genuine connection and a more holistic way to travel and live in Europe.
+        </p>
+      </div>
+      <div className="relative w-screen px-3 md:px-6  h-[170vh] md:h-[230vh] flex flex-col justify-between bg-[url('/landing/bg-contors.png')] bg-cover">
+        <div>
+          <div className="pt-[5vh] md:pt-[15vh] pl-[10vw] md:pl-[5vw]">
+            <Image src="/landing/hero2.png" alt="hero2" width={isMobile ? 150 : 420} height={isMobile ? 150 : 420} className="object-cover -rotate-[14deg]" />
+          </div>
+          <div className="relative flex flex-col md:flex-row justify-between align-bottom md:items-end">
+            <div className="pt-[5vh] md:pt-[15vh] pl-[5vw] md:pl-[20vw]">
+              <Image src="/landing/surfers.png" alt="surfers" width={isMobile ? 130 : 234} height={isMobile ? 100 : 180}  />
+            </div>
+            <Image src="/landing/hero3.png" alt="hero3" width={isMobile ? 160 : 440} height={isMobile ? 160 : 440} className={`transition-opacity duration-500 ${!isNegative ? 'opacity-0' : 'opacity-100'} object-cover rotate-[12deg] mr-[5vw] self-end mt-[16vh] md:mt-0`} />
+            <Image src="/landing/hero3-negative.png" alt="hero3" width={isMobile ? 160 : 440} height={isMobile ? 160 :440} className={`transition-opacity duration-500 ${!isNegative ? 'opacity-100' : 'opacity-0'} object-cover rotate-[12deg] absolute right-[5vw] bottom-0`} />
+          </div>
+        </div>
+        <div className="px-8 lg:px-20 pt-[20vh] md:pt-[10vh]">
           <Image src="/landing/hero4.png" alt="hero4" width={isMobile ? 200 : 535} height={isMobile ? 133 : 350} className="object-cover -rotate-[6deg] ml-0 md:ml-32" />
         </div>
-        <p className="text-2xl md:text-5xl pt-20 md:pt-60 font-semibold max-w-[300px] md:max-w-5xl">
+        <p className="text-3xl lg:text-5xl pb-[6vw] font-semibold max-w-[75vw] md:max-w-[70vw]">
           together with a team of experienced <Link href="/guides" target='_blank' className='underline hover:text-sky-300'>Guides</Link>, <span className="text-primary font-bold italic">ramble</span> offers curated camp stays,
           services, hospitality spots and experiences all with a focus on sustainability and nature connection.
         </p>
       </div>
-      <div className="relative w-screen pt-[900px] md:pt-[1430px] pb-40 space-y-6 px-2 md:px-12 overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: `url(${isMobile ? '/landing/hero5-mob.png' : '/landing/hero5.png'})`,
-            transform: `scale(${scaleHero5})`,
-            transition: 'transform 0.1s ease-out'
-          }}
-        />
 
-        <div className="relative z-1 max-w-[280px] md:max-w-4xl space-y-4">
+      <div className="relative w-screen px-3 md:px-6  h-[235vh] md:h-[210vh] flex flex-col justify-end">
+        <div className="absolute z-0 inset-0  max-w-[100vw] overflow-hidden">
+          <div 
+            className="h-[240vh] md:h-[210vh] bg-cover md:bg-cover bg-[center_top_0rem] md:bg-[center_top_-10rem]"
+            style={{
+              backgroundImage: `url(${isMobile ? '/landing/hero5-mob.png' : '/landing/hero5.png'})`,
+              transform: `scale(${scaleHero5})`,
+              transition: 'transform 0.1s ease-out'
+            }}
+          />
+        </div>
+        <div className="relative z-1 max-w-[70vw] md:max-w-5xl space-y-4 pb-[6vw]">
           <p className="font-bold text-3xl md:text-5xl text-primary italic">what you will find...</p>
           <Accordion type="single" collapsible className="max-w-8xl" defaultValue={features[0].q}>
             {features.map((feat) => (
               <AccordionItem key={feat.q} value={feat.q} className='text-lg md:text-3xl border-dashed border-b-2 border-gray-500'>
                 <AccordionTrigger className='hover:text-sky-300 decoration-transparent text-left py-3 md:py-4'>{feat.q}</AccordionTrigger>
-                <AccordionContent className="text-md md:text-xl">{feat.a}</AccordionContent>
+                <AccordionContent className="text-md md:text-xl max-w-[100%] md:max-w-[80%]">{feat.a}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
         </div>
       </div>
-      <div className="px-8 lg:px-20 space-y-40 pt-20 pb-[240px] md:pb-[480px] bg-[url('/landing/bg-contors.png')] bg-cover">
-        <div className="px-2 lg:px-20">
-          <Image src="/landing/hero7.png" alt="hero7" width={370} height={480} className="object-cover rotate-[9deg] md:-rotate-[9deg] w-[180px] md:w-[370px] mt-[120px] md:mt-0 ml-[80px] md:ml-0" />
+      <div className="relative w-screen px-3 md:px-6  h-[240vh] md:h-[180vh] flex flex-col justify-start items-end md:items-start bg-[url('/landing/bg-contors.png')] bg-cover">
+        <div className="pt-[50vh] md:pt-[15vh] pl-0 md:pl-[5vw] pr-[10vw]">
+          <Image src="/landing/hero7.png" alt="hero7" width={370} height={480} className="object-cover rotate-[9deg] md:-rotate-[9deg] w-[180px] md:w-[370px]" />
         </div>
-        <div className="px-8 lg:px-20 flex justify-between align-bottom flex-col-reverse md:flex-row">
-          <div>
-            <Image src="/landing/leaf.png" alt="van" width={234} height={180} className="object-cover mt-[380px] md:mt-40 mb-0 md:mb-10 w-[110px] md:w-[210px] ml-[120px] md:ml-0" />
+        <div className="px-8 lg:px-20 flex justify-between align-bottom flex-col-reverse md:flex-row w-[100%]">
+          <div className="pt-[50vh] md:pt-[25vh] pl-[5vw] md:pl-[10vw] self-end">
+            <Image src="/landing/leaf.png" alt="van" width={180} height={120} className="object-cover w-[110px] md:w-[160px]" />
           </div>
-          <div>
-            <Image src="/landing/hero6.png" alt="hero6" width={540} height={360} className="object-cover mt-[60px] md:-mt-80 -rotate-[12deg] md:rotate-[12deg]  w-[220px] md:w-[550px] -ml-[40px] md:ml-0" />
+          <div className="mt-[40vh] md:mt-[-10vh]">
+            <Image src="/landing/hero6.png" alt="hero6" width={540} height={360} className="object-cover -rotate-[12deg] md:rotate-[12deg] w-[220px] md:w-[550px]" />
           </div>
         </div>
       </div>
