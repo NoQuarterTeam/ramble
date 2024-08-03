@@ -40,7 +40,7 @@ export default function Home() {
           travelers looking for untouched nature, genuine connection and a more holistic way to travel and live in Europe.
         </p>
       </div>
-      <div className="relative w-screen px-3 md:px-6  h-[170vh] md:h-[230vh] flex flex-col justify-between bg-[url('/landing/bg-contors.png')] bg-cover">
+      <div className="relative w-screen px-3 md:px-6 h-[170vh] md:h-[230vh] flex flex-col justify-between bg-[url('/landing/bg-contors.png')] bg-cover">
         <div>
           <div className="pt-[5vh] md:pt-[15vh] pl-[10vw] md:pl-[5vw]">
             <Image
@@ -100,7 +100,7 @@ export default function Home() {
       </div>
 
       <div className="relative w-screen px-3 md:px-6  h-[235vh] md:h-[210vh] flex flex-col justify-end">
-        <div className="absolute z-0 inset-0  max-w-[100vw] overflow-hidden">
+        <div className="absolute z-0 inset-0 max-w-[100vw] overflow-hidden">
           <HeroImage5 />
         </div>
         <div className="relative z-1 max-w-[70vw] md:max-w-5xl space-y-4 pb-[6vw]">
