@@ -47,7 +47,7 @@
     "d3-shape": "3.2.0",
     "dayjs": "1.11.12",
     "isbot": "latest",
-    "lucide-react": "0.417.0",
+    "lucide-react": "0.424.0",
     "mapbox-gl": "3.5.2",
     "next": "14.2.5",
     "posthog-js": "1.154.2",
