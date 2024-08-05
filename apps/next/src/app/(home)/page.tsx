@@ -64,7 +64,7 @@ export default function Home() {
       <div className="relative w-screen px-3 md:px-6  h-[175vh] md:h-[200vh] flex flex-col justify-between">
         <div className="absolute z-0 inset-0  max-w-[100vw] overflow-hidden">
           <div 
-            className="h-[208vh] md:h-[200vh] bg-cover md:bg-cover bg-[center_top_-20rem] md:bg-[center_top_-6rem]"
+            className="h-[208vh] md:h-[200vh] bg-cover md:bg-cover bg-[center_top_-16rem] md:bg-[center_top_-6rem]"
             style={{
               backgroundImage: `url(${isMobile ? '/landing/hero1-mob.png' : '/landing/hero1.png'})`,
               transform: `scale(${scaleHero1})`,
@@ -113,7 +113,7 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="relative w-screen px-3 md:px-6  h-[235vh] md:h-[210vh] flex flex-col justify-end">
+      <div className="relative w-screen px-3 md:px-6  h-[255vh] md:h-[210vh] flex flex-col justify-end">
         <div className="absolute z-0 inset-0  max-w-[100vw] overflow-hidden">
           <div 
             className="h-[240vh] md:h-[210vh] bg-cover md:bg-cover bg-[center_top_0rem] md:bg-[center_top_-10rem]"
@@ -124,7 +124,7 @@ export default function Home() {
             }}
           />
         </div>
-        <div className="relative z-1 max-w-[70vw] md:max-w-5xl space-y-4 pb-[6vw]">
+        <div className="relative z-1 max-w-[75vw] md:max-w-5xl space-y-4 pb-[6vw]">
           <p className="font-bold text-3xl md:text-5xl text-primary italic">what you will find...</p>
           <Accordion type="single" collapsible className="max-w-8xl" defaultValue={features[0].q}>
             {features.map((feat) => (
