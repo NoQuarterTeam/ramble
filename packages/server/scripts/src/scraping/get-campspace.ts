@@ -2,7 +2,7 @@ import * as cheerio from "cheerio"
 
 const url = `https://campspace.com/en/campsites?viewport=-52.03125%2C34.30714385628804%2C80.85937500000001%2C68.49604022839505&location=Map+area&startDate=&endDate=&numberOfAdults=2&numberOfChildren=0&filter%5Baccommodations%5D%5B%5D=bring_motorhome&filter%5Baccommodations%5D%5B%5D=bring_minivan&page=`
 
-const pageCount = 51
+const pageCount = 271
 
 import { prisma } from "@ramble/database"
 import { convert } from "html-to-text"
@@ -229,7 +229,7 @@ async function main() {
   try {
     let scrapedIds: number[] = []
     // loop over each page
-    for (let currentPage = 1; currentPage < pageCount + 1; currentPage++) {
+    for (let currentPage = 47; currentPage < pageCount + 1; currentPage++) {
       const spotIds = await getPageCards(currentPage)
       scrapedIds = [...scrapedIds, ...spotIds]
 
