@@ -1,7 +1,7 @@
 import { prisma } from "@ramble/database"
+import { isPartnerSpot, spotPartnerFields } from "@ramble/shared"
 import * as Sentry from "@sentry/nextjs"
 import { sendMessages } from "./send-messages"
-import { isPartnerSpot, spotPartnerFields } from '@ramble/shared';
 
 export async function sendSpotVerifiedNotification({ initiatorId, spotId }: { spotId: string; initiatorId: string }) {
   try {
@@ -9,8 +9,7 @@ export async function sendSpotVerifiedNotification({ initiatorId, spotId }: { sp
       where: { id: spotId },
       select: { id: true, name: true, creatorId: true, ...spotPartnerFields },
     })
-    if (!spot) return
-    if (!spot || !isPartnerSpot(spot)) return
+    if (!spot || isPartnerSpot(spot)) return
 
     const initiator = await prisma.user.findUnique({ where: { id: initiatorId }, select: { username: true } })
     if (!initiator || initiatorId === spot.creatorId) return
