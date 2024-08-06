@@ -75,7 +75,7 @@ async function getPageCards(currentPage: number) {
       images = [...new Set(images)]
 
 
-      const description = $(".space-popup--body p").html()?.trim() || ""
+      const description = $(".space-section-about .space-p").html()?.trim() || ""
 
       const address =
         $(".space-header--part-location")
