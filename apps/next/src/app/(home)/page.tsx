@@ -30,12 +30,12 @@ export default function Home() {
               height={7000}
               className="hidden md:block absolute pointer-events-none right-[0vw] md:right-[7vw] lg:right-[10vw] z-10 h-[765vh] -top-[3vw] md:top-[-5vw]"
             />
-            <p className="text-xl md:text-2xl pl-1 md:pl-4 mt-0 md:-mt-[3rem] max-w-[75vw] md:max-w-lg">
-              community app for the modern van traveler looking for genuine connections and meaningful experiences.
+            <p className="text-xl md:text-3xl pl-1 md:pl-4 -mt-3 md:-mt-[3rem] max-w-[50vw] md:max-w-[75vw]">
+              community app for the modern van traveler
             </p>
           </div>
         </div>
-        <p className="relative text-3xl lg:text-5xl pb-[6vw] font-semibold max-w-[75vw] md:max-w-[70vw]">
+        <p className="relative text-3xl lg:text-5xl pb-[6vw] font-semibold max-w-[85vw] md:max-w-[70vw]">
           built for a <span className="text-primary font-bold italic">new generation</span> of adventurous, digitally connected
           travelers looking for untouched nature, genuine connection and a more holistic way to travel and live in Europe.
         </p>
@@ -99,7 +99,7 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="relative w-screen px-3 md:px-6  h-[245vh] md:h-[210vh] flex flex-col justify-end">
+      <div className="relative w-screen px-3 md:px-6  h-[225vh] md:h-[210vh] flex flex-col justify-end">
         <div className="absolute z-0 inset-0 max-w-[100vw] overflow-hidden">
           <HeroImage5 />
         </div>
@@ -117,8 +117,8 @@ export default function Home() {
           </Accordion>
         </div>
       </div>
-      <div className="relative w-screen px-3 md:px-6  h-[240vh] md:h-[180vh] flex flex-col justify-start items-end md:items-start bg-[url('/landing/bg-contors.png')] bg-cover">
-        <div className="pt-[50vh] md:pt-[15vh] pl-0 md:pl-[5vw] pr-[10vw]">
+      <div className="relative w-screen px-3 md:px-6  h-[250vh] md:h-[180vh] flex flex-col justify-start items-end md:items-start bg-[url('/landing/bg-contors.png')] bg-cover">
+        <div className="pt-[30vh] md:pt-[15vh] pl-0 md:pl-[5vw] pr-[10vw] flex flex-col justify-end">
           <Image
             src="/landing/hero7.png"
             alt="hero7"
@@ -126,20 +126,22 @@ export default function Home() {
             height={480}
             className="object-cover rotate-[9deg] md:-rotate-[9deg] w-[180px] md:w-[370px]"
           />
+          <Image
+            src="/landing/leaf.png"
+            alt="van"
+            width={180}
+            height={120}
+            className="object-cover w-[110px] md:w-[160px] mt-[10vh] md:mt-[25vh] self-end"
+          />
         </div>
-        <div className="px-8 lg:px-20 flex justify-between align-bottom flex-col-reverse md:flex-row w-[100%]">
-          <div className="pt-[50vh] md:pt-[25vh] pl-[5vw] md:pl-[10vw] self-end">
-            <Image src="/landing/leaf.png" alt="van" width={180} height={120} className="object-cover w-[110px] md:w-[160px]" />
-          </div>
-          <div className="mt-[40vh] md:mt-[-10vh]">
-            <Image
-              src="/landing/hero6.png"
-              alt="hero6"
-              width={540}
-              height={360}
-              className="object-cover -rotate-[12deg] md:rotate-[12deg] w-[220px] md:w-[550px]"
-            />
-          </div>
+        <div className="px-8 lg:px-32 w-[100%] flex flex-end md:justify-end">
+          <Image
+            src="/landing/hero6.png"
+            alt="hero6"
+            width={400}
+            height={360}
+            className="object-cover -rotate-[16deg] md:rotate-[12deg] w-[180px] md:w-[400px] h-[180px] md:h-[400px] mt-[40vh] md:-mt-[60vh]"
+          />
         </div>
       </div>
       <div className="bg-[url('/landing/bg-contors.png')] bg-cover pb-[180px] md:pb-60 relative">
