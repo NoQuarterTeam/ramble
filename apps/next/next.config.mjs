@@ -7,7 +7,11 @@ const nextConfig = {
   experimental: { serverComponentsExternalPackages: ["@aws-sdk"] },
   redirects: () => [
     { source: "/register", destination: "/", permanent: false },
-    { source: "/spots/:id", destination: "/map/:id", permanent: false },
+    {
+      source: "/about",
+      destination: "/",
+      permanent: true,
+    },
   ],
   images: {
     remotePatterns: [{ hostname: "ramble.guide" }, { hostname: "cdn.ramble.guide" }],
