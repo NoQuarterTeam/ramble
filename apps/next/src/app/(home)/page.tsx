@@ -99,11 +99,11 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="relative w-screen px-3 md:px-6  h-[235vh] md:h-[210vh] flex flex-col justify-end">
+      <div className="relative w-screen px-3 md:px-6  h-[255vh] md:h-[210vh] flex flex-col justify-end">
         <div className="absolute z-0 inset-0 max-w-[100vw] overflow-hidden">
           <HeroImage5 />
         </div>
-        <div className="relative z-1 max-w-[70vw] md:max-w-5xl space-y-4 pb-[6vw]">
+        <div className="relative z-1 max-w-[75vw] md:max-w-5xl space-y-4 pb-[6vw]">
           <p className="font-bold text-3xl md:text-5xl text-primary italic">what you will find...</p>
           <Accordion type="single" collapsible className="max-w-8xl" defaultValue={features[0].q}>
             {features.map((feat) => (
@@ -184,7 +184,7 @@ export default function Home() {
                 alt="hero11"
                 width={250}
                 height={543}
-                className="object-cover w-[700px] absolute top-0 md:top-[50px] right-0 -translate-y-[50%] z-10"
+                className="block md:hidden object-cover w-[700px] absolute top-0 md:top-[50px] right-0 -translate-y-[50%] z-10"
               />
               <Image
                 src="/landing/hero11-mob.png"
