@@ -9,11 +9,11 @@ export function HeroImage1() {
     const handleScroll = () => {
       const scrollTop = document.documentElement.scrollTop
       const scale = 1 + scrollTop / 4000 // Adjust the divisor to control the scaling speed
-      console.log("scrollTop", scale)
-      if (backgroundRef.current) {
+      console.log("scrollTop", scrollTop)
+      if (scrollTop < 1400 && backgroundRef.current) {
         backgroundRef.current.style.transform = `scale(${scale})`
       }
-      if (backgroundRefMob.current) {
+      if (scrollTop < 1400 && backgroundRefMob.current) {
         backgroundRefMob.current.style.transform = `scale(${scale})`
       }
     }
@@ -55,14 +55,13 @@ export function HeroImage5() {
 
   React.useEffect(() => {
     const handleScroll = () => {
-      console.log("document.documentElement.scrollTop", document.documentElement.scrollTop)
-      const scrollTop = document.documentElement.scrollTop - 2200
+      const scrollTop = document.documentElement.scrollTop - 1700
+
       const scale = 1 + scrollTop / 4000 // Adjust the divisor to control the scaling speed
-      console.log("scrollTop", scale)
-      if (backgroundRef.current) {
+      if (scrollTop > 0 && backgroundRef.current) {
         backgroundRef.current.style.transform = `scale(${scale})`
       }
-      if (backgroundRefMob.current) {
+      if (scrollTop > 0 && backgroundRefMob.current) {
         backgroundRefMob.current.style.transform = `scale(${scale})`
       }
     }
