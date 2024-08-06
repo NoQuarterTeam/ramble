@@ -99,7 +99,7 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="relative w-screen px-3 md:px-6  h-[255vh] md:h-[210vh] flex flex-col justify-end">
+      <div className="relative w-screen px-3 md:px-6  h-[245vh] md:h-[210vh] flex flex-col justify-end">
         <div className="absolute z-0 inset-0 max-w-[100vw] overflow-hidden">
           <HeroImage5 />
         </div>
