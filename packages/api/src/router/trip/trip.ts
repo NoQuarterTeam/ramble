@@ -146,15 +146,15 @@ export const tripRouter = createTRPCRouter({
         mediaSyncEnabled: true,
         startDate: true,
         endDate: true,
-        media: {
-          where: {
-            deletedAt: null,
-            latitude: { not: null },
-            longitude: { not: null },
-          },
-          orderBy: { timestamp: "asc" },
-          select: { timestamp: true, latitude: true, longitude: true },
-        },
+        //media: {
+          //where: {
+            //deletedAt: null,
+            //latitude: { not: null },
+            //longitude: { not: null },
+          //},
+          //orderBy: { timestamp: "asc" },
+          //select: { timestamp: true, latitude: true, longitude: true },
+        //},
         items: {
           orderBy: { order: "asc" },
           select: {
@@ -182,7 +182,7 @@ export const tripRouter = createTRPCRouter({
       orderBy: { timestamp: "desc" },
       select: { timestamp: true },
     })
-    const media = trip.media.map((m) => ({ timestamp: m.timestamp, latitude: m.latitude, longitude: m.longitude }))
+    // const media = trip.media.map((m) => ({ timestamp: m.timestamp, latitude: m.latitude, longitude: m.longitude }))
 
     const latestMediaTimestamp = latestMedia?.timestamp
     if (trip.items.length === 0) return { trip, latestMediaTimestamp }
@@ -210,10 +210,10 @@ export const tripRouter = createTRPCRouter({
       //   return coords
       // }
       // put all media between this item and the next
-      const mediaBetween = media.filter((m) => m.timestamp >= item.date! && m.timestamp <= nextItem.date!)
-      if (mediaBetween.length > 0) {
-        coords = coords.concat(mediaBetween.map((m) => [m.longitude!, m.latitude!]))
-      }
+      // const mediaBetween = media.filter((m) => m.timestamp >= item.date! && m.timestamp <= nextItem.date!)
+      // if (mediaBetween.length > 0) {
+        // coords = coords.concat(mediaBetween.map((m) => [m.longitude!, m.latitude!]))
+      // }
       return coords
     }) as [number, number][]
 
