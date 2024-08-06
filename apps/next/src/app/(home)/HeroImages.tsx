@@ -8,7 +8,7 @@ export function HeroImage1() {
   React.useEffect(() => {
     const handleScroll = () => {
       const scrollTop = document.documentElement.scrollTop
-      const scale = 1 + scrollTop / 4000 // Adjust the divisor to control the scaling speed
+      const scale = 1 + scrollTop / 10000 // Adjust the divisor to control the scaling speed
       console.log("scrollTop", scrollTop)
       if (scrollTop < 1400 && backgroundRef.current) {
         backgroundRef.current.style.transform = `scale(${scale})`
@@ -28,7 +28,7 @@ export function HeroImage1() {
   return (
     <>
       <div
-        className="block md:hidden h-[208vh] md:h-[200vh] bg-cover md:bg-cover bg-[center_top_-20rem] md:bg-[center_top_-6rem]"
+        className="block md:hidden h-[208vh] md:h-[200vh] bg-cover md:bg-cover bg-[center_bottom_12rem] md:bg-[center_top_-6rem]"
         style={{
           backgroundImage: "url(/landing/hero1-mob.png)",
           transformOrigin: "center", // Ensure the scaling is centered
@@ -55,9 +55,11 @@ export function HeroImage5() {
 
   React.useEffect(() => {
     const handleScroll = () => {
-      const scrollTop = document.documentElement.scrollTop - 1700
+      const scrollTop = document.documentElement.scrollTop - 2500
 
-      const scale = 1 + scrollTop / 4000 // Adjust the divisor to control the scaling speed
+      console.log(scrollTop)
+
+      const scale = 1 + scrollTop / 12000 // Adjust the divisor to control the scaling speed
       if (scrollTop > 0 && backgroundRef.current) {
         backgroundRef.current.style.transform = `scale(${scale})`
       }
@@ -74,7 +76,7 @@ export function HeroImage5() {
   return (
     <>
       <div
-        className="block md:hidden h-[240vh] md:h-[210vh] bg-cover md:bg-cover bg-[center_top_0rem] md:bg-[center_top_-10rem]"
+        className="block md:hidden h-[230vh] md:h-[210vh] bg-cover md:bg-cover bg-[center_top_0rem] md:bg-[center_top_-10rem]"
         style={{
           backgroundImage: "url(/landing/hero5-mob.png)",
           transformOrigin: "center", // Ensure the scaling is centered
