@@ -1,5 +1,5 @@
 "use client"
-import React from "react"
+import * as React from "react"
 
 export function HeroImage1() {
   const backgroundRef = React.useRef<HTMLDivElement>(null)
@@ -66,9 +66,7 @@ export function HeroImage5() {
         backgroundRefMob.current.style.transform = `scale(${scale})`
       }
     }
-
     window.addEventListener("scroll", handleScroll)
-
     return () => {
       window.removeEventListener("scroll", handleScroll)
     }
