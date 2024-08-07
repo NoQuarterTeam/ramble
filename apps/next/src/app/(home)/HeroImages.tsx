@@ -57,8 +57,6 @@ export function HeroImage5() {
     const handleScroll = () => {
       const scrollTop = document.documentElement.scrollTop - 2500
 
-      console.log(scrollTop)
-
       const scale = 1 + scrollTop / 12000 // Adjust the divisor to control the scaling speed
       if (scrollTop > 0 && backgroundRef.current) {
         backgroundRef.current.style.transform = `scale(${scale})`
@@ -76,7 +74,7 @@ export function HeroImage5() {
   return (
     <>
       <div
-        className="block md:hidden h-[230vh] md:h-[210vh] bg-cover md:bg-cover bg-[center_top_0rem] md:bg-[center_top_-10rem]"
+        className="block md:hidden h-[230vh] md:h-[210vh] bg-cover md:bg-cover [background-position-y:bottom] md:bg-[center_top_-10rem]"
         style={{
           backgroundImage: "url(/landing/hero5-mob.png)",
           transformOrigin: "center", // Ensure the scaling is centered

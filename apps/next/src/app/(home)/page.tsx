@@ -35,7 +35,7 @@ export default function Home() {
             </p>
           </div>
         </div>
-        <p className="relative text-3xl lg:text-5xl pb-[6vw] font-semibold max-w-[85vw] md:max-w-[70vw]">
+        <p className="relative text-2xl lg:text-5xl pb-[6vw] font-semibold max-w-[80vw] md:max-w-[70vw]">
           built for a <span className="text-primary font-bold italic">new generation</span> of adventurous, digitally connected
           travelers looking for untouched nature, genuine connection and a more holistic way to travel and live in Europe.
         </p>
@@ -89,7 +89,7 @@ export default function Home() {
             className="object-cover -rotate-[6deg] ml-0 md:ml-32 w-[200px] md:w-[535px] h-[133px] md:h-[350px]"
           />
         </div>
-        <p className="text-3xl lg:text-5xl pb-[6vw] font-semibold max-w-[75vw] md:max-w-[70vw]">
+        <p className="text-2xl lg:text-5xl pb-[6vw] font-semibold max-w-[75vw] md:max-w-[70vw]">
           together with a team of experienced{" "}
           <Link href="/guides" target="_blank" className="underline hover:text-sky-300">
             Guides
