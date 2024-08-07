@@ -104,11 +104,11 @@ export default function Home() {
           <HeroImage5 />
         </div>
         <div className="relative z-1 max-w-[75vw] md:max-w-5xl space-y-4 pb-[6vw]">
-          <p className="font-bold text-3xl md:text-5xl text-primary italic">what you will find...</p>
+          <p className="font-bold text-3xl md:text-5xl text-primary italic">what you will discover...</p>
           <Accordion type="single" collapsible className="max-w-8xl" defaultValue={features[0].q}>
             {features.map((feat) => (
               <AccordionItem key={feat.q} value={feat.q} className="text-lg md:text-3xl border-dashed border-b-2 border-gray-500">
-                <AccordionTrigger className="hover:text-sky-300 decoration-transparent text-left py-3 md:py-4">
+                <AccordionTrigger className="hover:text-sky-300 decoration-transparent text-left py-2 md:py-4">
                   {feat.q}
                 </AccordionTrigger>
                 <AccordionContent className="text-md md:text-xl max-w-[100%] md:max-w-[80%]">{feat.a}</AccordionContent>
