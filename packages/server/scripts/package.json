@@ -26,7 +26,7 @@
     "@types/html-to-text": "9.0.4",
     "@types/node": "20.14.15",
     "nanoid": "3.3.4",
-    "cheerio": "1.0.0-rc.12",
+    "cheerio": "1.0.0",
     "csv-stringify": "6.5.1",
     "dotenv-cli": "7.4.2",
     "graphql-request": "6.1.0",
