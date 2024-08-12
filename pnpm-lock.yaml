@@ -623,8 +623,8 @@ importers:
         specifier: workspace:*
         version: link:../../shared
       tailwind-merge:
-        specifier: 2.5.1
-        version: 2.5.1
+        specifier: 2.5.2
+        version: 2.5.2
       zod:
         specifier: 3.23.8
         version: 3.23.8
@@ -784,8 +784,8 @@ importers:
         specifier: workspace:*
         version: link:../database
       tailwind-merge:
-        specifier: 2.5.1
-        version: 2.5.1
+        specifier: 2.5.2
+        version: 2.5.2
     devDependencies:
       '@ramble/tailwind-config':
         specifier: workspace:*
@@ -16012,8 +16012,8 @@ packages:
       picocolors: 1.0.1
     dev: true
 
-  /tailwind-merge@2.5.1:
-    resolution: {integrity: sha512-1zKDdExKvNltulO+J0x/Rqv40xQn78FHsEQVn3rxt8e4HdebRIT6o6zGeLYlGuxd3Efue9Y69qsp8vKwEhuEeg==}
+  /tailwind-merge@2.5.2:
+    resolution: {integrity: sha512-kjEBm+pvD+6eAwzJL2Bi+02/9LFLal1Gs61+QB7HvTfQQ0aXwC5LGT8PEt1gS0CWKktKe6ysPTAy3cBC5MeiIg==}
     dev: false
 
   /tailwind-scrollbar-hide@1.1.7:
