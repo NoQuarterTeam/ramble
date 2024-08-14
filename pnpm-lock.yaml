@@ -702,8 +702,8 @@ importers:
         specifier: 3.629.0
         version: 3.629.0
       '@aws-sdk/lib-storage':
-        specifier: 3.629.0
-        version: 3.629.0(@aws-sdk/client-s3@3.629.0)
+        specifier: 3.631.0
+        version: 3.631.0(@aws-sdk/client-s3@3.629.0)
       '@aws-sdk/s3-request-presigner':
         specifier: 3.631.0
         version: 3.631.0
@@ -1209,11 +1209,11 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@aws-sdk/lib-storage@3.629.0(@aws-sdk/client-s3@3.629.0):
-    resolution: {integrity: sha512-o7gyawMHSeDKCiMLPArr5nR0bf6wM/lH9+wzCxmBkRQMvrHcUfbHMrzughcQACHEQJqna+uxby2zk2KjSAbRmA==}
+  /@aws-sdk/lib-storage@3.631.0(@aws-sdk/client-s3@3.629.0):
+    resolution: {integrity: sha512-B3sZoKqqoe2o8MLdOsUVdZzmbnjcQv+tbexbCOQxIDXBp+5QQAaYgkTRrxdqkmb73AUNw+mlfevyNdwgrx3PNg==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      '@aws-sdk/client-s3': ^3.629.0
+      '@aws-sdk/client-s3': ^3.631.0
     dependencies:
       '@aws-sdk/client-s3': 3.629.0
       '@smithy/abort-controller': 3.1.1
