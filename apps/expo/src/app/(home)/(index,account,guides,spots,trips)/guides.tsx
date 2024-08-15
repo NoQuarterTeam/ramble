@@ -84,9 +84,10 @@ export default function GuidesScreen() {
           <View className="space-y-6 mt-4">
             <View>
               <Text className="text-xl font-600">What you get as a Guide:</Text>
-              <Text className="text-lg">- Get featured the list of Guides</Text>
               <Text className="text-lg">- Ramblers can follow your profile, view your spots and check out your socials</Text>
-              <Text className="text-lg">- Featured on the Guide list on the Ramble website which links through to your socials</Text>
+              <Text className="text-lg">
+                - Featured on the Guide list on the Ramble website which links through to your socials
+              </Text>
               <Text className="text-lg">- Also featured in our Insta highlight of the Ramble Guides</Text>
               <Text className="text-lg">- Free access to Ramble</Text>
               <Text className="text-lg">- Priority requests of what features you would like to see added to Ramble</Text>
