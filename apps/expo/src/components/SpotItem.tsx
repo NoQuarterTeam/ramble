@@ -56,6 +56,11 @@ export function SpotItem({ spot }: Props) {
             <SpotIcon type={spot.type} size={20} />
           </View>
         )}
+        {!spot.verifiedAt && (
+          <View className="absolute px-3 py-1 top-2 right-2 rounded-full bg-background dark:bg-background-dark">
+            <Text>Unverified</Text>
+          </View>
+        )}
       </View>
 
       <View className="pt-1">

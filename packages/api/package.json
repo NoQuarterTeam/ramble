@@ -5,7 +5,7 @@
   "types": "./index.ts",
   "sideEffects": false,
   "scripts": {
-    "format": "pnpm dlx @biomejs/biome check --apply-unsafe ./src",
+    "format": "pnpm dlx @biomejs/biome check --write --unsafe ./src",
     "typecheck": "tsc --noEmit",
     "with-env": "dotenv -e ../../.env --"
   },
@@ -16,22 +16,22 @@
     "@ramble/server-schemas": "workspace:*",
     "@ramble/server-services": "workspace:*",
     "@ramble/shared": "workspace:*",
-    "@trpc/server": "11.0.0-rc.421",
-    "@turf/bbox": "7.0.0",
-    "@turf/center": "7.0.0",
-    "@turf/helpers": "7.0.0",
+    "@trpc/server": "11.0.0-rc.477",
+    "@turf/bbox": "7.1.0",
+    "@turf/center": "7.1.0",
+    "@turf/helpers": "7.1.0",
     "@vercel/functions": "^1.0.2",
-    "dayjs": "1.11.11",
+    "dayjs": "1.11.12",
     "semver": "^7.6.0",
     "supercluster": "8.0.1",
     "superjson": "2.2.1",
     "zod": "3.23.8"
   },
   "devDependencies": {
-    "@types/node": "20.14.9",
+    "@types/node": "20.14.15",
     "@types/semver": "^7.5.8",
     "@types/supercluster": "7.1.3",
     "dotenv-cli": "7.4.2",
-    "typescript": "5.4.5"
+    "typescript": "5.5.4"
   }
 }

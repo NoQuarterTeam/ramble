@@ -18,6 +18,7 @@ import { api } from "~/lib/api"
 import { isTablet, width } from "~/lib/device"
 import { useBackgroundColor } from "~/lib/tailwind"
 
+import { useTabSegment } from "~/lib/hooks/useTabSegment"
 import { CreatorCard } from "./CreatorCard"
 import { useFeedbackActivity } from "./FeedbackCheck"
 import { IconButton } from "./ui/IconButton"
@@ -41,10 +42,11 @@ export const SpotPreview = React.memo(function _SpotPreview({
   const weatherData = spot?.weather
   const backgroundColor = useBackgroundColor()
   const increment = useFeedbackActivity((s) => s.increment)
+  const tab = useTabSegment()
   const handleGoToSpot = () => {
     if (!spot) return
     increment()
-    router.push(`/(home)/(index)/spot/${spot.id}`)
+    router.push(`/${tab}/spot/${spot.id}`)
   }
 
   const currentIndex = spot?.sameLocationSpots.findIndex((s) => s.id === id) || 0
@@ -143,7 +145,7 @@ export const SpotPreview = React.memo(function _SpotPreview({
                   <Icon
                     icon={Heart}
                     size={14}
-                    fill={spot.listSpots && spot.listSpots.length > 0 ? (isDark ? "white" : "black") : undefined}
+                    fill={spot.listSpots && spot.listSpots.length > 0 ? (isDark ? "white" : "black") : "transparent"}
                   />
                 }
               >
@@ -156,13 +158,7 @@ export const SpotPreview = React.memo(function _SpotPreview({
                   increment()
                   router.push(`/spot/${spot.id}/save-to-trip`)
                 }}
-                leftIcon={
-                  <Icon
-                    icon={Route}
-                    size={14}
-                    // fill={spot.listSpots && spot.listSpots.length > 0 ? (isDark ? "white" : "black") : undefined}
-                  />
-                }
+                leftIcon={<Icon icon={Route} size={14} />}
               >
                 Add to Trip
               </Button>

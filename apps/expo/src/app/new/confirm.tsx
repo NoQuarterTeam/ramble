@@ -65,7 +65,7 @@ export default function NewSpotConfirmScreen() {
 
   const handleCreateSpot = async () => {
     setLoading(true)
-    const images = params.images ? await Promise.all(params.images.split(",").map((i) => upload(i))) : undefined
+    const images = params.images ? await Promise.all(params.images.split(",").map(upload)) : undefined
     if (!params.name || !params.type) return toast({ title: "Name is required", type: "error" })
     const coverImage = images?.[Number(params.coverIndex)]
     mutate({
@@ -154,8 +154,8 @@ export default function NewSpotConfirmScreen() {
       <View className="absolute right-4 bottom-12 left-4 flex items-center justify-center space-y-2">
         <Button
           isLoading={createLoading || isLoading}
-          leftIcon={<Icon icon={Check} size={20} color={{ light: "white", dark: "black" }} />}
-          className="rounded-full"
+          leftIcon={<Icon icon={Check} size={18} color={{ light: "white", dark: "black" }} />}
+          size="sm"
           onPress={handleCreateSpot}
         >
           Create

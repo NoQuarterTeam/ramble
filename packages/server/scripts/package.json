@@ -11,27 +11,29 @@
     "crag": "pnpm with-env ts-node ./src/scraping/get-thecrag.ts",
     "gpt": "pnpm with-env ts-node ./src/export/ramble-gpt.ts",
     "users": "pnpm with-env ts-node ./src/export/initial-users.ts",
+    "p4n": "pnpm with-env ts-node ./src/format/gen-p4n-image-replacements.ts",
+    "loops": "pnpm with-env ts-node ./src/format/update-loops.ts",
     "with-env": "dotenv -e ../../../.env --"
   },
   "sideEffects": false,
   "devDependencies": {
     "@faker-js/faker": "8.4.1",
-    "@inquirer/prompts": "5.0.7",
+    "@inquirer/prompts": "5.3.8",
     "@ramble/api": "workspace:*",
     "@ramble/database": "workspace:*",
     "@ramble/shared": "workspace:*",
     "@ramble/server-services": "workspace:*",
     "@types/html-to-text": "9.0.4",
-    "@types/node": "20.14.9",
+    "@types/node": "20.14.15",
     "nanoid": "3.3.4",
-    "cheerio": "1.0.0-rc.12",
-    "csv-stringify": "6.5.0",
+    "cheerio": "1.0.0",
+    "csv-stringify": "6.5.1",
     "dotenv-cli": "7.4.2",
     "graphql-request": "6.1.0",
     "graphql": "16.9.0",
     "html-to-text": "9.0.5",
-    "puppeteer": "22.12.1",
+    "puppeteer": "22.15.0",
     "ts-node": "10.9.2",
-    "typescript": "5.4.5"
+    "typescript": "5.5.4"
   }
 }

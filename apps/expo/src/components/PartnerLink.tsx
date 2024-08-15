@@ -31,25 +31,27 @@ export function PartnerLink(props: Props) {
               ? partners.park4night
               : props.spot.nesteId
                 ? partners.neste
-                : props.spot.hipcampId
-                  ? partners.hipcamp
-                  : props.spot.surflineId
-                    ? partners.surfline
-                    : props.spot.roadsurferId
-                      ? partners.roadsurfer
-                      : props.spot.cucortuId
-                        ? partners.cucortu
-                        : props.spot.loodusegakoosId
-                          ? partners.loodusegakoos
-                          : props.spot.norcampId
-                            ? partners.norcamp
-                            : props.spot.mossyEarthId
-                              ? partners.mossyEarth
-                              : props.spot.rewildingEuropeId
-                                ? partners.rewildingEurope
-                                : props.spot.polskiCaravaningId
-                                  ? partners.polskiCaravaning
-                                  : partners.camperguru
+                : props.spot.eFuelsNowId
+                  ? partners.eFuelsNow
+                  : props.spot.hipcampId
+                    ? partners.hipcamp
+                    : props.spot.surflineId
+                      ? partners.surfline
+                      : props.spot.roadsurferId
+                        ? partners.roadsurfer
+                        : props.spot.cucortuId
+                          ? partners.cucortu
+                          : props.spot.loodusegakoosId
+                            ? partners.loodusegakoos
+                            : props.spot.norcampId
+                              ? partners.norcamp
+                              : props.spot.mossyEarthId
+                                ? partners.mossyEarth
+                                : props.spot.rewildingEuropeId
+                                  ? partners.rewildingEurope
+                                  : props.spot.polskiCaravaningId
+                                    ? partners.polskiCaravaning
+                                    : partners.camperguru
 
   const handleOpen = async () => {
     if (!props.spot.sourceUrl) return

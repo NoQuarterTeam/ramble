@@ -29,3 +29,6 @@ export const PopoverArrow = React.forwardRef<SVGSVGElement, Popover.PopperArrowP
     />
   )
 })
+export const PopoverPortal = React.forwardRef<SVGSVGElement, Popover.PortalProps>(function Arrow(props) {
+  return <Popover.Portal {...props}>{props.children}</Popover.Portal>
+})

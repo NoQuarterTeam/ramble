@@ -12,19 +12,16 @@
   },
   "sideEffects": false,
   "dependencies": {
-    "@planetscale/database": "1.18.0",
-    "@prisma/adapter-planetscale": "5.15.0",
-    "@prisma/client": "5.15.0",
+    "@planetscale/database": "1.19.0",
+    "@prisma/adapter-planetscale": "5.18.0",
+    "@prisma/client": "5.18.0",
     "@ramble/server-env": "workspace:*",
     "nanoid": "3.3.4",
-    "prisma": "5.15.0"
+    "prisma": "5.18.0"
   },
   "devDependencies": {
-    "@types/node": "20.14.9",
+    "@types/node": "20.14.15",
     "dotenv-cli": "7.4.2",
-    "typescript": "5.4.5"
-  },
-  "prisma": {
-    "schema": "./schema.prisma"
+    "typescript": "5.5.4"
   }
 }

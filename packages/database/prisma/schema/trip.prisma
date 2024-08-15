@@ -1,0 +1,82 @@
+model Trip {
+  id               String   @id @default(uuid())
+  name             String
+  startDate        DateTime @db.Date
+  endDate          DateTime @db.Date
+  // @deprecated in 1.6.0 - dont use anymore
+  mediaSyncEnabled Boolean  @default(true)
+
+  creator       User           @relation(name: "CreatedTrips", fields: [creatorId], references: [id])
+  creatorId     String
+  notifications Notification[]
+
+  users User[]      @relation(name: "UserTrips")
+  items TripItem[]
+  media TripMedia[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+model TripMedia {
+  id            String    @id @default(uuid())
+  path          String
+  latitude      Float?
+  longitude     Float?
+  note          String?   @db.Text
+  type          MediaType @default(IMAGE)
+  duration      Int?
+  thumbnailPath String?
+  assetId       String
+  timestamp     DateTime
+
+  creator   User   @relation(fields: [creatorId], references: [id])
+  creatorId String
+  trip      Trip   @relation(fields: [tripId], references: [id])
+  tripId    String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+  deletedAt DateTime?
+
+  @@index([latitude])
+  @@index([longitude])
+  @@index([deletedAt])
+}
+
+model TripItem {
+  id          String    @id @default(uuid())
+  date        DateTime? @db.Date
+  order       Float     @default(0)
+  countryCode String?
+
+  creator   User      @relation(fields: [creatorId], references: [id])
+  creatorId String
+  trip      Trip      @relation(fields: [tripId], references: [id])
+  tripId    String
+  spot      Spot?     @relation(fields: [spotId], references: [id])
+  spotId    String?
+  stop      TripStop?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model TripStop {
+  id        String  @id @default(uuid())
+  name      String
+  image     String? @db.VarChar(500)
+  latitude  Float
+  longitude Float
+
+  tripItem   TripItem @relation(fields: [tripItemId], references: [id])
+  tripItemId String   @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}

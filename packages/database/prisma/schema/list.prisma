@@ -1,0 +1,24 @@
+model List {
+  id          String  @id @default(uuid())
+  name        String
+  description String? @db.Text
+  isPrivate   Boolean @default(false)
+
+  listSpots ListSpot[]
+  creatorId String
+  creator   User       @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model ListSpot {
+  id     String @id @default(uuid())
+  listId String
+  list   List   @relation(fields: [listId], references: [id], onDelete: Cascade)
+  spotId String
+  spot   Spot   @relation(fields: [spotId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}

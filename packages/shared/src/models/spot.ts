@@ -104,6 +104,7 @@ export const spotPartnerFields = {
   polskiCaravaningId: true,
   volunteeringEventsId: true,
   camperguruId: true,
+  eFuelsNowId: true,
   sourceUrl: true,
 } satisfies Prisma.SpotSelect
 
@@ -126,7 +127,8 @@ export const isPartnerSpot = (spot: SpotPartnerFields) =>
   spot.rewildingEuropeId ||
   spot.polskiCaravaningId ||
   spot.camperguruId ||
-  spot.volunteeringEventsId
+  spot.volunteeringEventsId ||
+  spot.eFuelsNowId
 
 export const partners = {
   campspace: {
@@ -177,6 +179,11 @@ export const partners = {
   neste: {
     name: "Neste",
     logo: { light: "/partners/neste.png", dark: "/partners/neste.png" },
+    pretext: "More info on",
+  },
+  eFuelsNow: {
+    name: "eFuels Now",
+    logo: { light: "/partners/efuels-now.png", dark: "/partners/efuels-now.png" },
     pretext: "More info on",
   },
   hipcamp: {
@@ -248,7 +255,7 @@ export function isCampingSpot(type?: SpotType | null | undefined) {
   return campingSpotTypes.includes(type)
 }
 
-export const activitySpotTypes = ["CLIMBING", "CLIMBING", "HIKING_TRAIL", "PADDLE_KAYAK", "MOUNTAIN_BIKING"] as SpotType[]
+export const activitySpotTypes = ["CLIMBING", "SURFING", "YOGA", "HIKING_TRAIL", "PADDLE_KAYAK", "MOUNTAIN_BIKING"] as SpotType[]
 
 export const spotMarkerColorTypes = {
   // stays
@@ -355,7 +362,7 @@ export const spotMarkerClusterColorTypes = {
 
 export type SpotListSort = "latest" | "rated" | "saved" | "near"
 
-export type SpotItemType = Pick<Spot, "id" | "name" | "address" | "type" | "latitude" | "longitude"> & {
+export type SpotItemType = Pick<Spot, "id" | "name" | "address" | "verifiedAt" | "type" | "latitude" | "longitude"> & {
   rating: string
   savedCount: string
   image?: SpotImage["path"] | null

@@ -84,7 +84,7 @@ export function ReviewItem({
       {error && <Text className="text-sm">Error translating description</Text>}
 
       {me ? (
-        me.id !== review.user.id ? (
+        me.id === review.user.id ? (
           <View className="flex flex-row space-x-1">
             <Button
               size="xs"
@@ -105,6 +105,7 @@ export function ReviewItem({
             </Button>
           </View>
         ) : (
+          review.description &&
           me.preferredLanguage !== review.language && (
             <View className="flex items-start">
               <Button

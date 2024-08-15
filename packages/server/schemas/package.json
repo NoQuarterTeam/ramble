@@ -3,19 +3,19 @@
   "version": "1.0.0",
   "main": "./src/index.ts",
   "scripts": {
-    "format": "pnpm dlx @biomejs/biome check --apply-unsafe ./src",
+    "format": "pnpm dlx @biomejs/biome check --write --unsafe ./src",
     "typecheck": "tsc --noEmit"
   },
   "sideEffects": false,
   "dependencies": {
     "@ramble/database": "workspace:*",
     "@ramble/shared": "workspace:*",
-    "tailwind-merge": "2.3.0",
+    "tailwind-merge": "2.5.2",
     "zod": "3.23.8"
   },
   "devDependencies": {
     "@ramble/tailwind-config": "workspace:*",
-    "@types/node": "20.14.9",
-    "typescript": "5.4.5"
+    "@types/node": "20.14.15",
+    "typescript": "5.5.4"
   }
 }

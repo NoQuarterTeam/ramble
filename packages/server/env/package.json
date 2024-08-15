@@ -5,7 +5,7 @@
   "types": "./src/index.ts",
   "sideEffects": false,
   "scripts": {
-    "format": "pnpm dlx @biomejs/biome check --apply-unsafe ./src",
+    "format": "pnpm dlx @biomejs/biome check --write --unsafe ./src",
     "typecheck": "tsc --noEmit",
     "with-env": "dotenv -e ../../../.env --"
   },
@@ -13,8 +13,8 @@
     "zod": "3.23.8"
   },
   "devDependencies": {
-    "@types/node": "20.14.9",
+    "@types/node": "20.14.15",
     "dotenv-cli": "7.4.2",
-    "typescript": "5.4.5"
+    "typescript": "5.5.4"
   }
 }

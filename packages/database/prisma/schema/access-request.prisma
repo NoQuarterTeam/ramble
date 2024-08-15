@@ -1,0 +1,12 @@
+model AccessRequest {
+  id         String    @id @default(uuid())
+  email      String
+  acceptedAt DateTime?
+  code       String    @unique
+
+  userId String? @unique
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
