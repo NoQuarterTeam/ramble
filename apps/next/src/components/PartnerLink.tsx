@@ -24,7 +24,7 @@ export function PartnerLink(props: Props) {
                 : props.spot.nesteId
                   ? partners.neste
                   : props.spot.eFuelsNowId
-                  ? partners.eFuelsNow
+                    ? partners.eFuelsNow
                     : props.spot.surflineId
                       ? partners.surfline
                       : props.spot.roadsurferId
