@@ -14,28 +14,28 @@ export default function Home() {
           <HeroImage1 />
         </div>
         <div className="relative justify-center flex flex-col pt-[30vh] md:pt-[10vh]">
-          <h1 className="text-[28vw] leading-none italic font-extrabold text-primary">ramble</h1>
+          <h1 className="text-[28vw] leading-none italic font-extrabold text-primary mix-blend-color-dodge">ramble</h1>
           <div className="relative">
             <Image
               src="/landing/hero0-mob.png"
               alt="hero0"
               width={1200}
               height={7000}
-              className="block md:hidden absolute pointer-events-none right-[0vw] md:right-[7vw] lg:right-[10vw] z-10 h-[765vh] -top-[3vw] md:top-[-5vw]"
+              className="block mix-blend-lighten md:hidden absolute pointer-events-none right-[0vw] md:right-[7vw] lg:right-[10vw] z-10 h-[765vh] -top-[3vw] md:top-[-5vw]"
             />
             <Image
               src="/landing/hero0.png"
               alt="hero0"
               width={1200}
               height={7000}
-              className="hidden md:block absolute pointer-events-none right-[0vw] md:right-[7vw] lg:right-[10vw] z-10 h-[765vh] -top-[3vw] md:top-[-5vw]"
+              className="hidden mix-blend-lighten md:block absolute pointer-events-none right-[0vw] md:right-[7vw] lg:right-[10vw] z-10 h-[765vh] -top-[3vw] md:top-[-5vw]"
             />
-            <p className="text-xl md:text-2xl pl-1 md:pl-4 mt-0 md:-mt-[3rem] max-w-[75vw] md:max-w-lg">
-              community app for the modern van traveler looking for genuine connections and meaningful experiences.
+            <p className="text-xl md:text-3xl pl-1 md:pl-4 -mt-3 md:-mt-[3rem] max-w-[50vw] md:max-w-[75vw] font-bold">
+              community app for the modern van traveler
             </p>
           </div>
         </div>
-        <p className="relative text-3xl lg:text-5xl pb-[6vw] font-semibold max-w-[75vw] md:max-w-[70vw]">
+        <p className="relative text-2xl lg:text-5xl pb-[6vw] font-semibold max-w-[80vw] md:max-w-[70vw]">
           built for a <span className="text-primary font-bold italic">new generation</span> of adventurous, digitally connected
           travelers looking for untouched nature, genuine connection and a more holistic way to travel and live in Europe.
         </p>
@@ -89,7 +89,7 @@ export default function Home() {
             className="object-cover -rotate-[6deg] ml-0 md:ml-32 w-[200px] md:w-[535px] h-[133px] md:h-[350px]"
           />
         </div>
-        <p className="text-3xl lg:text-5xl pb-[6vw] font-semibold max-w-[75vw] md:max-w-[70vw]">
+        <p className="text-2xl lg:text-5xl pb-[6vw] font-semibold max-w-[75vw] md:max-w-[70vw]">
           together with a team of experienced{" "}
           <Link href="/guides" target="_blank" className="underline hover:text-sky-300">
             Guides
@@ -99,16 +99,16 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="relative w-screen px-3 md:px-6  h-[255vh] md:h-[210vh] flex flex-col justify-end">
+      <div className="relative w-screen px-3 md:px-6  h-[225vh] md:h-[210vh] flex flex-col justify-end">
         <div className="absolute z-0 inset-0 max-w-[100vw] overflow-hidden">
           <HeroImage5 />
         </div>
         <div className="relative z-1 max-w-[75vw] md:max-w-5xl space-y-4 pb-[6vw]">
-          <p className="font-bold text-3xl md:text-5xl text-primary italic">what you will find...</p>
+          <p className="font-bold text-3xl md:text-5xl text-primary italic">what you will discover...</p>
           <Accordion type="single" collapsible className="max-w-8xl" defaultValue={features[0].q}>
             {features.map((feat) => (
               <AccordionItem key={feat.q} value={feat.q} className="text-lg md:text-3xl border-dashed border-b-2 border-gray-500">
-                <AccordionTrigger className="hover:text-sky-300 decoration-transparent text-left py-3 md:py-4">
+                <AccordionTrigger className="hover:text-sky-300 decoration-transparent text-left py-2 md:py-4">
                   {feat.q}
                 </AccordionTrigger>
                 <AccordionContent className="text-md md:text-xl max-w-[100%] md:max-w-[80%]">{feat.a}</AccordionContent>
@@ -117,8 +117,8 @@ export default function Home() {
           </Accordion>
         </div>
       </div>
-      <div className="relative w-screen px-3 md:px-6  h-[240vh] md:h-[180vh] flex flex-col justify-start items-end md:items-start bg-[url('/landing/bg-contors.png')] bg-cover">
-        <div className="pt-[50vh] md:pt-[15vh] pl-0 md:pl-[5vw] pr-[10vw]">
+      <div className="relative w-screen px-3 md:px-6  h-[250vh] md:h-[180vh] flex flex-col justify-start items-end md:items-start bg-[url('/landing/bg-contors.png')] bg-cover">
+        <div className="pt-[30vh] md:pt-[15vh] pl-0 md:pl-[5vw] pr-[10vw] flex flex-col justify-end">
           <Image
             src="/landing/hero7.png"
             alt="hero7"
@@ -126,20 +126,22 @@ export default function Home() {
             height={480}
             className="object-cover rotate-[9deg] md:-rotate-[9deg] w-[180px] md:w-[370px]"
           />
+          <Image
+            src="/landing/leaf.png"
+            alt="van"
+            width={180}
+            height={120}
+            className="object-cover w-[110px] md:w-[160px] mt-[10vh] md:mt-[25vh] self-end"
+          />
         </div>
-        <div className="px-8 lg:px-20 flex justify-between align-bottom flex-col-reverse md:flex-row w-[100%]">
-          <div className="pt-[50vh] md:pt-[25vh] pl-[5vw] md:pl-[10vw] self-end">
-            <Image src="/landing/leaf.png" alt="van" width={180} height={120} className="object-cover w-[110px] md:w-[160px]" />
-          </div>
-          <div className="mt-[40vh] md:mt-[-10vh]">
-            <Image
-              src="/landing/hero6.png"
-              alt="hero6"
-              width={540}
-              height={360}
-              className="object-cover -rotate-[12deg] md:rotate-[12deg] w-[220px] md:w-[550px]"
-            />
-          </div>
+        <div className="px-8 lg:px-32 w-[100%] flex flex-end md:justify-end">
+          <Image
+            src="/landing/hero6.png"
+            alt="hero6"
+            width={400}
+            height={360}
+            className="object-cover -rotate-[16deg] md:rotate-[12deg] w-[180px] md:w-[400px] h-[180px] md:h-[400px] mt-[40vh] md:-mt-[60vh]"
+          />
         </div>
       </div>
       <div className="bg-[url('/landing/bg-contors.png')] bg-cover pb-[180px] md:pb-60 relative">
@@ -178,7 +180,7 @@ export default function Home() {
                 </Link>
               </div>
             </div>
-            <div className="relative flex flex-1 min-h-[180px] md:min-h-full">
+            <div className="relative flex flex-1 min-h-[180px] md:min-h-full bg-blend-lighten">
               <Image
                 src="/landing/hero11.png"
                 alt="hero11"

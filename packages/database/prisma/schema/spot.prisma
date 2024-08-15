@@ -92,7 +92,7 @@ model Spot {
   googlePlaceId            String? @unique
   volunteeringEventsId     String? @unique
   camperguruId             Int?    @unique
-  eFuelsNowId              Int?    @unique
+  eFuelsNowId              String? @unique
 
   @@index([publishedAt])
   @@index([name])
