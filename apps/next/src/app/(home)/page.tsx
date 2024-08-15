@@ -14,7 +14,7 @@ export default function Home() {
           <HeroImage1 />
         </div>
         <div className="relative justify-center flex flex-col pt-[30vh] md:pt-[10vh]">
-          <h1 className="text-[28vw] leading-none italic font-extrabold text-primary mix-blend-color">ramble</h1>
+          <h1 className="text-[28vw] leading-none italic font-extrabold text-primary mix-blend-color-dodge">ramble</h1>
           <div className="relative">
             <Image
               src="/landing/hero0-mob.png"
@@ -30,7 +30,7 @@ export default function Home() {
               height={7000}
               className="hidden mix-blend-lighten md:block absolute pointer-events-none right-[0vw] md:right-[7vw] lg:right-[10vw] z-10 h-[765vh] -top-[3vw] md:top-[-5vw]"
             />
-            <p className="text-xl md:text-3xl pl-1 md:pl-4 -mt-3 md:-mt-[3rem] max-w-[50vw] md:max-w-[75vw]">
+            <p className="text-xl md:text-3xl pl-1 md:pl-4 -mt-3 md:-mt-[3rem] max-w-[50vw] md:max-w-[75vw] font-bold">
               community app for the modern van traveler
             </p>
           </div>
@@ -180,7 +180,7 @@ export default function Home() {
                 </Link>
               </div>
             </div>
-            <div className="relative flex flex-1 min-h-[180px] md:min-h-full">
+            <div className="relative flex flex-1 min-h-[180px] md:min-h-full bg-blend-lighten">
               <Image
                 src="/landing/hero11.png"
                 alt="hero11"
