@@ -191,7 +191,7 @@ function Footer({
   )
 }
 
-function Empty({ width, height, placeholderPaddingTop = 0 }: Pick<Props, "placeholderPaddingTop" | "width" | "height">) {
+export function Empty({ width, height, placeholderPaddingTop = 0 }: Pick<Props, "placeholderPaddingTop" | "width" | "height">) {
   return (
     <View
       style={{ width, height, paddingTop: placeholderPaddingTop }}

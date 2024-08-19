@@ -122,11 +122,6 @@ function SpotTypeSelector({ type, defaultValue }: { type: SpotTypeInfo; defaultV
       >
         {type.label}
       </Button>
-      {type.isComingSoon && (
-        <p className="-right-1 -top-1 absolute flex items-center justify-center rounded-full border bg-background px-1 text-xxs shadow">
-          Coming soon
-        </p>
-      )}
       {isSelected && <input type="hidden" name="type[]" value={type.value} />}
     </div>
   )

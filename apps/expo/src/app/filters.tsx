@@ -219,7 +219,6 @@ function SpotTypeSelector({
 }) {
   const { me } = useMe()
   const router = useRouter()
-  const isDisabled = me?.isAdmin ? false : type.isComingSoon
   return (
     <View className="relative">
       <Button
@@ -229,30 +228,16 @@ function SpotTypeSelector({
           <Icon
             icon={SPOT_TYPE_ICONS[type.value]}
             size={20}
-            className={join(!me?.isAdmin && (type.isComingSoon || isDisabled) && "opacity-50")}
             color={{ light: isSelected ? "white" : "black", dark: isSelected ? "black" : "white" }}
           />
         }
         className="min-w-[100px]"
-        disabled={(me && isDisabled) || false}
         onPress={() => {
           !me ? router.push("/register") : onPress()
         }}
       >
-        <Text className={join(isSelected ? "text-white dark:text-black" : "text-black dark:text-white", !me && "opacity-70")}>
-          {type.label}
-        </Text>
+        <Text className={join(isSelected ? "text-white dark:text-black" : "text-black dark:text-white")}>{type.label}</Text>
       </Button>
-
-      {!me?.isAdmin && type.isComingSoon && (
-        <View
-          className={join(
-            "-right-1 -top-1 absolute flex h-[18px] w-[70px] items-center justify-center rounded-full border border-gray-300 bg-background dark:border-gray-700 dark:bg-background-dark",
-          )}
-        >
-          <Text className="text-xxs leading-3">Coming soon</Text>
-        </View>
-      )}
     </View>
   )
 }
