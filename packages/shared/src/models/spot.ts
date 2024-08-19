@@ -14,8 +14,8 @@ export const SPOT_TYPES = {
   CAMPING: { isArchived: false, value: "CAMPING", label: "Camping", isComingSoon: false, category: "STAY" },
   VAN_PARK: { isArchived: false, value: "VAN_PARK", label: "Van park", isComingSoon: false, category: "STAY" },
   CARPARK: { isArchived: false, value: "CARPARK", label: "Car park", isComingSoon: false, category: "STAY" },
-  PRIVATE_LAND: { isArchived: false, value: "PRIVATE_LAND", label: "Private land", isComingSoon: true, category: "STAY" },
-  ROADSIDE: { isArchived: false, value: "ROADSIDE", label: "Roadside", isComingSoon: true, category: "STAY" },
+  PRIVATE_LAND: { isArchived: false, value: "PRIVATE_LAND", label: "Private land", isComingSoon: false, category: "STAY" },
+  ROADSIDE: { isArchived: false, value: "ROADSIDE", label: "Roadside", isComingSoon: false, category: "STAY" },
   /**
    * @deprecated in 1.4.11, migrate to others
    */
