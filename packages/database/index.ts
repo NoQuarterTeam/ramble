@@ -17,12 +17,12 @@ export const prisma =
     query: {
       spot: {
         create: ({ query, args }) => {
-          const id = createSpotNanoId()
-          return query({ ...args, data: { ...args.data, nanoid: id } })
+          const nanoid = createSpotNanoId()
+          return query({ ...args, data: { ...args.data, nanoid } })
         },
         upsert: ({ query, args }) => {
-          const id = createSpotNanoId()
-          return query({ ...args, create: { ...args.create, nanoid: id } })
+          const nanoid = createSpotNanoId()
+          return query({ ...args, create: { ...args.create, nanoid } })
         },
       },
     },

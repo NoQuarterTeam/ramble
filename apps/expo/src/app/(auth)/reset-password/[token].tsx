@@ -23,6 +23,7 @@ export default function Screen() {
     error,
   } = api.auth.resetPassword.useMutation({
     onSuccess: async () => {
+      navigation.navigate("/")
       navigation.navigate("/login")
       await new Promise((resolve) => setTimeout(resolve, 1000))
       toast({ title: "Password reset!" })

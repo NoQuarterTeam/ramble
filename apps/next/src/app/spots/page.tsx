@@ -36,7 +36,7 @@ export default async function Page({ searchParams }: { searchParams: SearchParam
               All
             </SearchParamButton>
 
-            {SPOT_TYPE_OPTIONS.filter((s) => s.category === "STAY" && !s.isComingSoon).map(({ value, label }) => (
+            {SPOT_TYPE_OPTIONS.filter((s) => s.category === "STAY").map(({ value, label }) => (
               <div key={value}>
                 <SearchParamButton
                   name="type"
