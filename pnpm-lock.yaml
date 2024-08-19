@@ -386,8 +386,8 @@ importers:
         specifier: 14.2.5
         version: 14.2.5(react-dom@18.2.0)(react@18.2.0)
       posthog-js:
-        specifier: 1.156.0
-        version: 1.156.0
+        specifier: 1.156.1
+        version: 1.156.1
       pretty-cache-header:
         specifier: 1.0.0
         version: 1.0.0
@@ -8324,10 +8324,6 @@ packages:
       '@types/geojson': 7946.0.14
     dev: true
 
-  /@types/web@0.0.154:
-    resolution: {integrity: sha512-Tc10Nkpbb8AgM3iGnrvpKVb6x8pzrZpMCPqMJe8htXoEdNDKojEevNAkCjxkjCLZF2p1ZB+gknAwdbkypxwxKg==}
-    dev: false
-
   /@types/wrap-ansi@3.0.0:
     resolution: {integrity: sha512-ltIpx+kM7g/MLRZfkbL7EsCEjfzCcScLpkg37eXEtx5kmrAKBkTJwd1GIAjDSL8wTpM6Hzn5YO4pSb91BEwu1g==}
     dev: true
@@ -14214,10 +14210,9 @@ packages:
       picocolors: 1.0.1
       source-map-js: 1.2.0
 
-  /posthog-js@1.156.0:
-    resolution: {integrity: sha512-BoHt8qEDpCp0yiCytKYD0NwQiod5tn7r4Upwd7Y9y6QSK2T9+DKcpRHJg1itr98OSnd5w1wvGSyZyc552J3Q3w==}
+  /posthog-js@1.156.1:
+    resolution: {integrity: sha512-XnQHGKKTXXRXf3tP/DfWXneGmiYdOEtGXC3HACX26ZKOri6HCZ/+Ss28OHzSe+eaauj+XwkQNX/VJzcnX/mn/w==}
     dependencies:
-      '@types/web': 0.0.154
       fflate: 0.4.8
       preact: 10.20.2
       web-vitals: 4.2.2
