@@ -159,17 +159,17 @@ function MapContainer() {
   // biome-ignore lint/correctness/useExhaustiveDependencies: dont add activeSpotId here
   const spotMarkers = React.useMemo(
     () =>
-      clusters?.map((point) => (
+      clusters?.map((point, i) => (
         <SpotClusterMarker
           point={point}
-          key={`${point.id || new Date().getMilliseconds()}`}
+          key={`${point.id || 1}-${i}`}
           onPress={() => {
             camera.current?.setCamera({
               zoomLevel: (point.properties.cluster && point.properties.zoomLevel) || undefined,
               animationMode: "linearTo",
               animationDuration: 300,
               centerCoordinate: point.geometry.coordinates,
-              padding: { paddingBottom: activeSpotId ? 430 : 0, paddingLeft: 0, paddingRight: 0, paddingTop: 0 },
+              // padding: { paddingBottom: activeSpotId ? 430 : 0, paddingLeft: 0, paddingRight: 0, paddingTop: 0 },
             })
             if (!point.properties.cluster) {
               increment()
@@ -374,8 +374,8 @@ function MapContainer() {
           <Icon icon={Navigation} size={18} />
         </TouchableOpacity>
       </View>
-      {activeSpotId && <SpotPreview id={activeSpotId} onSetSpotId={setActiveSpotId} />}
-      {selectedBioRegion && <BioRegionPreview id={selectedBioRegion} onClose={handleCloseBioRegionPreview} />}
+      {activeSpotId ? <SpotPreview id={activeSpotId} onSetSpotId={setActiveSpotId} /> : null}
+      {selectedBioRegion ? <BioRegionPreview id={selectedBioRegion} onClose={handleCloseBioRegionPreview} /> : null}
     </>
   )
 }
