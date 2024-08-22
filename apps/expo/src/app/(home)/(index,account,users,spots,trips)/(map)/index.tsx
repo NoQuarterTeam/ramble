@@ -159,10 +159,10 @@ function MapContainer() {
   // biome-ignore lint/correctness/useExhaustiveDependencies: dont add activeSpotId here
   const spotMarkers = React.useMemo(
     () =>
-      clusters?.map((point, i) => (
+      clusters?.map((point) => (
         <SpotClusterMarker
           point={point}
-          key={`${point.id || 0}${i}`}
+          key={`${point.id || new Date().getMilliseconds()}`}
           onPress={() => {
             camera.current?.setCamera({
               zoomLevel: (point.properties.cluster && point.properties.zoomLevel) || undefined,
