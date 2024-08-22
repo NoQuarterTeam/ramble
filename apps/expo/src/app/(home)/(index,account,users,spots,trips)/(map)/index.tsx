@@ -194,7 +194,7 @@ function MapContainer() {
               animationMode: "linearTo",
               animationDuration: 300,
               centerCoordinate: point.geometry.coordinates,
-              padding: { paddingBottom: 0, paddingLeft: 0, paddingRight: 0, paddingTop: 0 },
+              // padding: { paddingBottom: 0, paddingLeft: 0, paddingRight: 0, paddingTop: 0 },
             })
           }
           return (
