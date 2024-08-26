@@ -224,7 +224,7 @@ export const partners = {
 } as const
 
 export const canManageSpot = (
-  spot: Pick<Spot, "ownerId"> | null,
+  spot: Pick<Spot, "ownerId" | "creatorId"> | null,
   user: Pick<User, "id" | "isAdmin" | "role" | "isVerified"> | null | undefined,
 ) => {
   if (!user) return false
@@ -232,9 +232,9 @@ export const canManageSpot = (
   if (user.isAdmin) return true
   if (!user.isVerified) return false
   if (user.role === "GUIDE") return true
+  if (user.id === spot.creatorId) return true
   if (!spot.ownerId) return false
   if (user.role === "OWNER" && user.id === spot.ownerId) return true
-  if (spot.ownerId === user.id) return true
   return false
 }
 

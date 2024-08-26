@@ -199,6 +199,7 @@ export const spotRouter = createTRPCRouter({
           ownerId: true,
           address: true,
           verifier: true,
+          creatorId: true,
           creator: {
             select: {
               id: true,
