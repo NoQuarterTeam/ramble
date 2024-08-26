@@ -1,12 +1,10 @@
+import { displayRating, isPartnerSpot } from "@ramble/shared"
 import { Image } from "expo-image"
 import { useRouter } from "expo-router"
 import { ArrowLeft, ArrowRight, Heart, Route, Star, X } from "lucide-react-native"
 import * as React from "react"
 import { TouchableOpacity, View, useColorScheme } from "react-native"
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated"
-
-import { displayRating, isPartnerSpot } from "@ramble/shared"
-
 import { Icon } from "~/components/Icon"
 import { PartnerLink } from "~/components/PartnerLink"
 import { SpotImageCarousel } from "~/components/SpotImageCarousel"
@@ -16,9 +14,8 @@ import { Spinner } from "~/components/ui/Spinner"
 import { Text } from "~/components/ui/Text"
 import { api } from "~/lib/api"
 import { isTablet, width } from "~/lib/device"
-import { useBackgroundColor } from "~/lib/tailwind"
-
 import { useTabSegment } from "~/lib/hooks/useTabSegment"
+import { useBackgroundColor } from "~/lib/tailwind"
 import { CreatorCard } from "./CreatorCard"
 import { useFeedbackActivity } from "./FeedbackCheck"
 import { IconButton } from "./ui/IconButton"
@@ -55,7 +52,7 @@ export const SpotPreview = React.memo(function _SpotPreview({
 
   return (
     <Animated.View
-      style={{ width: "100%", position: "absolute", backgroundColor, bottom: 0, zIndex: 1 }}
+      style={{ width: "100%", position: "absolute", backgroundColor, bottom: 0 }}
       entering={SlideInDown.duration(200)}
       exiting={SlideOutDown.duration(200)}
       className="rounded-t-sm p-4"

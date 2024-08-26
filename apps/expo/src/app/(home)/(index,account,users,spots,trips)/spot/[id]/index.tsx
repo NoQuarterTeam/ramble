@@ -311,7 +311,7 @@ export default function SpotDetailScreen() {
                 )}
 
                 <View className="space-y-2 py-2">
-                  {canManageSpot(spot, me) && !spot.verifiedAt && (
+                  {me.isAdmin && !spot.verifiedAt && (
                     <Button
                       size="sm"
                       onPress={() => verifySpot({ id: spot.id })}
