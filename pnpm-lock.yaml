@@ -416,8 +416,8 @@ importers:
         specifier: 1.1.7
         version: 1.1.7
       tailwindcss-radix:
-        specifier: 3.0.4
-        version: 3.0.4
+        specifier: 3.0.5
+        version: 3.0.5(tailwindcss@3.3.2)
       use-onclickoutside:
         specifier: 0.4.1
         version: 0.4.1(@types/react@18.3.5)(react@18.2.0)
@@ -15919,8 +15919,13 @@ packages:
       tailwindcss: 3.3.2
     dev: false
 
-  /tailwindcss-radix@3.0.4:
-    resolution: {integrity: sha512-nnMdBWHGBon4OxfRsF0LfOaoW09WeSU5extMUpk8RckYl94nwu9uyJ6IO5eIrRpvrHNm5CVaWz6PaldcEoQ4SQ==}
+  /tailwindcss-radix@3.0.5(tailwindcss@3.3.2):
+    resolution: {integrity: sha512-dy5bIHixuvrmMzljDoteKD1mcLAm76Z1IPkCr7IWUN89zoxfokVepPlxMQkmWEQokYs3N9BOLsXXvn8fLZWoBg==}
+    engines: {pnpm: '9'}
+    peerDependencies:
+      tailwindcss: ^3.4.1
+    dependencies:
+      tailwindcss: 3.3.2
     dev: false
 
   /tailwindcss@3.3.2:
