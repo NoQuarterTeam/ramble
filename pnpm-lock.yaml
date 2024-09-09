@@ -386,8 +386,8 @@ importers:
         specifier: 14.2.8
         version: 14.2.8(react-dom@18.2.0)(react@18.2.0)
       posthog-js:
-        specifier: 1.161.0
-        version: 1.161.0
+        specifier: 1.161.1
+        version: 1.161.1
       pretty-cache-header:
         specifier: 1.0.0
         version: 1.0.0
@@ -14115,8 +14115,8 @@ packages:
       picocolors: 1.0.1
       source-map-js: 1.2.0
 
-  /posthog-js@1.161.0:
-    resolution: {integrity: sha512-P17q2s77/p7QPWrIhp9uAXVaLT8SwrdNh6W2QOilAMllOYMxD6Lzj4C8JW3NeqlL+nGbViCPpLmkUWuvWnGVLQ==}
+  /posthog-js@1.161.1:
+    resolution: {integrity: sha512-l897s6jjQUHfXDNjy6+CqIhRH/h5Up1Cr7PM2phq3Im+4zd66IJNJ7aSmMjP/HvQq/s16XO1LfGAGEPdbBr/xw==}
     dependencies:
       fflate: 0.4.8
       preact: 10.20.2
