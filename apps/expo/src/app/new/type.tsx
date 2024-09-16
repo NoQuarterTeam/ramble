@@ -22,7 +22,7 @@ export default function NewSpotTypeScreen() {
         <View className="py-4">
           <Text className="text-sm opacity-70 mb-1">Stay</Text>
           <View className="flex flex-row flex-wrap gap-2">
-            {SPOT_TYPE_OPTIONS.map((spotType) => (
+            {SPOT_TYPE_OPTIONS.filter((s) => s.category === "STAY").map((spotType) => (
               <Button
                 size="sm"
                 variant={type === spotType.value ? "primary" : "outline"}
@@ -47,7 +47,7 @@ export default function NewSpotTypeScreen() {
         <View className="pb-4">
           <Text className="text-sm opacity-70 mb-1">Activity</Text>
           <View className="flex flex-row flex-wrap gap-2">
-            {SPOT_TYPE_OPTIONS.map((spotType) => (
+            {SPOT_TYPE_OPTIONS.filter((s) => s.category === "ACTIVITY").map((spotType) => (
               <Button
                 size="sm"
                 variant={type === spotType.value ? "primary" : "outline"}
@@ -72,7 +72,7 @@ export default function NewSpotTypeScreen() {
         <View className="pb-4">
           <Text className="text-sm opacity-70 mb-1">Service</Text>
           <View className="flex flex-row flex-wrap gap-2">
-            {SPOT_TYPE_OPTIONS.map((spotType) => (
+            {SPOT_TYPE_OPTIONS.filter((s) => s.category === "SERVICE").map((spotType) => (
               <Button
                 size="sm"
                 variant={type === spotType.value ? "primary" : "outline"}
@@ -97,7 +97,7 @@ export default function NewSpotTypeScreen() {
         <View className="pb-4">
           <Text className="text-sm opacity-70 mb-1">Hospitality</Text>
           <View className="flex flex-row flex-wrap gap-2">
-            {SPOT_TYPE_OPTIONS.map((spotType) => (
+            {SPOT_TYPE_OPTIONS.filter((s) => s.category === "HOSPITALITY").map((spotType) => (
               <Button
                 size="sm"
                 variant={type === spotType.value ? "primary" : "outline"}
@@ -122,7 +122,7 @@ export default function NewSpotTypeScreen() {
         <View className="pb-4">
           <Text className="text-sm opacity-70 mb-1">Other</Text>
           <View className="flex flex-row flex-wrap gap-2">
-            {SPOT_TYPE_OPTIONS.map((spotType) => (
+            {SPOT_TYPE_OPTIONS.filter((s) => s.category === "OTHER").map((spotType) => (
               <Button
                 size="sm"
                 variant={type === spotType.value ? "primary" : "outline"}
