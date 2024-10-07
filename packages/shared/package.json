@@ -10,7 +10,7 @@
   "sideEffects": false,
   "dependencies": {
     "@ramble/database": "workspace:*",
-    "tailwind-merge": "2.5.2"
+    "tailwind-merge": "2.5.3"
   },
   "devDependencies": {
     "@ramble/tailwind-config": "workspace:*",
