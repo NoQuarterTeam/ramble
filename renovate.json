@@ -3,12 +3,9 @@
   "baseBranches": ["develop"],
   "automerge": true,
   "major": { "automerge": false },
+  "schedule": ["0 12 * * 0"],
   "requiredStatusChecks": null,
   "packageRules": [
-    {
-      "packagePatterns": ["eslint"],
-      "groupName": "eslint"
-    },
     {
       "packagePatterns": ["@types/"],
       "groupName": "@types"
