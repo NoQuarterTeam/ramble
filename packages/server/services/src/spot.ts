@@ -42,7 +42,7 @@ export const spotItemSelectFields = Prisma.sql`
 
 export const spotItemDistanceFromMeField = (user?: Pick<User, "id" | "latitude" | "longitude"> | null) =>
   user?.latitude && user?.longitude
-    ? Prisma.sql`CAST(ST_DistanceSphere(ST_Centroid("Spot"."pointLocation"::geometry), ST_GeomFromText('POINT(${user.longitude} ${user.latitude})', 4326)) as numeric)* 0.001 as "distanceFromMe"`
+    ? Prisma.sql`CAST(ST_DistanceSphere(ST_Centroid("Spot"."pointLocation"::geometry), ST_MakePoint(${user.longitude}, ${user.latitude})) AS numeric) * 0.001 AS "distanceFromMe"`
     : Prisma.sql`null as "distanceFromMe"`
 
 export const spotListQuery = ({

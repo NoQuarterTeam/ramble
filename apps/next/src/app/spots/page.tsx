@@ -13,8 +13,9 @@ const TAKE = 24
 
 type SearchParams = { type?: SpotType; sort?: SpotListSort }
 
-const getSpots = ({ type, sort = "latest" }: SearchParams) =>
-  db.$queryRaw<Array<SpotItemType>>`${spotListQuery({ type, sort, take: TAKE })}`
+const getSpots = async ({ type, sort = "latest" }: SearchParams) => {
+  return db.$queryRaw<Array<SpotItemType>>`${spotListQuery({ type, sort, take: TAKE })}`
+}
 
 export const revalidate = 86400
 
