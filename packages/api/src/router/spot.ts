@@ -271,7 +271,7 @@ export const spotRouter = createTRPCRouter({
       WHERE
         "Spot"."creatorId" = ${user.id} AND "Spot"."verifiedAt" IS NOT NULL AND ${publicSpotWhereClauseRaw(user.id)} AND "Spot"."sourceUrl" IS NULL
       GROUP BY
-        "Spot".id, "image", "blurHash"
+        "Spot".id, "image"
       ORDER BY
         "Spot"."createdAt" DESC, "Spot".id
       LIMIT 20
