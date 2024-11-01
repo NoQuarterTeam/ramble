@@ -44,7 +44,6 @@ export const spotItemDistanceFromMeField = (user?: Pick<User, "id" | "latitude" 
   user?.latitude && user?.longitude
     ? Prisma.sql`CAST(ST_DistanceSphere(ST_Centroid("Spot"."pointLocation"::geometry), ST_GeomFromText('POINT(${user.longitude} ${user.latitude})', 4326)) as numeric)* 0.001 as "distanceFromMe"`
     : Prisma.sql`null as "distanceFromMe"`
-
 export const spotListQuery = ({
   user,
   sort,
@@ -59,15 +58,15 @@ export const spotListQuery = ({
   type?: SpotType
 }) => {
   const whereClause = type
-    ? Prisma.sql`"Spot"."verifiedAt" IS NOT NULL AND "Spot".type = ${type} AND ${publicSpotWhereClauseRaw(user?.id)}`
-    : Prisma.sql`"Spot"."verifiedAt" IS NOT NULL AND "Spot".type IN (${Prisma.join(campingSpotTypes)}) AND ${publicSpotWhereClauseRaw(user?.id)}`
+    ? Prisma.sql`"Spot"."verifiedAt" IS NOT NULL AND "Spot".type = ${type}::"SpotType" AND ${publicSpotWhereClauseRaw(user?.id)}`
+    : Prisma.sql`"Spot"."verifiedAt" IS NOT NULL AND "Spot".type = ANY(ARRAY[${Prisma.join(campingSpotTypes)}]::"SpotType"[]) AND ${publicSpotWhereClauseRaw(user?.id)}`
 
   const whereWithDistanceSort =
     sort === "near" && user?.latitude && user?.longitude
       ? Prisma.sql`AND "Spot".latitude BETWEEN ${user.latitude - 1}
-                    AND ${user.latitude + 1}
-                    AND "Spot".longitude BETWEEN ${user.longitude - 1}
-                    AND ${user.longitude + 1}`
+        AND ${user.latitude + 1}
+        AND "Spot".longitude BETWEEN ${user.longitude - 1}
+        AND ${user.longitude + 1}`
       : Prisma.sql``
 
   const orderByClause = Prisma.sql`${
