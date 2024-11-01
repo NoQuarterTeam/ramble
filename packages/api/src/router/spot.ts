@@ -265,15 +265,15 @@ export const spotRouter = createTRPCRouter({
         ${spotItemDistanceFromMeField(ctx.user)},
         ${spotItemSelectFields}
       FROM
-        Spot
+        "Spot"
       LEFT JOIN
-        SpotImage ON Spot.coverId = SpotImage.id
+        "SpotImage" ON "Spot"."coverId" = "SpotImage".id
       WHERE
-        Spot.creatorId = ${user.id} AND Spot.verifiedAt IS NOT NULL AND ${publicSpotWhereClauseRaw(user.id)} AND Spot.sourceUrl IS NULL
+        "Spot"."creatorId" = ${user.id} AND "Spot"."verifiedAt" IS NOT NULL AND ${publicSpotWhereClauseRaw(user.id)} AND "Spot"."sourceUrl" IS NULL
       GROUP BY
-        Spot.id
+        "Spot".id
       ORDER BY
-        Spot.createdAt DESC, Spot.id
+        "Spot"."createdAt" DESC, "Spot".id
       LIMIT 20
     `
     return spots
