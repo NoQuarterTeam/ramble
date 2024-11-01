@@ -44,6 +44,7 @@ export const spotItemDistanceFromMeField = (user?: Pick<User, "id" | "latitude" 
   user?.latitude && user?.longitude
     ? Prisma.sql`CAST(ST_DistanceSphere(ST_Centroid("Spot"."pointLocation"::geometry), ST_GeomFromText('POINT(${user.longitude} ${user.latitude})', 4326)) as numeric)* 0.001 as "distanceFromMe"`
     : Prisma.sql`null as "distanceFromMe"`
+
 export const spotListQuery = ({
   user,
   sort,
@@ -93,7 +94,7 @@ export const spotListQuery = ({
       ${whereClause}
       ${whereWithDistanceSort}
     GROUP BY
-      "Spot".id
+      "Spot".id, image, "blurHash"
     ORDER BY
       ${orderByClause}
     LIMIT ${take}
