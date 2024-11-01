@@ -94,7 +94,7 @@ export const spotListQuery = ({
       ${whereClause}
       ${whereWithDistanceSort}
     GROUP BY
-      "Spot".id, image, "blurHash"
+      "Spot".id, "image", "blurHash"
     ORDER BY
       ${orderByClause}
     LIMIT ${take}
