@@ -1,4 +1,7 @@
 {
+  "cli": {
+    "appVersionSource": "local"
+  },
   "build": {
     "development": {
       "ios": { "simulator": true },
@@ -31,6 +34,7 @@
     "production": {
       "channel": "production",
       "distribution": "store",
+      // "autoIncrement": true,
       "pnpm": "8.15.4",
       "env": {
         "SENTRY_AUTH_TOKEN": "private",
