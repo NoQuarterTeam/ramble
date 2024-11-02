@@ -58,9 +58,9 @@ export function SpotItem({ spot }: Props) {
         )}
       </View>
 
-      <View className="pt-1">
+      <View className="pt-1 w-full">
         <View className="flex w-full flex-row items-center justify-between">
-          <Text numberOfLines={1} className="flex-1 font-500 text-lg">
+          <Text numberOfLines={1} className="flex-1 font-500 text-lg w-full">
             {spot.name}
           </Text>
           <View className="flex flex-row items-center justify-end space-x-1.5 pl-1">
