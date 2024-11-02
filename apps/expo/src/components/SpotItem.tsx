@@ -65,13 +65,13 @@ export function SpotItem({ spot }: Props) {
           </Text>
           <View className="flex flex-row items-center justify-end space-x-1.5 pl-1">
             {spot.savedCount && spot.savedCount !== "0" && (
-              <View className="flex flex-row items-center space-x-1">
+              <View className="flex flex-row items-center space-x-1 w-[20px]">
                 <Icon icon={Heart} size={15} fill={isDark ? "white" : "black"} />
                 <Text className="text-base">{displaySaved(spot.savedCount)}</Text>
               </View>
             )}
             {spot.rating && spot.rating !== "0" && (
-              <View className="flex flex-row items-center space-x-1">
+              <View className="flex flex-row items-center space-x-1 w-[20px]">
                 <Icon icon={Star} size={16} fill={isDark ? "white" : "black"} />
                 <Text className="text-base">{displayRating(spot.rating)}</Text>
               </View>
