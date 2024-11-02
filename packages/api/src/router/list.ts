@@ -58,17 +58,17 @@ export const listRouter = createTRPCRouter({
           ${spotItemDistanceFromMeField(ctx.user)},
           ${spotItemSelectFields}
         FROM
-          Spot
+          "Spot"
         LEFT JOIN
-          ListSpot ON Spot.id = ListSpot.spotId
+          "ListSpot" ON "Spot".id = "ListSpot"."spotId"
         LEFT JOIN
-          SpotImage ON Spot.coverId = SpotImage.id
+          "SpotImage" ON "Spot"."coverId" = "SpotImage".id
         WHERE
-          ListSpot.listId = ${input.id} AND ${publicSpotWhereClauseRaw(ctx.user?.id)}
+          "ListSpot"."listId" = ${input.id} AND ${publicSpotWhereClauseRaw(ctx.user?.id)}
         GROUP BY
-          Spot.id
+          "Spot".id
         ORDER BY
-          Spot.id
+          "Spot".id
       `,
     ])
     if (!list || (list.isPrivate && (!currentUser || currentUser !== list.creator.username))) {

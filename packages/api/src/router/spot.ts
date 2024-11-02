@@ -230,16 +230,16 @@ export const spotRouter = createTRPCRouter({
       rating: ctx.prisma.review.aggregate({ where: { spotId: input.id }, _avg: { rating: true } }),
       tags: ctx.prisma.$queryRaw<Array<{ name: string; count: string }>>`
         SELECT
-          Tag.name,
+          "Tag".name,
           CAST(COUNT(*) AS CHAR(32)) AS count
         FROM
-          Tag
-          LEFT JOIN _ReviewToTag AS rt ON Tag.id = rt.B
-          LEFT JOIN Review ON Review.id = rt.A
+          "Tag"
+          LEFT JOIN "_ReviewToTag" AS rt ON "Tag".id = rt."B"
+          LEFT JOIN "Review" ON "Review".id = rt."A"
         WHERE
-          Review.spotId = ${input.id}
+          "Review"."spotId" = ${input.id}
         GROUP BY
-          Tag.name
+          "Tag".name
         ORDER BY
 	        count DESC;
       `,
@@ -265,15 +265,15 @@ export const spotRouter = createTRPCRouter({
         ${spotItemDistanceFromMeField(ctx.user)},
         ${spotItemSelectFields}
       FROM
-        Spot
+        "Spot"
       LEFT JOIN
-        SpotImage ON Spot.coverId = SpotImage.id
+        "SpotImage" ON "Spot"."coverId" = "SpotImage".id
       WHERE
-        Spot.creatorId = ${user.id} AND Spot.verifiedAt IS NOT NULL AND ${publicSpotWhereClauseRaw(user.id)} AND Spot.sourceUrl IS NULL
+        "Spot"."creatorId" = ${user.id} AND "Spot"."verifiedAt" IS NOT NULL AND ${publicSpotWhereClauseRaw(user.id)} AND "Spot"."sourceUrl" IS NULL
       GROUP BY
-        Spot.id
+        "Spot".id, "image", "blurHash"
       ORDER BY
-        Spot.createdAt DESC, Spot.id
+        "Spot"."createdAt" DESC, "Spot".id
       LIMIT 20
     `
     return spots

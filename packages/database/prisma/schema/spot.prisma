@@ -45,7 +45,7 @@ model Spot {
   verifiedAt          DateTime?
   nanoid              String?   @unique
 
-  pointLocation Unsupported("POINT GENERATED ALWAYS AS (ST_GeomFromText(CONCAT('POINT(',longitude,' ',latitude,')'))) STORED")?
+  pointLocation Unsupported("geography(Point, 4326) GENERATED ALWAYS AS (ST_SetSRID(ST_MakePoint(longitude, latitude), 4326)) STORED")?
 
   // Options 
   isPetFriendly Boolean @default(true)
