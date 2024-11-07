@@ -66,7 +66,7 @@ export const listRouter = createTRPCRouter({
         WHERE
           "ListSpot"."listId" = ${input.id} AND ${publicSpotWhereClauseRaw(ctx.user?.id)}
         GROUP BY
-          "Spot".id
+          "Spot".id, "image", "blurHash"
         ORDER BY
           "Spot".id
       `,
