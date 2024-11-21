@@ -738,8 +738,8 @@ importers:
         specifier: ^3.10.0
         version: 3.10.0
       flickr-sdk:
-        specifier: 7.0.0-beta.8
-        version: 7.0.0-beta.8
+        specifier: 7.0.0-beta.9
+        version: 7.0.0-beta.9
       jsonwebtoken:
         specifier: 9.0.2
         version: 9.0.2
@@ -11197,8 +11197,8 @@ packages:
       micromatch: 4.0.5
     dev: false
 
-  /flickr-sdk@7.0.0-beta.8:
-    resolution: {integrity: sha512-ay1b93ALxbqjgRvLHOwIcbTMbnY0tq/aBIkkQw50ENgrhuh+NgM8N5JpyDCaPLWCCBk8rR0y/e3NY/kB8VOblw==}
+  /flickr-sdk@7.0.0-beta.9:
+    resolution: {integrity: sha512-uB9S0yu3E16+zdxkrqIegQJlzP9HkZGZVmFyM0Z8PwFOLBP/tPHIxndT3Tx1uVojNPlMZ1GZPADs1L2tCrbqvg==}
     engines: {node: '>= 18'}
     dependencies:
       '@rgrove/parse-xml': 4.1.0
