@@ -16,7 +16,7 @@
     "@ramble/server-schemas": "workspace:*",
     "@ramble/server-services": "workspace:*",
     "@ramble/shared": "workspace:*",
-    "@trpc/server": "11.0.0-rc.563",
+    "@trpc/server": "11.0.0-rc.638",
     "@turf/bbox": "7.1.0",
     "@turf/center": "7.1.0",
     "@turf/helpers": "7.1.0",
