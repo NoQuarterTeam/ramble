@@ -450,8 +450,8 @@ importers:
         specifier: 7.0.6
         version: 7.0.6(postcss@8.4.49)
       dotenv-cli:
-        specifier: 7.4.3
-        version: 7.4.3
+        specifier: 7.4.4
+        version: 7.4.4
       postcss:
         specifier: 8.4.49
         version: 8.4.49
@@ -523,8 +523,8 @@ importers:
         specifier: 7.1.3
         version: 7.1.3
       dotenv-cli:
-        specifier: 7.4.3
-        version: 7.4.3
+        specifier: 7.4.4
+        version: 7.4.4
       typescript:
         specifier: 5.6.3
         version: 5.6.3
@@ -570,8 +570,8 @@ importers:
         specifier: 20.16.10
         version: 20.16.10
       dotenv-cli:
-        specifier: 7.4.3
-        version: 7.4.3
+        specifier: 7.4.4
+        version: 7.4.4
       typescript:
         specifier: 5.6.3
         version: 5.6.3
@@ -608,8 +608,8 @@ importers:
         specifier: 20.16.10
         version: 20.16.10
       dotenv-cli:
-        specifier: 7.4.3
-        version: 7.4.3
+        specifier: 7.4.4
+        version: 7.4.4
       typescript:
         specifier: 5.6.3
         version: 5.6.3
@@ -672,8 +672,8 @@ importers:
         specifier: 6.5.2
         version: 6.5.2
       dotenv-cli:
-        specifier: 7.4.3
-        version: 7.4.3
+        specifier: 7.4.4
+        version: 7.4.4
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -772,8 +772,8 @@ importers:
         specifier: 6.4.16
         version: 6.4.16
       dotenv-cli:
-        specifier: 7.4.3
-        version: 7.4.3
+        specifier: 7.4.4
+        version: 7.4.4
       typescript:
         specifier: 5.6.3
         version: 5.6.3
@@ -9906,6 +9906,15 @@ packages:
       shebang-command: 2.0.0
       which: 2.0.2
 
+  /cross-spawn@7.0.6:
+    resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
+    engines: {node: '>= 8'}
+    dependencies:
+      path-key: 3.1.1
+      shebang-command: 2.0.0
+      which: 2.0.2
+    dev: true
+
   /crypt@0.0.2:
     resolution: {integrity: sha512-mCxBlsHFYh9C+HVpiEacem8FEBnMXgU9gy4zmNC+SXAZNB/1idgp/aulFJ4FgCi7GPEVbfyng092GqL2k2rmow==}
     dev: false
@@ -10355,11 +10364,11 @@ packages:
       domelementtype: 2.3.0
       domhandler: 5.0.3
 
-  /dotenv-cli@7.4.3:
-    resolution: {integrity: sha512-lf1E+TL1xFeoOHy2hSO3kLkx3KX8CDi17ccn5z5dVCnk2PuWqUKAnBVgQmhfS0BPuzFbptTEHVcIKFsGF0NAcg==}
+  /dotenv-cli@7.4.4:
+    resolution: {integrity: sha512-XkBYCG0tPIes+YZr4SpfFv76SQrV/LeCE8CI7JSEMi3VR9MvTihCGTOtbIexD6i2mXF+6px7trb1imVCXSNMDw==}
     hasBin: true
     dependencies:
-      cross-spawn: 7.0.3
+      cross-spawn: 7.0.6
       dotenv: 16.4.5
       dotenv-expand: 10.0.0
       minimist: 1.2.8
@@ -13690,6 +13699,7 @@ packages:
   /negotiator@0.6.3:
     resolution: {integrity: sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==}
     engines: {node: '>= 0.6'}
+    requiresBuild: true
     dev: false
 
   /neo-async@2.6.2:
