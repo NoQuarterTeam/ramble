@@ -386,8 +386,8 @@ importers:
         specifier: 14.2.18
         version: 14.2.18(react-dom@18.2.0)(react@18.2.0)
       posthog-js:
-        specifier: 1.166.2
-        version: 1.166.2
+        specifier: 1.188.0
+        version: 1.188.0
       pretty-cache-header:
         specifier: 1.0.0
         version: 1.0.0
@@ -9307,6 +9307,11 @@ packages:
     dependencies:
       browserslist: 4.24.2
 
+  /core-js@3.39.0:
+    resolution: {integrity: sha512-raM0ew0/jJUqkJ0E6e8UDtl+y/7ktFivgWvqw8dNSQeNWoSDLvQ1H/RN3aPXB9tBd4/FhyR4RDPGhsNIMsAn7g==}
+    requiresBuild: true
+    dev: false
+
   /core-util-is@1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
     dev: false
@@ -14018,9 +14023,10 @@ packages:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  /posthog-js@1.166.2:
-    resolution: {integrity: sha512-nulNJqmP25R1FvceDo4mPSohx10iI+OemcEzGFUy318q3O7n/yNz3JnmPx02kgLpioIqJBCPf/AZfjKnYj2vqA==}
+  /posthog-js@1.188.0:
+    resolution: {integrity: sha512-FdNCZcgM5sjADxES7VWbRntD39V2fvHunZry6Rrsp8VDG20TcAWc+koAuCMfEoU5jKxm/Ua37QnI9Xqfwg2fow==}
     dependencies:
+      core-js: 3.39.0
       fflate: 0.4.8
       preact: 10.20.2
       web-vitals: 4.2.2
