@@ -56,7 +56,7 @@
     "query-string": "9.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-dropzone": "14.2.9",
+    "react-dropzone": "14.3.5",
     "react-map-gl": "7.1.7",
     "sharp": "0.32.6",
     "sonner": "1.5.0",
