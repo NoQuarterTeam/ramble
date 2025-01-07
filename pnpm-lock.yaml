@@ -190,8 +190,8 @@ importers:
         specifier: 0.73.6
         version: 0.73.6(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(react@18.2.0)
       react-native-avoid-softinput:
-        specifier: 5.0.0
-        version: 5.0.0(react-native@0.73.6)(react@18.2.0)
+        specifier: 6.0.2
+        version: 6.0.2(react-native@0.73.6)(react@18.2.0)
       react-native-draggable-flatlist:
         specifier: 4.0.1
         version: 4.0.1(@babel/core@7.26.0)(react-native-gesture-handler@2.14.1)(react-native-reanimated@3.6.3)(react-native@0.73.6)
@@ -14446,11 +14446,11 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /react-native-avoid-softinput@5.0.0(react-native@0.73.6)(react@18.2.0):
-    resolution: {integrity: sha512-hpyWhBLiWcMqKbnhH1uQ+xWjv8b9L4sxIUyWiRE4F2O7lk7KlOvMKcpdl7Xxb6cyBOUNQxxtqN0btOAC6hT6oQ==}
+  /react-native-avoid-softinput@6.0.2(react-native@0.73.6)(react@18.2.0):
+    resolution: {integrity: sha512-0kdDy6QHDZyM37OQtZQhS8biW1P2h0WvQKOfOXGepn9KME+r4GSV4iYC4A2ltHaYVy5PDGwhSLEUh7J3zCU6Mg==}
     peerDependencies:
       react: '>=18.2.0'
-      react-native: '>=0.71.0'
+      react-native: '>=0.73.0'
     dependencies:
       react: 18.2.0
       react-native: 0.73.6(@babel/core@7.26.0)(@babel/preset-env@7.26.0)(react@18.2.0)
