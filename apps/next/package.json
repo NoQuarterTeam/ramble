@@ -44,7 +44,7 @@
     "@vercel/functions": "^1.0.2",
     "axios": "1.7.9",
     "blurhash": "2.0.5",
-    "class-variance-authority": "0.7.0",
+    "class-variance-authority": "0.7.1",
     "d3-shape": "3.2.0",
     "dayjs": "1.11.13",
     "isbot": "latest",
