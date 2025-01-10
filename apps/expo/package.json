@@ -34,7 +34,7 @@
     "@trpc/client": "11.0.0-rc.643",
     "@trpc/react-query": "11.0.0-rc.643",
     "@trpc/server": "11.0.0-rc.643",
-    "class-variance-authority": "0.7.0",
+    "class-variance-authority": "0.7.1",
     "d3-shape": "3.2.0",
     "dayjs": "1.11.13",
     "expo": "50.0.19",
