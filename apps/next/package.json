@@ -68,10 +68,10 @@
   },
   "devDependencies": {
     "@tailwindcss/forms": "0.5.9",
-    "@types/d3-shape": "3.1.6",
+    "@types/d3-shape": "3.1.7",
     "@types/node": "^20",
-    "@types/react": "18.3.12",
-    "@types/react-dom": "18.3.1",
+    "@types/react": "18.3.18",
+    "@types/react-dom": "18.3.5",
     "autoprefixer": "10.4.20",
     "cssnano": "7.0.6",
     "dotenv-cli": "7.4.4",
