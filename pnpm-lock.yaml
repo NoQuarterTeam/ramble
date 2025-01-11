@@ -404,8 +404,8 @@ importers:
         specifier: 14.3.5
         version: 14.3.5(react@18.2.0)
       react-map-gl:
-        specifier: 7.1.7
-        version: 7.1.7(mapbox-gl@3.8.0)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 7.1.8
+        version: 7.1.8(mapbox-gl@3.8.0)(react-dom@18.2.0)(react@18.2.0)
       sharp:
         specifier: 0.32.6
         version: 0.32.6
@@ -14501,8 +14501,8 @@ packages:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
     dev: false
 
-  /react-map-gl@7.1.7(mapbox-gl@3.8.0)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-mwjc0obkBJOXCcoXQr3VoLqmqwo9vS4bXfbGsdxXzEgVCv/PM0v+1QggL7W0d/ccIy+VCjbXNlGij+PENz6VNg==}
+  /react-map-gl@7.1.8(mapbox-gl@3.8.0)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-zwF16XMOdOKH4py5ehS1bgQIChqW8UN3b1bXps+JnADbYLSbOoUPQ3tNw0EZ2OTBWArR5aaQlhlEqg4lE47T8A==}
     peerDependencies:
       mapbox-gl: '>=1.13.0'
       maplibre-gl: '>=1.13.0'
