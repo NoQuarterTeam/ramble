@@ -28,8 +28,8 @@ importers:
         specifier: 4.1.0
         version: 4.1.0(react@18.2.0)
       '@hookform/resolvers':
-        specifier: 3.9.1
-        version: 3.9.1(react-hook-form@7.53.2)
+        specifier: 3.10.0
+        version: 3.10.0(react-hook-form@7.53.2)
       '@ramble/api':
         specifier: workspace:*
         version: link:../../packages/api
@@ -3964,8 +3964,8 @@ packages:
       '@hapi/hoek': 9.3.0
     dev: false
 
-  /@hookform/resolvers@3.9.1(react-hook-form@7.53.2):
-    resolution: {integrity: sha512-ud2HqmGBM0P0IABqoskKWI6PEf6ZDDBZkFqe2Vnl+mTHCEHzr3ISjjZyCwTjC/qpL25JC9aIDkloQejvMeq0ug==}
+  /@hookform/resolvers@3.10.0(react-hook-form@7.53.2):
+    resolution: {integrity: sha512-79Dv+3mDF7i+2ajj7SkypSKHhl1cbln1OGavqrsF7p6mbUv11xpqpacPsGDCTRvCSjEEIez2ef1NveSVL3b0Ag==}
     peerDependencies:
       react-hook-form: ^7.0.0
     dependencies:
