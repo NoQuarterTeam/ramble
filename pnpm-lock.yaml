@@ -229,8 +229,8 @@ importers:
         specifier: 0.19.10
         version: 0.19.10(react-dom@18.2.0)(react@18.2.0)
       superjson:
-        specifier: 2.2.1
-        version: 2.2.1
+        specifier: 2.2.2
+        version: 2.2.2
       zeego:
         specifier: 1.10.0
         version: 1.10.0(@react-native-menu/menu@1.0.3)(@types/react@18.3.18)(react-dom@18.2.0)(react-native-ios-context-menu@2.5.1)(react-native@0.73.6)(react@18.2.0)
@@ -507,8 +507,8 @@ importers:
         specifier: 8.0.1
         version: 8.0.1
       superjson:
-        specifier: 2.2.1
-        version: 2.2.1
+        specifier: 2.2.2
+        version: 2.2.2
       zod:
         specifier: 3.23.8
         version: 3.23.8
@@ -15838,8 +15838,8 @@ packages:
       kdbush: 4.0.2
     dev: false
 
-  /superjson@2.2.1:
-    resolution: {integrity: sha512-8iGv75BYOa0xRJHK5vRLEjE2H/i4lulTjzpUXic3Eg8akftYjkmQDa8JARQ42rlczXyFR3IeRoeFCc7RxHsYZA==}
+  /superjson@2.2.2:
+    resolution: {integrity: sha512-5JRxVqC8I8NuOUjzBbvVJAKNM8qoVuH0O77h4WInc/qC2q5IreqKxYwgkga3PfA22OayK2ikceb/B26dztPl+Q==}
     engines: {node: '>=16'}
     dependencies:
       copy-anything: 3.0.5
