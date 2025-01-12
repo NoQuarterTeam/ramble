@@ -413,8 +413,8 @@ importers:
         specifier: 1.7.1
         version: 1.7.1(react-dom@18.2.0)(react@18.2.0)
       tailwind-scrollbar-hide:
-        specifier: 1.1.7
-        version: 1.1.7
+        specifier: 1.3.1
+        version: 1.3.1(tailwindcss@3.3.2)
       tailwindcss-radix:
         specifier: 3.0.5
         version: 3.0.5(tailwindcss@3.3.2)
@@ -15927,8 +15927,12 @@ packages:
     resolution: {integrity: sha512-P+Vu1qXfzediirmHOC3xKGAYeZtPcV9g76X+xg2FD4tYgR71ewMA35Y3sCz3zhiN/dwefRpJX0yBcgwi1fXNQA==}
     dev: false
 
-  /tailwind-scrollbar-hide@1.1.7:
-    resolution: {integrity: sha512-X324n9OtpTmOMqEgDUEA/RgLrNfBF/jwJdctaPZDzB3mppxJk7TLIDmOreEDm1Bq4R9LSPu4Epf8VSdovNU+iA==}
+  /tailwind-scrollbar-hide@1.3.1(tailwindcss@3.3.2):
+    resolution: {integrity: sha512-eUAvPTltKnAGHbCBRpOk5S7+UZTkFZgDKmZLZ6jZXXs4V7mRXvwshBjeMwrv3vmiWqm3IGEDFVKzUSm1JuoXKw==}
+    peerDependencies:
+      tailwindcss: '>=3.0.0 || >= 4.0.0 || >= 4.0.0-beta.8 || >= 4.0.0-alpha.20'
+    dependencies:
+      tailwindcss: 3.3.2
     dev: false
 
   /tailwindcss-animate@1.0.7(tailwindcss@3.3.2):
