@@ -30,7 +30,7 @@
     "csv-stringify": "6.5.2",
     "dotenv-cli": "7.4.4",
     "graphql-request": "6.1.0",
-    "graphql": "16.9.0",
+    "graphql": "16.10.0",
     "html-to-text": "9.0.5",
     "puppeteer": "22.15.0",
     "ts-node": "10.9.2",
