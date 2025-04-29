@@ -55,8 +55,8 @@ importers:
         specifier: 1.0.3
         version: 1.0.3(react-native@0.73.6)(react@18.2.0)
       '@rnmapbox/maps':
-        specifier: 10.1.33
-        version: 10.1.33(expo@50.0.19)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0)
+        specifier: 10.1.38
+        version: 10.1.38(expo@50.0.19)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0)
       '@sentry/react-native':
         specifier: 5.20.0
         version: 5.20.0(expo@50.0.19)(react-native@0.73.6)(react@18.2.0)
@@ -6431,8 +6431,8 @@ packages:
     engines: {node: '>=14.0.0'}
     dev: false
 
-  /@rnmapbox/maps@10.1.33(expo@50.0.19)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0):
-    resolution: {integrity: sha512-+J1aJnZ6q0N3044doCb6To/Eftpsn3Eq78AYPMa/Ig9x/u1eWpmbt5WbXJCehkOltGsjvTCenn+/gZKsXMZfww==}
+  /@rnmapbox/maps@10.1.38(expo@50.0.19)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0):
+    resolution: {integrity: sha512-TMKaVwh5C5Z+nqUx87mZlDfPB1zmsdJqU6jAjmM8OrZWpuxpaBo3r0AgijmLEhoXIcJ2ptREk/RRcVnNgwNxgQ==}
     peerDependencies:
       expo: '>=47.0.0'
       mapbox-gl: ^2.9.0
@@ -6452,7 +6452,7 @@ packages:
       '@turf/helpers': 6.5.0
       '@turf/length': 6.5.0
       '@turf/nearest-point-on-line': 6.5.0
-      '@types/geojson': 7946.0.14
+      '@types/geojson': 7946.0.15
       debounce: 1.2.1
       expo: 50.0.19(@babel/core@7.26.10)(@react-native/babel-preset@0.79.1)
       react: 18.2.0
