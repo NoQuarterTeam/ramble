@@ -25,8 +25,8 @@ importers:
         specifier: 0.2.3
         version: 0.2.3
       '@expo/react-native-action-sheet':
-        specifier: 4.1.0
-        version: 4.1.0(react@18.2.0)
+        specifier: 4.1.1
+        version: 4.1.1(react@18.2.0)
       '@hookform/resolvers':
         specifier: 3.10.0
         version: 3.10.0(react-hook-form@7.54.2)
@@ -3592,8 +3592,8 @@ packages:
       - supports-color
     dev: false
 
-  /@expo/react-native-action-sheet@4.1.0(react@18.2.0):
-    resolution: {integrity: sha512-RILoWhREgjMdr1NUSmZa/cHg8onV2YPDAMOy0iIP1c3H7nT9QQZf5dQNHK8ehcLM82sarVxriBJyYSSHAx7j6w==}
+  /@expo/react-native-action-sheet@4.1.1(react@18.2.0):
+    resolution: {integrity: sha512-4KRaba2vhqDRR7ObBj6nrD5uJw8ePoNHdIOMETTpgGTX7StUbrF4j/sfrP1YUyaPEa1P8FXdwG6pB+2WtrJd1A==}
     peerDependencies:
       react: '>=18.0.0'
     dependencies:
