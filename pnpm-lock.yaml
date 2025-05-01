@@ -350,8 +350,8 @@ importers:
         specifier: 11.0.0-rc.730
         version: 11.0.0-rc.730(typescript@5.7.3)
       '@vercel/analytics':
-        specifier: 1.4.1
-        version: 1.4.1(next@14.2.28)(react@18.2.0)
+        specifier: 1.5.0
+        version: 1.5.0(next@14.2.28)(react@18.2.0)
       '@vercel/edge':
         specifier: 1.2.1
         version: 1.2.1
@@ -7928,8 +7928,8 @@ packages:
       wonka: 4.0.15
     dev: false
 
-  /@vercel/analytics@1.4.1(next@14.2.28)(react@18.2.0):
-    resolution: {integrity: sha512-ekpL4ReX2TH3LnrRZTUKjHHNpNy9S1I7QmS+g/RQXoSUQ8ienzosuX7T9djZ/s8zPhBx1mpHP/Rw5875N+zQIQ==}
+  /@vercel/analytics@1.5.0(next@14.2.28)(react@18.2.0):
+    resolution: {integrity: sha512-MYsBzfPki4gthY5HnYN7jgInhAZ7Ac1cYDoRWFomwGHWEX7odTEzbtg9kf/QSo7XEsEAqlQugA6gJ2WS2DEa3g==}
     peerDependencies:
       '@remix-run/react': ^2
       '@sveltejs/kit': ^1 || ^2
