@@ -16,7 +16,7 @@
     "clean": "rm -rf .expo .turbo node_modules"
   },
   "dependencies": {
-    "@expo-google-fonts/urbanist": "0.2.3",
+    "@expo-google-fonts/urbanist": "0.3.0",
     "@expo/react-native-action-sheet": "4.1.1",
     "@hookform/resolvers": "3.10.0",
     "@ramble/api": "workspace:*",
