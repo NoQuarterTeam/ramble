@@ -22,6 +22,6 @@
   "devDependencies": {
     "@types/node": "20.17.32",
     "dotenv-cli": "7.4.4",
-    "typescript": "5.7.3"
+    "typescript": "5.8.3"
   }
 }
