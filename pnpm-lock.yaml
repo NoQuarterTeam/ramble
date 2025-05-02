@@ -175,8 +175,8 @@ importers:
         specifier: 2.0.11
         version: 2.0.11(react@18.2.0)(tailwindcss@3.3.2)
       posthog-react-native:
-        specifier: 3.6.3
-        version: 3.6.3(@react-native-async-storage/async-storage@1.21.0)(@react-navigation/native@6.1.17)(expo-application@5.8.4)(expo-device@5.9.4)(expo-file-system@16.0.9)
+        specifier: 3.15.1
+        version: 3.15.1(@react-native-async-storage/async-storage@1.21.0)(@react-navigation/native@6.1.17)(expo-application@5.8.4)(expo-device@5.9.4)(expo-file-system@16.0.9)(react-native-safe-area-context@4.8.2)(react-native-svg@14.1.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -13872,18 +13872,21 @@ packages:
       web-vitals: 4.2.4
     dev: false
 
-  /posthog-react-native@3.6.3(@react-native-async-storage/async-storage@1.21.0)(@react-navigation/native@6.1.17)(expo-application@5.8.4)(expo-device@5.9.4)(expo-file-system@16.0.9):
-    resolution: {integrity: sha512-+v6rxbPkuXqxhGOcgEPPjt6oEOVNqeR8SRvWmTpWshzB2vQ61mxUM8sBRI+qupgHgPlFOSNvc/7RUQEcpMuCFQ==}
+  /posthog-react-native@3.15.1(@react-native-async-storage/async-storage@1.21.0)(@react-navigation/native@6.1.17)(expo-application@5.8.4)(expo-device@5.9.4)(expo-file-system@16.0.9)(react-native-safe-area-context@4.8.2)(react-native-svg@14.1.0):
+    resolution: {integrity: sha512-/eEyNkyWZI8MDcMLedTH0+QCeu98lnrUIrEfFHR986LcfTqxsZD7CfYM4bt/IlVo1iICqTcnvv6g0NzSMOpP3Q==}
     peerDependencies:
       '@react-native-async-storage/async-storage': '>=1.0.0'
-      '@react-navigation/native': '>= 5.0.10'
+      '@react-navigation/native': '>= 5.0.0'
       expo-application: '>= 4.0.0'
       expo-device: '>= 4.0.0'
       expo-file-system: '>= 13.0.0'
       expo-localization: '>= 11.0.0'
-      posthog-react-native-session-replay: ^0.1
+      posthog-react-native-session-replay: '>= 1.0.0'
       react-native-device-info: '>= 10.0.0'
-      react-native-navigation: '>=6.0.0'
+      react-native-localize: '>= 3.0.0'
+      react-native-navigation: '>= 6.0.0'
+      react-native-safe-area-context: '>= 4.0.0'
+      react-native-svg: '>= 15.0.0'
     peerDependenciesMeta:
       '@react-native-async-storage/async-storage':
         optional: true
@@ -13901,7 +13904,11 @@ packages:
         optional: true
       react-native-device-info:
         optional: true
+      react-native-localize:
+        optional: true
       react-native-navigation:
+        optional: true
+      react-native-safe-area-context:
         optional: true
     dependencies:
       '@react-native-async-storage/async-storage': 1.21.0(react-native@0.73.6)
@@ -13909,6 +13916,8 @@ packages:
       expo-application: 5.8.4(expo@50.0.19)
       expo-device: 5.9.4(expo@50.0.19)
       expo-file-system: 16.0.9(expo@50.0.19)
+      react-native-safe-area-context: 4.8.2(react-native@0.73.6)(react@18.2.0)
+      react-native-svg: 14.1.0(react-native@0.73.6)(react@18.2.0)
     dev: false
 
   /potpack@2.0.0:
