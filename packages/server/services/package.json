@@ -36,7 +36,7 @@
     "@types/jsonwebtoken": "9.0.9",
     "@types/node": "20.17.32",
     "@types/nodemailer": "6.4.17",
-    "dotenv-cli": "7.4.4",
+    "dotenv-cli": "8.0.0",
     "typescript": "5.8.3"
   }
 }
