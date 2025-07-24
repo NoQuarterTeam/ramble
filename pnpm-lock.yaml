@@ -22,8 +22,8 @@ importers:
   apps/expo:
     dependencies:
       '@expo-google-fonts/urbanist':
-        specifier: 0.3.0
-        version: 0.3.0
+        specifier: 0.4.1
+        version: 0.4.1
       '@expo/react-native-action-sheet':
         specifier: 4.1.1
         version: 4.1.1(react@18.2.0)
@@ -3203,8 +3203,8 @@ packages:
       '@types/hammerjs': 2.0.45
     dev: false
 
-  /@expo-google-fonts/urbanist@0.3.0:
-    resolution: {integrity: sha512-zJEQdPv80cNHSehlxE1U6FCZ09eZUGkqhGSPtaalJeA/S2LDgPBqp+bh4FVG2gPf/wMhDRckEMG9oujSnR39Vw==}
+  /@expo-google-fonts/urbanist@0.4.1:
+    resolution: {integrity: sha512-8RQQlveM9q0kBfDdAZxgakV93ncPlCn+gfRQpU3p7haYNo7J1fdHsoFsVpV1B2NUSFUNHBGRKjbglHqvPaRKiA==}
     dev: false
 
   /@expo/bunyan@4.0.0:
