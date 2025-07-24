@@ -380,8 +380,8 @@ importers:
         specifier: 0.445.0
         version: 0.445.0(react@18.2.0)
       mapbox-gl:
-        specifier: 3.11.1
-        version: 3.11.1
+        specifier: 3.13.0
+        version: 3.13.0
       next:
         specifier: 14.2.30
         version: 14.2.30(react-dom@18.2.0)(react@18.2.0)
@@ -405,7 +405,7 @@ importers:
         version: 14.3.8(react@18.2.0)
       react-map-gl:
         specifier: 7.1.9
-        version: 7.1.9(mapbox-gl@3.11.1)(react-dom@18.2.0)(react@18.2.0)
+        version: 7.1.9(mapbox-gl@3.13.0)(react-dom@18.2.0)(react@18.2.0)
       sharp:
         specifier: 0.32.6
         version: 0.32.6
@@ -9762,8 +9762,8 @@ packages:
       gopd: 1.2.0
     dev: false
 
-  /earcut@3.0.0:
-    resolution: {integrity: sha512-41Fs7Q/PLq1SDbqjsgcY7GA42T0jvaCNGXgGtsNdvg+Yv8eIu06bxv4/PoREkZ9nMDNwnUSG9OFB9+yv8eKhDg==}
+  /earcut@3.0.2:
+    resolution: {integrity: sha512-X7hshQbLyMJ/3RPhyObLARM2sNxxmRALLKx1+NVFFnQ9gKzmCrxm9+uLIAdBcvc8FNLpctqlQ2V6AE92Ol9UDQ==}
     dev: false
 
   /eastasianwidth@0.2.0:
@@ -12440,8 +12440,8 @@ packages:
       tmpl: 1.0.5
     dev: false
 
-  /mapbox-gl@3.11.1:
-    resolution: {integrity: sha512-OcXSBQU+q50YH7zVzsfOgCMSgYD1tyN3kObwsxnLEBOeceIFg46Yp+/I2AUhIGsq8VufgfeGzWKipPow/M7gww==}
+  /mapbox-gl@3.13.0:
+    resolution: {integrity: sha512-TSSJIvDKsiSPk22889FWk9V4mmjljbizUf8Y2Jhho2j0Mj4zonC6kKwoVLf3oGqYWTZ+oQrd0Cxg6LCmZmPPbQ==}
     dependencies:
       '@mapbox/jsonlint-lines-primitives': 2.0.2
       '@mapbox/mapbox-gl-supported': 3.0.0
@@ -12458,11 +12458,12 @@ packages:
       '@types/supercluster': 7.1.3
       cheap-ruler: 4.0.0
       csscolorparser: 1.0.3
-      earcut: 3.0.0
+      earcut: 3.0.2
       geojson-vt: 4.0.2
       gl-matrix: 3.4.3
       grid-index: 1.1.0
       kdbush: 4.0.2
+      martinez-polygon-clipping: 0.7.4
       murmurhash-js: 1.0.0
       pbf: 3.2.1
       potpack: 2.0.0
@@ -12481,6 +12482,14 @@ packages:
 
   /marky@1.2.5:
     resolution: {integrity: sha512-q9JtQJKjpsVxCRVgQ+WapguSbKC3SQ5HEzFGPAJMStgh3QjCawp00UKv3MTTAArTmGmmPUvllHZoNbZ3gs0I+Q==}
+    dev: false
+
+  /martinez-polygon-clipping@0.7.4:
+    resolution: {integrity: sha512-jBEwrKtA0jTagUZj2bnmb4Yg2s4KnJGRePStgI7bAVjtcipKiF39R4LZ2V/UT61jMYWrTcBhPazexeqd6JAVtw==}
+    dependencies:
+      robust-predicates: 2.0.4
+      splaytree: 0.1.4
+      tinyqueue: 1.2.3
     dev: false
 
   /math-intrinsics@1.1.0:
@@ -14490,7 +14499,7 @@ packages:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
     dev: false
 
-  /react-map-gl@7.1.9(mapbox-gl@3.11.1)(react-dom@18.2.0)(react@18.2.0):
+  /react-map-gl@7.1.9(mapbox-gl@3.13.0)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-KsCc8Gyn05wVGlHZoopaiiCr0RCAQ6LDISo5sEy1/pV/d7RlozkF946tiX7IgyijJQMRujHol5QdwUPESjh73w==}
     peerDependencies:
       mapbox-gl: '>=1.13.0'
@@ -14505,7 +14514,7 @@ packages:
     dependencies:
       '@maplibre/maplibre-gl-style-spec': 19.3.3
       '@types/mapbox-gl': 3.1.0
-      mapbox-gl: 3.11.1
+      mapbox-gl: 3.13.0
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: false
@@ -15112,6 +15121,10 @@ packages:
       glob: 7.2.3
     dev: false
 
+  /robust-predicates@2.0.4:
+    resolution: {integrity: sha512-l4NwboJM74Ilm4VKfbAtFeGq7aEjWL+5kVFcmgFA2MrdnQWx9iE/tUGvxY5HyMI7o/WpSIUFLbC5fbeaHgSCYg==}
+    dev: false
+
   /rollup@2.79.2:
     resolution: {integrity: sha512-fS6iqSPZDs3dr/y7Od6y5nha8dW1YnbgtsyotCVvoFGKbERG++CVRFv1meyGDE1SNItQA8BrnCw7ScdAhRJ3XQ==}
     engines: {node: '>=10.0.0'}
@@ -15534,6 +15547,10 @@ packages:
   /source-map@0.7.4:
     resolution: {integrity: sha512-l3BikUxvPOcn5E74dZiq5BGsTb5yEwhaTSzccU6t4sDOH8NWJCstKO5QT2CvtFoK6F0saL7p9xHAqHOlCPJygA==}
     engines: {node: '>= 8'}
+    dev: false
+
+  /splaytree@0.1.4:
+    resolution: {integrity: sha512-D50hKrjZgBzqD3FT2Ek53f2dcDLAQT8SSGrzj3vidNH5ISRgceeGVJ2dQIthKOuayqFXfFjXheHNo4bbt9LhRQ==}
     dev: false
 
   /split-on-first@1.1.0:
@@ -16084,6 +16101,10 @@ packages:
   /timestring@6.0.0:
     resolution: {integrity: sha512-wMctrWD2HZZLuIlchlkE2dfXJh7J2KDI9Dwl+2abPYg0mswQHfOAyQW3jJg1pY5VfttSINZuKcXoB3FGypVklA==}
     engines: {node: '>=8'}
+    dev: false
+
+  /tinyqueue@1.2.3:
+    resolution: {integrity: sha512-Qz9RgWuO9l8lT+Y9xvbzhPT2efIUIFd69N7eF7tJ9lnQl0iLj1M7peK7IoUGZL9DJHw9XftqLreccfxcQgYLxA==}
     dev: false
 
   /tinyqueue@3.0.0:
