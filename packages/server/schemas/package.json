@@ -11,7 +11,7 @@
     "@ramble/database": "workspace:*",
     "@ramble/shared": "workspace:*",
     "tailwind-merge": "2.6.0",
-    "zod": "3.24.3"
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@ramble/tailwind-config": "workspace:*",
