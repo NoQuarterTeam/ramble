@@ -29,7 +29,7 @@ importers:
         version: 4.1.1(react@18.2.0)
       '@hookform/resolvers':
         specifier: 3.10.0
-        version: 3.10.0(react-hook-form@7.56.1)
+        version: 3.10.0(react-hook-form@7.61.1)
       '@ramble/api':
         specifier: workspace:*
         version: link:../../packages/api
@@ -184,8 +184,8 @@ importers:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
       react-hook-form:
-        specifier: 7.56.1
-        version: 7.56.1(react@18.2.0)
+        specifier: 7.61.1
+        version: 7.61.1(react@18.2.0)
       react-native:
         specifier: 0.73.6
         version: 0.73.6(@babel/core@7.28.0)(@babel/preset-env@7.28.0)(react@18.2.0)
@@ -3718,12 +3718,12 @@ packages:
       '@hapi/hoek': 9.3.0
     dev: false
 
-  /@hookform/resolvers@3.10.0(react-hook-form@7.56.1):
+  /@hookform/resolvers@3.10.0(react-hook-form@7.61.1):
     resolution: {integrity: sha512-79Dv+3mDF7i+2ajj7SkypSKHhl1cbln1OGavqrsF7p6mbUv11xpqpacPsGDCTRvCSjEEIez2ef1NveSVL3b0Ag==}
     peerDependencies:
       react-hook-form: ^7.0.0
     dependencies:
-      react-hook-form: 7.56.1(react@18.2.0)
+      react-hook-form: 7.61.1(react@18.2.0)
     dev: false
 
   /@ide/backoff@1.0.0:
@@ -14478,8 +14478,8 @@ packages:
       react: 18.2.0
     dev: false
 
-  /react-hook-form@7.56.1(react@18.2.0):
-    resolution: {integrity: sha512-qWAVokhSpshhcEuQDSANHx3jiAEFzu2HAaaQIzi/r9FNPm1ioAvuJSD4EuZzWd7Al7nTRKcKPnBKO7sRn+zavQ==}
+  /react-hook-form@7.61.1(react@18.2.0):
+    resolution: {integrity: sha512-2vbXUFDYgqEgM2RcXcAT2PwDW/80QARi+PKmHy5q2KhuKvOlG8iIYgf7eIlIANR5trW9fJbP4r5aub3a4egsew==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
