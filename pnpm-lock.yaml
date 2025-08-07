@@ -269,8 +269,8 @@ importers:
         specifier: 3.862.0
         version: 3.862.0
       '@notionhq/client':
-        specifier: 2.3.0
-        version: 2.3.0
+        specifier: 4.0.1
+        version: 4.0.1
       '@radix-ui/react-accordion':
         specifier: 1.2.11
         version: 1.2.11(@types/react-dom@18.3.7)(@types/react@18.3.23)(react-dom@18.2.0)(react@18.2.0)
@@ -4147,14 +4147,9 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
-  /@notionhq/client@2.3.0:
-    resolution: {integrity: sha512-l7WqTCpQqC+HibkB9chghONQTYcxNQT0/rOJemBfmuKQRTu2vuV8B3yA395iKaUdDo7HI+0KvQaz9687Xskzkw==}
-    engines: {node: '>=12'}
-    dependencies:
-      '@types/node-fetch': 2.6.11
-      node-fetch: 2.7.0
-    transitivePeerDependencies:
-      - encoding
+  /@notionhq/client@4.0.1:
+    resolution: {integrity: sha512-SdILqiiThECLR2KDUOvl4JqRaJWBwDYaEw/f0qu+G6rKN/QUCkaJ84vN5MgBw1yKsMAsKxBlDazs3Jw6vv2ikA==}
+    engines: {node: '>=18'}
     dev: false
 
   /@npmcli/fs@1.1.1:
@@ -7850,13 +7845,6 @@ packages:
     dependencies:
       '@types/node': 22.16.5
     dev: true
-
-  /@types/node-fetch@2.6.11:
-    resolution: {integrity: sha512-24xFj9R5+rfQJLRyM56qh+wnVSYhyXC2tkoBndtY0U+vubqNsYXGjufB2nn8Q6gt0LrARwL6UBtMCSVCwl4B1g==}
-    dependencies:
-      '@types/node': 20.19.9
-      form-data: 4.0.0
-    dev: false
 
   /@types/node@20.19.9:
     resolution: {integrity: sha512-cuVNgarYWZqxRJDQHEB58GEONhOK79QVR/qYx4S7kcUObQvUwvFnYxJuuHUKm2aieN9X3yZB4LZsuYNU1Qphsw==}
