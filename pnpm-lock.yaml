@@ -386,8 +386,8 @@ importers:
         specifier: 14.2.32
         version: 14.2.32(react-dom@18.2.0)(react@18.2.0)
       posthog-js:
-        specifier: 1.258.6
-        version: 1.258.6
+        specifier: 1.260.2
+        version: 1.260.2
       pretty-cache-header:
         specifier: 1.0.0
         version: 1.0.0
@@ -14112,8 +14112,8 @@ packages:
       source-map-js: 1.2.1
     dev: true
 
-  /posthog-js@1.258.6:
-    resolution: {integrity: sha512-vL5AGG+rOoRg3LGquMfBPO55jD4bGl0CiV44SHdHAoBnOVDDAqxczRGDqMdxor+VLx3/ofTFOJ2FNprfAHp70Q==}
+  /posthog-js@1.260.2:
+    resolution: {integrity: sha512-2Q+QUz9j9+uG16wp0WcOEbezVsLZCobZyTX8NvWPMGKyPaf2lOsjbPjznsq5JiIt324B6NAqzpWYZTzvhn9k9Q==}
     peerDependencies:
       '@rrweb/types': 2.0.0-alpha.17
       rrweb-snapshot: 2.0.0-alpha.17
