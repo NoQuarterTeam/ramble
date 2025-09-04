@@ -82,8 +82,8 @@ importers:
         specifier: 3.2.0
         version: 3.2.0
       dayjs:
-        specifier: 1.11.13
-        version: 1.11.13
+        specifier: 1.11.18
+        version: 1.11.18
       expo:
         specifier: 50.0.19
         version: 50.0.19(@babel/core@7.28.3)(@react-native/babel-preset@0.81.1)
@@ -371,8 +371,8 @@ importers:
         specifier: 3.2.0
         version: 3.2.0
       dayjs:
-        specifier: 1.11.13
-        version: 1.11.13
+        specifier: 1.11.18
+        version: 1.11.18
       isbot:
         specifier: latest
         version: 5.1.4
@@ -498,8 +498,8 @@ importers:
         specifier: ^1.0.2
         version: 1.6.0
       dayjs:
-        specifier: 1.11.13
-        version: 1.11.13
+        specifier: 1.11.18
+        version: 1.11.18
       semver:
         specifier: ^7.6.0
         version: 7.7.2
@@ -732,8 +732,8 @@ importers:
         specifier: 2.0.5
         version: 2.0.5
       dayjs:
-        specifier: 1.11.13
-        version: 1.11.13
+        specifier: 1.11.18
+        version: 1.11.18
       expo-server-sdk:
         specifier: ^3.10.0
         version: 3.10.0
@@ -9568,8 +9568,8 @@ packages:
       is-data-view: 1.0.1
     dev: false
 
-  /dayjs@1.11.13:
-    resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
+  /dayjs@1.11.18:
+    resolution: {integrity: sha512-zFBQ7WFRvVRhKcWoUh+ZA1g2HVgUbsZm9sbddh8EC5iv93sui8DVVz1Npvz+r6meo9VKfa8NyLWBsQK1VvIKPA==}
     dev: false
 
   /debounce@1.2.1:
@@ -12400,7 +12400,7 @@ packages:
     hasBin: true
     dependencies:
       ansi-fragments: 0.2.1
-      dayjs: 1.11.13
+      dayjs: 1.11.18
       yargs: 15.4.1
     dev: false
 

@@ -36,7 +36,7 @@
     "@trpc/server": "11.5.0",
     "class-variance-authority": "0.7.1",
     "d3-shape": "3.2.0",
-    "dayjs": "1.11.13",
+    "dayjs": "1.11.18",
     "expo": "50.0.19",
     "expo-application": "5.8.4",
     "expo-av": "~13.10.6",
