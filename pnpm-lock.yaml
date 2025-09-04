@@ -386,8 +386,8 @@ importers:
         specifier: 14.2.32
         version: 14.2.32(react-dom@18.2.0)(react@18.2.0)
       posthog-js:
-        specifier: 1.260.2
-        version: 1.260.2
+        specifier: 1.261.6
+        version: 1.261.6
       pretty-cache-header:
         specifier: 1.0.0
         version: 1.0.0
@@ -4616,6 +4616,10 @@ packages:
   /@planetscale/database@1.19.0:
     resolution: {integrity: sha512-Tv4jcFUFAFjOWrGSio49H6R2ijALv0ZzVBfJKIdm+kl9X046Fh4LLawrF9OMsglVbK6ukqMJsUCeucGAFTBcMA==}
     engines: {node: '>=16'}
+    dev: false
+
+  /@posthog/core@1.0.2:
+    resolution: {integrity: sha512-hWk3rUtJl2crQK0WNmwg13n82hnTwB99BT99/XI5gZSvIlYZ1TPmMZE8H2dhJJ98J/rm9vYJ/UXNzw3RV5HTpQ==}
     dev: false
 
   /@prisma/adapter-planetscale@5.22.0(@planetscale/database@1.19.0):
@@ -14505,8 +14509,8 @@ packages:
       source-map-js: 1.2.1
     dev: true
 
-  /posthog-js@1.260.2:
-    resolution: {integrity: sha512-2Q+QUz9j9+uG16wp0WcOEbezVsLZCobZyTX8NvWPMGKyPaf2lOsjbPjznsq5JiIt324B6NAqzpWYZTzvhn9k9Q==}
+  /posthog-js@1.261.6:
+    resolution: {integrity: sha512-tson+4i+T2YkGYlj/oGjFwKRpBFqhM7Xr9ZmXGEtNFkZc6ZQHYCzObeeHT6BbKc5d/dAfMCPtvPCKssARaK6eQ==}
     peerDependencies:
       '@rrweb/types': 2.0.0-alpha.17
       rrweb-snapshot: 2.0.0-alpha.17
@@ -14516,6 +14520,7 @@ packages:
       rrweb-snapshot:
         optional: true
     dependencies:
+      '@posthog/core': 1.0.2
       core-js: 3.39.0
       fflate: 0.4.8
       preact: 10.20.2
