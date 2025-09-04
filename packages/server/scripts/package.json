@@ -24,7 +24,7 @@
     "@ramble/shared": "workspace:*",
     "@ramble/server-services": "workspace:*",
     "@types/html-to-text": "9.0.4",
-    "@types/node": "20.19.11",
+    "@types/node": "20.19.12",
     "nanoid": "3.3.4",
     "cheerio": "1.1.2",
     "csv-stringify": "6.6.0",
