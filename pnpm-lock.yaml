@@ -64,14 +64,14 @@ importers:
         specifier: 1.6.3
         version: 1.6.3(@babel/runtime@7.28.3)(react-native@0.73.6)(react@18.2.0)
       '@tanstack/react-query':
-        specifier: 5.85.9
-        version: 5.85.9(react@18.2.0)
+        specifier: 5.86.0
+        version: 5.86.0(react@18.2.0)
       '@trpc/client':
         specifier: 11.5.0
         version: 11.5.0(@trpc/server@11.5.0)(typescript@5.9.2)
       '@trpc/react-query':
         specifier: 11.5.0
-        version: 11.5.0(@tanstack/react-query@5.85.9)(@trpc/client@11.5.0)(@trpc/server@11.5.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.9.2)
+        version: 11.5.0(@tanstack/react-query@5.86.0)(@trpc/client@11.5.0)(@trpc/server@11.5.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.9.2)
       '@trpc/server':
         specifier: 11.5.0
         version: 11.5.0(typescript@5.9.2)
@@ -338,14 +338,14 @@ importers:
         specifier: 0.1.1
         version: 0.1.1(tailwindcss@3.3.2)
       '@tanstack/react-query':
-        specifier: 5.85.9
-        version: 5.85.9(react@18.2.0)
+        specifier: 5.86.0
+        version: 5.86.0(react@18.2.0)
       '@tanstack/react-table':
         specifier: 8.21.3
         version: 8.21.3(react-dom@18.2.0)(react@18.2.0)
       '@trpc/react-query':
         specifier: 11.5.0
-        version: 11.5.0(@tanstack/react-query@5.85.9)(@trpc/client@11.5.0)(@trpc/server@11.5.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.9.2)
+        version: 11.5.0(@tanstack/react-query@5.86.0)(@trpc/client@11.5.0)(@trpc/server@11.5.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.9.2)
       '@trpc/server':
         specifier: 11.5.0
         version: 11.5.0(typescript@5.9.2)
@@ -721,7 +721,7 @@ importers:
         version: link:../../shared
       '@react-email/render':
         specifier: ^0.0.17
-        version: 0.0.17(react-dom@18.3.1)(react@18.3.1)
+        version: 0.0.17(react-dom@18.2.0)(react@18.2.0)
       '@slack/web-api':
         specifier: 7.10.0
         version: 7.10.0
@@ -751,7 +751,7 @@ importers:
         version: 6.10.1
       resend:
         specifier: 3.5.0
-        version: 3.5.0(react-dom@18.3.1)(react@18.3.1)
+        version: 3.5.0(react-dom@18.2.0)(react@18.2.0)
       sharp:
         specifier: 0.32.6
         version: 0.32.6
@@ -6224,7 +6224,7 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@react-email/render@0.0.16(react-dom@18.3.1)(react@18.3.1):
+  /@react-email/render@0.0.16(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-wDaMy27xAq1cJHtSFptp0DTKPuV2GYhloqia95ub/DH9Dea1aWYsbdM918MOc/b/HvVS3w1z8DWzfAk13bGStQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
@@ -6233,12 +6233,12 @@ packages:
     dependencies:
       html-to-text: 9.0.5
       js-beautify: 1.15.1
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
       react-promise-suspense: 0.3.4
     dev: false
 
-  /@react-email/render@0.0.17(react-dom@18.3.1)(react@18.3.1):
+  /@react-email/render@0.0.17(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-xBQ+/73+WsGuXKY7r1U73zMBNV28xdV0cp9cFjhNYipBReDHhV97IpA6v7Hl0dDtDzt+yS/72dY5vYXrF1v8NA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
@@ -6247,8 +6247,8 @@ packages:
     dependencies:
       html-to-text: 9.0.5
       js-beautify: 1.15.1
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
       react-promise-suspense: 0.3.4
     dev: false
 
@@ -8025,16 +8025,16 @@ packages:
       tailwindcss: 3.3.2
     dev: true
 
-  /@tanstack/query-core@5.85.9:
-    resolution: {integrity: sha512-5fxb9vwyftYE6KFLhhhDyLr8NO75+Wpu7pmTo+TkwKmMX2oxZDoLwcqGP8ItKSpUMwk3urWgQDZfyWr5Jm9LsQ==}
+  /@tanstack/query-core@5.86.0:
+    resolution: {integrity: sha512-Y6ibQm6BXbw6w1p3a5LrPn8Ae64M0dx7hGmnhrm9P+XAkCCKXOwZN0J5Z1wK/0RdNHtR9o+sWHDXd4veNI60tQ==}
     dev: false
 
-  /@tanstack/react-query@5.85.9(react@18.2.0):
-    resolution: {integrity: sha512-2T5zgSpcOZXGkH/UObIbIkGmUPQqZqn7esVQFXLOze622h4spgWf5jmvrqAo9dnI13/hyMcNsF1jsoDcb59nJQ==}
+  /@tanstack/react-query@5.86.0(react@18.2.0):
+    resolution: {integrity: sha512-jgS/v0oSJkGHucv9zxOS8rL7mjATh1XO3K4eqAV4WMpAly8okcBrGi1YxRZN5S4B59F54x9JFjWrK5vMAvJYqA==}
     peerDependencies:
       react: ^18 || ^19
     dependencies:
-      '@tanstack/query-core': 5.85.9
+      '@tanstack/query-core': 5.86.0
       react: 18.2.0
     dev: false
 
@@ -8069,7 +8069,7 @@ packages:
       typescript: 5.9.2
     dev: false
 
-  /@trpc/react-query@11.5.0(@tanstack/react-query@5.85.9)(@trpc/client@11.5.0)(@trpc/server@11.5.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.9.2):
+  /@trpc/react-query@11.5.0(@tanstack/react-query@5.86.0)(@trpc/client@11.5.0)(@trpc/server@11.5.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.9.2):
     resolution: {integrity: sha512-BPrMbYi5/oW11SSRUmD3dONCAG/JJjxfniSyFbsY5VSS6qHXDF1RcfLAkiF+Ofo7MPchqmHc2iNqSl5Eumh8iA==}
     peerDependencies:
       '@tanstack/react-query': ^5.80.3
@@ -8079,7 +8079,7 @@ packages:
       react-dom: '>=18.2.0'
       typescript: '>=5.7.2'
     dependencies:
-      '@tanstack/react-query': 5.85.9(react@18.2.0)
+      '@tanstack/react-query': 5.86.0(react@18.2.0)
       '@trpc/client': 11.5.0(@trpc/server@11.5.0)(typescript@5.9.2)
       '@trpc/server': 11.5.0(typescript@5.9.2)
       react: 18.2.0
@@ -14886,16 +14886,6 @@ packages:
       scheduler: 0.23.2
     dev: false
 
-  /react-dom@18.3.1(react@18.3.1):
-    resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
-    peerDependencies:
-      react: ^18.3.1
-    dependencies:
-      loose-envify: 1.4.0
-      react: 18.3.1
-      scheduler: 0.23.2
-    dev: false
-
   /react-dropzone@14.3.8(react@18.2.0):
     resolution: {integrity: sha512-sBgODnq+lcA4P296DY4wacOZz3JFpD99fp+hb//iBO2HHnyeZU3FwWyXJ6salNpqQdsZrgMrotuko/BdJMV8Ug==}
     engines: {node: '>= 10.13'}
@@ -15315,13 +15305,6 @@ packages:
       loose-envify: 1.4.0
     dev: false
 
-  /react@18.3.1:
-    resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
-    engines: {node: '>=0.10.0'}
-    dependencies:
-      loose-envify: 1.4.0
-    dev: false
-
   /read-cache@1.0.0:
     resolution: {integrity: sha512-Owdv/Ft7IjOgm/i0xvNDZ1LrRANRfew4b2prF3OWMQLxLfu3bS8FVhCsrSCMK4lR56Y9ya+AThoTpDCTxCmpRA==}
     dependencies:
@@ -15450,11 +15433,11 @@ packages:
       resolve: 1.7.1
     dev: false
 
-  /resend@3.5.0(react-dom@18.3.1)(react@18.3.1):
+  /resend@3.5.0(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-bKu4LhXSecP6krvhfDzyDESApYdNfjirD5kykkT1xO0Cj9TKSiGh5Void4pGTs3Am+inSnp4dg0B5XzdwHBJOQ==}
     engines: {node: '>=18'}
     dependencies:
-      '@react-email/render': 0.0.16(react-dom@18.3.1)(react@18.3.1)
+      '@react-email/render': 0.0.16(react-dom@18.2.0)(react@18.2.0)
     transitivePeerDependencies:
       - react
       - react-dom
@@ -16105,7 +16088,7 @@ packages:
       queue-tick: 1.0.1
       text-decoder: 1.1.0
     optionalDependencies:
-      bare-events: 2.2.2
+      bare-events: 2.6.1
     optional: true
 
   /strict-uri-encode@1.1.0:
