@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@ramble/tailwind-config": "workspace:*",
-    "@types/node": "20.19.12",
+    "@types/node": "20.19.13",
     "typescript": "5.9.2"
   }
 }
