@@ -55,8 +55,8 @@ importers:
         specifier: 1.0.3
         version: 1.0.3(react-native@0.73.6)(react@18.2.0)
       '@rnmapbox/maps':
-        specifier: 10.1.42
-        version: 10.1.42(expo@50.0.19)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0)
+        specifier: 10.2.6
+        version: 10.2.6(expo@50.0.19)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0)
       '@sentry/react-native':
         specifier: 5.20.0
         version: 5.20.0(expo@50.0.19)(react-native@0.73.6)(react@18.2.0)
@@ -7012,14 +7012,14 @@ packages:
     engines: {node: '>=14.0.0'}
     dev: false
 
-  /@rnmapbox/maps@10.1.42(expo@50.0.19)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0):
-    resolution: {integrity: sha512-9Xxc42eY+ycpcyK+YaAS+T+mFds96x3p54qGAimXgEU2aY4wRI1KHjNqYCT1hdrhAWnWiIp9Jtaen8VZvNRbeQ==}
+  /@rnmapbox/maps@10.2.6(expo@50.0.19)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0):
+    resolution: {integrity: sha512-402m/pHrgfo3Isvd3lhW8N8uX9rGQB4OiIqfAgYrpMq7qnBV0CgXaOuaJIBQI1kGgCyHzL1XiypHDRP8JhrvmQ==}
     peerDependencies:
       expo: '>=47.0.0'
       mapbox-gl: ^2.9.0
-      react: '>=16.6.1'
+      react: '>=17.0.0'
       react-dom: '>= 17.0.0'
-      react-native: '>=0.59.9'
+      react-native: '>=0.69'
     peerDependenciesMeta:
       expo:
         optional: true
@@ -7034,7 +7034,7 @@ packages:
       '@turf/length': 6.5.0
       '@turf/nearest-point-on-line': 6.5.0
       '@types/geojson': 7946.0.16
-      debounce: 1.2.1
+      debounce: 2.2.0
       expo: 50.0.19(@babel/core@7.28.5)(@react-native/babel-preset@0.82.1)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -10436,8 +10436,9 @@ packages:
     resolution: {integrity: sha512-t5EcLVS6QPBNqM2z8fakk/NKel+Xzshgt8FFKAn+qwlD1pzZWxh0nVCrvFK7ZDb6XucZeF9z8C7CBWTRIVApAw==}
     dev: false
 
-  /debounce@1.2.1:
-    resolution: {integrity: sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==}
+  /debounce@2.2.0:
+    resolution: {integrity: sha512-Xks6RUDLZFdz8LIdR6q0MTH44k7FikOmnh5xkSjMig6ch45afc8sjTjRQf3P6ax8dMgcQrYO/AR2RGWURrruqw==}
+    engines: {node: '>=18'}
     dev: false
 
   /debug@2.6.9:
