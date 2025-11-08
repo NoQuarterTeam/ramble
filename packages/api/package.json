@@ -24,7 +24,7 @@
     "dayjs": "1.11.19",
     "semver": "^7.6.0",
     "supercluster": "8.0.1",
-    "superjson": "2.2.2",
+    "superjson": "2.2.5",
     "zod": "3.25.76"
   },
   "devDependencies": {
