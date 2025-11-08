@@ -97,7 +97,7 @@
     "@types/d3-shape": "3.1.7",
     "@types/react": "18.3.26",
     "tailwindcss": "3.3.2",
-    "typescript": "5.9.2"
+    "typescript": "5.9.3"
   },
   "private": true
 }

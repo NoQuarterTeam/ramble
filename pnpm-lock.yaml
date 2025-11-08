@@ -16,8 +16,8 @@ importers:
         specifier: 1.9.4
         version: 1.9.4
       typescript:
-        specifier: 5.9.2
-        version: 5.9.2
+        specifier: 5.9.3
+        version: 5.9.3
 
   apps/expo:
     dependencies:
@@ -68,13 +68,13 @@ importers:
         version: 5.86.0(react@18.2.0)
       '@trpc/client':
         specifier: 11.5.0
-        version: 11.5.0(@trpc/server@11.5.0)(typescript@5.9.2)
+        version: 11.5.0(@trpc/server@11.5.0)(typescript@5.9.3)
       '@trpc/react-query':
         specifier: 11.5.0
-        version: 11.5.0(@tanstack/react-query@5.86.0)(@trpc/client@11.5.0)(@trpc/server@11.5.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.9.2)
+        version: 11.5.0(@tanstack/react-query@5.86.0)(@trpc/client@11.5.0)(@trpc/server@11.5.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.9.3)
       '@trpc/server':
         specifier: 11.5.0
-        version: 11.5.0(typescript@5.9.2)
+        version: 11.5.0(typescript@5.9.3)
       class-variance-authority:
         specifier: 0.7.1
         version: 0.7.1
@@ -260,8 +260,8 @@ importers:
         specifier: 3.3.2
         version: 3.3.2
       typescript:
-        specifier: 5.9.2
-        version: 5.9.2
+        specifier: 5.9.3
+        version: 5.9.3
 
   apps/next:
     dependencies:
@@ -345,10 +345,10 @@ importers:
         version: 8.21.3(react-dom@18.2.0)(react@18.2.0)
       '@trpc/react-query':
         specifier: 11.5.0
-        version: 11.5.0(@tanstack/react-query@5.86.0)(@trpc/client@11.5.0)(@trpc/server@11.5.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.9.2)
+        version: 11.5.0(@tanstack/react-query@5.86.0)(@trpc/client@11.5.0)(@trpc/server@11.5.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.9.3)
       '@trpc/server':
         specifier: 11.5.0
-        version: 11.5.0(typescript@5.9.2)
+        version: 11.5.0(typescript@5.9.3)
       '@vercel/analytics':
         specifier: 1.5.0
         version: 1.5.0(next@14.2.33)(react@18.2.0)
@@ -459,8 +459,8 @@ importers:
         specifier: 3.3.2
         version: 3.3.2
       typescript:
-        specifier: 5.9.2
-        version: 5.9.2
+        specifier: 5.9.3
+        version: 5.9.3
 
   packages/api:
     dependencies:
@@ -484,7 +484,7 @@ importers:
         version: link:../shared
       '@trpc/server':
         specifier: 11.5.0
-        version: 11.5.0(typescript@5.9.2)
+        version: 11.5.0(typescript@5.9.3)
       '@turf/bbox':
         specifier: 7.2.0
         version: 7.2.0
@@ -526,8 +526,8 @@ importers:
         specifier: 7.4.4
         version: 7.4.4
       typescript:
-        specifier: 5.9.2
-        version: 5.9.2
+        specifier: 5.9.3
+        version: 5.9.3
 
   packages/config/tailwind:
     dependencies:
@@ -542,8 +542,8 @@ importers:
         specifier: 3.3.2
         version: 3.3.2
       typescript:
-        specifier: 5.9.2
-        version: 5.9.2
+        specifier: 5.9.3
+        version: 5.9.3
 
   packages/database:
     dependencies:
@@ -573,8 +573,8 @@ importers:
         specifier: 7.4.4
         version: 7.4.4
       typescript:
-        specifier: 5.9.2
-        version: 5.9.2
+        specifier: 5.9.3
+        version: 5.9.3
 
   packages/emails:
     dependencies:
@@ -595,8 +595,8 @@ importers:
         specifier: 3.3.2
         version: 3.3.2
       typescript:
-        specifier: 5.9.2
-        version: 5.9.2
+        specifier: 5.9.3
+        version: 5.9.3
 
   packages/server/env:
     dependencies:
@@ -611,8 +611,8 @@ importers:
         specifier: 7.4.4
         version: 7.4.4
       typescript:
-        specifier: 5.9.2
-        version: 5.9.2
+        specifier: 5.9.3
+        version: 5.9.3
 
   packages/server/schemas:
     dependencies:
@@ -636,8 +636,8 @@ importers:
         specifier: 20.19.24
         version: 20.19.24
       typescript:
-        specifier: 5.9.2
-        version: 5.9.2
+        specifier: 5.9.3
+        version: 5.9.3
 
   packages/server/scripts:
     devDependencies:
@@ -688,13 +688,13 @@ importers:
         version: 3.3.4
       puppeteer:
         specifier: 22.15.0
-        version: 22.15.0(typescript@5.9.2)
+        version: 22.15.0(typescript@5.9.3)
       ts-node:
         specifier: 10.9.2
-        version: 10.9.2(@types/node@20.19.24)(typescript@5.9.2)
+        version: 10.9.2(@types/node@20.19.24)(typescript@5.9.3)
       typescript:
-        specifier: 5.9.2
-        version: 5.9.2
+        specifier: 5.9.3
+        version: 5.9.3
 
   packages/server/services:
     dependencies:
@@ -775,8 +775,8 @@ importers:
         specifier: 7.4.4
         version: 7.4.4
       typescript:
-        specifier: 5.9.2
-        version: 5.9.2
+        specifier: 5.9.3
+        version: 5.9.3
 
   packages/shared:
     dependencies:
@@ -794,8 +794,8 @@ importers:
         specifier: 20.19.24
         version: 20.19.24
       typescript:
-        specifier: 5.9.2
-        version: 5.9.2
+        specifier: 5.9.3
+        version: 5.9.3
 
 packages:
 
@@ -8005,17 +8005,17 @@ packages:
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
     dev: true
 
-  /@trpc/client@11.5.0(@trpc/server@11.5.0)(typescript@5.9.2):
+  /@trpc/client@11.5.0(@trpc/server@11.5.0)(typescript@5.9.3):
     resolution: {integrity: sha512-32oH+KOAdo73jJKjU9tyG+vCjID6A28NgXwUNr691O5HjpF5yyTX51Zzyee8YtGzU89Nw/drCHdfA4gD7BN2eg==}
     peerDependencies:
       '@trpc/server': 11.5.0
       typescript: '>=5.7.2'
     dependencies:
-      '@trpc/server': 11.5.0(typescript@5.9.2)
-      typescript: 5.9.2
+      '@trpc/server': 11.5.0(typescript@5.9.3)
+      typescript: 5.9.3
     dev: false
 
-  /@trpc/react-query@11.5.0(@tanstack/react-query@5.86.0)(@trpc/client@11.5.0)(@trpc/server@11.5.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.9.2):
+  /@trpc/react-query@11.5.0(@tanstack/react-query@5.86.0)(@trpc/client@11.5.0)(@trpc/server@11.5.0)(react-dom@18.2.0)(react@18.2.0)(typescript@5.9.3):
     resolution: {integrity: sha512-BPrMbYi5/oW11SSRUmD3dONCAG/JJjxfniSyFbsY5VSS6qHXDF1RcfLAkiF+Ofo7MPchqmHc2iNqSl5Eumh8iA==}
     peerDependencies:
       '@tanstack/react-query': ^5.80.3
@@ -8026,19 +8026,19 @@ packages:
       typescript: '>=5.7.2'
     dependencies:
       '@tanstack/react-query': 5.86.0(react@18.2.0)
-      '@trpc/client': 11.5.0(@trpc/server@11.5.0)(typescript@5.9.2)
-      '@trpc/server': 11.5.0(typescript@5.9.2)
+      '@trpc/client': 11.5.0(@trpc/server@11.5.0)(typescript@5.9.3)
+      '@trpc/server': 11.5.0(typescript@5.9.3)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      typescript: 5.9.2
+      typescript: 5.9.3
     dev: false
 
-  /@trpc/server@11.5.0(typescript@5.9.2):
+  /@trpc/server@11.5.0(typescript@5.9.3):
     resolution: {integrity: sha512-0IBtkmUCeO2ycn4K45/cqsujnlCQrSvkCo7lFDpg3kGMIPiLyLRciID5IiS7prEjRjeITa+od2aaHTIwONApVw==}
     peerDependencies:
       typescript: '>=5.7.2'
     dependencies:
-      typescript: 5.9.2
+      typescript: 5.9.3
     dev: false
 
   /@tsconfig/node10@1.0.11:
@@ -9664,7 +9664,7 @@ packages:
       parse-json: 4.0.0
     dev: false
 
-  /cosmiconfig@9.0.0(typescript@5.9.2):
+  /cosmiconfig@9.0.0(typescript@5.9.3):
     resolution: {integrity: sha512-itvL5h8RETACmOTFc4UfIyB2RfEHi71Ax6E/PivVxq9NseKbOWpeyHEOIbmAw1rs8Ak0VursQNww7lf7YtUwzg==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -9677,7 +9677,7 @@ packages:
       import-fresh: 3.3.0
       js-yaml: 4.1.0
       parse-json: 5.2.0
-      typescript: 5.9.2
+      typescript: 5.9.3
     dev: true
 
   /create-require@1.1.1:
@@ -14690,14 +14690,14 @@ packages:
       - utf-8-validate
     dev: true
 
-  /puppeteer@22.15.0(typescript@5.9.2):
+  /puppeteer@22.15.0(typescript@5.9.3):
     resolution: {integrity: sha512-XjCY1SiSEi1T7iSYuxS82ft85kwDJUS7wj1Z0eGVXKdtr5g4xnVcbjwxhq5xBnpK/E7x1VZZoJDxpjAOasHT4Q==}
     engines: {node: '>=18'}
     hasBin: true
     requiresBuild: true
     dependencies:
       '@puppeteer/browsers': 2.3.0
-      cosmiconfig: 9.0.0(typescript@5.9.2)
+      cosmiconfig: 9.0.0(typescript@5.9.3)
       devtools-protocol: 0.0.1312386
       puppeteer-core: 22.15.0
     transitivePeerDependencies:
@@ -16514,7 +16514,7 @@ packages:
   /ts-interface-checker@0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
 
-  /ts-node@10.9.2(@types/node@20.19.24)(typescript@5.9.2):
+  /ts-node@10.9.2(@types/node@20.19.24)(typescript@5.9.3):
     resolution: {integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==}
     hasBin: true
     peerDependencies:
@@ -16540,7 +16540,7 @@ packages:
       create-require: 1.1.1
       diff: 4.0.2
       make-error: 1.3.6
-      typescript: 5.9.2
+      typescript: 5.9.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
     dev: true
@@ -16702,8 +16702,8 @@ packages:
       typed-array-byte-offset: 1.0.2
     dev: false
 
-  /typescript@5.9.2:
-    resolution: {integrity: sha512-CWBzXQrc/qOkhidw1OzBTQuYRbfyxDXJMVJ1XNwUHGROVmuaeiEm3OslpZ1RV96d7SKKjZKrSJu3+t/xlw3R9A==}
+  /typescript@5.9.3:
+    resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
