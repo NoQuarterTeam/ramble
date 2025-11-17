@@ -34,7 +34,7 @@
   "devDependencies": {
     "@types/bcryptjs": "2.4.6",
     "@types/jsonwebtoken": "9.0.10",
-    "@types/node": "20.19.24",
+    "@types/node": "20.19.25",
     "@types/nodemailer": "6.4.21",
     "dotenv-cli": "7.4.4",
     "typescript": "5.9.3"
