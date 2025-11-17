@@ -386,8 +386,8 @@ importers:
         specifier: 14.2.33
         version: 14.2.33(react-dom@18.2.0)(react@18.2.0)
       posthog-js:
-        specifier: 1.290.0
-        version: 1.290.0
+        specifier: 1.293.0
+        version: 1.293.0
       pretty-cache-header:
         specifier: 1.0.0
         version: 1.0.0
@@ -15137,8 +15137,8 @@ packages:
       source-map-js: 1.2.1
     dev: true
 
-  /posthog-js@1.290.0:
-    resolution: {integrity: sha512-zavBwZkf+3JeiSDVE7ZDXBfzva/iOljicdhdJH+cZoqp0LsxjKxjnNhGOd3KpAhw0wqdwjhd7Lp1aJuI7DXyaw==}
+  /posthog-js@1.293.0:
+    resolution: {integrity: sha512-0KN3gVNbZPwEEWe5w6VH5Ql/+y113mwsl5TTEpOlAtN1ae6Ok18mQ6cS2K0X56GpF/dtdSoXQtnex6ZqUcdAcA==}
     dependencies:
       '@posthog/core': 1.5.2
       core-js: 3.39.0
