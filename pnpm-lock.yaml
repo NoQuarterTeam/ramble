@@ -386,8 +386,8 @@ importers:
         specifier: 14.2.33
         version: 14.2.33(react-dom@18.2.0)(react@18.2.0)
       posthog-js:
-        specifier: 1.295.0
-        version: 1.295.0
+        specifier: 1.297.2
+        version: 1.297.2
       pretty-cache-header:
         specifier: 1.0.0
         version: 1.0.0
@@ -4687,8 +4687,8 @@ packages:
     engines: {node: '>=16'}
     dev: false
 
-  /@posthog/core@1.5.2:
-    resolution: {integrity: sha512-iedUP3EnOPPxTA2VaIrsrd29lSZnUV+ZrMnvY56timRVeZAXoYCkmjfIs3KBAsF8OUT5h1GXLSkoQdrV0r31OQ==}
+  /@posthog/core@1.5.5:
+    resolution: {integrity: sha512-m7G1EQTgo9xrr3lZxCp9C2egP99MSRpIDD95wYzwUPxMesKxI0xEQ+TC5LS/XOXIdmsNvsx4UcxwmzhSwD2GWA==}
     dependencies:
       cross-spawn: 7.0.6
     dev: false
@@ -14817,10 +14817,10 @@ packages:
       source-map-js: 1.2.1
     dev: true
 
-  /posthog-js@1.295.0:
-    resolution: {integrity: sha512-cOCO451t/5MB8Mq3QMrz/TV6Ct3COU9QEHcVaHAEdq5lYcCCq7bSfPUtwgwDQdNfxQB5LJdvfIfhz7HoOvOT1w==}
+  /posthog-js@1.297.2:
+    resolution: {integrity: sha512-pDtCKHpKegV1D5Yk9PBmkFwI9FMnLJm0TsBO5c5/PhPq5Om4y/t+1qqbNcLCdLajkuYl2px9UlRTzycQ6W7Vmw==}
     dependencies:
-      '@posthog/core': 1.5.2
+      '@posthog/core': 1.5.5
       core-js: 3.39.0
       fflate: 0.4.8
       preact: 10.20.2
