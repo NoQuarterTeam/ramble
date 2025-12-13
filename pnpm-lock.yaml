@@ -333,7 +333,7 @@ importers:
         version: link:../../packages/config/tailwind
       '@sentry/nextjs':
         specifier: 7.120.4
-        version: 7.120.4(next@14.2.33)(react@18.2.0)
+        version: 7.120.4(next@14.2.34)(react@18.2.0)
       '@tailwindcss/container-queries':
         specifier: 0.1.1
         version: 0.1.1(tailwindcss@3.3.2)
@@ -351,7 +351,7 @@ importers:
         version: 11.7.1(typescript@5.9.3)
       '@vercel/analytics':
         specifier: 1.5.0
-        version: 1.5.0(next@14.2.33)(react@18.2.0)
+        version: 1.5.0(next@14.2.34)(react@18.2.0)
       '@vercel/edge':
         specifier: 1.2.2
         version: 1.2.2
@@ -383,8 +383,8 @@ importers:
         specifier: 3.16.0
         version: 3.16.0
       next:
-        specifier: 14.2.33
-        version: 14.2.33(react-dom@18.2.0)(react@18.2.0)
+        specifier: 14.2.34
+        version: 14.2.34(react-dom@18.2.0)(react@18.2.0)
       posthog-js:
         specifier: 1.297.2
         version: 1.297.2
@@ -4543,8 +4543,8 @@ packages:
       sort-object: 3.0.3
     dev: false
 
-  /@next/env@14.2.33:
-    resolution: {integrity: sha512-CgVHNZ1fRIlxkLhIX22flAZI/HmpDaZ8vwyJ/B0SDPTBuLZ1PJ+DWMjCHhqnExfmSQzA/PbZi8OAc7PAq2w9IA==}
+  /@next/env@14.2.34:
+    resolution: {integrity: sha512-iuGW/UM+EZbn2dm+aLx+avo1rVap+ASoFr7oLpTBVW2G2DqhD5l8Fme9IsLZ6TTsp0ozVSFswidiHK1NGNO+pg==}
     dev: false
 
   /@next/swc-darwin-arm64@14.2.33:
@@ -7335,7 +7335,7 @@ packages:
       localforage: 1.10.0
     dev: false
 
-  /@sentry/nextjs@7.120.4(next@14.2.33)(react@18.2.0):
+  /@sentry/nextjs@7.120.4(next@14.2.34)(react@18.2.0):
     resolution: {integrity: sha512-1wtyDP1uiVvYqaJyCgXfP69eqyDgJrd6lERAVd4WqXNVEIs4vBT8oxfPQz6gxG2SJJUiTyQRjubMxuEc7dPoGQ==}
     engines: {node: '>=8'}
     peerDependencies:
@@ -7356,7 +7356,7 @@ packages:
       '@sentry/vercel-edge': 7.120.4
       '@sentry/webpack-plugin': 1.21.0
       chalk: 3.0.0
-      next: 14.2.33(react-dom@18.2.0)(react@18.2.0)
+      next: 14.2.34(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       resolve: 1.22.8
       rollup: 2.79.2
@@ -8746,7 +8746,7 @@ packages:
       wonka: 4.0.15
     dev: false
 
-  /@vercel/analytics@1.5.0(next@14.2.33)(react@18.2.0):
+  /@vercel/analytics@1.5.0(next@14.2.34)(react@18.2.0):
     resolution: {integrity: sha512-MYsBzfPki4gthY5HnYN7jgInhAZ7Ac1cYDoRWFomwGHWEX7odTEzbtg9kf/QSo7XEsEAqlQugA6gJ2WS2DEa3g==}
     peerDependencies:
       '@remix-run/react': ^2
@@ -8772,7 +8772,7 @@ packages:
       vue-router:
         optional: true
     dependencies:
-      next: 14.2.33(react-dom@18.2.0)(react@18.2.0)
+      next: 14.2.34(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
     dev: false
 
@@ -13719,9 +13719,10 @@ packages:
     engines: {node: '>= 0.4.0'}
     dev: true
 
-  /next@14.2.33(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-GiKHLsD00t4ACm1p00VgrI0rUFAC9cRDGReKyERlM57aeEZkOQGcZTpIbsGn0b562FTPJWmYfKwplfO9EaT6ng==}
+  /next@14.2.34(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-s7mRraWlkEVRLjHHdu5khn0bSnmUh+U+YtigBc+t2Ge7jJHFIVBZna+W9Jcx7b04HhM7eJWrNJ2A+sQs9gJ3eg==}
     engines: {node: '>=18.17.0'}
+    deprecated: This version has a security vulnerability. Please upgrade to a patched version. See https://nextjs.org/blog/security-update-2025-12-11 for more details.
     hasBin: true
     peerDependencies:
       '@opentelemetry/api': ^1.1.0
@@ -13737,7 +13738,7 @@ packages:
       sass:
         optional: true
     dependencies:
-      '@next/env': 14.2.33
+      '@next/env': 14.2.34
       '@swc/helpers': 0.5.5
       busboy: 1.6.0
       caniuse-lite: 1.0.30001754
