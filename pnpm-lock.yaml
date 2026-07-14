@@ -486,14 +486,14 @@ importers:
         specifier: 11.7.1
         version: 11.7.1(typescript@5.9.3)
       '@turf/bbox':
-        specifier: 7.3.0
-        version: 7.3.0
+        specifier: 7.3.5
+        version: 7.3.5
       '@turf/center':
-        specifier: 7.3.0
-        version: 7.3.0
+        specifier: 7.3.5
+        version: 7.3.5
       '@turf/helpers':
-        specifier: 7.3.0
-        version: 7.3.0
+        specifier: 7.3.5
+        version: 7.3.5
       '@vercel/functions':
         specifier: ^1.0.2
         version: 1.6.0
@@ -8257,11 +8257,11 @@ packages:
       '@turf/invariant': 6.5.0
     dev: false
 
-  /@turf/bbox@7.3.0:
-    resolution: {integrity: sha512-EC5GSUJlhXSiCVCEmgCSheZYm0s1ouKzUNqeEOsEYlqTbMAZ19RWgsg/xH2tjnuUw2JP9eGAUzQnCFX6JEV53w==}
+  /@turf/bbox@7.3.5:
+    resolution: {integrity: sha512-oG1ya/HtBjAIg4TimbWx+nOYPbY0bCvt82Bq8tm6sBw3qqtbOyRSfDz79Sq90TnH7DXJprJ1qnVGKNtZ6jemfw==}
     dependencies:
-      '@turf/helpers': 7.3.0
-      '@turf/meta': 7.3.0
+      '@turf/helpers': 7.3.5
+      '@turf/meta': 7.3.5
       '@types/geojson': 7946.0.16
       tslib: 2.8.1
     dev: false
@@ -8273,11 +8273,11 @@ packages:
       '@turf/invariant': 6.5.0
     dev: false
 
-  /@turf/center@7.3.0:
-    resolution: {integrity: sha512-OrXgY9Hz9qnfhuEUrB2PHJnyiC0T1al292ZNTvG382G9ZdjUTRhzz4ajT5a4Mtar/QF+p2KwN8SiFlB2H2N7oQ==}
+  /@turf/center@7.3.5:
+    resolution: {integrity: sha512-eub5/Kfdmn89ZqwCONHI7astmTDEtN5M6+JfOkgoSyhKKFhUJYNxUyH1F/vCtIP7j1K369Vs4L9TYiuGapvIKQ==}
     dependencies:
-      '@turf/bbox': 7.3.0
-      '@turf/helpers': 7.3.0
+      '@turf/bbox': 7.3.5
+      '@turf/helpers': 7.3.5
       '@types/geojson': 7946.0.16
       tslib: 2.8.1
     dev: false
@@ -8300,8 +8300,8 @@ packages:
     resolution: {integrity: sha512-VbI1dV5bLFzohYYdgqwikdMVpe7pJ9X3E+dlr425wa2/sMJqYDhTO++ec38/pcPvPE6oD9WEEeU3Xu3gza+VPw==}
     dev: false
 
-  /@turf/helpers@7.3.0:
-    resolution: {integrity: sha512-5kWdgwI6e2vGbkt2qOD+Z2BiKQ7dfKN/PtWRLCpvzyOO59rk19R53CHi8nUT/Y1vQLgWmT6eNpiKwsWwPZGIdg==}
+  /@turf/helpers@7.3.5:
+    resolution: {integrity: sha512-E/NMGV5MwbjjP7AJXBtsanC3yY8N2MQ87IGdIgkB2ji5AtBpwnH4L3gEqpYN4RlCJJWbLbzO91BbKv2waUd0eg==}
     dependencies:
       '@types/geojson': 7946.0.16
       tslib: 2.8.1
@@ -8345,11 +8345,12 @@ packages:
       '@turf/helpers': 6.5.0
     dev: false
 
-  /@turf/meta@7.3.0:
-    resolution: {integrity: sha512-fTLqdQqRm8qA2zHHUbBMY++YT9LDQejLG7OD70XF2dwg9nPiF9mUxO7nrsDp2IY8vNmH9OTAiMtlIjb0ssYccg==}
+  /@turf/meta@7.3.5:
+    resolution: {integrity: sha512-r+ohqxoyqeigFB0oFrQx/YEHIkOKqcKpCjvZkvZs7Tkv+IFco5MezAd2zd4rzK+0DfFgDP3KpJc7HqrYjvEjhg==}
     dependencies:
-      '@turf/helpers': 7.3.0
+      '@turf/helpers': 7.3.5
       '@types/geojson': 7946.0.16
+      tslib: 2.8.1
     dev: false
 
   /@turf/nearest-point-on-line@6.5.0:
@@ -11589,7 +11590,7 @@ packages:
   /geojson-rbush@3.2.0:
     resolution: {integrity: sha512-oVltQTXolxvsz1sZnutlSuLDEcQAKYC/uXt9zDzJJ6bu0W+baTI8LZBaTup5afzibEH4N3jlq2p+a152wlBJ7w==}
     dependencies:
-      '@turf/bbox': 7.3.0
+      '@turf/bbox': 7.3.5
       '@turf/helpers': 6.5.0
       '@turf/meta': 6.5.0
       '@types/geojson': 7946.0.8
