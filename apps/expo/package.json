@@ -85,7 +85,7 @@
     "react-native-svg": "14.1.0",
     "react-native-toast-message": "2.3.3",
     "react-native-web": "0.19.10",
-    "superjson": "2.2.5",
+    "superjson": "2.2.6",
     "zeego": "1.10.0",
     "zod": "3.25.76"
   },
