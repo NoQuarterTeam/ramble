@@ -548,11 +548,11 @@ importers:
   packages/database:
     dependencies:
       '@planetscale/database':
-        specifier: 1.19.0
-        version: 1.19.0
+        specifier: 1.20.1
+        version: 1.20.1
       '@prisma/adapter-planetscale':
         specifier: 5.22.0
-        version: 5.22.0(@planetscale/database@1.19.0)
+        version: 5.22.0(@planetscale/database@1.20.1)
       '@prisma/client':
         specifier: 5.22.0
         version: 5.22.0(prisma@5.22.0)
@@ -4085,8 +4085,8 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@planetscale/database@1.19.0:
-    resolution: {integrity: sha512-Tv4jcFUFAFjOWrGSio49H6R2ijALv0ZzVBfJKIdm+kl9X046Fh4LLawrF9OMsglVbK6ukqMJsUCeucGAFTBcMA==}
+  /@planetscale/database@1.20.1:
+    resolution: {integrity: sha512-DeMEVtQXwyYQDEztj3iuwJ7IdIqYgd68m26gsXpkRJ7rJd0V9Q0cSzQQ32ziwK04nFXuOfu1/RKAXwq6arIZZA==}
     engines: {node: '>=16'}
     dev: false
 
@@ -4096,12 +4096,12 @@ packages:
       cross-spawn: 7.0.6
     dev: false
 
-  /@prisma/adapter-planetscale@5.22.0(@planetscale/database@1.19.0):
+  /@prisma/adapter-planetscale@5.22.0(@planetscale/database@1.20.1):
     resolution: {integrity: sha512-4fffELMJCAsvLaO4E4YKw6SsX8z3524f0th8dgagr4/p4PQwOJa8wQUktC3DXZdUGG0jyQUZF9ZYPM5e18UB+A==}
     peerDependencies:
       '@planetscale/database': ^1.15.0
     dependencies:
-      '@planetscale/database': 1.19.0
+      '@planetscale/database': 1.20.1
       '@prisma/driver-adapter-utils': 5.22.0
     dev: false
 
@@ -7822,7 +7822,7 @@ packages:
     dependencies:
       '@babel/core': 7.29.7
       '@babel/helper-define-polyfill-provider': 0.6.8(@babel/core@7.29.7)
-      core-js-compat: 3.44.0
+      core-js-compat: 3.49.0
     transitivePeerDependencies:
       - supports-color
     dev: false
