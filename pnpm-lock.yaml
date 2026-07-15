@@ -353,8 +353,8 @@ importers:
         specifier: 1.6.1
         version: 1.6.1(next@14.2.35)(react@18.2.0)
       '@vercel/edge':
-        specifier: 1.2.2
-        version: 1.2.2
+        specifier: 1.3.1
+        version: 1.3.1
       '@vercel/functions':
         specifier: ^1.0.2
         version: 1.6.0
@@ -7427,8 +7427,8 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@vercel/edge@1.2.2:
-    resolution: {integrity: sha512-1+y+f6rk0Yc9ss9bRDgz/gdpLimwoRteKHhrcgHvEpjbP1nyT3ByqEMWm2BTcpIO5UtDmIFXc8zdq4LR190PDA==}
+  /@vercel/edge@1.3.1:
+    resolution: {integrity: sha512-k0tKWeYEWOv6qU6+Z8+hv2Nt/u3vFHRZdB0uvwE0DxoddU/5kWX/Chu8F6ojvqmRlnZwuX/7kyZFVeCP6DxqBg==}
     dev: false
 
   /@vercel/functions@1.6.0:
