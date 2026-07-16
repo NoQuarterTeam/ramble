@@ -392,8 +392,8 @@ importers:
         specifier: 1.0.0
         version: 1.0.0
       query-string:
-        specifier: 9.3.1
-        version: 9.3.1
+        specifier: 9.4.1
+        version: 9.4.1
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -13620,8 +13620,8 @@ packages:
       strict-uri-encode: 2.0.0
     dev: false
 
-  /query-string@9.3.1:
-    resolution: {integrity: sha512-5fBfMOcDi5SA9qj5jZhWAcTtDfKF5WFdd2uD9nVNlbxVv1baq65aALy6qofpNEGELHvisjjasxQp7BlM9gvMzw==}
+  /query-string@9.4.1:
+    resolution: {integrity: sha512-lSyJeN3RuaG7DZGWThtYRhk96+kEyZ/+doZpERuWbjeFL+Ok3vEat/swU498rAI0NcVt5/RJp8UDuLz7FckxrA==}
     engines: {node: '>=18'}
     dependencies:
       decode-uri-component: 0.4.1
