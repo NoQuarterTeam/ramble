@@ -401,8 +401,8 @@ importers:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
       react-dropzone:
-        specifier: 14.3.8
-        version: 14.3.8(react@18.2.0)
+        specifier: 14.4.1
+        version: 14.4.1(react@18.2.0)
       react-map-gl:
         specifier: 7.1.9
         version: 7.1.9(mapbox-gl@3.26.0)(react-dom@18.2.0)(react@18.2.0)
@@ -13686,8 +13686,8 @@ packages:
       scheduler: 0.23.2
     dev: false
 
-  /react-dropzone@14.3.8(react@18.2.0):
-    resolution: {integrity: sha512-sBgODnq+lcA4P296DY4wacOZz3JFpD99fp+hb//iBO2HHnyeZU3FwWyXJ6salNpqQdsZrgMrotuko/BdJMV8Ug==}
+  /react-dropzone@14.4.1(react@18.2.0):
+    resolution: {integrity: sha512-QDuV76v3uKbHiH34SpwifZ+gOLi1+RdsCO1kl5vxMT4wW8R82+sthjvBw4th3NHF/XX6FBsqDYZVNN+pnhaw0g==}
     engines: {node: '>= 10.13'}
     peerDependencies:
       react: '>= 16.8 || 18.0.0'
