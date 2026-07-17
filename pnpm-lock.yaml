@@ -149,10 +149,10 @@ importers:
         version: 0.27.8(expo@50.0.19)
       expo-router:
         specifier: 3.4.10
-        version: 3.4.10(expo-constants@15.4.6)(expo-linking@6.2.2)(expo-modules-autolinking@57.0.5)(expo-status-bar@1.11.1)(expo@50.0.19)(react-native-reanimated@3.6.3)(react-native-safe-area-context@4.8.2)(react-native-screens@3.29.0)(react-native@0.73.6)(react@18.2.0)
+        version: 3.4.10(expo-constants@15.4.6)(expo-linking@6.2.2)(expo-modules-autolinking@57.0.8)(expo-status-bar@1.11.1)(expo@50.0.19)(react-native-reanimated@3.6.3)(react-native-safe-area-context@4.8.2)(react-native-screens@3.29.0)(react-native@0.73.6)(react@18.2.0)
       expo-splash-screen:
         specifier: 0.26.5
-        version: 0.26.5(expo-modules-autolinking@57.0.5)(expo@50.0.19)
+        version: 0.26.5(expo-modules-autolinking@57.0.8)(expo@50.0.19)
       expo-status-bar:
         specifier: 1.11.1
         version: 1.11.1
@@ -502,7 +502,7 @@ importers:
         version: 1.11.21
       semver:
         specifier: ^7.6.0
-        version: 7.7.3
+        version: 7.8.5
       supercluster:
         specifier: 8.0.1
         version: 8.0.1
@@ -721,7 +721,7 @@ importers:
         version: link:../../shared
       '@react-email/render':
         specifier: ^0.0.17
-        version: 0.0.17(react-dom@18.2.0)(react@18.2.0)
+        version: 0.0.17(react-dom@18.3.1)(react@18.3.1)
       '@slack/web-api':
         specifier: 7.19.0
         version: 7.19.0
@@ -751,7 +751,7 @@ importers:
         version: 6.10.1
       resend:
         specifier: 3.5.0
-        version: 3.5.0(react-dom@18.2.0)(react@18.2.0)
+        version: 3.5.0(react-dom@18.3.1)(react@18.3.1)
       sharp:
         specifier: 0.32.6
         version: 0.32.6
@@ -3153,7 +3153,7 @@ packages:
       resolve: 1.22.10
       resolve-from: 5.0.0
       resolve.exports: 2.0.2
-      semver: 7.7.3
+      semver: 7.8.5
       send: 0.18.0
       slugify: 1.6.6
       source-map-support: 0.5.21
@@ -3223,7 +3223,7 @@ packages:
       getenv: 1.0.0
       glob: 7.1.6
       resolve-from: 5.0.0
-      semver: 7.7.3
+      semver: 7.8.5
       slash: 3.0.0
       slugify: 1.6.6
       xcode: 3.0.1
@@ -3247,7 +3247,7 @@ packages:
       getenv: 1.0.0
       glob: 7.1.6
       resolve-from: 5.0.0
-      semver: 7.7.3
+      semver: 7.8.5
       slash: 3.0.0
       slugify: 1.6.6
       xcode: 3.0.1
@@ -3438,7 +3438,7 @@ packages:
       - supports-color
     dev: false
 
-  /@expo/prebuild-config@6.8.1(expo-modules-autolinking@57.0.5):
+  /@expo/prebuild-config@6.8.1(expo-modules-autolinking@57.0.8):
     resolution: {integrity: sha512-ptK9e0dcj1eYlAWV+fG+QkuAWcLAT1AmtEbj++tn7ZjEj8+LkXRM73LCOEGaF0Er8i8ZWNnaVsgGW4vjgP5ZsA==}
     peerDependencies:
       expo-modules-autolinking: '>=0.8.1'
@@ -3449,7 +3449,7 @@ packages:
       '@expo/image-utils': 0.4.2
       '@expo/json-file': 8.3.1
       debug: 4.4.3
-      expo-modules-autolinking: 57.0.5(typescript@5.9.3)
+      expo-modules-autolinking: 57.0.8(typescript@5.9.3)
       fs-extra: 9.1.0
       resolve-from: 5.0.0
       semver: 7.5.3
@@ -3469,8 +3469,8 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@expo/require-utils@57.0.1(typescript@5.9.3):
-    resolution: {integrity: sha512-uXen5/4x7j60I5slShgZr5QEtJDBK8homFiNLDnDrNrxZhrRHXASo0H6JArs3/1PDzw1wahzhGWg2WKuYyZd0A==}
+  /@expo/require-utils@57.0.3(typescript@5.9.3):
+    resolution: {integrity: sha512-ns05X1K8tM+Qtzp6dNloUFOopSdh3J+HC61BtOR8WHhgtPFyX8TKuO2diqZUqVg9K8yfkWug7g8tBS0qRniSTA==}
     peerDependencies:
       typescript: ^5.0.0 || ^5.0.0-0 || ^6.0.0
     peerDependenciesMeta:
@@ -4038,7 +4038,7 @@ packages:
     resolution: {integrity: sha512-8KG5RD0GVP4ydEzRn/I4BNDuxDtqVbOdm8675T49OIG/NGhaK0pjPX7ZcDlvKYbA+ulvVK3ztfcF4uBdOxuJbQ==}
     dependencies:
       '@gar/promisify': 1.1.3
-      semver: 7.7.3
+      semver: 7.8.5
     dev: false
 
   /@npmcli/move-file@1.1.2:
@@ -4144,7 +4144,7 @@ packages:
       extract-zip: 2.0.1
       progress: 2.0.3
       proxy-agent: 6.4.0
-      semver: 7.7.3
+      semver: 7.8.5
       tar-fs: 3.0.6
       unbzip2-stream: 1.4.3
       yargs: 17.7.2
@@ -5663,7 +5663,7 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@react-email/render@0.0.16(react-dom@18.2.0)(react@18.2.0):
+  /@react-email/render@0.0.16(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-wDaMy27xAq1cJHtSFptp0DTKPuV2GYhloqia95ub/DH9Dea1aWYsbdM918MOc/b/HvVS3w1z8DWzfAk13bGStQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
@@ -5672,12 +5672,12 @@ packages:
     dependencies:
       html-to-text: 9.0.5
       js-beautify: 1.15.1
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
       react-promise-suspense: 0.3.4
     dev: false
 
-  /@react-email/render@0.0.17(react-dom@18.2.0)(react@18.2.0):
+  /@react-email/render@0.0.17(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-xBQ+/73+WsGuXKY7r1U73zMBNV28xdV0cp9cFjhNYipBReDHhV97IpA6v7Hl0dDtDzt+yS/72dY5vYXrF1v8NA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
@@ -5686,8 +5686,8 @@ packages:
     dependencies:
       html-to-text: 9.0.5
       js-beautify: 1.15.1
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
       react-promise-suspense: 0.3.4
     dev: false
 
@@ -5782,7 +5782,7 @@ packages:
       hermes-profile-transformer: 0.0.6
       node-stream-zip: 1.15.0
       ora: 5.4.1
-      semver: 7.7.3
+      semver: 7.8.5
       strip-ansi: 5.2.0
       wcwidth: 1.0.1
       yaml: 2.4.2
@@ -5860,7 +5860,7 @@ packages:
       node-fetch: 2.7.0
       open: 6.4.0
       ora: 5.4.1
-      semver: 7.7.3
+      semver: 7.8.5
       shell-quote: 1.8.1
       sudo-prompt: 9.2.1
     transitivePeerDependencies:
@@ -5895,7 +5895,7 @@ packages:
       fs-extra: 8.1.0
       graceful-fs: 4.2.11
       prompts: 2.4.2
-      semver: 7.7.3
+      semver: 7.8.5
     transitivePeerDependencies:
       - bufferutil
       - encoding
@@ -7922,8 +7922,6 @@ packages:
       bare-events: 2.2.2
       bare-path: 2.1.3
       bare-stream: 2.0.1
-    transitivePeerDependencies:
-      - bare-abort-controller
     optional: true
 
   /bare-os@2.3.0:
@@ -7943,8 +7941,6 @@ packages:
     requiresBuild: true
     dependencies:
       streamx: 2.18.0
-    transitivePeerDependencies:
-      - bare-abort-controller
     optional: true
 
   /base64-js@1.5.1:
@@ -9178,7 +9174,7 @@ packages:
       '@one-ini/wasm': 0.1.1
       commander: 10.0.1
       minimatch: 9.0.1
-      semver: 7.7.3
+      semver: 7.8.5
     dev: false
 
   /ee-first@1.1.1:
@@ -9551,7 +9547,7 @@ packages:
       expo-dev-menu: 4.5.8(expo@50.0.19)
       expo-manifests: 0.13.2(expo@50.0.19)
       resolve-from: 5.0.0
-      semver: 7.7.3
+      semver: 7.8.5
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -9571,7 +9567,7 @@ packages:
     dependencies:
       expo: 50.0.19(@babel/core@7.29.7)(@react-native/babel-preset@0.86.0)
       expo-dev-menu-interface: 1.7.2(expo@50.0.19)
-      semver: 7.7.3
+      semver: 7.8.5
     dev: false
 
   /expo-device@5.9.4(expo@50.0.19):
@@ -9728,11 +9724,11 @@ packages:
       - supports-color
     dev: false
 
-  /expo-modules-autolinking@57.0.5(typescript@5.9.3):
-    resolution: {integrity: sha512-Vv2PVeEUN0/VW19ItkVA8LxAuH8SV8cjui0MKhJxCKrNyCAGGZU6sRsBJciYXR4uVxuXWKiepGW6E3k/c+Ytdg==}
+  /expo-modules-autolinking@57.0.8(typescript@5.9.3):
+    resolution: {integrity: sha512-YBDgbJHlhhhr3JaKErW6znsIL8zQsh206LaDpWrLHV/WluRwhYfZuF/fhkVN7b/DsRxIu0UeCPExaEPMxlC2Hw==}
     hasBin: true
     dependencies:
-      '@expo/require-utils': 57.0.1(typescript@5.9.3)
+      '@expo/require-utils': 57.0.3(typescript@5.9.3)
       '@expo/spawn-async': 1.8.0
       chalk: 4.1.2
       commander: 7.2.0
@@ -9774,7 +9770,7 @@ packages:
       - supports-color
     dev: false
 
-  /expo-router@3.4.10(expo-constants@15.4.6)(expo-linking@6.2.2)(expo-modules-autolinking@57.0.5)(expo-status-bar@1.11.1)(expo@50.0.19)(react-native-reanimated@3.6.3)(react-native-safe-area-context@4.8.2)(react-native-screens@3.29.0)(react-native@0.73.6)(react@18.2.0):
+  /expo-router@3.4.10(expo-constants@15.4.6)(expo-linking@6.2.2)(expo-modules-autolinking@57.0.8)(expo-status-bar@1.11.1)(expo@50.0.19)(react-native-reanimated@3.6.3)(react-native-safe-area-context@4.8.2)(react-native-screens@3.29.0)(react-native@0.73.6)(react@18.2.0):
     resolution: {integrity: sha512-3Ldhsva/EtfWFFTDaTl6PRuJFJWG0DTd3OOI3U9/tY+/S7oaNbIOO8yVJbbTbsymAreVZuDwrQsfCmw0xLsB7g==}
     peerDependencies:
       '@react-navigation/drawer': ^6.5.8
@@ -9803,7 +9799,7 @@ packages:
       expo: 50.0.19(@babel/core@7.29.7)(@react-native/babel-preset@0.86.0)
       expo-constants: 15.4.6(expo@50.0.19)
       expo-linking: 6.2.2(expo@50.0.19)
-      expo-splash-screen: 0.26.5(expo-modules-autolinking@57.0.5)(expo@50.0.19)
+      expo-splash-screen: 0.26.5(expo-modules-autolinking@57.0.8)(expo@50.0.19)
       expo-status-bar: 1.11.1
       react-native-helmet-async: 2.0.4(react@18.2.0)
       react-native-reanimated: 3.6.3(@babel/core@7.29.7)(@babel/plugin-proposal-nullish-coalescing-operator@7.18.6)(@babel/plugin-proposal-optional-chaining@7.21.0)(@babel/plugin-transform-arrow-functions@7.29.7)(@babel/plugin-transform-shorthand-properties@7.29.7)(@babel/plugin-transform-template-literals@7.29.7)(react-native@0.73.6)(react@18.2.0)
@@ -9828,12 +9824,12 @@ packages:
       - encoding
     dev: false
 
-  /expo-splash-screen@0.26.5(expo-modules-autolinking@57.0.5)(expo@50.0.19):
+  /expo-splash-screen@0.26.5(expo-modules-autolinking@57.0.8)(expo@50.0.19):
     resolution: {integrity: sha512-FyvA2EWDeQdC3zuoQdXV2VmSANiJzF0hmbtoEEyR6MXoHaYFvxxKyhBeAm61N8C9TtUijIcEgFM6XBCh0wTBVw==}
     peerDependencies:
       expo: '*'
     dependencies:
-      '@expo/prebuild-config': 6.8.1(expo-modules-autolinking@57.0.5)
+      '@expo/prebuild-config': 6.8.1(expo-modules-autolinking@57.0.8)
       expo: 50.0.19(@babel/core@7.29.7)(@react-native/babel-preset@0.86.0)
     transitivePeerDependencies:
       - encoding
@@ -11409,7 +11405,7 @@ packages:
       lodash.isstring: 4.0.1
       lodash.once: 4.1.1
       ms: 2.1.3
-      semver: 7.7.3
+      semver: 7.8.5
     dev: false
 
   /jwa@2.0.1:
@@ -12353,7 +12349,7 @@ packages:
     resolution: {integrity: sha512-CPMcGa+y33xuL1E0TcNIu4YyaZCxnnvkVaEXrsosR3FxN+fV8xvb7Mzpb7IgKler10qeMkE6+Dp8qJhpzdq35g==}
     engines: {node: '>=10'}
     dependencies:
-      semver: 7.7.3
+      semver: 7.6.0
     dev: false
 
   /node-abort-controller@3.1.1:
@@ -13690,6 +13686,16 @@ packages:
       scheduler: 0.23.2
     dev: false
 
+  /react-dom@18.3.1(react@18.3.1):
+    resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
+    peerDependencies:
+      react: ^18.3.1
+    dependencies:
+      loose-envify: 1.4.0
+      react: 18.3.1
+      scheduler: 0.23.2
+    dev: false
+
   /react-dropzone@14.4.1(react@18.2.0):
     resolution: {integrity: sha512-QDuV76v3uKbHiH34SpwifZ+gOLi1+RdsCO1kl5vxMT4wW8R82+sthjvBw4th3NHF/XX6FBsqDYZVNN+pnhaw0g==}
     engines: {node: '>= 10.13'}
@@ -14109,6 +14115,13 @@ packages:
       loose-envify: 1.4.0
     dev: false
 
+  /react@18.3.1:
+    resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      loose-envify: 1.4.0
+    dev: false
+
   /read-cache@1.0.0:
     resolution: {integrity: sha512-Owdv/Ft7IjOgm/i0xvNDZ1LrRANRfew4b2prF3OWMQLxLfu3bS8FVhCsrSCMK4lR56Y9ya+AThoTpDCTxCmpRA==}
     dependencies:
@@ -14237,11 +14250,11 @@ packages:
       resolve: 1.7.1
     dev: false
 
-  /resend@3.5.0(react-dom@18.2.0)(react@18.2.0):
+  /resend@3.5.0(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-bKu4LhXSecP6krvhfDzyDESApYdNfjirD5kykkT1xO0Cj9TKSiGh5Void4pGTs3Am+inSnp4dg0B5XzdwHBJOQ==}
     engines: {node: '>=18'}
     dependencies:
-      '@react-email/render': 0.0.16(react-dom@18.2.0)(react@18.2.0)
+      '@react-email/render': 0.0.16(react-dom@18.3.1)(react@18.3.1)
     transitivePeerDependencies:
       - react
       - react-dom
@@ -14481,8 +14494,8 @@ packages:
     dependencies:
       lru-cache: 6.0.0
 
-  /semver@7.7.3:
-    resolution: {integrity: sha512-SdsKMrI9TdgjdweUSR9MweHA4EJ8YxHn8DFaDisvhVlUOe4BF1tLD7GAj0lIqWVl+dPb/rExr0Btby5loQm20Q==}
+  /semver@7.8.5:
+    resolution: {integrity: sha512-Y7/KDsb8LjooZpwaqGyulO6DQlksgCncchHGk+sZIY4SBvUocMBEFH5Ur1fI4dV+Jvl0w6cjvucaIi40puRioA==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -14888,9 +14901,7 @@ packages:
       queue-tick: 1.0.1
       text-decoder: 1.1.0
     optionalDependencies:
-      bare-events: 2.9.1
-    transitivePeerDependencies:
-      - bare-abort-controller
+      bare-events: 2.2.2
     optional: true
 
   /strict-uri-encode@1.1.0:
