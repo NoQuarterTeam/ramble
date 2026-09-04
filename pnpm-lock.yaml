@@ -669,8 +669,8 @@ importers:
         specifier: 1.2.0
         version: 1.2.0
       csv-stringify:
-        specifier: 6.8.1
-        version: 6.8.1
+        specifier: 6.8.3
+        version: 6.8.3
       dotenv-cli:
         specifier: 7.4.4
         version: 7.4.4
@@ -8831,8 +8831,8 @@ packages:
   /csstype@3.2.3:
     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
 
-  /csv-stringify@6.8.1:
-    resolution: {integrity: sha512-tZ6X6TKQyQgCo5OptXcyAbfN1pwmoxEqELPQ7KFazNErx7kiVsDK8o+VYRXhfMl4N9vvOOLXuioquR2MeP847A==}
+  /csv-stringify@6.8.3:
+    resolution: {integrity: sha512-gIeSCvq5F4VtXV3naV3VAewLhBkiZBz+PPhTOA8H3Y8h/ELa+R1ml0GZck/4/Nzo9ep2lvOluilJ6MJlbZsKMA==}
     dev: true
 
   /d3-path@3.1.0:
