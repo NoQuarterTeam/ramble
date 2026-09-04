@@ -75,7 +75,7 @@
     "autoprefixer": "10.5.4",
     "cssnano": "7.1.9",
     "dotenv-cli": "7.4.4",
-    "postcss": "8.5.23",
+    "postcss": "8.5.28",
     "tailwindcss": "3.3.2",
     "typescript": "5.9.3"
   }
