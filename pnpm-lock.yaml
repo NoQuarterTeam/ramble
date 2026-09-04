@@ -747,8 +747,8 @@ importers:
         specifier: 3.4.1
         version: 3.4.1
       nodemailer:
-        specifier: 6.10.1
-        version: 6.10.1
+        specifier: 9.0.1
+        version: 9.0.1
       resend:
         specifier: 3.5.0
         version: 3.5.0(react-dom@18.2.0)(react@18.2.0)
@@ -12394,8 +12394,8 @@ packages:
     engines: {node: '>=0.12.0'}
     dev: false
 
-  /nodemailer@6.10.1:
-    resolution: {integrity: sha512-Z+iLaBGVaSjbIzQ4pX6XV41HrooLsQ10ZWPUehGmuantvzWoDVBnmsdUcOIDM1t+yPor5pDhVlDESgOMEGxhHA==}
+  /nodemailer@9.0.1:
+    resolution: {integrity: sha512-Gwv8SQewT616ZM/URn0H54b8PWo/Wum7md3EW2aWy1lO27+WZCX+Xyak3J+NlmHUjDh5ME+uesJUDRbR3Ye8Bw==}
     engines: {node: '>=6.0.0'}
     dev: false
 
