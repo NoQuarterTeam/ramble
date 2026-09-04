@@ -21,7 +21,7 @@
     "@turf/center": "7.3.5",
     "@turf/helpers": "7.3.5",
     "@vercel/functions": "^1.0.2",
-    "dayjs": "1.11.21",
+    "dayjs": "1.11.23",
     "semver": "^7.6.0",
     "supercluster": "8.0.1",
     "superjson": "2.2.6",
