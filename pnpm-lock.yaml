@@ -55,8 +55,8 @@ importers:
         specifier: 1.0.3
         version: 1.0.3(react-native@0.73.6)(react@18.2.0)
       '@rnmapbox/maps':
-        specifier: 10.3.9
-        version: 10.3.9(expo@50.0.19)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0)
+        specifier: 10.3.10
+        version: 10.3.10(expo@50.0.19)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0)
       '@sentry/react-native':
         specifier: 5.20.0
         version: 5.20.0(expo@50.0.19)(react-native@0.73.6)(react@18.2.0)
@@ -6384,8 +6384,8 @@ packages:
     engines: {node: '>=14.0.0'}
     dev: false
 
-  /@rnmapbox/maps@10.3.9(expo@50.0.19)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0):
-    resolution: {integrity: sha512-oOMszJFZEUwFDSOQscbXYVqAGFN2o+c2cIOIGd4W89Bs0mrDv1yvoPayrZxDcW2K3WxLcmpVEsZilte+q02ueQ==}
+  /@rnmapbox/maps@10.3.10(expo@50.0.19)(react-dom@18.2.0)(react-native@0.73.6)(react@18.2.0):
+    resolution: {integrity: sha512-PX7AuAWWoGYECqzCXy3Cq+HyI6+6YI12hX7h9iZtLwsDoz2eRpUzKWaaWskKlkgy1oXyFcN9mTqqkVWvVMoBwA==}
     peerDependencies:
       expo: '>=47.0.0'
       mapbox-gl: ^2.9.0
