@@ -359,8 +359,8 @@ importers:
         specifier: ^1.0.2
         version: 1.6.0
       axios:
-        specifier: 1.20.0
-        version: 1.20.0
+        specifier: 1.21.0
+        version: 1.21.0
       blurhash:
         specifier: 2.0.5
         version: 2.0.5
@@ -6922,7 +6922,7 @@ packages:
       '@slack/types': 2.22.0
       '@types/node': 20.19.43
       '@types/retry': 0.12.0
-      axios: 1.20.0
+      axios: 1.21.0
       eventemitter3: 5.0.1
       form-data: 4.0.5
       is-electron: 2.2.2
@@ -7319,7 +7319,7 @@ packages:
     resolution: {integrity: sha512-24xFj9R5+rfQJLRyM56qh+wnVSYhyXC2tkoBndtY0U+vubqNsYXGjufB2nn8Q6gt0LrARwL6UBtMCSVCwl4B1g==}
     dependencies:
       '@types/node': 20.19.43
-      form-data: 4.0.5
+      form-data: 4.0.6
     dev: false
 
   /@types/node@20.19.43:
@@ -7794,8 +7794,8 @@ packages:
       possible-typed-array-names: 1.0.0
     dev: false
 
-  /axios@1.20.0:
-    resolution: {integrity: sha512-r8aOh8j9cGKpgQAqpzrUHnSIc6a59Y3Xf/cv8sy1DrHCkZHzQGEuoq1tARk6qSyDdtQGSDgpb9kFlruzPvrgwg==}
+  /axios@1.21.0:
+    resolution: {integrity: sha512-YCzXMB53Q9PZBsh7yN7wtapit4WepwcHS2fP8QhGsBxSz5YtgYobV7GGlWlAJi+RxfU77GQTQi2DSLUma42EYA==}
     dependencies:
       follow-redirects: 1.16.0
       form-data: 4.0.6
