@@ -67,14 +67,14 @@ importers:
         specifier: 5.105.1
         version: 5.105.1(@types/react@18.3.31)(react@18.2.0)
       '@trpc/client':
-        specifier: 11.19.0
-        version: 11.19.0(@trpc/server@11.19.0)(typescript@5.9.3)
+        specifier: 11.22.1
+        version: 11.22.1(@trpc/server@11.22.1)(typescript@5.9.3)
       '@trpc/react-query':
-        specifier: 11.19.0
-        version: 11.19.0(@tanstack/react-query@5.105.1)(@trpc/client@11.19.0)(@trpc/server@11.19.0)(react@18.2.0)(typescript@5.9.3)
+        specifier: 11.22.1
+        version: 11.22.1(@tanstack/react-query@5.105.1)(@trpc/client@11.22.1)(@trpc/server@11.22.1)(react@18.2.0)(typescript@5.9.3)
       '@trpc/server':
-        specifier: 11.19.0
-        version: 11.19.0(typescript@5.9.3)
+        specifier: 11.22.1
+        version: 11.22.1(typescript@5.9.3)
       class-variance-authority:
         specifier: 0.7.1
         version: 0.7.1
@@ -344,11 +344,11 @@ importers:
         specifier: 8.21.3
         version: 8.21.3(react-dom@18.2.0)(react@18.2.0)
       '@trpc/react-query':
-        specifier: 11.19.0
-        version: 11.19.0(@tanstack/react-query@5.105.1)(@trpc/client@11.19.0)(@trpc/server@11.19.0)(react@18.2.0)(typescript@5.9.3)
+        specifier: 11.22.1
+        version: 11.22.1(@tanstack/react-query@5.105.1)(@trpc/client@11.22.1)(@trpc/server@11.22.1)(react@18.2.0)(typescript@5.9.3)
       '@trpc/server':
-        specifier: 11.19.0
-        version: 11.19.0(typescript@5.9.3)
+        specifier: 11.22.1
+        version: 11.22.1(typescript@5.9.3)
       '@vercel/analytics':
         specifier: 1.6.1
         version: 1.6.1(next@14.2.35)(react@18.2.0)
@@ -483,8 +483,8 @@ importers:
         specifier: workspace:*
         version: link:../shared
       '@trpc/server':
-        specifier: 11.19.0
-        version: 11.19.0(typescript@5.9.3)
+        specifier: 11.22.1
+        version: 11.22.1(typescript@5.9.3)
       '@turf/bbox':
         specifier: 7.4.0
         version: 7.4.0
@@ -7056,35 +7056,35 @@ packages:
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
     dev: true
 
-  /@trpc/client@11.19.0(@trpc/server@11.19.0)(typescript@5.9.3):
-    resolution: {integrity: sha512-0MKkPq6MejsKB5Opca1Rl22KVIaqo2+A1EiXyZ8EGUsl9TLrPdpGn+Usux20TZKFwnSC2+wI/WilqNJaP4ODfw==}
+  /@trpc/client@11.22.1(@trpc/server@11.22.1)(typescript@5.9.3):
+    resolution: {integrity: sha512-flkAwF8bzzNCVJ5xcTMS+Az6Go/XK30ZIOGT94UJBYAmMq1w2tY7gk7+CIMiRUdvHzOYAVPitX2H+20qcIIomA==}
     hasBin: true
     peerDependencies:
-      '@trpc/server': 11.19.0
+      '@trpc/server': 11.22.1
       typescript: '>=5.7.2'
     dependencies:
-      '@trpc/server': 11.19.0(typescript@5.9.3)
+      '@trpc/server': 11.22.1(typescript@5.9.3)
       typescript: 5.9.3
     dev: false
 
-  /@trpc/react-query@11.19.0(@tanstack/react-query@5.105.1)(@trpc/client@11.19.0)(@trpc/server@11.19.0)(react@18.2.0)(typescript@5.9.3):
-    resolution: {integrity: sha512-TrqZBa/6weXX27mf0P2dMCI65duqO3B/wf9BkP1MezUWSUg7SRGJrIv6K8vjgjeHdafFBI1mmcqPEYXHF4AlVQ==}
+  /@trpc/react-query@11.22.1(@tanstack/react-query@5.105.1)(@trpc/client@11.22.1)(@trpc/server@11.22.1)(react@18.2.0)(typescript@5.9.3):
+    resolution: {integrity: sha512-PEd3EzQwiJDSi2qlOm1kkfnh5q4rsQcjVGBdKqcbW9iLl7f6/NH/5NOPDdWu/yiV8cY4QJ1pWHENLuD0A1j9uA==}
     peerDependencies:
       '@tanstack/react-query': ^5.80.3
-      '@trpc/client': 11.19.0
-      '@trpc/server': 11.19.0
+      '@trpc/client': 11.22.1
+      '@trpc/server': 11.22.1
       react: '>=18.2.0'
       typescript: '>=5.7.2'
     dependencies:
       '@tanstack/react-query': 5.105.1(@types/react@18.3.31)(react@18.2.0)
-      '@trpc/client': 11.19.0(@trpc/server@11.19.0)(typescript@5.9.3)
-      '@trpc/server': 11.19.0(typescript@5.9.3)
+      '@trpc/client': 11.22.1(@trpc/server@11.22.1)(typescript@5.9.3)
+      '@trpc/server': 11.22.1(typescript@5.9.3)
       react: 18.2.0
       typescript: 5.9.3
     dev: false
 
-  /@trpc/server@11.19.0(typescript@5.9.3):
-    resolution: {integrity: sha512-7C1goiDurz82yFKtZUbEzjXd0Rg/jyisaIZQhdvus+1l7E6mwcEYZXjZ1US/HF8kOyz1LERL8UN3bcboJtjcyQ==}
+  /@trpc/server@11.22.1(typescript@5.9.3):
+    resolution: {integrity: sha512-9SjWTS5iwENHOVPqpTjm0I1Os/CtuT6p8kDlovyEm00pXhpHX55tQM2vszJTEpcQhm/JfUz4ut/7Y9JZZQZo6A==}
     hasBin: true
     peerDependencies:
       typescript: '>=5.7.2'
